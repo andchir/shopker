@@ -109,7 +109,7 @@ Start the mongo Shell:
 
 Connect and authenticate as the user administrator:
 ~~~
-./mongo --port 27017 -u "root" -p "111111" --authenticationDatabase "admin"
+./mongo --port 27017 -u "root" -p "111111" --authenticationDatabase "shopkeeper4"
 ~~~
 
 Export:

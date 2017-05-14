@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NgbModal, NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ContentTypesService } from './services/content_types.service';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ContentField } from './models/content_field.model';
 import { ContentType } from './models/content_type.model';
 import { ConfirmModalContent } from './app.component';
@@ -15,29 +16,99 @@ export class ContentTypeModalContent implements OnInit {
     @Input() modalTitle;
     @Input() itemId;
 
-    model: ContentType = new ContentType('','','','',[],['Содержание', 'Служебное']);
-    currentField: ContentField = new ContentField(_.uniqueId(),'','','','','','');
+    model = new ContentType('','','','',[],['Содержание', 'Служебное']);
+    currentField = new ContentField(_.uniqueId(),'','','','','','');
     submitted: boolean = false;
     loading: boolean = false;
     errorMessage: string;
     action: string = 'add_field';
+    contentTypeForm: FormGroup;
+    fieldForm: FormGroup;
+    formErrors = {
+        'name': '',
+        'title': ''
+    };
+    validationMessages = {
+        'name': {
+            'required': 'Name is required.',
+            'pattern': 'The name must contain only Latin letters.'
+        },
+        'title': {
+            'required': 'Title is required.'
+        }
+    };
 
     constructor(
+        private fb: FormBuilder,
         private contentTypesService: ContentTypesService,
         public activeModal: NgbActiveModal
     ) {}
 
+    /** On initialize */
     ngOnInit(): void {
-
+        this.buildForm();
         if( this.itemId ){
             this.getModelData();
         }
     }
 
+    /** Build form groups */
+    buildForm(): void {
+        this.contentTypeForm = this.fb.group({
+            title: [this.model.title, [Validators.required]],
+            name: [this.model.name, [Validators.required, Validators.pattern('[A-Za-z_-]+')]],
+            description: [this.model.description, []]
+        });
+        this.contentTypeForm.valueChanges
+            .subscribe(data => this.onValueChanged(data));
+
+        this.fieldForm = this.fb.group({
+            field_title: [this.currentField.title, [Validators.required]],
+            field_name: [this.currentField.name, [Validators.required, Validators.pattern('[A-Za-z_-]+')]],
+            field_description: [this.currentField.description, []],
+            field_input_type: [this.currentField.inputType, [Validators.required]],
+            field_output_type: [this.currentField.outputType, [Validators.required]],
+            field_group: [this.currentField.group, [Validators.required]]
+        });
+        this.fieldForm.valueChanges
+            .subscribe(data => this.onFieldValueChanged(data));
+    }
+
+    /**
+     * On form value changed
+     * @param data
+     */
+    onValueChanged(data?: any){
+        if (!this.contentTypeForm) { return; }
+        const form = this.contentTypeForm;
+        const isSubmitted = this.submitted;
+
+        for (const field in this.formErrors) {
+            this.formErrors[field] = '';
+            const control = form.get(field);
+            if (control && (control.dirty || isSubmitted) && !control.valid) {
+                const messages = this.validationMessages[field];
+                for (const key in control.errors) {
+                    this.formErrors[field] += messages[key] + ' ';
+                }
+            }
+        }
+    }
+
+    /**
+     * On field form value changed
+     * @param data
+     */
+    onFieldValueChanged(data?: any){
+        if (!this.fieldForm) { return; }
+        const form = this.fieldForm;
+        const isSubmitted = this.submitted;
+
+        console.log( 'onFieldValueChanged', data );
+    }
+
     getModelData(){
-
         this.loading = true;
-
         this.contentTypesService.getItem( this.itemId )
             .then(item => {
                 this.model = item;
@@ -138,8 +209,13 @@ export class ContentTypeModalContent implements OnInit {
     }
 
     onSubmit() {
+
+        console.log( 'onSubmit', this.contentTypeForm.valid );
+
         this.submitted = true;
-        if( !this.model.title || !this.model.name || !this.model.description ){
+
+        if( !this.contentTypeForm.valid ){
+            this.onValueChanged();
             return;
         }
         if( this.model.fields.length == 0 ){
@@ -147,7 +223,9 @@ export class ContentTypeModalContent implements OnInit {
             return;
         }
 
-        this.contentTypesService.createItem(this.model)
+        console.log( this.contentTypeForm.value );
+
+        /*this.contentTypesService.createItem(this.model)
             .then((res) => {
                 if( res.success ){
                     this.closeModal();
@@ -156,7 +234,7 @@ export class ContentTypeModalContent implements OnInit {
                         this.errorMessage = res.msg;
                     }
                 }
-            });
+            });*/
     }
 
     closeModal() {

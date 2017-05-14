@@ -7,45 +7,47 @@
     <h4 class="modal-title">{{modalTitle}}</h4>
 </div>
 
-<form (ngSubmit)="onSubmit()" #contentTypeForm="ngForm" [class.loading]="loading">
+<form (ngSubmit)="onSubmit()" [class.loading]="loading">
 
     <div class="modal-body">
 
         <div class="row">
-            <div class="col-md-4">
 
-                <div class="form-group" [class.form-group-message]="submitted && !title.valid">
+            <!-- ContentType form -->
+            <div class="col-md-4" [formGroup]="contentTypeForm">
+
+                <div class="form-group" [class.form-group-message]="formErrors.title">
                     <label class="label-filled">
                         Название
                     </label>
-                    <input type="text" class="form-control" name="title" [(ngModel)]="model.title" #title="ngModel" required>
-                    <div [hidden]="!submitted || title.valid" class="alert alert-danger">
-                        Field is required
+                    <input type="text" class="form-control" name="title" formControlName="title">
+                    <div *ngIf="formErrors.title" class="alert alert-danger">
+                        {{formErrors.title}}
                     </div>
                 </div>
 
-                <div class="form-group" [class.form-group-message]="submitted && !name.valid">
+                <div class="form-group" [class.form-group-message]="formErrors.name">
                     <label class="label-filled">
                         Системное имя
                     </label>
-                    <input type="text" class="form-control" name="name" [(ngModel)]="model.name" #name="ngModel" required>
-                    <div [hidden]="!submitted || name.valid" class="alert alert-danger">
-                        Field is required
+                    <input type="text" class="form-control" name="name" formControlName="name">
+                    <div *ngIf="formErrors.name" class="alert alert-danger">
+                        {{formErrors.name}}
                     </div>
                 </div>
 
-                <div class="form-group" [class.form-group-message]="submitted && !description.valid">
+                <div class="form-group">
                     <label class="label-filled">
                         Описание
                     </label>
-                    <textarea type="text" class="form-control" name="description" [(ngModel)]="model.description" #description="ngModel" required></textarea>
-                    <div [hidden]="!submitted || description.valid" class="alert alert-danger">
-                        Field is required
-                    </div>
+                    <textarea type="text" class="form-control" name="description" formControlName="description"></textarea>
                 </div>
 
             </div>
-            <div class="col-md-8">
+            <!-- /ContentType form -->
+
+            <!-- Field form -->
+            <div class="col-md-8" [formGroup]="fieldForm">
 
                 <label class="label-filled" [hidden]="action != 'add_field'">
                     Добавить поле
@@ -62,7 +64,7 @@
                                 <label class="small">Название</label>
                             </div>
                             <div class="col-md-7">
-                                <input type="text" class="form-control form-control-sm" name="field_title" [(ngModel)]="currentField.title">
+                                <input type="text" class="form-control form-control-sm" name="field_title" formControlName="field_title">
                             </div>
                         </div>
 
@@ -71,7 +73,7 @@
                                 <label class="small">Системное имя</label>
                             </div>
                             <div class="col-md-7">
-                                <input type="text" class="form-control form-control-sm" name="field_name" [(ngModel)]="currentField.name">
+                                <input type="text" class="form-control form-control-sm" name="field_name" formControlName="field_name">
                             </div>
                         </div>
 
@@ -80,7 +82,7 @@
                                 <label class="small">Описание</label>
                             </div>
                             <div class="col-md-7">
-                                <textarea type="text" class="form-control form-control-sm" name="field_description" [(ngModel)]="currentField.description"></textarea>
+                                <textarea type="text" class="form-control form-control-sm" name="field_description" formControlName="field_description"></textarea>
                             </div>
                         </div>
 
@@ -89,7 +91,7 @@
                                 <label class="small">Тип ввода</label>
                             </div>
                             <div class="col-md-7">
-                                <select class="form-control form-control-sm" name="field_input_type" [(ngModel)]="currentField.inputType">
+                                <select class="form-control form-control-sm" name="field_input_type" formControlName="field_input_type">
                                     <option value="text">Текстовое поле</option>
                                     <option value="textarea">Многострочный текст</option>
                                     <option value="number">Число</option>
@@ -108,7 +110,7 @@
                                 <label class="small">Тип вывода</label>
                             </div>
                             <div class="col-md-7">
-                                <select class="form-control form-control-sm" name="field_output_type" [(ngModel)]="currentField.outputType">
+                                <select class="form-control form-control-sm" name="field_output_type" formControlName="field_output_type">
                                     <option value="text">Текст</option>
                                     <option value="select">Выпадающий список</option>
                                     <option value="checkbox">Чекбокс</option>
@@ -126,7 +128,7 @@
                             <div class="col-md-7">
 
                                 <div class="input-group input-group-sm">
-                                    <select class="form-control" name="field_group" [(ngModel)]="currentField.group">
+                                    <select class="form-control" name="field_group" formControlName="field_group">
                                         <option value="{{group}}" *ngFor="let group of model.groups">{{group}}</option>
                                     </select>
                                     <div class="input-group-btn">
@@ -172,6 +174,7 @@
 
                     </div>
                 </div>
+                <!-- /Field form -->
 
             </div>
         </div>
@@ -236,7 +239,7 @@
 
     </div>
     <div class="modal-footer d-block">
-        <button type="submit" class="btn btn-success btn-wide" [disabled]="submitted && !contentTypeForm.form.valid">
+        <button type="submit" class="btn btn-success btn-wide">
             Save
         </button>
         <button type="submit" class="btn btn-secondary btn-wide" (click)="activeModal.dismiss()">

@@ -133,11 +133,12 @@ var _a, _b;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__ = __webpack_require__(31);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_content_types_service__ = __webpack_require__(133);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__models_content_field_model__ = __webpack_require__(171);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__models_content_type_model__ = __webpack_require__(172);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_component__ = __webpack_require__(129);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_lodash__ = __webpack_require__(228);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_lodash__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_forms__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__models_content_field_model__ = __webpack_require__(171);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_content_type_model__ = __webpack_require__(172);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__app_component__ = __webpack_require__(129);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_lodash__ = __webpack_require__(228);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_lodash__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return ContentTypeModalContent; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ContentTypesComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -156,20 +157,91 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var ContentTypeModalContent = (function () {
-    function ContentTypeModalContent(contentTypesService, activeModal) {
+    function ContentTypeModalContent(fb, contentTypesService, activeModal) {
+        this.fb = fb;
         this.contentTypesService = contentTypesService;
         this.activeModal = activeModal;
-        this.model = new __WEBPACK_IMPORTED_MODULE_4__models_content_type_model__["a" /* ContentType */]('', '', '', '', [], ['Содержание', 'Служебное']);
-        this.currentField = new __WEBPACK_IMPORTED_MODULE_3__models_content_field_model__["a" /* ContentField */](__WEBPACK_IMPORTED_MODULE_6_lodash__["uniqueId"](), '', '', '', '', '', '');
+        this.model = new __WEBPACK_IMPORTED_MODULE_5__models_content_type_model__["a" /* ContentType */]('', '', '', '', [], ['Содержание', 'Служебное']);
+        this.currentField = new __WEBPACK_IMPORTED_MODULE_4__models_content_field_model__["a" /* ContentField */](__WEBPACK_IMPORTED_MODULE_7_lodash__["uniqueId"](), '', '', '', '', '', '');
         this.submitted = false;
         this.loading = false;
         this.action = 'add_field';
+        this.formErrors = {
+            'name': '',
+            'title': ''
+        };
+        this.validationMessages = {
+            'name': {
+                'required': 'Name is required.',
+                'pattern': 'The name must contain only Latin letters.'
+            },
+            'title': {
+                'required': 'Title is required.'
+            }
+        };
     }
+    /** On initialize */
     ContentTypeModalContent.prototype.ngOnInit = function () {
+        this.buildForm();
         if (this.itemId) {
             this.getModelData();
         }
+    };
+    /** Build form groups */
+    ContentTypeModalContent.prototype.buildForm = function () {
+        var _this = this;
+        this.contentTypeForm = this.fb.group({
+            title: [this.model.title, [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* Validators */].required]],
+            name: [this.model.name, [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* Validators */].pattern('[A-Za-z_-]+')]],
+            description: [this.model.description, []]
+        });
+        this.contentTypeForm.valueChanges
+            .subscribe(function (data) { return _this.onValueChanged(data); });
+        this.fieldForm = this.fb.group({
+            field_title: [this.currentField.title, [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* Validators */].required]],
+            field_name: [this.currentField.name, [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* Validators */].pattern('[A-Za-z_-]+')]],
+            field_description: [this.currentField.description, []],
+            field_input_type: [this.currentField.inputType, [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* Validators */].required]],
+            field_output_type: [this.currentField.outputType, [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* Validators */].required]],
+            field_group: [this.currentField.group, [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* Validators */].required]]
+        });
+        this.fieldForm.valueChanges
+            .subscribe(function (data) { return _this.onFieldValueChanged(data); });
+    };
+    /**
+     * On form value changed
+     * @param data
+     */
+    ContentTypeModalContent.prototype.onValueChanged = function (data) {
+        if (!this.contentTypeForm) {
+            return;
+        }
+        var form = this.contentTypeForm;
+        var isSubmitted = this.submitted;
+        for (var field in this.formErrors) {
+            this.formErrors[field] = '';
+            var control = form.get(field);
+            if (control && (control.dirty || isSubmitted) && !control.valid) {
+                var messages = this.validationMessages[field];
+                for (var key in control.errors) {
+                    this.formErrors[field] += messages[key] + ' ';
+                }
+            }
+        }
+    };
+    /**
+     * On field form value changed
+     * @param data
+     */
+    ContentTypeModalContent.prototype.onFieldValueChanged = function (data) {
+        if (!this.fieldForm) {
+            return;
+        }
+        var form = this.fieldForm;
+        var isSubmitted = this.submitted;
+        console.log('onFieldValueChanged', data);
     };
     ContentTypeModalContent.prototype.getModelData = function () {
         var _this = this;
@@ -187,11 +259,11 @@ var ContentTypeModalContent = (function () {
         console.log('deleteGroup');
     };
     ContentTypeModalContent.prototype.editField = function (field) {
-        this.currentField = __WEBPACK_IMPORTED_MODULE_6_lodash__["clone"](field);
+        this.currentField = __WEBPACK_IMPORTED_MODULE_7_lodash__["clone"](field);
         this.action = 'edit_field';
     };
     ContentTypeModalContent.prototype.deleteField = function (field) {
-        var index = __WEBPACK_IMPORTED_MODULE_6_lodash__["findIndex"](this.model.fields, { id: field.id });
+        var index = __WEBPACK_IMPORTED_MODULE_7_lodash__["findIndex"](this.model.fields, { id: field.id });
         if (index == -1) {
             this.errorMessage = 'Field not found.';
             return;
@@ -199,7 +271,7 @@ var ContentTypeModalContent = (function () {
         this.model.fields.splice(index, 1);
     };
     ContentTypeModalContent.prototype.clearFieldData = function () {
-        this.currentField.id = __WEBPACK_IMPORTED_MODULE_6_lodash__["uniqueId"]();
+        this.currentField.id = __WEBPACK_IMPORTED_MODULE_7_lodash__["uniqueId"]();
         this.currentField.name = '';
         this.currentField.title = '';
         this.currentField.description = '';
@@ -208,7 +280,7 @@ var ContentTypeModalContent = (function () {
         this.currentField.group = '';
     };
     ContentTypeModalContent.prototype.editFieldSubmit = function () {
-        var index = __WEBPACK_IMPORTED_MODULE_6_lodash__["findIndex"](this.model.fields, { id: this.currentField.id });
+        var index = __WEBPACK_IMPORTED_MODULE_7_lodash__["findIndex"](this.model.fields, { id: this.currentField.id });
         if (index == -1) {
             this.errorMessage = 'Field not found.';
             return;
@@ -219,7 +291,7 @@ var ContentTypeModalContent = (function () {
             return;
         }
         this.errorMessage = '';
-        this.model.fields[index] = __WEBPACK_IMPORTED_MODULE_6_lodash__["clone"](this.currentField);
+        this.model.fields[index] = __WEBPACK_IMPORTED_MODULE_7_lodash__["clone"](this.currentField);
         this.action = 'add_field';
         this.clearFieldData();
     };
@@ -229,7 +301,7 @@ var ContentTypeModalContent = (function () {
     };
     ContentTypeModalContent.prototype.validateEmptyFieldData = function (field) {
         var isHaveEmpty = false;
-        __WEBPACK_IMPORTED_MODULE_6_lodash__["forEach"](this.currentField, function (value, key) {
+        __WEBPACK_IMPORTED_MODULE_7_lodash__["forEach"](this.currentField, function (value, key) {
             if (!value) {
                 isHaveEmpty = true;
                 return false;
@@ -243,39 +315,40 @@ var ContentTypeModalContent = (function () {
             this.errorMessage = 'All fields is required.';
             return;
         }
-        var index = __WEBPACK_IMPORTED_MODULE_6_lodash__["findIndex"](this.model.fields, { name: this.currentField.name });
+        var index = __WEBPACK_IMPORTED_MODULE_7_lodash__["findIndex"](this.model.fields, { name: this.currentField.name });
         if (index > -1) {
             this.errorMessage = 'A field named "' + this.currentField.name + '" already exists.';
             return;
         }
         if (!this.currentField.id) {
-            this.currentField.id = __WEBPACK_IMPORTED_MODULE_6_lodash__["uniqueId"]();
+            this.currentField.id = __WEBPACK_IMPORTED_MODULE_7_lodash__["uniqueId"]();
         }
         this.errorMessage = '';
-        this.model.fields.push(__WEBPACK_IMPORTED_MODULE_6_lodash__["clone"](this.currentField));
+        this.model.fields.push(__WEBPACK_IMPORTED_MODULE_7_lodash__["clone"](this.currentField));
         this.clearFieldData();
     };
     ContentTypeModalContent.prototype.onSubmit = function () {
-        var _this = this;
+        console.log('onSubmit', this.contentTypeForm.valid);
         this.submitted = true;
-        if (!this.model.title || !this.model.name || !this.model.description) {
+        if (!this.contentTypeForm.valid) {
+            this.onValueChanged();
             return;
         }
         if (this.model.fields.length == 0) {
             this.errorMessage = 'You have not created any fields.';
             return;
         }
-        this.contentTypesService.createItem(this.model)
-            .then(function (res) {
-            if (res.success) {
-                _this.closeModal();
-            }
-            else {
-                if (res.msg) {
-                    _this.errorMessage = res.msg;
+        console.log(this.contentTypeForm.value);
+        /*this.contentTypesService.createItem(this.model)
+            .then((res) => {
+                if( res.success ){
+                    this.closeModal();
+                } else {
+                    if( res.msg ){
+                        this.errorMessage = res.msg;
+                    }
                 }
-            }
-        });
+            });*/
     };
     ContentTypeModalContent.prototype.closeModal = function () {
         this.activeModal.close();
@@ -296,7 +369,7 @@ ContentTypeModalContent = __decorate([
         template: __webpack_require__(232),
         providers: [__WEBPACK_IMPORTED_MODULE_2__services_content_types_service__["a" /* ContentTypesService */]]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__services_content_types_service__["a" /* ContentTypesService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_content_types_service__["a" /* ContentTypesService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["b" /* NgbActiveModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["b" /* NgbActiveModal */]) === "function" && _b || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* FormBuilder */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__services_content_types_service__["a" /* ContentTypesService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_content_types_service__["a" /* ContentTypesService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["b" /* NgbActiveModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["b" /* NgbActiveModal */]) === "function" && _c || Object])
 ], ContentTypeModalContent);
 
 var ContentTypesComponent = (function () {
@@ -333,7 +406,7 @@ var ContentTypesComponent = (function () {
     };
     ContentTypesComponent.prototype.deleteItemConfirm = function (itemId) {
         var _this = this;
-        this.modalRef = this.modalService.open(__WEBPACK_IMPORTED_MODULE_5__app_component__["b" /* ConfirmModalContent */]);
+        this.modalRef = this.modalService.open(__WEBPACK_IMPORTED_MODULE_6__app_component__["b" /* ConfirmModalContent */]);
         this.modalRef.componentInstance.modalTitle = 'Confirm';
         this.modalRef.componentInstance.modalContent = 'Are you sure you want to remove this item?';
         this.modalRef.result.then(function (result) {
@@ -365,10 +438,10 @@ ContentTypesComponent = __decorate([
         selector: 'shk-content-types',
         template: __webpack_require__(234)
     }),
-    __metadata("design:paramtypes", [typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__services_content_types_service__["a" /* ContentTypesService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_content_types_service__["a" /* ContentTypesService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["c" /* NgbModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["c" /* NgbModal */]) === "function" && _d || Object])
+    __metadata("design:paramtypes", [typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_2__services_content_types_service__["a" /* ContentTypesService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_content_types_service__["a" /* ContentTypesService */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["c" /* NgbModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["c" /* NgbModal */]) === "function" && _e || Object])
 ], ContentTypesComponent);
 
-var _a, _b, _c, _d;
+var _a, _b, _c, _d, _e;
 //# sourceMappingURL=content_types.component.js.map
 
 /***/ }),
@@ -680,6 +753,7 @@ AppModule = __decorate([
         imports: [
             __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
             __WEBPACK_IMPORTED_MODULE_2__angular_forms__["a" /* FormsModule */],
+            __WEBPACK_IMPORTED_MODULE_2__angular_forms__["b" /* ReactiveFormsModule */],
             __WEBPACK_IMPORTED_MODULE_3__angular_http__["a" /* HttpModule */],
             __WEBPACK_IMPORTED_MODULE_11__app_routing_module__["a" /* AppRoutingModule */],
             __WEBPACK_IMPORTED_MODULE_12__ng_bootstrap_ng_bootstrap__["a" /* NgbModule */].forRoot()
@@ -800,7 +874,7 @@ module.exports = "<div class=\"modal-header d-block\">\n    <h4 class=\"modal-ti
 /***/ 232:
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"modal-header d-block\">\n    <div class=\"d-block float-right\">\n        <button type=\"button\" class=\"btn btn-secondary\" (click)=\"activeModal.dismiss()\">\n            Close\n        </button>\n    </div>\n    <h4 class=\"modal-title\">{{modalTitle}}</h4>\n</div>\n\n<form (ngSubmit)=\"onSubmit()\" #contentTypeForm=\"ngForm\" [class.loading]=\"loading\">\n\n    <div class=\"modal-body\">\n\n        <div class=\"row\">\n            <div class=\"col-md-4\">\n\n                <div class=\"form-group\" [class.form-group-message]=\"submitted && !title.valid\">\n                    <label class=\"label-filled\">\n                        Название\n                    </label>\n                    <input type=\"text\" class=\"form-control\" name=\"title\" [(ngModel)]=\"model.title\" #title=\"ngModel\" required>\n                    <div [hidden]=\"!submitted || title.valid\" class=\"alert alert-danger\">\n                        Field is required\n                    </div>\n                </div>\n\n                <div class=\"form-group\" [class.form-group-message]=\"submitted && !name.valid\">\n                    <label class=\"label-filled\">\n                        Системное имя\n                    </label>\n                    <input type=\"text\" class=\"form-control\" name=\"name\" [(ngModel)]=\"model.name\" #name=\"ngModel\" required>\n                    <div [hidden]=\"!submitted || name.valid\" class=\"alert alert-danger\">\n                        Field is required\n                    </div>\n                </div>\n\n                <div class=\"form-group\" [class.form-group-message]=\"submitted && !description.valid\">\n                    <label class=\"label-filled\">\n                        Описание\n                    </label>\n                    <textarea type=\"text\" class=\"form-control\" name=\"description\" [(ngModel)]=\"model.description\" #description=\"ngModel\" required></textarea>\n                    <div [hidden]=\"!submitted || description.valid\" class=\"alert alert-danger\">\n                        Field is required\n                    </div>\n                </div>\n\n            </div>\n            <div class=\"col-md-8\">\n\n                <label class=\"label-filled\" [hidden]=\"action != 'add_field'\">\n                    Добавить поле\n                </label>\n                <label class=\"label-filled\" [hidden]=\"action != 'edit_field'\">\n                    Редактировать поле\n                </label>\n\n                <div class=\"card\">\n                    <div class=\"card-block\">\n\n                        <div class=\"form-group row\">\n                            <div class=\"col-md-5\">\n                                <label class=\"small\">Название</label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <input type=\"text\" class=\"form-control form-control-sm\" name=\"field_title\" [(ngModel)]=\"currentField.title\">\n                            </div>\n                        </div>\n\n                        <div class=\"form-group row\">\n                            <div class=\"col-md-5\">\n                                <label class=\"small\">Системное имя</label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <input type=\"text\" class=\"form-control form-control-sm\" name=\"field_name\" [(ngModel)]=\"currentField.name\">\n                            </div>\n                        </div>\n\n                        <div class=\"form-group row\">\n                            <div class=\"col-md-5\">\n                                <label class=\"small\">Описание</label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <textarea type=\"text\" class=\"form-control form-control-sm\" name=\"field_description\" [(ngModel)]=\"currentField.description\"></textarea>\n                            </div>\n                        </div>\n\n                        <div class=\"form-group row\">\n                            <div class=\"col-md-5\">\n                                <label class=\"small\">Тип ввода</label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <select class=\"form-control form-control-sm\" name=\"field_input_type\" [(ngModel)]=\"currentField.inputType\">\n                                    <option value=\"text\">Текстовое поле</option>\n                                    <option value=\"textarea\">Многострочный текст</option>\n                                    <option value=\"number\">Число</option>\n                                    <option value=\"select\">Выпадающий список</option>\n                                    <option value=\"checkbox\">Чекбокс</option>\n                                    <option value=\"radio\">Переключатель</option>\n                                    <option value=\"table\">Таблица</option>\n                                    <option value=\"file\">Файл</option>\n                                    <option value=\"image\">Картинка</option>\n                                </select>\n                            </div>\n                        </div>\n\n                        <div class=\"form-group row\">\n                            <div class=\"col-md-5\">\n                                <label class=\"small\">Тип вывода</label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <select class=\"form-control form-control-sm\" name=\"field_output_type\" [(ngModel)]=\"currentField.outputType\">\n                                    <option value=\"text\">Текст</option>\n                                    <option value=\"select\">Выпадающий список</option>\n                                    <option value=\"checkbox\">Чекбокс</option>\n                                    <option value=\"radio\">Переключатель</option>\n                                    <option value=\"tanle\">Таблица</option>\n                                    <option value=\"image\">Картинка</option>\n                                </select>\n                            </div>\n                        </div>\n\n                        <div class=\"form-group row\">\n                            <div class=\"col-md-5\">\n                                <label class=\"small\">Группа</label>\n                            </div>\n                            <div class=\"col-md-7\">\n\n                                <div class=\"input-group input-group-sm\">\n                                    <select class=\"form-control\" name=\"field_group\" [(ngModel)]=\"currentField.group\">\n                                        <option value=\"{{group}}\" *ngFor=\"let group of model.groups\">{{group}}</option>\n                                    </select>\n                                    <div class=\"input-group-btn\">\n                                        <button type=\"button\" class=\"btn btn-secondary btn-sm\" title=\"Добавить группу\" (click)=\"addGroupBlock.style.display = 'block'; addGroupField.value = ''; addGroupField.focus()\">\n                                            <i class=\"icon-plus\"></i>\n                                        </button>\n                                    </div>\n                                    <div class=\"input-group-btn\">\n                                        <button type=\"button\" class=\"btn btn-secondary btn-sm\" title=\"Удалить группу\" (click)=\"deleteGroup()\">\n                                            <i class=\"icon-cross\"></i>\n                                        </button>\n                                    </div>\n                                </div>\n\n                                <div class=\"card p-1 mt-2\" #addGroupBlock style=\"display: none;\">\n                                    <input type=\"text\" class=\"form-control form-control-sm mb-1\" #addGroupField>\n                                    <div class=\"text-right\">\n                                        <button type=\"button\" class=\"btn btn-secondary btn-sm\" (click)=\"addGroup(addGroupField.value); addGroupBlock.style.display = 'none'\">\n                                            Add\n                                        </button>\n                                        <button type=\"button\" class=\"btn btn-secondary btn-sm\" (click)=\"addGroupBlock.style.display = 'none'\">\n                                            Cancel\n                                        </button>\n                                    </div>\n                                </div>\n\n                            </div>\n                        </div>\n\n                        <div>\n                            <button type=\"button\" class=\"btn btn-sm btn-info btn-wide\" (click)=\"addField()\" [hidden]=\"action != 'add_field'\">\n                                <i class=\"icon-plus\"></i>\n                                Add field\n                            </button>\n                            <button type=\"button\" class=\"btn btn-sm btn-success btn-wide\" (click)=\"editFieldSubmit()\" [hidden]=\"action != 'edit_field'\">\n                                <i class=\"icon-check\"></i>\n                                Save field\n                            </button>\n                            <button type=\"button\" class=\"btn btn-sm btn-secondary btn-wide\" (click)=\"editFieldCancel()\" [hidden]=\"action != 'edit_field'\">\n                                Cancel\n                            </button>\n                        </div>\n\n                    </div>\n                </div>\n\n            </div>\n        </div>\n\n        <div class=\"form-group row\">\n            <div class=\"col-12\">\n                <label class=\"label-filled\">\n                    Поля\n                </label>\n\n                <table class=\"table table-hover table-bordered mb-0\">\n                    <thead>\n                        <tr>\n                            <th>Название</th>\n                            <th>Системное имя</th>\n                            <th>Тип ввода</th>\n                            <th>Группа</th>\n                        </tr>\n                    </thead>\n                    <tbody>\n                        <tr class=\"show-on-hover-parent\" *ngFor=\"let field of model.fields\">\n                            <td>\n                                {{field.title}}\n                            </td>\n                            <td>\n                                {{field.name}}\n                            </td>\n                            <td>\n                                {{field.inputType}}\n                            </td>\n                            <td>\n                                <div class=\"relative\">\n                                    <div class=\"show-on-hover\">\n                                        <button type=\"button\" class=\"btn btn-secondary btn-sm\" (click)=\"editField(field)\">\n                                            <i class=\"icon-pencil\"></i>\n                                        </button>\n                                        <button type=\"button\" class=\"btn btn-secondary btn-sm\" (click)=\"deleteField(field)\">\n                                            <i class=\"icon-cross\"></i>\n                                        </button>\n                                    </div>\n                                </div>\n                                {{field.group}}\n                            </td>\n                        </tr>\n                        <tr [hidden]=\"model.fields.length > 0\" class=\"table-active\">\n                            <td colspan=\"4\" class=\"text-center\">\n                                Empty\n                            </td>\n                        </tr>\n                    </tbody>\n                </table>\n\n                <div class=\"alert alert-danger mt-3 mb-0\" [hidden]=\"!errorMessage\">\n                    <button type=\"button\" class=\"close\" (click)=\"errorMessage = ''\">\n                        <span aria-hidden=\"true\">&times;</span>\n                    </button>\n                    {{errorMessage}}\n                </div>\n\n            </div>\n        </div>\n\n    </div>\n    <div class=\"modal-footer d-block\">\n        <button type=\"submit\" class=\"btn btn-success btn-wide\" [disabled]=\"submitted && !contentTypeForm.form.valid\">\n            Save\n        </button>\n        <button type=\"submit\" class=\"btn btn-secondary btn-wide\" (click)=\"activeModal.dismiss()\">\n            Cancel\n        </button>\n    </div>\n\n</form>"
+module.exports = "<div class=\"modal-header d-block\">\n    <div class=\"d-block float-right\">\n        <button type=\"button\" class=\"btn btn-secondary\" (click)=\"activeModal.dismiss()\">\n            Close\n        </button>\n    </div>\n    <h4 class=\"modal-title\">{{modalTitle}}</h4>\n</div>\n\n<form (ngSubmit)=\"onSubmit()\" [class.loading]=\"loading\">\n\n    <div class=\"modal-body\">\n\n        <div class=\"row\">\n\n            <!-- ContentType form -->\n            <div class=\"col-md-4\" [formGroup]=\"contentTypeForm\">\n\n                <div class=\"form-group\" [class.form-group-message]=\"formErrors.title\">\n                    <label class=\"label-filled\">\n                        Название\n                    </label>\n                    <input type=\"text\" class=\"form-control\" name=\"title\" formControlName=\"title\">\n                    <div *ngIf=\"formErrors.title\" class=\"alert alert-danger\">\n                        {{formErrors.title}}\n                    </div>\n                </div>\n\n                <div class=\"form-group\" [class.form-group-message]=\"formErrors.name\">\n                    <label class=\"label-filled\">\n                        Системное имя\n                    </label>\n                    <input type=\"text\" class=\"form-control\" name=\"name\" formControlName=\"name\">\n                    <div *ngIf=\"formErrors.name\" class=\"alert alert-danger\">\n                        {{formErrors.name}}\n                    </div>\n                </div>\n\n                <div class=\"form-group\">\n                    <label class=\"label-filled\">\n                        Описание\n                    </label>\n                    <textarea type=\"text\" class=\"form-control\" name=\"description\" formControlName=\"description\"></textarea>\n                </div>\n\n            </div>\n            <!-- /ContentType form -->\n\n            <!-- Field form -->\n            <div class=\"col-md-8\" [formGroup]=\"fieldForm\">\n\n                <label class=\"label-filled\" [hidden]=\"action != 'add_field'\">\n                    Добавить поле\n                </label>\n                <label class=\"label-filled\" [hidden]=\"action != 'edit_field'\">\n                    Редактировать поле\n                </label>\n\n                <div class=\"card\">\n                    <div class=\"card-block\">\n\n                        <div class=\"form-group row\">\n                            <div class=\"col-md-5\">\n                                <label class=\"small\">Название</label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <input type=\"text\" class=\"form-control form-control-sm\" name=\"field_title\" formControlName=\"field_title\">\n                            </div>\n                        </div>\n\n                        <div class=\"form-group row\">\n                            <div class=\"col-md-5\">\n                                <label class=\"small\">Системное имя</label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <input type=\"text\" class=\"form-control form-control-sm\" name=\"field_name\" formControlName=\"field_name\">\n                            </div>\n                        </div>\n\n                        <div class=\"form-group row\">\n                            <div class=\"col-md-5\">\n                                <label class=\"small\">Описание</label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <textarea type=\"text\" class=\"form-control form-control-sm\" name=\"field_description\" formControlName=\"field_description\"></textarea>\n                            </div>\n                        </div>\n\n                        <div class=\"form-group row\">\n                            <div class=\"col-md-5\">\n                                <label class=\"small\">Тип ввода</label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <select class=\"form-control form-control-sm\" name=\"field_input_type\" formControlName=\"field_input_type\">\n                                    <option value=\"text\">Текстовое поле</option>\n                                    <option value=\"textarea\">Многострочный текст</option>\n                                    <option value=\"number\">Число</option>\n                                    <option value=\"select\">Выпадающий список</option>\n                                    <option value=\"checkbox\">Чекбокс</option>\n                                    <option value=\"radio\">Переключатель</option>\n                                    <option value=\"table\">Таблица</option>\n                                    <option value=\"file\">Файл</option>\n                                    <option value=\"image\">Картинка</option>\n                                </select>\n                            </div>\n                        </div>\n\n                        <div class=\"form-group row\">\n                            <div class=\"col-md-5\">\n                                <label class=\"small\">Тип вывода</label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <select class=\"form-control form-control-sm\" name=\"field_output_type\" formControlName=\"field_output_type\">\n                                    <option value=\"text\">Текст</option>\n                                    <option value=\"select\">Выпадающий список</option>\n                                    <option value=\"checkbox\">Чекбокс</option>\n                                    <option value=\"radio\">Переключатель</option>\n                                    <option value=\"tanle\">Таблица</option>\n                                    <option value=\"image\">Картинка</option>\n                                </select>\n                            </div>\n                        </div>\n\n                        <div class=\"form-group row\">\n                            <div class=\"col-md-5\">\n                                <label class=\"small\">Группа</label>\n                            </div>\n                            <div class=\"col-md-7\">\n\n                                <div class=\"input-group input-group-sm\">\n                                    <select class=\"form-control\" name=\"field_group\" formControlName=\"field_group\">\n                                        <option value=\"{{group}}\" *ngFor=\"let group of model.groups\">{{group}}</option>\n                                    </select>\n                                    <div class=\"input-group-btn\">\n                                        <button type=\"button\" class=\"btn btn-secondary btn-sm\" title=\"Добавить группу\" (click)=\"addGroupBlock.style.display = 'block'; addGroupField.value = ''; addGroupField.focus()\">\n                                            <i class=\"icon-plus\"></i>\n                                        </button>\n                                    </div>\n                                    <div class=\"input-group-btn\">\n                                        <button type=\"button\" class=\"btn btn-secondary btn-sm\" title=\"Удалить группу\" (click)=\"deleteGroup()\">\n                                            <i class=\"icon-cross\"></i>\n                                        </button>\n                                    </div>\n                                </div>\n\n                                <div class=\"card p-1 mt-2\" #addGroupBlock style=\"display: none;\">\n                                    <input type=\"text\" class=\"form-control form-control-sm mb-1\" #addGroupField>\n                                    <div class=\"text-right\">\n                                        <button type=\"button\" class=\"btn btn-secondary btn-sm\" (click)=\"addGroup(addGroupField.value); addGroupBlock.style.display = 'none'\">\n                                            Add\n                                        </button>\n                                        <button type=\"button\" class=\"btn btn-secondary btn-sm\" (click)=\"addGroupBlock.style.display = 'none'\">\n                                            Cancel\n                                        </button>\n                                    </div>\n                                </div>\n\n                            </div>\n                        </div>\n\n                        <div>\n                            <button type=\"button\" class=\"btn btn-sm btn-info btn-wide\" (click)=\"addField()\" [hidden]=\"action != 'add_field'\">\n                                <i class=\"icon-plus\"></i>\n                                Add field\n                            </button>\n                            <button type=\"button\" class=\"btn btn-sm btn-success btn-wide\" (click)=\"editFieldSubmit()\" [hidden]=\"action != 'edit_field'\">\n                                <i class=\"icon-check\"></i>\n                                Save field\n                            </button>\n                            <button type=\"button\" class=\"btn btn-sm btn-secondary btn-wide\" (click)=\"editFieldCancel()\" [hidden]=\"action != 'edit_field'\">\n                                Cancel\n                            </button>\n                        </div>\n\n                    </div>\n                </div>\n                <!-- /Field form -->\n\n            </div>\n        </div>\n\n        <div class=\"form-group row\">\n            <div class=\"col-12\">\n                <label class=\"label-filled\">\n                    Поля\n                </label>\n\n                <table class=\"table table-hover table-bordered mb-0\">\n                    <thead>\n                        <tr>\n                            <th>Название</th>\n                            <th>Системное имя</th>\n                            <th>Тип ввода</th>\n                            <th>Группа</th>\n                        </tr>\n                    </thead>\n                    <tbody>\n                        <tr class=\"show-on-hover-parent\" *ngFor=\"let field of model.fields\">\n                            <td>\n                                {{field.title}}\n                            </td>\n                            <td>\n                                {{field.name}}\n                            </td>\n                            <td>\n                                {{field.inputType}}\n                            </td>\n                            <td>\n                                <div class=\"relative\">\n                                    <div class=\"show-on-hover\">\n                                        <button type=\"button\" class=\"btn btn-secondary btn-sm\" (click)=\"editField(field)\">\n                                            <i class=\"icon-pencil\"></i>\n                                        </button>\n                                        <button type=\"button\" class=\"btn btn-secondary btn-sm\" (click)=\"deleteField(field)\">\n                                            <i class=\"icon-cross\"></i>\n                                        </button>\n                                    </div>\n                                </div>\n                                {{field.group}}\n                            </td>\n                        </tr>\n                        <tr [hidden]=\"model.fields.length > 0\" class=\"table-active\">\n                            <td colspan=\"4\" class=\"text-center\">\n                                Empty\n                            </td>\n                        </tr>\n                    </tbody>\n                </table>\n\n                <div class=\"alert alert-danger mt-3 mb-0\" [hidden]=\"!errorMessage\">\n                    <button type=\"button\" class=\"close\" (click)=\"errorMessage = ''\">\n                        <span aria-hidden=\"true\">&times;</span>\n                    </button>\n                    {{errorMessage}}\n                </div>\n\n            </div>\n        </div>\n\n    </div>\n    <div class=\"modal-footer d-block\">\n        <button type=\"submit\" class=\"btn btn-success btn-wide\">\n            Save\n        </button>\n        <button type=\"submit\" class=\"btn btn-secondary btn-wide\" (click)=\"activeModal.dismiss()\">\n            Cancel\n        </button>\n    </div>\n\n</form>"
 
 /***/ }),
 

@@ -35,7 +35,7 @@ exports = module.exports = __webpack_require__(73)();
 
 
 // module
-exports.push([module.i, "\n\n\n", ""]);
+exports.push([module.i, "", ""]);
 
 // exports
 

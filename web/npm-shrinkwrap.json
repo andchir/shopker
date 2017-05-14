@@ -1,0 +1,22 @@
+{
+  "dependencies": {
+    "@ng-bootstrap/ng-bootstrap": {
+      "version": "1.0.0-alpha.23",
+      "from": "node_modules/@ng-bootstrap/ng-bootstrap@1.0.0-alpha.23",
+      "dependencies": {
+        "@angular/core": {
+          "version": "4.0.2",
+          "from": "@angular/core@2.3.1"
+        },
+        "@angular/common": {
+          "version": "4.0.2",
+          "from": "@angular/common@2.3.1"
+        },
+        "@angular/forms": {
+          "version": "4.0.2",
+          "from": "@angular/forms@2.3.1"
+        }
+      }
+    }
+  }
+}

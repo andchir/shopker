@@ -1,0 +1,17 @@
+{
+  "name": "shopkeeper4",
+  "version": "1.0.0",
+  "description": "Shopping cart and orders management",
+  "main": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Andchir",
+  "license": "MIT",
+  "devDependencies": {
+    "@angular/cli": "^1.0.0"
+  },
+  "dependencies": {
+    "@ng-bootstrap/ng-bootstrap": "^1.0.0-alpha.24"
+  }
+}

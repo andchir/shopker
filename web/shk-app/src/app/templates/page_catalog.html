@@ -1,0 +1,127 @@
+
+<div class="card">
+
+    <div class="card-block">
+
+        <div class="float-right">
+            <a class="btn btn-primary" [routerLink]="['/catalog/content_types']">
+                <i class="icon-box"></i>
+                Типы товаров
+            </a>
+        </div>
+        <h3>
+            <i class="icon-layers"></i>
+            {{title}}
+        </h3>
+
+        <hr>
+
+        <div class="float-right">
+            <button type="button" class="btn btn-outline-success d-inline-block btn-wide" (click)="modalOpen()">
+                <i class="icon-plus"></i>
+                Add
+            </button>
+        </div>
+        <div class="float-left">
+            <select name="category" class="form-control">
+                <option value="1">First</option>
+                <option value="2">Second</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Название</th>
+                <th>Цена</th>
+                <th>Статус</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="show-on-hover-parent">
+                <th scope="row">1</th>
+                <td>
+                    Первый
+                </td>
+                <td>
+                    2 200
+                </td>
+                <td>
+                    <div class="relative">
+                        <div class="show-on-hover">
+                            <button class="btn btn-secondary btn-sm">
+                                <i class="icon-pencil"></i>
+                            </button>
+                            <button class="btn btn-secondary btn-sm">
+                                <i class="icon-cross"></i>
+                            </button>
+                        </div>
+                    </div>
+                    Опуликован
+                </td>
+            </tr>
+            <tr class="show-on-hover-parent">
+                <th scope="row">1</th>
+                <td>
+                    Первый
+                </td>
+                <td>
+                    2 200
+                </td>
+                <td>
+                    <div class="relative">
+                        <div class="show-on-hover">
+                            <button class="btn btn-secondary btn-sm">
+                                <i class="icon-pencil"></i>
+                            </button>
+                            <button class="btn btn-secondary btn-sm">
+                                <i class="icon-cross"></i>
+                            </button>
+                        </div>
+                    </div>
+                    Опуликован
+                </td>
+            </tr>
+            <tr class="show-on-hover-parent">
+                <th scope="row">1</th>
+                <td>
+                    Первый
+                </td>
+                <td>
+                    2 200
+                </td>
+                <td>
+                    <div class="relative">
+                        <div class="show-on-hover">
+                            <button class="btn btn-secondary btn-sm">
+                                <i class="icon-pencil"></i>
+                            </button>
+                            <button class="btn btn-secondary btn-sm">
+                                <i class="icon-cross"></i>
+                            </button>
+                        </div>
+                    </div>
+                    Опуликован
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card-footer">
+
+        <nav aria-label="Pagination">
+            <ul class="pagination mb-0">
+                <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+            </ul>
+        </nav>
+
+    </div>
+</div>

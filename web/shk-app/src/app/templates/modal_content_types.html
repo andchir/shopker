@@ -1,0 +1,247 @@
+<div class="modal-header d-block">
+    <div class="d-block float-right">
+        <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss()">
+            Close
+        </button>
+    </div>
+    <h4 class="modal-title">{{modalTitle}}</h4>
+</div>
+
+<form (ngSubmit)="onSubmit()" #contentTypeForm="ngForm" [class.loading]="loading">
+
+    <div class="modal-body">
+
+        <div class="row">
+            <div class="col-md-4">
+
+                <div class="form-group" [class.form-group-message]="submitted && !title.valid">
+                    <label class="label-filled">
+                        Название
+                    </label>
+                    <input type="text" class="form-control" name="title" [(ngModel)]="model.title" #title="ngModel" required>
+                    <div [hidden]="!submitted || title.valid" class="alert alert-danger">
+                        Field is required
+                    </div>
+                </div>
+
+                <div class="form-group" [class.form-group-message]="submitted && !name.valid">
+                    <label class="label-filled">
+                        Системное имя
+                    </label>
+                    <input type="text" class="form-control" name="name" [(ngModel)]="model.name" #name="ngModel" required>
+                    <div [hidden]="!submitted || name.valid" class="alert alert-danger">
+                        Field is required
+                    </div>
+                </div>
+
+                <div class="form-group" [class.form-group-message]="submitted && !description.valid">
+                    <label class="label-filled">
+                        Описание
+                    </label>
+                    <textarea type="text" class="form-control" name="description" [(ngModel)]="model.description" #description="ngModel" required></textarea>
+                    <div [hidden]="!submitted || description.valid" class="alert alert-danger">
+                        Field is required
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-8">
+
+                <label class="label-filled" [hidden]="action != 'add_field'">
+                    Добавить поле
+                </label>
+                <label class="label-filled" [hidden]="action != 'edit_field'">
+                    Редактировать поле
+                </label>
+
+                <div class="card">
+                    <div class="card-block">
+
+                        <div class="form-group row">
+                            <div class="col-md-5">
+                                <label class="small">Название</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control form-control-sm" name="field_title" [(ngModel)]="currentField.title">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-5">
+                                <label class="small">Системное имя</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control form-control-sm" name="field_name" [(ngModel)]="currentField.name">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-5">
+                                <label class="small">Описание</label>
+                            </div>
+                            <div class="col-md-7">
+                                <textarea type="text" class="form-control form-control-sm" name="field_description" [(ngModel)]="currentField.description"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-5">
+                                <label class="small">Тип ввода</label>
+                            </div>
+                            <div class="col-md-7">
+                                <select class="form-control form-control-sm" name="field_input_type" [(ngModel)]="currentField.inputType">
+                                    <option value="text">Текстовое поле</option>
+                                    <option value="textarea">Многострочный текст</option>
+                                    <option value="number">Число</option>
+                                    <option value="select">Выпадающий список</option>
+                                    <option value="checkbox">Чекбокс</option>
+                                    <option value="radio">Переключатель</option>
+                                    <option value="table">Таблица</option>
+                                    <option value="file">Файл</option>
+                                    <option value="image">Картинка</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-5">
+                                <label class="small">Тип вывода</label>
+                            </div>
+                            <div class="col-md-7">
+                                <select class="form-control form-control-sm" name="field_output_type" [(ngModel)]="currentField.outputType">
+                                    <option value="text">Текст</option>
+                                    <option value="select">Выпадающий список</option>
+                                    <option value="checkbox">Чекбокс</option>
+                                    <option value="radio">Переключатель</option>
+                                    <option value="tanle">Таблица</option>
+                                    <option value="image">Картинка</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-5">
+                                <label class="small">Группа</label>
+                            </div>
+                            <div class="col-md-7">
+
+                                <div class="input-group input-group-sm">
+                                    <select class="form-control" name="field_group" [(ngModel)]="currentField.group">
+                                        <option value="{{group}}" *ngFor="let group of model.groups">{{group}}</option>
+                                    </select>
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-secondary btn-sm" title="Добавить группу" (click)="addGroupBlock.style.display = 'block'; addGroupField.value = ''; addGroupField.focus()">
+                                            <i class="icon-plus"></i>
+                                        </button>
+                                    </div>
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-secondary btn-sm" title="Удалить группу" (click)="deleteGroup()">
+                                            <i class="icon-cross"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="card p-1 mt-2" #addGroupBlock style="display: none;">
+                                    <input type="text" class="form-control form-control-sm mb-1" #addGroupField>
+                                    <div class="text-right">
+                                        <button type="button" class="btn btn-secondary btn-sm" (click)="addGroup(addGroupField.value); addGroupBlock.style.display = 'none'">
+                                            Add
+                                        </button>
+                                        <button type="button" class="btn btn-secondary btn-sm" (click)="addGroupBlock.style.display = 'none'">
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div>
+                            <button type="button" class="btn btn-sm btn-info btn-wide" (click)="addField()" [hidden]="action != 'add_field'">
+                                <i class="icon-plus"></i>
+                                Add field
+                            </button>
+                            <button type="button" class="btn btn-sm btn-success btn-wide" (click)="editFieldSubmit()" [hidden]="action != 'edit_field'">
+                                <i class="icon-check"></i>
+                                Save field
+                            </button>
+                            <button type="button" class="btn btn-sm btn-secondary btn-wide" (click)="editFieldCancel()" [hidden]="action != 'edit_field'">
+                                Cancel
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-12">
+                <label class="label-filled">
+                    Поля
+                </label>
+
+                <table class="table table-hover table-bordered mb-0">
+                    <thead>
+                        <tr>
+                            <th>Название</th>
+                            <th>Системное имя</th>
+                            <th>Тип ввода</th>
+                            <th>Группа</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="show-on-hover-parent" *ngFor="let field of model.fields">
+                            <td>
+                                {{field.title}}
+                            </td>
+                            <td>
+                                {{field.name}}
+                            </td>
+                            <td>
+                                {{field.inputType}}
+                            </td>
+                            <td>
+                                <div class="relative">
+                                    <div class="show-on-hover">
+                                        <button type="button" class="btn btn-secondary btn-sm" (click)="editField(field)">
+                                            <i class="icon-pencil"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-secondary btn-sm" (click)="deleteField(field)">
+                                            <i class="icon-cross"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                {{field.group}}
+                            </td>
+                        </tr>
+                        <tr [hidden]="model.fields.length > 0" class="table-active">
+                            <td colspan="4" class="text-center">
+                                Empty
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="alert alert-danger mt-3 mb-0" [hidden]="!errorMessage">
+                    <button type="button" class="close" (click)="errorMessage = ''">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    {{errorMessage}}
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer d-block">
+        <button type="submit" class="btn btn-success btn-wide" [disabled]="submitted && !contentTypeForm.form.valid">
+            Save
+        </button>
+        <button type="submit" class="btn btn-secondary btn-wide" (click)="activeModal.dismiss()">
+            Cancel
+        </button>
+    </div>
+
+</form>

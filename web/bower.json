@@ -1,0 +1,14 @@
+{
+  "name": "shopkeeper4",
+  "version": "0.1",
+  "authors": [
+    "andchir <andycoderw@gmail.com>"
+  ],
+  "main": "index.html",
+  "license": "",
+  "homepage": "",
+  "dependencies": {
+    "bootstrap": "v4.0.0-alpha.6"
+  },
+  "keywords": []
+}

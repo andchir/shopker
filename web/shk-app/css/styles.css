@@ -1,0 +1,56 @@
+
+/* common */
+.relative { position: relative; }
+.w-auto { width: auto; }
+
+/* form-control */
+input[type=text].form-control,
+input[type=number].form-control,
+input[type=password].form-control,
+textarea.form-control { background-color: #F8F8F8; box-shadow: 0 0 7px rgba(0,0,0,0.1) inset; transition: box-shadow 0.3s ease; }
+input[type=text].form-control:focus,
+input[type=number].form-control:focus,
+input[type=password].form-control:focus,
+textarea.form-control:focus { box-shadow: 0 0 6px rgba(0,0,0,0.3) inset; }
+select.form-control { box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); transition: box-shadow 0.3s ease; }
+select.form-control:hover { box-shadow: 0 0 11px rgba(0, 0, 0, 0.3); }
+
+.form-group-message {  }
+.form-group-message .form-control { border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-color: #a94442; }
+.form-group-message .alert { padding: 1px 8px; font-size: 14px; border-top-width: 0; border-top-left-radius: 0; border-top-right-radius: 0; }
+
+/* buttons */
+.btn { cursor: pointer; }
+.btn-wide { min-width: 130px; text-align: center; padding-left: 2rem; padding-right: 2rem; }
+
+/* modals */
+.modal .modal-dialog { box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+
+/* show-on-hover */
+.show-on-hover { position: absolute; top: 0; right: 0; display: none; }
+.show-on-hover-parent:hover .show-on-hover { display: block; }
+
+/* labels */
+.label-filled { padding: 1px 8px; margin-bottom: 0; background-color: rgba(0,0,0,.25); color: #fff; font-size: 14px; border-top-left-radius: 4px; border-top-right-radius: 4px; }
+.label-filled + .form-control,
+.label-filled + .card { border-top-left-radius: 0; }
+
+/* card-navbar */
+.card-navbar { padding: 7px; display: inline-block; background-color: rgba(0,0,0,.1); border-top-left-radius: 6px; border-top-right-radius: 6px; }
+.card-navbar + .card,
+.card-navbar + * + * > .card { border-top-left-radius: 0; }
+
+/* loading */
+.loading { position: relative; }
+.loading:before { content: ''; display: block; position: absolute; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.2); z-index: 500; }
+.loading:after { content: ''; display: block; position: absolute; left: 50%; top: 50%; width: 90px; height: 90px; margin: -45px 0 0 -45px; z-index: 510; border: 12px solid #f3f3f3; border-radius: 50%; border-top: 12px solid #5bc0de; opacity: 0.8; -webkit-animation: spin 1000ms linear infinite;  animation: spin 1000ms linear infinite; box-shadow: 0 0 30px rgba(0,0,0,0.3), inset 0 0 30px rgba(0,0,0,0.3); }
+@-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+

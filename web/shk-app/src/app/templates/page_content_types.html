@@ -1,0 +1,94 @@
+
+<div class="card">
+    <div class="card-block">
+
+        <h3>
+            <i class="icon-box"></i>
+            {{title}}
+        </h3>
+
+        <hr>
+
+        <div class="float-right">
+
+            <div ngbDropdown class="d-inline-block">
+                <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
+                    Массовые дейсвия
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item">Удалить</button>
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-outline-success d-inline-block btn-wide" (click)="modalOpen(manageTypesModal)">
+                <i class="icon-plus"></i>
+                Add
+            </button>
+        </div>
+        <div class="float-left">
+            <a class="btn btn-secondary" [routerLink]="['/catalog']">
+                <i class="icon-arrow-left"></i>
+                Каталог
+            </a>
+        </div>
+    </div>
+
+    <div [class.loading]="loading">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>
+                        <label class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input">
+                            <span class="custom-control-indicator"></span>
+                        </label>
+                    </th>
+                    <th>Название</th>
+                    <th>Системное имя</th>
+                    <th>Описание</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="show-on-hover-parent" *ngFor="let item of items">
+                    <td>
+                        <label class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input">
+                            <span class="custom-control-indicator"></span>
+                        </label>
+                    </td>
+                    <td>
+                        {{item.title}}
+                    </td>
+                    <td>
+                        {{item.name}}
+                    </td>
+                    <td>
+                        <div class="relative">
+
+                            <div class="show-on-hover">
+                                <button type="button" class="btn btn-secondary btn-sm" (click)="modalOpen(item.id)">
+                                    <i class="icon-pencil"></i>
+                                </button>
+                                <button type="button" class="btn btn-secondary btn-sm" (click)="deleteItemConfirm(item.id)">
+                                    <i class="icon-cross"></i>
+                                </button>
+                            </div>
+                        </div>
+                        {{item.description}}
+                    </td>
+                </tr>
+                <tr [hidden]="items.length > 0" class="table-active">
+                    <td colspan="4" class="text-center">
+                        Empty
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card-footer">
+
+        <ngb-pagination [class]="'mb-0'" [collectionSize]="120" [page]="1" [maxSize]="8" [rotate]="true" [boundaryLinks]="false"></ngb-pagination>
+
+    </div>
+</div>

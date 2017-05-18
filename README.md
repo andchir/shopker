@@ -1,6 +1,8 @@
 Shopkeeper 4
 ============
 
+**Current version: ALPHA (in development)**
+
 ~~~
 php bin/console cache:clear --env=dev
 php bin/console cache:clear --env=prod --no-debug

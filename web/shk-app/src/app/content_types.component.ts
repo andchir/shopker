@@ -15,6 +15,7 @@ import * as _ from "lodash";
 export class ContentTypeModalContent implements OnInit {
     @Input() modalTitle;
     @Input() itemId;
+    @Input() isItemCopy;
     @ViewChild('addCollectionBlock') elementAddCollectionBlock;
     @ViewChild('addGroupBlock') elementAddGroupBlock;
 
@@ -153,6 +154,9 @@ export class ContentTypeModalContent implements OnInit {
         this.loading = true;
         this.contentTypesService.getItem( this.itemId )
             .then(item => {
+                if( this.isItemCopy ){
+                    item.id = '';
+                }
                 this.model = item;
                 this.loading = false;
             });
@@ -281,16 +285,32 @@ export class ContentTypeModalContent implements OnInit {
             return;
         }
 
-        this.contentTypesService.createItem( this.model )
-            .then((res) => {
-                if( res.success ){
-                    this.closeModal();
-                } else {
-                    if( res.msg ){
-                        this.errorMessage = res.msg;
+        if( this.model.id ){
+
+            this.contentTypesService.editItem( this.model.id, this.model )
+                .then((res) => {
+                    if( res.success ){
+                        this.closeModal();
+                    } else {
+                        if( res.msg ){
+                            this.errorMessage = res.msg;
+                        }
                     }
-                }
-            });
+                });
+        }
+        else {
+
+            this.contentTypesService.createItem( this.model )
+                .then((res) => {
+                    if( res.success ){
+                        this.closeModal();
+                    } else {
+                        if( res.msg ){
+                            this.errorMessage = res.msg;
+                        }
+                    }
+                });
+        }
     }
 
     closeModal() {
@@ -324,10 +344,13 @@ export class ContentTypesComponent implements OnInit {
                 error => this.errorMessage = <any>error);
     }
 
-    modalOpen( itemId ): void {
+    modalOpen( itemId?: number, isItemCopy?: boolean ): void {
         this.modalRef = this.modalService.open(ContentTypeModalContent, {size: 'lg'});
-        this.modalRef.componentInstance.modalTitle = 'Add content type';
+        this.modalRef.componentInstance.modalTitle = itemId && !isItemCopy
+            ? 'Edit content type'
+            : 'Add content type';
         this.modalRef.componentInstance.itemId = itemId || 0;
+        this.modalRef.componentInstance.isItemCopy = isItemCopy || false;
         this.modalRef.result.then((result) => {
             this.getList();
         }, (reason) => {

@@ -20,7 +20,7 @@
                 </div>
             </div>
 
-            <button type="button" class="btn btn-outline-success d-inline-block btn-wide" (click)="modalOpen(manageTypesModal)">
+            <button type="button" class="btn btn-outline-success d-inline-block btn-wide" (click)="modalOpen()">
                 <i class="icon-plus"></i>
                 Add
             </button>
@@ -45,6 +45,7 @@
                     </th>
                     <th>Название</th>
                     <th>Системное имя</th>
+                    <th>Коллекция</th>
                     <th>Описание</th>
                 </tr>
             </thead>
@@ -63,18 +64,24 @@
                         {{item.name}}
                     </td>
                     <td>
+                        {{item.collection}}
+                    </td>
+                    <td>
                         <div class="relative">
 
                             <div class="show-on-hover">
-                                <button type="button" class="btn btn-secondary btn-sm" (click)="modalOpen(item.id)">
+                                <button type="button" class="btn btn-secondary btn-sm" title="Edit" (click)="modalOpen(item.id)">
                                     <i class="icon-pencil"></i>
                                 </button>
-                                <button type="button" class="btn btn-secondary btn-sm" (click)="deleteItemConfirm(item.id)">
+                                <button type="button" class="btn btn-secondary btn-sm" title="Copy" (click)="modalOpen(item.id, true)">
+                                    <i class="icon-stack"></i>
+                                </button>
+                                <button type="button" class="btn btn-secondary btn-sm" title="Delete" (click)="deleteItemConfirm(item.id)">
                                     <i class="icon-cross"></i>
                                 </button>
                             </div>
                         </div>
-                        {{item.description}}
+                        <div class="small">{{item.description}}</div>
                     </td>
                 </tr>
                 <tr [hidden]="items.length > 0" class="table-warning">

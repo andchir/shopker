@@ -38,6 +38,15 @@ export class ContentTypesService {
             .catch(this.handleError);
     }
 
+    editItem(id: string, item: ContentType): Promise<any> {
+        const url = `${this.oneUrl}/${id}`;
+        return this.http
+            .put(url, JSON.stringify( item ), {headers: this.headers})
+            .toPromise()
+            .then(res => res.json())
+            .catch(this.handleError);
+    }
+
     deleteItem(id: string): Promise<any> {
         const url = `${this.oneUrl}/${id}`;
         return this.http.delete(url, {headers: this.headers})

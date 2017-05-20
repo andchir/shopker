@@ -36,28 +36,68 @@ class ContentTypeController extends Controller
     }
 
     /**
-     * @Route("/app/content_type", name="content_type_post")
-     * @Method({"POST"})
-     * @param Request $request
-     * @return JsonResponse
+     * @param $data
+     * @param string $itemId
+     * @return array
      */
-    public function record(Request $request)
+    public function validateData( $data, $itemId = '' )
     {
-        $data = $request->getContent()
-            ? json_decode($request->getContent(), true)
-            : [];
-        if( empty($data['title']) || empty($data['name']) || empty($data['fields']) ){
-            return new JsonResponse([
-                'success' => false,
-                'msg' => 'Data is empty.'
-            ]);
+        if( empty($data) ){
+            return ['success' => false, 'msg' => 'Data is empty.'];
+        }
+        if( empty($data['title']) ){
+            return ['success' => false, 'msg' => 'Title is empty.'];
+        }
+        if( empty($data['name']) ){
+            return ['success' => false, 'msg' => 'System name is empty.'];
+        }
+        if( empty($data['collection']) ){
+            return ['success' => false, 'msg' => 'Collection name is empty.'];
+        }
+        if( empty($data['fields']) ){
+            return ['success' => false, 'msg' => 'Please create fields for content type.'];
         }
 
-        if( empty( $data['id'] ) ){
+        //Check unique name
+        $repository = $this->getRepository();
+        $query = $repository->createQueryBuilder()
+            ->field('name')->equals($data['name']);
+
+        if( $itemId ){
+            $query = $query->field('id')->notEqual( $itemId );
+        }
+
+        $count = $query->getQuery()
+            ->execute()
+            ->count();
+
+        if( $count > 0 ){
+            return ['success' => false, 'msg' => 'System name already exists.'];
+        }
+
+        return ['success' => true];
+    }
+
+    /**
+     * Create or update item
+     * @param $data
+     * @param string $itemId
+     * @return array
+     */
+    public function createUpdate( $data, $itemId = '' )
+    {
+        if( empty($data) || empty($data['title']) || empty($data['name']) || empty($data['fields']) ){
+            return [
+                'success' => false,
+                'msg' => 'Data is empty.'
+            ];
+        }
+
+        if( !$itemId ){
             $contentType = new ContentType();
         } else {
             $repository = $this->getRepository();
-            $contentType = $repository->find( $data['id'] );
+            $contentType = $repository->find( $itemId );
             if( !$contentType ){
                 $contentType = new ContentType();
             }
@@ -75,10 +115,55 @@ class ContentTypeController extends Controller
         $dm->persist( $contentType );
         $dm->flush();
 
-        return new JsonResponse([
+        return [
             'success' => true,
             'data' => $contentType->toArray()
-        ]);
+        ];
+    }
+
+    /**
+     * @Route("/app/content_type", name="content_type_post")
+     * @Method({"POST"})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function createItem(Request $request)
+    {
+        $data = $request->getContent()
+            ? json_decode($request->getContent(), true)
+            : [];
+
+        $output = $this->validateData( $data );
+        if( !$output['success'] ){
+            return new JsonResponse( $output );
+        }
+
+        $output = $this->createUpdate( $data );
+
+        return new JsonResponse( $output );
+    }
+
+    /**
+     * @Route("/app/content_type/{itemId}", name="content_type_put")
+     * @Method({"PUT"})
+     * @param Request $request
+     * @param string $itemId
+     * @return JsonResponse
+     */
+    public function editItem(Request $request, $itemId)
+    {
+        $data = $request->getContent()
+            ? json_decode($request->getContent(), true)
+            : [];
+
+        $output = $this->validateData( $data, $itemId );
+        if( !$output['success'] ){
+            return new JsonResponse( $output );
+        }
+
+        $output = $this->createUpdate( $data, $itemId );
+
+        return new JsonResponse( $output );
     }
 
     /**

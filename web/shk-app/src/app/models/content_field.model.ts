@@ -4,8 +4,8 @@ export class ContentField {
         public name: string,
         public title: string,
         public description: string,
-        public outputType: string,
-        public inputType: string,
+        public output_type: string,
+        public input_type: string,
         public group: string
     ) { }
 }

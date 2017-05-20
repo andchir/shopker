@@ -46,7 +46,7 @@ class ContentTypeController extends Controller
         $data = $request->getContent()
             ? json_decode($request->getContent(), true)
             : [];
-        if( empty($data['name']) || empty($data['title']) || empty($data['description']) ){
+        if( empty($data['title']) || empty($data['name']) || empty($data['fields']) ){
             return new JsonResponse([
                 'success' => false,
                 'msg' => 'Data is empty.'
@@ -65,9 +65,10 @@ class ContentTypeController extends Controller
         $contentType
             ->setTitle( $data['title'] )
             ->setName( $data['name'] )
-            ->setDescription( $data['description'] )
+            ->setDescription( !empty($data['description']) ? $data['description'] : '' )
+            ->setCollection( !empty($data['collection']) ? $data['collection'] : 'products' )
             ->setFields( $data['fields'] )
-            ->setGroups( $data['groups'] );
+            ->setGroups( !empty($data['groups']) ? $data['groups'] : [] );
 
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $this->get('doctrine_mongodb')->getManager();

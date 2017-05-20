@@ -6,7 +6,8 @@ export class ContentType {
         public name: string,
         public title: string,
         public description: string,
+        public collection: string,
         public fields: ContentField[],
-        public groups: any[]
+        public groups: string[]
     ) { }
 }

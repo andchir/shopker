@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { NgbModal, NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ContentTypesService } from './services/content_types.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -15,26 +15,68 @@ import * as _ from "lodash";
 export class ContentTypeModalContent implements OnInit {
     @Input() modalTitle;
     @Input() itemId;
+    @ViewChild('addCollectionBlock') elementAddCollectionBlock;
+    @ViewChild('addGroupBlock') elementAddGroupBlock;
 
-    model = new ContentType('','','','',[],['Содержание', 'Служебное']);
-    currentField = new ContentField(_.uniqueId(),'','','','','','');
+    model = new ContentType('','','','','products',[],['Содержание', 'Служебное']);
     submitted: boolean = false;
+    fieldSubmitted: boolean = false;
     loading: boolean = false;
     errorMessage: string;
     action: string = 'add_field';
+    currentFieldName = '';
+    collections = ['products'];
     contentTypeForm: FormGroup;
     fieldForm: FormGroup;
     formErrors = {
-        'name': '',
-        'title': ''
+        contentType: {
+            name: '',
+            title: '',
+            new_collection: ''
+        },
+        field: {
+            name: '',
+            title: '',
+            input_type: '',
+            output_type: '',
+            group: '',
+            new_group: ''
+        }
     };
     validationMessages = {
-        'name': {
-            'required': 'Name is required.',
-            'pattern': 'The name must contain only Latin letters.'
+        contentType: {
+            title: {
+                required: 'Title is required.'
+            },
+            name: {
+                required: 'Name is required.',
+                pattern: 'The name must contain only Latin letters.'
+            },
+            new_collection: {
+                pattern: 'The collection name must contain only Latin letters.',
+                exists: 'Collection with the same name already exists.'
+            }
         },
-        'title': {
-            'required': 'Title is required.'
+        field: {
+            title: {
+                required: 'Title is required.'
+            },
+            name: {
+                required: 'Name is required.',
+                pattern: 'The name must contain only Latin letters.'
+            },
+            input_type: {
+                required: 'Input type is required.'
+            },
+            output_type: {
+                required: 'Output type is required.'
+            },
+            group: {
+                required: 'Group is required.'
+            },
+            new_group: {
+                exists: 'Group with the same name already exists.'
+            }
         }
     };
 
@@ -56,55 +98,55 @@ export class ContentTypeModalContent implements OnInit {
     buildForm(): void {
         this.contentTypeForm = this.fb.group({
             title: [this.model.title, [Validators.required]],
-            name: [this.model.name, [Validators.required, Validators.pattern('[A-Za-z_-]+')]],
-            description: [this.model.description, []]
+            name: [this.model.name, [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')]],
+            description: [this.model.description, []],
+            collection: [this.model.collection, [Validators.required]],
+            new_collection: ['', [Validators.pattern('[A-Za-z0-9_-]+')]]
         });
         this.contentTypeForm.valueChanges
-            .subscribe(data => this.onValueChanged(data));
+            .subscribe(data => this.onValueChanged('contentType', data));
 
         this.fieldForm = this.fb.group({
-            field_title: [this.currentField.title, [Validators.required]],
-            field_name: [this.currentField.name, [Validators.required, Validators.pattern('[A-Za-z_-]+')]],
-            field_description: [this.currentField.description, []],
-            field_input_type: [this.currentField.inputType, [Validators.required]],
-            field_output_type: [this.currentField.outputType, [Validators.required]],
-            field_group: [this.currentField.group, [Validators.required]]
+            title: ['', [Validators.required]],
+            name: ['', [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')]],
+            description: ['', []],
+            input_type: ['', [Validators.required]],
+            output_type: ['', [Validators.required]],
+            group: ['', [Validators.required]],
+            new_group: ['', []]
         });
         this.fieldForm.valueChanges
-            .subscribe(data => this.onFieldValueChanged(data));
+            .subscribe(data => this.onValueChanged('field', data));
+    }
+
+    displayToggle(element: HTMLElement){
+        element.style.display = element.style.display == 'none' ? 'block' : 'none';
     }
 
     /**
      * On form value changed
+     * @param type
      * @param data
      */
-    onValueChanged(data?: any){
+    onValueChanged(type: string, data?: any){
         if (!this.contentTypeForm) { return; }
-        const form = this.contentTypeForm;
-        const isSubmitted = this.submitted;
+        const form = type == 'contentType'
+            ? this.contentTypeForm
+            : this.fieldForm;
+        const isSubmitted = type == 'contentType'
+            ? this.submitted
+            : this.fieldSubmitted;
 
-        for (const field in this.formErrors) {
-            this.formErrors[field] = '';
+        for (const field in this.formErrors[type]) {
+            this.formErrors[type][field] = '';
             const control = form.get(field);
             if (control && (control.dirty || isSubmitted) && !control.valid) {
-                const messages = this.validationMessages[field];
+                const messages = this.validationMessages[type][field];
                 for (const key in control.errors) {
-                    this.formErrors[field] += messages[key] + ' ';
+                    this.formErrors[type][field] += messages[key] + ' ';
                 }
             }
         }
-    }
-
-    /**
-     * On field form value changed
-     * @param data
-     */
-    onFieldValueChanged(data?: any){
-        if (!this.fieldForm) { return; }
-        const form = this.fieldForm;
-        const isSubmitted = this.submitted;
-
-        console.log( 'onFieldValueChanged', data );
     }
 
     getModelData(){
@@ -116,8 +158,52 @@ export class ContentTypeModalContent implements OnInit {
             });
     }
 
-    addGroup(newName: string){
-        this.model.groups.push( newName );
+    addCollection(){
+        const fieldName = 'new_collection';
+        const control = this.contentTypeForm.get(fieldName);
+        if( !control.valid ){
+            return false;
+        }
+        this.formErrors.contentType[fieldName] = '';
+        const value = control.value;
+        let exists = false;
+        for (let name of this.collections) {
+            if(value == name){
+                exists = true;
+                break;
+            }
+        }
+        if( exists ){
+            this.formErrors.contentType[fieldName] += this.validationMessages.contentType[fieldName].exists;
+            return false;
+        }
+        this.collections.push( value );
+        this.elementAddCollectionBlock.nativeElement.style.display = 'none';
+        return true;
+    }
+
+    deleteCollection(){
+
+        console.log( 'deleteCollection' );
+
+    }
+
+    addGroup(){
+        const fieldName = 'new_group';
+        const control = this.fieldForm.get(fieldName);
+        if( !control || !control.valid || !control.value ){
+            return false;
+        }
+        this.formErrors.field[fieldName] = '';
+        const value = control.value;
+        let index = this.model.groups.indexOf(value);
+        if( index > -1 ){
+            this.formErrors.field[fieldName] += this.validationMessages.field[fieldName].exists;
+            return false;
+        }
+        this.model.groups.push( value );
+        this.elementAddGroupBlock.nativeElement.style.display = 'none';
+        return true;
     }
 
     deleteGroup(){
@@ -127,12 +213,14 @@ export class ContentTypeModalContent implements OnInit {
     }
 
     editField(field: ContentField){
-        this.currentField = _.clone( field );
+        this.fieldForm.setValue( _.clone( field ) );
+        this.currentFieldName = field.name;
+        this.fieldSubmitted = false;
         this.action = 'edit_field';
     }
 
     deleteField(field: ContentField){
-        let index = _.findIndex( this.model.fields, {id: field.id} );
+        let index = _.findIndex( this.model.fields, {name: field.name} );
         if( index == -1 ){
             this.errorMessage = 'Field not found.';
             return;
@@ -140,82 +228,52 @@ export class ContentTypeModalContent implements OnInit {
         this.model.fields.splice(index, 1);
     }
 
-    clearFieldData(){
-        this.currentField.id = _.uniqueId();
-        this.currentField.name = '';
-        this.currentField.title = '';
-        this.currentField.description = '';
-        this.currentField.outputType = '';
-        this.currentField.inputType = '';
-        this.currentField.group = '';
-    }
-
-    editFieldSubmit(){
-        let index = _.findIndex( this.model.fields, {id: this.currentField.id} );
-        if( index == -1 ){
-            this.errorMessage = 'Field not found.';
-            return;
-        }
-
-        let isHaveEmpty = this.validateEmptyFieldData( this.currentField );
-        if( isHaveEmpty ){
-            this.errorMessage = 'All fields is required.';
-            return;
-        }
-
+    resetFieldForm(){
         this.errorMessage = '';
-        this.model.fields[index] = _.clone( this.currentField );
+        this.fieldSubmitted = false;
+        this.currentFieldName = '';
         this.action = 'add_field';
-        this.clearFieldData();
+        this.fieldForm.reset();
     }
 
     editFieldCancel(){
-        this.action = 'add_field';
-        this.clearFieldData();
+        this.resetFieldForm();
+        this.onValueChanged('field');
     }
 
-    validateEmptyFieldData(field: ContentField){
-        let isHaveEmpty = false;
-        _.forEach(this.currentField, function(value, key) {
-            if( !value ){
-                isHaveEmpty = true;
-                return false;
+    submitField(){
+        this.fieldSubmitted = true;
+
+        if( !this.fieldForm.valid ){
+            this.onValueChanged('field');
+            return;
+        }
+
+        let data = this.fieldForm.value;
+        let index = _.findIndex( this.model.fields, {name: data.name} );
+        if( index > -1 && this.currentFieldName != data.name ){
+            this.errorMessage = 'A field named "' + data.name + '" already exists.';
+            return;
+        }
+
+        if( this.action == 'add_field' ){
+            this.model.fields.push( _.clone( data ) );
+        }
+        else if( this.action == 'edit_field' ){
+            index = _.findIndex( this.model.fields, {name: this.currentFieldName} );
+            if( index > -1 ){
+                this.model.fields[index] = _.clone( data );
             }
-        });
-        return isHaveEmpty;
-    }
-
-    addField(){
-
-        let isHaveEmpty = this.validateEmptyFieldData( this.currentField );
-        if( isHaveEmpty ){
-            this.errorMessage = 'All fields is required.';
-            return;
         }
-
-        let index = _.findIndex( this.model.fields, {name: this.currentField.name} );
-
-        if( index > -1 ){
-            this.errorMessage = 'A field named "' + this.currentField.name + '" already exists.';
-            return;
-        }
-        if( !this.currentField.id ){
-            this.currentField.id = _.uniqueId();
-        }
-
-        this.errorMessage = '';
-        this.model.fields.push( _.clone( this.currentField ) );
-        this.clearFieldData();
+        this.resetFieldForm();
     }
 
     onSubmit() {
 
-        console.log( 'onSubmit', this.contentTypeForm.valid );
-
         this.submitted = true;
 
         if( !this.contentTypeForm.valid ){
-            this.onValueChanged();
+            this.onValueChanged('contentType');
             return;
         }
         if( this.model.fields.length == 0 ){
@@ -223,9 +281,7 @@ export class ContentTypeModalContent implements OnInit {
             return;
         }
 
-        console.log( this.contentTypeForm.value );
-
-        /*this.contentTypesService.createItem(this.model)
+        this.contentTypesService.createItem( this.model )
             .then((res) => {
                 if( res.success ){
                     this.closeModal();
@@ -234,7 +290,7 @@ export class ContentTypeModalContent implements OnInit {
                         this.errorMessage = res.msg;
                     }
                 }
-            });*/
+            });
     }
 
     closeModal() {

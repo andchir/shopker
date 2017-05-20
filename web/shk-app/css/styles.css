@@ -20,7 +20,7 @@ select.form-control:hover { box-shadow: 0 0 11px rgba(0, 0, 0, 0.3); }
 .form-group-message .alert { padding: 1px 8px; font-size: 14px; border-top-width: 0; border-top-left-radius: 0; border-top-right-radius: 0; }
 
 /* buttons */
-.btn { cursor: pointer; }
+.btn { cursor: pointer; border-radius: 2px; }
 .btn-wide { min-width: 130px; text-align: center; padding-left: 2rem; padding-right: 2rem; }
 
 /* modals */
@@ -33,6 +33,7 @@ select.form-control:hover { box-shadow: 0 0 11px rgba(0, 0, 0, 0.3); }
 /* labels */
 .label-filled { padding: 1px 8px; margin-bottom: 0; background-color: rgba(0,0,0,.25); color: #fff; font-size: 14px; border-top-left-radius: 4px; border-top-right-radius: 4px; }
 .label-filled + .form-control,
+.label-filled + .input-group .form-control,
 .label-filled + .card { border-top-left-radius: 0; }
 
 /* card-navbar */

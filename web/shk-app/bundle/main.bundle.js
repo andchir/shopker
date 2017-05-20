@@ -133,12 +133,11 @@ var _a, _b;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__ = __webpack_require__(31);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_content_types_service__ = __webpack_require__(133);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_forms__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__models_content_field_model__ = __webpack_require__(171);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_content_type_model__ = __webpack_require__(172);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__app_component__ = __webpack_require__(129);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_lodash__ = __webpack_require__(228);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_lodash__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_forms__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__models_content_type_model__ = __webpack_require__(172);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_component__ = __webpack_require__(129);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_lodash__ = __webpack_require__(228);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_lodash__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return ContentTypeModalContent; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ContentTypesComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -157,28 +156,67 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-
 var ContentTypeModalContent = (function () {
     function ContentTypeModalContent(fb, contentTypesService, activeModal) {
         this.fb = fb;
         this.contentTypesService = contentTypesService;
         this.activeModal = activeModal;
-        this.model = new __WEBPACK_IMPORTED_MODULE_5__models_content_type_model__["a" /* ContentType */]('', '', '', '', [], ['Содержание', 'Служебное']);
-        this.currentField = new __WEBPACK_IMPORTED_MODULE_4__models_content_field_model__["a" /* ContentField */](__WEBPACK_IMPORTED_MODULE_7_lodash__["uniqueId"](), '', '', '', '', '', '');
+        this.model = new __WEBPACK_IMPORTED_MODULE_4__models_content_type_model__["a" /* ContentType */]('', '', '', '', 'products', [], ['Содержание', 'Служебное']);
         this.submitted = false;
+        this.fieldSubmitted = false;
         this.loading = false;
         this.action = 'add_field';
+        this.currentFieldName = '';
+        this.collections = ['products'];
         this.formErrors = {
-            'name': '',
-            'title': ''
+            contentType: {
+                name: '',
+                title: '',
+                new_collection: ''
+            },
+            field: {
+                name: '',
+                title: '',
+                input_type: '',
+                output_type: '',
+                group: '',
+                new_group: ''
+            }
         };
         this.validationMessages = {
-            'name': {
-                'required': 'Name is required.',
-                'pattern': 'The name must contain only Latin letters.'
+            contentType: {
+                title: {
+                    required: 'Title is required.'
+                },
+                name: {
+                    required: 'Name is required.',
+                    pattern: 'The name must contain only Latin letters.'
+                },
+                new_collection: {
+                    pattern: 'The collection name must contain only Latin letters.',
+                    exists: 'Collection with the same name already exists.'
+                }
             },
-            'title': {
-                'required': 'Title is required.'
+            field: {
+                title: {
+                    required: 'Title is required.'
+                },
+                name: {
+                    required: 'Name is required.',
+                    pattern: 'The name must contain only Latin letters.'
+                },
+                input_type: {
+                    required: 'Input type is required.'
+                },
+                output_type: {
+                    required: 'Output type is required.'
+                },
+                group: {
+                    required: 'Group is required.'
+                },
+                new_group: {
+                    exists: 'Group with the same name already exists.'
+                }
             }
         };
     }
@@ -194,54 +232,53 @@ var ContentTypeModalContent = (function () {
         var _this = this;
         this.contentTypeForm = this.fb.group({
             title: [this.model.title, [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* Validators */].required]],
-            name: [this.model.name, [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* Validators */].pattern('[A-Za-z_-]+')]],
-            description: [this.model.description, []]
+            name: [this.model.name, [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* Validators */].pattern('[A-Za-z0-9_-]+')]],
+            description: [this.model.description, []],
+            collection: [this.model.collection, [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* Validators */].required]],
+            new_collection: ['', [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* Validators */].pattern('[A-Za-z0-9_-]+')]]
         });
         this.contentTypeForm.valueChanges
-            .subscribe(function (data) { return _this.onValueChanged(data); });
+            .subscribe(function (data) { return _this.onValueChanged('contentType', data); });
         this.fieldForm = this.fb.group({
-            field_title: [this.currentField.title, [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* Validators */].required]],
-            field_name: [this.currentField.name, [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* Validators */].pattern('[A-Za-z_-]+')]],
-            field_description: [this.currentField.description, []],
-            field_input_type: [this.currentField.inputType, [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* Validators */].required]],
-            field_output_type: [this.currentField.outputType, [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* Validators */].required]],
-            field_group: [this.currentField.group, [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* Validators */].required]]
+            title: ['', [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* Validators */].required]],
+            name: ['', [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* Validators */].pattern('[A-Za-z0-9_-]+')]],
+            description: ['', []],
+            input_type: ['', [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* Validators */].required]],
+            output_type: ['', [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* Validators */].required]],
+            group: ['', [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* Validators */].required]],
+            new_group: ['', []]
         });
         this.fieldForm.valueChanges
-            .subscribe(function (data) { return _this.onFieldValueChanged(data); });
+            .subscribe(function (data) { return _this.onValueChanged('field', data); });
+    };
+    ContentTypeModalContent.prototype.displayToggle = function (element) {
+        element.style.display = element.style.display == 'none' ? 'block' : 'none';
     };
     /**
      * On form value changed
+     * @param type
      * @param data
      */
-    ContentTypeModalContent.prototype.onValueChanged = function (data) {
+    ContentTypeModalContent.prototype.onValueChanged = function (type, data) {
         if (!this.contentTypeForm) {
             return;
         }
-        var form = this.contentTypeForm;
-        var isSubmitted = this.submitted;
-        for (var field in this.formErrors) {
-            this.formErrors[field] = '';
+        var form = type == 'contentType'
+            ? this.contentTypeForm
+            : this.fieldForm;
+        var isSubmitted = type == 'contentType'
+            ? this.submitted
+            : this.fieldSubmitted;
+        for (var field in this.formErrors[type]) {
+            this.formErrors[type][field] = '';
             var control = form.get(field);
             if (control && (control.dirty || isSubmitted) && !control.valid) {
-                var messages = this.validationMessages[field];
+                var messages = this.validationMessages[type][field];
                 for (var key in control.errors) {
-                    this.formErrors[field] += messages[key] + ' ';
+                    this.formErrors[type][field] += messages[key] + ' ';
                 }
             }
         }
-    };
-    /**
-     * On field form value changed
-     * @param data
-     */
-    ContentTypeModalContent.prototype.onFieldValueChanged = function (data) {
-        if (!this.fieldForm) {
-            return;
-        }
-        var form = this.fieldForm;
-        var isSubmitted = this.submitted;
-        console.log('onFieldValueChanged', data);
     };
     ContentTypeModalContent.prototype.getModelData = function () {
         var _this = this;
@@ -252,103 +289,123 @@ var ContentTypeModalContent = (function () {
             _this.loading = false;
         });
     };
-    ContentTypeModalContent.prototype.addGroup = function (newName) {
-        this.model.groups.push(newName);
+    ContentTypeModalContent.prototype.addCollection = function () {
+        var fieldName = 'new_collection';
+        var control = this.contentTypeForm.get(fieldName);
+        if (!control.valid) {
+            return false;
+        }
+        this.formErrors.contentType[fieldName] = '';
+        var value = control.value;
+        var exists = false;
+        for (var _i = 0, _a = this.collections; _i < _a.length; _i++) {
+            var name = _a[_i];
+            if (value == name) {
+                exists = true;
+                break;
+            }
+        }
+        if (exists) {
+            this.formErrors.contentType[fieldName] += this.validationMessages.contentType[fieldName].exists;
+            return false;
+        }
+        this.collections.push(value);
+        this.elementAddCollectionBlock.nativeElement.style.display = 'none';
+        return true;
+    };
+    ContentTypeModalContent.prototype.deleteCollection = function () {
+        console.log('deleteCollection');
+    };
+    ContentTypeModalContent.prototype.addGroup = function () {
+        var fieldName = 'new_group';
+        var control = this.fieldForm.get(fieldName);
+        if (!control || !control.valid || !control.value) {
+            return false;
+        }
+        this.formErrors.field[fieldName] = '';
+        var value = control.value;
+        var index = this.model.groups.indexOf(value);
+        if (index > -1) {
+            this.formErrors.field[fieldName] += this.validationMessages.field[fieldName].exists;
+            return false;
+        }
+        this.model.groups.push(value);
+        this.elementAddGroupBlock.nativeElement.style.display = 'none';
+        return true;
     };
     ContentTypeModalContent.prototype.deleteGroup = function () {
         console.log('deleteGroup');
     };
     ContentTypeModalContent.prototype.editField = function (field) {
-        this.currentField = __WEBPACK_IMPORTED_MODULE_7_lodash__["clone"](field);
+        this.fieldForm.setValue(__WEBPACK_IMPORTED_MODULE_6_lodash__["clone"](field));
+        this.currentFieldName = field.name;
+        this.fieldSubmitted = false;
         this.action = 'edit_field';
     };
     ContentTypeModalContent.prototype.deleteField = function (field) {
-        var index = __WEBPACK_IMPORTED_MODULE_7_lodash__["findIndex"](this.model.fields, { id: field.id });
+        var index = __WEBPACK_IMPORTED_MODULE_6_lodash__["findIndex"](this.model.fields, { name: field.name });
         if (index == -1) {
             this.errorMessage = 'Field not found.';
             return;
         }
         this.model.fields.splice(index, 1);
     };
-    ContentTypeModalContent.prototype.clearFieldData = function () {
-        this.currentField.id = __WEBPACK_IMPORTED_MODULE_7_lodash__["uniqueId"]();
-        this.currentField.name = '';
-        this.currentField.title = '';
-        this.currentField.description = '';
-        this.currentField.outputType = '';
-        this.currentField.inputType = '';
-        this.currentField.group = '';
-    };
-    ContentTypeModalContent.prototype.editFieldSubmit = function () {
-        var index = __WEBPACK_IMPORTED_MODULE_7_lodash__["findIndex"](this.model.fields, { id: this.currentField.id });
-        if (index == -1) {
-            this.errorMessage = 'Field not found.';
-            return;
-        }
-        var isHaveEmpty = this.validateEmptyFieldData(this.currentField);
-        if (isHaveEmpty) {
-            this.errorMessage = 'All fields is required.';
-            return;
-        }
+    ContentTypeModalContent.prototype.resetFieldForm = function () {
         this.errorMessage = '';
-        this.model.fields[index] = __WEBPACK_IMPORTED_MODULE_7_lodash__["clone"](this.currentField);
+        this.fieldSubmitted = false;
+        this.currentFieldName = '';
         this.action = 'add_field';
-        this.clearFieldData();
+        this.fieldForm.reset();
     };
     ContentTypeModalContent.prototype.editFieldCancel = function () {
-        this.action = 'add_field';
-        this.clearFieldData();
+        this.resetFieldForm();
+        this.onValueChanged('field');
     };
-    ContentTypeModalContent.prototype.validateEmptyFieldData = function (field) {
-        var isHaveEmpty = false;
-        __WEBPACK_IMPORTED_MODULE_7_lodash__["forEach"](this.currentField, function (value, key) {
-            if (!value) {
-                isHaveEmpty = true;
-                return false;
+    ContentTypeModalContent.prototype.submitField = function () {
+        this.fieldSubmitted = true;
+        if (!this.fieldForm.valid) {
+            this.onValueChanged('field');
+            return;
+        }
+        var data = this.fieldForm.value;
+        var index = __WEBPACK_IMPORTED_MODULE_6_lodash__["findIndex"](this.model.fields, { name: data.name });
+        if (index > -1 && this.currentFieldName != data.name) {
+            this.errorMessage = 'A field named "' + data.name + '" already exists.';
+            return;
+        }
+        if (this.action == 'add_field') {
+            this.model.fields.push(__WEBPACK_IMPORTED_MODULE_6_lodash__["clone"](data));
+        }
+        else if (this.action == 'edit_field') {
+            index = __WEBPACK_IMPORTED_MODULE_6_lodash__["findIndex"](this.model.fields, { name: this.currentFieldName });
+            if (index > -1) {
+                this.model.fields[index] = __WEBPACK_IMPORTED_MODULE_6_lodash__["clone"](data);
             }
-        });
-        return isHaveEmpty;
-    };
-    ContentTypeModalContent.prototype.addField = function () {
-        var isHaveEmpty = this.validateEmptyFieldData(this.currentField);
-        if (isHaveEmpty) {
-            this.errorMessage = 'All fields is required.';
-            return;
         }
-        var index = __WEBPACK_IMPORTED_MODULE_7_lodash__["findIndex"](this.model.fields, { name: this.currentField.name });
-        if (index > -1) {
-            this.errorMessage = 'A field named "' + this.currentField.name + '" already exists.';
-            return;
-        }
-        if (!this.currentField.id) {
-            this.currentField.id = __WEBPACK_IMPORTED_MODULE_7_lodash__["uniqueId"]();
-        }
-        this.errorMessage = '';
-        this.model.fields.push(__WEBPACK_IMPORTED_MODULE_7_lodash__["clone"](this.currentField));
-        this.clearFieldData();
+        this.resetFieldForm();
     };
     ContentTypeModalContent.prototype.onSubmit = function () {
-        console.log('onSubmit', this.contentTypeForm.valid);
+        var _this = this;
         this.submitted = true;
         if (!this.contentTypeForm.valid) {
-            this.onValueChanged();
+            this.onValueChanged('contentType');
             return;
         }
         if (this.model.fields.length == 0) {
             this.errorMessage = 'You have not created any fields.';
             return;
         }
-        console.log(this.contentTypeForm.value);
-        /*this.contentTypesService.createItem(this.model)
-            .then((res) => {
-                if( res.success ){
-                    this.closeModal();
-                } else {
-                    if( res.msg ){
-                        this.errorMessage = res.msg;
-                    }
+        this.contentTypesService.createItem(this.model)
+            .then(function (res) {
+            if (res.success) {
+                _this.closeModal();
+            }
+            else {
+                if (res.msg) {
+                    _this.errorMessage = res.msg;
                 }
-            });*/
+            }
+        });
     };
     ContentTypeModalContent.prototype.closeModal = function () {
         this.activeModal.close();
@@ -363,6 +420,14 @@ __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["M" /* Input */])(),
     __metadata("design:type", Object)
 ], ContentTypeModalContent.prototype, "itemId", void 0);
+__decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_9" /* ViewChild */])('addCollectionBlock'),
+    __metadata("design:type", Object)
+], ContentTypeModalContent.prototype, "elementAddCollectionBlock", void 0);
+__decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_9" /* ViewChild */])('addGroupBlock'),
+    __metadata("design:type", Object)
+], ContentTypeModalContent.prototype, "elementAddGroupBlock", void 0);
 ContentTypeModalContent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Component */])({
         selector: 'content-type-modal-content',
@@ -406,7 +471,7 @@ var ContentTypesComponent = (function () {
     };
     ContentTypesComponent.prototype.deleteItemConfirm = function (itemId) {
         var _this = this;
-        this.modalRef = this.modalService.open(__WEBPACK_IMPORTED_MODULE_6__app_component__["b" /* ConfirmModalContent */]);
+        this.modalRef = this.modalService.open(__WEBPACK_IMPORTED_MODULE_5__app_component__["b" /* ConfirmModalContent */]);
         this.modalRef.componentInstance.modalTitle = 'Confirm';
         this.modalRef.componentInstance.modalContent = 'Are you sure you want to remove this item?';
         this.modalRef.result.then(function (result) {
@@ -711,7 +776,7 @@ AppRoutingModule = __decorate([
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_forms__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_forms__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_component__ = __webpack_require__(129);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__orders_component__ = __webpack_require__(132);
@@ -779,39 +844,18 @@ AppModule = __decorate([
 
 /***/ }),
 
-/***/ 171:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ContentField; });
-var ContentField = (function () {
-    function ContentField(id, name, title, description, outputType, inputType, group) {
-        this.id = id;
-        this.name = name;
-        this.title = title;
-        this.description = description;
-        this.outputType = outputType;
-        this.inputType = inputType;
-        this.group = group;
-    }
-    return ContentField;
-}());
-
-//# sourceMappingURL=content_field.model.js.map
-
-/***/ }),
-
 /***/ 172:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ContentType; });
 var ContentType = (function () {
-    function ContentType(id, name, title, description, fields, groups) {
+    function ContentType(id, name, title, description, collection, fields, groups) {
         this.id = id;
         this.name = name;
         this.title = title;
         this.description = description;
+        this.collection = collection;
         this.fields = fields;
         this.groups = groups;
     }
@@ -874,7 +918,7 @@ module.exports = "<div class=\"modal-header d-block\">\n    <h4 class=\"modal-ti
 /***/ 232:
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"modal-header d-block\">\n    <div class=\"d-block float-right\">\n        <button type=\"button\" class=\"btn btn-secondary\" (click)=\"activeModal.dismiss()\">\n            Close\n        </button>\n    </div>\n    <h4 class=\"modal-title\">{{modalTitle}}</h4>\n</div>\n\n<form (ngSubmit)=\"onSubmit()\" [class.loading]=\"loading\">\n\n    <div class=\"modal-body\">\n\n        <div class=\"row\">\n\n            <!-- ContentType form -->\n            <div class=\"col-md-4\" [formGroup]=\"contentTypeForm\">\n\n                <div class=\"form-group\" [class.form-group-message]=\"formErrors.title\">\n                    <label class=\"label-filled\">\n                        Название\n                    </label>\n                    <input type=\"text\" class=\"form-control\" name=\"title\" formControlName=\"title\">\n                    <div *ngIf=\"formErrors.title\" class=\"alert alert-danger\">\n                        {{formErrors.title}}\n                    </div>\n                </div>\n\n                <div class=\"form-group\" [class.form-group-message]=\"formErrors.name\">\n                    <label class=\"label-filled\">\n                        Системное имя\n                    </label>\n                    <input type=\"text\" class=\"form-control\" name=\"name\" formControlName=\"name\">\n                    <div *ngIf=\"formErrors.name\" class=\"alert alert-danger\">\n                        {{formErrors.name}}\n                    </div>\n                </div>\n\n                <div class=\"form-group\">\n                    <label class=\"label-filled\">\n                        Описание\n                    </label>\n                    <textarea type=\"text\" class=\"form-control\" name=\"description\" formControlName=\"description\"></textarea>\n                </div>\n\n            </div>\n            <!-- /ContentType form -->\n\n            <!-- Field form -->\n            <div class=\"col-md-8\" [formGroup]=\"fieldForm\">\n\n                <label class=\"label-filled\" [hidden]=\"action != 'add_field'\">\n                    Добавить поле\n                </label>\n                <label class=\"label-filled\" [hidden]=\"action != 'edit_field'\">\n                    Редактировать поле\n                </label>\n\n                <div class=\"card\">\n                    <div class=\"card-block\">\n\n                        <div class=\"form-group row\">\n                            <div class=\"col-md-5\">\n                                <label class=\"small\">Название</label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <input type=\"text\" class=\"form-control form-control-sm\" name=\"field_title\" formControlName=\"field_title\">\n                            </div>\n                        </div>\n\n                        <div class=\"form-group row\">\n                            <div class=\"col-md-5\">\n                                <label class=\"small\">Системное имя</label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <input type=\"text\" class=\"form-control form-control-sm\" name=\"field_name\" formControlName=\"field_name\">\n                            </div>\n                        </div>\n\n                        <div class=\"form-group row\">\n                            <div class=\"col-md-5\">\n                                <label class=\"small\">Описание</label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <textarea type=\"text\" class=\"form-control form-control-sm\" name=\"field_description\" formControlName=\"field_description\"></textarea>\n                            </div>\n                        </div>\n\n                        <div class=\"form-group row\">\n                            <div class=\"col-md-5\">\n                                <label class=\"small\">Тип ввода</label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <select class=\"form-control form-control-sm\" name=\"field_input_type\" formControlName=\"field_input_type\">\n                                    <option value=\"text\">Текстовое поле</option>\n                                    <option value=\"textarea\">Многострочный текст</option>\n                                    <option value=\"number\">Число</option>\n                                    <option value=\"select\">Выпадающий список</option>\n                                    <option value=\"checkbox\">Чекбокс</option>\n                                    <option value=\"radio\">Переключатель</option>\n                                    <option value=\"table\">Таблица</option>\n                                    <option value=\"file\">Файл</option>\n                                    <option value=\"image\">Картинка</option>\n                                </select>\n                            </div>\n                        </div>\n\n                        <div class=\"form-group row\">\n                            <div class=\"col-md-5\">\n                                <label class=\"small\">Тип вывода</label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <select class=\"form-control form-control-sm\" name=\"field_output_type\" formControlName=\"field_output_type\">\n                                    <option value=\"text\">Текст</option>\n                                    <option value=\"select\">Выпадающий список</option>\n                                    <option value=\"checkbox\">Чекбокс</option>\n                                    <option value=\"radio\">Переключатель</option>\n                                    <option value=\"tanle\">Таблица</option>\n                                    <option value=\"image\">Картинка</option>\n                                </select>\n                            </div>\n                        </div>\n\n                        <div class=\"form-group row\">\n                            <div class=\"col-md-5\">\n                                <label class=\"small\">Группа</label>\n                            </div>\n                            <div class=\"col-md-7\">\n\n                                <div class=\"input-group input-group-sm\">\n                                    <select class=\"form-control\" name=\"field_group\" formControlName=\"field_group\">\n                                        <option value=\"{{group}}\" *ngFor=\"let group of model.groups\">{{group}}</option>\n                                    </select>\n                                    <div class=\"input-group-btn\">\n                                        <button type=\"button\" class=\"btn btn-secondary btn-sm\" title=\"Добавить группу\" (click)=\"addGroupBlock.style.display = 'block'; addGroupField.value = ''; addGroupField.focus()\">\n                                            <i class=\"icon-plus\"></i>\n                                        </button>\n                                    </div>\n                                    <div class=\"input-group-btn\">\n                                        <button type=\"button\" class=\"btn btn-secondary btn-sm\" title=\"Удалить группу\" (click)=\"deleteGroup()\">\n                                            <i class=\"icon-cross\"></i>\n                                        </button>\n                                    </div>\n                                </div>\n\n                                <div class=\"card p-1 mt-2\" #addGroupBlock style=\"display: none;\">\n                                    <input type=\"text\" class=\"form-control form-control-sm mb-1\" #addGroupField>\n                                    <div class=\"text-right\">\n                                        <button type=\"button\" class=\"btn btn-secondary btn-sm\" (click)=\"addGroup(addGroupField.value); addGroupBlock.style.display = 'none'\">\n                                            Add\n                                        </button>\n                                        <button type=\"button\" class=\"btn btn-secondary btn-sm\" (click)=\"addGroupBlock.style.display = 'none'\">\n                                            Cancel\n                                        </button>\n                                    </div>\n                                </div>\n\n                            </div>\n                        </div>\n\n                        <div>\n                            <button type=\"button\" class=\"btn btn-sm btn-info btn-wide\" (click)=\"addField()\" [hidden]=\"action != 'add_field'\">\n                                <i class=\"icon-plus\"></i>\n                                Add field\n                            </button>\n                            <button type=\"button\" class=\"btn btn-sm btn-success btn-wide\" (click)=\"editFieldSubmit()\" [hidden]=\"action != 'edit_field'\">\n                                <i class=\"icon-check\"></i>\n                                Save field\n                            </button>\n                            <button type=\"button\" class=\"btn btn-sm btn-secondary btn-wide\" (click)=\"editFieldCancel()\" [hidden]=\"action != 'edit_field'\">\n                                Cancel\n                            </button>\n                        </div>\n\n                    </div>\n                </div>\n                <!-- /Field form -->\n\n            </div>\n        </div>\n\n        <div class=\"form-group row\">\n            <div class=\"col-12\">\n                <label class=\"label-filled\">\n                    Поля\n                </label>\n\n                <table class=\"table table-hover table-bordered mb-0\">\n                    <thead>\n                        <tr>\n                            <th>Название</th>\n                            <th>Системное имя</th>\n                            <th>Тип ввода</th>\n                            <th>Группа</th>\n                        </tr>\n                    </thead>\n                    <tbody>\n                        <tr class=\"show-on-hover-parent\" *ngFor=\"let field of model.fields\">\n                            <td>\n                                {{field.title}}\n                            </td>\n                            <td>\n                                {{field.name}}\n                            </td>\n                            <td>\n                                {{field.inputType}}\n                            </td>\n                            <td>\n                                <div class=\"relative\">\n                                    <div class=\"show-on-hover\">\n                                        <button type=\"button\" class=\"btn btn-secondary btn-sm\" (click)=\"editField(field)\">\n                                            <i class=\"icon-pencil\"></i>\n                                        </button>\n                                        <button type=\"button\" class=\"btn btn-secondary btn-sm\" (click)=\"deleteField(field)\">\n                                            <i class=\"icon-cross\"></i>\n                                        </button>\n                                    </div>\n                                </div>\n                                {{field.group}}\n                            </td>\n                        </tr>\n                        <tr [hidden]=\"model.fields.length > 0\" class=\"table-active\">\n                            <td colspan=\"4\" class=\"text-center\">\n                                Empty\n                            </td>\n                        </tr>\n                    </tbody>\n                </table>\n\n                <div class=\"alert alert-danger mt-3 mb-0\" [hidden]=\"!errorMessage\">\n                    <button type=\"button\" class=\"close\" (click)=\"errorMessage = ''\">\n                        <span aria-hidden=\"true\">&times;</span>\n                    </button>\n                    {{errorMessage}}\n                </div>\n\n            </div>\n        </div>\n\n    </div>\n    <div class=\"modal-footer d-block\">\n        <button type=\"submit\" class=\"btn btn-success btn-wide\">\n            Save\n        </button>\n        <button type=\"submit\" class=\"btn btn-secondary btn-wide\" (click)=\"activeModal.dismiss()\">\n            Cancel\n        </button>\n    </div>\n\n</form>"
+module.exports = "<div class=\"modal-header d-block\">\n    <div class=\"d-block float-right\">\n        <button type=\"button\" class=\"btn btn-secondary\" (click)=\"activeModal.dismiss()\">\n            Close\n        </button>\n    </div>\n    <h4 class=\"modal-title\">{{modalTitle}}</h4>\n</div>\n\n<form (ngSubmit)=\"onSubmit()\" [class.loading]=\"loading\">\n\n    <div class=\"modal-body\">\n\n        <div class=\"row\">\n\n            <!-- ContentType form -->\n            <div class=\"col-lg-4\" [formGroup]=\"contentTypeForm\">\n\n                <div class=\"form-group\" [class.form-group-message]=\"formErrors.contentType.title\">\n                    <label class=\"label-filled\">\n                        Название\n                    </label>\n                    <input type=\"text\" class=\"form-control\" name=\"title\" formControlName=\"title\" [(ngModel)]=\"model.title\">\n                    <div *ngIf=\"formErrors.contentType.title\" class=\"alert alert-danger\">\n                        {{formErrors.contentType.title}}\n                    </div>\n                </div>\n\n                <div class=\"form-group\" [class.form-group-message]=\"formErrors.contentType.name\">\n                    <label class=\"label-filled\">\n                        Системное имя\n                    </label>\n                    <input type=\"text\" class=\"form-control\" name=\"name\" formControlName=\"name\" [(ngModel)]=\"model.name\">\n                    <div *ngIf=\"formErrors.contentType.name\" class=\"alert alert-danger\">\n                        {{formErrors.contentType.name}}\n                    </div>\n                </div>\n\n                <div class=\"form-group\">\n                    <label class=\"label-filled\">\n                        Описание\n                    </label>\n                    <textarea type=\"text\" class=\"form-control\" name=\"description\" formControlName=\"description\" [(ngModel)]=\"model.description\"></textarea>\n                </div>\n\n                <div class=\"form-group row\">\n                    <div class=\"col-12\">\n                        <label class=\"label-filled\">Коллекция</label>\n                        <div class=\"input-group\">\n                            <select class=\"form-control\" name=\"collection\" formControlName=\"collection\" [(ngModel)]=\"model.collection\">\n                                <option value=\"{{collection}}\" *ngFor=\"let collection of collections\">{{collection}}</option>\n                            </select>\n                            <div class=\"input-group-btn\">\n                                <button type=\"button\" class=\"btn btn-secondary btn-sm\" title=\"Добавить коллекцию\" (click)=\"displayToggle(addCollectionBlock); addCollectionField.value = ''; onValueChanged(); addCollectionField.focus()\">\n                                    <i class=\"icon-plus\"></i>\n                                </button>\n                            </div>\n                            <div class=\"input-group-btn\">\n                                <button type=\"button\" class=\"btn btn-secondary btn-sm\" title=\"Удалить коллекцию\" (click)=\"deleteCollection()\">\n                                    <i class=\"icon-cross\"></i>\n                                </button>\n                            </div>\n                        </div>\n\n                        <div class=\"card p-1 mt-2\" #addCollectionBlock style=\"display: none;\" [class.form-group-message]=\"formErrors.contentType.new_collection\">\n                            <input type=\"text\" class=\"form-control form-control-sm\" formControlName=\"new_collection\" #addCollectionField>\n                            <div *ngIf=\"formErrors.contentType.new_collection\" class=\"alert alert-danger mb-1\">\n                                {{formErrors.contentType.new_collection}}\n                            </div>\n\n                            <div class=\"text-right mt-1\">\n                                <button type=\"button\" class=\"btn btn-secondary btn-sm\" (click)=\"addCollection();\">\n                                    Add\n                                </button>\n                                <button type=\"button\" class=\"btn btn-secondary btn-sm\" (click)=\"addCollectionBlock.style.display = 'none'; formErrors.contentType.new_collection = ''\">\n                                    Cancel\n                                </button>\n                            </div>\n                        </div>\n\n                    </div>\n                </div>\n\n            </div>\n            <!-- /ContentType form -->\n\n            <!-- Field form -->\n            <div class=\"col-lg-8\" [formGroup]=\"fieldForm\">\n\n                <label class=\"label-filled\" [hidden]=\"action != 'add_field'\">\n                    Добавить поле\n                </label>\n                <label class=\"label-filled\" [hidden]=\"action != 'edit_field'\">\n                    Редактировать поле\n                </label>\n\n                <div class=\"card\">\n                    <div class=\"card-block\">\n\n                        <div class=\"form-group row\" [class.form-group-message]=\"formErrors.field.title\">\n                            <div class=\"col-md-5\">\n                                <label class=\"small\">Название</label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <input type=\"text\" class=\"form-control form-control-sm\" name=\"field_title\" formControlName=\"title\">\n                                <div *ngIf=\"formErrors.field.title\" class=\"alert alert-danger\">\n                                    {{formErrors.field.title}}\n                                </div>\n                            </div>\n                        </div>\n\n                        <div class=\"form-group row\" [class.form-group-message]=\"formErrors.field.name\">\n                            <div class=\"col-md-5\">\n                                <label class=\"small\">Системное имя</label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <input type=\"text\" class=\"form-control form-control-sm\" name=\"field_name\" formControlName=\"name\">\n                                <div *ngIf=\"formErrors.field.name\" class=\"alert alert-danger\">\n                                    {{formErrors.field.name}}\n                                </div>\n                            </div>\n                        </div>\n\n                        <div class=\"form-group row\">\n                            <div class=\"col-md-5\">\n                                <label class=\"small\">Описание</label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <textarea type=\"text\" class=\"form-control form-control-sm\" name=\"field_description\" formControlName=\"description\"></textarea>\n                            </div>\n                        </div>\n\n                        <div class=\"form-group row\">\n                            <div class=\"col-md-5\">\n                                <label class=\"small\">Тип ввода</label>\n                            </div>\n                            <div class=\"col-md-7\">\n\n                                <div class=\"form-group\" [class.form-group-message]=\"formErrors.field.input_type\">\n                                    <div class=\"input-group\">\n                                        <select class=\"form-control form-control-sm\" name=\"field_input_type\" formControlName=\"input_type\">\n                                            <option value=\"text\">Текстовое поле</option>\n                                            <option value=\"textarea\">Многострочный текст</option>\n                                            <option value=\"number\">Число</option>\n                                            <option value=\"select\">Выпадающий список</option>\n                                            <option value=\"checkbox\">Чекбокс</option>\n                                            <option value=\"radio\">Переключатель</option>\n                                            <option value=\"table\">Таблица</option>\n                                            <option value=\"file\">Файл</option>\n                                            <option value=\"image\">Картинка</option>\n                                        </select>\n                                        <div class=\"input-group-btn\">\n                                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" title=\"Параметры\" (click)=\"displayToggle(inputTypeOptionsBlock)\">\n                                                <i class=\"icon-cog\"></i>\n                                            </button>\n                                        </div>\n                                    </div>\n                                    <div *ngIf=\"formErrors.field.input_type\" class=\"alert alert-danger\">\n                                        {{formErrors.field.input_type}}\n                                    </div>\n                                </div>\n\n                                <div class=\"card p-1 mt-2\" #inputTypeOptionsBlock style=\"display: none;\">\n                                    <div>\n                                        Тут будут параметры\n                                    </div>\n                                    <div class=\"text-right mt-1\">\n                                        <button type=\"button\" class=\"btn btn-secondary btn-sm\" (click)=\"inputTypeOptionsBlock.style.display = 'none';\">\n                                            Close\n                                        </button>\n                                    </div>\n                                </div>\n\n                            </div>\n                        </div>\n\n                        <div class=\"form-group row\">\n                            <div class=\"col-md-5\">\n                                <label class=\"small\">Тип вывода</label>\n                            </div>\n                            <div class=\"col-md-7\">\n\n                                <div class=\"form-group\" [class.form-group-message]=\"formErrors.field.output_type\">\n                                    <div class=\"input-group\">\n                                        <select class=\"form-control form-control-sm\" name=\"field_output_type\" formControlName=\"output_type\">\n                                            <option value=\"text\">Текст</option>\n                                            <option value=\"select\">Выпадающий список</option>\n                                            <option value=\"checkbox\">Чекбокс</option>\n                                            <option value=\"radio\">Переключатель</option>\n                                            <option value=\"tanle\">Таблица</option>\n                                            <option value=\"image\">Картинка</option>\n                                        </select>\n                                        <div class=\"input-group-btn\">\n                                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" title=\"Параметры\" (click)=\"displayToggle(outputTypeOptionsBlock)\">\n                                                <i class=\"icon-cog\"></i>\n                                            </button>\n                                        </div>\n                                    </div>\n                                    <div *ngIf=\"formErrors.field.output_type\" class=\"alert alert-danger\">\n                                        {{formErrors.field.output_type}}\n                                    </div>\n                                </div>\n\n                                <div class=\"card p-1 mt-2\" #outputTypeOptionsBlock style=\"display: none;\">\n                                    <div>\n                                        Тут будут параметры\n                                    </div>\n                                    <div class=\"text-right mt-1\">\n                                        <button type=\"button\" class=\"btn btn-secondary btn-sm\" (click)=\"outputTypeOptionsBlock.style.display = 'none'\">\n                                            Close\n                                        </button>\n                                    </div>\n                                </div>\n\n                            </div>\n                        </div>\n\n                        <div class=\"form-group row\">\n                            <div class=\"col-md-5\">\n                                <label class=\"small\">Группа</label>\n                            </div>\n                            <div class=\"col-md-7\">\n\n                                <div class=\"form-group\" [class.form-group-message]=\"formErrors.field.group\">\n                                    <div class=\"input-group input-group-sm\">\n                                        <select class=\"form-control\" name=\"field_group\" formControlName=\"group\">\n                                            <option value=\"{{group}}\" *ngFor=\"let group of model.groups\">{{group}}</option>\n                                        </select>\n                                        <div class=\"input-group-btn\">\n                                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" title=\"Добавить группу\" (click)=\"displayToggle(addGroupBlock); addGroupField.value = ''; addGroupField.focus()\">\n                                                <i class=\"icon-plus\"></i>\n                                            </button>\n                                        </div>\n                                        <div class=\"input-group-btn\">\n                                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" title=\"Удалить группу\" (click)=\"deleteGroup()\">\n                                                <i class=\"icon-cross\"></i>\n                                            </button>\n                                        </div>\n                                    </div>\n                                    <div *ngIf=\"formErrors.field.group\" class=\"alert alert-danger\">\n                                        {{formErrors.field.group}}\n                                    </div>\n                                </div>\n\n                                <div class=\"card p-1 mt-2\" #addGroupBlock style=\"display: none;\" [class.form-group-message]=\"formErrors.field.new_group\">\n                                    <input type=\"text\" class=\"form-control form-control-sm\" #addGroupField formControlName=\"new_group\">\n                                    <div *ngIf=\"formErrors.field.new_group\" class=\"alert alert-danger mb-1\">\n                                        {{formErrors.field.new_group}}\n                                    </div>\n                                    <div class=\"text-right mt-1\">\n                                        <button type=\"button\" class=\"btn btn-secondary btn-sm\" (click)=\"addGroup();\">\n                                            Add\n                                        </button>\n                                        <button type=\"button\" class=\"btn btn-secondary btn-sm\" (click)=\"addGroupBlock.style.display = 'none'; formErrors.field.new_group = ''\">\n                                            Cancel\n                                        </button>\n                                    </div>\n                                </div>\n\n                            </div>\n                        </div>\n\n                        <div>\n                            <button type=\"button\" class=\"btn btn-sm btn-info btn-wide\" (click)=\"submitField()\" [hidden]=\"action != 'add_field'\">\n                                <i class=\"icon-plus\"></i>\n                                Add field\n                            </button>\n                            <button type=\"button\" class=\"btn btn-sm btn-success btn-wide\" (click)=\"submitField()\" [hidden]=\"action != 'edit_field'\">\n                                <i class=\"icon-check\"></i>\n                                Save field\n                            </button>\n                            <button type=\"button\" class=\"btn btn-sm btn-secondary btn-wide\" (click)=\"editFieldCancel()\">\n                                Cancel\n                            </button>\n                        </div>\n\n                    </div>\n                </div>\n                <!-- /Field form -->\n\n            </div>\n        </div>\n\n        <div class=\"form-group row mt-3\">\n            <div class=\"col-12\">\n                <label class=\"label-filled\">\n                    Поля\n                </label>\n\n                <table class=\"table table-striped table-hover table-bordered mb-0\">\n                    <thead>\n                        <tr>\n                            <th>Название</th>\n                            <th>Системное имя</th>\n                            <th>Тип ввода</th>\n                            <th>Группа</th>\n                        </tr>\n                    </thead>\n                    <tbody>\n                        <tr class=\"show-on-hover-parent\" *ngFor=\"let item of model.fields\">\n                            <td>\n                                {{item.title}}\n                            </td>\n                            <td>\n                                {{item.name}}\n                            </td>\n                            <td>\n                                {{item.input_type}}\n                            </td>\n                            <td>\n                                <div class=\"relative\">\n                                    <div class=\"show-on-hover\">\n                                        <button type=\"button\" class=\"btn btn-secondary btn-sm\" (click)=\"editField(item)\">\n                                            <i class=\"icon-pencil\"></i>\n                                        </button>\n                                        <button type=\"button\" class=\"btn btn-secondary btn-sm\" (click)=\"deleteField(item)\">\n                                            <i class=\"icon-cross\"></i>\n                                        </button>\n                                    </div>\n                                </div>\n                                {{item.group}}\n                            </td>\n                        </tr>\n                        <tr [hidden]=\"model.fields.length > 0\" class=\"table-warning\">\n                            <td colspan=\"4\" class=\"text-center\">\n                                Empty\n                            </td>\n                        </tr>\n                    </tbody>\n                </table>\n\n                <div class=\"alert alert-danger mt-3 mb-0\" [hidden]=\"!errorMessage\">\n                    <button type=\"button\" class=\"close\" (click)=\"errorMessage = ''\">\n                        <span aria-hidden=\"true\">&times;</span>\n                    </button>\n                    {{errorMessage}}\n                </div>\n\n            </div>\n        </div>\n\n    </div>\n    <div class=\"modal-footer d-block\">\n        <button type=\"submit\" class=\"btn btn-success btn-wide\">\n            Save\n        </button>\n        <button type=\"submit\" class=\"btn btn-secondary btn-wide\" (click)=\"activeModal.dismiss()\">\n            Cancel\n        </button>\n    </div>\n\n</form>"
 
 /***/ }),
 
@@ -888,7 +932,7 @@ module.exports = "\n<div class=\"card\">\n\n    <div class=\"card-block\">\n\n  
 /***/ 234:
 /***/ (function(module, exports) {
 
-module.exports = "\n<div class=\"card\">\n    <div class=\"card-block\">\n\n        <h3>\n            <i class=\"icon-box\"></i>\n            {{title}}\n        </h3>\n\n        <hr>\n\n        <div class=\"float-right\">\n\n            <div ngbDropdown class=\"d-inline-block\">\n                <button class=\"btn btn-outline-primary\" id=\"dropdownBasic1\" ngbDropdownToggle>\n                    Массовые дейсвия\n                </button>\n                <div class=\"dropdown-menu\" aria-labelledby=\"dropdownBasic1\">\n                    <button class=\"dropdown-item\">Удалить</button>\n                </div>\n            </div>\n\n            <button type=\"button\" class=\"btn btn-outline-success d-inline-block btn-wide\" (click)=\"modalOpen(manageTypesModal)\">\n                <i class=\"icon-plus\"></i>\n                Add\n            </button>\n        </div>\n        <div class=\"float-left\">\n            <a class=\"btn btn-secondary\" [routerLink]=\"['/catalog']\">\n                <i class=\"icon-arrow-left\"></i>\n                Каталог\n            </a>\n        </div>\n    </div>\n\n    <div [class.loading]=\"loading\">\n        <table class=\"table table-hover mb-0\">\n            <thead>\n                <tr>\n                    <th>\n                        <label class=\"custom-control custom-checkbox\">\n                            <input type=\"checkbox\" class=\"custom-control-input\">\n                            <span class=\"custom-control-indicator\"></span>\n                        </label>\n                    </th>\n                    <th>Название</th>\n                    <th>Системное имя</th>\n                    <th>Описание</th>\n                </tr>\n            </thead>\n            <tbody>\n                <tr class=\"show-on-hover-parent\" *ngFor=\"let item of items\">\n                    <td>\n                        <label class=\"custom-control custom-checkbox\">\n                            <input type=\"checkbox\" class=\"custom-control-input\">\n                            <span class=\"custom-control-indicator\"></span>\n                        </label>\n                    </td>\n                    <td>\n                        {{item.title}}\n                    </td>\n                    <td>\n                        {{item.name}}\n                    </td>\n                    <td>\n                        <div class=\"relative\">\n\n                            <div class=\"show-on-hover\">\n                                <button type=\"button\" class=\"btn btn-secondary btn-sm\" (click)=\"modalOpen(item.id)\">\n                                    <i class=\"icon-pencil\"></i>\n                                </button>\n                                <button type=\"button\" class=\"btn btn-secondary btn-sm\" (click)=\"deleteItemConfirm(item.id)\">\n                                    <i class=\"icon-cross\"></i>\n                                </button>\n                            </div>\n                        </div>\n                        {{item.description}}\n                    </td>\n                </tr>\n                <tr [hidden]=\"items.length > 0\" class=\"table-active\">\n                    <td colspan=\"4\" class=\"text-center\">\n                        Empty\n                    </td>\n                </tr>\n            </tbody>\n        </table>\n    </div>\n\n    <div class=\"card-footer\">\n\n        <ngb-pagination [class]=\"'mb-0'\" [collectionSize]=\"120\" [page]=\"1\" [maxSize]=\"8\" [rotate]=\"true\" [boundaryLinks]=\"false\"></ngb-pagination>\n\n    </div>\n</div>\n"
+module.exports = "\n<div class=\"card\">\n    <div class=\"card-block\">\n\n        <h3>\n            <i class=\"icon-box\"></i>\n            {{title}}\n        </h3>\n\n        <hr>\n\n        <div class=\"float-right\">\n\n            <div ngbDropdown class=\"d-inline-block\">\n                <button class=\"btn btn-outline-primary\" id=\"dropdownBasic1\" ngbDropdownToggle>\n                    Массовые дейсвия\n                </button>\n                <div class=\"dropdown-menu\" aria-labelledby=\"dropdownBasic1\">\n                    <button class=\"dropdown-item\">Удалить</button>\n                </div>\n            </div>\n\n            <button type=\"button\" class=\"btn btn-outline-success d-inline-block btn-wide\" (click)=\"modalOpen(manageTypesModal)\">\n                <i class=\"icon-plus\"></i>\n                Add\n            </button>\n        </div>\n        <div class=\"float-left\">\n            <a class=\"btn btn-secondary\" [routerLink]=\"['/catalog']\">\n                <i class=\"icon-arrow-left\"></i>\n                Каталог\n            </a>\n        </div>\n    </div>\n\n    <div [class.loading]=\"loading\">\n        <table class=\"table table-striped table-hover mb-0\">\n            <thead>\n                <tr>\n                    <th>\n                        <label class=\"custom-control custom-checkbox\">\n                            <input type=\"checkbox\" class=\"custom-control-input\">\n                            <span class=\"custom-control-indicator\"></span>\n                        </label>\n                    </th>\n                    <th>Название</th>\n                    <th>Системное имя</th>\n                    <th>Описание</th>\n                </tr>\n            </thead>\n            <tbody>\n                <tr class=\"show-on-hover-parent\" *ngFor=\"let item of items\">\n                    <td>\n                        <label class=\"custom-control custom-checkbox\">\n                            <input type=\"checkbox\" class=\"custom-control-input\">\n                            <span class=\"custom-control-indicator\"></span>\n                        </label>\n                    </td>\n                    <td>\n                        {{item.title}}\n                    </td>\n                    <td>\n                        {{item.name}}\n                    </td>\n                    <td>\n                        <div class=\"relative\">\n\n                            <div class=\"show-on-hover\">\n                                <button type=\"button\" class=\"btn btn-secondary btn-sm\" (click)=\"modalOpen(item.id)\">\n                                    <i class=\"icon-pencil\"></i>\n                                </button>\n                                <button type=\"button\" class=\"btn btn-secondary btn-sm\" (click)=\"deleteItemConfirm(item.id)\">\n                                    <i class=\"icon-cross\"></i>\n                                </button>\n                            </div>\n                        </div>\n                        {{item.description}}\n                    </td>\n                </tr>\n                <tr [hidden]=\"items.length > 0\" class=\"table-warning\">\n                    <td colspan=\"4\" class=\"text-center\">\n                        Empty\n                    </td>\n                </tr>\n            </tbody>\n        </table>\n    </div>\n\n    <div class=\"card-footer\">\n\n        <ngb-pagination [class]=\"'mb-0'\" [collectionSize]=\"120\" [page]=\"1\" [maxSize]=\"8\" [rotate]=\"true\" [boundaryLinks]=\"false\"></ngb-pagination>\n\n    </div>\n</div>\n"
 
 /***/ }),
 

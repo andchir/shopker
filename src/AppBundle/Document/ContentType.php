@@ -5,7 +5,7 @@ namespace AppBundle\Document;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
 /**
- * @MongoDB\Document(repositoryClass="AppBundle\Repository\ContentTypeRepository")
+ * @MongoDB\Document(collection="content_type",repositoryClass="AppBundle\Repository\ContentTypeRepository")
  */
 class ContentType
 {
@@ -28,6 +28,11 @@ class ContentType
      * @MongoDB\Field(type="string")
      */
     protected $description;
+
+    /**
+     * @MongoDB\Field(type="string")
+     */
+    protected $collection;
 
     /**
      * @MongoDB\Field(type="collection")
@@ -166,7 +171,8 @@ class ContentType
             'id' => $this->getId(),
             'title' => $this->getTitle(),
             'name' => $this->getName(),
-            'description' => $this->getDescription()
+            'description' => $this->getDescription(),
+            'collection' => $this->getCollection()
         ];
         if( $full ){
             $output = array_merge($output, [
@@ -177,4 +183,25 @@ class ContentType
         return $output;
     }
 
+    /**
+     * Set collection
+     *
+     * @param string $collection
+     * @return self
+     */
+    public function setCollection($collection)
+    {
+        $this->collection = $collection;
+        return $this;
+    }
+
+    /**
+     * Get collection
+     *
+     * @return string $collection
+     */
+    public function getCollection()
+    {
+        return $this->collection;
+    }
 }

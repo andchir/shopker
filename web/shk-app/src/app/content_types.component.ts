@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
-import { NgbModal, NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { ContentTypesService } from './services/content_types.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ContentField } from './models/content_field.model';
@@ -10,7 +10,7 @@ import * as _ from "lodash";
 @Component({
     selector: 'content-type-modal-content',
     templateUrl: 'templates/modal_content_types.html',
-    providers: [ ContentTypesService ]
+    providers: [ ContentTypesService, NgbTooltipConfig ]
 })
 export class ContentTypeModalContent implements OnInit {
     @Input() modalTitle;
@@ -84,8 +84,12 @@ export class ContentTypeModalContent implements OnInit {
     constructor(
         private fb: FormBuilder,
         private contentTypesService: ContentTypesService,
-        public activeModal: NgbActiveModal
-    ) {}
+        public activeModal: NgbActiveModal,
+        tooltipConfig: NgbTooltipConfig
+    ) {
+        tooltipConfig.placement = 'bottom';
+        tooltipConfig.container = 'body';
+    }
 
     /** On initialize */
     ngOnInit(): void {
@@ -156,6 +160,7 @@ export class ContentTypeModalContent implements OnInit {
             .then(item => {
                 if( this.isItemCopy ){
                     item.id = '';
+                    item.name = '';
                 }
                 this.model = item;
                 this.loading = false;
@@ -221,6 +226,15 @@ export class ContentTypeModalContent implements OnInit {
         this.currentFieldName = field.name;
         this.fieldSubmitted = false;
         this.action = 'edit_field';
+    }
+
+    copyField(field: ContentField){
+        let data = _.clone( field );
+        data.name = '';
+        this.fieldForm.setValue( data );
+        this.currentFieldName = '';
+        this.fieldSubmitted = false;
+        this.action = 'add_field';
     }
 
     deleteField(field: ContentField){

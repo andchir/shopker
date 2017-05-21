@@ -70,13 +70,13 @@
                         <div class="relative">
 
                             <div class="show-on-hover">
-                                <button type="button" class="btn btn-secondary btn-sm" title="Edit" (click)="modalOpen(item.id)">
+                                <button type="button" class="btn btn-secondary btn-sm" (click)="modalOpen(item.id)" ngbTooltip="Edit">
                                     <i class="icon-pencil"></i>
                                 </button>
-                                <button type="button" class="btn btn-secondary btn-sm" title="Copy" (click)="modalOpen(item.id, true)">
+                                <button type="button" class="btn btn-secondary btn-sm" (click)="modalOpen(item.id, true)" ngbTooltip="Copy">
                                     <i class="icon-stack"></i>
                                 </button>
-                                <button type="button" class="btn btn-secondary btn-sm" title="Delete" (click)="deleteItemConfirm(item.id)">
+                                <button type="button" class="btn btn-secondary btn-sm" (click)="deleteItemConfirm(item.id)" ngbTooltip="Delete">
                                     <i class="icon-cross"></i>
                                 </button>
                             </div>

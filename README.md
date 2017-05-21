@@ -23,18 +23,15 @@ cd shk-app
 ~~~
 
 ~~~
-ng serve --open --live-reload 0 --watch --port 4200 \
---output-path "/var/www/html/shopkeeper4/web/shk-app/dist_dev"
+ng serve --open --live-reload 0 --watch --port 4200 --output-path "./dist_dev"
 ~~~
 
 ~~~
-ng build --base-href "/" --watch \
---output-path "/var/www/html/shopkeeper4/web/shk-app/bundle"
+ng build --base-href "/" --watch --output-path "./bundle"
 ~~~
 
 ~~~
-ng build --base-href "/" \
---output-path "/var/www/html/shopkeeper4/web/shk-app/bundle"
+ng build --base-href "/" --output-path "./bundle"
 ~~~
 
 Symfony Console Commands

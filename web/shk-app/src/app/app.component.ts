@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { NgbModal, NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'modal_confirm',
@@ -20,8 +20,13 @@ export class ConfirmModalContent {
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
-    styleUrls: ['./app.component.css']
+    styleUrls: ['./app.component.css'],
+    providers: [ NgbTooltipConfig ]
 })
 export class AppComponent {
     title = 'Shopkeeper';
+    constructor(tooltipConfig: NgbTooltipConfig) {
+        tooltipConfig.placement = 'bottom';
+        tooltipConfig.container = 'body';
+    }
 }

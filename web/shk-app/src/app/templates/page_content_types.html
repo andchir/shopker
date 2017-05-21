@@ -16,6 +16,7 @@
                     Массовые дейсвия
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item">Отключить</button>
                     <button class="dropdown-item">Удалить</button>
                 </div>
             </div>
@@ -94,6 +95,14 @@
     </div>
 
     <div class="card-footer">
+
+        <div class="float-right">
+            <select class="form-control">
+                <option value="10">10</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+        </div>
 
         <ngb-pagination [class]="'mb-0'" [collectionSize]="120" [page]="1" [maxSize]="8" [rotate]="true" [boundaryLinks]="false"></ngb-pagination>
 

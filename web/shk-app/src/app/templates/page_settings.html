@@ -1,6 +1,17 @@
 <div class="card">
     <div class="card-block">
 
+        <div class="float-right">
+            <a class="btn btn-primary" [routerLink]="['/settings/input_types']">
+                <i class="icon-upload"></i>
+                Типы ввода
+            </a>
+            <a class="btn btn-primary" [routerLink]="['/settings/output_types']">
+                <i class="icon-download"></i>
+                Типы вывода
+            </a>
+        </div>
+
         <h3>
             <i class="icon-bar-graph-2"></i>
             {{title}}

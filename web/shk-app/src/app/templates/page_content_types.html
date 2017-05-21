@@ -44,11 +44,32 @@
                             <span class="custom-control-indicator"></span>
                         </label>
                     </th>
-                    <th>Название</th>
-                    <th>Системное имя</th>
-                    <th>Коллекция</th>
-                    <th>Описание</th>
-                    <th>Активность</th>
+                    <th>
+                        <a href="#">
+                            Системное имя
+                            <i class="icon-arrow-down"></i>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="#">
+                            Название
+                        </a>
+                    </th>
+                    <th>
+                        <a href="#">
+                            Коллекция
+                        </a>
+                    </th>
+                    <th>
+                        <a href="#">
+                            Описание
+                        </a>
+                    </th>
+                    <th class="text-center">
+                        <a href="#">
+                            Активность
+                        </a>
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -60,10 +81,10 @@
                         </label>
                     </td>
                     <td>
-                        {{item.title}}
+                        {{item.name}}
                     </td>
                     <td>
-                        {{item.name}}
+                        {{item.title}}
                     </td>
                     <td>
                         {{item.collection}}

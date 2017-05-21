@@ -105,10 +105,11 @@ class ContentTypeController extends Controller
         $contentType
             ->setTitle( $data['title'] )
             ->setName( $data['name'] )
-            ->setDescription( !empty($data['description']) ? $data['description'] : '' )
-            ->setCollection( !empty($data['collection']) ? $data['collection'] : 'products' )
+            ->setDescription( isset($data['description']) ? $data['description'] : '' )
+            ->setCollection( isset($data['collection']) ? $data['collection'] : 'products' )
             ->setFields( $data['fields'] )
-            ->setGroups( !empty($data['groups']) ? $data['groups'] : [] );
+            ->setGroups( isset($data['groups']) ? $data['groups'] : [] )
+            ->setIsActive( isset($data['is_active']) ? $data['is_active'] : true );
 
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $this->get('doctrine_mongodb')->getManager();

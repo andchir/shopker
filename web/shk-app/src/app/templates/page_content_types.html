@@ -16,7 +16,7 @@
                     Массовые дейсвия
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownBasic1">
-                    <button class="dropdown-item">Отключить</button>
+                    <button class="dropdown-item">Отключить / включить</button>
                     <button class="dropdown-item">Удалить</button>
                 </div>
             </div>
@@ -40,7 +40,7 @@
                 <tr>
                     <th>
                         <label class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input">
+                            <input type="checkbox" class="custom-control-input" (click)="selectAll($event)">
                             <span class="custom-control-indicator"></span>
                         </label>
                     </th>
@@ -48,13 +48,14 @@
                     <th>Системное имя</th>
                     <th>Коллекция</th>
                     <th>Описание</th>
+                    <th>Активность</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="show-on-hover-parent" *ngFor="let item of items">
+                <tr class="show-on-hover-parent" *ngFor="let item of items" [class.text-muted]="!item.is_active">
                     <td>
                         <label class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input">
+                            <input type="checkbox" class="custom-control-input" [checked]="getIsSelected(item.id)" (click)="setSelected($event, item.id)">
                             <span class="custom-control-indicator"></span>
                         </label>
                     </td>
@@ -68,8 +69,10 @@
                         {{item.collection}}
                     </td>
                     <td>
+                        <div class="small">{{item.description}}</div>
+                    </td>
+                    <td class="text-center">
                         <div class="relative">
-
                             <div class="show-on-hover">
                                 <button type="button" class="btn btn-secondary btn-sm" (click)="modalOpen(item.id)" ngbTooltip="Edit">
                                     <i class="icon-pencil"></i>
@@ -82,11 +85,12 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="small">{{item.description}}</div>
+                        <i class="big text-success icon-circle-check" [hidden]="!item.is_active"></i>
+                        <i class="big text-muted icon-circle-cross" [hidden]="item.is_active"></i>
                     </td>
                 </tr>
                 <tr [hidden]="items.length > 0" class="table-warning">
-                    <td colspan="4" class="text-center">
+                    <td colspan="5" class="text-center">
                         Empty
                     </td>
                 </tr>

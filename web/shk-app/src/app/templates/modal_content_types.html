@@ -148,6 +148,7 @@
                                         <option value="checkbox">Чекбокс</option>
                                         <option value="radio">Переключатель</option>
                                         <option value="table">Таблица</option>
+                                        <option value="date">Дата</option>
                                         <option value="file">Файл</option>
                                         <option value="image">Картинка</option>
                                     </select>
@@ -220,7 +221,7 @@
                             </div>
                             <div class="col-md-7">
 
-                                <div class="form-group" [class.form-group-message]="formErrors.field.group">
+                                <div [class.form-group-message]="formErrors.field.group">
                                     <div class="input-group input-group-sm">
                                         <select class="form-control" name="field_group" formControlName="group">
                                             <option value="{{group}}" *ngFor="let group of model.groups">{{group}}</option>
@@ -255,6 +256,18 @@
                                         </div>
                                     </div>
                                 </div>
+
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-7 offset-md-5">
+
+                                <label class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" value="1" name="is_filter" formControlName="is_filter">
+                                    <span class="custom-control-indicator"></span>
+                                    <span class="small">Показывать в фильтре</span>
+                                </label>
 
                             </div>
                         </div>
@@ -309,13 +322,13 @@
                             <td>
                                 <div class="relative">
                                     <div class="show-on-hover">
-                                        <button type="button" class="btn btn-secondary btn-sm" (click)="editField(item)" ngbTooltip="Edit">
+                                        <button type="button" class="btn btn-secondary btn-sm" (click)="editField(item)" [hidden]="item.name == currentFieldName" ngbTooltip="Edit">
                                             <i class="icon-pencil"></i>
                                         </button>
                                         <button type="button" class="btn btn-secondary btn-sm" (click)="copyField(item)" ngbTooltip="Copy">
                                             <i class="icon-stack"></i>
                                         </button>
-                                        <button type="button" class="btn btn-secondary btn-sm" (click)="deleteField(item)" ngbTooltip="Delete">
+                                        <button type="button" class="btn btn-secondary btn-sm" (click)="deleteField(item)" [hidden]="item.name == currentFieldName" ngbTooltip="Delete">
                                             <i class="icon-cross"></i>
                                         </button>
                                     </div>

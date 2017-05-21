@@ -8,6 +8,7 @@ export class ContentType {
         public description: string,
         public collection: string,
         public fields: ContentField[],
-        public groups: string[]
+        public groups: string[],
+        public is_active: boolean
     ) { }
 }

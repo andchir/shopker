@@ -45,6 +45,11 @@ class ContentType
     protected $groups;
 
     /**
+     * @MongoDB\Field(type="boolean")
+     */
+    protected $is_active;
+
+    /**
      * Get id
      *
      * @return string $id
@@ -164,25 +169,6 @@ class ContentType
         return $this->groups;
     }
 
-
-    public function toArray($full = false)
-    {
-        $output = [
-            'id' => $this->getId(),
-            'title' => $this->getTitle(),
-            'name' => $this->getName(),
-            'description' => $this->getDescription(),
-            'collection' => $this->getCollection()
-        ];
-        if( $full ){
-            $output = array_merge($output, [
-                'fields' => $this->getFields(),
-                'groups' => $this->getGroups()
-            ]);
-        }
-        return $output;
-    }
-
     /**
      * Set collection
      *
@@ -204,4 +190,50 @@ class ContentType
     {
         return $this->collection;
     }
+
+    /**
+     * Set isActive
+     *
+     * @param boolean $isActive
+     * @return self
+     */
+    public function setIsActive($isActive)
+    {
+        $this->is_active = $isActive;
+        return $this;
+    }
+
+    /**
+     * Get isActive
+     *
+     * @return boolean $isActive
+     */
+    public function getIsActive()
+    {
+        return $this->is_active;
+    }
+
+    /**
+     * @param bool $full
+     * @return array
+     */
+    public function toArray($full = false)
+    {
+        $output = [
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'name' => $this->getName(),
+            'description' => $this->getDescription(),
+            'collection' => $this->getCollection(),
+            'is_active' => $this->getIsActive()
+        ];
+        if( $full ){
+            $output = array_merge($output, [
+                'fields' => $this->getFields(),
+                'groups' => $this->getGroups()
+            ]);
+        }
+        return $output;
+    }
+
 }

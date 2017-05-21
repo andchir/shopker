@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { ContentTypesService } from './services/content_types.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -19,7 +20,7 @@ export class ContentTypeModalContent implements OnInit {
     @ViewChild('addCollectionBlock') elementAddCollectionBlock;
     @ViewChild('addGroupBlock') elementAddGroupBlock;
 
-    model = new ContentType('','','','','products',[],['Содержание', 'Служебное']);
+    model = new ContentType('','','','','products',[],['Содержание', 'Служебное'], true);
     submitted: boolean = false;
     fieldSubmitted: boolean = false;
     loading: boolean = false;
@@ -117,6 +118,7 @@ export class ContentTypeModalContent implements OnInit {
             description: ['', []],
             input_type: ['', [Validators.required]],
             output_type: ['', [Validators.required]],
+            is_filter: ['', []],
             group: ['', [Validators.required]],
             new_group: ['', []]
         });
@@ -342,10 +344,22 @@ export class ContentTypesComponent implements OnInit {
     title: string = 'Типы товаров';
     modalRef: NgbModalRef;
     loading: boolean = false;
+    selectedIds: string[] = [];
 
-    constructor(private contentTypesService: ContentTypesService, private modalService: NgbModal) {}
+    constructor(
+        private contentTypesService: ContentTypesService,
+        private modalService: NgbModal,
+        private titleService: Title
+    ) {}
 
-    ngOnInit(): void { this.getList(); }
+    ngOnInit(): void {
+        this.setTitle( this.title );
+        this.getList();
+    }
+
+    public setTitle( newTitle: string) {
+        this.titleService.setTitle( newTitle );
+    }
 
     getList(): void {
         this.loading = true;
@@ -389,7 +403,7 @@ export class ContentTypesComponent implements OnInit {
         });
     }
 
-    deleteItem( itemId ): void{
+    deleteItem( itemId: string ): void{
         this.contentTypesService.deleteItem( itemId )
             .then((res) => {
                 if( res.success ){
@@ -400,6 +414,30 @@ export class ContentTypesComponent implements OnInit {
                     }
                 }
             });
+    }
+
+    selectAll( event ): void{
+        this.selectedIds = [];
+        if( event.target.checked ){
+            for( let item of this.items ){
+                this.selectedIds.push( item.id );
+            }
+        }
+    }
+
+    setSelected( event, itemId: string ): void{
+        const index = this.selectedIds.indexOf( itemId );
+        if( event.target.checked ){
+            if( index == -1 ){
+                this.selectedIds.push( itemId );
+            }
+        } else if( index > -1 ){
+            this.selectedIds.splice( index, 1 );
+        }
+    }
+
+    getIsSelected( itemId: string ): boolean{
+        return this.selectedIds.lastIndexOf( itemId ) > -1;
     }
 
 }

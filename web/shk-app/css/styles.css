@@ -3,6 +3,7 @@
 .relative { position: relative; }
 .w-auto { width: auto; }
 .min-width150 { min-width: 150px; }
+.big { font-size: 120%; }
 
 /* form-control */
 input[type=text].form-control,

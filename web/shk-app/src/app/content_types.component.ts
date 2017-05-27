@@ -357,7 +357,7 @@ export class ContentTypesComponent implements OnInit {
         this.getList();
     }
 
-    public setTitle( newTitle: string) {
+    public setTitle( newTitle: string ) {
         this.titleService.setTitle( newTitle );
     }
 

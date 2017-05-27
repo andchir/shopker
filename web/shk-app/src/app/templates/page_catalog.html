@@ -17,16 +17,55 @@
         <hr>
 
         <div class="float-right">
-            <button type="button" class="btn btn-outline-success d-inline-block btn-wide" (click)="modalOpen()">
+
+            <div ngbDropdown class="d-inline-block">
+                <button class="btn btn-outline-info" id="dropdownBasic1" ngbDropdownToggle>
+                    Массовые дейсвия
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item">Отключить / включить</button>
+                    <button class="dropdown-item">Удалить</button>
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-outline-success" (click)="modalOpen()">
                 <i class="icon-plus"></i>
-                Add
+                Add product
             </button>
+
         </div>
         <div class="float-left">
-            <select name="category" class="form-control">
-                <option value="1">First</option>
-                <option value="2">Second</option>
-            </select>
+
+            <div class="d-inline-block" ngbDropdown #topDrop="ngbDropdown" (mouseleave)="topDrop.close()">
+                <button class="btn btn-info" ngbDropdownToggle (mouseenter)="topDrop.open()">Категории</button>
+                <div class="dropdown-menu">
+                    <button class="dropdown-item">Первая категория</button>
+                    <div ngbDropdown #secondDrop="ngbDropdown" (mouseleave)="secondDrop.close()">
+                        <button class="dropdown-item active" ngbDropdownToggle (mouseenter)="secondDrop.open()">Вторая категория</button>
+                        <div class="dropdown-menu">
+                            <button class="dropdown-item">Первая подкатегория</button>
+                            <button class="dropdown-item active">Вторая подкатегория</button>
+                            <button class="dropdown-item">Третья подкатегория</button>
+                        </div>
+                    </div>
+                    <button class="dropdown-item">Третья категория</button>
+                    <div ngbDropdown #thirdDrop="ngbDropdown" (mouseleave)="thirdDrop.close()">
+                        <button class="dropdown-item" ngbDropdownToggle (mouseenter)="thirdDrop.open()">Четвертая категория</button>
+                        <div class="dropdown-menu">
+                            <button class="dropdown-item">Первая подкатегория</button>
+                            <button class="dropdown-item">Вторая подкатегория</button>
+                            <button class="dropdown-item">Третья подкатегория</button>
+                        </div>
+                    </div>
+                    <button class="dropdown-item">Пятая категория</button>
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-outline-info" (click)="openModalCategory()">
+                <i class="icon-plus"></i>
+                Add category
+            </button>
+
         </div>
     </div>
 
@@ -43,7 +82,7 @@
                 <th>ID</th>
                 <th>Название</th>
                 <th>Цена</th>
-                <th>Статус</th>
+                <th class="text-center">Статус</th>
             </tr>
             </thead>
             <tbody>
@@ -61,7 +100,7 @@
                 <td>
                     2 200
                 </td>
-                <td>
+                <td class="text-center">
                     <div class="relative">
                         <div class="show-on-hover">
                             <button class="btn btn-secondary btn-sm">
@@ -72,7 +111,7 @@
                             </button>
                         </div>
                     </div>
-                    Опуликован
+                    <i class="big text-success icon-circle-check"></i>
                 </td>
             </tr>
             <tr class="show-on-hover-parent">
@@ -89,7 +128,7 @@
                 <td>
                     2 200
                 </td>
-                <td>
+                <td class="text-center">
                     <div class="relative">
                         <div class="show-on-hover">
                             <button class="btn btn-secondary btn-sm">
@@ -100,7 +139,7 @@
                             </button>
                         </div>
                     </div>
-                    Опуликован
+                    <i class="big text-success icon-circle-check"></i>
                 </td>
             </tr>
             <tr class="show-on-hover-parent">
@@ -117,7 +156,7 @@
                 <td>
                     2 200
                 </td>
-                <td>
+                <td class="text-center">
                     <div class="relative">
                         <div class="show-on-hover">
                             <button class="btn btn-secondary btn-sm">
@@ -128,7 +167,7 @@
                             </button>
                         </div>
                     </div>
-                    Опуликован
+                    <i class="big text-success icon-circle-check"></i>
                 </td>
             </tr>
             </tbody>

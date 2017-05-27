@@ -1,21 +1,51 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { NgbModal, NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
     selector: 'ngbd-modal-content',
     templateUrl: 'templates/modal_product.html'
 })
-export class ProductModalContent {
+export class ProductModalContent implements OnInit {
     @Input() modalTitle;
     @Input() itemId;
     submitted: boolean = false;
     loading: boolean = false;
     errorMessage: string;
 
+    form: FormGroup;
+
     constructor(
+        private fb: FormBuilder,
         public activeModal: NgbActiveModal
     ) {}
+
+    /** On initialize */
+    ngOnInit(): void {
+        this.buildForm();
+    }
+
+    buildForm(): void {
+        this.form = this.fb.group({
+            title: ['', [Validators.required]],
+            name: ['', [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')]],
+            description: ['', []]
+        });
+        this.form.valueChanges
+            .subscribe(data => this.onValueChanged(data));
+    }
+
+    /**
+     * On form value changed
+     * @param data
+     */
+    onValueChanged(data?: any){
+        if (!this.form) { return; }
+
+        console.log( data );
+
+    }
 
     onSubmit() {
 
@@ -36,14 +66,69 @@ export class CategoryModalContent {
     loading: boolean = false;
     errorMessage: string;
 
+    form: FormGroup;
+    formErrors = {
+        name: '',
+        title: ''
+    };
+    validationMessages = {
+        title: {
+            required: 'Title is required.'
+        },
+        name: {
+            required: 'Name is required.',
+            pattern: 'The name must contain only Latin letters.'
+        }
+    };
+
     constructor(
+        private fb: FormBuilder,
         public activeModal: NgbActiveModal
     ) {}
+
+    /** On initialize */
+    ngOnInit(): void {
+        this.buildForm();
+    }
+
+    buildForm(): void {
+        this.form = this.fb.group({
+            title: ['', [Validators.required]],
+            name: ['', [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')]],
+            description: ['', []]
+        });
+        this.form.valueChanges
+            .subscribe(data => this.onValueChanged(data));
+    }
+
+    /**
+     * On form value changed
+     * @param data
+     */
+    onValueChanged(data?: any): void {
+        if (!this.form) { return; }
+        for (const field in this.formErrors) {
+            this.formErrors[field] = '';
+            const control = this.form.get(field);
+            if (control && (control.dirty || this.submitted) && !control.valid) {
+                const messages = this.validationMessages[field];
+                for (const key in control.errors) {
+                    this.formErrors[field] += messages[key] + ' ';
+                }
+            }
+        }
+    }
 
     onSubmit() {
 
         this.submitted = true;
 
+        if( !this.form.valid ){
+            this.onValueChanged();
+            return;
+        }
+
+        console.log( 'onSubmit', this.form.value );
 
     }
 

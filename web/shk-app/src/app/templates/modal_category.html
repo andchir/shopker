@@ -6,27 +6,33 @@
     </div>
     <h4 class="modal-title">{{modalTitle}}</h4>
 </div>
-<div class="modal-body">
 
-    <form (ngSubmit)="onSubmit()" [class.loading]="loading">
+<form (ngSubmit)="onSubmit()" [formGroup]="form" [class.loading]="loading">
 
+    <div class="modal-body">
         <div>
 
-            <div class="row form-group">
+            <div class="row form-group" [class.form-group-message]="formErrors.name">
                 <div class="col-md-5">
                     <label for="fieldName">Системное имя</label>
                 </div>
                 <div class="col-md-7">
-                    <input type="text" id="fieldName" class="form-control">
+                    <input type="text" id="fieldName" class="form-control" formControlName="name">
+                    <div *ngIf="formErrors.name" class="alert alert-danger">
+                        {{formErrors.name}}
+                    </div>
                 </div>
             </div>
 
-            <div class="row form-group">
+            <div class="row form-group" [class.form-group-message]="formErrors.title">
                 <div class="col-md-5">
                     <label for="fieldTitle">Название</label>
                 </div>
                 <div class="col-md-7">
-                    <input type="text" id="fieldTitle" class="form-control">
+                    <input type="text" id="fieldTitle" class="form-control" formControlName="title">
+                    <div *ngIf="formErrors.title" class="alert alert-danger">
+                        {{formErrors.title}}
+                    </div>
                 </div>
             </div>
 
@@ -35,20 +41,20 @@
                     <label for="fieldDescription">Описание</label>
                 </div>
                 <div class="col-md-7">
-                    <textarea type="text" id="fieldDescription" rows="4" class="form-control"></textarea>
+                    <textarea type="text" id="fieldDescription" rows="4" class="form-control" formControlName="description"></textarea>
                 </div>
             </div>
 
         </div>
 
-    </form>
+    </div>
+    <div class="modal-footer d-block">
+        <button type="submit" class="btn btn-success btn-wide">
+            Save
+        </button>
+        <button type="submit" class="btn btn-secondary btn-wide" (click)="activeModal.dismiss()">
+            Cancel
+        </button>
+    </div>
 
-</div>
-<div class="modal-footer d-block">
-    <button type="submit" class="btn btn-success btn-wide">
-        Save
-    </button>
-    <button type="submit" class="btn btn-secondary btn-wide" (click)="activeModal.dismiss()">
-        Cancel
-    </button>
-</div>
+</form>

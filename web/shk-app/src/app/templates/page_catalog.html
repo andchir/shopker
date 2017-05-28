@@ -43,7 +43,7 @@
                 </button>
                 <div class="dropdown-menu" #categoriesDropdown>
                     <div class="dropdown-header">
-                        <button class="btn btn-sm btn-secondary" ngbTooltip="Back to root category" (click)="openRootCategory()" *ngIf="currentCategory.id > 0">
+                        <button class="btn btn-sm btn-secondary" ngbTooltip="Open root category" (click)="openRootCategory()" *ngIf="currentCategory.id > 0">
                             <i class="icon-folder"></i>
                         </button>
                         <button type="button" class="btn btn-sm btn-secondary" ngbTooltip="Add new category" (click)="openModalCategory()">
@@ -51,6 +51,9 @@
                         </button>
                         <button type="button" class="btn btn-sm btn-secondary" ngbTooltip="Edit current category" (click)="openModalCategory(currentCategory.id)" [hidden]="currentCategory.id == 0">
                             <i class="icon-pencil"></i>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-secondary" ngbTooltip="Copy category" [hidden]="currentCategory.id == 0">
+                            <i class="icon-stack"></i>
                         </button>
                         <button type="button" class="btn btn-sm btn-secondary" ngbTooltip="Move current category" [hidden]="currentCategory.id == 0">
                             <i class="icon-arrow-right"></i>

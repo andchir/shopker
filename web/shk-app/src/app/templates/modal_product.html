@@ -14,21 +14,84 @@
 
             <div class="row form-group">
                 <div class="col-md-5">
-                    <label for="fieldName">Системное имя</label>
+                    <label for="fieldContentType">Тип контента</label>
                 </div>
                 <div class="col-md-7">
-                    <input type="text" id="fieldName" class="form-control">
+                    <select id="fieldContentType" class="form-control">
+                        <option value="1">Электроника</option>
+                        <option value="0">Одежда</option>
+                    </select>
                 </div>
             </div>
 
-            <div class="row form-group">
-                <div class="col-md-5">
-                    <label for="fieldTitle">Название</label>
-                </div>
-                <div class="col-md-7">
-                    <input type="text" id="fieldTitle" class="form-control">
-                </div>
-            </div>
+            <ngb-tabset>
+                <ngb-tab title="Tab 1" id="1">
+                    <ng-template ngbTabContent>
+
+                        <div class="pt-3">
+
+                            <div class="row form-group">
+                                <div class="col-md-5">
+                                    <label for="fieldName">Системное имя</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <input type="text" id="fieldName" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <div class="col-md-5">
+                                    <label for="fieldTitle">Название</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <input type="text" id="fieldTitle" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <div class="col-md-5">
+                                    <label for="fieldDescription">Описание</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <textarea type="text" id="fieldDescription" rows="4" class="form-control" name="description"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <div class="col-md-5">
+                                    <label for="fieldTitle">Цена</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <input type="number" id="fieldPrice" class="form-control">
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </ng-template>
+                </ngb-tab>
+                <ngb-tab title="Tab 2" id="2">
+                    <ng-template ngbTabContent>
+                        <p class="pt-3">Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table
+                            craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl
+                            cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia
+                            yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean
+                            shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero
+                            sint qui sapiente accusamus tattooed echo park.</p>
+                    </ng-template>
+                </ngb-tab>
+                <ngb-tab title="Tab 3" id="3">
+                    <ng-template ngbTabContent>
+                        <p class="pt-3">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth
+                            master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh
+                            dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum
+                            iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
+                    </ng-template>
+                </ngb-tab>
+            </ngb-tabset>
+
+
+
 
         </div>
 

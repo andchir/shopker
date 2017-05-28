@@ -399,7 +399,7 @@ export class ContentTypesComponent implements OnInit {
                 this.deleteItem( itemId );
             }
         }, (reason) => {
-            //console.log( 'reason', reason );
+
         });
     }
 

@@ -17,7 +17,7 @@
                     <label for="fieldName">Системное имя</label>
                 </div>
                 <div class="col-md-7">
-                    <input type="text" id="fieldName" class="form-control" formControlName="name">
+                    <input type="text" id="fieldName" class="form-control" name="name" formControlName="name" [(ngModel)]="model.name">
                     <div *ngIf="formErrors.name" class="alert alert-danger">
                         {{formErrors.name}}
                     </div>
@@ -29,7 +29,7 @@
                     <label for="fieldTitle">Название</label>
                 </div>
                 <div class="col-md-7">
-                    <input type="text" id="fieldTitle" class="form-control" formControlName="title">
+                    <input type="text" id="fieldTitle" class="form-control" formControlName="title" name="title" [(ngModel)]="model.title">
                     <div *ngIf="formErrors.title" class="alert alert-danger">
                         {{formErrors.title}}
                     </div>
@@ -41,7 +41,7 @@
                     <label for="fieldDescription">Описание</label>
                 </div>
                 <div class="col-md-7">
-                    <textarea type="text" id="fieldDescription" rows="4" class="form-control" formControlName="description"></textarea>
+                    <textarea type="text" id="fieldDescription" rows="4" class="form-control" name="description" formControlName="description" [(ngModel)]="model.description"></textarea>
                 </div>
             </div>
 

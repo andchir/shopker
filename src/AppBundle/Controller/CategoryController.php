@@ -2,29 +2,29 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Document\Category;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use AppBundle\Document\ContentType;
 
-class ContentTypeController extends Controller
+class CategoryController extends Controller
 {
 
     /**
-     * @Route("/app/content_type_list", name="content_type_get_list")
+     * @Route("/app/categories_list", name="categories_get_list")
      * @Method({"GET"})
      * @param Request $request
      * @return JsonResponse
      */
-    public function getList( Request $request )
+    public function getList(Request $request)
     {
         $repository = $this->getRepository();
         $results = $repository->findAllOrderedByTitle();
 
         $data = [];
-        /** @var ContentType $item */
+        /** @var Category $item */
         foreach ($results as $item) {
             $data[] = $item->toArray();
         }
@@ -36,94 +36,7 @@ class ContentTypeController extends Controller
     }
 
     /**
-     * @param $data
-     * @param string $itemId
-     * @return array
-     */
-    public function validateData( $data, $itemId = '' )
-    {
-        if( empty($data) ){
-            return ['success' => false, 'msg' => 'Data is empty.'];
-        }
-        if( empty($data['title']) ){
-            return ['success' => false, 'msg' => 'Title is empty.'];
-        }
-        if( empty($data['name']) ){
-            return ['success' => false, 'msg' => 'System name is empty.'];
-        }
-        if( empty($data['collection']) ){
-            return ['success' => false, 'msg' => 'Collection name is empty.'];
-        }
-        if( empty($data['fields']) ){
-            return ['success' => false, 'msg' => 'Please create fields for content type.'];
-        }
-
-        //Check unique name
-        $repository = $this->getRepository();
-        $query = $repository->createQueryBuilder()
-            ->field('name')->equals($data['name']);
-
-        if( $itemId ){
-            $query = $query->field('id')->notEqual( $itemId );
-        }
-
-        $count = $query->getQuery()
-            ->execute()
-            ->count();
-
-        if( $count > 0 ){
-            return ['success' => false, 'msg' => 'System name already exists.'];
-        }
-
-        return ['success' => true];
-    }
-
-    /**
-     * Create or update item
-     * @param $data
-     * @param string $itemId
-     * @return array
-     */
-    public function createUpdate( $data, $itemId = '' )
-    {
-        if( empty($data) || empty($data['title']) || empty($data['name']) || empty($data['fields']) ){
-            return [
-                'success' => false,
-                'msg' => 'Data is empty.'
-            ];
-        }
-
-        if( !$itemId ){
-            $contentType = new ContentType();
-        } else {
-            $repository = $this->getRepository();
-            $contentType = $repository->find( $itemId );
-            if( !$contentType ){
-                $contentType = new ContentType();
-            }
-        }
-        $contentType
-            ->setTitle( $data['title'] )
-            ->setName( $data['name'] )
-            ->setDescription( isset($data['description']) ? $data['description'] : '' )
-            ->setCollection( isset($data['collection']) ? $data['collection'] : 'products' )
-            ->setFields( $data['fields'] )
-            ->setGroups( isset($data['groups']) ? $data['groups'] : [] )
-            ->setIsActive( isset($data['is_active']) ? $data['is_active'] : true );
-
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
-        $dm->persist( $contentType );
-        $dm->flush();
-
-        return [
-            'success' => true,
-            'data' => $contentType->toArray()
-        ];
-    }
-
-    /**
-     * @Route("/app/content_type", name="content_type_post")
+     * @Route("/app/category", name="category_create")
      * @Method({"POST"})
      * @param Request $request
      * @return JsonResponse
@@ -145,7 +58,111 @@ class ContentTypeController extends Controller
     }
 
     /**
-     * @Route("/app/content_type/{itemId}", name="content_type_put")
+     * @param $data
+     * @param string $itemId
+     * @return array
+     */
+    public function validateData( $data, $itemId = '' )
+    {
+        if( empty($data) ){
+            return ['success' => false, 'msg' => 'Data is empty.'];
+        }
+        if( empty($data['title']) ){
+            return ['success' => false, 'msg' => 'Title is empty.'];
+        }
+        if( empty($data['name']) ){
+            return ['success' => false, 'msg' => 'System name is empty.'];
+        }
+
+        //Check unique name
+        /*$repository = $this->getRepository();
+        $query = $repository->createQueryBuilder()
+            ->field('name')->equals($data['name']);
+
+        if( $itemId ){
+            $query = $query->field('id')->notEqual( $itemId );
+        }
+
+        $count = $query->getQuery()
+            ->execute()
+            ->count();
+
+        if( $count > 0 ){
+            return ['success' => false, 'msg' => 'System name already exists.'];
+        }*/
+
+        return ['success' => true];
+    }
+
+    /**
+     * @Route("/app/category/{itemId}", name="category_get")
+     * @Method({"GET"})
+     * @param Request $request
+     * @param $itemId
+     * @return JsonResponse
+     */
+    public function getItem( Request $request, $itemId )
+    {
+        $repository = $this->getRepository();
+
+        /** @var Category $category */
+        $category = $repository->find( $itemId );
+        if( !$category ){
+            return new JsonResponse([
+                'success' => false,
+                'msg' => 'Item not found.'
+            ]);
+        }
+
+        return new JsonResponse([
+            'success' => true,
+            'data' => $category->toArray()
+        ]);
+    }
+
+    /**
+     * Create or update item
+     * @param $data
+     * @param string $itemId
+     * @return array
+     */
+    public function createUpdate( $data, $itemId = '' )
+    {
+        if( empty($data) || empty($data['title']) || empty($data['name']) ){
+            return [
+                'success' => false,
+                'msg' => 'Data is empty.'
+            ];
+        }
+
+        if( !$itemId ){
+            $category = new Category();
+        } else {
+            $repository = $this->getRepository();
+            $category = $repository->find( $itemId );
+            if( !$category ){
+                $category = new Category();
+            }
+        }
+
+        $category
+            ->setTitle( $data['title'] )
+            ->setName( $data['name'] )
+            ->setDescription( isset($data['description']) ? $data['description'] : '' );
+
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $dm->persist( $category );
+        $dm->flush();
+
+        return [
+            'success' => true,
+            'data' => $category->toArray()
+        ];
+    }
+
+    /**
+     * @Route("/app/category/{itemId}", name="category_put")
      * @Method({"PUT"})
      * @param Request $request
      * @param string $itemId
@@ -168,7 +185,7 @@ class ContentTypeController extends Controller
     }
 
     /**
-     * @Route("/app/content_type/{itemId}", name="content_type_delete")
+     * @Route("/app/category/{itemId}", name="category_delete")
      * @Method({"DELETE"})
      * @param Request $request
      * @param $itemId
@@ -178,9 +195,9 @@ class ContentTypeController extends Controller
     {
         $repository = $this->getRepository();
 
-        /** @var ContentType $contentType */
-        $contentType = $repository->find( $itemId );
-        if( !$contentType ){
+        /** @var Category $category */
+        $category = $repository->find( $itemId );
+        if( !$category ){
             return new JsonResponse([
                 'success' => false,
                 'msg' => 'Item not found.'
@@ -189,7 +206,7 @@ class ContentTypeController extends Controller
 
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $this->get('doctrine_mongodb')->getManager();
-        $dm->remove( $contentType );
+        $dm->remove( $category );
         $dm->flush();
 
         return new JsonResponse([
@@ -198,39 +215,13 @@ class ContentTypeController extends Controller
     }
 
     /**
-     * @Route("/app/content_type/{itemId}", name="content_type_get")
-     * @Method({"GET"})
-     * @param Request $request
-     * @param $itemId
-     * @return JsonResponse
-     */
-    public function getItem( Request $request, $itemId )
-    {
-        $repository = $this->getRepository();
-
-        /** @var ContentType $contentType */
-        $contentType = $repository->find( $itemId );
-        if( !$contentType ){
-            return new JsonResponse([
-                'success' => false,
-                'msg' => 'Item not found.'
-            ]);
-        }
-
-        return new JsonResponse([
-            'success' => true,
-            'data' => $contentType->toArray(true)
-        ]);
-    }
-
-    /**
-     * @return \AppBundle\Repository\ContentTypeRepository
+     * @return \AppBundle\Repository\CategoryRepository
      */
     public function getRepository()
     {
         return $this->get('doctrine_mongodb')
             ->getManager()
-            ->getRepository('AppBundle:ContentType');
+            ->getRepository('AppBundle:Category');
     }
 
 }

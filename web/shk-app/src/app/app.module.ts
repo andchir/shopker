@@ -5,12 +5,14 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent, ConfirmModalContent } from './app.component';
 import { OrdersComponent } from './orders.component';
-import { CatalogComponent, ProductModalContent, CategoryModalContent } from './catalog.component';
+import { CatalogComponent, ProductModalContent } from './catalog.component';
+import { CategoriesComponent } from './categories.component';
 import { ContentTypesComponent, ContentTypeModalContent } from './content_types.component';
 import { StatisticsComponent } from './stat.component';
 import { SettingsComponent } from './settings.component';
 
 import { ContentTypesService } from './services/content_types.service';
+import { CategoriesService } from './services/categories.service';
 import { AppRoutingModule }     from './app-routing.module';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -34,11 +36,11 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
         SettingsComponent,
         ProductModalContent,
         ContentTypeModalContent,
-        CategoryModalContent,
+        CategoriesComponent,
         ConfirmModalContent
     ],
-    providers: [ ContentTypesService ],
-    entryComponents: [ ConfirmModalContent, ProductModalContent, ContentTypeModalContent, CategoryModalContent ],
+    providers: [ ContentTypesService, CategoriesService ],
+    entryComponents: [ ConfirmModalContent, ProductModalContent, ContentTypeModalContent, CategoriesComponent ],
     bootstrap: [ AppComponent ]
 })
 export class AppModule { }

@@ -156,10 +156,12 @@ export class CatalogComponent implements OnInit {
 
     openRootCategory(): void {
         this.currentCategory = new Category(0,0,'root','Категории','');
+        this.titleService.setTitle( this.title );
     }
 
     selectCategory( category: Category ): void {
         this.currentCategory = _.clone( category );
+        this.titleService.setTitle( this.title + ' / ' + this.currentCategory.title );
     }
 
     public setTitle( newTitle: string ): void {

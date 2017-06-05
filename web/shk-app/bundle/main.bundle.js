@@ -169,9 +169,11 @@ var CatalogComponent = (function () {
     };
     CatalogComponent.prototype.openRootCategory = function () {
         this.currentCategory = new __WEBPACK_IMPORTED_MODULE_5__models_category_model__["a" /* Category */](0, 0, 'root', 'Категории', '');
+        this.titleService.setTitle(this.title);
     };
     CatalogComponent.prototype.selectCategory = function (category) {
         this.currentCategory = __WEBPACK_IMPORTED_MODULE_8_lodash__["clone"](category);
+        this.titleService.setTitle(this.title + ' / ' + this.currentCategory.title);
     };
     CatalogComponent.prototype.setTitle = function (newTitle) {
         this.titleService.setTitle(newTitle);

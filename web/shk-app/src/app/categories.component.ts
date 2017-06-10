@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { Router, ActivatedRoute, Params } from '@angular/router';
-import { Location } from '@angular/common';
+import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal, NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CategoriesService } from './services/categories.service'
@@ -12,6 +11,9 @@ import { ConfirmModalContent } from './app.component';
 import 'rxjs/add/operator/switchMap';
 import * as _ from "lodash";
 
+/**
+ * @class CategoriesModalComponent
+ */
 @Component({
     selector: 'category-modal-content',
     templateUrl: 'templates/modal_category.html',
@@ -164,6 +166,9 @@ export class CategoriesModalComponent implements OnInit {
 
 }
 
+/**
+ * @class CategoriesMenuComponent
+ */
 @Component({
     selector: 'categories-menu',
     templateUrl: 'templates/categories-menu.html',
@@ -171,44 +176,60 @@ export class CategoriesModalComponent implements OnInit {
 })
 export class CategoriesMenuComponent implements OnInit {
     @Input() rootTitle: string = '';
+    rootCategoryTitle: string = 'Категории';
     currentCategory: Category;
     categories: Category[] = [];
     errorMessage: string = '';
     modalRef: NgbModalRef;
+    categoryId: number = 0;
 
     constructor(
         public router: Router,
+        private route: ActivatedRoute,
         private modalService: NgbModal,
         private categoriesService: CategoriesService,
-        private route: ActivatedRoute,
-        private location: Location,
         private titleService: Title
     ) {}
 
+    /** On initialize component */
     ngOnInit(): void {
-        this.getCategories();
         this.openRootCategory();
+        this.getCategories();
 
-        let routeParams = this.route.params['value'];
-        if( routeParams.categoryId ){
-            this.route.params
-                .switchMap((params: Params) => this.categoriesService.getItem(params['categoryId']))
-                .subscribe((category: Category) => this.currentCategory = category);
+        this.route.paramMap
+            .subscribe(
+                params => {
+                    this.categoryId = params.get('categoryId')
+                        ? parseInt( params.get('categoryId') )
+                        : 0;
+                    this.selectCurrent();
+                }
+            );
+    }
+
+    selectCurrent(): void {
+        for( let category of this.categories ){
+            if( category.id == this.categoryId ){
+                this.currentCategory = category;
+                break;
+            }
         }
     }
 
     getCategories() {
         this.categoriesService.getList()
-            .then(
+            .subscribe(
                 items => {
-                this.categories = items;
-            },
-            error => this.errorMessage = <any>error);
+                    this.categories = items;
+                    this.selectCurrent();
+                },
+                error =>  this.errorMessage = <any>error
+            );
     }
 
     openModalCategory( itemId?: number, isItemCopy?: boolean ): void {
         this.modalRef = this.modalService.open(CategoriesModalComponent, {size: 'lg'});
-        this.modalRef.componentInstance.modalTitle = 'Add category';
+        this.modalRef.componentInstance.modalTitle = itemId && !isItemCopy ? 'Edit category' : 'Add category';
         this.modalRef.componentInstance.itemId = itemId || 0;
         this.modalRef.componentInstance.isItemCopy = isItemCopy || false;
         this.modalRef.result.then((result) => {
@@ -259,20 +280,20 @@ export class CategoriesMenuComponent implements OnInit {
     }
 
     openRootCategory(): void {
-        this.currentCategory = new Category(0,0,'root','Категории','','');
+        this.currentCategory = new Category(0,0,'root',this.rootCategoryTitle,'','');
         this.titleService.setTitle( this.rootTitle );
     }
 
+    goToRootCategory(): void {
+        this.router.navigate(['/catalog']);
+    }
+
     selectCategory( category: Category ): void {
-        this.router.navigate(['/catalog', category.id]);
-        //this.currentCategory = _.clone( category );
-        //this.titleService.setTitle( this.rootTitle + ' / ' + this.currentCategory.title );
+        this.router.navigate(['/catalog/category', category.id]);
     }
 
     copyCategory(){
-
-        console.log( 'copyCategory' );
-
+        this.openModalCategory( this.currentCategory.id, true );
     }
 
     moveCategory(){

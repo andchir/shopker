@@ -5,8 +5,8 @@
     </button>
     <div class="dropdown-menu" #categoriesDropdown>
         <div class="dropdown-header">
-            <button class="btn btn-sm btn-secondary" ngbTooltip="Open root category" (click)="openRootCategory()" *ngIf="currentCategory.id > 0">
-                <i class="icon-folder"></i>
+            <button class="btn btn-sm btn-secondary" ngbTooltip="Open root category" (click)="goToRootCategory()" *ngIf="currentCategory.id > 0">
+                <i class="icon-home"></i>
             </button>
             <button type="button" class="btn btn-sm btn-secondary" ngbTooltip="Add new category" (click)="openModalCategory()">
                 <i class="icon-plus"></i>

@@ -1,8 +1,11 @@
 import { Injectable }              from '@angular/core';
 import { Http, Response }          from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
 
 import 'rxjs/add/operator/toPromise';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
 
 import { Category } from '../models/category.model';
 
@@ -32,7 +35,7 @@ export class CategoriesService {
             .catch(this.handleError);
     }
 
-    getItem(id: string): Promise<Category> {
+    getItem(id: number): Promise<Category> {
         const url = `${this.oneUrl}/${id}`;
         return this.http.get(url)
             .toPromise()
@@ -40,10 +43,9 @@ export class CategoriesService {
             .catch(this.handleError);
     }
 
-    getList(): Promise<Category[]> {
+    getList(): Observable<Category[]> {
         return this.http.get(this.listUrl)
-            .toPromise()
-            .then(this.extractData)
+            .map(this.extractData)
             .catch(this.handleError);
     }
 

@@ -1,0 +1,96 @@
+import { Component, OnInit, Input } from '@angular/core';
+import { NgbModal, NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { CategoriesService } from './services/categories.service';
+import { ContentTypesService } from './services/content_types.service';
+import { ContentType } from './models/content_type.model';
+import { Category } from "./models/category.model";
+import { Product } from "./models/product.model";
+import * as _ from "lodash";
+
+@Component({
+    selector: 'ngbd-modal-content',
+    templateUrl: 'templates/modal_product.html'
+})
+export class ProductModalContent implements OnInit {
+    @Input() modalTitle;
+    @Input() itemId;
+    @Input() categoryContentTypeName;
+    submitted: boolean = false;
+    loading: boolean = false;
+    errorMessage: string;
+    model: Product;
+    contentTypes: ContentType[] = [];
+
+    form: FormGroup;
+    formErrors = {
+        parent_id: '',
+        name: '',
+        title: '',
+        content_type: ''
+    };
+
+    constructor(
+        private fb: FormBuilder,
+        public activeModal: NgbActiveModal,
+        private contentTypesService: ContentTypesService,
+    ) {}
+
+    /** On initialize */
+    ngOnInit(): void {
+
+        console.log( 'onInit', this.itemId, this.categoryContentTypeName );
+
+        this.model = new Product(0,0,this.categoryContentTypeName,'','','');
+
+        this.buildForm();
+        this.getContentTypes();
+        if( this.itemId ){
+            this.getModelData();
+        }
+    }
+
+    buildForm(): void {
+        this.form = this.fb.group({
+            content_type: [this.model.content_type, [Validators.required]],
+            title: [this.model.title, [Validators.required]],
+            name: [this.model.name, [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')]],
+            description: [this.model.description, []]
+        });
+        this.form.valueChanges
+            .subscribe(data => this.onValueChanged(data));
+    }
+
+    getModelData(): void {
+
+        console.log( 'getModelData', this.itemId );
+
+    }
+
+    getContentTypes(){
+        this.contentTypesService.getList()
+            .then(
+                items => {
+                    this.contentTypes = items;
+                },
+                error => this.errorMessage = <any>error);
+    }
+
+    /**
+     * On form value changed
+     * @param data
+     */
+    onValueChanged(data?: any){
+        if (!this.form) { return; }
+
+        console.log( 'onValueChange', data );
+
+    }
+
+    onSubmit() {
+
+        this.submitted = true;
+
+
+    }
+}

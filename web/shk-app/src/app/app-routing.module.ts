@@ -12,7 +12,7 @@ const routes: Routes = [
     { path: '', redirectTo: '/orders', pathMatch: 'full' },
     { path: 'orders', component: OrdersComponent },
     { path: 'catalog', component: CatalogComponent },
-    { path: 'catalog/:categoryId', component: CatalogComponent },
+    { path: 'catalog/category/:categoryId', component: CatalogComponent },
     { path: 'catalog/content_types', component: ContentTypesComponent },
     { path: 'statistics', component: StatisticsComponent },
     { path: 'settings', component: SettingsComponent },

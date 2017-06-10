@@ -4,9 +4,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent, ConfirmModalContent } from './app.component';
+import { NotFoundComponent } from './not-found.component';
 import { OrdersComponent } from './orders.component';
 import { CatalogComponent, ProductModalContent } from './catalog.component';
-import { CategoriesComponent } from './categories.component';
+import { CategoriesMenuComponent, CategoriesModalComponent } from './categories.component';
 import { ContentTypesComponent, ContentTypeModalContent } from './content_types.component';
 import { StatisticsComponent } from './stat.component';
 import { SettingsComponent } from './settings.component';
@@ -29,18 +30,20 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     ],
     declarations: [
         AppComponent,
+        NotFoundComponent,
         OrdersComponent,
+        CategoriesMenuComponent,
         CatalogComponent,
         ContentTypesComponent,
         StatisticsComponent,
         SettingsComponent,
         ProductModalContent,
         ContentTypeModalContent,
-        CategoriesComponent,
+        CategoriesModalComponent,
         ConfirmModalContent
     ],
     providers: [ ContentTypesService, CategoriesService ],
-    entryComponents: [ ConfirmModalContent, ProductModalContent, ContentTypeModalContent, CategoriesComponent ],
+    entryComponents: [ ConfirmModalContent, ProductModalContent, ContentTypeModalContent, CategoriesModalComponent ],
     bootstrap: [ AppComponent ]
 })
 export class AppModule { }

@@ -4,6 +4,7 @@ export class Category {
         public parent_id: number,
         public name: string,
         public title: string,
-        public description: string
+        public description: string,
+        public content_type: string
     ) { }
 }

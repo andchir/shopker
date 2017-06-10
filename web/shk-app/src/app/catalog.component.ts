@@ -5,8 +5,6 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CategoriesService } from './services/categories.service';
 import { Category } from "./models/category.model";
 import { Product } from "./models/product.model";
-import { ConfirmModalContent } from './app.component';
-import { CategoriesComponent } from './categories.component';
 import * as _ from "lodash";
 
 @Component({
@@ -77,91 +75,17 @@ export class CatalogComponent implements OnInit {
 
     constructor(
         private modalService: NgbModal,
-        private categoriesService: CategoriesService,
         private titleService: Title
     ) {}
 
     ngOnInit(): void {
         this.setTitle( this.title );
-        this.openRootCategory();
-        this.getCategories();
-    }
-
-    getCategories() {
-        this.categoriesService.getList()
-            .then(
-                items => {
-                    this.categories = items;
-                },
-                error => this.errorMessage = <any>error);
     }
 
     modalOpen( itemId?: number ) {
         this.modalRef = this.modalService.open(ProductModalContent, {size: 'lg'});
         this.modalRef.componentInstance.modalTitle = 'Add product';
         this.modalRef.componentInstance.itemId = itemId || 0;
-    }
-
-    openModalCategory( itemId?: number, isItemCopy?: boolean ): void {
-        this.modalRef = this.modalService.open(CategoriesComponent, {size: 'lg'});
-        this.modalRef.componentInstance.modalTitle = 'Add category';
-        this.modalRef.componentInstance.itemId = itemId || 0;
-        this.modalRef.componentInstance.isItemCopy = isItemCopy || false;
-        this.modalRef.result.then((result) => {
-            if( result.reason && result.reason == 'edit' ){
-                //Update category data
-                this.currentCategory = _.clone( result.data );
-                let index = _.findIndex( this.categories, {id: result.data.id} );
-                if( index > -1 ){
-                    this.categories[index] = _.clone( result.data );
-                }
-            } else {
-                this.getCategories();
-            }
-        }, (reason) => {
-
-        });
-    }
-
-    deleteCategoryItemConfirm( itemId: number ): void{
-        let index = _.findIndex( this.categories, {id: itemId} );
-        if( index == -1 ){
-            return;
-        }
-        this.modalRef = this.modalService.open(ConfirmModalContent);
-        this.modalRef.componentInstance.modalTitle = 'Confirm';
-        this.modalRef.componentInstance.modalContent = 'Are you sure you want to remove category "' + this.categories[index].title + '"?';
-        this.modalRef.result.then((result) => {
-            if( result == 'accept' ){
-                this.deleteCategoryItem( itemId );
-            }
-        }, (reason) => {
-
-        });
-    }
-
-    deleteCategoryItem( itemId: number ): void{
-        this.categoriesService.deleteItem( itemId )
-            .then((res) => {
-                if( res.success ){
-                    this.openRootCategory();
-                    this.getCategories();
-                } else {
-                    if( res.msg ){
-                        //this.errorMessage = res.msg;
-                    }
-                }
-            });
-    }
-
-    openRootCategory(): void {
-        this.currentCategory = new Category(0,0,'root','Категории','');
-        this.titleService.setTitle( this.title );
-    }
-
-    selectCategory( category: Category ): void {
-        this.currentCategory = _.clone( category );
-        this.titleService.setTitle( this.title + ' / ' + this.currentCategory.title );
     }
 
     public setTitle( newTitle: string ): void {

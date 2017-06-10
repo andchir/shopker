@@ -35,6 +35,11 @@ class Category
     protected $description;
 
     /**
+     * @MongoDB\Field(type="string")
+     */
+    protected $content_type;
+
+    /**
      * Get id
      *
      * @return string $id
@@ -142,8 +147,30 @@ class Category
             'parent_id' => $this->getParentId(),
             'name' => $this->getName(),
             'title' => $this->getTitle(),
-            'description' => $this->getDescription()
+            'description' => $this->getDescription(),
+            'content_type' => $this->getContentType()
         ];
     }
 
+    /**
+     * Set contentType
+     *
+     * @param string $contentType
+     * @return self
+     */
+    public function setContentType($contentType)
+    {
+        $this->content_type = $contentType;
+        return $this;
+    }
+
+    /**
+     * Get contentType
+     *
+     * @return string $contentType
+     */
+    public function getContentType()
+    {
+        return $this->content_type;
+    }
 }

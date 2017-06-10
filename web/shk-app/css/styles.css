@@ -4,6 +4,7 @@
 .w-auto { width: auto; }
 .min-width150 { min-width: 150px; }
 .big { font-size: 120%; }
+.tooltip { pointer-events: none; }
 
 /* form-control */
 input[type=text].form-control,

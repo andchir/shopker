@@ -1,0 +1,38 @@
+<div class="d-inline-block dropdown">
+    <button class="btn btn-info dropdown-toggle dropdown-toggle-hover">
+        <i class="icon-folder"></i>
+        {{currentCategory.title}}
+    </button>
+    <div class="dropdown-menu" #categoriesDropdown>
+        <div class="dropdown-header">
+            <button class="btn btn-sm btn-secondary" ngbTooltip="Open root category" (click)="openRootCategory()" *ngIf="currentCategory.id > 0">
+                <i class="icon-folder"></i>
+            </button>
+            <button type="button" class="btn btn-sm btn-secondary" ngbTooltip="Add new category" (click)="openModalCategory()">
+                <i class="icon-plus"></i>
+            </button>
+            <button type="button" class="btn btn-sm btn-secondary" ngbTooltip="Edit current category" (click)="openModalCategory(currentCategory.id)" [hidden]="currentCategory.id == 0">
+                <i class="icon-pencil"></i>
+            </button>
+            <button type="button" class="btn btn-sm btn-secondary" ngbTooltip="Copy category" (click)="copyCategory()" [hidden]="currentCategory.id == 0">
+                <i class="icon-stack"></i>
+            </button>
+            <button type="button" class="btn btn-sm btn-secondary" ngbTooltip="Move current category" (click)="moveCategory()" [hidden]="currentCategory.id == 0">
+                <i class="icon-arrow-right"></i>
+            </button>
+            <button type="button" class="btn btn-sm btn-secondary" ngbTooltip="Delete current category" (click)="deleteCategoryItemConfirm(currentCategory.id)" [hidden]="currentCategory.id == 0">
+                <i class="icon-cross"></i>
+            </button>
+        </div>
+        <div class="dropdown-divider"></div>
+        <div class="dropdown-header" *ngIf="categories.length == 0">
+            No categories.
+        </div>
+
+        <button class="dropdown-item" *ngFor="let category of categories" (click)="selectCategory(category)" [class.active]="category.id == currentCategory.id">
+            <i class="icon-folder"></i>
+            {{category.title}}
+        </button>
+
+    </div>
+</div>

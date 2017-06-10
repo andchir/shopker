@@ -1,6 +1,7 @@
 import { NgModule }             from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { NotFoundComponent } from './not-found.component';
 import { OrdersComponent } from './orders.component';
 import { CatalogComponent } from './catalog.component';
 import { ContentTypesComponent } from './content_types.component';
@@ -11,9 +12,11 @@ const routes: Routes = [
     { path: '', redirectTo: '/orders', pathMatch: 'full' },
     { path: 'orders', component: OrdersComponent },
     { path: 'catalog', component: CatalogComponent },
+    { path: 'catalog/:categoryId', component: CatalogComponent },
     { path: 'catalog/content_types', component: ContentTypesComponent },
     { path: 'statistics', component: StatisticsComponent },
-    { path: 'settings', component: SettingsComponent }
+    { path: 'settings', component: SettingsComponent },
+    { path: '**', component: NotFoundComponent }
 ];
 
 @NgModule({

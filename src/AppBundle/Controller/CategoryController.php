@@ -68,10 +68,13 @@ class CategoryController extends Controller
             return ['success' => false, 'msg' => 'Data is empty.'];
         }
         if( empty($data['title']) ){
-            return ['success' => false, 'msg' => 'Title is empty.'];
+            return ['success' => false, 'msg' => 'Title is required.'];
         }
         if( empty($data['name']) ){
-            return ['success' => false, 'msg' => 'System name is empty.'];
+            return ['success' => false, 'msg' => 'System name is required.'];
+        }
+        if( empty($data['content_type']) ){
+            return ['success' => false, 'msg' => 'Content type is required.'];
         }
 
         //Check unique name
@@ -146,8 +149,10 @@ class CategoryController extends Controller
         }
 
         $category
+            ->setParentId( isset($data['parent_id']) ? intval( $data['parent_id'] ) : 0 )
             ->setTitle( $data['title'] )
             ->setName( $data['name'] )
+            ->setContentType( $data['content_type'] )
             ->setDescription( isset($data['description']) ? $data['description'] : '' );
 
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */

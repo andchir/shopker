@@ -36,7 +36,7 @@
         </div>
         <div class="float-left">
 
-            <categories-menu [rootTitle]="title"></categories-menu>
+            <categories-menu (changeRequest)="openCategory($event)"></categories-menu>
 
         </div>
     </div>

@@ -22,7 +22,6 @@ export class CatalogComponent implements OnInit {
     currentCategory: Category;
     items: Product[] = [];
     selectedIds: number[] = [];
-    categoryId: number = 0;
 
     constructor(
         public router: Router,
@@ -34,26 +33,21 @@ export class CatalogComponent implements OnInit {
 
     ngOnInit(): void {
         this.setTitle( this.title );
-
-        console.log( 'ngOnInit' );
-
-        this.route.paramMap
-            .subscribe(
-                params => {
-                    this.categoryId = params.get('categoryId')
-                        ? parseInt( params.get('categoryId') )
-                        : 0;
-                    this.getCategory();
-                    this.getProducts();
-                }
-            );
     }
 
-    getCategory(): void {
-        if( this.categoryId ){
-            this.categoriesService.getItem( this.categoryId )
+    openCategory( category: Category ): void {
+        this.currentCategory = _.clone( category );
+        this.titleService.setTitle( this.title + ' / ' + this.currentCategory.title );
+        this.getProducts();
+    }
+
+    //TODO: delete if not used
+    getCategory( categoryId: number ): void {
+        if( categoryId ){
+            this.categoriesService.getItem( categoryId )
                 .then(item => {
                     this.currentCategory = item;
+                    this.titleService.setTitle( this.title + ' / ' + this.currentCategory.title );
                 });
         } else {
             this.openRootCategory();
@@ -62,12 +56,15 @@ export class CatalogComponent implements OnInit {
 
     openRootCategory(): void {
         this.currentCategory = new Category(0,0,'root', '','','');
-        //this.titleService.setTitle( this.rootTitle );
+        this.titleService.setTitle( this.title );
+        this.getProducts();
     }
 
     getProducts(): void{
 
-        console.log( 'getProducts', this.categoryId );
+        this.loading = true;
+
+        console.log( 'getProducts', this.currentCategory.id );
 
     }
 

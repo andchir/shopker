@@ -225,12 +225,12 @@ class ContentType
             'name' => $this->getName(),
             'description' => $this->getDescription(),
             'collection' => $this->getCollection(),
-            'is_active' => $this->getIsActive()
+            'is_active' => $this->getIsActive(),
+            'groups' => $this->getGroups()
         ];
         if( $full ){
             $output = array_merge($output, [
-                'fields' => $this->getFields(),
-                'groups' => $this->getGroups()
+                'fields' => $this->getFields()
             ]);
         }
         return $output;

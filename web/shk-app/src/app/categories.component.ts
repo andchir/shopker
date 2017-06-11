@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal, NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -175,9 +175,9 @@ export class CategoriesModalComponent implements OnInit {
     providers: [ CategoriesService ]
 })
 export class CategoriesMenuComponent implements OnInit {
-    @Input() rootTitle: string = '';
-    rootCategoryTitle: string = 'Категории';
-    currentCategory: Category;
+    @Input() rootTitle: string = 'Категории';
+    @Output() changeRequest = new EventEmitter<Category>();
+    currentCategory: Category = new Category(0,0,'root',this.rootTitle,'','');
     categories: Category[] = [];
     errorMessage: string = '';
     modalRef: NgbModalRef;
@@ -187,14 +187,16 @@ export class CategoriesMenuComponent implements OnInit {
         public router: Router,
         private route: ActivatedRoute,
         private modalService: NgbModal,
-        private categoriesService: CategoriesService,
-        private titleService: Title
+        private categoriesService: CategoriesService
     ) {}
 
     /** On initialize component */
     ngOnInit(): void {
-        this.openRootCategory();
         this.getCategories();
+
+        let categoryId = this.route.snapshot.params['categoryId']
+            ? parseInt( this.route.snapshot.params['categoryId'] )
+            : 0;
 
         this.route.paramMap
             .subscribe(
@@ -205,12 +207,17 @@ export class CategoriesMenuComponent implements OnInit {
                     this.selectCurrent();
                 }
             );
+
+        if( !categoryId ){
+            this.openRootCategory();
+        }
     }
 
     selectCurrent(): void {
         for( let category of this.categories ){
             if( category.id == this.categoryId ){
                 this.currentCategory = category;
+                this.changeRequest.emit( this.currentCategory );
                 break;
             }
         }
@@ -280,8 +287,8 @@ export class CategoriesMenuComponent implements OnInit {
     }
 
     openRootCategory(): void {
-        this.currentCategory = new Category(0,0,'root',this.rootCategoryTitle,'','');
-        this.titleService.setTitle( this.rootTitle );
+        this.currentCategory = new Category(0,0,'root',this.rootTitle,'','');
+        this.changeRequest.emit( this.currentCategory );
     }
 
     goToRootCategory(): void {

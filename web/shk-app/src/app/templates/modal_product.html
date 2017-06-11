@@ -17,7 +17,7 @@
                     <label for="fieldContentType">Тип контента</label>
                 </div>
                 <div class="col-md-7">
-                    <select id="fieldContentType" class="form-control" name="content_type" formControlName="content_type" [(ngModel)]="model.content_type">
+                    <select id="fieldContentType" class="form-control" name="content_type" formControlName="content_type" [(ngModel)]="model.content_type" (change)="onChangeContentType()">
                         <option value="1" *ngFor="let contentType of contentTypes" [value]="contentType.name">{{contentType.title}}</option>
                     </select>
                     <div *ngIf="formErrors.content_type" class="alert alert-danger">
@@ -27,6 +27,14 @@
             </div>
 
             <ngb-tabset>
+                <ngb-tab title="{{groupName}}" id="{{i + 1}}" *ngFor="let groupName of currentContentType.groups; let i=index">
+                    <ng-template ngbTabContent>
+                        <div class="pt-3">Empty.</div>
+                    </ng-template>
+                </ngb-tab>
+            </ngb-tabset>
+
+            <!--ngb-tabset>
                 <ngb-tab title="Tab 1" id="1">
                     <ng-template ngbTabContent>
 
@@ -82,10 +90,7 @@
                         <div class="pt-3">Empty.</div>
                     </ng-template>
                 </ngb-tab>
-            </ngb-tabset>
-
-
-
+            </ngb-tabset-->
 
         </div>
 

@@ -21,6 +21,7 @@ export class ProductModalContent implements OnInit {
     errorMessage: string;
     model: Product;
     contentTypes: ContentType[] = [];
+    currentContentType: ContentType = new ContentType('','','','','',[],[],true);
 
     form: FormGroup;
     formErrors = {
@@ -38,9 +39,6 @@ export class ProductModalContent implements OnInit {
 
     /** On initialize */
     ngOnInit(): void {
-
-        console.log( 'onInit', this.itemId, this.categoryContentTypeName );
-
         this.model = new Product(0,0,this.categoryContentTypeName,'','','');
 
         this.buildForm();
@@ -67,14 +65,29 @@ export class ProductModalContent implements OnInit {
 
     }
 
+    selectCurrentContentType(): void {
+        let index = _.findIndex( this.contentTypes, {name: this.model.content_type} );
+        if( index > -1 ){
+            this.currentContentType = _.clone( this.contentTypes[index] );
+            console.log( 'selectCurrentContentType', this.currentContentType );
+        }
+    }
+
+    onChangeContentType(): void {
+        this.selectCurrentContentType();
+    }
+
     getContentTypes(){
         this.contentTypesService.getList()
             .then(
                 items => {
                     this.contentTypes = items;
+                    this.selectCurrentContentType();
                 },
                 error => this.errorMessage = <any>error);
     }
+
+
 
     /**
      * On form value changed

@@ -29,7 +29,18 @@
             <ngb-tabset>
                 <ngb-tab title="{{groupName}}" id="{{i + 1}}" *ngFor="let groupName of currentContentType.groups; let i=index">
                     <ng-template ngbTabContent>
-                        <div class="pt-3">Empty.</div>
+                        <div class="pt-3">
+
+                            <div class="row form-group" *ngFor="let field of currentContentType.fields | filterFieldByGroup: groupName">
+                                <div class="col-md-5">
+                                    <label for="field{{field.name}}">{{ field.title }}</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <input type="text" id="field{{field.name}}" class="form-control">
+                                </div>
+                            </div>
+
+                        </div>
                     </ng-template>
                 </ngb-tab>
             </ngb-tabset>

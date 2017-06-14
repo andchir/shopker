@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Pipe, PipeTransform } from '@angular/core';
 import { NgbModal, NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CategoriesService } from './services/categories.service';
@@ -6,6 +6,8 @@ import { ContentTypesService } from './services/content_types.service';
 import { ContentType } from './models/content_type.model';
 import { Category } from "./models/category.model";
 import { Product } from "./models/product.model";
+import { ContentField } from "./models/content_field.model";
+import { filterFieldByGroup } from "./filter-field-by-group.pipe";
 import * as _ from "lodash";
 
 @Component({
@@ -69,7 +71,6 @@ export class ProductModalContent implements OnInit {
         let index = _.findIndex( this.contentTypes, {name: this.model.content_type} );
         if( index > -1 ){
             this.currentContentType = _.clone( this.contentTypes[index] );
-            console.log( 'selectCurrentContentType', this.currentContentType );
         }
     }
 
@@ -78,7 +79,7 @@ export class ProductModalContent implements OnInit {
     }
 
     getContentTypes(){
-        this.contentTypesService.getList()
+        this.contentTypesService.getList( true )
             .then(
                 items => {
                     this.contentTypes = items;

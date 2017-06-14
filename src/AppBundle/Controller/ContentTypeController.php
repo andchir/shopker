@@ -22,11 +22,12 @@ class ContentTypeController extends Controller
     {
         $repository = $this->getRepository();
         $results = $repository->findAllOrderedByTitle();
+        $full = !empty( $request->get('full') ) ? true : false;
 
         $data = [];
         /** @var ContentType $item */
         foreach ($results as $item) {
-            $data[] = $item->toArray();
+            $data[] = $item->toArray( $full );
         }
 
         return new JsonResponse([

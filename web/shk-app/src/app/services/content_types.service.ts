@@ -11,12 +11,14 @@ export class ContentTypesService {
 
     private headers = new Headers({'Content-Type': 'application/json'});
     private listUrl = 'app/content_type_list';
+    private listUrlFull = 'app/content_type_list?full=1';
     private oneUrl = 'app/content_type';
 
     constructor (private http: Http) {}
 
-    getList(): Promise<ContentType[]> {
-        return this.http.get(this.listUrl)
+    getList(full?: boolean): Promise<ContentType[]> {
+        let url = full ? this.listUrlFull : this.listUrl;
+        return this.http.get( url )
             .toPromise()
             .then(this.extractData)
             .catch(this.handleError);

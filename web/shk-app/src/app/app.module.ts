@@ -13,6 +13,8 @@ import { ContentTypesComponent, ContentTypeModalContent } from './content_types.
 import { StatisticsComponent } from './stat.component';
 import { SettingsComponent } from './settings.component';
 
+import { filterFieldByGroup } from "./filter-field-by-group.pipe";
+
 import { ContentTypesService } from './services/content_types.service';
 import { CategoriesService } from './services/categories.service';
 import { AppRoutingModule }     from './app-routing.module';
@@ -41,7 +43,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
         ProductModalContent,
         ContentTypeModalContent,
         CategoriesModalComponent,
-        ConfirmModalContent
+        ConfirmModalContent,
+        filterFieldByGroup
     ],
     providers: [ ContentTypesService, CategoriesService ],
     entryComponents: [ ConfirmModalContent, ProductModalContent, ContentTypeModalContent, CategoriesModalComponent ],

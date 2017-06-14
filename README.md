@@ -168,7 +168,7 @@ server {
     server_name shopkeeper4;
     root /var/www/html/shopkeeper4/web;
 
-    client_max_body_size 2000m;
+    client_max_body_size 200m;
 
     location / {
         try_files $uri /app.php$is_args$args;

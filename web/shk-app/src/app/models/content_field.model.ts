@@ -9,6 +9,7 @@ export class ContentField {
         public output_type: string,
         public output_type_options: any[],
         public group: string,
-        public is_filter: boolean
+        public is_filter: boolean,
+        public required: false
     ) { }
 }

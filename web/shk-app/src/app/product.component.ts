@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Pipe, PipeTransform } from '@angular/core';
 import { NgbModal, NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CategoriesService } from './services/categories.service';
 import { ContentTypesService } from './services/content_types.service';
 import { ContentType } from './models/content_type.model';
@@ -51,12 +51,14 @@ export class ProductModalContent implements OnInit {
     }
 
     buildForm(): void {
-        this.form = this.fb.group({
-            content_type: [this.model.content_type, [Validators.required]],
-            title: [this.model.title, [Validators.required]],
-            name: [this.model.name, [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')]],
-            description: [this.model.description, []]
+
+        let group: any = {};
+        this.currentContentType.fields.forEach(field => {
+            group[field.name] = field.required
+                ? new FormControl('', Validators.required)
+                : new FormControl('');
         });
+        this.form = new FormGroup(group);
         this.form.valueChanges
             .subscribe(data => this.onValueChanged(data));
     }
@@ -77,8 +79,8 @@ export class ProductModalContent implements OnInit {
             if( !this.model.content_type ){
                 this.model.content_type = this.currentContentType.name;
             }
+            this.buildForm();
         }
-        console.log( 'selectCurrentContentType', index, this.contentTypes, this.currentContentType );
     }
 
     onChangeContentType(): void {
@@ -108,8 +110,16 @@ export class ProductModalContent implements OnInit {
 
     onSubmit() {
 
+        this.errorMessage = '';
         this.submitted = true;
 
+        if( !this.form.valid ){
+            this.onValueChanged();
+            this.errorMessage = 'Please fix the errors fill.';
+            return;
+        }
+
+        console.log( 'onSubmit', this.form.valid, this.form.value );
 
     }
 }

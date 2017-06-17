@@ -120,6 +120,7 @@ export class ContentTypeModalContent implements OnInit {
             input_type: ['', [Validators.required]],
             output_type: ['', [Validators.required]],
             is_filter: ['', []],
+            required: ['', []],
             group: ['', [Validators.required]],
             new_group: ['', []]
         });

@@ -69,9 +69,16 @@ export class ProductModalContent implements OnInit {
 
     selectCurrentContentType(): void {
         let index = _.findIndex( this.contentTypes, {name: this.model.content_type} );
-        if( index > -1 ){
-            this.currentContentType = _.clone( this.contentTypes[index] );
+        if( index == -1 ){
+            index = 0;
         }
+        if( this.contentTypes[index] ){
+            this.currentContentType = _.clone( this.contentTypes[index] );
+            if( !this.model.content_type ){
+                this.model.content_type = this.currentContentType.name;
+            }
+        }
+        console.log( 'selectCurrentContentType', index, this.contentTypes, this.currentContentType );
     }
 
     onChangeContentType(): void {
@@ -87,8 +94,6 @@ export class ProductModalContent implements OnInit {
                 },
                 error => this.errorMessage = <any>error);
     }
-
-
 
     /**
      * On form value changed

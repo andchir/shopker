@@ -273,6 +273,13 @@
                             </div>
                         </div>
 
+                        <div class="alert alert-danger mt-0 mb-3" [hidden]="!errorFieldMessage">
+                            <button type="button" class="close" (click)="errorFieldMessage = ''">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            {{errorFieldMessage}}
+                        </div>
+
                         <div>
                             <button type="button" class="btn btn-sm btn-info btn-wide" (click)="submitField()" [hidden]="action != 'add_field'">
                                 <i class="icon-plus"></i>

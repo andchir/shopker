@@ -25,6 +25,7 @@ export class ContentTypeModalContent implements OnInit {
     fieldSubmitted: boolean = false;
     loading: boolean = false;
     errorMessage: string;
+    errorFieldMessage: string;
     action: string = 'add_field';
     currentFieldName = '';
     collections = ['products'];
@@ -126,6 +127,7 @@ export class ContentTypeModalContent implements OnInit {
             .subscribe(data => this.onValueChanged('field', data));
     }
 
+    /** Element display toggle */
     displayToggle(element: HTMLElement){
         element.style.display = element.style.display == 'none' ? 'block' : 'none';
     }
@@ -156,6 +158,7 @@ export class ContentTypeModalContent implements OnInit {
         }
     }
 
+    /** Get model data */
     getModelData(){
         this.loading = true;
         this.contentTypesService.getItem( this.itemId )
@@ -169,6 +172,7 @@ export class ContentTypeModalContent implements OnInit {
             });
     }
 
+    /** Add collection */
     addCollection(){
         const fieldName = 'new_collection';
         const control = this.contentTypeForm.get(fieldName);
@@ -193,12 +197,14 @@ export class ContentTypeModalContent implements OnInit {
         return true;
     }
 
+    /** Delete collection */
     deleteCollection(){
 
         console.log( 'deleteCollection' );
 
     }
 
+    /** Add group */
     addGroup(){
         const fieldName = 'new_group';
         const control = this.fieldForm.get(fieldName);
@@ -217,12 +223,25 @@ export class ContentTypeModalContent implements OnInit {
         return true;
     }
 
+    /** Delete group */
     deleteGroup(){
-
-        console.log( 'deleteGroup' );
-
+        let currentGroupName = this.fieldForm.get('group').value;
+        let index = _.findIndex( this.model.fields, {group: currentGroupName} );
+        this.errorFieldMessage = '';
+        if( index > -1 ){
+            this.errorFieldMessage = 'You can\'t delete a group because it is not empty.';
+            return;
+        }
+        index = this.model.groups.indexOf( currentGroupName );
+        if( index > -1 ){
+            this.model.groups.splice(index, 1);
+        }
     }
 
+    /**
+     * Edit field
+     * @param field
+     */
     editField(field: ContentField){
         this.fieldForm.setValue( _.clone( field ) );
         this.currentFieldName = field.name;
@@ -230,6 +249,10 @@ export class ContentTypeModalContent implements OnInit {
         this.action = 'edit_field';
     }
 
+    /**
+     * Copy field
+     * @param field
+     */
     copyField(field: ContentField){
         let data = _.clone( field );
         data.name = '';
@@ -239,6 +262,10 @@ export class ContentTypeModalContent implements OnInit {
         this.action = 'add_field';
     }
 
+    /**
+     * Delete field
+     * @param field
+     */
     deleteField(field: ContentField){
         let index = _.findIndex( this.model.fields, {name: field.name} );
         if( index == -1 ){
@@ -248,19 +275,23 @@ export class ContentTypeModalContent implements OnInit {
         this.model.fields.splice(index, 1);
     }
 
+    /** Reset field form */
     resetFieldForm(){
         this.errorMessage = '';
+        this.errorFieldMessage = '';
         this.fieldSubmitted = false;
         this.currentFieldName = '';
         this.action = 'add_field';
         this.fieldForm.reset();
     }
 
+    /** Cancel edit field */
     editFieldCancel(){
         this.resetFieldForm();
         this.onValueChanged('field');
     }
 
+    /** Submit field */
     submitField(){
         this.fieldSubmitted = true;
 
@@ -288,6 +319,7 @@ export class ContentTypeModalContent implements OnInit {
         this.resetFieldForm();
     }
 
+    /** Submit Content type form */
     onSubmit() {
 
         this.submitted = true;
@@ -329,6 +361,7 @@ export class ContentTypeModalContent implements OnInit {
         }
     }
 
+    /** Close modal */
     closeModal() {
         this.activeModal.close();
     }

@@ -39,9 +39,9 @@
 
                                 <input *ngSwitchCase="'number'" type="number" id="field_{{field.name}}" min="0" class="form-control" [formControlName]="field.name">
 
-                                <textarea *ngSwitchCase="'textarea'" rows="6" id="field-{{field.name}}" class="form-control" [formControlName]="field.name"></textarea>
+                                <textarea *ngSwitchCase="'textarea'" rows="6" id="field_{{field.name}}" class="form-control" [formControlName]="field.name"></textarea>
 
-                                <input *ngSwitchCase="'image'" type="file" id="field-{{field.name}}" class="form-control" [formControlName]="field.name">
+                                <input *ngSwitchCase="'image'" type="file" id="field_{{field.name}}" class="form-control" [formControlName]="field.name">
 
                             </div>
                         </div>
@@ -50,6 +50,13 @@
                 </ng-template>
             </ngb-tab>
         </ngb-tabset>
+
+        <div class="alert alert-danger mt-3 mb-0" [hidden]="!errorMessage">
+            <button type="button" class="close" (click)="errorMessage = ''">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {{errorMessage}}
+        </div>
 
     </div>
     <div class="modal-footer d-block">

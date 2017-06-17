@@ -727,10 +727,11 @@ var _a;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_forms__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_content_types_service__ = __webpack_require__(36);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__models_content_type_model__ = __webpack_require__(138);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_product_model__ = __webpack_require__(183);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_lodash__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_lodash__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_products_service__ = __webpack_require__(292);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_content_type_model__ = __webpack_require__(138);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__models_product_model__ = __webpack_require__(183);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_lodash__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_lodash__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ProductModalContent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -748,15 +749,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var ProductModalContent = (function () {
-    function ProductModalContent(fb, activeModal, contentTypesService) {
+    function ProductModalContent(fb, activeModal, contentTypesService, productsService) {
         this.fb = fb;
         this.activeModal = activeModal;
         this.contentTypesService = contentTypesService;
+        this.productsService = productsService;
         this.submitted = false;
         this.loading = false;
         this.contentTypes = [];
-        this.currentContentType = new __WEBPACK_IMPORTED_MODULE_4__models_content_type_model__["a" /* ContentType */]('', '', '', '', '', [], [], true);
+        this.currentContentType = new __WEBPACK_IMPORTED_MODULE_5__models_content_type_model__["a" /* ContentType */]('', '', '', '', '', [], [], true);
         this.formErrors = {
             parent_id: '',
             name: '',
@@ -766,13 +769,14 @@ var ProductModalContent = (function () {
     }
     /** On initialize */
     ProductModalContent.prototype.ngOnInit = function () {
-        this.model = new __WEBPACK_IMPORTED_MODULE_5__models_product_model__["a" /* Product */](0, 0, this.categoryContentTypeName, '', '', '');
+        this.model = new __WEBPACK_IMPORTED_MODULE_6__models_product_model__["a" /* Product */](0, 0, this.categoryContentTypeName, '', '', '');
         this.buildForm();
         this.getContentTypes();
         if (this.itemId) {
             this.getModelData();
         }
     };
+    /** Build form */
     ProductModalContent.prototype.buildForm = function () {
         var _this = this;
         if (!this.form) {
@@ -789,7 +793,7 @@ var ProductModalContent = (function () {
         }
         else {
             var data_1 = this.form.value;
-            var newKeys = __WEBPACK_IMPORTED_MODULE_6_lodash__["map"](this.currentContentType.fields, function (field) {
+            var newKeys = __WEBPACK_IMPORTED_MODULE_7_lodash__["map"](this.currentContentType.fields, function (field) {
                 return field.name;
             });
             newKeys.push('content_type');
@@ -816,20 +820,23 @@ var ProductModalContent = (function () {
     ProductModalContent.prototype.getModelData = function () {
         console.log('getModelData', this.itemId);
     };
+    /** Select current content type */
     ProductModalContent.prototype.selectCurrentContentType = function () {
-        var index = __WEBPACK_IMPORTED_MODULE_6_lodash__["findIndex"](this.contentTypes, { name: this.form.get('content_type').value });
+        var index = __WEBPACK_IMPORTED_MODULE_7_lodash__["findIndex"](this.contentTypes, { name: this.form.get('content_type').value });
         if (index == -1) {
             index = 0;
         }
         if (this.contentTypes[index]) {
-            this.currentContentType = __WEBPACK_IMPORTED_MODULE_6_lodash__["clone"](this.contentTypes[index]);
+            this.currentContentType = __WEBPACK_IMPORTED_MODULE_7_lodash__["clone"](this.contentTypes[index]);
             this.form.get('content_type').setValue(this.currentContentType.name);
             this.buildForm();
         }
     };
+    /** On change content type */
     ProductModalContent.prototype.onChangeContentType = function () {
         this.selectCurrentContentType();
     };
+    /** Get content types */
     ProductModalContent.prototype.getContentTypes = function () {
         var _this = this;
         this.contentTypesService.getList(true)
@@ -848,7 +855,9 @@ var ProductModalContent = (function () {
         }
         console.log('onValueChange', data);
     };
+    /** Submit form */
     ProductModalContent.prototype.onSubmit = function () {
+        var _this = this;
         this.errorMessage = '';
         this.submitted = true;
         if (!this.form.valid) {
@@ -856,7 +865,21 @@ var ProductModalContent = (function () {
             this.errorMessage = 'Please fix the errors fill.';
             return;
         }
-        console.log('onSubmit', this.form.valid, this.form.value);
+        this.productsService.createItem(this.form.value)
+            .then(function (res) {
+            if (res.success) {
+                _this.closeModal();
+            }
+            else {
+                if (res.msg) {
+                    _this.errorMessage = res.msg;
+                }
+            }
+        });
+    };
+    /** Close modal */
+    ProductModalContent.prototype.closeModal = function () {
+        this.activeModal.close();
     };
     return ProductModalContent;
 }());
@@ -877,10 +900,10 @@ ProductModalContent = __decorate([
         selector: 'ngbd-modal-content',
         template: __webpack_require__(244)
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__angular_forms__["f" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_forms__["f" /* FormBuilder */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["b" /* NgbActiveModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["b" /* NgbActiveModal */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__services_content_types_service__["a" /* ContentTypesService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_content_types_service__["a" /* ContentTypesService */]) === "function" && _c || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__angular_forms__["f" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_forms__["f" /* FormBuilder */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["b" /* NgbActiveModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["b" /* NgbActiveModal */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__services_content_types_service__["a" /* ContentTypesService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_content_types_service__["a" /* ContentTypesService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_4__services_products_service__["a" /* ProductsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__services_products_service__["a" /* ProductsService */]) === "function" && _d || Object])
 ], ProductModalContent);
 
-var _a, _b, _c;
+var _a, _b, _c, _d;
 //# sourceMappingURL=product.component.js.map
 
 /***/ }),
@@ -1095,10 +1118,11 @@ AppRoutingModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__stat_component__ = __webpack_require__(143);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__settings_component__ = __webpack_require__(142);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__filter_field_by_group_pipe__ = __webpack_require__(181);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__services_content_types_service__ = __webpack_require__(36);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__services_categories_service__ = __webpack_require__(61);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__app_routing_module__ = __webpack_require__(178);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__ng_bootstrap_ng_bootstrap__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__services_products_service__ = __webpack_require__(292);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__services_content_types_service__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__services_categories_service__ = __webpack_require__(61);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__app_routing_module__ = __webpack_require__(178);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__ng_bootstrap_ng_bootstrap__ = __webpack_require__(22);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1106,6 +1130,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -1137,8 +1162,8 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_2__angular_forms__["a" /* FormsModule */],
             __WEBPACK_IMPORTED_MODULE_2__angular_forms__["b" /* ReactiveFormsModule */],
             __WEBPACK_IMPORTED_MODULE_3__angular_http__["a" /* HttpModule */],
-            __WEBPACK_IMPORTED_MODULE_16__app_routing_module__["a" /* AppRoutingModule */],
-            __WEBPACK_IMPORTED_MODULE_17__ng_bootstrap_ng_bootstrap__["a" /* NgbModule */].forRoot()
+            __WEBPACK_IMPORTED_MODULE_17__app_routing_module__["a" /* AppRoutingModule */],
+            __WEBPACK_IMPORTED_MODULE_18__ng_bootstrap_ng_bootstrap__["a" /* NgbModule */].forRoot()
         ],
         declarations: [
             __WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* AppComponent */],
@@ -1155,7 +1180,7 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_4__app_component__["b" /* ConfirmModalContent */],
             __WEBPACK_IMPORTED_MODULE_13__filter_field_by_group_pipe__["a" /* filterFieldByGroup */]
         ],
-        providers: [__WEBPACK_IMPORTED_MODULE_14__services_content_types_service__["a" /* ContentTypesService */], __WEBPACK_IMPORTED_MODULE_15__services_categories_service__["a" /* CategoriesService */]],
+        providers: [__WEBPACK_IMPORTED_MODULE_14__services_products_service__["a" /* ProductsService */], __WEBPACK_IMPORTED_MODULE_15__services_content_types_service__["a" /* ContentTypesService */], __WEBPACK_IMPORTED_MODULE_16__services_categories_service__["a" /* CategoriesService */]],
         entryComponents: [__WEBPACK_IMPORTED_MODULE_4__app_component__["b" /* ConfirmModalContent */], __WEBPACK_IMPORTED_MODULE_8__product_component__["a" /* ProductModalContent */], __WEBPACK_IMPORTED_MODULE_10__content_types_component__["b" /* ContentTypeModalContent */], __WEBPACK_IMPORTED_MODULE_9__categories_component__["b" /* CategoriesModalComponent */]],
         bootstrap: [__WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* AppComponent */]]
     })
@@ -1646,7 +1671,7 @@ module.exports = "<div class=\"d-inline-block dropdown\">\n    <button class=\"b
 /***/ 241:
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"modal-header d-block\">\n    <div class=\"d-block float-right\">\n        <button type=\"button\" class=\"btn btn-secondary\" (click)=\"activeModal.dismiss()\">\n            Close\n        </button>\n    </div>\n    <h4 class=\"modal-title\">{{modalTitle}}</h4>\n</div>\n\n<form (ngSubmit)=\"onSubmit()\" [formGroup]=\"form\" [class.loading]=\"loading\">\n\n    <div class=\"modal-body\">\n        <div>\n\n            <div class=\"row form-group\" [class.form-group-message]=\"formErrors.parent_id\">\n                <div class=\"col-md-5\">\n                    <label for=\"fieldContentType\">Родительская папка</label>\n                </div>\n                <div class=\"col-md-7\">\n                    <select id=\"fieldParent\" class=\"form-control\" name=\"parent_id\" formControlName=\"parent_id\" [(ngModel)]=\"model.parent_id\">\n                        <option value=\"0\">Корневая категория</option>\n                    </select>\n                    <div *ngIf=\"formErrors.parent_id\" class=\"alert alert-danger\">\n                        {{formErrors.parent_id}}\n                    </div>\n                </div>\n            </div>\n\n            <div class=\"row form-group\" [class.form-group-message]=\"formErrors.name\">\n                <div class=\"col-md-5\">\n                    <label for=\"fieldName\">Системное имя</label>\n                </div>\n                <div class=\"col-md-7\">\n                    <input type=\"text\" id=\"fieldName\" class=\"form-control\" name=\"name\" formControlName=\"name\" [(ngModel)]=\"model.name\">\n                    <div *ngIf=\"formErrors.name\" class=\"alert alert-danger\">\n                        {{formErrors.name}}\n                    </div>\n                </div>\n            </div>\n\n            <div class=\"row form-group\" [class.form-group-message]=\"formErrors.title\">\n                <div class=\"col-md-5\">\n                    <label for=\"fieldTitle\">Название</label>\n                </div>\n                <div class=\"col-md-7\">\n                    <input type=\"text\" id=\"fieldTitle\" class=\"form-control\" formControlName=\"title\" name=\"title\" [(ngModel)]=\"model.title\">\n                    <div *ngIf=\"formErrors.title\" class=\"alert alert-danger\">\n                        {{formErrors.title}}\n                    </div>\n                </div>\n            </div>\n\n            <div class=\"row form-group\">\n                <div class=\"col-md-5\">\n                    <label for=\"fieldDescription\">Описание</label>\n                </div>\n                <div class=\"col-md-7\">\n                    <textarea type=\"text\" id=\"fieldDescription\" rows=\"4\" class=\"form-control\" name=\"description\" formControlName=\"description\" [(ngModel)]=\"model.description\"></textarea>\n                </div>\n            </div>\n\n            <div class=\"row form-group\" [class.form-group-message]=\"formErrors.content_type\">\n                <div class=\"col-md-5\">\n                    <label for=\"fieldContentType\">Тип контента</label>\n                </div>\n                <div class=\"col-md-7\">\n                    <select id=\"fieldContentType\" class=\"form-control\" name=\"content_type\" formControlName=\"content_type\" [(ngModel)]=\"model.content_type\">\n                        <option value=\"1\" *ngFor=\"let contentType of contentTypes\" [value]=\"contentType.name\">{{contentType.title}}</option>\n                    </select>\n                    <div *ngIf=\"formErrors.content_type\" class=\"alert alert-danger\">\n                        {{formErrors.content_type}}\n                    </div>\n                </div>\n            </div>\n\n        </div>\n\n    </div>\n    <div class=\"modal-footer d-block\">\n        <button type=\"submit\" class=\"btn btn-success btn-wide\">\n            Save\n        </button>\n        <button type=\"submit\" class=\"btn btn-secondary btn-wide\" (click)=\"activeModal.dismiss()\">\n            Cancel\n        </button>\n    </div>\n\n</form>\n"
+module.exports = "<div class=\"modal-header d-block\">\n    <div class=\"d-block float-right\">\n        <button type=\"button\" class=\"btn btn-secondary\" (click)=\"activeModal.dismiss()\">\n            Close\n        </button>\n    </div>\n    <h4 class=\"modal-title\">{{modalTitle}}</h4>\n</div>\n\n<form (ngSubmit)=\"onSubmit()\" [formGroup]=\"form\" [class.loading]=\"loading\">\n\n    <div class=\"modal-body\">\n\n        <div class=\"row form-group\" [class.form-group-message]=\"formErrors.parent_id\">\n            <div class=\"col-md-5\">\n                <label for=\"fieldContentType\">Родительская папка</label>\n            </div>\n            <div class=\"col-md-7\">\n                <select id=\"fieldParent\" class=\"form-control\" name=\"parent_id\" formControlName=\"parent_id\" [(ngModel)]=\"model.parent_id\">\n                    <option value=\"0\">Корневая категория</option>\n                </select>\n                <div *ngIf=\"formErrors.parent_id\" class=\"alert alert-danger\">\n                    {{formErrors.parent_id}}\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row form-group\" [class.form-group-message]=\"formErrors.name\">\n            <div class=\"col-md-5\">\n                <label for=\"fieldName\">Системное имя</label>\n            </div>\n            <div class=\"col-md-7\">\n                <input type=\"text\" id=\"fieldName\" class=\"form-control\" name=\"name\" formControlName=\"name\" [(ngModel)]=\"model.name\">\n                <div *ngIf=\"formErrors.name\" class=\"alert alert-danger\">\n                    {{formErrors.name}}\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row form-group\" [class.form-group-message]=\"formErrors.title\">\n            <div class=\"col-md-5\">\n                <label for=\"fieldTitle\">Название</label>\n            </div>\n            <div class=\"col-md-7\">\n                <input type=\"text\" id=\"fieldTitle\" class=\"form-control\" formControlName=\"title\" name=\"title\" [(ngModel)]=\"model.title\">\n                <div *ngIf=\"formErrors.title\" class=\"alert alert-danger\">\n                    {{formErrors.title}}\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row form-group\">\n            <div class=\"col-md-5\">\n                <label for=\"fieldDescription\">Описание</label>\n            </div>\n            <div class=\"col-md-7\">\n                <textarea type=\"text\" id=\"fieldDescription\" rows=\"4\" class=\"form-control\" name=\"description\" formControlName=\"description\" [(ngModel)]=\"model.description\"></textarea>\n            </div>\n        </div>\n\n        <div class=\"row form-group\" [class.form-group-message]=\"formErrors.content_type\">\n            <div class=\"col-md-5\">\n                <label for=\"fieldContentType\">Тип контента</label>\n            </div>\n            <div class=\"col-md-7\">\n                <select id=\"fieldContentType\" class=\"form-control\" name=\"content_type\" formControlName=\"content_type\" [(ngModel)]=\"model.content_type\">\n                    <option value=\"1\" *ngFor=\"let contentType of contentTypes\" [value]=\"contentType.name\">{{contentType.title}}</option>\n                </select>\n                <div *ngIf=\"formErrors.content_type\" class=\"alert alert-danger\">\n                    {{formErrors.content_type}}\n                </div>\n            </div>\n        </div>\n\n        <div class=\"alert alert-danger mt-3 mb-0\" [hidden]=\"!errorMessage\">\n            <button type=\"button\" class=\"close\" (click)=\"errorMessage = ''\">\n                <span aria-hidden=\"true\">&times;</span>\n            </button>\n            {{errorMessage}}\n        </div>\n    </div>\n\n    <div class=\"modal-footer d-block\">\n        <button type=\"submit\" class=\"btn btn-success btn-wide\">\n            Save\n        </button>\n        <button type=\"submit\" class=\"btn btn-secondary btn-wide\" (click)=\"activeModal.dismiss()\">\n            Cancel\n        </button>\n    </div>\n\n</form>\n"
 
 /***/ }),
 
@@ -1667,7 +1692,7 @@ module.exports = "<div class=\"modal-header d-block\">\n    <div class=\"d-block
 /***/ 244:
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"modal-header d-block\">\n    <div class=\"d-block float-right\">\n        <button type=\"button\" class=\"btn btn-secondary\" (click)=\"activeModal.dismiss()\">\n            Close\n        </button>\n    </div>\n    <h4 class=\"modal-title\">{{modalTitle}}</h4>\n</div>\n\n<form (ngSubmit)=\"onSubmit()\" [formGroup]=\"form\" [class.loading]=\"loading\">\n    <div class=\"modal-body\">\n\n        <div class=\"row form-group\" [class.form-group-message]=\"formErrors.content_type\">\n            <div class=\"col-md-5\">\n                <label for=\"fieldContentType\">Тип контента</label>\n            </div>\n            <div class=\"col-md-7\">\n                <select id=\"fieldContentType\" class=\"form-control\" name=\"content_type\" formControlName=\"content_type\" (change)=\"onChangeContentType()\">\n                    <option value=\"1\" *ngFor=\"let contentType of contentTypes\" [value]=\"contentType.name\">{{contentType.title}}</option>\n                </select>\n                <div *ngIf=\"formErrors.content_type\" class=\"alert alert-danger\">\n                    {{formErrors.content_type}}\n                </div>\n            </div>\n        </div>\n\n        <ngb-tabset>\n            <ngb-tab title=\"{{groupName}}\" id=\"{{i + 1}}\" *ngFor=\"let groupName of currentContentType.groups; let i=index\">\n                <ng-template ngbTabContent>\n                    <div class=\"pt-3\">\n\n                        <div class=\"row form-group\" *ngFor=\"let field of currentContentType.fields | filterFieldByGroup: groupName\">\n                            <div class=\"col-md-5\">\n                                <label for=\"field_{{field.name}}\">{{ field.title }}</label>\n                            </div>\n                            <div class=\"col-md-7\" [ngSwitch]=\"field.input_type\">\n\n                                <input *ngSwitchCase=\"'text'\" type=\"text\" id=\"field_{{field.name}}\" class=\"form-control\" [formControlName]=\"field.name\">\n\n                                <input *ngSwitchCase=\"'number'\" type=\"number\" id=\"field_{{field.name}}\" min=\"0\" class=\"form-control\" [formControlName]=\"field.name\">\n\n                                <textarea *ngSwitchCase=\"'textarea'\" rows=\"6\" id=\"field-{{field.name}}\" class=\"form-control\" [formControlName]=\"field.name\"></textarea>\n\n                                <input *ngSwitchCase=\"'image'\" type=\"file\" id=\"field-{{field.name}}\" class=\"form-control\" [formControlName]=\"field.name\">\n\n                            </div>\n                        </div>\n\n                    </div>\n                </ng-template>\n            </ngb-tab>\n        </ngb-tabset>\n\n    </div>\n    <div class=\"modal-footer d-block\">\n        <button type=\"submit\" class=\"btn btn-success btn-wide\">\n            Save\n        </button>\n        <button type=\"submit\" class=\"btn btn-secondary btn-wide\" (click)=\"activeModal.dismiss()\">\n            Cancel\n        </button>\n    </div>\n</form>"
+module.exports = "<div class=\"modal-header d-block\">\n    <div class=\"d-block float-right\">\n        <button type=\"button\" class=\"btn btn-secondary\" (click)=\"activeModal.dismiss()\">\n            Close\n        </button>\n    </div>\n    <h4 class=\"modal-title\">{{modalTitle}}</h4>\n</div>\n\n<form (ngSubmit)=\"onSubmit()\" [formGroup]=\"form\" [class.loading]=\"loading\">\n    <div class=\"modal-body\">\n\n        <div class=\"row form-group\" [class.form-group-message]=\"formErrors.content_type\">\n            <div class=\"col-md-5\">\n                <label for=\"fieldContentType\">Тип контента</label>\n            </div>\n            <div class=\"col-md-7\">\n                <select id=\"fieldContentType\" class=\"form-control\" name=\"content_type\" formControlName=\"content_type\" (change)=\"onChangeContentType()\">\n                    <option value=\"1\" *ngFor=\"let contentType of contentTypes\" [value]=\"contentType.name\">{{contentType.title}}</option>\n                </select>\n                <div *ngIf=\"formErrors.content_type\" class=\"alert alert-danger\">\n                    {{formErrors.content_type}}\n                </div>\n            </div>\n        </div>\n\n        <ngb-tabset>\n            <ngb-tab title=\"{{groupName}}\" id=\"{{i + 1}}\" *ngFor=\"let groupName of currentContentType.groups; let i=index\">\n                <ng-template ngbTabContent>\n                    <div class=\"pt-3\">\n\n                        <div class=\"row form-group\" *ngFor=\"let field of currentContentType.fields | filterFieldByGroup: groupName\">\n                            <div class=\"col-md-5\">\n                                <label for=\"field_{{field.name}}\">{{ field.title }}</label>\n                            </div>\n                            <div class=\"col-md-7\" [ngSwitch]=\"field.input_type\">\n\n                                <input *ngSwitchCase=\"'text'\" type=\"text\" id=\"field_{{field.name}}\" class=\"form-control\" [formControlName]=\"field.name\">\n\n                                <input *ngSwitchCase=\"'number'\" type=\"number\" id=\"field_{{field.name}}\" min=\"0\" class=\"form-control\" [formControlName]=\"field.name\">\n\n                                <textarea *ngSwitchCase=\"'textarea'\" rows=\"6\" id=\"field_{{field.name}}\" class=\"form-control\" [formControlName]=\"field.name\"></textarea>\n\n                                <input *ngSwitchCase=\"'image'\" type=\"file\" id=\"field_{{field.name}}\" class=\"form-control\" [formControlName]=\"field.name\">\n\n                            </div>\n                        </div>\n\n                    </div>\n                </ng-template>\n            </ngb-tab>\n        </ngb-tabset>\n\n        <div class=\"alert alert-danger mt-3 mb-0\" [hidden]=\"!errorMessage\">\n            <button type=\"button\" class=\"close\" (click)=\"errorMessage = ''\">\n                <span aria-hidden=\"true\">&times;</span>\n            </button>\n            {{errorMessage}}\n        </div>\n\n    </div>\n    <div class=\"modal-footer d-block\">\n        <button type=\"submit\" class=\"btn btn-success btn-wide\">\n            Save\n        </button>\n        <button type=\"submit\" class=\"btn btn-secondary btn-wide\" (click)=\"activeModal.dismiss()\">\n            Cancel\n        </button>\n    </div>\n</form>"
 
 /***/ }),
 
@@ -1737,6 +1762,77 @@ var ContentField = (function () {
 }());
 
 //# sourceMappingURL=content_field.model.js.map
+
+/***/ }),
+
+/***/ 292:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise__ = __webpack_require__(156);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_catch__ = __webpack_require__(254);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_catch___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_catch__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_map__ = __webpack_require__(255);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_map__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ProductsService; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+var ProductsService = (function () {
+    function ProductsService(http) {
+        this.http = http;
+        this.headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Headers */]({ 'Content-Type': 'application/json' });
+        this.listUrl = 'app/products_list';
+        this.oneUrl = 'app/product';
+    }
+    ProductsService.prototype.createItem = function (data) {
+        return this.http
+            .post(this.oneUrl, JSON.stringify(data), { headers: this.headers })
+            .toPromise()
+            .then(function (res) { return res.json(); })
+            .catch(this.handleError);
+    };
+    ProductsService.prototype.extractData = function (res) {
+        var body = res.json();
+        return body.data || {};
+    };
+    ProductsService.prototype.handleError = function (error) {
+        var errMsg;
+        if (error instanceof __WEBPACK_IMPORTED_MODULE_1__angular_http__["c" /* Response */]) {
+            var body = error.json() || '';
+            var err = body.error || JSON.stringify(body);
+            errMsg = error.status + " - " + (error.statusText || '') + " " + err;
+        }
+        else {
+            errMsg = error.message ? error.message : error.toString();
+        }
+        console.error(errMsg);
+        return Promise.reject(errMsg);
+    };
+    return ProductsService;
+}());
+ProductsService = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["c" /* Injectable */])(),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* Http */]) === "function" && _a || Object])
+], ProductsService);
+
+var _a;
+//# sourceMappingURL=products.service.js.map
 
 /***/ }),
 

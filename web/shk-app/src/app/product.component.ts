@@ -3,6 +3,7 @@ import { NgbModal, NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CategoriesService } from './services/categories.service';
 import { ContentTypesService } from './services/content_types.service';
+import { ProductsService } from './services/products.service';
 import { ContentType } from './models/content_type.model';
 import { Category } from "./models/category.model";
 import { Product } from "./models/product.model";
@@ -37,6 +38,7 @@ export class ProductModalContent implements OnInit {
         private fb: FormBuilder,
         public activeModal: NgbActiveModal,
         private contentTypesService: ContentTypesService,
+        private productsService: ProductsService
     ) {}
 
     /** On initialize */
@@ -50,6 +52,7 @@ export class ProductModalContent implements OnInit {
         }
     }
 
+    /** Build form */
     buildForm(): void {
         if( !this.form ){
 
@@ -100,6 +103,7 @@ export class ProductModalContent implements OnInit {
 
     }
 
+    /** Select current content type */
     selectCurrentContentType(): void {
         let index = _.findIndex( this.contentTypes, {name: this.form.get('content_type').value} );
         if( index == -1 ){
@@ -112,10 +116,12 @@ export class ProductModalContent implements OnInit {
         }
     }
 
+    /** On change content type */
     onChangeContentType(): void {
         this.selectCurrentContentType();
     }
 
+    /** Get content types */
     getContentTypes(){
         this.contentTypesService.getList( true )
             .then(
@@ -137,6 +143,7 @@ export class ProductModalContent implements OnInit {
 
     }
 
+    /** Submit form */
     onSubmit() {
 
         this.errorMessage = '';
@@ -148,7 +155,20 @@ export class ProductModalContent implements OnInit {
             return;
         }
 
-        console.log( 'onSubmit', this.form.valid, this.form.value );
+        this.productsService.createItem( this.form.value )
+            .then((res) => {
+                if( res.success ){
+                    this.closeModal();
+                } else {
+                    if( res.msg ){
+                        this.errorMessage = res.msg;
+                    }
+                }
+            });
+    }
 
+    /** Close modal */
+    closeModal() {
+        this.activeModal.close();
     }
 }

@@ -15,6 +15,7 @@ import { SettingsComponent } from './settings.component';
 
 import { filterFieldByGroup } from "./filter-field-by-group.pipe";
 
+import { ProductsService } from './services/products.service';
 import { ContentTypesService } from './services/content_types.service';
 import { CategoriesService } from './services/categories.service';
 import { AppRoutingModule }     from './app-routing.module';
@@ -46,7 +47,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
         ConfirmModalContent,
         filterFieldByGroup
     ],
-    providers: [ ContentTypesService, CategoriesService ],
+    providers: [ ProductsService, ContentTypesService, CategoriesService ],
     entryComponents: [ ConfirmModalContent, ProductModalContent, ContentTypeModalContent, CategoriesModalComponent ],
     bootstrap: [ AppComponent ]
 })

@@ -10,6 +10,6 @@ export class ContentField {
         public output_type_options: any[],
         public group: string,
         public is_filter: boolean,
-        public required: false
+        public required: boolean
     ) { }
 }

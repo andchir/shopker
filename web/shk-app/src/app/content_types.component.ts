@@ -244,7 +244,9 @@ export class ContentTypeModalContent implements OnInit {
      * @param field
      */
     editField(field: ContentField){
-        this.fieldForm.setValue( _.clone( field ) );
+        let defaults = new ContentField('','','','','',[],'',[],'',false,false);
+        field = _.extend( defaults, field );
+        this.fieldForm.setValue( _.omit( field, ['id','input_type_options','output_type_options'] ) );
         this.currentFieldName = field.name;
         this.fieldSubmitted = false;
         this.action = 'edit_field';

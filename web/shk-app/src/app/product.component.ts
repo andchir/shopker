@@ -51,16 +51,47 @@ export class ProductModalContent implements OnInit {
     }
 
     buildForm(): void {
+        if( !this.form ){
 
-        let group: any = {};
-        this.currentContentType.fields.forEach(field => {
-            group[field.name] = field.required
-                ? new FormControl('', Validators.required)
-                : new FormControl('');
-        });
-        this.form = new FormGroup(group);
-        this.form.valueChanges
-            .subscribe(data => this.onValueChanged(data));
+            let group: any = {};
+            group['content_type'] = new FormControl('', Validators.required);
+            this.currentContentType.fields.forEach(field => {
+                group[field.name] = field.required
+                    ? new FormControl('', Validators.required)
+                    : new FormControl('');
+            });
+            this.form = new FormGroup(group);
+            this.form.valueChanges
+                .subscribe(data => this.onValueChanged(data));
+
+        } else {
+
+            let data = this.form.value;
+            let newKeys = _.map(this.currentContentType.fields, function(field){
+                return field.name;
+            });
+            newKeys.push( 'content_type' );
+
+            //Remove keys
+            for (let key in this.form.controls) {
+                if (this.form.controls.hasOwnProperty(key)) {
+                    if( newKeys.indexOf(key) === -1 ){
+                        this.form.removeControl( key );
+                    }
+                }
+            }
+
+            //Add new controls
+            this.currentContentType.fields.forEach(field => {
+                if( !this.form.controls[ field.name ] ){
+                    console.log( 'ADD CONTROL', field.name );
+                    let group = field.required
+                        ? new FormControl(data[field.name] || '', Validators.required)
+                        : new FormControl(data[field.name] || '');
+                    this.form.addControl( field.name, group );
+                }
+            });
+        }
     }
 
     getModelData(): void {
@@ -70,15 +101,13 @@ export class ProductModalContent implements OnInit {
     }
 
     selectCurrentContentType(): void {
-        let index = _.findIndex( this.contentTypes, {name: this.model.content_type} );
+        let index = _.findIndex( this.contentTypes, {name: this.form.get('content_type').value} );
         if( index == -1 ){
             index = 0;
         }
         if( this.contentTypes[index] ){
             this.currentContentType = _.clone( this.contentTypes[index] );
-            if( !this.model.content_type ){
-                this.model.content_type = this.currentContentType.name;
-            }
+            this.form.get('content_type').setValue(this.currentContentType.name);
             this.buildForm();
         }
     }

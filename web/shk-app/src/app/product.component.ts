@@ -16,9 +16,9 @@ import * as _ from "lodash";
     templateUrl: 'templates/modal_product.html'
 })
 export class ProductModalContent implements OnInit {
-    @Input() modalTitle;
-    @Input() itemId;
-    @Input() categoryContentTypeName;
+    @Input() modalTitle: string;
+    @Input() itemId: number;
+    @Input() category: Category;
     submitted: boolean = false;
     loading: boolean = false;
     errorMessage: string;
@@ -43,7 +43,7 @@ export class ProductModalContent implements OnInit {
 
     /** On initialize */
     ngOnInit(): void {
-        this.model = new Product(0,0,this.categoryContentTypeName,'','','');
+        this.model = new Product(0,0,this.category.content_type,'','','',0);
 
         this.buildForm();
         this.getContentTypes();
@@ -57,7 +57,7 @@ export class ProductModalContent implements OnInit {
         if( !this.form ){
 
             let group: any = {};
-            group['content_type'] = new FormControl('', Validators.required);
+            group['content_type'] = new FormControl(this.category.content_type, Validators.required);
             this.currentContentType.fields.forEach(field => {
                 group[field.name] = field.required
                     ? new FormControl('', Validators.required)
@@ -155,7 +155,10 @@ export class ProductModalContent implements OnInit {
             return;
         }
 
-        this.productsService.createItem( this.form.value )
+        let data = this.form.value;
+        data.parent_id = this.category.id;
+
+        this.productsService.createItem( data )
             .then((res) => {
                 if( res.success ){
                     this.closeModal();
@@ -169,6 +172,7 @@ export class ProductModalContent implements OnInit {
 
     /** Close modal */
     closeModal() {
-        this.activeModal.close();
+        let reason = this.itemId ? 'edit' : 'create';
+        this.activeModal.close( { reason: reason, data: this.model } );
     }
 }

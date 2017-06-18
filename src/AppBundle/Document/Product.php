@@ -5,7 +5,7 @@ namespace AppBundle\Document;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
 /**
- * @MongoDB\Document(collection="product")
+ * @MongoDB\Document(collection="product",repositoryClass="AppBundle\Repository\ProductRepository")
  */
 class Product
 {
@@ -34,6 +34,11 @@ class Product
      * @MongoDB\Field(type="string")
      */
     protected $description;
+
+    /**
+     * @MongoDB\Field(type="float")
+     */
+    protected $price;
 
     /**
      * Get id
@@ -132,4 +137,42 @@ class Product
     {
         return $this->description;
     }
+
+    /**
+     * Set price
+     *
+     * @param float $price
+     * @return self
+     */
+    public function setPrice($price)
+    {
+        $this->price = $price;
+        return $this;
+    }
+
+    /**
+     * Get price
+     *
+     * @return float $price
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        $output = [
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'name' => $this->getName(),
+            'description' => $this->getDescription(),
+            'price' => $this->getPrice()
+        ];
+        return $output;
+    }
+
 }

@@ -8,6 +8,7 @@ import { ProductModalContent } from './product.component';
 import { Category } from "./models/category.model";
 import { Product } from "./models/product.model";
 import * as _ from "lodash";
+import {ProductsService} from "./services/products.service";
 
 @Component({
     selector: 'shk-catalog',
@@ -29,6 +30,7 @@ export class CatalogComponent implements OnInit {
         private modalService: NgbModal,
         private titleService: Title,
         private categoriesService: CategoriesService,
+        private productsService: ProductsService
     ) {}
 
     ngOnInit(): void {
@@ -61,18 +63,31 @@ export class CatalogComponent implements OnInit {
     }
 
     getProducts(): void{
-
         this.loading = true;
-
-        console.log( 'getProducts', this.currentCategory.id );
-
+        this.productsService.getList()
+            .subscribe(
+                items => {
+                    this.items = items;
+                    this.loading = false;
+                },
+                error =>  this.errorMessage = <any>error
+            );
     }
 
     modalProductOpen( itemId?: number ) {
         this.modalRef = this.modalService.open(ProductModalContent, {size: 'lg'});
         this.modalRef.componentInstance.modalTitle = 'Add product';
         this.modalRef.componentInstance.itemId = itemId || 0;
-        this.modalRef.componentInstance.categoryContentTypeName = this.currentCategory.content_type;
+        this.modalRef.componentInstance.category = this.currentCategory;
+        this.modalRef.result.then((result) => {
+            if( result.reason && result.reason == 'edit' ){
+
+            } else {
+                this.getProducts();
+            }
+        }, (reason) => {
+
+        });
     }
 
     public setTitle( newTitle: string ): void {

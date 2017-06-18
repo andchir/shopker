@@ -26,6 +26,12 @@ export class ProductsService {
             .catch(this.handleError);
     }
 
+    getList(): Observable<Product[]> {
+        return this.http.get(this.listUrl)
+            .map(this.extractData)
+            .catch(this.handleError);
+    }
+
     private extractData(res: Response): any {
         let body = res.json();
         return body.data || {};

@@ -11,6 +11,28 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ProductController extends Controller
 {
+    /**
+     * @Route("/app/products_list", name="product_list")
+     * @Method({"GET"})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getList( Request $request )
+    {
+        $repository = $this->getRepository();
+        $results = $repository->findAll();
+
+        $data = [];
+        /** @var Product $item */
+        foreach ($results as $item) {
+            $data[] = $item->toArray();
+        }
+
+        return new JsonResponse([
+            'success' => true,
+            'data' => $data
+        ]);
+    }
 
     /**
      * @Route("/app/product", name="product_post")
@@ -24,15 +46,35 @@ class ProductController extends Controller
             ? json_decode($request->getContent(), true)
             : [];
 
-        var_dump( $data );
+        $product = new Product();
+        $product
+            ->setParentId( !empty($data['parent_id']) ? $data['parent_id'] : 0 )
+            ->setName( !empty($data['name']) ? $data['name'] : '' )
+            ->setTitle( !empty($data['title']) ? $data['title'] : 'Untitled' )
+            ->setPrice( !empty($data['price']) ? $data['price'] : 0 )
+            ->setDescription( !empty($data['description']) ? $data['description'] : '' );
 
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $dm->persist( $product );
+        $dm->flush();
 
         $output = [
             'success' => true,
-            'data' => []
+            'data' => $product->toArray()
         ];
 
         return new JsonResponse( $output );
+    }
+
+    /**
+     * @return \AppBundle\Repository\ContentTypeRepository
+     */
+    public function getRepository()
+    {
+        return $this->get('doctrine_mongodb')
+            ->getManager()
+            ->getRepository('AppBundle:Product');
     }
 
 }

@@ -15,10 +15,13 @@ class ProductRepository extends DocumentRepository
 
     /**
      * return \Doctrine\ODM\MongoDB\Cursor
+     * @param int $categoryId
+     * @return mixed
      */
-    public function findAll()
+    public function findAll( $categoryId = 0 )
     {
-        return $this->createQueryBuilder()
+        return $this->createQueryBuilder('Product')
+            ->field('parent_id')->equals( intval( $categoryId ) )
             ->sort('id', 'ASC')
             ->getQuery()
             ->execute();

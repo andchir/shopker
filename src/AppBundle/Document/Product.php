@@ -167,6 +167,7 @@ class Product
     {
         $output = [
             'id' => $this->getId(),
+            'parentId' => $this->getParentId(),
             'title' => $this->getTitle(),
             'name' => $this->getName(),
             'description' => $this->getDescription(),

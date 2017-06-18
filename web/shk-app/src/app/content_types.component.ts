@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ContentTypesService } from './services/content_types.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ContentField } from './models/content_field.model';
@@ -11,7 +11,7 @@ import * as _ from "lodash";
 @Component({
     selector: 'content-type-modal-content',
     templateUrl: 'templates/modal_content_types.html',
-    providers: [ ContentTypesService, NgbTooltipConfig ]
+    providers: [ ContentTypesService ]
 })
 export class ContentTypeModalContent implements OnInit {
     @Input() modalTitle;
@@ -86,11 +86,9 @@ export class ContentTypeModalContent implements OnInit {
     constructor(
         private fb: FormBuilder,
         private contentTypesService: ContentTypesService,
-        public activeModal: NgbActiveModal,
-        tooltipConfig: NgbTooltipConfig
+        public activeModal: NgbActiveModal
     ) {
-        tooltipConfig.placement = 'bottom';
-        tooltipConfig.container = 'body';
+
     }
 
     /** On initialize */

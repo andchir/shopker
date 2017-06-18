@@ -75,15 +75,23 @@
                     <td class="text-center">
                         <div class="relative">
                             <div class="show-on-hover">
-                                <button class="btn btn-secondary btn-sm">
+                                <button class="btn btn-secondary btn-sm" ngbTooltip="Edit">
                                     <i class="icon-pencil"></i>
                                 </button>
-                                <button class="btn btn-secondary btn-sm">
+                                <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Copy">
+                                    <i class="icon-stack"></i>
+                                </button>
+                                <button class="btn btn-secondary btn-sm" ngbTooltip="Delete">
                                     <i class="icon-cross"></i>
                                 </button>
                             </div>
                         </div>
                         <i class="big text-success icon-circle-check"></i>
+                    </td>
+                </tr>
+                <tr [hidden]="items.length > 0" class="table-warning">
+                    <td colspan="5" class="text-center">
+                        Empty.
                     </td>
                 </tr>
             </tbody>

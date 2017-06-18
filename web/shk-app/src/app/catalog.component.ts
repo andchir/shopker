@@ -8,7 +8,7 @@ import { ProductModalContent } from './product.component';
 import { Category } from "./models/category.model";
 import { Product } from "./models/product.model";
 import * as _ from "lodash";
-import {ProductsService} from "./services/products.service";
+import { ProductsService } from "./services/products.service";
 
 @Component({
     selector: 'shk-catalog',
@@ -26,7 +26,6 @@ export class CatalogComponent implements OnInit {
 
     constructor(
         public router: Router,
-        private route: ActivatedRoute,
         private modalService: NgbModal,
         private titleService: Title,
         private categoriesService: CategoriesService,
@@ -64,7 +63,7 @@ export class CatalogComponent implements OnInit {
 
     getProducts(): void{
         this.loading = true;
-        this.productsService.getList()
+        this.productsService.getList(this.currentCategory.id)
             .subscribe(
                 items => {
                     this.items = items;

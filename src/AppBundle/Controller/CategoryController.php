@@ -78,7 +78,7 @@ class CategoryController extends Controller
         }
 
         //Check unique name
-        /*$repository = $this->getRepository();
+        $repository = $this->getRepository();
         $query = $repository->createQueryBuilder()
             ->field('name')->equals($data['name']);
 
@@ -92,7 +92,7 @@ class CategoryController extends Controller
 
         if( $count > 0 ){
             return ['success' => false, 'msg' => 'System name already exists.'];
-        }*/
+        }
 
         return ['success' => true];
     }

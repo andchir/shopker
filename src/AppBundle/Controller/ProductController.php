@@ -12,15 +12,15 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class ProductController extends Controller
 {
     /**
-     * @Route("/app/products_list", name="product_list")
+     * @Route("/app/products_list/{categoryId}", name="product_list")
      * @Method({"GET"})
      * @param Request $request
      * @return JsonResponse
      */
-    public function getList( Request $request )
+    public function getList( Request $request, $categoryId )
     {
         $repository = $this->getRepository();
-        $results = $repository->findAll();
+        $results = $repository->findAll($categoryId);
 
         $data = [];
         /** @var Product $item */

@@ -26,8 +26,8 @@ export class ProductsService {
             .catch(this.handleError);
     }
 
-    getList(): Observable<Product[]> {
-        return this.http.get(this.listUrl)
+    getList(categoryId: number): Observable<Product[]> {
+        return this.http.get(this.listUrl + '/' + categoryId)
             .map(this.extractData)
             .catch(this.handleError);
     }

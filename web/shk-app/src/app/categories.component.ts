@@ -20,9 +20,10 @@ import * as _ from "lodash";
     providers: [ CategoriesService ]
 })
 export class CategoriesModalComponent implements OnInit {
-    @Input() modalTitle;
-    @Input() itemId;
-    @Input() isItemCopy;
+    @Input() modalTitle: string;
+    @Input() itemId: number;
+    @Input() isItemCopy: boolean;
+    @Input() categories: Category[] = [];
     submitted: boolean = false;
     loading: boolean = false;
     errorMessage: string;
@@ -239,6 +240,7 @@ export class CategoriesMenuComponent implements OnInit {
         this.modalRef.componentInstance.modalTitle = itemId && !isItemCopy ? 'Edit category' : 'Add category';
         this.modalRef.componentInstance.itemId = itemId || 0;
         this.modalRef.componentInstance.isItemCopy = isItemCopy || false;
+        this.modalRef.componentInstance.categories = this.categories;
         this.modalRef.result.then((result) => {
             if( result.reason && result.reason == 'edit' ){
                 //Update category data

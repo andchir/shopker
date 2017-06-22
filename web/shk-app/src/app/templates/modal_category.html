@@ -18,6 +18,7 @@
             <div class="col-md-7">
                 <select id="fieldParent" class="form-control" name="parent_id" formControlName="parent_id" [(ngModel)]="model.parent_id">
                     <option value="0">Корневая категория</option>
+                    <option value="{{category.id}}" *ngFor="let category of categories">{{category.title}}</option>
                 </select>
                 <div *ngIf="formErrors.parent_id" class="alert alert-danger">
                     {{formErrors.parent_id}}

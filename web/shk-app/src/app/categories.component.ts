@@ -168,6 +168,9 @@ export class CategoriesModalComponent implements OnInit {
 
 }
 
+/**
+ * @class CategoriesListComponent
+ */
 @Component({
     selector: 'categories-list',
     template: `        
@@ -232,6 +235,7 @@ export class CategoriesMenuComponent implements OnInit {
         }
     }
 
+    /** Select current category */
     selectCurrent(): void {
         for( let category of this.categories ){
             if( category.id == this.categoryId ){
@@ -242,6 +246,7 @@ export class CategoriesMenuComponent implements OnInit {
         }
     }
 
+    /** Get categories */
     getCategories() {
         this.categoriesService.getList()
             .subscribe(
@@ -253,6 +258,11 @@ export class CategoriesMenuComponent implements OnInit {
             );
     }
 
+    /**
+     * Open modal category
+     * @param itemId
+     * @param isItemCopy
+     */
     openModalCategory( itemId?: number, isItemCopy?: boolean ): void {
         this.modalRef = this.modalService.open(CategoriesModalComponent, {size: 'lg'});
         this.modalRef.componentInstance.modalTitle = itemId && !isItemCopy ? 'Edit category' : 'Add category';
@@ -265,7 +275,8 @@ export class CategoriesMenuComponent implements OnInit {
                 this.currentCategory = _.clone( result.data );
                 let index = _.findIndex( this.categories, {id: result.data.id} );
                 if( index > -1 ){
-                    this.categories[index] = _.clone( result.data );
+                    //this.categories[index].title = result.data.title;
+                    this.updateCategoryData( index, result.data );
                 }
             } else {
                 this.getCategories();
@@ -275,6 +286,24 @@ export class CategoriesMenuComponent implements OnInit {
         });
     }
 
+    /**
+     * Update category data
+     * @param index
+     * @param data
+     */
+    updateCategoryData( index, data ){
+        let category = this.categories[index];
+        Object.keys(category).forEach(function(k, i) {
+            if( data[k] ){
+                category[k] = data[k];
+            }
+        });
+    }
+
+    /**
+     * Confirm delete category
+     * @param itemId
+     */
     deleteCategoryItemConfirm( itemId: number ): void{
         let index = _.findIndex( this.categories, {id: itemId} );
         if( index == -1 ){
@@ -292,6 +321,10 @@ export class CategoriesMenuComponent implements OnInit {
         });
     }
 
+    /**
+     * Delete category
+     * @param itemId
+     */
     deleteCategoryItem( itemId: number ): void{
         this.categoriesService.deleteItem( itemId )
             .then((res) => {
@@ -306,23 +339,31 @@ export class CategoriesMenuComponent implements OnInit {
             });
     }
 
+    /** Open root category */
     openRootCategory(): void {
         this.currentCategory = new Category(0,0,'root',this.rootTitle,'','');
         this.changeRequest.emit( this.currentCategory );
     }
 
+    /** Go to root category */
     goToRootCategory(): void {
         this.router.navigate(['/catalog']);
     }
 
+    /**
+     * Select category
+     * @param category
+     */
     selectCategory( category: Category ): void {
         this.router.navigate(['/catalog/category', category.id]);
     }
 
+    /** Copy category */
     copyCategory(){
         this.openModalCategory( this.currentCategory.id, true );
     }
 
+    /** Move category */
     moveCategory(){
 
         console.log( 'moveCategory' );

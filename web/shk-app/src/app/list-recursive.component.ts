@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 @Component({
     selector: 'list-recursive',
@@ -8,6 +8,7 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChange
                 <a class="dropdown-item">
                     {{item.title}}
                 </a>
+                <list-recursive [inputItems]="inputItems" [parentId]="item.id" [currentId]="currentId"></list-recursive>
             </li>
         </ul>
     `

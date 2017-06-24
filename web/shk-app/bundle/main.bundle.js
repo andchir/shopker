@@ -1405,6 +1405,9 @@ CategoriesModalComponent = __decorate([
     __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__angular_forms__["d" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_forms__["d" /* FormBuilder */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_5__services_content_types_service__["a" /* ContentTypesService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__services_content_types_service__["a" /* ContentTypesService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_4__services_categories_service__["a" /* CategoriesService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__services_categories_service__["a" /* CategoriesService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["b" /* NgbActiveModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["b" /* NgbActiveModal */]) === "function" && _d || Object])
 ], CategoriesModalComponent);
 
+/**
+ * @class CategoriesListComponent
+ */
 var CategoriesListComponent = (function (_super) {
     __extends(CategoriesListComponent, _super);
     function CategoriesListComponent() {
@@ -1453,6 +1456,7 @@ var CategoriesMenuComponent = (function () {
             this.openRootCategory();
         }
     };
+    /** Select current category */
     CategoriesMenuComponent.prototype.selectCurrent = function () {
         for (var _i = 0, _a = this.categories; _i < _a.length; _i++) {
             var category = _a[_i];
@@ -1463,6 +1467,7 @@ var CategoriesMenuComponent = (function () {
             }
         }
     };
+    /** Get categories */
     CategoriesMenuComponent.prototype.getCategories = function () {
         var _this = this;
         this.categoriesService.getList()
@@ -1471,6 +1476,11 @@ var CategoriesMenuComponent = (function () {
             _this.selectCurrent();
         }, function (error) { return _this.errorMessage = error; });
     };
+    /**
+     * Open modal category
+     * @param itemId
+     * @param isItemCopy
+     */
     CategoriesMenuComponent.prototype.openModalCategory = function (itemId, isItemCopy) {
         var _this = this;
         this.modalRef = this.modalService.open(CategoriesModalComponent, { size: 'lg' });
@@ -1484,7 +1494,8 @@ var CategoriesMenuComponent = (function () {
                 _this.currentCategory = __WEBPACK_IMPORTED_MODULE_10_lodash__["clone"](result.data);
                 var index = __WEBPACK_IMPORTED_MODULE_10_lodash__["findIndex"](_this.categories, { id: result.data.id });
                 if (index > -1) {
-                    _this.categories[index] = __WEBPACK_IMPORTED_MODULE_10_lodash__["clone"](result.data);
+                    //this.categories[index].title = result.data.title;
+                    _this.updateCategoryData(index, result.data);
                 }
             }
             else {
@@ -1493,6 +1504,23 @@ var CategoriesMenuComponent = (function () {
         }, function (reason) {
         });
     };
+    /**
+     * Update category data
+     * @param index
+     * @param data
+     */
+    CategoriesMenuComponent.prototype.updateCategoryData = function (index, data) {
+        var category = this.categories[index];
+        Object.keys(category).forEach(function (k, i) {
+            if (data[k]) {
+                category[k] = data[k];
+            }
+        });
+    };
+    /**
+     * Confirm delete category
+     * @param itemId
+     */
     CategoriesMenuComponent.prototype.deleteCategoryItemConfirm = function (itemId) {
         var _this = this;
         var index = __WEBPACK_IMPORTED_MODULE_10_lodash__["findIndex"](this.categories, { id: itemId });
@@ -1509,6 +1537,10 @@ var CategoriesMenuComponent = (function () {
         }, function (reason) {
         });
     };
+    /**
+     * Delete category
+     * @param itemId
+     */
     CategoriesMenuComponent.prototype.deleteCategoryItem = function (itemId) {
         var _this = this;
         this.categoriesService.deleteItem(itemId)
@@ -1524,19 +1556,27 @@ var CategoriesMenuComponent = (function () {
             }
         });
     };
+    /** Open root category */
     CategoriesMenuComponent.prototype.openRootCategory = function () {
         this.currentCategory = new __WEBPACK_IMPORTED_MODULE_6__models_category_model__["a" /* Category */](0, 0, 'root', this.rootTitle, '', '');
         this.changeRequest.emit(this.currentCategory);
     };
+    /** Go to root category */
     CategoriesMenuComponent.prototype.goToRootCategory = function () {
         this.router.navigate(['/catalog']);
     };
+    /**
+     * Select category
+     * @param category
+     */
     CategoriesMenuComponent.prototype.selectCategory = function (category) {
         this.router.navigate(['/catalog/category', category.id]);
     };
+    /** Copy category */
     CategoriesMenuComponent.prototype.copyCategory = function () {
         this.openModalCategory(this.currentCategory.id, true);
     };
+    /** Move category */
     CategoriesMenuComponent.prototype.moveCategory = function () {
         console.log('moveCategory');
     };
@@ -1859,7 +1899,7 @@ __decorate([
 ListRecursiveComponent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Component */])({
         selector: 'list-recursive',
-        template: "\n        <ul>\n            <li *ngFor=\"let item of items\">\n                <a class=\"dropdown-item\">\n                    {{item.title}}\n                </a>\n            </li>\n        </ul>\n    "
+        template: "\n        <ul>\n            <li *ngFor=\"let item of items\">\n                <a class=\"dropdown-item\">\n                    {{item.title}}\n                </a>\n                <list-recursive [inputItems]=\"inputItems\" [parentId]=\"item.id\" [currentId]=\"currentId\"></list-recursive>\n            </li>\n        </ul>\n    "
     })
 ], ListRecursiveComponent);
 

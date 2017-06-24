@@ -42,19 +42,6 @@ export class CatalogComponent implements OnInit {
         this.getProducts();
     }
 
-    //TODO: delete if not used
-    getCategory( categoryId: number ): void {
-        if( categoryId ){
-            this.categoriesService.getItem( categoryId )
-                .then(item => {
-                    this.currentCategory = item;
-                    this.titleService.setTitle( this.title + ' / ' + this.currentCategory.title );
-                });
-        } else {
-            this.openRootCategory();
-        }
-    }
-
     openRootCategory(): void {
         this.currentCategory = new Category(0,0,'root', '','','');
         this.titleService.setTitle( this.title );

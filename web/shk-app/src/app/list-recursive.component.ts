@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import * as _ from "lodash";
 
 @Component({
     selector: 'list-recursive',
@@ -18,6 +19,7 @@ export class ListRecursiveComponent implements OnInit, OnChanges {
     @Input() items: any[];
     @Input() parentId: number;
     @Input() currentId: number;
+    currentParentsIds: number[];
 
     ngOnInit(): void {
         this.filterInputItems();
@@ -26,6 +28,9 @@ export class ListRecursiveComponent implements OnInit, OnChanges {
     ngOnChanges(changes: SimpleChanges) {
         if( changes.inputItems ){
             this.filterInputItems();
+        }
+        if( changes.currentId ){
+            this.updateParentsIds();
         }
     }
 
@@ -39,6 +44,48 @@ export class ListRecursiveComponent implements OnInit, OnChanges {
                 items.push( item );
             }
         });
+        this.updateParentsIds();
+    }
+
+    /**
+     * Update parents ids
+     */
+    updateParentsIds(): void {
+        let index = _.findIndex( this.inputItems, {id: this.currentId} );
+        this.currentParentsIds = [];
+        if( index === -1 ){
+            return;
+        }
+        this.currentParentsIds = this.getParentIds( this.inputItems[index].parent_id );
+    }
+
+    /**
+     *
+     * @param parentId
+     * @param parentIds
+     * @returns {number[]}
+     */
+    getParentIds( parentId, parentIds ?: number[] ): number[] {
+        parentIds = parentIds || [];
+        if( parentId > 0 ){
+            parentIds.push( parentId );
+            let index = _.findIndex( this.inputItems, {id: parentId} );
+            if( index === -1 ){
+                return parentIds;
+            }
+            return this.getParentIds( this.inputItems[index].parent_id, parentIds );
+        } else {
+            return parentIds;
+        }
+    }
+
+    /**
+     * Check parent id
+     * @param itemId
+     * @returns {boolean}
+     */
+    getIsActiveParent( itemId: number ): boolean {
+        return this.currentParentsIds.indexOf( itemId ) > -1;
     }
 
 }

@@ -175,7 +175,7 @@ export class CategoriesModalComponent implements OnInit {
     selector: 'categories-list',
     template: `        
         <ul class="dropdown-menu dropdown-menu-hover" *ngIf="items.length > 0">
-            <li class="dropdown-item active" *ngFor="let item of items" [class.active]="item.id == currentId">
+            <li class="dropdown-item active" *ngFor="let item of items" [class.active]="item.id == currentId" [class.current-level]="getIsActiveParent(item.id)">
                 <a href="#/catalog/category/{{item.id}}">
                     {{item.title}}
                 </a>
@@ -237,6 +237,9 @@ export class CategoriesMenuComponent implements OnInit {
 
     /** Select current category */
     selectCurrent(): void {
+        if( this.currentCategory.id === this.categoryId ){
+            return;
+        }
         for( let category of this.categories ){
             if( category.id == this.categoryId ){
                 this.currentCategory = category;
@@ -247,7 +250,7 @@ export class CategoriesMenuComponent implements OnInit {
     }
 
     /** Get categories */
-    getCategories() {
+    getCategories(): void {
         this.categoriesService.getList()
             .subscribe(
                 items => {
@@ -271,13 +274,7 @@ export class CategoriesMenuComponent implements OnInit {
         this.modalRef.componentInstance.categories = this.categories;
         this.modalRef.result.then((result) => {
             if( result.reason && result.reason == 'edit' ){
-                //Update category data
-                this.currentCategory = _.clone( result.data );
-                let index = _.findIndex( this.categories, {id: result.data.id} );
-                if( index > -1 ){
-                    //this.categories[index].title = result.data.title;
-                    this.updateCategoryData( index, result.data );
-                }
+                this.updateCategoryData( result.data.id, result.data );
             } else {
                 this.getCategories();
             }
@@ -288,16 +285,24 @@ export class CategoriesMenuComponent implements OnInit {
 
     /**
      * Update category data
-     * @param index
+     * @param itemId
      * @param data
      */
-    updateCategoryData( index, data ){
+    updateCategoryData( itemId: number, data: any ): void {
+        let index = _.findIndex( this.categories, {id: itemId} );
+        if( index === -1 ){
+            return;
+        }
         let category = this.categories[index];
-        Object.keys(category).forEach(function(k, i) {
-            if( data[k] ){
-                category[k] = data[k];
-            }
-        });
+        if( category.parent_id == data.parent_id ){
+            Object.keys(category).forEach(function(k, i) {
+                if( data[k] ){
+                    category[k] = data[k];
+                }
+            });
+        } else {
+            this.getCategories();
+        }
     }
 
     /**
@@ -359,12 +364,12 @@ export class CategoriesMenuComponent implements OnInit {
     }
 
     /** Copy category */
-    copyCategory(){
+    copyCategory(): void {
         this.openModalCategory( this.currentCategory.id, true );
     }
 
     /** Move category */
-    moveCategory(){
+    moveCategory(): void {
 
         console.log( 'moveCategory' );
 

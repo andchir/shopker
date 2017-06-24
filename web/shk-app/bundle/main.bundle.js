@@ -55,20 +55,6 @@ var CatalogComponent = (function () {
         this.titleService.setTitle(this.title + ' / ' + this.currentCategory.title);
         this.getProducts();
     };
-    //TODO: delete if not used
-    CatalogComponent.prototype.getCategory = function (categoryId) {
-        var _this = this;
-        if (categoryId) {
-            this.categoriesService.getItem(categoryId)
-                .then(function (item) {
-                _this.currentCategory = item;
-                _this.titleService.setTitle(_this.title + ' / ' + _this.currentCategory.title);
-            });
-        }
-        else {
-            this.openRootCategory();
-        }
-    };
     CatalogComponent.prototype.openRootCategory = function () {
         this.currentCategory = new __WEBPACK_IMPORTED_MODULE_6__models_category_model__["a" /* Category */](0, 0, 'root', '', '', '');
         this.titleService.setTitle(this.title);
@@ -1418,7 +1404,7 @@ var CategoriesListComponent = (function (_super) {
 CategoriesListComponent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Component */])({
         selector: 'categories-list',
-        template: "        \n        <ul class=\"dropdown-menu dropdown-menu-hover\" *ngIf=\"items.length > 0\">\n            <li class=\"dropdown-item active\" *ngFor=\"let item of items\" [class.active]=\"item.id == currentId\">\n                <a href=\"#/catalog/category/{{item.id}}\">\n                    {{item.title}}\n                </a>\n                <categories-list [inputItems]=\"inputItems\" [parentId]=\"item.id\" [currentId]=\"currentId\"></categories-list>\n            </li>\n        </ul>\n    "
+        template: "        \n        <ul class=\"dropdown-menu dropdown-menu-hover\" *ngIf=\"items.length > 0\">\n            <li class=\"dropdown-item active\" *ngFor=\"let item of items\" [class.active]=\"item.id == currentId\" [class.current-level]=\"getIsActiveParent(item.id)\">\n                <a href=\"#/catalog/category/{{item.id}}\">\n                    {{item.title}}\n                </a>\n                <categories-list [inputItems]=\"inputItems\" [parentId]=\"item.id\" [currentId]=\"currentId\"></categories-list>\n            </li>\n        </ul>\n    "
     })
 ], CategoriesListComponent);
 
@@ -1458,6 +1444,9 @@ var CategoriesMenuComponent = (function () {
     };
     /** Select current category */
     CategoriesMenuComponent.prototype.selectCurrent = function () {
+        if (this.currentCategory.id === this.categoryId) {
+            return;
+        }
         for (var _i = 0, _a = this.categories; _i < _a.length; _i++) {
             var category = _a[_i];
             if (category.id == this.categoryId) {
@@ -1490,13 +1479,7 @@ var CategoriesMenuComponent = (function () {
         this.modalRef.componentInstance.categories = this.categories;
         this.modalRef.result.then(function (result) {
             if (result.reason && result.reason == 'edit') {
-                //Update category data
-                _this.currentCategory = __WEBPACK_IMPORTED_MODULE_10_lodash__["clone"](result.data);
-                var index = __WEBPACK_IMPORTED_MODULE_10_lodash__["findIndex"](_this.categories, { id: result.data.id });
-                if (index > -1) {
-                    //this.categories[index].title = result.data.title;
-                    _this.updateCategoryData(index, result.data);
-                }
+                _this.updateCategoryData(result.data.id, result.data);
             }
             else {
                 _this.getCategories();
@@ -1506,16 +1489,25 @@ var CategoriesMenuComponent = (function () {
     };
     /**
      * Update category data
-     * @param index
+     * @param itemId
      * @param data
      */
-    CategoriesMenuComponent.prototype.updateCategoryData = function (index, data) {
+    CategoriesMenuComponent.prototype.updateCategoryData = function (itemId, data) {
+        var index = __WEBPACK_IMPORTED_MODULE_10_lodash__["findIndex"](this.categories, { id: itemId });
+        if (index === -1) {
+            return;
+        }
         var category = this.categories[index];
-        Object.keys(category).forEach(function (k, i) {
-            if (data[k]) {
-                category[k] = data[k];
-            }
-        });
+        if (category.parent_id == data.parent_id) {
+            Object.keys(category).forEach(function (k, i) {
+                if (data[k]) {
+                    category[k] = data[k];
+                }
+            });
+        }
+        else {
+            this.getCategories();
+        }
     };
     /**
      * Confirm delete category
@@ -1846,6 +1838,8 @@ module.exports = __webpack_require__(173);
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_lodash__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ListRecursiveComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1857,6 +1851,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
 var ListRecursiveComponent = (function () {
     function ListRecursiveComponent() {
     }
@@ -1866,6 +1861,9 @@ var ListRecursiveComponent = (function () {
     ListRecursiveComponent.prototype.ngOnChanges = function (changes) {
         if (changes.inputItems) {
             this.filterInputItems();
+        }
+        if (changes.currentId) {
+            this.updateParentsIds();
         }
     };
     ListRecursiveComponent.prototype.filterInputItems = function () {
@@ -1877,6 +1875,46 @@ var ListRecursiveComponent = (function () {
                 items.push(item);
             }
         });
+        this.updateParentsIds();
+    };
+    /**
+     * Update parents ids
+     */
+    ListRecursiveComponent.prototype.updateParentsIds = function () {
+        var index = __WEBPACK_IMPORTED_MODULE_1_lodash__["findIndex"](this.inputItems, { id: this.currentId });
+        this.currentParentsIds = [];
+        if (index === -1) {
+            return;
+        }
+        this.currentParentsIds = this.getParentIds(this.inputItems[index].parent_id);
+    };
+    /**
+     *
+     * @param parentId
+     * @param parentIds
+     * @returns {number[]}
+     */
+    ListRecursiveComponent.prototype.getParentIds = function (parentId, parentIds) {
+        parentIds = parentIds || [];
+        if (parentId > 0) {
+            parentIds.push(parentId);
+            var index = __WEBPACK_IMPORTED_MODULE_1_lodash__["findIndex"](this.inputItems, { id: parentId });
+            if (index === -1) {
+                return parentIds;
+            }
+            return this.getParentIds(this.inputItems[index].parent_id, parentIds);
+        }
+        else {
+            return parentIds;
+        }
+    };
+    /**
+     * Check parent id
+     * @param itemId
+     * @returns {boolean}
+     */
+    ListRecursiveComponent.prototype.getIsActiveParent = function (itemId) {
+        return this.currentParentsIds.indexOf(itemId) > -1;
     };
     return ListRecursiveComponent;
 }());

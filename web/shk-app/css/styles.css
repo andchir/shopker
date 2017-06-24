@@ -72,9 +72,10 @@ select.form-control:hover { box-shadow: 0 0 11px rgba(0, 0, 0, 0.3); }
 .dropdown-menu-hover { width: 100%; position: static; display: block; border: 0; }
 .dropdown-menu-hover .dropdown-menu-hover { width: 260px; display: none; position: absolute; border: 1px solid rgba(0,0,0,.15); }
 .dropdown-menu-hover .dropdown-item { position: relative; padding: 0; }
-.dropdown-menu-hover .dropdown-item:focus,
-.dropdown-menu-hover .dropdown-item:active { background-color: #f7f7f9; }
-.dropdown-menu-hover .dropdown-item > a { display: block; padding: 3px 1.5rem; text-decoration: none; }
-.dropdown-menu-hover .dropdown-item:hover .dropdown-menu-hover { display: block; }
+.dropdown-menu-hover .dropdown-item:focus:not(.active),
+.dropdown-menu-hover .dropdown-item:active:not(.active) { background-color: rgba(0,0,0,.1); }
+.dropdown-menu-hover .dropdown-item > a { display: block; padding: 8px 1.5rem; text-decoration: none; }
+.dropdown-menu-hover .dropdown-item:hover > * > .dropdown-menu-hover { display: block; }
 .dropdown-menu-hover .dropdown-item.active > a { color: #fff; }
+.dropdown-menu-hover .current-level { background-color: rgba(0,0,0,.1); }
 

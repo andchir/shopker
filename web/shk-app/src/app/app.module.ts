@@ -8,10 +8,11 @@ import { NotFoundComponent } from './not-found.component';
 import { OrdersComponent } from './orders.component';
 import { CatalogComponent } from './catalog.component';
 import { ProductModalContent } from './product.component';
-import { CategoriesMenuComponent, CategoriesModalComponent } from './categories.component';
+import { CategoriesMenuComponent, CategoriesModalComponent, CategoriesListComponent } from './categories.component';
 import { ContentTypesComponent, ContentTypeModalContent } from './content_types.component';
 import { StatisticsComponent } from './stat.component';
 import { SettingsComponent } from './settings.component';
+import { ListRecursiveComponent } from './list-recursive.component';
 
 import { filterFieldByGroup } from "./filter-field-by-group.pipe";
 
@@ -45,7 +46,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
         ContentTypeModalContent,
         CategoriesModalComponent,
         ConfirmModalContent,
-        filterFieldByGroup
+        filterFieldByGroup,
+        ListRecursiveComponent,
+        CategoriesListComponent
     ],
     providers: [ ProductsService, ContentTypesService, CategoriesService ],
     entryComponents: [ ConfirmModalContent, ProductModalContent, ContentTypeModalContent, CategoriesModalComponent ],

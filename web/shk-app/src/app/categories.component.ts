@@ -8,6 +8,7 @@ import { ContentTypesService } from './services/content_types.service';
 import { ContentType } from './models/content_type.model';
 import { Category } from "./models/category.model";
 import { ConfirmModalContent } from './app.component';
+import { ListRecursiveComponent } from './list-recursive.component';
 import 'rxjs/add/operator/switchMap';
 import * as _ from "lodash";
 
@@ -164,6 +165,23 @@ export class CategoriesModalComponent implements OnInit {
         let reason = this.itemId ? 'edit' : 'create';
         this.activeModal.close( { reason: reason, data: this.model } );
     }
+
+}
+
+@Component({
+    selector: 'categories-list',
+    template: `        
+        <ul class="dropdown-menu dropdown-menu-hover" *ngIf="items.length > 0">
+            <li class="dropdown-item active" *ngFor="let item of items" [class.active]="item.id == currentId">
+                <a href="#/catalog/category/{{item.id}}">
+                    {{item.title}}
+                </a>
+                <categories-list [inputItems]="inputItems" [parentId]="item.id" [currentId]="currentId"></categories-list>
+            </li>
+        </ul>
+    `
+})
+export class CategoriesListComponent extends ListRecursiveComponent {
 
 }
 

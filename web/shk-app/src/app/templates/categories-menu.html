@@ -29,10 +29,7 @@
             No categories.
         </div>
 
-        <button class="dropdown-item" *ngFor="let category of categories" (click)="selectCategory(category)" [class.active]="category.id == currentCategory.id">
-            <i class="icon-folder"></i>
-            {{category.title}}
-        </button>
+        <categories-list [inputItems]="categories" [parentId]="0" [currentId]="currentCategory.id"></categories-list>
 
     </div>
 </div>

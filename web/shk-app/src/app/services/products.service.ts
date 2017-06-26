@@ -26,9 +26,26 @@ export class ProductsService {
             .catch(this.handleError);
     }
 
+    editItem(id: number, data: any): Promise<any> {
+        const url = `${this.oneUrl}/${id}`;
+        return this.http
+            .put(url, JSON.stringify( data ), {headers: this.headers})
+            .toPromise()
+            .then(res => res.json())
+            .catch(this.handleError);
+    }
+
     getList(categoryId: number): Observable<Product[]> {
         return this.http.get(this.listUrl + '/' + categoryId)
             .map(this.extractData)
+            .catch(this.handleError);
+    }
+
+    getItem(id: number): Promise<Product> {
+        const url = `${this.oneUrl}/${id}`;
+        return this.http.get(url)
+            .toPromise()
+            .then(response => response.json().data as Product)
             .catch(this.handleError);
     }
 

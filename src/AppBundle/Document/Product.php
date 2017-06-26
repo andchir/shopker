@@ -33,6 +33,11 @@ class Product
     /**
      * @MongoDB\Field(type="string")
      */
+    protected $content_type;
+
+    /**
+     * @MongoDB\Field(type="string")
+     */
     protected $description;
 
     /**
@@ -139,6 +144,28 @@ class Product
     }
 
     /**
+     * Set contentType
+     *
+     * @param string $contentType
+     * @return self
+     */
+    public function setContentType($contentType)
+    {
+        $this->content_type = $contentType;
+        return $this;
+    }
+
+    /**
+     * Get contentType
+     *
+     * @return string $contentType
+     */
+    public function getContentType()
+    {
+        return $this->content_type;
+    }
+
+    /**
      * Set price
      *
      * @param float $price
@@ -171,9 +198,9 @@ class Product
             'title' => $this->getTitle(),
             'name' => $this->getName(),
             'description' => $this->getDescription(),
-            'price' => $this->getPrice()
+            'price' => $this->getPrice(),
+            'content_type' => $this->getContentType()
         ];
         return $output;
     }
-
 }

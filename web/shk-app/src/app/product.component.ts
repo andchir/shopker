@@ -46,61 +46,76 @@ export class ProductModalContent implements OnInit {
         this.model = new Product(0,0,this.category.content_type,'','','',0);
 
         this.buildForm();
-        this.getContentTypes();
         if( this.itemId ){
-            this.getModelData();
+
+            this.getData();
+
+        } else {
+            this.getContentTypes()
+                .then(
+                    items => {
+                        this.contentTypes = items;
+                        this.selectCurrentContentType();
+                        this.updateForm();
+                    },
+                    error => this.errorMessage = <any>error);
         }
+    }
+
+    buildForm(): void{
+        let group: any = {};
+        group['content_type'] = new FormControl(this.category.content_type, Validators.required);
+        this.form = new FormGroup(group);
     }
 
     /** Build form */
-    buildForm(): void {
-        if( !this.form ){
+    updateForm(data ?: any): void {
+        if( !data ){
+            data = this.form.value;
+        }
+        let newKeys = _.map(this.currentContentType.fields, function(field){
+            return field.name;
+        });
+        newKeys.push( 'content_type' );
 
-            let group: any = {};
-            group['content_type'] = new FormControl(this.category.content_type, Validators.required);
-            this.currentContentType.fields.forEach(field => {
-                group[field.name] = field.required
-                    ? new FormControl('', Validators.required)
-                    : new FormControl('');
-            });
-            this.form = new FormGroup(group);
-            this.form.valueChanges
-                .subscribe(data => this.onValueChanged(data));
-
-        } else {
-
-            let data = this.form.value;
-            let newKeys = _.map(this.currentContentType.fields, function(field){
-                return field.name;
-            });
-            newKeys.push( 'content_type' );
-
-            //Remove keys
-            for (let key in this.form.controls) {
-                if (this.form.controls.hasOwnProperty(key)) {
-                    if( newKeys.indexOf(key) === -1 ){
-                        this.form.removeControl( key );
-                    }
+        //Remove keys
+        for (let key in this.form.controls) {
+            if (this.form.controls.hasOwnProperty(key)) {
+                if( newKeys.indexOf(key) === -1 ){
+                    this.form.removeControl( key );
                 }
             }
-
-            //Add new controls
-            this.currentContentType.fields.forEach(field => {
-                if( !this.form.controls[ field.name ] ){
-                    console.log( 'ADD CONTROL', field.name );
-                    let group = field.required
-                        ? new FormControl(data[field.name] || '', Validators.required)
-                        : new FormControl(data[field.name] || '');
-                    this.form.addControl( field.name, group );
-                }
-            });
         }
+
+        //Add new controls
+        this.currentContentType.fields.forEach(field => {
+            if( !this.form.controls[ field.name ] ){
+                let group = field.required
+                    ? new FormControl(data[field.name] || '', Validators.required)
+                    : new FormControl(data[field.name] || '');
+                this.form.addControl( field.name, group );
+            }
+        });
     }
 
-    getModelData(): void {
+    getData(): void {
+        this.loading = true;
 
-        console.log( 'getModelData', this.itemId );
-
+        this.productsService.getItem( this.itemId )
+            .then(data => {
+                return new Promise((resolve, reject) => {
+                    this.getContentTypes()
+                        .then(items => {
+                            this.contentTypes = items;
+                            resolve(data);
+                        });
+                });
+            })
+            .then(data => {
+                this.setCurrentContentType( data.content_type );
+                this.updateForm( data );
+                this.loading = false;
+            });
     }
 
     /** Select current content type */
@@ -112,7 +127,18 @@ export class ProductModalContent implements OnInit {
         if( this.contentTypes[index] ){
             this.currentContentType = _.clone( this.contentTypes[index] );
             this.form.get('content_type').setValue(this.currentContentType.name);
-            this.buildForm();
+            this.updateForm();
+        }
+    }
+
+    setCurrentContentType( contentTypeName: string ): void {
+        let index = _.findIndex( this.contentTypes, {name: contentTypeName} );
+        if( index == -1 ){
+            index = 0;
+        }
+        if( this.contentTypes[index] ){
+            this.currentContentType = _.clone( this.contentTypes[index] );
+            this.form.get('content_type').setValue(this.currentContentType.name);
         }
     }
 
@@ -123,13 +149,7 @@ export class ProductModalContent implements OnInit {
 
     /** Get content types */
     getContentTypes(){
-        this.contentTypesService.getList( true )
-            .then(
-                items => {
-                    this.contentTypes = items;
-                    this.selectCurrentContentType();
-                },
-                error => this.errorMessage = <any>error);
+        return this.contentTypesService.getList( true );
     }
 
     /**
@@ -139,7 +159,7 @@ export class ProductModalContent implements OnInit {
     onValueChanged(data?: any){
         if (!this.form) { return; }
 
-        console.log( 'onValueChange', data );
+        //console.log( 'onValueChange', data );
 
     }
 
@@ -158,6 +178,7 @@ export class ProductModalContent implements OnInit {
         let data = this.form.value;
         data.parent_id = this.category.id;
 
+        //TODO: write code for update
         this.productsService.createItem( data )
             .then((res) => {
                 if( res.success ){

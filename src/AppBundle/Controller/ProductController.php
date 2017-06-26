@@ -35,6 +35,33 @@ class ProductController extends Controller
     }
 
     /**
+     * @Route("/app/product/{itemId}", name="product_get")
+     * @Method({"GET"})
+     * @param Request $request
+     * @param $itemId
+     * @return JsonResponse
+     */
+    public function getItem( Request $request, $itemId )
+    {
+        $repository = $this->getRepository();
+        /** @var Product $product */
+        $product = $repository->find( $itemId );
+        if( !$product ){
+            return new JsonResponse([
+                'success' => false,
+                'msg' => 'Item not found.'
+            ]);
+        }
+
+        $data = $product->toArray();
+
+        return new JsonResponse([
+            'success' => true,
+            'data' => $data
+        ]);
+    }
+
+    /**
      * @Route("/app/product", name="product_post")
      * @Method({"POST"})
      * @param Request $request
@@ -52,7 +79,8 @@ class ProductController extends Controller
             ->setName( !empty($data['name']) ? $data['name'] : '' )
             ->setTitle( !empty($data['title']) ? $data['title'] : 'Untitled' )
             ->setPrice( !empty($data['price']) ? $data['price'] : 0 )
-            ->setDescription( !empty($data['description']) ? $data['description'] : '' );
+            ->setDescription( !empty($data['description']) ? $data['description'] : '' )
+            ->setContentType( !empty($data['content_type']) ? $data['content_type'] : '' );
 
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $this->get('doctrine_mongodb')->getManager();

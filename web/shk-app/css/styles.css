@@ -5,6 +5,7 @@
 .min-width150 { min-width: 150px; }
 .big { font-size: 120%; }
 .tooltip { pointer-events: none; }
+.no-wrap { white-space: nowrap; }
 
 /* form-control */
 input[type=text].form-control,

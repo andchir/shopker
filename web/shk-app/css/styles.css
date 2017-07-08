@@ -23,6 +23,12 @@ select.form-control:hover { box-shadow: 0 0 11px rgba(0, 0, 0, 0.3); }
 .form-group-message .form-control { border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-color: #a94442; }
 .form-group-message .alert { padding: 1px 8px; font-size: 14px; border-top-width: 0; border-top-left-radius: 0; border-top-right-radius: 0; }
 
+/* table */
+.table-divided {  }
+.table-divided thead th { position: relative; }
+.table-divided thead th:after { content: ''; display: block; width: 2px; height: 20px; position: absolute; top: 50%; right: 0; margin-top: -10px; background-color: #ddd; }
+.table-divided thead th:last-child:after { display: none; }
+
 /* buttons */
 .btn { cursor: pointer; border-radius: 3px; }
 .btn-wide { min-width: 130px; text-align: center; padding-left: 2rem; padding-right: 2rem; }
@@ -80,3 +86,5 @@ select.form-control:hover { box-shadow: 0 0 11px rgba(0, 0, 0, 0.3); }
 .dropdown-menu-hover .dropdown-item.active > a { color: #fff; }
 .dropdown-menu-hover .current-level { background-color: rgba(0,0,0,.1); }
 
+/* shadow */
+.shadow { box-shadow: 0 0 20px rgba(0,0,0,0.3); }

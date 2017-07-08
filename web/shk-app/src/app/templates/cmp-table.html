@@ -1,5 +1,5 @@
 <div class="table-responsive" [class.loading]="loading">
-    <table class="table table-striped table-hover mb-0">
+    <table class="table table-striped table-divided mb-0">
         <thead>
             <tr>
                 <th>
@@ -9,9 +9,9 @@
                     </label>
                 </th>
                 <th *ngFor="let tableField of tableFields; let index=index">
-                    <button type="button" class="btn btn-link" (click)="selectSortBy(tableField.name)">
+                    <button type="button" class="btn btn-block btn-link" (click)="selectSortBy(tableField.name)">
                         {{tableField.title}}
-                        <i [class.icon-arrow-down]="sortDir == 'asc'" [class.icon-arrow-up]="sortDir == 'desc'" *ngIf="tableField.name == sortBy"></i>
+                        <i [class.icon-arrow-down]="sortDir == 'asc'" [class.icon-arrow-up]="sortDir == 'desc'" [style.visibility]="tableField.name == sortBy ? 'visible' : 'hidden'"></i>
                     </button>
                 </th>
             </tr>
@@ -44,8 +44,8 @@
                     <i class="big text-muted icon-circle-cross" [hidden]="item.is_active"></i-->
                 </td>
             </tr>
-        <tr [hidden]="items.length > 0" class="table-warning">
-            <td colspan="5" class="text-center">
+        <tr [hidden]="items.length > 0" class="table-active">
+            <td [attr.colspan]="tableFields.length + 1" class="text-center p-4">
                 Empty.
             </td>
         </tr>

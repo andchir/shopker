@@ -3,7 +3,7 @@
         <i class="icon-folder"></i>
         {{currentCategory.title}}
     </button>
-    <div class="dropdown-menu" #categoriesDropdown>
+    <div class="dropdown-menu shadow" #categoriesDropdown>
         <div class="dropdown-header">
             <button class="btn btn-sm btn-secondary" ngbTooltip="Open root category" (click)="goToRootCategory()" *ngIf="currentCategory.id > 0">
                 <i class="icon-home"></i>

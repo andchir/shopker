@@ -174,7 +174,7 @@ export class CategoriesModalComponent implements OnInit {
 @Component({
     selector: 'categories-list',
     template: `        
-        <ul class="dropdown-menu dropdown-menu-hover" *ngIf="items.length > 0">
+        <ul class="dropdown-menu dropdown-menu-hover" *ngIf="items.length > 0" [class.shadow]="parentId != 0">
             <li class="dropdown-item active" *ngFor="let item of items" [class.active]="item.id == currentId" [class.current-level]="getIsActiveParent(item.id)">
                 <a href="#/catalog/category/{{item.id}}">
                     {{item.title}}

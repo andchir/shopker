@@ -11,8 +11,7 @@
                 <th *ngFor="let tableField of tableFields; let index=index">
                     <button type="button" class="btn btn-link" (click)="selectSortBy(tableField.name)">
                         {{tableField.title}}
-                        <i class="icon-arrow-down" *ngIf="tableField.name == sortBy && sortDir == 'asc'"></i>
-                        <i class="icon-arrow-up" *ngIf="tableField.name == sortBy && sortDir == 'desc'"></i>
+                        <i [class.icon-arrow-down]="sortDir == 'asc'" [class.icon-arrow-up]="sortDir == 'desc'" *ngIf="tableField.name == sortBy"></i>
                     </button>
                 </th>
             </tr>

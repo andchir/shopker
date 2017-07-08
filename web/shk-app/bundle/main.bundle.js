@@ -46,6 +46,29 @@ var CatalogComponent = (function () {
         this.categories = [];
         this.items = [];
         this.selectedIds = [];
+        //TODO: get from settings
+        this.tableFields = [
+            {
+                name: 'id',
+                title: 'ID'
+            },
+            {
+                name: 'name',
+                title: 'Системное имя'
+            },
+            {
+                name: 'title',
+                title: 'Название'
+            },
+            {
+                name: 'price',
+                title: 'Цена'
+            },
+            {
+                name: 'published',
+                title: 'Статус'
+            }
+        ];
     }
     CatalogComponent.prototype.ngOnInit = function () {
         this.setTitle(this.title);
@@ -1236,12 +1259,13 @@ AppRoutingModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__stat_component__ = __webpack_require__(147);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__settings_component__ = __webpack_require__(146);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__list_recursive_component__ = __webpack_require__(141);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__filter_field_by_group_pipe__ = __webpack_require__(186);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__services_products_service__ = __webpack_require__(64);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__services_content_types_service__ = __webpack_require__(38);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__services_categories_service__ = __webpack_require__(63);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__app_routing_module__ = __webpack_require__(183);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__ng_bootstrap_ng_bootstrap__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__table_component__ = __webpack_require__(296);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__filter_field_by_group_pipe__ = __webpack_require__(186);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__services_products_service__ = __webpack_require__(64);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__services_content_types_service__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__services_categories_service__ = __webpack_require__(63);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__app_routing_module__ = __webpack_require__(183);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__ng_bootstrap_ng_bootstrap__ = __webpack_require__(24);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1269,7 +1293,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-//enableProdMode();
+
 var AppModule = (function () {
     function AppModule() {
     }
@@ -1282,8 +1306,8 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_2__angular_forms__["a" /* FormsModule */],
             __WEBPACK_IMPORTED_MODULE_2__angular_forms__["b" /* ReactiveFormsModule */],
             __WEBPACK_IMPORTED_MODULE_3__angular_http__["a" /* HttpModule */],
-            __WEBPACK_IMPORTED_MODULE_18__app_routing_module__["a" /* AppRoutingModule */],
-            __WEBPACK_IMPORTED_MODULE_19__ng_bootstrap_ng_bootstrap__["a" /* NgbModule */].forRoot()
+            __WEBPACK_IMPORTED_MODULE_19__app_routing_module__["a" /* AppRoutingModule */],
+            __WEBPACK_IMPORTED_MODULE_20__ng_bootstrap_ng_bootstrap__["a" /* NgbModule */].forRoot()
         ],
         declarations: [
             __WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* AppComponent */],
@@ -1298,11 +1322,12 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_10__content_types_component__["b" /* ContentTypeModalContent */],
             __WEBPACK_IMPORTED_MODULE_9__categories_component__["b" /* CategoriesModalComponent */],
             __WEBPACK_IMPORTED_MODULE_4__app_component__["b" /* ConfirmModalContent */],
-            __WEBPACK_IMPORTED_MODULE_14__filter_field_by_group_pipe__["a" /* filterFieldByGroup */],
+            __WEBPACK_IMPORTED_MODULE_15__filter_field_by_group_pipe__["a" /* filterFieldByGroup */],
             __WEBPACK_IMPORTED_MODULE_13__list_recursive_component__["a" /* ListRecursiveComponent */],
+            __WEBPACK_IMPORTED_MODULE_14__table_component__["a" /* TableComponent */],
             __WEBPACK_IMPORTED_MODULE_9__categories_component__["c" /* CategoriesListComponent */]
         ],
-        providers: [__WEBPACK_IMPORTED_MODULE_15__services_products_service__["a" /* ProductsService */], __WEBPACK_IMPORTED_MODULE_16__services_content_types_service__["a" /* ContentTypesService */], __WEBPACK_IMPORTED_MODULE_17__services_categories_service__["a" /* CategoriesService */]],
+        providers: [__WEBPACK_IMPORTED_MODULE_16__services_products_service__["a" /* ProductsService */], __WEBPACK_IMPORTED_MODULE_17__services_content_types_service__["a" /* ContentTypesService */], __WEBPACK_IMPORTED_MODULE_18__services_categories_service__["a" /* CategoriesService */]],
         entryComponents: [__WEBPACK_IMPORTED_MODULE_4__app_component__["b" /* ConfirmModalContent */], __WEBPACK_IMPORTED_MODULE_8__product_component__["a" /* ProductModalContent */], __WEBPACK_IMPORTED_MODULE_10__content_types_component__["b" /* ContentTypeModalContent */], __WEBPACK_IMPORTED_MODULE_9__categories_component__["b" /* CategoriesModalComponent */]],
         bootstrap: [__WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* AppComponent */]]
     })
@@ -1927,7 +1952,7 @@ module.exports = "<div class=\"modal-header d-block\">\n    <div class=\"d-block
 /***/ 251:
 /***/ (function(module, exports) {
 
-module.exports = "\n<div class=\"card\">\n\n    <div class=\"card-block\">\n\n        <div class=\"float-right\">\n            <a class=\"btn btn-primary\" [routerLink]=\"['/catalog/content_types']\">\n                <i class=\"icon-box\"></i>\n                Типы товаров\n            </a>\n        </div>\n        <h3>\n            <i class=\"icon-layers\"></i>\n            {{title}}\n        </h3>\n\n        <hr>\n\n        <div class=\"float-right\">\n\n            <div ngbDropdown class=\"d-inline-block\">\n                <button class=\"btn btn-outline-info\" id=\"dropdownBasic1\" ngbDropdownToggle>\n                    Массовые дейсвия\n                </button>\n                <div class=\"dropdown-menu\" aria-labelledby=\"dropdownBasic1\">\n                    <button class=\"dropdown-item\">Отключить / включить</button>\n                    <button class=\"dropdown-item\">Удалить</button>\n                </div>\n            </div>\n\n            <button type=\"button\" class=\"btn btn-outline-success\" (click)=\"modalProductOpen()\">\n                <i class=\"icon-plus\"></i>\n                Add product\n            </button>\n\n        </div>\n        <div class=\"float-left\">\n\n            <categories-menu (changeRequest)=\"openCategory($event)\"></categories-menu>\n\n        </div>\n    </div>\n\n    <div class=\"table-responsive\" [class.loading]=\"loading\">\n        <table class=\"table table-hover mb-0\">\n            <thead>\n                <tr>\n                    <th>\n                        <label class=\"custom-control custom-checkbox\">\n                            <input type=\"checkbox\" class=\"custom-control-input\">\n                            <span class=\"custom-control-indicator\"></span>\n                        </label>\n                    </th>\n                    <th>ID</th>\n                    <th>Название</th>\n                    <th>Цена</th>\n                    <th class=\"text-center\">Статус</th>\n                </tr>\n            </thead>\n            <tbody>\n                <tr class=\"show-on-hover-parent\" *ngFor=\"let item of items\">\n                    <td>\n                        <label class=\"custom-control custom-checkbox\">\n                            <input type=\"checkbox\" class=\"custom-control-input\">\n                            <span class=\"custom-control-indicator\"></span>\n                        </label>\n                    </td>\n                    <th>{{item.id}}</th>\n                    <td>\n                        {{item.title}}\n                    </td>\n                    <td>\n                        {{item.price}}\n                    </td>\n                    <td class=\"text-center\">\n                        <div class=\"relative\">\n                            <div class=\"show-on-hover no-wrap\">\n                                <button class=\"btn btn-secondary btn-sm\" (click)=\"modalProductOpen(item.id)\" ngbTooltip=\"Edit\">\n                                    <i class=\"icon-pencil\"></i>\n                                </button>\n                                <button type=\"button\" class=\"btn btn-secondary btn-sm\" (click)=\"modalProductOpen(item.id, true)\" ngbTooltip=\"Copy\">\n                                    <i class=\"icon-stack\"></i>\n                                </button>\n                                <button class=\"btn btn-secondary btn-sm\" ngbTooltip=\"Delete\">\n                                    <i class=\"icon-cross\"></i>\n                                </button>\n                            </div>\n                        </div>\n                        <i class=\"big text-success icon-circle-check\"></i>\n                    </td>\n                </tr>\n                <tr [hidden]=\"items.length > 0\" class=\"table-warning\">\n                    <td colspan=\"5\" class=\"text-center\">\n                        Empty.\n                    </td>\n                </tr>\n            </tbody>\n        </table>\n    </div>\n\n    <div class=\"card-footer\">\n\n        <div class=\"float-right\">\n            <select class=\"form-control\">\n                <option value=\"10\">10</option>\n                <option value=\"50\">50</option>\n                <option value=\"100\">100</option>\n            </select>\n        </div>\n\n        <ngb-pagination [class]=\"'mb-0'\" [collectionSize]=\"120\" [page]=\"1\" [maxSize]=\"8\" [rotate]=\"true\" [boundaryLinks]=\"false\"></ngb-pagination>\n\n    </div>\n</div>\n"
+module.exports = "\n<div class=\"card\">\n\n    <div class=\"card-block\">\n\n        <div class=\"float-right\">\n            <a class=\"btn btn-primary\" [routerLink]=\"['/catalog/content_types']\">\n                <i class=\"icon-box\"></i>\n                Типы товаров\n            </a>\n        </div>\n        <h3>\n            <i class=\"icon-layers\"></i>\n            {{title}}\n        </h3>\n\n        <hr>\n\n        <div class=\"float-right\">\n\n            <div ngbDropdown class=\"d-inline-block\">\n                <button class=\"btn btn-outline-info\" id=\"dropdownBasic1\" ngbDropdownToggle>\n                    Массовые дейсвия\n                </button>\n                <div class=\"dropdown-menu\" aria-labelledby=\"dropdownBasic1\">\n                    <button class=\"dropdown-item\">Отключить / включить</button>\n                    <button class=\"dropdown-item\">Удалить</button>\n                </div>\n            </div>\n\n            <button type=\"button\" class=\"btn btn-outline-success\" (click)=\"modalProductOpen()\">\n                <i class=\"icon-plus\"></i>\n                Add product\n            </button>\n\n        </div>\n        <div class=\"float-left\">\n\n            <categories-menu (changeRequest)=\"openCategory($event)\"></categories-menu>\n\n        </div>\n    </div>\n\n    <cmp-table [items]=\"items\" [itemsTotal]=\"100\" [tableFields]=\"tableFields\" (editItemRequest)=\"modalProductOpen($event)\"></cmp-table>\n\n</div>\n"
 
 /***/ }),
 
@@ -1964,6 +1989,107 @@ module.exports = "<div class=\"card\">\n    <div class=\"card-block\">\n\n      
 
 module.exports = __webpack_require__(174);
 
+
+/***/ }),
+
+/***/ 296:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(44);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TableComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var TableComponent = (function () {
+    function TableComponent(router) {
+        this.router = router;
+        this.editItemRequest = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["F" /* EventEmitter */]();
+        this.loading = false;
+        this.selectedIds = [];
+        this.sortDir = 'asc';
+    }
+    TableComponent.prototype.ngOnInit = function () {
+        this.sortBy = this.tableFields[0].name;
+    };
+    TableComponent.prototype.editItem = function (itemId) {
+        this.editItemRequest.emit(itemId);
+    };
+    TableComponent.prototype.selectSortBy = function (fieldName) {
+        if (this.sortBy == fieldName) {
+            this.sortDir = this.sortDir == 'asc' ? 'desc' : 'asc';
+        }
+        else {
+            this.sortBy = fieldName;
+        }
+    };
+    TableComponent.prototype.selectAll = function (event) {
+        this.selectedIds = [];
+        if (event.target.checked) {
+            for (var _i = 0, _a = this.items; _i < _a.length; _i++) {
+                var item = _a[_i];
+                this.selectedIds.push(item.id);
+            }
+        }
+    };
+    TableComponent.prototype.setSelected = function (event, itemId) {
+        var index = this.selectedIds.indexOf(itemId);
+        if (event.target.checked) {
+            if (index == -1) {
+                this.selectedIds.push(itemId);
+            }
+        }
+        else if (index > -1) {
+            this.selectedIds.splice(index, 1);
+        }
+    };
+    TableComponent.prototype.getIsSelected = function (itemId) {
+        return this.selectedIds.lastIndexOf(itemId) > -1;
+    };
+    return TableComponent;
+}());
+__decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["O" /* Input */])(),
+    __metadata("design:type", Array)
+], TableComponent.prototype, "items", void 0);
+__decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["O" /* Input */])(),
+    __metadata("design:type", Array)
+], TableComponent.prototype, "tableFields", void 0);
+__decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["O" /* Input */])(),
+    __metadata("design:type", Number)
+], TableComponent.prototype, "itemsTotal", void 0);
+__decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* Output */])(),
+    __metadata("design:type", Object)
+], TableComponent.prototype, "editItemRequest", void 0);
+TableComponent = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Component */])({
+        selector: 'cmp-table',
+        template: __webpack_require__(297)
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */]) === "function" && _a || Object])
+], TableComponent);
+
+var _a;
+//# sourceMappingURL=table.component.js.map
+
+/***/ }),
+
+/***/ 297:
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"table-responsive\" [class.loading]=\"loading\">\n    <table class=\"table table-striped table-hover mb-0\">\n        <thead>\n            <tr>\n                <th>\n                    <label class=\"custom-control custom-checkbox\">\n                        <input type=\"checkbox\" class=\"custom-control-input\" (click)=\"selectAll($event)\">\n                        <span class=\"custom-control-indicator\"></span>\n                    </label>\n                </th>\n                <th *ngFor=\"let tableField of tableFields; let index=index\">\n                    <button type=\"button\" class=\"btn btn-link\" (click)=\"selectSortBy(tableField.name)\">\n                        {{tableField.title}}\n                        <i class=\"icon-arrow-down\" *ngIf=\"tableField.name == sortBy && sortDir == 'asc'\"></i>\n                        <i class=\"icon-arrow-up\" *ngIf=\"tableField.name == sortBy && sortDir == 'desc'\"></i>\n                    </button>\n                </th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr class=\"show-on-hover-parent\" *ngFor=\"let item of items\">\n                <td>\n                    <label class=\"custom-control custom-checkbox\">\n                        <input type=\"checkbox\" class=\"custom-control-input\" [checked]=\"getIsSelected(item.id)\" (click)=\"setSelected($event, item.id)\">\n                        <span class=\"custom-control-indicator\"></span>\n                    </label>\n                </td>\n                <td *ngFor=\"let tableField of tableFields; let index=index\">\n                    <div class=\"relative\" *ngIf=\"index == tableFields.length - 1\">\n                        <div class=\"show-on-hover no-wrap\">\n                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" (click)=\"editItem(item.id)\" ngbTooltip=\"Edit\">\n                                <i class=\"icon-pencil\"></i>\n                            </button>\n                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" ngbTooltip=\"Copy\">\n                                <i class=\"icon-stack\"></i>\n                            </button>\n                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" ngbTooltip=\"Delete\">\n                                <i class=\"icon-cross\"></i>\n                            </button>\n                        </div>\n                    </div>\n                    {{item[tableField.name]}}\n\n                    <!--i class=\"big text-success icon-circle-check\" [hidden]=\"!item.is_active\"></i>\n                    <i class=\"big text-muted icon-circle-cross\" [hidden]=\"item.is_active\"></i-->\n                </td>\n            </tr>\n        <tr [hidden]=\"items.length > 0\" class=\"table-warning\">\n            <td colspan=\"5\" class=\"text-center\">\n                Empty.\n            </td>\n        </tr>\n        </tbody>\n    </table>\n</div>\n\n<div class=\"card-footer\">\n\n    <div class=\"float-right\">\n        <select class=\"form-control\">\n            <option value=\"10\">10</option>\n            <option value=\"50\">50</option>\n            <option value=\"100\">100</option>\n        </select>\n    </div>\n\n    <ngb-pagination [class]=\"'mb-0'\" [collectionSize]=\"120\" [page]=\"1\" [maxSize]=\"8\" [rotate]=\"true\" [boundaryLinks]=\"false\"></ngb-pagination>\n\n</div>"
 
 /***/ }),
 

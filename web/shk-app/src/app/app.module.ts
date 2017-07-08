@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, enableProdMode } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
@@ -13,6 +13,7 @@ import { ContentTypesComponent, ContentTypeModalContent } from './content_types.
 import { StatisticsComponent } from './stat.component';
 import { SettingsComponent } from './settings.component';
 import { ListRecursiveComponent } from './list-recursive.component';
+import { TableComponent } from './table.component';
 
 import { filterFieldByGroup } from "./filter-field-by-group.pipe";
 
@@ -23,7 +24,6 @@ import { AppRoutingModule }     from './app-routing.module';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-//enableProdMode();
 @NgModule({
     imports: [
         BrowserModule,
@@ -48,6 +48,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
         ConfirmModalContent,
         filterFieldByGroup,
         ListRecursiveComponent,
+        TableComponent,
         CategoriesListComponent
     ],
     providers: [ ProductsService, ContentTypesService, CategoriesService ],

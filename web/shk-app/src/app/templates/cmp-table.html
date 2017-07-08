@@ -1,0 +1,69 @@
+<div class="table-responsive" [class.loading]="loading">
+    <table class="table table-striped table-hover mb-0">
+        <thead>
+            <tr>
+                <th>
+                    <label class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" (click)="selectAll($event)">
+                        <span class="custom-control-indicator"></span>
+                    </label>
+                </th>
+                <th *ngFor="let tableField of tableFields; let index=index">
+                    <button type="button" class="btn btn-link" (click)="selectSortBy(tableField.name)">
+                        {{tableField.title}}
+                        <i class="icon-arrow-down" *ngIf="tableField.name == sortBy && sortDir == 'asc'"></i>
+                        <i class="icon-arrow-up" *ngIf="tableField.name == sortBy && sortDir == 'desc'"></i>
+                    </button>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="show-on-hover-parent" *ngFor="let item of items">
+                <td>
+                    <label class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" [checked]="getIsSelected(item.id)" (click)="setSelected($event, item.id)">
+                        <span class="custom-control-indicator"></span>
+                    </label>
+                </td>
+                <td *ngFor="let tableField of tableFields; let index=index">
+                    <div class="relative" *ngIf="index == tableFields.length - 1">
+                        <div class="show-on-hover no-wrap">
+                            <button type="button" class="btn btn-secondary btn-sm" (click)="editItem(item.id)" ngbTooltip="Edit">
+                                <i class="icon-pencil"></i>
+                            </button>
+                            <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Copy">
+                                <i class="icon-stack"></i>
+                            </button>
+                            <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Delete">
+                                <i class="icon-cross"></i>
+                            </button>
+                        </div>
+                    </div>
+                    {{item[tableField.name]}}
+
+                    <!--i class="big text-success icon-circle-check" [hidden]="!item.is_active"></i>
+                    <i class="big text-muted icon-circle-cross" [hidden]="item.is_active"></i-->
+                </td>
+            </tr>
+        <tr [hidden]="items.length > 0" class="table-warning">
+            <td colspan="5" class="text-center">
+                Empty.
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="card-footer">
+
+    <div class="float-right">
+        <select class="form-control">
+            <option value="10">10</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+        </select>
+    </div>
+
+    <ngb-pagination [class]="'mb-0'" [collectionSize]="120" [page]="1" [maxSize]="8" [rotate]="true" [boundaryLinks]="false"></ngb-pagination>
+
+</div>

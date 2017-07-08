@@ -24,6 +24,30 @@ export class CatalogComponent implements OnInit {
     items: Product[] = [];
     selectedIds: number[] = [];
 
+    //TODO: get from settings
+    tableFields = [
+        {
+            name: 'id',
+            title: 'ID'
+        },
+        {
+            name: 'name',
+            title: 'Системное имя'
+        },
+        {
+            name: 'title',
+            title: 'Название'
+        },
+        {
+            name: 'price',
+            title: 'Цена'
+        },
+        {
+            name: 'published',
+            title: 'Статус'
+        }
+    ];
+
     constructor(
         public router: Router,
         private modalService: NgbModal,

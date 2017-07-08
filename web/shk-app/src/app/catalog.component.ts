@@ -29,23 +29,28 @@ export class CatalogComponent implements OnInit {
     tableFields = [
         {
             name: 'id',
-            title: 'ID'
+            title: 'ID',
+            output_type: 'text'
         },
         {
             name: 'name',
-            title: 'Системное имя'
+            title: 'Системное имя',
+            output_type: 'text'
         },
         {
             name: 'title',
-            title: 'Название'
+            title: 'Название',
+            output_type: 'text'
         },
         {
             name: 'price',
-            title: 'Цена'
+            title: 'Цена',
+            output_type: 'number'
         },
         {
             name: 'published',
-            title: 'Статус'
+            title: 'Статус',
+            output_type: 'boolean'
         }
     ];
 

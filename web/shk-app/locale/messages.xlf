@@ -5,18 +5,50 @@
       <trans-unit id="4e7f5f07ae8e67878f35b34bcee10e39300ff41a" datatype="html">
         <source>Orders</source>
         <target/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.component.ts</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="61e0f26d843eec0b33ff475e111b0c2f7a80b835" datatype="html">
         <source>Statistics</source>
         <target/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.component.ts</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="532152365f64d8738343423767f1130c1a451e78" datatype="html">
         <source>Catalog</source>
         <target/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.component.ts</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="121cc5391cd2a5115bc2b3160379ee5b36cd7716" datatype="html">
         <source>Settings</source>
         <target/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.component.ts</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1f332ec66f3bc8d943c248091be7f92772ba280f" datatype="html">
+        <source>Expand</source>
+        <target/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/content_types.component.ts</context>
+          <context context-type="linenumber">330</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e8bcb762b48cf52fbea66ce9c4f6b970b99a80fd" datatype="html">
+        <source>Collapse</source>
+        <target/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/content_types.component.ts</context>
+          <context context-type="linenumber">334</context>
+        </context-group>
       </trans-unit>
     </body>
   </file>

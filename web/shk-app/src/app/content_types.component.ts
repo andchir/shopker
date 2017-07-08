@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { NgbModal, NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { ContentTypesService } from './services/content_types.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ContentField } from './models/content_field.model';
@@ -11,7 +11,7 @@ import * as _ from "lodash";
 @Component({
     selector: 'content-type-modal-content',
     templateUrl: 'templates/modal_content_types.html',
-    providers: [ ContentTypesService ]
+    providers: [ ContentTypesService, NgbTooltipConfig ]
 })
 export class ContentTypeModalContent implements OnInit {
     @Input() modalTitle;
@@ -86,9 +86,11 @@ export class ContentTypeModalContent implements OnInit {
     constructor(
         private fb: FormBuilder,
         private contentTypesService: ContentTypesService,
-        public activeModal: NgbActiveModal
+        public activeModal: NgbActiveModal,
+        tooltipConfig: NgbTooltipConfig
     ) {
-
+        tooltipConfig.placement = 'bottom';
+        tooltipConfig.container = 'body';
     }
 
     /** On initialize */
@@ -127,8 +129,9 @@ export class ContentTypeModalContent implements OnInit {
     }
 
     /** Element display toggle */
-    displayToggle(element: HTMLElement){
-        element.style.display = element.style.display == 'none' ? 'block' : 'none';
+    displayToggle(element: HTMLElement, display?: boolean): void {
+        display = display || element.style.display == 'none';
+        element.style.display = display ? 'block' : 'none';
     }
 
     /**
@@ -136,7 +139,7 @@ export class ContentTypeModalContent implements OnInit {
      * @param type
      * @param data
      */
-    onValueChanged(type: string, data?: any){
+    onValueChanged(type: string, data?: any): void{
         if (!this.contentTypeForm) { return; }
         const form = type == 'contentType'
             ? this.contentTypeForm
@@ -381,23 +384,26 @@ export class ContentTypesComponent implements OnInit {
     selectedIds: string[] = [];
 
     //TODO: get from settings
-    //TODO: add field format option
     tableFields = [
         {
             name: 'name',
-            title: 'Системное имя'
+            title: 'Системное имя',
+            output_type: 'text'
         },
         {
             name: 'title',
-            title: 'Название'
+            title: 'Название',
+            output_type: 'text'
         },
         {
             name: 'collection',
-            title: 'Коллекция'
+            title: 'Коллекция',
+            output_type: 'text'
         },
         {
             name: 'published',
-            title: 'Статус'
+            title: 'Статус',
+            output_type: 'boolean'
         }
     ];
 
@@ -439,6 +445,10 @@ export class ContentTypesComponent implements OnInit {
         }, (reason) => {
             //console.log( 'reason', reason );
         });
+    }
+
+    copyItem( itemId: number ): void {
+        this.modalOpen( itemId, true );
     }
 
     modalClose(): void {

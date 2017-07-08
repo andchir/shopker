@@ -11,6 +11,8 @@ export class TableComponent implements OnInit {
     @Input() tableFields: any[];
     @Input() itemsTotal: number;
     @Output() editItemRequest = new EventEmitter();
+    @Output() copyItemRequest = new EventEmitter();
+    @Output() deleteItemRequest = new EventEmitter();
     loading: boolean = false;
     selectedIds: string[] = [];
     sortBy: string;
@@ -28,6 +30,14 @@ export class TableComponent implements OnInit {
         this.editItemRequest.emit( itemId );
     }
 
+    copyItem(itemId: number): void {
+        this.copyItemRequest.emit( itemId );
+    }
+
+    deleteItem(itemId: number): void {
+        this.deleteItemRequest.emit( itemId );
+    }
+
     selectSortBy(fieldName: string): void {
         if( this.sortBy == fieldName ){
             this.sortDir = this.sortDir == 'asc' ? 'desc' : 'asc';
@@ -36,7 +46,7 @@ export class TableComponent implements OnInit {
         }
     }
 
-    selectAll( event ): void{
+    selectAll( event ): void {
         this.selectedIds = [];
         if( event.target.checked ){
             for( let item of this.items ){

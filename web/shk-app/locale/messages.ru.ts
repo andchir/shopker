@@ -19,6 +19,14 @@ export const TRANSLATION_RU = `
                 <source>Settings</source>
                 <target>Настройки</target>
             </trans-unit>
+            <trans-unit id="1f332ec66f3bc8d943c248091be7f92772ba280f" datatype="html">
+                <source>Expand</source>
+                <target>Развернуть</target>
+            </trans-unit>
+            <trans-unit id="e8bcb762b48cf52fbea66ce9c4f6b970b99a80fd" datatype="html">
+                <source>Collapse</source>
+                <target>Свернуть</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

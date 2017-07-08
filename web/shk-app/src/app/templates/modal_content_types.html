@@ -186,11 +186,13 @@
                                 <div class="input-group">
                                     <select class="form-control form-control-sm" name="field_output_type" formControlName="output_type">
                                         <option value="text">Текст</option>
+                                        <option value="number">Число</option>
                                         <option value="select">Выпадающий список</option>
                                         <option value="checkbox">Чекбокс</option>
                                         <option value="radio">Переключатель</option>
                                         <option value="table">Таблица</option>
                                         <option value="image">Картинка</option>
+                                        <option value="boolean">Да/Нет</option>
                                     </select>
                                     <div class="input-group-btn">
                                         <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Options" (click)="displayToggle(outputTypeOptionsBlock)">
@@ -297,11 +299,11 @@
                                 <i class="icon-plus"></i>
                                 Add field
                             </button>
-                            <button type="button" class="btn btn-sm btn-success btn-wide" (click)="submitField()" [hidden]="action != 'edit_field'">
+                            <button type="button" class="btn btn-sm btn-success btn-wide" (click)="displayToggle(fieldsBlock, true); submitField()" [hidden]="action != 'edit_field'">
                                 <i class="icon-check"></i>
                                 Save field
                             </button>
-                            <button type="button" class="btn btn-sm btn-secondary btn-wide" (click)="editFieldCancel()">
+                            <button type="button" class="btn btn-sm btn-secondary btn-wide" (click)="displayToggle(fieldsBlock, true); editFieldCancel()">
                                 Cancel
                             </button>
                         </div>
@@ -315,54 +317,71 @@
 
         <div class="form-group row mt-3">
             <div class="col-12">
+
                 <label class="label-filled">
                     Поля
                 </label>
 
-                <table class="table table-striped table-hover table-bordered mb-0">
-                    <thead>
-                        <tr>
-                            <th>Название</th>
-                            <th>Системное имя</th>
-                            <th>Тип ввода</th>
-                            <th>Группа</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="show-on-hover-parent" *ngFor="let item of model.fields">
-                            <td>
-                                {{item.title}}
-                            </td>
-                            <td>
-                                {{item.name}}
-                            </td>
-                            <td>
-                                {{item.input_type}}
-                            </td>
-                            <td>
-                                <div class="relative">
-                                    <div class="show-on-hover">
-                                        <button type="button" class="btn btn-secondary btn-sm" (click)="editField(item)" [hidden]="item.name == currentFieldName" ngbTooltip="Edit">
-                                            <i class="icon-pencil"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-secondary btn-sm" (click)="copyField(item)" ngbTooltip="Copy">
-                                            <i class="icon-stack"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-secondary btn-sm" (click)="deleteField(item)" [hidden]="item.name == currentFieldName" ngbTooltip="Delete">
-                                            <i class="icon-cross"></i>
-                                        </button>
+                <hr class="mt-0 mb-0">
+                <div class="text-center mb-2" style="margin-top: -0.8rem;">
+                    <button type="button" class="btn btn-secondary btn-sm" [ngSwitch]="fieldsBlock.style.display" (click)="displayToggle(fieldsBlock)">
+                        <span *ngSwitchCase="'none'">
+                            <i class="icon-plus"></i>
+                            <span i18n>Expand</span>
+                        </span>
+                        <span *ngSwitchCase="'block'">
+                            <i class="icon-minus"></i>
+                            <span i18n>Collapse</span>
+                        </span>
+                    </button>
+                </div>
+
+                <div #fieldsBlock style="display: block;">
+                    <table class="table table-striped table-hover table-bordered mb-0">
+                        <thead>
+                            <tr>
+                                <th>Название</th>
+                                <th>Системное имя</th>
+                                <th>Тип ввода</th>
+                                <th>Группа</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="show-on-hover-parent" *ngFor="let item of model.fields">
+                                <td>
+                                    {{item.title}}
+                                </td>
+                                <td>
+                                    {{item.name}}
+                                </td>
+                                <td>
+                                    {{item.input_type}}
+                                </td>
+                                <td>
+                                    <div class="relative">
+                                        <div class="show-on-hover">
+                                            <button type="button" class="btn btn-secondary btn-sm" (click)="displayToggle(fieldsBlock); editField(item)" [hidden]="item.name == currentFieldName" ngbTooltip="Edit">
+                                                <i class="icon-pencil"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-secondary btn-sm" (click)="displayToggle(fieldsBlock); copyField(item)" ngbTooltip="Copy">
+                                                <i class="icon-stack"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-secondary btn-sm" (click)="deleteField(item)" [hidden]="item.name == currentFieldName" ngbTooltip="Delete">
+                                                <i class="icon-cross"></i>
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                                {{item.group}}
-                            </td>
-                        </tr>
-                        <tr [hidden]="model.fields.length > 0" class="table-warning">
-                            <td colspan="4" class="text-center">
-                                Empty
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                                    {{item.group}}
+                                </td>
+                            </tr>
+                            <tr [hidden]="model.fields.length > 0" class="table-warning">
+                                <td colspan="4" class="text-center">
+                                    Empty
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
                 <div class="alert alert-danger mt-3 mb-0" [hidden]="!errorMessage">
                     <button type="button" class="close" (click)="errorMessage = ''">

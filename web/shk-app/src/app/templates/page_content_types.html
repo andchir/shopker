@@ -33,7 +33,9 @@
         </div>
     </div>
 
-    <div class="table-responsive" [class.loading]="loading">
+    <cmp-table [items]="items" [itemsTotal]="100" [tableFields]="tableFields" (editItemRequest)="modalOpen($event)"></cmp-table>
+
+    <!--div class="table-responsive" [class.loading]="loading">
         <table class="table table-striped table-hover mb-0">
             <thead>
                 <tr>
@@ -116,19 +118,19 @@
                 </tr>
             </tbody>
         </table>
-    </div>
+    </div-->
 
-    <div class="card-footer">
+    <!--div-- class="card-footer">
 
         <div class="float-right">
             <select class="form-control">
-                <!--option value="10">10</option>
+                <option value="10">10</option>
                 <option value="50">50</option>
-                <option value="100">100</option-->
+                <option value="100">100</option>
             </select>
         </div>
 
         <ngb-pagination [class]="'mb-0'" [collectionSize]="120" [page]="1" [maxSize]="8" [rotate]="true" [boundaryLinks]="false"></ngb-pagination>
 
-    </div>
+    </div-->
 </div>

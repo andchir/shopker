@@ -380,6 +380,27 @@ export class ContentTypesComponent implements OnInit {
     loading: boolean = false;
     selectedIds: string[] = [];
 
+    //TODO: get from settings
+    //TODO: add field format option
+    tableFields = [
+        {
+            name: 'name',
+            title: 'Системное имя'
+        },
+        {
+            name: 'title',
+            title: 'Название'
+        },
+        {
+            name: 'collection',
+            title: 'Коллекция'
+        },
+        {
+            name: 'published',
+            title: 'Статус'
+        }
+    ];
+
     constructor(
         private contentTypesService: ContentTypesService,
         private modalService: NgbModal,

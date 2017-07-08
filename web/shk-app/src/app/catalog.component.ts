@@ -25,6 +25,7 @@ export class CatalogComponent implements OnInit {
     selectedIds: number[] = [];
 
     //TODO: get from settings
+    //TODO: add field format option
     tableFields = [
         {
             name: 'id',

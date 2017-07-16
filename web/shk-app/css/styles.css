@@ -8,7 +8,8 @@
 .no-wrap { white-space: nowrap; }
 .mwidth-80 { max-width: 80px; }
 .m-auto { margin-left: auto; margin-right: auto; }
-.card-block:not(:first-child) { border-top: 1px solid rgba(0,0,0,.1); }
+.border-t { border-top: 1px solid rgba(0,0,0,0.1); }
+.border-b { border-bottom: 1px solid rgba(0,0,0,0.1); }
 
 /* shadow */
 .shadow { box-shadow: 0 0 20px rgba(0,0,0,0.3); }

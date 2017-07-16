@@ -6,6 +6,11 @@
 .big { font-size: 120%; }
 .tooltip { pointer-events: none; }
 .no-wrap { white-space: nowrap; }
+.mwidth-80 { max-width: 80px; }
+.m-auto { margin-left: auto; margin-right: auto; }
+
+/* shadow */
+.shadow { box-shadow: 0 0 20px rgba(0,0,0,0.3); }
 
 /* form-control */
 input[type=text].form-control,
@@ -25,7 +30,7 @@ select.form-control:hover { box-shadow: 0 0 11px rgba(0, 0, 0, 0.3); }
 
 /* table */
 .table-divided {  }
-.table-divided thead th { position: relative; }
+.table-divided thead th { position: relative; text-align: center; color: #727272; }
 .table-divided thead th:after { content: ''; display: block; width: 2px; height: 20px; position: absolute; top: 50%; right: 0; margin-top: -10px; background-color: #ddd; }
 .table-divided thead th:last-child:after { display: none; }
 
@@ -68,7 +73,7 @@ select.form-control:hover { box-shadow: 0 0 11px rgba(0, 0, 0, 0.3); }
 .pagination { margin-bottom: 0; }
 
 /* dropdown-menu */
-.dropdown-menu { top: 97%; }
+.dropdown-menu { top: 97%; box-shadow: 0 0 20px rgba(0,0,0,0.3); }
 .dropdown-menu .dropdown-menu { left: 98%; bottom: auto; top: 0; }
 .dropdown-menu .dropdown-toggle:after { position: absolute; top: 12px; right: 10px; border-style: solid; border-width: .3em 0 .3em .3em; border-color: transparent transparent transparent #000000; }
 .dropdown-item { cursor: pointer; }
@@ -76,8 +81,8 @@ select.form-control:hover { box-shadow: 0 0 11px rgba(0, 0, 0, 0.3); }
 .dropdown-toggle-hover + .dropdown-menu:hover { display: block; }
 
 /* dropdown-menu-hover */
-.dropdown-menu-hover { width: 100%; position: static; display: block; border: 0; }
-.dropdown-menu-hover .dropdown-menu-hover { width: 260px; display: none; position: absolute; border: 1px solid rgba(0,0,0,.15); }
+.dropdown-menu-hover { width: 100%; position: static; display: block; border: 0; box-shadow: none; }
+.dropdown-menu-hover .dropdown-menu-hover { width: 260px; display: none; position: absolute; border: 1px solid rgba(0,0,0,.15); box-shadow: 0 0 20px rgba(0,0,0,0.3); }
 .dropdown-menu-hover .dropdown-item { position: relative; padding: 0; }
 .dropdown-menu-hover .dropdown-item:focus:not(.active),
 .dropdown-menu-hover .dropdown-item:active:not(.active) { background-color: rgba(0,0,0,.1); }
@@ -86,5 +91,3 @@ select.form-control:hover { box-shadow: 0 0 11px rgba(0, 0, 0, 0.3); }
 .dropdown-menu-hover .dropdown-item.active > a { color: #fff; }
 .dropdown-menu-hover .current-level { background-color: rgba(0,0,0,.1); }
 
-/* shadow */
-.shadow { box-shadow: 0 0 20px rgba(0,0,0,0.3); }

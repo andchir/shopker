@@ -17,5 +17,7 @@
             </a>
         </div>
 
+        <cmp-table [items]="items" [itemsTotal]="100" [tableFields]="tableFields" (editItemRequest)="modalItemOpen($event)"></cmp-table>
+
     </div>
 </div>

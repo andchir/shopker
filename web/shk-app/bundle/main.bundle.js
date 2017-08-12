@@ -2170,15 +2170,35 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 var FieldTypesComponent = (function () {
     function FieldTypesComponent(tooltipConfig) {
-        this.items = [];
         this.title = 'Типы полей';
         this.loading = false;
+        this.items = [];
         this.selectedIds = [];
+        this.tableFields = [
+            {
+                name: 'id',
+                title: 'ID',
+                output_type: 'text'
+            },
+            {
+                name: 'name',
+                title: 'Системное имя',
+                output_type: 'text'
+            },
+            {
+                name: 'title',
+                title: 'Название',
+                output_type: 'text'
+            }
+        ];
         tooltipConfig.placement = 'bottom';
         tooltipConfig.container = 'body';
     }
     /** On initialize */
     FieldTypesComponent.prototype.ngOnInit = function () {
+    };
+    FieldTypesComponent.prototype.modalItemOpen = function () {
+        console.log('modalItemOpen');
     };
     return FieldTypesComponent;
 }());
@@ -2198,7 +2218,7 @@ var _a;
 /***/ 299:
 /***/ (function(module, exports) {
 
-module.exports = "\n<div class=\"card\">\n\n    <div class=\"card-block\">\n\n        <h3>\n            <i class=\"icon-toggle\"></i>\n            {{title}}\n        </h3>\n\n        <hr>\n\n        <div class=\"float-left\">\n            <a class=\"btn btn-secondary\" [routerLink]=\"['/catalog']\">\n                <i class=\"icon-arrow-left\"></i>\n                Каталог\n            </a>\n        </div>\n\n    </div>\n</div>\n"
+module.exports = "\n<div class=\"card\">\n\n    <div class=\"card-block\">\n\n        <h3>\n            <i class=\"icon-toggle\"></i>\n            {{title}}\n        </h3>\n\n        <hr>\n\n        <div class=\"float-left\">\n            <a class=\"btn btn-secondary\" [routerLink]=\"['/catalog']\">\n                <i class=\"icon-arrow-left\"></i>\n                Каталог\n            </a>\n        </div>\n\n        <cmp-table [items]=\"items\" [itemsTotal]=\"100\" [tableFields]=\"tableFields\" (editItemRequest)=\"modalItemOpen($event)\"></cmp-table>\n\n    </div>\n</div>\n"
 
 /***/ }),
 

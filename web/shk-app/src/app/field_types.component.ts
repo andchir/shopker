@@ -14,11 +14,29 @@ import * as _ from "lodash";
 })
 export class FieldTypesComponent implements OnInit {
     errorMessage: string;
-    items: ContentType[] = [];
     title: string = 'Типы полей';
     modalRef: NgbModalRef;
     loading: boolean = false;
+    items: any[] = [];
     selectedIds: string[] = [];
+
+    tableFields = [
+        {
+            name: 'id',
+            title: 'ID',
+            output_type: 'text'
+        },
+        {
+            name: 'name',
+            title: 'Системное имя',
+            output_type: 'text'
+        },
+        {
+            name: 'title',
+            title: 'Название',
+            output_type: 'text'
+        }
+    ];
 
     constructor(
         tooltipConfig: NgbTooltipConfig
@@ -29,6 +47,12 @@ export class FieldTypesComponent implements OnInit {
 
     /** On initialize */
     ngOnInit(): void {
+
+    }
+
+    modalItemOpen(): void {
+
+        console.log('modalItemOpen');
 
     }
 

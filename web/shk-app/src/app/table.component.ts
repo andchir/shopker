@@ -46,28 +46,28 @@ export class TableComponent implements OnInit {
         }
     }
 
-    selectAll( event ): void {
+    selectAll(event): void {
         this.selectedIds = [];
-        if( event.target.checked ){
-            for( let item of this.items ){
-                this.selectedIds.push( item.id );
+        if(event.target.checked){
+            for(let item of this.items){
+                this.selectedIds.push(item.id);
             }
         }
     }
 
-    setSelected( event, itemId: string ): void{
-        const index = this.selectedIds.indexOf( itemId );
+    setSelected(event, itemId: string): void{
+        const index = this.selectedIds.indexOf(itemId);
         if( event.target.checked ){
-            if( index == -1 ){
-                this.selectedIds.push( itemId );
+            if(index == -1){
+                this.selectedIds.push(itemId);
             }
         } else if( index > -1 ){
-            this.selectedIds.splice( index, 1 );
+            this.selectedIds.splice(index, 1);
         }
     }
 
-    getIsSelected( itemId: string ): boolean{
-        return this.selectedIds.lastIndexOf( itemId ) > -1;
+    getIsSelected(itemId: string): boolean{
+        return this.selectedIds.lastIndexOf(itemId) > -1;
     }
 
 }

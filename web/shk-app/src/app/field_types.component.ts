@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, Injectable, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { ContentTypesService } from './services/content_types.service';
@@ -8,24 +8,53 @@ import { ContentType } from './models/content_type.model';
 import { ConfirmModalContent } from './app.component';
 import * as _ from "lodash";
 
+import { DataService } from './services/data-service.abstract';
+import { PageTableAbstractComponent, ModalContentAbstractComponent } from './page-table.abstract';
+
+@Injectable()
+export class FieldTypesService extends DataService {
+
+
+
+}
+
+@Component({
+    selector: 'field-type-modal-content',
+    templateUrl: 'templates/modal_field_types.html',
+    providers: [ FieldTypesService ]
+})
+export class FieldTypeModalContent extends ModalContentAbstractComponent {
+
+    constructor(
+        fb: FormBuilder,
+        dataService: FieldTypesService,
+        activeModal: NgbActiveModal,
+        tooltipConfig: NgbTooltipConfig
+    ) {
+        super(fb, dataService, activeModal, tooltipConfig);
+    }
+
+}
+
 @Component({
     selector: 'shk-field-types',
-    templateUrl: 'templates/page_field_types.html'
+    templateUrl: 'templates/page_field_types.html',
+    providers: [ FieldTypesService ]
 })
-export class FieldTypesComponent implements OnInit {
-    errorMessage: string;
-    title: string = 'Типы полей';
-    modalRef: NgbModalRef;
-    loading: boolean = false;
-    items: any[] = [];
-    selectedIds: string[] = [];
+export class FieldTypesComponent extends PageTableAbstractComponent {
+    title: string = 'Field types';
+
+    constructor(
+        //private fb: FormBuilder,
+        dataService: FieldTypesService,
+        activeModal: NgbActiveModal,
+        modalService: NgbModal,
+        titleService: Title
+    ) {
+        super(dataService, activeModal, modalService, titleService);
+    }
 
     tableFields = [
-        {
-            name: 'id',
-            title: 'ID',
-            output_type: 'text'
-        },
         {
             name: 'name',
             title: 'Системное имя',
@@ -38,22 +67,8 @@ export class FieldTypesComponent implements OnInit {
         }
     ];
 
-    constructor(
-        tooltipConfig: NgbTooltipConfig
-    ) {
-        tooltipConfig.placement = 'bottom';
-        tooltipConfig.container = 'body';
-    }
-
-    /** On initialize */
-    ngOnInit(): void {
-
-    }
-
-    modalItemOpen(): void {
-
-        console.log('modalItemOpen');
-
+    getModalContent(){
+        return FieldTypeModalContent;
     }
 
 }

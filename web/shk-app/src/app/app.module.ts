@@ -10,7 +10,7 @@ import { CatalogComponent } from './catalog.component';
 import { ProductModalContent } from './product.component';
 import { CategoriesMenuComponent, CategoriesModalComponent, CategoriesListComponent } from './categories.component';
 import { ContentTypesComponent, ContentTypeModalContent } from './content_types.component';
-import { FieldTypesComponent } from './field_types.component';
+import { FieldTypesComponent, FieldTypeModalContent } from './field_types.component';
 import { StatisticsComponent } from './stat.component';
 import { SettingsComponent } from './settings.component';
 import { ListRecursiveComponent } from './list-recursive.component';
@@ -23,7 +23,7 @@ import { ContentTypesService } from './services/content_types.service';
 import { CategoriesService } from './services/categories.service';
 import { AppRoutingModule }     from './app-routing.module';
 
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbActiveModal, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
     imports: [
@@ -44,17 +44,25 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
         FieldTypesComponent,
         StatisticsComponent,
         SettingsComponent,
-        ProductModalContent,
-        ContentTypeModalContent,
-        CategoriesModalComponent,
-        ConfirmModalContent,
         filterFieldByGroup,
         ListRecursiveComponent,
         TableComponent,
-        CategoriesListComponent
+        CategoriesListComponent,
+
+        ConfirmModalContent,
+        ProductModalContent,
+        ContentTypeModalContent,
+        CategoriesModalComponent,
+        FieldTypeModalContent
     ],
-    providers: [ ProductsService, ContentTypesService, CategoriesService ],
-    entryComponents: [ ConfirmModalContent, ProductModalContent, ContentTypeModalContent, CategoriesModalComponent ],
+    providers: [ ProductsService, ContentTypesService, CategoriesService, NgbActiveModal, NgbTooltipConfig ],
+    entryComponents: [
+        ConfirmModalContent,
+        ProductModalContent,
+        ContentTypeModalContent,
+        CategoriesModalComponent,
+        FieldTypeModalContent
+    ],
     bootstrap: [ AppComponent ]
 })
 export class AppModule { }

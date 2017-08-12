@@ -10,6 +10,7 @@ import { CatalogComponent } from './catalog.component';
 import { ProductModalContent } from './product.component';
 import { CategoriesMenuComponent, CategoriesModalComponent, CategoriesListComponent } from './categories.component';
 import { ContentTypesComponent, ContentTypeModalContent } from './content_types.component';
+import { FieldTypesComponent } from './field_types.component';
 import { StatisticsComponent } from './stat.component';
 import { SettingsComponent } from './settings.component';
 import { ListRecursiveComponent } from './list-recursive.component';
@@ -40,6 +41,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
         CategoriesMenuComponent,
         CatalogComponent,
         ContentTypesComponent,
+        FieldTypesComponent,
         StatisticsComponent,
         SettingsComponent,
         ProductModalContent,

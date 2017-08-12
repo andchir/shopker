@@ -1233,8 +1233,9 @@ var TRANSLATION_RU = "\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<xliff vers
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__orders_component__ = __webpack_require__(144);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__catalog_component__ = __webpack_require__(139);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__content_types_component__ = __webpack_require__(140);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__stat_component__ = __webpack_require__(147);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__settings_component__ = __webpack_require__(146);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__field_types_component__ = __webpack_require__(298);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__stat_component__ = __webpack_require__(147);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__settings_component__ = __webpack_require__(146);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppRoutingModule; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1250,14 +1251,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+
 var routes = [
     { path: '', redirectTo: '/orders', pathMatch: 'full' },
     { path: 'orders', component: __WEBPACK_IMPORTED_MODULE_3__orders_component__["a" /* OrdersComponent */] },
     { path: 'catalog', component: __WEBPACK_IMPORTED_MODULE_4__catalog_component__["a" /* CatalogComponent */] },
     { path: 'catalog/category/:categoryId', component: __WEBPACK_IMPORTED_MODULE_4__catalog_component__["a" /* CatalogComponent */] },
     { path: 'catalog/content_types', component: __WEBPACK_IMPORTED_MODULE_5__content_types_component__["a" /* ContentTypesComponent */] },
-    { path: 'statistics', component: __WEBPACK_IMPORTED_MODULE_6__stat_component__["a" /* StatisticsComponent */] },
-    { path: 'settings', component: __WEBPACK_IMPORTED_MODULE_7__settings_component__["a" /* SettingsComponent */] },
+    { path: 'catalog/field_types', component: __WEBPACK_IMPORTED_MODULE_6__field_types_component__["a" /* FieldTypesComponent */] },
+    { path: 'statistics', component: __WEBPACK_IMPORTED_MODULE_7__stat_component__["a" /* StatisticsComponent */] },
+    { path: 'settings', component: __WEBPACK_IMPORTED_MODULE_8__settings_component__["a" /* SettingsComponent */] },
     { path: '**', component: __WEBPACK_IMPORTED_MODULE_2__not_found_component__["a" /* NotFoundComponent */] }
 ];
 var AppRoutingModule = (function () {
@@ -1291,16 +1294,17 @@ AppRoutingModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__product_component__ = __webpack_require__(145);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__categories_component__ = __webpack_require__(185);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__content_types_component__ = __webpack_require__(140);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__stat_component__ = __webpack_require__(147);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__settings_component__ = __webpack_require__(146);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__list_recursive_component__ = __webpack_require__(141);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__table_component__ = __webpack_require__(190);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__filter_field_by_group_pipe__ = __webpack_require__(186);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__services_products_service__ = __webpack_require__(64);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__services_content_types_service__ = __webpack_require__(39);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__services_categories_service__ = __webpack_require__(63);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__app_routing_module__ = __webpack_require__(183);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__ng_bootstrap_ng_bootstrap__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__field_types_component__ = __webpack_require__(298);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__stat_component__ = __webpack_require__(147);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__settings_component__ = __webpack_require__(146);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__list_recursive_component__ = __webpack_require__(141);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__table_component__ = __webpack_require__(190);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__filter_field_by_group_pipe__ = __webpack_require__(186);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__services_products_service__ = __webpack_require__(64);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__services_content_types_service__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__services_categories_service__ = __webpack_require__(63);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__app_routing_module__ = __webpack_require__(183);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__ng_bootstrap_ng_bootstrap__ = __webpack_require__(24);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1308,6 +1312,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -1341,8 +1346,8 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_2__angular_forms__["a" /* FormsModule */],
             __WEBPACK_IMPORTED_MODULE_2__angular_forms__["b" /* ReactiveFormsModule */],
             __WEBPACK_IMPORTED_MODULE_3__angular_http__["a" /* HttpModule */],
-            __WEBPACK_IMPORTED_MODULE_19__app_routing_module__["a" /* AppRoutingModule */],
-            __WEBPACK_IMPORTED_MODULE_20__ng_bootstrap_ng_bootstrap__["a" /* NgbModule */].forRoot()
+            __WEBPACK_IMPORTED_MODULE_20__app_routing_module__["a" /* AppRoutingModule */],
+            __WEBPACK_IMPORTED_MODULE_21__ng_bootstrap_ng_bootstrap__["a" /* NgbModule */].forRoot()
         ],
         declarations: [
             __WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* AppComponent */],
@@ -1351,18 +1356,19 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_9__categories_component__["a" /* CategoriesMenuComponent */],
             __WEBPACK_IMPORTED_MODULE_7__catalog_component__["a" /* CatalogComponent */],
             __WEBPACK_IMPORTED_MODULE_10__content_types_component__["a" /* ContentTypesComponent */],
-            __WEBPACK_IMPORTED_MODULE_11__stat_component__["a" /* StatisticsComponent */],
-            __WEBPACK_IMPORTED_MODULE_12__settings_component__["a" /* SettingsComponent */],
+            __WEBPACK_IMPORTED_MODULE_11__field_types_component__["a" /* FieldTypesComponent */],
+            __WEBPACK_IMPORTED_MODULE_12__stat_component__["a" /* StatisticsComponent */],
+            __WEBPACK_IMPORTED_MODULE_13__settings_component__["a" /* SettingsComponent */],
             __WEBPACK_IMPORTED_MODULE_8__product_component__["a" /* ProductModalContent */],
             __WEBPACK_IMPORTED_MODULE_10__content_types_component__["b" /* ContentTypeModalContent */],
             __WEBPACK_IMPORTED_MODULE_9__categories_component__["b" /* CategoriesModalComponent */],
             __WEBPACK_IMPORTED_MODULE_4__app_component__["b" /* ConfirmModalContent */],
-            __WEBPACK_IMPORTED_MODULE_15__filter_field_by_group_pipe__["a" /* filterFieldByGroup */],
-            __WEBPACK_IMPORTED_MODULE_13__list_recursive_component__["a" /* ListRecursiveComponent */],
-            __WEBPACK_IMPORTED_MODULE_14__table_component__["a" /* TableComponent */],
+            __WEBPACK_IMPORTED_MODULE_16__filter_field_by_group_pipe__["a" /* filterFieldByGroup */],
+            __WEBPACK_IMPORTED_MODULE_14__list_recursive_component__["a" /* ListRecursiveComponent */],
+            __WEBPACK_IMPORTED_MODULE_15__table_component__["a" /* TableComponent */],
             __WEBPACK_IMPORTED_MODULE_9__categories_component__["c" /* CategoriesListComponent */]
         ],
-        providers: [__WEBPACK_IMPORTED_MODULE_16__services_products_service__["a" /* ProductsService */], __WEBPACK_IMPORTED_MODULE_17__services_content_types_service__["a" /* ContentTypesService */], __WEBPACK_IMPORTED_MODULE_18__services_categories_service__["a" /* CategoriesService */]],
+        providers: [__WEBPACK_IMPORTED_MODULE_17__services_products_service__["a" /* ProductsService */], __WEBPACK_IMPORTED_MODULE_18__services_content_types_service__["a" /* ContentTypesService */], __WEBPACK_IMPORTED_MODULE_19__services_categories_service__["a" /* CategoriesService */]],
         entryComponents: [__WEBPACK_IMPORTED_MODULE_4__app_component__["b" /* ConfirmModalContent */], __WEBPACK_IMPORTED_MODULE_8__product_component__["a" /* ProductModalContent */], __WEBPACK_IMPORTED_MODULE_10__content_types_component__["b" /* ContentTypeModalContent */], __WEBPACK_IMPORTED_MODULE_9__categories_component__["b" /* CategoriesModalComponent */]],
         bootstrap: [__WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* AppComponent */]]
     })
@@ -2052,13 +2058,6 @@ module.exports = module.exports.toString();
 
 /***/ }),
 
-/***/ 246:
-/***/ (function(module, exports) {
-
-module.exports = "<div>\n\n    <div class=\"card-navbar\">\n        <div class=\"btn-group\" role=\"group\" aria-label=\"First group\">\n            <a class=\"btn btn-outline-primary\" [routerLink]=\"['/orders']\" routerLinkActive=\"active\">\n                <i class=\"icon-bag\"></i>\n                <span class=\"hidden-xs-down\" i18n>Orders</span>\n            </a>\n            <a class=\"btn btn-outline-primary\" [routerLink]=\"['/statistics']\" routerLinkActive=\"active\">\n                <i class=\"icon-bar-graph-2\"></i>\n                <span class=\"hidden-xs-down\" i18n>Statistics</span>\n            </a>\n            <a class=\"btn btn-outline-primary\" [routerLink]=\"['/catalog']\" routerLinkActive=\"active\">\n                <i class=\"icon-layers\"></i>\n                <span class=\"hidden-xs-down\" i18n>Catalog</span>\n            </a>\n            <a class=\"btn btn-outline-primary\" [routerLink]=\"['/settings']\" routerLinkActive=\"active\">\n                <i class=\"icon-cog\"></i>\n                <span class=\"hidden-xs-down\" i18n>Settings</span>\n            </a>\n        </div>\n    </div>\n\n    <router-outlet></router-outlet>\n\n</div>"
-
-/***/ }),
-
 /***/ 247:
 /***/ (function(module, exports) {
 
@@ -2104,7 +2103,7 @@ module.exports = "<div class=\"modal-header d-block\">\n    <div class=\"d-block
 /***/ 253:
 /***/ (function(module, exports) {
 
-module.exports = "\n<div class=\"card\">\n\n    <div class=\"card-block\">\n\n        <div class=\"float-right\">\n            <a class=\"btn btn-primary\" [routerLink]=\"['/catalog/content_types']\">\n                <i class=\"icon-box\"></i>\n                Типы товаров\n            </a>\n        </div>\n        <h3>\n            <i class=\"icon-layers\"></i>\n            {{title}}\n        </h3>\n\n        <hr>\n\n        <div class=\"float-right\">\n\n            <div ngbDropdown class=\"d-inline-block\">\n                <button class=\"btn btn-outline-info\" id=\"dropdownBasic1\" ngbDropdownToggle>\n                    Массовые дейсвия\n                </button>\n                <div class=\"dropdown-menu\" aria-labelledby=\"dropdownBasic1\">\n                    <button class=\"dropdown-item\">Отключить / включить</button>\n                    <button class=\"dropdown-item\">Удалить</button>\n                </div>\n            </div>\n\n            <button type=\"button\" class=\"btn btn-outline-success\" (click)=\"modalProductOpen()\">\n                <i class=\"icon-plus\"></i>\n                Add product\n            </button>\n\n        </div>\n        <div class=\"float-left\">\n\n            <categories-menu (changeRequest)=\"openCategory($event)\"></categories-menu>\n\n        </div>\n    </div>\n\n    <cmp-table [items]=\"items\" [itemsTotal]=\"100\" [tableFields]=\"tableFields\" (editItemRequest)=\"modalProductOpen($event)\"></cmp-table>\n\n</div>\n"
+module.exports = "\n<div class=\"card\">\n\n    <div class=\"card-block\">\n\n        <div class=\"float-right\">\n            <a class=\"btn btn-primary\" [routerLink]=\"['/catalog/content_types']\">\n                <i class=\"icon-box\"></i>\n                Типы товаров\n            </a>\n            <a class=\"btn btn-primary\" [routerLink]=\"['/catalog/field_types']\">\n                <i class=\"icon-toggle\"></i>\n                Типы полей\n            </a>\n        </div>\n        <h3>\n            <i class=\"icon-layers\"></i>\n            {{title}}\n        </h3>\n\n        <hr>\n\n        <div class=\"float-right\">\n\n            <div ngbDropdown class=\"d-inline-block\">\n                <button class=\"btn btn-outline-info\" id=\"dropdownBasic1\" ngbDropdownToggle>\n                    Массовые дейсвия\n                </button>\n                <div class=\"dropdown-menu\" aria-labelledby=\"dropdownBasic1\">\n                    <button class=\"dropdown-item\">Отключить / включить</button>\n                    <button class=\"dropdown-item\">Удалить</button>\n                </div>\n            </div>\n\n            <button type=\"button\" class=\"btn btn-outline-success\" (click)=\"modalProductOpen()\">\n                <i class=\"icon-plus\"></i>\n                Add product\n            </button>\n\n        </div>\n        <div class=\"float-left\">\n\n            <categories-menu (changeRequest)=\"openCategory($event)\"></categories-menu>\n\n        </div>\n    </div>\n\n    <cmp-table [items]=\"items\" [itemsTotal]=\"100\" [tableFields]=\"tableFields\" (editItemRequest)=\"modalProductOpen($event)\"></cmp-table>\n\n</div>\n"
 
 /***/ }),
 
@@ -2141,6 +2140,65 @@ module.exports = "<div class=\"card\">\n    <div class=\"card-block\">\n\n      
 
 module.exports = __webpack_require__(174);
 
+
+/***/ }),
+
+/***/ 297:
+/***/ (function(module, exports) {
+
+module.exports = "<div>\n\n    <div class=\"card-navbar\">\n        <div class=\"btn-group\" role=\"group\" aria-label=\"First group\">\n            <a class=\"btn btn-outline-primary\" [routerLink]=\"['/orders']\" routerLinkActive=\"active\">\n                <i class=\"icon-bag\"></i>\n                <span class=\"hidden-xs-down\" i18n>Orders</span>\n            </a>\n            <a class=\"btn btn-outline-primary\" [routerLink]=\"['/statistics']\" routerLinkActive=\"active\">\n                <i class=\"icon-bar-graph-2\"></i>\n                <span class=\"hidden-xs-down\" i18n>Statistics</span>\n            </a>\n            <a class=\"btn btn-outline-primary\" [routerLink]=\"['/catalog']\" routerLinkActive=\"active\">\n                <i class=\"icon-layers\"></i>\n                <span class=\"hidden-xs-down\" i18n>Catalog</span>\n            </a>\n            <a class=\"btn btn-outline-primary\" [routerLink]=\"['/settings']\" routerLinkActive=\"active\">\n                <i class=\"icon-cog\"></i>\n                <span class=\"hidden-xs-down\" i18n>Settings</span>\n            </a>\n        </div>\n    </div>\n\n    <router-outlet></router-outlet>\n\n</div>"
+
+/***/ }),
+
+/***/ 298:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__ = __webpack_require__(24);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FieldTypesComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var FieldTypesComponent = (function () {
+    function FieldTypesComponent(tooltipConfig) {
+        this.items = [];
+        this.title = 'Типы полей';
+        this.loading = false;
+        this.selectedIds = [];
+        tooltipConfig.placement = 'bottom';
+        tooltipConfig.container = 'body';
+    }
+    /** On initialize */
+    FieldTypesComponent.prototype.ngOnInit = function () {
+    };
+    return FieldTypesComponent;
+}());
+FieldTypesComponent = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Component */])({
+        selector: 'shk-field-types',
+        template: __webpack_require__(299)
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["d" /* NgbTooltipConfig */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["d" /* NgbTooltipConfig */]) === "function" && _a || Object])
+], FieldTypesComponent);
+
+var _a;
+//# sourceMappingURL=field_types.component.js.map
+
+/***/ }),
+
+/***/ 299:
+/***/ (function(module, exports) {
+
+module.exports = "\n<div class=\"card\">\n\n    <div class=\"card-block\">\n\n        <h3>\n            <i class=\"icon-toggle\"></i>\n            {{title}}\n        </h3>\n\n        <hr>\n\n        <div class=\"float-left\">\n            <a class=\"btn btn-secondary\" [routerLink]=\"['/catalog']\">\n                <i class=\"icon-arrow-left\"></i>\n                Каталог\n            </a>\n        </div>\n\n    </div>\n</div>\n"
 
 /***/ }),
 
@@ -2295,7 +2353,7 @@ var AppComponent = (function () {
 AppComponent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Component */])({
         selector: 'app-root',
-        template: __webpack_require__(246),
+        template: __webpack_require__(297),
         styles: [__webpack_require__(245)],
         providers: [__WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["d" /* NgbTooltipConfig */]]
     }),

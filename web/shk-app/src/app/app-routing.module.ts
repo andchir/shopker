@@ -5,6 +5,7 @@ import { NotFoundComponent } from './not-found.component';
 import { OrdersComponent } from './orders.component';
 import { CatalogComponent } from './catalog.component';
 import { ContentTypesComponent } from './content_types.component';
+import { FieldTypesComponent } from './field_types.component';
 import { StatisticsComponent } from './stat.component';
 import { SettingsComponent } from './settings.component';
 
@@ -14,6 +15,7 @@ const routes: Routes = [
     { path: 'catalog', component: CatalogComponent },
     { path: 'catalog/category/:categoryId', component: CatalogComponent },
     { path: 'catalog/content_types', component: ContentTypesComponent },
+    { path: 'catalog/field_types', component: FieldTypesComponent },
     { path: 'statistics', component: StatisticsComponent },
     { path: 'settings', component: SettingsComponent },
     { path: '**', component: NotFoundComponent }

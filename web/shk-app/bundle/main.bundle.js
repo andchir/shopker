@@ -130,7 +130,7 @@ var CatalogComponent = (function () {
 CatalogComponent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Component */])({
         selector: 'shk-catalog',
-        template: __webpack_require__(265)
+        template: __webpack_require__(266)
     }),
     __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_4__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__angular_router__["a" /* Router */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["d" /* NgbModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["d" /* NgbModal */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["c" /* Title */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["c" /* Title */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__services_categories_service__["a" /* CategoriesService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_categories_service__["a" /* CategoriesService */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_8__services_products_service__["a" /* ProductsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_8__services_products_service__["a" /* ProductsService */]) === "function" && _e || Object])
 ], CatalogComponent);
@@ -251,23 +251,23 @@ var ContentTypeModalContent = (function () {
     ContentTypeModalContent.prototype.buildForm = function () {
         var _this = this;
         this.contentTypeForm = this.fb.group({
-            title: [this.model.title, [__WEBPACK_IMPORTED_MODULE_4__angular_forms__["f" /* Validators */].required]],
-            name: [this.model.name, [__WEBPACK_IMPORTED_MODULE_4__angular_forms__["f" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_4__angular_forms__["f" /* Validators */].pattern('[A-Za-z0-9_-]+')]],
+            title: [this.model.title, [__WEBPACK_IMPORTED_MODULE_4__angular_forms__["e" /* Validators */].required]],
+            name: [this.model.name, [__WEBPACK_IMPORTED_MODULE_4__angular_forms__["e" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_4__angular_forms__["e" /* Validators */].pattern('[A-Za-z0-9_-]+')]],
             description: [this.model.description, []],
-            collection: [this.model.collection, [__WEBPACK_IMPORTED_MODULE_4__angular_forms__["f" /* Validators */].required]],
-            new_collection: ['', [__WEBPACK_IMPORTED_MODULE_4__angular_forms__["f" /* Validators */].pattern('[A-Za-z0-9_-]+')]]
+            collection: [this.model.collection, [__WEBPACK_IMPORTED_MODULE_4__angular_forms__["e" /* Validators */].required]],
+            new_collection: ['', [__WEBPACK_IMPORTED_MODULE_4__angular_forms__["e" /* Validators */].pattern('[A-Za-z0-9_-]+')]]
         });
         this.contentTypeForm.valueChanges
             .subscribe(function (data) { return _this.onValueChanged('contentType', data); });
         this.fieldForm = this.fb.group({
-            title: ['', [__WEBPACK_IMPORTED_MODULE_4__angular_forms__["f" /* Validators */].required]],
-            name: ['', [__WEBPACK_IMPORTED_MODULE_4__angular_forms__["f" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_4__angular_forms__["f" /* Validators */].pattern('[A-Za-z0-9_-]+')]],
+            title: ['', [__WEBPACK_IMPORTED_MODULE_4__angular_forms__["e" /* Validators */].required]],
+            name: ['', [__WEBPACK_IMPORTED_MODULE_4__angular_forms__["e" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_4__angular_forms__["e" /* Validators */].pattern('[A-Za-z0-9_-]+')]],
             description: ['', []],
-            input_type: ['', [__WEBPACK_IMPORTED_MODULE_4__angular_forms__["f" /* Validators */].required]],
-            output_type: ['', [__WEBPACK_IMPORTED_MODULE_4__angular_forms__["f" /* Validators */].required]],
+            input_type: ['', [__WEBPACK_IMPORTED_MODULE_4__angular_forms__["e" /* Validators */].required]],
+            output_type: ['', [__WEBPACK_IMPORTED_MODULE_4__angular_forms__["e" /* Validators */].required]],
             is_filter: ['', []],
             required: ['', []],
-            group: ['', [__WEBPACK_IMPORTED_MODULE_4__angular_forms__["f" /* Validators */].required]],
+            group: ['', [__WEBPACK_IMPORTED_MODULE_4__angular_forms__["e" /* Validators */].required]],
             new_group: ['', []]
         });
         this.fieldForm.valueChanges
@@ -521,10 +521,10 @@ __decorate([
 ContentTypeModalContent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Component */])({
         selector: 'content-type-modal-content',
-        template: __webpack_require__(262),
+        template: __webpack_require__(263),
         providers: [__WEBPACK_IMPORTED_MODULE_3__services_content_types_service__["a" /* ContentTypesService */]]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_4__angular_forms__["e" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__angular_forms__["e" /* FormBuilder */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__services_content_types_service__["a" /* ContentTypesService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_content_types_service__["a" /* ContentTypesService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["b" /* NgbActiveModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["b" /* NgbActiveModal */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["c" /* NgbTooltipConfig */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["c" /* NgbTooltipConfig */]) === "function" && _d || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_4__angular_forms__["f" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__angular_forms__["f" /* FormBuilder */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__services_content_types_service__["a" /* ContentTypesService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_content_types_service__["a" /* ContentTypesService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["b" /* NgbActiveModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["b" /* NgbActiveModal */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["c" /* NgbTooltipConfig */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["c" /* NgbTooltipConfig */]) === "function" && _d || Object])
 ], ContentTypeModalContent);
 
 var ContentTypesComponent = (function () {
@@ -650,7 +650,7 @@ var ContentTypesComponent = (function () {
 ContentTypesComponent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Component */])({
         selector: 'shk-content-types',
-        template: __webpack_require__(266)
+        template: __webpack_require__(267)
     }),
     __metadata("design:paramtypes", [typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_3__services_content_types_service__["a" /* ContentTypesService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_content_types_service__["a" /* ContentTypesService */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["d" /* NgbModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["d" /* NgbModal */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["c" /* Title */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["c" /* Title */]) === "function" && _g || Object])
 ], ContentTypesComponent);
@@ -665,11 +665,13 @@ var _a, _b, _c, _d, _e, _f, _g;
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_forms__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_data_service_abstract__ = __webpack_require__(152);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__page_table_abstract__ = __webpack_require__(200);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ng_bootstrap_ng_bootstrap__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_forms__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_field_data_model__ = __webpack_require__(199);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services_data_service_abstract__ = __webpack_require__(152);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__page_table_abstract__ = __webpack_require__(201);
 /* unused harmony export FieldTypesService */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return FieldTypeModalContent; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FieldTypesComponent; });
@@ -698,31 +700,95 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+
 var FieldTypesService = (function (_super) {
     __extends(FieldTypesService, _super);
-    function FieldTypesService() {
-        return _super !== null && _super.apply(this, arguments) || this;
+    function FieldTypesService(http) {
+        var _this = _super.call(this, http) || this;
+        _this.setRequestUrl('admin/field_types');
+        return _this;
     }
     return FieldTypesService;
-}(__WEBPACK_IMPORTED_MODULE_4__services_data_service_abstract__["a" /* DataService */]));
+}(__WEBPACK_IMPORTED_MODULE_6__services_data_service_abstract__["a" /* DataService */]));
 FieldTypesService = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["e" /* Injectable */])()
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["e" /* Injectable */])(),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* Http */]) === "function" && _a || Object])
 ], FieldTypesService);
 
 var FieldTypeModalContent = (function (_super) {
     __extends(FieldTypeModalContent, _super);
     function FieldTypeModalContent(fb, dataService, activeModal, tooltipConfig) {
-        return _super.call(this, fb, dataService, activeModal, tooltipConfig) || this;
+        var _this = _super.call(this, fb, dataService, activeModal, tooltipConfig) || this;
+        _this.formFields = {
+            name: {
+                value: '',
+                validators: [__WEBPACK_IMPORTED_MODULE_4__angular_forms__["e" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_4__angular_forms__["e" /* Validators */].pattern('[A-Za-z0-9_-]+')],
+                messages: {
+                    required: 'Name is required.',
+                    pattern: 'The name must contain only Latin letters and numbers.'
+                }
+            },
+            title: {
+                value: '',
+                validators: [__WEBPACK_IMPORTED_MODULE_4__angular_forms__["e" /* Validators */].required],
+                messages: {
+                    required: 'Title is required.'
+                }
+            },
+            description: {
+                value: '',
+                validators: [],
+                messages: {}
+            }
+        };
+        _this.properties = [new __WEBPACK_IMPORTED_MODULE_5__models_field_data_model__["a" /* FieldData */](1, '', '', '')];
+        return _this;
     }
+    FieldTypeModalContent.prototype.ngOnInit = function () {
+        this.buildForm(this.formFields);
+    };
+    FieldTypeModalContent.prototype.addRow = function () {
+        this.properties.push(new __WEBPACK_IMPORTED_MODULE_5__models_field_data_model__["a" /* FieldData */](1, '', '', ''));
+    };
+    FieldTypeModalContent.prototype.deleteRow = function (index) {
+        if (this.properties.length < index + 1) {
+            return;
+        }
+        this.properties.splice(index, 1);
+    };
+    FieldTypeModalContent.prototype.save = function () {
+        var _this = this;
+        this.submitted = true;
+        if (!this.form.valid) {
+            this.onValueChanged(this.form.value);
+            this.submitted = false;
+        }
+        else {
+            var data = this.form.value;
+            data.properties = this.properties;
+            this.dataService.create(data)
+                .then(function (res) {
+                if (res.success) {
+                    _this.closeModal();
+                }
+                else {
+                    if (res.msg) {
+                        _this.errorMessage = res.msg;
+                    }
+                }
+            });
+        }
+    };
     return FieldTypeModalContent;
-}(__WEBPACK_IMPORTED_MODULE_5__page_table_abstract__["a" /* ModalContentAbstractComponent */]));
+}(__WEBPACK_IMPORTED_MODULE_7__page_table_abstract__["a" /* ModalContentAbstractComponent */]));
 FieldTypeModalContent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Component */])({
         selector: 'field-type-modal-content',
-        template: __webpack_require__(263),
+        template: __webpack_require__(264),
         providers: [FieldTypesService]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* FormBuilder */]) === "function" && _a || Object, FieldTypesService, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["b" /* NgbActiveModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["b" /* NgbActiveModal */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["c" /* NgbTooltipConfig */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["c" /* NgbTooltipConfig */]) === "function" && _c || Object])
+    __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_4__angular_forms__["f" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__angular_forms__["f" /* FormBuilder */]) === "function" && _b || Object, FieldTypesService, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__ng_bootstrap_ng_bootstrap__["b" /* NgbActiveModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ng_bootstrap_ng_bootstrap__["b" /* NgbActiveModal */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__ng_bootstrap_ng_bootstrap__["c" /* NgbTooltipConfig */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ng_bootstrap_ng_bootstrap__["c" /* NgbTooltipConfig */]) === "function" && _d || Object])
 ], FieldTypeModalContent);
 
 var FieldTypesComponent = (function (_super) {
@@ -750,17 +816,17 @@ var FieldTypesComponent = (function (_super) {
         return FieldTypeModalContent;
     };
     return FieldTypesComponent;
-}(__WEBPACK_IMPORTED_MODULE_5__page_table_abstract__["b" /* PageTableAbstractComponent */]));
+}(__WEBPACK_IMPORTED_MODULE_7__page_table_abstract__["b" /* PageTableAbstractComponent */]));
 FieldTypesComponent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Component */])({
         selector: 'shk-field-types',
-        template: __webpack_require__(267),
+        template: __webpack_require__(268),
         providers: [FieldTypesService]
     }),
-    __metadata("design:paramtypes", [FieldTypesService, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["b" /* NgbActiveModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["b" /* NgbActiveModal */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["d" /* NgbModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["d" /* NgbModal */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["c" /* Title */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["c" /* Title */]) === "function" && _f || Object])
+    __metadata("design:paramtypes", [FieldTypesService, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_3__ng_bootstrap_ng_bootstrap__["b" /* NgbActiveModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ng_bootstrap_ng_bootstrap__["b" /* NgbActiveModal */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_3__ng_bootstrap_ng_bootstrap__["d" /* NgbModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ng_bootstrap_ng_bootstrap__["d" /* NgbModal */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__["c" /* Title */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__["c" /* Title */]) === "function" && _g || Object])
 ], FieldTypesComponent);
 
-var _a, _b, _c, _d, _e, _f;
+var _a, _b, _c, _d, _e, _f, _g;
 //# sourceMappingURL=field_types.component.js.map
 
 /***/ }),
@@ -963,7 +1029,7 @@ var OrdersComponent = (function () {
 OrdersComponent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Component */])({
         selector: 'shk-settings',
-        template: __webpack_require__(268)
+        template: __webpack_require__(269)
     }),
     __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["c" /* Title */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["c" /* Title */]) === "function" && _a || Object])
 ], OrdersComponent);
@@ -984,7 +1050,7 @@ var _a;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_products_service__ = __webpack_require__(68);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_content_type_model__ = __webpack_require__(148);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__models_category_model__ = __webpack_require__(66);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__models_product_model__ = __webpack_require__(199);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__models_product_model__ = __webpack_require__(200);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_lodash__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_lodash__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ProductModalContent; });
@@ -1042,7 +1108,7 @@ var ProductModalContent = (function () {
     };
     ProductModalContent.prototype.buildForm = function () {
         var group = {};
-        group['content_type'] = new __WEBPACK_IMPORTED_MODULE_2__angular_forms__["g" /* FormControl */](this.category.content_type, __WEBPACK_IMPORTED_MODULE_2__angular_forms__["f" /* Validators */].required);
+        group['content_type'] = new __WEBPACK_IMPORTED_MODULE_2__angular_forms__["g" /* FormControl */](this.category.content_type, __WEBPACK_IMPORTED_MODULE_2__angular_forms__["e" /* Validators */].required);
         this.form = new __WEBPACK_IMPORTED_MODULE_2__angular_forms__["h" /* FormGroup */](group);
     };
     /** Build form */
@@ -1067,7 +1133,7 @@ var ProductModalContent = (function () {
         this.currentContentType.fields.forEach(function (field) {
             if (!_this.form.controls[field.name]) {
                 var group = field.required
-                    ? new __WEBPACK_IMPORTED_MODULE_2__angular_forms__["g" /* FormControl */](data[field.name] || '', __WEBPACK_IMPORTED_MODULE_2__angular_forms__["f" /* Validators */].required)
+                    ? new __WEBPACK_IMPORTED_MODULE_2__angular_forms__["g" /* FormControl */](data[field.name] || '', __WEBPACK_IMPORTED_MODULE_2__angular_forms__["e" /* Validators */].required)
                     : new __WEBPACK_IMPORTED_MODULE_2__angular_forms__["g" /* FormControl */](data[field.name] || '');
                 _this.form.addControl(field.name, group);
             }
@@ -1179,9 +1245,9 @@ __decorate([
 ProductModalContent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Component */])({
         selector: 'ngbd-modal-content',
-        template: __webpack_require__(264)
+        template: __webpack_require__(265)
     }),
-    __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_forms__["e" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_forms__["e" /* FormBuilder */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["b" /* NgbActiveModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["b" /* NgbActiveModal */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__services_content_types_service__["a" /* ContentTypesService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_content_types_service__["a" /* ContentTypesService */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_4__services_products_service__["a" /* ProductsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__services_products_service__["a" /* ProductsService */]) === "function" && _e || Object])
+    __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_forms__["f" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_forms__["f" /* FormBuilder */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["b" /* NgbActiveModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["b" /* NgbActiveModal */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__services_content_types_service__["a" /* ContentTypesService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_content_types_service__["a" /* ContentTypesService */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_4__services_products_service__["a" /* ProductsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__services_products_service__["a" /* ProductsService */]) === "function" && _e || Object])
 ], ProductModalContent);
 
 var _a, _b, _c, _d, _e;
@@ -1194,7 +1260,7 @@ var _a, _b, _c, _d, _e;
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise__ = __webpack_require__(47);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_catch__ = __webpack_require__(85);
@@ -1208,23 +1274,77 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
 
 
 
 
 
 var DataService = (function () {
-    function DataService() {
+    function DataService(http) {
         this.headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Headers */]({ 'Content-Type': 'application/json' });
-        this.listUrl = 'app/data_list';
-        this.oneUrl = 'app/data';
+        this.requestUrl = '';
+        this.http = http;
+        this.requestUrl = 'app/data_list';
     }
+    DataService.prototype.setRequestUrl = function (url) {
+        this.requestUrl = url;
+    };
+    DataService.prototype.getList = function () {
+        return this.http.get(this.requestUrl)
+            .map(this.extractData)
+            .catch(this.handleError);
+    };
+    DataService.prototype.delete = function (id) {
+        var url = this.requestUrl + "/" + id;
+        return this.http.delete(url, { headers: this.headers })
+            .toPromise()
+            .then(function () { return null; })
+            .catch(this.handleError);
+    };
+    DataService.prototype.create = function (item) {
+        return this.http
+            .post(this.requestUrl, JSON.stringify(item), { headers: this.headers })
+            .toPromise()
+            .then(function (res) { return res.json(); })
+            .catch(this.handleError);
+    };
+    DataService.prototype.update = function (item) {
+        var url = this.requestUrl + "/" + item.id;
+        return this.http
+            .put(url, JSON.stringify(item), { headers: this.headers })
+            .toPromise()
+            .then(function () { return item; })
+            .catch(this.handleError);
+    };
+    DataService.prototype.extractData = function (res) {
+        var body = res.json();
+        return body.data || {};
+    };
+    DataService.prototype.handleError = function (error) {
+        var errMsg;
+        if (error instanceof __WEBPACK_IMPORTED_MODULE_1__angular_http__["c" /* Response */]) {
+            var body = error.json() || '';
+            var err = body.error || JSON.stringify(body);
+            errMsg = error.status + " - " + (error.statusText || '') + " " + err;
+        }
+        else {
+            errMsg = error.message ? error.message : error.toString();
+        }
+        console.error(errMsg);
+        return Promise.reject(errMsg);
+    };
     return DataService;
 }());
 DataService = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["e" /* Injectable */])()
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["e" /* Injectable */])(),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* Http */]) === "function" && _a || Object])
 ], DataService);
 
+var _a;
 //# sourceMappingURL=data-service.abstract.js.map
 
 /***/ }),
@@ -1263,7 +1383,7 @@ var SettingsComponent = (function () {
 SettingsComponent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Component */])({
         selector: 'shk-settings',
-        template: __webpack_require__(269)
+        template: __webpack_require__(270)
     }),
     __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["c" /* Title */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["c" /* Title */]) === "function" && _a || Object])
 ], SettingsComponent);
@@ -1307,7 +1427,7 @@ var StatisticsComponent = (function () {
 StatisticsComponent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Component */])({
         selector: 'shk-settings',
-        template: __webpack_require__(270)
+        template: __webpack_require__(271)
     }),
     __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["c" /* Title */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["c" /* Title */]) === "function" && _a || Object])
 ], StatisticsComponent);
@@ -1340,7 +1460,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__ = __webpack_require__(187);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_i18n_providers__ = __webpack_require__(197);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_app_module__ = __webpack_require__(194);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__environments_environment__ = __webpack_require__(202);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__environments_environment__ = __webpack_require__(203);
 
 
 
@@ -1431,7 +1551,7 @@ AppRoutingModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_forms__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_component__ = __webpack_require__(65);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__not_found_component__ = __webpack_require__(149);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__orders_component__ = __webpack_require__(150);
@@ -1443,7 +1563,7 @@ AppRoutingModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__stat_component__ = __webpack_require__(154);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__settings_component__ = __webpack_require__(153);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__list_recursive_component__ = __webpack_require__(147);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__table_component__ = __webpack_require__(201);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__table_component__ = __webpack_require__(202);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__filter_field_by_group_pipe__ = __webpack_require__(196);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__services_products_service__ = __webpack_require__(68);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__services_content_types_service__ = __webpack_require__(41);
@@ -1543,7 +1663,7 @@ AppModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__models_category_model__ = __webpack_require__(66);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__app_component__ = __webpack_require__(65);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__list_recursive_component__ = __webpack_require__(147);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_rxjs_add_operator_switchMap__ = __webpack_require__(274);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_rxjs_add_operator_switchMap__ = __webpack_require__(275);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_rxjs_add_operator_switchMap___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9_rxjs_add_operator_switchMap__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_lodash__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10_lodash__);
@@ -1647,11 +1767,11 @@ var CategoriesModalComponent = (function () {
     CategoriesModalComponent.prototype.buildForm = function () {
         var _this = this;
         this.form = this.fb.group({
-            parent_id: [this.model.parent_id, [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* Validators */].required]],
-            title: [this.model.title, [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* Validators */].required]],
-            name: [this.model.name, [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* Validators */].pattern('[A-Za-z0-9_-]+')]],
+            parent_id: [this.model.parent_id, [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* Validators */].required]],
+            title: [this.model.title, [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* Validators */].required]],
+            name: [this.model.name, [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* Validators */].pattern('[A-Za-z0-9_-]+')]],
             description: [this.model.description, []],
-            content_type: [this.model.content_type, [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* Validators */].required]]
+            content_type: [this.model.content_type, [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* Validators */].required]]
         });
         this.form.valueChanges
             .subscribe(function (data) { return _this.onValueChanged(data); });
@@ -1737,10 +1857,10 @@ __decorate([
 CategoriesModalComponent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Component */])({
         selector: 'category-modal-content',
-        template: __webpack_require__(260),
+        template: __webpack_require__(261),
         providers: [__WEBPACK_IMPORTED_MODULE_4__services_categories_service__["a" /* CategoriesService */]]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* FormBuilder */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_5__services_content_types_service__["a" /* ContentTypesService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__services_content_types_service__["a" /* ContentTypesService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_4__services_categories_service__["a" /* CategoriesService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__services_categories_service__["a" /* CategoriesService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["b" /* NgbActiveModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["b" /* NgbActiveModal */]) === "function" && _d || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* FormBuilder */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_5__services_content_types_service__["a" /* ContentTypesService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__services_content_types_service__["a" /* ContentTypesService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_4__services_categories_service__["a" /* CategoriesService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__services_categories_service__["a" /* CategoriesService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["b" /* NgbActiveModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["b" /* NgbActiveModal */]) === "function" && _d || Object])
 ], CategoriesModalComponent);
 
 /**
@@ -1937,7 +2057,7 @@ __decorate([
 CategoriesMenuComponent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Component */])({
         selector: 'categories-menu',
-        template: __webpack_require__(258),
+        template: __webpack_require__(259),
         providers: [__WEBPACK_IMPORTED_MODULE_4__services_categories_service__["a" /* CategoriesService */]]
     }),
     __metadata("design:paramtypes", [typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* ActivatedRoute */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* ActivatedRoute */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["d" /* NgbModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["d" /* NgbModal */]) === "function" && _g || Object, typeof (_h = typeof __WEBPACK_IMPORTED_MODULE_4__services_categories_service__["a" /* CategoriesService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__services_categories_service__["a" /* CategoriesService */]) === "function" && _h || Object])
@@ -2047,6 +2167,25 @@ var ContentField = (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FieldData; });
+var FieldData = (function () {
+    function FieldData(id, name, title, default_value) {
+        this.id = id;
+        this.name = name;
+        this.title = title;
+        this.default_value = default_value;
+    }
+    return FieldData;
+}());
+
+//# sourceMappingURL=field-data.model.js.map
+
+/***/ }),
+
+/***/ 200:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Product; });
 var Product = (function () {
     function Product(id, parent_id, content_type, name, title, description, price) {
@@ -2065,7 +2204,7 @@ var Product = (function () {
 
 /***/ }),
 
-/***/ 200:
+/***/ 201:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2092,16 +2231,46 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 var ModalContentAbstractComponent = (function () {
     function ModalContentAbstractComponent(fb, dataService, activeModal, tooltipConfig) {
+        this.submitted = false;
+        this.loading = false;
+        this.formErrors = {};
+        this.validationMessages = {};
         this.fb = fb;
         this.dataService = dataService;
         this.activeModal = activeModal;
-        this.tooltipConfig = tooltipConfig;
-        this.submitted = false;
-        this.loading = false;
         tooltipConfig.placement = 'bottom';
         tooltipConfig.container = 'body';
     }
     ModalContentAbstractComponent.prototype.ngOnInit = function () {
+    };
+    /** Build form groups */
+    ModalContentAbstractComponent.prototype.buildForm = function (formFields) {
+        var _this = this;
+        var controls = {};
+        for (var key in formFields) {
+            var options = formFields[key];
+            controls[key] = new __WEBPACK_IMPORTED_MODULE_3__angular_forms__["g" /* FormControl */](options.value, options.validators);
+            this.formErrors[key] = '';
+            this.validationMessages[key] = options.messages;
+        }
+        this.form = this.fb.group(controls);
+        this.form.valueChanges
+            .subscribe(function (data) { return _this.onValueChanged(data); });
+    };
+    /** Callback on form value changed */
+    ModalContentAbstractComponent.prototype.onValueChanged = function (data) {
+        if (!this.form) {
+            return;
+        }
+        for (var fieldName in data) {
+            this.formErrors[fieldName] = '';
+            var control = this.form.get(fieldName);
+            if (control && (control.dirty || this.submitted) && !control.valid) {
+                for (var key in control.errors) {
+                    this.formErrors[fieldName] += this.validationMessages[fieldName][key] + ' ';
+                }
+            }
+        }
     };
     /** Close modal */
     ModalContentAbstractComponent.prototype.closeModal = function () {
@@ -2110,7 +2279,6 @@ var ModalContentAbstractComponent = (function () {
     /** Submit form */
     ModalContentAbstractComponent.prototype.onSubmit = function () {
         this.submitted = true;
-        console.log('onSubmit');
         this.closeModal();
     };
     return ModalContentAbstractComponent;
@@ -2129,7 +2297,7 @@ __decorate([
 ], ModalContentAbstractComponent.prototype, "isItemCopy", void 0);
 ModalContentAbstractComponent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Component */])({}),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* FormBuilder */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_4__services_data_service_abstract__["a" /* DataService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__services_data_service_abstract__["a" /* DataService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["b" /* NgbActiveModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["b" /* NgbActiveModal */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["c" /* NgbTooltipConfig */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["c" /* NgbTooltipConfig */]) === "function" && _d || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* FormBuilder */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_4__services_data_service_abstract__["a" /* DataService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__services_data_service_abstract__["a" /* DataService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["b" /* NgbActiveModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["b" /* NgbActiveModal */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["c" /* NgbTooltipConfig */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["c" /* NgbTooltipConfig */]) === "function" && _d || Object])
 ], ModalContentAbstractComponent);
 
 var PageTableAbstractComponent = (function () {
@@ -2184,7 +2352,7 @@ var _a, _b, _c, _d, _e, _f, _g, _h;
 
 /***/ }),
 
-/***/ 201:
+/***/ 202:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2284,7 +2452,7 @@ __decorate([
 TableComponent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Component */])({
         selector: 'cmp-table',
-        template: __webpack_require__(259)
+        template: __webpack_require__(260)
     }),
     __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */]) === "function" && _a || Object])
 ], TableComponent);
@@ -2294,7 +2462,7 @@ var _a;
 
 /***/ }),
 
-/***/ 202:
+/***/ 203:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2311,7 +2479,7 @@ var environment = {
 
 /***/ }),
 
-/***/ 256:
+/***/ 257:
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(84)();
@@ -2329,105 +2497,105 @@ module.exports = module.exports.toString();
 
 /***/ }),
 
-/***/ 257:
+/***/ 258:
 /***/ (function(module, exports) {
 
 module.exports = "<div>\n\n    <div class=\"card-navbar\">\n        <div class=\"btn-group\" role=\"group\" aria-label=\"First group\">\n            <a class=\"btn btn-outline-primary\" [routerLink]=\"['/orders']\" routerLinkActive=\"active\">\n                <i class=\"icon-bag\"></i>\n                <span class=\"hidden-xs-down\" i18n>Orders</span>\n            </a>\n            <a class=\"btn btn-outline-primary\" [routerLink]=\"['/statistics']\" routerLinkActive=\"active\">\n                <i class=\"icon-bar-graph-2\"></i>\n                <span class=\"hidden-xs-down\" i18n>Statistics</span>\n            </a>\n            <a class=\"btn btn-outline-primary\" [routerLink]=\"['/catalog']\" routerLinkActive=\"active\">\n                <i class=\"icon-layers\"></i>\n                <span class=\"hidden-xs-down\" i18n>Catalog</span>\n            </a>\n            <a class=\"btn btn-outline-primary\" [routerLink]=\"['/settings']\" routerLinkActive=\"active\">\n                <i class=\"icon-cog\"></i>\n                <span class=\"hidden-xs-down\" i18n>Settings</span>\n            </a>\n        </div>\n    </div>\n\n    <router-outlet></router-outlet>\n\n</div>"
 
 /***/ }),
 
-/***/ 258:
+/***/ 259:
 /***/ (function(module, exports) {
 
 module.exports = "<div class=\"d-inline-block dropdown\">\n    <button class=\"btn btn-info dropdown-toggle dropdown-toggle-hover\">\n        <i class=\"icon-folder\"></i>\n        {{currentCategory.title}}\n    </button>\n    <div class=\"dropdown-menu shadow\" #categoriesDropdown>\n        <div class=\"dropdown-header\">\n            <button class=\"btn btn-sm btn-secondary\" ngbTooltip=\"Open root category\" (click)=\"goToRootCategory()\" *ngIf=\"currentCategory.id > 0\">\n                <i class=\"icon-home\"></i>\n            </button>\n            <button type=\"button\" class=\"btn btn-sm btn-secondary\" ngbTooltip=\"Add new category\" (click)=\"openModalCategory()\">\n                <i class=\"icon-plus\"></i>\n            </button>\n            <button type=\"button\" class=\"btn btn-sm btn-secondary\" ngbTooltip=\"Edit current category\" (click)=\"openModalCategory(currentCategory.id)\" [hidden]=\"currentCategory.id == 0\">\n                <i class=\"icon-pencil\"></i>\n            </button>\n            <button type=\"button\" class=\"btn btn-sm btn-secondary\" ngbTooltip=\"Copy category\" (click)=\"copyCategory()\" [hidden]=\"currentCategory.id == 0\">\n                <i class=\"icon-stack\"></i>\n            </button>\n            <button type=\"button\" class=\"btn btn-sm btn-secondary\" ngbTooltip=\"Move current category\" (click)=\"moveCategory()\" [hidden]=\"currentCategory.id == 0\">\n                <i class=\"icon-arrow-right\"></i>\n            </button>\n            <button type=\"button\" class=\"btn btn-sm btn-secondary\" ngbTooltip=\"Delete current category\" (click)=\"deleteCategoryItemConfirm(currentCategory.id)\" [hidden]=\"currentCategory.id == 0\">\n                <i class=\"icon-cross\"></i>\n            </button>\n        </div>\n        <div class=\"dropdown-divider\"></div>\n        <div class=\"dropdown-header\" *ngIf=\"categories.length == 0\">\n            No categories.\n        </div>\n\n        <categories-list [inputItems]=\"categories\" [parentId]=\"0\" [currentId]=\"currentCategory.id\"></categories-list>\n\n    </div>\n</div>"
 
 /***/ }),
 
-/***/ 259:
+/***/ 260:
 /***/ (function(module, exports) {
 
 module.exports = "<div class=\"table-responsive\" [class.loading]=\"loading\">\n    <table class=\"table table-striped table-divided mb-0\">\n        <thead>\n            <tr>\n                <th class=\"text-left\">\n                    <label class=\"custom-control custom-checkbox\">\n                        <input type=\"checkbox\" class=\"custom-control-input\" (click)=\"selectAll($event)\">\n                        <span class=\"custom-control-indicator\"></span>\n                    </label>\n                </th>\n                <th *ngFor=\"let tableField of tableFields; let index=index\">\n                    <button type=\"button\" class=\"btn btn-block btn-link\" (click)=\"selectSortBy(tableField.name)\">\n                        {{tableField.title}}\n                        <i [class.icon-arrow-down]=\"sortDir == 'asc'\" [class.icon-arrow-up]=\"sortDir == 'desc'\" [style.visibility]=\"tableField.name == sortBy ? 'visible' : 'hidden'\"></i>\n                    </button>\n                </th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr class=\"show-on-hover-parent\" *ngFor=\"let item of items\">\n                <td>\n                    <label class=\"custom-control custom-checkbox\">\n                        <input type=\"checkbox\" class=\"custom-control-input\" [checked]=\"getIsSelected(item.id)\" (click)=\"setSelected($event, item.id)\">\n                        <span class=\"custom-control-indicator\"></span>\n                    </label>\n                </td>\n                <td *ngFor=\"let tableField of tableFields; let index=index\">\n                    <div class=\"relative\" *ngIf=\"index == tableFields.length - 1\">\n                        <div class=\"show-on-hover no-wrap\">\n                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" ngbTooltip=\"Edit\" (click)=\"editItem(item.id)\">\n                                <i class=\"icon-pencil\"></i>\n                            </button>\n                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" ngbTooltip=\"Copy\" (click)=\"copyItem(item.id)\">\n                                <i class=\"icon-stack\"></i>\n                            </button>\n                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" ngbTooltip=\"Delete\" (click)=\"deleteItem(item.id)\">\n                                <i class=\"icon-cross\"></i>\n                            </button>\n                        </div>\n                    </div>\n                    {{item[tableField.name]}}\n\n                    <!--i class=\"big text-success icon-circle-check\" [hidden]=\"!item.is_active\"></i>\n                    <i class=\"big text-muted icon-circle-cross\" [hidden]=\"item.is_active\"></i-->\n                </td>\n            </tr>\n        <tr [hidden]=\"items.length > 0\" class=\"table-active\">\n            <td [attr.colspan]=\"tableFields.length + 1\" class=\"text-center p-4\">\n                Empty.\n            </td>\n        </tr>\n        </tbody>\n    </table>\n</div>\n\n<div class=\"card-footer\">\n\n    <div class=\"float-right\">\n        <select class=\"form-control\">\n            <option value=\"10\">10</option>\n            <option value=\"20\">20</option>\n            <option value=\"50\">50</option>\n            <option value=\"100\">100</option>\n        </select>\n    </div>\n\n    <ngb-pagination [class]=\"'mb-0'\" [collectionSize]=\"120\" [page]=\"1\" [maxSize]=\"8\" [rotate]=\"true\" [boundaryLinks]=\"false\"></ngb-pagination>\n\n</div>"
 
 /***/ }),
 
-/***/ 260:
+/***/ 261:
 /***/ (function(module, exports) {
 
 module.exports = "<div class=\"modal-header d-block\">\n    <div class=\"d-block float-right\">\n        <button type=\"button\" class=\"btn btn-secondary\" (click)=\"activeModal.dismiss()\">\n            Close\n        </button>\n    </div>\n    <h4 class=\"modal-title\">{{modalTitle}}</h4>\n</div>\n\n<form (ngSubmit)=\"onSubmit()\" [formGroup]=\"form\" [class.loading]=\"loading\">\n\n    <div class=\"modal-body\">\n\n        <div class=\"row form-group\" [class.form-group-message]=\"formErrors.parent_id\">\n            <div class=\"col-md-5\">\n                <label for=\"fieldContentType\">Родительская папка</label>\n            </div>\n            <div class=\"col-md-7\">\n                <select id=\"fieldParent\" class=\"form-control\" name=\"parent_id\" formControlName=\"parent_id\" [(ngModel)]=\"model.parent_id\">\n                    <option value=\"0\">Корневая категория</option>\n                    <option value=\"{{category.id}}\" *ngFor=\"let category of categories\">{{category.title}}</option>\n                </select>\n                <div *ngIf=\"formErrors.parent_id\" class=\"alert alert-danger\">\n                    {{formErrors.parent_id}}\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row form-group\" [class.form-group-message]=\"formErrors.name\">\n            <div class=\"col-md-5\">\n                <label for=\"fieldName\">Системное имя</label>\n            </div>\n            <div class=\"col-md-7\">\n                <input type=\"text\" id=\"fieldName\" class=\"form-control\" name=\"name\" formControlName=\"name\" [(ngModel)]=\"model.name\">\n                <div *ngIf=\"formErrors.name\" class=\"alert alert-danger\">\n                    {{formErrors.name}}\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row form-group\" [class.form-group-message]=\"formErrors.title\">\n            <div class=\"col-md-5\">\n                <label for=\"fieldTitle\">Название</label>\n            </div>\n            <div class=\"col-md-7\">\n                <input type=\"text\" id=\"fieldTitle\" class=\"form-control\" formControlName=\"title\" name=\"title\" [(ngModel)]=\"model.title\">\n                <div *ngIf=\"formErrors.title\" class=\"alert alert-danger\">\n                    {{formErrors.title}}\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row form-group\">\n            <div class=\"col-md-5\">\n                <label for=\"fieldDescription\">Описание</label>\n            </div>\n            <div class=\"col-md-7\">\n                <textarea type=\"text\" id=\"fieldDescription\" rows=\"4\" class=\"form-control\" name=\"description\" formControlName=\"description\" [(ngModel)]=\"model.description\"></textarea>\n            </div>\n        </div>\n\n        <div class=\"row form-group\" [class.form-group-message]=\"formErrors.content_type\">\n            <div class=\"col-md-5\">\n                <label for=\"fieldContentType\">Тип контента</label>\n            </div>\n            <div class=\"col-md-7\">\n                <select id=\"fieldContentType\" class=\"form-control\" name=\"content_type\" formControlName=\"content_type\" [(ngModel)]=\"model.content_type\">\n                    <option value=\"1\" *ngFor=\"let contentType of contentTypes\" [value]=\"contentType.name\">{{contentType.title}}</option>\n                </select>\n                <div *ngIf=\"formErrors.content_type\" class=\"alert alert-danger\">\n                    {{formErrors.content_type}}\n                </div>\n            </div>\n        </div>\n\n        <div class=\"alert alert-danger mt-3 mb-0\" [hidden]=\"!errorMessage\">\n            <button type=\"button\" class=\"close\" (click)=\"errorMessage = ''\">\n                <span aria-hidden=\"true\">&times;</span>\n            </button>\n            {{errorMessage}}\n        </div>\n    </div>\n\n    <div class=\"modal-footer d-block\">\n        <button type=\"submit\" class=\"btn btn-success btn-wide\">\n            Save\n        </button>\n        <button type=\"submit\" class=\"btn btn-secondary btn-wide\" (click)=\"activeModal.dismiss()\">\n            Cancel\n        </button>\n    </div>\n\n</form>\n"
 
 /***/ }),
 
-/***/ 261:
+/***/ 262:
 /***/ (function(module, exports) {
 
 module.exports = "<div class=\"modal-header d-block\">\n    <h4 class=\"modal-title\">{{modalTitle}}</h4>\n</div>\n<div class=\"modal-body\">\n    {{modalContent}}\n</div>\n<div class=\"modal-footer d-block\">\n    <button type=\"button\" class=\"btn btn-success btn-wide\" (click)=\"accept()\">\n        Yes\n    </button>\n    <button type=\"button\" class=\"btn btn-secondary btn-wide\" (click)=\"activeModal.close()\">\n        No\n    </button>\n</div>"
 
 /***/ }),
 
-/***/ 262:
+/***/ 263:
 /***/ (function(module, exports) {
 
 module.exports = "<div class=\"modal-header d-block\">\n    <div class=\"d-block float-right\">\n        <button type=\"button\" class=\"btn btn-secondary\" (click)=\"activeModal.dismiss()\">\n            Close\n        </button>\n    </div>\n    <h4 class=\"modal-title\">{{modalTitle}}</h4>\n</div>\n\n<form (ngSubmit)=\"onSubmit()\" [class.loading]=\"loading\">\n\n    <div class=\"modal-body\">\n\n        <div class=\"row\">\n\n            <!-- ContentType form -->\n            <div class=\"col-lg-4\" [formGroup]=\"contentTypeForm\">\n\n                <div class=\"form-group\" [class.form-group-message]=\"formErrors.contentType.title\">\n                    <label class=\"label-filled\">\n                        Название\n                    </label>\n                    <input type=\"text\" class=\"form-control\" name=\"title\" formControlName=\"title\" [(ngModel)]=\"model.title\">\n                    <div *ngIf=\"formErrors.contentType.title\" class=\"alert alert-danger\">\n                        {{formErrors.contentType.title}}\n                    </div>\n                </div>\n\n                <div class=\"form-group\" [class.form-group-message]=\"formErrors.contentType.name\">\n                    <label class=\"label-filled\">\n                        Системное имя\n                    </label>\n                    <input type=\"text\" class=\"form-control\" name=\"name\" formControlName=\"name\" [(ngModel)]=\"model.name\">\n                    <div *ngIf=\"formErrors.contentType.name\" class=\"alert alert-danger\">\n                        {{formErrors.contentType.name}}\n                    </div>\n                </div>\n\n                <div class=\"form-group\">\n                    <label class=\"label-filled\">\n                        Описание\n                    </label>\n                    <textarea type=\"text\" class=\"form-control\" name=\"description\" formControlName=\"description\" [(ngModel)]=\"model.description\"></textarea>\n                </div>\n\n                <div class=\"form-group row\">\n                    <div class=\"col-12\">\n\n                        <div class=\"form-group\">\n                            <label class=\"label-filled\">Коллекция</label>\n                            <div class=\"input-group\">\n                                <select class=\"form-control\" name=\"collection\" formControlName=\"collection\" [(ngModel)]=\"model.collection\">\n                                    <option value=\"{{collection}}\" *ngFor=\"let collection of collections\">{{collection}}</option>\n                                </select>\n                                <div class=\"input-group-btn\">\n                                    <button type=\"button\" class=\"btn btn-secondary btn-sm\" ngbTooltip=\"Add collection\" (click)=\"displayToggle(addCollectionBlock); addCollectionField.value = ''; onValueChanged(); addCollectionField.focus()\">\n                                        <i class=\"icon-plus\"></i>\n                                    </button>\n                                </div>\n                                <div class=\"input-group-btn\">\n                                    <button type=\"button\" class=\"btn btn-secondary btn-sm\" ngbTooltip=\"Delete collection\" (click)=\"deleteCollection()\">\n                                        <i class=\"icon-cross\"></i>\n                                    </button>\n                                </div>\n                            </div>\n\n                            <div class=\"card p-1 mt-2\" #addCollectionBlock style=\"display: none;\" [class.form-group-message]=\"formErrors.contentType.new_collection\">\n                                <input type=\"text\" class=\"form-control form-control-sm\" formControlName=\"new_collection\" #addCollectionField>\n                                <div *ngIf=\"formErrors.contentType.new_collection\" class=\"alert alert-danger mb-1\">\n                                    {{formErrors.contentType.new_collection}}\n                                </div>\n\n                                <div class=\"text-right mt-1\">\n                                    <button type=\"button\" class=\"btn btn-secondary btn-sm\" (click)=\"addCollection();\">\n                                        Add\n                                    </button>\n                                    <button type=\"button\" class=\"btn btn-secondary btn-sm\" (click)=\"addCollectionBlock.style.display = 'none'; formErrors.contentType.new_collection = ''\">\n                                        Cancel\n                                    </button>\n                                </div>\n                            </div>\n                        </div>\n\n                    </div>\n                </div>\n\n            </div>\n            <!-- /ContentType form -->\n\n            <!-- Field form -->\n            <div class=\"col-lg-8\" [formGroup]=\"fieldForm\">\n\n                <label class=\"label-filled\" [hidden]=\"action != 'add_field'\">\n                    Добавить поле\n                </label>\n                <label class=\"label-filled\" [hidden]=\"action != 'edit_field'\">\n                    Редактировать поле\n                </label>\n\n                <div class=\"card\">\n                    <div class=\"card-block\">\n\n                        <div class=\"form-group row\" [class.form-group-message]=\"formErrors.field.title\">\n                            <div class=\"col-md-5\">\n                                <label class=\"small\">Название</label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <input type=\"text\" class=\"form-control form-control-sm\" name=\"field_title\" formControlName=\"title\">\n                                <div *ngIf=\"formErrors.field.title\" class=\"alert alert-danger\">\n                                    {{formErrors.field.title}}\n                                </div>\n                            </div>\n                        </div>\n\n                        <div class=\"form-group row\" [class.form-group-message]=\"formErrors.field.name\">\n                            <div class=\"col-md-5\">\n                                <label class=\"small\">Системное имя</label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <input type=\"text\" class=\"form-control form-control-sm\" name=\"field_name\" formControlName=\"name\">\n                                <div *ngIf=\"formErrors.field.name\" class=\"alert alert-danger\">\n                                    {{formErrors.field.name}}\n                                </div>\n                            </div>\n                        </div>\n\n                        <div class=\"form-group row\">\n                            <div class=\"col-md-5\">\n                                <label class=\"small\">Описание</label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <textarea type=\"text\" class=\"form-control form-control-sm\" name=\"field_description\" formControlName=\"description\"></textarea>\n                            </div>\n                        </div>\n\n                        <div class=\"form-group row\" [class.form-group-message]=\"formErrors.field.input_type\">\n                            <div class=\"col-md-5\">\n                                <label class=\"small\">Тип ввода</label>\n                            </div>\n                            <div class=\"col-md-7\">\n\n                                <div class=\"input-group\">\n                                    <select class=\"form-control form-control-sm\" name=\"field_input_type\" formControlName=\"input_type\">\n                                        <option value=\"text\">Текстовое поле</option>\n                                        <option value=\"textarea\">Многострочный текст</option>\n                                        <option value=\"richtext\">Текстовый редактор</option>\n                                        <option value=\"number\">Число</option>\n                                        <option value=\"select\">Выпадающий список</option>\n                                        <option value=\"checkbox\">Чекбокс</option>\n                                        <option value=\"radio\">Переключатель</option>\n                                        <option value=\"table\">Таблица</option>\n                                        <option value=\"date\">Дата</option>\n                                        <option value=\"file\">Файл</option>\n                                        <option value=\"image\">Картинка</option>\n                                    </select>\n                                    <div class=\"input-group-btn\">\n                                        <button type=\"button\" class=\"btn btn-secondary btn-sm\" ngbTooltip=\"Options\" (click)=\"displayToggle(inputTypeOptionsBlock)\">\n                                            <i class=\"icon-cog\"></i>\n                                        </button>\n                                    </div>\n                                </div>\n                                <div *ngIf=\"formErrors.field.input_type\" class=\"alert alert-danger\">\n                                    {{formErrors.field.input_type}}\n                                </div>\n\n                            </div>\n                        </div>\n\n                        <div class=\"card card-block mb-3\" #inputTypeOptionsBlock style=\"display: none;\">\n                            <div>\n                                Тут будут параметры\n                            </div>\n                            <div class=\"text-right mt-1\">\n                                <button type=\"button\" class=\"btn btn-secondary btn-sm\" (click)=\"inputTypeOptionsBlock.style.display = 'none';\">\n                                    Close\n                                </button>\n                            </div>\n                        </div>\n\n                        <div class=\"form-group row\" [class.form-group-message]=\"formErrors.field.output_type\">\n                            <div class=\"col-md-5\">\n                                <label class=\"small\">Тип вывода</label>\n                            </div>\n                            <div class=\"col-md-7\">\n\n                                <div class=\"input-group\">\n                                    <select class=\"form-control form-control-sm\" name=\"field_output_type\" formControlName=\"output_type\">\n                                        <option value=\"text\">Текст</option>\n                                        <option value=\"number\">Число</option>\n                                        <option value=\"select\">Выпадающий список</option>\n                                        <option value=\"checkbox\">Чекбокс</option>\n                                        <option value=\"radio\">Переключатель</option>\n                                        <option value=\"table\">Таблица</option>\n                                        <option value=\"image\">Картинка</option>\n                                        <option value=\"boolean\">Да/Нет</option>\n                                    </select>\n                                    <div class=\"input-group-btn\">\n                                        <button type=\"button\" class=\"btn btn-secondary btn-sm\" ngbTooltip=\"Options\" (click)=\"displayToggle(outputTypeOptionsBlock)\">\n                                            <i class=\"icon-cog\"></i>\n                                        </button>\n                                    </div>\n                                </div>\n                                <div *ngIf=\"formErrors.field.output_type\" class=\"alert alert-danger\">\n                                    {{formErrors.field.output_type}}\n                                </div>\n\n                            </div>\n                        </div>\n\n                        <div class=\"card card-block mb-3\" #outputTypeOptionsBlock style=\"display: none;\">\n                            <div>\n                                Тут будут параметры\n                            </div>\n                            <div class=\"text-right mt-1\">\n                                <button type=\"button\" class=\"btn btn-secondary btn-sm\" (click)=\"outputTypeOptionsBlock.style.display = 'none'\">\n                                    Close\n                                </button>\n                            </div>\n                        </div>\n\n                        <div class=\"form-group row\">\n                            <div class=\"col-md-5\">\n                                <label class=\"small\">Группа</label>\n                            </div>\n                            <div class=\"col-md-7\">\n\n                                <div [class.form-group-message]=\"formErrors.field.group\">\n                                    <div class=\"input-group input-group-sm\">\n                                        <select class=\"form-control\" name=\"field_group\" formControlName=\"group\">\n                                            <option value=\"{{group}}\" *ngFor=\"let group of model.groups\">{{group}}</option>\n                                        </select>\n                                        <div class=\"input-group-btn\">\n                                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" ngbTooltip=\"Add group\" (click)=\"displayToggle(addGroupBlock); addGroupField.value = ''; addGroupField.focus()\">\n                                                <i class=\"icon-plus\"></i>\n                                            </button>\n                                        </div>\n                                        <div class=\"input-group-btn\">\n                                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" ngbTooltip=\"Delete group\" (click)=\"deleteGroup()\">\n                                                <i class=\"icon-cross\"></i>\n                                            </button>\n                                        </div>\n                                    </div>\n                                    <div *ngIf=\"formErrors.field.group\" class=\"alert alert-danger\">\n                                        {{formErrors.field.group}}\n                                    </div>\n\n                                    <div class=\"card p-1 mt-2\" #addGroupBlock style=\"display: none;\" [class.form-group-message]=\"formErrors.field.new_group\">\n                                        <input type=\"text\" class=\"form-control form-control-sm\" #addGroupField formControlName=\"new_group\">\n                                        <div *ngIf=\"formErrors.field.new_group\" class=\"alert alert-danger mb-1\">\n                                            {{formErrors.field.new_group}}\n                                        </div>\n                                        <div class=\"text-right mt-1\">\n                                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" (click)=\"addGroup();\">\n                                                Add\n                                            </button>\n                                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" (click)=\"addGroupBlock.style.display = 'none'; formErrors.field.new_group = ''\">\n                                                Cancel\n                                            </button>\n                                        </div>\n                                    </div>\n                                </div>\n\n                            </div>\n                        </div>\n\n                        <div class=\"form-group row mb-0\">\n                            <div class=\"col-md-7 offset-md-5\">\n\n                                <label class=\"custom-control custom-checkbox\">\n                                    <input type=\"checkbox\" class=\"custom-control-input\" value=\"1\" name=\"required\" formControlName=\"required\">\n                                    <span class=\"custom-control-indicator\"></span>\n                                    <span class=\"small\">Обязательный</span>\n                                </label>\n\n                            </div>\n                        </div>\n\n                        <div class=\"form-group row mb-0\">\n                            <div class=\"col-md-7 offset-md-5\">\n\n                                <label class=\"custom-control custom-checkbox\">\n                                    <input type=\"checkbox\" class=\"custom-control-input\" value=\"1\" name=\"show_in_table\">\n                                    <span class=\"custom-control-indicator\"></span>\n                                    <span class=\"small\">Показывать в таблице</span>\n                                </label>\n\n                            </div>\n                        </div>\n\n                        <div class=\"form-group row mb-0\">\n                            <div class=\"col-md-7 offset-md-5\">\n\n                                <label class=\"custom-control custom-checkbox\">\n                                    <input type=\"checkbox\" class=\"custom-control-input\" value=\"1\" name=\"is_filter\" formControlName=\"is_filter\">\n                                    <span class=\"custom-control-indicator\"></span>\n                                    <span class=\"small\">Показывать в фильтре</span>\n                                </label>\n\n                            </div>\n                        </div>\n\n                        <div class=\"alert alert-danger mt-3 mb-3\" [hidden]=\"!errorFieldMessage\">\n                            <button type=\"button\" class=\"close\" (click)=\"errorFieldMessage = ''\">\n                                <span aria-hidden=\"true\">&times;</span>\n                            </button>\n                            {{errorFieldMessage}}\n                        </div>\n\n                        <div class=\"mt-3\">\n                            <button type=\"button\" class=\"btn btn-sm btn-info btn-wide\" (click)=\"submitField()\" [hidden]=\"action != 'add_field'\">\n                                <i class=\"icon-plus\"></i>\n                                Add field\n                            </button>\n                            <button type=\"button\" class=\"btn btn-sm btn-success btn-wide\" (click)=\"displayToggle(fieldsBlock, true); submitField()\" [hidden]=\"action != 'edit_field'\">\n                                <i class=\"icon-check\"></i>\n                                Save field\n                            </button>\n                            <button type=\"button\" class=\"btn btn-sm btn-secondary btn-wide\" (click)=\"displayToggle(fieldsBlock, true); editFieldCancel()\">\n                                Cancel\n                            </button>\n                        </div>\n\n                    </div>\n                </div>\n                <!-- /Field form -->\n\n            </div>\n        </div>\n\n        <div class=\"form-group row mt-3\">\n            <div class=\"col-12\">\n\n                <label class=\"label-filled\">\n                    Поля\n                </label>\n\n                <hr class=\"mt-0 mb-0\">\n                <div class=\"text-center mb-2\" style=\"margin-top: -0.8rem;\">\n                    <button type=\"button\" class=\"btn btn-secondary btn-sm\" [ngSwitch]=\"fieldsBlock.style.display\" (click)=\"displayToggle(fieldsBlock)\">\n                        <span *ngSwitchCase=\"'none'\">\n                            <i class=\"icon-plus\"></i>\n                            <span i18n>Expand</span>\n                        </span>\n                        <span *ngSwitchCase=\"'block'\">\n                            <i class=\"icon-minus\"></i>\n                            <span i18n>Collapse</span>\n                        </span>\n                    </button>\n                </div>\n\n                <div #fieldsBlock style=\"display: block;\">\n                    <table class=\"table table-striped table-divided mb-0\">\n                        <thead>\n                            <tr>\n                                <th>Название</th>\n                                <th>Системное имя</th>\n                                <th>Тип ввода</th>\n                                <th>Группа</th>\n                            </tr>\n                        </thead>\n                        <tbody>\n                            <tr class=\"show-on-hover-parent\" *ngFor=\"let item of model.fields\">\n                                <td>\n                                    {{item.title}}\n                                </td>\n                                <td>\n                                    {{item.name}}\n                                </td>\n                                <td>\n                                    {{item.input_type}}\n                                </td>\n                                <td>\n                                    <div class=\"relative\">\n                                        <div class=\"show-on-hover\">\n                                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" (click)=\"displayToggle(fieldsBlock); editField(item)\" [hidden]=\"item.name == currentFieldName\" ngbTooltip=\"Edit\">\n                                                <i class=\"icon-pencil\"></i>\n                                            </button>\n                                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" (click)=\"displayToggle(fieldsBlock); copyField(item)\" ngbTooltip=\"Copy\">\n                                                <i class=\"icon-stack\"></i>\n                                            </button>\n                                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" (click)=\"deleteField(item)\" [hidden]=\"item.name == currentFieldName\" ngbTooltip=\"Delete\">\n                                                <i class=\"icon-cross\"></i>\n                                            </button>\n                                        </div>\n                                    </div>\n                                    {{item.group}}\n                                </td>\n                            </tr>\n                            <tr [hidden]=\"model.fields.length > 0\" class=\"table-warning\">\n                                <td colspan=\"4\" class=\"text-center\">\n                                    Empty\n                                </td>\n                            </tr>\n                        </tbody>\n                    </table>\n                </div>\n\n                <div class=\"alert alert-danger mt-3 mb-0\" [hidden]=\"!errorMessage\">\n                    <button type=\"button\" class=\"close\" (click)=\"errorMessage = ''\">\n                        <span aria-hidden=\"true\">&times;</span>\n                    </button>\n                    {{errorMessage}}\n                </div>\n\n            </div>\n        </div>\n\n    </div>\n    <div class=\"modal-footer d-block\">\n        <button type=\"submit\" class=\"btn btn-success btn-wide\">\n            Save\n        </button>\n        <button type=\"submit\" class=\"btn btn-secondary btn-wide\" (click)=\"activeModal.dismiss()\">\n            Cancel\n        </button>\n    </div>\n\n</form>"
 
 /***/ }),
 
-/***/ 263:
-/***/ (function(module, exports) {
-
-module.exports = "<div class=\"modal-header d-block\">\n    <div class=\"d-block float-right\">\n        <button type=\"button\" class=\"btn btn-secondary\" (click)=\"activeModal.dismiss()\">\n            Close\n        </button>\n    </div>\n    <h4 class=\"modal-title\">{{modalTitle}}</h4>\n</div>\n\n<form (ngSubmit)=\"onSubmit()\" [class.loading]=\"loading\">\n\n    <div class=\"modal-body\">\n\n        <div class=\"row\">\n\n\n\n        </div>\n\n    </div>\n    <div class=\"modal-footer d-block\">\n        <button type=\"submit\" class=\"btn btn-success btn-wide\">\n            Save\n        </button>\n        <button type=\"submit\" class=\"btn btn-secondary btn-wide\" (click)=\"activeModal.dismiss()\">\n            Cancel\n        </button>\n    </div>\n\n</form>\n"
-
-/***/ }),
-
 /***/ 264:
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"modal-header d-block\">\n    <div class=\"d-block float-right\">\n        <button type=\"button\" class=\"btn btn-secondary\" (click)=\"activeModal.dismiss()\">\n            Close\n        </button>\n    </div>\n    <h4 class=\"modal-title\">{{modalTitle}}</h4>\n</div>\n\n<form (ngSubmit)=\"onSubmit()\" [formGroup]=\"form\" [class.loading]=\"loading\">\n    <div class=\"modal-body\">\n\n        <div class=\"row form-group\" [class.form-group-message]=\"formErrors.content_type\">\n            <div class=\"col-md-5\">\n                <label for=\"fieldContentType\">Тип контента</label>\n            </div>\n            <div class=\"col-md-7\">\n                <select id=\"fieldContentType\" class=\"form-control\" name=\"content_type\" formControlName=\"content_type\" (change)=\"onChangeContentType()\">\n                    <option value=\"1\" *ngFor=\"let contentType of contentTypes\" [value]=\"contentType.name\">{{contentType.title}}</option>\n                </select>\n                <div *ngIf=\"formErrors.content_type\" class=\"alert alert-danger\">\n                    {{formErrors.content_type}}\n                </div>\n            </div>\n        </div>\n\n        <ngb-tabset>\n            <ngb-tab title=\"{{groupName}}\" id=\"{{i + 1}}\" *ngFor=\"let groupName of currentContentType.groups; let i=index\">\n                <ng-template ngbTabContent>\n                    <div class=\"pt-3\">\n\n                        <div class=\"row form-group\" *ngFor=\"let field of currentContentType.fields | filterFieldByGroup: groupName\">\n                            <div class=\"col-md-5\">\n                                <label for=\"field_{{field.name}}\">{{ field.title }}</label>\n                            </div>\n                            <div class=\"col-md-7\" [ngSwitch]=\"field.input_type\">\n\n                                <input *ngSwitchCase=\"'text'\" type=\"text\" id=\"field_{{field.name}}\" class=\"form-control\" [formControlName]=\"field.name\">\n\n                                <input *ngSwitchCase=\"'number'\" type=\"number\" id=\"field_{{field.name}}\" min=\"0\" class=\"form-control\" [formControlName]=\"field.name\">\n\n                                <textarea *ngSwitchCase=\"'textarea'\" rows=\"6\" id=\"field_{{field.name}}\" class=\"form-control\" [formControlName]=\"field.name\"></textarea>\n\n                                <input *ngSwitchCase=\"'image'\" type=\"file\" id=\"field_{{field.name}}\" class=\"form-control\" [formControlName]=\"field.name\">\n\n                            </div>\n                        </div>\n\n                    </div>\n                </ng-template>\n            </ngb-tab>\n        </ngb-tabset>\n\n        <div class=\"alert alert-danger mt-3 mb-0\" [hidden]=\"!errorMessage\">\n            <button type=\"button\" class=\"close\" (click)=\"errorMessage = ''\">\n                <span aria-hidden=\"true\">&times;</span>\n            </button>\n            {{errorMessage}}\n        </div>\n\n    </div>\n    <div class=\"modal-footer d-block\">\n        <button type=\"submit\" class=\"btn btn-success btn-wide\">\n            Save\n        </button>\n        <button type=\"submit\" class=\"btn btn-secondary btn-wide\" (click)=\"activeModal.dismiss()\">\n            Cancel\n        </button>\n    </div>\n</form>"
+module.exports = "<div class=\"modal-header d-block\">\n    <div class=\"d-block float-right\">\n        <button type=\"button\" class=\"btn btn-secondary\" (click)=\"activeModal.dismiss()\">\n            Close\n        </button>\n    </div>\n    <h4 class=\"modal-title\">{{modalTitle}}</h4>\n</div>\n\n<div class=\"modal-body\" [class.loading]=\"loading\">\n\n    <form #formElement=\"ngForm\" (ngSubmit)=\"onSubmit()\" [formGroup]=\"form\">\n        <div class=\"row\">\n            <div class=\"col-md-6\">\n                <div class=\"form-group\" [class.form-group-message]=\"formErrors.name\">\n                    <label for=\"fieldName\" class=\"label-filled\">Системное имя</label>\n                    <input type=\"text\" class=\"form-control\" name=\"name\" formControlName=\"name\" id=\"fieldName\" value=\"\">\n                    <div *ngIf=\"formErrors.name\" class=\"alert alert-danger\">\n                        {{formErrors.name}}\n                    </div>\n                </div>\n                <div class=\"form-group form-group-message\" [class.form-group-message]=\"formErrors.title\">\n                    <label for=\"fieldTitle\" class=\"label-filled\">Название</label>\n                    <input type=\"text\" class=\"form-control\" name=\"title\" formControlName=\"title\" id=\"fieldTitle\" value=\"\">\n                    <div *ngIf=\"formErrors.title\" class=\"alert alert-danger\">\n                        {{formErrors.title}}\n                    </div>\n                </div>\n            </div>\n            <div class=\"col-md-6\">\n                <div class=\"form-group\">\n                    <label for=\"fieldDescription\" class=\"label-filled\">Описание</label>\n                    <textarea class=\"form-control\" rows=\"5\" name=\"description\" formControlName=\"description\" id=\"fieldDescription\"></textarea>\n                </div>\n            </div>\n        </div>\n    </form>\n\n    <label class=\"label-filled\">Свойства</label>\n\n    <table class=\"table table-bordered table-divided mb-0\">\n        <thead>\n            <tr>\n                <th>\n                    Системное имя\n                </th>\n                <th>\n                    Название\n                </th>\n                <th>\n                    По умолчанию\n                </th>\n                <th></th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr *ngFor=\"let item of properties; let index=index\">\n                <td>\n                    <input type=\"text\" class=\"form-control\" [(ngModel)]=\"item.name\" name=\"name\">\n                </td>\n                <td class=\"text-center\">\n                    <input type=\"text\" class=\"form-control\" [(ngModel)]=\"item.title\" name=\"title\">\n                </td>\n                <td class=\"text-center\">\n                    <input type=\"text\" class=\"form-control\" [(ngModel)]=\"item.default_value\" name=\"default_value\">\n                </td>\n                <td class=\"text-center\">\n                    <button type=\"button\" class=\"btn btn-secondary\" (click)=\"deleteRow(index)\" ngbTooltip=\"Remove\">\n                        <i class=\"icon-cross\"></i>\n                    </button>\n                </td>\n            </tr>\n        </tbody>\n        <tfoot>\n            <tr class=\"bg-faded\">\n                <td colspan=\"4\" class=\"text-center\">\n                    <button type=\"button\" class=\"btn btn-secondary\" (click)=\"addRow()\">\n                        <i class=\"icon-plus\"></i>\n                        Добавить\n                    </button>\n                </td>\n            </tr>\n        </tfoot>\n    </table>\n\n</div>\n<div class=\"modal-footer d-block\">\n    <button type=\"submit\" class=\"btn btn-success btn-wide\" [disabled]=\"submitted\" (click)=\"save()\">\n        Save\n    </button>\n    <button type=\"submit\" class=\"btn btn-secondary btn-wide\" (click)=\"activeModal.dismiss()\">\n        Cancel\n    </button>\n</div>\n"
 
 /***/ }),
 
 /***/ 265:
 /***/ (function(module, exports) {
 
-module.exports = "\n<div class=\"card\">\n\n    <div class=\"card-block\">\n\n        <div class=\"float-right\">\n            <a class=\"btn btn-primary\" [routerLink]=\"['/catalog/content_types']\">\n                <i class=\"icon-box\"></i>\n                Типы товаров\n            </a>\n            <a class=\"btn btn-primary\" [routerLink]=\"['/catalog/field_types']\">\n                <i class=\"icon-toggle\"></i>\n                Типы полей\n            </a>\n        </div>\n        <h3>\n            <i class=\"icon-layers\"></i>\n            {{title}}\n        </h3>\n\n        <hr>\n\n        <div class=\"float-right\">\n\n            <div ngbDropdown class=\"d-inline-block\">\n                <button class=\"btn btn-outline-info\" id=\"dropdownBasic1\" ngbDropdownToggle>\n                    Массовые дейсвия\n                </button>\n                <div class=\"dropdown-menu\" aria-labelledby=\"dropdownBasic1\">\n                    <button class=\"dropdown-item\">Отключить / включить</button>\n                    <button class=\"dropdown-item\">Удалить</button>\n                </div>\n            </div>\n\n            <button type=\"button\" class=\"btn btn-outline-success\" (click)=\"modalProductOpen()\">\n                <i class=\"icon-plus\"></i>\n                Add product\n            </button>\n\n        </div>\n        <div class=\"float-left\">\n\n            <categories-menu (changeRequest)=\"openCategory($event)\"></categories-menu>\n\n        </div>\n    </div>\n\n    <cmp-table [items]=\"items\" [itemsTotal]=\"100\" [tableFields]=\"tableFields\" (editItemRequest)=\"modalProductOpen($event)\"></cmp-table>\n\n</div>\n"
+module.exports = "<div class=\"modal-header d-block\">\n    <div class=\"d-block float-right\">\n        <button type=\"button\" class=\"btn btn-secondary\" (click)=\"activeModal.dismiss()\">\n            Close\n        </button>\n    </div>\n    <h4 class=\"modal-title\">{{modalTitle}}</h4>\n</div>\n\n<form (ngSubmit)=\"onSubmit()\" [formGroup]=\"form\" [class.loading]=\"loading\">\n    <div class=\"modal-body\">\n\n        <div class=\"row form-group\" [class.form-group-message]=\"formErrors.content_type\">\n            <div class=\"col-md-5\">\n                <label for=\"fieldContentType\">Тип контента</label>\n            </div>\n            <div class=\"col-md-7\">\n                <select id=\"fieldContentType\" class=\"form-control\" name=\"content_type\" formControlName=\"content_type\" (change)=\"onChangeContentType()\">\n                    <option value=\"1\" *ngFor=\"let contentType of contentTypes\" [value]=\"contentType.name\">{{contentType.title}}</option>\n                </select>\n                <div *ngIf=\"formErrors.content_type\" class=\"alert alert-danger\">\n                    {{formErrors.content_type}}\n                </div>\n            </div>\n        </div>\n\n        <ngb-tabset>\n            <ngb-tab title=\"{{groupName}}\" id=\"{{i + 1}}\" *ngFor=\"let groupName of currentContentType.groups; let i=index\">\n                <ng-template ngbTabContent>\n                    <div class=\"pt-3\">\n\n                        <div class=\"row form-group\" *ngFor=\"let field of currentContentType.fields | filterFieldByGroup: groupName\">\n                            <div class=\"col-md-5\">\n                                <label for=\"field_{{field.name}}\">{{ field.title }}</label>\n                            </div>\n                            <div class=\"col-md-7\" [ngSwitch]=\"field.input_type\">\n\n                                <input *ngSwitchCase=\"'text'\" type=\"text\" id=\"field_{{field.name}}\" class=\"form-control\" [formControlName]=\"field.name\">\n\n                                <input *ngSwitchCase=\"'number'\" type=\"number\" id=\"field_{{field.name}}\" min=\"0\" class=\"form-control\" [formControlName]=\"field.name\">\n\n                                <textarea *ngSwitchCase=\"'textarea'\" rows=\"6\" id=\"field_{{field.name}}\" class=\"form-control\" [formControlName]=\"field.name\"></textarea>\n\n                                <input *ngSwitchCase=\"'image'\" type=\"file\" id=\"field_{{field.name}}\" class=\"form-control\" [formControlName]=\"field.name\">\n\n                            </div>\n                        </div>\n\n                    </div>\n                </ng-template>\n            </ngb-tab>\n        </ngb-tabset>\n\n        <div class=\"alert alert-danger mt-3 mb-0\" [hidden]=\"!errorMessage\">\n            <button type=\"button\" class=\"close\" (click)=\"errorMessage = ''\">\n                <span aria-hidden=\"true\">&times;</span>\n            </button>\n            {{errorMessage}}\n        </div>\n\n    </div>\n    <div class=\"modal-footer d-block\">\n        <button type=\"submit\" class=\"btn btn-success btn-wide\">\n            Save\n        </button>\n        <button type=\"submit\" class=\"btn btn-secondary btn-wide\" (click)=\"activeModal.dismiss()\">\n            Cancel\n        </button>\n    </div>\n</form>"
 
 /***/ }),
 
 /***/ 266:
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"card\">\n    <div class=\"card-block\">\n\n        <h3>\n            <i class=\"icon-box\"></i>\n            {{title}}\n        </h3>\n\n        <hr>\n\n        <div class=\"float-right\">\n\n            <div ngbDropdown class=\"d-inline-block\">\n                <button class=\"btn btn-outline-info\" id=\"dropdownBasic1\" ngbDropdownToggle>\n                    Массовые дейсвия\n                </button>\n                <div class=\"dropdown-menu\" aria-labelledby=\"dropdownBasic1\">\n                    <button class=\"dropdown-item\">Отключить / включить</button>\n                    <button class=\"dropdown-item\">Удалить</button>\n                </div>\n            </div>\n\n            <button type=\"button\" class=\"btn btn-outline-success d-inline-block btn-wide\" (click)=\"modalOpen()\">\n                <i class=\"icon-plus\"></i>\n                Add\n            </button>\n        </div>\n        <div class=\"float-left\">\n            <a class=\"btn btn-secondary\" [routerLink]=\"['/catalog']\">\n                <i class=\"icon-arrow-left\"></i>\n                Каталог\n            </a>\n        </div>\n    </div>\n\n    <cmp-table [items]=\"items\" [itemsTotal]=\"100\" [tableFields]=\"tableFields\" (editItemRequest)=\"modalOpen($event)\" (copyItemRequest)=\"copyItem($event)\" (deleteItemRequest)=\"deleteItemConfirm($event)\"></cmp-table>\n\n</div>\n"
+module.exports = "\n<div class=\"card\">\n\n    <div class=\"card-block\">\n\n        <div class=\"float-right\">\n            <a class=\"btn btn-primary\" [routerLink]=\"['/catalog/content_types']\">\n                <i class=\"icon-box\"></i>\n                Типы товаров\n            </a>\n            <a class=\"btn btn-primary\" [routerLink]=\"['/catalog/field_types']\">\n                <i class=\"icon-toggle\"></i>\n                Типы полей\n            </a>\n        </div>\n        <h3>\n            <i class=\"icon-layers\"></i>\n            {{title}}\n        </h3>\n\n        <hr>\n\n        <div class=\"float-right\">\n\n            <div ngbDropdown class=\"d-inline-block\">\n                <button class=\"btn btn-outline-info\" id=\"dropdownBasic1\" ngbDropdownToggle>\n                    Массовые дейсвия\n                </button>\n                <div class=\"dropdown-menu\" aria-labelledby=\"dropdownBasic1\">\n                    <button class=\"dropdown-item\">Отключить / включить</button>\n                    <button class=\"dropdown-item\">Удалить</button>\n                </div>\n            </div>\n\n            <button type=\"button\" class=\"btn btn-outline-success\" (click)=\"modalProductOpen()\">\n                <i class=\"icon-plus\"></i>\n                Add product\n            </button>\n\n        </div>\n        <div class=\"float-left\">\n\n            <categories-menu (changeRequest)=\"openCategory($event)\"></categories-menu>\n\n        </div>\n    </div>\n\n    <cmp-table [items]=\"items\" [itemsTotal]=\"100\" [tableFields]=\"tableFields\" (editItemRequest)=\"modalProductOpen($event)\"></cmp-table>\n\n</div>\n"
 
 /***/ }),
 
 /***/ 267:
 /***/ (function(module, exports) {
 
-module.exports = "\n<div class=\"card\">\n\n    <div class=\"card-block\">\n\n        <h3>\n            <i class=\"icon-toggle\"></i>\n            {{title}}\n        </h3>\n\n        <hr>\n\n        <div class=\"float-right\">\n\n            <div ngbDropdown class=\"d-inline-block\">\n                <button class=\"btn btn-outline-info\" id=\"dropdownBasic1\" ngbDropdownToggle>\n                    Массовые дейсвия\n                </button>\n                <div class=\"dropdown-menu\" aria-labelledby=\"dropdownBasic1\">\n                    <button class=\"dropdown-item\">Отключить / включить</button>\n                    <button class=\"dropdown-item\">Удалить</button>\n                </div>\n            </div>\n\n            <button type=\"button\" class=\"btn btn-outline-success d-inline-block btn-wide\" (click)=\"modalOpen()\">\n                <i class=\"icon-plus\"></i>\n                Add\n            </button>\n        </div>\n\n        <div class=\"float-left\">\n            <a class=\"btn btn-secondary\" [routerLink]=\"['/catalog']\">\n                <i class=\"icon-arrow-left\"></i>\n                Каталог\n            </a>\n        </div>\n    </div>\n\n    <cmp-table [items]=\"items\" [itemsTotal]=\"100\" [tableFields]=\"tableFields\" (editItemRequest)=\"modalOpen($event)\"></cmp-table>\n\n</div>\n"
+module.exports = "<div class=\"card\">\n    <div class=\"card-block\">\n\n        <h3>\n            <i class=\"icon-box\"></i>\n            {{title}}\n        </h3>\n\n        <hr>\n\n        <div class=\"float-right\">\n\n            <div ngbDropdown class=\"d-inline-block\">\n                <button class=\"btn btn-outline-info\" id=\"dropdownBasic1\" ngbDropdownToggle>\n                    Массовые дейсвия\n                </button>\n                <div class=\"dropdown-menu\" aria-labelledby=\"dropdownBasic1\">\n                    <button class=\"dropdown-item\">Отключить / включить</button>\n                    <button class=\"dropdown-item\">Удалить</button>\n                </div>\n            </div>\n\n            <button type=\"button\" class=\"btn btn-outline-success d-inline-block btn-wide\" (click)=\"modalOpen()\">\n                <i class=\"icon-plus\"></i>\n                Add\n            </button>\n        </div>\n        <div class=\"float-left\">\n            <a class=\"btn btn-secondary\" [routerLink]=\"['/catalog']\">\n                <i class=\"icon-arrow-left\"></i>\n                Каталог\n            </a>\n        </div>\n    </div>\n\n    <cmp-table [items]=\"items\" [itemsTotal]=\"100\" [tableFields]=\"tableFields\" (editItemRequest)=\"modalOpen($event)\" (copyItemRequest)=\"copyItem($event)\" (deleteItemRequest)=\"deleteItemConfirm($event)\"></cmp-table>\n\n</div>\n"
 
 /***/ }),
 
 /***/ 268:
 /***/ (function(module, exports) {
 
-module.exports = "\n<div class=\"card\">\n\n    <div class=\"card-block\">\n\n        <h3>\n            <i class=\"icon-bag\"></i>\n            {{title}}\n        </h3>\n\n        <hr>\n\n        <div class=\"float-right\">\n\n            <div ngbDropdown class=\"d-inline-block\">\n                <button class=\"btn btn-outline-primary\" id=\"dropdownBasic1\" ngbDropdownToggle>\n                    Массовые дейсвия\n                </button>\n                <div class=\"dropdown-menu\" aria-labelledby=\"dropdownBasic1\">\n                    <button class=\"dropdown-item\">Изменить статус</button>\n                    <button class=\"dropdown-item\">Удалить</button>\n                </div>\n            </div>\n\n        </div>\n        <div class=\"float-left\">\n\n            <div class=\"input-group\">\n                <input class=\"form-control\" placeholder=\"yyyy-mm-dd\"\n                       name=\"dp\" ngbDatepicker #d=\"ngbDatepicker\">\n                <div class=\"input-group-addon\" (click)=\"d.toggle()\">\n                    <i class=\"icon-grid\"></i>\n                </div>\n            </div>\n\n        </div>\n\n    </div>\n\n    <div class=\"table-responsive\">\n        <table class=\"table table-striped table-divided mb-0\">\n            <thead>\n            <tr>\n                <th>\n                    <label class=\"custom-control custom-checkbox\">\n                        <input type=\"checkbox\" class=\"custom-control-input\">\n                        <span class=\"custom-control-indicator\"></span>\n                    </label>\n                </th>\n                <th>\n                    <button type=\"button\" class=\"btn btn-block btn-link\">\n                        ID\n                        <i class=\"icon-arrow-down\"></i>\n                    </button>\n                </th>\n                <th>\n                    <button type=\"button\" class=\"btn btn-block btn-link\">\n                        Статус\n                    </button>\n                </th>\n                <th>\n                    <button type=\"button\" class=\"btn btn-block btn-link\">\n                        Дата и время\n                    </button>\n                </th>\n                <th>\n                    <button type=\"button\" class=\"btn btn-block btn-link\">\n                        Кол-во товаров\n                    </button>\n                </th>\n                <th>\n                    <button type=\"button\" class=\"btn btn-block btn-link\">\n                        Общая цена\n                    </button>\n                </th>\n                <th>\n                    <button type=\"button\" class=\"btn btn-block btn-link\">\n                        Пользователь\n                    </button>\n                </th>\n            </tr>\n            </thead>\n            <tbody>\n                <tr class=\"show-on-hover-parent\">\n                    <td>\n                        <label class=\"custom-control custom-checkbox\">\n                            <input type=\"checkbox\" class=\"custom-control-input\">\n                            <span class=\"custom-control-indicator\"></span>\n                        </label>\n                    </td>\n                    <th>1</th>\n                    <td>\n                        <button type=\"button\" class=\"btn btn-sm btn-info min-width150\">\n                            Новый\n                        </button>\n                    </td>\n                    <td>\n                        01.03.2017\n                    </td>\n                    <td>\n                        2\n                    </td>\n                    <td>\n                        1 100\n                    </td>\n                    <td>\n                        <div class=\"relative\">\n                            <div class=\"show-on-hover\">\n                                <button class=\"btn btn-secondary btn-sm\">\n                                    <i class=\"icon-pencil\"></i>\n                                </button>\n                                <button class=\"btn btn-secondary btn-sm\">\n                                    <i class=\"icon-cross\"></i>\n                                </button>\n                            </div>\n                        </div>\n                        username@domain.com\n                    </td>\n                </tr>\n                <tr class=\"show-on-hover-parent\">\n                    <td>\n                        <label class=\"custom-control custom-checkbox\">\n                            <input type=\"checkbox\" class=\"custom-control-input\">\n                            <span class=\"custom-control-indicator\"></span>\n                        </label>\n                    </td>\n                    <th>2</th>\n                    <td>\n                        <button type=\"button\" class=\"btn btn-sm btn-success min-width150\">\n                            Выполнен\n                        </button>\n                    </td>\n                    <td>\n                        22.02.2017\n                    </td>\n                    <td>\n                        3\n                    </td>\n                    <td>\n                        2 300\n                    </td>\n                    <td>\n                        <div class=\"relative\">\n                            <div class=\"show-on-hover\">\n                                <button class=\"btn btn-secondary btn-sm\">\n                                    <i class=\"icon-pencil\"></i>\n                                </button>\n                                <button class=\"btn btn-secondary btn-sm\">\n                                    <i class=\"icon-cross\"></i>\n                                </button>\n                            </div>\n                        </div>\n                        username@domain.com\n                    </td>\n                </tr>\n                <tr class=\"show-on-hover-parent\">\n                    <td>\n                        <label class=\"custom-control custom-checkbox\">\n                            <input type=\"checkbox\" class=\"custom-control-input\">\n                            <span class=\"custom-control-indicator\"></span>\n                        </label>\n                    </td>\n                    <th>3</th>\n                    <td>\n                        <button type=\"button\" class=\"btn btn-sm btn-info min-width150\">\n                            Новый\n                        </button>\n                    </td>\n                    <td>\n                        20.02.2017\n                    </td>\n                    <td>\n                        5\n                    </td>\n                    <td>\n                        5 520\n                    </td>\n                    <td>\n                        <div class=\"relative\">\n                            <div class=\"show-on-hover\">\n                                <button class=\"btn btn-secondary btn-sm\">\n                                    <i class=\"icon-pencil\"></i>\n                                </button>\n                                <button class=\"btn btn-secondary btn-sm\">\n                                    <i class=\"icon-cross\"></i>\n                                </button>\n                            </div>\n                        </div>\n                        username@domain.com\n                    </td>\n                </tr>\n                <tr class=\"show-on-hover-parent\">\n                    <td>\n                        <label class=\"custom-control custom-checkbox\">\n                            <input type=\"checkbox\" class=\"custom-control-input\">\n                            <span class=\"custom-control-indicator\"></span>\n                        </label>\n                    </td>\n                    <th>3</th>\n                    <td>\n                        <button type=\"button\" class=\"btn btn-sm btn-info min-width150\">\n                            Новый\n                        </button>\n                    </td>\n                    <td>\n                        20.02.2017\n                    </td>\n                    <td>\n                        5\n                    </td>\n                    <td>\n                        5 520\n                    </td>\n                    <td>\n                        <div class=\"relative\">\n                            <div class=\"show-on-hover\">\n                                <button class=\"btn btn-secondary btn-sm\">\n                                    <i class=\"icon-pencil\"></i>\n                                </button>\n                                <button class=\"btn btn-secondary btn-sm\">\n                                    <i class=\"icon-cross\"></i>\n                                </button>\n                            </div>\n                        </div>\n                        username@domain.com\n                    </td>\n                </tr>\n            </tbody>\n        </table>\n    </div>\n\n    <div class=\"card-footer\">\n\n        <div class=\"float-right\">\n            <select class=\"form-control\">\n                <option value=\"10\">10</option>\n                <option value=\"50\">50</option>\n                <option value=\"100\">100</option>\n            </select>\n        </div>\n\n        <ngb-pagination [class]=\"'mb-0'\" [collectionSize]=\"120\" [page]=\"1\" [maxSize]=\"8\" [rotate]=\"true\" [boundaryLinks]=\"false\"></ngb-pagination>\n\n    </div>\n\n</div>"
+module.exports = "\n<div class=\"card\">\n\n    <div class=\"card-block\">\n\n        <h3>\n            <i class=\"icon-toggle\"></i>\n            {{title}}\n        </h3>\n\n        <hr>\n\n        <div class=\"float-right\">\n\n            <div ngbDropdown class=\"d-inline-block\">\n                <button class=\"btn btn-outline-info\" id=\"dropdownBasic1\" ngbDropdownToggle>\n                    Массовые дейсвия\n                </button>\n                <div class=\"dropdown-menu\" aria-labelledby=\"dropdownBasic1\">\n                    <button class=\"dropdown-item\">Отключить / включить</button>\n                    <button class=\"dropdown-item\">Удалить</button>\n                </div>\n            </div>\n\n            <button type=\"button\" class=\"btn btn-outline-success d-inline-block btn-wide\" (click)=\"modalOpen()\">\n                <i class=\"icon-plus\"></i>\n                Add\n            </button>\n        </div>\n\n        <div class=\"float-left\">\n            <a class=\"btn btn-secondary\" [routerLink]=\"['/catalog']\">\n                <i class=\"icon-arrow-left\"></i>\n                Каталог\n            </a>\n        </div>\n    </div>\n\n    <cmp-table [items]=\"items\" [itemsTotal]=\"100\" [tableFields]=\"tableFields\" (editItemRequest)=\"modalOpen($event)\"></cmp-table>\n\n</div>\n"
 
 /***/ }),
 
 /***/ 269:
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"card\">\n    <div class=\"card-block\">\n\n        <div class=\"float-right\">\n            <!--a class=\"btn btn-primary\" [routerLink]=\"['/settings/input_types']\">\n                <i class=\"icon-upload\"></i>\n                Типы ввода\n            </a>\n            <a class=\"btn btn-primary\" [routerLink]=\"['/settings/output_types']\">\n                <i class=\"icon-download\"></i>\n                Типы вывода\n            </a-->\n        </div>\n\n        <h3>\n            <i class=\"icon-bar-graph-2\"></i>\n            {{title}}\n        </h3>\n\n        <hr>\n\n        <div class=\"row\">\n            <div class=\"col-md-6\">\n\n                <!-- statuses -->\n                <label class=\"label-filled\">\n                    Статусы\n                </label>\n\n                <div class=\"card\">\n                    <div class=\"card-block text-muted\">\n                        Названия статусов заказов и цвет для вывода на странице заказов в административной части.\n                    </div>\n                    <div class=\"table-responsive\">\n\n                        <table class=\"table table-divided mb-0\">\n                            <thead>\n                            <tr>\n                                <th>\n                                    Название\n                                </th>\n                                <th>\n                                    Шаблон письма\n                                </th>\n                                <th>\n                                    Цвет\n                                </th>\n                                <th></th>\n                            </tr>\n                            </thead>\n                            <tbody>\n                            <tr>\n                                <td>\n                                    <input type=\"text\" class=\"form-control form-control-sm\" name=\"\" value=\"Новый\">\n                                </td>\n                                <td>\n                                    <input type=\"text\" class=\"form-control form-control-sm\" name=\"\" value=\"userEmailStatus\">\n                                </td>\n                                <td class=\"text-center\">\n                                    <button class=\"btn btn-secondary btn-sm bg-info\" style=\"width: 30px;\">\n                                        &nbsp;\n                                    </button>\n                                </td>\n                                <td class=\"text-center\">\n                                    <button class=\"btn btn-secondary btn-sm\">\n                                        <i class=\"icon-cross\"></i>\n                                    </button>\n                                </td>\n                            </tr>\n                            <tr>\n                                <td>\n                                    <input type=\"text\" class=\"form-control form-control-sm\" name=\"\" value=\"Принят к оплате\">\n                                </td>\n                                <td>\n                                    <input type=\"text\" class=\"form-control form-control-sm\" name=\"\" value=\"userEmailStatus\">\n                                </td>\n                                <td class=\"text-center\">\n                                    <button class=\"btn btn-secondary btn-sm bg-success\" style=\"width: 30px;\">\n                                        &nbsp;\n                                    </button>\n                                </td>\n                                <td class=\"text-center\">\n                                    <button class=\"btn btn-secondary btn-sm\">\n                                        <i class=\"icon-cross\"></i>\n                                    </button>\n                                </td>\n                            </tr>\n                            <tr>\n                                <td>\n                                    <input type=\"text\" class=\"form-control form-control-sm\" name=\"\" value=\"Отправлен\">\n                                </td>\n                                <td>\n                                    <input type=\"text\" class=\"form-control form-control-sm\" name=\"\" value=\"userEmailStatus\">\n                                </td>\n                                <td class=\"text-center\">\n                                    <button class=\"btn btn-secondary btn-sm bg-warning\" style=\"width: 30px;\">\n                                        &nbsp;\n                                    </button>\n                                </td>\n                                <td class=\"text-center\">\n                                    <button class=\"btn btn-secondary btn-sm\">\n                                        <i class=\"icon-cross\"></i>\n                                    </button>\n                                </td>\n                            </tr>\n                            <tr>\n                                <td>\n                                    <input type=\"text\" class=\"form-control form-control-sm\" name=\"\" value=\"Отменен\">\n                                </td>\n                                <td>\n                                    <input type=\"text\" class=\"form-control form-control-sm\" name=\"\" value=\"userEmailStatus\">\n                                </td>\n                                <td class=\"text-center\">\n                                    <button class=\"btn btn-secondary btn-sm bg-danger\" style=\"width: 30px;\">\n                                        &nbsp;\n                                    </button>\n                                </td>\n                                <td class=\"text-center\">\n                                    <button class=\"btn btn-secondary btn-sm\">\n                                        <i class=\"icon-cross\"></i>\n                                    </button>\n                                </td>\n                            </tr>\n                            </tbody>\n                            <tfoot>\n                            <tr class=\"bg-faded\">\n                                <td colspan=\"4\" class=\"text-center\">\n                                    <button class=\"btn btn-secondary btn-sm\">\n                                        <i class=\"icon-plus\"></i>\n                                        Добавить\n                                    </button>\n                                </td>\n                            </tr>\n                            </tfoot>\n                        </table>\n\n                    </div>\n                </div>\n                <!-- /statuses -->\n\n            </div>\n            <div class=\"col-md-6\">\n\n                <!-- delivery -->\n                <label class=\"label-filled\">\n                    Методы доставки\n                </label>\n\n                <div class=\"card mb-3\">\n                    <div class=\"card-block text-muted\">\n                        Список методов доставки для вывода в форме заказа во внешней части сайта.\n                    </div>\n                    <div class=\"table-responsive\">\n\n                        <table class=\"table table-divided mb-0\">\n                            <thead>\n                                <tr>\n                                    <th>\n                                        Название\n                                    </th>\n                                    <th>\n                                        Цена\n                                    </th>\n                                    <th>\n                                        Макс. цена\n                                    </th>\n                                    <th></th>\n                                </tr>\n                            </thead>\n                            <tbody>\n                                <tr>\n                                    <td>\n                                        <input type=\"text\" class=\"form-control form-control-sm\" name=\"\" value=\"Самовывоз\">\n                                    </td>\n                                    <td class=\"text-center\">\n                                        <input type=\"number\" class=\"form-control form-control-sm mwidth-80 m-auto\" name=\"\" value=\"0\">\n                                    </td>\n                                    <td class=\"text-center\">\n                                        <input type=\"number\" class=\"form-control form-control-sm mwidth-80 m-auto\" name=\"\" value=\"\">\n                                    </td>\n                                    <td class=\"text-center\">\n                                        <button class=\"btn btn-secondary btn-sm\">\n                                            <i class=\"icon-cross\"></i>\n                                        </button>\n                                    </td>\n                                </tr>\n                                <tr>\n                                    <td>\n                                        <input type=\"text\" class=\"form-control form-control-sm\" name=\"\" value=\"Доставка по городу\">\n                                    </td>\n                                    <td class=\"text-center\">\n                                        <input type=\"number\" class=\"form-control form-control-sm mwidth-80 m-auto\" name=\"\" value=\"0\">\n                                    </td>\n                                    <td class=\"text-center\">\n                                        <input type=\"number\" class=\"form-control form-control-sm mwidth-80 m-auto\" name=\"\" value=\"\">\n                                    </td>\n                                    <td class=\"text-center\">\n                                        <button class=\"btn btn-secondary btn-sm\">\n                                            <i class=\"icon-cross\"></i>\n                                        </button>\n                                    </td>\n                                </tr>\n                                <tr>\n                                    <td>\n                                        <input type=\"text\" class=\"form-control form-control-sm\" name=\"\" value=\"Доставка по городу\">\n                                    </td>\n                                    <td class=\"text-center\">\n                                        <input type=\"number\" class=\"form-control form-control-sm mwidth-80 m-auto\" name=\"\" value=\"0\">\n                                    </td>\n                                    <td class=\"text-center\">\n                                        <input type=\"number\" class=\"form-control form-control-sm mwidth-80 m-auto\" name=\"\" value=\"\">\n                                    </td>\n                                    <td class=\"text-center\">\n                                        <button class=\"btn btn-secondary btn-sm\">\n                                            <i class=\"icon-cross\"></i>\n                                        </button>\n                                    </td>\n                                </tr>\n                            </tbody>\n                            <tfoot>\n                                <tr class=\"bg-faded\">\n                                    <td colspan=\"4\" class=\"text-center\">\n                                        <button class=\"btn btn-secondary btn-sm\">\n                                            <i class=\"icon-plus\"></i>\n                                            Добавить\n                                        </button>\n                                    </td>\n                                </tr>\n                            </tfoot>\n                        </table>\n\n                    </div>\n                </div>\n                <!-- /delivery -->\n\n            </div>\n        </div>\n\n    </div>\n</div>"
+module.exports = "\n<div class=\"card\">\n\n    <div class=\"card-block\">\n\n        <h3>\n            <i class=\"icon-bag\"></i>\n            {{title}}\n        </h3>\n\n        <hr>\n\n        <div class=\"float-right\">\n\n            <div ngbDropdown class=\"d-inline-block\">\n                <button class=\"btn btn-outline-primary\" id=\"dropdownBasic1\" ngbDropdownToggle>\n                    Массовые дейсвия\n                </button>\n                <div class=\"dropdown-menu\" aria-labelledby=\"dropdownBasic1\">\n                    <button class=\"dropdown-item\">Изменить статус</button>\n                    <button class=\"dropdown-item\">Удалить</button>\n                </div>\n            </div>\n\n        </div>\n        <div class=\"float-left\">\n\n            <div class=\"input-group\">\n                <input class=\"form-control\" placeholder=\"yyyy-mm-dd\"\n                       name=\"dp\" ngbDatepicker #d=\"ngbDatepicker\">\n                <div class=\"input-group-addon\" (click)=\"d.toggle()\">\n                    <i class=\"icon-grid\"></i>\n                </div>\n            </div>\n\n        </div>\n\n    </div>\n\n    <div class=\"table-responsive\">\n        <table class=\"table table-striped table-divided mb-0\">\n            <thead>\n            <tr>\n                <th>\n                    <label class=\"custom-control custom-checkbox\">\n                        <input type=\"checkbox\" class=\"custom-control-input\">\n                        <span class=\"custom-control-indicator\"></span>\n                    </label>\n                </th>\n                <th>\n                    <button type=\"button\" class=\"btn btn-block btn-link\">\n                        ID\n                        <i class=\"icon-arrow-down\"></i>\n                    </button>\n                </th>\n                <th>\n                    <button type=\"button\" class=\"btn btn-block btn-link\">\n                        Статус\n                    </button>\n                </th>\n                <th>\n                    <button type=\"button\" class=\"btn btn-block btn-link\">\n                        Дата и время\n                    </button>\n                </th>\n                <th>\n                    <button type=\"button\" class=\"btn btn-block btn-link\">\n                        Кол-во товаров\n                    </button>\n                </th>\n                <th>\n                    <button type=\"button\" class=\"btn btn-block btn-link\">\n                        Общая цена\n                    </button>\n                </th>\n                <th>\n                    <button type=\"button\" class=\"btn btn-block btn-link\">\n                        Пользователь\n                    </button>\n                </th>\n            </tr>\n            </thead>\n            <tbody>\n                <tr class=\"show-on-hover-parent\">\n                    <td>\n                        <label class=\"custom-control custom-checkbox\">\n                            <input type=\"checkbox\" class=\"custom-control-input\">\n                            <span class=\"custom-control-indicator\"></span>\n                        </label>\n                    </td>\n                    <th>1</th>\n                    <td>\n                        <button type=\"button\" class=\"btn btn-sm btn-info min-width150\">\n                            Новый\n                        </button>\n                    </td>\n                    <td>\n                        01.03.2017\n                    </td>\n                    <td>\n                        2\n                    </td>\n                    <td>\n                        1 100\n                    </td>\n                    <td>\n                        <div class=\"relative\">\n                            <div class=\"show-on-hover\">\n                                <button class=\"btn btn-secondary btn-sm\">\n                                    <i class=\"icon-pencil\"></i>\n                                </button>\n                                <button class=\"btn btn-secondary btn-sm\">\n                                    <i class=\"icon-cross\"></i>\n                                </button>\n                            </div>\n                        </div>\n                        username@domain.com\n                    </td>\n                </tr>\n                <tr class=\"show-on-hover-parent\">\n                    <td>\n                        <label class=\"custom-control custom-checkbox\">\n                            <input type=\"checkbox\" class=\"custom-control-input\">\n                            <span class=\"custom-control-indicator\"></span>\n                        </label>\n                    </td>\n                    <th>2</th>\n                    <td>\n                        <button type=\"button\" class=\"btn btn-sm btn-success min-width150\">\n                            Выполнен\n                        </button>\n                    </td>\n                    <td>\n                        22.02.2017\n                    </td>\n                    <td>\n                        3\n                    </td>\n                    <td>\n                        2 300\n                    </td>\n                    <td>\n                        <div class=\"relative\">\n                            <div class=\"show-on-hover\">\n                                <button class=\"btn btn-secondary btn-sm\">\n                                    <i class=\"icon-pencil\"></i>\n                                </button>\n                                <button class=\"btn btn-secondary btn-sm\">\n                                    <i class=\"icon-cross\"></i>\n                                </button>\n                            </div>\n                        </div>\n                        username@domain.com\n                    </td>\n                </tr>\n                <tr class=\"show-on-hover-parent\">\n                    <td>\n                        <label class=\"custom-control custom-checkbox\">\n                            <input type=\"checkbox\" class=\"custom-control-input\">\n                            <span class=\"custom-control-indicator\"></span>\n                        </label>\n                    </td>\n                    <th>3</th>\n                    <td>\n                        <button type=\"button\" class=\"btn btn-sm btn-info min-width150\">\n                            Новый\n                        </button>\n                    </td>\n                    <td>\n                        20.02.2017\n                    </td>\n                    <td>\n                        5\n                    </td>\n                    <td>\n                        5 520\n                    </td>\n                    <td>\n                        <div class=\"relative\">\n                            <div class=\"show-on-hover\">\n                                <button class=\"btn btn-secondary btn-sm\">\n                                    <i class=\"icon-pencil\"></i>\n                                </button>\n                                <button class=\"btn btn-secondary btn-sm\">\n                                    <i class=\"icon-cross\"></i>\n                                </button>\n                            </div>\n                        </div>\n                        username@domain.com\n                    </td>\n                </tr>\n                <tr class=\"show-on-hover-parent\">\n                    <td>\n                        <label class=\"custom-control custom-checkbox\">\n                            <input type=\"checkbox\" class=\"custom-control-input\">\n                            <span class=\"custom-control-indicator\"></span>\n                        </label>\n                    </td>\n                    <th>3</th>\n                    <td>\n                        <button type=\"button\" class=\"btn btn-sm btn-info min-width150\">\n                            Новый\n                        </button>\n                    </td>\n                    <td>\n                        20.02.2017\n                    </td>\n                    <td>\n                        5\n                    </td>\n                    <td>\n                        5 520\n                    </td>\n                    <td>\n                        <div class=\"relative\">\n                            <div class=\"show-on-hover\">\n                                <button class=\"btn btn-secondary btn-sm\">\n                                    <i class=\"icon-pencil\"></i>\n                                </button>\n                                <button class=\"btn btn-secondary btn-sm\">\n                                    <i class=\"icon-cross\"></i>\n                                </button>\n                            </div>\n                        </div>\n                        username@domain.com\n                    </td>\n                </tr>\n            </tbody>\n        </table>\n    </div>\n\n    <div class=\"card-footer\">\n\n        <div class=\"float-right\">\n            <select class=\"form-control\">\n                <option value=\"10\">10</option>\n                <option value=\"50\">50</option>\n                <option value=\"100\">100</option>\n            </select>\n        </div>\n\n        <ngb-pagination [class]=\"'mb-0'\" [collectionSize]=\"120\" [page]=\"1\" [maxSize]=\"8\" [rotate]=\"true\" [boundaryLinks]=\"false\"></ngb-pagination>\n\n    </div>\n\n</div>"
 
 /***/ }),
 
 /***/ 270:
 /***/ (function(module, exports) {
 
+module.exports = "<div class=\"card\">\n    <div class=\"card-block\">\n\n        <div class=\"float-right\">\n            <!--a class=\"btn btn-primary\" [routerLink]=\"['/settings/input_types']\">\n                <i class=\"icon-upload\"></i>\n                Типы ввода\n            </a>\n            <a class=\"btn btn-primary\" [routerLink]=\"['/settings/output_types']\">\n                <i class=\"icon-download\"></i>\n                Типы вывода\n            </a-->\n        </div>\n\n        <h3>\n            <i class=\"icon-bar-graph-2\"></i>\n            {{title}}\n        </h3>\n\n        <hr>\n\n        <div class=\"row\">\n            <div class=\"col-md-6\">\n\n                <!-- statuses -->\n                <label class=\"label-filled\">\n                    Статусы\n                </label>\n\n                <div class=\"card\">\n                    <div class=\"card-block text-muted\">\n                        Названия статусов заказов и цвет для вывода на странице заказов в административной части.\n                    </div>\n                    <div class=\"table-responsive\">\n\n                        <table class=\"table table-divided mb-0\">\n                            <thead>\n                            <tr>\n                                <th>\n                                    Название\n                                </th>\n                                <th>\n                                    Шаблон письма\n                                </th>\n                                <th>\n                                    Цвет\n                                </th>\n                                <th></th>\n                            </tr>\n                            </thead>\n                            <tbody>\n                            <tr>\n                                <td>\n                                    <input type=\"text\" class=\"form-control form-control-sm\" name=\"\" value=\"Новый\">\n                                </td>\n                                <td>\n                                    <input type=\"text\" class=\"form-control form-control-sm\" name=\"\" value=\"userEmailStatus\">\n                                </td>\n                                <td class=\"text-center\">\n                                    <button class=\"btn btn-secondary btn-sm bg-info\" style=\"width: 30px;\">\n                                        &nbsp;\n                                    </button>\n                                </td>\n                                <td class=\"text-center\">\n                                    <button class=\"btn btn-secondary btn-sm\">\n                                        <i class=\"icon-cross\"></i>\n                                    </button>\n                                </td>\n                            </tr>\n                            <tr>\n                                <td>\n                                    <input type=\"text\" class=\"form-control form-control-sm\" name=\"\" value=\"Принят к оплате\">\n                                </td>\n                                <td>\n                                    <input type=\"text\" class=\"form-control form-control-sm\" name=\"\" value=\"userEmailStatus\">\n                                </td>\n                                <td class=\"text-center\">\n                                    <button class=\"btn btn-secondary btn-sm bg-success\" style=\"width: 30px;\">\n                                        &nbsp;\n                                    </button>\n                                </td>\n                                <td class=\"text-center\">\n                                    <button class=\"btn btn-secondary btn-sm\">\n                                        <i class=\"icon-cross\"></i>\n                                    </button>\n                                </td>\n                            </tr>\n                            <tr>\n                                <td>\n                                    <input type=\"text\" class=\"form-control form-control-sm\" name=\"\" value=\"Отправлен\">\n                                </td>\n                                <td>\n                                    <input type=\"text\" class=\"form-control form-control-sm\" name=\"\" value=\"userEmailStatus\">\n                                </td>\n                                <td class=\"text-center\">\n                                    <button class=\"btn btn-secondary btn-sm bg-warning\" style=\"width: 30px;\">\n                                        &nbsp;\n                                    </button>\n                                </td>\n                                <td class=\"text-center\">\n                                    <button class=\"btn btn-secondary btn-sm\">\n                                        <i class=\"icon-cross\"></i>\n                                    </button>\n                                </td>\n                            </tr>\n                            <tr>\n                                <td>\n                                    <input type=\"text\" class=\"form-control form-control-sm\" name=\"\" value=\"Отменен\">\n                                </td>\n                                <td>\n                                    <input type=\"text\" class=\"form-control form-control-sm\" name=\"\" value=\"userEmailStatus\">\n                                </td>\n                                <td class=\"text-center\">\n                                    <button class=\"btn btn-secondary btn-sm bg-danger\" style=\"width: 30px;\">\n                                        &nbsp;\n                                    </button>\n                                </td>\n                                <td class=\"text-center\">\n                                    <button class=\"btn btn-secondary btn-sm\">\n                                        <i class=\"icon-cross\"></i>\n                                    </button>\n                                </td>\n                            </tr>\n                            </tbody>\n                            <tfoot>\n                            <tr class=\"bg-faded\">\n                                <td colspan=\"4\" class=\"text-center\">\n                                    <button class=\"btn btn-secondary btn-sm\">\n                                        <i class=\"icon-plus\"></i>\n                                        Добавить\n                                    </button>\n                                </td>\n                            </tr>\n                            </tfoot>\n                        </table>\n\n                    </div>\n                </div>\n                <!-- /statuses -->\n\n            </div>\n            <div class=\"col-md-6\">\n\n                <!-- delivery -->\n                <label class=\"label-filled\">\n                    Методы доставки\n                </label>\n\n                <div class=\"card mb-3\">\n                    <div class=\"card-block text-muted\">\n                        Список методов доставки для вывода в форме заказа во внешней части сайта.\n                    </div>\n                    <div class=\"table-responsive\">\n\n                        <table class=\"table table-divided mb-0\">\n                            <thead>\n                                <tr>\n                                    <th>\n                                        Название\n                                    </th>\n                                    <th>\n                                        Цена\n                                    </th>\n                                    <th>\n                                        Макс. цена\n                                    </th>\n                                    <th></th>\n                                </tr>\n                            </thead>\n                            <tbody>\n                                <tr>\n                                    <td>\n                                        <input type=\"text\" class=\"form-control form-control-sm\" name=\"\" value=\"Самовывоз\">\n                                    </td>\n                                    <td class=\"text-center\">\n                                        <input type=\"number\" class=\"form-control form-control-sm mwidth-80 m-auto\" name=\"\" value=\"0\">\n                                    </td>\n                                    <td class=\"text-center\">\n                                        <input type=\"number\" class=\"form-control form-control-sm mwidth-80 m-auto\" name=\"\" value=\"\">\n                                    </td>\n                                    <td class=\"text-center\">\n                                        <button class=\"btn btn-secondary btn-sm\">\n                                            <i class=\"icon-cross\"></i>\n                                        </button>\n                                    </td>\n                                </tr>\n                                <tr>\n                                    <td>\n                                        <input type=\"text\" class=\"form-control form-control-sm\" name=\"\" value=\"Доставка по городу\">\n                                    </td>\n                                    <td class=\"text-center\">\n                                        <input type=\"number\" class=\"form-control form-control-sm mwidth-80 m-auto\" name=\"\" value=\"0\">\n                                    </td>\n                                    <td class=\"text-center\">\n                                        <input type=\"number\" class=\"form-control form-control-sm mwidth-80 m-auto\" name=\"\" value=\"\">\n                                    </td>\n                                    <td class=\"text-center\">\n                                        <button class=\"btn btn-secondary btn-sm\">\n                                            <i class=\"icon-cross\"></i>\n                                        </button>\n                                    </td>\n                                </tr>\n                                <tr>\n                                    <td>\n                                        <input type=\"text\" class=\"form-control form-control-sm\" name=\"\" value=\"Доставка по городу\">\n                                    </td>\n                                    <td class=\"text-center\">\n                                        <input type=\"number\" class=\"form-control form-control-sm mwidth-80 m-auto\" name=\"\" value=\"0\">\n                                    </td>\n                                    <td class=\"text-center\">\n                                        <input type=\"number\" class=\"form-control form-control-sm mwidth-80 m-auto\" name=\"\" value=\"\">\n                                    </td>\n                                    <td class=\"text-center\">\n                                        <button class=\"btn btn-secondary btn-sm\">\n                                            <i class=\"icon-cross\"></i>\n                                        </button>\n                                    </td>\n                                </tr>\n                            </tbody>\n                            <tfoot>\n                                <tr class=\"bg-faded\">\n                                    <td colspan=\"4\" class=\"text-center\">\n                                        <button class=\"btn btn-secondary btn-sm\">\n                                            <i class=\"icon-plus\"></i>\n                                            Добавить\n                                        </button>\n                                    </td>\n                                </tr>\n                            </tfoot>\n                        </table>\n\n                    </div>\n                </div>\n                <!-- /delivery -->\n\n            </div>\n        </div>\n\n    </div>\n</div>"
+
+/***/ }),
+
+/***/ 271:
+/***/ (function(module, exports) {
+
 module.exports = "<div class=\"card\">\n    <div class=\"card-block\">\n\n        <h3>\n            <i class=\"icon-bar-graph-2\"></i>\n            {{title}}\n        </h3>\n\n        <hr>\n\n        <div class=\"float-left\">\n\n            <div class=\"input-group\">\n                <input class=\"form-control\" placeholder=\"yyyy-mm-dd\" name=\"dp\" ngbDatepicker #d=\"ngbDatepicker\">\n                <div class=\"input-group-addon\" (click)=\"d.toggle()\">\n                    <i class=\"icon-grid\"></i>\n                </div>\n            </div>\n\n        </div>\n\n        <div class=\"clearfix\"></div>\n\n    </div>\n    <div class=\"card-block border-t\">\n\n        <br>\n        <br>\n        <br>\n\n    </div>\n</div>"
 
 /***/ }),
 
-/***/ 304:
+/***/ 305:
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(183);
@@ -2440,7 +2608,7 @@ module.exports = __webpack_require__(183);
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise__ = __webpack_require__(47);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ContentTypesService; });
@@ -2569,7 +2737,7 @@ __decorate([
 ConfirmModalContent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Component */])({
         selector: 'modal_confirm',
-        template: __webpack_require__(261),
+        template: __webpack_require__(262),
         providers: []
     }),
     __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["b" /* NgbActiveModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["b" /* NgbActiveModal */]) === "function" && _a || Object])
@@ -2586,8 +2754,8 @@ var AppComponent = (function () {
 AppComponent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Component */])({
         selector: 'app-root',
-        template: __webpack_require__(257),
-        styles: [__webpack_require__(256)],
+        template: __webpack_require__(258),
+        styles: [__webpack_require__(257)],
         providers: [__WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["c" /* NgbTooltipConfig */]]
     }),
     __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["c" /* NgbTooltipConfig */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["c" /* NgbTooltipConfig */]) === "function" && _b || Object])
@@ -2624,7 +2792,7 @@ var Category = (function () {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise__ = __webpack_require__(47);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_catch__ = __webpack_require__(85);
@@ -2722,7 +2890,7 @@ var _a;
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise__ = __webpack_require__(47);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_catch__ = __webpack_require__(85);
@@ -2808,5 +2976,5 @@ var _a;
 
 /***/ })
 
-},[304]);
+},[305]);
 //# sourceMappingURL=main.bundle.js.map

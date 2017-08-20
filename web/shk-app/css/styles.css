@@ -32,9 +32,8 @@ select.form-control:hover { box-shadow: 0 0 11px rgba(0, 0, 0, 0.3); }
 
 /* table */
 .table-divided {  }
-.table-divided thead th { position: relative; text-align: center; color: #727272; }
-.table-divided thead th:after { content: ''; display: block; width: 2px; height: 20px; position: absolute; top: 50%; right: 0; margin-top: -10px; background-color: #ddd; }
-.table-divided thead th:last-child:after { display: none; }
+.table-divided thead th { position: relative; text-align: center; color: #727272; border: 0; }
+.table-divided thead th:not(:last-child):after { content: ''; display: block; width: 2px; height: 20px; position: absolute; top: 50%; right: 0; margin-top: -10px; background-color: #ddd; }
 
 /* buttons */
 .btn { cursor: pointer; border-radius: 3px; }

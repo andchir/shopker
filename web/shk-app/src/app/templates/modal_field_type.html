@@ -1,0 +1,94 @@
+<div class="modal-header d-block">
+    <div class="d-block float-right">
+        <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss()">
+            Close
+        </button>
+    </div>
+    <h4 class="modal-title">{{modalTitle}}</h4>
+</div>
+
+<div class="modal-body" [class.loading]="loading">
+
+    <form #formElement="ngForm" (ngSubmit)="onSubmit()" [formGroup]="form">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group" [class.form-group-message]="formErrors.name">
+                    <label for="fieldName" class="label-filled">Системное имя</label>
+                    <input type="text" class="form-control" name="name" formControlName="name" id="fieldName" value="">
+                    <div *ngIf="formErrors.name" class="alert alert-danger">
+                        {{formErrors.name}}
+                    </div>
+                </div>
+                <div class="form-group form-group-message" [class.form-group-message]="formErrors.title">
+                    <label for="fieldTitle" class="label-filled">Название</label>
+                    <input type="text" class="form-control" name="title" formControlName="title" id="fieldTitle" value="">
+                    <div *ngIf="formErrors.title" class="alert alert-danger">
+                        {{formErrors.title}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="fieldDescription" class="label-filled">Описание</label>
+                    <textarea class="form-control" rows="5" name="description" formControlName="description" id="fieldDescription"></textarea>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <label class="label-filled">Свойства</label>
+
+    <table class="table table-bordered table-divided mb-0">
+        <thead>
+            <tr>
+                <th>
+                    Системное имя
+                </th>
+                <th>
+                    Название
+                </th>
+                <th>
+                    По умолчанию
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of properties; let index=index">
+                <td>
+                    <input type="text" class="form-control" [(ngModel)]="item.name" name="name">
+                </td>
+                <td class="text-center">
+                    <input type="text" class="form-control" [(ngModel)]="item.title" name="title">
+                </td>
+                <td class="text-center">
+                    <input type="text" class="form-control" [(ngModel)]="item.default_value" name="default_value">
+                </td>
+                <td class="text-center">
+                    <button type="button" class="btn btn-secondary" (click)="deleteRow(index)" ngbTooltip="Remove">
+                        <i class="icon-cross"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr class="bg-faded">
+                <td colspan="4" class="text-center">
+                    <button type="button" class="btn btn-secondary" (click)="addRow()">
+                        <i class="icon-plus"></i>
+                        Добавить
+                    </button>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+
+</div>
+<div class="modal-footer d-block">
+    <button type="submit" class="btn btn-success btn-wide" [disabled]="submitted" (click)="save()">
+        Save
+    </button>
+    <button type="submit" class="btn btn-secondary btn-wide" (click)="activeModal.dismiss()">
+        Cancel
+    </button>
+</div>

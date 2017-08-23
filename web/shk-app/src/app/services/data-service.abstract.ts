@@ -1,5 +1,5 @@
-import { Injectable }              from '@angular/core';
-import { Http, Response }          from '@angular/http';
+import { Injectable } from '@angular/core';
+import { Http, Response } from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
 
 import { Observable } from 'rxjs/Observable';
@@ -7,45 +7,50 @@ import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
-import { Product } from '../models/product.model';
-
 @Injectable()
-export class ProductsService {
+export abstract class DataService {
 
+    private http: Http;
     private headers = new Headers({'Content-Type': 'application/json'});
-    private listUrl = 'app/products_list';
-    private oneUrl = 'app/product';
+    private requestUrl = '';
 
-    constructor (private http: Http) {}
-
-    createItem(data: any): Promise<any> {
-        return this.http
-            .post(this.oneUrl, JSON.stringify( data ), {headers: this.headers})
-            .toPromise()
-            .then(res => res.json())
-            .catch(this.handleError);
+    constructor(http: Http) {
+        this.http = http;
+        this.requestUrl = 'app/data_list';
     }
 
-    editItem(id: number, data: any): Promise<any> {
-        const url = `${this.oneUrl}/${id}`;
-        return this.http
-            .put(url, JSON.stringify( data ), {headers: this.headers})
-            .toPromise()
-            .then(res => res.json())
-            .catch(this.handleError);
+    setRequestUrl(url){
+        this.requestUrl = url;
     }
 
-    getList(categoryId: number): Observable<Product[]> {
-        return this.http.get(this.listUrl + '/' + categoryId)
+    getList(): Observable<any[]> {
+        return this.http.get(this.requestUrl)
             .map(this.extractData)
             .catch(this.handleError);
     }
 
-    getItem(id: number): Promise<Product> {
-        const url = `${this.oneUrl}/${id}`;
-        return this.http.get(url)
+    delete(id: number): Promise<void> {
+        const url = `${this.requestUrl}/${id}`;
+        return this.http.delete(url, {headers: this.headers})
             .toPromise()
-            .then(response => response.json().data as Product)
+            .then(() => null)
+            .catch(this.handleError);
+    }
+
+    create(item: any): Promise<any> {
+        return this.http
+            .post(this.requestUrl, JSON.stringify(item), {headers: this.headers})
+            .toPromise()
+            .then(res => res.json())
+            .catch(this.handleError);
+    }
+
+    update(item: any): Promise<any> {
+        const url = `${this.requestUrl}/${item.id}`;
+        return this.http
+            .put(url, JSON.stringify(item), {headers: this.headers})
+            .toPromise()
+            .then(() => item)
             .catch(this.handleError);
     }
 
@@ -68,3 +73,4 @@ export class ProductsService {
     }
 
 }
+

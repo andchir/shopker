@@ -1,0 +1,41 @@
+
+<div class="card">
+
+    <div class="card-block">
+
+        <h3>
+            <i class="icon-toggle"></i>
+            {{title}}
+        </h3>
+
+        <hr>
+
+        <div class="float-right">
+
+            <div ngbDropdown class="d-inline-block">
+                <button class="btn btn-outline-info" id="dropdownBasic1" ngbDropdownToggle>
+                    Массовые дейсвия
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item">Отключить / включить</button>
+                    <button class="dropdown-item">Удалить</button>
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-outline-success d-inline-block btn-wide" (click)="modalOpen()">
+                <i class="icon-plus"></i>
+                Add
+            </button>
+        </div>
+
+        <div class="float-left">
+            <a class="btn btn-secondary" [routerLink]="['/catalog']">
+                <i class="icon-arrow-left"></i>
+                Каталог
+            </a>
+        </div>
+    </div>
+
+    <cmp-table [items]="items" [itemsTotal]="100" [tableFields]="tableFields" (editItemRequest)="modalOpen($event)"></cmp-table>
+
+</div>

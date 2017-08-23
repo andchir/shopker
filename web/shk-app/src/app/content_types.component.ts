@@ -11,7 +11,7 @@ import * as _ from "lodash";
 @Component({
     selector: 'content-type-modal-content',
     templateUrl: 'templates/modal_content_types.html',
-    providers: [ ContentTypesService, NgbTooltipConfig ]
+    providers: [ ContentTypesService ]
 })
 export class ContentTypeModalContent implements OnInit {
     @Input() modalTitle;
@@ -86,7 +86,7 @@ export class ContentTypeModalContent implements OnInit {
     constructor(
         private fb: FormBuilder,
         private contentTypesService: ContentTypesService,
-        public activeModal: NgbActiveModal,
+        private activeModal: NgbActiveModal,
         tooltipConfig: NgbTooltipConfig
     ) {
         tooltipConfig.placement = 'bottom';

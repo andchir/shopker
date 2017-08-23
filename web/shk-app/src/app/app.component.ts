@@ -19,7 +19,7 @@ export class ConfirmModalContent {
 
 @Component({
     selector: 'app-root',
-    templateUrl: './app.component.html',
+    templateUrl: './templates/app.component.html',
     styleUrls: ['./app.component.css'],
     providers: [ NgbTooltipConfig ]
 })

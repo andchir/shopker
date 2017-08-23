@@ -19,6 +19,10 @@ Angular CLI
 -----------
 
 ~~~
+npm install -g @angular/cli@latest
+~~~
+
+~~~
 cd shk-app
 ~~~
 

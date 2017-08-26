@@ -5,7 +5,7 @@ namespace AppBundle\Document;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
 /**
- * @MongoDB\Document(collection="product",repositoryClass="AppBundle\Repository\FieldTypeRepository")
+ * @MongoDB\Document(collection="field_type",repositoryClass="AppBundle\Repository\FieldTypeRepository")
  */
 class FieldType
 {
@@ -159,5 +159,20 @@ class FieldType
     public function getIsActive()
     {
         return $this->is_active;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'name' => $this->getName(),
+            'description' => $this->getDescription(),
+            'properties' => $this->getProperties(),
+            'isActive' => $this->getIsActive()
+        ];
     }
 }

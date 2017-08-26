@@ -3,6 +3,7 @@ import { Title } from '@angular/platform-browser';
 import { NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { DataService } from './services/data-service.abstract';
+import { AlertModalContent, ConfirmModalContent } from './app.component';
 
 @Component({
 
@@ -22,6 +23,8 @@ export abstract class ModalContentAbstractComponent implements OnInit {
     form: FormGroup;
     formErrors = {};
     validationMessages = {};
+    formFields = {};
+    data = {};
 
     constructor(
         fb: FormBuilder,
@@ -38,7 +41,23 @@ export abstract class ModalContentAbstractComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.buildForm(this.formFields);
+        if(this.itemId){
+            this.getModelData();
+        }
+    }
 
+    getModelData(): void {
+        this.loading = true;
+        this.dataService.getItem(this.itemId)
+            .then(item => {
+                if(this.isItemCopy){
+                    item.id = '';
+                    item.name = '';
+                }
+                this.data = item;
+                this.loading = false;
+            });
     }
 
     /** Build form groups */
@@ -46,7 +65,10 @@ export abstract class ModalContentAbstractComponent implements OnInit {
         let controls = {};
         for (let key in formFields) {
             let options = formFields[key];
-            controls[key] = new FormControl(options.value, options.validators);
+            if(!this.data[key]){
+                this.data[key] = options.value;
+            }
+            controls[key] = new FormControl(this.data[key], options.validators);
             this.formErrors[key] = '';
             this.validationMessages[key] = options.messages;
         }
@@ -95,14 +117,21 @@ export abstract class PageTableAbstractComponent implements OnInit {
     loading: boolean = false;
     selectedIds: string[] = [];
 
-    constructor(
-        //private fb: FormBuilder,
-        private dataService: DataService,
-        private activeModal: NgbActiveModal,
-        private modalService: NgbModal,
-        private titleService: Title
-    ) {
+    public dataService: DataService;
+    private activeModal: NgbActiveModal;
+    private modalService: NgbModal;
+    private titleService: Title;
 
+    constructor(
+        dataService: DataService,
+        activeModal: NgbActiveModal,
+        modalService: NgbModal,
+        titleService: Title
+    ) {
+        this.dataService = dataService;
+        this.activeModal = activeModal;
+        this.modalService = modalService;
+        this.titleService = titleService;
     }
 
     ngOnInit(): void {
@@ -114,7 +143,7 @@ export abstract class PageTableAbstractComponent implements OnInit {
         this.titleService.setTitle( newTitle );
     }
 
-    modalOpen( itemId?: number, isItemCopy?: boolean ): void {
+    modalOpen(itemId?: number, isItemCopy?: boolean): void {
         this.modalRef = this.modalService.open(this.getModalContent(), {size: 'lg'});
         this.modalRef.componentInstance.modalTitle = itemId && !isItemCopy
             ? 'Edit'
@@ -126,6 +155,35 @@ export abstract class PageTableAbstractComponent implements OnInit {
         }, (reason) => {
             //console.log( 'reason', reason );
         });
+    }
+
+    deleteItemConfirm(itemId): void{
+        this.modalRef = this.modalService.open(ConfirmModalContent);
+        this.modalRef.componentInstance.modalTitle = 'Confirm';
+        this.modalRef.componentInstance.modalContent = 'Are you sure you want to remove this item?';
+        this.modalRef.result.then((result) => {
+            if( result == 'accept' ){
+                this.deleteItem(itemId);
+            }
+        }, (reason) => {
+
+        });
+    }
+
+    deleteItem(itemId: number): void{
+        this.dataService.deleteItem(itemId)
+            .then((res) => {
+                if(res.success){
+                    this.getList();
+                } else {
+                    if(res.msg){
+                        this.modalRef = this.modalService.open(AlertModalContent);
+                        this.modalRef.componentInstance.modalContent = res.msg;
+                        this.modalRef.componentInstance.modalTitle = 'Error';
+                        this.modalRef.componentInstance.messageType = 'error';
+                    }
+                }
+            });
     }
 
     getModalContent(){

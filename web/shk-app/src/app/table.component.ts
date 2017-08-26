@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Router, ActivatedRoute, Params} from '@angular/router';
 import * as _ from "lodash";
 
 @Component({
@@ -18,28 +18,27 @@ export class TableComponent implements OnInit {
     sortBy: string;
     sortDir: string = 'asc';
 
-    constructor(
-        public router: Router
-    ) {}
+    constructor(public router: Router) {
+    }
 
     ngOnInit(): void {
         this.sortBy = this.tableFields[0].name;
     }
 
     editItem(itemId: number): void {
-        this.editItemRequest.emit( itemId );
+        this.editItemRequest.emit(itemId);
     }
 
     copyItem(itemId: number): void {
-        this.copyItemRequest.emit( itemId );
+        this.copyItemRequest.emit(itemId);
     }
 
     deleteItem(itemId: number): void {
-        this.deleteItemRequest.emit( itemId );
+        this.deleteItemRequest.emit(itemId);
     }
 
     selectSortBy(fieldName: string): void {
-        if( this.sortBy == fieldName ){
+        if (this.sortBy == fieldName) {
             this.sortDir = this.sortDir == 'asc' ? 'desc' : 'asc';
         } else {
             this.sortBy = fieldName;
@@ -48,25 +47,25 @@ export class TableComponent implements OnInit {
 
     selectAll(event): void {
         this.selectedIds = [];
-        if(event.target.checked){
-            for(let item of this.items){
+        if (event.target.checked) {
+            for (let item of this.items) {
                 this.selectedIds.push(item.id);
             }
         }
     }
 
-    setSelected(event, itemId: string): void{
+    setSelected(event, itemId: string): void {
         const index = this.selectedIds.indexOf(itemId);
-        if( event.target.checked ){
-            if(index == -1){
+        if (event.target.checked) {
+            if (index == -1) {
                 this.selectedIds.push(itemId);
             }
-        } else if( index > -1 ){
+        } else if (index > -1) {
             this.selectedIds.splice(index, 1);
         }
     }
 
-    getIsSelected(itemId: string): boolean{
+    getIsSelected(itemId: string): boolean {
         return this.selectedIds.lastIndexOf(itemId) > -1;
     }
 

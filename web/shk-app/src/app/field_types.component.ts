@@ -7,7 +7,8 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { ContentField } from './models/content_field.model';
 import { ContentType } from './models/content_type.model';
 import { ConfirmModalContent } from './app.component';
-import { FieldData } from './models/field-data.model';
+import { FieldType } from './models/field-type.model';
+import { FieldTypeProperty } from './models/field-type-property.model';
 import * as _ from "lodash";
 
 import { DataService } from './services/data-service.abstract';
@@ -30,7 +31,7 @@ export class FieldTypesService extends DataService {
 })
 export class FieldTypeModalContent extends ModalContentAbstractComponent {
 
-    properties: FieldData[];
+    data: FieldType;
 
     formFields = {
         name: {
@@ -63,22 +64,21 @@ export class FieldTypeModalContent extends ModalContentAbstractComponent {
     ) {
         super(fb, dataService, activeModal, tooltipConfig);
 
-        this.properties = [new FieldData(1,'','','')];
-    }
-
-    ngOnInit(): void {
-        this.buildForm(this.formFields);
+        this.data.properties = [new FieldTypeProperty('','','')];
     }
 
     addRow(){
-        this.properties.push(new FieldData(1,'','',''));
+        if(!this.data.properties){
+            this.data.properties = [];
+        }
+        this.data.properties.push(new FieldTypeProperty('','',''));
     }
 
     deleteRow(index){
-        if(this.properties.length < index + 1){
+        if(this.data.properties.length < index + 1){
             return;
         }
-        this.properties.splice(index, 1);
+        this.data.properties.splice(index, 1);
     }
 
     save(){
@@ -88,14 +88,13 @@ export class FieldTypeModalContent extends ModalContentAbstractComponent {
             this.submitted = false;
         }
         else {
-            let data = this.form.value;
-            data.properties = this.properties;
-            this.dataService.create(data)
+            this.dataService.create(this.data)
                 .then((res) => {
                     if( res.success ){
                         this.closeModal();
                     } else {
                         if( res.msg ){
+                            this.submitted = false;
                             this.errorMessage = res.msg;
                         }
                     }
@@ -114,7 +113,6 @@ export class FieldTypesComponent extends PageTableAbstractComponent {
     title: string = 'Field types';
 
     constructor(
-        //private fb: FormBuilder,
         dataService: FieldTypesService,
         activeModal: NgbActiveModal,
         modalService: NgbModal,
@@ -135,6 +133,18 @@ export class FieldTypesComponent extends PageTableAbstractComponent {
             output_type: 'text'
         }
     ];
+
+    getList(): void {
+        this.loading = true;
+        this.dataService.getList()
+            .subscribe(
+                items => {
+                    this.items = items;
+                    this.loading = false;
+                },
+                error =>  this.errorMessage = <any>error
+            );
+    }
 
     getModalContent(){
         return FieldTypeModalContent;

@@ -101,8 +101,9 @@ module.exports = module.exports.toString();
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return ConfirmModalContent; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppComponent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return ConfirmModalContent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AlertModalContent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return AppComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__ = __webpack_require__("../../../../@ng-bootstrap/ng-bootstrap/index.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -142,6 +143,33 @@ ConfirmModalContent = __decorate([
     __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */]) === "function" && _a || Object])
 ], ConfirmModalContent);
 
+var AlertModalContent = (function () {
+    function AlertModalContent(activeModal) {
+        this.activeModal = activeModal;
+    }
+    return AlertModalContent;
+}());
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["F" /* Input */])(),
+    __metadata("design:type", Object)
+], AlertModalContent.prototype, "modalTitle", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["F" /* Input */])(),
+    __metadata("design:type", Object)
+], AlertModalContent.prototype, "modalContent", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["F" /* Input */])(),
+    __metadata("design:type", Object)
+], AlertModalContent.prototype, "messageType", void 0);
+AlertModalContent = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
+        selector: 'modal_alert',
+        template: __webpack_require__("../../../../../src/app/templates/modal_alert.html"),
+        providers: []
+    }),
+    __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */]) === "function" && _b || Object])
+], AlertModalContent);
+
 var AppComponent = (function () {
     function AppComponent(tooltipConfig) {
         this.title = 'Shopkeeper';
@@ -157,10 +185,10 @@ AppComponent = __decorate([
         styles: [__webpack_require__("../../../../../src/app/app.component.css")],
         providers: [__WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["d" /* NgbTooltipConfig */]]
     }),
-    __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["d" /* NgbTooltipConfig */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["d" /* NgbTooltipConfig */]) === "function" && _b || Object])
+    __metadata("design:paramtypes", [typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["d" /* NgbTooltipConfig */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["d" /* NgbTooltipConfig */]) === "function" && _c || Object])
 ], AppComponent);
 
-var _a, _b;
+var _a, _b, _c;
 //# sourceMappingURL=app.component.js.map
 
 /***/ }),
@@ -236,7 +264,7 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_21__ng_bootstrap_ng_bootstrap__["c" /* NgbModule */].forRoot()
         ],
         declarations: [
-            __WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* AppComponent */],
+            __WEBPACK_IMPORTED_MODULE_4__app_component__["b" /* AppComponent */],
             __WEBPACK_IMPORTED_MODULE_5__not_found_component__["a" /* NotFoundComponent */],
             __WEBPACK_IMPORTED_MODULE_6__orders_component__["a" /* OrdersComponent */],
             __WEBPACK_IMPORTED_MODULE_9__categories_component__["b" /* CategoriesMenuComponent */],
@@ -249,7 +277,8 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_14__list_recursive_component__["a" /* ListRecursiveComponent */],
             __WEBPACK_IMPORTED_MODULE_15__table_component__["a" /* TableComponent */],
             __WEBPACK_IMPORTED_MODULE_9__categories_component__["a" /* CategoriesListComponent */],
-            __WEBPACK_IMPORTED_MODULE_4__app_component__["b" /* ConfirmModalContent */],
+            __WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* AlertModalContent */],
+            __WEBPACK_IMPORTED_MODULE_4__app_component__["c" /* ConfirmModalContent */],
             __WEBPACK_IMPORTED_MODULE_8__product_component__["a" /* ProductModalContent */],
             __WEBPACK_IMPORTED_MODULE_10__content_types_component__["a" /* ContentTypeModalContent */],
             __WEBPACK_IMPORTED_MODULE_9__categories_component__["c" /* CategoriesModalComponent */],
@@ -257,13 +286,14 @@ AppModule = __decorate([
         ],
         providers: [__WEBPACK_IMPORTED_MODULE_17__services_products_service__["a" /* ProductsService */], __WEBPACK_IMPORTED_MODULE_18__services_content_types_service__["a" /* ContentTypesService */], __WEBPACK_IMPORTED_MODULE_19__services_categories_service__["a" /* CategoriesService */], __WEBPACK_IMPORTED_MODULE_21__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */], __WEBPACK_IMPORTED_MODULE_21__ng_bootstrap_ng_bootstrap__["d" /* NgbTooltipConfig */]],
         entryComponents: [
-            __WEBPACK_IMPORTED_MODULE_4__app_component__["b" /* ConfirmModalContent */],
+            __WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* AlertModalContent */],
+            __WEBPACK_IMPORTED_MODULE_4__app_component__["c" /* ConfirmModalContent */],
             __WEBPACK_IMPORTED_MODULE_8__product_component__["a" /* ProductModalContent */],
             __WEBPACK_IMPORTED_MODULE_10__content_types_component__["a" /* ContentTypeModalContent */],
             __WEBPACK_IMPORTED_MODULE_9__categories_component__["c" /* CategoriesModalComponent */],
             __WEBPACK_IMPORTED_MODULE_11__field_types_component__["a" /* FieldTypeModalContent */]
         ],
-        bootstrap: [__WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* AppComponent */]]
+        bootstrap: [__WEBPACK_IMPORTED_MODULE_4__app_component__["b" /* AppComponent */]]
     })
 ], AppModule);
 
@@ -752,7 +782,7 @@ var CategoriesMenuComponent = (function () {
         if (index == -1) {
             return;
         }
-        this.modalRef = this.modalService.open(__WEBPACK_IMPORTED_MODULE_7__app_component__["b" /* ConfirmModalContent */]);
+        this.modalRef = this.modalService.open(__WEBPACK_IMPORTED_MODULE_7__app_component__["c" /* ConfirmModalContent */]);
         this.modalRef.componentInstance.modalTitle = 'Confirm';
         this.modalRef.componentInstance.modalContent = 'Are you sure you want to remove category "' + this.categories[index].title + '"?';
         this.modalRef.result.then(function (result) {
@@ -1287,7 +1317,7 @@ var ContentTypesComponent = (function () {
     };
     ContentTypesComponent.prototype.deleteItemConfirm = function (itemId) {
         var _this = this;
-        this.modalRef = this.modalService.open(__WEBPACK_IMPORTED_MODULE_7__app_component__["b" /* ConfirmModalContent */]);
+        this.modalRef = this.modalService.open(__WEBPACK_IMPORTED_MODULE_7__app_component__["c" /* ConfirmModalContent */]);
         this.modalRef.componentInstance.modalTitle = 'Confirm';
         this.modalRef.componentInstance.modalContent = 'Are you sure you want to remove this item?';
         this.modalRef.result.then(function (result) {
@@ -1361,7 +1391,7 @@ var _a, _b, _c, _d, _e, _f, _g;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__ = __webpack_require__("../../../platform-browser/@angular/platform-browser.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ng_bootstrap_ng_bootstrap__ = __webpack_require__("../../../../@ng-bootstrap/ng-bootstrap/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_field_data_model__ = __webpack_require__("../../../../../src/app/models/field-data.model.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_field_type_property_model__ = __webpack_require__("../../../../../src/app/models/field-type-property.model.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services_data_service_abstract__ = __webpack_require__("../../../../../src/app/services/data-service.abstract.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__page_table_abstract__ = __webpack_require__("../../../../../src/app/page-table.abstract.ts");
 var __extends = (this && this.__extends) || (function () {
@@ -1431,20 +1461,20 @@ var FieldTypeModalContent = (function (_super) {
                 messages: {}
             }
         };
-        _this.properties = [new __WEBPACK_IMPORTED_MODULE_5__models_field_data_model__["a" /* FieldData */](1, '', '', '')];
+        _this.data.properties = [new __WEBPACK_IMPORTED_MODULE_5__models_field_type_property_model__["a" /* FieldTypeProperty */]('', '', '')];
         return _this;
     }
-    FieldTypeModalContent.prototype.ngOnInit = function () {
-        this.buildForm(this.formFields);
-    };
     FieldTypeModalContent.prototype.addRow = function () {
-        this.properties.push(new __WEBPACK_IMPORTED_MODULE_5__models_field_data_model__["a" /* FieldData */](1, '', '', ''));
+        if (!this.data.properties) {
+            this.data.properties = [];
+        }
+        this.data.properties.push(new __WEBPACK_IMPORTED_MODULE_5__models_field_type_property_model__["a" /* FieldTypeProperty */]('', '', ''));
     };
     FieldTypeModalContent.prototype.deleteRow = function (index) {
-        if (this.properties.length < index + 1) {
+        if (this.data.properties.length < index + 1) {
             return;
         }
-        this.properties.splice(index, 1);
+        this.data.properties.splice(index, 1);
     };
     FieldTypeModalContent.prototype.save = function () {
         var _this = this;
@@ -1454,15 +1484,14 @@ var FieldTypeModalContent = (function (_super) {
             this.submitted = false;
         }
         else {
-            var data = this.form.value;
-            data.properties = this.properties;
-            this.dataService.create(data)
+            this.dataService.create(this.data)
                 .then(function (res) {
                 if (res.success) {
                     _this.closeModal();
                 }
                 else {
                     if (res.msg) {
+                        _this.submitted = false;
                         _this.errorMessage = res.msg;
                     }
                 }
@@ -1482,9 +1511,7 @@ FieldTypeModalContent = __decorate([
 
 var FieldTypesComponent = (function (_super) {
     __extends(FieldTypesComponent, _super);
-    function FieldTypesComponent(
-        //private fb: FormBuilder,
-        dataService, activeModal, modalService, titleService) {
+    function FieldTypesComponent(dataService, activeModal, modalService, titleService) {
         var _this = _super.call(this, dataService, activeModal, modalService, titleService) || this;
         _this.title = 'Field types';
         _this.tableFields = [
@@ -1501,6 +1528,15 @@ var FieldTypesComponent = (function (_super) {
         ];
         return _this;
     }
+    FieldTypesComponent.prototype.getList = function () {
+        var _this = this;
+        this.loading = true;
+        this.dataService.getList()
+            .subscribe(function (items) {
+            _this.items = items;
+            _this.loading = false;
+        }, function (error) { return _this.errorMessage = error; });
+    };
     FieldTypesComponent.prototype.getModalContent = function () {
         return FieldTypeModalContent;
     };
@@ -1771,22 +1807,21 @@ var ContentType = (function () {
 
 /***/ }),
 
-/***/ "../../../../../src/app/models/field-data.model.ts":
+/***/ "../../../../../src/app/models/field-type-property.model.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FieldData; });
-var FieldData = (function () {
-    function FieldData(id, name, title, default_value) {
-        this.id = id;
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FieldTypeProperty; });
+var FieldTypeProperty = (function () {
+    function FieldTypeProperty(name, title, default_value) {
         this.name = name;
         this.title = title;
         this.default_value = default_value;
     }
-    return FieldData;
+    return FieldTypeProperty;
 }());
 
-//# sourceMappingURL=field-data.model.js.map
+//# sourceMappingURL=field-type-property.model.js.map
 
 /***/ }),
 
@@ -1896,6 +1931,7 @@ var _a;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__ = __webpack_require__("../../../../@ng-bootstrap/ng-bootstrap/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_data_service_abstract__ = __webpack_require__("../../../../../src/app/services/data-service.abstract.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_component__ = __webpack_require__("../../../../../src/app/app.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1910,12 +1946,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var ModalContentAbstractComponent = (function () {
     function ModalContentAbstractComponent(fb, dataService, activeModal, tooltipConfig) {
         this.submitted = false;
         this.loading = false;
         this.formErrors = {};
         this.validationMessages = {};
+        this.formFields = {};
+        this.data = {};
         this.fb = fb;
         this.dataService = dataService;
         this.activeModal = activeModal;
@@ -1923,6 +1962,23 @@ var ModalContentAbstractComponent = (function () {
         tooltipConfig.container = 'body';
     }
     ModalContentAbstractComponent.prototype.ngOnInit = function () {
+        this.buildForm(this.formFields);
+        if (this.itemId) {
+            this.getModelData();
+        }
+    };
+    ModalContentAbstractComponent.prototype.getModelData = function () {
+        var _this = this;
+        this.loading = true;
+        this.dataService.getItem(this.itemId)
+            .then(function (item) {
+            if (_this.isItemCopy) {
+                item.id = '';
+                item.name = '';
+            }
+            _this.data = item;
+            _this.loading = false;
+        });
     };
     /** Build form groups */
     ModalContentAbstractComponent.prototype.buildForm = function (formFields) {
@@ -1930,7 +1986,10 @@ var ModalContentAbstractComponent = (function () {
         var controls = {};
         for (var key in formFields) {
             var options = formFields[key];
-            controls[key] = new __WEBPACK_IMPORTED_MODULE_3__angular_forms__["b" /* FormControl */](options.value, options.validators);
+            if (!this.data[key]) {
+                this.data[key] = options.value;
+            }
+            controls[key] = new __WEBPACK_IMPORTED_MODULE_3__angular_forms__["b" /* FormControl */](this.data[key], options.validators);
             this.formErrors[key] = '';
             this.validationMessages[key] = options.messages;
         }
@@ -1982,17 +2041,15 @@ ModalContentAbstractComponent = __decorate([
 ], ModalContentAbstractComponent);
 
 var PageTableAbstractComponent = (function () {
-    function PageTableAbstractComponent(
-        //private fb: FormBuilder,
-        dataService, activeModal, modalService, titleService) {
-        this.dataService = dataService;
-        this.activeModal = activeModal;
-        this.modalService = modalService;
-        this.titleService = titleService;
+    function PageTableAbstractComponent(dataService, activeModal, modalService, titleService) {
         this.items = [];
         this.title = 'Page with data table';
         this.loading = false;
         this.selectedIds = [];
+        this.dataService = dataService;
+        this.activeModal = activeModal;
+        this.modalService = modalService;
+        this.titleService = titleService;
     }
     PageTableAbstractComponent.prototype.ngOnInit = function () {
         this.setTitle(this.title);
@@ -2013,6 +2070,35 @@ var PageTableAbstractComponent = (function () {
             _this.getList();
         }, function (reason) {
             //console.log( 'reason', reason );
+        });
+    };
+    PageTableAbstractComponent.prototype.deleteItemConfirm = function (itemId) {
+        var _this = this;
+        this.modalRef = this.modalService.open(__WEBPACK_IMPORTED_MODULE_5__app_component__["c" /* ConfirmModalContent */]);
+        this.modalRef.componentInstance.modalTitle = 'Confirm';
+        this.modalRef.componentInstance.modalContent = 'Are you sure you want to remove this item?';
+        this.modalRef.result.then(function (result) {
+            if (result == 'accept') {
+                _this.deleteItem(itemId);
+            }
+        }, function (reason) {
+        });
+    };
+    PageTableAbstractComponent.prototype.deleteItem = function (itemId) {
+        var _this = this;
+        this.dataService.deleteItem(itemId)
+            .then(function (res) {
+            if (res.success) {
+                _this.getList();
+            }
+            else {
+                if (res.msg) {
+                    _this.modalRef = _this.modalService.open(__WEBPACK_IMPORTED_MODULE_5__app_component__["a" /* AlertModalContent */]);
+                    _this.modalRef.componentInstance.modalContent = res.msg;
+                    _this.modalRef.componentInstance.modalTitle = 'Error';
+                    _this.modalRef.componentInstance.messageType = 'error';
+                }
+            }
         });
     };
     PageTableAbstractComponent.prototype.getModalContent = function () {
@@ -2480,16 +2566,23 @@ var DataService = (function () {
     DataService.prototype.setRequestUrl = function (url) {
         this.requestUrl = url;
     };
+    DataService.prototype.getItem = function (id) {
+        var url = this.requestUrl + "/" + id;
+        return this.http.get(url)
+            .toPromise()
+            .then(function (response) { return response.json().data; })
+            .catch(this.handleError);
+    };
     DataService.prototype.getList = function () {
         return this.http.get(this.requestUrl)
             .map(this.extractData)
             .catch(this.handleError);
     };
-    DataService.prototype.delete = function (id) {
+    DataService.prototype.deleteItem = function (id) {
         var url = this.requestUrl + "/" + id;
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
-            .then(function () { return null; })
+            .then(function (response) { return response.json(); })
             .catch(this.handleError);
     };
     DataService.prototype.create = function (item) {
@@ -2846,6 +2939,13 @@ module.exports = "<div class=\"table-responsive\" [class.loading]=\"loading\">\n
 
 /***/ }),
 
+/***/ "../../../../../src/app/templates/modal_alert.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"modal-header d-block\">\n    <h4 class=\"modal-title\">{{modalTitle}}</h4>\n</div>\n<div class=\"modal-body\">\n    {{modalContent}}\n</div>\n<div class=\"modal-footer d-block\">\n    <button type=\"button\" class=\"btn btn-info btn-wide\" (click)=\"activeModal.close()\">\n        Ok\n    </button>\n</div>"
+
+/***/ }),
+
 /***/ "../../../../../src/app/templates/modal_category.html":
 /***/ (function(module, exports) {
 
@@ -2870,7 +2970,7 @@ module.exports = "<div class=\"modal-header d-block\">\n    <div class=\"d-block
 /***/ "../../../../../src/app/templates/modal_field_type.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"modal-header d-block\">\n    <div class=\"d-block float-right\">\n        <button type=\"button\" class=\"btn btn-secondary\" (click)=\"activeModal.dismiss()\">\n            Close\n        </button>\n    </div>\n    <h4 class=\"modal-title\">{{modalTitle}}</h4>\n</div>\n\n<div class=\"modal-body\" [class.loading]=\"loading\">\n\n    <form #formElement=\"ngForm\" (ngSubmit)=\"onSubmit()\" [formGroup]=\"form\">\n        <div class=\"row\">\n            <div class=\"col-md-6\">\n                <div class=\"form-group\" [class.form-group-message]=\"formErrors.name\">\n                    <label for=\"fieldName\" class=\"label-filled\">Системное имя</label>\n                    <input type=\"text\" class=\"form-control\" name=\"name\" formControlName=\"name\" id=\"fieldName\" value=\"\">\n                    <div *ngIf=\"formErrors.name\" class=\"alert alert-danger\">\n                        {{formErrors.name}}\n                    </div>\n                </div>\n                <div class=\"form-group form-group-message\" [class.form-group-message]=\"formErrors.title\">\n                    <label for=\"fieldTitle\" class=\"label-filled\">Название</label>\n                    <input type=\"text\" class=\"form-control\" name=\"title\" formControlName=\"title\" id=\"fieldTitle\" value=\"\">\n                    <div *ngIf=\"formErrors.title\" class=\"alert alert-danger\">\n                        {{formErrors.title}}\n                    </div>\n                </div>\n            </div>\n            <div class=\"col-md-6\">\n                <div class=\"form-group\">\n                    <label for=\"fieldDescription\" class=\"label-filled\">Описание</label>\n                    <textarea class=\"form-control\" rows=\"5\" name=\"description\" formControlName=\"description\" id=\"fieldDescription\"></textarea>\n                </div>\n            </div>\n        </div>\n    </form>\n\n    <label class=\"label-filled\">Свойства</label>\n\n    <table class=\"table table-bordered table-divided mb-0\">\n        <thead>\n            <tr>\n                <th>\n                    Системное имя\n                </th>\n                <th>\n                    Название\n                </th>\n                <th>\n                    По умолчанию\n                </th>\n                <th></th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr *ngFor=\"let item of properties; let index=index\">\n                <td>\n                    <input type=\"text\" class=\"form-control\" [(ngModel)]=\"item.name\" name=\"name\">\n                </td>\n                <td class=\"text-center\">\n                    <input type=\"text\" class=\"form-control\" [(ngModel)]=\"item.title\" name=\"title\">\n                </td>\n                <td class=\"text-center\">\n                    <input type=\"text\" class=\"form-control\" [(ngModel)]=\"item.default_value\" name=\"default_value\">\n                </td>\n                <td class=\"text-center\">\n                    <button type=\"button\" class=\"btn btn-secondary\" (click)=\"deleteRow(index)\" ngbTooltip=\"Remove\">\n                        <i class=\"icon-cross\"></i>\n                    </button>\n                </td>\n            </tr>\n        </tbody>\n        <tfoot>\n            <tr class=\"bg-faded\">\n                <td colspan=\"4\" class=\"text-center\">\n                    <button type=\"button\" class=\"btn btn-secondary\" (click)=\"addRow()\">\n                        <i class=\"icon-plus\"></i>\n                        Добавить\n                    </button>\n                </td>\n            </tr>\n        </tfoot>\n    </table>\n\n</div>\n<div class=\"modal-footer d-block\">\n    <button type=\"submit\" class=\"btn btn-success btn-wide\" [disabled]=\"submitted\" (click)=\"save()\">\n        Save\n    </button>\n    <button type=\"submit\" class=\"btn btn-secondary btn-wide\" (click)=\"activeModal.dismiss()\">\n        Cancel\n    </button>\n</div>\n"
+module.exports = "<div class=\"modal-header d-block\">\n    <div class=\"d-block float-right\">\n        <button type=\"button\" class=\"btn btn-secondary\" (click)=\"activeModal.dismiss()\">\n            Close\n        </button>\n    </div>\n    <h4 class=\"modal-title\">{{modalTitle}}</h4>\n</div>\n\n<div class=\"modal-body\" [class.loading]=\"loading\">\n\n    <form #formElement=\"ngForm\" (ngSubmit)=\"onSubmit()\" [formGroup]=\"form\">\n        <div class=\"row\">\n            <div class=\"col-md-6\">\n                <div class=\"form-group\" [class.form-group-message]=\"formErrors.name\">\n                    <label for=\"fieldName\" class=\"label-filled\">Системное имя</label>\n                    <input type=\"text\" class=\"form-control\" name=\"name\" formControlName=\"name\" id=\"fieldName\" [(ngModel)]=\"data.name\">\n                    <div *ngIf=\"formErrors.name\" class=\"alert alert-danger\">\n                        {{formErrors.name}}\n                    </div>\n                </div>\n                <div class=\"form-group form-group-message\" [class.form-group-message]=\"formErrors.title\">\n                    <label for=\"fieldTitle\" class=\"label-filled\">Название</label>\n                    <input type=\"text\" class=\"form-control\" name=\"title\" formControlName=\"title\" id=\"fieldTitle\" [(ngModel)]=\"data.title\">\n                    <div *ngIf=\"formErrors.title\" class=\"alert alert-danger\">\n                        {{formErrors.title}}\n                    </div>\n                </div>\n            </div>\n            <div class=\"col-md-6\">\n                <div class=\"form-group\">\n                    <label for=\"fieldDescription\" class=\"label-filled\">Описание</label>\n                    <textarea class=\"form-control\" rows=\"5\" name=\"description\" formControlName=\"description\" id=\"fieldDescription\" [(ngModel)]=\"data.description\"></textarea>\n                </div>\n            </div>\n        </div>\n    </form>\n\n    <label class=\"label-filled\">Свойства</label>\n\n    <table class=\"table table-bordered table-divided mb-0\">\n        <thead>\n            <tr>\n                <th>\n                    Системное имя\n                </th>\n                <th>\n                    Название\n                </th>\n                <th>\n                    По умолчанию\n                </th>\n                <th></th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr *ngFor=\"let item of data.properties; let index=index\">\n                <td>\n                    <input type=\"text\" class=\"form-control\" [(ngModel)]=\"item.name\" name=\"name\">\n                </td>\n                <td class=\"text-center\">\n                    <input type=\"text\" class=\"form-control\" [(ngModel)]=\"item.title\" name=\"title\">\n                </td>\n                <td class=\"text-center\">\n                    <input type=\"text\" class=\"form-control\" [(ngModel)]=\"item.default_value\" name=\"default_value\">\n                </td>\n                <td class=\"text-center\">\n                    <button type=\"button\" class=\"btn btn-secondary\" (click)=\"deleteRow(index)\" ngbTooltip=\"Remove\">\n                        <i class=\"icon-cross\"></i>\n                    </button>\n                </td>\n            </tr>\n        </tbody>\n        <tfoot>\n            <tr class=\"bg-faded\">\n                <td colspan=\"4\" class=\"text-center\">\n                    <button type=\"button\" class=\"btn btn-secondary\" (click)=\"addRow()\">\n                        <i class=\"icon-plus\"></i>\n                        Добавить\n                    </button>\n                </td>\n            </tr>\n        </tfoot>\n    </table>\n\n    <div class=\"alert alert-danger mt-3 mb-0\" [hidden]=\"!errorMessage\">\n        <button type=\"button\" class=\"close\" (click)=\"errorMessage = ''\">\n            <span aria-hidden=\"true\">&times;</span>\n        </button>\n        {{errorMessage}}\n    </div>\n\n</div>\n<div class=\"modal-footer d-block\">\n    <button type=\"submit\" class=\"btn btn-success btn-wide\" [disabled]=\"submitted\" (click)=\"save()\">\n        Save\n    </button>\n    <button type=\"submit\" class=\"btn btn-secondary btn-wide\" (click)=\"activeModal.dismiss()\">\n        Cancel\n    </button>\n</div>\n"
 
 /***/ }),
 
@@ -2898,7 +2998,7 @@ module.exports = "<div class=\"card\">\n    <div class=\"card-body\">\n\n       
 /***/ "../../../../../src/app/templates/page_field_types.html":
 /***/ (function(module, exports) {
 
-module.exports = "\n<div class=\"card\">\n\n    <div class=\"card-body\">\n\n        <h3>\n            <i class=\"icon-toggle\"></i>\n            {{title}}\n        </h3>\n\n        <hr>\n\n        <div class=\"float-right\">\n\n            <div ngbDropdown class=\"d-inline-block\">\n                <button class=\"btn btn-outline-info\" id=\"dropdownBasic1\" ngbDropdownToggle>\n                    Массовые дейсвия\n                </button>\n                <div class=\"dropdown-menu\" aria-labelledby=\"dropdownBasic1\">\n                    <button class=\"dropdown-item\">Отключить / включить</button>\n                    <button class=\"dropdown-item\">Удалить</button>\n                </div>\n            </div>\n\n            <button type=\"button\" class=\"btn btn-outline-success d-inline-block btn-wide\" (click)=\"modalOpen()\">\n                <i class=\"icon-plus\"></i>\n                Add\n            </button>\n        </div>\n\n        <div class=\"float-left\">\n            <a class=\"btn btn-secondary\" [routerLink]=\"['/catalog']\">\n                <i class=\"icon-arrow-left\"></i>\n                Каталог\n            </a>\n        </div>\n    </div>\n\n    <cmp-table [items]=\"items\" [itemsTotal]=\"100\" [tableFields]=\"tableFields\" (editItemRequest)=\"modalOpen($event)\"></cmp-table>\n\n</div>\n"
+module.exports = "\n<div class=\"card\">\n\n    <div class=\"card-body\">\n\n        <h3>\n            <i class=\"icon-toggle\"></i>\n            {{title}}\n        </h3>\n\n        <hr>\n\n        <div class=\"float-right\">\n\n            <div ngbDropdown class=\"d-inline-block\">\n                <button class=\"btn btn-outline-info\" id=\"dropdownBasic1\" ngbDropdownToggle>\n                    Массовые дейсвия\n                </button>\n                <div class=\"dropdown-menu\" aria-labelledby=\"dropdownBasic1\">\n                    <button class=\"dropdown-item\">Отключить / включить</button>\n                    <button class=\"dropdown-item\">Удалить</button>\n                </div>\n            </div>\n\n            <button type=\"button\" class=\"btn btn-outline-success d-inline-block btn-wide\" (click)=\"modalOpen()\">\n                <i class=\"icon-plus\"></i>\n                Add\n            </button>\n        </div>\n\n        <div class=\"float-left\">\n            <a class=\"btn btn-secondary\" [routerLink]=\"['/catalog']\">\n                <i class=\"icon-arrow-left\"></i>\n                Каталог\n            </a>\n        </div>\n    </div>\n\n    <cmp-table [items]=\"items\" [itemsTotal]=\"100\" [tableFields]=\"tableFields\" (editItemRequest)=\"modalOpen($event)\" (deleteItemRequest)=\"deleteItemConfirm($event)\"></cmp-table>\n\n</div>\n"
 
 /***/ }),
 

@@ -175,7 +175,7 @@ class ContentTypeController extends Controller
      * @param $itemId
      * @return JsonResponse
      */
-    public function deleteItem( Request $request, $itemId )
+    public function deleteItem(Request $request, $itemId)
     {
         $repository = $this->getRepository();
 

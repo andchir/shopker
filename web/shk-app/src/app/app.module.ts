@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
-import { AppComponent, ConfirmModalContent } from './app.component';
+import { AppComponent, AlertModalContent, ConfirmModalContent } from './app.component';
 import { NotFoundComponent } from './not-found.component';
 import { OrdersComponent } from './orders.component';
 import { CatalogComponent } from './catalog.component';
@@ -49,6 +49,7 @@ import { NgbModule, NgbActiveModal, NgbTooltipConfig } from '@ng-bootstrap/ng-bo
         TableComponent,
         CategoriesListComponent,
 
+        AlertModalContent,
         ConfirmModalContent,
         ProductModalContent,
         ContentTypeModalContent,
@@ -57,6 +58,7 @@ import { NgbModule, NgbActiveModal, NgbTooltipConfig } from '@ng-bootstrap/ng-bo
     ],
     providers: [ ProductsService, ContentTypesService, CategoriesService, NgbActiveModal, NgbTooltipConfig ],
     entryComponents: [
+        AlertModalContent,
         ConfirmModalContent,
         ProductModalContent,
         ContentTypeModalContent,

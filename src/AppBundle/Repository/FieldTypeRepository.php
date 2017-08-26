@@ -12,4 +12,16 @@ use Doctrine\ODM\MongoDB\DocumentRepository;
  */
 class FieldTypeRepository extends DocumentRepository
 {
+
+    /**
+     * return \Doctrine\ODM\MongoDB\Cursor
+     */
+    public function findAllOrderedByName()
+    {
+        return $this->createQueryBuilder()
+            ->sort('name', 'ASC')
+            ->getQuery()
+            ->execute();
+    }
+
 }

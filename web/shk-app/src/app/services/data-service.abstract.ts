@@ -23,17 +23,25 @@ export abstract class DataService {
         this.requestUrl = url;
     }
 
+    getItem(id: string): Promise<any> {
+        const url = `${this.requestUrl}/${id}`;
+        return this.http.get(url)
+            .toPromise()
+            .then(response => response.json().data)
+            .catch(this.handleError);
+    }
+
     getList(): Observable<any[]> {
         return this.http.get(this.requestUrl)
             .map(this.extractData)
             .catch(this.handleError);
     }
 
-    delete(id: number): Promise<void> {
+    deleteItem(id: number): Promise<any> {
         const url = `${this.requestUrl}/${id}`;
         return this.http.delete(url, {headers: this.headers})
             .toPromise()
-            .then(() => null)
+            .then(response => response.json())
             .catch(this.handleError);
     }
 

@@ -14,14 +14,14 @@
             <div class="col-md-6">
                 <div class="form-group" [class.form-group-message]="formErrors.name">
                     <label for="fieldName" class="label-filled">Системное имя</label>
-                    <input type="text" class="form-control" name="name" formControlName="name" id="fieldName" value="">
+                    <input type="text" class="form-control" name="name" formControlName="name" id="fieldName" [(ngModel)]="data.name">
                     <div *ngIf="formErrors.name" class="alert alert-danger">
                         {{formErrors.name}}
                     </div>
                 </div>
                 <div class="form-group form-group-message" [class.form-group-message]="formErrors.title">
                     <label for="fieldTitle" class="label-filled">Название</label>
-                    <input type="text" class="form-control" name="title" formControlName="title" id="fieldTitle" value="">
+                    <input type="text" class="form-control" name="title" formControlName="title" id="fieldTitle" [(ngModel)]="data.title">
                     <div *ngIf="formErrors.title" class="alert alert-danger">
                         {{formErrors.title}}
                     </div>
@@ -30,7 +30,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="fieldDescription" class="label-filled">Описание</label>
-                    <textarea class="form-control" rows="5" name="description" formControlName="description" id="fieldDescription"></textarea>
+                    <textarea class="form-control" rows="5" name="description" formControlName="description" id="fieldDescription" [(ngModel)]="data.description"></textarea>
                 </div>
             </div>
         </div>
@@ -54,7 +54,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let item of properties; let index=index">
+            <tr *ngFor="let item of data.properties; let index=index">
                 <td>
                     <input type="text" class="form-control" [(ngModel)]="item.name" name="name">
                 </td>
@@ -82,6 +82,13 @@
             </tr>
         </tfoot>
     </table>
+
+    <div class="alert alert-danger mt-3 mb-0" [hidden]="!errorMessage">
+        <button type="button" class="close" (click)="errorMessage = ''">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        {{errorMessage}}
+    </div>
 
 </div>
 <div class="modal-footer d-block">

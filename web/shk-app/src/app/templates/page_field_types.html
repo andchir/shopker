@@ -36,6 +36,6 @@
         </div>
     </div>
 
-    <cmp-table [items]="items" [itemsTotal]="100" [tableFields]="tableFields" (editItemRequest)="modalOpen($event)"></cmp-table>
+    <cmp-table [items]="items" [itemsTotal]="100" [tableFields]="tableFields" (editItemRequest)="modalOpen($event)" (deleteItemRequest)="deleteItemConfirm($event)"></cmp-table>
 
 </div>

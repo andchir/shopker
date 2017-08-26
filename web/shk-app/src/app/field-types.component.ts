@@ -63,8 +63,6 @@ export class FieldTypeModalContent extends ModalContentAbstractComponent {
         tooltipConfig: NgbTooltipConfig
     ) {
         super(fb, dataService, activeModal, tooltipConfig);
-
-        this.data.properties = [new FieldTypeProperty('','','')];
     }
 
     addRow(){

@@ -4,8 +4,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { NotFoundComponent } from './not-found.component';
 import { OrdersComponent } from './orders.component';
 import { CatalogComponent } from './catalog.component';
-import { ContentTypesComponent } from './content_types.component';
-import { FieldTypesComponent } from './field_types.component';
+import { ContentTypesComponent } from './content-types.component';
+import { FieldTypesComponent } from './field-types.component';
 import { StatisticsComponent } from './stat.component';
 import { SettingsComponent } from './settings.component';
 

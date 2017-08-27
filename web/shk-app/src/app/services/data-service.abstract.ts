@@ -27,7 +27,7 @@ export abstract class DataService {
         const url = `${this.requestUrl}/${id}`;
         return this.http.get(url)
             .toPromise()
-            .then(response => response.json().data)
+            .then(res => res.json().data)
             .catch(this.handleError);
     }
 
@@ -41,7 +41,7 @@ export abstract class DataService {
         const url = `${this.requestUrl}/${id}`;
         return this.http.delete(url, {headers: this.headers})
             .toPromise()
-            .then(response => response.json())
+            .then(res => res.json())
             .catch(this.handleError);
     }
 
@@ -58,7 +58,7 @@ export abstract class DataService {
         return this.http
             .put(url, JSON.stringify(item), {headers: this.headers})
             .toPromise()
-            .then(() => item)
+            .then(res => res.json())
             .catch(this.handleError);
     }
 

@@ -86,17 +86,23 @@ export class FieldTypeModalContent extends ModalContentAbstractComponent {
             this.submitted = false;
         }
         else {
-            this.dataService.create(this.data)
-                .then((res) => {
-                    if( res.success ){
-                        this.closeModal();
-                    } else {
-                        if( res.msg ){
-                            this.submitted = false;
-                            this.errorMessage = res.msg;
-                        }
+
+            let callback = function(res: any){
+                if(res.success){
+                    this.closeModal();
+                } else {
+                    if(res.msg){
+                        this.submitted = false;
+                        this.errorMessage = res.msg;
                     }
-                });
+                }
+            };
+
+            if(this.data.id){
+                this.dataService.update(this.data).then(callback.bind(this));
+            } else {
+                this.dataService.create(this.data).then(callback.bind(this));
+            }
         }
     }
 

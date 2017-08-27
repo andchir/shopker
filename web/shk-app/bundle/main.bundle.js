@@ -33,8 +33,8 @@ webpackEmptyAsyncContext.id = "../../../../../src/$$_gendir lazy recursive";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__not_found_component__ = __webpack_require__("../../../../../src/app/not-found.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__orders_component__ = __webpack_require__("../../../../../src/app/orders.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__catalog_component__ = __webpack_require__("../../../../../src/app/catalog.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__content_types_component__ = __webpack_require__("../../../../../src/app/content_types.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__field_types_component__ = __webpack_require__("../../../../../src/app/field_types.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__content_types_component__ = __webpack_require__("../../../../../src/app/content-types.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__field_types_component__ = __webpack_require__("../../../../../src/app/field-types.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__stat_component__ = __webpack_require__("../../../../../src/app/stat.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__settings_component__ = __webpack_require__("../../../../../src/app/settings.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -208,8 +208,8 @@ var _a, _b, _c;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__catalog_component__ = __webpack_require__("../../../../../src/app/catalog.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__product_component__ = __webpack_require__("../../../../../src/app/product.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__categories_component__ = __webpack_require__("../../../../../src/app/categories.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__content_types_component__ = __webpack_require__("../../../../../src/app/content_types.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__field_types_component__ = __webpack_require__("../../../../../src/app/field_types.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__content_types_component__ = __webpack_require__("../../../../../src/app/content-types.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__field_types_component__ = __webpack_require__("../../../../../src/app/field-types.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__stat_component__ = __webpack_require__("../../../../../src/app/stat.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__settings_component__ = __webpack_require__("../../../../../src/app/settings.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__list_recursive_component__ = __webpack_require__("../../../../../src/app/list-recursive.component.ts");
@@ -859,7 +859,7 @@ var _a, _b, _c, _d, _e, _f, _g, _h;
 
 /***/ }),
 
-/***/ "../../../../../src/app/content_types.component.ts":
+/***/ "../../../../../src/app/content-types.component.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1375,11 +1375,11 @@ ContentTypesComponent = __decorate([
 ], ContentTypesComponent);
 
 var _a, _b, _c, _d, _e, _f, _g;
-//# sourceMappingURL=content_types.component.js.map
+//# sourceMappingURL=content-types.component.js.map
 
 /***/ }),
 
-/***/ "../../../../../src/app/field_types.component.ts":
+/***/ "../../../../../src/app/field-types.component.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1461,7 +1461,6 @@ var FieldTypeModalContent = (function (_super) {
                 messages: {}
             }
         };
-        _this.data.properties = [new __WEBPACK_IMPORTED_MODULE_5__models_field_type_property_model__["a" /* FieldTypeProperty */]('', '', '')];
         return _this;
     }
     FieldTypeModalContent.prototype.addRow = function () {
@@ -1477,25 +1476,29 @@ var FieldTypeModalContent = (function (_super) {
         this.data.properties.splice(index, 1);
     };
     FieldTypeModalContent.prototype.save = function () {
-        var _this = this;
         this.submitted = true;
         if (!this.form.valid) {
             this.onValueChanged(this.form.value);
             this.submitted = false;
         }
         else {
-            this.dataService.create(this.data)
-                .then(function (res) {
+            var callback = function (res) {
                 if (res.success) {
-                    _this.closeModal();
+                    this.closeModal();
                 }
                 else {
                     if (res.msg) {
-                        _this.submitted = false;
-                        _this.errorMessage = res.msg;
+                        this.submitted = false;
+                        this.errorMessage = res.msg;
                     }
                 }
-            });
+            };
+            if (this.data.id) {
+                this.dataService.update(this.data).then(callback.bind(this));
+            }
+            else {
+                this.dataService.create(this.data).then(callback.bind(this));
+            }
         }
     };
     return FieldTypeModalContent;
@@ -1552,7 +1555,7 @@ FieldTypesComponent = __decorate([
 ], FieldTypesComponent);
 
 var _a, _b, _c, _d, _e, _f, _g;
-//# sourceMappingURL=field_types.component.js.map
+//# sourceMappingURL=field-types.component.js.map
 
 /***/ }),
 
@@ -2101,6 +2104,19 @@ var PageTableAbstractComponent = (function () {
             }
         });
     };
+    PageTableAbstractComponent.prototype.actionRequest = function (actionValue) {
+        switch (actionValue[0]) {
+            case 'edit':
+                this.modalOpen(actionValue[1]);
+                break;
+            case 'copy':
+                this.modalOpen(actionValue[1], true);
+                break;
+            case 'delete':
+                this.deleteItemConfirm(actionValue[1]);
+                break;
+        }
+    };
     PageTableAbstractComponent.prototype.getModalContent = function () {
         return ModalContentAbstractComponent;
     };
@@ -2570,7 +2586,7 @@ var DataService = (function () {
         var url = this.requestUrl + "/" + id;
         return this.http.get(url)
             .toPromise()
-            .then(function (response) { return response.json().data; })
+            .then(function (res) { return res.json().data; })
             .catch(this.handleError);
     };
     DataService.prototype.getList = function () {
@@ -2582,7 +2598,7 @@ var DataService = (function () {
         var url = this.requestUrl + "/" + id;
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
-            .then(function (response) { return response.json(); })
+            .then(function (res) { return res.json(); })
             .catch(this.handleError);
     };
     DataService.prototype.create = function (item) {
@@ -2597,7 +2613,7 @@ var DataService = (function () {
         return this.http
             .put(url, JSON.stringify(item), { headers: this.headers })
             .toPromise()
-            .then(function () { return item; })
+            .then(function (res) { return res.json(); })
             .catch(this.handleError);
     };
     DataService.prototype.extractData = function (res) {
@@ -2829,9 +2845,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var TableComponent = (function () {
     function TableComponent(router) {
         this.router = router;
-        this.editItemRequest = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["x" /* EventEmitter */]();
-        this.copyItemRequest = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["x" /* EventEmitter */]();
-        this.deleteItemRequest = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["x" /* EventEmitter */]();
+        this.actionRequest = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["x" /* EventEmitter */]();
         this.loading = false;
         this.selectedIds = [];
         this.sortDir = 'asc';
@@ -2840,13 +2854,13 @@ var TableComponent = (function () {
         this.sortBy = this.tableFields[0].name;
     };
     TableComponent.prototype.editItem = function (itemId) {
-        this.editItemRequest.emit(itemId);
+        //this.editItemRequest.emit(itemId);
     };
     TableComponent.prototype.copyItem = function (itemId) {
-        this.copyItemRequest.emit(itemId);
+        //this.copyItemRequest.emit(itemId);
     };
     TableComponent.prototype.deleteItem = function (itemId) {
-        this.deleteItemRequest.emit(itemId);
+        //this.deleteItemRequest.emit(itemId);
     };
     TableComponent.prototype.selectSortBy = function (fieldName) {
         if (this.sortBy == fieldName) {
@@ -2876,6 +2890,9 @@ var TableComponent = (function () {
             this.selectedIds.splice(index, 1);
         }
     };
+    TableComponent.prototype.action = function (actionName, actionValue) {
+        this.actionRequest.emit([actionName, actionValue]);
+    };
     TableComponent.prototype.getIsSelected = function (itemId) {
         return this.selectedIds.lastIndexOf(itemId) > -1;
     };
@@ -2896,15 +2913,7 @@ __decorate([
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["T" /* Output */])(),
     __metadata("design:type", Object)
-], TableComponent.prototype, "editItemRequest", void 0);
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["T" /* Output */])(),
-    __metadata("design:type", Object)
-], TableComponent.prototype, "copyItemRequest", void 0);
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["T" /* Output */])(),
-    __metadata("design:type", Object)
-], TableComponent.prototype, "deleteItemRequest", void 0);
+], TableComponent.prototype, "actionRequest", void 0);
 TableComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
         selector: 'cmp-table',
@@ -2935,7 +2944,7 @@ module.exports = "<div class=\"d-inline-block dropdown\">\n    <button class=\"b
 /***/ "../../../../../src/app/templates/cmp-table.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"table-responsive\" [class.loading]=\"loading\">\n    <table class=\"table table-striped table-divided mb-0\">\n        <thead>\n            <tr>\n                <th class=\"text-left\">\n                    <label class=\"custom-control custom-checkbox\">\n                        <input type=\"checkbox\" class=\"custom-control-input\" (click)=\"selectAll($event)\">\n                        <span class=\"custom-control-indicator\"></span>\n                    </label>\n                </th>\n                <th *ngFor=\"let tableField of tableFields; let index=index\">\n                    <button type=\"button\" class=\"btn btn-block btn-link\" (click)=\"selectSortBy(tableField.name)\">\n                        {{tableField.title}}\n                        <i [class.icon-arrow-down]=\"sortDir == 'asc'\" [class.icon-arrow-up]=\"sortDir == 'desc'\" [style.visibility]=\"tableField.name == sortBy ? 'visible' : 'hidden'\"></i>\n                    </button>\n                </th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr class=\"show-on-hover-parent\" *ngFor=\"let item of items\">\n                <td>\n                    <label class=\"custom-control custom-checkbox\">\n                        <input type=\"checkbox\" class=\"custom-control-input\" [checked]=\"getIsSelected(item.id)\" (click)=\"setSelected($event, item.id)\">\n                        <span class=\"custom-control-indicator\"></span>\n                    </label>\n                </td>\n                <td *ngFor=\"let tableField of tableFields; let index=index\">\n                    <div class=\"relative\" *ngIf=\"index == tableFields.length - 1\">\n                        <div class=\"show-on-hover no-wrap\">\n                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" ngbTooltip=\"Edit\" (click)=\"editItem(item.id)\">\n                                <i class=\"icon-pencil\"></i>\n                            </button>\n                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" ngbTooltip=\"Copy\" (click)=\"copyItem(item.id)\">\n                                <i class=\"icon-stack\"></i>\n                            </button>\n                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" ngbTooltip=\"Delete\" (click)=\"deleteItem(item.id)\">\n                                <i class=\"icon-cross\"></i>\n                            </button>\n                        </div>\n                    </div>\n                    {{item[tableField.name]}}\n\n                    <!--i class=\"big text-success icon-circle-check\" [hidden]=\"!item.is_active\"></i>\n                    <i class=\"big text-muted icon-circle-cross\" [hidden]=\"item.is_active\"></i-->\n                </td>\n            </tr>\n        <tr [hidden]=\"items.length > 0\" class=\"table-active\">\n            <td [attr.colspan]=\"tableFields.length + 1\" class=\"text-center p-4\">\n                Empty.\n            </td>\n        </tr>\n        </tbody>\n    </table>\n</div>\n\n<div class=\"card-footer\">\n\n    <div class=\"float-right\">\n        <select class=\"form-control\">\n            <option value=\"10\">10</option>\n            <option value=\"20\">20</option>\n            <option value=\"50\">50</option>\n            <option value=\"100\">100</option>\n        </select>\n    </div>\n\n    <ngb-pagination [class]=\"'mb-0'\" [collectionSize]=\"120\" [page]=\"1\" [maxSize]=\"8\" [rotate]=\"true\" [boundaryLinks]=\"false\"></ngb-pagination>\n\n</div>"
+module.exports = "<div class=\"table-responsive\" [class.loading]=\"loading\">\n    <table class=\"table table-striped table-divided mb-0\">\n        <thead>\n            <tr>\n                <th class=\"text-left\">\n                    <label class=\"custom-control custom-checkbox\">\n                        <input type=\"checkbox\" class=\"custom-control-input\" (click)=\"selectAll($event)\">\n                        <span class=\"custom-control-indicator\"></span>\n                    </label>\n                </th>\n                <th *ngFor=\"let tableField of tableFields; let index=index\">\n                    <button type=\"button\" class=\"btn btn-block btn-link\" (click)=\"selectSortBy(tableField.name)\">\n                        {{tableField.title}}\n                        <i [class.icon-arrow-down]=\"sortDir == 'asc'\" [class.icon-arrow-up]=\"sortDir == 'desc'\" [style.visibility]=\"tableField.name == sortBy ? 'visible' : 'hidden'\"></i>\n                    </button>\n                </th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr class=\"show-on-hover-parent\" *ngFor=\"let item of items\">\n                <td>\n                    <label class=\"custom-control custom-checkbox\">\n                        <input type=\"checkbox\" class=\"custom-control-input\" [checked]=\"getIsSelected(item.id)\" (click)=\"setSelected($event, item.id)\">\n                        <span class=\"custom-control-indicator\"></span>\n                    </label>\n                </td>\n                <td *ngFor=\"let tableField of tableFields; let index=index\">\n                    <div class=\"relative\" *ngIf=\"index == tableFields.length - 1\">\n                        <div class=\"show-on-hover no-wrap\">\n                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" ngbTooltip=\"Edit\" (click)=\"action('edit', item.id)\">\n                                <i class=\"icon-pencil\"></i>\n                            </button>\n                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" ngbTooltip=\"Copy\" (click)=\"action('copy', item.id)\">\n                                <i class=\"icon-stack\"></i>\n                            </button>\n                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" ngbTooltip=\"Delete\" (click)=\"action('delete', item.id)\">\n                                <i class=\"icon-cross\"></i>\n                            </button>\n                        </div>\n                    </div>\n                    {{item[tableField.name]}}\n\n                    <!--i class=\"big text-success icon-circle-check\" [hidden]=\"!item.is_active\"></i>\n                    <i class=\"big text-muted icon-circle-cross\" [hidden]=\"item.is_active\"></i-->\n                </td>\n            </tr>\n        <tr [hidden]=\"items.length > 0\" class=\"table-active\">\n            <td [attr.colspan]=\"tableFields.length + 1\" class=\"text-center p-4\">\n                Empty.\n            </td>\n        </tr>\n        </tbody>\n    </table>\n</div>\n\n<div class=\"card-footer\">\n\n    <div class=\"float-right\">\n        <select class=\"form-control\">\n            <option value=\"10\">10</option>\n            <option value=\"20\">20</option>\n            <option value=\"50\">50</option>\n            <option value=\"100\">100</option>\n        </select>\n    </div>\n\n    <ngb-pagination [class]=\"'mb-0'\" [collectionSize]=\"120\" [page]=\"1\" [maxSize]=\"8\" [rotate]=\"true\" [boundaryLinks]=\"false\"></ngb-pagination>\n\n</div>"
 
 /***/ }),
 
@@ -2998,7 +3007,7 @@ module.exports = "<div class=\"card\">\n    <div class=\"card-body\">\n\n       
 /***/ "../../../../../src/app/templates/page_field_types.html":
 /***/ (function(module, exports) {
 
-module.exports = "\n<div class=\"card\">\n\n    <div class=\"card-body\">\n\n        <h3>\n            <i class=\"icon-toggle\"></i>\n            {{title}}\n        </h3>\n\n        <hr>\n\n        <div class=\"float-right\">\n\n            <div ngbDropdown class=\"d-inline-block\">\n                <button class=\"btn btn-outline-info\" id=\"dropdownBasic1\" ngbDropdownToggle>\n                    Массовые дейсвия\n                </button>\n                <div class=\"dropdown-menu\" aria-labelledby=\"dropdownBasic1\">\n                    <button class=\"dropdown-item\">Отключить / включить</button>\n                    <button class=\"dropdown-item\">Удалить</button>\n                </div>\n            </div>\n\n            <button type=\"button\" class=\"btn btn-outline-success d-inline-block btn-wide\" (click)=\"modalOpen()\">\n                <i class=\"icon-plus\"></i>\n                Add\n            </button>\n        </div>\n\n        <div class=\"float-left\">\n            <a class=\"btn btn-secondary\" [routerLink]=\"['/catalog']\">\n                <i class=\"icon-arrow-left\"></i>\n                Каталог\n            </a>\n        </div>\n    </div>\n\n    <cmp-table [items]=\"items\" [itemsTotal]=\"100\" [tableFields]=\"tableFields\" (editItemRequest)=\"modalOpen($event)\" (deleteItemRequest)=\"deleteItemConfirm($event)\"></cmp-table>\n\n</div>\n"
+module.exports = "\n<div class=\"card\">\n\n    <div class=\"card-body\">\n\n        <h3>\n            <i class=\"icon-toggle\"></i>\n            {{title}}\n        </h3>\n\n        <hr>\n\n        <div class=\"float-right\">\n\n            <div ngbDropdown class=\"d-inline-block\">\n                <button class=\"btn btn-outline-info\" id=\"dropdownBasic1\" ngbDropdownToggle>\n                    Массовые дейсвия\n                </button>\n                <div class=\"dropdown-menu\" aria-labelledby=\"dropdownBasic1\">\n                    <button class=\"dropdown-item\">Отключить / включить</button>\n                    <button class=\"dropdown-item\">Удалить</button>\n                </div>\n            </div>\n\n            <button type=\"button\" class=\"btn btn-outline-success d-inline-block btn-wide\" (click)=\"modalOpen()\">\n                <i class=\"icon-plus\"></i>\n                Add\n            </button>\n        </div>\n\n        <div class=\"float-left\">\n            <a class=\"btn btn-secondary\" [routerLink]=\"['/catalog']\">\n                <i class=\"icon-arrow-left\"></i>\n                Каталог\n            </a>\n        </div>\n    </div>\n\n    <cmp-table [items]=\"items\" [itemsTotal]=\"100\" [tableFields]=\"tableFields\" (actionRequest)=\"actionRequest($event)\"></cmp-table>\n\n</div>\n"
 
 /***/ }),
 

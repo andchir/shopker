@@ -38,10 +38,10 @@ class ContentTypeController extends Controller
 
     /**
      * @param $data
-     * @param string $itemId
+     * @param int $itemId
      * @return array
      */
-    public function validateData( $data, $itemId = '' )
+    public function validateData($data, $itemId = 0)
     {
         if( empty($data) ){
             return ['success' => false, 'msg' => 'Data is empty.'];
@@ -59,24 +59,31 @@ class ContentTypeController extends Controller
             return ['success' => false, 'msg' => 'Please create fields for content type.'];
         }
 
-        //Check unique name
-        $repository = $this->getRepository();
-        $query = $repository->createQueryBuilder()
-            ->field('name')->equals($data['name']);
-
-        if( $itemId ){
-            $query = $query->field('id')->notEqual( $itemId );
-        }
-
-        $count = $query->getQuery()
-            ->execute()
-            ->count();
-
-        if( $count > 0 ){
+        if($this->checkNameExists($data['name'], $itemId)){
             return ['success' => false, 'msg' => 'System name already exists.'];
         }
 
         return ['success' => true];
+    }
+
+    /**
+     * @param $name
+     * @param int $itemId
+     * @return mixed
+     */
+    public function checkNameExists($name, $itemId = 0){
+
+        $repository = $this->getRepository();
+        $query = $repository->createQueryBuilder()
+            ->field('name')->equals($name);
+
+        if($itemId){
+            $query = $query->field('id')->notEqual($itemId);
+        }
+
+        return $query->getQuery()
+            ->execute()
+            ->count();
     }
 
     /**
@@ -85,7 +92,7 @@ class ContentTypeController extends Controller
      * @param string $itemId
      * @return array
      */
-    public function createUpdate( $data, $itemId = '' )
+    public function createUpdate($data, $itemId = '')
     {
         if( empty($data) || empty($data['title']) || empty($data['name']) || empty($data['fields']) ){
             return [

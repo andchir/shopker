@@ -157,7 +157,7 @@ export abstract class PageTableAbstractComponent implements OnInit {
         });
     }
 
-    deleteItemConfirm(itemId): void{
+    deleteItemConfirm(itemId: number): void{
         this.modalRef = this.modalService.open(ConfirmModalContent);
         this.modalRef.componentInstance.modalTitle = 'Confirm';
         this.modalRef.componentInstance.modalContent = 'Are you sure you want to remove this item?';
@@ -184,6 +184,20 @@ export abstract class PageTableAbstractComponent implements OnInit {
                     }
                 }
             });
+    }
+
+    actionRequest(actionValue : [string, number]): void {
+        switch(actionValue[0]){
+            case 'edit':
+                this.modalOpen(actionValue[1]);
+                break;
+            case 'copy':
+                this.modalOpen(actionValue[1], true);
+                break;
+            case 'delete':
+                this.deleteItemConfirm(actionValue[1]);
+                break;
+        }
     }
 
     getModalContent(){

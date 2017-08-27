@@ -27,13 +27,13 @@
                 <td *ngFor="let tableField of tableFields; let index=index">
                     <div class="relative" *ngIf="index == tableFields.length - 1">
                         <div class="show-on-hover no-wrap">
-                            <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Edit" (click)="editItem(item.id)">
+                            <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Edit" (click)="action('edit', item.id)">
                                 <i class="icon-pencil"></i>
                             </button>
-                            <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Copy" (click)="copyItem(item.id)">
+                            <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Copy" (click)="action('copy', item.id)">
                                 <i class="icon-stack"></i>
                             </button>
-                            <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Delete" (click)="deleteItem(item.id)">
+                            <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Delete" (click)="action('delete', item.id)">
                                 <i class="icon-cross"></i>
                             </button>
                         </div>

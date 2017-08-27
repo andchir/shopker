@@ -14,12 +14,14 @@ class FieldTypeRepository extends DocumentRepository
 {
 
     /**
-     * return \Doctrine\ODM\MongoDB\Cursor
+     * @param string $orderBy
+     * @param string $orderDir
+     * @return \Doctrine\ODM\MongoDB\Cursor
      */
-    public function findAllOrderedByName()
+    public function findAllOrderedBy($orderBy = 'name', $orderDir = 'asc')
     {
         return $this->createQueryBuilder()
-            ->sort('name', 'ASC')
+            ->sort($orderBy, $orderDir)
             ->getQuery()
             ->execute();
     }

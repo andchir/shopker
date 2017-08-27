@@ -10,9 +10,7 @@ export class TableComponent implements OnInit {
     @Input() items: any[];
     @Input() tableFields: any[];
     @Input() itemsTotal: number;
-    @Output() editItemRequest = new EventEmitter();
-    @Output() copyItemRequest = new EventEmitter();
-    @Output() deleteItemRequest = new EventEmitter();
+    @Output() actionRequest = new EventEmitter();
     loading: boolean = false;
     selectedIds: string[] = [];
     sortBy: string;
@@ -26,15 +24,15 @@ export class TableComponent implements OnInit {
     }
 
     editItem(itemId: number): void {
-        this.editItemRequest.emit(itemId);
+        //this.editItemRequest.emit(itemId);
     }
 
     copyItem(itemId: number): void {
-        this.copyItemRequest.emit(itemId);
+        //this.copyItemRequest.emit(itemId);
     }
 
     deleteItem(itemId: number): void {
-        this.deleteItemRequest.emit(itemId);
+        //this.deleteItemRequest.emit(itemId);
     }
 
     selectSortBy(fieldName: string): void {
@@ -63,6 +61,10 @@ export class TableComponent implements OnInit {
         } else if (index > -1) {
             this.selectedIds.splice(index, 1);
         }
+    }
+
+    action(actionName: string, actionValue ?: number): void {
+        this.actionRequest.emit([actionName, actionValue]);
     }
 
     getIsSelected(itemId: string): boolean {

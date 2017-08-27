@@ -373,7 +373,7 @@ export class ContentTypeModalContent implements OnInit {
 
 @Component({
     selector: 'shk-content-types',
-    templateUrl: 'templates/page_content_types.html'
+    templateUrl: 'templates/page-content_types.html'
 })
 export class ContentTypesComponent implements OnInit {
     errorMessage: string;
@@ -505,4 +505,17 @@ export class ContentTypesComponent implements OnInit {
         return this.selectedIds.lastIndexOf( itemId ) > -1;
     }
 
+    actionRequest(actionValue : [string, number]): void {
+        switch(actionValue[0]){
+            case 'edit':
+                this.modalOpen(actionValue[1]);
+                break;
+            case 'copy':
+                this.modalOpen(actionValue[1], true);
+                break;
+            case 'delete':
+                this.deleteItemConfirm(actionValue[1]);
+                break;
+        }
+    }
 }

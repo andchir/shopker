@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 use AppBundle\Document\FieldType;
-use AppBundle\Document\ContentType;
 
 /**
  * Class FieldTypeController

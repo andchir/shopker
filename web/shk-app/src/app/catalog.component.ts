@@ -12,7 +12,7 @@ import { ProductsService } from "./services/products.service";
 
 @Component({
     selector: 'shk-catalog',
-    templateUrl: 'templates/page_catalog.html'
+    templateUrl: 'templates/page-catalog.html'
 })
 export class CatalogComponent implements OnInit {
     title = 'Каталог';
@@ -116,6 +116,20 @@ export class CatalogComponent implements OnInit {
             for( let item of this.items ){
                 this.selectedIds.push( item.id );
             }
+        }
+    }
+
+    actionRequest(actionValue : [string, number]): void {
+        switch(actionValue[0]){
+            case 'edit':
+                this.modalProductOpen(actionValue[1]);
+                break;
+            case 'copy':
+                //this.modalProductOpen(actionValue[1], true);
+                break;
+            case 'delete':
+                //this.deleteItemConfirm(actionValue[1]);
+                break;
         }
     }
 

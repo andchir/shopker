@@ -3,7 +3,7 @@ import { Title } from '@angular/platform-browser';
 
 @Component({
     selector: 'shk-settings',
-    templateUrl: 'templates/page_statistics.html'
+    templateUrl: 'templates/page-statistics.html'
 })
 export class StatisticsComponent implements OnInit {
     title = 'Статистика';

@@ -9,12 +9,14 @@ import * as _ from "lodash";
 export class TableComponent implements OnInit {
     @Input() items: any[];
     @Input() tableFields: any[];
-    @Input() itemsTotal: number;
+    @Input() collectionSize: number;
+    @Input() currentPage: number;
     @Output() actionRequest = new EventEmitter();
     loading: boolean = false;
     selectedIds: string[] = [];
     sortBy: string;
     sortDir: string = 'asc';
+    limit: number = 10;
 
     constructor(public router: Router) {
     }
@@ -61,6 +63,10 @@ export class TableComponent implements OnInit {
         } else if (index > -1) {
             this.selectedIds.splice(index, 1);
         }
+    }
+
+    pageChange(page: number): void{
+        this.actionRequest.emit(['pageChange', page]);
     }
 
     action(actionName: string, actionValue ?: number): void {

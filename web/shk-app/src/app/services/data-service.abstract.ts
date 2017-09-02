@@ -31,9 +31,14 @@ export abstract class DataService {
             .catch(this.handleError);
     }
 
-    getList(): Observable<any[]> {
-        return this.http.get(this.requestUrl)
-            .map(this.extractData)
+    getList(pageNum: number): Observable<any> {
+
+        let qs = 'page=' + pageNum,
+            url = this.requestUrl + '?' + qs;
+
+        return this.http.get(url)
+            //.map(this.extractData)
+            .map(res => res.json())
             .catch(this.handleError);
     }
 

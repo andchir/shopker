@@ -116,6 +116,8 @@ export abstract class PageTableAbstractComponent implements OnInit {
     modalRef: NgbModalRef;
     loading: boolean = false;
     selectedIds: string[] = [];
+    collectionSize = 0;
+    currentPage = 1;
 
     public dataService: DataService;
     private activeModal: NgbActiveModal;
@@ -187,6 +189,9 @@ export abstract class PageTableAbstractComponent implements OnInit {
     }
 
     actionRequest(actionValue : [string, number]): void {
+
+        console.log(actionValue);
+
         switch(actionValue[0]){
             case 'edit':
                 this.modalOpen(actionValue[1]);
@@ -196,6 +201,10 @@ export abstract class PageTableAbstractComponent implements OnInit {
                 break;
             case 'delete':
                 this.deleteItemConfirm(actionValue[1]);
+                break;
+            case 'pageChange':
+                this.currentPage = actionValue[1];
+                this.getList();
                 break;
         }
     }

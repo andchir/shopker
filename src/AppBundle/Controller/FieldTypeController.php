@@ -25,6 +25,18 @@ class FieldTypeController extends StorageControllerAbstract
      */
     public function validateData($data, $itemId = 0)
     {
+        if( empty($data) ){
+            return ['success' => false, 'msg' => 'Data is empty.'];
+        }
+        if( empty($data['title']) ){
+            return ['success' => false, 'msg' => 'Title is empty.'];
+        }
+        if( empty($data['name']) ){
+            return ['success' => false, 'msg' => 'System name is empty.'];
+        }
+        if($this->checkNameExists($data['name'], $itemId)){
+            return ['success' => false, 'msg' => 'System name already exists.'];
+        }
 
         return ['success' => true];
     }

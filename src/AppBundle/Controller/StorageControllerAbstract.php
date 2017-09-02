@@ -23,19 +23,23 @@ abstract class StorageControllerAbstract extends BaseController
      * @Method({"GET"})
      * @return JsonResponse
      */
-    public function getList()
+    public function getList(Request $request)
     {
+        $queryString = $request->getQueryString();
+        parse_str($queryString, $options);
+
         $repository = $this->getRepository();
-        $results = $repository->findAllOrderedBy('name', 'asc');
+        $results = $repository->findAllByOptions($options);
 
         $data = [];
-        foreach ($results as $item) {
+        foreach ($results['data'] as $item) {
             $data[] = $item->toArray();
         }
 
         return new JsonResponse([
             'success' => true,
-            'data' => $data
+            'data' => $data,
+            'total' => $results['total']
         ]);
     }
 

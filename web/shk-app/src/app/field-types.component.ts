@@ -140,10 +140,11 @@ export class FieldTypesComponent extends PageTableAbstractComponent {
 
     getList(): void {
         this.loading = true;
-        this.dataService.getList()
+        this.dataService.getList(this.currentPage)
             .subscribe(
-                items => {
-                    this.items = items;
+                res => {
+                    this.items = res.data;
+                    this.collectionSize = res.total;
                     this.loading = false;
                 },
                 error =>  this.errorMessage = <any>error

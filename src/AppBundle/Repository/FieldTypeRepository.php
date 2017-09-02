@@ -3,6 +3,7 @@
 namespace AppBundle\Repository;
 
 use Doctrine\ODM\MongoDB\DocumentRepository;
+use AppBundle\Document\FieldType;
 
 /**
  * FieldTypeRepository
@@ -14,16 +15,55 @@ class FieldTypeRepository extends DocumentRepository
 {
 
     /**
-     * @param string $orderBy
-     * @param string $orderDir
-     * @return \Doctrine\ODM\MongoDB\Cursor
+     * @param array $options
+     * @return array
      */
-    public function findAllOrderedBy($orderBy = 'name', $orderDir = 'asc')
+    public function findAllByOptions($options = [])
     {
-        return $this->createQueryBuilder()
-            ->sort($orderBy, $orderDir)
+        $defaults = [
+            'page' => 1,
+            'limit' => 10,
+            'orderby' => 'name',
+            'orderdir' => 'asc'
+        ];
+        $opts = array_merge($defaults, $options);
+
+        /** @var \Doctrine\ODM\MongoDB\Mapping\ClassMetadataFactory $factory */
+        $factory = $this->getDocumentManager()->getMetadataFactory();
+
+        /** @var \Doctrine\ODM\MongoDB\Mapping\ClassMetadata $metadata */
+        $metadata = $factory->getMetadataFor(FieldType::class);
+        $fieldNames = $metadata->getFieldNames();
+
+        if(!in_array($opts['orderby'], $fieldNames)){
+            $opts['orderby'] = $defaults['orderby'];
+        }
+        if(!in_array($opts['orderdir'], ['asc', 'desc'])){
+            $opts['orderdir'] = $defaults['orderdir'];
+        }
+        if(!is_numeric($opts['page'])){
+            $opts['page'] = $defaults['page'];
+        }
+        if(!is_numeric($opts['limit'])){
+            $opts['limit'] = $defaults['limit'];
+        }
+
+        $skip = ($opts['page'] - 1) * $opts['limit'];
+
+        $results = $this->createQueryBuilder()
+            ->sort($opts['orderby'], $opts['orderdir'])
+            ->limit($opts['limit'])
+            ->skip($skip)
             ->getQuery()
             ->execute();
+
+        $total = $this->createQueryBuilder()
+            ->getQuery()->execute()->count();
+
+        return [
+            'data' => $results,
+            'total' => $total
+        ];
     }
 
 }

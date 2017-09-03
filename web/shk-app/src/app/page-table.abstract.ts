@@ -94,6 +94,12 @@ export abstract class ModalContentAbstractComponent implements OnInit {
         }
     }
 
+    /** Element display toggle */
+    displayToggle(element: HTMLElement, display?: boolean): void {
+        display = display || element.style.display == 'none';
+        element.style.display = display ? 'block' : 'none';
+    }
+
     /** Close modal */
     closeModal() {
         this.activeModal.close();

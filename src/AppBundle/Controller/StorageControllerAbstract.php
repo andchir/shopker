@@ -63,7 +63,7 @@ abstract class StorageControllerAbstract extends BaseController
 
         return new JsonResponse([
             'success' => true,
-            'data' => $fieldType->toArray()
+            'data' => $fieldType->toArray(true)
         ]);
     }
 

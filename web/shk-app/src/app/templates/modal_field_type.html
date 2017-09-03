@@ -36,10 +36,26 @@
         </div>
     </form>
 
-    <label class="label-filled">Свойства</label>
+    <!-- Input -->
+    <label class="label-filled">Параметры ввода</label>
 
-    <table class="table table-bordered table-divided mb-0">
-        <thead>
+    <hr class="mt-0 mb-0">
+    <div class="text-center mb-2" style="margin-top: -0.8rem;">
+        <button type="button" class="btn btn-outline-secondary bg-white text-secondary btn-xs" [ngSwitch]="collapseContainer1.style.display" (click)="displayToggle(collapseContainer1)">
+            <span *ngSwitchCase="'none'">
+                <i class="icon-plus"></i>
+                <span i18n>Expand</span>
+            </span>
+            <span *ngSwitchCase="'block'">
+                <i class="icon-minus"></i>
+                <span i18n>Collapse</span>
+            </span>
+        </button>
+    </div>
+
+    <div #collapseContainer1 class="mb-3" style="display: block;">
+        <table class="table table-bordered table-divided mb-0">
+            <thead>
             <tr>
                 <th>
                     Системное имя
@@ -52,36 +68,103 @@
                 </th>
                 <th></th>
             </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let item of data.properties; let index=index">
-                <td>
-                    <input type="text" class="form-control" [(ngModel)]="item.name" name="name">
-                </td>
-                <td class="text-center">
-                    <input type="text" class="form-control" [(ngModel)]="item.title" name="title">
-                </td>
-                <td class="text-center">
-                    <input type="text" class="form-control" [(ngModel)]="item.default_value" name="default_value">
-                </td>
-                <td class="text-center">
-                    <button type="button" class="btn btn-secondary" (click)="deleteRow(index)" ngbTooltip="Remove">
-                        <i class="icon-cross"></i>
-                    </button>
-                </td>
-            </tr>
-        </tbody>
-        <tfoot>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of data.inputProperties; let index=index">
+                    <td>
+                        <input type="text" class="form-control" [(ngModel)]="item.name" name="name">
+                    </td>
+                    <td class="text-center">
+                        <input type="text" class="form-control" [(ngModel)]="item.title" name="title">
+                    </td>
+                    <td class="text-center">
+                        <input type="text" class="form-control" [(ngModel)]="item.default_value" name="default_value">
+                    </td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-secondary" (click)="deleteRow(index, 'inputProperties')" ngbTooltip="Remove">
+                            <i class="icon-cross"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
             <tr class="bg-faded">
                 <td colspan="4" class="text-center">
-                    <button type="button" class="btn btn-secondary" (click)="addRow()">
+                    <button type="button" class="btn btn-secondary" (click)="addRow('inputProperties')">
                         <i class="icon-plus"></i>
                         Добавить
                     </button>
                 </td>
             </tr>
-        </tfoot>
-    </table>
+            </tfoot>
+        </table>
+    </div>
+    <!-- /Input -->
+
+    <!-- Output -->
+    <label class="label-filled">Параметры вывода</label>
+
+    <hr class="mt-0 mb-0">
+    <div class="text-center mb-2" style="margin-top: -0.8rem;">
+        <button type="button" class="btn btn-outline-secondary bg-white text-secondary btn-xs" [ngSwitch]="collapseContainer2.style.display" (click)="displayToggle(collapseContainer2)">
+            <span *ngSwitchCase="'none'">
+                <i class="icon-plus"></i>
+                <span i18n>Expand</span>
+            </span>
+            <span *ngSwitchCase="'block'">
+                <i class="icon-minus"></i>
+                <span i18n>Collapse</span>
+            </span>
+        </button>
+    </div>
+
+    <div #collapseContainer2 style="display: none;">
+        <table class="table table-bordered table-divided mb-0">
+            <thead>
+                <tr>
+                    <th>
+                        Системное имя
+                    </th>
+                    <th>
+                        Название
+                    </th>
+                    <th>
+                        По умолчанию
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of data.outputProperties; let index=index">
+                    <td>
+                        <input type="text" class="form-control" [(ngModel)]="item.name" name="name">
+                    </td>
+                    <td class="text-center">
+                        <input type="text" class="form-control" [(ngModel)]="item.title" name="title">
+                    </td>
+                    <td class="text-center">
+                        <input type="text" class="form-control" [(ngModel)]="item.default_value" name="default_value">
+                    </td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-secondary" (click)="deleteRow(index, 'outputProperties')" ngbTooltip="Remove">
+                            <i class="icon-cross"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr class="bg-faded">
+                    <td colspan="4" class="text-center">
+                        <button type="button" class="btn btn-secondary" (click)="addRow('outputProperties')">
+                            <i class="icon-plus"></i>
+                            Добавить
+                        </button>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <!-- /Output -->
 
     <div class="alert alert-danger mt-3 mb-0" [hidden]="!errorMessage">
         <button type="button" class="close" (click)="errorMessage = ''">

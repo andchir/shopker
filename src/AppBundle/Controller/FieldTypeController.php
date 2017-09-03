@@ -48,8 +48,11 @@ class FieldTypeController extends StorageControllerAbstract
      */
     public function createUpdate($data, $itemId = 0){
 
-        if(empty($data['properties'])){
-            $data['properties'] = [];
+        if(empty($data['inputProperties'])){
+            $data['inputProperties'] = [];
+        }
+        if(empty($data['outputProperties'])){
+            $data['outputProperties'] = [];
         }
 
         if($itemId){
@@ -68,7 +71,8 @@ class FieldTypeController extends StorageControllerAbstract
             ->setTitle($data['title'])
             ->setName($data['name'])
             ->setDescription($data['description'])
-            ->setProperties($data['properties']);
+            ->setInputProperties($data['inputProperties'])
+            ->setOutputProperties($data['outputProperties']);
 
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $this->get('doctrine_mongodb')->getManager();

@@ -33,7 +33,12 @@ class FieldType
     /**
      * @MongoDB\Field(type="collection")
      */
-    protected $properties;
+    protected $inputProperties;
+
+    /**
+     * @MongoDB\Field(type="collection")
+     */
+    protected $outputProperties;
 
     /**
      * @MongoDB\Field(type="boolean")
@@ -118,28 +123,6 @@ class FieldType
     }
 
     /**
-     * Set properties
-     *
-     * @param array $properties
-     * @return self
-     */
-    public function setProperties($properties)
-    {
-        $this->properties = $properties;
-        return $this;
-    }
-
-    /**
-     * Get properties
-     *
-     * @return array $properties
-     */
-    public function getProperties()
-    {
-        return $this->properties;
-    }
-
-    /**
      * Set isActive
      *
      * @param boolean $isActive
@@ -162,17 +145,66 @@ class FieldType
     }
 
     /**
+     * @param bool $full
      * @return array
      */
-    public function toArray()
+    public function toArray($full = false)
     {
-        return [
+        $output = [
             'id' => $this->getId(),
             'title' => $this->getTitle(),
             'name' => $this->getName(),
             'description' => $this->getDescription(),
-            'properties' => $this->getProperties(),
             'isActive' => $this->getIsActive()
         ];
+        if( $full ){
+            $output['inputProperties'] = $this->getInputProperties();
+            $output['outputProperties'] = $this->getOutputProperties();
+        }
+        return $output;
+    }
+
+    /**
+     * Set inputProperties
+     *
+     * @param array $inputProperties
+     * @return self
+     */
+    public function setInputProperties($inputProperties)
+    {
+        $this->inputProperties = $inputProperties;
+        return $this;
+    }
+
+    /**
+     * Get inputProperties
+     *
+     * @return array $inputProperties
+     */
+    public function getInputProperties()
+    {
+        return $this->inputProperties;
+    }
+
+    /**
+     * Set outputProperties
+     *
+     * @param array $outputProperties
+     * @return self
+     */
+    public function setOutputProperties($outputProperties)
+    {
+        $this->outputProperties = $outputProperties;
+        return $this;
+    }
+
+    /**
+     * Get outputProperties
+     *
+     * @return array $outputProperties
+     */
+    public function getOutputProperties()
+    {
+        return $this->outputProperties;
     }
 }

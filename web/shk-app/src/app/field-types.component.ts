@@ -65,18 +65,18 @@ export class FieldTypeModalContent extends ModalContentAbstractComponent {
         super(fb, dataService, activeModal, tooltipConfig);
     }
 
-    addRow(){
-        if(!this.data.properties){
-            this.data.properties = [];
+    addRow(type: string){
+        if(!this.data[type]){
+            this.data[type] = [];
         }
-        this.data.properties.push(new FieldTypeProperty('','',''));
+        this.data[type].push(new FieldTypeProperty('','',''));
     }
 
-    deleteRow(index){
-        if(this.data.properties.length < index + 1){
+    deleteRow(index: number, type: string){
+        if(this.data[type].length < index + 1){
             return;
         }
-        this.data.properties.splice(index, 1);
+        this.data[type].splice(index, 1);
     }
 
     save(){

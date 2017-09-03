@@ -336,12 +336,12 @@
 
                 <hr class="mt-0 mb-0">
                 <div class="text-center mb-2" style="margin-top: -0.8rem;">
-                    <button type="button" class="btn btn-secondary btn-sm" [ngSwitch]="fieldsBlock.style.display" (click)="displayToggle(fieldsBlock)">
+                    <button type="button" class="btn btn-outline-secondary bg-white text-secondary btn-xs" [ngSwitch]="fieldsBlock.style.display" (click)="displayToggle(fieldsBlock)">
                         <span *ngSwitchCase="'none'">
                             <i class="icon-plus"></i>
                             <span i18n>Expand</span>
                         </span>
-                        <span *ngSwitchCase="'block'">
+                                    <span *ngSwitchCase="'block'">
                             <i class="icon-minus"></i>
                             <span i18n>Collapse</span>
                         </span>

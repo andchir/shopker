@@ -30,6 +30,9 @@ select.form-control:hover { box-shadow: 0 0 11px rgba(0, 0, 0, 0.3); }
 .form-group-message .form-control { border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-color: #a94442; }
 .form-group-message .alert { padding: 1px 8px; font-size: 14px; border-top-width: 0; border-top-left-radius: 0; border-top-right-radius: 0; }
 
+/* buttons */
+.btn-group-xs > .btn, .btn-xs { padding: .1rem .5rem; font-size: .875rem; line-height: 1.5; }
+
 /* table */
 .table-divided {  }
 .table-divided thead th { position: relative; text-align: center; color: #727272; border: 0; }

@@ -6,6 +6,7 @@ import { FieldTypesService } from './field-types.component';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ContentField } from './models/content_field.model';
 import { ContentType } from './models/content_type.model';
+import { FieldTypeProperty } from './models/field-type-property.model';
 import { QueryOptions } from './models/query-options';
 import { ConfirmModalContent } from './app.component';
 import * as _ from "lodash";
@@ -36,8 +37,8 @@ export class ContentTypeModalContent implements OnInit {
     contentTypeForm: FormGroup;
     fieldForm: FormGroup;
     fieldTypes: FieldType[];
-    inputFieldTypeProperties = [];
-    outputFieldTypeProperties = [];
+    inputFieldTypeProperties: FieldTypeProperty[];
+    outputFieldTypeProperties: FieldTypeProperty[];
     formErrors = {
         contentType: {
             name: '',
@@ -123,14 +124,14 @@ export class ContentTypeModalContent implements OnInit {
             .subscribe(data => this.onValueChanged('contentType', data));
 
         this.fieldForm = this.fb.group({
-            title: ['', [Validators.required]],
-            name: ['', [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')]],
-            description: ['', []],
-            input_type: ['', [Validators.required]],
-            output_type: ['', [Validators.required]],
-            is_filter: ['', []],
-            required: ['', []],
-            group: ['', [Validators.required]],
+            title: [this.fieldModel.title, [Validators.required]],
+            name: [this.fieldModel.name, [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')]],
+            description: [this.fieldModel.description, []],
+            input_type: [this.fieldModel.input_type, [Validators.required]],
+            output_type: [this.fieldModel.output_type, [Validators.required]],
+            is_filter: [this.fieldModel.is_filter, []],
+            required: [this.fieldModel.required, []],
+            group: [this.fieldModel.group, [Validators.required]],
             new_group: ['', []]
         });
         this.fieldForm.valueChanges
@@ -149,8 +150,27 @@ export class ContentTypeModalContent implements OnInit {
             );
     }
 
-    selectFieldTypeProperties(type: string, name: string): void{
-        console.log('selectFieldTypeProperties', type, name);
+    /**
+     * Select fild type properties
+     * @param type
+     */
+    selectFieldTypeProperties(type: string): void {
+        let fieldType = _.find(this.fieldTypes, {name: this.fieldModel[type]});
+        if(!fieldType){
+            if(type == 'input_type'){
+                this.inputFieldTypeProperties = null;
+            }
+            else if(type == 'output_type'){
+                this.outputFieldTypeProperties = null;
+            }
+            return;
+        }
+        if(type == 'input_type'){
+            this.inputFieldTypeProperties = _.clone(fieldType.inputProperties);
+        }
+        else if(type == 'output_type'){
+            this.outputFieldTypeProperties = _.clone(fieldType.outputProperties);
+        }
     }
 
     /** Element display toggle */
@@ -270,10 +290,9 @@ export class ContentTypeModalContent implements OnInit {
      * @param field
      */
     editField(field: ContentField) {
-        let defaults = new ContentField('', '', '', '', '', [], '', [], '', false, false);
-        field = _.extend(defaults, field);
-        this.fieldForm.setValue(_.omit(field, ['id', 'input_type_options', 'output_type_options']));
-        this.currentFieldName = field.name;
+        this.fieldModel = _.clone(field);
+        this.fieldForm.setValue(_.omit(this.fieldModel, ['id', 'input_type_options', 'output_type_options']));
+        this.currentFieldName = this.fieldModel.name;
         this.fieldSubmitted = false;
         this.action = 'edit_field';
     }
@@ -283,9 +302,9 @@ export class ContentTypeModalContent implements OnInit {
      * @param field
      */
     copyField(field: ContentField) {
-        let data = _.clone(field);
-        data.name = '';
-        this.fieldForm.setValue(data);
+        this.fieldModel = _.clone(field);
+        this.fieldModel.name = '';
+        this.fieldForm.setValue(this.fieldModel);
         this.currentFieldName = '';
         this.fieldSubmitted = false;
         this.action = 'add_field';
@@ -318,8 +337,6 @@ export class ContentTypeModalContent implements OnInit {
     editFieldCancel(){
         this.resetFieldForm();
         this.onValueChanged('field');
-        this.selectFieldTypeProperties('input', '');
-        this.selectFieldTypeProperties('output', '');
     }
 
     /** Submit field */

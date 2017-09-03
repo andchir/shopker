@@ -32,8 +32,9 @@ abstract class StorageControllerAbstract extends BaseController
         $results = $repository->findAllByOptions($options);
 
         $data = [];
+        $getFull = !empty($options['full']);
         foreach ($results['data'] as $item) {
-            $data[] = $item->toArray();
+            $data[] = $item->toArray($getFull);
         }
 
         return new JsonResponse([

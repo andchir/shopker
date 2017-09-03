@@ -24,7 +24,8 @@ class FieldTypeRepository extends DocumentRepository
             'page' => 1,
             'limit' => 10,
             'orderby' => 'name',
-            'orderdir' => 'asc'
+            'orderdir' => 'asc',
+            'full' => 1
         ];
         $opts = array_merge($defaults, $options);
 

@@ -9,6 +9,7 @@ import { ContentType } from './models/content_type.model';
 import { ConfirmModalContent } from './app.component';
 import { FieldType } from './models/field-type.model';
 import { FieldTypeProperty } from './models/field-type-property.model';
+import { QueryOptions } from './models/query-options';
 import * as _ from "lodash";
 
 import { DataService } from './services/data-service.abstract';
@@ -140,7 +141,9 @@ export class FieldTypesComponent extends PageTableAbstractComponent {
 
     getList(): void {
         this.loading = true;
-        this.dataService.getList(this.currentPage)
+
+        let options = new QueryOptions('name', 'asc', this.currentPage);
+        this.dataService.getList(options)
             .subscribe(
                 res => {
                     this.items = res.data;

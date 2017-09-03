@@ -2,16 +2,19 @@ import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { ContentTypesService } from './services/content_types.service';
+import { FieldTypesService } from './field-types.component';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ContentField } from './models/content_field.model';
 import { ContentType } from './models/content_type.model';
+import { QueryOptions } from './models/query-options';
 import { ConfirmModalContent } from './app.component';
 import * as _ from "lodash";
+import {FieldType} from "./models/field-type.model";
 
 @Component({
     selector: 'content-type-modal-content',
     templateUrl: 'templates/modal_content_types.html',
-    providers: [ ContentTypesService ]
+    providers: [ ContentTypesService, FieldTypesService ]
 })
 export class ContentTypeModalContent implements OnInit {
     @Input() modalTitle;
@@ -21,6 +24,7 @@ export class ContentTypeModalContent implements OnInit {
     @ViewChild('addGroupBlock') elementAddGroupBlock;
 
     model = new ContentType('','','','','products',[],['Содержание', 'Служебное'], true);
+    fieldModel = new ContentField('', '', '', '', '', [], '', [], '', false, false);
     submitted: boolean = false;
     fieldSubmitted: boolean = false;
     loading: boolean = false;
@@ -31,6 +35,9 @@ export class ContentTypeModalContent implements OnInit {
     collections = ['products'];
     contentTypeForm: FormGroup;
     fieldForm: FormGroup;
+    fieldTypes: FieldType[];
+    inputFieldTypeProperties = [];
+    outputFieldTypeProperties = [];
     formErrors = {
         contentType: {
             name: '',
@@ -86,6 +93,7 @@ export class ContentTypeModalContent implements OnInit {
     constructor(
         private fb: FormBuilder,
         private contentTypesService: ContentTypesService,
+        private fieldTypesService: FieldTypesService,
         private activeModal: NgbActiveModal,
         tooltipConfig: NgbTooltipConfig
     ) {
@@ -96,6 +104,7 @@ export class ContentTypeModalContent implements OnInit {
     /** On initialize */
     ngOnInit(): void {
         this.buildForm();
+        this.getFieldTypes();
         if( this.itemId ){
             this.getModelData();
         }
@@ -126,6 +135,22 @@ export class ContentTypeModalContent implements OnInit {
         });
         this.fieldForm.valueChanges
             .subscribe(data => this.onValueChanged('field', data));
+    }
+
+    /** Get field types */
+    getFieldTypes(): void {
+        let options = new QueryOptions('name', 'asc', 0, 0, 1);
+        this.fieldTypesService.getList(options)
+            .subscribe(
+                res => {
+                    this.fieldTypes = res.data;
+                },
+                error =>  this.errorMessage = <any>error
+            );
+    }
+
+    selectFieldTypeProperties(type: string, name: string): void{
+        console.log('selectFieldTypeProperties', type, name);
     }
 
     /** Element display toggle */
@@ -244,10 +269,10 @@ export class ContentTypeModalContent implements OnInit {
      * Edit field
      * @param field
      */
-    editField(field: ContentField){
-        let defaults = new ContentField('','','','','',[],'',[],'',false,false);
-        field = _.extend( defaults, field );
-        this.fieldForm.setValue( _.omit( field, ['id','input_type_options','output_type_options'] ) );
+    editField(field: ContentField) {
+        let defaults = new ContentField('', '', '', '', '', [], '', [], '', false, false);
+        field = _.extend(defaults, field);
+        this.fieldForm.setValue(_.omit(field, ['id', 'input_type_options', 'output_type_options']));
         this.currentFieldName = field.name;
         this.fieldSubmitted = false;
         this.action = 'edit_field';
@@ -257,10 +282,10 @@ export class ContentTypeModalContent implements OnInit {
      * Copy field
      * @param field
      */
-    copyField(field: ContentField){
-        let data = _.clone( field );
+    copyField(field: ContentField) {
+        let data = _.clone(field);
         data.name = '';
-        this.fieldForm.setValue( data );
+        this.fieldForm.setValue(data);
         this.currentFieldName = '';
         this.fieldSubmitted = false;
         this.action = 'add_field';
@@ -293,6 +318,8 @@ export class ContentTypeModalContent implements OnInit {
     editFieldCancel(){
         this.resetFieldForm();
         this.onValueChanged('field');
+        this.selectFieldTypeProperties('input', '');
+        this.selectFieldTypeProperties('output', '');
     }
 
     /** Submit field */

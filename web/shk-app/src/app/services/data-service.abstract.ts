@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
+import { QueryOptions } from '../models/query-options';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/toPromise';
@@ -31,10 +32,14 @@ export abstract class DataService {
             .catch(this.handleError);
     }
 
-    getList(pageNum: number): Observable<any> {
+    getList(options ?: QueryOptions): Observable<any> {
 
-        let qs = 'page=' + pageNum,
-            url = this.requestUrl + '?' + qs;
+        let qs = '';
+        for(let name in options){
+            qs += `${name}=${options[name]}&`;
+        }
+        qs = qs.substr(0, qs.length - 1);
+        let url = this.requestUrl + '?' + qs;
 
         return this.http.get(url)
             //.map(this.extractData)

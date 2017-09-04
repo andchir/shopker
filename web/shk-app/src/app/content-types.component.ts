@@ -426,6 +426,7 @@ export class ContentTypesComponent implements OnInit {
     modalRef: NgbModalRef;
     loading: boolean = false;
     selectedIds: string[] = [];
+    queryOptions: QueryOptions = new QueryOptions('name', 'asc', 1, 10, 0);
 
     //TODO: get from settings
     tableFields = [

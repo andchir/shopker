@@ -7,6 +7,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { ProductModalContent } from './product.component';
 import { Category } from "./models/category.model";
 import { Product } from "./models/product.model";
+import { QueryOptions } from './models/query-options';
 import * as _ from "lodash";
 import { ProductsService } from "./services/products.service";
 
@@ -23,6 +24,7 @@ export class CatalogComponent implements OnInit {
     currentCategory: Category;
     items: Product[] = [];
     selectedIds: number[] = [];
+    queryOptions: QueryOptions = new QueryOptions('name', 'asc', 1, 10, 0);
 
     //TODO: get from settings
     //TODO: add field format option

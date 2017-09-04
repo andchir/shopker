@@ -45,6 +45,6 @@
         </div>
     </div>
 
-    <cmp-table [items]="items" [collectionSize]="100" [tableFields]="tableFields" (actionRequest)="actionRequest($event)"></cmp-table>
+    <cmp-table [items]="items" [collectionSize]="100" [tableFields]="tableFields" [queryOptions]="queryOptions" [(loading)]="loading" (actionRequest)="actionRequest($event)"></cmp-table>
 
 </div>

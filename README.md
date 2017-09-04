@@ -122,6 +122,16 @@ Connect and authenticate as the user administrator:
 ./mongo --port 27017 -u "shopkeeper4user" -p "111111" --authenticationDatabase "shopkeeper4"
 ~~~
 
+Configuration on Ubuntu:
+~~~
+sudo nano /lib/systemd/system/mongod.service
+Edit:
+ExecStart=/usr/bin/mongod --quiet --auth --config /etc/mongod.conf
+
+sudo service mongod restart
+mongo -u admin -p 111111 --authenticationDatabase admin
+~~~
+
 Export:
 ~~~
 ./mongoexport --db shopkeeper4 --collection ContentType --out ../ContentType.json \

@@ -55,7 +55,7 @@
 
 <div class="card-footer">
 
-    <div class="float-right mb-3">
+    <div class="float-right">
         <select class="form-control">
             <option value="10">10</option>
             <option value="20">20</option>
@@ -66,4 +66,5 @@
 
     <ngb-pagination *ngIf="collectionSize > limit" [class]="'mb-0'" [collectionSize]="collectionSize" [(page)]="currentPage" [maxSize]="8" (pageChange)="pageChange($event)" [rotate]="true" [boundaryLinks]="false"></ngb-pagination>
 
+    <div class="clearfix"></div>
 </div>

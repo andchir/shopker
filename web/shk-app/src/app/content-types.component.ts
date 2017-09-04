@@ -6,11 +6,11 @@ import { FieldTypesService } from './field-types.component';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ContentField } from './models/content_field.model';
 import { ContentType } from './models/content_type.model';
+import { FieldType } from "./models/field-type.model";
 import { FieldTypeProperty } from './models/field-type-property.model';
 import { QueryOptions } from './models/query-options';
 import { ConfirmModalContent } from './app.component';
 import * as _ from "lodash";
-import {FieldType} from "./models/field-type.model";
 
 @Component({
     selector: 'content-type-modal-content',
@@ -37,8 +37,8 @@ export class ContentTypeModalContent implements OnInit {
     contentTypeForm: FormGroup;
     fieldForm: FormGroup;
     fieldTypes: FieldType[];
-    inputFieldTypeProperties: FieldTypeProperty[];
-    outputFieldTypeProperties: FieldTypeProperty[];
+    inputFieldTypeProperties: FieldTypeProperty[] = [];
+    outputFieldTypeProperties: FieldTypeProperty[] = [];
     formErrors = {
         contentType: {
             name: '',
@@ -158,10 +158,10 @@ export class ContentTypeModalContent implements OnInit {
         let fieldType = _.find(this.fieldTypes, {name: this.fieldModel[type]});
         if(!fieldType){
             if(type == 'input_type'){
-                this.inputFieldTypeProperties = null;
+                this.inputFieldTypeProperties = [];
             }
             else if(type == 'output_type'){
-                this.outputFieldTypeProperties = null;
+                this.outputFieldTypeProperties = [];
             }
             return;
         }

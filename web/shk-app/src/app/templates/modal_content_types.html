@@ -102,7 +102,7 @@
 
                         <div class="form-group row" [class.form-group-message]="formErrors.field.title">
                             <div class="col-md-5">
-                                <label class="small">Название</label>
+                                <label>Название</label>
                             </div>
                             <div class="col-md-7">
                                 <input type="text" class="form-control form-control-sm" name="field_title" formControlName="title" [(ngModel)]="fieldModel.title">
@@ -114,7 +114,7 @@
 
                         <div class="form-group row" [class.form-group-message]="formErrors.field.name">
                             <div class="col-md-5">
-                                <label class="small">Системное имя</label>
+                                <label>Системное имя</label>
                             </div>
                             <div class="col-md-7">
                                 <input type="text" class="form-control form-control-sm" name="field_name" formControlName="name" [(ngModel)]="fieldModel.name">
@@ -126,7 +126,7 @@
 
                         <div class="form-group row">
                             <div class="col-md-5">
-                                <label class="small">Описание</label>
+                                <label>Описание</label>
                             </div>
                             <div class="col-md-7">
                                 <textarea type="text" class="form-control form-control-sm" name="field_description" formControlName="description" [(ngModel)]="fieldModel.description"></textarea>
@@ -135,7 +135,7 @@
 
                         <div class="form-group row" [class.form-group-message]="formErrors.field.input_type">
                             <div class="col-md-5">
-                                <label class="small">Тип ввода</label>
+                                <label>Тип ввода</label>
                             </div>
                             <div class="col-md-7">
 
@@ -158,7 +158,7 @@
 
                         <div class="card card-body bg-light mb-3" #inputTypeOptionsBlock style="display: none;">
                             <div>
-                                <div class="alert alert-secondary small" [hidden]="inputFieldTypeProperties">
+                                <div class="alert alert-secondary small" [hidden]="inputFieldTypeProperties.length > 0">
                                     There are no parameters.
                                 </div>
                                 <div class="row form-group" *ngFor="let property of inputFieldTypeProperties">
@@ -179,7 +179,7 @@
 
                         <div class="form-group row" [class.form-group-message]="formErrors.field.output_type">
                             <div class="col-md-5">
-                                <label class="small">Тип вывода</label>
+                                <label>Тип вывода</label>
                             </div>
                             <div class="col-md-7">
 
@@ -201,7 +201,7 @@
                         </div>
 
                         <div class="card card-body bg-light mb-3" #outputTypeOptionsBlock style="display: none;">
-                            <div class="alert alert-secondary small" [hidden]="outputFieldTypeProperties">
+                            <div class="alert alert-secondary small" [hidden]="outputFieldTypeProperties.length > 0">
                                 There are no parameters.
                             </div>
                             <div class="row form-group" *ngFor="let property of outputFieldTypeProperties">
@@ -221,7 +221,7 @@
 
                         <div class="form-group row">
                             <div class="col-md-5">
-                                <label class="small">Группа</label>
+                                <label>Группа</label>
                             </div>
                             <div class="col-md-7">
 
@@ -270,7 +270,7 @@
                                 <label class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" value="1" name="required" formControlName="required">
                                     <span class="custom-control-indicator"></span>
-                                    <span class="small">Обязательный</span>
+                                    <span>Обязательный</span>
                                 </label>
 
                             </div>
@@ -282,7 +282,7 @@
                                 <label class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" value="1" name="show_in_table">
                                     <span class="custom-control-indicator"></span>
-                                    <span class="small">Показывать в таблице</span>
+                                    <span>Показывать в таблице</span>
                                 </label>
 
                             </div>
@@ -294,7 +294,7 @@
                                 <label class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" value="1" name="is_filter" formControlName="is_filter">
                                     <span class="custom-control-indicator"></span>
-                                    <span class="small">Показывать в фильтре</span>
+                                    <span>Показывать в фильтре</span>
                                 </label>
 
                             </div>

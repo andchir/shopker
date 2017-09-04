@@ -23,8 +23,8 @@ class FieldTypeRepository extends DocumentRepository
         $defaults = [
             'page' => 1,
             'limit' => 10,
-            'orderby' => 'name',
-            'orderdir' => 'asc',
+            'sortByy' => 'name',
+            'sortDir' => 'asc',
             'full' => 1
         ];
         $opts = array_merge($defaults, $options);
@@ -36,11 +36,11 @@ class FieldTypeRepository extends DocumentRepository
         $metadata = $factory->getMetadataFor(FieldType::class);
         $fieldNames = $metadata->getFieldNames();
 
-        if(!in_array($opts['orderby'], $fieldNames)){
-            $opts['orderby'] = $defaults['orderby'];
+        if(!in_array($opts['sortBy'], $fieldNames)){
+            $opts['sortBy'] = $defaults['sortBy'];
         }
-        if(!in_array($opts['orderdir'], ['asc', 'desc'])){
-            $opts['orderdir'] = $defaults['orderdir'];
+        if(!in_array($opts['sortDir'], ['asc', 'desc'])){
+            $opts['sortDir'] = $defaults['sortDir'];
         }
         if(!is_numeric($opts['page'])){
             $opts['page'] = $defaults['page'];
@@ -52,7 +52,7 @@ class FieldTypeRepository extends DocumentRepository
         $skip = ($opts['page'] - 1) * $opts['limit'];
 
         $results = $this->createQueryBuilder()
-            ->sort($opts['orderby'], $opts['orderdir'])
+            ->sort($opts['sortBy'], $opts['sortDir'])
             ->limit($opts['limit'])
             ->skip($skip)
             ->getQuery()

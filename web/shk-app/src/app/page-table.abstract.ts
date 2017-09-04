@@ -3,6 +3,7 @@ import { Title } from '@angular/platform-browser';
 import { NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { DataService } from './services/data-service.abstract';
+import { QueryOptions } from './models/query-options';
 import { AlertModalContent, ConfirmModalContent } from './app.component';
 
 @Component({
@@ -123,7 +124,7 @@ export abstract class PageTableAbstractComponent implements OnInit {
     loading: boolean = false;
     selectedIds: string[] = [];
     collectionSize = 0;
-    currentPage = 1;
+    queryOptions: QueryOptions = new QueryOptions('name', 'asc', 1, 10, 0);
 
     public dataService: DataService;
     private activeModal: NgbActiveModal;
@@ -208,8 +209,7 @@ export abstract class PageTableAbstractComponent implements OnInit {
             case 'delete':
                 this.deleteItemConfirm(actionValue[1]);
                 break;
-            case 'pageChange':
-                this.currentPage = actionValue[1];
+            case 'changeQuery':
                 this.getList();
                 break;
         }

@@ -11,7 +11,7 @@
                 <th *ngFor="let tableField of tableFields; let index=index">
                     <button type="button" class="btn btn-block btn-link" (click)="selectSortBy(tableField.name)">
                         {{tableField.title}}
-                        <i [class.icon-arrow-down]="sortDir == 'asc'" [class.icon-arrow-up]="sortDir == 'desc'" [style.visibility]="tableField.name == sortBy ? 'visible' : 'hidden'"></i>
+                        <i [class.icon-arrow-down]="queryOptions.sortDir == 'asc'" [class.icon-arrow-up]="queryOptions.sortDir == 'desc'" [style.visibility]="tableField.name == queryOptions.sortBy ? 'visible' : 'hidden'"></i>
                     </button>
                 </th>
             </tr>
@@ -64,7 +64,7 @@
         </select>
     </div>
 
-    <ngb-pagination *ngIf="collectionSize > limit" [class]="'mb-0'" [collectionSize]="collectionSize" [(page)]="currentPage" [maxSize]="8" (pageChange)="pageChange($event)" [rotate]="true" [boundaryLinks]="false"></ngb-pagination>
+    <ngb-pagination *ngIf="collectionSize > queryOptions.limit" [class]="'mb-0'" [collectionSize]="collectionSize" [(page)]="queryOptions.page" [maxSize]="queryOptions.limit" (pageChange)="pageChange()" [rotate]="true" [boundaryLinks]="false"></ngb-pagination>
 
     <div class="clearfix"></div>
 </div>

@@ -141,9 +141,7 @@ export class FieldTypesComponent extends PageTableAbstractComponent {
 
     getList(): void {
         this.loading = true;
-
-        let options = new QueryOptions('name', 'asc', this.currentPage);
-        this.dataService.getList(options)
+        this.dataService.getList(this.queryOptions)
             .subscribe(
                 res => {
                     this.items = res.data;

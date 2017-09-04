@@ -36,6 +36,6 @@
         </div>
     </div>
 
-    <cmp-table [items]="items" [collectionSize]="collectionSize" [currentPage]="currentPage" [tableFields]="tableFields" (actionRequest)="actionRequest($event)"></cmp-table>
+    <cmp-table [items]="items" [collectionSize]="collectionSize" [queryOptions]="queryOptions" [tableFields]="tableFields" [(loading)]="loading" (actionRequest)="actionRequest($event)"></cmp-table>
 
 </div>

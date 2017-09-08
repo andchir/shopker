@@ -20,6 +20,8 @@ export abstract class DataService {
         this.requestUrl = 'app/data_list';
     }
 
+    abstract extractData(res: Response);
+
     setRequestUrl(url){
         this.requestUrl = url;
     }
@@ -28,7 +30,7 @@ export abstract class DataService {
         const url = `${this.requestUrl}/${id}`;
         return this.http.get(url)
             .toPromise()
-            .then(res => res.json().data)
+            .then(this.extractData)
             .catch(this.handleError);
     }
 
@@ -41,7 +43,7 @@ export abstract class DataService {
         let url = this.requestUrl + '?' + qs;
 
         return this.http.get(url)
-            .map(res => res.json())
+            .map(this.extractData)
             .catch(this.handleError);
     }
 
@@ -49,7 +51,7 @@ export abstract class DataService {
         const url = `${this.requestUrl}/${id}`;
         return this.http.delete(url, {headers: this.headers})
             .toPromise()
-            .then(res => res.json())
+            .then(this.extractData)
             .catch(this.handleError);
     }
 
@@ -57,7 +59,7 @@ export abstract class DataService {
         return this.http
             .post(this.requestUrl, JSON.stringify(item), {headers: this.headers})
             .toPromise()
-            .then(res => res.json())
+            .then(this.extractData)
             .catch(this.handleError);
     }
 
@@ -66,13 +68,8 @@ export abstract class DataService {
         return this.http
             .put(url, JSON.stringify(item), {headers: this.headers})
             .toPromise()
-            .then(res => res.json())
+            .then(this.extractData)
             .catch(this.handleError);
-    }
-
-    private extractData(res: Response): any {
-        let body = res.json();
-        return body.data || {};
     }
 
     private handleError (error: Response | any) {

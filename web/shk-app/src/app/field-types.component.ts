@@ -1,16 +1,10 @@
-import { Component, Injectable, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Title } from '@angular/platform-browser';
-import { NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
-import { ContentTypesService } from './services/content_types.service';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { ContentField } from './models/content_field.model';
-import { ContentType } from './models/content_type.model';
-import { ConfirmModalContent } from './app.component';
+import { NgbModal, NgbActiveModal, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
+import { FormBuilder, Validators } from '@angular/forms';
 import { FieldType } from './models/field-type.model';
 import { FieldTypeProperty } from './models/field-type-property.model';
-import { QueryOptions } from './models/query-options';
-import * as _ from "lodash";
 
 import { DataService } from './services/data-service.abstract';
 import { PageTableAbstractComponent, ModalContentAbstractComponent } from './page-table.abstract';
@@ -23,6 +17,17 @@ export class FieldTypesService extends DataService {
         this.setRequestUrl('admin/field_types');
     }
 
+    extractData(res: Response): any {
+        let body = res.json();
+        if(body.data){
+            if(Array.isArray(body.data)){
+                body.data = body.data as FieldType[];
+            } else {
+                body.data = body.data as FieldType;
+            }
+        }
+        return body;
+    }
 }
 
 @Component({
@@ -138,19 +143,6 @@ export class FieldTypesComponent extends PageTableAbstractComponent {
             output_type: 'text'
         }
     ];
-
-    getList(): void {
-        this.loading = true;
-        this.dataService.getList(this.queryOptions)
-            .subscribe(
-                res => {
-                    this.items = res.data;
-                    this.collectionSize = res.total;
-                    this.loading = false;
-                },
-                error =>  this.errorMessage = <any>error
-            );
-    }
 
     getModalContent(){
         return FieldTypeModalContent;

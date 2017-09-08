@@ -51,12 +51,12 @@ export abstract class ModalContentAbstractComponent implements OnInit {
     getModelData(): void {
         this.loading = true;
         this.dataService.getItem(this.itemId)
-            .then(item => {
+            .then(res => {
                 if(this.isItemCopy){
-                    item.id = '';
-                    item.name = '';
+                    res.data.id = '';
+                    res.data.name = '';
                 }
-                this.data = item;
+                this.data = res.data;
                 this.loading = false;
             });
     }
@@ -221,7 +221,15 @@ export abstract class PageTableAbstractComponent implements OnInit {
 
     getList(): void {
         this.loading = true;
-
+        this.dataService.getList(this.queryOptions)
+            .subscribe(
+                res => {
+                    this.items = res.data;
+                    this.collectionSize = res.total;
+                    this.loading = false;
+                },
+                error =>  this.errorMessage = <any>error
+            );
     }
 
 }

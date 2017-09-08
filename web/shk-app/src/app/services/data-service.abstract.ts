@@ -33,7 +33,6 @@ export abstract class DataService {
     }
 
     getList(options ?: QueryOptions): Observable<any> {
-
         let qs = '';
         for(let name in options){
             qs += `${name}=${options[name]}&`;
@@ -42,7 +41,6 @@ export abstract class DataService {
         let url = this.requestUrl + '?' + qs;
 
         return this.http.get(url)
-            //.map(this.extractData)
             .map(res => res.json())
             .catch(this.handleError);
     }

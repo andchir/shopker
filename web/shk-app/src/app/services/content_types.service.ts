@@ -1,13 +1,34 @@
-import { Injectable }              from '@angular/core';
-import { Http, Response }          from '@angular/http';
+import { Injectable } from '@angular/core';
+import { Http, Response } from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
+import { DataService } from './data-service.abstract';
+import { ContentType } from '../models/content_type.model';
 
 import 'rxjs/add/operator/toPromise';
 
-import { ContentType } from '../models/content_type.model';
+@Injectable()
+export class ContentTypesService extends DataService {
+
+    constructor(http: Http) {
+        super(http);
+        this.setRequestUrl('admin/content_types');
+    }
+
+    extractData(res: Response): any {
+        let body = res.json();
+        if(body.data){
+            if(Array.isArray(body.data)){
+                body.data = body.data as ContentType[];
+            } else {
+                body.data = body.data as ContentType;
+            }
+        }
+        return body;
+    }
+}
 
 @Injectable()
-export class ContentTypesService {
+export class ContentTypesService_ {
 
     private headers = new Headers({'Content-Type': 'application/json'});
     private listUrl = 'app/content_type_list';

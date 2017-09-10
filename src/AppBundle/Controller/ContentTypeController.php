@@ -4,37 +4,39 @@ namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Document\ContentType;
 
-class ContentTypeController extends Controller
+/**
+ * Class ContentTypeController
+ * @package AppBundle\Controller
+ * @Route("/admin/content_types")
+ */
+class ContentTypeController extends StorageControllerAbstract
 {
 
-    /**
-     * @Route("/app/content_type_list", name="content_type_get_list")
-     * @Method({"GET"})
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function getList( Request $request )
-    {
-        $repository = $this->getRepository();
-        $results = $repository->findAllOrderedByTitle();
-        $full = !empty( $request->get('full') ) ? true : false;
-
-        $data = [];
-        /** @var ContentType $item */
-        foreach ($results as $item) {
-            $data[] = $item->toArray( $full );
-        }
-
-        return new JsonResponse([
-            'success' => true,
-            'data' => $data
-        ]);
-    }
+//    /**
+//     * @Route("/app/content_type_list", name="content_type_get_list")
+//     * @Method({"GET"})
+//     * @param Request $request
+//     * @return JsonResponse
+//     */
+//    public function getList( Request $request )
+//    {
+//        $repository = $this->getRepository();
+//        $results = $repository->findAllOrderedByTitle();
+//        $full = !empty( $request->get('full') ) ? true : false;
+//
+//        $data = [];
+//        /** @var ContentType $item */
+//        foreach ($results as $item) {
+//            $data[] = $item->toArray( $full );
+//        }
+//
+//        return new JsonResponse([
+//            'success' => true,
+//            'data' => $data
+//        ]);
+//    }
 
     /**
      * @param $data
@@ -66,25 +68,25 @@ class ContentTypeController extends Controller
         return ['success' => true];
     }
 
-    /**
-     * @param $name
-     * @param int $itemId
-     * @return mixed
-     */
-    public function checkNameExists($name, $itemId = 0){
-
-        $repository = $this->getRepository();
-        $query = $repository->createQueryBuilder()
-            ->field('name')->equals($name);
-
-        if($itemId){
-            $query = $query->field('id')->notEqual($itemId);
-        }
-
-        return $query->getQuery()
-            ->execute()
-            ->count();
-    }
+//    /**
+//     * @param $name
+//     * @param int $itemId
+//     * @return mixed
+//     */
+//    public function checkNameExists($name, $itemId = 0){
+//
+//        $repository = $this->getRepository();
+//        $query = $repository->createQueryBuilder()
+//            ->field('name')->equals($name);
+//
+//        if($itemId){
+//            $query = $query->field('id')->notEqual($itemId);
+//        }
+//
+//        return $query->getQuery()
+//            ->execute()
+//            ->count();
+//    }
 
     /**
      * Create or update item
@@ -94,13 +96,6 @@ class ContentTypeController extends Controller
      */
     public function createUpdate($data, $itemId = '')
     {
-        if( empty($data) || empty($data['title']) || empty($data['name']) || empty($data['fields']) ){
-            return [
-                'success' => false,
-                'msg' => 'Data is empty.'
-            ];
-        }
-
         if( !$itemId ){
             $contentType = new ContentType();
         } else {
@@ -130,106 +125,106 @@ class ContentTypeController extends Controller
         ];
     }
 
-    /**
-     * @Route("/app/content_type", name="content_type_post")
-     * @Method({"POST"})
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function createItem( Request $request )
-    {
-        $data = $request->getContent()
-            ? json_decode($request->getContent(), true)
-            : [];
+//    /**
+//     * @Route("/app/content_type", name="content_type_post")
+//     * @Method({"POST"})
+//     * @param Request $request
+//     * @return JsonResponse
+//     */
+//    public function createItem( Request $request )
+//    {
+//        $data = $request->getContent()
+//            ? json_decode($request->getContent(), true)
+//            : [];
+//
+//        $output = $this->validateData( $data );
+//        if( !$output['success'] ){
+//            return new JsonResponse( $output );
+//        }
+//
+//        $output = $this->createUpdate( $data );
+//
+//        return new JsonResponse( $output );
+//    }
 
-        $output = $this->validateData( $data );
-        if( !$output['success'] ){
-            return new JsonResponse( $output );
-        }
+//    /**
+//     * @Route("/app/content_type/{itemId}", name="content_type_put")
+//     * @Method({"PUT"})
+//     * @param Request $request
+//     * @param string $itemId
+//     * @return JsonResponse
+//     */
+//    public function editItem( Request $request, $itemId )
+//    {
+//        $data = $request->getContent()
+//            ? json_decode($request->getContent(), true)
+//            : [];
+//
+//        $output = $this->validateData( $data, $itemId );
+//        if( !$output['success'] ){
+//            return new JsonResponse( $output );
+//        }
+//
+//        $output = $this->createUpdate( $data, $itemId );
+//
+//        return new JsonResponse( $output );
+//    }
 
-        $output = $this->createUpdate( $data );
+//    /**
+//     * @Route("/app/content_type/{itemId}", name="content_type_delete")
+//     * @Method({"DELETE"})
+//     * @param Request $request
+//     * @param $itemId
+//     * @return JsonResponse
+//     */
+//    public function deleteItem(Request $request, $itemId)
+//    {
+//        $repository = $this->getRepository();
+//
+//        /** @var ContentType $contentType */
+//        $contentType = $repository->find( $itemId );
+//        if( !$contentType ){
+//            return new JsonResponse([
+//                'success' => false,
+//                'msg' => 'Item not found.'
+//            ]);
+//        }
+//
+//        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+//        $dm = $this->get('doctrine_mongodb')->getManager();
+//        $dm->remove( $contentType );
+//        $dm->flush();
+//
+//        return new JsonResponse([
+//            'success' => true
+//        ]);
+//    }
 
-        return new JsonResponse( $output );
-    }
-
-    /**
-     * @Route("/app/content_type/{itemId}", name="content_type_put")
-     * @Method({"PUT"})
-     * @param Request $request
-     * @param string $itemId
-     * @return JsonResponse
-     */
-    public function editItem( Request $request, $itemId )
-    {
-        $data = $request->getContent()
-            ? json_decode($request->getContent(), true)
-            : [];
-
-        $output = $this->validateData( $data, $itemId );
-        if( !$output['success'] ){
-            return new JsonResponse( $output );
-        }
-
-        $output = $this->createUpdate( $data, $itemId );
-
-        return new JsonResponse( $output );
-    }
-
-    /**
-     * @Route("/app/content_type/{itemId}", name="content_type_delete")
-     * @Method({"DELETE"})
-     * @param Request $request
-     * @param $itemId
-     * @return JsonResponse
-     */
-    public function deleteItem(Request $request, $itemId)
-    {
-        $repository = $this->getRepository();
-
-        /** @var ContentType $contentType */
-        $contentType = $repository->find( $itemId );
-        if( !$contentType ){
-            return new JsonResponse([
-                'success' => false,
-                'msg' => 'Item not found.'
-            ]);
-        }
-
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
-        $dm->remove( $contentType );
-        $dm->flush();
-
-        return new JsonResponse([
-            'success' => true
-        ]);
-    }
-
-    /**
-     * @Route("/app/content_type/{itemId}", name="content_type_get")
-     * @Method({"GET"})
-     * @param Request $request
-     * @param $itemId
-     * @return JsonResponse
-     */
-    public function getItem( Request $request, $itemId )
-    {
-        $repository = $this->getRepository();
-
-        /** @var ContentType $contentType */
-        $contentType = $repository->find( $itemId );
-        if( !$contentType ){
-            return new JsonResponse([
-                'success' => false,
-                'msg' => 'Item not found.'
-            ]);
-        }
-
-        return new JsonResponse([
-            'success' => true,
-            'data' => $contentType->toArray(true)
-        ]);
-    }
+//    /**
+//     * @Route("/app/content_type/{itemId}", name="content_type_get")
+//     * @Method({"GET"})
+//     * @param Request $request
+//     * @param $itemId
+//     * @return JsonResponse
+//     */
+//    public function getItem( Request $request, $itemId )
+//    {
+//        $repository = $this->getRepository();
+//
+//        /** @var ContentType $contentType */
+//        $contentType = $repository->find( $itemId );
+//        if( !$contentType ){
+//            return new JsonResponse([
+//                'success' => false,
+//                'msg' => 'Item not found.'
+//            ]);
+//        }
+//
+//        return new JsonResponse([
+//            'success' => true,
+//            'data' => $contentType->toArray(true)
+//        ]);
+//    }
 
     /**
      * @return \AppBundle\Repository\ContentTypeRepository

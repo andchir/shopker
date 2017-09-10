@@ -32,7 +32,7 @@ export class FieldTypesService extends DataService {
 
 @Component({
     selector: 'field-type-modal-content',
-    templateUrl: 'templates/modal_field_type.html',
+    templateUrl: 'templates/modal-field_type.html',
     providers: [ FieldTypesService ]
 })
 export class FieldTypeModalContent extends ModalContentAbstractComponent {

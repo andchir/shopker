@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, Injectable, ElementRef } from '@angular/core';
+import { Http, Response } from '@angular/http';
 import { Title } from '@angular/platform-browser';
 import { NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { ContentTypesService } from './services/content_types.service';
@@ -10,17 +11,19 @@ import { FieldType } from "./models/field-type.model";
 import { FieldTypeProperty } from './models/field-type-property.model';
 import { QueryOptions } from './models/query-options';
 import { ConfirmModalContent } from './app.component';
+import { DataService } from './services/data-service.abstract';
+import { PageTableAbstractComponent, ModalContentAbstractComponent } from './page-table.abstract';
 import * as _ from "lodash";
 
 @Component({
     selector: 'content-type-modal-content',
-    templateUrl: 'templates/modal_content_types.html',
+    templateUrl: 'templates/modal-content_types.html',
     providers: [ ContentTypesService, FieldTypesService ]
 })
-export class ContentTypeModalContent implements OnInit {
-    @Input() modalTitle;
-    @Input() itemId;
-    @Input() isItemCopy;
+export class ContentTypeModalContent extends ModalContentAbstractComponent {
+
+    data: FieldType;
+
     @ViewChild('addCollectionBlock') elementAddCollectionBlock;
     @ViewChild('addGroupBlock') elementAddGroupBlock;
 
@@ -39,6 +42,30 @@ export class ContentTypeModalContent implements OnInit {
     fieldTypes: FieldType[];
     inputFieldTypeProperties: FieldTypeProperty[] = [];
     outputFieldTypeProperties: FieldTypeProperty[] = [];
+
+    formFields = {
+        name: {
+            value: '',
+            validators: [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')],
+            messages: {
+                required: 'Name is required.',
+                pattern: 'The name must contain only Latin letters and numbers.'
+            }
+        },
+        title: {
+            value: '',
+            validators: [Validators.required],
+            messages: {
+                required: 'Title is required.'
+            }
+        },
+        description: {
+            value: '',
+            validators: [],
+            messages: {}
+        }
+    };
+
     formErrors = {
         contentType: {
             name: '',
@@ -92,63 +119,61 @@ export class ContentTypeModalContent implements OnInit {
     };
 
     constructor(
-        private fb: FormBuilder,
-        private contentTypesService: ContentTypesService,
-        private fieldTypesService: FieldTypesService,
-        private activeModal: NgbActiveModal,
+        fb: FormBuilder,
+        dataService: FieldTypesService,
+        activeModal: NgbActiveModal,
         tooltipConfig: NgbTooltipConfig
     ) {
-        tooltipConfig.placement = 'bottom';
-        tooltipConfig.container = 'body';
+        super(fb, dataService, activeModal, tooltipConfig);
     }
 
-    /** On initialize */
-    ngOnInit(): void {
-        this.buildForm();
-        this.getFieldTypes();
-        if( this.itemId ){
-            this.getModelData();
-        }
-    }
+    // /** On initialize */
+    // ngOnInit(): void {
+    //     this.buildForm();
+    //     this.getFieldTypes();
+    //     if( this.itemId ){
+    //         this.getModelData();
+    //     }
+    // }
 
-    /** Build form groups */
-    buildForm(): void {
-        this.contentTypeForm = this.fb.group({
-            title: [this.model.title, [Validators.required]],
-            name: [this.model.name, [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')]],
-            description: [this.model.description, []],
-            collection: [this.model.collection, [Validators.required]],
-            new_collection: ['', [Validators.pattern('[A-Za-z0-9_-]+')]]
-        });
-        this.contentTypeForm.valueChanges
-            .subscribe(data => this.onValueChanged('contentType', data));
+    // /** Build form groups */
+    // buildForm(): void {
+    //     this.contentTypeForm = this.fb.group({
+    //         title: [this.model.title, [Validators.required]],
+    //         name: [this.model.name, [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')]],
+    //         description: [this.model.description, []],
+    //         collection: [this.model.collection, [Validators.required]],
+    //         new_collection: ['', [Validators.pattern('[A-Za-z0-9_-]+')]]
+    //     });
+    //     this.contentTypeForm.valueChanges
+    //         .subscribe(data => this.onValueChanged('contentType', data));
+    //
+    //     this.fieldForm = this.fb.group({
+    //         title: [this.fieldModel.title, [Validators.required]],
+    //         name: [this.fieldModel.name, [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')]],
+    //         description: [this.fieldModel.description, []],
+    //         input_type: [this.fieldModel.input_type, [Validators.required]],
+    //         output_type: [this.fieldModel.output_type, [Validators.required]],
+    //         is_filter: [this.fieldModel.is_filter, []],
+    //         required: [this.fieldModel.required, []],
+    //         group: [this.fieldModel.group, [Validators.required]],
+    //         new_group: ['', []]
+    //     });
+    //     this.fieldForm.valueChanges
+    //         .subscribe(data => this.onValueChanged('field', data));
+    // }
 
-        this.fieldForm = this.fb.group({
-            title: [this.fieldModel.title, [Validators.required]],
-            name: [this.fieldModel.name, [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')]],
-            description: [this.fieldModel.description, []],
-            input_type: [this.fieldModel.input_type, [Validators.required]],
-            output_type: [this.fieldModel.output_type, [Validators.required]],
-            is_filter: [this.fieldModel.is_filter, []],
-            required: [this.fieldModel.required, []],
-            group: [this.fieldModel.group, [Validators.required]],
-            new_group: ['', []]
-        });
-        this.fieldForm.valueChanges
-            .subscribe(data => this.onValueChanged('field', data));
-    }
-
-    /** Get field types */
-    getFieldTypes(): void {
-        let options = new QueryOptions('name', 'asc', 0, 0, 1);
-        this.fieldTypesService.getList(options)
-            .subscribe(
-                res => {
-                    this.fieldTypes = res.data;
-                },
-                error =>  this.errorMessage = <any>error
-            );
-    }
+    // /** Get field types */
+    // getFieldTypes(): void {
+    //     let options = new QueryOptions('name', 'asc', 0, 0, 1);
+    //     this.fieldTypesService.getList(options)
+    //         .subscribe(
+    //             res => {
+    //                 this.fieldTypes = res.data;
+    //             },
+    //             error =>  this.errorMessage = <any>error
+    //         );
+    // }
 
     /**
      * Select fild type properties
@@ -173,51 +198,51 @@ export class ContentTypeModalContent implements OnInit {
         }
     }
 
-    /** Element display toggle */
-    displayToggle(element: HTMLElement, display?: boolean): void {
-        display = display || element.style.display == 'none';
-        element.style.display = display ? 'block' : 'none';
-    }
+    // /** Element display toggle */
+    // displayToggle(element: HTMLElement, display?: boolean): void {
+    //     display = display || element.style.display == 'none';
+    //     element.style.display = display ? 'block' : 'none';
+    // }
 
-    /**
-     * On form value changed
-     * @param type
-     * @param data
-     */
-    onValueChanged(type: string, data?: any): void{
-        if (!this.contentTypeForm) { return; }
-        const form = type == 'contentType'
-            ? this.contentTypeForm
-            : this.fieldForm;
-        const isSubmitted = type == 'contentType'
-            ? this.submitted
-            : this.fieldSubmitted;
+    // /**
+    //  * On form value changed
+    //  * @param type
+    //  * @param data
+    //  */
+    // onValueChanged(type: string, data?: any): void{
+    //     if (!this.contentTypeForm) { return; }
+    //     const form = type == 'contentType'
+    //         ? this.contentTypeForm
+    //         : this.fieldForm;
+    //     const isSubmitted = type == 'contentType'
+    //         ? this.submitted
+    //         : this.fieldSubmitted;
+    //
+    //     for (const field in this.formErrors[type]) {
+    //         this.formErrors[type][field] = '';
+    //         const control = form.get(field);
+    //         if (control && (control.dirty || isSubmitted) && !control.valid) {
+    //             const messages = this.validationMessages[type][field];
+    //             for (const key in control.errors) {
+    //                 this.formErrors[type][field] += messages[key] + ' ';
+    //             }
+    //         }
+    //     }
+    // }
 
-        for (const field in this.formErrors[type]) {
-            this.formErrors[type][field] = '';
-            const control = form.get(field);
-            if (control && (control.dirty || isSubmitted) && !control.valid) {
-                const messages = this.validationMessages[type][field];
-                for (const key in control.errors) {
-                    this.formErrors[type][field] += messages[key] + ' ';
-                }
-            }
-        }
-    }
-
-    /** Get model data */
-    getModelData(){
-        this.loading = true;
-        this.contentTypesService.getItem( this.itemId )
-            .then(item => {
-                if( this.isItemCopy ){
-                    item.id = '';
-                    item.name = '';
-                }
-                this.model = item;
-                this.loading = false;
-            });
-    }
+    // /** Get model data */
+    // getModelData(){
+    //     this.loading = true;
+    //     this.contentTypesService.getItem( this.itemId )
+    //         .then(item => {
+    //             if( this.isItemCopy ){
+    //                 item.id = '';
+    //                 item.name = '';
+    //             }
+    //             this.model = item;
+    //             this.loading = false;
+    //         });
+    // }
 
     /** Add collection */
     addCollection(){
@@ -244,12 +269,12 @@ export class ContentTypeModalContent implements OnInit {
         return true;
     }
 
-    /** Delete collection */
-    deleteCollection(){
-
-        console.log( 'deleteCollection' );
-
-    }
+    // /** Delete collection */
+    // deleteCollection(){
+    //
+    //     console.log( 'deleteCollection' );
+    //
+    // }
 
     /** Add group */
     addGroup(){
@@ -381,45 +406,46 @@ export class ContentTypeModalContent implements OnInit {
             return;
         }
 
-        if( this.model.id ){
-
-            this.contentTypesService.editItem( this.model.id, this.model )
-                .then((res) => {
-                    if( res.success ){
-                        this.closeModal();
-                    } else {
-                        if( res.msg ){
-                            this.errorMessage = res.msg;
-                        }
-                    }
-                });
-        }
-        else {
-
-            this.contentTypesService.createItem( this.model )
-                .then((res) => {
-                    if( res.success ){
-                        this.closeModal();
-                    } else {
-                        if( res.msg ){
-                            this.errorMessage = res.msg;
-                        }
-                    }
-                });
-        }
+        // if( this.model.id ){
+        //
+        //     this.contentTypesService.update(this.model)
+        //         .then((res) => {
+        //             if( res.success ){
+        //                 this.closeModal();
+        //             } else {
+        //                 if( res.msg ){
+        //                     this.errorMessage = res.msg;
+        //                 }
+        //             }
+        //         });
+        // }
+        // else {
+        //
+        //     this.contentTypesService.create(this.model)
+        //         .then((res) => {
+        //             if( res.success ){
+        //                 this.closeModal();
+        //             } else {
+        //                 if( res.msg ){
+        //                     this.errorMessage = res.msg;
+        //                 }
+        //             }
+        //         });
+        // }
     }
 
-    /** Close modal */
-    closeModal() {
-        this.activeModal.close();
-    }
+    // /** Close modal */
+    // closeModal() {
+    //     this.activeModal.close();
+    // }
 }
 
 @Component({
     selector: 'shk-content-types',
-    templateUrl: 'templates/page-content_types.html'
+    templateUrl: 'templates/page-content_types.html',
+    providers: [ ContentTypesService ]
 })
-export class ContentTypesComponent implements OnInit {
+export class ContentTypesComponent extends PageTableAbstractComponent {
     errorMessage: string;
     items: ContentType[] = [];
     title: string = 'Типы товаров';
@@ -427,6 +453,15 @@ export class ContentTypesComponent implements OnInit {
     loading: boolean = false;
     selectedIds: string[] = [];
     queryOptions: QueryOptions = new QueryOptions('name', 'asc', 1, 10, 0);
+
+    constructor(
+        dataService: ContentTypesService,
+        activeModal: NgbActiveModal,
+        modalService: NgbModal,
+        titleService: Title
+    ) {
+        super(dataService, activeModal, modalService, titleService);
+    }
 
     //TODO: get from settings
     tableFields = [
@@ -452,115 +487,109 @@ export class ContentTypesComponent implements OnInit {
         }
     ];
 
-    constructor(
-        private contentTypesService: ContentTypesService,
-        private modalService: NgbModal,
-        private titleService: Title
-    ) {}
-
-    ngOnInit(): void {
-        this.setTitle( this.title );
-        this.getList();
+    getModalContent(){
+        return ContentTypeModalContent;
     }
 
-    public setTitle( newTitle: string ) {
-        this.titleService.setTitle( newTitle );
-    }
+    // ngOnInit(): void {
+    //     this.setTitle( this.title );
+    //     this.getList();
+    // }
 
-    getList(): void {
-        this.loading = true;
-        this.contentTypesService.getList()
-            .then(
-                items => {
-                    this.items = items;
-                    this.loading = false;
-                },
-                error => this.errorMessage = <any>error);
-    }
+    // getList(): void {
+    //     this.loading = true;
+    //     this.contentTypesService.getList()
+    //         .subscribe(
+    //             items => {
+    //                 this.items = items;
+    //                 this.loading = false;
+    //             },
+    //             error => this.errorMessage = <any>error);
+    // }
 
-    modalOpen( itemId?: number, isItemCopy?: boolean ): void {
-        this.modalRef = this.modalService.open(ContentTypeModalContent, {size: 'lg'});
-        this.modalRef.componentInstance.modalTitle = itemId && !isItemCopy
-            ? 'Edit content type'
-            : 'Add content type';
-        this.modalRef.componentInstance.itemId = itemId || 0;
-        this.modalRef.componentInstance.isItemCopy = isItemCopy || false;
-        this.modalRef.result.then((result) => {
-            this.getList();
-        }, (reason) => {
-            //console.log( 'reason', reason );
-        });
-    }
+    // modalOpen( itemId?: number, isItemCopy?: boolean ): void {
+    //     this.modalRef = this.modalService.open(ContentTypeModalContent, {size: 'lg'});
+    //     this.modalRef.componentInstance.modalTitle = itemId && !isItemCopy
+    //         ? 'Edit content type'
+    //         : 'Add content type';
+    //     this.modalRef.componentInstance.itemId = itemId || 0;
+    //     this.modalRef.componentInstance.isItemCopy = isItemCopy || false;
+    //     this.modalRef.result.then((result) => {
+    //         this.getList();
+    //     }, (reason) => {
+    //         //console.log( 'reason', reason );
+    //     });
+    // }
+    //
+    // copyItem( itemId: number ): void {
+    //     this.modalOpen( itemId, true );
+    // }
+    //
+    // modalClose(): void {
+    //     this.modalRef.close();
+    // }
 
-    copyItem( itemId: number ): void {
-        this.modalOpen( itemId, true );
-    }
+    // deleteItemConfirm( itemId ): void{
+    //     this.modalRef = this.modalService.open(ConfirmModalContent);
+    //     this.modalRef.componentInstance.modalTitle = 'Confirm';
+    //     this.modalRef.componentInstance.modalContent = 'Are you sure you want to remove this item?';
+    //     this.modalRef.result.then((result) => {
+    //         if( result == 'accept' ){
+    //             this.deleteItem( itemId );
+    //         }
+    //     }, (reason) => {
+    //
+    //     });
+    // }
 
-    modalClose(): void {
-        this.modalRef.close();
-    }
+    // deleteItem( itemId: number ): void{
+    //     this.contentTypesService.deleteItem( itemId )
+    //         .then((res) => {
+    //             if( res.success ){
+    //                 this.getList();
+    //             } else {
+    //                 if( res.msg ){
+    //                     //this.errorMessage = res.msg;
+    //                 }
+    //             }
+    //         });
+    // }
 
-    deleteItemConfirm( itemId ): void{
-        this.modalRef = this.modalService.open(ConfirmModalContent);
-        this.modalRef.componentInstance.modalTitle = 'Confirm';
-        this.modalRef.componentInstance.modalContent = 'Are you sure you want to remove this item?';
-        this.modalRef.result.then((result) => {
-            if( result == 'accept' ){
-                this.deleteItem( itemId );
-            }
-        }, (reason) => {
+    // selectAll( event ): void{
+    //     this.selectedIds = [];
+    //     if( event.target.checked ){
+    //         for( let item of this.items ){
+    //             this.selectedIds.push( item.id );
+    //         }
+    //     }
+    // }
+    //
+    // setSelected( event, itemId: string ): void{
+    //     const index = this.selectedIds.indexOf( itemId );
+    //     if( event.target.checked ){
+    //         if( index == -1 ){
+    //             this.selectedIds.push( itemId );
+    //         }
+    //     } else if( index > -1 ){
+    //         this.selectedIds.splice( index, 1 );
+    //     }
+    // }
+    //
+    // getIsSelected( itemId: string ): boolean{
+    //     return this.selectedIds.lastIndexOf( itemId ) > -1;
+    // }
 
-        });
-    }
-
-    deleteItem( itemId: string ): void{
-        this.contentTypesService.deleteItem( itemId )
-            .then((res) => {
-                if( res.success ){
-                    this.getList();
-                } else {
-                    if( res.msg ){
-                        //this.errorMessage = res.msg;
-                    }
-                }
-            });
-    }
-
-    selectAll( event ): void{
-        this.selectedIds = [];
-        if( event.target.checked ){
-            for( let item of this.items ){
-                this.selectedIds.push( item.id );
-            }
-        }
-    }
-
-    setSelected( event, itemId: string ): void{
-        const index = this.selectedIds.indexOf( itemId );
-        if( event.target.checked ){
-            if( index == -1 ){
-                this.selectedIds.push( itemId );
-            }
-        } else if( index > -1 ){
-            this.selectedIds.splice( index, 1 );
-        }
-    }
-
-    getIsSelected( itemId: string ): boolean{
-        return this.selectedIds.lastIndexOf( itemId ) > -1;
-    }
-
-    actionRequest(actionValue : [string, number]): void {
-        switch(actionValue[0]){
-            case 'edit':
-                this.modalOpen(actionValue[1]);
-                break;
-            case 'copy':
-                this.modalOpen(actionValue[1], true);
-                break;
-            case 'delete':
-                this.deleteItemConfirm(actionValue[1]);
-                break;
-        }
-    }
+    // actionRequest(actionValue : [string, number]): void {
+    //     switch(actionValue[0]){
+    //         case 'edit':
+    //             this.modalOpen(actionValue[1]);
+    //             break;
+    //         case 'copy':
+    //             this.modalOpen(actionValue[1], true);
+    //             break;
+    //         case 'delete':
+    //             this.deleteItemConfirm(actionValue[1]);
+    //             break;
+    //     }
+    // }
 }

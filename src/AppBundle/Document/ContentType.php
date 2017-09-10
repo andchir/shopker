@@ -10,7 +10,7 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 class ContentType
 {
     /**
-     * @MongoDB\Id
+     * @MongoDB\Id(type="int", strategy="INCREMENT")
      */
     protected $id;
 
@@ -52,7 +52,7 @@ class ContentType
     /**
      * Get id
      *
-     * @return string $id
+     * @return int $id
      */
     public function getId()
     {

@@ -37,7 +37,7 @@ export class FieldTypesService extends DataService {
 })
 export class FieldTypeModalContent extends ModalContentAbstractComponent {
 
-    data: FieldType;
+    model: FieldType;
 
     formFields = {
         name: {
@@ -72,17 +72,17 @@ export class FieldTypeModalContent extends ModalContentAbstractComponent {
     }
 
     addRow(type: string){
-        if(!this.data[type]){
-            this.data[type] = [];
+        if(!this.model[type]){
+            this.model[type] = [];
         }
-        this.data[type].push(new FieldTypeProperty('','',''));
+        this.model[type].push(new FieldTypeProperty('','',''));
     }
 
     deleteRow(index: number, type: string){
-        if(this.data[type].length < index + 1){
+        if(this.model[type].length < index + 1){
             return;
         }
-        this.data[type].splice(index, 1);
+        this.model[type].splice(index, 1);
     }
 
     save(){
@@ -104,10 +104,10 @@ export class FieldTypeModalContent extends ModalContentAbstractComponent {
                 }
             };
 
-            if(this.data.id){
-                this.dataService.update(this.data).then(callback.bind(this));
+            if(this.model.id){
+                this.dataService.update(this.model).then(callback.bind(this));
             } else {
-                this.dataService.create(this.data).then(callback.bind(this));
+                this.dataService.create(this.model).then(callback.bind(this));
             }
         }
     }

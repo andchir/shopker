@@ -85,7 +85,7 @@ export class CategoriesModalComponent implements OnInit {
 
     getContentTypes(){
         this.contentTypesService.getList()
-            .then(
+            .subscribe(
                 items => {
                     this.contentTypes = items;
                 },

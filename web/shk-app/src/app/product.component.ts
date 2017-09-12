@@ -52,7 +52,7 @@ export class ProductModalContent implements OnInit {
 
         } else {
             this.getContentTypes()
-                .then(
+                .subscribe(
                     items => {
                         this.contentTypes = items;
                         this.selectCurrentContentType();
@@ -105,7 +105,7 @@ export class ProductModalContent implements OnInit {
             .then(data => {
                 return new Promise((resolve, reject) => {
                     this.getContentTypes()
-                        .then(items => {
+                        .subscribe(items => {
                             this.contentTypes = items;
                             resolve(data);
                         });
@@ -149,7 +149,7 @@ export class ProductModalContent implements OnInit {
 
     /** Get content types */
     getContentTypes(){
-        return this.contentTypesService.getList( true );
+        return this.contentTypesService.getList();
     }
 
     /**

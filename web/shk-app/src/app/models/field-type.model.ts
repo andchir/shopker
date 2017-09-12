@@ -6,7 +6,7 @@ export class FieldType {
         public name: string,
         public title: string,
         public description: string,
-        public is_active: boolean,
+        public isActive: boolean,
         public inputProperties: FieldTypeProperty[],
         public outputProperties: FieldTypeProperty[]
     ) { }

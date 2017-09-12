@@ -22,13 +22,11 @@ import * as _ from "lodash";
 })
 export class ContentTypeModalContent extends ModalContentAbstractComponent {
 
-    data: FieldType;
-
     @ViewChild('addCollectionBlock') elementAddCollectionBlock;
     @ViewChild('addGroupBlock') elementAddGroupBlock;
 
-    model = new ContentType('','','','','products',[],['Содержание', 'Служебное'], true);
-    fieldModel = new ContentField('', '', '', '', '', [], '', [], '', false, false);
+    model: ContentType = new ContentType(0, '', '', '', '', [], [], true);
+    fieldModel: ContentField = new ContentField('', '', '', '', '', [], '', [], '', false, false);
     submitted: boolean = false;
     fieldSubmitted: boolean = false;
     loading: boolean = false;
@@ -42,6 +40,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
     fieldTypes: FieldType[];
     inputFieldTypeProperties: FieldTypeProperty[] = [];
     outputFieldTypeProperties: FieldTypeProperty[] = [];
+    formErrors = {};
 
     formFields = {
         name: {
@@ -66,57 +65,103 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
         }
     };
 
-    formErrors = {
-        contentType: {
-            name: '',
-            title: '',
-            new_collection: ''
-        },
-        field: {
-            name: '',
-            title: '',
-            input_type: '',
-            output_type: '',
-            group: '',
-            new_group: ''
-        }
-    };
-    validationMessages = {
-        contentType: {
-            title: {
+    fieldsFormOptions = {
+        /*title: {
+            value: '',
+            validators: [Validators.required],
+            messages: {
                 required: 'Title is required.'
-            },
-            name: {
-                required: 'Name is required.',
-                pattern: 'The name must contain only Latin letters.'
-            },
-            new_collection: {
-                pattern: 'The collection name must contain only Latin letters.',
-                exists: 'Collection with the same name already exists.'
             }
         },
-        field: {
-            title: {
-                required: 'Title is required.'
-            },
-            name: {
+        name: {
+            value: '',
+            validators: [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')],
+            messages: {
                 required: 'Name is required.',
                 pattern: 'The name must contain only Latin letters.'
-            },
-            input_type: {
+            }
+        },
+        input_type: {
+            value: '',
+            validators: [Validators.required],
+            messages: {
                 required: 'Input type is required.'
-            },
-            output_type: {
+            }
+        },
+        output_type: {
+            value: '',
+            validators: [Validators.required],
+            messages: {
                 required: 'Output type is required.'
-            },
-            group: {
+            }
+        },
+        group: {
+            value: '',
+            validators: [Validators.required],
+            messages: {
                 required: 'Group is required.'
-            },
-            new_group: {
+            }
+        },
+        new_group: {
+            value: '',
+            validators: [Validators.required],
+            messages: {
                 exists: 'Group with the same name already exists.'
             }
-        }
+        }*/
     };
+
+    // formErrors = {
+    //     contentType: {
+    //         name: '',
+    //         title: '',
+    //         new_collection: ''
+    //     },
+    //     field: {
+    //         name: '',
+    //         title: '',
+    //         input_type: '',
+    //         output_type: '',
+    //         group: '',
+    //         new_group: ''
+    //     }
+    // };
+    // validationMessages = {
+    //     contentType: {
+    //         title: {
+    //             required: 'Title is required.'
+    //         },
+    //         name: {
+    //             required: 'Name is required.',
+    //             pattern: 'The name must contain only Latin letters.'
+    //         },
+    //         new_collection: {
+    //             pattern: 'The collection name must contain only Latin letters.',
+    //             exists: 'Collection with the same name already exists.'
+    //         }
+    //     },
+    //     field: {
+    //         title: {
+    //             required: 'Title is required.'
+    //         },
+    //         name: {
+    //             required: 'Name is required.',
+    //             pattern: 'The name must contain only Latin letters.'
+    //         },
+    //         input_type: {
+    //             required: 'Input type is required.'
+    //         },
+    //         output_type: {
+    //             required: 'Output type is required.'
+    //         },
+    //         group: {
+    //             required: 'Group is required.'
+    //         },
+    //         new_group: {
+    //             exists: 'Group with the same name already exists.'
+    //         }
+    //     }
+    // };
 
     constructor(
         fb: FormBuilder,
@@ -125,6 +170,30 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
         tooltipConfig: NgbTooltipConfig
     ) {
         super(fb, dataService, activeModal, tooltipConfig);
+    }
+
+    buildForm(formFields: any): void {
+        ModalContentAbstractComponent.prototype.buildForm.call(this, formFields);
+
+        let controls = this.buildControls(this.fieldsFormOptions, 'model', 'fld_');
+        this.fieldForm = this.fb.group(controls);
+
+        /*
+        this.fieldForm = this.fb.group({
+            title: [this.fieldModel.title, [Validators.required]],
+            name: [this.fieldModel.name, [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')]],
+            description: [this.fieldModel.description, []],
+            input_type: [this.fieldModel.input_type, [Validators.required]],
+            output_type: [this.fieldModel.output_type, [Validators.required]],
+            is_filter: [this.fieldModel.is_filter, []],
+            required: [this.fieldModel.required, []],
+            group: [this.fieldModel.group, [Validators.required]],
+            new_group: ['', []]
+        });
+        */
+
+        //this.fieldForm = new FormGroup({});
+
     }
 
     // /** On initialize */
@@ -245,7 +314,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
     // }
 
     /** Add collection */
-    addCollection(){
+    /*addCollection(){
         const fieldName = 'new_collection';
         const control = this.contentTypeForm.get(fieldName);
         if( !control.valid ){
@@ -267,7 +336,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
         this.collections.push( value );
         this.elementAddCollectionBlock.nativeElement.style.display = 'none';
         return true;
-    }
+    }*/
 
     // /** Delete collection */
     // deleteCollection(){
@@ -277,7 +346,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
     // }
 
     /** Add group */
-    addGroup(){
+    /*addGroup(){
         const fieldName = 'new_group';
         const control = this.fieldForm.get(fieldName);
         if( !control || !control.valid || !control.value ){
@@ -293,7 +362,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
         this.model.groups.push( value );
         this.elementAddGroupBlock.nativeElement.style.display = 'none';
         return true;
-    }
+    }*/
 
     /** Delete group */
     deleteGroup(){
@@ -395,16 +464,16 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
     /** Submit Content type form */
     onSubmit() {
 
-        this.submitted = true;
-
-        if( !this.contentTypeForm.valid ){
-            this.onValueChanged('contentType');
-            return;
-        }
-        if( this.model.fields.length == 0 ){
-            this.errorMessage = 'You have not created any fields.';
-            return;
-        }
+        // this.submitted = true;
+        //
+        // if( !this.contentTypeForm.valid ){
+        //     this.onValueChanged('contentType');
+        //     return;
+        // }
+        // if( this.model.fields.length == 0 ){
+        //     this.errorMessage = 'You have not created any fields.';
+        //     return;
+        // }
 
         // if( this.model.id ){
         //
@@ -438,6 +507,23 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
     // closeModal() {
     //     this.activeModal.close();
     // }
+
+    save() {
+        this.submitted = true;
+
+        console.log('SAVE', this.form.value);
+
+        if(!this.form.valid){
+            this.onValueChanged(this.form.value);
+            this.submitted = false;
+        }
+        else {
+
+
+
+        }
+    }
+
 }
 
 @Component({
@@ -446,13 +532,8 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
     providers: [ ContentTypesService ]
 })
 export class ContentTypesComponent extends PageTableAbstractComponent {
-    errorMessage: string;
-    items: ContentType[] = [];
+
     title: string = 'Типы товаров';
-    modalRef: NgbModalRef;
-    loading: boolean = false;
-    selectedIds: string[] = [];
-    queryOptions: QueryOptions = new QueryOptions('name', 'asc', 1, 10, 0);
 
     constructor(
         dataService: ContentTypesService,

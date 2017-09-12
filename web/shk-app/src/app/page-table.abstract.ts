@@ -14,9 +14,9 @@ export abstract class ModalContentAbstractComponent implements OnInit {
     @Input() itemId;
     @Input() isItemCopy;
 
-    private fb: FormBuilder;
-    public dataService: DataService;
-    private activeModal: NgbActiveModal;
+    //private fb: FormBuilder;
+    //public dataService: DataService;
+    //private activeModal: NgbActiveModal;
 
     submitted: boolean = false;
     loading: boolean = false;
@@ -25,13 +25,13 @@ export abstract class ModalContentAbstractComponent implements OnInit {
     formErrors = {};
     validationMessages = {};
     formFields = {};
-    data = {};
+    model = {};
 
     constructor(
-        fb: FormBuilder,
-        dataService: DataService,
-        activeModal: NgbActiveModal,
-        tooltipConfig: NgbTooltipConfig
+        public fb: FormBuilder,
+        public dataService: DataService,
+        public activeModal: NgbActiveModal,
+        public tooltipConfig: NgbTooltipConfig
     ) {
         this.fb = fb;
         this.dataService = dataService;
@@ -56,27 +56,31 @@ export abstract class ModalContentAbstractComponent implements OnInit {
                     res.data.id = '';
                     res.data.name = '';
                 }
-                this.data = res.data;
+                this.model = res.data;
                 this.loading = false;
             });
     }
 
     /** Build form groups */
     buildForm(formFields: any): void {
-        let controls = {};
-        for (let key in formFields) {
-            let options = formFields[key];
-            if(!this.data[key]){
-                this.data[key] = options.value;
-            }
-            controls[key] = new FormControl(this.data[key], options.validators);
-            this.formErrors[key] = '';
-            this.validationMessages[key] = options.messages;
-        }
-
+        let controls = this.buildControls(formFields, 'model');
         this.form = this.fb.group(controls);
         this.form.valueChanges
             .subscribe(data => this.onValueChanged(data));
+    }
+
+    buildControls(options: {}, modelName: string, keyPrefix: string = ''): {[s: string]: FormControl;} {
+        let controls = {};
+        for (let key in options) {
+            let opts = options[key];
+            if(!this[modelName][key]){
+                this[modelName][key] = opts.value;
+            }
+            controls[key] = new FormControl(this[modelName][key], opts.validators);
+            this.formErrors[keyPrefix + key] = '';
+            this.validationMessages[keyPrefix + key] = opts.messages;
+        }
+        return controls;
     }
 
     /** Callback on form value changed */

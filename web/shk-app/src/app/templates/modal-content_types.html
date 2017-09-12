@@ -16,23 +16,23 @@
             <!-- ContentType form -->
             <div class="col-lg-4" [formGroup]="form">
 
-                <div class="form-group" [class.form-group-message]="formErrors.contentType.title">
+                <div class="form-group" [class.form-group-message]="formErrors.title">
                     <label class="label-filled">
                         Название
                     </label>
                     <input type="text" class="form-control" name="title" formControlName="title" [(ngModel)]="model.title">
-                    <div *ngIf="formErrors.contentType.title" class="alert alert-danger">
-                        {{formErrors.contentType.title}}
+                    <div *ngIf="formErrors.title" class="alert alert-danger">
+                        {{formErrors.title}}
                     </div>
                 </div>
 
-                <div class="form-group" [class.form-group-message]="formErrors.contentType.name">
+                <div class="form-group" [class.form-group-message]="formErrors.name">
                     <label class="label-filled">
                         Системное имя
                     </label>
                     <input type="text" class="form-control" name="name" formControlName="name" [(ngModel)]="model.name">
-                    <div *ngIf="formErrors.contentType.name" class="alert alert-danger">
-                        {{formErrors.contentType.name}}
+                    <div *ngIf="formErrors.name" class="alert alert-danger">
+                        {{formErrors.name}}
                     </div>
                 </div>
 
@@ -88,17 +88,17 @@
             <!-- /ContentType form -->
 
             <!-- Field form -->
-            <!--<div class="col-lg-8" [formGroup]="fieldForm">-->
+            <div class="col-lg-8" [formGroup]="fieldForm">
 
-                <!--<label class="label-filled" [hidden]="action != 'add_field'">-->
-                    <!--Добавить поле-->
-                <!--</label>-->
-                <!--<label class="label-filled" [hidden]="action != 'edit_field'">-->
-                    <!--Редактировать поле-->
-                <!--</label>-->
+                <label class="label-filled" [hidden]="action != 'add_field'">
+                    Добавить поле
+                </label>
+                <label class="label-filled" [hidden]="action != 'edit_field'">
+                    Редактировать поле
+                </label>
 
-                <!--<div class="card">-->
-                    <!--<div class="card-body">-->
+                <div class="card">
+                    <div class="card-body">
 
                         <!--<div class="form-group row" [class.form-group-message]="formErrors.field.title">-->
                             <!--<div class="col-md-5">-->
@@ -321,10 +321,10 @@
                             <!--</button>-->
                         <!--</div>-->
 
-                    <!--</div>-->
-                <!--</div>-->
+                    </div>
+                </div>
 
-            <!--</div>-->
+            </div>
             <!-- /Field form -->
 
         </div>
@@ -361,31 +361,31 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="show-on-hover-parent" *ngFor="let item of model.fields">
+                            <tr class="show-on-hover-parent" *ngFor="let field of model.fields">
                                 <td>
-                                    {{item.title}}
+                                    {{field.title}}
                                 </td>
                                 <td>
-                                    {{item.name}}
+                                    {{field.name}}
                                 </td>
                                 <td>
-                                    {{item.input_type}}
+                                    {{field.input_type}}
                                 </td>
                                 <td>
                                     <div class="relative">
                                         <div class="show-on-hover">
-                                            <button type="button" class="btn btn-secondary btn-sm" (click)="displayToggle(fieldsBlock); editField(item)" [hidden]="item.name == currentFieldName" ngbTooltip="Edit">
+                                            <button type="button" class="btn btn-secondary btn-sm" (click)="displayToggle(fieldsBlock); editField(field)" [hidden]="field.name == currentFieldName" ngbTooltip="Edit">
                                                 <i class="icon-pencil"></i>
                                             </button>
-                                            <button type="button" class="btn btn-secondary btn-sm" (click)="displayToggle(fieldsBlock); copyField(item)" ngbTooltip="Copy">
+                                            <button type="button" class="btn btn-secondary btn-sm" (click)="displayToggle(fieldsBlock); copyField(field)" ngbTooltip="Copy">
                                                 <i class="icon-stack"></i>
                                             </button>
-                                            <button type="button" class="btn btn-secondary btn-sm" (click)="deleteField(item)" [hidden]="item.name == currentFieldName" ngbTooltip="Delete">
+                                            <button type="button" class="btn btn-secondary btn-sm" (click)="deleteField(field)" [hidden]="field.name == currentFieldName" ngbTooltip="Delete">
                                                 <i class="icon-cross"></i>
                                             </button>
                                         </div>
                                     </div>
-                                    {{item.group}}
+                                    {{field.group}}
                                 </td>
                             </tr>
                             <tr [hidden]="model.fields.length > 0" class="table-warning">
@@ -409,10 +409,10 @@
 
     </div>
     <div class="modal-footer d-block">
-        <button type="submit" class="btn btn-success btn-wide">
+        <button type="button" class="btn btn-success btn-wide" [disabled]="submitted" (click)="save()">
             Save
         </button>
-        <button type="submit" class="btn btn-secondary btn-wide" (click)="activeModal.dismiss()">
+        <button type="button" class="btn btn-secondary btn-wide" (click)="activeModal.dismiss()">
             Cancel
         </button>
     </div>

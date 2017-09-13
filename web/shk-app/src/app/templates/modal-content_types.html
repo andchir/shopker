@@ -100,38 +100,38 @@
                 <div class="card">
                     <div class="card-body">
 
-                        <!--<div class="form-group row" [class.form-group-message]="formErrors.field.title">-->
-                            <!--<div class="col-md-5">-->
-                                <!--<label>Название</label>-->
-                            <!--</div>-->
-                            <!--<div class="col-md-7">-->
-                                <!--<input type="text" class="form-control form-control-sm" name="field_title" formControlName="title" [(ngModel)]="fieldModel.title">-->
-                                <!--<div *ngIf="formErrors.field.title" class="alert alert-danger">-->
-                                    <!--{{formErrors.field.title}}-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        <!--</div>-->
+                        <div class="form-group row" [class.form-group-message]="formErrors.fld_title">
+                            <div class="col-md-5">
+                                <label>Название</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control form-control-sm" name="field_title" formControlName="title" [(ngModel)]="fieldModel.title">
+                                <div *ngIf="formErrors.fld_title" class="alert alert-danger">
+                                    {{formErrors.fld_title}}
+                                </div>
+                            </div>
+                        </div>
 
-                        <!--<div class="form-group row" [class.form-group-message]="formErrors.field.name">-->
-                            <!--<div class="col-md-5">-->
-                                <!--<label>Системное имя</label>-->
-                            <!--</div>-->
-                            <!--<div class="col-md-7">-->
-                                <!--<input type="text" class="form-control form-control-sm" name="field_name" formControlName="name" [(ngModel)]="fieldModel.name">-->
-                                <!--<div *ngIf="formErrors.field.name" class="alert alert-danger">-->
-                                    <!--{{formErrors.field.name}}-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        <!--</div>-->
+                        <div class="form-group row" [class.form-group-message]="formErrors.fld_name">
+                            <div class="col-md-5">
+                                <label>Системное имя</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control form-control-sm" name="field_name" formControlName="name" [(ngModel)]="fieldModel.name">
+                                <div *ngIf="formErrors.fld_name" class="alert alert-danger">
+                                    {{formErrors.fld_name}}
+                                </div>
+                            </div>
+                        </div>
 
-                        <!--<div class="form-group row">-->
-                            <!--<div class="col-md-5">-->
-                                <!--<label>Описание</label>-->
-                            <!--</div>-->
-                            <!--<div class="col-md-7">-->
-                                <!--<textarea type="text" class="form-control form-control-sm" name="field_description" formControlName="description" [(ngModel)]="fieldModel.description"></textarea>-->
-                            <!--</div>-->
-                        <!--</div>-->
+                        <div class="form-group row">
+                            <div class="col-md-5">
+                                <label>Описание</label>
+                            </div>
+                            <div class="col-md-7">
+                                <textarea type="text" class="form-control form-control-sm" name="field_description" formControlName="description" [(ngModel)]="fieldModel.description"></textarea>
+                            </div>
+                        </div>
 
                         <!--<div class="form-group row" [class.form-group-message]="formErrors.field.input_type">-->
                             <!--<div class="col-md-5">-->
@@ -264,62 +264,62 @@
                             <!--</div>-->
                         <!--</div>-->
 
-                        <!--<div class="form-group row mb-0">-->
-                            <!--<div class="col-md-7 offset-md-5">-->
+                        <div class="form-group row mb-0">
+                            <div class="col-md-7 offset-md-5">
 
-                                <!--<label class="custom-control custom-checkbox">-->
-                                    <!--<input type="checkbox" class="custom-control-input" value="1" name="required" formControlName="required">-->
-                                    <!--<span class="custom-control-indicator"></span>-->
-                                    <!--<span>Обязательный</span>-->
-                                <!--</label>-->
+                                <label class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" value="1" name="required" formControlName="required">
+                                    <span class="custom-control-indicator"></span>
+                                    <span>Обязательный</span>
+                                </label>
 
-                            <!--</div>-->
-                        <!--</div>-->
+                            </div>
+                        </div>
 
-                        <!--<div class="form-group row mb-0">-->
-                            <!--<div class="col-md-7 offset-md-5">-->
+                        <div class="form-group row mb-0">
+                            <div class="col-md-7 offset-md-5">
 
-                                <!--<label class="custom-control custom-checkbox">-->
-                                    <!--<input type="checkbox" class="custom-control-input" value="1" name="show_in_table">-->
-                                    <!--<span class="custom-control-indicator"></span>-->
-                                    <!--<span>Показывать в таблице</span>-->
-                                <!--</label>-->
+                                <label class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" value="1" name="show_in_table" formControlName="show_in_table">
+                                    <span class="custom-control-indicator"></span>
+                                    <span>Показывать в таблице</span>
+                                </label>
 
-                            <!--</div>-->
-                        <!--</div>-->
+                            </div>
+                        </div>
 
-                        <!--<div class="form-group row mb-0">-->
-                            <!--<div class="col-md-7 offset-md-5">-->
+                        <div class="form-group row mb-0">
+                            <div class="col-md-7 offset-md-5">
 
-                                <!--<label class="custom-control custom-checkbox">-->
-                                    <!--<input type="checkbox" class="custom-control-input" value="1" name="is_filter" formControlName="is_filter">-->
-                                    <!--<span class="custom-control-indicator"></span>-->
-                                    <!--<span>Показывать в фильтре</span>-->
-                                <!--</label>-->
+                                <label class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" value="1" name="is_filter" formControlName="is_filter">
+                                    <span class="custom-control-indicator"></span>
+                                    <span>Показывать в фильтре</span>
+                                </label>
 
-                            <!--</div>-->
-                        <!--</div>-->
+                            </div>
+                        </div>
 
-                        <!--<div class="alert alert-danger mt-3 mb-3" [hidden]="!errorFieldMessage">-->
-                            <!--<button type="button" class="close" (click)="errorFieldMessage = ''">-->
-                                <!--<span aria-hidden="true">&times;</span>-->
-                            <!--</button>-->
-                            <!--{{errorFieldMessage}}-->
-                        <!--</div>-->
+                        <div class="alert alert-danger mt-3 mb-3" [hidden]="!errorFieldMessage">
+                            <button type="button" class="close" (click)="errorFieldMessage = ''">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            {{errorFieldMessage}}
+                        </div>
 
-                        <!--<div class="mt-3">-->
-                            <!--<button type="button" class="btn btn-sm btn-info btn-wide" (click)="submitField()" [hidden]="action != 'add_field'">-->
-                                <!--<i class="icon-plus"></i>-->
-                                <!--Add field-->
-                            <!--</button>-->
-                            <!--<button type="button" class="btn btn-sm btn-success btn-wide" (click)="displayToggle(fieldsBlock, true); submitField()" [hidden]="action != 'edit_field'">-->
-                                <!--<i class="icon-check"></i>-->
-                                <!--Save field-->
-                            <!--</button>-->
-                            <!--<button type="button" class="btn btn-sm btn-secondary btn-wide" (click)="displayToggle(fieldsBlock, true); editFieldCancel()">-->
-                                <!--Cancel-->
-                            <!--</button>-->
-                        <!--</div>-->
+                        <div class="mt-3">
+                            <button type="button" class="btn btn-sm btn-info btn-wide" (click)="submitField()" [hidden]="action != 'add_field'">
+                                <i class="icon-plus"></i>
+                                Add field
+                            </button>
+                            <button type="button" class="btn btn-sm btn-success btn-wide" (click)="displayToggle(fieldsBlock, true); submitField()" [hidden]="action != 'edit_field'">
+                                <i class="icon-check"></i>
+                                Save field
+                            </button>
+                            <button type="button" class="btn btn-sm btn-secondary btn-wide" (click)="displayToggle(fieldsBlock, true); editFieldCancel()">
+                                Cancel
+                            </button>
+                        </div>
 
                     </div>
                 </div>

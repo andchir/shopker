@@ -14,10 +14,6 @@ export abstract class ModalContentAbstractComponent implements OnInit {
     @Input() itemId;
     @Input() isItemCopy;
 
-    //private fb: FormBuilder;
-    //public dataService: DataService;
-    //private activeModal: NgbActiveModal;
-
     submitted: boolean = false;
     loading: boolean = false;
     errorMessage: string;
@@ -33,10 +29,6 @@ export abstract class ModalContentAbstractComponent implements OnInit {
         public activeModal: NgbActiveModal,
         public tooltipConfig: NgbTooltipConfig
     ) {
-        this.fb = fb;
-        this.dataService = dataService;
-        this.activeModal = activeModal;
-
         tooltipConfig.placement = 'bottom';
         tooltipConfig.container = 'body';
     }
@@ -84,18 +76,17 @@ export abstract class ModalContentAbstractComponent implements OnInit {
     }
 
     /** Callback on form value changed */
-    onValueChanged(data?: any): void{
-        if (!this.form) { return; }
+    onValueChanged(data?: any, formName: string = 'form', keyPrefix: string = ''): void{
+        if (!this[formName]) { return; }
 
         for (let fieldName in data) {
-            this.formErrors[fieldName] = '';
-            let control = this.form.get(fieldName);
-            if (control && (control.dirty || this.submitted) && !control.valid) {
+            this.formErrors[keyPrefix + fieldName] = '';
+            let control = this[formName].get(fieldName);
+            if (control && (control.dirty || this[keyPrefix + 'submitted']) && !control.valid) {
                 for (let key in control.errors) {
-                    this.formErrors[fieldName] += this.validationMessages[fieldName][key] + ' ';
+                    this.formErrors[keyPrefix + fieldName] += this.validationMessages[keyPrefix + fieldName][key] + ' ';
                 }
             }
-
         }
     }
 

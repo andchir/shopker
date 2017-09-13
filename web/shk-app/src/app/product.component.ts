@@ -24,7 +24,7 @@ export class ProductModalContent implements OnInit {
     errorMessage: string;
     model: Product;
     contentTypes: ContentType[] = [];
-    currentContentType: ContentType = new ContentType('','','','','',[],[],true);
+    currentContentType: ContentType = new ContentType(0,'','','','',[],[],true);
 
     form: FormGroup;
     formErrors = {

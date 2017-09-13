@@ -27,20 +27,17 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
 
     model: ContentType = new ContentType(0, '', '', '', '', [], [], true);
     fieldModel: ContentField = new ContentField('', '', '', '', '', [], '', [], '', false, false);
-    submitted: boolean = false;
-    fieldSubmitted: boolean = false;
+    fld_submitted: boolean = false;
     loading: boolean = false;
     errorMessage: string;
     errorFieldMessage: string;
     action: string = 'add_field';
     currentFieldName = '';
     collections = ['products'];
-    contentTypeForm: FormGroup;
     fieldForm: FormGroup;
     fieldTypes: FieldType[];
     inputFieldTypeProperties: FieldTypeProperty[] = [];
     outputFieldTypeProperties: FieldTypeProperty[] = [];
-    formErrors = {};
 
     formFields = {
         name: {
@@ -66,7 +63,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
     };
 
     fieldsFormOptions = {
-        /*title: {
+        title: {
             value: '',
             validators: [Validators.required],
             messages: {
@@ -81,13 +78,18 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
                 pattern: 'The name must contain only Latin letters.'
             }
         },
+        description: {
+            value: '',
+            validators: [],
+            messages: {}
+        },/*
         input_type: {
             value: '',
             validators: [Validators.required],
             messages: {
                 required: 'Input type is required.'
             }
-        },
+        }/*,
         output_type: {
             value: '',
             validators: [Validators.required],
@@ -109,59 +111,22 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
                 exists: 'Group with the same name already exists.'
             }
         }*/
+        required: {
+            value: '',
+            validators: [],
+            messages: {}
+        },
+        show_in_table: {
+            value: '',
+            validators: [],
+            messages: {}
+        },
+        is_filter: {
+            value: '',
+            validators: [],
+            messages: {}
+        }
     };
-
-    // formErrors = {
-    //     contentType: {
-    //         name: '',
-    //         title: '',
-    //         new_collection: ''
-    //     },
-    //     field: {
-    //         name: '',
-    //         title: '',
-    //         input_type: '',
-    //         output_type: '',
-    //         group: '',
-    //         new_group: ''
-    //     }
-    // };
-    // validationMessages = {
-    //     contentType: {
-    //         title: {
-    //             required: 'Title is required.'
-    //         },
-    //         name: {
-    //             required: 'Name is required.',
-    //             pattern: 'The name must contain only Latin letters.'
-    //         },
-    //         new_collection: {
-    //             pattern: 'The collection name must contain only Latin letters.',
-    //             exists: 'Collection with the same name already exists.'
-    //         }
-    //     },
-    //     field: {
-    //         title: {
-    //             required: 'Title is required.'
-    //         },
-    //         name: {
-    //             required: 'Name is required.',
-    //             pattern: 'The name must contain only Latin letters.'
-    //         },
-    //         input_type: {
-    //             required: 'Input type is required.'
-    //         },
-    //         output_type: {
-    //             required: 'Output type is required.'
-    //         },
-    //         group: {
-    //             required: 'Group is required.'
-    //         },
-    //         new_group: {
-    //             exists: 'Group with the same name already exists.'
-    //         }
-    //     }
-    // };
 
     constructor(
         fb: FormBuilder,
@@ -175,7 +140,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
     buildForm(formFields: any): void {
         ModalContentAbstractComponent.prototype.buildForm.call(this, formFields);
 
-        let controls = this.buildControls(this.fieldsFormOptions, 'model', 'fld_');
+        let controls = this.buildControls(this.fieldsFormOptions, 'fieldModel', 'fld_');
         this.fieldForm = this.fb.group(controls);
 
         /*
@@ -387,7 +352,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
         this.fieldModel = _.clone(field);
         this.fieldForm.setValue(_.omit(this.fieldModel, ['id', 'input_type_options', 'output_type_options']));
         this.currentFieldName = this.fieldModel.name;
-        this.fieldSubmitted = false;
+        this.fld_submitted = false;
         this.action = 'edit_field';
     }
 
@@ -400,7 +365,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
         this.fieldModel.name = '';
         this.fieldForm.setValue(this.fieldModel);
         this.currentFieldName = '';
-        this.fieldSubmitted = false;
+        this.fld_submitted = false;
         this.action = 'add_field';
     }
 
@@ -421,7 +386,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
     resetFieldForm(){
         this.errorMessage = '';
         this.errorFieldMessage = '';
-        this.fieldSubmitted = false;
+        this.fld_submitted = false;
         this.currentFieldName = '';
         this.action = 'add_field';
         this.fieldForm.reset();
@@ -430,32 +395,33 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
     /** Cancel edit field */
     editFieldCancel(){
         this.resetFieldForm();
-        this.onValueChanged('field');
+        this.onValueChanged(this.fieldForm.value, 'fieldForm', 'fld_');
     }
 
     /** Submit field */
-    submitField(){
-        this.fieldSubmitted = true;
+    submitField() {
+        this.fld_submitted = true;
 
-        if( !this.fieldForm.valid ){
-            this.onValueChanged('field');
+        if (!this.fieldForm.valid) {
+            this.onValueChanged(this.fieldForm.value, 'fieldForm', 'fld_');
+            this.fld_submitted = false;
             return;
         }
 
         let data = this.fieldForm.value;
-        let index = _.findIndex( this.model.fields, {name: data.name} );
-        if( index > -1 && this.currentFieldName != data.name ){
+        let index = _.findIndex(this.model.fields, {name: data.name});
+        if (index > -1 && this.currentFieldName != data.name) {
             this.errorMessage = 'A field named "' + data.name + '" already exists.';
             return;
         }
 
-        if( this.action == 'add_field' ){
-            this.model.fields.push( _.clone( data ) );
+        if (this.action == 'add_field') {
+            this.model.fields.push(_.clone(data));
         }
-        else if( this.action == 'edit_field' ){
-            index = _.findIndex( this.model.fields, {name: this.currentFieldName} );
-            if( index > -1 ){
-                this.model.fields[index] = _.clone( data );
+        else if (this.action == 'edit_field') {
+            index = _.findIndex(this.model.fields, {name: this.currentFieldName});
+            if (index > -1) {
+                this.model.fields[index] = _.clone(data);
             }
         }
         this.resetFieldForm();

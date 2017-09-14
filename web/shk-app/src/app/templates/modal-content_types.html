@@ -43,46 +43,46 @@
                     <textarea type="text" class="form-control" name="description" formControlName="description" [(ngModel)]="model.description"></textarea>
                 </div>
 
-                <!--<div class="form-group row">-->
-                    <!--<div class="col-12">-->
+                <div class="form-group row" [class.form-group-message]="formErrors.collection">
+                    <div class="col-12">
 
-                        <!--<div class="form-group">-->
-                            <!--<label class="label-filled">Коллекция</label>-->
-                            <!--<div class="input-group">-->
-                                <!--<select class="form-control form-control-sm" name="collection" formControlName="collection" [(ngModel)]="model.collection">-->
-                                    <!--<option value="{{collection}}" *ngFor="let collection of collections">{{collection}}</option>-->
-                                <!--</select>-->
-                                <!--<div class="input-group-btn">-->
-                                    <!--<button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Add collection" (click)="displayToggle(addCollectionBlock); addCollectionField.value = ''; onValueChanged(); addCollectionField.focus()">-->
-                                        <!--<i class="icon-plus"></i>-->
-                                    <!--</button>-->
-                                <!--</div>-->
-                                <!--<div class="input-group-btn">-->
-                                    <!--<button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Delete collection" (click)="deleteCollection()">-->
-                                        <!--<i class="icon-cross"></i>-->
-                                    <!--</button>-->
-                                <!--</div>-->
-                            <!--</div>-->
+                        <div class="form-group">
+                            <label class="label-filled">Коллекция</label>
+                            <div class="input-group">
+                                <select class="form-control form-control-sm" name="collection" formControlName="collection" [(ngModel)]="model.collection">
+                                    <option value="{{collection}}" *ngFor="let collection of collections">{{collection}}</option>
+                                </select>
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Add collection" (click)="displayToggle(addCollectionBlock); addCollectionField.value = ''; onValueChanged(); addCollectionField.focus()">
+                                        <i class="icon-plus"></i>
+                                    </button>
+                                </div>
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Delete collection" (click)="deleteCollection()">
+                                        <i class="icon-cross"></i>
+                                    </button>
+                                </div>
+                            </div>
 
-                            <!--<div class="card p-1 mt-2" #addCollectionBlock style="display: none;" [class.form-group-message]="formErrors.contentType.new_collection">-->
-                                <!--<input type="text" class="form-control form-control-sm" formControlName="new_collection" #addCollectionField>-->
-                                <!--<div *ngIf="formErrors.contentType.new_collection" class="alert alert-danger mb-1">-->
-                                    <!--{{formErrors.contentType.new_collection}}-->
-                                <!--</div>-->
+                            <div class="card p-1 mt-2" #addCollectionBlock style="display: none;" [class.form-group-message]="formErrors.new_collection">
+                                <input type="text" class="form-control form-control-sm" formControlName="new_collection" #addCollectionField>
+                                <div *ngIf="formErrors.new_collection" class="alert alert-danger mb-1">
+                                    {{formErrors.new_collection}}
+                                </div>
 
-                                <!--<div class="text-right mt-1">-->
-                                    <!--<button type="button" class="btn btn-secondary btn-sm" (click)="addCollection();">-->
-                                        <!--Add-->
-                                    <!--</button>-->
-                                    <!--<button type="button" class="btn btn-secondary btn-sm" (click)="addCollectionBlock.style.display = 'none'; formErrors.contentType.new_collection = ''">-->
-                                        <!--Cancel-->
-                                    <!--</button>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        <!--</div>-->
+                                <div class="text-right mt-1">
+                                    <button type="button" class="btn btn-secondary btn-sm" (click)="addCollection();">
+                                        Add
+                                    </button>
+                                    <button type="button" class="btn btn-secondary btn-sm" (click)="addCollectionBlock.style.display = 'none'; formErrors.new_collection = ''">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
 
-                    <!--</div>-->
-                <!--</div>-->
+                    </div>
+                </div>
 
             </div>
             <!-- /ContentType form -->

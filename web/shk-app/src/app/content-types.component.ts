@@ -59,6 +59,20 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
             value: '',
             validators: [],
             messages: {}
+        },
+        collection: {
+            value: '',
+            validators: [Validators.required],
+            messages: {
+                required: 'Title is required.'
+            }
+        },
+        new_collection: {
+            value: '',
+            validators: [Validators.pattern('[A-Za-z0-9_-]+')],
+            message: {
+                pattern: 'The name must contain only Latin letters and numbers.'
+            }
         }
     };
 
@@ -130,7 +144,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
 
     constructor(
         fb: FormBuilder,
-        dataService: FieldTypesService,
+        dataService: ContentTypesService,
         activeModal: NgbActiveModal,
         tooltipConfig: NgbTooltipConfig
     ) {
@@ -279,36 +293,36 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
     // }
 
     /** Add collection */
-    /*addCollection(){
-        const fieldName = 'new_collection';
-        const control = this.contentTypeForm.get(fieldName);
-        if( !control.valid ){
-            return false;
-        }
-        this.formErrors.contentType[fieldName] = '';
-        const value = control.value;
-        let exists = false;
-        for (let name of this.collections) {
-            if(value == name){
-                exists = true;
-                break;
-            }
-        }
-        if( exists ){
-            this.formErrors.contentType[fieldName] += this.validationMessages.contentType[fieldName].exists;
-            return false;
-        }
-        this.collections.push( value );
-        this.elementAddCollectionBlock.nativeElement.style.display = 'none';
-        return true;
-    }*/
+    addCollection(){
+        // const fieldName = 'new_collection';
+        // const control = this.contentTypeForm.get(fieldName);
+        // if( !control.valid ){
+        //     return false;
+        // }
+        // this.formErrors.contentType[fieldName] = '';
+        // const value = control.value;
+        // let exists = false;
+        // for (let name of this.collections) {
+        //     if(value == name){
+        //         exists = true;
+        //         break;
+        //     }
+        // }
+        // if( exists ){
+        //     this.formErrors.contentType[fieldName] += this.validationMessages.contentType[fieldName].exists;
+        //     return false;
+        // }
+        // this.collections.push( value );
+        // this.elementAddCollectionBlock.nativeElement.style.display = 'none';
+        // return true;
+    }
 
     // /** Delete collection */
-    // deleteCollection(){
-    //
-    //     console.log( 'deleteCollection' );
-    //
-    // }
+    deleteCollection(){
+
+        console.log( 'deleteCollection' );
+
+    }
 
     /** Add group */
     /*addGroup(){
@@ -485,8 +499,22 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
         }
         else {
 
+            let callback = function(res: any){
+                if(res.success){
+                    this.closeModal();
+                } else {
+                    if(res.msg){
+                        this.submitted = false;
+                        this.errorMessage = res.msg;
+                    }
+                }
+            };
 
-
+            if(this.model.id){
+                this.dataService.update(this.model).then(callback.bind(this));
+            } else {
+                this.dataService.create(this.model).then(callback.bind(this));
+            }
         }
     }
 

@@ -23,6 +23,8 @@ export abstract class ModalContentAbstractComponent implements OnInit {
     formFields = {};
     model = {};
 
+    abstract save();
+
     constructor(
         public fb: FormBuilder,
         public dataService: DataService,
@@ -34,7 +36,7 @@ export abstract class ModalContentAbstractComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.buildForm(this.formFields);
+        this.buildForm();
         if(this.itemId){
             this.getModelData();
         }
@@ -54,11 +56,11 @@ export abstract class ModalContentAbstractComponent implements OnInit {
     }
 
     /** Build form groups */
-    buildForm(formFields: any): void {
-        let controls = this.buildControls(formFields, 'model');
+    buildForm(): void {
+        let controls = this.buildControls(this.formFields, 'model');
         this.form = this.fb.group(controls);
         this.form.valueChanges
-            .subscribe(data => this.onValueChanged(data));
+            .subscribe(() => this.onValueChanged('form'));
     }
 
     buildControls(options: {}, modelName: string, keyPrefix: string = ''): {[s: string]: FormControl;} {
@@ -76,10 +78,14 @@ export abstract class ModalContentAbstractComponent implements OnInit {
     }
 
     /** Callback on form value changed */
-    onValueChanged(data?: any, formName: string = 'form', keyPrefix: string = ''): void{
+    onValueChanged(formName: string, keyPrefix: string = ''): void{
         if (!this[formName]) { return; }
+        let data = this[formName].value;
 
         for (let fieldName in data) {
+            if (!data.hasOwnProperty(fieldName)) {
+                continue;
+            }
             this.formErrors[keyPrefix + fieldName] = '';
             let control = this[formName].get(fieldName);
             if (control && (control.dirty || this[keyPrefix + 'submitted']) && !control.valid) {
@@ -125,6 +131,8 @@ export abstract class PageTableAbstractComponent implements OnInit {
     private activeModal: NgbActiveModal;
     private modalService: NgbModal;
     private titleService: Title;
+
+    abstract getModalContent();
 
     constructor(
         dataService: DataService,
@@ -208,10 +216,6 @@ export abstract class PageTableAbstractComponent implements OnInit {
                 this.getList();
                 break;
         }
-    }
-
-    getModalContent(){
-        return ModalContentAbstractComponent;
     }
 
     getList(): void {

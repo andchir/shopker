@@ -9,6 +9,6 @@ export class ContentType {
         public collection: string,
         public fields: ContentField[],
         public groups: string[],
-        public isActive: boolean
+        public is_active: boolean
     ) { }
 }

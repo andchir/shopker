@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, ViewChild, Injectable, ElementRef } from '@angular/core';
-import { Http, Response } from '@angular/http';
 import { Title } from '@angular/platform-browser';
 import { NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { ContentTypesService } from './services/content_types.service';
@@ -10,8 +9,6 @@ import { ContentType } from './models/content_type.model';
 import { FieldType } from "./models/field-type.model";
 import { FieldTypeProperty } from './models/field-type-property.model';
 import { QueryOptions } from './models/query-options';
-import { ConfirmModalContent } from './app.component';
-import { DataService } from './services/data-service.abstract';
 import { PageTableAbstractComponent, ModalContentAbstractComponent } from './page-table.abstract';
 import * as _ from "lodash";
 
@@ -25,7 +22,17 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
     @ViewChild('addCollectionBlock') elementAddCollectionBlock;
     @ViewChild('addGroupBlock') elementAddGroupBlock;
 
-    model: ContentType = new ContentType(0, '', '', '', '', [], [], true);
+    constructor(
+        public fb: FormBuilder,
+        public dataService: ContentTypesService,
+        public activeModal: NgbActiveModal,
+        public tooltipConfig: NgbTooltipConfig,
+        private fieldTypesService: FieldTypesService
+    ) {
+        super(fb, dataService, activeModal, tooltipConfig);
+    }
+
+    model: ContentType = new ContentType(0, '', '', '', 'products', [], [], true);
     fieldModel: ContentField = new ContentField('', '', '', '', '', [], '', [], '', false, false);
     fld_submitted: boolean = false;
     loading: boolean = false;
@@ -70,9 +77,14 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
         new_collection: {
             value: '',
             validators: [Validators.pattern('[A-Za-z0-9_-]+')],
-            message: {
+            messages: {
                 pattern: 'The name must contain only Latin letters and numbers.'
             }
+        },
+        is_active: {
+            value: '',
+            validators: [],
+            messages: {}
         }
     };
 
@@ -96,21 +108,21 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
             value: '',
             validators: [],
             messages: {}
-        },/*
+        },
         input_type: {
             value: '',
             validators: [Validators.required],
             messages: {
                 required: 'Input type is required.'
             }
-        }/*,
+        },
         output_type: {
             value: '',
             validators: [Validators.required],
             messages: {
                 required: 'Output type is required.'
             }
-        },
+        },/*
         group: {
             value: '',
             validators: [Validators.required],
@@ -142,86 +154,32 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
         }
     };
 
-    constructor(
-        fb: FormBuilder,
-        dataService: ContentTypesService,
-        activeModal: NgbActiveModal,
-        tooltipConfig: NgbTooltipConfig
-    ) {
-        super(fb, dataService, activeModal, tooltipConfig);
-    }
-
-    buildForm(formFields: any): void {
-        ModalContentAbstractComponent.prototype.buildForm.call(this, formFields);
+    buildForm(): void {
+        ModalContentAbstractComponent.prototype.buildForm.call(this);
 
         let controls = this.buildControls(this.fieldsFormOptions, 'fieldModel', 'fld_');
         this.fieldForm = this.fb.group(controls);
-
-        /*
-        this.fieldForm = this.fb.group({
-            title: [this.fieldModel.title, [Validators.required]],
-            name: [this.fieldModel.name, [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')]],
-            description: [this.fieldModel.description, []],
-            input_type: [this.fieldModel.input_type, [Validators.required]],
-            output_type: [this.fieldModel.output_type, [Validators.required]],
-            is_filter: [this.fieldModel.is_filter, []],
-            required: [this.fieldModel.required, []],
-            group: [this.fieldModel.group, [Validators.required]],
-            new_group: ['', []]
-        });
-        */
-
-        //this.fieldForm = new FormGroup({});
-
+        this.fieldForm.valueChanges
+            .subscribe(() => this.onValueChanged('fieldForm', 'fld_'));
     }
 
-    // /** On initialize */
-    // ngOnInit(): void {
-    //     this.buildForm();
-    //     this.getFieldTypes();
-    //     if( this.itemId ){
-    //         this.getModelData();
-    //     }
-    // }
+    /** On initialize */
+    ngOnInit(): void {
+        ModalContentAbstractComponent.prototype.ngOnInit.call(this);
+        this.getFieldTypes();
+    }
 
-    // /** Build form groups */
-    // buildForm(): void {
-    //     this.contentTypeForm = this.fb.group({
-    //         title: [this.model.title, [Validators.required]],
-    //         name: [this.model.name, [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')]],
-    //         description: [this.model.description, []],
-    //         collection: [this.model.collection, [Validators.required]],
-    //         new_collection: ['', [Validators.pattern('[A-Za-z0-9_-]+')]]
-    //     });
-    //     this.contentTypeForm.valueChanges
-    //         .subscribe(data => this.onValueChanged('contentType', data));
-    //
-    //     this.fieldForm = this.fb.group({
-    //         title: [this.fieldModel.title, [Validators.required]],
-    //         name: [this.fieldModel.name, [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')]],
-    //         description: [this.fieldModel.description, []],
-    //         input_type: [this.fieldModel.input_type, [Validators.required]],
-    //         output_type: [this.fieldModel.output_type, [Validators.required]],
-    //         is_filter: [this.fieldModel.is_filter, []],
-    //         required: [this.fieldModel.required, []],
-    //         group: [this.fieldModel.group, [Validators.required]],
-    //         new_group: ['', []]
-    //     });
-    //     this.fieldForm.valueChanges
-    //         .subscribe(data => this.onValueChanged('field', data));
-    // }
-
-    // /** Get field types */
-    // getFieldTypes(): void {
-    //     let options = new QueryOptions('name', 'asc', 0, 0, 1);
-    //     this.fieldTypesService.getList(options)
-    //         .subscribe(
-    //             res => {
-    //                 this.fieldTypes = res.data;
-    //             },
-    //             error =>  this.errorMessage = <any>error
-    //         );
-    // }
+    /** Get field types */
+    getFieldTypes(): void {
+        let options = new QueryOptions('name', 'asc', 0, 0, 1);
+        this.fieldTypesService.getList(options)
+            .subscribe(
+                res => {
+                    this.fieldTypes = res.data;
+                },
+                error =>  this.errorMessage = <any>error
+            );
+    }
 
     /**
      * Select fild type properties
@@ -245,52 +203,6 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
             this.outputFieldTypeProperties = _.clone(fieldType.outputProperties);
         }
     }
-
-    // /** Element display toggle */
-    // displayToggle(element: HTMLElement, display?: boolean): void {
-    //     display = display || element.style.display == 'none';
-    //     element.style.display = display ? 'block' : 'none';
-    // }
-
-    // /**
-    //  * On form value changed
-    //  * @param type
-    //  * @param data
-    //  */
-    // onValueChanged(type: string, data?: any): void{
-    //     if (!this.contentTypeForm) { return; }
-    //     const form = type == 'contentType'
-    //         ? this.contentTypeForm
-    //         : this.fieldForm;
-    //     const isSubmitted = type == 'contentType'
-    //         ? this.submitted
-    //         : this.fieldSubmitted;
-    //
-    //     for (const field in this.formErrors[type]) {
-    //         this.formErrors[type][field] = '';
-    //         const control = form.get(field);
-    //         if (control && (control.dirty || isSubmitted) && !control.valid) {
-    //             const messages = this.validationMessages[type][field];
-    //             for (const key in control.errors) {
-    //                 this.formErrors[type][field] += messages[key] + ' ';
-    //             }
-    //         }
-    //     }
-    // }
-
-    // /** Get model data */
-    // getModelData(){
-    //     this.loading = true;
-    //     this.contentTypesService.getItem( this.itemId )
-    //         .then(item => {
-    //             if( this.isItemCopy ){
-    //                 item.id = '';
-    //                 item.name = '';
-    //             }
-    //             this.model = item;
-    //             this.loading = false;
-    //         });
-    // }
 
     /** Add collection */
     addCollection(){
@@ -317,7 +229,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
         // return true;
     }
 
-    // /** Delete collection */
+    /** Delete collection */
     deleteCollection(){
 
         console.log( 'deleteCollection' );
@@ -409,7 +321,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
     /** Cancel edit field */
     editFieldCancel(){
         this.resetFieldForm();
-        this.onValueChanged(this.fieldForm.value, 'fieldForm', 'fld_');
+        this.onValueChanged('fieldForm', 'fld_');
     }
 
     /** Submit field */
@@ -417,7 +329,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
         this.fld_submitted = true;
 
         if (!this.fieldForm.valid) {
-            this.onValueChanged(this.fieldForm.value, 'fieldForm', 'fld_');
+            this.onValueChanged('fieldForm', 'fld_');
             this.fld_submitted = false;
             return;
         }
@@ -441,80 +353,32 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
         this.resetFieldForm();
     }
 
-    /** Submit Content type form */
-    onSubmit() {
-
-        // this.submitted = true;
-        //
-        // if( !this.contentTypeForm.valid ){
-        //     this.onValueChanged('contentType');
-        //     return;
-        // }
-        // if( this.model.fields.length == 0 ){
-        //     this.errorMessage = 'You have not created any fields.';
-        //     return;
-        // }
-
-        // if( this.model.id ){
-        //
-        //     this.contentTypesService.update(this.model)
-        //         .then((res) => {
-        //             if( res.success ){
-        //                 this.closeModal();
-        //             } else {
-        //                 if( res.msg ){
-        //                     this.errorMessage = res.msg;
-        //                 }
-        //             }
-        //         });
-        // }
-        // else {
-        //
-        //     this.contentTypesService.create(this.model)
-        //         .then((res) => {
-        //             if( res.success ){
-        //                 this.closeModal();
-        //             } else {
-        //                 if( res.msg ){
-        //                     this.errorMessage = res.msg;
-        //                 }
-        //             }
-        //         });
-        // }
-    }
-
-    // /** Close modal */
-    // closeModal() {
-    //     this.activeModal.close();
-    // }
-
     save() {
         this.submitted = true;
 
         console.log('SAVE', this.form.value);
 
         if(!this.form.valid){
-            this.onValueChanged(this.form.value);
+            this.onValueChanged('form');
             this.submitted = false;
+            return;
         }
-        else {
 
-            let callback = function(res: any){
-                if(res.success){
-                    this.closeModal();
-                } else {
-                    if(res.msg){
-                        this.submitted = false;
-                        this.errorMessage = res.msg;
-                    }
-                }
-            };
-
-            if(this.model.id){
-                this.dataService.update(this.model).then(callback.bind(this));
+        let callback = function(res: any){
+            if(res.success){
+                this.closeModal();
             } else {
-                this.dataService.create(this.model).then(callback.bind(this));
+                if(res.msg){
+                    this.submitted = false;
+                    this.errorMessage = res.msg;
+                }
             }
+        };
+
+        if(this.model.id){
+            this.dataService.update(this.model).then(callback.bind(this));
+        } else {
+            this.dataService.create(this.model).then(callback.bind(this));
         }
     }
 

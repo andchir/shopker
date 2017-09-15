@@ -9,7 +9,7 @@
 
 <div class="modal-body" [class.loading]="loading">
 
-    <form #formElement="ngForm" (ngSubmit)="onSubmit()" [formGroup]="form">
+    <form #formElement="ngForm" [formGroup]="form">
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group" [class.form-group-message]="formErrors.name">

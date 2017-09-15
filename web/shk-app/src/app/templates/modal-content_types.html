@@ -7,7 +7,7 @@
     <h4 class="modal-title">{{modalTitle}}</h4>
 </div>
 
-<form (ngSubmit)="onSubmit()" [class.loading]="loading">
+<form [class.loading]="loading">
 
     <div class="modal-body">
 
@@ -46,7 +46,7 @@
                 <div class="form-group row" [class.form-group-message]="formErrors.collection">
                     <div class="col-12">
 
-                        <div class="form-group">
+                        <div class="form-group mb-0">
                             <label class="label-filled">Коллекция</label>
                             <div class="input-group">
                                 <select class="form-control form-control-sm" name="collection" formControlName="collection" [(ngModel)]="model.collection">
@@ -79,6 +79,22 @@
                                     </button>
                                 </div>
                             </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-12">
+
+                        <div class="card card-body p-2 pl-3">
+
+                            <label class="custom-control custom-checkbox m-0">
+                                <input type="checkbox" class="custom-control-input" value="1" name="is_active" formControlName="is_active" [(ngModel)]="model.is_active">
+                                <span class="custom-control-indicator"></span>
+                                <span>Активный?</span>
+                            </label>
+
                         </div>
 
                     </div>
@@ -133,91 +149,91 @@
                             </div>
                         </div>
 
-                        <!--<div class="form-group row" [class.form-group-message]="formErrors.field.input_type">-->
-                            <!--<div class="col-md-5">-->
-                                <!--<label>Тип ввода</label>-->
-                            <!--</div>-->
-                            <!--<div class="col-md-7">-->
+                        <div class="form-group row" [class.form-group-message]="formErrors.fld_input_type">
+                            <div class="col-md-5">
+                                <label>Тип ввода</label>
+                            </div>
+                            <div class="col-md-7">
 
-                                <!--<div class="input-group">-->
-                                    <!--<select class="form-control form-control-sm" name="field_input_type" formControlName="input_type" [(ngModel)]="fieldModel.input_type" (ngModelChange)="selectFieldTypeProperties('input_type')">-->
-                                        <!--<option value="{{fieldType.name}}" *ngFor="let fieldType of fieldTypes">{{fieldType.title}}</option>-->
-                                    <!--</select>-->
-                                    <!--<div class="input-group-btn">-->
-                                        <!--<button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Options" (click)="displayToggle(inputTypeOptionsBlock)">-->
-                                            <!--<i class="icon-cog"></i>-->
-                                        <!--</button>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                                <!--<div *ngIf="formErrors.field.input_type" class="alert alert-danger">-->
-                                    <!--{{formErrors.field.input_type}}-->
-                                <!--</div>-->
+                                <div class="input-group">
+                                    <select class="form-control form-control-sm" name="field_input_type" formControlName="input_type" [(ngModel)]="fieldModel.input_type" (ngModelChange)="selectFieldTypeProperties('input_type')">
+                                        <option value="{{fieldType.name}}" *ngFor="let fieldType of fieldTypes">{{fieldType.title}}</option>
+                                    </select>
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Options" (click)="displayToggle(inputTypeOptionsBlock)">
+                                            <i class="icon-cog"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div *ngIf="formErrors.fld_input_type" class="alert alert-danger">
+                                    {{formErrors.fld_input_type}}
+                                </div>
 
-                            <!--</div>-->
-                        <!--</div>-->
+                            </div>
+                        </div>
 
-                        <!--<div class="card card-body bg-light mb-3" #inputTypeOptionsBlock style="display: none;">-->
-                            <!--<div>-->
-                                <!--<div class="alert alert-secondary small" [hidden]="inputFieldTypeProperties.length > 0">-->
-                                    <!--There are no parameters.-->
-                                <!--</div>-->
-                                <!--<div class="row form-group" *ngFor="let property of inputFieldTypeProperties">-->
-                                    <!--<div class="col-md-5">-->
-                                        <!--{{property.title}}-->
-                                    <!--</div>-->
-                                    <!--<div class="col-md-7">-->
-                                        <!--<input type="text" class="form-control form-control-sm" name="input_properties[]" [value]="property.default_value">-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                            <!--<div class="text-right mt-1">-->
-                                <!--<button type="button" class="btn btn-secondary btn-sm" (click)="inputTypeOptionsBlock.style.display = 'none';">-->
-                                    <!--Close-->
-                                <!--</button>-->
-                            <!--</div>-->
-                        <!--</div>-->
+                        <div class="card card-body bg-light mb-3" #inputTypeOptionsBlock style="display: none;">
+                            <div>
+                                <div class="alert alert-secondary small" [hidden]="inputFieldTypeProperties.length > 0">
+                                    There are no parameters.
+                                </div>
+                                <div class="row form-group" *ngFor="let property of inputFieldTypeProperties">
+                                    <div class="col-md-5">
+                                        {{property.title}}
+                                    </div>
+                                    <div class="col-md-7">
+                                        <input type="text" class="form-control form-control-sm" name="input_properties[]" [value]="property.default_value">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-right mt-1">
+                                <button type="button" class="btn btn-secondary btn-sm" (click)="inputTypeOptionsBlock.style.display = 'none';">
+                                    Close
+                                </button>
+                            </div>
+                        </div>
 
-                        <!--<div class="form-group row" [class.form-group-message]="formErrors.field.output_type">-->
-                            <!--<div class="col-md-5">-->
-                                <!--<label>Тип вывода</label>-->
-                            <!--</div>-->
-                            <!--<div class="col-md-7">-->
+                        <div class="form-group row" [class.form-group-message]="formErrors.fld_output_type">
+                            <div class="col-md-5">
+                                <label>Тип вывода</label>
+                            </div>
+                            <div class="col-md-7">
 
-                                <!--<div class="input-group">-->
-                                    <!--<select class="form-control form-control-sm" name="field_output_type" formControlName="output_type" [(ngModel)]="fieldModel.output_type"  (ngModelChange)="selectFieldTypeProperties('output_type')">-->
-                                        <!--<option value="{{fieldType.name}}" *ngFor="let fieldType of fieldTypes">{{fieldType.title}}</option>-->
-                                    <!--</select>-->
-                                    <!--<div class="input-group-btn">-->
-                                        <!--<button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Options" (click)="displayToggle(outputTypeOptionsBlock)">-->
-                                            <!--<i class="icon-cog"></i>-->
-                                        <!--</button>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                                <!--<div *ngIf="formErrors.field.output_type" class="alert alert-danger">-->
-                                    <!--{{formErrors.field.output_type}}-->
-                                <!--</div>-->
+                                <div class="input-group">
+                                    <select class="form-control form-control-sm" name="field_output_type" formControlName="output_type" [(ngModel)]="fieldModel.output_type"  (ngModelChange)="selectFieldTypeProperties('output_type')">
+                                        <option value="{{fieldType.name}}" *ngFor="let fieldType of fieldTypes">{{fieldType.title}}</option>
+                                    </select>
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Options" (click)="displayToggle(outputTypeOptionsBlock)">
+                                            <i class="icon-cog"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div *ngIf="formErrors.fld_output_type" class="alert alert-danger">
+                                    {{formErrors.fld_output_type}}
+                                </div>
 
-                            <!--</div>-->
-                        <!--</div>-->
+                            </div>
+                        </div>
 
-                        <!--<div class="card card-body bg-light mb-3" #outputTypeOptionsBlock style="display: none;">-->
-                            <!--<div class="alert alert-secondary small" [hidden]="outputFieldTypeProperties.length > 0">-->
-                                <!--There are no parameters.-->
-                            <!--</div>-->
-                            <!--<div class="row form-group" *ngFor="let property of outputFieldTypeProperties">-->
-                                <!--<div class="col-md-5">-->
-                                    <!--{{property.title}}-->
-                                <!--</div>-->
-                                <!--<div class="col-md-7">-->
-                                    <!--<input type="text" class="form-control form-control-sm" name="output_properties[]" [value]="property.default_value">-->
-                                <!--</div>-->
-                            <!--</div>-->
-                            <!--<div class="text-right mt-1">-->
-                                <!--<button type="button" class="btn btn-secondary btn-sm" (click)="outputTypeOptionsBlock.style.display = 'none'">-->
-                                    <!--Close-->
-                                <!--</button>-->
-                            <!--</div>-->
-                        <!--</div>-->
+                        <div class="card card-body bg-light mb-3" #outputTypeOptionsBlock style="display: none;">
+                            <div class="alert alert-secondary small" [hidden]="outputFieldTypeProperties.length > 0">
+                                There are no parameters.
+                            </div>
+                            <div class="row form-group" *ngFor="let property of outputFieldTypeProperties">
+                                <div class="col-md-5">
+                                    {{property.title}}
+                                </div>
+                                <div class="col-md-7">
+                                    <input type="text" class="form-control form-control-sm" name="output_properties[]" [value]="property.default_value">
+                                </div>
+                            </div>
+                            <div class="text-right mt-1">
+                                <button type="button" class="btn btn-secondary btn-sm" (click)="outputTypeOptionsBlock.style.display = 'none'">
+                                    Close
+                                </button>
+                            </div>
+                        </div>
 
                         <!--<div class="form-group row">-->
                             <!--<div class="col-md-5">-->

@@ -40,7 +40,7 @@
                     <label class="label-filled">
                         Описание
                     </label>
-                    <textarea type="text" class="form-control" name="description" formControlName="description" [(ngModel)]="model.description"></textarea>
+                    <textarea type="text" class="form-control" rows="3" name="description" formControlName="description" [(ngModel)]="model.description"></textarea>
                 </div>
 
                 <div class="form-group row" [class.form-group-message]="formErrors.collection">
@@ -145,7 +145,7 @@
                                 <label>Описание</label>
                             </div>
                             <div class="col-md-7">
-                                <textarea type="text" class="form-control form-control-sm" name="field_description" formControlName="description" [(ngModel)]="fieldModel.description"></textarea>
+                                <textarea type="text" class="form-control form-control-sm" rows="3" name="field_description" formControlName="description" [(ngModel)]="fieldModel.description"></textarea>
                             </div>
                         </div>
 
@@ -235,50 +235,50 @@
                             </div>
                         </div>
 
-                        <!--<div class="form-group row">-->
-                            <!--<div class="col-md-5">-->
-                                <!--<label>Группа</label>-->
-                            <!--</div>-->
-                            <!--<div class="col-md-7">-->
+                        <div class="form-group row">
+                            <div class="col-md-5">
+                                <label>Группа</label>
+                            </div>
+                            <div class="col-md-7">
 
-                                <!--<div [class.form-group-message]="formErrors.field.group">-->
-                                    <!--<div class="input-group input-group-sm">-->
-                                        <!--<select class="form-control" name="field_group" formControlName="group">-->
-                                            <!--<option value="{{group}}" *ngFor="let group of model.groups">{{group}}</option>-->
-                                        <!--</select>-->
-                                        <!--<div class="input-group-btn">-->
-                                            <!--<button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Add group" (click)="displayToggle(addGroupBlock); addGroupField.value = ''; addGroupField.focus()">-->
-                                                <!--<i class="icon-plus"></i>-->
-                                            <!--</button>-->
-                                        <!--</div>-->
-                                        <!--<div class="input-group-btn">-->
-                                            <!--<button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Delete group" (click)="deleteGroup()">-->
-                                                <!--<i class="icon-cross"></i>-->
-                                            <!--</button>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                    <!--<div *ngIf="formErrors.field.group" class="alert alert-danger">-->
-                                        <!--{{formErrors.field.group}}-->
-                                    <!--</div>-->
+                                <div [class.form-group-message]="formErrors.fld_group">
+                                    <div class="input-group input-group-sm">
+                                        <select class="form-control" name="field_group" formControlName="group" [(ngModel)]="fieldModel.group">
+                                            <option value="{{group}}" *ngFor="let group of model.groups">{{group}}</option>
+                                        </select>
+                                        <div class="input-group-btn">
+                                            <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Add group" (click)="displayToggle(addGroupBlock); addGroupField.value = ''; addGroupField.focus()">
+                                                <i class="icon-plus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="input-group-btn">
+                                            <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Delete group" (click)="deleteGroup()">
+                                                <i class="icon-cross"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="formErrors.fld_group" class="alert alert-danger">
+                                        {{formErrors.fld_group}}
+                                    </div>
 
-                                    <!--<div class="card p-1 mt-2" #addGroupBlock style="display: none;" [class.form-group-message]="formErrors.field.new_group">-->
-                                        <!--<input type="text" class="form-control form-control-sm" #addGroupField formControlName="new_group">-->
-                                        <!--<div *ngIf="formErrors.field.new_group" class="alert alert-danger mb-1">-->
-                                            <!--{{formErrors.field.new_group}}-->
-                                        <!--</div>-->
-                                        <!--<div class="text-right mt-1">-->
-                                            <!--<button type="button" class="btn btn-secondary btn-sm" (click)="addGroup();">-->
-                                                <!--Add-->
-                                            <!--</button>-->
-                                            <!--<button type="button" class="btn btn-secondary btn-sm" (click)="addGroupBlock.style.display = 'none'; formErrors.field.new_group = ''">-->
-                                                <!--Cancel-->
-                                            <!--</button>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                <!--</div>-->
+                                    <div class="card p-1 mt-2" #addGroupBlock style="display: none;" [class.form-group-message]="formErrors.fld_new_group">
+                                        <input type="text" class="form-control form-control-sm" #addGroupField formControlName="new_group">
+                                        <div *ngIf="formErrors.fld_new_group" class="alert alert-danger mb-1">
+                                            {{formErrors.fld_new_group}}
+                                        </div>
+                                        <div class="text-right mt-1">
+                                            <button type="button" class="btn btn-secondary btn-sm" (click)="addGroup();">
+                                                Add
+                                            </button>
+                                            <button type="button" class="btn btn-secondary btn-sm" (click)="addGroupBlock.style.display = 'none'; formErrors.fld_new_group = ''">
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
 
-                            <!--</div>-->
-                        <!--</div>-->
+                            </div>
+                        </div>
 
                         <div class="form-group row mb-0">
                             <div class="col-md-7 offset-md-5">
@@ -286,7 +286,7 @@
                                 <label class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" value="1" name="required" formControlName="required">
                                     <span class="custom-control-indicator"></span>
-                                    <span>Обязательный</span>
+                                    <span>Обязательное</span>
                                 </label>
 
                             </div>
@@ -424,8 +424,9 @@
         </div>
 
     </div>
+
     <div class="modal-footer d-block">
-        <button type="button" class="btn btn-success btn-wide" [disabled]="submitted" (click)="save()">
+        <button type="button" class="btn btn-success btn-wide" [disabled]="submitted && form.valid" (click)="save()">
             Save
         </button>
         <button type="button" class="btn btn-secondary btn-wide" (click)="activeModal.dismiss()">

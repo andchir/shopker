@@ -155,7 +155,7 @@ class FieldType
             'title' => $this->getTitle(),
             'name' => $this->getName(),
             'description' => $this->getDescription(),
-            'isActive' => $this->getIsActive()
+            'is_active' => $this->getIsActive()
         ];
         if( $full ){
             $output['inputProperties'] = $this->getInputProperties();

@@ -21,14 +21,14 @@ export class TableComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.queryOptions.sortBy = this.tableFields[0].name;
+        this.queryOptions.sort_by = this.tableFields[0].name;
     }
 
     selectSortBy(fieldName: string): void {
-        if (this.queryOptions.sortBy == fieldName) {
-            this.queryOptions.sortDir = this.queryOptions.sortDir == 'asc' ? 'desc' : 'asc';
+        if (this.queryOptions.sort_by == fieldName) {
+            this.queryOptions.sort_dir = this.queryOptions.sort_dir == 'asc' ? 'desc' : 'asc';
         } else {
-            this.queryOptions.sortBy = fieldName;
+            this.queryOptions.sort_by = fieldName;
         }
         this.actionRequest.emit(['changeQuery', this.queryOptions]);
     }

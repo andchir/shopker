@@ -1,9 +1,10 @@
 export class QueryOptions {
     constructor(
-        public sortBy: string,
-        public sortDir: string,
+        public sort_by: string,
+        public sort_dir: string,
         public page: number,
         public limit?: number,
-        public full?: number
+        public full?: number,
+        public only_active?: number
     ) { }
 }

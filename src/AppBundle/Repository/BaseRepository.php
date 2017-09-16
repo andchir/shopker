@@ -18,9 +18,10 @@ abstract class BaseRepository extends DocumentRepository
         $defaults = [
             'page' => 1,
             'limit' => 10,
-            'sortBy' => 'name',
-            'sortDir' => 'asc',
-            'full' => 1
+            'sort_by' => 'name',
+            'sort_dir' => 'asc',
+            'full' => 1,
+            'only_active' => 1
         ];
         $opts = array_merge($defaults, $options);
 
@@ -31,11 +32,11 @@ abstract class BaseRepository extends DocumentRepository
         $metadata = $factory->getMetadataFor($this->getDocumentName());
         $fieldNames = $metadata->getFieldNames();
 
-        if(!in_array($opts['sortBy'], $fieldNames)){
-            $opts['sortBy'] = $defaults['sortBy'];
+        if(!in_array($opts['sort_by'], $fieldNames)){
+            $opts['sort_by'] = $defaults['sort_by'];
         }
-        if(!in_array($opts['sortDir'], ['asc', 'desc'])){
-            $opts['sortDir'] = $defaults['sortDir'];
+        if(!in_array($opts['sort_dir'], ['asc', 'desc'])){
+            $opts['sort_dir'] = $defaults['sort_dir'];
         }
         if(!is_numeric($opts['page'])){
             $opts['page'] = $defaults['page'];
@@ -46,10 +47,17 @@ abstract class BaseRepository extends DocumentRepository
 
         $skip = ($opts['page'] - 1) * $opts['limit'];
 
-        $results = $this->createQueryBuilder()
-            ->sort($opts['sortBy'], $opts['sortDir'])
+        $query = $this->createQueryBuilder()
+            ->sort($opts['sort_by'], $opts['sort_dir'])
             ->limit($opts['limit'])
-            ->skip($skip)
+            ->skip($skip);
+
+        if($opts['only_active']){
+            $query = $query
+                ->field('is_active')->equals(true);
+        }
+
+        $results = $query
             ->getQuery()
             ->execute();
 

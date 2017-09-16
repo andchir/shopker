@@ -63,6 +63,7 @@ export abstract class ModalContentAbstractComponent implements OnInit {
             .subscribe(() => this.onValueChanged('form'));
     }
 
+    /** Build controls */
     buildControls(options: {}, modelName: string, keyPrefix: string = ''): {[s: string]: FormControl;} {
         let controls = {};
         for (let key in options) {
@@ -125,7 +126,7 @@ export abstract class PageTableAbstractComponent implements OnInit {
     loading: boolean = false;
     selectedIds: string[] = [];
     collectionSize = 0;
-    queryOptions: QueryOptions = new QueryOptions('name', 'asc', 1, 10, 0);
+    queryOptions: QueryOptions = new QueryOptions('name', 'asc', 1, 10, 0, 0);
 
     public dataService: DataService;
     private activeModal: NgbActiveModal;
@@ -199,9 +200,6 @@ export abstract class PageTableAbstractComponent implements OnInit {
     }
 
     actionRequest(actionValue : [string, number]): void {
-
-        console.log(actionValue);
-
         switch(actionValue[0]){
             case 'edit':
                 this.modalOpen(actionValue[1]);

@@ -37,7 +37,7 @@ export class FieldTypesService extends DataService {
 })
 export class FieldTypeModalContent extends ModalContentAbstractComponent {
 
-    model: FieldType;
+    model: FieldType = new FieldType(0, '', '', '', true, [], []);
 
     formFields = {
         name: {
@@ -56,6 +56,11 @@ export class FieldTypeModalContent extends ModalContentAbstractComponent {
             }
         },
         description: {
+            value: '',
+            validators: [],
+            messages: {}
+        },
+        is_active: {
             value: '',
             validators: [],
             messages: {}
@@ -140,6 +145,11 @@ export class FieldTypesComponent extends PageTableAbstractComponent {
         {
             name: 'title',
             title: 'Название',
+            output_type: 'text'
+        },
+        {
+            name: 'is_active',
+            title: 'Статус',
             output_type: 'text'
         }
     ];

@@ -32,11 +32,9 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
         super(fb, dataService, activeModal, tooltipConfig);
     }
 
-    model: ContentType = new ContentType(0, '', '', '', 'products', [], [], true);
+    model: ContentType = new ContentType(0, '', '', '', 'products', [], ['Основное','Служебное'], true);
     fieldModel: ContentField = new ContentField('', '', '', '', '', [], '', [], '', false, false);
     fld_submitted: boolean = false;
-    loading: boolean = false;
-    errorMessage: string;
     errorFieldMessage: string;
     action: string = 'add_field';
     currentFieldName = '';
@@ -122,7 +120,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
             messages: {
                 required: 'Output type is required.'
             }
-        },/*
+        },
         group: {
             value: '',
             validators: [Validators.required],
@@ -132,11 +130,11 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
         },
         new_group: {
             value: '',
-            validators: [Validators.required],
+            validators: [],
             messages: {
                 exists: 'Group with the same name already exists.'
             }
-        }*/
+        },
         required: {
             value: '',
             validators: [],
@@ -182,7 +180,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
     }
 
     /**
-     * Select fild type properties
+     * Select field type properties
      * @param type
      */
     selectFieldTypeProperties(type: string): void {
@@ -237,35 +235,35 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
     }
 
     /** Add group */
-    /*addGroup(){
+    addGroup(){
         const fieldName = 'new_group';
         const control = this.fieldForm.get(fieldName);
         if( !control || !control.valid || !control.value ){
             return false;
         }
-        this.formErrors.field[fieldName] = '';
+        this.formErrors['fld_'+fieldName] = '';
         const value = control.value;
         let index = this.model.groups.indexOf(value);
         if( index > -1 ){
-            this.formErrors.field[fieldName] += this.validationMessages.field[fieldName].exists;
+            this.formErrors['fld_'+fieldName] += this.validationMessages['fld_'+fieldName].exists;
             return false;
         }
         this.model.groups.push( value );
         this.elementAddGroupBlock.nativeElement.style.display = 'none';
         return true;
-    }*/
+    }
 
     /** Delete group */
-    deleteGroup(){
+    deleteGroup() {
         let currentGroupName = this.fieldForm.get('group').value;
-        let index = _.findIndex( this.model.fields, {group: currentGroupName} );
+        let index = _.findIndex(this.model.fields, {group: currentGroupName});
         this.errorFieldMessage = '';
-        if( index > -1 ){
+        if (index > -1) {
             this.errorFieldMessage = 'You can\'t delete a group because it is not empty.';
             return;
         }
-        index = this.model.groups.indexOf( currentGroupName );
-        if( index > -1 ){
+        index = this.model.groups.indexOf(currentGroupName);
+        if (index > -1) {
             this.model.groups.splice(index, 1);
         }
     }
@@ -381,7 +379,6 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
             this.dataService.create(this.model).then(callback.bind(this));
         }
     }
-
 }
 
 @Component({
@@ -420,7 +417,7 @@ export class ContentTypesComponent extends PageTableAbstractComponent {
             output_type: 'text'
         },
         {
-            name: 'published',
+            name: 'is_active',
             title: 'Статус',
             output_type: 'boolean'
         }

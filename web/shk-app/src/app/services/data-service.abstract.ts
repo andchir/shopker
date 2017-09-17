@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http, Response, URLSearchParams } from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
 import { QueryOptions } from '../models/query-options';
 
@@ -38,14 +38,14 @@ export abstract class DataService {
     }
 
     getList(options ?: QueryOptions): Observable<any> {
-        let qs = '';
+        let params = new URLSearchParams();
         for(let name in options){
-            qs += `${name}=${options[name]}&`;
+            if(!options.hasOwnProperty(name)){
+                continue;
+            }
+            params.set(name, options[name]);
         }
-        qs = qs.substr(0, qs.length - 1);
-        let url = this.requestUrl + '?' + qs;
-
-        return this.http.get(url)
+        return this.http.get(this.requestUrl, {search: params})
             .map(this.extractData)
             .catch(this.handleError);
     }

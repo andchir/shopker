@@ -56,7 +56,7 @@
 <div class="card-footer">
 
     <div class="float-right">
-        <select class="form-control">
+        <select class="form-control" [(ngModel)]="queryOptions.limit" (change)="pageChange()">
             <option value="10">10</option>
             <option value="20">20</option>
             <option value="50">50</option>

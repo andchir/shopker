@@ -22,7 +22,6 @@ export class CollectionsService extends DataService {
     }
 
     extractData(res: Response): any {
-        let body = res.json();
-        return body.data;
+        return res.json();
     }
 }

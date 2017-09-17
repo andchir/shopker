@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use AppBundle\Document\ContentType;
+use AppBundle\Document\Collection;
 
 /**
  * Class ContentTypeController
@@ -13,30 +14,6 @@ use AppBundle\Document\ContentType;
  */
 class ContentTypeController extends StorageControllerAbstract
 {
-
-//    /**
-//     * @Route("/app/content_type_list", name="content_type_get_list")
-//     * @Method({"GET"})
-//     * @param Request $request
-//     * @return JsonResponse
-//     */
-//    public function getList( Request $request )
-//    {
-//        $repository = $this->getRepository();
-//        $results = $repository->findAllOrderedByTitle();
-//        $full = !empty( $request->get('full') ) ? true : false;
-//
-//        $data = [];
-//        /** @var ContentType $item */
-//        foreach ($results as $item) {
-//            $data[] = $item->toArray( $full );
-//        }
-//
-//        return new JsonResponse([
-//            'success' => true,
-//            'data' => $data
-//        ]);
-//    }
 
     /**
      * @param $data
@@ -68,26 +45,6 @@ class ContentTypeController extends StorageControllerAbstract
         return ['success' => true];
     }
 
-//    /**
-//     * @param $name
-//     * @param int $itemId
-//     * @return mixed
-//     */
-//    public function checkNameExists($name, $itemId = 0){
-//
-//        $repository = $this->getRepository();
-//        $query = $repository->createQueryBuilder()
-//            ->field('name')->equals($name);
-//
-//        if($itemId){
-//            $query = $query->field('id')->notEqual($itemId);
-//        }
-//
-//        return $query->getQuery()
-//            ->execute()
-//            ->count();
-//    }
-
     /**
      * Create or update item
      * @param $data
@@ -96,135 +53,55 @@ class ContentTypeController extends StorageControllerAbstract
      */
     public function createUpdate($data, $itemId = '')
     {
-        if( !$itemId ){
+        if (!$itemId) {
             $contentType = new ContentType();
         } else {
             $repository = $this->getRepository();
-            $contentType = $repository->find( $itemId );
-            if( !$contentType ){
+            $contentType = $repository->find($itemId);
+            if (!$contentType) {
                 $contentType = new ContentType();
             }
         }
+
+        $collectionName = isset($data['collection']) ? $data['collection'] : 'products';
+
         $contentType
-            ->setTitle( $data['title'] )
-            ->setName( $data['name'] )
-            ->setDescription( isset($data['description']) ? $data['description'] : '' )
-            ->setCollection( isset($data['collection']) ? $data['collection'] : 'products' )
-            ->setFields( $data['fields'] )
-            ->setGroups( isset($data['groups']) ? $data['groups'] : [] )
-            ->setIsActive( isset($data['is_active']) ? $data['is_active'] : true );
+            ->setTitle($data['title'])
+            ->setName($data['name'])
+            ->setDescription(isset($data['description']) ? $data['description'] : '')
+            ->setCollection($collectionName)
+            ->setFields($data['fields'])
+            ->setGroups(isset($data['groups']) ? $data['groups'] : [])
+            ->setIsActive(isset($data['is_active']) ? $data['is_active'] : true);
 
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $this->get('doctrine_mongodb')->getManager();
-        $dm->persist( $contentType );
+        $dm->persist($contentType);
         $dm->flush();
+
+        //Add new collection
+        $collectionRepository = $this->get('doctrine_mongodb')
+            ->getManager()
+            ->getRepository('AppBundle:Collection');
+
+        $count = $collectionRepository->createQueryBuilder()
+            ->field('name')->equals($collectionName)
+            ->getQuery()
+            ->execute()
+            ->count();
+
+        if(!$count){
+            $collection = new Collection();
+            $collection->setName($collectionName);
+            $dm->persist($collection);
+            $dm->flush();
+        }
 
         return [
             'success' => true,
             'data' => $contentType->toArray()
         ];
     }
-
-//    /**
-//     * @Route("/app/content_type", name="content_type_post")
-//     * @Method({"POST"})
-//     * @param Request $request
-//     * @return JsonResponse
-//     */
-//    public function createItem( Request $request )
-//    {
-//        $data = $request->getContent()
-//            ? json_decode($request->getContent(), true)
-//            : [];
-//
-//        $output = $this->validateData( $data );
-//        if( !$output['success'] ){
-//            return new JsonResponse( $output );
-//        }
-//
-//        $output = $this->createUpdate( $data );
-//
-//        return new JsonResponse( $output );
-//    }
-
-//    /**
-//     * @Route("/app/content_type/{itemId}", name="content_type_put")
-//     * @Method({"PUT"})
-//     * @param Request $request
-//     * @param string $itemId
-//     * @return JsonResponse
-//     */
-//    public function editItem( Request $request, $itemId )
-//    {
-//        $data = $request->getContent()
-//            ? json_decode($request->getContent(), true)
-//            : [];
-//
-//        $output = $this->validateData( $data, $itemId );
-//        if( !$output['success'] ){
-//            return new JsonResponse( $output );
-//        }
-//
-//        $output = $this->createUpdate( $data, $itemId );
-//
-//        return new JsonResponse( $output );
-//    }
-
-//    /**
-//     * @Route("/app/content_type/{itemId}", name="content_type_delete")
-//     * @Method({"DELETE"})
-//     * @param Request $request
-//     * @param $itemId
-//     * @return JsonResponse
-//     */
-//    public function deleteItem(Request $request, $itemId)
-//    {
-//        $repository = $this->getRepository();
-//
-//        /** @var ContentType $contentType */
-//        $contentType = $repository->find( $itemId );
-//        if( !$contentType ){
-//            return new JsonResponse([
-//                'success' => false,
-//                'msg' => 'Item not found.'
-//            ]);
-//        }
-//
-//        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-//        $dm = $this->get('doctrine_mongodb')->getManager();
-//        $dm->remove( $contentType );
-//        $dm->flush();
-//
-//        return new JsonResponse([
-//            'success' => true
-//        ]);
-//    }
-
-//    /**
-//     * @Route("/app/content_type/{itemId}", name="content_type_get")
-//     * @Method({"GET"})
-//     * @param Request $request
-//     * @param $itemId
-//     * @return JsonResponse
-//     */
-//    public function getItem( Request $request, $itemId )
-//    {
-//        $repository = $this->getRepository();
-//
-//        /** @var ContentType $contentType */
-//        $contentType = $repository->find( $itemId );
-//        if( !$contentType ){
-//            return new JsonResponse([
-//                'success' => false,
-//                'msg' => 'Item not found.'
-//            ]);
-//        }
-//
-//        return new JsonResponse([
-//            'success' => true,
-//            'data' => $contentType->toArray(true)
-//        ]);
-//    }
 
     /**
      * @return \AppBundle\Repository\ContentTypeRepository
@@ -235,5 +112,4 @@ class ContentTypeController extends StorageControllerAbstract
             ->getManager()
             ->getRepository('AppBundle:ContentType');
     }
-
 }

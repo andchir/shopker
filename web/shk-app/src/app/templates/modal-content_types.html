@@ -57,6 +57,7 @@
 
                         <div class="form-group mb-0">
                             <label class="label-filled">Коллекция</label>
+
                             <div class="input-group">
                                 <select class="form-control form-control-sm" name="collection" formControlName="collection" [(ngModel)]="model.collection">
                                     <option value="{{collection}}" *ngFor="let collection of collections">{{collection}}</option>
@@ -66,8 +67,8 @@
                                         <i class="icon-plus"></i>
                                     </button>
                                 </div>
-                                <div class="input-group-btn">
-                                    <button type="button" class="btn btn-secondary btn-sm" [ngbPopover]="confirmPopover" #buttonDeleteCollection="ngbPopover" triggers="manual" (click)="deleteCollection(buttonDeleteCollection)">
+                                <div class="input-group-btn" [ngbPopover]="confirmPopover" #buttonDeleteCollection="ngbPopover" triggers="manual">
+                                    <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Delete" (click)="deleteCollection(buttonDeleteCollection)">
                                         <i class="icon-cross"></i>
                                     </button>
                                 </div>
@@ -80,7 +81,7 @@
                                 </div>
 
                                 <div class="text-right mt-1">
-                                    <button type="button" class="btn btn-secondary btn-sm" (click)="addCollection();">
+                                    <button type="button" class="btn btn-secondary btn-sm" (click)="addCollection()">
                                         Add
                                     </button>
                                     <button type="button" class="btn btn-secondary btn-sm" (click)="addCollectionBlock.style.display = 'none'; formErrors.new_collection = ''">
@@ -88,6 +89,7 @@
                                     </button>
                                 </div>
                             </div>
+
                         </div>
 
                     </div>
@@ -176,7 +178,7 @@
                                 </div>
                                 <div *ngIf="formErrors.fld_input_type" class="alert alert-danger">
                                     {{formErrors.fld_input_type}}
-                                </div>
+                                </div>`
 
                             </div>
                         </div>

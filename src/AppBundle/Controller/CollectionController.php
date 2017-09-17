@@ -14,17 +14,30 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  * @package AppBundle\Controller
  * @Route("/admin/collections")
  */
-class CollectionController extends StorageControllerAbstract
+class CollectionController extends BaseController
 {
 
     /**
-     * @param $data
-     * @param int $itemId
-     * @return array
+     * @Route("")
+     * @Method({"GET"})
+     * @return JsonResponse
      */
-    public function validateData($data, $itemId = 0)
+    public function getList(Request $request)
     {
-        return ['success' => true];
+        $repository = $this->getRepository();
+
+        $results = $repository->findBy([], ['name' => 'asc']);
+
+        $data = [];
+        /** @var Collection $item */
+        foreach ($results as $item) {
+            $data[] = $item->getName();
+        }
+
+        return new JsonResponse([
+            'success' => true,
+            'data' => $data
+        ]);
     }
 
     /**
@@ -49,12 +62,27 @@ class CollectionController extends StorageControllerAbstract
             ]);
         }
 
-        var_dump($collection->getName());
+        $contentTypeRepository = $this->get('doctrine_mongodb')
+            ->getManager()
+            ->getRepository('AppBundle:ContentType');
 
-//        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-//        $dm = $this->get('doctrine_mongodb')->getManager();
-//        $dm->remove( $category );
-//        $dm->flush();
+        $count = $contentTypeRepository->createQueryBuilder()
+            ->field('collection')->equals($itemName)
+            ->getQuery()
+            ->execute()
+            ->count();
+
+        if($count > 0){
+            return new JsonResponse([
+                'success' => false,
+                'msg' => 'This collection is not empty.'
+            ]);
+        }
+
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $dm->remove($collection);
+        $dm->flush();
 
         return new JsonResponse([
             'success' => true

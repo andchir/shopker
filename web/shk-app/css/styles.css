@@ -97,4 +97,4 @@ select.form-control:hover { box-shadow: 0 0 11px rgba(0, 0, 0, 0.3); }
 
 /* popover */
 .popover { box-shadow: 0 0 20px rgba(0,0,0,0.3); }
-
+.popover-body { min-width: 150px; }

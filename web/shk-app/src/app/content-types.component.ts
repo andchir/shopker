@@ -42,7 +42,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
     errorFieldMessage: string;
     action: string = 'add_field';
     currentFieldName = '';
-    collections = ['products'];
+    collections: any[] = ['products'];
     fieldForm: FormGroup;
     fieldTypes: FieldType[];
     inputFieldTypeProperties: FieldTypeProperty[] = [];
@@ -80,7 +80,8 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
             value: '',
             validators: [Validators.pattern('[A-Za-z0-9_-]+')],
             messages: {
-                pattern: 'The name must contain only Latin letters and numbers.'
+                pattern: 'The name must contain only Latin letters and numbers.',
+                exists: 'Collection with the same name already exists.'
             }
         },
         is_active: {
@@ -169,6 +170,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
     ngOnInit(): void {
         ModalContentAbstractComponent.prototype.ngOnInit.call(this);
         this.getFieldTypes();
+        this.getCollectionsList();
     }
 
     /** Get field types */
@@ -180,6 +182,18 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
                     this.fieldTypes = res.data;
                 },
                 error =>  this.errorMessage = <any>error
+            );
+    }
+
+    /** Get collections list */
+    getCollectionsList(): void {
+        this.collectionsService.getList()
+            .subscribe(
+                res => {
+                    if(res.data && res.data.length > 0){
+                        this.collections = res.data;
+                    }
+                }
             );
     }
 
@@ -213,17 +227,11 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
         if(!control.valid){
             return false;
         }
-        this.formErrors['fld_' + fieldName] = '';
+        this.formErrors[fieldName] = '';
         const value = control.value;
-        let exists = false;
-        for (let name of this.collections) {
-            if(value == name){
-                exists = true;
-                break;
-            }
-        }
-        if( exists ){
-            this.formErrors['fld_' + fieldName] += this.validationMessages['fld_' + fieldName].exists;
+
+        if( this.collections.indexOf(value) > -1){
+            this.formErrors[fieldName] += this.validationMessages[fieldName].exists;
             return false;
         }
         this.collections.push(value);
@@ -244,7 +252,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
         }
 
         let popoverContent: any;
-        popover.container = 'body';
+        //popover.container = 'body';
         popover.placement = 'top';
         popover.popoverTitle = 'Confirm';
 
@@ -253,7 +261,14 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
             this.collectionsService.deleteItemByName(this.model.collection)
                 .then((res) => {
                     if(res.success){
+
+                        let index = this.collections.indexOf(this.model.collection);
+                        if(index > -1){
+                            this.collections.splice(index, 1);
+                            this.model.collection = this.collections[0];
+                        }
                         popover.close();
+
                     } else {
                         if(res.msg){
                             popoverContent.message = res.msg;

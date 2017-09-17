@@ -6,7 +6,7 @@
         <div class="float-right">
             <a class="btn btn-primary" [routerLink]="['/catalog/content_types']">
                 <i class="icon-box"></i>
-                Типы товаров
+                Типы контента
             </a>
             <a class="btn btn-primary" [routerLink]="['/catalog/field_types']">
                 <i class="icon-toggle"></i>
@@ -32,9 +32,9 @@
                 </div>
             </div>
 
-            <button type="button" class="btn btn-outline-success" (click)="modalProductOpen()">
+            <button type="button" class="btn btn-outline-success d-inline-block btn-wide" (click)="modalOpen()">
                 <i class="icon-plus"></i>
-                Add product
+                Add
             </button>
 
         </div>
@@ -45,6 +45,6 @@
         </div>
     </div>
 
-    <cmp-table [items]="items" [collectionSize]="100" [tableFields]="tableFields" [queryOptions]="queryOptions" [(loading)]="loading" (actionRequest)="actionRequest($event)"></cmp-table>
+    <cmp-table [items]="items" [collectionSize]="collectionSize" [queryOptions]="queryOptions" [tableFields]="tableFields" [(loading)]="loading" (actionRequest)="actionRequest($event)"></cmp-table>
 
 </div>

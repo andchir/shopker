@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Pipe, PipeTransform } from '@angular/core';
-import { NgbModal, NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig  } from '@ng-bootstrap/ng-bootstrap';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CategoriesService } from './services/categories.service';
 import { ContentTypesService } from './services/content_types.service';
@@ -7,54 +7,80 @@ import { ProductsService } from './services/products.service';
 import { ContentType } from './models/content_type.model';
 import { Category } from "./models/category.model";
 import { Product } from "./models/product.model";
+import { QueryOptions } from './models/query-options';
 import { ContentField } from "./models/content_field.model";
 import { filterFieldByGroup } from "./filter-field-by-group.pipe";
+import { DataService } from './services/data-service.abstract';
+import { PageTableAbstractComponent, ModalContentAbstractComponent } from './page-table.abstract';
 import * as _ from "lodash";
 
 @Component({
-    selector: 'ngbd-modal-content',
+    selector: 'product-modal-content',
     templateUrl: 'templates/modal_product.html'
 })
-export class ProductModalContent implements OnInit {
-    @Input() modalTitle: string;
-    @Input() itemId: number;
-    @Input() category: Category;
-    submitted: boolean = false;
-    loading: boolean = false;
-    errorMessage: string;
-    model: Product;
-    contentTypes: ContentType[] = [];
-    currentContentType: ContentType = new ContentType(0,'','','','',[],[],true);
+export class ProductModalContent extends ModalContentAbstractComponent {
 
-    form: FormGroup;
-    formErrors = {
-        parent_id: '',
-        name: '',
-        title: '',
-        content_type: ''
+    @Input() category: Category;
+    contentTypes: ContentType[] = [];
+    currentContentType: ContentType = new ContentType(0, '', '', '', '', [], [], true);
+    model: Product = new Product(0, 0, '', '', '');
+
+    formFields = {
+        content_type: {
+            value: '',
+            validators: [],
+            messages: {}
+        }/*,
+        name: {
+            value: '',
+            validators: [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')],
+            messages: {
+                required: 'Name is required.',
+                pattern: 'The name must contain only Latin letters and numbers.'
+            }
+        },
+        title: {
+            value: '',
+            validators: [Validators.required],
+            messages: {
+                required: 'Title is required.'
+            }
+        },
+        description: {
+            value: '',
+            validators: [],
+            messages: {}
+        },
+        is_active: {
+            value: '',
+            validators: [],
+            messages: {}
+        }*/
     };
 
     constructor(
-        private fb: FormBuilder,
-        public activeModal: NgbActiveModal,
-        private contentTypesService: ContentTypesService,
-        private productsService: ProductsService
-    ) {}
+        fb: FormBuilder,
+        dataService: ProductsService,
+        activeModal: NgbActiveModal,
+        tooltipConfig: NgbTooltipConfig,
+        private contentTypesService: ContentTypesService
+    ) {
+        super(fb, dataService, activeModal, tooltipConfig);
+    }
 
     /** On initialize */
     ngOnInit(): void {
-        this.model = new Product(0,0,this.category.content_type,'','','',0);
 
         this.buildForm();
-        if( this.itemId ){
+        if(this.itemId){
 
-            this.getData();
+            this.getModelData();
 
         } else {
             this.getContentTypes()
                 .subscribe(
-                    items => {
-                        this.contentTypes = items;
+                    res => {
+                        this.contentTypes = res.data;
                         this.selectCurrentContentType();
                         this.updateForm();
                     },
@@ -64,63 +90,65 @@ export class ProductModalContent implements OnInit {
 
     buildForm(): void{
         let group: any = {};
-        group['content_type'] = new FormControl(this.category.content_type, Validators.required);
+        group.content_type = new FormControl(this.model.content_type, Validators.required);
         this.form = new FormGroup(group);
     }
 
     /** Build form */
     updateForm(data ?: any): void {
-        if( !data ){
+        if(!data){
             data = this.form.value;
         }
         let newKeys = _.map(this.currentContentType.fields, function(field){
             return field.name;
         });
-        newKeys.push( 'content_type' );
+        newKeys.push('content_type');
 
         //Remove keys
         for (let key in this.form.controls) {
             if (this.form.controls.hasOwnProperty(key)) {
-                if( newKeys.indexOf(key) === -1 ){
-                    this.form.removeControl( key );
+                if(newKeys.indexOf(key) === -1){
+                    this.form.removeControl(key);
                 }
             }
         }
 
         //Add new controls
         this.currentContentType.fields.forEach(field => {
-            if( !this.form.controls[ field.name ] ){
+            if (!this.form.controls[field.name]) {
                 let group = field.required
                     ? new FormControl(data[field.name] || '', Validators.required)
                     : new FormControl(data[field.name] || '');
-                this.form.addControl( field.name, group );
+                this.form.addControl(field.name, group);
             }
         });
     }
 
-    getData(): void {
+    getModelData(): void {
         this.loading = true;
 
-        this.productsService.getItem( this.itemId )
+        this.dataService.getItem(this.itemId)
             .then(data => {
                 return new Promise((resolve, reject) => {
                     this.getContentTypes()
-                        .subscribe(items => {
-                            this.contentTypes = items;
-                            resolve(data);
+                        .subscribe(res => {
+                            if(res.success){
+                                this.contentTypes = res.data;
+                                resolve(res.data);
+                            }
                         });
                 });
             })
             .then(data => {
-                this.setCurrentContentType( data.content_type );
-                this.updateForm( data );
+                this.setCurrentContentType(data.content_type);
+                this.updateForm(data);
                 this.loading = false;
             });
     }
 
     /** Select current content type */
     selectCurrentContentType(): void {
-        let index = _.findIndex( this.contentTypes, {name: this.form.get('content_type').value} );
+        let index = _.findIndex(this.contentTypes, {name: this.form.get('content_type').value});
         if( index == -1 ){
             index = 0;
         }
@@ -149,7 +177,8 @@ export class ProductModalContent implements OnInit {
 
     /** Get content types */
     getContentTypes(){
-        return this.contentTypesService.getList();
+        let queryOptions = new QueryOptions('name', 'asc', 1, 0, 1, 1);
+        return this.contentTypesService.getList(queryOptions);
     }
 
     /**
@@ -159,41 +188,49 @@ export class ProductModalContent implements OnInit {
     onValueChanged(data?: any){
         if (!this.form) { return; }
 
-        //console.log( 'onValueChange', data );
+        console.log('onValueChange', data);
 
     }
 
-    /** Submit form */
     onSubmit() {
+        if(!this.form.valid){
+            for(let key in this.form.controls){
+                if(!this.form.controls.hasOwnProperty(key)){
+                    continue;
+                }
+                this.form.controls[key].markAsDirty();
+            }
+        }
+    }
 
-        this.errorMessage = '';
+    save() {
         this.submitted = true;
 
-        if( !this.form.valid ){
-            this.onValueChanged();
-            this.errorMessage = 'Please fix the errors fill.';
+        this.onSubmit();
+
+        console.log('SAVE', this.form.value);
+
+        if (!this.form.valid) {
+            this.submitted = false;
             return;
         }
 
-        let data = this.form.value;
-        data.parent_id = this.category.id;
-
-        //TODO: write code for update
-        this.productsService.createItem( data )
-            .then((res) => {
-                if( res.success ){
-                    this.closeModal();
-                } else {
-                    if( res.msg ){
-                        this.errorMessage = res.msg;
-                    }
+        let callback = function(res: any){
+            if(res.success){
+                this.closeModal();
+            } else {
+                if(res.msg){
+                    this.submitted = false;
+                    this.errorMessage = res.msg;
                 }
-            });
-    }
+            }
+        };
 
-    /** Close modal */
-    closeModal() {
-        let reason = this.itemId ? 'edit' : 'create';
-        this.activeModal.close( { reason: reason, data: this.model } );
+        if(this.model.id){
+            this.dataService.update(this.model).then(callback.bind(this));
+        } else {
+            this.dataService.create(this.model).then(callback.bind(this));
+        }
+
     }
 }

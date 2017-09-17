@@ -67,6 +67,9 @@ export abstract class ModalContentAbstractComponent implements OnInit {
     buildControls(options: {}, modelName: string, keyPrefix: string = ''): {[s: string]: FormControl;} {
         let controls = {};
         for (let key in options) {
+            if(!options.hasOwnProperty(key)){
+                continue;
+            }
             let opts = options[key];
             if(!this[modelName][key]){
                 this[modelName][key] = opts.value;
@@ -128,23 +131,15 @@ export abstract class PageTableAbstractComponent implements OnInit {
     collectionSize = 0;
     queryOptions: QueryOptions = new QueryOptions('name', 'asc', 1, 10, 0, 0);
 
-    public dataService: DataService;
-    private activeModal: NgbActiveModal;
-    private modalService: NgbModal;
-    private titleService: Title;
-
     abstract getModalContent();
 
     constructor(
-        dataService: DataService,
-        activeModal: NgbActiveModal,
-        modalService: NgbModal,
-        titleService: Title
+        public dataService: DataService,
+        public activeModal: NgbActiveModal,
+        public modalService: NgbModal,
+        public titleService: Title
     ) {
-        this.dataService = dataService;
-        this.activeModal = activeModal;
-        this.modalService = modalService;
-        this.titleService = titleService;
+
     }
 
     ngOnInit(): void {

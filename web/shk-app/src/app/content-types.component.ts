@@ -440,7 +440,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
 })
 export class ContentTypesComponent extends PageTableAbstractComponent {
 
-    title: string = 'Типы товаров';
+    title: string = 'Типы контента';
 
     constructor(
         dataService: ContentTypesService,

@@ -7,7 +7,7 @@
     <h4 class="modal-title">{{modalTitle}}</h4>
 </div>
 
-<form (ngSubmit)="onSubmit()" [formGroup]="form" [class.loading]="loading">
+<form [formGroup]="form" [class.loading]="loading">
     <div class="modal-body">
 
         <div class="row form-group" [class.form-group-message]="formErrors.content_type">
@@ -15,7 +15,7 @@
                 <label for="fieldContentType">Тип контента</label>
             </div>
             <div class="col-md-7">
-                <select id="fieldContentType" class="form-control" name="content_type" formControlName="content_type" (change)="onChangeContentType()">
+                <select id="fieldContentType" class="form-control" name="content_type" formControlName="content_type" [(ngModel)]="model.content_type" (change)="onChangeContentType()">
                     <option value="1" *ngFor="let contentType of contentTypes" [value]="contentType.name">{{contentType.title}}</option>
                 </select>
                 <div *ngIf="formErrors.content_type" class="alert alert-danger">
@@ -24,29 +24,12 @@
             </div>
         </div>
 
-        <ngb-tabset>
+        <ngb-tabset justify="fill">
             <ngb-tab title="{{groupName}}" id="{{i + 1}}" *ngFor="let groupName of currentContentType.groups; let i=index">
                 <ng-template ngbTabContent>
                     <div class="pt-3">
 
-                        <div class="row form-group" *ngFor="let field of currentContentType.fields | filterFieldByGroup: groupName">
-                            <div class="col-md-5">
-                                <label for="field_{{field.name}}">{{ field.title }}</label>
-                            </div>
-                            <div class="col-md-7" [ngSwitch]="field.input_type">
-
-                                <input *ngSwitchCase="'text'" type="text" id="field_{{field.name}}" class="form-control" [formControlName]="field.name">
-
-                                <input *ngSwitchCase="'name'" type="text" id="field_{{field.name}}" class="form-control" [formControlName]="field.name">
-
-                                <input *ngSwitchCase="'number'" type="number" id="field_{{field.name}}" min="0" class="form-control" [formControlName]="field.name">
-
-                                <textarea *ngSwitchCase="'textarea'" rows="6" id="field_{{field.name}}" class="form-control" [formControlName]="field.name"></textarea>
-
-                                <input *ngSwitchCase="'image'" type="file" id="field_{{field.name}}" class="form-control" [formControlName]="field.name">
-
-                            </div>
-                        </div>
+                        <input-field [fields]="currentContentType.fields" [filterGroupName]="groupName" [(model)]="model" [(form)]="form"></input-field>
 
                     </div>
                 </ng-template>
@@ -61,12 +44,14 @@
         </div>
 
     </div>
+
     <div class="modal-footer d-block">
-        <button type="submit" class="btn btn-success btn-wide">
+        <button type="button" class="btn btn-success btn-wide" [disabled]="submitted" (click)="save()">
             Save
         </button>
-        <button type="submit" class="btn btn-secondary btn-wide" (click)="activeModal.dismiss()">
+        <button type="button" class="btn btn-secondary btn-wide" (click)="activeModal.dismiss()">
             Cancel
         </button>
     </div>
+
 </form>

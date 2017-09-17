@@ -5,7 +5,7 @@ export class Product {
         public content_type: string,
         public name: string,
         public title: string,
-        public description: string,
-        public price: number
+        public description?: string,
+        public price?: number
     ) { }
 }

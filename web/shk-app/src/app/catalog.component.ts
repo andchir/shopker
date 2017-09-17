@@ -8,23 +8,29 @@ import { ProductModalContent } from './product.component';
 import { Category } from "./models/category.model";
 import { Product } from "./models/product.model";
 import { QueryOptions } from './models/query-options';
+import { PageTableAbstractComponent, ModalContentAbstractComponent } from './page-table.abstract'
 import * as _ from "lodash";
 import { ProductsService } from "./services/products.service";
 
 @Component({
     selector: 'shk-catalog',
-    templateUrl: 'templates/page-catalog.html'
+    templateUrl: 'templates/page-catalog.html',
+    providers: [ ProductsService ]
 })
-export class CatalogComponent implements OnInit {
-    title = 'Каталог';
-    errorMessage: string = '';
-    modalRef: NgbModalRef;
-    loading: boolean = false;
+export class CatalogComponent extends PageTableAbstractComponent {
+
+    title: string = 'Каталог';
     categories: Category[] = [];
     currentCategory: Category;
-    items: Product[] = [];
-    selectedIds: number[] = [];
-    queryOptions: QueryOptions = new QueryOptions('name', 'asc', 1, 10, 0);
+
+    constructor(
+        dataService: ProductsService,
+        activeModal: NgbActiveModal,
+        modalService: NgbModal,
+        titleService: Title
+    ) {
+        super(dataService, activeModal, modalService, titleService);
+    }
 
     //TODO: get from settings
     //TODO: add field format option
@@ -56,16 +62,20 @@ export class CatalogComponent implements OnInit {
         }
     ];
 
-    constructor(
-        public router: Router,
-        private modalService: NgbModal,
-        private titleService: Title,
-        private categoriesService: CategoriesService,
-        private productsService: ProductsService
-    ) {}
+    // constructor(
+    //     public router: Router,
+    //     private modalService: NgbModal,
+    //     private titleService: Title,
+    //     private categoriesService: CategoriesService,
+    //     private productsService: ProductsService
+    // ) {}
 
-    ngOnInit(): void {
-        this.setTitle( this.title );
+    // ngOnInit(): void {
+    //     this.setTitle( this.title );
+    // }
+
+    getModalContent(){
+        return ProductModalContent;
     }
 
     openCategory( category: Category ): void {
@@ -81,58 +91,58 @@ export class CatalogComponent implements OnInit {
     }
 
     getProducts(): void{
-        this.loading = true;
-        this.productsService.getList(this.currentCategory.id)
-            .subscribe(
-                items => {
-                    this.items = items;
-                    this.loading = false;
-                },
-                error =>  this.errorMessage = <any>error
-            );
+        // this.loading = true;
+        // this.productsService.getList(this.currentCategory.id)
+        //     .subscribe(
+        //         items => {
+        //             this.items = items;
+        //             this.loading = false;
+        //         },
+        //         error =>  this.errorMessage = <any>error
+        //     );
     }
 
-    modalProductOpen( itemId?: number ) {
-        this.modalRef = this.modalService.open(ProductModalContent, {size: 'lg'});
-        this.modalRef.componentInstance.modalTitle = 'Add product';
-        this.modalRef.componentInstance.itemId = itemId || 0;
-        this.modalRef.componentInstance.category = this.currentCategory;
-        this.modalRef.result.then((result) => {
-            if( result.reason && result.reason == 'edit' ){
+    // modalProductOpen( itemId?: number ) {
+    //     this.modalRef = this.modalService.open(ProductModalContent, {size: 'lg'});
+    //     this.modalRef.componentInstance.modalTitle = 'Add product';
+    //     this.modalRef.componentInstance.itemId = itemId || 0;
+    //     this.modalRef.componentInstance.category = this.currentCategory;
+    //     this.modalRef.result.then((result) => {
+    //         if( result.reason && result.reason == 'edit' ){
+    //
+    //         } else {
+    //             this.getProducts();
+    //         }
+    //     }, (reason) => {
+    //
+    //     });
+    // }
 
-            } else {
-                this.getProducts();
-            }
-        }, (reason) => {
+    // public setTitle( newTitle: string ): void {
+    //     this.titleService.setTitle( newTitle );
+    // }
+    //
+    // selectAll( event ): void{
+    //     this.selectedIds = [];
+    //     if( event.target.checked ){
+    //         for( let item of this.items ){
+    //             this.selectedIds.push( item.id );
+    //         }
+    //     }
+    // }
 
-        });
-    }
-
-    public setTitle( newTitle: string ): void {
-        this.titleService.setTitle( newTitle );
-    }
-
-    selectAll( event ): void{
-        this.selectedIds = [];
-        if( event.target.checked ){
-            for( let item of this.items ){
-                this.selectedIds.push( item.id );
-            }
-        }
-    }
-
-    actionRequest(actionValue : [string, number]): void {
-        switch(actionValue[0]){
-            case 'edit':
-                this.modalProductOpen(actionValue[1]);
-                break;
-            case 'copy':
-                //this.modalProductOpen(actionValue[1], true);
-                break;
-            case 'delete':
-                //this.deleteItemConfirm(actionValue[1]);
-                break;
-        }
-    }
+    // actionRequest(actionValue : [string, number]): void {
+    //     switch(actionValue[0]){
+    //         case 'edit':
+    //             this.modalProductOpen(actionValue[1]);
+    //             break;
+    //         case 'copy':
+    //             //this.modalProductOpen(actionValue[1], true);
+    //             break;
+    //         case 'delete':
+    //             //this.deleteItemConfirm(actionValue[1]);
+    //             break;
+    //     }
+    // }
 
 }

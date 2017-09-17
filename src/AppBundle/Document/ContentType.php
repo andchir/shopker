@@ -227,7 +227,7 @@ class ContentType
             'collection' => $this->getCollection(),
             'is_active' => $this->getIsActive()
         ];
-        if( $full ){
+        if($full){
             $output = array_merge($output, [
                 'groups' => $this->getGroups(),
                 'fields' => $this->getFields()

@@ -11,11 +11,10 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export abstract class DataService {
 
-    private http: Http;
-    private headers = new Headers({'Content-Type': 'application/json'});
+    public headers = new Headers({'Content-Type': 'application/json'});
     private requestUrl = '';
 
-    constructor(http: Http) {
+    constructor(public http: Http) {
         this.http = http;
         this.requestUrl = 'app/data_list';
     }
@@ -24,6 +23,10 @@ export abstract class DataService {
 
     setRequestUrl(url){
         this.requestUrl = url;
+    }
+
+    getRequestUrl(){
+        return this.requestUrl;
     }
 
     getItem(id: string): Promise<any> {
@@ -72,7 +75,7 @@ export abstract class DataService {
             .catch(this.handleError);
     }
 
-    private handleError (error: Response | any) {
+    handleError (error: Response | any) {
         let errMsg: string;
         if (error instanceof Response) {
             const body = error.json() || '';

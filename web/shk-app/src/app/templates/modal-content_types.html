@@ -7,6 +7,15 @@
     <h4 class="modal-title">{{modalTitle}}</h4>
 </div>
 
+<ng-template #confirmPopover let-confirm="confirm" let-p="p" let-msg="message">
+    <p class="text-center">Delete this item?</p>
+    <div class="alert alert-danger p-2" *ngIf="msg">{{msg}}</div>
+    <div class="text-center">
+        <button type="button" class="btn btn-success btn-sm" (click)="confirm()">Yes</button>
+        <button type="button" class="btn btn-secondary btn-sm" (click)="p.close()">No</button>
+    </div>
+</ng-template>
+
 <form [class.loading]="loading">
 
     <div class="modal-body">
@@ -58,7 +67,7 @@
                                     </button>
                                 </div>
                                 <div class="input-group-btn">
-                                    <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Delete collection" (click)="deleteCollection()">
+                                    <button type="button" class="btn btn-secondary btn-sm" [ngbPopover]="confirmPopover" #buttonDeleteCollection="ngbPopover" triggers="manual" (click)="deleteCollection(buttonDeleteCollection)">
                                         <i class="icon-cross"></i>
                                     </button>
                                 </div>
@@ -92,7 +101,7 @@
                             <label class="custom-control custom-checkbox m-0">
                                 <input type="checkbox" class="custom-control-input" value="1" name="is_active" formControlName="is_active" [(ngModel)]="model.is_active">
                                 <span class="custom-control-indicator"></span>
-                                <span>Активный?</span>
+                                <span>Активный</span>
                             </label>
 
                         </div>
@@ -404,8 +413,8 @@
                                     {{field.group}}
                                 </td>
                             </tr>
-                            <tr [hidden]="model.fields.length > 0" class="table-warning">
-                                <td colspan="4" class="text-center">
+                            <tr [hidden]="model.fields.length > 0" class="table-active">
+                                <td colspan="4" class="text-center p-3">
                                     Empty
                                 </td>
                             </tr>

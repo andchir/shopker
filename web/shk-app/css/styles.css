@@ -95,3 +95,6 @@ select.form-control:hover { box-shadow: 0 0 11px rgba(0, 0, 0, 0.3); }
 .dropdown-menu-hover .dropdown-item.active > a { color: #fff; }
 .dropdown-menu-hover .current-level { background-color: rgba(0,0,0,.1); }
 
+/* popover */
+.popover { box-shadow: 0 0 20px rgba(0,0,0,0.3); }
+

@@ -1,8 +1,9 @@
 import { Component, OnInit, Input, ViewChild, Injectable, ElementRef } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbActiveModal, NgbModalRef, NgbPopover, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { ContentTypesService } from './services/content_types.service';
 import { FieldTypesService } from './field-types.component';
+import { CollectionsService } from './services/collections.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ContentField } from './models/content_field.model';
 import { ContentType } from './models/content_type.model';
@@ -15,19 +16,22 @@ import * as _ from "lodash";
 @Component({
     selector: 'content-type-modal-content',
     templateUrl: 'templates/modal-content_types.html',
-    providers: [ ContentTypesService, FieldTypesService ]
+    providers: [ ContentTypesService, FieldTypesService, CollectionsService ]
 })
 export class ContentTypeModalContent extends ModalContentAbstractComponent {
 
     @ViewChild('addCollectionBlock') elementAddCollectionBlock;
     @ViewChild('addGroupBlock') elementAddGroupBlock;
+    modalRef: NgbModalRef;
 
     constructor(
         public fb: FormBuilder,
         public dataService: ContentTypesService,
         public activeModal: NgbActiveModal,
         public tooltipConfig: NgbTooltipConfig,
-        private fieldTypesService: FieldTypesService
+        private fieldTypesService: FieldTypesService,
+        private collectionsService: CollectionsService,
+        private modalService: NgbModal
     ) {
         super(fb, dataService, activeModal, tooltipConfig);
     }
@@ -204,34 +208,68 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
 
     /** Add collection */
     addCollection(){
-        // const fieldName = 'new_collection';
-        // const control = this.contentTypeForm.get(fieldName);
-        // if( !control.valid ){
-        //     return false;
-        // }
-        // this.formErrors.contentType[fieldName] = '';
-        // const value = control.value;
-        // let exists = false;
-        // for (let name of this.collections) {
-        //     if(value == name){
-        //         exists = true;
-        //         break;
-        //     }
-        // }
-        // if( exists ){
-        //     this.formErrors.contentType[fieldName] += this.validationMessages.contentType[fieldName].exists;
-        //     return false;
-        // }
-        // this.collections.push( value );
-        // this.elementAddCollectionBlock.nativeElement.style.display = 'none';
-        // return true;
+        const fieldName = 'new_collection';
+        const control = this.form.get(fieldName);
+        if(!control.valid){
+            return false;
+        }
+        this.formErrors['fld_' + fieldName] = '';
+        const value = control.value;
+        let exists = false;
+        for (let name of this.collections) {
+            if(value == name){
+                exists = true;
+                break;
+            }
+        }
+        if( exists ){
+            this.formErrors['fld_' + fieldName] += this.validationMessages['fld_' + fieldName].exists;
+            return false;
+        }
+        this.collections.push(value);
+        this.model.collection = value;
+        this.elementAddCollectionBlock.nativeElement.style.display = 'none';
+        return true;
     }
 
     /** Delete collection */
-    deleteCollection(){
+    deleteCollection(popover: NgbPopover){
+        if(!this.model.collection){
+            return;
+        }
 
-        console.log( 'deleteCollection' );
+        if(popover.isOpen()){
+            popover.close();
+            return;
+        }
 
+        let popoverContent: any;
+        popover.container = 'body';
+        popover.placement = 'top';
+        popover.popoverTitle = 'Confirm';
+
+        let confirm = function(){
+            this.loading = true;
+            this.collectionsService.deleteItemByName(this.model.collection)
+                .then((res) => {
+                    if(res.success){
+                        popover.close();
+                    } else {
+                        if(res.msg){
+                            popoverContent.message = res.msg;
+                        }
+                    }
+                    this.loading = false;
+                });
+        };
+
+        popoverContent = {
+            p: popover,
+            confirm: confirm.bind(this),
+            message: ''
+        };
+
+        popover.open(popoverContent);
     }
 
     /** Add group */
@@ -248,7 +286,8 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
             this.formErrors['fld_'+fieldName] += this.validationMessages['fld_'+fieldName].exists;
             return false;
         }
-        this.model.groups.push( value );
+        this.model.groups.push(value);
+        this.fieldModel.group = value;
         this.elementAddGroupBlock.nativeElement.style.display = 'none';
         return true;
     }
@@ -273,11 +312,11 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
      * @param field
      */
     editField(field: ContentField) {
+        this.action = 'edit_field';
         this.fieldModel = _.clone(field);
         this.fieldForm.setValue(_.omit(this.fieldModel, ['id', 'input_type_options', 'output_type_options']));
         this.currentFieldName = this.fieldModel.name;
         this.fld_submitted = false;
-        this.action = 'edit_field';
     }
 
     /**
@@ -285,12 +324,12 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
      * @param field
      */
     copyField(field: ContentField) {
+        this.action = 'add_field';
         this.fieldModel = _.clone(field);
         this.fieldModel.name = '';
         this.fieldForm.setValue(this.fieldModel);
         this.currentFieldName = '';
         this.fld_submitted = false;
-        this.action = 'add_field';
     }
 
     /**
@@ -308,11 +347,11 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
 
     /** Reset field form */
     resetFieldForm(){
+        this.action = 'add_field';
         this.errorMessage = '';
         this.errorFieldMessage = '';
         this.fld_submitted = false;
         this.currentFieldName = '';
-        this.action = 'add_field';
         this.fieldForm.reset();
     }
 
@@ -353,8 +392,6 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
 
     save() {
         this.submitted = true;
-
-        console.log('SAVE', this.form.value);
 
         if(!this.form.valid){
             this.onValueChanged('form');

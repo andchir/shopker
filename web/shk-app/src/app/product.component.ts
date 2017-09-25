@@ -1,9 +1,6 @@
 import { Component, OnInit, Input, Pipe, PipeTransform } from '@angular/core';
 import { NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig  } from '@ng-bootstrap/ng-bootstrap';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { CategoriesService } from './services/categories.service';
-import { ContentTypesService } from './services/content_types.service';
-import { ProductsService } from './services/products.service';
 import { ContentType } from './models/content_type.model';
 import { Category } from "./models/category.model";
 import { Product } from "./models/product.model";
@@ -14,9 +11,15 @@ import { DataService } from './services/data-service.abstract';
 import { PageTableAbstractComponent, ModalContentAbstractComponent } from './page-table.abstract';
 import * as _ from "lodash";
 
+import { CategoriesService } from './services/categories.service';
+import { ContentTypesService } from './services/content_types.service';
+import { ProductsService } from './services/products.service';
+import { SystemNameService } from './services/system-name.service';
+
 @Component({
     selector: 'product-modal-content',
-    templateUrl: 'templates/modal_product.html'
+    templateUrl: 'templates/modal_product.html',
+    providers: [ SystemNameService ]
 })
 export class ProductModalContent extends ModalContentAbstractComponent {
 
@@ -61,11 +64,12 @@ export class ProductModalContent extends ModalContentAbstractComponent {
     constructor(
         fb: FormBuilder,
         dataService: ProductsService,
+        systemNameService: SystemNameService,
         activeModal: NgbActiveModal,
         tooltipConfig: NgbTooltipConfig,
         private contentTypesService: ContentTypesService
     ) {
-        super(fb, dataService, activeModal, tooltipConfig);
+        super(fb, dataService, systemNameService, activeModal, tooltipConfig);
     }
 
     /** On initialize */

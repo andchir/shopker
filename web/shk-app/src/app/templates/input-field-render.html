@@ -7,7 +7,14 @@
     </div>
     <div class="col-md-7" [ngSwitch]="field.input_type">
 
-        <input *ngSwitchCase="'system_name'" type="text" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control">
+        <div class="input-group" *ngSwitchCase="'system_name'">
+            <input type="text" class="form-control form-control-sm" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control">
+            <div class="input-group-btn">
+                <button type="button" class="btn btn-secondary" ngbTooltip="Generate" (click)="generateName(model)">
+                    <i class="icon-reload"></i>
+                </button>
+            </div>
+        </div>
 
         <input *ngSwitchCase="'text'" type="text" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control">
 

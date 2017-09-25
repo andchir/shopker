@@ -1,22 +1,25 @@
 import { Component, OnInit, Input, ViewChild, Injectable, ElementRef } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { NgbModal, NgbActiveModal, NgbModalRef, NgbPopover, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
-import { ContentTypesService } from './services/content_types.service';
+import * as _ from "lodash";
+
 import { FieldTypesService } from './field-types.component';
-import { CollectionsService } from './services/collections.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ContentField } from './models/content_field.model';
 import { ContentType } from './models/content_type.model';
 import { FieldType } from "./models/field-type.model";
 import { FieldTypeProperty } from './models/field-type-property.model';
 import { QueryOptions } from './models/query-options';
 import { PageTableAbstractComponent, ModalContentAbstractComponent } from './page-table.abstract';
-import * as _ from "lodash";
+
+import { ContentTypesService } from './services/content_types.service';
+import { CollectionsService } from './services/collections.service';
+import { SystemNameService } from './services/system-name.service';
 
 @Component({
     selector: 'content-type-modal-content',
     templateUrl: 'templates/modal-content_types.html',
-    providers: [ ContentTypesService, FieldTypesService, CollectionsService ]
+    providers: [ ContentTypesService, FieldTypesService, CollectionsService, SystemNameService ]
 })
 export class ContentTypeModalContent extends ModalContentAbstractComponent {
 
@@ -27,13 +30,14 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
     constructor(
         public fb: FormBuilder,
         public dataService: ContentTypesService,
+        public systemNameService: SystemNameService,
         public activeModal: NgbActiveModal,
         public tooltipConfig: NgbTooltipConfig,
         private fieldTypesService: FieldTypesService,
         private collectionsService: CollectionsService,
         private modalService: NgbModal
     ) {
-        super(fb, dataService, activeModal, tooltipConfig);
+        super(fb, dataService, systemNameService, activeModal, tooltipConfig);
     }
 
     model: ContentType = new ContentType(0, '', '', '', 'products', [], ['Основное','Служебное'], true);
@@ -199,9 +203,13 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
 
     /**
      * Select field type properties
-     * @param type
+     * @param {string} type
+     * @param {string} fieldTypeName
      */
-    selectFieldTypeProperties(type: string): void {
+    selectFieldTypeProperties(type: string, fieldTypeName?: string): void {
+        if(fieldTypeName){
+            this.fieldModel[type] = fieldTypeName;
+        }
         let fieldType = _.find(this.fieldTypes, {name: this.fieldModel[type]});
         if(!fieldType){
             if(type == 'input_type'){
@@ -214,9 +222,15 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
         }
         if(type == 'input_type'){
             this.inputFieldTypeProperties = _.clone(fieldType.inputProperties);
+            if(!this.fieldModel.output_type){
+                this.selectFieldTypeProperties('output_type', this.fieldModel[type]);
+            }
         }
         else if(type == 'output_type'){
             this.outputFieldTypeProperties = _.clone(fieldType.outputProperties);
+            if(!this.fieldModel.input_type){
+                this.selectFieldTypeProperties('input_type', this.fieldModel[type]);
+            }
         }
     }
 

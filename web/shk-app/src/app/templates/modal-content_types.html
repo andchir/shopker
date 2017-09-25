@@ -144,10 +144,19 @@
                                 <label>Системное имя</label>
                             </div>
                             <div class="col-md-7">
-                                <input type="text" class="form-control form-control-sm" name="field_name" formControlName="name" [(ngModel)]="fieldModel.name">
+
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-control-sm" name="field_name" formControlName="name" [(ngModel)]="fieldModel.name">
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Generate" (click)="generateName(fieldModel)">
+                                            <i class="icon-reload"></i>
+                                        </button>
+                                    </div>
+                                </div>
                                 <div *ngIf="formErrors.fld_name" class="alert alert-danger">
                                     {{formErrors.fld_name}}
                                 </div>
+
                             </div>
                         </div>
 
@@ -168,6 +177,7 @@
 
                                 <div class="input-group">
                                     <select class="form-control form-control-sm" name="field_input_type" formControlName="input_type" [(ngModel)]="fieldModel.input_type" (ngModelChange)="selectFieldTypeProperties('input_type')">
+                                        <option value=""></option>
                                         <option value="{{fieldType.name}}" *ngFor="let fieldType of fieldTypes">{{fieldType.title}}</option>
                                     </select>
                                     <div class="input-group-btn">
@@ -212,6 +222,7 @@
 
                                 <div class="input-group">
                                     <select class="form-control form-control-sm" name="field_output_type" formControlName="output_type" [(ngModel)]="fieldModel.output_type"  (ngModelChange)="selectFieldTypeProperties('output_type')">
+                                        <option value=""></option>
                                         <option value="{{fieldType.name}}" *ngFor="let fieldType of fieldTypes">{{fieldType.title}}</option>
                                     </select>
                                     <div class="input-group-btn">

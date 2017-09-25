@@ -12,18 +12,27 @@
     <form #formElement="ngForm" [formGroup]="form">
         <div class="row">
             <div class="col-md-6">
-                <div class="form-group" [class.form-group-message]="formErrors.name">
-                    <label for="fieldName" class="label-filled">Системное имя</label>
-                    <input type="text" class="form-control" name="name" formControlName="name" id="fieldName" [(ngModel)]="model.name">
-                    <div *ngIf="formErrors.name" class="alert alert-danger">
-                        {{formErrors.name}}
-                    </div>
-                </div>
+
                 <div class="form-group form-group-message" [class.form-group-message]="formErrors.title">
                     <label for="fieldTitle" class="label-filled">Название</label>
                     <input type="text" class="form-control" name="title" formControlName="title" id="fieldTitle" [(ngModel)]="model.title">
                     <div *ngIf="formErrors.title" class="alert alert-danger">
                         {{formErrors.title}}
+                    </div>
+                </div>
+
+                <div class="form-group" [class.form-group-message]="formErrors.name">
+                    <label for="fieldName" class="label-filled">Системное имя</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="name" formControlName="name" id="fieldName" [(ngModel)]="model.name">
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-secondary" ngbTooltip="Generate" (click)="generateName(model)">
+                                <i class="icon-reload"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div *ngIf="formErrors.name" class="alert alert-danger">
+                        {{formErrors.name}}
                     </div>
                 </div>
 

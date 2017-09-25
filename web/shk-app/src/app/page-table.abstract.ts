@@ -2,9 +2,11 @@ import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { DataService } from './services/data-service.abstract';
 import { QueryOptions } from './models/query-options';
 import { AlertModalContent, ConfirmModalContent } from './app.component';
+
+import { DataService } from './services/data-service.abstract';
+import { SystemNameService } from './services/system-name.service';
 
 @Component({
 
@@ -28,6 +30,7 @@ export abstract class ModalContentAbstractComponent implements OnInit {
     constructor(
         public fb: FormBuilder,
         public dataService: DataService,
+        public systemNameService: SystemNameService,
         public activeModal: NgbActiveModal,
         public tooltipConfig: NgbTooltipConfig
     ) {
@@ -104,6 +107,11 @@ export abstract class ModalContentAbstractComponent implements OnInit {
     displayToggle(element: HTMLElement, display?: boolean): void {
         display = display || element.style.display == 'none';
         element.style.display = display ? 'block' : 'none';
+    }
+
+    generateName(model): void {
+        let title = model.title || '';
+        model.name = this.systemNameService.generateName(title);
     }
 
     /** Close modal */

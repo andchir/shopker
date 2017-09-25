@@ -7,6 +7,7 @@ import { FieldType } from './models/field-type.model';
 import { FieldTypeProperty } from './models/field-type-property.model';
 
 import { DataService } from './services/data-service.abstract';
+import { SystemNameService } from './services/system-name.service';
 import { PageTableAbstractComponent, ModalContentAbstractComponent } from './page-table.abstract';
 
 @Injectable()
@@ -33,7 +34,7 @@ export class FieldTypesService extends DataService {
 @Component({
     selector: 'field-type-modal-content',
     templateUrl: 'templates/modal-field_type.html',
-    providers: [ FieldTypesService ]
+    providers: [ FieldTypesService, SystemNameService ]
 })
 export class FieldTypeModalContent extends ModalContentAbstractComponent {
 
@@ -70,10 +71,11 @@ export class FieldTypeModalContent extends ModalContentAbstractComponent {
     constructor(
         fb: FormBuilder,
         dataService: FieldTypesService,
+        systemNameService: SystemNameService,
         activeModal: NgbActiveModal,
         tooltipConfig: NgbTooltipConfig
     ) {
-        super(fb, dataService, activeModal, tooltipConfig);
+        super(fb, dataService, systemNameService, activeModal, tooltipConfig);
     }
 
     addRow(type: string){

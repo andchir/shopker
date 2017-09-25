@@ -22,7 +22,7 @@
     "@angular/platform-browser": "^4.2.3",
     "@angular/platform-browser-dynamic": "^4.2.3",
     "@angular/router": "^4.2.3",
-    "@ng-bootstrap/ng-bootstrap": "^1.0.0-alpha.24",
+    "@ng-bootstrap/ng-bootstrap": "^1.0.0-beta.5",
     "@types/jquery": "^2.0.47",
     "@types/lodash": "^4.14.66",
     "@types/node": "^6.0.78",

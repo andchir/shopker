@@ -2,9 +2,12 @@ import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef }
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { ContentField } from "./models/content_field.model";
 
+import { SystemNameService } from './services/system-name.service';
+
 @Component({
     selector: 'input-field',
-    templateUrl: 'templates/input-field-render.html'
+    templateUrl: 'templates/input-field-render.html',
+    providers: [ SystemNameService ]
 })
 export class InputFieldComponent implements OnInit {
 
@@ -14,6 +17,12 @@ export class InputFieldComponent implements OnInit {
     @Input() form: FormGroup;
     //@Output() modelChange = new EventEmitter<number>();
     //@Output() formChange = new EventEmitter<number>();
+
+    constructor(
+        private systemNameService: SystemNameService
+    ) {
+
+    }
 
     formErrors = {};
     validationMessages = {};
@@ -68,6 +77,11 @@ export class InputFieldComponent implements OnInit {
                 }
             }
         }
+    }
+
+    generateName(model): void {
+        let title = model.title || '';
+        model.name = this.systemNameService.generateName(title);
     }
 
 }

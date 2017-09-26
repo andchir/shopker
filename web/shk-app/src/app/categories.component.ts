@@ -273,8 +273,10 @@ export class CategoriesMenuComponent implements OnInit {
     getCategories(): void {
         this.categoriesService.getList()
             .subscribe(
-                items => {
-                    this.categories = items;
+                res => {
+                    if(res.success){
+                        this.categories = res.data;
+                    }
                     this.selectCurrent();
                 },
                 error =>  this.errorMessage = <any>error

@@ -735,8 +735,10 @@ var CategoriesMenuComponent = (function () {
     CategoriesMenuComponent.prototype.getCategories = function () {
         var _this = this;
         this.categoriesService.getList()
-            .subscribe(function (items) {
-            _this.categories = items;
+            .subscribe(function (res) {
+            if (res.success) {
+                _this.categories = res.data;
+            }
             _this.selectCurrent();
         }, function (error) { return _this.errorMessage = error; });
     };

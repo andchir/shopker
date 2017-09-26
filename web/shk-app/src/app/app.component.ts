@@ -44,5 +44,6 @@ export class AppComponent {
     constructor(tooltipConfig: NgbTooltipConfig) {
         tooltipConfig.placement = 'bottom';
         tooltipConfig.container = 'body';
+        tooltipConfig.triggers = 'hover click';
     }
 }

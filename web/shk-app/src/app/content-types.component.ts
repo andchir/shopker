@@ -390,6 +390,18 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
         this.onValueChanged('fieldForm', 'fld_');
     }
 
+    fieldMove(index: number, direction: string): void{
+        if((direction == 'up' && index === 0)
+            || (direction == 'down' && index === this.model.fields.length - 1)){
+            return;
+        }
+        let newIndex = direction == 'up' ? index - 1 : index + 1;
+        let field = this.model.fields[index];
+
+        this.model.fields.splice(index, 1);
+        this.model.fields.splice(newIndex, 0, field);
+    }
+
     /** Submit field */
     submitField() {
         this.fld_submitted = true;

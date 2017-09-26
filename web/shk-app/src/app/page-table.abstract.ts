@@ -36,6 +36,7 @@ export abstract class ModalContentAbstractComponent implements OnInit {
     ) {
         tooltipConfig.placement = 'bottom';
         tooltipConfig.container = 'body';
+        tooltipConfig.triggers = 'hover click';
     }
 
     ngOnInit(): void {

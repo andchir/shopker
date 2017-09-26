@@ -399,7 +399,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="show-on-hover-parent" *ngFor="let field of model.fields">
+                            <tr class="show-on-hover-parent" *ngFor="let field of model.fields; let index=index">
                                 <td>
                                     {{field.title}}
                                 </td>
@@ -412,6 +412,12 @@
                                 <td>
                                     <div class="relative">
                                         <div class="show-on-hover">
+                                            <button type="button" class="btn btn-secondary btn-sm" (click)="fieldMove(index, 'up')" ngbTooltip="Move up" *ngIf="index > 0">
+                                                <i class="icon-arrow-up"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-secondary btn-sm" (click)="fieldMove(index, 'down')" ngbTooltip="Move down" *ngIf="index < model.fields.length - 1">
+                                                <i class="icon-arrow-down"></i>
+                                            </button>
                                             <button type="button" class="btn btn-secondary btn-sm" (click)="displayToggle(fieldsBlock); editField(field)" [hidden]="field.name == currentFieldName" ngbTooltip="Edit">
                                                 <i class="icon-pencil"></i>
                                             </button>

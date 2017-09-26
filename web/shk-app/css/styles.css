@@ -46,7 +46,7 @@ select.form-control:hover { box-shadow: 0 0 11px rgba(0, 0, 0, 0.3); }
 .modal .modal-dialog { box-shadow: 0 0 20px rgba(0,0,0,0.5); }
 
 /* show-on-hover */
-.show-on-hover { position: absolute; top: 0; right: 0; display: none; }
+.show-on-hover { position: absolute; top: 0; right: 0; white-space: nowrap; display: none; }
 .show-on-hover-parent:hover .show-on-hover { display: block; }
 
 /* labels */

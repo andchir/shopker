@@ -28,9 +28,6 @@ export class InputFieldComponent implements OnInit {
     validationMessages = {};
 
     ngOnInit(): void {
-
-        console.log(this.fields, this.filterGroupName, this.model);
-
         let controls = {};
         this.fields.forEach(function(field, index){
             if(!this.model[field.name]){
@@ -50,7 +47,6 @@ export class InputFieldComponent implements OnInit {
         if(field.required){
             validators.push(Validators.required);
         }
-
         return validators;
     }
 

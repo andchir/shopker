@@ -52,10 +52,10 @@ abstract class BaseRepository extends DocumentRepository
             ->limit($opts['limit'])
             ->skip($skip);
 
-        if($opts['only_active']){
-            $query = $query
-                ->field('is_active')->equals(true);
-        }
+//        if($opts['only_active']){
+//            $query = $query
+//                ->field('is_active')->equals(true);
+//        }
 
         $results = $query
             ->getQuery()

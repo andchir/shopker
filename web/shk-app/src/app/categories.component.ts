@@ -1,26 +1,28 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Title } from '@angular/platform-browser';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NgbModal, NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { CategoriesService } from './services/categories.service'
-import { ContentTypesService } from './services/content_types.service';
 import { ContentType } from './models/content_type.model';
 import { Category } from "./models/category.model";
 import { ConfirmModalContent } from './app.component';
 import { ListRecursiveComponent } from './list-recursive.component';
+import { ModalContentAbstractComponent } from './page-table.abstract';
 import 'rxjs/add/operator/switchMap';
 import * as _ from "lodash";
+
+import { SystemNameService } from './services/system-name.service';
+import { CategoriesService } from './services/categories.service'
+import { ContentTypesService } from './services/content_types.service';
 
 /**
  * @class CategoriesModalComponent
  */
 @Component({
     selector: 'category-modal-content',
-    templateUrl: 'templates/modal_category.html',
-    providers: [ CategoriesService ]
+    templateUrl: 'templates/modal-category.html',
+    providers: [ CategoriesService, SystemNameService ]
 })
-export class CategoriesModalComponent implements OnInit {
+export class CategoriesModalComponent extends ModalContentAbstractComponent {
     @Input() modalTitle: string;
     @Input() itemId: number;
     @Input() isItemCopy: boolean;
@@ -32,138 +34,156 @@ export class CategoriesModalComponent implements OnInit {
     contentTypes: ContentType[] = [];
 
     form: FormGroup;
-    formErrors = {
-        parent_id: '',
-        name: '',
-        title: '',
-        content_type: ''
-    };
-    validationMessages = {
-        parent_id: {
-            required: 'Parent is required.'
-        },
-        title: {
-            required: 'Title is required.'
-        },
-        name: {
-            required: 'Name is required.',
-            pattern: 'The name must contain only Latin letters.'
-        },
-        content_type: {
-            required: 'Content type is required.'
-        }
-    };
+    // formErrors = {
+    //     parent_id: '',
+    //     name: '',
+    //     title: '',
+    //     content_type: ''
+    // };
+    // validationMessages = {
+    //     parent_id: {
+    //         required: 'Parent is required.'
+    //     },
+    //     title: {
+    //         required: 'Title is required.'
+    //     },
+    //     name: {
+    //         required: 'Name is required.',
+    //         pattern: 'The name must contain only Latin letters.'
+    //     },
+    //     content_type: {
+    //         required: 'Content type is required.'
+    //     }
+    // };
+
+    // constructor(
+    //     private fb: FormBuilder,
+    //     private contentTypesService: ContentTypesService,
+    //     private categoriesService: CategoriesService,
+    //     public activeModal: NgbActiveModal
+    // ) {}
 
     constructor(
-        private fb: FormBuilder,
-        private contentTypesService: ContentTypesService,
-        private categoriesService: CategoriesService,
-        public activeModal: NgbActiveModal
-    ) {}
+        public fb: FormBuilder,
+        public dataService: CategoriesService,
+        public systemNameService: SystemNameService,
+        public activeModal: NgbActiveModal,
+        public tooltipConfig: NgbTooltipConfig
+    ) {
+        super(fb, dataService, systemNameService, activeModal, tooltipConfig);
+    }
 
     /** On initialize */
-    ngOnInit(): void {
-        this.buildForm();
-        this.getContentTypes();
-        if( this.itemId ){
-            this.getModelData();
-        }
-    }
+    // ngOnInit(): void {
+    //     this.buildForm();
+    //     this.getContentTypes();
+    //     if( this.itemId ){
+    //         this.getModelData();
+    //     }
+    // }
 
-    getModelData(){
-        this.loading = true;
-        this.categoriesService.getItem( this.itemId )
-            .then(item => {
-                if( this.isItemCopy ){
-                    item.id = 0;
-                    item.name = '';
-                }
-                this.model = item;
-                this.loading = false;
-            });
-    }
+    // getModelData(){
+    //     this.loading = true;
+    //     this.categoriesService.getItem( this.itemId )
+    //         .then(item => {
+    //             if( this.isItemCopy ){
+    //                 item.id = 0;
+    //                 item.name = '';
+    //             }
+    //             this.model = item;
+    //             this.loading = false;
+    //         });
+    // }
 
     getContentTypes(){
-        this.contentTypesService.getList()
-            .subscribe(
-                items => {
-                    this.contentTypes = items;
-                },
-                error => this.errorMessage = <any>error);
+        // this.contentTypesService.getList()
+        //     .subscribe(
+        //         res => {
+        //             if(res.success){
+        //                 this.contentTypes = res.data;
+        //             }
+        //         },
+        //         error => this.errorMessage = <any>error);
     }
 
-    buildForm(): void {
-        this.form = this.fb.group({
-            parent_id: [this.model.parent_id, [Validators.required]],
-            title: [this.model.title, [Validators.required]],
-            name: [this.model.name, [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')]],
-            description: [this.model.description, []],
-            content_type: [this.model.content_type, [Validators.required]]
-        });
-        this.form.valueChanges
-            .subscribe(data => this.onValueChanged(data));
-    }
+    // buildForm(): void {
+    //     this.form = this.fb.group({
+    //         parent_id: [this.model.parent_id, [Validators.required]],
+    //         title: [this.model.title, [Validators.required]],
+    //         name: [this.model.name, [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')]],
+    //         description: [this.model.description, []],
+    //         content_type: [this.model.content_type, [Validators.required]]
+    //     });
+    //     this.form.valueChanges
+    //         .subscribe(data => this.onValueChanged(data));
+    // }
 
-    /**
-     * On form value changed
-     * @param data
-     */
-    onValueChanged(data?: any): void {
-        if (!this.form) { return; }
-        for (const field in this.formErrors) {
-            this.formErrors[field] = '';
-            const control = this.form.get(field);
-            if (control && (control.dirty || this.submitted) && !control.valid) {
-                const messages = this.validationMessages[field];
-                for (const key in control.errors) {
-                    this.formErrors[field] += messages[key] + ' ';
-                }
-            }
-        }
-    }
+    // /**
+    //  * On form value changed
+    //  * @param data
+    //  */
+    // onValueChanged(data?: any): void {
+    //     if (!this.form) { return; }
+    //     for (const field in this.formErrors) {
+    //         this.formErrors[field] = '';
+    //         const control = this.form.get(field);
+    //         if (control && (control.dirty || this.submitted) && !control.valid) {
+    //             const messages = this.validationMessages[field];
+    //             for (const key in control.errors) {
+    //                 this.formErrors[field] += messages[key] + ' ';
+    //             }
+    //         }
+    //     }
+    // }
 
-    /**
-     * On form submit
-     */
-    onSubmit() {
-        this.submitted = true;
+    // /**
+    //  * On form submit
+    //  */
+    // onSubmit() {
+    //     this.submitted = true;
+    //
+    //     if( !this.form.valid ){
+    //         this.onValueChanged();
+    //         return;
+    //     }
+    //
+    //     if( this.model.id ){
+    //
+    //         this.categoriesService.editItem( this.model.id, this.model )
+    //             .then((res) => {
+    //                 if( res.success ){
+    //                     this.closeModal();
+    //                 } else {
+    //                     if( res.msg ){
+    //                         this.errorMessage = res.msg;
+    //                     }
+    //                 }
+    //             });
+    //
+    //     } else {
+    //
+    //         this.categoriesService.createItem( this.model )
+    //             .then((res) => {
+    //                 if( res.success ){
+    //                     this.closeModal();
+    //                 } else {
+    //                     if( res.msg ){
+    //                         this.errorMessage = res.msg;
+    //                     }
+    //                 }
+    //             });
+    //     }
+    // }
+    //
+    // closeModal() {
+    //     let reason = this.itemId ? 'edit' : 'create';
+    //     this.activeModal.close( { reason: reason, data: this.model } );
+    // }
 
-        if( !this.form.valid ){
-            this.onValueChanged();
-            return;
-        }
+    save(): void{
 
-        if( this.model.id ){
+        console.log('SAVE');
 
-            this.categoriesService.editItem( this.model.id, this.model )
-                .then((res) => {
-                    if( res.success ){
-                        this.closeModal();
-                    } else {
-                        if( res.msg ){
-                            this.errorMessage = res.msg;
-                        }
-                    }
-                });
-
-        } else {
-
-            this.categoriesService.createItem( this.model )
-                .then((res) => {
-                    if( res.success ){
-                        this.closeModal();
-                    } else {
-                        if( res.msg ){
-                            this.errorMessage = res.msg;
-                        }
-                    }
-                });
-        }
-    }
-
-    closeModal() {
-        let reason = this.itemId ? 'edit' : 'create';
-        this.activeModal.close( { reason: reason, data: this.model } );
     }
 
 }

@@ -26,18 +26,6 @@
             </div>
         </div>
 
-        <div class="row form-group" [class.form-group-message]="formErrors.name">
-            <div class="col-md-5">
-                <label for="fieldName">Системное имя</label>
-            </div>
-            <div class="col-md-7">
-                <input type="text" id="fieldName" class="form-control" name="name" formControlName="name" [(ngModel)]="model.name">
-                <div *ngIf="formErrors.name" class="alert alert-danger">
-                    {{formErrors.name}}
-                </div>
-            </div>
-        </div>
-
         <div class="row form-group" [class.form-group-message]="formErrors.title">
             <div class="col-md-5">
                 <label for="fieldTitle">Название</label>
@@ -46,6 +34,25 @@
                 <input type="text" id="fieldTitle" class="form-control" formControlName="title" name="title" [(ngModel)]="model.title">
                 <div *ngIf="formErrors.title" class="alert alert-danger">
                     {{formErrors.title}}
+                </div>
+            </div>
+        </div>
+
+        <div class="row form-group" [class.form-group-message]="formErrors.name">
+            <div class="col-md-5">
+                <label for="fieldName">Системное имя</label>
+            </div>
+            <div class="col-md-7">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="name" formControlName="name" id="fieldName" [(ngModel)]="model.name">
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-secondary" ngbTooltip="Generate" (click)="generateName(model)">
+                            <i class="icon-reload"></i>
+                        </button>
+                    </div>
+                </div>
+                <div *ngIf="formErrors.name" class="alert alert-danger">
+                    {{formErrors.name}}
                 </div>
             </div>
         </div>

@@ -41,7 +41,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
     }
 
     model: ContentType = new ContentType(0, '', '', '', 'products', [], ['Основное','Служебное'], true);
-    fieldModel: ContentField = new ContentField('', '', '', '', '', [], '', [], '', false, false);
+    fieldModel: ContentField = new ContentField('', '', '', '', '', {}, '', {}, '', false, false, false);
     fld_submitted: boolean = false;
     errorFieldMessage: string;
     action: string = 'add_field';
@@ -123,12 +123,22 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
                 required: 'Input type is required.'
             }
         },
+        input_type_properties: {
+            value: '',
+            validators: [],
+            messages: {}
+        },
         output_type: {
             value: '',
             validators: [Validators.required],
             messages: {
                 required: 'Output type is required.'
             }
+        },
+        output_type_properties: {
+            value: '',
+            validators: [],
+            messages: {}
         },
         group: {
             value: '',
@@ -222,6 +232,16 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
         }
         if(type == 'input_type'){
             this.inputFieldTypeProperties = _.clone(fieldType.inputProperties);
+            let propNames = _.map(this.inputFieldTypeProperties, 'name');
+            this.fieldModel.input_type_properties = _.pick(this.fieldModel.input_type_properties, propNames);
+            for(let i in this.inputFieldTypeProperties){
+                if(this.inputFieldTypeProperties.hasOwnProperty(i)){
+                    let fldName = this.inputFieldTypeProperties[i].name;
+                    if(typeof this.fieldModel.input_type_properties[fldName] == 'undefined'){
+                        this.fieldModel.input_type_properties[fldName] = this.inputFieldTypeProperties[i].default_value;
+                    }
+                }
+            }
             if(!this.fieldModel.output_type){
                 this.selectFieldTypeProperties('output_type', this.fieldModel[type]);
             }
@@ -343,7 +363,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
     editField(field: ContentField) {
         this.action = 'edit_field';
         this.fieldModel = _.clone(field);
-        this.fieldForm.setValue(_.omit(this.fieldModel, ['id', 'input_type_options', 'output_type_options']));
+        this.fieldForm.setValue(_.omit(this.fieldModel, ['id']));
         this.currentFieldName = this.fieldModel.name;
         this.fld_submitted = false;
     }
@@ -382,6 +402,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
         this.fld_submitted = false;
         this.currentFieldName = '';
         this.fieldForm.reset();
+        this.fieldModel = new ContentField('', '', '', '', '', {}, '', {}, '', false, false, false);
     }
 
     /** Cancel edit field */
@@ -390,6 +411,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
         this.onValueChanged('fieldForm', 'fld_');
     }
 
+    /** Change field order index */
     fieldMove(index: number, direction: string): void{
         if((direction == 'up' && index === 0)
             || (direction == 'down' && index === this.model.fields.length - 1)){
@@ -412,7 +434,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
             return;
         }
 
-        let data = this.fieldForm.value;
+        let data = _.clone(this.fieldModel);
         let index = _.findIndex(this.model.fields, {name: data.name});
         if (index > -1 && this.currentFieldName != data.name) {
             this.errorMessage = 'A field named "' + data.name + '" already exists.';

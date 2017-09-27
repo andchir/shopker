@@ -36,10 +36,15 @@
                 </div>
 
                 <div class="form-group" [class.form-group-message]="formErrors.name">
-                    <label class="label-filled">
-                        Системное имя
-                    </label>
-                    <input type="text" class="form-control" name="name" formControlName="name" [(ngModel)]="model.name">
+                    <label for="fieldName" class="label-filled">Системное имя</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="name" formControlName="name" id="fieldName" [(ngModel)]="model.name">
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-secondary" ngbTooltip="Generate" (click)="generateName(model)">
+                                <i class="icon-reload"></i>
+                            </button>
+                        </div>
+                    </div>
                     <div *ngIf="formErrors.name" class="alert alert-danger">
                         {{formErrors.name}}
                     </div>
@@ -203,7 +208,7 @@
                                         {{property.title}}
                                     </div>
                                     <div class="col-md-7">
-                                        <input type="text" class="form-control form-control-sm" name="input_properties[]" [value]="property.default_value">
+                                        <input type="text" class="form-control form-control-sm" name="input_properties[]" [(ngModel)]="fieldModel.input_type_properties[property.name]" [ngModelOptions]="{standalone: true}">
                                     </div>
                                 </div>
                             </div>
@@ -221,7 +226,7 @@
                             <div class="col-md-7">
 
                                 <div class="input-group">
-                                    <select class="form-control form-control-sm" name="field_output_type" formControlName="output_type" [(ngModel)]="fieldModel.output_type"  (ngModelChange)="selectFieldTypeProperties('output_type')">
+                                    <select class="form-control form-control-sm" name="field_output_type" formControlName="output_type" [(ngModel)]="fieldModel.output_type" (ngModelChange)="selectFieldTypeProperties('output_type')">
                                         <option value=""></option>
                                         <option value="{{fieldType.name}}" *ngFor="let fieldType of fieldTypes">{{fieldType.title}}</option>
                                     </select>
@@ -247,7 +252,7 @@
                                     {{property.title}}
                                 </div>
                                 <div class="col-md-7">
-                                    <input type="text" class="form-control form-control-sm" name="output_properties[]" [value]="property.default_value">
+                                    <input type="text" class="form-control form-control-sm" name="output_properties[]">
                                 </div>
                             </div>
                             <div class="text-right mt-1">
@@ -306,7 +311,7 @@
                             <div class="col-md-7 offset-md-5">
 
                                 <label class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" value="1" name="required" formControlName="required">
+                                    <input type="checkbox" class="custom-control-input" value="1" name="required" formControlName="required" [(ngModel)]="fieldModel.required">
                                     <span class="custom-control-indicator"></span>
                                     <span>Обязательное</span>
                                 </label>
@@ -318,7 +323,7 @@
                             <div class="col-md-7 offset-md-5">
 
                                 <label class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" value="1" name="show_in_table" formControlName="show_in_table">
+                                    <input type="checkbox" class="custom-control-input" value="1" name="show_in_table" formControlName="show_in_table" [(ngModel)]="fieldModel.show_in_table">
                                     <span class="custom-control-indicator"></span>
                                     <span>Показывать в таблице</span>
                                 </label>
@@ -330,7 +335,7 @@
                             <div class="col-md-7 offset-md-5">
 
                                 <label class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" value="1" name="is_filter" formControlName="is_filter">
+                                    <input type="checkbox" class="custom-control-input" value="1" name="is_filter" formControlName="is_filter" [(ngModel)]="fieldModel.is_filter">
                                     <span class="custom-control-indicator"></span>
                                     <span>Показывать в фильтре</span>
                                 </label>

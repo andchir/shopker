@@ -123,11 +123,11 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
                 required: 'Input type is required.'
             }
         },
-        input_type_properties: {
-            value: '',
-            validators: [],
-            messages: {}
-        },
+        // input_type_properties: {
+        //     value: '',
+        //     validators: [],
+        //     messages: {}
+        // },
         output_type: {
             value: '',
             validators: [Validators.required],
@@ -135,11 +135,11 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
                 required: 'Output type is required.'
             }
         },
-        output_type_properties: {
-            value: '',
-            validators: [],
-            messages: {}
-        },
+        // output_type_properties: {
+        //     value: '',
+        //     validators: [],
+        //     messages: {}
+        // },
         group: {
             value: '',
             validators: [Validators.required],
@@ -361,9 +361,10 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
      * @param field
      */
     editField(field: ContentField) {
+        let fieldsNames = Object.keys(this.fieldsFormOptions);
         this.action = 'edit_field';
         this.fieldModel = _.clone(field);
-        this.fieldForm.setValue(_.omit(this.fieldModel, ['id']));
+        this.fieldForm.setValue(_.pick(this.fieldModel, fieldsNames));
         this.currentFieldName = this.fieldModel.name;
         this.fld_submitted = false;
     }
@@ -427,13 +428,11 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
     /** Submit field */
     submitField() {
         this.fld_submitted = true;
-
         if (!this.fieldForm.valid) {
             this.onValueChanged('fieldForm', 'fld_');
             this.fld_submitted = false;
             return;
         }
-
         let data = _.clone(this.fieldModel);
         let index = _.findIndex(this.model.fields, {name: data.name});
         if (index > -1 && this.currentFieldName != data.name) {

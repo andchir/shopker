@@ -78,7 +78,7 @@ export abstract class ModalContentAbstractComponent implements OnInit {
             if(!this[modelName][key]){
                 this[modelName][key] = opts.value;
             }
-            controls[key] = new FormControl(this[modelName][key], opts.validators);
+            controls[key] = new FormControl(this[modelName][key] || '', opts.validators);
             this.formErrors[keyPrefix + key] = '';
             this.validationMessages[keyPrefix + key] = opts.messages;
         }

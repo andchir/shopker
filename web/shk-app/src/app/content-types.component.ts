@@ -49,8 +49,10 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
     collections: any[] = ['products'];
     fieldForm: FormGroup;
     fieldTypes: FieldType[];
-    inputFieldTypeProperties: FieldTypeProperty[] = [];
-    outputFieldTypeProperties: FieldTypeProperty[] = [];
+    fieldTypeProperties: {} = {
+        input: [],
+        output: []
+    };
 
     formFields = {
         name: {
@@ -123,11 +125,6 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
                 required: 'Input type is required.'
             }
         },
-        // input_type_properties: {
-        //     value: '',
-        //     validators: [],
-        //     messages: {}
-        // },
         output_type: {
             value: '',
             validators: [Validators.required],
@@ -135,11 +132,6 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
                 required: 'Output type is required.'
             }
         },
-        // output_type_properties: {
-        //     value: '',
-        //     validators: [],
-        //     messages: {}
-        // },
         group: {
             value: '',
             validators: [Validators.required],
@@ -220,37 +212,25 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
         if(fieldTypeName){
             this.fieldModel[type] = fieldTypeName;
         }
-        let fieldType = _.find(this.fieldTypes, {name: this.fieldModel[type]});
+        let fieldType = _.find(this.fieldTypes, {name: this.fieldModel[type + '_type']});
         if(!fieldType){
-            if(type == 'input_type'){
-                this.inputFieldTypeProperties = [];
-            }
-            else if(type == 'output_type'){
-                this.outputFieldTypeProperties = [];
-            }
+            this.fieldTypeProperties[type] = [];
             return;
         }
-        if(type == 'input_type'){
-            this.inputFieldTypeProperties = _.clone(fieldType.inputProperties);
-            let propNames = _.map(this.inputFieldTypeProperties, 'name');
-            this.fieldModel.input_type_properties = _.pick(this.fieldModel.input_type_properties, propNames);
-            for(let i in this.inputFieldTypeProperties){
-                if(this.inputFieldTypeProperties.hasOwnProperty(i)){
-                    let fldName = this.inputFieldTypeProperties[i].name;
-                    if(typeof this.fieldModel.input_type_properties[fldName] == 'undefined'){
-                        this.fieldModel.input_type_properties[fldName] = this.inputFieldTypeProperties[i].default_value;
-                    }
+        this.fieldTypeProperties[type] = _.clone(fieldType.outputProperties);
+        let propNames = _.map(this.fieldTypeProperties[type], 'name');
+        let modelField = type + '_properties';
+        this.fieldModel[modelField] = _.pick(this.fieldModel[modelField], propNames);
+        for(let i in this.fieldTypeProperties[type]){
+            if(this.fieldTypeProperties[type].hasOwnProperty(i)){
+                let fldName = this.fieldTypeProperties[type][i].name;
+                if(typeof this.fieldModel[modelField][fldName] == 'undefined'){
+                    this.fieldModel[modelField][fldName] = this.fieldTypeProperties[type][i].default_value;
                 }
             }
-            if(!this.fieldModel.output_type){
-                this.selectFieldTypeProperties('output_type', this.fieldModel[type]);
-            }
         }
-        else if(type == 'output_type'){
-            this.outputFieldTypeProperties = _.clone(fieldType.outputProperties);
-            if(!this.fieldModel.input_type){
-                this.selectFieldTypeProperties('input_type', this.fieldModel[type]);
-            }
+        if(!this.fieldModel.input_type){
+            this.selectFieldTypeProperties('input_type', this.fieldModel[type]);
         }
     }
 

@@ -8,7 +8,7 @@ import { ContentField } from "./models/content_field.model";
 })
 export class OutputFieldComponent implements OnInit {
 
-    @Input() value: ContentField;
+    @Input() value: string | number | boolean;
     @Input() outputType: string;
     @Input() options: {};
 

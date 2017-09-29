@@ -39,7 +39,7 @@
                         </div>
                     </div>
 
-                    <output-field [field]="item" [fieldName]="tableField.name" [outputType]="tableField.output_type"></output-field>
+                    <output-field [value]="item[tableField.name]" [outputType]="tableField.output_type" [options]="tableField.output_properties"></output-field>
 
                 </td>
             </tr>

@@ -38,27 +38,32 @@ export class CatalogComponent extends PageTableAbstractComponent {
         {
             name: 'id',
             title: 'ID',
-            output_type: 'text'
+            output_type: 'text',
+            output_properties: {}
         },
         {
             name: 'name',
             title: 'Системное имя',
-            output_type: 'text'
+            output_type: 'text',
+            output_properties: {}
         },
         {
             name: 'title',
             title: 'Название',
-            output_type: 'text'
+            output_type: 'text',
+            output_properties: {}
         },
         {
             name: 'price',
             title: 'Цена',
-            output_type: 'number'
+            output_type: 'number',
+            output_properties: {}
         },
         {
             name: 'is_active',
             title: 'Статус',
-            output_type: 'boolean'
+            output_type: 'boolean',
+            output_properties: {}
         }
     ];
 

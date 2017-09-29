@@ -483,22 +483,26 @@ export class ContentTypesComponent extends PageTableAbstractComponent {
         {
             name: 'name',
             title: 'Системное имя',
-            output_type: 'text'
+            output_type: 'text',
+            output_properties: {}
         },
         {
             name: 'title',
             title: 'Название',
-            output_type: 'text'
+            output_type: 'text',
+            output_properties: {}
         },
         {
             name: 'collection',
             title: 'Коллекция',
-            output_type: 'text'
+            output_type: 'text',
+            output_properties: {}
         },
         {
             name: 'is_active',
             title: 'Статус',
-            output_type: 'boolean'
+            output_type: 'boolean',
+            output_properties: {}
         }
     ];
 
@@ -506,105 +510,4 @@ export class ContentTypesComponent extends PageTableAbstractComponent {
         return ContentTypeModalContent;
     }
 
-    // ngOnInit(): void {
-    //     this.setTitle( this.title );
-    //     this.getList();
-    // }
-
-    // getList(): void {
-    //     this.loading = true;
-    //     this.contentTypesService.getList()
-    //         .subscribe(
-    //             items => {
-    //                 this.items = items;
-    //                 this.loading = false;
-    //             },
-    //             error => this.errorMessage = <any>error);
-    // }
-
-    // modalOpen( itemId?: number, isItemCopy?: boolean ): void {
-    //     this.modalRef = this.modalService.open(ContentTypeModalContent, {size: 'lg'});
-    //     this.modalRef.componentInstance.modalTitle = itemId && !isItemCopy
-    //         ? 'Edit content type'
-    //         : 'Add content type';
-    //     this.modalRef.componentInstance.itemId = itemId || 0;
-    //     this.modalRef.componentInstance.isItemCopy = isItemCopy || false;
-    //     this.modalRef.result.then((result) => {
-    //         this.getList();
-    //     }, (reason) => {
-    //         //console.log( 'reason', reason );
-    //     });
-    // }
-    //
-    // copyItem( itemId: number ): void {
-    //     this.modalOpen( itemId, true );
-    // }
-    //
-    // modalClose(): void {
-    //     this.modalRef.close();
-    // }
-
-    // deleteItemConfirm( itemId ): void{
-    //     this.modalRef = this.modalService.open(ConfirmModalContent);
-    //     this.modalRef.componentInstance.modalTitle = 'Confirm';
-    //     this.modalRef.componentInstance.modalContent = 'Are you sure you want to remove this item?';
-    //     this.modalRef.result.then((result) => {
-    //         if( result == 'accept' ){
-    //             this.deleteItem( itemId );
-    //         }
-    //     }, (reason) => {
-    //
-    //     });
-    // }
-
-    // deleteItem( itemId: number ): void{
-    //     this.contentTypesService.deleteItem( itemId )
-    //         .then((res) => {
-    //             if( res.success ){
-    //                 this.getList();
-    //             } else {
-    //                 if( res.msg ){
-    //                     //this.errorMessage = res.msg;
-    //                 }
-    //             }
-    //         });
-    // }
-
-    // selectAll( event ): void{
-    //     this.selectedIds = [];
-    //     if( event.target.checked ){
-    //         for( let item of this.items ){
-    //             this.selectedIds.push( item.id );
-    //         }
-    //     }
-    // }
-    //
-    // setSelected( event, itemId: string ): void{
-    //     const index = this.selectedIds.indexOf( itemId );
-    //     if( event.target.checked ){
-    //         if( index == -1 ){
-    //             this.selectedIds.push( itemId );
-    //         }
-    //     } else if( index > -1 ){
-    //         this.selectedIds.splice( index, 1 );
-    //     }
-    // }
-    //
-    // getIsSelected( itemId: string ): boolean{
-    //     return this.selectedIds.lastIndexOf( itemId ) > -1;
-    // }
-
-    // actionRequest(actionValue : [string, number]): void {
-    //     switch(actionValue[0]){
-    //         case 'edit':
-    //             this.modalOpen(actionValue[1]);
-    //             break;
-    //         case 'copy':
-    //             this.modalOpen(actionValue[1], true);
-    //             break;
-    //         case 'delete':
-    //             this.deleteItemConfirm(actionValue[1]);
-    //             break;
-    //     }
-    // }
 }

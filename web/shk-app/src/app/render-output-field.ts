@@ -8,16 +8,16 @@ import { ContentField } from "./models/content_field.model";
 })
 export class OutputFieldComponent implements OnInit {
 
-    @Input() field: ContentField;
-    @Input() fieldName: string;
+    @Input() value: ContentField;
     @Input() outputType: string;
+    @Input() options: {};
 
     constructor() {
 
     }
 
     ngOnInit(): void {
-
+        //console.log(this.options);
     }
 
 }

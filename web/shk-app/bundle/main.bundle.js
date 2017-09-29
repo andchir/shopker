@@ -365,27 +365,32 @@ var CatalogComponent = (function (_super) {
             {
                 name: 'id',
                 title: 'ID',
-                output_type: 'text'
+                output_type: 'text',
+                output_properties: {}
             },
             {
                 name: 'name',
                 title: 'Системное имя',
-                output_type: 'text'
+                output_type: 'text',
+                output_properties: {}
             },
             {
                 name: 'title',
                 title: 'Название',
-                output_type: 'text'
+                output_type: 'text',
+                output_properties: {}
             },
             {
                 name: 'price',
                 title: 'Цена',
-                output_type: 'number'
+                output_type: 'number',
+                output_properties: {}
             },
             {
                 name: 'is_active',
                 title: 'Статус',
-                output_type: 'boolean'
+                output_type: 'boolean',
+                output_properties: {}
             }
         ];
         return _this;
@@ -1355,22 +1360,26 @@ var ContentTypesComponent = (function (_super) {
             {
                 name: 'name',
                 title: 'Системное имя',
-                output_type: 'text'
+                output_type: 'text',
+                output_properties: {}
             },
             {
                 name: 'title',
                 title: 'Название',
-                output_type: 'text'
+                output_type: 'text',
+                output_properties: {}
             },
             {
                 name: 'collection',
                 title: 'Коллекция',
-                output_type: 'text'
+                output_type: 'text',
+                output_properties: {}
             },
             {
                 name: 'is_active',
                 title: 'Статус',
-                output_type: 'boolean'
+                output_type: 'boolean',
+                output_properties: {}
             }
         ];
         return _this;
@@ -1557,17 +1566,20 @@ var FieldTypesComponent = (function (_super) {
             {
                 name: 'name',
                 title: 'Системное имя',
-                output_type: 'text'
+                output_type: 'text',
+                output_properties: {}
             },
             {
                 name: 'title',
                 title: 'Название',
-                output_type: 'text'
+                output_type: 'text',
+                output_properties: {}
             },
             {
                 name: 'is_active',
                 title: 'Статус',
-                output_type: 'boolean'
+                output_type: 'boolean',
+                output_properties: {}
             }
         ];
         return _this;
@@ -2634,21 +2646,22 @@ var OutputFieldComponent = (function () {
     function OutputFieldComponent() {
     }
     OutputFieldComponent.prototype.ngOnInit = function () {
+        //console.log(this.options);
     };
     return OutputFieldComponent;
 }());
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["F" /* Input */])(),
     __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__models_content_field_model__["a" /* ContentField */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__models_content_field_model__["a" /* ContentField */]) === "function" && _a || Object)
-], OutputFieldComponent.prototype, "field", void 0);
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["F" /* Input */])(),
-    __metadata("design:type", String)
-], OutputFieldComponent.prototype, "fieldName", void 0);
+], OutputFieldComponent.prototype, "value", void 0);
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["F" /* Input */])(),
     __metadata("design:type", String)
 ], OutputFieldComponent.prototype, "outputType", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["F" /* Input */])(),
+    __metadata("design:type", Object)
+], OutputFieldComponent.prototype, "options", void 0);
 OutputFieldComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
         selector: 'output-field',
@@ -3375,7 +3388,7 @@ module.exports = "<div class=\"d-inline-block dropdown\">\n    <button class=\"b
 /***/ "../../../../../src/app/templates/cmp-table.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"table-responsive\" [class.loading]=\"loading\">\n    <table class=\"table table-striped table-divided mb-0\">\n        <thead>\n            <tr>\n                <th class=\"text-left\">\n                    <label class=\"custom-control custom-checkbox\">\n                        <input type=\"checkbox\" class=\"custom-control-input\" (click)=\"selectAll($event)\">\n                        <span class=\"custom-control-indicator\"></span>\n                    </label>\n                </th>\n                <th *ngFor=\"let tableField of tableFields; let index=index\">\n                    <button type=\"button\" class=\"btn btn-block btn-link\" (click)=\"selectSortBy(tableField.name)\">\n                        {{tableField.title}}\n                        <i [class.icon-arrow-down]=\"queryOptions.sort_dir == 'asc'\" [class.icon-arrow-up]=\"queryOptions.sort_dir == 'desc'\" [style.visibility]=\"tableField.name == queryOptions.sort_by ? 'visible' : 'hidden'\"></i>\n                    </button>\n                </th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr class=\"show-on-hover-parent\" *ngFor=\"let item of items\">\n                <td>\n                    <label class=\"custom-control custom-checkbox\">\n                        <input type=\"checkbox\" class=\"custom-control-input\" [checked]=\"getIsSelected(item.id)\" (click)=\"setSelected($event, item.id)\">\n                        <span class=\"custom-control-indicator\"></span>\n                    </label>\n                </td>\n                <td *ngFor=\"let tableField of tableFields; let index=index\">\n                    <div class=\"relative\" *ngIf=\"index == tableFields.length - 1\">\n                        <div class=\"show-on-hover no-wrap\">\n                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" ngbTooltip=\"Edit\" (click)=\"action('edit', item.id)\">\n                                <i class=\"icon-pencil\"></i>\n                            </button>\n                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" ngbTooltip=\"Copy\" (click)=\"action('copy', item.id)\">\n                                <i class=\"icon-stack\"></i>\n                            </button>\n                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" ngbTooltip=\"Delete\" (click)=\"action('delete', item.id)\">\n                                <i class=\"icon-cross\"></i>\n                            </button>\n                        </div>\n                    </div>\n\n                    <output-field [field]=\"item\" [fieldName]=\"tableField.name\" [outputType]=\"tableField.output_type\"></output-field>\n\n                    <!--i class=\"big text-success icon-circle-check\" [hidden]=\"!item.is_active\"></i>\n                    <i class=\"big text-muted icon-circle-cross\" [hidden]=\"item.is_active\"></i-->\n                </td>\n            </tr>\n        <tr [hidden]=\"items.length > 0\" class=\"table-active\">\n            <td [attr.colspan]=\"tableFields.length + 1\" class=\"text-center p-4\">\n                Empty.\n            </td>\n        </tr>\n        </tbody>\n    </table>\n</div>\n\n<div class=\"card-footer\">\n\n    <div class=\"float-right\">\n        <select class=\"form-control\" [(ngModel)]=\"queryOptions.limit\" (change)=\"pageChange()\">\n            <option value=\"10\">10</option>\n            <option value=\"20\">20</option>\n            <option value=\"50\">50</option>\n            <option value=\"100\">100</option>\n        </select>\n    </div>\n\n    <ngb-pagination *ngIf=\"collectionSize > queryOptions.limit\" [class]=\"'mb-0'\" [collectionSize]=\"collectionSize\" [(page)]=\"queryOptions.page\" [maxSize]=\"queryOptions.limit\" (pageChange)=\"pageChange()\" [rotate]=\"true\" [boundaryLinks]=\"false\"></ngb-pagination>\n\n    <div class=\"clearfix\"></div>\n</div>"
+module.exports = "<div class=\"table-responsive\" [class.loading]=\"loading\">\n    <table class=\"table table-striped table-divided mb-0\">\n        <thead>\n            <tr>\n                <th class=\"text-left\">\n                    <label class=\"custom-control custom-checkbox\">\n                        <input type=\"checkbox\" class=\"custom-control-input\" (click)=\"selectAll($event)\">\n                        <span class=\"custom-control-indicator\"></span>\n                    </label>\n                </th>\n                <th *ngFor=\"let tableField of tableFields; let index=index\">\n                    <button type=\"button\" class=\"btn btn-block btn-link\" (click)=\"selectSortBy(tableField.name)\">\n                        {{tableField.title}}\n                        <i [class.icon-arrow-down]=\"queryOptions.sort_dir == 'asc'\" [class.icon-arrow-up]=\"queryOptions.sort_dir == 'desc'\" [style.visibility]=\"tableField.name == queryOptions.sort_by ? 'visible' : 'hidden'\"></i>\n                    </button>\n                </th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr class=\"show-on-hover-parent\" *ngFor=\"let item of items\">\n                <td>\n                    <label class=\"custom-control custom-checkbox\">\n                        <input type=\"checkbox\" class=\"custom-control-input\" [checked]=\"getIsSelected(item.id)\" (click)=\"setSelected($event, item.id)\">\n                        <span class=\"custom-control-indicator\"></span>\n                    </label>\n                </td>\n                <td *ngFor=\"let tableField of tableFields; let index=index\">\n                    <div class=\"relative\" *ngIf=\"index == tableFields.length - 1\">\n                        <div class=\"show-on-hover no-wrap\">\n                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" ngbTooltip=\"Edit\" (click)=\"action('edit', item.id)\">\n                                <i class=\"icon-pencil\"></i>\n                            </button>\n                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" ngbTooltip=\"Copy\" (click)=\"action('copy', item.id)\">\n                                <i class=\"icon-stack\"></i>\n                            </button>\n                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" ngbTooltip=\"Delete\" (click)=\"action('delete', item.id)\">\n                                <i class=\"icon-cross\"></i>\n                            </button>\n                        </div>\n                    </div>\n\n                    <output-field [value]=\"item[tableField.name]\" [outputType]=\"tableField.output_type\" [options]=\"tableField.output_properties\"></output-field>\n\n                </td>\n            </tr>\n        <tr [hidden]=\"items.length > 0\" class=\"table-active\">\n            <td [attr.colspan]=\"tableFields.length + 1\" class=\"text-center p-4\">\n                Empty.\n            </td>\n        </tr>\n        </tbody>\n    </table>\n</div>\n\n<div class=\"card-footer\">\n\n    <div class=\"float-right\">\n        <select class=\"form-control\" [(ngModel)]=\"queryOptions.limit\" (change)=\"pageChange()\">\n            <option value=\"10\">10</option>\n            <option value=\"20\">20</option>\n            <option value=\"50\">50</option>\n            <option value=\"100\">100</option>\n        </select>\n    </div>\n\n    <ngb-pagination *ngIf=\"collectionSize > queryOptions.limit\" [class]=\"'mb-0'\" [collectionSize]=\"collectionSize\" [(page)]=\"queryOptions.page\" [maxSize]=\"queryOptions.limit\" (pageChange)=\"pageChange()\" [rotate]=\"true\" [boundaryLinks]=\"false\"></ngb-pagination>\n\n    <div class=\"clearfix\"></div>\n</div>"
 
 /***/ }),
 
@@ -3473,7 +3486,7 @@ module.exports = "<div class=\"row form-group\" [class.form-group-message]=\"for
 /***/ "../../../../../src/app/templates/render-output-field.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div [ngSwitch]=\"outputType\">\n    <div *ngSwitchCase=\"'boolean'\" class=\"text-center\">\n        <i class=\"big text-success icon-circle-check\" [hidden]=\"!field[fieldName]\"></i>\n        <i class=\"big text-muted icon-circle-cross\" [hidden]=\"field[fieldName]\"></i>\n    </div>\n    <div *ngSwitchDefault>{{field[fieldName]}}</div>\n</div>"
+module.exports = "<div [ngSwitch]=\"outputType\">\n    <div *ngSwitchCase=\"'boolean'\" class=\"text-center\">\n        <i class=\"big text-success icon-circle-check\" [hidden]=\"!value\"></i>\n        <i class=\"big text-muted icon-circle-cross\" [hidden]=\"value\"></i>\n    </div>\n    <div *ngSwitchDefault>{{value}}</div>\n</div>"
 
 /***/ }),
 

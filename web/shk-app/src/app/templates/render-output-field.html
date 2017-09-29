@@ -1,7 +1,7 @@
 <div [ngSwitch]="outputType">
     <div *ngSwitchCase="'boolean'" class="text-center">
-        <i class="big text-success icon-circle-check" [hidden]="!field[fieldName]"></i>
-        <i class="big text-muted icon-circle-cross" [hidden]="field[fieldName]"></i>
+        <i class="big text-success icon-circle-check" [hidden]="!value"></i>
+        <i class="big text-muted icon-circle-cross" [hidden]="value"></i>
     </div>
-    <div *ngSwitchDefault>{{field[fieldName]}}</div>
+    <div *ngSwitchDefault>{{value}}</div>
 </div>

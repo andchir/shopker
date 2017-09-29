@@ -38,10 +38,9 @@
                             </button>
                         </div>
                     </div>
-                    {{item[tableField.name]}}
 
-                    <!--i class="big text-success icon-circle-check" [hidden]="!item.is_active"></i>
-                    <i class="big text-muted icon-circle-cross" [hidden]="item.is_active"></i-->
+                    <output-field [field]="item" [fieldName]="tableField.name" [outputType]="tableField.output_type"></output-field>
+
                 </td>
             </tr>
         <tr [hidden]="items.length > 0" class="table-active">

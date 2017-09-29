@@ -6,7 +6,7 @@ import { SystemNameService } from './services/system-name.service';
 
 @Component({
     selector: 'input-field',
-    templateUrl: 'templates/input-field-render.html',
+    templateUrl: 'templates/render-input-field.html',
     providers: [ SystemNameService ]
 })
 export class InputFieldComponent implements OnInit {
@@ -15,8 +15,6 @@ export class InputFieldComponent implements OnInit {
     @Input() filterGroupName: string;
     @Input() model: any;
     @Input() form: FormGroup;
-    //@Output() modelChange = new EventEmitter<number>();
-    //@Output() formChange = new EventEmitter<number>();
 
     constructor(
         private systemNameService: SystemNameService

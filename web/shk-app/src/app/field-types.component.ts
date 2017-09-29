@@ -152,7 +152,7 @@ export class FieldTypesComponent extends PageTableAbstractComponent {
         {
             name: 'is_active',
             title: 'Статус',
-            output_type: 'text'
+            output_type: 'boolean'
         }
     ];
 

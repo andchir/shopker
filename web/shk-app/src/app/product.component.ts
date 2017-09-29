@@ -18,7 +18,7 @@ import { SystemNameService } from './services/system-name.service';
 
 @Component({
     selector: 'product-modal-content',
-    templateUrl: 'templates/modal_product.html',
+    templateUrl: 'templates/modal-product.html',
     providers: [ SystemNameService ]
 })
 export class ProductModalContent extends ModalContentAbstractComponent {

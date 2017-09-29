@@ -15,7 +15,8 @@ import { StatisticsComponent } from './stat.component';
 import { SettingsComponent } from './settings.component';
 import { ListRecursiveComponent } from './list-recursive.component';
 import { TableComponent } from './table.component';
-import { InputFieldComponent } from './input-field-render';
+import { InputFieldComponent } from './render-input-field';
+import { OutputFieldComponent } from './render-output-field';
 
 import { filterFieldByGroup } from "./filter-field-by-group.pipe";
 
@@ -50,6 +51,7 @@ import { NgbModule, NgbActiveModal, NgbTooltipConfig } from '@ng-bootstrap/ng-bo
         TableComponent,
         CategoriesListComponent,
         InputFieldComponent,
+        OutputFieldComponent,
 
         AlertModalContent,
         ConfirmModalContent,

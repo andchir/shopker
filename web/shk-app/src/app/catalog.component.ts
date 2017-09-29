@@ -56,7 +56,7 @@ export class CatalogComponent extends PageTableAbstractComponent {
             output_type: 'number'
         },
         {
-            name: 'published',
+            name: 'is_active',
             title: 'Статус',
             output_type: 'boolean'
         }

@@ -24,7 +24,21 @@ class CategoryController extends StorageControllerAbstract
      */
     public function validateData($data, $itemId = 0)
     {
-
+        if( empty($data) ){
+            return ['success' => false, 'msg' => 'Data is empty.'];
+        }
+        if( empty($data['title']) ){
+            return ['success' => false, 'msg' => 'Title is required.'];
+        }
+        if( empty($data['name']) ){
+            return ['success' => false, 'msg' => 'System name is required.'];
+        }
+        if( empty($data['content_type']) ){
+            return ['success' => false, 'msg' => 'Content type is required.'];
+        }
+        if($this->checkNameExists($data['name'], $itemId)){
+            return ['success' => false, 'msg' => 'System name already exists.'];
+        }
 
         return ['success' => true];
     }
@@ -37,35 +51,38 @@ class CategoryController extends StorageControllerAbstract
      */
     public function createUpdate($data, $itemId = '')
     {
+        $isFolder = false;
+        if($itemId){
+            $item = $this->getRepository()->find($itemId);
+            if(!$item){
+                return [
+                    'success' => false,
+                    'msg' => 'Item not found.'
+                ];
+            }
+        } else {
+            $item = new Category();
+        }
+
+        $item
+            ->setTitle($data['title'])
+            ->setName($data['name'])
+            ->setDescription(isset($data['description']) ? $data['description'] : '')
+            ->setContentType($data['content_type'])
+            ->setIsActive(isset($data['is_active']) ? $data['is_active'] : true)
+            ->setParentId(isset($data['parent_id']) ? intval( $data['parent_id'] ) : 0);
+
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $dm->persist($item);
+        $dm->flush();
 
         return [
             'success' => true,
-            'data' => []
+            'data' => $item->toArray()
         ];
     }
 
-//    /**
-//     * @Route("/app/categories_list", name="categories_get_list")
-//     * @Method({"GET"})
-//     * @param Request $request
-//     * @return JsonResponse
-//     */
-//    public function getList(Request $request)
-//    {
-//        $repository = $this->getRepository();
-//        $results = $repository->findAllOrderedByTitle();
-//
-//        $data = [];
-//        /** @var Category $item */
-//        foreach ($results as $item) {
-//            $data[] = $item->toArray();
-//        }
-//
-//        return new JsonResponse([
-//            'success' => true,
-//            'data' => $data
-//        ]);
-//    }
 //
 //    /**
 //     * @Route("/app/category", name="category_create")
@@ -89,45 +106,6 @@ class CategoryController extends StorageControllerAbstract
 //        return new JsonResponse( $output );
 //    }
 //
-//    /**
-//     * @param $data
-//     * @param string $itemId
-//     * @return array
-//     */
-//    public function validateData( $data, $itemId = '' )
-//    {
-//        if( empty($data) ){
-//            return ['success' => false, 'msg' => 'Data is empty.'];
-//        }
-//        if( empty($data['title']) ){
-//            return ['success' => false, 'msg' => 'Title is required.'];
-//        }
-//        if( empty($data['name']) ){
-//            return ['success' => false, 'msg' => 'System name is required.'];
-//        }
-//        if( empty($data['content_type']) ){
-//            return ['success' => false, 'msg' => 'Content type is required.'];
-//        }
-//
-//        //Check unique name
-//        $repository = $this->getRepository();
-//        $query = $repository->createQueryBuilder()
-//            ->field('name')->equals($data['name']);
-//
-//        if( $itemId ){
-//            $query = $query->field('id')->notEqual( $itemId );
-//        }
-//
-//        $count = $query->getQuery()
-//            ->execute()
-//            ->count();
-//
-//        if( $count > 0 ){
-//            return ['success' => false, 'msg' => 'System name already exists.'];
-//        }
-//
-//        return ['success' => true];
-//    }
 //
 //    /**
 //     * @Route("/app/category/{itemId}", name="category_get")
@@ -250,16 +228,7 @@ class CategoryController extends StorageControllerAbstract
 //            'success' => true
 //        ]);
 //    }
-//
-//    /**
-//     * @return \AppBundle\Repository\CategoryRepository
-//     */
-//    public function getRepository()
-//    {
-//        return $this->get('doctrine_mongodb')
-//            ->getManager()
-//            ->getRepository('AppBundle:Category');
-//    }
+
 
     /**
      * @return \AppBundle\Repository\ContentTypeRepository

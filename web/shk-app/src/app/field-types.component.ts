@@ -41,19 +41,19 @@ export class FieldTypeModalContent extends ModalContentAbstractComponent {
     model: FieldType = new FieldType(0, '', '', '', true, [], []);
 
     formFields = {
+        title: {
+            value: '',
+            validators: [Validators.required],
+            messages: {
+                required: 'Title is required.'
+            }
+        },
         name: {
             value: '',
             validators: [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')],
             messages: {
                 required: 'Name is required.',
                 pattern: 'The name must contain only Latin letters and numbers.'
-            }
-        },
-        title: {
-            value: '',
-            validators: [Validators.required],
-            messages: {
-                required: 'Title is required.'
             }
         },
         description: {

@@ -117,7 +117,8 @@ export abstract class ModalContentAbstractComponent implements OnInit {
 
     /** Close modal */
     closeModal() {
-        this.activeModal.close();
+        let reason = this.itemId ? 'edit' : 'create';
+        this.activeModal.close({reason: reason, data: this.model});
     }
 
     /** Submit form */

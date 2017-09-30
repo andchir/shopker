@@ -20,172 +20,107 @@ import { ContentTypesService } from './services/content_types.service';
 @Component({
     selector: 'category-modal-content',
     templateUrl: 'templates/modal-category.html',
-    providers: [ CategoriesService, SystemNameService ]
+    providers: [ CategoriesService, SystemNameService, ContentTypesService ]
 })
 export class CategoriesModalComponent extends ModalContentAbstractComponent {
-    @Input() modalTitle: string;
-    @Input() itemId: number;
-    @Input() isItemCopy: boolean;
+
     @Input() categories: Category[] = [];
-    submitted: boolean = false;
-    loading: boolean = false;
-    errorMessage: string;
-    model: Category = new Category(0,0,'','','','');
+    model: Category = new Category(0, false, 0, '', '', '', '', true);
     contentTypes: ContentType[] = [];
 
-    form: FormGroup;
-    // formErrors = {
-    //     parent_id: '',
-    //     name: '',
-    //     title: '',
-    //     content_type: ''
-    // };
-    // validationMessages = {
-    //     parent_id: {
-    //         required: 'Parent is required.'
-    //     },
-    //     title: {
-    //         required: 'Title is required.'
-    //     },
-    //     name: {
-    //         required: 'Name is required.',
-    //         pattern: 'The name must contain only Latin letters.'
-    //     },
-    //     content_type: {
-    //         required: 'Content type is required.'
-    //     }
-    // };
-
-    // constructor(
-    //     private fb: FormBuilder,
-    //     private contentTypesService: ContentTypesService,
-    //     private categoriesService: CategoriesService,
-    //     public activeModal: NgbActiveModal
-    // ) {}
+    formFields = {
+        title: {
+            value: '',
+            validators: [Validators.required],
+            messages: {
+                required: 'Title is required.'
+            }
+        },
+        name: {
+            value: '',
+            validators: [Validators.required],
+            messages: {
+                required: 'Name is required.'
+            }
+        },
+        description: {
+            value: '',
+            validators: [],
+            messages: {}
+        },
+        parent_id: {
+            value: 0,
+            validators: [],
+            messages: {}
+        },
+        content_type: {
+            value: '',
+            validators: [Validators.required],
+            messages: {
+                required: 'Content type is required.'
+            }
+        },
+        is_active: {
+            value: false,
+            validators: [],
+            messages: {}
+        }
+    };
 
     constructor(
         public fb: FormBuilder,
         public dataService: CategoriesService,
         public systemNameService: SystemNameService,
         public activeModal: NgbActiveModal,
-        public tooltipConfig: NgbTooltipConfig
+        public tooltipConfig: NgbTooltipConfig,
+        private contentTypesService: ContentTypesService
     ) {
         super(fb, dataService, systemNameService, activeModal, tooltipConfig);
     }
 
     /** On initialize */
-    // ngOnInit(): void {
-    //     this.buildForm();
-    //     this.getContentTypes();
-    //     if( this.itemId ){
-    //         this.getModelData();
-    //     }
-    // }
-
-    // getModelData(){
-    //     this.loading = true;
-    //     this.categoriesService.getItem( this.itemId )
-    //         .then(item => {
-    //             if( this.isItemCopy ){
-    //                 item.id = 0;
-    //                 item.name = '';
-    //             }
-    //             this.model = item;
-    //             this.loading = false;
-    //         });
-    // }
+    ngOnInit(): void {
+        ModalContentAbstractComponent.prototype.ngOnInit.call(this);
+        this.getContentTypes();
+    }
 
     getContentTypes(){
-        // this.contentTypesService.getList()
-        //     .subscribe(
-        //         res => {
-        //             if(res.success){
-        //                 this.contentTypes = res.data;
-        //             }
-        //         },
-        //         error => this.errorMessage = <any>error);
+        this.contentTypesService.getList()
+            .subscribe(
+                res => {
+                    if(res.success){
+                        this.contentTypes = res.data;
+                    }
+                },
+                error => this.errorMessage = <any>error);
     }
-
-    // buildForm(): void {
-    //     this.form = this.fb.group({
-    //         parent_id: [this.model.parent_id, [Validators.required]],
-    //         title: [this.model.title, [Validators.required]],
-    //         name: [this.model.name, [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')]],
-    //         description: [this.model.description, []],
-    //         content_type: [this.model.content_type, [Validators.required]]
-    //     });
-    //     this.form.valueChanges
-    //         .subscribe(data => this.onValueChanged(data));
-    // }
-
-    // /**
-    //  * On form value changed
-    //  * @param data
-    //  */
-    // onValueChanged(data?: any): void {
-    //     if (!this.form) { return; }
-    //     for (const field in this.formErrors) {
-    //         this.formErrors[field] = '';
-    //         const control = this.form.get(field);
-    //         if (control && (control.dirty || this.submitted) && !control.valid) {
-    //             const messages = this.validationMessages[field];
-    //             for (const key in control.errors) {
-    //                 this.formErrors[field] += messages[key] + ' ';
-    //             }
-    //         }
-    //     }
-    // }
-
-    // /**
-    //  * On form submit
-    //  */
-    // onSubmit() {
-    //     this.submitted = true;
-    //
-    //     if( !this.form.valid ){
-    //         this.onValueChanged();
-    //         return;
-    //     }
-    //
-    //     if( this.model.id ){
-    //
-    //         this.categoriesService.editItem( this.model.id, this.model )
-    //             .then((res) => {
-    //                 if( res.success ){
-    //                     this.closeModal();
-    //                 } else {
-    //                     if( res.msg ){
-    //                         this.errorMessage = res.msg;
-    //                     }
-    //                 }
-    //             });
-    //
-    //     } else {
-    //
-    //         this.categoriesService.createItem( this.model )
-    //             .then((res) => {
-    //                 if( res.success ){
-    //                     this.closeModal();
-    //                 } else {
-    //                     if( res.msg ){
-    //                         this.errorMessage = res.msg;
-    //                     }
-    //                 }
-    //             });
-    //     }
-    // }
-    //
-    // closeModal() {
-    //     let reason = this.itemId ? 'edit' : 'create';
-    //     this.activeModal.close( { reason: reason, data: this.model } );
-    // }
 
     save(): void{
+        this.submitted = true;
 
-        console.log('SAVE');
+        if(!this.form.valid){
+            this.onValueChanged('form');
+            this.submitted = false;
+            return;
+        }
 
+        let callback = function(res: any){
+            if(res.success){
+                this.closeModal();
+            } else {
+                if(res.msg){
+                    this.submitted = false;
+                    this.errorMessage = res.msg;
+                }
+            }
+        };
+
+        if(this.model.id){
+            this.dataService.update(this.model).then(callback.bind(this));
+        } else {
+            this.dataService.create(this.model).then(callback.bind(this));
+        }
     }
-
 }
 
 /**
@@ -196,6 +131,7 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent {
     template: `        
         <ul class="dropdown-menu dropdown-menu-hover" *ngIf="items.length > 0" [class.shadow]="parentId != 0">
             <li class="dropdown-item active" *ngFor="let item of items" [class.active]="item.id == currentId" [class.current-level]="getIsActiveParent(item.id)">
+                <i class="icon-fast-forward float-right" [hidden]="!item.is_folder"></i>
                 <a href="#/catalog/category/{{item.id}}">
                     {{item.title}}
                 </a>
@@ -219,7 +155,7 @@ export class CategoriesListComponent extends ListRecursiveComponent {
 export class CategoriesMenuComponent implements OnInit {
     @Input() rootTitle: string = 'Категории';
     @Output() changeRequest = new EventEmitter<Category>();
-    currentCategory: Category = new Category(0,0,'root',this.rootTitle,'','');
+    currentCategory: Category = new Category(0, false, 0, 'root', this.rootTitle, '', '', true);
     categories: Category[] = [];
     errorMessage: string = '';
     modalRef: NgbModalRef;
@@ -368,7 +304,7 @@ export class CategoriesMenuComponent implements OnInit {
 
     /** Open root category */
     openRootCategory(): void {
-        this.currentCategory = new Category(0,0,'root',this.rootTitle,'','');
+        this.currentCategory = new Category(0, false, 0, 'root', this.rootTitle, '', '', true);
         this.changeRequest.emit( this.currentCategory );
     }
 
@@ -396,6 +332,5 @@ export class CategoriesMenuComponent implements OnInit {
         console.log( 'moveCategory' );
 
     }
-
 }
 

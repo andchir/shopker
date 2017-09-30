@@ -40,6 +40,16 @@ class Category
     protected $content_type;
 
     /**
+     * @MongoDB\Field(type="boolean")
+     */
+    protected $is_folder;
+
+    /**
+     * @MongoDB\Field(type="boolean")
+     */
+    protected $is_active;
+
+    /**
      * Get id
      *
      * @return string $id
@@ -148,7 +158,9 @@ class Category
             'name' => $this->getName(),
             'title' => $this->getTitle(),
             'description' => $this->getDescription(),
-            'content_type' => $this->getContentType()
+            'content_type' => $this->getContentType(),
+            'is_folder' => $this->getIsFolder(),
+            'is_active' => $this->getIsActive()
         ];
     }
 
@@ -172,5 +184,49 @@ class Category
     public function getContentType()
     {
         return $this->content_type;
+    }
+
+    /**
+     * Set isFolder
+     *
+     * @param boolean $isFolder
+     * @return self
+     */
+    public function setIsFolder($isFolder)
+    {
+        $this->is_folder = $isFolder;
+        return $this;
+    }
+
+    /**
+     * Get isFolder
+     *
+     * @return boolean $isFolder
+     */
+    public function getIsFolder()
+    {
+        return $this->is_folder;
+    }
+
+    /**
+     * Set isActive
+     *
+     * @param boolean $isActive
+     * @return self
+     */
+    public function setIsActive($isActive)
+    {
+        $this->is_active = $isActive;
+        return $this;
+    }
+
+    /**
+     * Get isActive
+     *
+     * @return boolean $isActive
+     */
+    public function getIsActive()
+    {
+        return $this->is_active;
     }
 }

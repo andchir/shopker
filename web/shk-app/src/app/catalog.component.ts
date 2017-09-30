@@ -90,7 +90,7 @@ export class CatalogComponent extends PageTableAbstractComponent {
     }
 
     openRootCategory(): void {
-        this.currentCategory = new Category(0,0,'root', '','','');
+        this.currentCategory = new Category(0, false, 0, 'root', '', '', '');
         this.titleService.setTitle( this.title );
         this.getProducts();
     }

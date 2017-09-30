@@ -7,7 +7,7 @@
     <h4 class="modal-title">{{modalTitle}}</h4>
 </div>
 
-<form (ngSubmit)="onSubmit()" [formGroup]="form" [class.loading]="loading">
+<form [formGroup]="form" [class.loading]="loading">
 
     <div class="modal-body">
 
@@ -80,16 +80,33 @@
             </div>
         </div>
 
+        <div class="row form-group">
+            <div class="col-md-7 ml-md-auto">
+
+                <div class="card card-body p-2 pl-3">
+
+                    <label class="custom-control custom-checkbox m-0">
+                        <input type="checkbox" class="custom-control-input" value="1" name="is_active" formControlName="is_active" [(ngModel)]="model.is_active">
+                        <span class="custom-control-indicator"></span>
+                        <span>Активный</span>
+                    </label>
+
+                </div>
+
+            </div>
+        </div>
+
         <div class="alert alert-danger mt-3 mb-0" [hidden]="!errorMessage">
             <button type="button" class="close" (click)="errorMessage = ''">
                 <span aria-hidden="true">&times;</span>
             </button>
             {{errorMessage}}
         </div>
+
     </div>
 
     <div class="modal-footer d-block">
-        <button type="submit" class="btn btn-success btn-wide">
+        <button type="submit" class="btn btn-success btn-wide" [disabled]="submitted" (click)="save()">
             Save
         </button>
         <button type="submit" class="btn btn-secondary btn-wide" (click)="activeModal.dismiss()">

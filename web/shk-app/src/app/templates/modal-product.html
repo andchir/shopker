@@ -24,6 +24,20 @@
             </div>
         </div>
 
+        <div class="row form-group" [class.form-group-message]="formErrors.is_active">
+            <div class="col-md-7 ml-md-auto">
+                <div class="card card-body p-2 pl-3">
+
+                    <label class="custom-control custom-checkbox m-0">
+                        <input type="checkbox" class="custom-control-input" value="1" name="is_active" formControlName="is_active" [(ngModel)]="model.is_active">
+                        <span class="custom-control-indicator"></span>
+                        <span>Активный</span>
+                    </label>
+
+                </div>
+            </div>
+        </div>
+
         <ngb-tabset justify="fill">
             <ngb-tab title="{{groupName}}" id="{{i + 1}}" *ngFor="let groupName of currentContentType.groups; let i=index">
                 <ng-template ngbTabContent>

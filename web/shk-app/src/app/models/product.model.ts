@@ -1,6 +1,7 @@
 export class Product {
     constructor(
         public id: number,
+        public is_active: boolean,
         public parent_id: number,
         public content_type: string,
         public name: string,

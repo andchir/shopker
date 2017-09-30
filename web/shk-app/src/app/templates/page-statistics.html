@@ -11,9 +11,11 @@
         <div class="float-left">
 
             <div class="input-group">
-                <input class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker">
-                <div class="input-group-addon" (click)="d.toggle()">
-                    <i class="icon-grid"></i>
+                <input type="text" class="form-control" name="dp" ngbDatepicker #d="ngbDatepicker">
+                <div class="input-group-btn">
+                    <button class="btn btn-secondary" (click)="d.toggle()" type="button">
+                        <i class="icon-date_range"></i>
+                    </button>
                 </div>
             </div>
 

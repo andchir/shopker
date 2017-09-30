@@ -46,6 +46,11 @@ class Product
     protected $price;
 
     /**
+     * @MongoDB\Field(type="boolean")
+     */
+    protected $is_active;
+
+    /**
      * Get id
      *
      * @return int $id
@@ -194,13 +199,36 @@ class Product
     {
         $output = [
             'id' => $this->getId(),
-            'parentId' => $this->getParentId(),
+            'parent_id' => $this->getParentId(),
             'title' => $this->getTitle(),
             'name' => $this->getName(),
             'description' => $this->getDescription(),
             'price' => $this->getPrice(),
-            'content_type' => $this->getContentType()
+            'content_type' => $this->getContentType(),
+            'is_active' => $this->getIsActive()
         ];
         return $output;
+    }
+
+    /**
+     * Set isActive
+     *
+     * @param boolean $isActive
+     * @return self
+     */
+    public function setIsActive($isActive)
+    {
+        $this->is_active = $isActive;
+        return $this;
+    }
+
+    /**
+     * Get isActive
+     *
+     * @return boolean $isActive
+     */
+    public function getIsActive()
+    {
+        return $this->is_active;
     }
 }

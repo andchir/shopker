@@ -26,11 +26,16 @@ export class ProductModalContent extends ModalContentAbstractComponent {
     @Input() category: Category;
     contentTypes: ContentType[] = [];
     currentContentType: ContentType = new ContentType(0, '', '', '', '', [], [], true);
-    model: Product = new Product(0, 0, '', '', '');
+    model: Product = new Product(0, true, 0, '', '', '');
 
     formFields = {
         content_type: {
             value: '',
+            validators: [],
+            messages: {}
+        },
+        is_active: {
+            value: true,
             validators: [],
             messages: {}
         }/*,
@@ -95,6 +100,7 @@ export class ProductModalContent extends ModalContentAbstractComponent {
     buildForm(): void{
         let group: any = {};
         group.content_type = new FormControl(this.model.content_type, Validators.required);
+        group.is_active = new FormControl(this.model.is_active, []);
         this.form = new FormGroup(group);
     }
 

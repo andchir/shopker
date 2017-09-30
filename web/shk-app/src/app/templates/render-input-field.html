@@ -18,6 +18,15 @@
 
         <input *ngSwitchCase="'text'" type="text" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control">
 
+        <div class="input-group" *ngSwitchCase="'date'">
+            <input type="text" class="form-control" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" ngbDatepicker #d="ngbDatepicker">
+            <div class="input-group-btn">
+                <button class="btn btn-secondary" (click)="d.toggle()" type="button">
+                    <i class="icon-date_range"></i>
+                </button>
+            </div>
+        </div>
+
         <input *ngSwitchCase="'name'" type="text" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control">
 
         <input *ngSwitchCase="'number'" type="number" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" min="0" class="form-control">

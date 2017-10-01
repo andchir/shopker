@@ -556,7 +556,8 @@ var CategoriesModalComponent = (function (_super) {
     }
     /** On initialize */
     CategoriesModalComponent.prototype.ngOnInit = function () {
-        this.model.parent_id = this.currentCategoryId;
+        this.model.parent_id = this.currentCategory.id;
+        this.model.content_type = this.currentCategory.content_type;
         __WEBPACK_IMPORTED_MODULE_7__page_table_abstract__["a" /* ModalContentAbstractComponent */].prototype.ngOnInit.call(this);
         this.getContentTypes();
     };
@@ -602,15 +603,15 @@ __decorate([
 ], CategoriesModalComponent.prototype, "categories", void 0);
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["F" /* Input */])(),
-    __metadata("design:type", Number)
-], CategoriesModalComponent.prototype, "currentCategoryId", void 0);
+    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_4__models_category_model__["a" /* Category */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__models_category_model__["a" /* Category */]) === "function" && _a || Object)
+], CategoriesModalComponent.prototype, "currentCategory", void 0);
 CategoriesModalComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
         selector: 'category-modal-content',
         template: __webpack_require__("../../../../../src/app/templates/modal-category.html"),
         providers: [__WEBPACK_IMPORTED_MODULE_11__services_categories_service__["a" /* CategoriesService */], __WEBPACK_IMPORTED_MODULE_10__services_system_name_service__["a" /* SystemNameService */], __WEBPACK_IMPORTED_MODULE_12__services_content_types_service__["a" /* ContentTypesService */]]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__angular_forms__["a" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_forms__["a" /* FormBuilder */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_11__services_categories_service__["a" /* CategoriesService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_11__services_categories_service__["a" /* CategoriesService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_10__services_system_name_service__["a" /* SystemNameService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_10__services_system_name_service__["a" /* SystemNameService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["d" /* NgbTooltipConfig */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["d" /* NgbTooltipConfig */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_12__services_content_types_service__["a" /* ContentTypesService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_12__services_content_types_service__["a" /* ContentTypesService */]) === "function" && _f || Object])
+    __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__angular_forms__["a" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_forms__["a" /* FormBuilder */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_11__services_categories_service__["a" /* CategoriesService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_11__services_categories_service__["a" /* CategoriesService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_10__services_system_name_service__["a" /* SystemNameService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_10__services_system_name_service__["a" /* SystemNameService */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["d" /* NgbTooltipConfig */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["d" /* NgbTooltipConfig */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_12__services_content_types_service__["a" /* ContentTypesService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_12__services_content_types_service__["a" /* ContentTypesService */]) === "function" && _g || Object])
 ], CategoriesModalComponent);
 
 /**
@@ -701,7 +702,7 @@ var CategoriesMenuComponent = (function () {
         this.modalRef.componentInstance.itemId = itemId || 0;
         this.modalRef.componentInstance.isItemCopy = isItemCopy || false;
         this.modalRef.componentInstance.categories = this.categories;
-        this.modalRef.componentInstance.currentCategoryId = this.currentCategory.id;
+        this.modalRef.componentInstance.currentCategory = this.currentCategory;
         this.modalRef.result.then(function (result) {
             _this.getCategories();
         }, function (reason) {
@@ -804,10 +805,10 @@ CategoriesMenuComponent = __decorate([
         template: __webpack_require__("../../../../../src/app/templates/categories-menu.html"),
         providers: [__WEBPACK_IMPORTED_MODULE_11__services_categories_service__["a" /* CategoriesService */]]
     }),
-    __metadata("design:paramtypes", [typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */]) === "function" && _g || Object, typeof (_h = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* ActivatedRoute */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* ActivatedRoute */]) === "function" && _h || Object, typeof (_j = typeof __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["b" /* NgbModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["b" /* NgbModal */]) === "function" && _j || Object, typeof (_k = typeof __WEBPACK_IMPORTED_MODULE_11__services_categories_service__["a" /* CategoriesService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_11__services_categories_service__["a" /* CategoriesService */]) === "function" && _k || Object])
+    __metadata("design:paramtypes", [typeof (_h = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */]) === "function" && _h || Object, typeof (_j = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* ActivatedRoute */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* ActivatedRoute */]) === "function" && _j || Object, typeof (_k = typeof __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["b" /* NgbModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["b" /* NgbModal */]) === "function" && _k || Object, typeof (_l = typeof __WEBPACK_IMPORTED_MODULE_11__services_categories_service__["a" /* CategoriesService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_11__services_categories_service__["a" /* CategoriesService */]) === "function" && _l || Object])
 ], CategoriesMenuComponent);
 
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
 //# sourceMappingURL=categories.component.js.map
 
 /***/ }),

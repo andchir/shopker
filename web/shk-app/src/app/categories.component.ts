@@ -25,7 +25,7 @@ import { ContentTypesService } from './services/content_types.service';
 export class CategoriesModalComponent extends ModalContentAbstractComponent {
 
     @Input() categories: Category[] = [];
-    @Input() currentCategoryId: number;
+    @Input() currentCategory: Category;
     model: Category = new Category(0, false, 0, '', '', '', '', true);
     contentTypes: ContentType[] = [];
 
@@ -81,7 +81,9 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent {
 
     /** On initialize */
     ngOnInit(): void {
-        this.model.parent_id = this.currentCategoryId;
+        this.model.parent_id = this.currentCategory.id;
+        this.model.content_type = this.currentCategory.content_type;
+
         ModalContentAbstractComponent.prototype.ngOnInit.call(this);
         this.getContentTypes();
     }
@@ -232,7 +234,7 @@ export class CategoriesMenuComponent implements OnInit {
         this.modalRef.componentInstance.itemId = itemId || 0;
         this.modalRef.componentInstance.isItemCopy = isItemCopy || false;
         this.modalRef.componentInstance.categories = this.categories;
-        this.modalRef.componentInstance.currentCategoryId = this.currentCategory.id;
+        this.modalRef.componentInstance.currentCategory = this.currentCategory;
         this.modalRef.result.then((result) => {
             this.getCategories();
         }, (reason) => {

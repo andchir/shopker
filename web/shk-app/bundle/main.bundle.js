@@ -410,7 +410,7 @@ var CatalogComponent = (function (_super) {
         this.getProducts();
     };
     CatalogComponent.prototype.openRootCategory = function () {
-        this.currentCategory = new __WEBPACK_IMPORTED_MODULE_4__models_category_model__["a" /* Category */](0, false, 0, 'root', '', '', '');
+        this.currentCategory = new __WEBPACK_IMPORTED_MODULE_4__models_category_model__["a" /* Category */](0, false, 0, 'root', '', '', '', true);
         this.titleService.setTitle(this.title);
         this.getProducts();
     };
@@ -618,7 +618,7 @@ var CategoriesListComponent = (function (_super) {
 CategoriesListComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
         selector: 'categories-list',
-        template: "        \n        <ul class=\"dropdown-menu dropdown-menu-hover\" *ngIf=\"items.length > 0\" [class.shadow]=\"parentId != 0\">\n            <li class=\"dropdown-item active\" *ngFor=\"let item of items\" [class.active]=\"item.id == currentId\" [class.current-level]=\"getIsActiveParent(item.id)\">\n                <i class=\"icon-fast-forward float-right\" [hidden]=\"!item.is_folder\"></i>\n                <a href=\"#/catalog/category/{{item.id}}\">\n                    {{item.title}}\n                </a>\n                <categories-list [inputItems]=\"inputItems\" [parentId]=\"item.id\" [currentId]=\"currentId\"></categories-list>\n            </li>\n        </ul>\n    "
+        template: "        \n        <ul class=\"dropdown-menu dropdown-menu-hover\" *ngIf=\"items.length > 0\" [class.shadow]=\"parentId != 0\">\n            <li class=\"dropdown-item active\" *ngFor=\"let item of items\" [class.active]=\"item.id == currentId\" [class.current-level]=\"getIsActiveParent(item.id)\">\n                <i class=\"icon-fast-forward float-right m-2 p-1\" [hidden]=\"!item.is_folder\"></i>\n                <a href=\"#/catalog/category/{{item.id}}\" [class.text-muted]=\"!item.is_active\">\n                    {{item.title}}\n                </a>\n                <categories-list [inputItems]=\"inputItems\" [parentId]=\"item.id\" [currentId]=\"currentId\"></categories-list>\n            </li>\n        </ul>\n    "
     })
 ], CategoriesListComponent);
 

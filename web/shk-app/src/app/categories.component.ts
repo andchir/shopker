@@ -131,8 +131,8 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent {
     template: `        
         <ul class="dropdown-menu dropdown-menu-hover" *ngIf="items.length > 0" [class.shadow]="parentId != 0">
             <li class="dropdown-item active" *ngFor="let item of items" [class.active]="item.id == currentId" [class.current-level]="getIsActiveParent(item.id)">
-                <i class="icon-fast-forward float-right" [hidden]="!item.is_folder"></i>
-                <a href="#/catalog/category/{{item.id}}">
+                <i class="icon-fast-forward float-right m-2 p-1" [hidden]="!item.is_folder"></i>
+                <a href="#/catalog/category/{{item.id}}" [class.text-muted]="!item.is_active">
                     {{item.title}}
                 </a>
                 <categories-list [inputItems]="inputItems" [parentId]="item.id" [currentId]="currentId"></categories-list>

@@ -18,7 +18,8 @@ import { TableComponent } from './table.component';
 import { InputFieldComponent } from './render-input-field';
 import { OutputFieldComponent } from './render-output-field';
 
-import { filterFieldByGroup } from "./filter-field-by-group.pipe";
+import { FilterFieldByGroup } from "./pipes/filter-field-by-group.pipe";
+import { OrderByPipe } from "./pipes/orderby.pipe";
 
 import { ProductsService } from './services/products.service';
 import { ContentTypesService } from './services/content_types.service';
@@ -46,12 +47,14 @@ import { NgbModule, NgbActiveModal, NgbTooltipConfig } from '@ng-bootstrap/ng-bo
         FieldTypesComponent,
         StatisticsComponent,
         SettingsComponent,
-        filterFieldByGroup,
         ListRecursiveComponent,
         TableComponent,
         CategoriesListComponent,
         InputFieldComponent,
         OutputFieldComponent,
+
+        FilterFieldByGroup,
+        OrderByPipe,
 
         AlertModalContent,
         ConfirmModalContent,

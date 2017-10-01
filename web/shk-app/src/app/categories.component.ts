@@ -25,6 +25,7 @@ import { ContentTypesService } from './services/content_types.service';
 export class CategoriesModalComponent extends ModalContentAbstractComponent {
 
     @Input() categories: Category[] = [];
+    @Input() currentCategoryId: number;
     model: Category = new Category(0, false, 0, '', '', '', '', true);
     contentTypes: ContentType[] = [];
 
@@ -80,6 +81,7 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent {
 
     /** On initialize */
     ngOnInit(): void {
+        this.model.parent_id = this.currentCategoryId;
         ModalContentAbstractComponent.prototype.ngOnInit.call(this);
         this.getContentTypes();
     }
@@ -128,7 +130,7 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent {
  */
 @Component({
     selector: 'categories-list',
-    template: `        
+    template: `
         <ul class="dropdown-menu dropdown-menu-hover" *ngIf="items.length > 0" [class.shadow]="parentId != 0">
             <li class="dropdown-item active" *ngFor="let item of items" [class.active]="item.id == currentId" [class.current-level]="getIsActiveParent(item.id)">
                 <i class="icon-keyboard_arrow_right float-right m-2 pt-1" [hidden]="!item.is_folder"></i>
@@ -230,6 +232,7 @@ export class CategoriesMenuComponent implements OnInit {
         this.modalRef.componentInstance.itemId = itemId || 0;
         this.modalRef.componentInstance.isItemCopy = isItemCopy || false;
         this.modalRef.componentInstance.categories = this.categories;
+        this.modalRef.componentInstance.currentCategoryId = this.currentCategory.id;
         this.modalRef.result.then((result) => {
             this.getCategories();
         }, (reason) => {

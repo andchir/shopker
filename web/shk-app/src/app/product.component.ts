@@ -6,7 +6,7 @@ import { Category } from "./models/category.model";
 import { Product } from "./models/product.model";
 import { QueryOptions } from './models/query-options';
 import { ContentField } from "./models/content_field.model";
-import { filterFieldByGroup } from "./filter-field-by-group.pipe";
+import { FilterFieldByGroup } from "./pipes/filter-field-by-group.pipe";
 import { DataService } from './services/data-service.abstract';
 import { PageTableAbstractComponent, ModalContentAbstractComponent } from './page-table.abstract';
 import * as _ from "lodash";

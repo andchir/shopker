@@ -217,18 +217,20 @@ var _a, _b, _c;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__table_component__ = __webpack_require__("../../../../../src/app/table.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__render_input_field__ = __webpack_require__("../../../../../src/app/render-input-field.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__render_output_field__ = __webpack_require__("../../../../../src/app/render-output-field.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__filter_field_by_group_pipe__ = __webpack_require__("../../../../../src/app/filter-field-by-group.pipe.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__services_products_service__ = __webpack_require__("../../../../../src/app/services/products.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__services_content_types_service__ = __webpack_require__("../../../../../src/app/services/content_types.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__services_categories_service__ = __webpack_require__("../../../../../src/app/services/categories.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__app_routing_module__ = __webpack_require__("../../../../../src/app/app-routing.module.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__ng_bootstrap_ng_bootstrap__ = __webpack_require__("../../../../@ng-bootstrap/ng-bootstrap/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__pipes_filter_field_by_group_pipe__ = __webpack_require__("../../../../../src/app/pipes/filter-field-by-group.pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__pipes_orderby_pipe__ = __webpack_require__("../../../../../src/app/pipes/orderby.pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__services_products_service__ = __webpack_require__("../../../../../src/app/services/products.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__services_content_types_service__ = __webpack_require__("../../../../../src/app/services/content_types.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__services_categories_service__ = __webpack_require__("../../../../../src/app/services/categories.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__app_routing_module__ = __webpack_require__("../../../../../src/app/app-routing.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__ng_bootstrap_ng_bootstrap__ = __webpack_require__("../../../../@ng-bootstrap/ng-bootstrap/index.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -265,8 +267,8 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_2__angular_forms__["d" /* FormsModule */],
             __WEBPACK_IMPORTED_MODULE_2__angular_forms__["g" /* ReactiveFormsModule */],
             __WEBPACK_IMPORTED_MODULE_3__angular_http__["c" /* HttpModule */],
-            __WEBPACK_IMPORTED_MODULE_22__app_routing_module__["a" /* AppRoutingModule */],
-            __WEBPACK_IMPORTED_MODULE_23__ng_bootstrap_ng_bootstrap__["c" /* NgbModule */].forRoot()
+            __WEBPACK_IMPORTED_MODULE_23__app_routing_module__["a" /* AppRoutingModule */],
+            __WEBPACK_IMPORTED_MODULE_24__ng_bootstrap_ng_bootstrap__["c" /* NgbModule */].forRoot()
         ],
         declarations: [
             __WEBPACK_IMPORTED_MODULE_4__app_component__["b" /* AppComponent */],
@@ -278,12 +280,13 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_11__field_types_component__["b" /* FieldTypesComponent */],
             __WEBPACK_IMPORTED_MODULE_12__stat_component__["a" /* StatisticsComponent */],
             __WEBPACK_IMPORTED_MODULE_13__settings_component__["a" /* SettingsComponent */],
-            __WEBPACK_IMPORTED_MODULE_18__filter_field_by_group_pipe__["a" /* filterFieldByGroup */],
             __WEBPACK_IMPORTED_MODULE_14__list_recursive_component__["a" /* ListRecursiveComponent */],
             __WEBPACK_IMPORTED_MODULE_15__table_component__["a" /* TableComponent */],
             __WEBPACK_IMPORTED_MODULE_9__categories_component__["a" /* CategoriesListComponent */],
             __WEBPACK_IMPORTED_MODULE_16__render_input_field__["a" /* InputFieldComponent */],
             __WEBPACK_IMPORTED_MODULE_17__render_output_field__["a" /* OutputFieldComponent */],
+            __WEBPACK_IMPORTED_MODULE_18__pipes_filter_field_by_group_pipe__["a" /* FilterFieldByGroup */],
+            __WEBPACK_IMPORTED_MODULE_19__pipes_orderby_pipe__["a" /* OrderByPipe */],
             __WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* AlertModalContent */],
             __WEBPACK_IMPORTED_MODULE_4__app_component__["c" /* ConfirmModalContent */],
             __WEBPACK_IMPORTED_MODULE_8__product_component__["a" /* ProductModalContent */],
@@ -291,7 +294,7 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_9__categories_component__["c" /* CategoriesModalComponent */],
             __WEBPACK_IMPORTED_MODULE_11__field_types_component__["a" /* FieldTypeModalContent */]
         ],
-        providers: [__WEBPACK_IMPORTED_MODULE_19__services_products_service__["a" /* ProductsService */], __WEBPACK_IMPORTED_MODULE_20__services_content_types_service__["a" /* ContentTypesService */], __WEBPACK_IMPORTED_MODULE_21__services_categories_service__["a" /* CategoriesService */], __WEBPACK_IMPORTED_MODULE_23__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */], __WEBPACK_IMPORTED_MODULE_23__ng_bootstrap_ng_bootstrap__["d" /* NgbTooltipConfig */]],
+        providers: [__WEBPACK_IMPORTED_MODULE_20__services_products_service__["a" /* ProductsService */], __WEBPACK_IMPORTED_MODULE_21__services_content_types_service__["a" /* ContentTypesService */], __WEBPACK_IMPORTED_MODULE_22__services_categories_service__["a" /* CategoriesService */], __WEBPACK_IMPORTED_MODULE_24__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */], __WEBPACK_IMPORTED_MODULE_24__ng_bootstrap_ng_bootstrap__["d" /* NgbTooltipConfig */]],
         entryComponents: [
             __WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* AlertModalContent */],
             __WEBPACK_IMPORTED_MODULE_4__app_component__["c" /* ConfirmModalContent */],
@@ -553,6 +556,7 @@ var CategoriesModalComponent = (function (_super) {
     }
     /** On initialize */
     CategoriesModalComponent.prototype.ngOnInit = function () {
+        this.model.parent_id = this.currentCategoryId;
         __WEBPACK_IMPORTED_MODULE_7__page_table_abstract__["a" /* ModalContentAbstractComponent */].prototype.ngOnInit.call(this);
         this.getContentTypes();
     };
@@ -596,6 +600,10 @@ __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["F" /* Input */])(),
     __metadata("design:type", Array)
 ], CategoriesModalComponent.prototype, "categories", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["F" /* Input */])(),
+    __metadata("design:type", Number)
+], CategoriesModalComponent.prototype, "currentCategoryId", void 0);
 CategoriesModalComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
         selector: 'category-modal-content',
@@ -618,7 +626,7 @@ var CategoriesListComponent = (function (_super) {
 CategoriesListComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
         selector: 'categories-list',
-        template: "        \n        <ul class=\"dropdown-menu dropdown-menu-hover\" *ngIf=\"items.length > 0\" [class.shadow]=\"parentId != 0\">\n            <li class=\"dropdown-item active\" *ngFor=\"let item of items\" [class.active]=\"item.id == currentId\" [class.current-level]=\"getIsActiveParent(item.id)\">\n                <i class=\"icon-keyboard_arrow_right float-right m-2 pt-1\" [hidden]=\"!item.is_folder\"></i>\n                <a href=\"#/catalog/category/{{item.id}}\" [class.text-muted]=\"!item.is_active\">\n                    {{item.title}}\n                </a>\n                <categories-list [inputItems]=\"inputItems\" [parentId]=\"item.id\" [currentId]=\"currentId\"></categories-list>\n            </li>\n        </ul>\n    "
+        template: "\n        <ul class=\"dropdown-menu dropdown-menu-hover\" *ngIf=\"items.length > 0\" [class.shadow]=\"parentId != 0\">\n            <li class=\"dropdown-item active\" *ngFor=\"let item of items\" [class.active]=\"item.id == currentId\" [class.current-level]=\"getIsActiveParent(item.id)\">\n                <i class=\"icon-keyboard_arrow_right float-right m-2 pt-1\" [hidden]=\"!item.is_folder\"></i>\n                <a href=\"#/catalog/category/{{item.id}}\" [class.text-muted]=\"!item.is_active\">\n                    {{item.title}}\n                </a>\n                <categories-list [inputItems]=\"inputItems\" [parentId]=\"item.id\" [currentId]=\"currentId\"></categories-list>\n            </li>\n        </ul>\n    "
     })
 ], CategoriesListComponent);
 
@@ -693,6 +701,7 @@ var CategoriesMenuComponent = (function () {
         this.modalRef.componentInstance.itemId = itemId || 0;
         this.modalRef.componentInstance.isItemCopy = isItemCopy || false;
         this.modalRef.componentInstance.categories = this.categories;
+        this.modalRef.componentInstance.currentCategoryId = this.currentCategory.id;
         this.modalRef.result.then(function (result) {
             _this.getCategories();
         }, function (reason) {
@@ -1525,35 +1534,6 @@ var _a, _b, _c, _d, _e, _f, _g, _h;
 
 /***/ }),
 
-/***/ "../../../../../src/app/filter-field-by-group.pipe.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return filterFieldByGroup; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-
-var filterFieldByGroup = (function () {
-    function filterFieldByGroup() {
-    }
-    filterFieldByGroup.prototype.transform = function (allFields, groupName) {
-        return allFields.filter(function (field) { return field.group == groupName; });
-    };
-    return filterFieldByGroup;
-}());
-filterFieldByGroup = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["X" /* Pipe */])({ name: 'filterFieldByGroup' })
-], filterFieldByGroup);
-
-//# sourceMappingURL=filter-field-by-group.pipe.js.map
-
-/***/ }),
-
 /***/ "../../../../../src/app/i18n-providers.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2185,6 +2165,164 @@ PageTableAbstractComponent = __decorate([
 
 var _a, _b, _c, _d, _e, _f, _g, _h, _j;
 //# sourceMappingURL=page-table.abstract.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/pipes/filter-field-by-group.pipe.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FilterFieldByGroup; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+var FilterFieldByGroup = (function () {
+    function FilterFieldByGroup() {
+    }
+    FilterFieldByGroup.prototype.transform = function (allFields, groupName) {
+        return allFields.filter(function (field) { return field.group == groupName; });
+    };
+    return FilterFieldByGroup;
+}());
+FilterFieldByGroup = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["X" /* Pipe */])({ name: 'filterFieldByGroup' })
+], FilterFieldByGroup);
+
+//# sourceMappingURL=filter-field-by-group.pipe.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/pipes/orderby.pipe.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return OrderByPipe; });
+/* unused harmony export ORDERBY_PROVIDERS */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/*
+ * https://github.com/FuelInteractive/fuel-ui
+ * Example use
+ *		Basic Array of single type: *ngFor="let todo of todoService.todos | orderBy : '-'"
+ *		Multidimensional Array Sort on single column: *ngFor="let todo of todoService.todos | orderBy : ['-status']"
+ *		Multidimensional Array Sort on multiple columns: *ngFor="let todo of todoService.todos | orderBy : ['status', '-title']"
+ */
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+var OrderByPipe = OrderByPipe_1 = (function () {
+    function OrderByPipe() {
+        this.value = [];
+    }
+    OrderByPipe._orderByComparator = function (a, b) {
+        if (a === null || typeof a === 'undefined')
+            a = 0;
+        if (b === null || typeof b === 'undefined')
+            b = 0;
+        if ((isNaN(parseFloat(a)) || !isFinite(a)) || (isNaN(parseFloat(b)) || !isFinite(b))) {
+            //Isn't a number so lowercase the string to properly compare
+            if (a.toLowerCase() < b.toLowerCase())
+                return -1;
+            if (a.toLowerCase() > b.toLowerCase())
+                return 1;
+        }
+        else {
+            //Parse strings as numbers to compare properly
+            if (parseFloat(a) < parseFloat(b))
+                return -1;
+            if (parseFloat(a) > parseFloat(b))
+                return 1;
+        }
+        return 0; //equal each other
+    };
+    OrderByPipe.prototype.transform = function (input, config) {
+        if (config === void 0) { config = '+'; }
+        //invalid input given
+        if (!input)
+            return input;
+        //make a copy of the input's reference
+        this.value = input.slice();
+        var value = this.value;
+        if (!Array.isArray(value))
+            return value;
+        if (!Array.isArray(config) || (Array.isArray(config) && config.length == 1)) {
+            var propertyToCheck = !Array.isArray(config) ? config : config[0];
+            var desc_1 = propertyToCheck.substr(0, 1) == '-';
+            //Basic array
+            if (!propertyToCheck || propertyToCheck == '-' || propertyToCheck == '+') {
+                return !desc_1 ? value.sort() : value.sort().reverse();
+            }
+            else {
+                var property_1 = propertyToCheck.substr(0, 1) == '+' || propertyToCheck.substr(0, 1) == '-'
+                    ? propertyToCheck.substr(1)
+                    : propertyToCheck;
+                return value.sort(function (a, b) {
+                    var aValue = a[property_1];
+                    var bValue = b[property_1];
+                    var propertySplit = property_1.split('.');
+                    if (typeof aValue === 'undefined' && typeof bValue === 'undefined' && propertySplit.length > 1) {
+                        aValue = a;
+                        bValue = b;
+                        for (var j = 0; j < propertySplit.length; j++) {
+                            aValue = aValue[propertySplit[j]];
+                            bValue = bValue[propertySplit[j]];
+                        }
+                    }
+                    return !desc_1
+                        ? OrderByPipe_1._orderByComparator(aValue, bValue)
+                        : -OrderByPipe_1._orderByComparator(aValue, bValue);
+                });
+            }
+        }
+        else {
+            //Loop over property of the array in order and sort
+            return value.sort(function (a, b) {
+                for (var i = 0; i < config.length; i++) {
+                    var desc = config[i].substr(0, 1) == '-';
+                    var property = config[i].substr(0, 1) == '+' || config[i].substr(0, 1) == '-'
+                        ? config[i].substr(1)
+                        : config[i];
+                    var aValue = a[property];
+                    var bValue = b[property];
+                    var propertySplit = property.split('.');
+                    if (typeof aValue === 'undefined' && typeof bValue === 'undefined' && propertySplit.length > 1) {
+                        aValue = a;
+                        bValue = b;
+                        for (var j = 0; j < propertySplit.length; j++) {
+                            aValue = aValue[propertySplit[j]];
+                            bValue = bValue[propertySplit[j]];
+                        }
+                    }
+                    var comparison = !desc
+                        ? OrderByPipe_1._orderByComparator(aValue, bValue)
+                        : -OrderByPipe_1._orderByComparator(aValue, bValue);
+                    //Don't return 0 yet in case of needing to sort by next property
+                    if (comparison != 0)
+                        return comparison;
+                }
+                return 0; //equal each other
+            });
+        }
+    };
+    return OrderByPipe;
+}());
+OrderByPipe = OrderByPipe_1 = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["X" /* Pipe */])({ name: 'orderBy', pure: false })
+], OrderByPipe);
+
+var ORDERBY_PROVIDERS = [
+    OrderByPipe
+];
+var OrderByPipe_1;
+//# sourceMappingURL=orderby.pipe.js.map
 
 /***/ }),
 
@@ -3257,7 +3395,7 @@ module.exports = "<div class=\"table-responsive\" [class.loading]=\"loading\">\n
 /***/ "../../../../../src/app/templates/modal-category.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"modal-header d-block\">\n    <div class=\"d-block float-right\">\n        <button type=\"button\" class=\"btn btn-secondary\" (click)=\"activeModal.dismiss()\">\n            Close\n        </button>\n    </div>\n    <h4 class=\"modal-title\">{{modalTitle}}</h4>\n</div>\n\n<form [formGroup]=\"form\" [class.loading]=\"loading\">\n\n    <div class=\"modal-body\">\n\n        <div class=\"row form-group\" [class.form-group-message]=\"formErrors.parent_id\">\n            <div class=\"col-md-5\">\n                <label for=\"fieldContentType\">Родительская папка</label>\n            </div>\n            <div class=\"col-md-7\">\n                <select id=\"fieldParent\" class=\"form-control\" name=\"parent_id\" formControlName=\"parent_id\" [(ngModel)]=\"model.parent_id\">\n                    <option value=\"0\">Корневая категория</option>\n                    <option value=\"{{category.id}}\" *ngFor=\"let category of categories\">{{category.title}}</option>\n                </select>\n                <div *ngIf=\"formErrors.parent_id\" class=\"alert alert-danger\">\n                    {{formErrors.parent_id}}\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row form-group\" [class.form-group-message]=\"formErrors.title\">\n            <div class=\"col-md-5\">\n                <label for=\"fieldTitle\">Название</label>\n            </div>\n            <div class=\"col-md-7\">\n                <input type=\"text\" id=\"fieldTitle\" class=\"form-control\" formControlName=\"title\" name=\"title\" [(ngModel)]=\"model.title\">\n                <div *ngIf=\"formErrors.title\" class=\"alert alert-danger\">\n                    {{formErrors.title}}\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row form-group\" [class.form-group-message]=\"formErrors.name\">\n            <div class=\"col-md-5\">\n                <label for=\"fieldName\">Системное имя</label>\n            </div>\n            <div class=\"col-md-7\">\n                <div class=\"input-group\">\n                    <input type=\"text\" class=\"form-control\" name=\"name\" formControlName=\"name\" id=\"fieldName\" [(ngModel)]=\"model.name\">\n                    <div class=\"input-group-btn\">\n                        <button type=\"button\" class=\"btn btn-secondary\" ngbTooltip=\"Generate\" (click)=\"generateName(model)\">\n                            <i class=\"icon-reload\"></i>\n                        </button>\n                    </div>\n                </div>\n                <div *ngIf=\"formErrors.name\" class=\"alert alert-danger\">\n                    {{formErrors.name}}\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row form-group\">\n            <div class=\"col-md-5\">\n                <label for=\"fieldDescription\">Описание</label>\n            </div>\n            <div class=\"col-md-7\">\n                <textarea type=\"text\" id=\"fieldDescription\" rows=\"4\" class=\"form-control\" name=\"description\" formControlName=\"description\" [(ngModel)]=\"model.description\"></textarea>\n            </div>\n        </div>\n\n        <div class=\"row form-group\" [class.form-group-message]=\"formErrors.content_type\">\n            <div class=\"col-md-5\">\n                <label for=\"fieldContentType\">Тип контента</label>\n            </div>\n            <div class=\"col-md-7\">\n                <select id=\"fieldContentType\" class=\"form-control\" name=\"content_type\" formControlName=\"content_type\" [(ngModel)]=\"model.content_type\">\n                    <option value=\"1\" *ngFor=\"let contentType of contentTypes\" [value]=\"contentType.name\">{{contentType.title}}</option>\n                </select>\n                <div *ngIf=\"formErrors.content_type\" class=\"alert alert-danger\">\n                    {{formErrors.content_type}}\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row form-group\">\n            <div class=\"col-md-7 ml-md-auto\">\n\n                <div class=\"card card-body p-2 pl-3\">\n\n                    <label class=\"custom-control custom-checkbox m-0\">\n                        <input type=\"checkbox\" class=\"custom-control-input\" value=\"1\" name=\"is_active\" formControlName=\"is_active\" [(ngModel)]=\"model.is_active\">\n                        <span class=\"custom-control-indicator\"></span>\n                        <span>Активный</span>\n                    </label>\n\n                </div>\n\n            </div>\n        </div>\n\n        <div class=\"alert alert-danger mt-3 mb-0\" [hidden]=\"!errorMessage\">\n            <button type=\"button\" class=\"close\" (click)=\"errorMessage = ''\">\n                <span aria-hidden=\"true\">&times;</span>\n            </button>\n            {{errorMessage}}\n        </div>\n\n    </div>\n\n    <div class=\"modal-footer d-block\">\n        <button type=\"submit\" class=\"btn btn-success btn-wide\" [disabled]=\"submitted\" (click)=\"save()\">\n            Save\n        </button>\n        <button type=\"submit\" class=\"btn btn-secondary btn-wide\" (click)=\"activeModal.dismiss()\">\n            Cancel\n        </button>\n    </div>\n\n</form>\n"
+module.exports = "<div class=\"modal-header d-block\">\n    <div class=\"d-block float-right\">\n        <button type=\"button\" class=\"btn btn-secondary\" (click)=\"activeModal.dismiss()\">\n            Close\n        </button>\n    </div>\n    <h4 class=\"modal-title\">{{modalTitle}}</h4>\n</div>\n\n<form [formGroup]=\"form\" [class.loading]=\"loading\">\n\n    <div class=\"modal-body\">\n\n        <div class=\"row form-group\" [class.form-group-message]=\"formErrors.parent_id\">\n            <div class=\"col-md-5\">\n                <label for=\"fieldContentType\">Родительская папка</label>\n            </div>\n            <div class=\"col-md-7\">\n                <select id=\"fieldParent\" class=\"form-control\" name=\"parent_id\" formControlName=\"parent_id\" [(ngModel)]=\"model.parent_id\">\n                    <option value=\"0\">Корневая категория</option>\n                    <option value=\"{{category.id}}\" *ngFor=\"let category of categories | orderBy: 'title'\">{{category.title}}</option>\n                </select>\n                <div *ngIf=\"formErrors.parent_id\" class=\"alert alert-danger\">\n                    {{formErrors.parent_id}}\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row form-group\" [class.form-group-message]=\"formErrors.title\">\n            <div class=\"col-md-5\">\n                <label for=\"fieldTitle\">Название</label>\n            </div>\n            <div class=\"col-md-7\">\n                <input type=\"text\" id=\"fieldTitle\" class=\"form-control\" formControlName=\"title\" name=\"title\" [(ngModel)]=\"model.title\">\n                <div *ngIf=\"formErrors.title\" class=\"alert alert-danger\">\n                    {{formErrors.title}}\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row form-group\" [class.form-group-message]=\"formErrors.name\">\n            <div class=\"col-md-5\">\n                <label for=\"fieldName\">Системное имя</label>\n            </div>\n            <div class=\"col-md-7\">\n                <div class=\"input-group\">\n                    <input type=\"text\" class=\"form-control\" name=\"name\" formControlName=\"name\" id=\"fieldName\" [(ngModel)]=\"model.name\">\n                    <div class=\"input-group-btn\">\n                        <button type=\"button\" class=\"btn btn-secondary\" ngbTooltip=\"Generate\" (click)=\"generateName(model)\">\n                            <i class=\"icon-reload\"></i>\n                        </button>\n                    </div>\n                </div>\n                <div *ngIf=\"formErrors.name\" class=\"alert alert-danger\">\n                    {{formErrors.name}}\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row form-group\">\n            <div class=\"col-md-5\">\n                <label for=\"fieldDescription\">Описание</label>\n            </div>\n            <div class=\"col-md-7\">\n                <textarea type=\"text\" id=\"fieldDescription\" rows=\"4\" class=\"form-control\" name=\"description\" formControlName=\"description\" [(ngModel)]=\"model.description\"></textarea>\n            </div>\n        </div>\n\n        <div class=\"row form-group\" [class.form-group-message]=\"formErrors.content_type\">\n            <div class=\"col-md-5\">\n                <label for=\"fieldContentType\">Тип контента</label>\n            </div>\n            <div class=\"col-md-7\">\n                <select id=\"fieldContentType\" class=\"form-control\" name=\"content_type\" formControlName=\"content_type\" [(ngModel)]=\"model.content_type\">\n                    <option value=\"1\" *ngFor=\"let contentType of contentTypes\" [value]=\"contentType.name\">{{contentType.title}}</option>\n                </select>\n                <div *ngIf=\"formErrors.content_type\" class=\"alert alert-danger\">\n                    {{formErrors.content_type}}\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row form-group\">\n            <div class=\"col-md-7 ml-md-auto\">\n\n                <div class=\"card card-body p-2 pl-3\">\n\n                    <label class=\"custom-control custom-checkbox m-0\">\n                        <input type=\"checkbox\" class=\"custom-control-input\" value=\"1\" name=\"is_active\" formControlName=\"is_active\" [(ngModel)]=\"model.is_active\">\n                        <span class=\"custom-control-indicator\"></span>\n                        <span>Активный</span>\n                    </label>\n\n                </div>\n\n            </div>\n        </div>\n\n        <div class=\"alert alert-danger mt-3 mb-0\" [hidden]=\"!errorMessage\">\n            <button type=\"button\" class=\"close\" (click)=\"errorMessage = ''\">\n                <span aria-hidden=\"true\">&times;</span>\n            </button>\n            {{errorMessage}}\n        </div>\n\n    </div>\n\n    <div class=\"modal-footer d-block\">\n        <button type=\"submit\" class=\"btn btn-success btn-wide\" [disabled]=\"submitted\" (click)=\"save()\">\n            Save\n        </button>\n        <button type=\"submit\" class=\"btn btn-secondary btn-wide\" (click)=\"activeModal.dismiss()\">\n            Cancel\n        </button>\n    </div>\n\n</form>\n"
 
 /***/ }),
 

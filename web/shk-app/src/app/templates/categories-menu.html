@@ -17,9 +17,6 @@
             <button type="button" class="btn btn-sm btn-secondary" ngbTooltip="Copy category" (click)="copyCategory()" [hidden]="currentCategory.id == 0">
                 <i class="icon-stack"></i>
             </button>
-            <button type="button" class="btn btn-sm btn-secondary" ngbTooltip="Move current category" (click)="moveCategory()" [hidden]="currentCategory.id == 0">
-                <i class="icon-arrow-right"></i>
-            </button>
             <button type="button" class="btn btn-sm btn-secondary" ngbTooltip="Delete current category" (click)="deleteCategoryItemConfirm(currentCategory.id)" [hidden]="currentCategory.id == 0">
                 <i class="icon-cross"></i>
             </button>

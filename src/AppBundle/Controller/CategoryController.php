@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use AppBundle\Event\CategoryUpdatedEvent;
 
 /**
  * Class ContentTypeController
@@ -51,8 +52,9 @@ class CategoryController extends StorageControllerAbstract
      */
     public function createUpdate($data, $itemId = '')
     {
-        $isFolder = false;
+        $previousParentId = 0;
         if($itemId){
+            /** @var Category $item */
             $item = $this->getRepository()->find($itemId);
             if(!$item){
                 return [
@@ -60,6 +62,7 @@ class CategoryController extends StorageControllerAbstract
                     'msg' => 'Item not found.'
                 ];
             }
+            $previousParentId = $item->getParentId();
         } else {
             $item = new Category();
         }
@@ -77,10 +80,10 @@ class CategoryController extends StorageControllerAbstract
         $dm->persist($item);
         $dm->flush();
 
-        $item = $this->isFolderUpdate($item->getId());
-        if($item->getParentId() > 0){
-            $this->isFolderUpdate($item->getParentId());
-        }
+        //Dispatch event
+        $evenDispatcher = $this->get('event_dispatcher');
+        $event = new CategoryUpdatedEvent($this->container, $item, $previousParentId);
+        $item = $evenDispatcher->dispatch(CategoryUpdatedEvent::NAME, $event)->getCategory();
 
         return [
             'success' => true,
@@ -107,50 +110,21 @@ class CategoryController extends StorageControllerAbstract
             ]);
         }
 
-        $parentId = $item->getParentId();
+        $previousParentId = $item->getParentId();
 
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $this->get('doctrine_mongodb')->getManager();
         $dm->remove($item);
         $dm->flush();
 
-        $this->isFolderUpdate($parentId);
+        //Dispatch event
+        $evenDispatcher = $this->get('event_dispatcher');
+        $event = new CategoryUpdatedEvent($this->container, null, $previousParentId);
+        $evenDispatcher->dispatch(CategoryUpdatedEvent::NAME, $event);
 
         return new JsonResponse([
             'success' => true
         ]);
-    }
-
-    /**
-     * Update is_folder flag
-     * @param $itemId
-     * @return Category|null
-     */
-    public function isFolderUpdate($itemId){
-        /** @var Category $item */
-        $item = $this->getRepository()->find($itemId);
-        if(!$item){
-            return null;
-        }
-
-        $repository = $this->getRepository();
-        $count = $repository->createQueryBuilder()
-            ->field('parent_id')->equals($itemId)
-            ->getQuery()
-            ->execute()
-            ->count();
-
-        $isFolder = $count > 0;
-
-        if($item->getIsFolder() !== $isFolder){
-            $item->setIsFolder($isFolder);
-
-            /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-            $dm = $this->get('doctrine_mongodb')->getManager();
-            $dm->persist($item);
-            $dm->flush();
-        }
-        return $item;
     }
 
     /**

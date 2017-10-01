@@ -7,3 +7,8 @@ services:
     #service_name:
     #    class: AppBundle\Directory\ClassName
     #    arguments: ['@another_service_name', 'plain_value', '%parameter_name%']
+    kernel_event_listener:
+        class: AppBundle\EventListener\KernelEventListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.request }
+        arguments: [ '@service_container' ]

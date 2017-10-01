@@ -131,7 +131,7 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent {
     template: `        
         <ul class="dropdown-menu dropdown-menu-hover" *ngIf="items.length > 0" [class.shadow]="parentId != 0">
             <li class="dropdown-item active" *ngFor="let item of items" [class.active]="item.id == currentId" [class.current-level]="getIsActiveParent(item.id)">
-                <i class="icon-fast-forward float-right m-2 p-1" [hidden]="!item.is_folder"></i>
+                <i class="icon-keyboard_arrow_right float-right m-2 pt-1" [hidden]="!item.is_folder"></i>
                 <a href="#/catalog/category/{{item.id}}" [class.text-muted]="!item.is_active">
                     {{item.title}}
                 </a>
@@ -231,11 +231,7 @@ export class CategoriesMenuComponent implements OnInit {
         this.modalRef.componentInstance.isItemCopy = isItemCopy || false;
         this.modalRef.componentInstance.categories = this.categories;
         this.modalRef.result.then((result) => {
-            if( result.reason && result.reason == 'edit' ){
-                this.updateCategoryData( result.data.id, result.data );
-            } else {
-                this.getCategories();
-            }
+            this.getCategories();
         }, (reason) => {
 
         });
@@ -323,14 +319,7 @@ export class CategoriesMenuComponent implements OnInit {
 
     /** Copy category */
     copyCategory(): void {
-        this.openModalCategory( this.currentCategory.id, true );
-    }
-
-    /** Move category */
-    moveCategory(): void {
-
-        console.log( 'moveCategory' );
-
+        this.openModalCategory(this.currentCategory.id, true);
     }
 }
 

@@ -10,26 +10,18 @@ namespace AppBundle\Repository;
  */
 class CategoryRepository extends BaseRepository
 {
-//    /**
-//     * return \Doctrine\ODM\MongoDB\Cursor
-//     */
-//    public function findAllOrderedById()
-//    {
-//        return $this->createQueryBuilder()
-//            ->sort('id', 'ASC')
-//            ->getQuery()
-//            ->execute();
-//    }
-//
-//    /**
-//     * return \Doctrine\ODM\MongoDB\Cursor
-//     */
-//    public function findAllOrderedByTitle()
-//    {
-//        return $this->createQueryBuilder()
-//            ->sort('title', 'ASC')
-//            ->getQuery()
-//            ->execute();
-//    }
+
+    /**
+     * @param $parentId
+     * @return mixed
+     */
+    public function getChildCountByParentId($parentId)
+    {
+        return $this->createQueryBuilder()
+            ->field('parent_id')->equals($parentId)
+            ->getQuery()
+            ->execute()
+            ->count();
+    }
 
 }

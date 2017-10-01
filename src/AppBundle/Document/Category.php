@@ -6,6 +6,7 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
 /**
  * @MongoDB\Document(collection="category",repositoryClass="AppBundle\Repository\CategoryRepository")
+ * @MongoDB\HasLifecycleCallbacks()
  */
 class Category
 {
@@ -229,4 +230,15 @@ class Category
     {
         return $this->is_active;
     }
+
+    /**
+     * @MongoDB\PostUpdate
+     */
+    public function updateParentIsFolder()
+    {
+
+        //var_dump('updateParentIsFolder', $this); exit;
+
+    }
+
 }

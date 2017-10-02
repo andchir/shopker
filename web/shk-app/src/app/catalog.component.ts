@@ -96,15 +96,18 @@ export class CatalogComponent extends PageTableAbstractComponent {
     }
 
     getProducts(): void{
-        // this.loading = true;
-        // this.productsService.getList(this.currentCategory.id)
-        //     .subscribe(
-        //         items => {
-        //             this.items = items;
-        //             this.loading = false;
-        //         },
-        //         error =>  this.errorMessage = <any>error
-        //     );
+        this.loading = true;
+        //this.currentCategory.id
+        this.dataService.getList()
+            .subscribe(
+                res => {
+                    if(res.success){
+                        this.items = res.data;
+                    }
+                    this.loading = false;
+                },
+                error =>  this.errorMessage = <any>error
+            );
     }
 
     // modalProductOpen( itemId?: number ) {
@@ -121,19 +124,6 @@ export class CatalogComponent extends PageTableAbstractComponent {
     //     }, (reason) => {
     //
     //     });
-    // }
-
-    // public setTitle( newTitle: string ): void {
-    //     this.titleService.setTitle( newTitle );
-    // }
-    //
-    // selectAll( event ): void{
-    //     this.selectedIds = [];
-    //     if( event.target.checked ){
-    //         for( let item of this.items ){
-    //             this.selectedIds.push( item.id );
-    //         }
-    //     }
     // }
 
     // actionRequest(actionValue : [string, number]): void {

@@ -14,7 +14,11 @@ var TRANSLATION_RU = "\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<xliff vers
 /***/ (function(module, exports) {
 
 function webpackEmptyAsyncContext(req) {
-	return new Promise(function(resolve, reject) { reject(new Error("Cannot find module '" + req + "'.")); });
+	// Here Promise.resolve().then() is used instead of new Promise() to prevent
+	// uncatched exception popping up in devtools
+	return Promise.resolve().then(function() {
+		throw new Error("Cannot find module '" + req + "'.");
+	});
 }
 webpackEmptyAsyncContext.keys = function() { return []; };
 webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
@@ -418,15 +422,16 @@ var CatalogComponent = (function (_super) {
         this.getProducts();
     };
     CatalogComponent.prototype.getProducts = function () {
-        // this.loading = true;
-        // this.productsService.getList(this.currentCategory.id)
-        //     .subscribe(
-        //         items => {
-        //             this.items = items;
-        //             this.loading = false;
-        //         },
-        //         error =>  this.errorMessage = <any>error
-        //     );
+        var _this = this;
+        this.loading = true;
+        //this.currentCategory.id
+        this.dataService.getList()
+            .subscribe(function (res) {
+            if (res.success) {
+                _this.items = res.data;
+            }
+            _this.loading = false;
+        }, function (error) { return _this.errorMessage = error; });
     };
     return CatalogComponent;
 }(__WEBPACK_IMPORTED_MODULE_5__page_table_abstract__["b" /* PageTableAbstractComponent */]));

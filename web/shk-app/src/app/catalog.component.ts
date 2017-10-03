@@ -33,7 +33,6 @@ export class CatalogComponent extends PageTableAbstractComponent {
     }
 
     //TODO: get from settings
-    //TODO: add field format option
     tableFields = [
         {
             name: 'id',
@@ -75,17 +74,13 @@ export class CatalogComponent extends PageTableAbstractComponent {
     //     private productsService: ProductsService
     // ) {}
 
-    // ngOnInit(): void {
-    //     this.setTitle( this.title );
-    // }
-
     getModalContent(){
         return ProductModalContent;
     }
 
-    openCategory( category: Category ): void {
-        this.currentCategory = _.clone( category );
-        this.titleService.setTitle( this.title + ' / ' + this.currentCategory.title );
+    openCategory(category: Category): void {
+        this.currentCategory = _.clone(category);
+        this.titleService.setTitle(this.title + ' / ' + this.currentCategory.title);
         this.getProducts();
     }
 
@@ -97,6 +92,7 @@ export class CatalogComponent extends PageTableAbstractComponent {
 
     getProducts(): void{
         this.loading = true;
+        console.log(this.currentCategory.id);
         //this.currentCategory.id
         this.dataService.getList()
             .subscribe(

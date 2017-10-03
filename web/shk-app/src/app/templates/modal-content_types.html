@@ -398,21 +398,22 @@
                         <thead>
                             <tr>
                                 <th>Название</th>
-                                <th>Системное имя</th>
                                 <th>Тип ввода</th>
                                 <th>Группа</th>
+                                <th>Обязательное?</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr class="show-on-hover-parent" *ngFor="let field of model.fields; let index=index">
                                 <td>
                                     {{field.title}}
-                                </td>
-                                <td>
-                                    {{field.name}}
+                                    <span class="text-muted">({{field.name}})</span>
                                 </td>
                                 <td>
                                     {{field.input_type}}
+                                </td>
+                                <td>
+                                    {{field.group}}
                                 </td>
                                 <td>
                                     <div class="relative">
@@ -434,7 +435,8 @@
                                             </button>
                                         </div>
                                     </div>
-                                    {{field.group}}
+
+                                    <output-field [value]="field.required" outputType="boolean"></output-field>
                                 </td>
                             </tr>
                             <tr [hidden]="model.fields.length > 0" class="table-active">

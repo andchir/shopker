@@ -2,8 +2,8 @@ import {Component, Input} from '@angular/core';
 import {NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-    selector: 'modal_confirm',
-    templateUrl: 'templates/modal_confirm.html',
+    selector: 'modal-confirm',
+    templateUrl: 'templates/modal-confirm.html',
     providers: []
 })
 export class ConfirmModalContent {
@@ -19,8 +19,8 @@ export class ConfirmModalContent {
 }
 
 @Component({
-    selector: 'modal_alert',
-    templateUrl: 'templates/modal_alert.html',
+    selector: 'modal-alert',
+    templateUrl: 'templates/modal-alert.html',
     providers: []
 })
 export class AlertModalContent {

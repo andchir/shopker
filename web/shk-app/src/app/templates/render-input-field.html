@@ -1,4 +1,4 @@
-<div class="row form-group" [class.form-group-message]="formErrors[field.name]" [formGroup]="form" *ngFor="let field of fields | filterFieldByGroup: filterGroupName">
+<div class="row form-group" [class.form-group-message]="formErrors[field.name]" [formGroup]="form" *ngFor="let field of fields">
     <div class="col-md-5">
         <label for="field_{{field.name}}">
             {{field.title}}
@@ -34,6 +34,8 @@
         <textarea *ngSwitchCase="'textarea'" rows="6" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control"></textarea>
 
         <input *ngSwitchCase="'image'" type="file" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control">
+
+        <input *ngSwitchCase="'color'" type="color" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control">
 
         <div *ngIf="formErrors[field.name]" class="alert alert-danger">
             {{formErrors[field.name]}}

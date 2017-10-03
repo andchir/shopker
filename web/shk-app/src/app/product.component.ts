@@ -38,32 +38,7 @@ export class ProductModalContent extends ModalContentAbstractComponent {
             value: true,
             validators: [],
             messages: {}
-        }/*,
-        name: {
-            value: '',
-            validators: [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')],
-            messages: {
-                required: 'Name is required.',
-                pattern: 'The name must contain only Latin letters and numbers.'
-            }
-        },
-        title: {
-            value: '',
-            validators: [Validators.required],
-            messages: {
-                required: 'Title is required.'
-            }
-        },
-        description: {
-            value: '',
-            validators: [],
-            messages: {}
-        },
-        is_active: {
-            value: '',
-            validators: [],
-            messages: {}
-        }*/
+        }
     };
 
     constructor(
@@ -89,19 +64,18 @@ export class ProductModalContent extends ModalContentAbstractComponent {
             this.getContentTypes()
                 .subscribe(
                     res => {
-                        this.contentTypes = res.data;
-                        this.selectCurrentContentType();
-                        this.updateForm();
+                        if(res.success){
+                            this.contentTypes = res.data;
+                            this.selectCurrentContentType();
+                            this.updateForm();
+                        } else {
+                            if(res.msg){
+                                this.errorMessage = res.msg;
+                            }
+                        }
                     },
                     error => this.errorMessage = <any>error);
         }
-    }
-
-    buildForm(): void{
-        let group: any = {};
-        group.content_type = new FormControl(this.model.content_type, Validators.required);
-        group.is_active = new FormControl(this.model.is_active, []);
-        this.form = new FormGroup(group);
     }
 
     /** Build form */
@@ -159,23 +133,23 @@ export class ProductModalContent extends ModalContentAbstractComponent {
     /** Select current content type */
     selectCurrentContentType(): void {
         let index = _.findIndex(this.contentTypes, {name: this.form.get('content_type').value});
-        if( index == -1 ){
+        if (index == -1) {
             index = 0;
         }
-        if( this.contentTypes[index] ){
-            this.currentContentType = _.clone( this.contentTypes[index] );
+        if (this.contentTypes[index]) {
+            this.currentContentType = _.clone(this.contentTypes[index]);
             this.form.get('content_type').setValue(this.currentContentType.name);
             this.updateForm();
         }
     }
 
-    setCurrentContentType( contentTypeName: string ): void {
-        let index = _.findIndex( this.contentTypes, {name: contentTypeName} );
-        if( index == -1 ){
+    setCurrentContentType(contentTypeName: string): void {
+        let index = _.findIndex(this.contentTypes, {name: contentTypeName});
+        if (index == -1) {
             index = 0;
         }
-        if( this.contentTypes[index] ){
-            this.currentContentType = _.clone( this.contentTypes[index] );
+        if (this.contentTypes[index]) {
+            this.currentContentType = _.clone(this.contentTypes[index]);
             this.form.get('content_type').setValue(this.currentContentType.name);
         }
     }
@@ -186,57 +160,60 @@ export class ProductModalContent extends ModalContentAbstractComponent {
     }
 
     /** Get content types */
-    getContentTypes(){
+    getContentTypes() {
         let queryOptions = new QueryOptions('name', 'asc', 1, 0, 1, 1);
         return this.contentTypesService.getList(queryOptions);
     }
 
-    /**
-     * On form value changed
-     * @param data
-     */
-    onValueChanged(data?: any){
-        if (!this.form) { return; }
+    // /**
+    //  * On form value changed
+    //  * @param data
+    //  */
+    // onValueChanged(data?: any) {
+    //     if (!this.form) {
+    //         return;
+    //     }
+    //
+    //     console.log('onValueChange', data);
+    //
+    // }
 
-        console.log('onValueChange', data);
-
-    }
-
-    onSubmit() {
-        if(!this.form.valid){
-            for(let key in this.form.controls){
-                if(!this.form.controls.hasOwnProperty(key)){
-                    continue;
-                }
-                this.form.controls[key].markAsDirty();
-            }
-        }
-    }
+    // onSubmit() {
+    //     if (!this.form.valid) {
+    //         for (let key in this.form.controls) {
+    //             if (!this.form.controls.hasOwnProperty(key)) {
+    //                 continue;
+    //             }
+    //             this.form.controls[key].markAsDirty();
+    //         }
+    //     }
+    // }
 
     save() {
         this.submitted = true;
 
-        this.onSubmit();
+        //this.onSubmit();
 
-        console.log('SAVE', this.form.value);
+        console.log('SAVE', this.form.valid, this.form.value);
 
-        if (!this.form.valid) {
+        if(!this.form.valid){
+            this.onValueChanged('form');
             this.submitted = false;
             return;
         }
 
-        let callback = function(res: any){
-            if(res.success){
+        let callback = function (res: any) {
+            if (res.success) {
                 this.closeModal();
             } else {
-                if(res.msg){
+                if (res.msg) {
                     this.submitted = false;
                     this.errorMessage = res.msg;
                 }
             }
         };
 
-        if(this.model.id){
+        if (this.model.id) {
             this.dataService.update(this.model).then(callback.bind(this));
         } else {
             this.dataService.create(this.model).then(callback.bind(this));

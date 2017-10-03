@@ -12,18 +12,17 @@ import { SystemNameService } from './services/system-name.service';
 export class InputFieldComponent implements OnInit {
 
     @Input() fields: ContentField[];
-    @Input() filterGroupName: string;
     @Input() model: any;
     @Input() form: FormGroup;
+    @Input() submitted: boolean;
+    @Input() formErrors: {};
+    @Input() validationMessages: {};
 
     constructor(
         private systemNameService: SystemNameService
     ) {
 
     }
-
-    formErrors = {};
-    validationMessages = {};
 
     ngOnInit(): void {
         let controls = {};
@@ -35,9 +34,6 @@ export class InputFieldComponent implements OnInit {
             this.formErrors[field.name] = '';
             this.validationMessages[field.name] = this.getValidationMessages(field);
         }.bind(this));
-
-        this.form.valueChanges
-            .subscribe((data) => this.onValueChanged(data));
     }
 
     getValidators(field: ContentField): any[] {
@@ -55,22 +51,6 @@ export class InputFieldComponent implements OnInit {
         }
 
         return messages;
-    }
-
-    onValueChanged(data: any): void{
-        for (let fieldName in data) {
-            if (!data.hasOwnProperty(fieldName)) {
-                continue;
-            }
-
-            this.formErrors[fieldName] = '';
-            let control = this.form.get(fieldName);
-            if (control && control.dirty && !control.valid) {
-                for (let key in control.errors) {
-                    this.formErrors[fieldName] += this.validationMessages[fieldName][key] + ' ';
-                }
-            }
-        }
     }
 
     generateName(model): void {

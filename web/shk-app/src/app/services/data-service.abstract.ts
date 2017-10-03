@@ -30,7 +30,7 @@ export abstract class DataService {
     }
 
     getItem(id: string): Promise<any> {
-        const url = `${this.requestUrl}/${id}`;
+        const url = this.getRequestUrl() + `/${id}`;
         return this.http.get(url)
             .toPromise()
             .then(this.extractData)
@@ -45,13 +45,13 @@ export abstract class DataService {
             }
             params.set(name, options[name]);
         }
-        return this.http.get(this.requestUrl, {search: params})
+        return this.http.get(this.getRequestUrl(), {search: params})
             .map(this.extractData)
             .catch(this.handleError);
     }
 
     deleteItem(id: number): Promise<any> {
-        const url = `${this.requestUrl}/${id}`;
+        const url = this.getRequestUrl() + `/${id}`;
         return this.http.delete(url, {headers: this.headers})
             .toPromise()
             .then(this.extractData)
@@ -60,14 +60,14 @@ export abstract class DataService {
 
     create(item: any): Promise<any> {
         return this.http
-            .post(this.requestUrl, JSON.stringify(item), {headers: this.headers})
+            .post(this.getRequestUrl(), JSON.stringify(item), {headers: this.headers})
             .toPromise()
             .then(this.extractData)
             .catch(this.handleError);
     }
 
     update(item: any): Promise<any> {
-        const url = `${this.requestUrl}/${item.id}`;
+        const url = this.getRequestUrl() + `/${item.id}`;
         return this.http
             .put(url, JSON.stringify(item), {headers: this.headers})
             .toPromise()

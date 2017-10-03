@@ -43,7 +43,7 @@
                 <ng-template ngbTabContent>
                     <div class="pt-3">
 
-                        <input-field [fields]="currentContentType.fields" [filterGroupName]="groupName" [(model)]="model" [(form)]="form"></input-field>
+                        <input-field [fields]="currentContentType.fields | filterFieldByGroup: groupName" [(formErrors)]="formErrors" [(validationMessages)]="validationMessages" [(model)]="model" [(form)]="form"></input-field>
 
                     </div>
                 </ng-template>

@@ -98,7 +98,9 @@ export abstract class ModalContentAbstractComponent implements OnInit {
             let control = this[formName].get(fieldName);
             if (control && (control.dirty || this[keyPrefix + 'submitted']) && !control.valid) {
                 for (let key in control.errors) {
-                    this.formErrors[keyPrefix + fieldName] += this.validationMessages[keyPrefix + fieldName][key] + ' ';
+                    if(this.validationMessages[keyPrefix + fieldName][key]){
+                        this.formErrors[keyPrefix + fieldName] += this.validationMessages[keyPrefix + fieldName][key] + ' ';
+                    }
                 }
             }
         }

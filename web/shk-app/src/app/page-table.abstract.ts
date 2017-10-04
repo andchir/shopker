@@ -165,16 +165,20 @@ export abstract class PageTableAbstractComponent implements OnInit {
 
     modalOpen(itemId?: number, isItemCopy?: boolean): void {
         this.modalRef = this.modalService.open(this.getModalContent(), {size: 'lg'});
-        this.modalRef.componentInstance.modalTitle = itemId && !isItemCopy
-            ? 'Edit'
-            : 'Add';
-        this.modalRef.componentInstance.itemId = itemId || 0;
-        this.modalRef.componentInstance.isItemCopy = isItemCopy || false;
+        this.setModalInputs(itemId, isItemCopy);
         this.modalRef.result.then((result) => {
             this.getList();
         }, (reason) => {
             //console.log( 'reason', reason );
         });
+    }
+
+    setModalInputs(itemId?: number, isItemCopy?: boolean): void {
+        this.modalRef.componentInstance.modalTitle = itemId && !isItemCopy
+            ? 'Edit'
+            : 'Add';
+        this.modalRef.componentInstance.itemId = itemId || 0;
+        this.modalRef.componentInstance.isItemCopy = isItemCopy || false;
     }
 
     deleteItemConfirm(itemId: number): void{

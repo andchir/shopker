@@ -25,6 +25,7 @@ input[type=password].form-control:focus,
 textarea.form-control:focus { box-shadow: 0 0 6px rgba(0,0,0,0.3) inset; }
 select.form-control { box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); transition: box-shadow 0.3s ease; }
 select.form-control:hover { box-shadow: 0 0 11px rgba(0, 0, 0, 0.3); }
+input[type="color"].form-control { height: 35px; padding: 2px; cursor: pointer; }
 
 .form-group-message {  }
 .form-group-message .form-control { border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-color: #a94442; }

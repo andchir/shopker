@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Document\ContentType;
 use AppBundle\Document\Product;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -35,11 +36,35 @@ class ProductController extends StorageControllerAbstract
      */
     public function createUpdate($data, $itemId = 0){
 
-        
+        if(empty($data['content_type'])){
+            return [
+                'success' => false,
+                'msg' => 'Content type not found.'
+            ];
+        }
+
+        /** @var ContentType $contentType */
+        $contentType = $this->get('doctrine_mongodb')
+            ->getManager()
+            ->getRepository(ContentType::class)
+            ->findOneBy([
+                'name' => $data['content_type']
+            ]);
+
+        if(!$contentType){
+            return [
+                'success' => false,
+                'msg' => 'Content type not found.'
+            ];
+        }
+
+        print_r($contentType->toArray(true));
+
+        print_r($data);
 
 
         return [
-            'success' => true,
+            'success' => false,
             'data' => []
         ];
     }

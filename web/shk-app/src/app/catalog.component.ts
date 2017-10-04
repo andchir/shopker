@@ -106,6 +106,11 @@ export class CatalogComponent extends PageTableAbstractComponent {
             );
     }
 
+    setModalInputs(itemId?: number, isItemCopy?: boolean): void {
+        PageTableAbstractComponent.prototype.setModalInputs.call(this);
+        this.modalRef.componentInstance.category = this.currentCategory;
+    }
+
     // modalProductOpen( itemId?: number ) {
     //     this.modalRef = this.modalService.open(ProductModalContent, {size: 'lg'});
     //     this.modalRef.componentInstance.modalTitle = 'Add product';

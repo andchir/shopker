@@ -178,21 +178,8 @@ export class ProductModalContent extends ModalContentAbstractComponent {
     //
     // }
 
-    // onSubmit() {
-    //     if (!this.form.valid) {
-    //         for (let key in this.form.controls) {
-    //             if (!this.form.controls.hasOwnProperty(key)) {
-    //                 continue;
-    //             }
-    //             this.form.controls[key].markAsDirty();
-    //         }
-    //     }
-    // }
-
     save() {
         this.submitted = true;
-
-        //this.onSubmit();
 
         console.log('SAVE', this.form.valid, this.form.value);
 
@@ -212,6 +199,8 @@ export class ProductModalContent extends ModalContentAbstractComponent {
                 }
             }
         };
+
+        this.model.parent_id = this.category.id;
 
         if (this.model.id) {
             this.dataService.update(this.model).then(callback.bind(this));

@@ -1,5 +1,5 @@
-import {Component, Input} from '@angular/core';
-import {NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
+import { Component, Input } from '@angular/core';
+import { NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'modal-confirm',
@@ -35,8 +35,8 @@ export class AlertModalContent {
 @Component({
     selector: 'app-root',
     templateUrl: './templates/app.component.html',
-    styleUrls: ['./app.component.css'],
-    providers: [NgbTooltipConfig]
+    styleUrls: [ './app.component.css' ],
+    providers: [ NgbTooltipConfig ]
 })
 export class AppComponent {
     title = 'Shopkeeper';

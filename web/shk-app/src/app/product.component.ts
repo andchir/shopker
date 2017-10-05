@@ -26,7 +26,10 @@ export class ProductModalContent extends ModalContentAbstractComponent {
     @Input() category: Category;
     contentTypes: ContentType[] = [];
     currentContentType: ContentType = new ContentType(0, '', '', '', '', [], [], true);
-    model: Product = new Product(0, true, 0, '', '', '');
+    model = {
+        id: 0,
+        parent_id: 0
+    };
 
     formFields = {
         content_type: {
@@ -86,7 +89,7 @@ export class ProductModalContent extends ModalContentAbstractComponent {
         let newKeys = _.map(this.currentContentType.fields, function(field){
             return field.name;
         });
-        newKeys.push('content_type');
+        newKeys.push('content_type', 'is_active');
 
         //Remove keys
         for (let key in this.form.controls) {
@@ -100,10 +103,13 @@ export class ProductModalContent extends ModalContentAbstractComponent {
         //Add new controls
         this.currentContentType.fields.forEach(field => {
             if (!this.form.controls[field.name]) {
-                let group = field.required
-                    ? new FormControl(data[field.name] || '', Validators.required)
-                    : new FormControl(data[field.name] || '');
-                this.form.addControl(field.name, group);
+                this.model[field.name] = data[field.name] || '';
+                let validators = [];
+                if(field.required){
+                    validators.push(Validators.required);
+                }
+                let control = new FormControl(this.model[field.name], validators);
+                this.form.addControl(field.name, control);
             }
         });
     }
@@ -164,19 +170,6 @@ export class ProductModalContent extends ModalContentAbstractComponent {
         let queryOptions = new QueryOptions('name', 'asc', 1, 0, 1, 1);
         return this.contentTypesService.getList(queryOptions);
     }
-
-    // /**
-    //  * On form value changed
-    //  * @param data
-    //  */
-    // onValueChanged(data?: any) {
-    //     if (!this.form) {
-    //         return;
-    //     }
-    //
-    //     console.log('onValueChange', data);
-    //
-    // }
 
     save() {
         this.submitted = true;

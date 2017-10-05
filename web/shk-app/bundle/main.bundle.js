@@ -1806,29 +1806,6 @@ var FieldType = (function () {
 
 /***/ }),
 
-/***/ "../../../../../src/app/models/product.model.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Product; });
-var Product = (function () {
-    function Product(id, is_active, parent_id, content_type, name, title, description, price) {
-        this.id = id;
-        this.is_active = is_active;
-        this.parent_id = parent_id;
-        this.content_type = content_type;
-        this.name = name;
-        this.title = title;
-        this.description = description;
-        this.price = price;
-    }
-    return Product;
-}());
-
-//# sourceMappingURL=product.model.js.map
-
-/***/ }),
-
 /***/ "../../../../../src/app/models/query-options.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2348,14 +2325,13 @@ var OrderByPipe_1;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__models_content_type_model__ = __webpack_require__("../../../../../src/app/models/content_type.model.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__models_category_model__ = __webpack_require__("../../../../../src/app/models/category.model.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_product_model__ = __webpack_require__("../../../../../src/app/models/product.model.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__models_query_options__ = __webpack_require__("../../../../../src/app/models/query-options.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__page_table_abstract__ = __webpack_require__("../../../../../src/app/page-table.abstract.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_lodash__ = __webpack_require__("../../../../lodash/lodash.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_lodash__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__services_content_types_service__ = __webpack_require__("../../../../../src/app/services/content_types.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__services_products_service__ = __webpack_require__("../../../../../src/app/services/products.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__services_system_name_service__ = __webpack_require__("../../../../../src/app/services/system-name.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_query_options__ = __webpack_require__("../../../../../src/app/models/query-options.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__page_table_abstract__ = __webpack_require__("../../../../../src/app/page-table.abstract.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_lodash__ = __webpack_require__("../../../../lodash/lodash.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_lodash__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__services_content_types_service__ = __webpack_require__("../../../../../src/app/services/content_types.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__services_products_service__ = __webpack_require__("../../../../../src/app/services/products.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__services_system_name_service__ = __webpack_require__("../../../../../src/app/services/system-name.service.ts");
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -2386,7 +2362,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-
 var ProductModalContent = (function (_super) {
     __extends(ProductModalContent, _super);
     function ProductModalContent(fb, dataService, systemNameService, activeModal, tooltipConfig, contentTypesService) {
@@ -2394,7 +2369,10 @@ var ProductModalContent = (function (_super) {
         _this.contentTypesService = contentTypesService;
         _this.contentTypes = [];
         _this.currentContentType = new __WEBPACK_IMPORTED_MODULE_3__models_content_type_model__["a" /* ContentType */](0, '', '', '', '', [], [], true);
-        _this.model = new __WEBPACK_IMPORTED_MODULE_5__models_product_model__["a" /* Product */](0, true, 0, '', '', '');
+        _this.model = {
+            id: 0,
+            parent_id: 0
+        };
         _this.formFields = {
             content_type: {
                 value: '',
@@ -2438,10 +2416,10 @@ var ProductModalContent = (function (_super) {
         if (!data) {
             data = this.form.value;
         }
-        var newKeys = __WEBPACK_IMPORTED_MODULE_8_lodash__["map"](this.currentContentType.fields, function (field) {
+        var newKeys = __WEBPACK_IMPORTED_MODULE_7_lodash__["map"](this.currentContentType.fields, function (field) {
             return field.name;
         });
-        newKeys.push('content_type');
+        newKeys.push('content_type', 'is_active');
         //Remove keys
         for (var key in this.form.controls) {
             if (this.form.controls.hasOwnProperty(key)) {
@@ -2453,10 +2431,13 @@ var ProductModalContent = (function (_super) {
         //Add new controls
         this.currentContentType.fields.forEach(function (field) {
             if (!_this.form.controls[field.name]) {
-                var group = field.required
-                    ? new __WEBPACK_IMPORTED_MODULE_2__angular_forms__["b" /* FormControl */](data[field.name] || '', __WEBPACK_IMPORTED_MODULE_2__angular_forms__["h" /* Validators */].required)
-                    : new __WEBPACK_IMPORTED_MODULE_2__angular_forms__["b" /* FormControl */](data[field.name] || '');
-                _this.form.addControl(field.name, group);
+                _this.model[field.name] = data[field.name] || '';
+                var validators = [];
+                if (field.required) {
+                    validators.push(__WEBPACK_IMPORTED_MODULE_2__angular_forms__["h" /* Validators */].required);
+                }
+                var control = new __WEBPACK_IMPORTED_MODULE_2__angular_forms__["b" /* FormControl */](_this.model[field.name], validators);
+                _this.form.addControl(field.name, control);
             }
         });
     };
@@ -2483,23 +2464,23 @@ var ProductModalContent = (function (_super) {
     };
     /** Select current content type */
     ProductModalContent.prototype.selectCurrentContentType = function () {
-        var index = __WEBPACK_IMPORTED_MODULE_8_lodash__["findIndex"](this.contentTypes, { name: this.form.get('content_type').value });
+        var index = __WEBPACK_IMPORTED_MODULE_7_lodash__["findIndex"](this.contentTypes, { name: this.form.get('content_type').value });
         if (index == -1) {
             index = 0;
         }
         if (this.contentTypes[index]) {
-            this.currentContentType = __WEBPACK_IMPORTED_MODULE_8_lodash__["clone"](this.contentTypes[index]);
+            this.currentContentType = __WEBPACK_IMPORTED_MODULE_7_lodash__["clone"](this.contentTypes[index]);
             this.form.get('content_type').setValue(this.currentContentType.name);
             this.updateForm();
         }
     };
     ProductModalContent.prototype.setCurrentContentType = function (contentTypeName) {
-        var index = __WEBPACK_IMPORTED_MODULE_8_lodash__["findIndex"](this.contentTypes, { name: contentTypeName });
+        var index = __WEBPACK_IMPORTED_MODULE_7_lodash__["findIndex"](this.contentTypes, { name: contentTypeName });
         if (index == -1) {
             index = 0;
         }
         if (this.contentTypes[index]) {
-            this.currentContentType = __WEBPACK_IMPORTED_MODULE_8_lodash__["clone"](this.contentTypes[index]);
+            this.currentContentType = __WEBPACK_IMPORTED_MODULE_7_lodash__["clone"](this.contentTypes[index]);
             this.form.get('content_type').setValue(this.currentContentType.name);
         }
     };
@@ -2509,21 +2490,9 @@ var ProductModalContent = (function (_super) {
     };
     /** Get content types */
     ProductModalContent.prototype.getContentTypes = function () {
-        var queryOptions = new __WEBPACK_IMPORTED_MODULE_6__models_query_options__["a" /* QueryOptions */]('name', 'asc', 1, 0, 1, 1);
+        var queryOptions = new __WEBPACK_IMPORTED_MODULE_5__models_query_options__["a" /* QueryOptions */]('name', 'asc', 1, 0, 1, 1);
         return this.contentTypesService.getList(queryOptions);
     };
-    // /**
-    //  * On form value changed
-    //  * @param data
-    //  */
-    // onValueChanged(data?: any) {
-    //     if (!this.form) {
-    //         return;
-    //     }
-    //
-    //     console.log('onValueChange', data);
-    //
-    // }
     ProductModalContent.prototype.save = function () {
         this.submitted = true;
         console.log('SAVE', this.form.valid, this.form.value);
@@ -2552,7 +2521,7 @@ var ProductModalContent = (function (_super) {
         }
     };
     return ProductModalContent;
-}(__WEBPACK_IMPORTED_MODULE_7__page_table_abstract__["a" /* ModalContentAbstractComponent */]));
+}(__WEBPACK_IMPORTED_MODULE_6__page_table_abstract__["a" /* ModalContentAbstractComponent */]));
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["F" /* Input */])(),
     __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_4__models_category_model__["a" /* Category */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__models_category_model__["a" /* Category */]) === "function" && _a || Object)
@@ -2561,9 +2530,9 @@ ProductModalContent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
         selector: 'product-modal-content',
         template: __webpack_require__("../../../../../src/app/templates/modal-product.html"),
-        providers: [__WEBPACK_IMPORTED_MODULE_11__services_system_name_service__["a" /* SystemNameService */]]
+        providers: [__WEBPACK_IMPORTED_MODULE_10__services_system_name_service__["a" /* SystemNameService */]]
     }),
-    __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_forms__["a" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_forms__["a" /* FormBuilder */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_10__services_products_service__["a" /* ProductsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_10__services_products_service__["a" /* ProductsService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_11__services_system_name_service__["a" /* SystemNameService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_11__services_system_name_service__["a" /* SystemNameService */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["e" /* NgbTooltipConfig */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["e" /* NgbTooltipConfig */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_9__services_content_types_service__["a" /* ContentTypesService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_9__services_content_types_service__["a" /* ContentTypesService */]) === "function" && _g || Object])
+    __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_forms__["a" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_forms__["a" /* FormBuilder */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_9__services_products_service__["a" /* ProductsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_9__services_products_service__["a" /* ProductsService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_10__services_system_name_service__["a" /* SystemNameService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_10__services_system_name_service__["a" /* SystemNameService */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["e" /* NgbTooltipConfig */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["e" /* NgbTooltipConfig */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_8__services_content_types_service__["a" /* ContentTypesService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_8__services_content_types_service__["a" /* ContentTypesService */]) === "function" && _g || Object])
 ], ProductModalContent);
 
 var _a, _b, _c, _d, _e, _f, _g;

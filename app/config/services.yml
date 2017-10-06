@@ -12,3 +12,8 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.request }
         arguments: [ '@service_container' ]
+    mongodb_paramconverter:
+        class: Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter
+        arguments: ["@doctrine_mongodb"]
+        tags:
+            - { name: request.param_converter }

@@ -81,19 +81,19 @@ export class CatalogComponent extends PageTableAbstractComponent {
     openCategory(category: Category): void {
         this.currentCategory = _.clone(category);
         this.titleService.setTitle(this.title + ' / ' + this.currentCategory.title);
+        this.dataService.setRequestUrl('admin/products/' + this.currentCategory.id);
         this.getProducts();
     }
 
     openRootCategory(): void {
         this.currentCategory = new Category(0, false, 0, 'root', '', '', '', true);
         this.titleService.setTitle( this.title );
+        this.dataService.setRequestUrl('admin/products/' + this.currentCategory.id);
         this.getProducts();
     }
 
     getProducts(): void{
         this.loading = true;
-        console.log(this.currentCategory.id);
-        //this.currentCategory.id
         this.dataService.getList()
             .subscribe(
                 res => {

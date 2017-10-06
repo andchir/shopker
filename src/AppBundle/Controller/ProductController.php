@@ -2,10 +2,12 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Document\Category;
 use AppBundle\Document\ContentType;
 use AppBundle\Document\Product;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -69,6 +71,13 @@ class ProductController extends StorageControllerAbstract
             $document = [];
         }
 
+        $document['parent_id'] = !empty($data['parent_id'])
+            ? $data['parent_id']
+            : 0;
+        $document['is_active'] = isset($data['is_active'])
+            ? $data['is_active']
+            : true;
+
         foreach ($contentType->getFields() as $field){
             $document[$field['name']] = !empty($data[$field['name']])
                 ? $data[$field['name']]
@@ -86,25 +95,52 @@ class ProductController extends StorageControllerAbstract
     }
 
     /**
-     * @Route("", name="product_list")
+     * @Route("/{categoryId}", name="category_product_list")
      * @Method({"GET"})
-     * @param Request $request
+     * @ParamConverter("category", class="AppBundle:Category", options={"id" = "categoryId"})
      * @return JsonResponse
      */
-    public function getList(Request $request)
+    public function getListByCategory(Request $request, Category $category)
     {
+        $contentTypeName = $category->getContentType();
+
+        /** @var ContentType $contentType */
+        $contentType = $this->get('doctrine_mongodb')
+            ->getManager()
+            ->getRepository(ContentType::class)
+            ->findOneBy([
+                'name' => $contentTypeName
+            ]);
+
+        if(!$contentType){
+            return new JsonResponse([
+                'success' => false,
+                'msg' => 'Content type not found.'
+            ]);
+        }
+
+        $contentTypeFields = $contentType->getFields();
+
         $m = $this->container->get('doctrine_mongodb.odm.default_connection');
         $db = $m->selectDatabase($this->getParameter('mongodb_database'));
-        $collection = $db->createCollection('products');
+        $collection = $db->createCollection($contentType->getCollection());
 
         $data = [];
-        $results = $collection->find();
+        $results = $collection->find([
+            'parent_id' => $category->getId()
+        ]);
 
-        //TODO: get fields from Content type
         foreach ($results as $entry) {
-            $data[] = array_merge($entry, [
-                'id' => $entry['_id']
-            ]);
+            $row = [
+                'parent_id' => $entry['parent_id'],
+                'is_active' => $entry['is_active']
+            ];
+            foreach ($contentTypeFields as $field){
+                $row[$field['name']] = !empty($entry[$field['name']])
+                    ? $entry[$field['name']]
+                    : '';
+            }
+            $data[] = $row;
         }
 
         return new JsonResponse([

@@ -410,18 +410,18 @@ var CatalogComponent = (function (_super) {
     CatalogComponent.prototype.openCategory = function (category) {
         this.currentCategory = __WEBPACK_IMPORTED_MODULE_6_lodash__["clone"](category);
         this.titleService.setTitle(this.title + ' / ' + this.currentCategory.title);
+        this.dataService.setRequestUrl('admin/products/' + this.currentCategory.id);
         this.getProducts();
     };
     CatalogComponent.prototype.openRootCategory = function () {
         this.currentCategory = new __WEBPACK_IMPORTED_MODULE_4__models_category_model__["a" /* Category */](0, false, 0, 'root', '', '', '', true);
         this.titleService.setTitle(this.title);
+        this.dataService.setRequestUrl('admin/products/' + this.currentCategory.id);
         this.getProducts();
     };
     CatalogComponent.prototype.getProducts = function () {
         var _this = this;
         this.loading = true;
-        console.log(this.currentCategory.id);
-        //this.currentCategory.id
         this.dataService.getList()
             .subscribe(function (res) {
             if (res.success) {

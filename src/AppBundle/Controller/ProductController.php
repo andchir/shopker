@@ -98,10 +98,19 @@ class ProductController extends StorageControllerAbstract
      * @Route("/{categoryId}", name="category_product_list")
      * @Method({"GET"})
      * @ParamConverter("category", class="AppBundle:Category", options={"id" = "categoryId"})
+     * @param Request $request
+     * @param Category $category
      * @return JsonResponse
      */
-    public function getListByCategory(Request $request, Category $category)
+    public function getListByCategory(Request $request, Category $category = null)
     {
+        if(!$category){
+            return new JsonResponse([
+                'success' => true,
+                'data' => []
+            ]);
+        }
+
         $contentTypeName = $category->getContentType();
 
         /** @var ContentType $contentType */

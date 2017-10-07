@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import {Component, OnInit, Input, OnChanges, SimpleChanges} from '@angular/core';
 import * as _ from "lodash";
 
 @Component({
@@ -26,22 +26,21 @@ export class ListRecursiveComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if( changes.inputItems ){
+        if (changes.inputItems) {
             this.filterInputItems();
         }
-        if( changes.currentId ){
+        if (changes.currentId) {
             this.updateParentsIds();
         }
     }
 
-    filterInputItems()
-    {
+    filterInputItems() {
         this.items = [];
         let items = this.items;
         const parentId = this.parentId;
-        this.inputItems.forEach(function(item){
-            if( item.parent_id === parentId ){
-                items.push( item );
+        this.inputItems.forEach(function (item) {
+            if (item.parent_id === parentId) {
+                items.push(item);
             }
         });
         this.updateParentsIds();
@@ -51,12 +50,12 @@ export class ListRecursiveComponent implements OnInit, OnChanges {
      * Update parents ids
      */
     updateParentsIds(): void {
-        let index = _.findIndex( this.inputItems, {id: this.currentId} );
+        let index = _.findIndex(this.inputItems, {id: this.currentId});
         this.currentParentsIds = [];
-        if( index === -1 ){
+        if (index === -1) {
             return;
         }
-        this.currentParentsIds = this.getParentIds( this.inputItems[index].parent_id );
+        this.currentParentsIds = this.getParentIds(this.inputItems[index].parent_id);
     }
 
     /**
@@ -65,15 +64,15 @@ export class ListRecursiveComponent implements OnInit, OnChanges {
      * @param parentIds
      * @returns {number[]}
      */
-    getParentIds( parentId, parentIds ?: number[] ): number[] {
+    getParentIds(parentId, parentIds ?: number[]): number[] {
         parentIds = parentIds || [];
-        if( parentId > 0 ){
-            parentIds.push( parentId );
-            let index = _.findIndex( this.inputItems, {id: parentId} );
-            if( index === -1 ){
+        if (parentId > 0) {
+            parentIds.push(parentId);
+            let index = _.findIndex(this.inputItems, {id: parentId});
+            if (index === -1) {
                 return parentIds;
             }
-            return this.getParentIds( this.inputItems[index].parent_id, parentIds );
+            return this.getParentIds(this.inputItems[index].parent_id, parentIds);
         } else {
             return parentIds;
         }
@@ -84,8 +83,8 @@ export class ListRecursiveComponent implements OnInit, OnChanges {
      * @param itemId
      * @returns {boolean}
      */
-    getIsActiveParent( itemId: number ): boolean {
-        return this.currentParentsIds.indexOf( itemId ) > -1;
+    getIsActiveParent(itemId: number): boolean {
+        return this.currentParentsIds.indexOf(itemId) > -1;
     }
 
 }

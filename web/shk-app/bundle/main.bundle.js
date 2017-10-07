@@ -448,6 +448,9 @@ var CatalogCategoryComponent = (function (_super) {
         ];
         return _this;
     }
+    CatalogCategoryComponent.prototype.ngOnInit = function () {
+        this.setTitle(this.title);
+    };
     CatalogCategoryComponent.prototype.getModalContent = function () {
         return __WEBPACK_IMPORTED_MODULE_7__product_component__["a" /* ProductModalContent */];
     };
@@ -713,7 +716,7 @@ var CategoriesListComponent = (function (_super) {
 CategoriesListComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
         selector: 'categories-list',
-        template: "\n        <ul class=\"dropdown-menu dropdown-menu-hover\" *ngIf=\"items.length > 0\" [class.shadow]=\"parentId != 0\">\n            <li class=\"dropdown-item active\" *ngFor=\"let item of items\" [class.active]=\"item.id == currentId\" [class.current-level]=\"getIsActiveParent(item.id)\">\n                <i class=\"icon-keyboard_arrow_right float-right m-2 pt-1\" [hidden]=\"!item.is_folder\"></i>\n                <a href=\"#/catalog/category/{{item.id}}\" [class.text-muted]=\"!item.is_active\">\n                    {{item.title}}\n                </a>\n                <categories-list [inputItems]=\"inputItems\" [parentId]=\"item.id\" [currentId]=\"currentId\"></categories-list>\n            </li>\n        </ul>\n    "
+        template: "\n        <ul class=\"dropdown-menu dropdown-menu-hover\" *ngIf=\"items.length > 0\" [class.shadow]=\"parentId != 0\">\n            <li class=\"dropdown-item active\" *ngFor=\"let item of items\" [class.active]=\"item.id == currentId\"\n                [class.current-level]=\"getIsActiveParent(item.id)\">\n                <i class=\"icon-keyboard_arrow_right float-right m-2 pt-1\" [hidden]=\"!item.is_folder\"></i>\n                <a href=\"\" [routerLink]=\"['/catalog/category/', item.id]\" [class.text-muted]=\"!item.is_active\">\n                    {{item.title}}\n                </a>\n                <categories-list [inputItems]=\"inputItems\" [parentId]=\"item.id\" [currentId]=\"currentId\"></categories-list>\n            </li>\n        </ul>\n    "
     })
 ], CategoriesListComponent);
 
@@ -756,13 +759,18 @@ var CategoriesMenuComponent = (function () {
         if (this.currentCategory.id === this.categoryId) {
             return;
         }
-        for (var _i = 0, _a = this.categories; _i < _a.length; _i++) {
-            var category = _a[_i];
-            if (category.id == this.categoryId) {
-                this.currentCategory = category;
-                this.changeRequest.emit(this.currentCategory);
-                break;
+        if (this.categoryId > 0) {
+            for (var _i = 0, _a = this.categories; _i < _a.length; _i++) {
+                var category = _a[_i];
+                if (category.id == this.categoryId) {
+                    this.currentCategory = category;
+                    this.changeRequest.emit(this.currentCategory);
+                    break;
+                }
             }
+        }
+        else {
+            this.openRootCategory();
         }
     };
     /** Get categories */
@@ -862,7 +870,7 @@ var CategoriesMenuComponent = (function () {
     };
     /** Go to root category */
     CategoriesMenuComponent.prototype.goToRootCategory = function () {
-        this.router.navigate(['/catalog']);
+        this.router.navigate(['/catalog/category/0']);
     };
     /**
      * Select category
@@ -3495,7 +3503,7 @@ module.exports = "<div class=\"modal-header d-block\">\n    <div class=\"d-block
 /***/ "../../../../../src/app/templates/page-catalog.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"card\">\n\n    <div class=\"card-body\">\n\n        <div class=\"float-right\">\n            <a class=\"btn btn-outline-primary\" href=\"\" [routerLink]=\"['/catalog/content_types']\" routerLinkActive=\"active\">\n                <i class=\"icon-box\"></i>\n                Типы контента\n            </a>\n            <a class=\"btn btn-outline-primary\" href=\"\" [routerLink]=\"['/catalog/field_types']\" routerLinkActive=\"active\">\n                <i class=\"icon-toggle\"></i>\n                Типы полей\n            </a>\n        </div>\n        <h3>\n            <i class=\"icon-layers\"></i>\n            <span i18n>Catalog</span>\n        </h3>\n\n        <hr>\n\n        <router-outlet></router-outlet>\n\n    </div>\n</div>\n"
+module.exports = "<div class=\"card\">\n\n    <div class=\"card-body\">\n\n        <div class=\"float-right\">\n            <a class=\"btn btn-outline-primary\" href=\"\" [routerLink]=\"['content_types']\" routerLinkActive=\"active\">\n                <i class=\"icon-box\"></i>\n                Типы контента\n            </a>\n            <a class=\"btn btn-outline-primary\" href=\"\" [routerLink]=\"['field_types']\" routerLinkActive=\"active\">\n                <i class=\"icon-toggle\"></i>\n                Типы полей\n            </a>\n        </div>\n        <h3>\n            <i class=\"icon-layers\"></i>\n            <span i18n>Catalog</span>\n        </h3>\n\n        <hr>\n\n        <router-outlet></router-outlet>\n\n    </div>\n</div>\n"
 
 /***/ }),
 

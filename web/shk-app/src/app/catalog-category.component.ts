@@ -5,13 +5,13 @@ import * as _ from "lodash";
 
 import { Category } from "./models/category.model";
 import { ProductsService } from "./services/products.service";
-import { PageTableAbstractComponent, ModalContentAbstractComponent } from './page-table.abstract'
+import { PageTableAbstractComponent } from './page-table.abstract'
 import { ProductModalContent } from './product.component';
 
 @Component({
     selector: 'catalog-category',
     templateUrl: 'templates/catalog-category.html',
-    providers: [ ProductsService ]
+    providers: [ProductsService]
 })
 export class CatalogCategoryComponent extends PageTableAbstractComponent {
 
@@ -19,12 +19,10 @@ export class CatalogCategoryComponent extends PageTableAbstractComponent {
     categories: Category[] = [];
     currentCategory: Category;
 
-    constructor(
-        dataService: ProductsService,
-        activeModal: NgbActiveModal,
-        modalService: NgbModal,
-        titleService: Title
-    ) {
+    constructor(dataService: ProductsService,
+                activeModal: NgbActiveModal,
+                modalService: NgbModal,
+                titleService: Title) {
         super(dataService, activeModal, modalService, titleService);
     }
 
@@ -62,7 +60,11 @@ export class CatalogCategoryComponent extends PageTableAbstractComponent {
         }
     ];
 
-    getModalContent(){
+    ngOnInit(): void {
+        this.setTitle(this.title);
+    }
+
+    getModalContent() {
         return ProductModalContent;
     }
 
@@ -75,22 +77,22 @@ export class CatalogCategoryComponent extends PageTableAbstractComponent {
 
     openRootCategory(): void {
         this.currentCategory = new Category(0, false, 0, 'root', '', '', '', true);
-        this.titleService.setTitle( this.title );
+        this.titleService.setTitle(this.title);
         this.dataService.setRequestUrl('admin/products/' + this.currentCategory.id);
         this.getProducts();
     }
 
-    getProducts(): void{
+    getProducts(): void {
         this.loading = true;
         this.dataService.getList()
             .subscribe(
                 res => {
-                    if(res.success){
+                    if (res.success) {
                         this.items = res.data;
                     }
                     this.loading = false;
                 },
-                error =>  this.errorMessage = <any>error
+                error => this.errorMessage = <any>error
             );
     }
 

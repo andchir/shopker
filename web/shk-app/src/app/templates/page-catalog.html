@@ -1,50 +1,25 @@
-
 <div class="card">
 
     <div class="card-body">
 
         <div class="float-right">
-            <a class="btn btn-primary" [routerLink]="['/catalog/content_types']">
+            <a class="btn btn-outline-primary" href="" [routerLink]="['/catalog/content_types']" routerLinkActive="active">
                 <i class="icon-box"></i>
                 Типы контента
             </a>
-            <a class="btn btn-primary" [routerLink]="['/catalog/field_types']">
+            <a class="btn btn-outline-primary" href="" [routerLink]="['/catalog/field_types']" routerLinkActive="active">
                 <i class="icon-toggle"></i>
                 Типы полей
             </a>
         </div>
         <h3>
             <i class="icon-layers"></i>
-            {{title}}
+            <span i18n>Catalog</span>
         </h3>
 
         <hr>
 
-        <div class="float-right">
+        <router-outlet></router-outlet>
 
-            <div ngbDropdown class="d-inline-block">
-                <button class="btn btn-outline-info" ngbDropdownToggle>
-                    Массовые дейсвия
-                </button>
-                <div ngbDropdownMenu>
-                    <button class="dropdown-item">Отключить / включить</button>
-                    <button class="dropdown-item">Удалить</button>
-                </div>
-            </div>
-
-            <button type="button" class="btn btn-outline-success d-inline-block btn-wide" (click)="modalOpen()">
-                <i class="icon-plus"></i>
-                Add
-            </button>
-
-        </div>
-        <div class="float-left">
-
-            <categories-menu (changeRequest)="openCategory($event)"></categories-menu>
-
-        </div>
     </div>
-
-    <cmp-table [items]="items" [collectionSize]="collectionSize" [queryOptions]="queryOptions" [tableFields]="tableFields" [(loading)]="loading" (actionRequest)="actionRequest($event)"></cmp-table>
-
 </div>

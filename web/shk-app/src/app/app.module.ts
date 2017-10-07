@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
@@ -7,6 +8,7 @@ import { AppComponent, AlertModalContent, ConfirmModalContent } from './app.comp
 import { NotFoundComponent } from './not-found.component';
 import { OrdersComponent } from './orders.component';
 import { CatalogComponent } from './catalog.component';
+import { CatalogCategoryComponent } from './catalog-category.component';
 import { ProductModalContent } from './product.component';
 import { CategoriesMenuComponent, CategoriesModalComponent, CategoriesListComponent } from './categories.component';
 import { ContentTypesComponent, ContentTypeModalContent } from './content-types.component';
@@ -31,6 +33,7 @@ import { NgbModule, NgbActiveModal, NgbTooltipConfig } from '@ng-bootstrap/ng-bo
 @NgModule({
     imports: [
         BrowserModule,
+        BrowserAnimationsModule,
         FormsModule,
         ReactiveFormsModule,
         HttpModule,
@@ -43,6 +46,7 @@ import { NgbModule, NgbActiveModal, NgbTooltipConfig } from '@ng-bootstrap/ng-bo
         OrdersComponent,
         CategoriesMenuComponent,
         CatalogComponent,
+        CatalogCategoryComponent,
         ContentTypesComponent,
         FieldTypesComponent,
         StatisticsComponent,

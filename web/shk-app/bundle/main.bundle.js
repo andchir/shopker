@@ -37,10 +37,11 @@ webpackEmptyAsyncContext.id = "../../../../../src/$$_gendir lazy recursive";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__not_found_component__ = __webpack_require__("../../../../../src/app/not-found.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__orders_component__ = __webpack_require__("../../../../../src/app/orders.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__catalog_component__ = __webpack_require__("../../../../../src/app/catalog.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__content_types_component__ = __webpack_require__("../../../../../src/app/content-types.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__field_types_component__ = __webpack_require__("../../../../../src/app/field-types.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__stat_component__ = __webpack_require__("../../../../../src/app/stat.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__settings_component__ = __webpack_require__("../../../../../src/app/settings.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__catalog_category_component__ = __webpack_require__("../../../../../src/app/catalog-category.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__content_types_component__ = __webpack_require__("../../../../../src/app/content-types.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__field_types_component__ = __webpack_require__("../../../../../src/app/field-types.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__stat_component__ = __webpack_require__("../../../../../src/app/stat.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__settings_component__ = __webpack_require__("../../../../../src/app/settings.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -56,16 +57,60 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+
 var routes = [
-    { path: '', redirectTo: '/orders', pathMatch: 'full' },
-    { path: 'orders', component: __WEBPACK_IMPORTED_MODULE_3__orders_component__["a" /* OrdersComponent */] },
-    { path: 'catalog', component: __WEBPACK_IMPORTED_MODULE_4__catalog_component__["a" /* CatalogComponent */] },
-    { path: 'catalog/category/:categoryId', component: __WEBPACK_IMPORTED_MODULE_4__catalog_component__["a" /* CatalogComponent */] },
-    { path: 'catalog/content_types', component: __WEBPACK_IMPORTED_MODULE_5__content_types_component__["b" /* ContentTypesComponent */] },
-    { path: 'catalog/field_types', component: __WEBPACK_IMPORTED_MODULE_6__field_types_component__["b" /* FieldTypesComponent */] },
-    { path: 'statistics', component: __WEBPACK_IMPORTED_MODULE_7__stat_component__["a" /* StatisticsComponent */] },
-    { path: 'settings', component: __WEBPACK_IMPORTED_MODULE_8__settings_component__["a" /* SettingsComponent */] },
-    { path: '**', component: __WEBPACK_IMPORTED_MODULE_2__not_found_component__["a" /* NotFoundComponent */] }
+    {
+        path: '',
+        redirectTo: '/orders',
+        pathMatch: 'full'
+    },
+    {
+        path: 'orders',
+        component: __WEBPACK_IMPORTED_MODULE_3__orders_component__["a" /* OrdersComponent */],
+        data: { title: 'Orders' }
+    },
+    {
+        path: 'catalog',
+        component: __WEBPACK_IMPORTED_MODULE_4__catalog_component__["a" /* CatalogComponent */],
+        data: { title: 'Catalog' },
+        children: [
+            {
+                path: '',
+                redirectTo: 'category/0',
+                pathMatch: 'full'
+            },
+            {
+                path: 'category/:categoryId',
+                component: __WEBPACK_IMPORTED_MODULE_5__catalog_category_component__["a" /* CatalogCategoryComponent */],
+                data: { title: 'Catalog' }
+            },
+            {
+                path: 'content_types',
+                component: __WEBPACK_IMPORTED_MODULE_6__content_types_component__["b" /* ContentTypesComponent */],
+                data: { title: 'Content types' }
+            },
+            {
+                path: 'field_types',
+                component: __WEBPACK_IMPORTED_MODULE_7__field_types_component__["b" /* FieldTypesComponent */],
+                data: { title: 'Field types' }
+            },
+        ]
+    },
+    {
+        path: 'statistics',
+        component: __WEBPACK_IMPORTED_MODULE_8__stat_component__["a" /* StatisticsComponent */],
+        data: { title: 'Statistics' }
+    },
+    {
+        path: 'settings',
+        component: __WEBPACK_IMPORTED_MODULE_9__settings_component__["a" /* SettingsComponent */],
+        data: { title: 'Settings' }
+    },
+    {
+        path: '**',
+        component: __WEBPACK_IMPORTED_MODULE_2__not_found_component__["a" /* NotFoundComponent */],
+        data: { title: 'Page not found' }
+    }
 ];
 var AppRoutingModule = (function () {
     function AppRoutingModule() {
@@ -204,36 +249,40 @@ var _a, _b, _c;
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__("../../../platform-browser/@angular/platform-browser.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_component__ = __webpack_require__("../../../../../src/app/app.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__not_found_component__ = __webpack_require__("../../../../../src/app/not-found.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__orders_component__ = __webpack_require__("../../../../../src/app/orders.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__catalog_component__ = __webpack_require__("../../../../../src/app/catalog.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__product_component__ = __webpack_require__("../../../../../src/app/product.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__categories_component__ = __webpack_require__("../../../../../src/app/categories.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__content_types_component__ = __webpack_require__("../../../../../src/app/content-types.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__field_types_component__ = __webpack_require__("../../../../../src/app/field-types.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__stat_component__ = __webpack_require__("../../../../../src/app/stat.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__settings_component__ = __webpack_require__("../../../../../src/app/settings.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__list_recursive_component__ = __webpack_require__("../../../../../src/app/list-recursive.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__table_component__ = __webpack_require__("../../../../../src/app/table.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__render_input_field__ = __webpack_require__("../../../../../src/app/render-input-field.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__render_output_field__ = __webpack_require__("../../../../../src/app/render-output-field.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__pipes_filter_field_by_group_pipe__ = __webpack_require__("../../../../../src/app/pipes/filter-field-by-group.pipe.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__pipes_orderby_pipe__ = __webpack_require__("../../../../../src/app/pipes/orderby.pipe.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__services_products_service__ = __webpack_require__("../../../../../src/app/services/products.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__services_content_types_service__ = __webpack_require__("../../../../../src/app/services/content_types.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__services_categories_service__ = __webpack_require__("../../../../../src/app/services/categories.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__app_routing_module__ = __webpack_require__("../../../../../src/app/app-routing.module.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__ng_bootstrap_ng_bootstrap__ = __webpack_require__("../../../../@ng-bootstrap/ng-bootstrap/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_animations__ = __webpack_require__("../../../platform-browser/@angular/platform-browser/animations.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_component__ = __webpack_require__("../../../../../src/app/app.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__not_found_component__ = __webpack_require__("../../../../../src/app/not-found.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__orders_component__ = __webpack_require__("../../../../../src/app/orders.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__catalog_component__ = __webpack_require__("../../../../../src/app/catalog.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__catalog_category_component__ = __webpack_require__("../../../../../src/app/catalog-category.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__product_component__ = __webpack_require__("../../../../../src/app/product.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__categories_component__ = __webpack_require__("../../../../../src/app/categories.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__content_types_component__ = __webpack_require__("../../../../../src/app/content-types.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__field_types_component__ = __webpack_require__("../../../../../src/app/field-types.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__stat_component__ = __webpack_require__("../../../../../src/app/stat.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__settings_component__ = __webpack_require__("../../../../../src/app/settings.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__list_recursive_component__ = __webpack_require__("../../../../../src/app/list-recursive.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__table_component__ = __webpack_require__("../../../../../src/app/table.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__render_input_field__ = __webpack_require__("../../../../../src/app/render-input-field.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__render_output_field__ = __webpack_require__("../../../../../src/app/render-output-field.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__pipes_filter_field_by_group_pipe__ = __webpack_require__("../../../../../src/app/pipes/filter-field-by-group.pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__pipes_orderby_pipe__ = __webpack_require__("../../../../../src/app/pipes/orderby.pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__services_products_service__ = __webpack_require__("../../../../../src/app/services/products.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__services_content_types_service__ = __webpack_require__("../../../../../src/app/services/content_types.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__services_categories_service__ = __webpack_require__("../../../../../src/app/services/categories.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__app_routing_module__ = __webpack_require__("../../../../../src/app/app-routing.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__ng_bootstrap_ng_bootstrap__ = __webpack_require__("../../../../@ng-bootstrap/ng-bootstrap/index.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
 
 
 
@@ -265,49 +314,51 @@ var AppModule = (function () {
     return AppModule;
 }());
 AppModule = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["M" /* NgModule */])({
+    Object(__WEBPACK_IMPORTED_MODULE_2__angular_core__["M" /* NgModule */])({
         imports: [
             __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
-            __WEBPACK_IMPORTED_MODULE_2__angular_forms__["d" /* FormsModule */],
-            __WEBPACK_IMPORTED_MODULE_2__angular_forms__["g" /* ReactiveFormsModule */],
-            __WEBPACK_IMPORTED_MODULE_3__angular_http__["c" /* HttpModule */],
-            __WEBPACK_IMPORTED_MODULE_23__app_routing_module__["a" /* AppRoutingModule */],
-            __WEBPACK_IMPORTED_MODULE_24__ng_bootstrap_ng_bootstrap__["d" /* NgbModule */].forRoot()
+            __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */],
+            __WEBPACK_IMPORTED_MODULE_3__angular_forms__["d" /* FormsModule */],
+            __WEBPACK_IMPORTED_MODULE_3__angular_forms__["g" /* ReactiveFormsModule */],
+            __WEBPACK_IMPORTED_MODULE_4__angular_http__["c" /* HttpModule */],
+            __WEBPACK_IMPORTED_MODULE_25__app_routing_module__["a" /* AppRoutingModule */],
+            __WEBPACK_IMPORTED_MODULE_26__ng_bootstrap_ng_bootstrap__["d" /* NgbModule */].forRoot()
         ],
         declarations: [
-            __WEBPACK_IMPORTED_MODULE_4__app_component__["b" /* AppComponent */],
-            __WEBPACK_IMPORTED_MODULE_5__not_found_component__["a" /* NotFoundComponent */],
-            __WEBPACK_IMPORTED_MODULE_6__orders_component__["a" /* OrdersComponent */],
-            __WEBPACK_IMPORTED_MODULE_9__categories_component__["b" /* CategoriesMenuComponent */],
-            __WEBPACK_IMPORTED_MODULE_7__catalog_component__["a" /* CatalogComponent */],
-            __WEBPACK_IMPORTED_MODULE_10__content_types_component__["b" /* ContentTypesComponent */],
-            __WEBPACK_IMPORTED_MODULE_11__field_types_component__["b" /* FieldTypesComponent */],
-            __WEBPACK_IMPORTED_MODULE_12__stat_component__["a" /* StatisticsComponent */],
-            __WEBPACK_IMPORTED_MODULE_13__settings_component__["a" /* SettingsComponent */],
-            __WEBPACK_IMPORTED_MODULE_14__list_recursive_component__["a" /* ListRecursiveComponent */],
-            __WEBPACK_IMPORTED_MODULE_15__table_component__["a" /* TableComponent */],
-            __WEBPACK_IMPORTED_MODULE_9__categories_component__["a" /* CategoriesListComponent */],
-            __WEBPACK_IMPORTED_MODULE_16__render_input_field__["a" /* InputFieldComponent */],
-            __WEBPACK_IMPORTED_MODULE_17__render_output_field__["a" /* OutputFieldComponent */],
-            __WEBPACK_IMPORTED_MODULE_18__pipes_filter_field_by_group_pipe__["a" /* FilterFieldByGroup */],
-            __WEBPACK_IMPORTED_MODULE_19__pipes_orderby_pipe__["a" /* OrderByPipe */],
-            __WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* AlertModalContent */],
-            __WEBPACK_IMPORTED_MODULE_4__app_component__["c" /* ConfirmModalContent */],
-            __WEBPACK_IMPORTED_MODULE_8__product_component__["a" /* ProductModalContent */],
-            __WEBPACK_IMPORTED_MODULE_10__content_types_component__["a" /* ContentTypeModalContent */],
-            __WEBPACK_IMPORTED_MODULE_9__categories_component__["c" /* CategoriesModalComponent */],
-            __WEBPACK_IMPORTED_MODULE_11__field_types_component__["a" /* FieldTypeModalContent */]
+            __WEBPACK_IMPORTED_MODULE_5__app_component__["b" /* AppComponent */],
+            __WEBPACK_IMPORTED_MODULE_6__not_found_component__["a" /* NotFoundComponent */],
+            __WEBPACK_IMPORTED_MODULE_7__orders_component__["a" /* OrdersComponent */],
+            __WEBPACK_IMPORTED_MODULE_11__categories_component__["b" /* CategoriesMenuComponent */],
+            __WEBPACK_IMPORTED_MODULE_8__catalog_component__["a" /* CatalogComponent */],
+            __WEBPACK_IMPORTED_MODULE_9__catalog_category_component__["a" /* CatalogCategoryComponent */],
+            __WEBPACK_IMPORTED_MODULE_12__content_types_component__["b" /* ContentTypesComponent */],
+            __WEBPACK_IMPORTED_MODULE_13__field_types_component__["b" /* FieldTypesComponent */],
+            __WEBPACK_IMPORTED_MODULE_14__stat_component__["a" /* StatisticsComponent */],
+            __WEBPACK_IMPORTED_MODULE_15__settings_component__["a" /* SettingsComponent */],
+            __WEBPACK_IMPORTED_MODULE_16__list_recursive_component__["a" /* ListRecursiveComponent */],
+            __WEBPACK_IMPORTED_MODULE_17__table_component__["a" /* TableComponent */],
+            __WEBPACK_IMPORTED_MODULE_11__categories_component__["a" /* CategoriesListComponent */],
+            __WEBPACK_IMPORTED_MODULE_18__render_input_field__["a" /* InputFieldComponent */],
+            __WEBPACK_IMPORTED_MODULE_19__render_output_field__["a" /* OutputFieldComponent */],
+            __WEBPACK_IMPORTED_MODULE_20__pipes_filter_field_by_group_pipe__["a" /* FilterFieldByGroup */],
+            __WEBPACK_IMPORTED_MODULE_21__pipes_orderby_pipe__["a" /* OrderByPipe */],
+            __WEBPACK_IMPORTED_MODULE_5__app_component__["a" /* AlertModalContent */],
+            __WEBPACK_IMPORTED_MODULE_5__app_component__["c" /* ConfirmModalContent */],
+            __WEBPACK_IMPORTED_MODULE_10__product_component__["a" /* ProductModalContent */],
+            __WEBPACK_IMPORTED_MODULE_12__content_types_component__["a" /* ContentTypeModalContent */],
+            __WEBPACK_IMPORTED_MODULE_11__categories_component__["c" /* CategoriesModalComponent */],
+            __WEBPACK_IMPORTED_MODULE_13__field_types_component__["a" /* FieldTypeModalContent */]
         ],
-        providers: [__WEBPACK_IMPORTED_MODULE_20__services_products_service__["a" /* ProductsService */], __WEBPACK_IMPORTED_MODULE_21__services_content_types_service__["a" /* ContentTypesService */], __WEBPACK_IMPORTED_MODULE_22__services_categories_service__["a" /* CategoriesService */], __WEBPACK_IMPORTED_MODULE_24__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */], __WEBPACK_IMPORTED_MODULE_24__ng_bootstrap_ng_bootstrap__["e" /* NgbTooltipConfig */]],
+        providers: [__WEBPACK_IMPORTED_MODULE_22__services_products_service__["a" /* ProductsService */], __WEBPACK_IMPORTED_MODULE_23__services_content_types_service__["a" /* ContentTypesService */], __WEBPACK_IMPORTED_MODULE_24__services_categories_service__["a" /* CategoriesService */], __WEBPACK_IMPORTED_MODULE_26__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */], __WEBPACK_IMPORTED_MODULE_26__ng_bootstrap_ng_bootstrap__["e" /* NgbTooltipConfig */]],
         entryComponents: [
-            __WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* AlertModalContent */],
-            __WEBPACK_IMPORTED_MODULE_4__app_component__["c" /* ConfirmModalContent */],
-            __WEBPACK_IMPORTED_MODULE_8__product_component__["a" /* ProductModalContent */],
-            __WEBPACK_IMPORTED_MODULE_10__content_types_component__["a" /* ContentTypeModalContent */],
-            __WEBPACK_IMPORTED_MODULE_9__categories_component__["c" /* CategoriesModalComponent */],
-            __WEBPACK_IMPORTED_MODULE_11__field_types_component__["a" /* FieldTypeModalContent */]
+            __WEBPACK_IMPORTED_MODULE_5__app_component__["a" /* AlertModalContent */],
+            __WEBPACK_IMPORTED_MODULE_5__app_component__["c" /* ConfirmModalContent */],
+            __WEBPACK_IMPORTED_MODULE_10__product_component__["a" /* ProductModalContent */],
+            __WEBPACK_IMPORTED_MODULE_12__content_types_component__["a" /* ContentTypeModalContent */],
+            __WEBPACK_IMPORTED_MODULE_11__categories_component__["c" /* CategoriesModalComponent */],
+            __WEBPACK_IMPORTED_MODULE_13__field_types_component__["a" /* FieldTypeModalContent */]
         ],
-        bootstrap: [__WEBPACK_IMPORTED_MODULE_4__app_component__["b" /* AppComponent */]]
+        bootstrap: [__WEBPACK_IMPORTED_MODULE_5__app_component__["b" /* AppComponent */]]
     })
 ], AppModule);
 
@@ -315,20 +366,20 @@ AppModule = __decorate([
 
 /***/ }),
 
-/***/ "../../../../../src/app/catalog.component.ts":
+/***/ "../../../../../src/app/catalog-category.component.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CatalogComponent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CatalogCategoryComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__ = __webpack_require__("../../../platform-browser/@angular/platform-browser.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__ = __webpack_require__("../../../../@ng-bootstrap/ng-bootstrap/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__product_component__ = __webpack_require__("../../../../../src/app/product.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash__ = __webpack_require__("../../../../lodash/lodash.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_lodash__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__models_category_model__ = __webpack_require__("../../../../../src/app/models/category.model.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__page_table_abstract__ = __webpack_require__("../../../../../src/app/page-table.abstract.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_lodash__ = __webpack_require__("../../../../lodash/lodash.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_lodash__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_products_service__ = __webpack_require__("../../../../../src/app/services/products.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_products_service__ = __webpack_require__("../../../../../src/app/services/products.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__page_table_abstract__ = __webpack_require__("../../../../../src/app/page-table.abstract.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__product_component__ = __webpack_require__("../../../../../src/app/product.component.ts");
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -356,9 +407,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-var CatalogComponent = (function (_super) {
-    __extends(CatalogComponent, _super);
-    function CatalogComponent(dataService, activeModal, modalService, titleService) {
+var CatalogCategoryComponent = (function (_super) {
+    __extends(CatalogCategoryComponent, _super);
+    function CatalogCategoryComponent(dataService, activeModal, modalService, titleService) {
         var _this = _super.call(this, dataService, activeModal, modalService, titleService) || this;
         _this.title = 'Каталог';
         _this.categories = [];
@@ -397,29 +448,22 @@ var CatalogComponent = (function (_super) {
         ];
         return _this;
     }
-    // constructor(
-    //     public router: Router,
-    //     private modalService: NgbModal,
-    //     private titleService: Title,
-    //     private categoriesService: CategoriesService,
-    //     private productsService: ProductsService
-    // ) {}
-    CatalogComponent.prototype.getModalContent = function () {
-        return __WEBPACK_IMPORTED_MODULE_3__product_component__["a" /* ProductModalContent */];
+    CatalogCategoryComponent.prototype.getModalContent = function () {
+        return __WEBPACK_IMPORTED_MODULE_7__product_component__["a" /* ProductModalContent */];
     };
-    CatalogComponent.prototype.openCategory = function (category) {
-        this.currentCategory = __WEBPACK_IMPORTED_MODULE_6_lodash__["clone"](category);
+    CatalogCategoryComponent.prototype.openCategory = function (category) {
+        this.currentCategory = __WEBPACK_IMPORTED_MODULE_3_lodash__["clone"](category);
         this.titleService.setTitle(this.title + ' / ' + this.currentCategory.title);
         this.dataService.setRequestUrl('admin/products/' + this.currentCategory.id);
         this.getProducts();
     };
-    CatalogComponent.prototype.openRootCategory = function () {
+    CatalogCategoryComponent.prototype.openRootCategory = function () {
         this.currentCategory = new __WEBPACK_IMPORTED_MODULE_4__models_category_model__["a" /* Category */](0, false, 0, 'root', '', '', '', true);
         this.titleService.setTitle(this.title);
         this.dataService.setRequestUrl('admin/products/' + this.currentCategory.id);
         this.getProducts();
     };
-    CatalogComponent.prototype.getProducts = function () {
+    CatalogCategoryComponent.prototype.getProducts = function () {
         var _this = this;
         this.loading = true;
         this.dataService.getList()
@@ -430,22 +474,58 @@ var CatalogComponent = (function (_super) {
             _this.loading = false;
         }, function (error) { return _this.errorMessage = error; });
     };
-    CatalogComponent.prototype.setModalInputs = function (itemId, isItemCopy) {
-        __WEBPACK_IMPORTED_MODULE_5__page_table_abstract__["b" /* PageTableAbstractComponent */].prototype.setModalInputs.call(this);
+    CatalogCategoryComponent.prototype.setModalInputs = function (itemId, isItemCopy) {
+        __WEBPACK_IMPORTED_MODULE_6__page_table_abstract__["b" /* PageTableAbstractComponent */].prototype.setModalInputs.call(this);
         this.modalRef.componentInstance.category = this.currentCategory;
     };
-    return CatalogComponent;
-}(__WEBPACK_IMPORTED_MODULE_5__page_table_abstract__["b" /* PageTableAbstractComponent */]));
-CatalogComponent = __decorate([
+    return CatalogCategoryComponent;
+}(__WEBPACK_IMPORTED_MODULE_6__page_table_abstract__["b" /* PageTableAbstractComponent */]));
+CatalogCategoryComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
-        selector: 'shk-catalog',
-        template: __webpack_require__("../../../../../src/app/templates/page-catalog.html"),
-        providers: [__WEBPACK_IMPORTED_MODULE_7__services_products_service__["a" /* ProductsService */]]
+        selector: 'catalog-category',
+        template: __webpack_require__("../../../../../src/app/templates/catalog-category.html"),
+        providers: [__WEBPACK_IMPORTED_MODULE_5__services_products_service__["a" /* ProductsService */]]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_7__services_products_service__["a" /* ProductsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_7__services_products_service__["a" /* ProductsService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["c" /* NgbModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["c" /* NgbModal */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["b" /* Title */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["b" /* Title */]) === "function" && _d || Object])
-], CatalogComponent);
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_5__services_products_service__["a" /* ProductsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__services_products_service__["a" /* ProductsService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["c" /* NgbModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["c" /* NgbModal */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["c" /* Title */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["c" /* Title */]) === "function" && _d || Object])
+], CatalogCategoryComponent);
 
 var _a, _b, _c, _d;
+//# sourceMappingURL=catalog-category.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/catalog.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CatalogComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var CatalogComponent = (function () {
+    function CatalogComponent() {
+    }
+    CatalogComponent.prototype.ngOnInit = function () {
+    };
+    return CatalogComponent;
+}());
+CatalogComponent = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
+        selector: 'catalog',
+        template: __webpack_require__("../../../../../src/app/templates/page-catalog.html"),
+        providers: []
+    }),
+    __metadata("design:paramtypes", [])
+], CatalogComponent);
+
 //# sourceMappingURL=catalog.component.js.map
 
 /***/ }),
@@ -1330,10 +1410,10 @@ var ContentTypesComponent = (function (_super) {
 ContentTypesComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
         selector: 'shk-content-types',
-        template: __webpack_require__("../../../../../src/app/templates/page-content_types.html"),
+        template: __webpack_require__("../../../../../src/app/templates/catalog-content_types.html"),
         providers: [__WEBPACK_IMPORTED_MODULE_10__services_content_types_service__["a" /* ContentTypesService */]]
     }),
-    __metadata("design:paramtypes", [typeof (_j = typeof __WEBPACK_IMPORTED_MODULE_10__services_content_types_service__["a" /* ContentTypesService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_10__services_content_types_service__["a" /* ContentTypesService */]) === "function" && _j || Object, typeof (_k = typeof __WEBPACK_IMPORTED_MODULE_3__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */]) === "function" && _k || Object, typeof (_l = typeof __WEBPACK_IMPORTED_MODULE_3__ng_bootstrap_ng_bootstrap__["c" /* NgbModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ng_bootstrap_ng_bootstrap__["c" /* NgbModal */]) === "function" && _l || Object, typeof (_m = typeof __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__["b" /* Title */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__["b" /* Title */]) === "function" && _m || Object])
+    __metadata("design:paramtypes", [typeof (_j = typeof __WEBPACK_IMPORTED_MODULE_10__services_content_types_service__["a" /* ContentTypesService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_10__services_content_types_service__["a" /* ContentTypesService */]) === "function" && _j || Object, typeof (_k = typeof __WEBPACK_IMPORTED_MODULE_3__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */]) === "function" && _k || Object, typeof (_l = typeof __WEBPACK_IMPORTED_MODULE_3__ng_bootstrap_ng_bootstrap__["c" /* NgbModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ng_bootstrap_ng_bootstrap__["c" /* NgbModal */]) === "function" && _l || Object, typeof (_m = typeof __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__["c" /* Title */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__["c" /* Title */]) === "function" && _m || Object])
 ], ContentTypesComponent);
 
 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
@@ -1530,10 +1610,10 @@ var FieldTypesComponent = (function (_super) {
 FieldTypesComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
         selector: 'shk-field-types',
-        template: __webpack_require__("../../../../../src/app/templates/page-field_types.html"),
+        template: __webpack_require__("../../../../../src/app/templates/catalog-field_types.html"),
         providers: [FieldTypesService]
     }),
-    __metadata("design:paramtypes", [FieldTypesService, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_3__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_3__ng_bootstrap_ng_bootstrap__["c" /* NgbModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ng_bootstrap_ng_bootstrap__["c" /* NgbModal */]) === "function" && _g || Object, typeof (_h = typeof __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__["b" /* Title */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__["b" /* Title */]) === "function" && _h || Object])
+    __metadata("design:paramtypes", [FieldTypesService, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_3__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_3__ng_bootstrap_ng_bootstrap__["c" /* NgbModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ng_bootstrap_ng_bootstrap__["c" /* NgbModal */]) === "function" && _g || Object, typeof (_h = typeof __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__["c" /* Title */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__["c" /* Title */]) === "function" && _h || Object])
 ], FieldTypesComponent);
 
 var _a, _b, _c, _d, _e, _f, _g, _h;
@@ -1892,7 +1972,7 @@ OrdersComponent = __decorate([
         selector: 'shk-settings',
         template: __webpack_require__("../../../../../src/app/templates/page-orders.html")
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["b" /* Title */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["b" /* Title */]) === "function" && _a || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["c" /* Title */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["c" /* Title */]) === "function" && _a || Object])
 ], OrdersComponent);
 
 var _a;
@@ -2149,7 +2229,7 @@ var PageTableAbstractComponent = (function () {
 }());
 PageTableAbstractComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({}),
-    __metadata("design:paramtypes", [typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_6__services_data_service_abstract__["a" /* DataService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_6__services_data_service_abstract__["a" /* DataService */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */]) === "function" && _g || Object, typeof (_h = typeof __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["c" /* NgbModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["c" /* NgbModal */]) === "function" && _h || Object, typeof (_j = typeof __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["b" /* Title */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["b" /* Title */]) === "function" && _j || Object])
+    __metadata("design:paramtypes", [typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_6__services_data_service_abstract__["a" /* DataService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_6__services_data_service_abstract__["a" /* DataService */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */]) === "function" && _g || Object, typeof (_h = typeof __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["c" /* NgbModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["c" /* NgbModal */]) === "function" && _h || Object, typeof (_j = typeof __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["c" /* Title */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["c" /* Title */]) === "function" && _j || Object])
 ], PageTableAbstractComponent);
 
 var _a, _b, _c, _d, _e, _f, _g, _h, _j;
@@ -3166,7 +3246,7 @@ SettingsComponent = __decorate([
         selector: 'shk-settings',
         template: __webpack_require__("../../../../../src/app/templates/page-settings.html")
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["b" /* Title */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["b" /* Title */]) === "function" && _a || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["c" /* Title */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["c" /* Title */]) === "function" && _a || Object])
 ], SettingsComponent);
 
 var _a;
@@ -3210,7 +3290,7 @@ StatisticsComponent = __decorate([
         selector: 'shk-settings',
         template: __webpack_require__("../../../../../src/app/templates/page-statistics.html")
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["b" /* Title */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["b" /* Title */]) === "function" && _a || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["c" /* Title */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["c" /* Title */]) === "function" && _a || Object])
 ], StatisticsComponent);
 
 var _a;
@@ -3335,17 +3415,38 @@ module.exports = "<div>\n\n    <div class=\"card-navbar\">\n        <div class=\
 
 /***/ }),
 
+/***/ "../../../../../src/app/templates/catalog-category.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"float-right\">\n\n    <div ngbDropdown class=\"d-inline-block\">\n        <button class=\"btn btn-info\" ngbDropdownToggle>\n            Массовые дейсвия\n        </button>\n        <div ngbDropdownMenu>\n            <button class=\"dropdown-item\">Отключить / включить</button>\n            <button class=\"dropdown-item\">Удалить</button>\n        </div>\n    </div>\n\n    <button type=\"button\" class=\"btn btn-success d-inline-block btn-wide\" (click)=\"modalOpen()\">\n        <i class=\"icon-plus\"></i>\n        Add\n    </button>\n\n</div>\n<div class=\"float-left\">\n\n    <categories-menu (changeRequest)=\"openCategory($event)\"></categories-menu>\n\n</div>\n\n<cmp-table [items]=\"items\" [collectionSize]=\"collectionSize\" [queryOptions]=\"queryOptions\" [tableFields]=\"tableFields\" [(loading)]=\"loading\" (actionRequest)=\"actionRequest($event)\"></cmp-table>\n"
+
+/***/ }),
+
+/***/ "../../../../../src/app/templates/catalog-content_types.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"float-right\">\n\n    <div ngbDropdown class=\"d-inline-block\">\n        <button class=\"btn btn-info\" ngbDropdownToggle>\n            Массовые дейсвия\n        </button>\n        <div ngbDropdownMenu>\n            <button class=\"dropdown-item\">Отключить / включить</button>\n            <button class=\"dropdown-item\">Удалить</button>\n        </div>\n    </div>\n\n    <button type=\"button\" class=\"btn btn-success d-inline-block btn-wide\" (click)=\"modalOpen()\">\n        <i class=\"icon-plus\"></i>\n        Add\n    </button>\n\n</div>\n<div class=\"float-left\">\n    <a class=\"btn btn-outline-secondary\" [routerLink]=\"['/catalog']\">\n        <i class=\"icon-arrow-left\"></i>\n        Каталог\n    </a>\n</div>\n\n<cmp-table [items]=\"items\" [collectionSize]=\"collectionSize\" [queryOptions]=\"queryOptions\" [tableFields]=\"tableFields\" [(loading)]=\"loading\" (actionRequest)=\"actionRequest($event)\"></cmp-table>\n"
+
+/***/ }),
+
+/***/ "../../../../../src/app/templates/catalog-field_types.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"float-right\">\n\n    <div ngbDropdown class=\"d-inline-block\">\n        <button class=\"btn btn-info\" ngbDropdownToggle>\n            Массовые дейсвия\n        </button>\n        <div ngbDropdownMenu>\n            <button class=\"dropdown-item\">Отключить / включить</button>\n            <button class=\"dropdown-item\">Удалить</button>\n        </div>\n    </div>\n\n    <button type=\"button\" class=\"btn btn-success d-inline-block btn-wide\" (click)=\"modalOpen()\">\n        <i class=\"icon-plus\"></i>\n        Add\n    </button>\n\n</div>\n\n<div class=\"float-left\">\n    <a class=\"btn btn-outline-secondary\" [routerLink]=\"['/catalog']\">\n        <i class=\"icon-arrow-left\"></i>\n        Каталог\n    </a>\n</div>\n\n<cmp-table [items]=\"items\" [collectionSize]=\"collectionSize\" [queryOptions]=\"queryOptions\" [tableFields]=\"tableFields\" [(loading)]=\"loading\" (actionRequest)=\"actionRequest($event)\"></cmp-table>\n"
+
+/***/ }),
+
 /***/ "../../../../../src/app/templates/categories-menu.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"d-inline-block dropdown\">\n    <button class=\"btn btn-info dropdown-toggle dropdown-toggle-hover\">\n        <i class=\"icon-folder\"></i>\n        {{currentCategory.title}}\n    </button>\n    <div class=\"dropdown-menu shadow\" #categoriesDropdown>\n        <div class=\"dropdown-header\">\n            <button class=\"btn btn-sm btn-secondary\" ngbTooltip=\"Open root category\" (click)=\"goToRootCategory()\" *ngIf=\"currentCategory.id > 0\">\n                <i class=\"icon-home\"></i>\n            </button>\n            <button type=\"button\" class=\"btn btn-sm btn-secondary\" ngbTooltip=\"Add new category\" (click)=\"openModalCategory()\">\n                <i class=\"icon-plus\"></i>\n            </button>\n            <button type=\"button\" class=\"btn btn-sm btn-secondary\" ngbTooltip=\"Edit current category\" (click)=\"openModalCategory(currentCategory.id)\" [hidden]=\"currentCategory.id == 0\">\n                <i class=\"icon-pencil\"></i>\n            </button>\n            <button type=\"button\" class=\"btn btn-sm btn-secondary\" ngbTooltip=\"Copy category\" (click)=\"copyCategory()\" [hidden]=\"currentCategory.id == 0\">\n                <i class=\"icon-stack\"></i>\n            </button>\n            <button type=\"button\" class=\"btn btn-sm btn-secondary\" ngbTooltip=\"Delete current category\" (click)=\"deleteCategoryItemConfirm(currentCategory.id)\" [hidden]=\"currentCategory.id == 0\">\n                <i class=\"icon-cross\"></i>\n            </button>\n        </div>\n        <div class=\"dropdown-divider\"></div>\n        <div class=\"dropdown-header\" *ngIf=\"categories.length == 0\">\n            No categories.\n        </div>\n\n        <categories-list [inputItems]=\"categories\" [parentId]=\"0\" [currentId]=\"currentCategory.id\"></categories-list>\n\n    </div>\n</div>"
+module.exports = "<div class=\"d-inline-block dropdown\">\n    <button class=\"btn btn-secondary dropdown-toggle dropdown-toggle-hover\">\n        <i class=\"icon-folder\"></i>\n        {{currentCategory.title}}\n    </button>\n    <div class=\"dropdown-menu shadow\" #categoriesDropdown>\n        <div class=\"dropdown-header\">\n            <button class=\"btn btn-sm btn-secondary\" ngbTooltip=\"Open root category\" (click)=\"goToRootCategory()\" *ngIf=\"currentCategory.id > 0\">\n                <i class=\"icon-home\"></i>\n            </button>\n            <button type=\"button\" class=\"btn btn-sm btn-secondary\" ngbTooltip=\"Add new category\" (click)=\"openModalCategory()\">\n                <i class=\"icon-plus\"></i>\n            </button>\n            <button type=\"button\" class=\"btn btn-sm btn-secondary\" ngbTooltip=\"Edit current category\" (click)=\"openModalCategory(currentCategory.id)\" [hidden]=\"currentCategory.id == 0\">\n                <i class=\"icon-pencil\"></i>\n            </button>\n            <button type=\"button\" class=\"btn btn-sm btn-secondary\" ngbTooltip=\"Copy category\" (click)=\"copyCategory()\" [hidden]=\"currentCategory.id == 0\">\n                <i class=\"icon-stack\"></i>\n            </button>\n            <button type=\"button\" class=\"btn btn-sm btn-secondary\" ngbTooltip=\"Delete current category\" (click)=\"deleteCategoryItemConfirm(currentCategory.id)\" [hidden]=\"currentCategory.id == 0\">\n                <i class=\"icon-cross\"></i>\n            </button>\n        </div>\n        <div class=\"dropdown-divider\"></div>\n        <div class=\"dropdown-header\" *ngIf=\"categories.length == 0\">\n            No categories.\n        </div>\n\n        <categories-list [inputItems]=\"categories\" [parentId]=\"0\" [currentId]=\"currentCategory.id\"></categories-list>\n\n    </div>\n</div>"
 
 /***/ }),
 
 /***/ "../../../../../src/app/templates/cmp-table.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"table-responsive\" [class.loading]=\"loading\">\n    <table class=\"table table-striped table-divided mb-0\">\n        <thead>\n            <tr>\n                <th class=\"text-left\">\n                    <label class=\"custom-control custom-checkbox\">\n                        <input type=\"checkbox\" class=\"custom-control-input\" (click)=\"selectAll($event)\">\n                        <span class=\"custom-control-indicator\"></span>\n                    </label>\n                </th>\n                <th *ngFor=\"let tableField of tableFields; let index=index\">\n                    <button type=\"button\" class=\"btn btn-block btn-link\" (click)=\"selectSortBy(tableField.name)\">\n                        {{tableField.title}}\n                        <i [class.icon-arrow-down]=\"queryOptions.sort_dir == 'asc'\" [class.icon-arrow-up]=\"queryOptions.sort_dir == 'desc'\" [style.visibility]=\"tableField.name == queryOptions.sort_by ? 'visible' : 'hidden'\"></i>\n                    </button>\n                </th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr class=\"show-on-hover-parent\" *ngFor=\"let item of items\">\n                <td>\n                    <label class=\"custom-control custom-checkbox\">\n                        <input type=\"checkbox\" class=\"custom-control-input\" [checked]=\"getIsSelected(item.id)\" (click)=\"setSelected($event, item.id)\">\n                        <span class=\"custom-control-indicator\"></span>\n                    </label>\n                </td>\n                <td *ngFor=\"let tableField of tableFields; let index=index\">\n                    <div class=\"relative\" *ngIf=\"index == tableFields.length - 1\">\n                        <div class=\"show-on-hover no-wrap\">\n                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" ngbTooltip=\"Edit\" (click)=\"action('edit', item.id)\">\n                                <i class=\"icon-pencil\"></i>\n                            </button>\n                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" ngbTooltip=\"Copy\" (click)=\"action('copy', item.id)\">\n                                <i class=\"icon-stack\"></i>\n                            </button>\n                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" ngbTooltip=\"Delete\" (click)=\"action('delete', item.id)\">\n                                <i class=\"icon-cross\"></i>\n                            </button>\n                        </div>\n                    </div>\n\n                    <output-field [value]=\"item[tableField.name]\" [outputType]=\"tableField.output_type\" [options]=\"tableField.output_properties\"></output-field>\n\n                </td>\n            </tr>\n        <tr [hidden]=\"items.length > 0\" class=\"table-active\">\n            <td [attr.colspan]=\"tableFields.length + 1\" class=\"text-center p-4\">\n                Empty.\n            </td>\n        </tr>\n        </tbody>\n    </table>\n</div>\n\n<div class=\"card-footer\">\n\n    <div class=\"float-right\">\n        <select class=\"form-control\" [(ngModel)]=\"queryOptions.limit\" (change)=\"pageChange()\">\n            <option value=\"10\">10</option>\n            <option value=\"20\">20</option>\n            <option value=\"50\">50</option>\n            <option value=\"100\">100</option>\n        </select>\n    </div>\n\n    <ngb-pagination *ngIf=\"collectionSize > queryOptions.limit\" [class]=\"'mb-0'\" [collectionSize]=\"collectionSize\" [(page)]=\"queryOptions.page\" [maxSize]=\"queryOptions.limit\" (pageChange)=\"pageChange()\" [rotate]=\"true\" [boundaryLinks]=\"false\"></ngb-pagination>\n\n    <div class=\"clearfix\"></div>\n</div>"
+module.exports = "<div class=\"table-responsive\" [class.loading]=\"loading\">\n    <table class=\"table table-striped table-divided mb-0\">\n        <thead>\n            <tr>\n                <th class=\"text-left\">\n                    <label class=\"custom-control custom-checkbox\">\n                        <input type=\"checkbox\" class=\"custom-control-input\" (click)=\"selectAll($event)\">\n                        <span class=\"custom-control-indicator\"></span>\n                    </label>\n                </th>\n                <th *ngFor=\"let tableField of tableFields; let index=index\">\n                    <button type=\"button\" class=\"btn btn-block btn-link\" (click)=\"selectSortBy(tableField.name)\">\n                        {{tableField.title}}\n                        <i [class.icon-arrow-down]=\"queryOptions.sort_dir == 'asc'\" [class.icon-arrow-up]=\"queryOptions.sort_dir == 'desc'\" [style.visibility]=\"tableField.name == queryOptions.sort_by ? 'visible' : 'hidden'\"></i>\n                    </button>\n                </th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr class=\"show-on-hover-parent\" *ngFor=\"let item of items\">\n                <td>\n                    <label class=\"custom-control custom-checkbox\">\n                        <input type=\"checkbox\" class=\"custom-control-input\" [checked]=\"getIsSelected(item.id)\" (click)=\"setSelected($event, item.id)\">\n                        <span class=\"custom-control-indicator\"></span>\n                    </label>\n                </td>\n                <td *ngFor=\"let tableField of tableFields; let index=index\">\n                    <div class=\"relative\" *ngIf=\"index == tableFields.length - 1\">\n                        <div class=\"show-on-hover no-wrap\">\n                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" ngbTooltip=\"Edit\" (click)=\"action('edit', item.id)\">\n                                <i class=\"icon-pencil\"></i>\n                            </button>\n                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" ngbTooltip=\"Copy\" (click)=\"action('copy', item.id)\">\n                                <i class=\"icon-stack\"></i>\n                            </button>\n                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" ngbTooltip=\"Delete\" (click)=\"action('delete', item.id)\">\n                                <i class=\"icon-cross\"></i>\n                            </button>\n                        </div>\n                    </div>\n\n                    <output-field [value]=\"item[tableField.name]\" [outputType]=\"tableField.output_type\" [options]=\"tableField.output_properties\"></output-field>\n\n                </td>\n            </tr>\n        <tr [hidden]=\"items.length > 0\" class=\"table-active\">\n            <td [attr.colspan]=\"tableFields.length + 1\" class=\"text-center p-4\">\n                Empty.\n            </td>\n        </tr>\n        </tbody>\n    </table>\n</div>\n\n<div class=\"pt-3\">\n\n    <div class=\"float-right\">\n        <select class=\"form-control\" [(ngModel)]=\"queryOptions.limit\" (change)=\"pageChange()\">\n            <option value=\"10\">10</option>\n            <option value=\"20\">20</option>\n            <option value=\"50\">50</option>\n            <option value=\"100\">100</option>\n        </select>\n    </div>\n\n    <ngb-pagination *ngIf=\"collectionSize > queryOptions.limit\" [class]=\"'mb-0'\" [collectionSize]=\"collectionSize\" [(page)]=\"queryOptions.page\" [maxSize]=\"queryOptions.limit\" (pageChange)=\"pageChange()\" [rotate]=\"true\" [boundaryLinks]=\"false\"></ngb-pagination>\n\n    <div class=\"clearfix\"></div>\n</div>"
 
 /***/ }),
 
@@ -3394,21 +3495,7 @@ module.exports = "<div class=\"modal-header d-block\">\n    <div class=\"d-block
 /***/ "../../../../../src/app/templates/page-catalog.html":
 /***/ (function(module, exports) {
 
-module.exports = "\n<div class=\"card\">\n\n    <div class=\"card-body\">\n\n        <div class=\"float-right\">\n            <a class=\"btn btn-primary\" [routerLink]=\"['/catalog/content_types']\">\n                <i class=\"icon-box\"></i>\n                Типы контента\n            </a>\n            <a class=\"btn btn-primary\" [routerLink]=\"['/catalog/field_types']\">\n                <i class=\"icon-toggle\"></i>\n                Типы полей\n            </a>\n        </div>\n        <h3>\n            <i class=\"icon-layers\"></i>\n            {{title}}\n        </h3>\n\n        <hr>\n\n        <div class=\"float-right\">\n\n            <div ngbDropdown class=\"d-inline-block\">\n                <button class=\"btn btn-outline-info\" ngbDropdownToggle>\n                    Массовые дейсвия\n                </button>\n                <div ngbDropdownMenu>\n                    <button class=\"dropdown-item\">Отключить / включить</button>\n                    <button class=\"dropdown-item\">Удалить</button>\n                </div>\n            </div>\n\n            <button type=\"button\" class=\"btn btn-outline-success d-inline-block btn-wide\" (click)=\"modalOpen()\">\n                <i class=\"icon-plus\"></i>\n                Add\n            </button>\n\n        </div>\n        <div class=\"float-left\">\n\n            <categories-menu (changeRequest)=\"openCategory($event)\"></categories-menu>\n\n        </div>\n    </div>\n\n    <cmp-table [items]=\"items\" [collectionSize]=\"collectionSize\" [queryOptions]=\"queryOptions\" [tableFields]=\"tableFields\" [(loading)]=\"loading\" (actionRequest)=\"actionRequest($event)\"></cmp-table>\n\n</div>\n"
-
-/***/ }),
-
-/***/ "../../../../../src/app/templates/page-content_types.html":
-/***/ (function(module, exports) {
-
-module.exports = "<div class=\"card\">\n    <div class=\"card-body\">\n\n        <h3>\n            <i class=\"icon-box\"></i>\n            {{title}}\n        </h3>\n\n        <hr>\n\n        <div class=\"float-right\">\n\n            <div ngbDropdown class=\"d-inline-block\">\n                <button class=\"btn btn-outline-info\" ngbDropdownToggle>\n                    Массовые дейсвия\n                </button>\n                <div ngbDropdownMenu>\n                    <button class=\"dropdown-item\">Отключить / включить</button>\n                    <button class=\"dropdown-item\">Удалить</button>\n                </div>\n            </div>\n\n            <button type=\"button\" class=\"btn btn-outline-success d-inline-block btn-wide\" (click)=\"modalOpen()\">\n                <i class=\"icon-plus\"></i>\n                Add\n            </button>\n        </div>\n        <div class=\"float-left\">\n            <a class=\"btn btn-secondary\" [routerLink]=\"['/catalog']\">\n                <i class=\"icon-arrow-left\"></i>\n                Каталог\n            </a>\n        </div>\n    </div>\n\n    <cmp-table [items]=\"items\" [collectionSize]=\"collectionSize\" [queryOptions]=\"queryOptions\" [tableFields]=\"tableFields\" [(loading)]=\"loading\" (actionRequest)=\"actionRequest($event)\"></cmp-table>\n\n</div>\n"
-
-/***/ }),
-
-/***/ "../../../../../src/app/templates/page-field_types.html":
-/***/ (function(module, exports) {
-
-module.exports = "\n<div class=\"card\">\n\n    <div class=\"card-body\">\n\n        <h3>\n            <i class=\"icon-toggle\"></i>\n            {{title}}\n        </h3>\n\n        <hr>\n\n        <div class=\"float-right\">\n\n            <div ngbDropdown class=\"d-inline-block\">\n                <button class=\"btn btn-outline-info\" ngbDropdownToggle>\n                    Массовые дейсвия\n                </button>\n                <div ngbDropdownMenu>\n                    <button class=\"dropdown-item\">Отключить / включить</button>\n                    <button class=\"dropdown-item\">Удалить</button>\n                </div>\n            </div>\n\n            <button type=\"button\" class=\"btn btn-outline-success d-inline-block btn-wide\" (click)=\"modalOpen()\">\n                <i class=\"icon-plus\"></i>\n                Add\n            </button>\n        </div>\n\n        <div class=\"float-left\">\n            <a class=\"btn btn-secondary\" [routerLink]=\"['/catalog']\">\n                <i class=\"icon-arrow-left\"></i>\n                Каталог\n            </a>\n        </div>\n    </div>\n\n    <cmp-table [items]=\"items\" [collectionSize]=\"collectionSize\" [queryOptions]=\"queryOptions\" [tableFields]=\"tableFields\" [(loading)]=\"loading\" (actionRequest)=\"actionRequest($event)\"></cmp-table>\n\n</div>\n"
+module.exports = "<div class=\"card\">\n\n    <div class=\"card-body\">\n\n        <div class=\"float-right\">\n            <a class=\"btn btn-outline-primary\" href=\"\" [routerLink]=\"['/catalog/content_types']\" routerLinkActive=\"active\">\n                <i class=\"icon-box\"></i>\n                Типы контента\n            </a>\n            <a class=\"btn btn-outline-primary\" href=\"\" [routerLink]=\"['/catalog/field_types']\" routerLinkActive=\"active\">\n                <i class=\"icon-toggle\"></i>\n                Типы полей\n            </a>\n        </div>\n        <h3>\n            <i class=\"icon-layers\"></i>\n            <span i18n>Catalog</span>\n        </h3>\n\n        <hr>\n\n        <router-outlet></router-outlet>\n\n    </div>\n</div>\n"
 
 /***/ }),
 

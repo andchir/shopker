@@ -123,7 +123,7 @@ export class FieldTypeModalContent extends ModalContentAbstractComponent {
 
 @Component({
     selector: 'shk-field-types',
-    templateUrl: 'templates/page-field_types.html',
+    templateUrl: 'templates/catalog-field_types.html',
     providers: [ FieldTypesService ]
 })
 export class FieldTypesComponent extends PageTableAbstractComponent {

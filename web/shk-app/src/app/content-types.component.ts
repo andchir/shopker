@@ -462,7 +462,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
 
 @Component({
     selector: 'shk-content-types',
-    templateUrl: 'templates/page-content_types.html',
+    templateUrl: 'templates/catalog-content_types.html',
     providers: [ ContentTypesService ]
 })
 export class ContentTypesComponent extends PageTableAbstractComponent {

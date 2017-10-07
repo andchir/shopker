@@ -1,0 +1,25 @@
+<div class="float-right">
+
+    <div ngbDropdown class="d-inline-block">
+        <button class="btn btn-info" ngbDropdownToggle>
+            Массовые дейсвия
+        </button>
+        <div ngbDropdownMenu>
+            <button class="dropdown-item">Отключить / включить</button>
+            <button class="dropdown-item">Удалить</button>
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-success d-inline-block btn-wide" (click)="modalOpen()">
+        <i class="icon-plus"></i>
+        Add
+    </button>
+
+</div>
+<div class="float-left">
+
+    <categories-menu (changeRequest)="openCategory($event)"></categories-menu>
+
+</div>
+
+<cmp-table [items]="items" [collectionSize]="collectionSize" [queryOptions]="queryOptions" [tableFields]="tableFields" [(loading)]="loading" (actionRequest)="actionRequest($event)"></cmp-table>

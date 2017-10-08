@@ -131,7 +131,7 @@ export abstract class ModalContentAbstractComponent implements OnInit {
 }
 
 @Component({
-    //providers: [ NgbTooltipConfig ]
+
 })
 export abstract class PageTableAbstractComponent implements OnInit {
     errorMessage: string;
@@ -232,8 +232,12 @@ export abstract class PageTableAbstractComponent implements OnInit {
         this.dataService.getList(this.queryOptions)
             .subscribe(
                 res => {
-                    this.items = res.data;
-                    this.collectionSize = res.total;
+                    if(res.success){
+                        this.items = res.data;
+                        this.collectionSize = res.total;
+                    } else {
+                        this.items = [];
+                    }
                     this.loading = false;
                 },
                 error =>  this.errorMessage = <any>error

@@ -174,8 +174,6 @@ export class ProductModalContent extends ModalContentAbstractComponent {
     save() {
         this.submitted = true;
 
-        console.log('SAVE', this.form.valid, this.form.value);
-
         if(!this.form.valid){
             this.onValueChanged('form');
             this.submitted = false;

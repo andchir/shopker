@@ -44,6 +44,12 @@ class ProductController extends StorageControllerAbstract
                 'msg' => 'Content type not found.'
             ];
         }
+        if(empty($data['parent_id'])){
+            return [
+                'success' => false,
+                'msg' => 'Category not found.'
+            ];
+        }
 
         /** @var ContentType $contentType */
         $contentType = $this->get('doctrine_mongodb')

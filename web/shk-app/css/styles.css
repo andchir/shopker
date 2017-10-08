@@ -99,3 +99,11 @@ input[type="color"].form-control { height: 35px; padding: 2px; cursor: pointer; 
 /* popover */
 .popover { box-shadow: 0 0 20px rgba(0,0,0,0.3); }
 .popover-body { min-width: 150px; }
+
+/* icons */
+body .ui-datepicker .ui-datepicker-header .ui-datepicker-prev:before { font-family: 'icomoon'; content: "\e908"; }
+body .ui-datepicker .ui-datepicker-header .ui-datepicker-next:before { font-family: 'icomoon'; content: "\e907"; }
+.fa:before { font-family: 'icomoon'; }
+.fa.fa-angle-up:before { content: "\e906"; }
+.fa.fa-angle-down:before { content: "\e909"; }
+

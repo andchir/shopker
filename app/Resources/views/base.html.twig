@@ -10,19 +10,26 @@
 
     <link href="/shk-app/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="/shk-app/css/icomoon/style.css" rel="stylesheet">
+    <link href="/shk-app/node_modules/quill/dist/quill.core.css" rel="stylesheet">
+    <link href="/shk-app/node_modules/quill/dist/quill.snow.css" rel="stylesheet">
+    <link href="/shk-app/node_modules/primeng/resources/themes/bootstrap/theme.css" rel="stylesheet">
+    <link href="/shk-app/node_modules/primeng/resources/primeng.css" rel="stylesheet">
     <link href="/shk-app/css/styles.css" rel="stylesheet">
 
 </head>
 <body>
+
 {% block body %}{% endblock %}
 
 {% block javascripts %}
+<script type="text/javascript" src="/shk-app/node_modules/quill/dist/quill.js"></script>
 <script type="text/javascript" src="/shk-app/bundle/inline.bundle.js"></script>
 <script type="text/javascript" src="/shk-app/bundle/polyfills.bundle.js"></script>
-<script type="text/javascript" src="/shk-app/bundle/scripts.bundle.js"></script>
+<!--script type="text/javascript" src="/shk-app/bundle/scripts.bundle.js"></script-->
 <script type="text/javascript" src="/shk-app/bundle/styles.bundle.js"></script>
 <script type="text/javascript" src="/shk-app/bundle/vendor.bundle.js"></script>
 <script type="text/javascript" src="/shk-app/bundle/main.bundle.js"></script>
 {% endblock %}
+
 </body>
 </html>

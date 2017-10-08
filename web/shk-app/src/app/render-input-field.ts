@@ -45,11 +45,12 @@ export class InputFieldComponent implements OnInit {
             case 'date':
                 if(!this.model[fieldName]){
                     const now = new Date();
-                    this.model[fieldName] =  {
-                        year: now.getFullYear(),
-                        month: now.getMonth() + 1,
-                        day: now.getDate()
-                    };
+                    // this.model[fieldName] = {
+                    //     year: now.getFullYear(),
+                    //     month: now.getMonth() + 1,
+                    //     day: now.getDate()
+                    // };
+                    this.model[fieldName] = new Date();
                 }
                 break;
         }

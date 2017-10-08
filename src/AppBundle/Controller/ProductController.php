@@ -60,15 +60,16 @@ class ProductController extends StorageControllerAbstract
             ];
         }
 
-        $m = $this->container->get('doctrine_mongodb.odm.default_connection');
-        $db = $m->selectDatabase($this->getParameter('mongodb_database'));
-        $collection = $db->createCollection($contentType->getCollection());
+        //TODO: check system collections
+        $collection = $this->getCollection($contentType->getCollection());
 
         if($itemId){
             //TODO: get from DB
             $document = [];
         } else {
-            $document = [];
+            $document = [
+                '_id' => $this->getNextId($contentType->getCollection())
+            ];
         }
 
         $document['parent_id'] = !empty($data['parent_id'])
@@ -92,6 +93,38 @@ class ProductController extends StorageControllerAbstract
             'success' => !empty($result['ok']),
             'data' => $document
         ];
+    }
+
+    /**
+     * @param string $collectionName
+     * @return \Doctrine\MongoDB\Collection
+     */
+    public function getCollection($collectionName){
+        $m = $this->container->get('doctrine_mongodb.odm.default_connection');
+        $db = $m->selectDatabase($this->getParameter('mongodb_database'));
+        return $db->createCollection($collectionName);
+    }
+
+    /**
+     * @param string $collectionName
+     * @return int
+     */
+    public function getNextId($collectionName){
+        $autoincrementCollection = $this->getCollection('doctrine_increment_ids');
+        $count = $autoincrementCollection->count(['_id' => $collectionName]);
+        if(!$count){
+            $record = [
+                '_id' => $collectionName,
+                'current_id' => 0
+            ];
+            $autoincrementCollection->insert($record);
+        }
+        $ret = $autoincrementCollection->findAndUpdate(
+            ['_id' => $collectionName],
+            ['$inc' => ['current_id' => 1]],
+            ['new' => true]
+        );
+        return $ret['current_id'];
     }
 
     /**
@@ -129,10 +162,7 @@ class ProductController extends StorageControllerAbstract
         }
 
         $contentTypeFields = $contentType->getFields();
-
-        $m = $this->container->get('doctrine_mongodb.odm.default_connection');
-        $db = $m->selectDatabase($this->getParameter('mongodb_database'));
-        $collection = $db->createCollection($contentType->getCollection());
+        $collection = $this->getCollection($contentType->getCollection());
 
         $data = [];
         $results = $collection->find([
@@ -141,6 +171,7 @@ class ProductController extends StorageControllerAbstract
 
         foreach ($results as $entry) {
             $row = [
+                'id' => $entry['_id'],
                 'parent_id' => $entry['parent_id'],
                 'is_active' => $entry['is_active']
             ];

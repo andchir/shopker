@@ -482,7 +482,8 @@ var CatalogCategoryComponent = (function (_super) {
         }, function (error) { return _this.errorMessage = error; });
     };
     CatalogCategoryComponent.prototype.setModalInputs = function (itemId, isItemCopy) {
-        __WEBPACK_IMPORTED_MODULE_6__page_table_abstract__["b" /* PageTableAbstractComponent */].prototype.setModalInputs.call(this);
+        if (isItemCopy === void 0) { isItemCopy = false; }
+        __WEBPACK_IMPORTED_MODULE_6__page_table_abstract__["b" /* PageTableAbstractComponent */].prototype.setModalInputs.call(this, itemId, isItemCopy);
         this.modalRef.componentInstance.category = this.currentCategory;
     };
     return CatalogCategoryComponent;
@@ -2167,6 +2168,7 @@ var PageTableAbstractComponent = (function () {
     };
     PageTableAbstractComponent.prototype.modalOpen = function (itemId, isItemCopy) {
         var _this = this;
+        if (isItemCopy === void 0) { isItemCopy = false; }
         this.modalRef = this.modalService.open(this.getModalContent(), { size: 'lg' });
         this.setModalInputs(itemId, isItemCopy);
         this.modalRef.result.then(function (result) {
@@ -2176,6 +2178,7 @@ var PageTableAbstractComponent = (function () {
         });
     };
     PageTableAbstractComponent.prototype.setModalInputs = function (itemId, isItemCopy) {
+        if (isItemCopy === void 0) { isItemCopy = false; }
         this.modalRef.componentInstance.modalTitle = itemId && !isItemCopy
             ? 'Edit'
             : 'Add';
@@ -2487,6 +2490,7 @@ var ProductModalContent = (function (_super) {
     /** On initialize */
     ProductModalContent.prototype.ngOnInit = function () {
         var _this = this;
+        this.dataService.setRequestUrl('admin/products/' + this.category.id);
         this.buildForm();
         if (this.itemId) {
             this.getModelData();
@@ -2497,7 +2501,6 @@ var ProductModalContent = (function (_super) {
                 if (res.success) {
                     _this.contentTypes = res.data;
                     _this.selectCurrentContentType();
-                    _this.updateForm();
                 }
                 else {
                     if (res.msg) {
@@ -2511,7 +2514,7 @@ var ProductModalContent = (function (_super) {
     ProductModalContent.prototype.updateForm = function (data) {
         var _this = this;
         if (!data) {
-            data = this.form.value;
+            data = this.model;
         }
         var newKeys = __WEBPACK_IMPORTED_MODULE_6_lodash__["map"](this.currentContentType.fields, function (field) {
             return field.name;
@@ -2542,36 +2545,31 @@ var ProductModalContent = (function (_super) {
         var _this = this;
         this.loading = true;
         this.dataService.getItem(this.itemId)
-            .then(function (data) {
+            .then(function (res) {
             return new Promise(function (resolve, reject) {
                 _this.getContentTypes()
-                    .subscribe(function (res) {
-                    if (res.success) {
-                        _this.contentTypes = res.data;
-                        resolve(res.data);
+                    .subscribe(function (resp) {
+                    if (resp.success) {
+                        _this.contentTypes = resp.data;
+                        if (res.success) {
+                            resolve(res.data);
+                        }
+                        else {
+                            reject(res);
+                        }
                     }
                 });
             });
         })
             .then(function (data) {
-            _this.setCurrentContentType(data.content_type);
-            _this.updateForm(data);
+            _this.model = data;
+            _this.selectCurrentContentType(data.content_type);
             _this.loading = false;
         });
     };
     /** Select current content type */
-    ProductModalContent.prototype.selectCurrentContentType = function () {
-        var index = __WEBPACK_IMPORTED_MODULE_6_lodash__["findIndex"](this.contentTypes, { name: this.form.get('content_type').value });
-        if (index == -1) {
-            index = 0;
-        }
-        if (this.contentTypes[index]) {
-            this.currentContentType = __WEBPACK_IMPORTED_MODULE_6_lodash__["clone"](this.contentTypes[index]);
-            this.form.get('content_type').setValue(this.currentContentType.name);
-            this.updateForm();
-        }
-    };
-    ProductModalContent.prototype.setCurrentContentType = function (contentTypeName) {
+    ProductModalContent.prototype.selectCurrentContentType = function (contentTypeName) {
+        contentTypeName = contentTypeName || this.form.get('content_type').value;
         var index = __WEBPACK_IMPORTED_MODULE_6_lodash__["findIndex"](this.contentTypes, { name: contentTypeName });
         if (index == -1) {
             index = 0;
@@ -2579,6 +2577,7 @@ var ProductModalContent = (function (_super) {
         if (this.contentTypes[index]) {
             this.currentContentType = __WEBPACK_IMPORTED_MODULE_6_lodash__["clone"](this.contentTypes[index]);
             this.form.get('content_type').setValue(this.currentContentType.name);
+            this.updateForm();
         }
     };
     /** On change content type */
@@ -3539,7 +3538,7 @@ module.exports = "<div class=\"card\">\n    <div class=\"card-body\">\n\n       
 /***/ "../../../../../src/app/templates/render-input-field.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"form-group\" [class.form-group-message]=\"formErrors[field.name]\" [formGroup]=\"form\" *ngFor=\"let field of fields\">\n\n    <div [ngSwitch]=\"field.input_type\">\n\n        <div class=\"row\" *ngSwitchCase=\"'system_name'\">\n            <div class=\"col-md-5\">\n                <label for=\"field_{{field.name}}\">\n                    {{field.title}}\n                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                </label>\n            </div>\n            <div class=\"col-md-7\">\n                <div class=\"input-group\">\n                    <input type=\"text\" class=\"form-control form-control-sm\" id=\"field_{{field.name}}\" [name]=\"field.name\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" class=\"form-control\">\n                    <div class=\"input-group-btn\">\n                        <button type=\"button\" class=\"btn btn-secondary\" ngbTooltip=\"Generate\" (click)=\"generateName(model)\">\n                            <i class=\"icon-reload\"></i>\n                        </button>\n                    </div>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row\" *ngSwitchCase=\"'text'\">\n            <div class=\"col-md-5\">\n                <label for=\"field_{{field.name}}\">\n                    {{field.title}}\n                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                </label>\n            </div>\n            <div class=\"col-md-7\">\n                <input type=\"text\" id=\"field_{{field.name}}\" [name]=\"field.name\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" class=\"form-control\">\n            </div>\n        </div>\n\n        <div class=\"row\" *ngSwitchCase=\"'name'\">\n            <div class=\"col-md-5\">\n                <label for=\"field_{{field.name}}\">\n                    {{field.title}}\n                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                </label>\n            </div>\n            <div class=\"col-md-7\">\n                <input type=\"text\" id=\"field_{{field.name}}\" [name]=\"field.name\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" class=\"form-control\">\n            </div>\n        </div>\n\n        <div class=\"row\" *ngSwitchCase=\"'number'\">\n            <div class=\"col-md-5\">\n                <label for=\"field_{{field.name}}\">\n                    {{field.title}}\n                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                </label>\n            </div>\n            <div class=\"col-md-7\">\n                <input type=\"number\" id=\"field_{{field.name}}\" [name]=\"field.name\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" min=\"0\" class=\"form-control\">\n            </div>\n        </div>\n\n        <div class=\"row\" *ngSwitchCase=\"'textarea'\">\n            <div class=\"col-md-5\">\n                <label for=\"field_{{field.name}}\">\n                    {{field.title}}\n                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                </label>\n            </div>\n            <div class=\"col-md-7\">\n                <textarea rows=\"6\" id=\"field_{{field.name}}\" [name]=\"field.name\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" class=\"form-control\"></textarea>\n            </div>\n        </div>\n\n        <div class=\"row\" *ngSwitchCase=\"'image'\">\n            <div class=\"col-md-5\">\n                <label for=\"field_{{field.name}}\">\n                    {{field.title}}\n                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                </label>\n            </div>\n            <div class=\"col-md-7\">\n                <input type=\"file\" id=\"field_{{field.name}}\" [name]=\"field.name\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" class=\"form-control\">\n            </div>\n        </div>\n\n        <div class=\"row\" *ngSwitchCase=\"'color'\">\n            <div class=\"col-md-5\">\n                <label for=\"field_{{field.name}}\">\n                    {{field.title}}\n                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                </label>\n            </div>\n            <div class=\"col-md-7\">\n                <input type=\"color\" id=\"field_{{field.name}}\" [name]=\"field.name\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" class=\"form-control\">\n            </div>\n        </div>\n\n        <div class=\"row\" *ngSwitchCase=\"'rich_text'\">\n            <div class=\"col-12\">\n                <label for=\"field_{{field.name}}\">\n                    {{field.title}}\n                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                </label>\n                <p-editor [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" [style]=\"{'height':'320px'}\"></p-editor>\n            </div>\n        </div>\n\n        <div class=\"row\" *ngSwitchCase=\"'date'\">\n            <div class=\"col-md-5\">\n                <label for=\"field_{{field.name}}\">\n                    {{field.title}}\n                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                </label>\n            </div>\n            <div class=\"col-md-7\">\n                <div class=\"input-group\">\n                    <input type=\"text\" class=\"form-control\" id=\"field_{{field.name}}\" [name]=\"field.name\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" ngbDatepicker #d=\"ngbDatepicker\">\n                    <div class=\"input-group-btn\">\n                        <button class=\"btn btn-secondary\" (click)=\"d.toggle()\" type=\"button\">\n                            <i class=\"icon-date_range\"></i>\n                        </button>\n                    </div>\n                </div>\n            </div>\n        </div>\n\n    </div>\n\n    <div *ngIf=\"formErrors[field.name]\" class=\"alert alert-danger\">\n        {{formErrors[field.name]}}\n    </div>\n\n</div>\n"
+module.exports = "<div class=\"form-group\" [class.form-group-message]=\"formErrors[field.name]\" [formGroup]=\"form\" *ngFor=\"let field of fields\">\n\n    <div [ngSwitch]=\"field.input_type\">\n\n        <div class=\"row\" *ngSwitchCase=\"'system_name'\">\n            <div class=\"col-md-5\">\n                <label for=\"field_{{field.name}}\">\n                    {{field.title}}\n                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                </label>\n            </div>\n            <div class=\"col-md-7\">\n                <div class=\"input-group\">\n                    <input type=\"text\" class=\"form-control form-control-sm\" id=\"field_{{field.name}}\" [name]=\"field.name\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" class=\"form-control\">\n                    <div class=\"input-group-btn\">\n                        <button type=\"button\" class=\"btn btn-secondary\" ngbTooltip=\"Generate\" (click)=\"generateName(model)\">\n                            <i class=\"icon-reload\"></i>\n                        </button>\n                    </div>\n                </div>\n                <div *ngIf=\"formErrors[field.name]\" class=\"alert alert-danger\">\n                    {{formErrors[field.name]}}\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row\" *ngSwitchCase=\"'text'\">\n            <div class=\"col-md-5\">\n                <label for=\"field_{{field.name}}\">\n                    {{field.title}}\n                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                </label>\n            </div>\n            <div class=\"col-md-7\">\n                <input type=\"text\" id=\"field_{{field.name}}\" [name]=\"field.name\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" class=\"form-control\">\n                <div *ngIf=\"formErrors[field.name]\" class=\"alert alert-danger\">\n                    {{formErrors[field.name]}}\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row\" *ngSwitchCase=\"'name'\">\n            <div class=\"col-md-5\">\n                <label for=\"field_{{field.name}}\">\n                    {{field.title}}\n                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                </label>\n            </div>\n            <div class=\"col-md-7\">\n                <input type=\"text\" id=\"field_{{field.name}}\" [name]=\"field.name\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" class=\"form-control\">\n                <div *ngIf=\"formErrors[field.name]\" class=\"alert alert-danger\">\n                    {{formErrors[field.name]}}\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row\" *ngSwitchCase=\"'number'\">\n            <div class=\"col-md-5\">\n                <label for=\"field_{{field.name}}\">\n                    {{field.title}}\n                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                </label>\n            </div>\n            <div class=\"col-md-7\">\n                <input type=\"number\" id=\"field_{{field.name}}\" [name]=\"field.name\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" min=\"0\" class=\"form-control\">\n                <div *ngIf=\"formErrors[field.name]\" class=\"alert alert-danger\">\n                    {{formErrors[field.name]}}\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row\" *ngSwitchCase=\"'textarea'\">\n            <div class=\"col-md-5\">\n                <label for=\"field_{{field.name}}\">\n                    {{field.title}}\n                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                </label>\n            </div>\n            <div class=\"col-md-7\">\n                <textarea rows=\"6\" id=\"field_{{field.name}}\" [name]=\"field.name\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" class=\"form-control\"></textarea>\n                <div *ngIf=\"formErrors[field.name]\" class=\"alert alert-danger\">\n                    {{formErrors[field.name]}}\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row\" *ngSwitchCase=\"'image'\">\n            <div class=\"col-md-5\">\n                <label for=\"field_{{field.name}}\">\n                    {{field.title}}\n                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                </label>\n            </div>\n            <div class=\"col-md-7\">\n                <input type=\"file\" id=\"field_{{field.name}}\" [name]=\"field.name\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" class=\"form-control\">\n                <div *ngIf=\"formErrors[field.name]\" class=\"alert alert-danger\">\n                    {{formErrors[field.name]}}\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row\" *ngSwitchCase=\"'color'\">\n            <div class=\"col-md-5\">\n                <label for=\"field_{{field.name}}\">\n                    {{field.title}}\n                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                </label>\n            </div>\n            <div class=\"col-md-7\">\n                <input type=\"color\" id=\"field_{{field.name}}\" [name]=\"field.name\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" class=\"form-control\">\n                <div *ngIf=\"formErrors[field.name]\" class=\"alert alert-danger\">\n                    {{formErrors[field.name]}}\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row\" *ngSwitchCase=\"'rich_text'\">\n            <div class=\"col-12\">\n                <label for=\"field_{{field.name}}\">\n                    {{field.title}}\n                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                </label>\n                <p-editor [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" [style]=\"{'height':'320px'}\"></p-editor>\n                <div *ngIf=\"formErrors[field.name]\" class=\"alert alert-danger\">\n                    {{formErrors[field.name]}}\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row\" *ngSwitchCase=\"'date'\">\n            <div class=\"col-md-5\">\n                <label for=\"field_{{field.name}}\">\n                    {{field.title}}\n                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                </label>\n            </div>\n            <div class=\"col-md-7\">\n                <div class=\"input-group\">\n                    <input type=\"text\" class=\"form-control\" id=\"field_{{field.name}}\" [name]=\"field.name\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" ngbDatepicker #d=\"ngbDatepicker\">\n                    <div class=\"input-group-btn\">\n                        <button class=\"btn btn-secondary\" (click)=\"d.toggle()\" type=\"button\">\n                            <i class=\"icon-date_range\"></i>\n                        </button>\n                    </div>\n                </div>\n                <div *ngIf=\"formErrors[field.name]\" class=\"alert alert-danger\">\n                    {{formErrors[field.name]}}\n                </div>\n            </div>\n        </div>\n\n    </div>\n\n</div>\n"
 
 /***/ }),
 

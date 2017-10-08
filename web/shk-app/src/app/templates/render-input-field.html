@@ -18,6 +18,9 @@
                         </button>
                     </div>
                 </div>
+                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                    {{formErrors[field.name]}}
+                </div>
             </div>
         </div>
 
@@ -30,6 +33,9 @@
             </div>
             <div class="col-md-7">
                 <input type="text" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control">
+                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                    {{formErrors[field.name]}}
+                </div>
             </div>
         </div>
 
@@ -42,6 +48,9 @@
             </div>
             <div class="col-md-7">
                 <input type="text" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control">
+                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                    {{formErrors[field.name]}}
+                </div>
             </div>
         </div>
 
@@ -54,6 +63,9 @@
             </div>
             <div class="col-md-7">
                 <input type="number" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" min="0" class="form-control">
+                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                    {{formErrors[field.name]}}
+                </div>
             </div>
         </div>
 
@@ -66,6 +78,9 @@
             </div>
             <div class="col-md-7">
                 <textarea rows="6" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control"></textarea>
+                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                    {{formErrors[field.name]}}
+                </div>
             </div>
         </div>
 
@@ -78,6 +93,9 @@
             </div>
             <div class="col-md-7">
                 <input type="file" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control">
+                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                    {{formErrors[field.name]}}
+                </div>
             </div>
         </div>
 
@@ -90,6 +108,9 @@
             </div>
             <div class="col-md-7">
                 <input type="color" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control">
+                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                    {{formErrors[field.name]}}
+                </div>
             </div>
         </div>
 
@@ -100,6 +121,9 @@
                     <span class="text-danger" *ngIf="field.required">*</span>
                 </label>
                 <p-editor [formControlName]="field.name" [(ngModel)]="model[field.name]" [style]="{'height':'320px'}"></p-editor>
+                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                    {{formErrors[field.name]}}
+                </div>
             </div>
         </div>
 
@@ -119,13 +143,12 @@
                         </button>
                     </div>
                 </div>
+                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                    {{formErrors[field.name]}}
+                </div>
             </div>
         </div>
 
-    </div>
-
-    <div *ngIf="formErrors[field.name]" class="alert alert-danger">
-        {{formErrors[field.name]}}
     </div>
 
 </div>

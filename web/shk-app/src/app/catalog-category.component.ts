@@ -96,8 +96,8 @@ export class CatalogCategoryComponent extends PageTableAbstractComponent {
             );
     }
 
-    setModalInputs(itemId?: number, isItemCopy?: boolean): void {
-        PageTableAbstractComponent.prototype.setModalInputs.call(this);
+    setModalInputs(itemId?: number, isItemCopy: boolean = false): void {
+        PageTableAbstractComponent.prototype.setModalInputs.call(this, itemId, isItemCopy);
         this.modalRef.componentInstance.category = this.currentCategory;
     }
 

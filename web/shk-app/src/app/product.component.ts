@@ -58,6 +58,7 @@ export class ProductModalContent extends ModalContentAbstractComponent {
     /** On initialize */
     ngOnInit(): void {
 
+        this.dataService.setRequestUrl('admin/products/' + this.category.id);
         this.buildForm();
         if(this.itemId){
 
@@ -70,7 +71,6 @@ export class ProductModalContent extends ModalContentAbstractComponent {
                         if(res.success){
                             this.contentTypes = res.data;
                             this.selectCurrentContentType();
-                            this.updateForm();
                         } else {
                             if(res.msg){
                                 this.errorMessage = res.msg;
@@ -84,7 +84,7 @@ export class ProductModalContent extends ModalContentAbstractComponent {
     /** Build form */
     updateForm(data ?: any): void {
         if(!data){
-            data = this.form.value;
+            data = this.model;
         }
         let newKeys = _.map(this.currentContentType.fields, function(field){
             return field.name;
@@ -116,40 +116,32 @@ export class ProductModalContent extends ModalContentAbstractComponent {
 
     getModelData(): void {
         this.loading = true;
-
         this.dataService.getItem(this.itemId)
-            .then(data => {
+            .then(res => {
                 return new Promise((resolve, reject) => {
                     this.getContentTypes()
-                        .subscribe(res => {
-                            if(res.success){
-                                this.contentTypes = res.data;
-                                resolve(res.data);
+                        .subscribe(resp => {
+                            if(resp.success){
+                                this.contentTypes = resp.data;
+                                if(res.success){
+                                    resolve(res.data);
+                                } else {
+                                    reject(res);
+                                }
                             }
                         });
                 });
             })
             .then(data => {
-                this.setCurrentContentType(data.content_type);
-                this.updateForm(data);
+                this.model = data;
+                this.selectCurrentContentType(data.content_type);
                 this.loading = false;
             });
     }
 
     /** Select current content type */
-    selectCurrentContentType(): void {
-        let index = _.findIndex(this.contentTypes, {name: this.form.get('content_type').value});
-        if (index == -1) {
-            index = 0;
-        }
-        if (this.contentTypes[index]) {
-            this.currentContentType = _.clone(this.contentTypes[index]);
-            this.form.get('content_type').setValue(this.currentContentType.name);
-            this.updateForm();
-        }
-    }
-
-    setCurrentContentType(contentTypeName: string): void {
+    selectCurrentContentType(contentTypeName?: string): void {
+        contentTypeName = contentTypeName || this.form.get('content_type').value;
         let index = _.findIndex(this.contentTypes, {name: contentTypeName});
         if (index == -1) {
             index = 0;
@@ -157,6 +149,7 @@ export class ProductModalContent extends ModalContentAbstractComponent {
         if (this.contentTypes[index]) {
             this.currentContentType = _.clone(this.contentTypes[index]);
             this.form.get('content_type').setValue(this.currentContentType.name);
+            this.updateForm();
         }
     }
 
@@ -198,6 +191,5 @@ export class ProductModalContent extends ModalContentAbstractComponent {
         } else {
             this.dataService.create(this.model).then(callback.bind(this));
         }
-
     }
 }

@@ -163,7 +163,7 @@ export abstract class PageTableAbstractComponent implements OnInit {
         this.titleService.setTitle( newTitle );
     }
 
-    modalOpen(itemId?: number, isItemCopy?: boolean): void {
+    modalOpen(itemId?: number, isItemCopy: boolean = false): void {
         this.modalRef = this.modalService.open(this.getModalContent(), {size: 'lg'});
         this.setModalInputs(itemId, isItemCopy);
         this.modalRef.result.then((result) => {
@@ -173,7 +173,7 @@ export abstract class PageTableAbstractComponent implements OnInit {
         });
     }
 
-    setModalInputs(itemId?: number, isItemCopy?: boolean): void {
+    setModalInputs(itemId?: number, isItemCopy: boolean = false): void {
         this.modalRef.componentInstance.modalTitle = itemId && !isItemCopy
             ? 'Edit'
             : 'Add';

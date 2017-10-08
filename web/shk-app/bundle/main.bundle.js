@@ -326,7 +326,8 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_4__angular_http__["c" /* HttpModule */],
             __WEBPACK_IMPORTED_MODULE_27__app_routing_module__["a" /* AppRoutingModule */],
             __WEBPACK_IMPORTED_MODULE_5__ng_bootstrap_ng_bootstrap__["d" /* NgbModule */].forRoot(),
-            __WEBPACK_IMPORTED_MODULE_6_primeng_primeng__["EditorModule"]
+            __WEBPACK_IMPORTED_MODULE_6_primeng_primeng__["EditorModule"],
+            __WEBPACK_IMPORTED_MODULE_6_primeng_primeng__["CalendarModule"]
         ],
         declarations: [
             __WEBPACK_IMPORTED_MODULE_7__app_component__["b" /* AppComponent */],
@@ -462,24 +463,13 @@ var CatalogCategoryComponent = (function (_super) {
         this.currentCategory = __WEBPACK_IMPORTED_MODULE_3_lodash__["clone"](category);
         this.titleService.setTitle(this.title + ' / ' + this.currentCategory.title);
         this.dataService.setRequestUrl('admin/products/' + this.currentCategory.id);
-        this.getProducts();
+        this.getList();
     };
     CatalogCategoryComponent.prototype.openRootCategory = function () {
         this.currentCategory = new __WEBPACK_IMPORTED_MODULE_4__models_category_model__["a" /* Category */](0, false, 0, 'root', '', '', '', true);
         this.titleService.setTitle(this.title);
         this.dataService.setRequestUrl('admin/products/' + this.currentCategory.id);
-        this.getProducts();
-    };
-    CatalogCategoryComponent.prototype.getProducts = function () {
-        var _this = this;
-        this.loading = true;
-        this.dataService.getList()
-            .subscribe(function (res) {
-            if (res.success) {
-                _this.items = res.data;
-            }
-            _this.loading = false;
-        }, function (error) { return _this.errorMessage = error; });
+        this.getList();
     };
     CatalogCategoryComponent.prototype.setModalInputs = function (itemId, isItemCopy) {
         if (isItemCopy === void 0) { isItemCopy = false; }
@@ -2562,6 +2552,9 @@ var ProductModalContent = (function (_super) {
             });
         })
             .then(function (data) {
+            if (_this.isItemCopy) {
+                data.id = 0;
+            }
             _this.model = data;
             _this.selectCurrentContentType(data.content_type);
             _this.loading = false;

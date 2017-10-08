@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { NgbModule, NgbActiveModal, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
-import { EditorModule } from 'primeng/primeng';
+import { EditorModule, CalendarModule } from 'primeng/primeng';
 
 import { AppComponent, AlertModalContent, ConfirmModalContent } from './app.component';
 import { NotFoundComponent } from './not-found.component';
@@ -39,7 +39,8 @@ import { AppRoutingModule }     from './app-routing.module';
         HttpModule,
         AppRoutingModule,
         NgbModule.forRoot(),
-        EditorModule
+        EditorModule,
+        CalendarModule
     ],
     declarations: [
         AppComponent,

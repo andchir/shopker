@@ -133,6 +133,9 @@ export class ProductModalContent extends ModalContentAbstractComponent {
                 });
             })
             .then(data => {
+                if(this.isItemCopy){
+                    data.id = 0;
+                }
                 this.model = data;
                 this.selectCurrentContentType(data.content_type);
                 this.loading = false;

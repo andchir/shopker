@@ -72,63 +72,19 @@ export class CatalogCategoryComponent extends PageTableAbstractComponent {
         this.currentCategory = _.clone(category);
         this.titleService.setTitle(this.title + ' / ' + this.currentCategory.title);
         this.dataService.setRequestUrl('admin/products/' + this.currentCategory.id);
-        this.getProducts();
+        this.getList();
     }
 
     openRootCategory(): void {
         this.currentCategory = new Category(0, false, 0, 'root', '', '', '', true);
         this.titleService.setTitle(this.title);
         this.dataService.setRequestUrl('admin/products/' + this.currentCategory.id);
-        this.getProducts();
-    }
-
-    getProducts(): void {
-        this.loading = true;
-        this.dataService.getList()
-            .subscribe(
-                res => {
-                    if (res.success) {
-                        this.items = res.data;
-                    }
-                    this.loading = false;
-                },
-                error => this.errorMessage = <any>error
-            );
+        this.getList();
     }
 
     setModalInputs(itemId?: number, isItemCopy: boolean = false): void {
         PageTableAbstractComponent.prototype.setModalInputs.call(this, itemId, isItemCopy);
         this.modalRef.componentInstance.category = this.currentCategory;
     }
-
-    // modalProductOpen( itemId?: number ) {
-    //     this.modalRef = this.modalService.open(ProductModalContent, {size: 'lg'});
-    //     this.modalRef.componentInstance.modalTitle = 'Add product';
-    //     this.modalRef.componentInstance.itemId = itemId || 0;
-    //     this.modalRef.componentInstance.category = this.currentCategory;
-    //     this.modalRef.result.then((result) => {
-    //         if( result.reason && result.reason == 'edit' ){
-    //
-    //         } else {
-    //             this.getProducts();
-    //         }
-    //     }, (reason) => {
-    //
-    //     });
-    // }
-
-    // actionRequest(actionValue : [string, number]): void {
-    //     switch(actionValue[0]){
-    //         case 'edit':
-    //             this.modalProductOpen(actionValue[1]);
-    //             break;
-    //         case 'copy':
-    //             //this.modalProductOpen(actionValue[1], true);
-    //             break;
-    //         case 'delete':
-    //             //this.deleteItemConfirm(actionValue[1]);
-    //             break;
-    //     }
-    // }
 
 }

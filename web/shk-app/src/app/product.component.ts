@@ -8,9 +8,9 @@ import { QueryOptions } from './models/query-options';
 import { ContentField } from "./models/content_field.model";
 import { FilterFieldByGroup } from "./pipes/filter-field-by-group.pipe";
 import { DataService } from './services/data-service.abstract';
-import { PageTableAbstractComponent, ModalContentAbstractComponent } from './page-table.abstract';
 import * as _ from "lodash";
 
+import { PageTableAbstractComponent, ModalContentAbstractComponent } from './page-table.abstract';
 import { CategoriesService } from './services/categories.service';
 import { ContentTypesService } from './services/content_types.service';
 import { ProductsService } from './services/products.service';

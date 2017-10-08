@@ -37,8 +37,13 @@
 
         <input *ngSwitchCase="'color'" type="color" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control">
 
+        <div *ngSwitchCase="'rich_text'">
+            <p-editor [formControlName]="field.name" [(ngModel)]="model[field.name]" [style]="{'height':'320px'}"></p-editor>
+        </div>
+
         <div *ngIf="formErrors[field.name]" class="alert alert-danger">
             {{formErrors[field.name]}}
         </div>
+
     </div>
 </div>

@@ -3,6 +3,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { NgbModule, NgbActiveModal, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
+import { EditorModule } from 'primeng/primeng';
 
 import { AppComponent, AlertModalContent, ConfirmModalContent } from './app.component';
 import { NotFoundComponent } from './not-found.component';
@@ -28,8 +30,6 @@ import { ContentTypesService } from './services/content_types.service';
 import { CategoriesService } from './services/categories.service';
 import { AppRoutingModule }     from './app-routing.module';
 
-import { NgbModule, NgbActiveModal, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
-
 @NgModule({
     imports: [
         BrowserModule,
@@ -38,7 +38,8 @@ import { NgbModule, NgbActiveModal, NgbTooltipConfig } from '@ng-bootstrap/ng-bo
         ReactiveFormsModule,
         HttpModule,
         AppRoutingModule,
-        NgbModule.forRoot()
+        NgbModule.forRoot(),
+        EditorModule
     ],
     declarations: [
         AppComponent,

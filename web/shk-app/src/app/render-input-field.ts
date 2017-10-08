@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { NgbDateStruct, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
-import { ContentField } from "./models/content_field.model";
 
+import { ContentField } from "./models/content_field.model";
 import { SystemNameService } from './services/system-name.service';
 
 @Component({

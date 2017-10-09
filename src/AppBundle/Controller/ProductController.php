@@ -183,7 +183,6 @@ class ProductController extends BaseController
             ];
         }
 
-        //TODO: check system collections
         $collection = $this->getCollection($contentType->getCollection());
 
         if($itemId){

@@ -15,6 +15,16 @@ use AppBundle\Document\Collection;
 class ContentTypeController extends StorageControllerAbstract
 {
 
+    const SYSTEM_COLLECTIONS = [
+        'doctrine_increment_ids',
+        'content_type',
+        'field_type',
+        'collection',
+        'category',
+        'settings',
+        'orders'
+    ];
+
     /**
      * @param $data
      * @param int $itemId
@@ -22,20 +32,23 @@ class ContentTypeController extends StorageControllerAbstract
      */
     public function validateData($data, $itemId = 0)
     {
-        if( empty($data) ){
+        if (empty($data)) {
             return ['success' => false, 'msg' => 'Data is empty.'];
         }
-        if( empty($data['title']) ){
+        if (empty($data['title'])) {
             return ['success' => false, 'msg' => 'Title is empty.'];
         }
-        if( empty($data['name']) ){
+        if (empty($data['name'])) {
             return ['success' => false, 'msg' => 'System name is empty.'];
         }
-        if( empty($data['collection']) ){
+        if (empty($data['collection'])) {
             return ['success' => false, 'msg' => 'Collection name is empty.'];
         }
-        if( empty($data['fields']) ){
+        if (empty($data['fields'])) {
             return ['success' => false, 'msg' => 'Please create fields for content type.'];
+        }
+        if (in_array($data['collection'], self::SYSTEM_COLLECTIONS)){
+            return ['success' => false, 'msg' => 'You can not save content in system collections. Please choose a different collection name.'];
         }
 
         if($this->checkNameExists($data['name'], $itemId)){

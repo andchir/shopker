@@ -23,19 +23,15 @@ npm install -g @angular/cli@latest
 ~~~
 
 ~~~
-cd shk-app
-~~~
-
-~~~
 ng serve --open --live-reload 0 --watch --port 4200 --output-path "./dist_dev"
 ~~~
 
 ~~~
-ng build --base-href "/" --output-path "./bundle"
+ng build --base-href "/" --output-path "./bundle" --watch
 ~~~
 
 ~~~
-ng build --base-href "/" --output-path "./bundle" --watch
+ng build --prod --env=prod --base-href "/" --output-path "./bundle"
 ~~~
 
 **Angular internationalization (i18n)**

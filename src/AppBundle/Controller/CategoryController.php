@@ -2,13 +2,15 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Document\Category;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Event\CategoryUpdatedEvent;
+
+use AppBundle\Document\Category;
+use AppBundle\Document\ContentType;
 
 /**
  * Class ContentTypeController
@@ -34,7 +36,7 @@ class CategoryController extends StorageControllerAbstract
         if( empty($data['name']) ){
             return ['success' => false, 'msg' => 'System name is required.'];
         }
-        if( empty($data['content_type']) ){
+        if( empty($data['content_type_name']) ){
             return ['success' => false, 'msg' => 'Content type is required.'];
         }
         if($this->checkNameExists($data['name'], $itemId)){
@@ -67,13 +69,29 @@ class CategoryController extends StorageControllerAbstract
             $item = new Category();
         }
 
+        /** @var ContentType $contentType */
+        $contentType = $this->get('doctrine_mongodb')
+            ->getManager()
+            ->getRepository(ContentType::class)
+            ->findOneBy([
+                'name' => $data['content_type_name']
+            ]);
+
+        if(!$contentType){
+            return [
+                'success' => false,
+                'msg' => 'Content type not found.'
+            ];
+        }
+
         $item
             ->setTitle($data['title'])
             ->setName($data['name'])
             ->setDescription(isset($data['description']) ? $data['description'] : '')
-            ->setContentType($data['content_type'])
             ->setIsActive(isset($data['is_active']) ? $data['is_active'] : true)
-            ->setParentId(isset($data['parent_id']) ? intval( $data['parent_id'] ) : 0);
+            ->setParentId(isset($data['parent_id']) ? intval( $data['parent_id'] ) : 0)
+            ->setContentTypeName($data['content_type_name'])
+            ->setContentType($contentType);
 
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $this->get('doctrine_mongodb')->getManager();

@@ -3,6 +3,7 @@
 namespace AppBundle\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use AppBundle\Document\ContentType;
 
 /**
  * @MongoDB\Document(collection="category",repositoryClass="AppBundle\Repository\CategoryRepository")
@@ -38,7 +39,7 @@ class Category
     /**
      * @MongoDB\Field(type="string")
      */
-    protected $content_type;
+    protected $content_type_name;
 
     /**
      * @MongoDB\Field(type="boolean")
@@ -49,6 +50,11 @@ class Category
      * @MongoDB\Field(type="boolean")
      */
     protected $is_active;
+
+    /**
+     * @MongoDB\ReferenceOne(targetDocument="ContentType", inversedBy="category")
+     */
+    protected $contentType;
 
     /**
      * Get id
@@ -159,32 +165,32 @@ class Category
             'name' => $this->getName(),
             'title' => $this->getTitle(),
             'description' => $this->getDescription(),
-            'content_type' => $this->getContentType(),
+            'content_type_name' => $this->getContentTypeName(),
             'is_folder' => $this->getIsFolder(),
             'is_active' => $this->getIsActive()
         ];
     }
 
     /**
-     * Set contentType
+     * Set contentTypeName
      *
-     * @param string $contentType
+     * @param string $contentTypeName
      * @return self
      */
-    public function setContentType($contentType)
+    public function setContentTypeName($contentTypeName)
     {
-        $this->content_type = $contentType;
+        $this->content_type_name = $contentTypeName;
         return $this;
     }
 
     /**
-     * Get contentType
+     * Get contentTypeName
      *
-     * @return string $contentType
+     * @return string $contentTypeName
      */
-    public function getContentType()
+    public function getContentTypeName()
     {
-        return $this->content_type;
+        return $this->content_type_name;
     }
 
     /**
@@ -241,4 +247,25 @@ class Category
 
     }
 
+    /**
+     * Set contentType
+     *
+     * @param ContentType $contentType
+     * @return self
+     */
+    public function setContentType(ContentType $contentType)
+    {
+        $this->contentType = $contentType;
+        return $this;
+    }
+
+    /**
+     * Get contentType
+     *
+     * @return ContentType $contentType
+     */
+    public function getContentType()
+    {
+        return $this->contentType;
+    }
 }

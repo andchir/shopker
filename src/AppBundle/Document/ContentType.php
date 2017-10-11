@@ -3,6 +3,7 @@
 namespace AppBundle\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use \Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @MongoDB\Document(collection="content_type",repositoryClass="AppBundle\Repository\ContentTypeRepository")
@@ -48,6 +49,11 @@ class ContentType
      * @MongoDB\Field(type="boolean")
      */
     protected $is_active;
+
+    /**
+     * @MongoDB\ReferenceMany(targetDocument="Category", mappedBy="contentType")
+     */
+    protected $categories;
 
     /**
      * Get id
@@ -236,4 +242,38 @@ class ContentType
         return $output;
     }
 
+    public function __construct()
+    {
+        $this->categories = new ArrayCollection();
+    }
+    
+    /**
+     * Add category
+     *
+     * @param Category $category
+     */
+    public function addCategory(Category $category)
+    {
+        $this->categories[] = $category;
+    }
+
+    /**
+     * Remove category
+     *
+     * @param Category $category
+     */
+    public function removeCategory(Category $category)
+    {
+        $this->categories->removeElement($category);
+    }
+
+    /**
+     * Get categories
+     *
+     * @return \Doctrine\Common\Collections\Collection $categories
+     */
+    public function getCategories()
+    {
+        return $this->categories;
+    }
 }

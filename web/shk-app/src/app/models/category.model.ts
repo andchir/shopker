@@ -6,7 +6,7 @@ export class Category {
         public name: string,
         public title: string,
         public description: string,
-        public content_type: string,
+        public content_type_name: string,
         public is_active: boolean
     ) { }
 }

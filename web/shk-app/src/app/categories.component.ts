@@ -54,7 +54,7 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent {
             validators: [],
             messages: {}
         },
-        content_type: {
+        content_type_name: {
             value: '',
             validators: [Validators.required],
             messages: {
@@ -81,7 +81,9 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent {
     /** On initialize */
     ngOnInit(): void {
         this.model.parent_id = this.currentCategory.id;
-        this.model.content_type = this.currentCategory.content_type;
+        this.model.content_type_name = this.currentCategory.content_type_name;
+
+        console.log(this.currentCategory);
 
         ModalContentAbstractComponent.prototype.ngOnInit.call(this);
         this.getContentTypes();

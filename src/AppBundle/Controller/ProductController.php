@@ -38,17 +38,7 @@ class ProductController extends BaseController
             ]);
         }
 
-        $queryString = $request->getQueryString();
-        $contentTypeName = $category->getContentType();
-
-        /** @var ContentType $contentType */
-        $contentType = $this->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository(ContentType::class)
-            ->findOneBy([
-                'name' => $contentTypeName
-            ]);
-
+        $contentType = $category->getContentType();
         if(!$contentType){
             return new JsonResponse([
                 'success' => false,
@@ -56,6 +46,7 @@ class ProductController extends BaseController
             ]);
         }
 
+        $queryString = $request->getQueryString();
         $queryOptions = $this->getQueryOptions($queryString, $contentType);
         $contentTypeFields = $contentType->getFields();
         $collection = $this->getCollection($contentType->getCollection());
@@ -99,7 +90,7 @@ class ProductController extends BaseController
      * @param int $itemId
      * @return array
      */
-    public function validateData($data, Category $category, $itemId = 0)
+    public function validateData($data, Category $category = null, $itemId = 0)
     {
         if(!$category){
             return [
@@ -108,15 +99,7 @@ class ProductController extends BaseController
             ];
         }
 
-        $contentTypeName = !empty($data['content_type']) ? $data['content_type'] : '';
-
-        /** @var ContentType $contentType */
-        $contentType = $this->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository(ContentType::class)
-            ->findOneBy([
-                'name' => $contentTypeName
-            ]);
+        $contentType = $category->getContentType();
 
         if(!$contentType){
             return [
@@ -162,20 +145,12 @@ class ProductController extends BaseController
      * @param int $itemId
      * @return array
      */
-    public function createUpdate($data, Category $category, $itemId = 0)
+    public function createUpdate($data, Category $category = null, $itemId = 0)
     {
         $parentId = !empty($data['parent_id']) ? $data['parent_id'] : 0;
-        $contentTypeName = !empty($data['content_type']) ? $data['content_type'] : '';
         $itemId = intval($itemId);
 
-        /** @var ContentType $contentType */
-        $contentType = $this->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository(ContentType::class)
-            ->findOneBy([
-                'name' => $contentTypeName
-            ]);
-
+        $contentType = $category->getContentType();
         if(!$contentType){
             return [
                 'success' => false,
@@ -280,14 +255,7 @@ class ProductController extends BaseController
         }
         $itemId = intval($itemId);
 
-        /** @var ContentType $contentType */
-        $contentType = $this->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository(ContentType::class)
-            ->findOneBy([
-                'name' => $category->getContentType()
-            ]);
-
+        $contentType = $category->getContentType();
         if(!$contentType){
             return new JsonResponse([
                 'success' => false,
@@ -332,16 +300,8 @@ class ProductController extends BaseController
         }
 
         $itemId = intval($itemId);
-        $contentTypeName = $category->getContentType();
 
-        /** @var ContentType $contentType */
-        $contentType = $this->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository(ContentType::class)
-            ->findOneBy([
-                'name' => $contentTypeName
-            ]);
-
+        $contentType = $category->getContentType();
         if(!$contentType){
             return new JsonResponse([
                 'success' => false,
@@ -364,7 +324,7 @@ class ProductController extends BaseController
             'id' => $entry['_id'],
             'parent_id' => $entry['parent_id'],
             'is_active' => $entry['is_active'],
-            'content_type' => $contentTypeName
+            'content_type' => $contentType->getName()
         ];
         foreach ($contentTypeFields as $field){
             $data[$field['name']] = !empty($entry[$field['name']])

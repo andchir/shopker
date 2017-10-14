@@ -210,14 +210,14 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
      */
     selectFieldTypeProperties(type: string, fieldTypeName?: string): void {
         if(fieldTypeName){
-            this.fieldModel[type] = fieldTypeName;
+            this.fieldModel[type + '_type'] = fieldTypeName;
         }
         let fieldType = _.find(this.fieldTypes, {name: this.fieldModel[type + '_type']});
         if(!fieldType){
             this.fieldTypeProperties[type] = [];
             return;
         }
-        this.fieldTypeProperties[type] = _.clone(fieldType.outputProperties);
+        this.fieldTypeProperties[type] = _.clone(fieldType[type + 'Properties']);
         let propNames = _.map(this.fieldTypeProperties[type], 'name');
         let modelField = type + '_properties';
         this.fieldModel[modelField] = _.pick(this.fieldModel[modelField], propNames);
@@ -229,8 +229,8 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
                 }
             }
         }
-        if(!this.fieldModel.input_type){
-            this.selectFieldTypeProperties('input_type', this.fieldModel[type]);
+        if(type == 'input' && !this.fieldModel.output_type){
+            this.selectFieldTypeProperties('output', this.fieldModel['input_type']);
         }
     }
 
@@ -341,10 +341,16 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
      * @param field
      */
     editField(field: ContentField) {
-        let fieldsNames = Object.keys(this.fieldsFormOptions);
         this.action = 'edit_field';
         this.fieldModel = _.clone(field);
-        this.fieldForm.setValue(_.pick(this.fieldModel, fieldsNames));
+        let newFormValue = {};
+        for (const key in this.fieldsFormOptions) {
+            if (!this.fieldsFormOptions.hasOwnProperty(key)) {
+                continue;
+            }
+            newFormValue[key] = field[key] || '';
+        }
+        this.fieldForm.setValue(newFormValue);
         this.currentFieldName = this.fieldModel.name;
         this.fld_submitted = false;
     }

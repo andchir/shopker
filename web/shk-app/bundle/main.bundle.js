@@ -642,7 +642,6 @@ var CategoriesModalComponent = (function (_super) {
     CategoriesModalComponent.prototype.ngOnInit = function () {
         this.model.parent_id = this.currentCategory.id;
         this.model.content_type_name = this.currentCategory.content_type_name;
-        console.log(this.currentCategory);
         __WEBPACK_IMPORTED_MODULE_7__page_table_abstract__["a" /* ModalContentAbstractComponent */].prototype.ngOnInit.call(this);
         this.getContentTypes();
     };
@@ -1126,14 +1125,14 @@ var ContentTypeModalContent = (function (_super) {
      */
     ContentTypeModalContent.prototype.selectFieldTypeProperties = function (type, fieldTypeName) {
         if (fieldTypeName) {
-            this.fieldModel[type] = fieldTypeName;
+            this.fieldModel[type + '_type'] = fieldTypeName;
         }
         var fieldType = __WEBPACK_IMPORTED_MODULE_4_lodash__["find"](this.fieldTypes, { name: this.fieldModel[type + '_type'] });
         if (!fieldType) {
             this.fieldTypeProperties[type] = [];
             return;
         }
-        this.fieldTypeProperties[type] = __WEBPACK_IMPORTED_MODULE_4_lodash__["clone"](fieldType.outputProperties);
+        this.fieldTypeProperties[type] = __WEBPACK_IMPORTED_MODULE_4_lodash__["clone"](fieldType[type + 'Properties']);
         var propNames = __WEBPACK_IMPORTED_MODULE_4_lodash__["map"](this.fieldTypeProperties[type], 'name');
         var modelField = type + '_properties';
         this.fieldModel[modelField] = __WEBPACK_IMPORTED_MODULE_4_lodash__["pick"](this.fieldModel[modelField], propNames);
@@ -1145,8 +1144,8 @@ var ContentTypeModalContent = (function (_super) {
                 }
             }
         }
-        if (!this.fieldModel.input_type) {
-            this.selectFieldTypeProperties('input_type', this.fieldModel[type]);
+        if (type == 'input' && !this.fieldModel.output_type) {
+            this.selectFieldTypeProperties('output', this.fieldModel['input_type']);
         }
     };
     /** Add collection */
@@ -1246,10 +1245,16 @@ var ContentTypeModalContent = (function (_super) {
      * @param field
      */
     ContentTypeModalContent.prototype.editField = function (field) {
-        var fieldsNames = Object.keys(this.fieldsFormOptions);
         this.action = 'edit_field';
         this.fieldModel = __WEBPACK_IMPORTED_MODULE_4_lodash__["clone"](field);
-        this.fieldForm.setValue(__WEBPACK_IMPORTED_MODULE_4_lodash__["pick"](this.fieldModel, fieldsNames));
+        var newFormValue = {};
+        for (var key in this.fieldsFormOptions) {
+            if (!this.fieldsFormOptions.hasOwnProperty(key)) {
+                continue;
+            }
+            newFormValue[key] = field[key] || '';
+        }
+        this.fieldForm.setValue(newFormValue);
         this.currentFieldName = this.fieldModel.name;
         this.fld_submitted = false;
     };

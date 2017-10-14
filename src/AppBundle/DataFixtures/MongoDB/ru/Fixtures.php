@@ -114,6 +114,11 @@ class Fixtures extends Fixture
                         'default_value' => ''
                     ],
                     [
+                        'name' => 'rows',
+                        'title' => 'Число строк',
+                        'default_value' => '6'
+                    ],
+                    [
                         'name' => 'handler',
                         'title' => 'Обработчик',
                         'default_value' => ''
@@ -286,6 +291,11 @@ class Fixtures extends Fixture
                         'name' => 'handler',
                         'title' => 'Обработчик',
                         'default_value' => ''
+                    ],
+                    [
+                        'name' => 'format',
+                        'title' => 'Формат даты',
+                        'default_value' => 'Y-m-d H:i:s'
                     ]
                 ],
                 'outputProperties' => [
@@ -298,6 +308,30 @@ class Fixtures extends Fixture
             ],
             'hidden' => [
                 'title' => 'Скрытое поле',
+                'description' => '',
+                'isActive' => true,
+                'inputProperties' => [
+                    [
+                        'name' => 'value',
+                        'title' => 'Значение по умолчанию',
+                        'default_value' => ''
+                    ],
+                    [
+                        'name' => 'handler',
+                        'title' => 'Обработчик',
+                        'default_value' => ''
+                    ]
+                ],
+                'outputProperties' => [
+                    [
+                        'name' => 'className',
+                        'title' => 'CSS класс',
+                        'default_value' => ''
+                    ]
+                ]
+            ],
+            'color' => [
+                'title' => 'Цвет',
                 'description' => '',
                 'isActive' => true,
                 'inputProperties' => [

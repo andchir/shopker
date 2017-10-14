@@ -82,9 +82,6 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent {
     ngOnInit(): void {
         this.model.parent_id = this.currentCategory.id;
         this.model.content_type_name = this.currentCategory.content_type_name;
-
-        console.log(this.currentCategory);
-
         ModalContentAbstractComponent.prototype.ngOnInit.call(this);
         this.getContentTypes();
     }

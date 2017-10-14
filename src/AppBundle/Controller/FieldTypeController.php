@@ -67,7 +67,7 @@ class FieldTypeController extends StorageControllerAbstract
             ->setTitle($data['title'])
             ->setName($data['name'])
             ->setDescription($data['description'])
-            ->setIsActive($data['is_active'])
+            ->setIsActive($data['isActive'])
             ->setInputProperties($data['inputProperties'])
             ->setOutputProperties($data['outputProperties']);
 

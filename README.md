@@ -4,6 +4,7 @@ Shopkeeper 4
 **Current version: ALPHA (in development)**
 
 ~~~
+php bin/console doctrine:mongodb:fixtures:load --append
 php bin/console cache:clear --env=dev
 php bin/console cache:clear --env=prod --no-debug
 php bin/console server:run localhost:8001

@@ -61,8 +61,8 @@ export class FieldTypeModalContent extends ModalContentAbstractComponent {
             validators: [],
             messages: {}
         },
-        is_active: {
-            value: '',
+        isActive: {
+            value: true,
             validators: [],
             messages: {}
         }
@@ -152,7 +152,7 @@ export class FieldTypesComponent extends PageTableAbstractComponent {
             output_properties: {}
         },
         {
-            name: 'is_active',
+            name: 'isActive',
             title: 'Статус',
             output_type: 'boolean',
             output_properties: {}

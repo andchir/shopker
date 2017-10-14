@@ -43,7 +43,7 @@ class FieldType
     /**
      * @MongoDB\Field(type="boolean")
      */
-    protected $is_active;
+    protected $isActive;
 
 
     /**
@@ -130,7 +130,7 @@ class FieldType
      */
     public function setIsActive($isActive)
     {
-        $this->is_active = $isActive;
+        $this->isActive = $isActive;
         return $this;
     }
 
@@ -141,7 +141,7 @@ class FieldType
      */
     public function getIsActive()
     {
-        return $this->is_active;
+        return $this->isActive;
     }
 
     /**
@@ -155,7 +155,7 @@ class FieldType
             'title' => $this->getTitle(),
             'name' => $this->getName(),
             'description' => $this->getDescription(),
-            'is_active' => $this->getIsActive()
+            'isActive' => $this->getIsActive()
         ];
         if( $full ){
             $output['inputProperties'] = $this->getInputProperties();

@@ -8,9 +8,6 @@ import { AlertModalContent, ConfirmModalContent } from './app.component';
 import { DataService } from './services/data-service.abstract';
 import { SystemNameService } from './services/system-name.service';
 
-@Component({
-
-})
 export abstract class ModalContentAbstractComponent implements OnInit {
     @Input() modalTitle;
     @Input() itemId;
@@ -130,9 +127,6 @@ export abstract class ModalContentAbstractComponent implements OnInit {
     }
 }
 
-@Component({
-
-})
 export abstract class PageTableAbstractComponent implements OnInit {
     errorMessage: string;
     items: any[] = [];

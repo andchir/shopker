@@ -17,10 +17,10 @@ export abstract class ModalContentAbstractComponent implements OnInit {
     loading: boolean = false;
     errorMessage: string;
     form: FormGroup;
-    formErrors = {};
-    validationMessages = {};
+    formErrors: {[key: string]: string} = {};
+    validationMessages: {[key: string]: {[key: string]: string}} = {};
     formFields = {};
-    model = {};
+    model: {[key: string]: any} = {};
 
     abstract save();
 
@@ -97,6 +97,8 @@ export abstract class ModalContentAbstractComponent implements OnInit {
                 for (let key in control.errors) {
                     if(this.validationMessages[keyPrefix + fieldName][key]){
                         this.formErrors[keyPrefix + fieldName] += this.validationMessages[keyPrefix + fieldName][key] + ' ';
+                    }  else {
+                        this.formErrors[keyPrefix + fieldName] += 'Error. ';
                     }
                 }
             }

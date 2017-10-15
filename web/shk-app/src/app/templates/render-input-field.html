@@ -1,157 +1,169 @@
-<div class="form-group" [class.form-group-message]="formErrors[field.name]" [formGroup]="form" *ngFor="let field of fields">
 
-    <div [ngSwitch]="field.input_type">
+<ngb-tabset justify="fill">
+    <ngb-tab *ngFor="let groupName of groups; let i=index">
+        <ng-template ngbTabTitle>{{groupName}}</ng-template>
+        <ng-template ngbTabContent>
+            <div class="pt-3">
 
-        <div class="row" *ngSwitchCase="'system_name'">
-            <div class="col-md-5">
-                <label for="field_{{field.name}}">
-                    {{field.title}}
-                    <span class="text-danger" *ngIf="field.required">*</span>
-                </label>
-            </div>
-            <div class="col-md-7">
-                <div class="input-group">
-                    <input type="text" class="form-control form-control-sm" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control">
-                    <div class="input-group-btn">
-                        <button type="button" class="btn btn-secondary" ngbTooltip="Generate" (click)="generateName(model)">
-                            <i class="icon-reload"></i>
-                        </button>
+                <div class="form-group" [class.form-group-message]="formErrors[field.name]" [formGroup]="form" *ngFor="let field of fields | filterFieldByGroup: groupName">
+
+                    <div [ngSwitch]="field.input_type">
+
+                        <div class="row" *ngSwitchCase="'system_name'">
+                            <div class="col-md-5">
+                                <label for="field_{{field.name}}">
+                                    {{field.title}}
+                                    <span class="text-danger" *ngIf="field.required">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-7">
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-control-sm" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]">
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-secondary" ngbTooltip="Generate" (click)="generateName(field.name)">
+                                            <i class="icon-reload"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                                    {{formErrors[field.name]}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" *ngSwitchCase="'text'">
+                            <div class="col-md-5">
+                                <label for="field_{{field.name}}">
+                                    {{field.title}}
+                                    <span class="text-danger" *ngIf="field.required">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-7">
+                                <input type="text" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control">
+                                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                                    {{formErrors[field.name]}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" *ngSwitchCase="'name'">
+                            <div class="col-md-5">
+                                <label for="field_{{field.name}}">
+                                    {{field.title}}
+                                    <span class="text-danger" *ngIf="field.required">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-7">
+                                <input type="text" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control">
+                                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                                    {{formErrors[field.name]}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" *ngSwitchCase="'number'">
+                            <div class="col-md-5">
+                                <label for="field_{{field.name}}">
+                                    {{field.title}}
+                                    <span class="text-danger" *ngIf="field.required">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-7">
+                                <input type="number" class="form-control" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" [min]="field.input_properties.min" [max]="field.input_properties.max" [step]="field.input_properties.step">
+                                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                                    {{formErrors[field.name]}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" *ngSwitchCase="'textarea'">
+                            <div class="col-md-5">
+                                <label for="field_{{field.name}}">
+                                    {{field.title}}
+                                    <span class="text-danger" *ngIf="field.required">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-7">
+                                <textarea rows="6" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control"></textarea>
+                                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                                    {{formErrors[field.name]}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" *ngSwitchCase="'image'">
+                            <div class="col-md-5">
+                                <label for="field_{{field.name}}">
+                                    {{field.title}}
+                                    <span class="text-danger" *ngIf="field.required">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-7">
+                                <input type="file" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control">
+                                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                                    {{formErrors[field.name]}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" *ngSwitchCase="'color'">
+                            <div class="col-md-5">
+                                <label for="field_{{field.name}}">
+                                    {{field.title}}
+                                    <span class="text-danger" *ngIf="field.required">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-7">
+                                <input type="color" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control">
+                                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                                    {{formErrors[field.name]}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" *ngSwitchCase="'rich_text'">
+                            <div class="col-12">
+                                <label for="field_{{field.name}}">
+                                    {{field.title}}
+                                    <span class="text-danger" *ngIf="field.required">*</span>
+                                </label>
+                                <p-editor [formControlName]="field.name" [(ngModel)]="model[field.name]" [style]="{'height':'320px'}"></p-editor>
+                                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                                    {{formErrors[field.name]}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" *ngSwitchCase="'date'">
+                            <div class="col-md-5">
+                                <label for="field_{{field.name}}">
+                                    {{field.title}}
+                                    <span class="text-danger" *ngIf="field.required">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-7">
+                                <!--<div class="input-group">-->
+                                <!--<input type="text" class="form-control" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" ngbDatepicker #d="ngbDatepicker">-->
+                                <!--<div class="input-group-btn">-->
+                                <!--<button class="btn btn-secondary" (click)="d.toggle()" type="button">-->
+                                <!--<i class="icon-date_range"></i>-->
+                                <!--</button>-->
+                                <!--</div>-->
+                                <!--</div>-->
+
+                                <p-calendar [formControlName]="field.name" [(ngModel)]="model[field.name]" showTime="true" [showIcon]="true" dateFormat="dd.mm.yy" icon="icon-date_range"></p-calendar>
+
+                                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                                    {{formErrors[field.name]}}
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
+
                 </div>
-                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
-                    {{formErrors[field.name]}}
-                </div>
-            </div>
-        </div>
 
-        <div class="row" *ngSwitchCase="'text'">
-            <div class="col-md-5">
-                <label for="field_{{field.name}}">
-                    {{field.title}}
-                    <span class="text-danger" *ngIf="field.required">*</span>
-                </label>
             </div>
-            <div class="col-md-7">
-                <input type="text" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control">
-                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
-                    {{formErrors[field.name]}}
-                </div>
-            </div>
-        </div>
-
-        <div class="row" *ngSwitchCase="'name'">
-            <div class="col-md-5">
-                <label for="field_{{field.name}}">
-                    {{field.title}}
-                    <span class="text-danger" *ngIf="field.required">*</span>
-                </label>
-            </div>
-            <div class="col-md-7">
-                <input type="text" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control">
-                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
-                    {{formErrors[field.name]}}
-                </div>
-            </div>
-        </div>
-
-        <div class="row" *ngSwitchCase="'number'">
-            <div class="col-md-5">
-                <label for="field_{{field.name}}">
-                    {{field.title}}
-                    <span class="text-danger" *ngIf="field.required">*</span>
-                </label>
-            </div>
-            <div class="col-md-7">
-                <input type="number" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" min="0" class="form-control">
-                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
-                    {{formErrors[field.name]}}
-                </div>
-            </div>
-        </div>
-
-        <div class="row" *ngSwitchCase="'textarea'">
-            <div class="col-md-5">
-                <label for="field_{{field.name}}">
-                    {{field.title}}
-                    <span class="text-danger" *ngIf="field.required">*</span>
-                </label>
-            </div>
-            <div class="col-md-7">
-                <textarea rows="6" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control"></textarea>
-                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
-                    {{formErrors[field.name]}}
-                </div>
-            </div>
-        </div>
-
-        <div class="row" *ngSwitchCase="'image'">
-            <div class="col-md-5">
-                <label for="field_{{field.name}}">
-                    {{field.title}}
-                    <span class="text-danger" *ngIf="field.required">*</span>
-                </label>
-            </div>
-            <div class="col-md-7">
-                <input type="file" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control">
-                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
-                    {{formErrors[field.name]}}
-                </div>
-            </div>
-        </div>
-
-        <div class="row" *ngSwitchCase="'color'">
-            <div class="col-md-5">
-                <label for="field_{{field.name}}">
-                    {{field.title}}
-                    <span class="text-danger" *ngIf="field.required">*</span>
-                </label>
-            </div>
-            <div class="col-md-7">
-                <input type="color" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control">
-                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
-                    {{formErrors[field.name]}}
-                </div>
-            </div>
-        </div>
-
-        <div class="row" *ngSwitchCase="'rich_text'">
-            <div class="col-12">
-                <label for="field_{{field.name}}">
-                    {{field.title}}
-                    <span class="text-danger" *ngIf="field.required">*</span>
-                </label>
-                <p-editor [formControlName]="field.name" [(ngModel)]="model[field.name]" [style]="{'height':'320px'}"></p-editor>
-                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
-                    {{formErrors[field.name]}}
-                </div>
-            </div>
-        </div>
-
-        <div class="row" *ngSwitchCase="'date'">
-            <div class="col-md-5">
-                <label for="field_{{field.name}}">
-                    {{field.title}}
-                    <span class="text-danger" *ngIf="field.required">*</span>
-                </label>
-            </div>
-            <div class="col-md-7">
-                <!--<div class="input-group">-->
-                    <!--<input type="text" class="form-control" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" ngbDatepicker #d="ngbDatepicker">-->
-                    <!--<div class="input-group-btn">-->
-                        <!--<button class="btn btn-secondary" (click)="d.toggle()" type="button">-->
-                            <!--<i class="icon-date_range"></i>-->
-                        <!--</button>-->
-                    <!--</div>-->
-                <!--</div>-->
-
-                <p-calendar [formControlName]="field.name" [(ngModel)]="model[field.name]" showTime="true" [showIcon]="true" dateFormat="dd.mm.yy" icon="icon-date_range"></p-calendar>
-
-                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
-                    {{formErrors[field.name]}}
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-</div>
+        </ng-template>
+    </ngb-tab>
+</ngb-tabset>

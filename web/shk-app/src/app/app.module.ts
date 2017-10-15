@@ -19,7 +19,7 @@ import { StatisticsComponent } from './stat.component';
 import { SettingsComponent } from './settings.component';
 import { ListRecursiveComponent } from './list-recursive.component';
 import { TableComponent } from './table.component';
-import { InputFieldComponent } from './render-input-field';
+import { InputFieldRenderComponent } from './render-input-field';
 import { OutputFieldComponent } from './render-output-field';
 
 import { FilterFieldByGroup } from "./pipes/filter-field-by-group.pipe";
@@ -56,7 +56,7 @@ import { AppRoutingModule }     from './app-routing.module';
         ListRecursiveComponent,
         TableComponent,
         CategoriesListComponent,
-        InputFieldComponent,
+        InputFieldRenderComponent,
         OutputFieldComponent,
 
         FilterFieldByGroup,

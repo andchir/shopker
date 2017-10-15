@@ -1,57 +1,103 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { NgbDateStruct, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
+import { Component, OnInit, Input, OnChanges, SimpleChange } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import * as _ from "lodash";
 
 import { ContentField } from "./models/content_field.model";
 import { SystemNameService } from './services/system-name.service';
 
 @Component({
-    selector: 'input-field',
+    selector: 'input-field-renderer',
     templateUrl: 'templates/render-input-field.html',
     providers: [ SystemNameService ]
 })
-export class InputFieldComponent implements OnInit {
+export class InputFieldRenderComponent implements OnInit, OnChanges {
 
     @Input() fields: ContentField[];
+    @Input() groups: string[];
     @Input() model: any;
     @Input() form: FormGroup;
     @Input() submitted: boolean;
-    @Input() formErrors: {};
-    @Input() validationMessages: {};
+    @Input() formErrors: {[key: string]: string};
+    @Input() validationMessages: {[key: string]: {[key: string]: string}};
 
     constructor(
-        private systemNameService: SystemNameService,
-        private dateParserFormatter: NgbDateParserFormatter
+        private systemNameService: SystemNameService
     ) {
 
     }
 
     ngOnInit(): void {
-        let controls = {};
-        this.fields.forEach(function(field, index){
-            if(!this.model[field.name]){
-                this.model[field.name] = '';
-            }
-            controls[field.name] = new FormControl(this.model[field.name], this.getValidators(field));
-            this.setDefaultValue(field.input_type, field.name);
+        this.buildControls();
+    }
+
+    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
+        this.buildControls();
+    }
+
+    buildControls() {
+        this.fields.forEach(function(field){
+            this.setDefaultValue(field);
+            this.setFieldProperties(field);
             this.formErrors[field.name] = '';
-            this.validationMessages[field.name] = this.getValidationMessages(field);
+            if(!this.validationMessages[field.name]){
+                this.validationMessages[field.name] = {};
+            }
+
+            if (!this.form.controls[field.name]) {
+                let validators = this.getValidators(field);
+                let control = new FormControl(this.model[field.name], validators);
+                this.form.addControl(field.name, control);
+            }
         }.bind(this));
     }
 
-    setDefaultValue(fieldType: string, fieldName: string) {
+    setFieldProperties(field: ContentField): void {
 
-        switch (fieldType){
+        switch (field.input_type) {
+            case 'number':
+
+                const propertiesDefault = {
+                    min: 0,
+                    max: null,
+                    step: 1
+                };
+
+                field.input_properties = _.extend({}, propertiesDefault, field.input_properties);
+
+                break;
+            default:
+
+                break;
+        }
+    }
+
+    setDefaultValue(field: ContentField): void {
+        if(this.model[field.name]){
+            return;
+        }
+
+        let defaultValue = null;
+        if (typeof field.input_properties.value !== 'undefined'
+            && field.input_properties.value) {
+            defaultValue = field.input_properties.value;
+        }
+
+        switch (field.input_type){
             case 'date':
-                if(!this.model[fieldName]){
+                if(!this.model[field.name]){
                     const now = new Date();
                     // this.model[fieldName] = {
                     //     year: now.getFullYear(),
                     //     month: now.getMonth() + 1,
                     //     day: now.getDate()
                     // };
-                    this.model[fieldName] = new Date();
+                    this.model[field.name] = new Date();
                 }
+                break;
+            case 'number':
+
+                this.model[field.name] = defaultValue ? parseInt(defaultValue) : null;
+
                 break;
         }
     }
@@ -60,21 +106,14 @@ export class InputFieldComponent implements OnInit {
         let validators = [];
         if(field.required){
             validators.push(Validators.required);
+            this.validationMessages[field.name].required = field.title + ' is required.';
         }
         return validators;
     }
 
-    getValidationMessages(field: ContentField): any[] {
-        let messages: any = {};
-        if(field.required){
-            messages.required = 'This field is required.';
-        }
-        return messages;
-    }
-
-    generateName(model): void {
-        let title = model.title || '';
-        model.name = this.systemNameService.generateName(title);
+    generateName(fieldName: string): void {
+        const title = this.model.title || '';
+        this.model[fieldName] = this.systemNameService.generateName(title);
     }
 
 }

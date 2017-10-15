@@ -113,22 +113,7 @@ class ProductController extends BaseController
         $error = '';
 
         foreach ($contentTypeFields as $field){
-            $inputProperties = isset($field['input_properties'])
-                ? $field['input_properties']
-                : [];
-            if(!empty($field['required']) && empty($data[$field['name']])){
-                $error = "Field \"{$field['title']}\" is required.";
-            }
-            switch ($field['input_type']){
-                case 'system_name':
-
-                    if(!empty($data[$field['name']]) && $this->checkNameExists($data[$field['name']], $collectionName, $itemId)){
-                        $error = 'System name already exists.';
-                    }
-
-                    break;
-            }
-            if(!empty($error)){
+            if($error = $this->validateField($data, $field, $collectionName, $itemId)){
                 break;
             }
         }
@@ -137,6 +122,35 @@ class ProductController extends BaseController
             'success' => empty($error),
             'msg' => $error
         ];
+    }
+
+    /**
+     * @param $data
+     * @param $field
+     * @param $collectionName
+     * @param $itemId
+     * @return string
+     */
+    public function validateField($data, $field, $collectionName, $itemId)
+    {
+        $inputProperties = isset($field['input_properties'])
+            ? $field['input_properties']
+            : [];
+        if(!empty($field['required']) && (!isset($data[$field['name']]) || $data[$field['name']] === '')){
+            return "Field \"{$field['title']}\" is required.";
+        }
+        $error = '';
+        // TODO: add validation by input properties
+        switch ($field['input_type']){
+            case 'system_name':
+
+                if(!empty($data[$field['name']]) && $this->checkNameExists($field['name'], $data[$field['name']], $collectionName, $itemId)){
+                    $error = 'System name already exists.';
+                }
+
+                break;
+        }
+        return $error;
     }
 
     /**
@@ -168,15 +182,15 @@ class ProductController extends BaseController
             ];
         }
 
-        $document['parent_id'] = $parentId;
+        $document['parent_id'] = intval($parentId);
         $document['is_active'] = isset($data['is_active'])
             ? $data['is_active']
             : true;
 
         foreach ($contentType->getFields() as $field){
-            $document[$field['name']] = !empty($data[$field['name']])
+            $document[$field['name']] = isset($data[$field['name']])
                 ? $data[$field['name']]
-                : '';
+                : null;
         }
 
         if($itemId){
@@ -373,17 +387,18 @@ class ProductController extends BaseController
     }
 
     /**
+     * @param string $fieldName
      * @param string $name
      * @param string $collectionName
      * @param int $itemId
      * @return mixed
      */
-    public function checkNameExists($name, $collectionName, $itemId = 0)
+    public function checkNameExists($fieldName, $name, $collectionName, $itemId = 0)
     {
         $collection = $this->getCollection($collectionName);
         $itemId = intval($itemId);
         $where = [
-            'name' => $name
+            $fieldName => $name
         ];
         if($itemId){
             $where['_id'] = ['$ne' => $itemId];

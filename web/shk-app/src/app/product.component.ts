@@ -3,7 +3,6 @@ import { NgbActiveModal, NgbTooltipConfig  } from '@ng-bootstrap/ng-bootstrap';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import { ContentType } from './models/content_type.model';
 import { Category } from "./models/category.model";
-import { QueryOptions } from './models/query-options';
 import * as _ from "lodash";
 
 import { ModalContentAbstractComponent } from './page-table.abstract';
@@ -23,10 +22,7 @@ export class ProductModalContent extends ModalContentAbstractComponent {
     categories: Category[] = [];
     contentTypes: ContentType[] = [];
     currentContentType: ContentType = new ContentType(0, '', '', '', '', [], [], true);
-    model = {
-        id: 0,
-        parent_id: 0
-    };
+    model: {[key: string]: any} = {};
 
     formFields = {
         parent_id: {
@@ -53,6 +49,9 @@ export class ProductModalContent extends ModalContentAbstractComponent {
         private categoriesService: CategoriesService
     ) {
         super(fb, dataService, systemNameService, activeModal, tooltipConfig);
+
+        this.model.id = 0;
+        this.model.parent_id = 0;
     }
 
     /** On initialize */
@@ -86,6 +85,9 @@ export class ProductModalContent extends ModalContentAbstractComponent {
     }
 
     getContentType() {
+        if(!this.category.content_type_name){
+            return;
+        }
         this.loading = true;
         this.contentTypesService.getItemByName(this.category.content_type_name)
             .then((res) => {
@@ -104,7 +106,7 @@ export class ProductModalContent extends ModalContentAbstractComponent {
     /** Build form */
     updateForm(data ?: any): void {
         if(!data){
-            data = this.model;
+            data = _.clone(this.model);
         }
         let newKeys = _.map(this.currentContentType.fields, function(field){
             return field.name;
@@ -119,19 +121,7 @@ export class ProductModalContent extends ModalContentAbstractComponent {
                 }
             }
         }
-
-        //Add new controls
-        this.currentContentType.fields.forEach(field => {
-            if (!this.form.controls[field.name]) {
-                this.model[field.name] = data[field.name] || '';
-                let validators = [];
-                if(field.required){
-                    validators.push(Validators.required);
-                }
-                let control = new FormControl(this.model[field.name], validators);
-                this.form.addControl(field.name, control);
-            }
-        });
+        this.model = _.pick(data, newKeys);
     }
 
     getModelData(): void {
@@ -147,30 +137,6 @@ export class ProductModalContent extends ModalContentAbstractComponent {
                 }
                 this.loading = false;
             });
-        // this.dataService.getItem(this.itemId)
-        //     .then(res => {
-        //         return new Promise((resolve, reject) => {
-        //             this.getContentTypes()
-        //                 .subscribe(resp => {
-        //                     if(resp.success){
-        //                         this.contentTypes = resp.data;
-        //                         if(res.success){
-        //                             resolve(res.data);
-        //                         } else {
-        //                             reject(res);
-        //                         }
-        //                     }
-        //                 });
-        //         });
-        //     })
-        //     .then(data => {
-        //         if(this.isItemCopy){
-        //             data.id = 0;
-        //         }
-        //         this.model = data;
-        //         this.selectCurrentContentType(data.content_type);
-        //         this.loading = false;
-        //     });
     }
 
     /** On change content type */
@@ -194,6 +160,8 @@ export class ProductModalContent extends ModalContentAbstractComponent {
             return;
         }
 
+        this.dataService.setRequestUrl('admin/products/' + this.category.id);
+
         let callback = function (res: any) {
             if (res.success) {
                 this.closeModal();
@@ -204,8 +172,6 @@ export class ProductModalContent extends ModalContentAbstractComponent {
                 }
             }
         };
-
-        //this.model.parent_id = this.category.id;
 
         if (this.model.id) {
             this.dataService.update(this.model).then(callback.bind(this));

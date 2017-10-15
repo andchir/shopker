@@ -164,7 +164,7 @@ class en extends Fixture
                     [
                         'name' => 'value',
                         'title' => 'Default value',
-                        'default_value' => ''
+                        'default_value' => null
                     ],
                     [
                         'name' => 'handler',
@@ -172,29 +172,34 @@ class en extends Fixture
                         'default_value' => ''
                     ],
                     [
-                        'name' => 'class',
-                        'title' => 'CSS class name',
-                        'default_value' => ''
-                    ], [
                         'name' => 'allow_decimals',
                         'title' => 'Разрешить десятичные?',
                         'default_value' => '1'
-                    ], [
+                    ],
+                    [
                         'name' => 'decimal_precision',
                         'title' => 'Точность',
                         'default_value' => '2'
-                    ], [
+                    ],
+                    [
                         'name' => 'decimal_separator',
                         'title' => 'Разделитель',
                         'default_value' => '.'
-                    ], [
+                    ],
+                    [
                         'name' => 'max',
                         'title' => 'Максимальное значение',
-                        'default_value' => ''
-                    ], [
+                        'default_value' => null
+                    ],
+                    [
                         'name' => 'min',
                         'title' => 'Минимальное значение',
-                        'default_value' => '0'
+                        'default_value' => 0
+                    ],
+                    [
+                        'name' => 'step',
+                        'title' => 'Step',
+                        'default_value' => 1
                     ]
                 ],
                 'outputProperties' => [

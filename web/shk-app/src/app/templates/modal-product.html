@@ -38,17 +38,20 @@
             </div>
         </div>
 
-        <ngb-tabset justify="fill">
-            <ngb-tab title="{{groupName}}" id="{{i + 1}}" *ngFor="let groupName of currentContentType.groups; let i=index">
-                <ng-template ngbTabContent>
-                    <div class="pt-3">
+        <input-field-renderer [(fields)]="currentContentType.fields" [(groups)]="currentContentType.groups" [(formErrors)]="formErrors" [(validationMessages)]="validationMessages" [(model)]="model" [(form)]="form"></input-field-renderer>
 
-                        <input-field [fields]="currentContentType.fields | filterFieldByGroup: groupName" [(formErrors)]="formErrors" [(validationMessages)]="validationMessages" [(model)]="model" [(form)]="form"></input-field>
+        <!--<ngb-tabset justify="fill">-->
+            <!--<ngb-tab *ngFor="let groupName of currentContentType.groups; let i=index">-->
+                <!--<ng-template ngbTabTitle>{{groupName}}</ng-template>-->
+                <!--<ng-template ngbTabContent>-->
+                    <!--<div class="pt-3">-->
 
-                    </div>
-                </ng-template>
-            </ngb-tab>
-        </ngb-tabset>
+                        <!--<input-field #inputFields [fields]="currentContentType.fields | filterFieldByGroup: groupName" [(formErrors)]="formErrors" [(validationMessages)]="validationMessages" [(model)]="model" [(form)]="form"></input-field>-->
+
+                    <!--</div>-->
+                <!--</ng-template>-->
+            <!--</ngb-tab>-->
+        <!--</ngb-tabset>-->
 
         <div class="alert alert-danger mt-3 mb-0" [hidden]="!errorMessage">
             <button type="button" class="close" (click)="errorMessage = ''">

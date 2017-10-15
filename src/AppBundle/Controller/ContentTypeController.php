@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Document\ContentType;
 use AppBundle\Document\Collection;
 
@@ -114,6 +115,32 @@ class ContentTypeController extends StorageControllerAbstract
             'success' => true,
             'data' => $contentType->toArray()
         ];
+    }
+
+    /**
+     * @Route("/by_name/{itemName}")
+     * @Method({"GET"})
+     * @param $itemName
+     * @return JsonResponse
+     */
+    public function getItemByName($itemName)
+    {
+        $repository = $this->getRepository();
+
+        $fieldType = $repository->findOneBy([
+            'name' => $itemName
+        ]);
+        if (!$fieldType) {
+            return new JsonResponse([
+                'success' => false,
+                'msg' => 'Item not found.'
+            ]);
+        }
+
+        return new JsonResponse([
+            'success' => true,
+            'data' => $fieldType->toArray(true)
+        ]);
     }
 
     /**

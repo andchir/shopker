@@ -8,7 +8,6 @@ import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
-@Injectable()
 export abstract class DataService {
 
     public headers = new Headers({'Content-Type': 'application/json'});
@@ -29,7 +28,7 @@ export abstract class DataService {
         return this.requestUrl;
     }
 
-    getItem(id: string): Promise<any> {
+    getItem(id: number): Promise<any> {
         const url = this.getRequestUrl() + `/${id}`;
         return this.http.get(url)
             .toPromise()

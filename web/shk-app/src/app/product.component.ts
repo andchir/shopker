@@ -1,16 +1,12 @@
-import { Component, OnInit, Input, Pipe, PipeTransform } from '@angular/core';
-import { NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig  } from '@ng-bootstrap/ng-bootstrap';
-import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, Input } from '@angular/core';
+import { NgbActiveModal, NgbTooltipConfig  } from '@ng-bootstrap/ng-bootstrap';
+import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import { ContentType } from './models/content_type.model';
 import { Category } from "./models/category.model";
-import { Product } from "./models/product.model";
 import { QueryOptions } from './models/query-options';
-import { ContentField } from "./models/content_field.model";
-import { FilterFieldByGroup } from "./pipes/filter-field-by-group.pipe";
-import { DataService } from './services/data-service.abstract';
 import * as _ from "lodash";
 
-import { PageTableAbstractComponent, ModalContentAbstractComponent } from './page-table.abstract';
+import { ModalContentAbstractComponent } from './page-table.abstract';
 import { CategoriesService } from './services/categories.service';
 import { ContentTypesService } from './services/content_types.service';
 import { ProductsService } from './services/products.service';
@@ -24,6 +20,7 @@ import { SystemNameService } from './services/system-name.service';
 export class ProductModalContent extends ModalContentAbstractComponent {
 
     @Input() category: Category;
+    categories: Category[] = [];
     contentTypes: ContentType[] = [];
     currentContentType: ContentType = new ContentType(0, '', '', '', '', [], [], true);
     model = {
@@ -32,10 +29,12 @@ export class ProductModalContent extends ModalContentAbstractComponent {
     };
 
     formFields = {
-        content_type: {
-            value: '',
-            validators: [],
-            messages: {}
+        parent_id: {
+            value: 0,
+            validators: [Validators.required],
+            messages: {
+                required: 'Category is required.'
+            }
         },
         is_active: {
             value: true,
@@ -50,7 +49,8 @@ export class ProductModalContent extends ModalContentAbstractComponent {
         systemNameService: SystemNameService,
         activeModal: NgbActiveModal,
         tooltipConfig: NgbTooltipConfig,
-        private contentTypesService: ContentTypesService
+        private contentTypesService: ContentTypesService,
+        private categoriesService: CategoriesService
     ) {
         super(fb, dataService, systemNameService, activeModal, tooltipConfig);
     }
@@ -58,27 +58,47 @@ export class ProductModalContent extends ModalContentAbstractComponent {
     /** On initialize */
     ngOnInit(): void {
 
+        this.model.parent_id = this.category.id;
         this.dataService.setRequestUrl('admin/products/' + this.category.id);
+
         this.buildForm();
-        if(this.itemId){
+        this.getCategories();
+        this.getContentType();
 
+        if (this.itemId) {
             this.getModelData();
-
-        } else {
-            this.getContentTypes()
-                .subscribe(
-                    res => {
-                        if(res.success){
-                            this.contentTypes = res.data;
-                            this.selectCurrentContentType();
-                        } else {
-                            if(res.msg){
-                                this.errorMessage = res.msg;
-                            }
-                        }
-                    },
-                    error => this.errorMessage = <any>error);
         }
+    }
+
+    getCategories() {
+        this.loading = true;
+        this.categoriesService.getList()
+            .subscribe((res) => {
+                if(res.success){
+                    this.categories = res.data;
+                } else {
+                    if (res.msg) {
+                        this.errorMessage = res.msg;
+                    }
+                }
+                this.loading = false;
+            });
+    }
+
+    getContentType() {
+        this.loading = true;
+        this.contentTypesService.getItemByName(this.category.content_type_name)
+            .then((res) => {
+                if(res.success){
+                    this.currentContentType = res.data as ContentType;
+                    this.updateForm();
+                } else {
+                    if (res.msg) {
+                        this.errorMessage = res.msg;
+                    }
+                }
+                this.loading = false;
+            });
     }
 
     /** Build form */
@@ -89,7 +109,7 @@ export class ProductModalContent extends ModalContentAbstractComponent {
         let newKeys = _.map(this.currentContentType.fields, function(field){
             return field.name;
         });
-        newKeys.push('content_type', 'is_active');
+        newKeys.push('parent_id', 'is_active');
 
         //Remove keys
         for (let key in this.form.controls) {
@@ -118,55 +138,53 @@ export class ProductModalContent extends ModalContentAbstractComponent {
         this.loading = true;
         this.dataService.getItem(this.itemId)
             .then(res => {
-                return new Promise((resolve, reject) => {
-                    this.getContentTypes()
-                        .subscribe(resp => {
-                            if(resp.success){
-                                this.contentTypes = resp.data;
-                                if(res.success){
-                                    resolve(res.data);
-                                } else {
-                                    reject(res);
-                                }
-                            }
-                        });
-                });
-            })
-            .then(data => {
-                if(this.isItemCopy){
-                    data.id = 0;
+                if(res.success){
+                    this.model = res.data;
+                } else {
+                    if (res.msg) {
+                        this.errorMessage = res.msg;
+                    }
                 }
-                this.model = data;
-                this.selectCurrentContentType(data.content_type);
                 this.loading = false;
             });
-    }
-
-    /** Select current content type */
-    selectCurrentContentType(contentTypeName?: string): void {
-        contentTypeName = contentTypeName || this.form.get('content_type').value;
-        let index = _.findIndex(this.contentTypes, {name: contentTypeName});
-        if (index == -1) {
-            index = 0;
-        }
-        if (this.contentTypes[index]) {
-            this.currentContentType = _.clone(this.contentTypes[index]);
-            this.form.get('content_type').setValue(this.currentContentType.name);
-            this.updateForm();
-        }
+        // this.dataService.getItem(this.itemId)
+        //     .then(res => {
+        //         return new Promise((resolve, reject) => {
+        //             this.getContentTypes()
+        //                 .subscribe(resp => {
+        //                     if(resp.success){
+        //                         this.contentTypes = resp.data;
+        //                         if(res.success){
+        //                             resolve(res.data);
+        //                         } else {
+        //                             reject(res);
+        //                         }
+        //                     }
+        //                 });
+        //         });
+        //     })
+        //     .then(data => {
+        //         if(this.isItemCopy){
+        //             data.id = 0;
+        //         }
+        //         this.model = data;
+        //         this.selectCurrentContentType(data.content_type);
+        //         this.loading = false;
+        //     });
     }
 
     /** On change content type */
     onChangeContentType(): void {
-        this.selectCurrentContentType();
+        const parentId = parseInt(String(this.model.parent_id));
+        let index = _.findIndex(this.categories, {id: parentId});
+        if (index == -1) {
+            return;
+        }
+        this.category = _.clone(this.categories[index]);
+        this.getContentType();
     }
 
-    /** Get content types */
-    getContentTypes() {
-        let queryOptions = new QueryOptions('name', 'asc', 1, 0, 1, 1);
-        return this.contentTypesService.getList(queryOptions);
-    }
-
+    /** Save data */
     save() {
         this.submitted = true;
 
@@ -187,7 +205,7 @@ export class ProductModalContent extends ModalContentAbstractComponent {
             }
         };
 
-        this.model.parent_id = this.category.id;
+        //this.model.parent_id = this.category.id;
 
         if (this.model.id) {
             this.dataService.update(this.model).then(callback.bind(this));

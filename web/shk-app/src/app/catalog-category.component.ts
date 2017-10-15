@@ -16,7 +16,6 @@ import { ProductModalContent } from './product.component';
 export class CatalogCategoryComponent extends PageTableAbstractComponent {
 
     title: string = 'Каталог';
-    categories: Category[] = [];
     currentCategory: Category;
 
     constructor(dataService: ProductsService,

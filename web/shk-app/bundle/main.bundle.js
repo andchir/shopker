@@ -417,7 +417,6 @@ var CatalogCategoryComponent = (function (_super) {
     function CatalogCategoryComponent(dataService, activeModal, modalService, titleService) {
         var _this = _super.call(this, dataService, activeModal, modalService, titleService) || this;
         _this.title = 'Каталог';
-        _this.categories = [];
         //TODO: get from settings
         _this.tableFields = [
             {
@@ -2404,10 +2403,10 @@ var OrderByPipe_1;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__models_content_type_model__ = __webpack_require__("../../../../../src/app/models/content_type.model.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__models_category_model__ = __webpack_require__("../../../../../src/app/models/category.model.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_query_options__ = __webpack_require__("../../../../../src/app/models/query-options.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_lodash__ = __webpack_require__("../../../../lodash/lodash.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_lodash__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__page_table_abstract__ = __webpack_require__("../../../../../src/app/page-table.abstract.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_lodash__ = __webpack_require__("../../../../lodash/lodash.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_lodash__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__page_table_abstract__ = __webpack_require__("../../../../../src/app/page-table.abstract.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_categories_service__ = __webpack_require__("../../../../../src/app/services/categories.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__services_content_types_service__ = __webpack_require__("../../../../../src/app/services/content_types.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__services_products_service__ = __webpack_require__("../../../../../src/app/services/products.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__services_system_name_service__ = __webpack_require__("../../../../../src/app/services/system-name.service.ts");
@@ -2443,9 +2442,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 var ProductModalContent = (function (_super) {
     __extends(ProductModalContent, _super);
-    function ProductModalContent(fb, dataService, systemNameService, activeModal, tooltipConfig, contentTypesService) {
+    function ProductModalContent(fb, dataService, systemNameService, activeModal, tooltipConfig, contentTypesService, categoriesService) {
         var _this = _super.call(this, fb, dataService, systemNameService, activeModal, tooltipConfig) || this;
         _this.contentTypesService = contentTypesService;
+        _this.categoriesService = categoriesService;
+        _this.categories = [];
         _this.contentTypes = [];
         _this.currentContentType = new __WEBPACK_IMPORTED_MODULE_3__models_content_type_model__["a" /* ContentType */](0, '', '', '', '', [], [], true);
         _this.model = {
@@ -2453,10 +2454,12 @@ var ProductModalContent = (function (_super) {
             parent_id: 0
         };
         _this.formFields = {
-            content_type: {
-                value: '',
-                validators: [],
-                messages: {}
+            parent_id: {
+                value: 0,
+                validators: [__WEBPACK_IMPORTED_MODULE_2__angular_forms__["Validators"].required],
+                messages: {
+                    required: 'Category is required.'
+                }
             },
             is_active: {
                 value: true,
@@ -2468,26 +2471,47 @@ var ProductModalContent = (function (_super) {
     }
     /** On initialize */
     ProductModalContent.prototype.ngOnInit = function () {
-        var _this = this;
+        this.model.parent_id = this.category.id;
         this.dataService.setRequestUrl('admin/products/' + this.category.id);
         this.buildForm();
+        this.getCategories();
+        this.getContentType();
         if (this.itemId) {
             this.getModelData();
         }
-        else {
-            this.getContentTypes()
-                .subscribe(function (res) {
-                if (res.success) {
-                    _this.contentTypes = res.data;
-                    _this.selectCurrentContentType();
+    };
+    ProductModalContent.prototype.getCategories = function () {
+        var _this = this;
+        this.loading = true;
+        this.categoriesService.getList()
+            .subscribe(function (res) {
+            if (res.success) {
+                _this.categories = res.data;
+            }
+            else {
+                if (res.msg) {
+                    _this.errorMessage = res.msg;
                 }
-                else {
-                    if (res.msg) {
-                        _this.errorMessage = res.msg;
-                    }
+            }
+            _this.loading = false;
+        });
+    };
+    ProductModalContent.prototype.getContentType = function () {
+        var _this = this;
+        this.loading = true;
+        this.contentTypesService.getItemByName(this.category.content_type_name)
+            .then(function (res) {
+            if (res.success) {
+                _this.currentContentType = res.data;
+                _this.updateForm();
+            }
+            else {
+                if (res.msg) {
+                    _this.errorMessage = res.msg;
                 }
-            }, function (error) { return _this.errorMessage = error; });
-        }
+            }
+            _this.loading = false;
+        });
     };
     /** Build form */
     ProductModalContent.prototype.updateForm = function (data) {
@@ -2495,10 +2519,10 @@ var ProductModalContent = (function (_super) {
         if (!data) {
             data = this.model;
         }
-        var newKeys = __WEBPACK_IMPORTED_MODULE_6_lodash__["map"](this.currentContentType.fields, function (field) {
+        var newKeys = __WEBPACK_IMPORTED_MODULE_5_lodash__["map"](this.currentContentType.fields, function (field) {
             return field.name;
         });
-        newKeys.push('content_type', 'is_active');
+        newKeys.push('parent_id', 'is_active');
         //Remove keys
         for (var key in this.form.controls) {
             if (this.form.controls.hasOwnProperty(key)) {
@@ -2525,52 +2549,52 @@ var ProductModalContent = (function (_super) {
         this.loading = true;
         this.dataService.getItem(this.itemId)
             .then(function (res) {
-            return new Promise(function (resolve, reject) {
-                _this.getContentTypes()
-                    .subscribe(function (resp) {
-                    if (resp.success) {
-                        _this.contentTypes = resp.data;
-                        if (res.success) {
-                            resolve(res.data);
-                        }
-                        else {
-                            reject(res);
-                        }
-                    }
-                });
-            });
-        })
-            .then(function (data) {
-            if (_this.isItemCopy) {
-                data.id = 0;
+            if (res.success) {
+                _this.model = res.data;
             }
-            _this.model = data;
-            _this.selectCurrentContentType(data.content_type);
+            else {
+                if (res.msg) {
+                    _this.errorMessage = res.msg;
+                }
+            }
             _this.loading = false;
         });
-    };
-    /** Select current content type */
-    ProductModalContent.prototype.selectCurrentContentType = function (contentTypeName) {
-        contentTypeName = contentTypeName || this.form.get('content_type').value;
-        var index = __WEBPACK_IMPORTED_MODULE_6_lodash__["findIndex"](this.contentTypes, { name: contentTypeName });
-        if (index == -1) {
-            index = 0;
-        }
-        if (this.contentTypes[index]) {
-            this.currentContentType = __WEBPACK_IMPORTED_MODULE_6_lodash__["clone"](this.contentTypes[index]);
-            this.form.get('content_type').setValue(this.currentContentType.name);
-            this.updateForm();
-        }
+        // this.dataService.getItem(this.itemId)
+        //     .then(res => {
+        //         return new Promise((resolve, reject) => {
+        //             this.getContentTypes()
+        //                 .subscribe(resp => {
+        //                     if(resp.success){
+        //                         this.contentTypes = resp.data;
+        //                         if(res.success){
+        //                             resolve(res.data);
+        //                         } else {
+        //                             reject(res);
+        //                         }
+        //                     }
+        //                 });
+        //         });
+        //     })
+        //     .then(data => {
+        //         if(this.isItemCopy){
+        //             data.id = 0;
+        //         }
+        //         this.model = data;
+        //         this.selectCurrentContentType(data.content_type);
+        //         this.loading = false;
+        //     });
     };
     /** On change content type */
     ProductModalContent.prototype.onChangeContentType = function () {
-        this.selectCurrentContentType();
+        var parentId = parseInt(String(this.model.parent_id));
+        var index = __WEBPACK_IMPORTED_MODULE_5_lodash__["findIndex"](this.categories, { id: parentId });
+        if (index == -1) {
+            return;
+        }
+        this.category = __WEBPACK_IMPORTED_MODULE_5_lodash__["clone"](this.categories[index]);
+        this.getContentType();
     };
-    /** Get content types */
-    ProductModalContent.prototype.getContentTypes = function () {
-        var queryOptions = new __WEBPACK_IMPORTED_MODULE_5__models_query_options__["a" /* QueryOptions */]('name', 'asc', 1, 0, 1, 1);
-        return this.contentTypesService.getList(queryOptions);
-    };
+    /** Save data */
     ProductModalContent.prototype.save = function () {
         this.submitted = true;
         if (!this.form.valid) {
@@ -2589,7 +2613,7 @@ var ProductModalContent = (function (_super) {
                 }
             }
         };
-        this.model.parent_id = this.category.id;
+        //this.model.parent_id = this.category.id;
         if (this.model.id) {
             this.dataService.update(this.model).then(callback.bind(this));
         }
@@ -2598,7 +2622,7 @@ var ProductModalContent = (function (_super) {
         }
     };
     return ProductModalContent;
-}(__WEBPACK_IMPORTED_MODULE_7__page_table_abstract__["a" /* ModalContentAbstractComponent */]));
+}(__WEBPACK_IMPORTED_MODULE_6__page_table_abstract__["a" /* ModalContentAbstractComponent */]));
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
     __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_4__models_category_model__["a" /* Category */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__models_category_model__["a" /* Category */]) === "function" && _a || Object)
@@ -2609,10 +2633,10 @@ ProductModalContent = __decorate([
         template: __webpack_require__("../../../../../src/app/templates/modal-product.html"),
         providers: [__WEBPACK_IMPORTED_MODULE_10__services_system_name_service__["a" /* SystemNameService */]]
     }),
-    __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_forms__["FormBuilder"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_forms__["FormBuilder"]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_9__services_products_service__["a" /* ProductsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_9__services_products_service__["a" /* ProductsService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_10__services_system_name_service__["a" /* SystemNameService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_10__services_system_name_service__["a" /* SystemNameService */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["e" /* NgbTooltipConfig */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["e" /* NgbTooltipConfig */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_8__services_content_types_service__["a" /* ContentTypesService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_8__services_content_types_service__["a" /* ContentTypesService */]) === "function" && _g || Object])
+    __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_forms__["FormBuilder"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_forms__["FormBuilder"]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_9__services_products_service__["a" /* ProductsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_9__services_products_service__["a" /* ProductsService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_10__services_system_name_service__["a" /* SystemNameService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_10__services_system_name_service__["a" /* SystemNameService */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["e" /* NgbTooltipConfig */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__ng_bootstrap_ng_bootstrap__["e" /* NgbTooltipConfig */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_8__services_content_types_service__["a" /* ContentTypesService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_8__services_content_types_service__["a" /* ContentTypesService */]) === "function" && _g || Object, typeof (_h = typeof __WEBPACK_IMPORTED_MODULE_7__services_categories_service__["a" /* CategoriesService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_7__services_categories_service__["a" /* CategoriesService */]) === "function" && _h || Object])
 ], ProductModalContent);
 
-var _a, _b, _c, _d, _e, _f, _g;
+var _a, _b, _c, _d, _e, _f, _g, _h;
 //# sourceMappingURL=product.component.js.map
 
 /***/ }),
@@ -2963,6 +2987,13 @@ var ContentTypesService = (function (_super) {
         }
         return body;
     };
+    ContentTypesService.prototype.getItemByName = function (name) {
+        var url = this.getRequestUrl() + ("/by_name/" + name);
+        return this.http.get(url)
+            .toPromise()
+            .then(this.extractData)
+            .catch(this.handleError);
+    };
     return ContentTypesService;
 }(__WEBPACK_IMPORTED_MODULE_2__data_service_abstract__["a" /* DataService */]));
 ContentTypesService = __decorate([
@@ -2980,24 +3011,13 @@ var _a;
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DataService; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise__ = __webpack_require__("../../../../rxjs/add/operator/toPromise.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_catch__ = __webpack_require__("../../../../rxjs/add/operator/catch.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_catch___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_catch__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_map__ = __webpack_require__("../../../../rxjs/add/operator/map.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_map__);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_add_operator_toPromise__ = __webpack_require__("../../../../rxjs/add/operator/toPromise.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs_add_operator_toPromise__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_catch__ = __webpack_require__("../../../../rxjs/add/operator/catch.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_catch___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_catch__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map__ = __webpack_require__("../../../../rxjs/add/operator/map.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map__);
 
 
 
@@ -3006,7 +3026,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var DataService = (function () {
     function DataService(http) {
         this.http = http;
-        this.headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Headers */]({ 'Content-Type': 'application/json' });
+        this.headers = new __WEBPACK_IMPORTED_MODULE_0__angular_http__["a" /* Headers */]({ 'Content-Type': 'application/json' });
         this.requestUrl = '';
         this.http = http;
         this.requestUrl = 'app/data_list';
@@ -3025,7 +3045,7 @@ var DataService = (function () {
             .catch(this.handleError);
     };
     DataService.prototype.getList = function (options) {
-        var params = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["e" /* URLSearchParams */]();
+        var params = new __WEBPACK_IMPORTED_MODULE_0__angular_http__["e" /* URLSearchParams */]();
         for (var name in options) {
             if (!options.hasOwnProperty(name)) {
                 continue;
@@ -3060,7 +3080,7 @@ var DataService = (function () {
     };
     DataService.prototype.handleError = function (error) {
         var errMsg;
-        if (error instanceof __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* Response */]) {
+        if (error instanceof __WEBPACK_IMPORTED_MODULE_0__angular_http__["d" /* Response */]) {
             var body = error.json() || '';
             var err = body.error || JSON.stringify(body);
             errMsg = error.status + " - " + (error.statusText || '') + " " + err;
@@ -3073,12 +3093,7 @@ var DataService = (function () {
     };
     return DataService;
 }());
-DataService = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]) === "function" && _a || Object])
-], DataService);
 
-var _a;
 //# sourceMappingURL=data-service.abstract.js.map
 
 /***/ }),
@@ -3486,7 +3501,7 @@ module.exports = "<div class=\"modal-header d-block\">\n    <div class=\"d-block
 /***/ "../../../../../src/app/templates/modal-product.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"modal-header d-block\">\n    <div class=\"d-block float-right\">\n        <button type=\"button\" class=\"btn btn-secondary\" (click)=\"activeModal.dismiss()\">\n            Close\n        </button>\n    </div>\n    <h4 class=\"modal-title\">{{modalTitle}}</h4>\n</div>\n\n<form [formGroup]=\"form\" [class.loading]=\"loading\">\n    <div class=\"modal-body\">\n\n        <div class=\"row form-group\" [class.form-group-message]=\"formErrors.content_type\">\n            <div class=\"col-md-5\">\n                <label for=\"fieldContentType\">Тип контента</label>\n            </div>\n            <div class=\"col-md-7\">\n                <select id=\"fieldContentType\" class=\"form-control\" name=\"content_type\" formControlName=\"content_type\" [(ngModel)]=\"model.content_type\" (change)=\"onChangeContentType()\">\n                    <option value=\"1\" *ngFor=\"let contentType of contentTypes\" [value]=\"contentType.name\">{{contentType.title}}</option>\n                </select>\n                <div *ngIf=\"formErrors.content_type\" class=\"alert alert-danger\">\n                    {{formErrors.content_type}}\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row form-group\" [class.form-group-message]=\"formErrors.is_active\">\n            <div class=\"col-md-7 ml-md-auto\">\n                <div class=\"card card-body p-2 pl-3\">\n\n                    <label class=\"custom-control custom-checkbox m-0\">\n                        <input type=\"checkbox\" class=\"custom-control-input\" value=\"1\" name=\"is_active\" formControlName=\"is_active\" [(ngModel)]=\"model.is_active\">\n                        <span class=\"custom-control-indicator\"></span>\n                        <span>Активный</span>\n                    </label>\n\n                </div>\n            </div>\n        </div>\n\n        <ngb-tabset justify=\"fill\">\n            <ngb-tab title=\"{{groupName}}\" id=\"{{i + 1}}\" *ngFor=\"let groupName of currentContentType.groups; let i=index\">\n                <ng-template ngbTabContent>\n                    <div class=\"pt-3\">\n\n                        <input-field [fields]=\"currentContentType.fields | filterFieldByGroup: groupName\" [(formErrors)]=\"formErrors\" [(validationMessages)]=\"validationMessages\" [(model)]=\"model\" [(form)]=\"form\"></input-field>\n\n                    </div>\n                </ng-template>\n            </ngb-tab>\n        </ngb-tabset>\n\n        <div class=\"alert alert-danger mt-3 mb-0\" [hidden]=\"!errorMessage\">\n            <button type=\"button\" class=\"close\" (click)=\"errorMessage = ''\">\n                <span aria-hidden=\"true\">&times;</span>\n            </button>\n            {{errorMessage}}\n        </div>\n\n    </div>\n\n    <div class=\"modal-footer d-block\">\n        <button type=\"button\" class=\"btn btn-success btn-wide\" [disabled]=\"submitted\" (click)=\"save()\">\n            Save\n        </button>\n        <button type=\"button\" class=\"btn btn-secondary btn-wide\" (click)=\"activeModal.dismiss()\">\n            Cancel\n        </button>\n    </div>\n\n</form>"
+module.exports = "<div class=\"modal-header d-block\">\n    <div class=\"d-block float-right\">\n        <button type=\"button\" class=\"btn btn-secondary\" (click)=\"activeModal.dismiss()\">\n            Close\n        </button>\n    </div>\n    <h4 class=\"modal-title\">{{modalTitle}}</h4>\n</div>\n\n<form [formGroup]=\"form\" [class.loading]=\"loading\">\n    <div class=\"modal-body\">\n\n        <div class=\"row form-group\" [class.form-group-message]=\"formErrors.parent_id\">\n            <div class=\"col-md-5\">\n                <label for=\"fieldCategory\">Основная категория</label>\n            </div>\n            <div class=\"col-md-7\">\n                <select id=\"fieldCategory\" class=\"form-control\" name=\"parent_id\" formControlName=\"parent_id\" [(ngModel)]=\"model.parent_id\" (change)=\"onChangeContentType()\">\n                    <option *ngFor=\"let category of categories\" [value]=\"category.id\">{{category.title}}</option>\n                </select>\n                <div *ngIf=\"formErrors.parent_id\" class=\"alert alert-danger\">\n                    {{formErrors.parent_id}}\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row form-group\" [class.form-group-message]=\"formErrors.is_active\">\n            <div class=\"col-md-7 ml-md-auto\">\n                <div class=\"card card-body p-2 pl-3\">\n\n                    <label class=\"custom-control custom-checkbox m-0\">\n                        <input type=\"checkbox\" class=\"custom-control-input\" value=\"1\" name=\"is_active\" formControlName=\"is_active\" [(ngModel)]=\"model.is_active\">\n                        <span class=\"custom-control-indicator\"></span>\n                        <span>Активный</span>\n                    </label>\n\n                </div>\n            </div>\n        </div>\n\n        <ngb-tabset justify=\"fill\">\n            <ngb-tab title=\"{{groupName}}\" id=\"{{i + 1}}\" *ngFor=\"let groupName of currentContentType.groups; let i=index\">\n                <ng-template ngbTabContent>\n                    <div class=\"pt-3\">\n\n                        <input-field [fields]=\"currentContentType.fields | filterFieldByGroup: groupName\" [(formErrors)]=\"formErrors\" [(validationMessages)]=\"validationMessages\" [(model)]=\"model\" [(form)]=\"form\"></input-field>\n\n                    </div>\n                </ng-template>\n            </ngb-tab>\n        </ngb-tabset>\n\n        <div class=\"alert alert-danger mt-3 mb-0\" [hidden]=\"!errorMessage\">\n            <button type=\"button\" class=\"close\" (click)=\"errorMessage = ''\">\n                <span aria-hidden=\"true\">&times;</span>\n            </button>\n            {{errorMessage}}\n        </div>\n\n    </div>\n\n    <div class=\"modal-footer d-block\">\n        <button type=\"button\" class=\"btn btn-success btn-wide\" [disabled]=\"submitted\" (click)=\"save()\">\n            Save\n        </button>\n        <button type=\"button\" class=\"btn btn-secondary btn-wide\" (click)=\"activeModal.dismiss()\">\n            Cancel\n        </button>\n    </div>\n\n</form>"
 
 /***/ }),
 

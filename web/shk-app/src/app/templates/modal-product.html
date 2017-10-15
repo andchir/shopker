@@ -10,16 +10,16 @@
 <form [formGroup]="form" [class.loading]="loading">
     <div class="modal-body">
 
-        <div class="row form-group" [class.form-group-message]="formErrors.content_type">
+        <div class="row form-group" [class.form-group-message]="formErrors.parent_id">
             <div class="col-md-5">
-                <label for="fieldContentType">Тип контента</label>
+                <label for="fieldCategory">Основная категория</label>
             </div>
             <div class="col-md-7">
-                <select id="fieldContentType" class="form-control" name="content_type" formControlName="content_type" [(ngModel)]="model.content_type" (change)="onChangeContentType()">
-                    <option value="1" *ngFor="let contentType of contentTypes" [value]="contentType.name">{{contentType.title}}</option>
+                <select id="fieldCategory" class="form-control" name="parent_id" formControlName="parent_id" [(ngModel)]="model.parent_id" (change)="onChangeContentType()">
+                    <option *ngFor="let category of categories" [value]="category.id">{{category.title}}</option>
                 </select>
-                <div *ngIf="formErrors.content_type" class="alert alert-danger">
-                    {{formErrors.content_type}}
+                <div *ngIf="formErrors.parent_id" class="alert alert-danger">
+                    {{formErrors.parent_id}}
                 </div>
             </div>
         </div>

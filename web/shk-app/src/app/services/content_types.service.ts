@@ -24,4 +24,13 @@ export class ContentTypesService extends DataService {
         }
         return body;
     }
+
+    getItemByName(name: string): Promise<any> {
+        const url = this.getRequestUrl() + `/by_name/${name}`;
+        return this.http.get(url)
+            .toPromise()
+            .then(this.extractData)
+            .catch(this.handleError);
+    }
+
 }

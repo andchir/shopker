@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChange } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChange, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import * as _ from "lodash";
 
@@ -21,6 +21,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
     @Input() validationMessages: {[key: string]: {[key: string]: string}};
 
     constructor(
+        private changeDetectionRef: ChangeDetectorRef,
         private systemNameService: SystemNameService
     ) {
 
@@ -100,6 +101,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
 
                 break;
         }
+        //this.changeDetectionRef.detectChanges();
     }
 
     getValidators(field: ContentField): any[] {
@@ -111,9 +113,11 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
         return validators;
     }
 
-    generateName(fieldName: string): void {
-        const title = this.model.title || '';
-        this.model[fieldName] = this.systemNameService.generateName(title);
+    generateName(field: ContentField): void {
+        const sourceFieldName = field.input_properties.source_field || 'title';
+        const title = this.model[sourceFieldName] || '';
+        this.model[field.name] = this.systemNameService.generateName(title);
+        this.changeDetectionRef.detectChanges();
     }
 
 }

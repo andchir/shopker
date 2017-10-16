@@ -18,10 +18,12 @@ export class CatalogCategoryComponent extends PageTableAbstractComponent {
     title: string = 'Каталог';
     currentCategory: Category;
 
-    constructor(dataService: ProductsService,
-                activeModal: NgbActiveModal,
-                modalService: NgbModal,
-                titleService: Title) {
+    constructor(
+        dataService: ProductsService,
+        activeModal: NgbActiveModal,
+        modalService: NgbModal,
+        titleService: Title
+    ) {
         super(dataService, activeModal, modalService, titleService);
     }
 

@@ -41,7 +41,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
     }
 
     model: ContentType = new ContentType(0, '', '', '', 'products', [], ['Основное','Служебное'], true);
-    fieldModel: ContentField = new ContentField('', '', '', '', '', {}, '', {}, '', false, false, false);
+    fieldModel: ContentField = new ContentField(0, '', '', '', '', {}, '', {}, '', false, false, false);
     fld_submitted: boolean = false;
     errorFieldMessage: string;
     action: string = 'add_field';
@@ -389,7 +389,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
         this.fld_submitted = false;
         this.currentFieldName = '';
         this.fieldForm.reset();
-        this.fieldModel = new ContentField('', '', '', '', '', {}, '', {}, '', false, false, false);
+        this.fieldModel = new ContentField(0, '', '', '', '', {}, '', {}, '', false, false, false);
     }
 
     /** Cancel edit field */

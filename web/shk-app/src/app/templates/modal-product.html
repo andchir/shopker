@@ -40,19 +40,6 @@
 
         <input-field-renderer [(fields)]="currentContentType.fields" [(groups)]="currentContentType.groups" [(formErrors)]="formErrors" [(validationMessages)]="validationMessages" [(model)]="model" [(form)]="form"></input-field-renderer>
 
-        <!--<ngb-tabset justify="fill">-->
-            <!--<ngb-tab *ngFor="let groupName of currentContentType.groups; let i=index">-->
-                <!--<ng-template ngbTabTitle>{{groupName}}</ng-template>-->
-                <!--<ng-template ngbTabContent>-->
-                    <!--<div class="pt-3">-->
-
-                        <!--<input-field #inputFields [fields]="currentContentType.fields | filterFieldByGroup: groupName" [(formErrors)]="formErrors" [(validationMessages)]="validationMessages" [(model)]="model" [(form)]="form"></input-field>-->
-
-                    <!--</div>-->
-                <!--</ng-template>-->
-            <!--</ngb-tab>-->
-        <!--</ngb-tabset>-->
-
         <div class="alert alert-danger mt-3 mb-0" [hidden]="!errorMessage">
             <button type="button" class="close" (click)="errorMessage = ''">
                 <span aria-hidden="true">&times;</span>

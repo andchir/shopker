@@ -66,6 +66,11 @@ class Fixtures extends Fixture
                 'isActive' => true,
                 'inputProperties' => [
                     [
+                        'name' => 'source_field',
+                        'title' => 'Поле источник',
+                        'default_value' => 'title'
+                    ],
+                    [
                         'name' => 'handler',
                         'title' => 'Обработчик',
                         'default_value' => ''

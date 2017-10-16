@@ -4,7 +4,7 @@ Shopkeeper 4
 **Current version: ALPHA (in development)**
 
 ~~~
-php bin/console doctrine:mongodb:fixtures:load --fixtures=AppBundle/DataFixtures/MongoDB/en
+php bin/console doctrine:mongodb:fixtures:load --fixtures=src/AppBundle/DataFixtures/MongoDB/en
 php bin/console cache:clear --env=dev
 php bin/console cache:clear --env=prod --no-debug
 php bin/console server:run localhost:8001

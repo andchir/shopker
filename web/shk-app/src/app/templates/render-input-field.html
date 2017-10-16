@@ -20,7 +20,7 @@
                                 <div class="input-group">
                                     <input type="text" class="form-control form-control-sm" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]">
                                     <div class="input-group-btn">
-                                        <button type="button" class="btn btn-secondary" ngbTooltip="Generate" (click)="generateName(field.name)">
+                                        <button type="button" class="btn btn-secondary" ngbTooltip="Generate" (click)="generateName(field)">
                                             <i class="icon-reload"></i>
                                         </button>
                                     </div>

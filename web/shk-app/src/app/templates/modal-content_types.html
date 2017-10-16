@@ -271,7 +271,8 @@
                                 <div [class.form-group-message]="formErrors.fld_group">
                                     <div class="input-group input-group-sm">
                                         <select class="form-control" name="field_group" formControlName="group" [(ngModel)]="fieldModel.group">
-                                            <option value="{{group}}" *ngFor="let group of model.groups">{{group}}</option>
+                                            <option value=""></option>
+                                            <option [value]="groupName" *ngFor="let groupName of model.groups">{{groupName}}</option>
                                         </select>
                                         <div class="input-group-btn">
                                             <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Add group" (click)="displayToggle(addGroupBlock); addGroupField.value = ''; addGroupField.focus()">

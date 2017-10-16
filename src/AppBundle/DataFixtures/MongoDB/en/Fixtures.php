@@ -66,6 +66,11 @@ class en extends Fixture
                 'isActive' => true,
                 'inputProperties' => [
                     [
+                        'name' => 'source_field',
+                        'title' => 'Source field',
+                        'default_value' => 'title'
+                    ],
+                    [
                         'name' => 'handler',
                         'title' => 'Handler',
                         'default_value' => ''

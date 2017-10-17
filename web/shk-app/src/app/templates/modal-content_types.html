@@ -402,6 +402,7 @@
                                 <th>Тип ввода</th>
                                 <th>Группа</th>
                                 <th>Обязательное?</th>
+                                <th>В таблице?</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -415,6 +416,9 @@
                                 </td>
                                 <td>
                                     {{field.group}}
+                                </td>
+                                <td>
+                                    <output-field [value]="field.required" outputType="boolean"></output-field>
                                 </td>
                                 <td>
                                     <div class="relative">
@@ -437,7 +441,7 @@
                                         </div>
                                     </div>
 
-                                    <output-field [value]="field.required" outputType="boolean"></output-field>
+                                    <output-field [value]="field.show_in_table" outputType="boolean"></output-field>
                                 </td>
                             </tr>
                             <tr [hidden]="model.fields.length > 0" class="table-active">

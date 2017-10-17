@@ -12,7 +12,7 @@ php bin/console server:run localhost:8001
 
 ~~~
 cd /var/www/html/shopkeeper4
-sudo chmod -R 0777 ./var
+sudo chmod -R 0777 ./var/cache
 php bin/console cache:clear --env=prod --no-debug
 ~~~
 

@@ -184,8 +184,8 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
         let options = new QueryOptions('name', 'asc', 0, 0, 1);
         this.fieldTypesService.getList(options)
             .subscribe(
-                res => {
-                    this.fieldTypes = res.data;
+                preparedData => {
+                    this.fieldTypes = preparedData.data;
                 },
                 error =>  this.errorMessage = <any>error
             );
@@ -195,9 +195,9 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
     getCollectionsList(): void {
         this.collectionsService.getList()
             .subscribe(
-                res => {
-                    if(res.data && res.data.length > 0){
-                        this.collections = res.data;
+                preparedData => {
+                    if(preparedData.data.length > 0){
+                        this.collections = preparedData.data;
                     }
                 }
             );

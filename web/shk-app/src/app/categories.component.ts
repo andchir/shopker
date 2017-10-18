@@ -89,10 +89,9 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent {
     getContentTypes() {
         this.contentTypesService.getList()
             .subscribe(
-                res => {
-                    if (res.success) {
-                        this.contentTypes = res.data;
-                    }
+                preparedData => {
+                    this.contentTypes = preparedData.data;
+                    this.errorMessage = preparedData.errorMsg;
                 },
                 error => this.errorMessage = <any>error);
     }
@@ -217,10 +216,8 @@ export class CategoriesMenuComponent implements OnInit {
     getCategories(): void {
         this.categoriesService.getList()
             .subscribe(
-                res => {
-                    if (res.success) {
-                        this.categories = res.data;
-                    }
+                preparedData => {
+                    this.categories = preparedData.data;
                     this.selectCurrent();
                 },
                 error => this.errorMessage = <any>error

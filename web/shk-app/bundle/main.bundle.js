@@ -459,6 +459,11 @@ var CatalogCategoryComponent = (function (_super) {
     };
     CatalogCategoryComponent.prototype.openCategory = function (category) {
         var _this = this;
+        if (!category.id) {
+            this.items = [];
+            this.tableFields = [];
+            return;
+        }
         this.loading = true;
         this.currentCategory = __WEBPACK_IMPORTED_MODULE_3_lodash__["clone"](category);
         this.titleService.setTitle(this.title + ' / ' + this.currentCategory.title);
@@ -656,10 +661,9 @@ var CategoriesModalComponent = (function (_super) {
     CategoriesModalComponent.prototype.getContentTypes = function () {
         var _this = this;
         this.contentTypesService.getList()
-            .subscribe(function (res) {
-            if (res.success) {
-                _this.contentTypes = res.data;
-            }
+            .subscribe(function (preparedData) {
+            _this.contentTypes = preparedData.data;
+            _this.errorMessage = preparedData.errorMsg;
         }, function (error) { return _this.errorMessage = error; });
     };
     CategoriesModalComponent.prototype.save = function () {
@@ -780,10 +784,8 @@ var CategoriesMenuComponent = (function () {
     CategoriesMenuComponent.prototype.getCategories = function () {
         var _this = this;
         this.categoriesService.getList()
-            .subscribe(function (res) {
-            if (res.success) {
-                _this.categories = res.data;
-            }
+            .subscribe(function (preparedData) {
+            _this.categories = preparedData.data;
             _this.selectCurrent();
         }, function (error) { return _this.errorMessage = error; });
     };
@@ -1112,17 +1114,17 @@ var ContentTypeModalContent = (function (_super) {
         var _this = this;
         var options = new __WEBPACK_IMPORTED_MODULE_8__models_query_options__["a" /* QueryOptions */]('name', 'asc', 0, 0, 1);
         this.fieldTypesService.getList(options)
-            .subscribe(function (res) {
-            _this.fieldTypes = res.data;
+            .subscribe(function (preparedData) {
+            _this.fieldTypes = preparedData.data;
         }, function (error) { return _this.errorMessage = error; });
     };
     /** Get collections list */
     ContentTypeModalContent.prototype.getCollectionsList = function () {
         var _this = this;
         this.collectionsService.getList()
-            .subscribe(function (res) {
-            if (res.data && res.data.length > 0) {
-                _this.collections = res.data;
+            .subscribe(function (preparedData) {
+            if (preparedData.data.length > 0) {
+                _this.collections = preparedData.data;
             }
         });
     };
@@ -2229,14 +2231,10 @@ var PageTableAbstractComponent = (function () {
         var _this = this;
         this.loading = true;
         this.dataService.getList(this.queryOptions)
-            .subscribe(function (res) {
-            if (res.success) {
-                _this.items = res.data;
-                _this.collectionSize = res.total;
-            }
-            else {
-                _this.items = [];
-            }
+            .subscribe(function (preparedData) {
+            _this.items = preparedData.data;
+            _this.collectionSize = preparedData.total;
+            _this.errorMessage = preparedData.errorMsg;
             _this.loading = false;
         }, function (error) { return _this.errorMessage = error; });
     };
@@ -2495,15 +2493,9 @@ var ProductModalContent = (function (_super) {
         var _this = this;
         this.loading = true;
         this.categoriesService.getList()
-            .subscribe(function (res) {
-            if (res.success) {
-                _this.categories = res.data;
-            }
-            else {
-                if (res.msg) {
-                    _this.errorMessage = res.msg;
-                }
-            }
+            .subscribe(function (preparedData) {
+            _this.categories = preparedData.data;
+            _this.errorMessage = preparedData.errorMsg;
             _this.loading = false;
         });
     };
@@ -2667,6 +2659,7 @@ var InputFieldRenderComponent = (function () {
                 this.form.addControl(field.name, control);
             }
         }.bind(this));
+        this.changeDetectionRef.detectChanges();
     };
     InputFieldRenderComponent.prototype.setFieldProperties = function (field) {
         switch (field.input_type) {
@@ -2707,7 +2700,6 @@ var InputFieldRenderComponent = (function () {
                 this.model[field.name] = defaultValue ? parseInt(defaultValue) : null;
                 break;
         }
-        //this.changeDetectionRef.detectChanges();
     };
     InputFieldRenderComponent.prototype.getValidators = function (field) {
         var validators = [];
@@ -3068,7 +3060,8 @@ var DataService = (function () {
         }
         return this.http.get(this.getRequestUrl(), { search: params })
             .map(this.extractData)
-            .catch(this.handleError);
+            .catch(this.handleError)
+            .map(DataService.prepareDataArray);
     };
     DataService.prototype.deleteItem = function (id) {
         var url = this.getRequestUrl() + ("/" + id);
@@ -3091,6 +3084,26 @@ var DataService = (function () {
             .toPromise()
             .then(this.extractData)
             .catch(this.handleError);
+    };
+    DataService.prepareDataArray = function (data) {
+        var output = { data: [], successMsg: '', errorMsg: '', total: 0 };
+        if (data.success) {
+            if (data.data) {
+                output.data = data.data;
+            }
+            if (data.total) {
+                output.total = data.total;
+            }
+            if (data.msg) {
+                output.successMsg = data.msg;
+            }
+        }
+        else {
+            if (data.msg) {
+                output.errorMsg = data.msg;
+            }
+        }
+        return output;
     };
     DataService.prototype.handleError = function (error) {
         var errMsg;

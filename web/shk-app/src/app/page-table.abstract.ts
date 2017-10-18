@@ -227,13 +227,10 @@ export abstract class PageTableAbstractComponent implements OnInit {
         this.loading = true;
         this.dataService.getList(this.queryOptions)
             .subscribe(
-                res => {
-                    if(res.success){
-                        this.items = res.data;
-                        this.collectionSize = res.total;
-                    } else {
-                        this.items = [];
-                    }
+                preparedData => {
+                    this.items = preparedData.data;
+                    this.collectionSize = preparedData.total;
+                    this.errorMessage = preparedData.errorMsg;
                     this.loading = false;
                 },
                 error =>  this.errorMessage = <any>error

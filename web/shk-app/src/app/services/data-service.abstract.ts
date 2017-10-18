@@ -8,6 +8,13 @@ import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
+export interface outputData {
+    data: any | any[] | null;
+    successMsg: string;
+    errorMsg: string;
+    total: number;
+}
+
 export abstract class DataService {
 
     public headers = new Headers({'Content-Type': 'application/json'});
@@ -46,7 +53,8 @@ export abstract class DataService {
         }
         return this.http.get(this.getRequestUrl(), {search: params})
             .map(this.extractData)
-            .catch(this.handleError);
+            .catch(this.handleError)
+            .map(DataService.prepareDataArray);
     }
 
     deleteItem(id: number): Promise<any> {
@@ -72,6 +80,26 @@ export abstract class DataService {
             .toPromise()
             .then(this.extractData)
             .catch(this.handleError);
+    }
+
+    static prepareDataArray(data: any): outputData {
+        let output: outputData = {data: [], successMsg: '', errorMsg: '', total: 0};
+        if (data.success) {
+            if (data.data) {
+                output.data = data.data;
+            }
+            if (data.total) {
+                output.total = data.total;
+            }
+            if (data.msg) {
+                output.successMsg = data.msg;
+            }
+        } else {
+            if (data.msg) {
+                output.errorMsg = data.msg;
+            }
+        }
+        return output;
     }
 
     handleError (error: Response | any) {

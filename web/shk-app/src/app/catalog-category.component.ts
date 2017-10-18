@@ -70,6 +70,11 @@ export class CatalogCategoryComponent extends PageTableAbstractComponent {
     }
 
     openCategory(category: Category): void {
+        if (!category.id) {
+            this.items = [];
+            this.tableFields = [];
+            return;
+        }
         this.loading = true;
         this.currentCategory = _.clone(category);
         this.titleService.setTitle(this.title + ' / ' + this.currentCategory.title);
@@ -77,7 +82,7 @@ export class CatalogCategoryComponent extends PageTableAbstractComponent {
         this.getContentType()
             .then((res) => {
                 this.loading = false;
-                if(res.success) {
+                if (res.success) {
                     this.currentContentType = res.data as ContentType;
                     this.updateTableConfig();
                     this.getList();

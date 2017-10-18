@@ -50,6 +50,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                 this.form.addControl(field.name, control);
             }
         }.bind(this));
+        this.changeDetectionRef.detectChanges();
     }
 
     setFieldProperties(field: ContentField): void {
@@ -101,7 +102,6 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
 
                 break;
         }
-        //this.changeDetectionRef.detectChanges();
     }
 
     getValidators(field: ContentField): any[] {

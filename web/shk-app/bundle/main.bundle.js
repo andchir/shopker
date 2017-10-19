@@ -459,15 +459,16 @@ var CatalogCategoryComponent = (function (_super) {
     };
     CatalogCategoryComponent.prototype.openCategory = function (category) {
         var _this = this;
-        if (!category.id) {
+        this.currentCategory = __WEBPACK_IMPORTED_MODULE_3_lodash__["clone"](category);
+        this.dataService.setRequestUrl('admin/products/' + this.currentCategory.id);
+        if (!this.currentCategory.id) {
             this.items = [];
             this.tableFields = [];
+            this.currentCategory.id = 0;
             return;
         }
         this.loading = true;
-        this.currentCategory = __WEBPACK_IMPORTED_MODULE_3_lodash__["clone"](category);
         this.titleService.setTitle(this.title + ' / ' + this.currentCategory.title);
-        this.dataService.setRequestUrl('admin/products/' + this.currentCategory.id);
         this.getContentType()
             .then(function (res) {
             _this.loading = false;
@@ -2045,16 +2046,26 @@ var ModalContentAbstractComponent = (function () {
             this.getModelData();
         }
     };
+    ModalContentAbstractComponent.prototype.getSystemFieldName = function () {
+        return 'name';
+    };
     ModalContentAbstractComponent.prototype.getModelData = function () {
         var _this = this;
         this.loading = true;
         this.dataService.getItem(this.itemId)
             .then(function (res) {
-            if (_this.isItemCopy) {
-                res.data.id = '';
-                res.data.name = '';
+            if (res.success) {
+                if (_this.isItemCopy) {
+                    res.data.id = '';
+                    res.data[_this.getSystemFieldName()] = '';
+                }
+                _this.model = res.data;
             }
-            _this.model = res.data;
+            else {
+                if (res.msg) {
+                    _this.errorMessage = res.msg;
+                }
+            }
             _this.loading = false;
         });
     };
@@ -2480,14 +2491,21 @@ var ProductModalContent = (function (_super) {
     }
     /** On initialize */
     ProductModalContent.prototype.ngOnInit = function () {
+        var _this = this;
         this.model.parent_id = this.category.id;
         this.dataService.setRequestUrl('admin/products/' + this.category.id);
         this.buildForm();
         this.getCategories();
-        this.getContentType();
-        if (this.itemId) {
-            this.getModelData();
-        }
+        this.getContentType()
+            .then(function () {
+            if (_this.itemId) {
+                _this.getModelData();
+            }
+        });
+    };
+    ProductModalContent.prototype.getSystemFieldName = function () {
+        var index = __WEBPACK_IMPORTED_MODULE_5_lodash__["findIndex"](this.currentContentType.fields, { input_type: 'system_name' });
+        return index > -1 ? this.currentContentType.fields[index].name : 'name';
     };
     ProductModalContent.prototype.getCategories = function () {
         var _this = this;
@@ -2505,7 +2523,7 @@ var ProductModalContent = (function (_super) {
             return;
         }
         this.loading = true;
-        this.contentTypesService.getItemByName(this.category.content_type_name)
+        return this.contentTypesService.getItemByName(this.category.content_type_name)
             .then(function (res) {
             if (res.success) {
                 _this.currentContentType = res.data;
@@ -2537,22 +2555,6 @@ var ProductModalContent = (function (_super) {
             }
         }
         this.model = __WEBPACK_IMPORTED_MODULE_5_lodash__["pick"](data, newKeys);
-    };
-    ProductModalContent.prototype.getModelData = function () {
-        var _this = this;
-        this.loading = true;
-        this.dataService.getItem(this.itemId)
-            .then(function (res) {
-            if (res.success) {
-                _this.model = res.data;
-            }
-            else {
-                if (res.msg) {
-                    _this.errorMessage = res.msg;
-                }
-            }
-            _this.loading = false;
-        });
     };
     /** On change content type */
     ProductModalContent.prototype.onChangeContentType = function () {
@@ -3488,7 +3490,7 @@ module.exports = "<div class=\"d-inline-block dropdown\">\n    <button class=\"b
 /***/ "../../../../../src/app/templates/cmp-table.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"table-responsive\" [class.loading]=\"loading\">\n    <table class=\"table table-striped table-divided mb-0\">\n        <thead>\n            <tr>\n                <th class=\"text-left\">\n                    <label class=\"custom-control custom-checkbox\">\n                        <input type=\"checkbox\" class=\"custom-control-input\" (click)=\"selectAll($event)\">\n                        <span class=\"custom-control-indicator\"></span>\n                    </label>\n                </th>\n                <th *ngFor=\"let tableField of tableFields; let index=index\">\n                    <button type=\"button\" class=\"btn btn-block btn-link\" (click)=\"selectSortBy(tableField.name)\">\n                        {{tableField.title}}\n                        <i [class.icon-arrow-down]=\"queryOptions.sort_dir == 'asc'\" [class.icon-arrow-up]=\"queryOptions.sort_dir == 'desc'\" [style.visibility]=\"tableField.name == queryOptions.sort_by ? 'visible' : 'hidden'\"></i>\n                    </button>\n                </th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr class=\"show-on-hover-parent\" *ngFor=\"let item of items\">\n                <td>\n                    <label class=\"custom-control custom-checkbox\">\n                        <input type=\"checkbox\" class=\"custom-control-input\" [checked]=\"getIsSelected(item.id)\" (click)=\"setSelected($event, item.id)\">\n                        <span class=\"custom-control-indicator\"></span>\n                    </label>\n                </td>\n                <td *ngFor=\"let tableField of tableFields; let index=index\">\n                    <div class=\"relative\" *ngIf=\"index == tableFields.length - 1\">\n                        <div class=\"show-on-hover no-wrap\">\n                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" ngbTooltip=\"Edit\" (click)=\"action('edit', item.id)\">\n                                <i class=\"icon-pencil\"></i>\n                            </button>\n                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" ngbTooltip=\"Copy\" (click)=\"action('copy', item.id)\">\n                                <i class=\"icon-stack\"></i>\n                            </button>\n                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" ngbTooltip=\"Delete\" (click)=\"action('delete', item.id)\">\n                                <i class=\"icon-cross\"></i>\n                            </button>\n                        </div>\n                    </div>\n\n                    <output-field [value]=\"item[tableField.name]\" [outputType]=\"tableField.output_type\" [options]=\"tableField.output_properties\"></output-field>\n\n                </td>\n            </tr>\n        <tr [hidden]=\"items.length > 0\" class=\"table-active\">\n            <td [attr.colspan]=\"tableFields.length + 1\" class=\"text-center p-4\">\n                Empty.\n            </td>\n        </tr>\n        </tbody>\n    </table>\n    <div class=\"pt-3\">\n\n        <div class=\"float-right\">\n            <select class=\"form-control\" [(ngModel)]=\"queryOptions.limit\" (change)=\"pageChange()\">\n                <option value=\"10\">10</option>\n                <option value=\"20\">20</option>\n                <option value=\"50\">50</option>\n                <option value=\"100\">100</option>\n            </select>\n        </div>\n\n        <ngb-pagination *ngIf=\"collectionSize > queryOptions.limit\" [class]=\"'mb-0'\" [collectionSize]=\"collectionSize\" [(page)]=\"queryOptions.page\" [maxSize]=\"queryOptions.limit\" (pageChange)=\"pageChange()\" [rotate]=\"true\" [boundaryLinks]=\"false\"></ngb-pagination>\n\n        <div class=\"clearfix\"></div>\n    </div>\n</div>"
+module.exports = "<div class=\"table-responsive\" [class.loading]=\"loading\">\n    <table class=\"table table-striped table-divided mb-0\">\n        <thead>\n            <tr>\n                <th class=\"text-left\">\n                    <label class=\"custom-control custom-checkbox\" [hidden]=\"items.length === 0\">\n                        <input type=\"checkbox\" class=\"custom-control-input\" (click)=\"selectAll($event)\">\n                        <span class=\"custom-control-indicator\"></span>\n                    </label>\n                </th>\n                <th *ngFor=\"let tableField of tableFields; let index=index\">\n                    <button type=\"button\" class=\"btn btn-block btn-link\" (click)=\"selectSortBy(tableField.name)\">\n                        {{tableField.title}}\n                        <i [class.icon-arrow-down]=\"queryOptions.sort_dir == 'asc'\" [class.icon-arrow-up]=\"queryOptions.sort_dir == 'desc'\" [style.visibility]=\"tableField.name == queryOptions.sort_by ? 'visible' : 'hidden'\"></i>\n                    </button>\n                </th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr class=\"show-on-hover-parent\" *ngFor=\"let item of items\">\n                <td>\n                    <label class=\"custom-control custom-checkbox\">\n                        <input type=\"checkbox\" class=\"custom-control-input\" [checked]=\"getIsSelected(item.id)\" (click)=\"setSelected($event, item.id)\">\n                        <span class=\"custom-control-indicator\"></span>\n                    </label>\n                </td>\n                <td *ngFor=\"let tableField of tableFields; let index=index\">\n                    <div class=\"relative\" *ngIf=\"index == tableFields.length - 1\">\n                        <div class=\"show-on-hover no-wrap\">\n                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" ngbTooltip=\"Edit\" (click)=\"action('edit', item.id)\">\n                                <i class=\"icon-pencil\"></i>\n                            </button>\n                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" ngbTooltip=\"Copy\" (click)=\"action('copy', item.id)\">\n                                <i class=\"icon-stack\"></i>\n                            </button>\n                            <button type=\"button\" class=\"btn btn-secondary btn-sm\" ngbTooltip=\"Delete\" (click)=\"action('delete', item.id)\">\n                                <i class=\"icon-cross\"></i>\n                            </button>\n                        </div>\n                    </div>\n\n                    <output-field [value]=\"item[tableField.name]\" [outputType]=\"tableField.output_type\" [options]=\"tableField.output_properties\"></output-field>\n\n                </td>\n            </tr>\n            <tr [hidden]=\"items.length > 0\" class=\"table-active\">\n                <td [attr.colspan]=\"tableFields.length + 1\" class=\"text-center p-4\">\n                    Empty.\n                </td>\n            </tr>\n        </tbody>\n    </table>\n    <div class=\"pt-3\" [hidden]=\"items.length === 0\">\n\n        <div class=\"float-right\">\n            <select class=\"form-control\" [(ngModel)]=\"queryOptions.limit\" (change)=\"pageChange()\">\n                <option value=\"10\">10</option>\n                <option value=\"20\">20</option>\n                <option value=\"50\">50</option>\n                <option value=\"100\">100</option>\n            </select>\n        </div>\n\n        <ngb-pagination *ngIf=\"collectionSize > queryOptions.limit\" [class]=\"'mb-0'\" [collectionSize]=\"collectionSize\" [(page)]=\"queryOptions.page\" [maxSize]=\"queryOptions.limit\" (pageChange)=\"pageChange()\" [rotate]=\"true\" [boundaryLinks]=\"false\"></ngb-pagination>\n\n        <div class=\"clearfix\"></div>\n    </div>\n</div>"
 
 /***/ }),
 

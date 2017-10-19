@@ -62,11 +62,17 @@ export class ProductModalContent extends ModalContentAbstractComponent {
 
         this.buildForm();
         this.getCategories();
-        this.getContentType();
+        this.getContentType()
+            .then(() => {
+                if (this.itemId) {
+                    this.getModelData();
+                }
+            });
+    }
 
-        if (this.itemId) {
-            this.getModelData();
-        }
+    getSystemFieldName(): string {
+        const index = _.findIndex(this.currentContentType.fields, {input_type: 'system_name'});
+        return index > -1 ? this.currentContentType.fields[index].name : 'name';
     }
 
     getCategories() {
@@ -79,12 +85,12 @@ export class ProductModalContent extends ModalContentAbstractComponent {
             });
     }
 
-    getContentType() {
+    getContentType(): Promise<any> {
         if(!this.category.content_type_name){
             return;
         }
         this.loading = true;
-        this.contentTypesService.getItemByName(this.category.content_type_name)
+        return this.contentTypesService.getItemByName(this.category.content_type_name)
             .then((res) => {
                 if(res.success){
                     this.currentContentType = res.data as ContentType;
@@ -117,21 +123,6 @@ export class ProductModalContent extends ModalContentAbstractComponent {
             }
         }
         this.model = _.pick(data, newKeys);
-    }
-
-    getModelData(): void {
-        this.loading = true;
-        this.dataService.getItem(this.itemId)
-            .then(res => {
-                if(res.success){
-                    this.model = res.data;
-                } else {
-                    if (res.msg) {
-                        this.errorMessage = res.msg;
-                    }
-                }
-                this.loading = false;
-            });
     }
 
     /** On change content type */

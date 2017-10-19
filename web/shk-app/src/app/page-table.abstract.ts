@@ -43,15 +43,25 @@ export abstract class ModalContentAbstractComponent implements OnInit {
         }
     }
 
+    getSystemFieldName(): string {
+        return 'name';
+    }
+
     getModelData(): void {
         this.loading = true;
         this.dataService.getItem(this.itemId)
             .then(res => {
-                if(this.isItemCopy){
-                    res.data.id = '';
-                    res.data.name = '';
+                if (res.success) {
+                    if(this.isItemCopy){
+                        res.data.id = '';
+                        res.data[this.getSystemFieldName()] = '';
+                    }
+                    this.model = res.data;
+                } else {
+                    if (res.msg) {
+                        this.errorMessage = res.msg;
+                    }
                 }
-                this.model = res.data;
                 this.loading = false;
             });
     }

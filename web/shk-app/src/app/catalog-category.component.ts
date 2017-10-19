@@ -70,15 +70,16 @@ export class CatalogCategoryComponent extends PageTableAbstractComponent {
     }
 
     openCategory(category: Category): void {
-        if (!category.id) {
+        this.currentCategory = _.clone(category);
+        this.dataService.setRequestUrl('admin/products/' + this.currentCategory.id);
+        if (!this.currentCategory.id) {
             this.items = [];
             this.tableFields = [];
+            this.currentCategory.id = 0;
             return;
         }
         this.loading = true;
-        this.currentCategory = _.clone(category);
         this.titleService.setTitle(this.title + ' / ' + this.currentCategory.title);
-        this.dataService.setRequestUrl('admin/products/' + this.currentCategory.id);
         this.getContentType()
             .then((res) => {
                 this.loading = false;

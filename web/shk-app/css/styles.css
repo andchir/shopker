@@ -65,7 +65,7 @@ input[type="color"].form-control { height: 35px; padding: 2px; cursor: pointer; 
 #page-preloader { position: fixed; left: 0; top: 0; width: 100%; height: 100%; background-color: #eee; }
 .loading { position: relative; min-height: 120px; }
 .loading:before { content: ''; display: block; position: absolute; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.2); z-index: 500; }
-.loading:after { content: ''; display: block; position: absolute; left: 50%; top: 50%; width: 90px; height: 90px; margin: -45px 0 0 -45px; z-index: 510; border: 8px solid #f3f3f3; border-radius: 50%; border-top: 8px solid #5bc0de; opacity: 0.8; -webkit-animation: spin 1000ms linear infinite;  animation: spin 1000ms linear infinite; box-shadow: 0 0 30px rgba(0,0,0,0.3), inset 0 0 30px rgba(0,0,0,0.3); }
+.loading:after { content: ''; display: block; position: absolute; left: 50%; top: 50%; width: 70px; height: 70px; margin: -35px 0 0 -35px; z-index: 510; border: 9px solid #f3f3f3; border-radius: 50%; border-top-color: #5bc0de; opacity: 0.8; -webkit-animation: spin 1000ms linear infinite;  animation: spin 1000ms linear infinite; box-shadow: 0 0 30px rgba(0,0,0,0.3), inset 0 0 30px rgba(0,0,0,0.3); }
 @-webkit-keyframes spin {
     0% { -webkit-transform: rotate(0deg); }
     100% { -webkit-transform: rotate(360deg); }

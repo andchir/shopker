@@ -75,7 +75,9 @@ class ProductController extends BaseController
             $data[] = $row;
         }
 
-        $total = $collection->count();
+        $total = $collection->count([
+            'parent_id' => $category->getId()
+        ]);
 
         return new JsonResponse([
             'success' => true,

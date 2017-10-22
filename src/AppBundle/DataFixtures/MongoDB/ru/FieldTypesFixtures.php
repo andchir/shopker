@@ -3,14 +3,14 @@
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use AppBundle\Document\FieldType;
+use AppBundle\Document\ContentType;
+use AppBundle\Document\Category;
 
-class Fixtures extends Fixture
+class FieldTypesFixtures extends Fixture
 {
 
-    public function load(ObjectManager $manager)
-    {
+    public function load(ObjectManager $manager) {
 
-        // Field types
         $data = [
             'checkbox' => [
                 'title' => 'Чекбокс',
@@ -381,7 +381,5 @@ class Fixtures extends Fixture
         }
 
         $manager->flush();
-
     }
-
 }

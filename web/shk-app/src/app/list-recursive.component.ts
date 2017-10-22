@@ -39,7 +39,7 @@ export class ListRecursiveComponent implements OnInit, OnChanges {
         let items = this.items;
         const parentId = this.parentId;
         this.inputItems.forEach(function (item) {
-            if (item.parent_id === parentId) {
+            if (item.parentId === parentId) {
                 items.push(item);
             }
         });
@@ -55,7 +55,7 @@ export class ListRecursiveComponent implements OnInit, OnChanges {
         if (index === -1) {
             return;
         }
-        this.currentParentsIds = this.getParentIds(this.inputItems[index].parent_id);
+        this.currentParentsIds = this.getParentIds(this.inputItems[index].parentId);
     }
 
     /**
@@ -72,7 +72,7 @@ export class ListRecursiveComponent implements OnInit, OnChanges {
             if (index === -1) {
                 return parentIds;
             }
-            return this.getParentIds(this.inputItems[index].parent_id, parentIds);
+            return this.getParentIds(this.inputItems[index].parentId, parentIds);
         } else {
             return parentIds;
         }

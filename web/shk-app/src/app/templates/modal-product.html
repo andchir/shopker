@@ -10,26 +10,26 @@
 <form [formGroup]="form" [class.loading]="loading">
     <div class="modal-body">
 
-        <div class="row form-group" [class.form-group-message]="formErrors.parent_id">
+        <div class="row form-group" [class.form-group-message]="formErrors.parentId">
             <div class="col-md-5">
                 <label for="fieldCategory">Основная категория</label>
             </div>
             <div class="col-md-7">
-                <select id="fieldCategory" class="form-control" name="parent_id" formControlName="parent_id" [(ngModel)]="model.parent_id" (change)="onChangeContentType()">
+                <select id="fieldCategory" class="form-control" name="parentId" formControlName="parentId" [(ngModel)]="model.parentId" (change)="onChangeContentType()">
                     <option *ngFor="let category of categories" [value]="category.id">{{category.title}}</option>
                 </select>
-                <div *ngIf="formErrors.parent_id" class="alert alert-danger">
-                    {{formErrors.parent_id}}
+                <div *ngIf="formErrors.parentId" class="alert alert-danger">
+                    {{formErrors.parentId}}
                 </div>
             </div>
         </div>
 
-        <div class="row form-group" [class.form-group-message]="formErrors.is_active">
+        <div class="row form-group" [class.form-group-message]="formErrors.isActive">
             <div class="col-md-7 ml-md-auto">
                 <div class="card card-body p-2 pl-3">
 
                     <label class="custom-control custom-checkbox m-0">
-                        <input type="checkbox" class="custom-control-input" value="1" name="is_active" formControlName="is_active" [(ngModel)]="model.is_active">
+                        <input type="checkbox" class="custom-control-input" value="1" name="isActive" formControlName="isActive" [(ngModel)]="model.isActive">
                         <span class="custom-control-indicator"></span>
                         <span>Активный</span>
                     </label>

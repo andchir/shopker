@@ -55,7 +55,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
 
     setFieldProperties(field: ContentField): void {
 
-        switch (field.input_type) {
+        switch (field.inputType) {
             case 'number':
 
                 const propertiesDefault = {
@@ -64,7 +64,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                     step: 1
                 };
 
-                field.input_properties = _.extend({}, propertiesDefault, field.input_properties);
+                field.inputProperties = _.extend({}, propertiesDefault, field.inputProperties);
 
                 break;
             default:
@@ -79,12 +79,12 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
         }
 
         let defaultValue = null;
-        if (typeof field.input_properties.value !== 'undefined'
-            && field.input_properties.value) {
-            defaultValue = field.input_properties.value;
+        if (typeof field.inputProperties.value !== 'undefined'
+            && field.inputProperties.value) {
+            defaultValue = field.inputProperties.value;
         }
 
-        switch (field.input_type){
+        switch (field.inputType){
             case 'date':
                 if(!this.model[field.name]){
                     const now = new Date();
@@ -114,7 +114,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
     }
 
     generateName(field: ContentField): void {
-        const sourceFieldName = field.input_properties.source_field || 'title';
+        const sourceFieldName = field.inputProperties.source_field || 'title';
         const title = this.model[sourceFieldName] || '';
         this.model[field.name] = this.systemNameService.generateName(title);
         this.changeDetectionRef.detectChanges();

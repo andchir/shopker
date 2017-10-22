@@ -54,7 +54,7 @@ abstract class BaseRepository extends DocumentRepository
 
 //        if($opts['only_active']){
 //            $query = $query
-//                ->field('is_active')->equals(true);
+//                ->field('isActive')->equals(true);
 //        }
 
         $results = $query

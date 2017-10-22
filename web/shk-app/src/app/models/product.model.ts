@@ -1,9 +1,9 @@
 export class Product {
     constructor(
         public id: number,
-        public is_active: boolean,
-        public parent_id: number,
-        public content_type: string,
+        public isActive: boolean,
+        public parentId: number,
+        public contentType: string,
         public name: string,
         public title: string,
         public description?: string,

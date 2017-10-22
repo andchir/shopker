@@ -82,7 +82,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
                 required: 'Title is required.'
             }
         },
-        new_collection: {
+        newCollection: {
             value: '',
             validators: [Validators.pattern('[A-Za-z0-9_-]+')],
             messages: {
@@ -90,7 +90,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
                 exists: 'Collection with the same name already exists.'
             }
         },
-        is_active: {
+        isActive: {
             value: '',
             validators: [],
             messages: {}
@@ -118,14 +118,14 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
             validators: [],
             messages: {}
         },
-        input_type: {
+        inputType: {
             value: '',
             validators: [Validators.required],
             messages: {
                 required: 'Input type is required.'
             }
         },
-        output_type: {
+        outputType: {
             value: '',
             validators: [Validators.required],
             messages: {
@@ -139,7 +139,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
                 required: 'Group is required.'
             }
         },
-        new_group: {
+        newGroup: {
             value: '',
             validators: [],
             messages: {
@@ -151,12 +151,12 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
             validators: [],
             messages: {}
         },
-        show_in_table: {
+        showInTable: {
             value: '',
             validators: [],
             messages: {}
         },
-        is_filter: {
+        isFilter: {
             value: '',
             validators: [],
             messages: {}
@@ -181,7 +181,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
 
     /** Get field types */
     getFieldTypes(): void {
-        let options = new QueryOptions('name', 'asc', 0, 0, 1);
+        let options = new QueryOptions('title', 'asc', 0, 0, 1);
         this.fieldTypesService.getList(options)
             .subscribe(
                 preparedData => {
@@ -210,9 +210,9 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
      */
     selectFieldTypeProperties(type: string, fieldTypeName?: string): void {
         if(fieldTypeName){
-            this.fieldModel[type + '_type'] = fieldTypeName;
+            this.fieldModel[type + 'Type'] = fieldTypeName;
         }
-        let fieldType = _.find(this.fieldTypes, {name: this.fieldModel[type + '_type']});
+        let fieldType = _.find(this.fieldTypes, {name: this.fieldModel[type + 'Type']});
         if(!fieldType){
             this.fieldTypeProperties[type] = [];
             return;
@@ -229,14 +229,14 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
                 }
             }
         }
-        if(type == 'input' && !this.fieldModel.output_type){
-            this.selectFieldTypeProperties('output', this.fieldModel['input_type']);
+        if(type == 'input' && !this.fieldModel.outputType){
+            this.selectFieldTypeProperties('output', this.fieldModel['inputType']);
         }
     }
 
     /** Add collection */
     addCollection(){
-        const fieldName = 'new_collection';
+        const fieldName = 'newCollection';
         const control = this.form.get(fieldName);
         if(!control.valid){
             return false;
@@ -489,32 +489,32 @@ export class ContentTypesComponent extends PageTableAbstractComponent {
         {
             name: 'id',
             title: 'ID',
-            output_type: 'text',
-            output_properties: {}
+            outputType: 'text',
+            outputProperties: {}
         },
         {
             name: 'title',
             title: 'Название',
-            output_type: 'text',
-            output_properties: {}
+            outputType: 'text',
+            outputProperties: {}
         },
         {
             name: 'name',
             title: 'Системное имя',
-            output_type: 'text',
-            output_properties: {}
+            outputType: 'text',
+            outputProperties: {}
         },
         {
             name: 'collection',
             title: 'Коллекция',
-            output_type: 'text',
-            output_properties: {}
+            outputType: 'text',
+            outputProperties: {}
         },
         {
-            name: 'is_active',
+            name: 'isActive',
             title: 'Статус',
-            output_type: 'boolean',
-            output_properties: {}
+            outputType: 'boolean',
+            outputProperties: {}
         }
     ];
 

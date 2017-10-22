@@ -87,7 +87,7 @@ class ContentTypeController extends StorageControllerAbstract
             ->setCollection($collectionName)
             ->setFields($data['fields'])
             ->setGroups(isset($data['groups']) ? $data['groups'] : [])
-            ->setIsActive(isset($data['is_active']) ? $data['is_active'] : true);
+            ->setIsActive(isset($data['isActive']) ? $data['isActive'] : true);
 
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $this->get('doctrine_mongodb')->getManager();

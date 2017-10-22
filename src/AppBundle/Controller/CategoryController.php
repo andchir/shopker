@@ -36,7 +36,7 @@ class CategoryController extends StorageControllerAbstract
         if( empty($data['name']) ){
             return ['success' => false, 'msg' => 'System name is required.'];
         }
-        if( empty($data['content_type_name']) ){
+        if( empty($data['contentTypeName']) ){
             return ['success' => false, 'msg' => 'Content type is required.'];
         }
         if($this->checkNameExists($data['name'], $itemId)){
@@ -74,7 +74,7 @@ class CategoryController extends StorageControllerAbstract
             ->getManager()
             ->getRepository(ContentType::class)
             ->findOneBy([
-                'name' => $data['content_type_name']
+                'name' => $data['contentTypeName']
             ]);
 
         if(!$contentType){
@@ -88,9 +88,9 @@ class CategoryController extends StorageControllerAbstract
             ->setTitle($data['title'])
             ->setName($data['name'])
             ->setDescription(isset($data['description']) ? $data['description'] : '')
-            ->setIsActive(isset($data['is_active']) ? $data['is_active'] : true)
-            ->setParentId(isset($data['parent_id']) ? intval( $data['parent_id'] ) : 0)
-            ->setContentTypeName($data['content_type_name'])
+            ->setIsActive(isset($data['isActive']) ? $data['isActive'] : true)
+            ->setParentId(isset($data['parentId']) ? intval( $data['parentId'] ) : 0)
+            ->setContentTypeName($data['contentTypeName'])
             ->setContentType($contentType);
 
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */

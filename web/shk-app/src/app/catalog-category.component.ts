@@ -44,17 +44,17 @@ export class CatalogCategoryComponent extends PageTableAbstractComponent {
             {
                 name: 'id',
                 title: 'ID',
-                output_type: 'number',
-                output_properties: {}
+                outputType: 'number',
+                outputProperties: {}
             }
         ];
         this.currentContentType.fields.forEach((field) => {
-            if (field.show_in_table) {
+            if (field.showInTable) {
                 this.tableFields.push({
                     name: field.name,
                     title: field.title,
-                    output_type: field.output_type,
-                    output_properties: field.output_properties
+                    outputType: field.outputType,
+                    outputProperties: field.outputProperties
                 });
             }
         });
@@ -66,7 +66,7 @@ export class CatalogCategoryComponent extends PageTableAbstractComponent {
 
     getContentType(): Promise<any> {
         return this.contentTypesService
-            .getItemByName(this.currentCategory.content_type_name);
+            .getItemByName(this.currentCategory.contentTypeName);
     }
 
     openCategory(category: Category): void {

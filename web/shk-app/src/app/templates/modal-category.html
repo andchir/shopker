@@ -11,17 +11,17 @@
 
     <div class="modal-body">
 
-        <div class="row form-group" [class.form-group-message]="formErrors.parent_id">
+        <div class="row form-group" [class.form-group-message]="formErrors.parentId">
             <div class="col-md-5">
                 <label for="fieldContentType">Родительская папка</label>
             </div>
             <div class="col-md-7">
-                <select id="fieldParent" class="form-control" name="parent_id" formControlName="parent_id" [(ngModel)]="model.parent_id">
+                <select id="fieldParent" class="form-control" name="parentId" formControlName="parentId" [(ngModel)]="model.parentId">
                     <option value="0">Корневая категория</option>
                     <option value="{{category.id}}" *ngFor="let category of categories | orderBy: 'title'">{{category.title}}</option>
                 </select>
-                <div *ngIf="formErrors.parent_id" class="alert alert-danger">
-                    {{formErrors.parent_id}}
+                <div *ngIf="formErrors.parentId" class="alert alert-danger">
+                    {{formErrors.parentId}}
                 </div>
             </div>
         </div>
@@ -66,16 +66,16 @@
             </div>
         </div>
 
-        <div class="row form-group" [class.form-group-message]="formErrors.content_type_name">
+        <div class="row form-group" [class.form-group-message]="formErrors.contentTypeName">
             <div class="col-md-5">
                 <label for="fieldContentType">Тип контента</label>
             </div>
             <div class="col-md-7">
-                <select id="fieldContentType" class="form-control" name="content_type_name" formControlName="content_type_name" [(ngModel)]="model.content_type_name">
+                <select id="fieldContentType" class="form-control" name="contentTypeName" formControlName="contentTypeName" [(ngModel)]="model.contentTypeName">
                     <option value="1" *ngFor="let contentType of contentTypes" [value]="contentType.name">{{contentType.title}}</option>
                 </select>
-                <div *ngIf="formErrors.content_type_name" class="alert alert-danger">
-                    {{formErrors.content_type_name}}
+                <div *ngIf="formErrors.contentTypeName" class="alert alert-danger">
+                    {{formErrors.contentTypeName}}
                 </div>
             </div>
         </div>
@@ -86,7 +86,7 @@
                 <div class="card card-body p-2 pl-3">
 
                     <label class="custom-control custom-checkbox m-0">
-                        <input type="checkbox" class="custom-control-input" value="1" name="is_active" formControlName="is_active" [(ngModel)]="model.is_active">
+                        <input type="checkbox" class="custom-control-input" value="1" name="isActive" formControlName="isActive" [(ngModel)]="model.isActive">
                         <span class="custom-control-indicator"></span>
                         <span>Активный</span>
                     </label>

@@ -49,19 +49,19 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent {
             validators: [],
             messages: {}
         },
-        parent_id: {
+        parentId: {
             value: 0,
             validators: [],
             messages: {}
         },
-        content_type_name: {
+        contentTypeName: {
             value: '',
             validators: [Validators.required],
             messages: {
                 required: 'Content type is required.'
             }
         },
-        is_active: {
+        isActive: {
             value: false,
             validators: [],
             messages: {}
@@ -80,8 +80,8 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent {
 
     /** On initialize */
     ngOnInit(): void {
-        this.model.parent_id = this.currentCategory.id;
-        this.model.content_type_name = this.currentCategory.content_type_name;
+        this.model.parentId = this.currentCategory.id;
+        this.model.contentTypeName = this.currentCategory.contentTypeName;
         ModalContentAbstractComponent.prototype.ngOnInit.call(this);
         this.getContentTypes();
     }
@@ -133,8 +133,8 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent {
         <ul class="dropdown-menu dropdown-menu-hover" *ngIf="items.length > 0" [class.shadow]="parentId != 0">
             <li class="dropdown-item active" *ngFor="let item of items" [class.active]="item.id == currentId"
                 [class.current-level]="getIsActiveParent(item.id)">
-                <i class="icon-keyboard_arrow_right float-right m-2 pt-1" [hidden]="!item.is_folder"></i>
-                <a href="" [routerLink]="['/catalog/category/', item.id]" [class.text-muted]="!item.is_active">
+                <i class="icon-keyboard_arrow_right float-right m-2 pt-1" [hidden]="!item.isFolder"></i>
+                <a href="" [routerLink]="['/catalog/category/', item.id]" [class.text-muted]="!item.isActive">
                     {{item.title}}
                 </a>
                 <categories-list [inputItems]="inputItems" [parentId]="item.id" [currentId]="currentId"></categories-list>
@@ -254,7 +254,7 @@ export class CategoriesMenuComponent implements OnInit {
             return;
         }
         let category = this.categories[index];
-        if (category.parent_id == data.parent_id) {
+        if (category.parentId == data.parentId) {
             Object.keys(category).forEach(function (k, i) {
                 if (data[k]) {
                     category[k] = data[k];

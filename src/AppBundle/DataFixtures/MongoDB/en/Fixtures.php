@@ -10,6 +10,13 @@ class en extends Fixture
     public function load(ObjectManager $manager)
     {
 
+        $this->loadFieldTypes($manager);
+
+    }
+
+    public function loadFieldTypes(ObjectManager $manager)
+    {
+
         // Field types
         $data = [
             'checkbox' => [

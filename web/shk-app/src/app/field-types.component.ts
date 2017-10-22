@@ -142,26 +142,26 @@ export class FieldTypesComponent extends PageTableAbstractComponent {
         {
             name: 'id',
             title: 'ID',
-            output_type: 'text',
-            output_properties: {}
+            outputType: 'text',
+            outputProperties: {}
         },
         {
             name: 'title',
             title: 'Название',
-            output_type: 'text',
-            output_properties: {}
+            outputType: 'text',
+            outputProperties: {}
         },
         {
             name: 'name',
             title: 'Системное имя',
-            output_type: 'text',
-            output_properties: {}
+            outputType: 'text',
+            outputProperties: {}
         },
         {
             name: 'isActive',
             title: 'Статус',
-            output_type: 'boolean',
-            output_properties: {}
+            outputType: 'boolean',
+            outputProperties: {}
         }
     ];
 

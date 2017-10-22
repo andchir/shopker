@@ -55,7 +55,7 @@ class ProductController extends BaseController
 
         $data = [];
         $results = $collection->find([
-            'parent_id' => $category->getId()
+            'parentId' => $category->getId()
         ])
             ->sort([$queryOptions['sort_by'] => $queryOptions['sort_dir']])
             ->skip($skip)
@@ -64,8 +64,8 @@ class ProductController extends BaseController
         foreach ($results as $entry) {
             $row = [
                 'id' => $entry['_id'],
-                'parent_id' => $entry['parent_id'],
-                'is_active' => $entry['is_active']
+                'parentId' => $entry['parentId'],
+                'isActive' => $entry['isActive']
             ];
             foreach ($contentTypeFields as $field){
                 $row[$field['name']] = !empty($entry[$field['name']])
@@ -76,7 +76,7 @@ class ProductController extends BaseController
         }
 
         $total = $collection->count([
-            'parent_id' => $category->getId()
+            'parentId' => $category->getId()
         ]);
 
         return new JsonResponse([
@@ -115,7 +115,7 @@ class ProductController extends BaseController
         $error = '';
 
         foreach ($contentTypeFields as $field){
-            if($error = $this->validateField($data, $field, $collectionName, $itemId)){
+            if($error = $this->validateField($data, $field, $collectionName, $category->getId(), $itemId)){
                 break;
             }
         }
@@ -127,26 +127,30 @@ class ProductController extends BaseController
     }
 
     /**
-     * @param $data
-     * @param $field
-     * @param $collectionName
-     * @param $itemId
+     * @param array $data
+     * @param array $field
+     * @param string $collectionName
+     * @param int $categoryId
+     * @param int $itemId
      * @return string
      */
-    public function validateField($data, $field, $collectionName, $itemId)
+    public function validateField($data, $field, $collectionName, $categoryId, $itemId)
     {
-        $inputProperties = isset($field['input_properties'])
-            ? $field['input_properties']
+        $inputProperties = isset($field['inputProperties'])
+            ? $field['inputProperties']
             : [];
         if(!empty($field['required']) && (!isset($data[$field['name']]) || $data[$field['name']] === '')){
             return "Field \"{$field['title']}\" is required.";
         }
         $error = '';
         // TODO: add validation by input properties
-        switch ($field['input_type']){
+        switch ($field['inputType']){
             case 'system_name':
 
-                if(!empty($data[$field['name']]) && $this->checkNameExists($field['name'], $data[$field['name']], $collectionName, $itemId)){
+                if(
+                    !empty($data[$field['name']])
+                    && $this->checkNameExists($field['name'], $data[$field['name']], $collectionName, $categoryId, $itemId)
+                ){
                     $error = 'System name already exists.';
                 }
 
@@ -163,7 +167,7 @@ class ProductController extends BaseController
      */
     public function createUpdate($data, Category $category = null, $itemId = 0)
     {
-        $parentId = !empty($data['parent_id']) ? $data['parent_id'] : 0;
+        $parentId = !empty($data['parentId']) ? $data['parentId'] : 0;
         $itemId = intval($itemId);
 
         $contentType = $category->getContentType();
@@ -184,9 +188,9 @@ class ProductController extends BaseController
             ];
         }
 
-        $document['parent_id'] = intval($parentId);
-        $document['is_active'] = isset($data['is_active'])
-            ? $data['is_active']
+        $document['parentId'] = intval($parentId);
+        $document['isActive'] = isset($data['isActive'])
+            ? $data['isActive']
             : true;
 
         foreach ($contentType->getFields() as $field){
@@ -281,10 +285,21 @@ class ProductController extends BaseController
             ]);
         }
 
-        var_dump($data['ids']);
+        $contentType = $category->getContentType();
+        if(!$contentType){
+            return new JsonResponse([
+                'success' => false,
+                'msg' => 'Content type not found.'
+            ]);
+        }
+
+        $collection = $this->getCollection($contentType->getCollection());
+        $result = $collection->remove([
+            '_id' => ['$in' => $data['ids']]
+        ]);
 
         return new JsonResponse([
-            'success' => true
+            'success' => !empty($result['ok'])
         ]);
     }
 
@@ -373,9 +388,8 @@ class ProductController extends BaseController
 
         $data = [
             'id' => $entry['_id'],
-            'parent_id' => $entry['parent_id'],
-            'is_active' => $entry['is_active'],
-            'content_type' => $contentType->getName()
+            'parentId' => $entry['parentId'],
+            'isActive' => $entry['isActive']
         ];
         foreach ($contentTypeFields as $field){
             $data[$field['name']] = !empty($entry[$field['name']])
@@ -427,15 +441,17 @@ class ProductController extends BaseController
      * @param string $fieldName
      * @param string $name
      * @param string $collectionName
+     * @param int $categoryId
      * @param int $itemId
      * @return mixed
      */
-    public function checkNameExists($fieldName, $name, $collectionName, $itemId = 0)
+    public function checkNameExists($fieldName, $name, $collectionName, $categoryId, $itemId = 0)
     {
         $collection = $this->getCollection($collectionName);
         $itemId = intval($itemId);
         $where = [
-            $fieldName => $name
+            $fieldName => $name,
+            'parentId' => $categoryId
         ];
         if($itemId){
             $where['_id'] = ['$ne' => $itemId];

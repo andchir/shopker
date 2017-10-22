@@ -19,7 +19,7 @@ class Category
     /**
      * @MongoDB\Field(type="int")
      */
-    protected $parent_id;
+    protected $parentId;
 
     /**
      * @MongoDB\Field(type="string")
@@ -39,17 +39,17 @@ class Category
     /**
      * @MongoDB\Field(type="string")
      */
-    protected $content_type_name;
+    protected $contentTypeName;
 
     /**
      * @MongoDB\Field(type="boolean")
      */
-    protected $is_folder;
+    protected $isFolder;
 
     /**
      * @MongoDB\Field(type="boolean")
      */
-    protected $is_active;
+    protected $isActive;
 
     /**
      * @MongoDB\ReferenceOne(targetDocument="ContentType", inversedBy="category")
@@ -140,7 +140,7 @@ class Category
      */
     public function setParentId($parentId)
     {
-        $this->parent_id = $parentId;
+        $this->parentId = $parentId;
         return $this;
     }
 
@@ -151,7 +151,7 @@ class Category
      */
     public function getParentId()
     {
-        return $this->parent_id;
+        return $this->parentId;
     }
 
     /**
@@ -161,13 +161,13 @@ class Category
     {
         return [
             'id' => $this->getId(),
-            'parent_id' => $this->getParentId(),
+            'parentId' => $this->getParentId(),
             'name' => $this->getName(),
             'title' => $this->getTitle(),
             'description' => $this->getDescription(),
-            'content_type_name' => $this->getContentTypeName(),
-            'is_folder' => $this->getIsFolder(),
-            'is_active' => $this->getIsActive()
+            'contentTypeName' => $this->getContentTypeName(),
+            'isFolder' => $this->getIsFolder(),
+            'isActive' => $this->getIsActive()
         ];
     }
 
@@ -179,7 +179,7 @@ class Category
      */
     public function setContentTypeName($contentTypeName)
     {
-        $this->content_type_name = $contentTypeName;
+        $this->contentTypeName = $contentTypeName;
         return $this;
     }
 
@@ -190,7 +190,7 @@ class Category
      */
     public function getContentTypeName()
     {
-        return $this->content_type_name;
+        return $this->contentTypeName;
     }
 
     /**
@@ -201,7 +201,7 @@ class Category
      */
     public function setIsFolder($isFolder)
     {
-        $this->is_folder = $isFolder;
+        $this->isFolder = $isFolder;
         return $this;
     }
 
@@ -212,7 +212,7 @@ class Category
      */
     public function getIsFolder()
     {
-        return $this->is_folder;
+        return $this->isFolder;
     }
 
     /**
@@ -223,7 +223,7 @@ class Category
      */
     public function setIsActive($isActive)
     {
-        $this->is_active = $isActive;
+        $this->isActive = $isActive;
         return $this;
     }
 
@@ -234,7 +234,7 @@ class Category
      */
     public function getIsActive()
     {
-        return $this->is_active;
+        return $this->isActive;
     }
 
     /**

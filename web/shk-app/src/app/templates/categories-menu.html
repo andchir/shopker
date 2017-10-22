@@ -11,7 +11,7 @@
             <button type="button" class="btn btn-sm btn-secondary" ngbTooltip="Add new category" (click)="openModalCategory()">
                 <i class="icon-plus"></i>
             </button>
-            <button type="button" class="btn btn-sm btn-secondary" ngbTooltip="Edit current category" (click)="openModalCategory(currentCategory.id)" [hidden]="currentCategory.id == 0">
+            <button type="button" class="btn btn-sm btn-secondary" ngbTooltip="Edit current category" (click)="openModalCategory(currentCategory.id)">
                 <i class="icon-pencil"></i>
             </button>
             <button type="button" class="btn btn-sm btn-secondary" ngbTooltip="Copy category" (click)="copyCategory()" [hidden]="currentCategory.id == 0">

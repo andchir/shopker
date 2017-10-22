@@ -25,14 +25,14 @@ export class ProductModalContent extends ModalContentAbstractComponent {
     model: {[key: string]: any} = {};
 
     formFields = {
-        parent_id: {
+        parentId: {
             value: 0,
             validators: [Validators.required],
             messages: {
                 required: 'Category is required.'
             }
         },
-        is_active: {
+        isActive: {
             value: true,
             validators: [],
             messages: {}
@@ -51,13 +51,13 @@ export class ProductModalContent extends ModalContentAbstractComponent {
         super(fb, dataService, systemNameService, activeModal, tooltipConfig);
 
         this.model.id = 0;
-        this.model.parent_id = 0;
+        this.model.parentId = 0;
     }
 
     /** On initialize */
     ngOnInit(): void {
 
-        this.model.parent_id = this.category.id;
+        this.model.parentId = this.category.id;
         this.dataService.setRequestUrl('admin/products/' + this.category.id);
 
         this.buildForm();
@@ -71,7 +71,7 @@ export class ProductModalContent extends ModalContentAbstractComponent {
     }
 
     getSystemFieldName(): string {
-        const index = _.findIndex(this.currentContentType.fields, {input_type: 'system_name'});
+        const index = _.findIndex(this.currentContentType.fields, {inputType: 'system_name'});
         return index > -1 ? this.currentContentType.fields[index].name : 'name';
     }
 
@@ -86,11 +86,11 @@ export class ProductModalContent extends ModalContentAbstractComponent {
     }
 
     getContentType(): Promise<any> {
-        if(!this.category.content_type_name){
-            return;
+        if(!this.category.contentTypeName){
+            return Promise.reject('Content type name not found.');
         }
         this.loading = true;
-        return this.contentTypesService.getItemByName(this.category.content_type_name)
+        return this.contentTypesService.getItemByName(this.category.contentTypeName)
             .then((res) => {
                 if(res.success){
                     this.currentContentType = res.data as ContentType;
@@ -112,7 +112,7 @@ export class ProductModalContent extends ModalContentAbstractComponent {
         let newKeys = _.map(this.currentContentType.fields, function(field){
             return field.name;
         });
-        newKeys.push('parent_id', 'is_active');
+        newKeys.push('parentId', 'isActive');
 
         //Remove keys
         for (let key in this.form.controls) {
@@ -127,7 +127,7 @@ export class ProductModalContent extends ModalContentAbstractComponent {
 
     /** On change content type */
     onChangeContentType(): void {
-        const parentId = parseInt(String(this.model.parent_id));
+        const parentId = parseInt(String(this.model.parentId));
         let index = _.findIndex(this.categories, {id: parentId});
         if (index == -1) {
             return;

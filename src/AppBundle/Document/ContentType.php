@@ -48,7 +48,7 @@ class ContentType
     /**
      * @MongoDB\Field(type="boolean")
      */
-    protected $is_active;
+    protected $isActive;
 
     /**
      * @MongoDB\ReferenceMany(targetDocument="Category", mappedBy="contentType")
@@ -205,7 +205,7 @@ class ContentType
      */
     public function setIsActive($isActive)
     {
-        $this->is_active = $isActive;
+        $this->isActive = $isActive;
         return $this;
     }
 
@@ -216,7 +216,7 @@ class ContentType
      */
     public function getIsActive()
     {
-        return $this->is_active;
+        return $this->isActive;
     }
 
     /**
@@ -231,7 +231,7 @@ class ContentType
             'name' => $this->getName(),
             'description' => $this->getDescription(),
             'collection' => $this->getCollection(),
-            'is_active' => $this->getIsActive()
+            'isActive' => $this->getIsActive()
         ];
         if($full){
             $output = array_merge($output, [

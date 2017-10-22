@@ -1396,14 +1396,20 @@ var ContentTypesComponent = (function (_super) {
         //TODO: get from settings
         _this.tableFields = [
             {
-                name: 'name',
-                title: 'Системное имя',
+                name: 'id',
+                title: 'ID',
                 output_type: 'text',
                 output_properties: {}
             },
             {
                 name: 'title',
                 title: 'Название',
+                output_type: 'text',
+                output_properties: {}
+            },
+            {
+                name: 'name',
+                title: 'Системное имя',
                 output_type: 'text',
                 output_properties: {}
             },
@@ -1602,14 +1608,20 @@ var FieldTypesComponent = (function (_super) {
         _this.title = 'Field types';
         _this.tableFields = [
             {
-                name: 'name',
-                title: 'Системное имя',
+                name: 'id',
+                title: 'ID',
                 output_type: 'text',
                 output_properties: {}
             },
             {
                 name: 'title',
                 title: 'Название',
+                output_type: 'text',
+                output_properties: {}
+            },
+            {
+                name: 'name',
+                title: 'Системное имя',
                 output_type: 'text',
                 output_properties: {}
             },
@@ -2202,23 +2214,66 @@ var PageTableAbstractComponent = (function () {
             if (result == 'accept') {
                 _this.deleteItem(itemId);
             }
-        }, function (reason) {
         });
+    };
+    PageTableAbstractComponent.prototype.confirmAction = function (message) {
+        this.modalRef = this.modalService.open(__WEBPACK_IMPORTED_MODULE_3__app_component__["c" /* ConfirmModalContent */]);
+        this.modalRef.componentInstance.modalTitle = 'Confirm';
+        this.modalRef.componentInstance.modalContent = message;
+        return this.modalRef.result;
+    };
+    PageTableAbstractComponent.prototype.blockSelected = function () {
+        if (this.selectedIds.length === 0) {
+            this.showAlert('Nothing is selected.');
+            return;
+        }
+        console.log('blockSelected', this.selectedIds);
+    };
+    PageTableAbstractComponent.prototype.deleteSelected = function () {
+        var _this = this;
+        if (this.selectedIds.length === 0) {
+            this.showAlert('Nothing is selected.');
+            return;
+        }
+        this.confirmAction('Are you sure you want to delete all selected items?')
+            .then(function (result) {
+            if (result == 'accept') {
+                _this.dataService.deleteByArray(_this.selectedIds)
+                    .then(function (res) {
+                    if (res.success) {
+                        _this.getList();
+                    }
+                    else {
+                        if (res.msg) {
+                            _this.showAlert(res.msg);
+                        }
+                    }
+                });
+            }
+        });
+    };
+    PageTableAbstractComponent.prototype.showAlert = function (message) {
+        this.modalRef = this.modalService.open(__WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* AlertModalContent */]);
+        this.modalRef.componentInstance.modalContent = message;
+        this.modalRef.componentInstance.modalTitle = 'Error';
+        this.modalRef.componentInstance.messageType = 'error';
     };
     PageTableAbstractComponent.prototype.deleteItem = function (itemId) {
         var _this = this;
-        this.dataService.deleteItem(itemId)
-            .then(function (res) {
-            if (res.success) {
-                _this.getList();
-            }
-            else {
-                if (res.msg) {
-                    _this.modalRef = _this.modalService.open(__WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* AlertModalContent */]);
-                    _this.modalRef.componentInstance.modalContent = res.msg;
-                    _this.modalRef.componentInstance.modalTitle = 'Error';
-                    _this.modalRef.componentInstance.messageType = 'error';
-                }
+        this.confirmAction('Are you sure you want to remove this item?')
+            .then(function (result) {
+            if (result == 'accept') {
+                _this.dataService.deleteItem(itemId)
+                    .then(function (res) {
+                    if (res.success) {
+                        _this.getList();
+                    }
+                    else {
+                        if (res.msg) {
+                            _this.showAlert(res.msg);
+                        }
+                    }
+                });
             }
         });
     };
@@ -2231,7 +2286,7 @@ var PageTableAbstractComponent = (function () {
                 this.modalOpen(actionValue[1], true);
                 break;
             case 'delete':
-                this.deleteItemConfirm(actionValue[1]);
+                this.deleteItem(actionValue[1]);
                 break;
             case 'changeQuery':
                 this.getList();
@@ -3072,6 +3127,16 @@ var DataService = (function () {
             .then(this.extractData)
             .catch(this.handleError);
     };
+    DataService.prototype.deleteByArray = function (idsArray) {
+        var url = this.getRequestUrl() + '/batch';
+        return this.http.delete(url, {
+            headers: this.headers,
+            body: { ids: idsArray }
+        })
+            .toPromise()
+            .then(this.extractData)
+            .catch(this.handleError);
+    };
     DataService.prototype.create = function (item) {
         return this.http
             .post(this.getRequestUrl(), JSON.stringify(item), { headers: this.headers })
@@ -3363,8 +3428,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var TableComponent = (function () {
     function TableComponent(router) {
         this.router = router;
-        this.actionRequest = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
         this.selectedIds = [];
+        this.actionRequest = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
     }
     TableComponent.prototype.ngOnInit = function () {
         this.queryOptions.sort_by = this.tableFields.length > 0
@@ -3381,12 +3446,14 @@ var TableComponent = (function () {
         this.actionRequest.emit(['changeQuery', this.queryOptions]);
     };
     TableComponent.prototype.selectAll = function (event) {
-        this.selectedIds = [];
         if (event.target.checked) {
             for (var _i = 0, _a = this.items; _i < _a.length; _i++) {
                 var item = _a[_i];
                 this.selectedIds.push(item.id);
             }
+        }
+        else {
+            this.selectedIds.splice(0);
         }
     };
     TableComponent.prototype.setSelected = function (event, itemId) {
@@ -3436,6 +3503,10 @@ __decorate([
     __metadata("design:type", Boolean)
 ], TableComponent.prototype, "loading", void 0);
 __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+    __metadata("design:type", Array)
+], TableComponent.prototype, "selectedIds", void 0);
+__decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(),
     __metadata("design:type", Object)
 ], TableComponent.prototype, "actionRequest", void 0);
@@ -3462,21 +3533,21 @@ module.exports = "<div>\n\n    <div class=\"card-navbar\">\n        <div class=\
 /***/ "../../../../../src/app/templates/catalog-category.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"mb-3\">\n    <div class=\"float-right\">\n\n        <div ngbDropdown class=\"d-inline-block mr-1\">\n            <button class=\"btn btn-info\" ngbDropdownToggle>\n                Массовые дейсвия\n            </button>\n            <div ngbDropdownMenu>\n                <button class=\"dropdown-item\">Отключить / включить</button>\n                <button class=\"dropdown-item\">Удалить</button>\n            </div>\n        </div>\n\n        <button type=\"button\" class=\"btn btn-success d-inline-block btn-wide\" (click)=\"modalOpen()\">\n            <i class=\"icon-plus\"></i>\n            Add\n        </button>\n\n    </div>\n    <div class=\"float-left\">\n\n        <categories-menu (changeRequest)=\"openCategory($event)\"></categories-menu>\n\n    </div>\n    <div class=\"clearfix\"></div>\n</div>\n\n<cmp-table [items]=\"items\" [collectionSize]=\"collectionSize\" [queryOptions]=\"queryOptions\" [tableFields]=\"tableFields\" [(loading)]=\"loading\" (actionRequest)=\"actionRequest($event)\"></cmp-table>\n"
+module.exports = "<div class=\"mb-3\">\n    <div class=\"float-right\">\n\n        <div ngbDropdown class=\"d-inline-block mr-1\">\n            <button class=\"btn btn-info\" ngbDropdownToggle>\n                Массовые дейсвия\n            </button>\n            <div ngbDropdownMenu>\n                <button class=\"dropdown-item\" (click)=\"blockSelected()\">Отключить / включить</button>\n                <button class=\"dropdown-item\" (click)=\"deleteSelected()\">Удалить</button>\n            </div>\n        </div>\n\n        <button type=\"button\" class=\"btn btn-success d-inline-block btn-wide\" (click)=\"modalOpen()\">\n            <i class=\"icon-plus\"></i>\n            Add\n        </button>\n\n    </div>\n    <div class=\"float-left\">\n\n        <categories-menu (changeRequest)=\"openCategory($event)\"></categories-menu>\n\n    </div>\n    <div class=\"clearfix\"></div>\n</div>\n\n<cmp-table [items]=\"items\" [(selectedIds)]=\"selectedIds\" [collectionSize]=\"collectionSize\" [queryOptions]=\"queryOptions\" [tableFields]=\"tableFields\" [(loading)]=\"loading\" (actionRequest)=\"actionRequest($event)\"></cmp-table>\n"
 
 /***/ }),
 
 /***/ "../../../../../src/app/templates/catalog-content_types.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"mb-3\">\n    <div class=\"float-right\">\n\n        <div ngbDropdown class=\"d-inline-block mr-1\">\n            <button class=\"btn btn-info\" ngbDropdownToggle>\n                Массовые дейсвия\n            </button>\n            <div ngbDropdownMenu>\n                <button class=\"dropdown-item\">Отключить / включить</button>\n                <button class=\"dropdown-item\">Удалить</button>\n            </div>\n        </div>\n\n        <button type=\"button\" class=\"btn btn-success d-inline-block btn-wide\" (click)=\"modalOpen()\">\n            <i class=\"icon-plus\"></i>\n            Add\n        </button>\n\n    </div>\n    <div class=\"float-left\">\n        <a class=\"btn btn-outline-secondary\" [routerLink]=\"['/catalog']\">\n            <i class=\"icon-arrow-left\"></i>\n            Каталог\n        </a>\n    </div>\n    <div class=\"clearfix\"></div>\n</div>\n\n<cmp-table [items]=\"items\" [collectionSize]=\"collectionSize\" [queryOptions]=\"queryOptions\" [tableFields]=\"tableFields\" [(loading)]=\"loading\" (actionRequest)=\"actionRequest($event)\"></cmp-table>\n"
+module.exports = "<div class=\"mb-3\">\n    <div class=\"float-right\">\n\n        <div ngbDropdown class=\"d-inline-block mr-1\">\n            <button class=\"btn btn-info\" ngbDropdownToggle>\n                Массовые дейсвия\n            </button>\n            <div ngbDropdownMenu>\n                <button class=\"dropdown-item\" (click)=\"blockSelected()\">Отключить / включить</button>\n                <button class=\"dropdown-item\" (click)=\"deleteSelected()\">Удалить</button>\n            </div>\n        </div>\n\n        <button type=\"button\" class=\"btn btn-success d-inline-block btn-wide\" (click)=\"modalOpen()\">\n            <i class=\"icon-plus\"></i>\n            Add\n        </button>\n\n    </div>\n    <div class=\"float-left\">\n        <a class=\"btn btn-outline-secondary\" [routerLink]=\"['/catalog']\">\n            <i class=\"icon-arrow-left\"></i>\n            Каталог\n        </a>\n    </div>\n    <div class=\"clearfix\"></div>\n</div>\n\n<cmp-table [items]=\"items\" [(selectedIds)]=\"selectedIds\" [collectionSize]=\"collectionSize\" [queryOptions]=\"queryOptions\" [tableFields]=\"tableFields\" [(loading)]=\"loading\" (actionRequest)=\"actionRequest($event)\"></cmp-table>\n"
 
 /***/ }),
 
 /***/ "../../../../../src/app/templates/catalog-field_types.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"mb-3\">\n    <div class=\"float-right\">\n\n        <div ngbDropdown class=\"d-inline-block mr-1\">\n            <button class=\"btn btn-info\" ngbDropdownToggle>\n                Массовые дейсвия\n            </button>\n            <div ngbDropdownMenu>\n                <button class=\"dropdown-item\">Отключить / включить</button>\n                <button class=\"dropdown-item\">Удалить</button>\n            </div>\n        </div>\n\n        <button type=\"button\" class=\"btn btn-success d-inline-block btn-wide\" (click)=\"modalOpen()\">\n            <i class=\"icon-plus\"></i>\n            Add\n        </button>\n\n    </div>\n\n    <div class=\"float-left\">\n        <a class=\"btn btn-outline-secondary\" [routerLink]=\"['/catalog']\">\n            <i class=\"icon-arrow-left\"></i>\n            Каталог\n        </a>\n    </div>\n    <div class=\"clearfix\"></div>\n</div>\n\n<cmp-table [items]=\"items\" [collectionSize]=\"collectionSize\" [queryOptions]=\"queryOptions\" [tableFields]=\"tableFields\" [(loading)]=\"loading\" (actionRequest)=\"actionRequest($event)\"></cmp-table>\n"
+module.exports = "<div class=\"mb-3\">\n    <div class=\"float-right\">\n\n        <div ngbDropdown class=\"d-inline-block mr-1\">\n            <button class=\"btn btn-info\" ngbDropdownToggle>\n                Массовые дейсвия\n            </button>\n            <div ngbDropdownMenu>\n                <button class=\"dropdown-item\" (click)=\"blockSelected()\">Отключить / включить</button>\n                <button class=\"dropdown-item\" (click)=\"deleteSelected()\">Удалить</button>\n            </div>\n        </div>\n\n        <button type=\"button\" class=\"btn btn-success d-inline-block btn-wide\" (click)=\"modalOpen()\">\n            <i class=\"icon-plus\"></i>\n            Add\n        </button>\n\n    </div>\n\n    <div class=\"float-left\">\n        <a class=\"btn btn-outline-secondary\" [routerLink]=\"['/catalog']\">\n            <i class=\"icon-arrow-left\"></i>\n            Каталог\n        </a>\n    </div>\n    <div class=\"clearfix\"></div>\n</div>\n\n<cmp-table [items]=\"items\" [(selectedIds)]=\"selectedIds\" [collectionSize]=\"collectionSize\" [queryOptions]=\"queryOptions\" [tableFields]=\"tableFields\" [(loading)]=\"loading\" (actionRequest)=\"actionRequest($event)\"></cmp-table>\n"
 
 /***/ }),
 

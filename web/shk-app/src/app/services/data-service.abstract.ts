@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
 import { Http, Response, URLSearchParams } from '@angular/http';
+import { HttpParams } from "@angular/common/http";
 import { Headers, RequestOptions } from '@angular/http';
 import { QueryOptions } from '../models/query-options';
 
@@ -65,6 +65,17 @@ export abstract class DataService {
             .catch(this.handleError);
     }
 
+    deleteByArray(idsArray: number[]): Promise<any> {
+        const url = this.getRequestUrl() + '/batch';
+        return this.http.delete(url, {
+                headers: this.headers,
+                body: {ids: idsArray}
+            })
+            .toPromise()
+            .then(this.extractData)
+            .catch(this.handleError);
+    }
+
     create(item: any): Promise<any> {
         return this.http
             .post(this.getRequestUrl(), JSON.stringify(item), {headers: this.headers})
@@ -102,7 +113,7 @@ export abstract class DataService {
         return output;
     }
 
-    handleError (error: Response | any) {
+    handleError(error: Response | any) {
         let errMsg: string;
         if (error instanceof Response) {
             const body = error.json() || '';

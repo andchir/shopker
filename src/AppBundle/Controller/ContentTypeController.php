@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Document\ContentType;
 use AppBundle\Document\Collection;
@@ -140,6 +141,47 @@ class ContentTypeController extends StorageControllerAbstract
         return new JsonResponse([
             'success' => true,
             'data' => $fieldType->toArray(true)
+        ]);
+    }
+
+    /**
+     * @Route("/batch")
+     * @Method({"DELETE"})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function deleteBatch(Request $request)
+    {
+        $data = $request->getContent()
+            ? json_decode($request->getContent(), true)
+            : [];
+
+        if(empty($data['ids'])){
+            return new JsonResponse([
+                'success' => true,
+                'msg' => 'Bad data.'
+            ]);
+        }
+
+        $repository = $this->getRepository();
+
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $qb = $dm->createQueryBuilder($repository->getClassName())
+            ->field('_id')->in($data['ids']);
+
+        $contentTypes = $qb->getQuery()->execute();
+
+        foreach ($contentTypes as $contentType) {
+
+            // TODO: delete cascade
+
+            //$dm->remove($contentType);
+        }
+        $dm->flush();
+
+        return new JsonResponse([
+            'success' => true
         ]);
     }
 

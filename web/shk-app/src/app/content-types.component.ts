@@ -487,14 +487,20 @@ export class ContentTypesComponent extends PageTableAbstractComponent {
     //TODO: get from settings
     tableFields = [
         {
-            name: 'name',
-            title: 'Системное имя',
+            name: 'id',
+            title: 'ID',
             output_type: 'text',
             output_properties: {}
         },
         {
             name: 'title',
             title: 'Название',
+            output_type: 'text',
+            output_properties: {}
+        },
+        {
+            name: 'name',
+            title: 'Системное имя',
             output_type: 'text',
             output_properties: {}
         },

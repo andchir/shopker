@@ -6,8 +6,8 @@
                 Массовые дейсвия
             </button>
             <div ngbDropdownMenu>
-                <button class="dropdown-item">Отключить / включить</button>
-                <button class="dropdown-item">Удалить</button>
+                <button class="dropdown-item" (click)="blockSelected()">Отключить / включить</button>
+                <button class="dropdown-item" (click)="deleteSelected()">Удалить</button>
             </div>
         </div>
 
@@ -26,4 +26,4 @@
     <div class="clearfix"></div>
 </div>
 
-<cmp-table [items]="items" [collectionSize]="collectionSize" [queryOptions]="queryOptions" [tableFields]="tableFields" [(loading)]="loading" (actionRequest)="actionRequest($event)"></cmp-table>
+<cmp-table [items]="items" [(selectedIds)]="selectedIds" [collectionSize]="collectionSize" [queryOptions]="queryOptions" [tableFields]="tableFields" [(loading)]="loading" (actionRequest)="actionRequest($event)"></cmp-table>

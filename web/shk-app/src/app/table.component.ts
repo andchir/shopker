@@ -1,5 +1,5 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {Router, ActivatedRoute, Params} from '@angular/router';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 import { QueryOptions } from './models/query-options';
 import * as _ from "lodash";
 
@@ -14,10 +14,12 @@ export class TableComponent implements OnInit {
     @Input() currentPage: number;
     @Input() queryOptions: QueryOptions;
     @Input() loading: boolean;
+    @Input() selectedIds: number[] = [];
     @Output() actionRequest = new EventEmitter();
-    selectedIds: string[] = [];
 
-    constructor(public router: Router) {
+    constructor(
+        public router: Router
+    ) {
     }
 
     ngOnInit(): void {
@@ -36,15 +38,16 @@ export class TableComponent implements OnInit {
     }
 
     selectAll(event): void {
-        this.selectedIds = [];
         if (event.target.checked) {
             for (let item of this.items) {
                 this.selectedIds.push(item.id);
             }
+        } else {
+            this.selectedIds.splice(0);
         }
     }
 
-    setSelected(event, itemId: string): void {
+    setSelected(event, itemId: number): void {
         const index = this.selectedIds.indexOf(itemId);
         if (event.target.checked) {
             if (index == -1) {
@@ -63,7 +66,7 @@ export class TableComponent implements OnInit {
         this.actionRequest.emit([actionName, actionValue]);
     }
 
-    getIsSelected(itemId: string): boolean {
+    getIsSelected(itemId: number): boolean {
         return this.selectedIds.lastIndexOf(itemId) > -1;
     }
 

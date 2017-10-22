@@ -54,8 +54,8 @@ abstract class StorageControllerAbstract extends BaseController
     {
         $repository = $this->getRepository();
 
-        $fieldType = $repository->find($itemId);
-        if (!$fieldType) {
+        $item = $repository->find($itemId);
+        if (!$item) {
             return new JsonResponse([
                 'success' => false,
                 'msg' => 'Item not found.'
@@ -64,7 +64,44 @@ abstract class StorageControllerAbstract extends BaseController
 
         return new JsonResponse([
             'success' => true,
-            'data' => $fieldType->toArray(true)
+            'data' => $item->toArray(true)
+        ]);
+    }
+
+    /**
+     * @Route("/batch")
+     * @Method({"DELETE"})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function deleteBatch(Request $request)
+    {
+        $data = $request->getContent()
+            ? json_decode($request->getContent(), true)
+            : [];
+
+        if(empty($data['ids'])){
+            return new JsonResponse([
+                'success' => true,
+                'msg' => 'Bad data.'
+            ]);
+        }
+
+        $repository = $this->getRepository();
+
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $qb = $dm->createQueryBuilder($repository->getClassName())
+            ->field('_id')->in($data['ids']);
+
+        $items = $qb->getQuery()->execute();
+        foreach ($items as $item) {
+            $dm->remove($item);
+        }
+        $dm->flush();
+
+        return new JsonResponse([
+            'success' => true
         ]);
     }
 

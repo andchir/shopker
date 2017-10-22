@@ -254,6 +254,41 @@ class ProductController extends BaseController
     }
 
     /**
+     * @Route("/{categoryId}/batch")
+     * @Method({"DELETE"})
+     * @ParamConverter("category", class="AppBundle:Category", options={"id" = "categoryId"})
+     * @param Request $request
+     * @param Category $category
+     * @return JsonResponse
+     */
+    public function deleteBatch(Request $request, Category $category = null)
+    {
+        if (!$category) {
+            return new JsonResponse([
+                'success' => false,
+                'msg' => 'Category not found.'
+            ]);
+        }
+
+        $data = $request->getContent()
+            ? json_decode($request->getContent(), true)
+            : [];
+
+        if(empty($data['ids'])){
+            return new JsonResponse([
+                'success' => true,
+                'msg' => 'Bad data.'
+            ]);
+        }
+
+        var_dump($data['ids']);
+
+        return new JsonResponse([
+            'success' => true
+        ]);
+    }
+
+    /**
      * @Route("/{categoryId}/{itemId}")
      * @Method({"DELETE"})
      * @ParamConverter("category", class="AppBundle:Category", options={"id" = "categoryId"})

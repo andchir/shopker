@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { QueryOptions } from './models/query-options';
 import { AlertModalContent, ConfirmModalContent } from './app.component';
 
@@ -85,11 +85,18 @@ export abstract class ModalContentAbstractComponent implements OnInit {
             if(!this[modelName][key]){
                 this[modelName][key] = opts.value;
             }
-            controls[key] = new FormControl(this[modelName][key] || '', opts.validators);
+            controls[key] = new FormControl({
+                value: this[modelName][key] || '',
+                disabled: opts.disabled || false
+            }, opts.validators);
             this.formErrors[keyPrefix + key] = '';
             this.validationMessages[keyPrefix + key] = opts.messages;
         }
         return controls;
+    }
+
+    getControl(name: string): AbstractControl {
+        return this.form.controls['name'];
     }
 
     /** Callback on form value changed */
@@ -130,6 +137,11 @@ export abstract class ModalContentAbstractComponent implements OnInit {
     closeModal() {
         let reason = this.itemId ? 'edit' : 'create';
         this.activeModal.close({reason: reason, data: this.model});
+    }
+
+    close(e: MouseEvent) {
+        e.preventDefault();
+        this.activeModal.dismiss('canceled');
     }
 
     /** Submit form */

@@ -55,9 +55,17 @@ class CategoryController extends StorageControllerAbstract
     public function createUpdate($data, $itemId = '')
     {
         $previousParentId = 0;
-        if($itemId){
+        if($itemId === null || !is_numeric($itemId)){
+            $item = new Category();
+        } else {
             /** @var Category $item */
             $item = $this->getRepository()->find($itemId);
+            if(!$item && $data['name'] == 'root'){
+                $item = new Category();
+                $item
+                    ->setId(0)
+                    ->setIsFolder(true);
+            }
             if(!$item){
                 return [
                     'success' => false,
@@ -65,8 +73,6 @@ class CategoryController extends StorageControllerAbstract
                 ];
             }
             $previousParentId = $item->getParentId();
-        } else {
-            $item = new Category();
         }
 
         /** @var ContentType $contentType */

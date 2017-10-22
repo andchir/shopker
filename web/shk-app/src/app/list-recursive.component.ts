@@ -39,7 +39,7 @@ export class ListRecursiveComponent implements OnInit, OnChanges {
         let items = this.items;
         const parentId = this.parentId;
         this.inputItems.forEach(function (item) {
-            if (item.parentId === parentId) {
+            if (item.id !== item.parentId && item.parentId === parentId) {
                 items.push(item);
             }
         });

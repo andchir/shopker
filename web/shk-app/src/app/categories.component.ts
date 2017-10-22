@@ -26,12 +26,14 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent {
 
     @Input() categories: Category[] = [];
     @Input() currentCategory: Category;
-    model: Category = new Category(0, false, 0, '', '', '', '', true);
+    @Input() isRoot: boolean = false;
+    model: Category = new Category(null, false, 0, '', '', '', '', true);
     contentTypes: ContentType[] = [];
 
     formFields = {
         title: {
             value: '',
+            disabled: false,
             validators: [Validators.required],
             messages: {
                 required: 'Title is required.'
@@ -39,6 +41,7 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent {
         },
         name: {
             value: '',
+            disabled: false,
             validators: [Validators.required],
             messages: {
                 required: 'Name is required.'
@@ -46,16 +49,19 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent {
         },
         description: {
             value: '',
+            disabled: false,
             validators: [],
             messages: {}
         },
         parentId: {
             value: 0,
+            disabled: false,
             validators: [],
             messages: {}
         },
         contentTypeName: {
             value: '',
+            disabled: false,
             validators: [Validators.required],
             messages: {
                 required: 'Content type is required.'
@@ -63,17 +69,19 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent {
         },
         isActive: {
             value: false,
+            disabled: false,
             validators: [],
             messages: {}
         }
     };
 
-    constructor(public fb: FormBuilder,
-                public dataService: CategoriesService,
-                public systemNameService: SystemNameService,
-                public activeModal: NgbActiveModal,
-                public tooltipConfig: NgbTooltipConfig,
-                private contentTypesService: ContentTypesService
+    constructor(
+        public fb: FormBuilder,
+        public dataService: CategoriesService,
+        public systemNameService: SystemNameService,
+        public activeModal: NgbActiveModal,
+        public tooltipConfig: NgbTooltipConfig,
+        private contentTypesService: ContentTypesService
     ) {
         super(fb, dataService, systemNameService, activeModal, tooltipConfig);
     }
@@ -82,6 +90,14 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent {
     ngOnInit(): void {
         this.model.parentId = this.currentCategory.id;
         this.model.contentTypeName = this.currentCategory.contentTypeName;
+        if (this.isRoot) {
+            this.model.id = 0;
+            this.model.title = 'Корневая категория';
+            this.model.name = 'root';
+            this.formFields.title.disabled = true;
+            this.formFields.name.disabled = true;
+            this.formFields.isActive.disabled = true;
+        }
         ModalContentAbstractComponent.prototype.ngOnInit.call(this);
         this.getContentTypes();
     }
@@ -116,7 +132,7 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent {
             }
         };
 
-        if (this.model.id) {
+        if (this.model.id !== null) {
             this.dataService.update(this.model).then(callback.bind(this));
         } else {
             this.dataService.create(this.model).then(callback.bind(this));
@@ -202,7 +218,7 @@ export class CategoriesMenuComponent implements OnInit {
         if(this.categoryId > 0){
             for (let category of this.categories) {
                 if (category.id == this.categoryId) {
-                    this.currentCategory = category;
+                    this.currentCategory = _.clone(category);
                     this.changeRequest.emit(this.currentCategory);
                     break;
                 }
@@ -217,7 +233,7 @@ export class CategoriesMenuComponent implements OnInit {
         this.categoriesService.getList()
             .subscribe(
                 preparedData => {
-                    this.categories = preparedData.data;
+                    this.categories = _.clone(preparedData.data);
                     this.selectCurrent();
                 },
                 error => this.errorMessage = <any>error
@@ -229,13 +245,15 @@ export class CategoriesMenuComponent implements OnInit {
      * @param itemId
      * @param isItemCopy
      */
-    openModalCategory(itemId?: number, isItemCopy?: boolean): void {
+    openModalCategory(itemId?: number, isItemCopy: boolean = false): void {
+        const isRoot = itemId === 0;
         this.modalRef = this.modalService.open(CategoriesModalComponent, {size: 'lg'});
-        this.modalRef.componentInstance.modalTitle = itemId && !isItemCopy ? 'Edit category' : 'Add category';
+        this.modalRef.componentInstance.modalTitle = itemId !== undefined && !isItemCopy ? 'Edit category' : 'Add category';
         this.modalRef.componentInstance.itemId = itemId || 0;
         this.modalRef.componentInstance.isItemCopy = isItemCopy || false;
         this.modalRef.componentInstance.categories = this.categories;
         this.modalRef.componentInstance.currentCategory = this.currentCategory;
+        this.modalRef.componentInstance.isRoot = isRoot;
         this.modalRef.result.then((result) => {
             this.getCategories();
         }, (reason) => {

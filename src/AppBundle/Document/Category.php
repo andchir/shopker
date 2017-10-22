@@ -67,6 +67,18 @@ class Category
     }
 
     /**
+     * Set ID
+     *
+     * @param int $id
+     * @return self
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
      * Set title
      *
      * @param string $title

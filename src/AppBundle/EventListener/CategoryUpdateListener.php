@@ -28,6 +28,10 @@ class CategoryUpdateListener
         $category = $event->getCategory();
         $previousParentId = $event->getPreviousParentId();
 
+        if($category && $category->getName() === 'root'){
+            return $category;
+        }
+
         if(!empty($category)){
             $category = $this->isFolderUpdate($category->getId());
             if($category->getParentId()){

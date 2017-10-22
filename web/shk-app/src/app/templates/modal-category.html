@@ -11,7 +11,7 @@
 
     <div class="modal-body">
 
-        <div class="row form-group" [class.form-group-message]="formErrors.parentId">
+        <div class="row form-group" [class.form-group-message]="formErrors.parentId" *ngIf="!isRoot">
             <div class="col-md-5">
                 <label for="fieldContentType">Родительская папка</label>
             </div>
@@ -46,7 +46,7 @@
                 <div class="input-group">
                     <input type="text" class="form-control" name="name" formControlName="name" id="fieldName" [(ngModel)]="model.name">
                     <div class="input-group-btn">
-                        <button type="button" class="btn btn-secondary" ngbTooltip="Generate" (click)="generateName(model)">
+                        <button type="button" class="btn btn-secondary" ngbTooltip="Generate" (click)="generateName(model)" [disabled]="getControl('name').disabled">
                             <i class="icon-reload"></i>
                         </button>
                     </div>
@@ -109,7 +109,7 @@
         <button type="submit" class="btn btn-success btn-wide" [disabled]="submitted" (click)="save()">
             Save
         </button>
-        <button type="submit" class="btn btn-secondary btn-wide" (click)="activeModal.dismiss()">
+        <button type="button" class="btn btn-secondary btn-wide" (click)="close($event)">
             Cancel
         </button>
     </div>

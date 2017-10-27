@@ -217,20 +217,33 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
             this.fieldTypeProperties[type] = [];
             return;
         }
-        this.fieldTypeProperties[type] = _.clone(fieldType[type + 'Properties']);
-        let propNames = _.map(this.fieldTypeProperties[type], 'name');
-        let modelField = type + '_properties';
-        this.fieldModel[modelField] = _.pick(this.fieldModel[modelField], propNames);
-        for(let i in this.fieldTypeProperties[type]){
-            if(this.fieldTypeProperties[type].hasOwnProperty(i)){
-                let fldName = this.fieldTypeProperties[type][i].name;
-                if(typeof this.fieldModel[modelField][fldName] == 'undefined'){
-                    this.fieldModel[modelField][fldName] = this.fieldTypeProperties[type][i].default_value;
+
+        const modelPropertiesField = type + 'Properties';
+        const propNames = _.map(fieldType[type + 'Properties'], 'name');
+        this.fieldTypeProperties[type].splice(0);
+
+        fieldType[type + 'Properties'].forEach((v, i) => {
+            this.fieldTypeProperties[type].push(v);
+        });
+
+        for (let prop in this.fieldModel[modelPropertiesField]) {
+            if (this.fieldModel[modelPropertiesField].hasOwnProperty(prop)) {
+                if (propNames.indexOf(prop) === -1) {
+                    delete this.fieldModel[modelPropertiesField][prop];
                 }
             }
         }
-        if(type == 'input' && !this.fieldModel.outputType){
-            this.selectFieldTypeProperties('output', this.fieldModel['inputType']);
+
+        for (let i in this.fieldTypeProperties[type]) {
+            if (this.fieldTypeProperties[type].hasOwnProperty(i)) {
+                let fldName = this.fieldTypeProperties[type][i].name;
+                if (typeof this.fieldModel[modelPropertiesField][fldName] == 'undefined') {
+                    this.fieldModel[modelPropertiesField][fldName] = this.fieldTypeProperties[type][i].default_value;
+                }
+            }
+        }
+        if (type == 'input' && !this.fieldModel.outputType) {
+            this.selectFieldTypeProperties('output', this.fieldModel.inputType);
         }
     }
 

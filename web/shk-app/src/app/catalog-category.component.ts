@@ -23,10 +23,10 @@ export class CatalogCategoryComponent extends PageTableAbstractComponent {
     tableFields = [];
 
     constructor(
-        dataService: ProductsService,
-        activeModal: NgbActiveModal,
-        modalService: NgbModal,
-        titleService: Title,
+        public dataService: ProductsService,
+        public activeModal: NgbActiveModal,
+        public modalService: NgbModal,
+        public titleService: Title,
         private contentTypesService: ContentTypesService
     ) {
         super(dataService, activeModal, modalService, titleService);
@@ -71,13 +71,14 @@ export class CatalogCategoryComponent extends PageTableAbstractComponent {
 
     openCategory(category: Category): void {
         this.currentCategory = _.clone(category);
-        this.dataService.setRequestUrl('admin/products/' + this.currentCategory.id);
-        if (!this.currentCategory.id) {
+        if(!this.currentCategory.contentTypeName){
             this.items = [];
             this.tableFields = [];
             this.currentCategory.id = 0;
             return;
         }
+
+        this.dataService.setRequestUrl('admin/products/' + this.currentCategory.id);
         this.loading = true;
         this.titleService.setTitle(this.title + ' / ' + this.currentCategory.title);
         this.getContentType()
@@ -87,6 +88,10 @@ export class CatalogCategoryComponent extends PageTableAbstractComponent {
                     this.currentContentType = res.data as ContentType;
                     this.updateTableConfig();
                     this.getList();
+                } else {
+                    this.items = [];
+                    this.tableFields = [];
+                    this.currentCategory.id = 0;
                 }
             });
     }

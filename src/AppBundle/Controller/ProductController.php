@@ -92,7 +92,7 @@ class ProductController extends BaseController
      * @param int $itemId
      * @return array
      */
-    public function validateData($data, Category $category = null, $itemId = 0)
+    public function validateData($data, Category $category = null, $itemId = null)
     {
         if(!$category){
             return [
@@ -165,7 +165,7 @@ class ProductController extends BaseController
      * @param int $itemId
      * @return array
      */
-    public function createUpdate($data, Category $category = null, $itemId = 0)
+    public function createUpdate($data, Category $category = null, $itemId = null)
     {
         $parentId = !empty($data['parentId']) ? $data['parentId'] : 0;
         $itemId = intval($itemId);
@@ -445,7 +445,7 @@ class ProductController extends BaseController
      * @param int $itemId
      * @return mixed
      */
-    public function checkNameExists($fieldName, $name, $collectionName, $categoryId, $itemId = 0)
+    public function checkNameExists($fieldName, $name, $collectionName, $categoryId, $itemId = null)
     {
         $collection = $this->getCollection($collectionName);
         $itemId = intval($itemId);

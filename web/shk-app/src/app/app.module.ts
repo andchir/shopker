@@ -22,8 +22,9 @@ import { TableComponent } from './table.component';
 import { InputFieldRenderComponent } from './render-input-field';
 import { OutputFieldComponent } from './render-output-field';
 
-import { FilterFieldByGroup } from "./pipes/filter-field-by-group.pipe";
-import { OrderByPipe } from "./pipes/orderby.pipe";
+import { FilterFieldByGroup } from './pipes/filter-field-by-group.pipe';
+import { OrderByPipe } from './pipes/orderby.pipe';
+import { FilterArrayPipe } from './pipes/filter-array-pipe';
 
 import { ProductsService } from './services/products.service';
 import { ContentTypesService } from './services/content_types.service';
@@ -61,6 +62,7 @@ import { AppRoutingModule }     from './app-routing.module';
 
         FilterFieldByGroup,
         OrderByPipe,
+        FilterArrayPipe,
 
         AlertModalContent,
         ConfirmModalContent,

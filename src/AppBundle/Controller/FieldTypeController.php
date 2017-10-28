@@ -19,7 +19,7 @@ class FieldTypeController extends StorageControllerAbstract
      * @param int $itemId
      * @return array
      */
-    public function validateData($data, $itemId = 0)
+    public function validateData($data, $itemId = null)
     {
         if( empty($data) ){
             return ['success' => false, 'msg' => 'Data is empty.'];
@@ -42,7 +42,7 @@ class FieldTypeController extends StorageControllerAbstract
      * @param int $itemId
      * @return array
      */
-    public function createUpdate($data, $itemId = 0){
+    public function createUpdate($data, $itemId = null){
 
         if(empty($data['inputProperties'])){
             $data['inputProperties'] = [];

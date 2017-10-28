@@ -13,6 +13,7 @@ import * as _ from "lodash";
 import { SystemNameService } from './services/system-name.service';
 import { CategoriesService } from './services/categories.service'
 import { ContentTypesService } from './services/content_types.service';
+import { Observable } from 'rxjs/Observable';
 
 /**
  * @class CategoriesModalComponent
@@ -88,6 +89,13 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent {
 
     /** On initialize */
     ngOnInit(): void {
+
+        // Filter root category
+        const rootIndex = _.findIndex(this.categories, {name: 'root'});
+        if (rootIndex > -1) {
+            this.categories.splice(rootIndex, 1);
+        }
+
         this.model.parentId = this.currentCategory.id;
         this.model.contentTypeName = this.currentCategory.contentTypeName;
         if (this.isRoot) {
@@ -173,7 +181,7 @@ export class CategoriesListComponent extends ListRecursiveComponent {
 export class CategoriesMenuComponent implements OnInit {
     @Input() rootTitle: string = 'Категории';
     @Output() changeRequest = new EventEmitter<Category>();
-    currentCategory: Category = new Category(0, false, 0, 'root', this.rootTitle, '', '', true);
+    currentCategory: Category = new Category(null, false, 0, 'root', this.rootTitle, '', '', true);
     categories: Category[] = [];
     errorMessage: string = '';
     modalRef: NgbModalRef;
@@ -189,25 +197,23 @@ export class CategoriesMenuComponent implements OnInit {
 
     /** On initialize component */
     ngOnInit(): void {
-        this.getCategories();
-
-        let categoryId = this.route.snapshot.params['categoryId']
-            ? parseInt(this.route.snapshot.params['categoryId'])
-            : 0;
-
-        this.route.paramMap
+        this.getCategoriesRequest()
             .subscribe(
-                params => {
-                    this.categoryId = params.get('categoryId')
-                        ? parseInt(params.get('categoryId'))
-                        : 0;
-                    this.selectCurrent();
-                }
-            );
+                preparedData => {
+                    this.categories = _.clone(preparedData.data);
 
-        if (!categoryId) {
-            this.openRootCategory();
-        }
+                    this.route.paramMap
+                        .subscribe(
+                            params => {
+                                this.categoryId = params.get('categoryId')
+                                    ? parseInt(params.get('categoryId'))
+                                    : 0;
+                                this.selectCurrent();
+                            }
+                        );
+                },
+                error => this.errorMessage = <any>error
+            );
     }
 
     /** Select current category */
@@ -215,22 +221,23 @@ export class CategoriesMenuComponent implements OnInit {
         if (this.currentCategory.id === this.categoryId) {
             return;
         }
-        if(this.categoryId > 0){
-            for (let category of this.categories) {
-                if (category.id == this.categoryId) {
-                    this.currentCategory = _.clone(category);
-                    this.changeRequest.emit(this.currentCategory);
-                    break;
-                }
-            }
+        const index = _.findIndex(this.categories, {id: this.categoryId});
+        if(index > -1){
+            this.currentCategory = _.clone(this.categories[index]);
+            this.changeRequest.emit(this.currentCategory);
         } else {
             this.openRootCategory();
         }
     }
 
     /** Get categories */
+    getCategoriesRequest(): Observable<any> {
+        return this.categoriesService.getList();
+    }
+
+    /** Get categories */
     getCategories(): void {
-        this.categoriesService.getList()
+        this.getCategoriesRequest()
             .subscribe(
                 preparedData => {
                     this.categories = _.clone(preparedData.data);
@@ -246,15 +253,18 @@ export class CategoriesMenuComponent implements OnInit {
      * @param isItemCopy
      */
     openModalCategory(itemId?: number, isItemCopy: boolean = false): void {
-        const isRoot = itemId === 0;
+        const isRoot = itemId === 0 || itemId === null;
+        const isEditMode = typeof itemId !== 'undefined' && !isItemCopy;
         this.modalRef = this.modalService.open(CategoriesModalComponent, {size: 'lg'});
-        this.modalRef.componentInstance.modalTitle = itemId !== undefined && !isItemCopy ? 'Edit category' : 'Add category';
+        this.modalRef.componentInstance.modalTitle = isEditMode ? 'Edit category' : 'Add category';
         this.modalRef.componentInstance.itemId = itemId || 0;
         this.modalRef.componentInstance.isItemCopy = isItemCopy || false;
-        this.modalRef.componentInstance.categories = this.categories;
+        this.modalRef.componentInstance.categories = _.cloneDeep(this.categories);
         this.modalRef.componentInstance.currentCategory = this.currentCategory;
         this.modalRef.componentInstance.isRoot = isRoot;
+        this.modalRef.componentInstance.isEditMode = isEditMode;
         this.modalRef.result.then((result) => {
+            this.currentCategory.id = null;// For update current category data
             this.getCategories();
         }, (reason) => {
 
@@ -312,7 +322,8 @@ export class CategoriesMenuComponent implements OnInit {
         this.categoriesService.deleteItem(itemId)
             .then((res) => {
                 if (res.success) {
-                    this.openRootCategory();
+                    this.categoryId = 0;
+                    this.selectCurrent();
                     this.getCategories();
                 } else {
                     if (res.msg) {
@@ -324,7 +335,7 @@ export class CategoriesMenuComponent implements OnInit {
 
     /** Open root category */
     openRootCategory(): void {
-        this.currentCategory = new Category(0, false, 0, 'root', this.rootTitle, '', '', true);
+        this.currentCategory = new Category(null, false, 0, 'root', this.rootTitle, '', '', true);
         this.changeRequest.emit(this.currentCategory);
     }
 

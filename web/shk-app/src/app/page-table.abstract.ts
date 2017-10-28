@@ -1,26 +1,27 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
-import { Title } from '@angular/platform-browser';
-import { NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
-import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { QueryOptions } from './models/query-options';
-import { AlertModalContent, ConfirmModalContent } from './app.component';
+import {Component, OnInit, Input, ViewChild, ElementRef} from '@angular/core';
+import {Title} from '@angular/platform-browser';
+import {NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
+import {FormGroup, FormControl, FormBuilder, Validators, AbstractControl} from '@angular/forms';
+import {QueryOptions} from './models/query-options';
+import {AlertModalContent, ConfirmModalContent} from './app.component';
 
-import { DataService } from './services/data-service.abstract';
-import { SystemNameService } from './services/system-name.service';
+import {DataService} from './services/data-service.abstract';
+import {SystemNameService} from './services/system-name.service';
 
 export abstract class ModalContentAbstractComponent implements OnInit {
-    @Input() modalTitle;
-    @Input() itemId;
-    @Input() isItemCopy;
+    @Input() modalTitle: string;
+    @Input() itemId: number | null;
+    @Input() isItemCopy: boolean;
+    @Input() isEditMode: boolean;
 
     submitted: boolean = false;
     loading: boolean = false;
     errorMessage: string;
     form: FormGroup;
-    formErrors: {[key: string]: string} = {};
-    validationMessages: {[key: string]: {[key: string]: string}} = {};
+    formErrors: { [key: string]: string } = {};
+    validationMessages: { [key: string]: { [key: string]: string } } = {};
     formFields = {};
-    model: {[key: string]: any} = {};
+    model: { [key: string]: any } = {};
 
     abstract save();
 
@@ -38,7 +39,7 @@ export abstract class ModalContentAbstractComponent implements OnInit {
 
     ngOnInit(): void {
         this.buildForm();
-        if(this.itemId){
+        if (this.isEditMode || this.isItemCopy) {
             this.getModelData();
         }
     }
@@ -52,7 +53,7 @@ export abstract class ModalContentAbstractComponent implements OnInit {
         this.dataService.getItem(this.itemId)
             .then(res => {
                 if (res.success) {
-                    if(this.isItemCopy){
+                    if (this.isItemCopy) {
                         res.data.id = '';
                         res.data[this.getSystemFieldName()] = '';
                     }
@@ -75,14 +76,14 @@ export abstract class ModalContentAbstractComponent implements OnInit {
     }
 
     /** Build controls */
-    buildControls(options: {}, modelName: string, keyPrefix: string = ''): {[s: string]: FormControl;} {
+    buildControls(options: {}, modelName: string, keyPrefix: string = ''): { [s: string]: FormControl; } {
         let controls = {};
         for (let key in options) {
-            if(!options.hasOwnProperty(key)){
+            if (!options.hasOwnProperty(key)) {
                 continue;
             }
             let opts = options[key];
-            if(!this[modelName][key]){
+            if (!this[modelName][key]) {
                 this[modelName][key] = opts.value;
             }
             controls[key] = new FormControl({
@@ -100,8 +101,10 @@ export abstract class ModalContentAbstractComponent implements OnInit {
     }
 
     /** Callback on form value changed */
-    onValueChanged(formName: string, keyPrefix: string = ''): void{
-        if (!this[formName]) { return; }
+    onValueChanged(formName: string, keyPrefix: string = ''): void {
+        if (!this[formName]) {
+            return;
+        }
         let data = this[formName].value;
 
         for (let fieldName in data) {
@@ -112,9 +115,9 @@ export abstract class ModalContentAbstractComponent implements OnInit {
             let control = this[formName].get(fieldName);
             if (control && (control.dirty || this[keyPrefix + 'submitted']) && !control.valid) {
                 for (let key in control.errors) {
-                    if(this.validationMessages[keyPrefix + fieldName][key]){
+                    if (this.validationMessages[keyPrefix + fieldName][key]) {
                         this.formErrors[keyPrefix + fieldName] += this.validationMessages[keyPrefix + fieldName][key] + ' ';
-                    }  else {
+                    } else {
                         this.formErrors[keyPrefix + fieldName] += 'Error. ';
                     }
                 }
@@ -173,12 +176,12 @@ export abstract class PageTableAbstractComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.setTitle( this.title );
+        this.setTitle(this.title);
         this.getList();
     }
 
-    public setTitle( newTitle: string ) {
-        this.titleService.setTitle( newTitle );
+    public setTitle(newTitle: string) {
+        this.titleService.setTitle(newTitle);
     }
 
     modalOpen(itemId?: number, isItemCopy: boolean = false): void {
@@ -192,19 +195,19 @@ export abstract class PageTableAbstractComponent implements OnInit {
     }
 
     setModalInputs(itemId?: number, isItemCopy: boolean = false): void {
-        this.modalRef.componentInstance.modalTitle = itemId && !isItemCopy
-            ? 'Edit'
-            : 'Add';
+        const isEditMode = typeof itemId !== 'undefined' && !isItemCopy;
+        this.modalRef.componentInstance.modalTitle = isEditMode ? 'Edit' : 'Add';
         this.modalRef.componentInstance.itemId = itemId || 0;
         this.modalRef.componentInstance.isItemCopy = isItemCopy || false;
+        this.modalRef.componentInstance.isEditMode = isEditMode;
     }
 
-    deleteItemConfirm(itemId: number): void{
+    deleteItemConfirm(itemId: number): void {
         this.modalRef = this.modalService.open(ConfirmModalContent);
         this.modalRef.componentInstance.modalTitle = 'Confirm';
         this.modalRef.componentInstance.modalContent = 'Are you sure you want to remove this item?';
         this.modalRef.result.then((result) => {
-            if( result == 'accept' ){
+            if (result == 'accept') {
                 this.deleteItem(itemId);
             }
         });
@@ -218,7 +221,7 @@ export abstract class PageTableAbstractComponent implements OnInit {
     }
 
     blockSelected() {
-        if(this.selectedIds.length === 0){
+        if (this.selectedIds.length === 0) {
             this.showAlert('Nothing is selected.');
             return;
         }
@@ -226,19 +229,19 @@ export abstract class PageTableAbstractComponent implements OnInit {
     }
 
     deleteSelected() {
-        if(this.selectedIds.length === 0){
+        if (this.selectedIds.length === 0) {
             this.showAlert('Nothing is selected.');
             return;
         }
         this.confirmAction('Are you sure you want to delete all selected items?')
             .then((result) => {
-                if( result == 'accept' ){
+                if (result == 'accept') {
                     this.dataService.deleteByArray(this.selectedIds)
                         .then((res) => {
-                            if(res.success){
+                            if (res.success) {
                                 this.getList();
                             } else {
-                                if(res.msg){
+                                if (res.msg) {
                                     this.showAlert(res.msg);
                                 }
                             }
@@ -254,16 +257,16 @@ export abstract class PageTableAbstractComponent implements OnInit {
         this.modalRef.componentInstance.messageType = 'error';
     }
 
-    deleteItem(itemId: number): void{
+    deleteItem(itemId: number): void {
         this.confirmAction('Are you sure you want to remove this item?')
             .then((result) => {
-                if( result == 'accept' ){
+                if (result == 'accept') {
                     this.dataService.deleteItem(itemId)
                         .then((res) => {
-                            if(res.success){
+                            if (res.success) {
                                 this.getList();
                             } else {
-                                if(res.msg){
+                                if (res.msg) {
                                     this.showAlert(res.msg);
                                 }
                             }
@@ -273,7 +276,7 @@ export abstract class PageTableAbstractComponent implements OnInit {
     }
 
     actionRequest(actionValue: [string, number]): void {
-        switch(actionValue[0]){
+        switch (actionValue[0]) {
             case 'edit':
                 this.modalOpen(actionValue[1]);
                 break;
@@ -299,7 +302,7 @@ export abstract class PageTableAbstractComponent implements OnInit {
                     this.errorMessage = preparedData.errorMsg;
                     this.loading = false;
                 },
-                error =>  this.errorMessage = <any>error
+                error => this.errorMessage = <any>error
             );
     }
 

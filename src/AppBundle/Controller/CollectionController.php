@@ -95,7 +95,7 @@ class CollectionController extends BaseController
      * @param string $itemId
      * @return array
      */
-    public function createUpdate($data, $itemId = '')
+    public function createUpdate($data, $itemId = null)
     {
         if( !$itemId ){
             $collection = new Collection();

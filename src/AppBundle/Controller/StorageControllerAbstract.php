@@ -16,7 +16,7 @@ abstract class StorageControllerAbstract extends BaseController
 {
     abstract protected function getRepository();
     abstract protected function createUpdate($data);
-    abstract protected function validateData($data, $itemId = 0);
+    abstract protected function validateData($data, $itemId = null);
 
     /**
      * @Route("")
@@ -179,13 +179,12 @@ abstract class StorageControllerAbstract extends BaseController
      * @param int $itemId
      * @return mixed
      */
-    public function checkNameExists($name, $itemId = 0){
-
+    public function checkNameExists($name, $itemId = null){
         $repository = $this->getRepository();
         $query = $repository->createQueryBuilder()
             ->field('name')->equals($name);
 
-        if($itemId){
+        if($itemId !== null && is_numeric($itemId)){
             $query = $query->field('id')->notEqual($itemId);
         }
 

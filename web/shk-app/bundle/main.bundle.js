@@ -273,16 +273,18 @@ var _a, _b, _c;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__render_output_field__ = __webpack_require__("../../../../../src/app/render-output-field.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__pipes_filter_field_by_group_pipe__ = __webpack_require__("../../../../../src/app/pipes/filter-field-by-group.pipe.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__pipes_orderby_pipe__ = __webpack_require__("../../../../../src/app/pipes/orderby.pipe.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__services_products_service__ = __webpack_require__("../../../../../src/app/services/products.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__services_content_types_service__ = __webpack_require__("../../../../../src/app/services/content_types.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__services_categories_service__ = __webpack_require__("../../../../../src/app/services/categories.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__app_routing_module__ = __webpack_require__("../../../../../src/app/app-routing.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__pipes_filter_array_pipe__ = __webpack_require__("../../../../../src/app/pipes/filter-array-pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__services_products_service__ = __webpack_require__("../../../../../src/app/services/products.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__services_content_types_service__ = __webpack_require__("../../../../../src/app/services/content_types.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__services_categories_service__ = __webpack_require__("../../../../../src/app/services/categories.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__app_routing_module__ = __webpack_require__("../../../../../src/app/app-routing.module.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -324,7 +326,7 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_3__angular_forms__["FormsModule"],
             __WEBPACK_IMPORTED_MODULE_3__angular_forms__["ReactiveFormsModule"],
             __WEBPACK_IMPORTED_MODULE_4__angular_http__["c" /* HttpModule */],
-            __WEBPACK_IMPORTED_MODULE_27__app_routing_module__["a" /* AppRoutingModule */],
+            __WEBPACK_IMPORTED_MODULE_28__app_routing_module__["a" /* AppRoutingModule */],
             __WEBPACK_IMPORTED_MODULE_5__ng_bootstrap_ng_bootstrap__["c" /* NgbModule */].forRoot(),
             __WEBPACK_IMPORTED_MODULE_6_primeng_primeng__["EditorModule"],
             __WEBPACK_IMPORTED_MODULE_6_primeng_primeng__["CalendarModule"]
@@ -347,6 +349,7 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_21__render_output_field__["a" /* OutputFieldComponent */],
             __WEBPACK_IMPORTED_MODULE_22__pipes_filter_field_by_group_pipe__["a" /* FilterFieldByGroup */],
             __WEBPACK_IMPORTED_MODULE_23__pipes_orderby_pipe__["a" /* OrderByPipe */],
+            __WEBPACK_IMPORTED_MODULE_24__pipes_filter_array_pipe__["a" /* FilterArrayPipe */],
             __WEBPACK_IMPORTED_MODULE_7__app_component__["a" /* AlertModalContent */],
             __WEBPACK_IMPORTED_MODULE_7__app_component__["c" /* ConfirmModalContent */],
             __WEBPACK_IMPORTED_MODULE_12__product_component__["a" /* ProductModalContent */],
@@ -354,7 +357,7 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_13__categories_component__["c" /* CategoriesModalComponent */],
             __WEBPACK_IMPORTED_MODULE_15__field_types_component__["a" /* FieldTypeModalContent */]
         ],
-        providers: [__WEBPACK_IMPORTED_MODULE_24__services_products_service__["a" /* ProductsService */], __WEBPACK_IMPORTED_MODULE_25__services_content_types_service__["a" /* ContentTypesService */], __WEBPACK_IMPORTED_MODULE_26__services_categories_service__["a" /* CategoriesService */], __WEBPACK_IMPORTED_MODULE_5__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */], __WEBPACK_IMPORTED_MODULE_5__ng_bootstrap_ng_bootstrap__["d" /* NgbTooltipConfig */]],
+        providers: [__WEBPACK_IMPORTED_MODULE_25__services_products_service__["a" /* ProductsService */], __WEBPACK_IMPORTED_MODULE_26__services_content_types_service__["a" /* ContentTypesService */], __WEBPACK_IMPORTED_MODULE_27__services_categories_service__["a" /* CategoriesService */], __WEBPACK_IMPORTED_MODULE_5__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */], __WEBPACK_IMPORTED_MODULE_5__ng_bootstrap_ng_bootstrap__["d" /* NgbTooltipConfig */]],
         entryComponents: [
             __WEBPACK_IMPORTED_MODULE_7__app_component__["a" /* AlertModalContent */],
             __WEBPACK_IMPORTED_MODULE_7__app_component__["c" /* ConfirmModalContent */],
@@ -418,6 +421,10 @@ var CatalogCategoryComponent = (function (_super) {
     __extends(CatalogCategoryComponent, _super);
     function CatalogCategoryComponent(dataService, activeModal, modalService, titleService, contentTypesService) {
         var _this = _super.call(this, dataService, activeModal, modalService, titleService) || this;
+        _this.dataService = dataService;
+        _this.activeModal = activeModal;
+        _this.modalService = modalService;
+        _this.titleService = titleService;
         _this.contentTypesService = contentTypesService;
         _this.title = 'Каталог';
         _this.tableFields = [];
@@ -460,13 +467,13 @@ var CatalogCategoryComponent = (function (_super) {
     CatalogCategoryComponent.prototype.openCategory = function (category) {
         var _this = this;
         this.currentCategory = __WEBPACK_IMPORTED_MODULE_3_lodash__["clone"](category);
-        this.dataService.setRequestUrl('admin/products/' + this.currentCategory.id);
-        if (!this.currentCategory.id) {
+        if (!this.currentCategory.contentTypeName) {
             this.items = [];
             this.tableFields = [];
             this.currentCategory.id = 0;
             return;
         }
+        this.dataService.setRequestUrl('admin/products/' + this.currentCategory.id);
         this.loading = true;
         this.titleService.setTitle(this.title + ' / ' + this.currentCategory.title);
         this.getContentType()
@@ -476,6 +483,11 @@ var CatalogCategoryComponent = (function (_super) {
                 _this.currentContentType = res.data;
                 _this.updateTableConfig();
                 _this.getList();
+            }
+            else {
+                _this.items = [];
+                _this.tableFields = [];
+                _this.currentCategory.id = 0;
             }
         });
     };
@@ -557,7 +569,8 @@ CatalogComponent = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_component__ = __webpack_require__("../../../../../src/app/app.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__list_recursive_component__ = __webpack_require__("../../../../../src/app/list-recursive.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__page_table_abstract__ = __webpack_require__("../../../../../src/app/page-table.abstract.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_rxjs_add_operator_switchMap__ = __webpack_require__("../../../../rxjs/_esm5/add/operator/switchMap.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_rxjs_add_operator_switchMap__ = __webpack_require__("../../../../rxjs/add/operator/switchMap.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_rxjs_add_operator_switchMap___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_rxjs_add_operator_switchMap__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_lodash__ = __webpack_require__("../../../../lodash/lodash.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9_lodash__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__services_system_name_service__ = __webpack_require__("../../../../../src/app/services/system-name.service.ts");
@@ -660,6 +673,11 @@ var CategoriesModalComponent = (function (_super) {
     }
     /** On initialize */
     CategoriesModalComponent.prototype.ngOnInit = function () {
+        // Filter root category
+        var rootIndex = __WEBPACK_IMPORTED_MODULE_9_lodash__["findIndex"](this.categories, { name: 'root' });
+        if (rootIndex > -1) {
+            this.categories.splice(rootIndex, 1);
+        }
         this.model.parentId = this.currentCategory.id;
         this.model.contentTypeName = this.currentCategory.contentTypeName;
         if (this.isRoot) {
@@ -757,7 +775,7 @@ var CategoriesMenuComponent = (function () {
         this.categoriesService = categoriesService;
         this.rootTitle = 'Категории';
         this.changeRequest = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
-        this.currentCategory = new __WEBPACK_IMPORTED_MODULE_4__models_category_model__["a" /* Category */](0, false, 0, 'root', this.rootTitle, '', '', true);
+        this.currentCategory = new __WEBPACK_IMPORTED_MODULE_4__models_category_model__["a" /* Category */](null, false, 0, 'root', this.rootTitle, '', '', true);
         this.categories = [];
         this.errorMessage = '';
         this.categoryId = 0;
@@ -765,44 +783,40 @@ var CategoriesMenuComponent = (function () {
     /** On initialize component */
     CategoriesMenuComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.getCategories();
-        var categoryId = this.route.snapshot.params['categoryId']
-            ? parseInt(this.route.snapshot.params['categoryId'])
-            : 0;
-        this.route.paramMap
-            .subscribe(function (params) {
-            _this.categoryId = params.get('categoryId')
-                ? parseInt(params.get('categoryId'))
-                : 0;
-            _this.selectCurrent();
-        });
-        if (!categoryId) {
-            this.openRootCategory();
-        }
+        this.getCategoriesRequest()
+            .subscribe(function (preparedData) {
+            _this.categories = __WEBPACK_IMPORTED_MODULE_9_lodash__["clone"](preparedData.data);
+            _this.route.paramMap
+                .subscribe(function (params) {
+                _this.categoryId = params.get('categoryId')
+                    ? parseInt(params.get('categoryId'))
+                    : 0;
+                _this.selectCurrent();
+            });
+        }, function (error) { return _this.errorMessage = error; });
     };
     /** Select current category */
     CategoriesMenuComponent.prototype.selectCurrent = function () {
         if (this.currentCategory.id === this.categoryId) {
             return;
         }
-        if (this.categoryId > 0) {
-            for (var _i = 0, _a = this.categories; _i < _a.length; _i++) {
-                var category = _a[_i];
-                if (category.id == this.categoryId) {
-                    this.currentCategory = __WEBPACK_IMPORTED_MODULE_9_lodash__["clone"](category);
-                    this.changeRequest.emit(this.currentCategory);
-                    break;
-                }
-            }
+        var index = __WEBPACK_IMPORTED_MODULE_9_lodash__["findIndex"](this.categories, { id: this.categoryId });
+        if (index > -1) {
+            this.currentCategory = __WEBPACK_IMPORTED_MODULE_9_lodash__["clone"](this.categories[index]);
+            this.changeRequest.emit(this.currentCategory);
         }
         else {
             this.openRootCategory();
         }
     };
     /** Get categories */
+    CategoriesMenuComponent.prototype.getCategoriesRequest = function () {
+        return this.categoriesService.getList();
+    };
+    /** Get categories */
     CategoriesMenuComponent.prototype.getCategories = function () {
         var _this = this;
-        this.categoriesService.getList()
+        this.getCategoriesRequest()
             .subscribe(function (preparedData) {
             _this.categories = __WEBPACK_IMPORTED_MODULE_9_lodash__["clone"](preparedData.data);
             _this.selectCurrent();
@@ -816,15 +830,18 @@ var CategoriesMenuComponent = (function () {
     CategoriesMenuComponent.prototype.openModalCategory = function (itemId, isItemCopy) {
         var _this = this;
         if (isItemCopy === void 0) { isItemCopy = false; }
-        var isRoot = itemId === 0;
+        var isRoot = itemId === 0 || itemId === null;
+        var isEditMode = typeof itemId !== 'undefined' && !isItemCopy;
         this.modalRef = this.modalService.open(CategoriesModalComponent, { size: 'lg' });
-        this.modalRef.componentInstance.modalTitle = itemId !== undefined && !isItemCopy ? 'Edit category' : 'Add category';
+        this.modalRef.componentInstance.modalTitle = isEditMode ? 'Edit category' : 'Add category';
         this.modalRef.componentInstance.itemId = itemId || 0;
         this.modalRef.componentInstance.isItemCopy = isItemCopy || false;
-        this.modalRef.componentInstance.categories = this.categories;
+        this.modalRef.componentInstance.categories = __WEBPACK_IMPORTED_MODULE_9_lodash__["cloneDeep"](this.categories);
         this.modalRef.componentInstance.currentCategory = this.currentCategory;
         this.modalRef.componentInstance.isRoot = isRoot;
+        this.modalRef.componentInstance.isEditMode = isEditMode;
         this.modalRef.result.then(function (result) {
+            _this.currentCategory.id = null; // For update current category data
             _this.getCategories();
         }, function (reason) {
         });
@@ -880,7 +897,8 @@ var CategoriesMenuComponent = (function () {
         this.categoriesService.deleteItem(itemId)
             .then(function (res) {
             if (res.success) {
-                _this.openRootCategory();
+                _this.categoryId = 0;
+                _this.selectCurrent();
                 _this.getCategories();
             }
             else {
@@ -892,7 +910,7 @@ var CategoriesMenuComponent = (function () {
     };
     /** Open root category */
     CategoriesMenuComponent.prototype.openRootCategory = function () {
-        this.currentCategory = new __WEBPACK_IMPORTED_MODULE_4__models_category_model__["a" /* Category */](0, false, 0, 'root', this.rootTitle, '', '', true);
+        this.currentCategory = new __WEBPACK_IMPORTED_MODULE_4__models_category_model__["a" /* Category */](null, false, 0, 'root', this.rootTitle, '', '', true);
         this.changeRequest.emit(this.currentCategory);
     };
     /** Go to root category */
@@ -2085,7 +2103,7 @@ var ModalContentAbstractComponent = (function () {
     }
     ModalContentAbstractComponent.prototype.ngOnInit = function () {
         this.buildForm();
-        if (this.itemId) {
+        if (this.isEditMode || this.isItemCopy) {
             this.getModelData();
         }
     };
@@ -2197,16 +2215,20 @@ var ModalContentAbstractComponent = (function () {
 
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
-    __metadata("design:type", Object)
+    __metadata("design:type", String)
 ], ModalContentAbstractComponent.prototype, "modalTitle", void 0);
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
-    __metadata("design:type", Object)
+    __metadata("design:type", Number)
 ], ModalContentAbstractComponent.prototype, "itemId", void 0);
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
-    __metadata("design:type", Object)
+    __metadata("design:type", Boolean)
 ], ModalContentAbstractComponent.prototype, "isItemCopy", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+    __metadata("design:type", Boolean)
+], ModalContentAbstractComponent.prototype, "isEditMode", void 0);
 var PageTableAbstractComponent = (function () {
     function PageTableAbstractComponent(dataService, activeModal, modalService, titleService) {
         this.dataService = dataService;
@@ -2240,11 +2262,11 @@ var PageTableAbstractComponent = (function () {
     };
     PageTableAbstractComponent.prototype.setModalInputs = function (itemId, isItemCopy) {
         if (isItemCopy === void 0) { isItemCopy = false; }
-        this.modalRef.componentInstance.modalTitle = itemId && !isItemCopy
-            ? 'Edit'
-            : 'Add';
+        var isEditMode = typeof itemId !== 'undefined' && !isItemCopy;
+        this.modalRef.componentInstance.modalTitle = isEditMode ? 'Edit' : 'Add';
         this.modalRef.componentInstance.itemId = itemId || 0;
         this.modalRef.componentInstance.isItemCopy = isItemCopy || false;
+        this.modalRef.componentInstance.isEditMode = isEditMode;
     };
     PageTableAbstractComponent.prototype.deleteItemConfirm = function (itemId) {
         var _this = this;
@@ -2349,6 +2371,49 @@ var PageTableAbstractComponent = (function () {
 }());
 
 //# sourceMappingURL=page-table.abstract.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/pipes/filter-array-pipe.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FilterArrayPipe; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+// Filter Array of Objects
+var FilterArrayPipe = (function () {
+    function FilterArrayPipe() {
+    }
+    FilterArrayPipe.prototype.transform = function (value, filter) {
+        if (filter && Array.isArray(value)) {
+            var filterKeys_1 = Object.keys(filter);
+            return value.filter(function (item) {
+                return filterKeys_1.reduce(function (memo, keyName) {
+                    return memo && item[keyName] === filter[keyName];
+                }, true);
+            });
+        }
+        else {
+            return value;
+        }
+    };
+    return FilterArrayPipe;
+}());
+FilterArrayPipe = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Pipe"])({
+        name: 'filter',
+        pure: false
+    })
+], FilterArrayPipe);
+
+//# sourceMappingURL=filter-array-pipe.js.map
 
 /***/ }),
 
@@ -2914,10 +2979,12 @@ OutputFieldComponent = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__data_service_abstract__ = __webpack_require__("../../../../../src/app/services/data-service.abstract.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__ = __webpack_require__("../../../../rxjs/_esm5/add/operator/toPromise.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__ = __webpack_require__("../../../../rxjs/add/operator/toPromise.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_catch__ = __webpack_require__("../../../../rxjs/_esm5/add/operator/catch.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_add_operator_map__ = __webpack_require__("../../../../rxjs/_esm5/add/operator/map.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_catch__ = __webpack_require__("../../../../rxjs/add/operator/catch.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_catch___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_catch__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_add_operator_map__ = __webpack_require__("../../../../rxjs/add/operator/map.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_rxjs_add_operator_map__);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -2982,7 +3049,7 @@ var _a;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__data_service_abstract__ = __webpack_require__("../../../../../src/app/services/data-service.abstract.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__ = __webpack_require__("../../../../rxjs/_esm5/add/operator/toPromise.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__ = __webpack_require__("../../../../rxjs/add/operator/toPromise.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
@@ -3045,7 +3112,7 @@ var _a;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__data_service_abstract__ = __webpack_require__("../../../../../src/app/services/data-service.abstract.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__ = __webpack_require__("../../../../rxjs/_esm5/add/operator/toPromise.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__ = __webpack_require__("../../../../rxjs/add/operator/toPromise.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
@@ -3114,10 +3181,12 @@ var _a;
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DataService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_add_operator_toPromise__ = __webpack_require__("../../../../rxjs/_esm5/add/operator/toPromise.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_add_operator_toPromise__ = __webpack_require__("../../../../rxjs/add/operator/toPromise.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs_add_operator_toPromise__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_catch__ = __webpack_require__("../../../../rxjs/_esm5/add/operator/catch.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map__ = __webpack_require__("../../../../rxjs/_esm5/add/operator/map.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_catch__ = __webpack_require__("../../../../rxjs/add/operator/catch.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_catch___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_catch__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map__ = __webpack_require__("../../../../rxjs/add/operator/map.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map__);
 
 
 
@@ -3237,10 +3306,12 @@ var DataService = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__data_service_abstract__ = __webpack_require__("../../../../../src/app/services/data-service.abstract.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__ = __webpack_require__("../../../../rxjs/_esm5/add/operator/toPromise.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__ = __webpack_require__("../../../../rxjs/add/operator/toPromise.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_catch__ = __webpack_require__("../../../../rxjs/_esm5/add/operator/catch.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_add_operator_map__ = __webpack_require__("../../../../rxjs/_esm5/add/operator/map.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_catch__ = __webpack_require__("../../../../rxjs/add/operator/catch.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_catch___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_catch__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_add_operator_map__ = __webpack_require__("../../../../rxjs/add/operator/map.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_rxjs_add_operator_map__);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -3589,7 +3660,7 @@ module.exports = "<div class=\"mb-3\">\n    <div class=\"float-right\">\n\n     
 /***/ "../../../../../src/app/templates/categories-menu.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"d-inline-block dropdown\">\n    <button class=\"btn btn-secondary dropdown-toggle dropdown-toggle-hover\">\n        <i class=\"icon-folder\"></i>\n        {{currentCategory.title}}\n    </button>\n    <div class=\"dropdown-menu shadow\" #categoriesDropdown>\n        <div class=\"dropdown-header\">\n            <button class=\"btn btn-sm btn-secondary\" ngbTooltip=\"Open root category\" (click)=\"goToRootCategory()\" *ngIf=\"currentCategory.id > 0\">\n                <i class=\"icon-home\"></i>\n            </button>\n            <button type=\"button\" class=\"btn btn-sm btn-secondary\" ngbTooltip=\"Add new category\" (click)=\"openModalCategory()\">\n                <i class=\"icon-plus\"></i>\n            </button>\n            <button type=\"button\" class=\"btn btn-sm btn-secondary\" ngbTooltip=\"Edit current category\" (click)=\"openModalCategory(currentCategory.id)\">\n                <i class=\"icon-pencil\"></i>\n            </button>\n            <button type=\"button\" class=\"btn btn-sm btn-secondary\" ngbTooltip=\"Copy category\" (click)=\"copyCategory()\" [hidden]=\"currentCategory.id == 0\">\n                <i class=\"icon-stack\"></i>\n            </button>\n            <button type=\"button\" class=\"btn btn-sm btn-secondary\" ngbTooltip=\"Delete current category\" (click)=\"deleteCategoryItemConfirm(currentCategory.id)\" [hidden]=\"currentCategory.id == 0\">\n                <i class=\"icon-cross\"></i>\n            </button>\n        </div>\n        <div class=\"dropdown-divider\"></div>\n        <div class=\"dropdown-header\" *ngIf=\"categories.length == 0\">\n            No categories.\n        </div>\n\n        <categories-list [inputItems]=\"categories\" [parentId]=\"0\" [currentId]=\"currentCategory.id\"></categories-list>\n\n    </div>\n</div>"
+module.exports = "<div class=\"d-inline-block dropdown\">\n    <button class=\"btn btn-secondary dropdown-toggle dropdown-toggle-hover\">\n        <i class=\"icon-folder\"></i>\n        {{currentCategory.title}}\n    </button>\n    <div class=\"dropdown-menu shadow\" #categoriesDropdown>\n        <div class=\"dropdown-header\">\n            <button class=\"btn btn-sm btn-secondary\" ngbTooltip=\"Open root category\" (click)=\"goToRootCategory()\" *ngIf=\"currentCategory.id > 0\">\n                <i class=\"icon-home\"></i>\n            </button>\n            <button type=\"button\" class=\"btn btn-sm btn-secondary\" ngbTooltip=\"Add new category\" (click)=\"openModalCategory()\">\n                <i class=\"icon-plus\"></i>\n            </button>\n            <button type=\"button\" class=\"btn btn-sm btn-secondary\" ngbTooltip=\"Edit current category\" (click)=\"openModalCategory(currentCategory.id)\">\n                <i class=\"icon-pencil\"></i>\n            </button>\n            <button type=\"button\" class=\"btn btn-sm btn-secondary\" ngbTooltip=\"Copy category\" (click)=\"copyCategory()\" [hidden]=\"!currentCategory.id\">\n                <i class=\"icon-stack\"></i>\n            </button>\n            <button type=\"button\" class=\"btn btn-sm btn-secondary\" ngbTooltip=\"Delete current category\" (click)=\"deleteCategoryItemConfirm(currentCategory.id)\" [hidden]=\"!currentCategory.id\">\n                <i class=\"icon-cross\"></i>\n            </button>\n        </div>\n        <div class=\"dropdown-divider\"></div>\n        <div class=\"dropdown-header\" *ngIf=\"categories.length == 0\">\n            No categories.\n        </div>\n\n        <categories-list [inputItems]=\"categories\" [parentId]=\"0\" [currentId]=\"currentCategory.id\"></categories-list>\n\n    </div>\n</div>"
 
 /***/ }),
 

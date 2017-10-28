@@ -25,21 +25,21 @@ class CategoryController extends StorageControllerAbstract
      * @param int $itemId
      * @return array
      */
-    public function validateData($data, $itemId = 0)
+    public function validateData($data, $itemId = null)
     {
-        if( empty($data) ){
+        if (empty($data)) {
             return ['success' => false, 'msg' => 'Data is empty.'];
         }
-        if( empty($data['title']) ){
+        if (empty($data['title'])) {
             return ['success' => false, 'msg' => 'Title is required.'];
         }
-        if( empty($data['name']) ){
+        if (empty($data['name'])) {
             return ['success' => false, 'msg' => 'System name is required.'];
         }
-        if( empty($data['contentTypeName']) ){
+        if (empty($data['contentTypeName'])) {
             return ['success' => false, 'msg' => 'Content type is required.'];
         }
-        if($this->checkNameExists($data['name'], $itemId)){
+        if ($this->checkNameExists($data['name'], $itemId)) {
             return ['success' => false, 'msg' => 'System name already exists.'];
         }
 
@@ -52,7 +52,7 @@ class CategoryController extends StorageControllerAbstract
      * @param string $itemId
      * @return array
      */
-    public function createUpdate($data, $itemId = '')
+    public function createUpdate($data, $itemId = null)
     {
         $previousParentId = 0;
         if($itemId === null || !is_numeric($itemId)){

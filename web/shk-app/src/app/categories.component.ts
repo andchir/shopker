@@ -140,7 +140,7 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent {
             }
         };
 
-        if (this.model.id !== null) {
+        if (this.isEditMode) {
             this.dataService.update(this.model).then(callback.bind(this));
         } else {
             this.dataService.create(this.model).then(callback.bind(this));

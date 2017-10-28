@@ -136,6 +136,8 @@ class CategoryController extends StorageControllerAbstract
 
         $previousParentId = $item->getParentId();
 
+        $this->deleteProductsByCategory($item);
+
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $this->get('doctrine_mongodb')->getManager();
         $dm->remove($item);
@@ -149,6 +151,34 @@ class CategoryController extends StorageControllerAbstract
         return new JsonResponse([
             'success' => true
         ]);
+    }
+
+    /**
+     * Delete category nested products
+     * @param Category $category
+     * @return bool
+     */
+    public function deleteProductsByCategory(Category $category)
+    {
+        $contentType = $category->getContentType();
+        if ($contentType) {
+            $collectionName = $contentType->getCollection();
+            $collection = $this->getCollection($collectionName);
+            $result = $collection->remove(['parentId' => $category->getId()]);
+            return !empty($result['ok']);
+        }
+        return false;
+    }
+
+    /**
+     * @param string $collectionName
+     * @return \Doctrine\MongoDB\Collection
+     */
+    public function getCollection($collectionName)
+    {
+        $m = $this->container->get('doctrine_mongodb.odm.default_connection');
+        $db = $m->selectDatabase($this->getParameter('mongodb_database'));
+        return $db->createCollection($collectionName);
     }
 
     /**

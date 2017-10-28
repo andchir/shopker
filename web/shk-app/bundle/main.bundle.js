@@ -717,7 +717,7 @@ var CategoriesModalComponent = (function (_super) {
                 }
             }
         };
-        if (this.model.id !== null) {
+        if (this.isEditMode) {
             this.dataService.update(this.model).then(callback.bind(this));
         }
         else {
@@ -2117,7 +2117,7 @@ var ModalContentAbstractComponent = (function () {
             .then(function (res) {
             if (res.success) {
                 if (_this.isItemCopy) {
-                    res.data.id = '';
+                    res.data.id = null;
                     res.data[_this.getSystemFieldName()] = '';
                 }
                 _this.model = res.data;

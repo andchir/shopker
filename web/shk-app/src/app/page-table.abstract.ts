@@ -54,7 +54,7 @@ export abstract class ModalContentAbstractComponent implements OnInit {
             .then(res => {
                 if (res.success) {
                     if (this.isItemCopy) {
-                        res.data.id = '';
+                        res.data.id = null;
                         res.data[this.getSystemFieldName()] = '';
                     }
                     this.model = res.data;

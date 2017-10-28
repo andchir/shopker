@@ -3,48 +3,17 @@
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use AppBundle\Document\FieldType;
+use AppBundle\Document\ContentType;
+use AppBundle\Document\Category;
 
-class en extends Fixture
+class FieldTypesFixtures extends Fixture
 {
 
-    public function load(ObjectManager $manager)
-    {
+    public function load(ObjectManager $manager) {
 
-        $this->loadFieldTypes($manager);
-
-    }
-
-    public function loadFieldTypes(ObjectManager $manager)
-    {
-
-        // Field types
         $data = [
             'checkbox' => [
                 'title' => 'Checkbox',
-                'description' => '',
-                'isActive' => true,
-                'inputProperties' => [
-                    [
-                        'name' => 'value',
-                        'title' => 'Default value',
-                        'default_value' => ''
-                    ],
-                    [
-                        'name' => 'handler',
-                        'title' => 'Handle',
-                        'default_value' => ''
-                    ]
-                ],
-                'outputProperties' => [
-                    [
-                        'name' => 'className',
-                        'title' => 'CSS class name',
-                        'default_value' => ''
-                    ]
-                ]
-            ],
-            'select' => [
-                'title' => 'Drop-down select',
                 'description' => '',
                 'isActive' => true,
                 'inputProperties' => [
@@ -62,7 +31,31 @@ class en extends Fixture
                 'outputProperties' => [
                     [
                         'name' => 'className',
-                        'title' => 'CSS class name',
+                        'title' => 'CSS class',
+                        'default_value' => ''
+                    ]
+                ]
+            ],
+            'select' => [
+                'title' => 'Dropdown select',
+                'description' => '',
+                'isActive' => true,
+                'inputProperties' => [
+                    [
+                        'name' => 'value',
+                        'title' => 'Default value',
+                        'default_value' => ''
+                    ],
+                    [
+                        'name' => 'handler',
+                        'title' => 'Handler',
+                        'default_value' => ''
+                    ]
+                ],
+                'outputProperties' => [
+                    [
+                        'name' => 'className',
+                        'title' => 'CSS class',
                         'default_value' => ''
                     ]
                 ]
@@ -86,7 +79,7 @@ class en extends Fixture
                 'outputProperties' => [
                     [
                         'name' => 'className',
-                        'title' => 'CSS class name',
+                        'title' => 'CSS class',
                         'default_value' => ''
                     ]
                 ]
@@ -110,13 +103,13 @@ class en extends Fixture
                 'outputProperties' => [
                     [
                         'name' => 'className',
-                        'title' => 'CSS class name',
+                        'title' => 'CSS class',
                         'default_value' => ''
                     ]
                 ]
             ],
             'textarea' => [
-                'title' => 'Textarea',
+                'title' => 'Text area',
                 'description' => '',
                 'isActive' => true,
                 'inputProperties' => [
@@ -139,7 +132,7 @@ class en extends Fixture
                 'outputProperties' => [
                     [
                         'name' => 'className',
-                        'title' => 'CSS class name',
+                        'title' => 'CSS class',
                         'default_value' => ''
                     ]
                 ]
@@ -163,7 +156,7 @@ class en extends Fixture
                 'outputProperties' => [
                     [
                         'name' => 'className',
-                        'title' => 'CSS class name',
+                        'title' => 'CSS class',
                         'default_value' => ''
                     ]
                 ]
@@ -185,39 +178,39 @@ class en extends Fixture
                     ],
                     [
                         'name' => 'allow_decimals',
-                        'title' => 'Разрешить десятичные?',
+                        'title' => 'Allow decimal?',
                         'default_value' => '1'
                     ],
                     [
                         'name' => 'decimal_precision',
-                        'title' => 'Точность',
+                        'title' => 'Precision',
                         'default_value' => '2'
                     ],
                     [
                         'name' => 'decimal_separator',
-                        'title' => 'Разделитель',
+                        'title' => 'Separator',
                         'default_value' => '.'
                     ],
                     [
                         'name' => 'max',
-                        'title' => 'Максимальное значение',
+                        'title' => 'Maximum value',
                         'default_value' => null
                     ],
                     [
                         'name' => 'min',
-                        'title' => 'Минимальное значение',
+                        'title' => 'Minimum value',
                         'default_value' => 0
                     ],
                     [
                         'name' => 'step',
-                        'title' => 'Step',
+                        'title' => 'Step size',
                         'default_value' => 1
                     ]
                 ],
                 'outputProperties' => [
                     [
                         'name' => 'className',
-                        'title' => 'CSS class name',
+                        'title' => 'CSS class',
                         'default_value' => ''
                     ]
                 ]
@@ -241,7 +234,7 @@ class en extends Fixture
                 'outputProperties' => [
                     [
                         'name' => 'className',
-                        'title' => 'CSS class name',
+                        'title' => 'CSS class',
                         'default_value' => ''
                     ]
                 ]
@@ -265,7 +258,7 @@ class en extends Fixture
                 'outputProperties' => [
                     [
                         'name' => 'className',
-                        'title' => 'CSS class name',
+                        'title' => 'CSS class',
                         'default_value' => ''
                     ]
                 ]
@@ -289,7 +282,7 @@ class en extends Fixture
                 'outputProperties' => [
                     [
                         'name' => 'className',
-                        'title' => 'CSS class name',
+                        'title' => 'CSS class',
                         'default_value' => ''
                     ]
                 ]
@@ -311,14 +304,14 @@ class en extends Fixture
                     ],
                     [
                         'name' => 'format',
-                        'title' => 'Date format',
+                        'title' => 'Format',
                         'default_value' => 'Y-m-d H:i:s'
                     ]
                 ],
                 'outputProperties' => [
                     [
                         'name' => 'className',
-                        'title' => 'CSS class name',
+                        'title' => 'CSS class',
                         'default_value' => ''
                     ]
                 ]
@@ -342,7 +335,7 @@ class en extends Fixture
                 'outputProperties' => [
                     [
                         'name' => 'className',
-                        'title' => 'CSS class name',
+                        'title' => 'CSS class',
                         'default_value' => ''
                     ]
                 ]
@@ -366,7 +359,7 @@ class en extends Fixture
                 'outputProperties' => [
                     [
                         'name' => 'className',
-                        'title' => 'CSS class name',
+                        'title' => 'CSS class',
                         'default_value' => ''
                     ]
                 ]
@@ -388,7 +381,5 @@ class en extends Fixture
         }
 
         $manager->flush();
-
     }
-
 }

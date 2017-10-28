@@ -21,7 +21,7 @@ class CatalogFixtures extends Fixture
 
         $fields = [
             [
-                'title' => 'Название',
+                'title' => 'Title',
                 'name' => 'title',
                 'description' => '',
                 'inputType' => 'text',
@@ -33,13 +33,13 @@ class CatalogFixtures extends Fixture
                 'outputProperties' => [
                     'className' => ''
                 ],
-                'group' => 'Основное',
+                'group' => 'General',
                 'required' => true,
                 'showInTable' => true,
                 'isFilter' => false
             ],
             [
-                'title' => 'Системное имя',
+                'title' => 'System name',
                 'name' => 'name',
                 'description' => '',
                 'inputType' => 'system_name',
@@ -52,13 +52,13 @@ class CatalogFixtures extends Fixture
                 'outputProperties' => [
                     'className' => ''
                 ],
-                'group' => 'Основное',
+                'group' => 'General',
                 'required' => true,
                 'showInTable' => true,
                 'isFilter' => false
             ],
             [
-                'title' => 'Описание',
+                'title' => 'Description',
                 'name' => 'description',
                 'description' => '',
                 'inputType' => 'textarea',
@@ -71,13 +71,13 @@ class CatalogFixtures extends Fixture
                 'outputProperties' => [
                     'className' => ''
                 ],
-                'group' => 'Основное',
+                'group' => 'General',
                 'required' => false,
                 'showInTable' => false,
                 'isFilter' => false
             ],
             [
-                'title' => 'Цена',
+                'title' => 'Price',
                 'name' => 'price',
                 'description' => '',
                 'inputType' => 'number',
@@ -95,13 +95,13 @@ class CatalogFixtures extends Fixture
                 'outputProperties' => [
                     'className' => ''
                 ],
-                'group' => 'Основное',
+                'group' => 'General',
                 'required' => false,
                 'showInTable' => true,
                 'isFilter' => false
             ],
             [
-                'title' => 'Бренд',
+                'title' => 'Brand',
                 'name' => 'brand',
                 'description' => '',
                 'inputType' => 'text',
@@ -113,13 +113,13 @@ class CatalogFixtures extends Fixture
                 'outputProperties' => [
                     'className' => ''
                 ],
-                'group' => 'Параметры',
+                'group' => 'Options',
                 'required' => false,
                 'showInTable' => false,
                 'isFilter' => true
             ],
             [
-                'title' => 'Страна',
+                'title' => 'Country',
                 'name' => 'country',
                 'description' => '',
                 'inputType' => 'text',
@@ -131,13 +131,13 @@ class CatalogFixtures extends Fixture
                 'outputProperties' => [
                     'className' => ''
                 ],
-                'group' => 'Параметры',
+                'group' => 'Options',
                 'required' => false,
                 'showInTable' => false,
                 'isFilter' => true
             ],
             [
-                'title' => 'Цвет',
+                'title' => 'Color',
                 'name' => 'color',
                 'description' => '',
                 'inputType' => 'color',
@@ -149,13 +149,13 @@ class CatalogFixtures extends Fixture
                 'outputProperties' => [
                     'className' => ''
                 ],
-                'group' => 'Параметры',
+                'group' => 'Options',
                 'required' => false,
                 'showInTable' => false,
                 'isFilter' => true
             ],
             [
-                'title' => 'Материал',
+                'title' => 'Material',
                 'name' => 'material',
                 'description' => '',
                 'inputType' => 'text',
@@ -167,7 +167,7 @@ class CatalogFixtures extends Fixture
                 'outputProperties' => [
                     'className' => ''
                 ],
-                'group' => 'Параметры',
+                'group' => 'Options',
                 'required' => false,
                 'showInTable' => false,
                 'isFilter' => true
@@ -176,12 +176,12 @@ class CatalogFixtures extends Fixture
 
         $contentType = new ContentType();
         $contentType
-            ->setTitle('Общий')
+            ->setTitle('General')
             ->setName('general')
-            ->setDescription('Товары каталога')
+            ->setDescription('Products catalog')
             ->setCollection('products')
             ->setFields($fields)
-            ->setGroups(['Основное','Параметры'])
+            ->setGroups(['General','Options'])
             ->setIsActive(true);
 
         $manager->persist($contentType);
@@ -193,10 +193,11 @@ class CatalogFixtures extends Fixture
     public function loadCategory(ObjectManager $manager) {
 
         $category = new Category();
+        /** @var ContentType $contentType */
         $contentType = $this->getReference('content_type');
 
         $category
-            ->setTitle('Категория каталога')
+            ->setTitle('Products catalog')
             ->setName('default')
             ->setDescription('Default category')
             ->setIsActive(true)

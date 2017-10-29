@@ -68,7 +68,7 @@ class ProductController extends BaseController
                 'isActive' => $entry['isActive']
             ];
             foreach ($contentTypeFields as $field){
-                $row[$field['name']] = !empty($entry[$field['name']])
+                $row[$field['name']] = isset($entry[$field['name']])
                     ? $entry[$field['name']]
                     : '';
             }
@@ -392,7 +392,7 @@ class ProductController extends BaseController
             'isActive' => $entry['isActive']
         ];
         foreach ($contentTypeFields as $field){
-            $data[$field['name']] = !empty($entry[$field['name']])
+            $data[$field['name']] = isset($entry[$field['name']])
                 ? $entry[$field['name']]
                 : '';
         }

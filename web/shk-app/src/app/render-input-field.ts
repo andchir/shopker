@@ -39,6 +39,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
         this.fields.forEach(function(field){
             this.setDefaultValue(field);
             this.setFieldProperties(field);
+            this.setFieldOptions(field);
             this.formErrors[field.name] = '';
             if(!this.validationMessages[field.name]){
                 this.validationMessages[field.name] = {};
@@ -73,6 +74,27 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
         }
     }
 
+    setFieldOptions(field: ContentField): void {
+
+        field.options = [];
+
+        switch (field.inputType) {
+            case 'radio':
+            case 'checkbox':
+            case 'select':
+
+                const valueArr = field.inputProperties.value
+                    ? field.inputProperties.value.split('||')
+                    : [];
+
+                valueArr.forEach((optStr) => {
+                    field.options.push(_.zipObject(['title','value'], optStr.split('==')));
+                });
+
+                break;
+        }
+    }
+
     setDefaultValue(field: ContentField): void {
         if(this.model[field.name]){
             return;
@@ -99,6 +121,11 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
             case 'number':
 
                 this.model[field.name] = defaultValue ? parseInt(defaultValue) : null;
+
+                break;
+            case 'color':
+
+                this.model[field.name] = defaultValue ? defaultValue : null;
 
                 break;
         }

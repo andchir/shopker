@@ -11,6 +11,7 @@ export class ContentField {
         public group: string,
         public required: boolean,
         public isFilter: boolean,
-        public showInTable: boolean
+        public showInTable: boolean,
+        public options?: {}[]
     ) { }
 }

@@ -168,6 +168,8 @@
 
                                 <!--<p-calendar [formControlName]="field.name" [(ngModel)]="model[field.name]" showTime="true" [showIcon]="true" dateFormat="dd.mm.yy" icon="icon-date_range"></p-calendar>-->
 
+                                <input type="text" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control">
+
                                 <div *ngIf="formErrors[field.name]" class="alert alert-danger">
                                     {{formErrors[field.name]}}
                                 </div>
@@ -182,7 +184,9 @@
                                 </label>
                             </div>
                             <div class="col-md-7">
-
+                                <select id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control">
+                                    <option *ngFor="let opt of field.options" [value]="opt.value">{{opt.title}}</option>
+                                </select>
                                 <div *ngIf="formErrors[field.name]" class="alert alert-danger">
                                     {{formErrors[field.name]}}
                                 </div>
@@ -197,7 +201,10 @@
                                 </label>
                             </div>
                             <div class="col-md-7">
-
+                                <label *ngFor="let opt of field.options" class="mr-3">
+                                    <input type="radio" [name]="field.name" [value]="opt.value" [formControlName]="field.name" [(ngModel)]="model[field.name]">
+                                    {{opt.title}}
+                                </label>
                                 <div *ngIf="formErrors[field.name]" class="alert alert-danger">
                                     {{formErrors[field.name]}}
                                 </div>
@@ -212,7 +219,10 @@
                                 </label>
                             </div>
                             <div class="col-md-7">
-
+                                <label class="mr-3">
+                                    <input type="checkbox" [name]="field.name" [value]="field.options[0].value" [formControlName]="field.name" [(ngModel)]="model[field.name]">
+                                    {{field.options[0].title}}
+                                </label>
                                 <div *ngIf="formErrors[field.name]" class="alert alert-danger">
                                     {{formErrors[field.name]}}
                                 </div>

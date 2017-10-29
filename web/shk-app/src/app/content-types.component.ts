@@ -316,7 +316,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
 
     /** Add group */
     addGroup(){
-        const fieldName = 'new_group';
+        const fieldName = 'newGroup';
         const control = this.fieldForm.get(fieldName);
         if( !control || !control.valid || !control.value ){
             return false;

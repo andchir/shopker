@@ -90,11 +90,15 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent {
     /** On initialize */
     ngOnInit(): void {
 
-        // Filter root category
-        const rootIndex = _.findIndex(this.categories, {name: 'root'});
-        if (rootIndex > -1) {
-            this.categories.splice(rootIndex, 1);
-        }
+        // Filter root category and self
+        this.categories = _.filter(this.categories, (category) => {
+            if (this.isEditMode) {
+                return category.name != 'root'
+                    && category.id != this.currentCategory.id;
+            } else {
+                return category.name != 'root';
+            }
+        });
 
         this.model.parentId = this.currentCategory.id;
         this.model.contentTypeName = this.currentCategory.contentTypeName;

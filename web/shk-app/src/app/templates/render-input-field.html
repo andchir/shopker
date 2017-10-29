@@ -106,6 +106,21 @@
                             </div>
                         </div>
 
+                        <div class="row" *ngSwitchCase="'file'">
+                            <div class="col-md-5">
+                                <label for="field_{{field.name}}">
+                                    {{field.title}}
+                                    <span class="text-danger" *ngIf="field.required">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-7">
+                                <input type="file" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control">
+                                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                                    {{formErrors[field.name]}}
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="row" *ngSwitchCase="'color'">
                             <div class="col-md-5">
                                 <label for="field_{{field.name}}">
@@ -151,7 +166,52 @@
                                 <!--</div>-->
                                 <!--</div>-->
 
-                                <p-calendar [formControlName]="field.name" [(ngModel)]="model[field.name]" showTime="true" [showIcon]="true" dateFormat="dd.mm.yy" icon="icon-date_range"></p-calendar>
+                                <!--<p-calendar [formControlName]="field.name" [(ngModel)]="model[field.name]" showTime="true" [showIcon]="true" dateFormat="dd.mm.yy" icon="icon-date_range"></p-calendar>-->
+
+                                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                                    {{formErrors[field.name]}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" *ngSwitchCase="'select'">
+                            <div class="col-md-5">
+                                <label for="field_{{field.name}}">
+                                    {{field.title}}
+                                    <span class="text-danger" *ngIf="field.required">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-7">
+
+                                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                                    {{formErrors[field.name]}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" *ngSwitchCase="'radio'">
+                            <div class="col-md-5">
+                                <label for="field_{{field.name}}">
+                                    {{field.title}}
+                                    <span class="text-danger" *ngIf="field.required">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-7">
+
+                                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                                    {{formErrors[field.name]}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" *ngSwitchCase="'checkbox'">
+                            <div class="col-md-5">
+                                <label for="field_{{field.name}}">
+                                    {{field.title}}
+                                    <span class="text-danger" *ngIf="field.required">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-7">
 
                                 <div *ngIf="formErrors[field.name]" class="alert alert-danger">
                                     {{formErrors[field.name]}}

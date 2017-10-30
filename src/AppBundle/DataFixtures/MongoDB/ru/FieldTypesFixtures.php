@@ -18,6 +18,11 @@ class FieldTypesFixtures extends Fixture
                 'isActive' => true,
                 'inputProperties' => [
                     [
+                        'name' => 'values_list',
+                        'title' => 'Список значений',
+                        'default_value' => ''
+                    ],
+                    [
                         'name' => 'value',
                         'title' => 'Значение по умолчанию',
                         'default_value' => ''
@@ -41,6 +46,11 @@ class FieldTypesFixtures extends Fixture
                 'description' => '',
                 'isActive' => true,
                 'inputProperties' => [
+                    [
+                        'name' => 'values_list',
+                        'title' => 'Список значений',
+                        'default_value' => ''
+                    ],
                     [
                         'name' => 'value',
                         'title' => 'Значение по умолчанию',
@@ -220,6 +230,11 @@ class FieldTypesFixtures extends Fixture
                 'description' => '',
                 'isActive' => true,
                 'inputProperties' => [
+                    [
+                        'name' => 'values_list',
+                        'title' => 'Список значений',
+                        'default_value' => ''
+                    ],
                     [
                         'name' => 'value',
                         'title' => 'Значение по умолчанию',

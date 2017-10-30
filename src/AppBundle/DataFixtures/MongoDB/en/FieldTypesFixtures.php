@@ -18,6 +18,11 @@ class FieldTypesFixtures extends Fixture
                 'isActive' => true,
                 'inputProperties' => [
                     [
+                        'name' => 'values_list',
+                        'title' => 'List of values',
+                        'default_value' => ''
+                    ],
+                    [
                         'name' => 'value',
                         'title' => 'Default value',
                         'default_value' => ''
@@ -41,6 +46,11 @@ class FieldTypesFixtures extends Fixture
                 'description' => '',
                 'isActive' => true,
                 'inputProperties' => [
+                    [
+                        'name' => 'values_list',
+                        'title' => 'List of values',
+                        'default_value' => ''
+                    ],
                     [
                         'name' => 'value',
                         'title' => 'Default value',
@@ -220,6 +230,11 @@ class FieldTypesFixtures extends Fixture
                 'description' => '',
                 'isActive' => true,
                 'inputProperties' => [
+                    [
+                        'name' => 'values_list',
+                        'title' => 'List of values',
+                        'default_value' => ''
+                    ],
                     [
                         'name' => 'value',
                         'title' => 'Default value',

@@ -201,7 +201,7 @@
                                 </label>
                             </div>
                             <div class="col-md-7">
-                                <label *ngFor="let opt of field.options" class="mr-3">
+                                <label class="mr-3" *ngFor="let opt of field.options">
                                     <input type="radio" [name]="field.name" [value]="opt.value" [formControlName]="field.name" [(ngModel)]="model[field.name]">
                                     {{opt.title}}
                                 </label>
@@ -219,9 +219,9 @@
                                 </label>
                             </div>
                             <div class="col-md-7">
-                                <label class="mr-3">
-                                    <input type="checkbox" [name]="field.name" [value]="field.options[0].value" [formControlName]="field.name" [(ngModel)]="model[field.name]">
-                                    {{field.options[0].title}}
+                                <label class="mr-3" *ngFor="let opt of field.options; let index=index">
+                                    <input type="checkbox" [name]="field.name + index" [value]="opt.value">
+                                    {{opt.title}}
                                 </label>
                                 <div *ngIf="formErrors[field.name]" class="alert alert-danger">
                                     {{formErrors[field.name]}}

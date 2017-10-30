@@ -54,9 +54,7 @@ export class ProductModalContent extends ModalContentAbstractComponent {
         this.model.parentId = 0;
     }
 
-    /** On initialize */
     ngOnInit(): void {
-
         this.model.parentId = this.category.id;
         this.dataService.setRequestUrl('admin/products/' + this.category.id);
 
@@ -104,7 +102,6 @@ export class ProductModalContent extends ModalContentAbstractComponent {
             });
     }
 
-    /** Build form */
     updateForm(data ?: any): void {
         if(!data){
             data = _.clone(this.model);
@@ -125,7 +122,6 @@ export class ProductModalContent extends ModalContentAbstractComponent {
         this.model = _.pick(data, newKeys);
     }
 
-    /** On change content type */
     onChangeContentType(): void {
         const parentId = parseInt(String(this.model.parentId));
         let index = _.findIndex(this.categories, {id: parentId});
@@ -136,7 +132,6 @@ export class ProductModalContent extends ModalContentAbstractComponent {
         this.getContentType();
     }
 
-    /** Save data */
     save() {
         this.submitted = true;
 

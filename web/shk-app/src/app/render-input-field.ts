@@ -4,6 +4,7 @@ import * as _ from "lodash";
 
 import { ContentField } from "./models/content_field.model";
 import { SystemNameService } from './services/system-name.service';
+import { MultiValues } from './models/multivalues.model';
 
 @Component({
     selector: 'input-field-renderer',
@@ -19,6 +20,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
     @Input() submitted: boolean;
     @Input() formErrors: {[key: string]: string};
     @Input() validationMessages: {[key: string]: {[key: string]: string}};
+    fieldsMultivalues: {[key: string]: MultiValues} = {};
 
     constructor(
         private changeDetectionRef: ChangeDetectorRef,
@@ -83,12 +85,17 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
             case 'checkbox':
             case 'select':
 
-                const valueArr = field.inputProperties.value
-                    ? field.inputProperties.value.split('||')
+                const valueArr = field.inputProperties.values_list
+                    ? field.inputProperties.values_list.split('||')
                     : [];
 
-                valueArr.forEach((optStr) => {
-                    field.options.push(_.zipObject(['title','value'], optStr.split('==')));
+                this.fieldsMultivalues[field.name] = new MultiValues([], []);
+
+                valueArr.forEach((optStr, index) => {
+                    let opts = optStr.split('==');
+                    field.options.push(_.zipObject(['title','value'], opts));
+                    this.fieldsMultivalues[field.name].values.push(opts[1]);
+                    this.fieldsMultivalues[field.name].checked.push(false);
                 });
 
                 break;
@@ -96,13 +103,12 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
     }
 
     setDefaultValue(field: ContentField): void {
-        if(this.model[field.name]){
+        if(typeof this.model[field.name] !== 'undefined'){
             return;
         }
 
         let defaultValue = null;
-        if (typeof field.inputProperties.value !== 'undefined'
-            && field.inputProperties.value) {
+        if (typeof field.inputProperties.value !== 'undefined') {
             defaultValue = field.inputProperties.value;
         }
 
@@ -120,12 +126,12 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                 break;
             case 'number':
 
-                this.model[field.name] = defaultValue ? parseInt(defaultValue) : null;
+                this.model[field.name] = defaultValue;
 
                 break;
             case 'color':
 
-                this.model[field.name] = defaultValue ? defaultValue : null;
+                this.model[field.name] = defaultValue;
 
                 break;
         }

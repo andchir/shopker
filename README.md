@@ -33,6 +33,13 @@ ng build --base-href "/" --output-path "./bundle" --watch
 ng build --prod --env=prod --base-href "/" --output-path "./bundle"
 ~~~
 
+Fix changes watches for Ubuntu:
+~~~
+sudo sysctl fs.inotify.max_user_watches=524288
+sudo sysctl -p --system
+~~~
+https://confluence.jetbrains.com/display/IDEADEV/Inotify+Watches+Limit
+
 **Angular internationalization (i18n)**
 
 Create a translation source file:

@@ -79,23 +79,43 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
     setFieldOptions(field: ContentField): void {
 
         field.options = [];
+        let valueArr;
 
         switch (field.inputType) {
             case 'radio':
-            case 'checkbox':
             case 'select':
 
-                const valueArr = field.inputProperties.values_list
+                valueArr = field.inputProperties.values_list
+                    ? field.inputProperties.values_list.split('||')
+                    : [];
+                valueArr.forEach((optStr, index) => {
+                    let opts = optStr.split('==');
+                    if (!opts[1]) {
+                        opts[1] = opts[0];
+                    }
+                    field.options.push(_.zipObject(['title','value'], opts));
+                });
+
+                break;
+            case 'checkbox':
+
+                valueArr = field.inputProperties.values_list
                     ? field.inputProperties.values_list.split('||')
                     : [];
 
-                this.fieldsMultivalues[field.name] = new MultiValues([], []);
+                if (!_.isArray(this.model[field.name])) {
+                    this.model[field.name] = [];
+                }
 
+                this.fieldsMultivalues[field.name] = new MultiValues([], []);
                 valueArr.forEach((optStr, index) => {
                     let opts = optStr.split('==');
+                    if (!opts[1]) {
+                        opts[1] = opts[0];
+                    }
                     field.options.push(_.zipObject(['title','value'], opts));
                     this.fieldsMultivalues[field.name].values.push(opts[1]);
-                    this.fieldsMultivalues[field.name].checked.push(false);
+                    this.fieldsMultivalues[field.name].checked.push(this.model[field.name].indexOf(opts[1]) > -1);
                 });
 
                 break;
@@ -134,6 +154,28 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                 this.model[field.name] = defaultValue;
 
                 break;
+            case 'checkbox':
+
+                this.model[field.name] = defaultValue ? defaultValue.split('||') : [];
+
+                break;
+        }
+    }
+
+    selectValue(e, fieldName: string, value: string): void {
+        if (!_.isArray(this.model[fieldName])) {
+            this.model[fieldName] = [];
+        }
+        const valIndex = this.fieldsMultivalues[fieldName].values.indexOf(value);
+        if (valIndex === -1) {
+            return;
+        }
+        if (e.target.checked) {
+            this.model[fieldName].push(value);
+            this.fieldsMultivalues[fieldName].checked[valIndex] = true;
+        } else {
+            this.model[fieldName].splice(this.model[fieldName].indexOf(value), 1);
+            this.fieldsMultivalues[fieldName].checked[valIndex] = false;
         }
     }
 

@@ -220,7 +220,7 @@
                             </div>
                             <div class="col-md-7">
                                 <label class="mr-3" *ngFor="let opt of field.options; let index=index">
-                                    <input type="checkbox" [name]="field.name + index" [value]="opt.value">
+                                    <input type="checkbox" [name]="field.name + index" [value]="opt.value" (change)="selectValue($event, field.name, opt.value)" [checked]="fieldsMultivalues[field.name].checked[index]">
                                     {{opt.title}}
                                 </label>
                                 <div *ngIf="formErrors[field.name]" class="alert alert-danger">

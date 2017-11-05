@@ -99,7 +99,19 @@
                                 </label>
                             </div>
                             <div class="col-md-7">
-                                <input type="file" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control">
+                                <input type="file" id="field_{{field.name}}" [name]="field.name" accept="image/*" style="display:none;" (change)="fileChange($event, field.name)" #fileInput>
+                                <input type="hidden" [formControlName]="field.name" [(ngModel)]="model[field.name]">
+                                <button type="button" class="btn btn-secondary btn-wide" (click)="fileInput.click()">
+                                    <i class="icon-upload"></i>
+                                    Обзор
+                                </button>
+                                <button type="button" class="btn btn-secondary" *ngIf="model[field.name]" (click)="fileClear(field.name)" title="Clear">
+                                    <i class="icon-cross"></i>
+                                </button>
+                                <div class="pt-2 text-secondary" *ngIf="selectedItems[field.name]">
+                                    <i class="icon-file"></i>
+                                    {{selectedItems[field.name]}}
+                                </div>
                                 <div *ngIf="formErrors[field.name]" class="alert alert-danger">
                                     {{formErrors[field.name]}}
                                 </div>
@@ -114,7 +126,19 @@
                                 </label>
                             </div>
                             <div class="col-md-7">
-                                <input type="file" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control">
+                                <input type="file" id="field_{{field.name}}" [name]="field.name" style="display:none;" (change)="fileChange($event, field.name)" #fileInput>
+                                <input type="hidden" [formControlName]="field.name" [(ngModel)]="model[field.name]">
+                                <button type="button" class="btn btn-secondary btn-wide" (click)="fileInput.click()">
+                                    <i class="icon-upload"></i>
+                                    Обзор
+                                </button>
+                                <button type="button" class="btn btn-secondary" *ngIf="model[field.name]" (click)="fileClear(field.name)" title="Clear">
+                                    <i class="icon-cross"></i>
+                                </button>
+                                <div class="pt-2 text-secondary" *ngIf="selectedItems[field.name]">
+                                    <i class="icon-file"></i>
+                                    {{selectedItems[field.name]}}
+                                </div>
                                 <div *ngIf="formErrors[field.name]" class="alert alert-danger">
                                     {{formErrors[field.name]}}
                                 </div>

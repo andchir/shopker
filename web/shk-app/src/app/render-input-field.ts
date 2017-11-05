@@ -22,6 +22,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
     @Input() submitted: boolean;
     @Input() formErrors: {[key: string]: string};
     @Input() validationMessages: {[key: string]: {[key: string]: string}};
+    @Input() selectedItems: { [key: string]: string; } = {};
     fieldsMultivalues: {[key: string]: MultiValues} = {};
     calendarLocale = {
         en: {
@@ -252,6 +253,21 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
         const title = this.model[sourceFieldName] || '';
         this.model[field.name] = this.systemNameService.generateName(title);
         this.changeDetectionRef.detectChanges();
+    }
+
+    fileChange(event, fieldName: string) {
+        const fileList: FileList = event.target.files;
+        if (fileList.length > 0) {
+            // this.model[fieldName] = fileList[0].name;
+            this.form.controls[fieldName].setValue(fileList[0].name);
+            this.selectedItems[fieldName] = fileList[0].name;
+        }
+    }
+
+    fileClear(fieldName: string) {
+        this.model[fieldName] = null;
+        this.form.controls[fieldName].reset(null);
+        delete this.selectedItems[fieldName];
     }
 
 }

@@ -209,7 +209,7 @@ class FieldTypesFixtures extends Fixture
                     [
                         'name' => 'min',
                         'title' => 'Minimum value',
-                        'default_value' => 0
+                        'default_value' => null
                     ],
                     [
                         'name' => 'step',
@@ -320,7 +320,22 @@ class FieldTypesFixtures extends Fixture
                     [
                         'name' => 'format',
                         'title' => 'Format',
-                        'default_value' => 'Y-m-d H:i:s'
+                        'default_value' => 'yy-mm-dd'
+                    ],
+                    [
+                        'name' => 'show_time',
+                        'title' => 'Show time',
+                        'default_value' => '1'
+                    ],
+                    [
+                        'name' => 'hour_format',
+                        'title' => 'Hour format',
+                        'default_value' => '24'
+                    ],
+                    [
+                        'name' => 'locale',
+                        'title' => 'Calendar language',
+                        'default_value' => 'en'
                     ]
                 ],
                 'outputProperties' => [

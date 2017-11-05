@@ -209,7 +209,7 @@ class FieldTypesFixtures extends Fixture
                     [
                         'name' => 'min',
                         'title' => 'Минимальное значение',
-                        'default_value' => 0
+                        'default_value' => null
                     ],
                     [
                         'name' => 'step',
@@ -320,7 +320,22 @@ class FieldTypesFixtures extends Fixture
                     [
                         'name' => 'format',
                         'title' => 'Формат даты',
-                        'default_value' => 'Y-m-d H:i:s'
+                        'default_value' => 'yy-mm-dd'
+                    ],
+                    [
+                        'name' => 'show_time',
+                        'title' => 'Показывать время',
+                        'default_value' => '1'
+                    ],
+                    [
+                        'name' => 'hour_format',
+                        'title' => 'Формат времени',
+                        'default_value' => '24'
+                    ],
+                    [
+                        'name' => 'locale',
+                        'title' => 'Язык календаря',
+                        'default_value' => 'ru'
                     ]
                 ],
                 'outputProperties' => [

@@ -166,9 +166,15 @@
                                 <!--</div>-->
                                 <!--</div>-->
 
-                                <!--<p-calendar [formControlName]="field.name" [(ngModel)]="model[field.name]" showTime="true" [showIcon]="true" dateFormat="dd.mm.yy" icon="icon-date_range"></p-calendar>-->
-
-                                <input type="text" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control">
+                                <p-calendar [formControlName]="field.name"
+                                            [(ngModel)]="model[field.name]"
+                                            [dateFormat]="field.inputProperties.format"
+                                            [showTime]="field.inputProperties.show_time"
+                                            [hourFormat]="field.inputProperties.hour_format"
+                                            [locale]="calendarLocale[field.inputProperties.locale]"
+                                            [showButtonBar]="true"
+                                            [showIcon]="true"
+                                            [icon]="'icon-date_range'"></p-calendar>
 
                                 <div *ngIf="formErrors[field.name]" class="alert alert-danger">
                                     {{formErrors[field.name]}}

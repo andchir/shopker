@@ -65,6 +65,8 @@ export class ProductModalContent extends ModalContentAbstractComponent {
                 if (this.itemId) {
                     this.getModelData();
                 }
+            }, (msg) => {
+                this.errorMessage = msg;
             });
     }
 
@@ -78,7 +80,9 @@ export class ProductModalContent extends ModalContentAbstractComponent {
         this.categoriesService.getList()
             .subscribe(preparedData => {
                 this.categories = preparedData.data;
-                this.errorMessage = preparedData.errorMsg;
+                if (preparedData.errorMsg) {
+                    this.errorMessage = preparedData.errorMsg;
+                }
                 this.loading = false;
             });
     }
@@ -92,6 +96,7 @@ export class ProductModalContent extends ModalContentAbstractComponent {
             .then((res) => {
                 if(res.success){
                     this.currentContentType = res.data as ContentType;
+                    this.errorMessage = '';
                     this.updateForm();
                 } else {
                     if (res.msg) {

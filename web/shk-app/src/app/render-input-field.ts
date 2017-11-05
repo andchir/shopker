@@ -126,6 +126,20 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                 );
 
                 break;
+
+            case 'rich_text':
+
+                propertiesDefault = {
+                    handler: '',
+                    formats: 'background,bold,color,font,code,italic,link,size,strike,script,underline,blockquote,header,indent,list,align,direction,code-block,formula,image,video,clean'
+                };
+                field.inputProperties = InputFieldRenderComponent.extendProperties(
+                    field.inputProperties,
+                    propertiesDefault
+                );
+                field.inputProperties.formats = String(field.inputProperties.formats).split(',');
+
+                break;
             default:
 
                 break;
@@ -231,7 +245,9 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
     }
 
     generateName(field: ContentField): void {
-        const sourceFieldName = field.inputProperties.source_field || 'title';
+        const sourceFieldName = field.inputProperties.source_field
+            ? String(field.inputProperties.source_field)
+            : 'title';
         const title = this.model[sourceFieldName] || '';
         this.model[field.name] = this.systemNameService.generateName(title);
         this.changeDetectionRef.detectChanges();

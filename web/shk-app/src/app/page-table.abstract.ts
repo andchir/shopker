@@ -185,7 +185,7 @@ export abstract class PageTableAbstractComponent implements OnInit {
     }
 
     modalOpen(itemId?: number, isItemCopy: boolean = false): void {
-        this.modalRef = this.modalService.open(this.getModalContent(), {size: 'lg'});
+        this.modalRef = this.modalService.open(this.getModalContent(), {size: 'lg', backdrop: 'static'});
         this.setModalInputs(itemId, isItemCopy);
         this.modalRef.result.then((result) => {
             this.getList();

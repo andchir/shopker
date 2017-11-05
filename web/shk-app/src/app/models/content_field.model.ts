@@ -5,7 +5,7 @@ export class ContentField {
         public title: string,
         public description: string,
         public inputType: string,
-        public inputProperties: {[key: string]: string|number},
+        public inputProperties: {[key: string]: string|number|string[]},
         public outputType: string,
         public outputProperties: {[key: string]: string|number},
         public group: string,

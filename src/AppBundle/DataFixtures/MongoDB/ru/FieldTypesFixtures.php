@@ -161,6 +161,11 @@ class FieldTypesFixtures extends Fixture
                         'name' => 'handler',
                         'title' => 'Обработчик',
                         'default_value' => ''
+                    ],
+                    [
+                        'name' => 'formats',
+                        'title' => 'Список кнопок',
+                        'default_value' => 'background,bold,color,font,code,italic,link,size,strike,script,underline,blockquote,header,indent,list,align,direction,code-block,formula,image,video,clean'
                     ]
                 ],
                 'outputProperties' => [

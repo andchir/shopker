@@ -161,6 +161,11 @@ class FieldTypesFixtures extends Fixture
                         'name' => 'handler',
                         'title' => 'Handler',
                         'default_value' => ''
+                    ],
+                    [
+                        'name' => 'formats',
+                        'title' => 'Whitelist of buttons to display',
+                        'default_value' => 'background,bold,color,font,code,italic,link,size,strike,script,underline,blockquote,header,indent,list,align,direction,code-block,formula,image,video,clean'
                     ]
                 ],
                 'outputProperties' => [

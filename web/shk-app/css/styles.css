@@ -1,6 +1,5 @@
 
 /* common */
-.relative { position: relative; }
 .w-auto { width: auto; }
 .min-width150 { min-width: 150px; }
 .big { font-size: 120%; }
@@ -10,6 +9,9 @@
 .m-auto { margin-left: auto; margin-right: auto; }
 .border-t { border-top: 1px solid rgba(0,0,0,0.1); }
 .border-b { border-bottom: 1px solid rgba(0,0,0,0.1); }
+.relative { position: relative; }
+.pos-absolute-left { position: absolute; left: 0; top: 0; }
+.pos-absolute-right { position: absolute; right: 0; top: 0; }
 
 /* shadow */
 .shadow { box-shadow: 0 0 20px rgba(0,0,0,0.3); }
@@ -51,7 +53,7 @@ input.form-control:disabled { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); cursor
 .modal .modal-dialog { box-shadow: 0 0 20px rgba(0,0,0,0.5); }
 
 /* show-on-hover */
-.show-on-hover { position: absolute; top: 0; right: 0; white-space: nowrap; display: none; }
+.show-on-hover-parent .show-on-hover { position: absolute; top: 0; right: 0; white-space: nowrap; display: none; }
 .show-on-hover-parent:hover .show-on-hover { display: block; }
 
 /* labels */

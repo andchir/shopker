@@ -255,19 +255,33 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
         this.changeDetectionRef.detectChanges();
     }
 
-    fileChange(event, fieldName: string) {
+    fileChange(event, fieldName: string, imgPreviewEl?: HTMLImageElement) {
         const fileList: FileList = event.target.files;
         if (fileList.length > 0) {
             // this.model[fieldName] = fileList[0].name;
             this.form.controls[fieldName].setValue(fileList[0].name);
             this.selectedItems[fieldName] = fileList[0].name;
+
+            if (imgPreviewEl) {
+                const reader = new FileReader();
+                reader.onload = function(e: ProgressEvent) {
+                    const fr = e.target as FileReader;
+                    imgPreviewEl.src = fr.result;
+                    imgPreviewEl.style.display = 'block';
+                };
+                reader.readAsDataURL(fileList[0]);
+            }
         }
     }
 
-    fileClear(fieldName: string) {
+    fileClear(fieldName: string, imgPreviewEl?: HTMLImageElement) {
         this.model[fieldName] = null;
         this.form.controls[fieldName].reset(null);
         delete this.selectedItems[fieldName];
+        if (imgPreviewEl) {
+            imgPreviewEl.src = '';
+            imgPreviewEl.style.display = 'none';
+        }
     }
 
 }

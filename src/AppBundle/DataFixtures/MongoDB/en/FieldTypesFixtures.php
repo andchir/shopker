@@ -320,7 +320,7 @@ class FieldTypesFixtures extends Fixture
                     [
                         'name' => 'format',
                         'title' => 'Format',
-                        'default_value' => 'yy-mm-dd'
+                        'default_value' => 'mm/dd/yy'
                     ],
                     [
                         'name' => 'show_time',

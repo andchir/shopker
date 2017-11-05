@@ -2904,7 +2904,7 @@ var InputFieldRenderComponent = InputFieldRenderComponent_1 = (function () {
             case 'date':
                 propertiesDefault = {
                     handler: '',
-                    format: 'yy-mm-dd H:i:s',
+                    format: 'mm/dd/yy',
                     show_time: 0,
                     hour_format: 24,
                     locale: 'en'
@@ -2958,20 +2958,11 @@ var InputFieldRenderComponent = InputFieldRenderComponent_1 = (function () {
         if (typeof field.inputProperties.value !== 'undefined') {
             defaultValue = field.inputProperties.value;
         }
-        var hourFormat = field.inputProperties && field.inputProperties.hour_format
-            ? parseInt(String(field.inputProperties.hour_format))
-            : 24;
-        var dateFormat = field.inputProperties && field.inputProperties.format
-            ? String(field.inputProperties.format)
-            : '';
-        var localeName = field.inputProperties && field.inputProperties.locale
-            ? String(field.inputProperties.locale)
-            : 'en';
         switch (field.inputType) {
             case 'date':
                 defaultValue = new Date();
                 if (modelValue) {
-                    modelValue = this.parseDateTime(modelValue, dateFormat, hourFormat, localeName);
+                    modelValue = new Date(modelValue);
                 }
                 break;
             case 'number':
@@ -3013,195 +3004,6 @@ var InputFieldRenderComponent = InputFieldRenderComponent_1 = (function () {
         var title = this.model[sourceFieldName] || '';
         this.model[field.name] = this.systemNameService.generateName(title);
         this.changeDetectionRef.detectChanges();
-    };
-    InputFieldRenderComponent.prototype.parseDateTime = function (text, dateFormat, hourFormat, localeName) {
-        var date, parts = text.replace('T', ' ').split(' ');
-        date = this.parseDate(parts[0], dateFormat, localeName);
-        if (parts.length > 1) {
-            parts[1] = parts[1].replace(/[^\d.:]/g, '');
-            parts[2] = parts[2] ? parts[2].toUpperCase() : '';
-            this.populateTime(date, hourFormat, parts[1], parts[2]);
-        }
-        return date;
-    };
-    InputFieldRenderComponent.prototype.populateTime = function (value, hourFormat, timeString, ampm) {
-        var time = this.parseTime(timeString, hourFormat, ampm);
-        value.setHours(time.hour);
-        value.setMinutes(time.minute);
-        value.setSeconds(time.second);
-    };
-    InputFieldRenderComponent.prototype.parseTime = function (value, hourFormat, ampm) {
-        var pm = (ampm === 'PM');
-        var tokens = value.split(':');
-        var h = parseInt(tokens[0]);
-        var m = parseInt(tokens[1]);
-        var s = tokens[2] ? parseInt(tokens[2]) : 0;
-        if (isNaN(h) || isNaN(m)) {
-            return { hour: 0, minute: 0, second: 0 };
-        }
-        else {
-            if (hourFormat == 12 && h !== 12 && pm) {
-                h += 12;
-            }
-            return { hour: h, minute: m, second: s };
-        }
-    };
-    InputFieldRenderComponent.prototype.getDaysCountInMonth = function (month, year) {
-        return 32 - this.daylightSavingAdjust(new Date(year, month, 32)).getDate();
-    };
-    InputFieldRenderComponent.prototype.daylightSavingAdjust = function (date) {
-        if (!date) {
-            return null;
-        }
-        date.setHours(date.getHours() > 12 ? date.getHours() + 2 : 0);
-        return date;
-    };
-    // Ported from jquery-ui datepicker parseDate
-    InputFieldRenderComponent.prototype.parseDate = function (value, format, localeName) {
-        var optShortYearCutoff = '+10';
-        var ticksTo1970 = (((1970 - 1) * 365 + Math.floor(1970 / 4) - Math.floor(1970 / 100) +
-            Math.floor(1970 / 400)) * 24 * 60 * 60 * 10000000);
-        var utc = false;
-        if (format == null || value == null) {
-            throw "Invalid arguments";
-        }
-        value = (typeof value === "object" ? String(value) : value + "");
-        if (value === "") {
-            return null;
-        }
-        var iFormat, dim, extra, iValue = 0, shortYearCutoff = (typeof optShortYearCutoff !== "string"
-            ? optShortYearCutoff
-            : new Date().getFullYear() % 100 + parseInt(optShortYearCutoff, 10)), year = -1, month = -1, day = -1, doy = -1, literal = false, date, lookAhead = function (match) {
-            var matches = (iFormat + 1 < format.length && format.charAt(iFormat + 1) === match);
-            if (matches) {
-                iFormat++;
-            }
-            return matches;
-        }, getNumber = function (match) {
-            var isDoubled = lookAhead(match), size = (match === "@" ? 14 : (match === "!" ? 20 :
-                (match === "y" && isDoubled ? 4 : (match === "o" ? 3 : 2)))), minSize = (match === "y" ? size : 1), digits = new RegExp("^\\d{" + minSize + "," + size + "}"), num = value.substring(iValue).match(digits);
-            if (!num) {
-                throw "Missing number at position " + iValue;
-            }
-            iValue += num[0].length;
-            return parseInt(num[0], 10);
-        }, getName = function (match, shortNames, longNames) {
-            var index = -1;
-            var arr = lookAhead(match) ? longNames : shortNames;
-            var names = [];
-            for (var i = 0; i < arr.length; i++) {
-                names.push([i, arr[i]]);
-            }
-            names.sort(function (a, b) {
-                return -(a[1].length - b[1].length);
-            });
-            for (var i = 0; i < names.length; i++) {
-                var name = names[i][1];
-                if (value.substr(iValue, name.length).toLowerCase() === name.toLowerCase()) {
-                    index = names[i][0];
-                    iValue += name.length;
-                    break;
-                }
-            }
-            if (index !== -1) {
-                return index + 1;
-            }
-            else {
-                throw "Unknown name at position " + iValue;
-            }
-        }, checkLiteral = function () {
-            if (value.charAt(iValue) !== format.charAt(iFormat)) {
-                throw "Unexpected literal at position " + iValue;
-            }
-            iValue++;
-        };
-        for (iFormat = 0; iFormat < format.length; iFormat++) {
-            if (literal) {
-                if (format.charAt(iFormat) === "'" && !lookAhead("'")) {
-                    literal = false;
-                }
-                else {
-                    checkLiteral();
-                }
-            }
-            else {
-                switch (format.charAt(iFormat)) {
-                    case "d":
-                        day = getNumber("d");
-                        break;
-                    case "D":
-                        getName("D", this.calendarLocale[localeName].dayNamesShort, this.calendarLocale[localeName].dayNames);
-                        break;
-                    case "o":
-                        doy = getNumber("o");
-                        break;
-                    case "m":
-                        month = getNumber("m");
-                        break;
-                    case "M":
-                        month = getName("M", this.calendarLocale[localeName].monthNamesShort, this.calendarLocale[localeName].monthNames);
-                        break;
-                    case "y":
-                        year = getNumber("y");
-                        break;
-                    case "@":
-                        date = new Date(getNumber("@"));
-                        year = date.getFullYear();
-                        month = date.getMonth() + 1;
-                        day = date.getDate();
-                        break;
-                    case "!":
-                        date = new Date((getNumber("!") - ticksTo1970) / 10000);
-                        year = date.getFullYear();
-                        month = date.getMonth() + 1;
-                        day = date.getDate();
-                        break;
-                    case "'":
-                        if (lookAhead("'")) {
-                            checkLiteral();
-                        }
-                        else {
-                            literal = true;
-                        }
-                        break;
-                    default:
-                        checkLiteral();
-                }
-            }
-        }
-        if (iValue < value.length) {
-            extra = value.substr(iValue);
-            if (!/^\s+/.test(extra)) {
-                throw "Extra/unparsed characters found in date: " + extra;
-            }
-        }
-        if (year === -1) {
-            year = new Date().getFullYear();
-        }
-        else if (year < 100) {
-            year += new Date().getFullYear() - new Date().getFullYear() % 100 +
-                (year <= shortYearCutoff ? 0 : -100);
-        }
-        if (doy > -1) {
-            month = 1;
-            day = doy;
-            do {
-                dim = this.getDaysCountInMonth(year, month - 1);
-                if (day <= dim) {
-                    break;
-                }
-                month++;
-                day -= dim;
-            } while (true);
-        }
-        if (utc)
-            date = new Date(Date.UTC(year, month - 1, day));
-        else
-            date = this.daylightSavingAdjust(new Date(year, month - 1, day));
-        if (date.getFullYear() !== year || date.getMonth() + 1 !== month || date.getDate() !== day) {
-            throw "Invalid date"; // E.g. 31/02/00
-        }
-        return date;
     };
     return InputFieldRenderComponent;
 }());
@@ -4069,7 +3871,7 @@ module.exports = "<div class=\"card\">\n    <div class=\"card-body\">\n\n       
 /***/ "../../../../../src/app/templates/render-input-field.html":
 /***/ (function(module, exports) {
 
-module.exports = "\n<ngb-tabset justify=\"fill\">\n    <ngb-tab *ngFor=\"let groupName of groups; let i=index\">\n        <ng-template ngbTabTitle>{{groupName}}</ng-template>\n        <ng-template ngbTabContent>\n            <div class=\"pt-3\">\n\n                <div class=\"form-group\" [class.form-group-message]=\"formErrors[field.name]\" [formGroup]=\"form\" *ngFor=\"let field of fields | filterFieldByGroup: groupName\">\n\n                    <div [ngSwitch]=\"field.inputType\">\n\n                        <div class=\"row\" *ngSwitchCase=\"'system_name'\">\n                            <div class=\"col-md-5\">\n                                <label for=\"field_{{field.name}}\">\n                                    {{field.title}}\n                                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                                </label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <div class=\"input-group\">\n                                    <input type=\"text\" class=\"form-control form-control-sm\" id=\"field_{{field.name}}\" [name]=\"field.name\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\">\n                                    <div class=\"input-group-btn\">\n                                        <button type=\"button\" class=\"btn btn-secondary\" ngbTooltip=\"Generate\" (click)=\"generateName(field)\">\n                                            <i class=\"icon-reload\"></i>\n                                        </button>\n                                    </div>\n                                </div>\n                                <div *ngIf=\"formErrors[field.name]\" class=\"alert alert-danger\">\n                                    {{formErrors[field.name]}}\n                                </div>\n                            </div>\n                        </div>\n\n                        <div class=\"row\" *ngSwitchCase=\"'text'\">\n                            <div class=\"col-md-5\">\n                                <label for=\"field_{{field.name}}\">\n                                    {{field.title}}\n                                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                                </label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <input type=\"text\" id=\"field_{{field.name}}\" [name]=\"field.name\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" class=\"form-control\">\n                                <div *ngIf=\"formErrors[field.name]\" class=\"alert alert-danger\">\n                                    {{formErrors[field.name]}}\n                                </div>\n                            </div>\n                        </div>\n\n                        <div class=\"row\" *ngSwitchCase=\"'name'\">\n                            <div class=\"col-md-5\">\n                                <label for=\"field_{{field.name}}\">\n                                    {{field.title}}\n                                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                                </label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <input type=\"text\" id=\"field_{{field.name}}\" [name]=\"field.name\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" class=\"form-control\">\n                                <div *ngIf=\"formErrors[field.name]\" class=\"alert alert-danger\">\n                                    {{formErrors[field.name]}}\n                                </div>\n                            </div>\n                        </div>\n\n                        <div class=\"row\" *ngSwitchCase=\"'number'\">\n                            <div class=\"col-md-5\">\n                                <label for=\"field_{{field.name}}\">\n                                    {{field.title}}\n                                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                                </label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <input type=\"number\" class=\"form-control\" id=\"field_{{field.name}}\" [name]=\"field.name\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" [min]=\"field.inputProperties.min\" [max]=\"field.inputProperties.max\" [step]=\"field.inputProperties.step\">\n                                <div *ngIf=\"formErrors[field.name]\" class=\"alert alert-danger\">\n                                    {{formErrors[field.name]}}\n                                </div>\n                            </div>\n                        </div>\n\n                        <div class=\"row\" *ngSwitchCase=\"'textarea'\">\n                            <div class=\"col-md-5\">\n                                <label for=\"field_{{field.name}}\">\n                                    {{field.title}}\n                                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                                </label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <textarea rows=\"6\" id=\"field_{{field.name}}\" [name]=\"field.name\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" class=\"form-control\"></textarea>\n                                <div *ngIf=\"formErrors[field.name]\" class=\"alert alert-danger\">\n                                    {{formErrors[field.name]}}\n                                </div>\n                            </div>\n                        </div>\n\n                        <div class=\"row\" *ngSwitchCase=\"'image'\">\n                            <div class=\"col-md-5\">\n                                <label for=\"field_{{field.name}}\">\n                                    {{field.title}}\n                                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                                </label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <input type=\"file\" id=\"field_{{field.name}}\" [name]=\"field.name\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" class=\"form-control\">\n                                <div *ngIf=\"formErrors[field.name]\" class=\"alert alert-danger\">\n                                    {{formErrors[field.name]}}\n                                </div>\n                            </div>\n                        </div>\n\n                        <div class=\"row\" *ngSwitchCase=\"'file'\">\n                            <div class=\"col-md-5\">\n                                <label for=\"field_{{field.name}}\">\n                                    {{field.title}}\n                                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                                </label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <input type=\"file\" id=\"field_{{field.name}}\" [name]=\"field.name\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" class=\"form-control\">\n                                <div *ngIf=\"formErrors[field.name]\" class=\"alert alert-danger\">\n                                    {{formErrors[field.name]}}\n                                </div>\n                            </div>\n                        </div>\n\n                        <div class=\"row\" *ngSwitchCase=\"'color'\">\n                            <div class=\"col-md-5\">\n                                <label for=\"field_{{field.name}}\">\n                                    {{field.title}}\n                                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                                </label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <input type=\"color\" id=\"field_{{field.name}}\" [name]=\"field.name\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" class=\"form-control\">\n                                <div *ngIf=\"formErrors[field.name]\" class=\"alert alert-danger\">\n                                    {{formErrors[field.name]}}\n                                </div>\n                            </div>\n                        </div>\n\n                        <div class=\"row\" *ngSwitchCase=\"'rich_text'\">\n                            <div class=\"col-12\">\n                                <label for=\"field_{{field.name}}\">\n                                    {{field.title}}\n                                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                                </label>\n                                <p-editor [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" [style]=\"{'height':'320px'}\"></p-editor>\n                                <div *ngIf=\"formErrors[field.name]\" class=\"alert alert-danger\">\n                                    {{formErrors[field.name]}}\n                                </div>\n                            </div>\n                        </div>\n\n                        <div class=\"row\" *ngSwitchCase=\"'date'\">\n                            <div class=\"col-md-5\">\n                                <label for=\"field_{{field.name}}\">\n                                    {{field.title}}\n                                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                                </label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <!--<div class=\"input-group\">-->\n                                <!--<input type=\"text\" class=\"form-control\" id=\"field_{{field.name}}\" [name]=\"field.name\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" ngbDatepicker #d=\"ngbDatepicker\">-->\n                                <!--<div class=\"input-group-btn\">-->\n                                <!--<button class=\"btn btn-secondary\" (click)=\"d.toggle()\" type=\"button\">-->\n                                <!--<i class=\"icon-date_range\"></i>-->\n                                <!--</button>-->\n                                <!--</div>-->\n                                <!--</div>-->\n\n                                <p-calendar [formControlName]=\"field.name\"\n                                            [(ngModel)]=\"model[field.name]\"\n                                            [dateFormat]=\"field.inputProperties.format\"\n                                            [showTime]=\"field.inputProperties.show_time\"\n                                            [hourFormat]=\"field.inputProperties.hour_format\"\n                                            [locale]=\"calendarLocale[field.inputProperties.locale]\"\n                                            [showButtonBar]=\"true\"\n                                            [showIcon]=\"true\"\n                                            [icon]=\"'icon-date_range'\"></p-calendar>\n\n                                <div *ngIf=\"formErrors[field.name]\" class=\"alert alert-danger\">\n                                    {{formErrors[field.name]}}\n                                </div>\n                            </div>\n                        </div>\n\n                        <div class=\"row\" *ngSwitchCase=\"'select'\">\n                            <div class=\"col-md-5\">\n                                <label for=\"field_{{field.name}}\">\n                                    {{field.title}}\n                                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                                </label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <select id=\"field_{{field.name}}\" [name]=\"field.name\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" class=\"form-control\">\n                                    <option *ngFor=\"let opt of field.options\" [value]=\"opt.value\">{{opt.title}}</option>\n                                </select>\n                                <div *ngIf=\"formErrors[field.name]\" class=\"alert alert-danger\">\n                                    {{formErrors[field.name]}}\n                                </div>\n                            </div>\n                        </div>\n\n                        <div class=\"row\" *ngSwitchCase=\"'radio'\">\n                            <div class=\"col-md-5\">\n                                <label for=\"field_{{field.name}}\">\n                                    {{field.title}}\n                                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                                </label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <label class=\"mr-3\" *ngFor=\"let opt of field.options\">\n                                    <input type=\"radio\" [name]=\"field.name\" [value]=\"opt.value\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\">\n                                    {{opt.title}}\n                                </label>\n                                <div *ngIf=\"formErrors[field.name]\" class=\"alert alert-danger\">\n                                    {{formErrors[field.name]}}\n                                </div>\n                            </div>\n                        </div>\n\n                        <div class=\"row\" *ngSwitchCase=\"'checkbox'\">\n                            <div class=\"col-md-5\">\n                                <label for=\"field_{{field.name}}\">\n                                    {{field.title}}\n                                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                                </label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <label class=\"mr-3\" *ngFor=\"let opt of field.options; let index=index\">\n                                    <input type=\"checkbox\" [name]=\"field.name + index\" [value]=\"opt.value\" (change)=\"selectValue($event, field.name, opt.value)\" [checked]=\"fieldsMultivalues[field.name].checked[index]\">\n                                    {{opt.title}}\n                                </label>\n                                <div *ngIf=\"formErrors[field.name]\" class=\"alert alert-danger\">\n                                    {{formErrors[field.name]}}\n                                </div>\n                            </div>\n                        </div>\n\n                    </div>\n\n                </div>\n\n            </div>\n        </ng-template>\n    </ngb-tab>\n</ngb-tabset>\n"
+module.exports = "\n<ngb-tabset justify=\"fill\">\n    <ngb-tab *ngFor=\"let groupName of groups; let i=index\">\n        <ng-template ngbTabTitle>{{groupName}}</ng-template>\n        <ng-template ngbTabContent>\n            <div class=\"pt-3\">\n\n                <div class=\"form-group\" [class.form-group-message]=\"formErrors[field.name]\" [formGroup]=\"form\" *ngFor=\"let field of fields | filterFieldByGroup: groupName\">\n\n                    <div [ngSwitch]=\"field.inputType\">\n\n                        <div class=\"row\" *ngSwitchCase=\"'system_name'\">\n                            <div class=\"col-md-5\">\n                                <label for=\"field_{{field.name}}\">\n                                    {{field.title}}\n                                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                                </label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <div class=\"input-group\">\n                                    <input type=\"text\" class=\"form-control form-control-sm\" id=\"field_{{field.name}}\" [name]=\"field.name\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\">\n                                    <div class=\"input-group-btn\">\n                                        <button type=\"button\" class=\"btn btn-secondary\" ngbTooltip=\"Generate\" (click)=\"generateName(field)\">\n                                            <i class=\"icon-reload\"></i>\n                                        </button>\n                                    </div>\n                                </div>\n                                <div *ngIf=\"formErrors[field.name]\" class=\"alert alert-danger\">\n                                    {{formErrors[field.name]}}\n                                </div>\n                            </div>\n                        </div>\n\n                        <div class=\"row\" *ngSwitchCase=\"'text'\">\n                            <div class=\"col-md-5\">\n                                <label for=\"field_{{field.name}}\">\n                                    {{field.title}}\n                                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                                </label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <input type=\"text\" id=\"field_{{field.name}}\" [name]=\"field.name\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" class=\"form-control\">\n                                <div *ngIf=\"formErrors[field.name]\" class=\"alert alert-danger\">\n                                    {{formErrors[field.name]}}\n                                </div>\n                            </div>\n                        </div>\n\n                        <div class=\"row\" *ngSwitchCase=\"'name'\">\n                            <div class=\"col-md-5\">\n                                <label for=\"field_{{field.name}}\">\n                                    {{field.title}}\n                                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                                </label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <input type=\"text\" id=\"field_{{field.name}}\" [name]=\"field.name\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" class=\"form-control\">\n                                <div *ngIf=\"formErrors[field.name]\" class=\"alert alert-danger\">\n                                    {{formErrors[field.name]}}\n                                </div>\n                            </div>\n                        </div>\n\n                        <div class=\"row\" *ngSwitchCase=\"'number'\">\n                            <div class=\"col-md-5\">\n                                <label for=\"field_{{field.name}}\">\n                                    {{field.title}}\n                                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                                </label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <input type=\"number\" class=\"form-control\" id=\"field_{{field.name}}\" [name]=\"field.name\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" [min]=\"field.inputProperties.min\" [max]=\"field.inputProperties.max\" [step]=\"field.inputProperties.step\">\n                                <div *ngIf=\"formErrors[field.name]\" class=\"alert alert-danger\">\n                                    {{formErrors[field.name]}}\n                                </div>\n                            </div>\n                        </div>\n\n                        <div class=\"row\" *ngSwitchCase=\"'textarea'\">\n                            <div class=\"col-md-5\">\n                                <label for=\"field_{{field.name}}\">\n                                    {{field.title}}\n                                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                                </label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <textarea rows=\"6\" id=\"field_{{field.name}}\" [name]=\"field.name\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" class=\"form-control\"></textarea>\n                                <div *ngIf=\"formErrors[field.name]\" class=\"alert alert-danger\">\n                                    {{formErrors[field.name]}}\n                                </div>\n                            </div>\n                        </div>\n\n                        <div class=\"row\" *ngSwitchCase=\"'image'\">\n                            <div class=\"col-md-5\">\n                                <label for=\"field_{{field.name}}\">\n                                    {{field.title}}\n                                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                                </label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <input type=\"file\" id=\"field_{{field.name}}\" [name]=\"field.name\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" class=\"form-control\">\n                                <div *ngIf=\"formErrors[field.name]\" class=\"alert alert-danger\">\n                                    {{formErrors[field.name]}}\n                                </div>\n                            </div>\n                        </div>\n\n                        <div class=\"row\" *ngSwitchCase=\"'file'\">\n                            <div class=\"col-md-5\">\n                                <label for=\"field_{{field.name}}\">\n                                    {{field.title}}\n                                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                                </label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <input type=\"file\" id=\"field_{{field.name}}\" [name]=\"field.name\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" class=\"form-control\">\n                                <div *ngIf=\"formErrors[field.name]\" class=\"alert alert-danger\">\n                                    {{formErrors[field.name]}}\n                                </div>\n                            </div>\n                        </div>\n\n                        <div class=\"row\" *ngSwitchCase=\"'color'\">\n                            <div class=\"col-md-5\">\n                                <label for=\"field_{{field.name}}\">\n                                    {{field.title}}\n                                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                                </label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <input type=\"color\" id=\"field_{{field.name}}\" [name]=\"field.name\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" class=\"form-control\">\n                                <div *ngIf=\"formErrors[field.name]\" class=\"alert alert-danger\">\n                                    {{formErrors[field.name]}}\n                                </div>\n                            </div>\n                        </div>\n\n                        <div class=\"row\" *ngSwitchCase=\"'rich_text'\">\n                            <div class=\"col-12\">\n                                <label for=\"field_{{field.name}}\">\n                                    {{field.title}}\n                                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                                </label>\n                                <p-editor [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" [style]=\"{'height':'320px'}\"></p-editor>\n                                <div *ngIf=\"formErrors[field.name]\" class=\"alert alert-danger\">\n                                    {{formErrors[field.name]}}\n                                </div>\n                            </div>\n                        </div>\n\n                        <div class=\"row\" *ngSwitchCase=\"'date'\">\n                            <div class=\"col-md-5\">\n                                <label for=\"field_{{field.name}}\">\n                                    {{field.title}}\n                                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                                </label>\n                            </div>\n                            <div class=\"col-md-7\">\n\n                                <p-calendar [formControlName]=\"field.name\"\n                                            [(ngModel)]=\"model[field.name]\"\n                                            [dateFormat]=\"field.inputProperties.format\"\n                                            [showTime]=\"field.inputProperties.show_time\"\n                                            [hourFormat]=\"field.inputProperties.hour_format\"\n                                            [locale]=\"calendarLocale[field.inputProperties.locale]\"\n                                            [showButtonBar]=\"true\"\n                                            [showIcon]=\"true\"\n                                            [icon]=\"'icon-date_range'\"></p-calendar>\n\n                                <div *ngIf=\"formErrors[field.name]\" class=\"alert alert-danger\">\n                                    {{formErrors[field.name]}}\n                                </div>\n                            </div>\n                        </div>\n\n                        <div class=\"row\" *ngSwitchCase=\"'select'\">\n                            <div class=\"col-md-5\">\n                                <label for=\"field_{{field.name}}\">\n                                    {{field.title}}\n                                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                                </label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <select id=\"field_{{field.name}}\" [name]=\"field.name\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\" class=\"form-control\">\n                                    <option *ngFor=\"let opt of field.options\" [value]=\"opt.value\">{{opt.title}}</option>\n                                </select>\n                                <div *ngIf=\"formErrors[field.name]\" class=\"alert alert-danger\">\n                                    {{formErrors[field.name]}}\n                                </div>\n                            </div>\n                        </div>\n\n                        <div class=\"row\" *ngSwitchCase=\"'radio'\">\n                            <div class=\"col-md-5\">\n                                <label for=\"field_{{field.name}}\">\n                                    {{field.title}}\n                                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                                </label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <label class=\"mr-3\" *ngFor=\"let opt of field.options\">\n                                    <input type=\"radio\" [name]=\"field.name\" [value]=\"opt.value\" [formControlName]=\"field.name\" [(ngModel)]=\"model[field.name]\">\n                                    {{opt.title}}\n                                </label>\n                                <div *ngIf=\"formErrors[field.name]\" class=\"alert alert-danger\">\n                                    {{formErrors[field.name]}}\n                                </div>\n                            </div>\n                        </div>\n\n                        <div class=\"row\" *ngSwitchCase=\"'checkbox'\">\n                            <div class=\"col-md-5\">\n                                <label for=\"field_{{field.name}}\">\n                                    {{field.title}}\n                                    <span class=\"text-danger\" *ngIf=\"field.required\">*</span>\n                                </label>\n                            </div>\n                            <div class=\"col-md-7\">\n                                <label class=\"mr-3\" *ngFor=\"let opt of field.options; let index=index\">\n                                    <input type=\"checkbox\" [name]=\"field.name + index\" [value]=\"opt.value\" (change)=\"selectValue($event, field.name, opt.value)\" [checked]=\"fieldsMultivalues[field.name].checked[index]\">\n                                    {{opt.title}}\n                                </label>\n                                <div *ngIf=\"formErrors[field.name]\" class=\"alert alert-danger\">\n                                    {{formErrors[field.name]}}\n                                </div>\n                            </div>\n                        </div>\n\n                    </div>\n\n                </div>\n\n            </div>\n        </ng-template>\n    </ngb-tab>\n</ngb-tabset>\n"
 
 /***/ }),
 

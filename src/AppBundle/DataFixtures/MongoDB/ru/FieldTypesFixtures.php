@@ -398,6 +398,30 @@ class FieldTypesFixtures extends Fixture
                         'default_value' => ''
                     ]
                 ]
+            ],
+            'tags' => [
+                'title' => 'Метки',
+                'description' => '',
+                'isActive' => true,
+                'inputProperties' => [
+                    [
+                        'name' => 'value',
+                        'title' => 'Значение по умолчанию',
+                        'default_value' => ''
+                    ],
+                    [
+                        'name' => 'handler',
+                        'title' => 'Обработчик',
+                        'default_value' => ''
+                    ]
+                ],
+                'outputProperties' => [
+                    [
+                        'name' => 'className',
+                        'title' => 'CSS класс',
+                        'default_value' => ''
+                    ]
+                ]
             ]
         ];
 

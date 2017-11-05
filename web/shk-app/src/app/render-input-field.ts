@@ -15,18 +15,6 @@ import { Properties } from './models/properties.iterface';
 })
 export class InputFieldRenderComponent implements OnInit, OnChanges {
 
-    static extendProperties(object1: Properties, object2: Properties): Properties {
-        object1 = _.extend({}, object2, object1);
-        for (let key in object1) {
-            if (object1.hasOwnProperty(key)) {
-                if (isNumeric(object1[key])) {
-                    object1[key] = parseInt(String(object1[key]));
-                }
-            }
-        }
-        return object1;
-    }
-
     @Input() fields: ContentField[];
     @Input() groups: string[];
     @Input() model: any;
@@ -105,7 +93,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                     max: null,
                     step: 1
                 };
-                field.inputProperties = InputFieldRenderComponent.extendProperties(
+                field.inputProperties = this.extendProperties(
                     field.inputProperties,
                     propertiesDefault
                 );
@@ -120,7 +108,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                     hour_format: 24,
                     locale: 'en'
                 };
-                field.inputProperties = InputFieldRenderComponent.extendProperties(
+                field.inputProperties = this.extendProperties(
                     field.inputProperties,
                     propertiesDefault
                 );
@@ -133,7 +121,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                     handler: '',
                     formats: 'background,bold,color,font,code,italic,link,strike,script,underline,blockquote,header,indent,list,align,direction,code-block,formula,image,video,clean'
                 };
-                field.inputProperties = InputFieldRenderComponent.extendProperties(
+                field.inputProperties = this.extendProperties(
                     field.inputProperties,
                     propertiesDefault
                 );
@@ -211,6 +199,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
             case 'number':
                 defaultValue = parseInt(String(defaultValue));
                 break;
+            case 'tags':
             case 'checkbox':
                 defaultValue = defaultValue ? defaultValue.split('||') : [];
                 break;
@@ -242,6 +231,18 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
             this.validationMessages[field.name].required = field.title + ' is required.';
         }
         return validators;
+    }
+
+    extendProperties(object1: Properties, object2: Properties): Properties {
+        object1 = _.extend({}, object2, object1);
+        for (let key in object1) {
+            if (object1.hasOwnProperty(key)) {
+                if (isNumeric(object1[key])) {
+                    object1[key] = parseInt(String(object1[key]));
+                }
+            }
+        }
+        return object1;
     }
 
     generateName(field: ContentField): void {

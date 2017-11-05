@@ -108,7 +108,8 @@ input.form-control:disabled { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); cursor
 /* icons */
 body .ui-datepicker .ui-datepicker-header .ui-datepicker-prev:before { font-family: 'icomoon'; content: "\e908"; }
 body .ui-datepicker .ui-datepicker-header .ui-datepicker-next:before { font-family: 'icomoon'; content: "\e907"; }
+.ui-chips-token .ui-chips-token-icon { margin-top: -0.6em !important; }
 .fa:before { font-family: 'icomoon'; }
 .fa.fa-angle-up:before { content: "\e906"; }
 .fa.fa-angle-down:before { content: "\e909"; }
-
+.fa.fa-close:before { content: "\e117"; }

@@ -131,7 +131,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
 
                 propertiesDefault = {
                     handler: '',
-                    formats: 'background,bold,color,font,code,italic,link,size,strike,script,underline,blockquote,header,indent,list,align,direction,code-block,formula,image,video,clean'
+                    formats: 'background,bold,color,font,code,italic,link,strike,script,underline,blockquote,header,indent,list,align,direction,code-block,formula,image,video,clean'
                 };
                 field.inputProperties = InputFieldRenderComponent.extendProperties(
                     field.inputProperties,

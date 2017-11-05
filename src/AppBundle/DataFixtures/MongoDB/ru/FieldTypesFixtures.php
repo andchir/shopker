@@ -165,7 +165,7 @@ class FieldTypesFixtures extends Fixture
                     [
                         'name' => 'formats',
                         'title' => 'Список кнопок',
-                        'default_value' => 'background,bold,color,font,code,italic,link,size,strike,script,underline,blockquote,header,indent,list,align,direction,code-block,formula,image,video,clean'
+                        'default_value' => 'background,bold,color,font,code,italic,link,strike,script,underline,blockquote,header,indent,list,align,direction,code-block,formula,image,video,clean'
                     ]
                 ],
                 'outputProperties' => [

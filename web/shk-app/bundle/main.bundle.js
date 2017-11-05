@@ -2805,7 +2805,7 @@ var InputFieldRenderComponent = InputFieldRenderComponent_1 = (function () {
             case 'rich_text':
                 propertiesDefault = {
                     handler: '',
-                    formats: 'background,bold,color,font,code,italic,link,size,strike,script,underline,blockquote,header,indent,list,align,direction,code-block,formula,image,video,clean'
+                    formats: 'background,bold,color,font,code,italic,link,strike,script,underline,blockquote,header,indent,list,align,direction,code-block,formula,image,video,clean'
                 };
                 field.inputProperties = InputFieldRenderComponent_1.extendProperties(field.inputProperties, propertiesDefault);
                 field.inputProperties.formats = String(field.inputProperties.formats).split(',');

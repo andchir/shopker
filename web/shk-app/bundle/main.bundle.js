@@ -2761,6 +2761,13 @@ var ProductModalContent = (function (_super) {
     };
     ProductModalContent.prototype.saveFiles = function (itemId) {
         console.log('SAVE FILES', this.files, itemId);
+        var formData = new FormData();
+        for (var key in this.files) {
+            if (this.files.hasOwnProperty(key) && this.files[key] instanceof File) {
+                formData.append(key, this.files[key], this.files[key].name);
+            }
+        }
+        // TODO: Save files
     };
     ProductModalContent.prototype.save = function () {
         this.submitted = true;

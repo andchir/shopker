@@ -141,6 +141,15 @@ export class ProductModalContent extends ModalContentAbstractComponent {
 
         console.log('SAVE FILES', this.files, itemId);
 
+        const formData: FormData = new FormData();
+        for (let key in this.files) {
+            if (this.files.hasOwnProperty(key) && this.files[key] instanceof File) {
+                formData.append(key, this.files[key], this.files[key].name);
+            }
+        }
+
+        // TODO: Save files
+
     }
 
     save() {

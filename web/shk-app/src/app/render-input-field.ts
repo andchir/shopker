@@ -19,11 +19,12 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
     @Input() groups: string[];
     @Input() model: any;
     @Input() form: FormGroup;
-    @Input() submitted: boolean;
     @Input() formErrors: {[key: string]: string};
     @Input() validationMessages: {[key: string]: {[key: string]: string}};
     @Input() selectedItems: { [key: string]: string; } = {};
+    @Input() files: { [key: string]: File } = {};
     fieldsMultivalues: {[key: string]: MultiValues} = {};
+    submitted = false;
     calendarLocale = {
         en: {
             firstDayOfWeek: 0,
@@ -258,9 +259,9 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
     fileChange(event, fieldName: string, imgPreviewEl?: HTMLImageElement) {
         const fileList: FileList = event.target.files;
         if (fileList.length > 0) {
-            // this.model[fieldName] = fileList[0].name;
             this.form.controls[fieldName].setValue(fileList[0].name);
             this.selectedItems[fieldName] = fileList[0].name;
+            this.files[fieldName] = fileList[0];
 
             if (imgPreviewEl) {
                 const reader = new FileReader();
@@ -278,6 +279,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
         this.model[fieldName] = null;
         this.form.controls[fieldName].reset(null);
         delete this.selectedItems[fieldName];
+        delete this.files[fieldName];
         if (imgPreviewEl) {
             imgPreviewEl.src = '';
             imgPreviewEl.style.display = 'none';

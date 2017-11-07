@@ -194,6 +194,10 @@ class ProductController extends BaseController
             : true;
 
         foreach ($contentType->getFields() as $field){
+            // Files will be saved later by a separate request
+            if (in_array($field['inputType'], ['file','image'])) {
+                continue;
+            }
             $document[$field['name']] = isset($data[$field['name']])
                 ? $data[$field['name']]
                 : null;

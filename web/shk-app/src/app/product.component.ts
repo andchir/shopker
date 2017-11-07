@@ -40,11 +40,11 @@ export class ProductModalContent extends ModalContentAbstractComponent {
     };
 
     constructor(
-        fb: FormBuilder,
-        dataService: ProductsService,
-        systemNameService: SystemNameService,
-        activeModal: NgbActiveModal,
-        tooltipConfig: NgbTooltipConfig,
+        public fb: FormBuilder,
+        public dataService: ProductsService,
+        public systemNameService: SystemNameService,
+        public activeModal: NgbActiveModal,
+        public tooltipConfig: NgbTooltipConfig,
         private contentTypesService: ContentTypesService,
         private categoriesService: CategoriesService
     ) {
@@ -137,9 +137,14 @@ export class ProductModalContent extends ModalContentAbstractComponent {
         this.getContentType();
     }
 
+    saveFiles(itemId: number) {
+
+        console.log('SAVE FILES', this.files, itemId);
+
+    }
+
     save() {
         this.submitted = true;
-
         if(!this.form.valid){
             this.onValueChanged('form');
             this.submitted = false;
@@ -150,7 +155,11 @@ export class ProductModalContent extends ModalContentAbstractComponent {
 
         let callback = function (res: any) {
             if (res.success) {
-                this.closeModal();
+                if (!_.isEmpty(this.files) && res.data._id) {
+                    this.saveFiles(res.data._id);
+                } else {
+                    this.closeModal();
+                }
             } else {
                 if (res.msg) {
                     this.submitted = false;

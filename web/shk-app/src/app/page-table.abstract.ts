@@ -22,6 +22,7 @@ export abstract class ModalContentAbstractComponent implements OnInit {
     validationMessages: { [key: string]: { [key: string]: string } } = {};
     formFields = {};
     model: { [key: string]: any } = {};
+    files: { [key: string]: File } = {};
 
     abstract save();
 

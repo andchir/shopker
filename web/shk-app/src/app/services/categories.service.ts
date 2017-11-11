@@ -9,22 +9,10 @@ import 'rxjs/add/operator/map';
 import { Category } from '../models/category.model';
 
 @Injectable()
-export class CategoriesService extends DataService {
+export class CategoriesService extends DataService<Category> {
 
     constructor(http: Http) {
         super(http);
         this.setRequestUrl('admin/categories');
-    }
-
-    extractData(res: Response): any {
-        let body = res.json();
-        if(body.data){
-            if(Array.isArray(body.data)){
-                body.data = body.data as Category[];
-            } else {
-                body.data = body.data as Category;
-            }
-        }
-        return body;
     }
 }

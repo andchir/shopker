@@ -6,23 +6,11 @@ import { ContentType } from '../models/content_type.model';
 import 'rxjs/add/operator/toPromise';
 
 @Injectable()
-export class ContentTypesService extends DataService {
+export class ContentTypesService extends DataService<ContentType> {
 
     constructor(http: Http) {
         super(http);
         this.setRequestUrl('admin/content_types');
-    }
-
-    extractData(res: Response): any {
-        let body = res.json();
-        if(body.data){
-            if(Array.isArray(body.data)){
-                body.data = body.data as ContentType[];
-            } else {
-                body.data = body.data as ContentType;
-            }
-        }
-        return body;
     }
 
     getItemByName(name: string): Promise<any> {

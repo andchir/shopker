@@ -10,22 +10,10 @@ import 'rxjs/add/operator/map';
 import { Product } from '../models/product.model';
 
 @Injectable()
-export class ProductsService extends DataService {
+export class ProductsService extends DataService<Product> {
 
     constructor(http: Http) {
         super(http);
         this.setRequestUrl('admin/products');
-    }
-
-    extractData(res: Response): any {
-        let body = res.json();
-        if(body.data){
-            if(Array.isArray(body.data)){
-                body.data = body.data as Product[];
-            } else {
-                body.data = body.data as Product;
-            }
-        }
-        return body;
     }
 }

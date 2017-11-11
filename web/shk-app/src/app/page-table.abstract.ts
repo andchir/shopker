@@ -146,7 +146,7 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
 
     getList(): void {
         this.loading = true;
-        this.dataService.getList(this.queryOptions)
+        this.dataService.getList<M>(this.queryOptions)
             .subscribe(
                 preparedData => {
                     this.items = preparedData.data as M[];

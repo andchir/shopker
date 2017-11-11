@@ -6,7 +6,7 @@ import { DataService } from './data-service.abstract';
 import 'rxjs/add/operator/toPromise';
 
 @Injectable()
-export class CollectionsService extends DataService {
+export class CollectionsService extends DataService<any> {
 
     constructor(public http: Http) {
         super(http);

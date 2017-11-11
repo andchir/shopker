@@ -15,7 +15,7 @@ export interface outputData {
     total: number;
 }
 
-export abstract class DataService {
+export abstract class DataService<M> {
 
     public headers = new Headers({'Content-Type': 'application/json'});
     private requestUrl = '';
@@ -24,8 +24,6 @@ export abstract class DataService {
         this.http = http;
         this.requestUrl = 'app/data_list';
     }
-
-    abstract extractData(res: Response);
 
     setRequestUrl(url){
         this.requestUrl = url;
@@ -124,6 +122,18 @@ export abstract class DataService {
         }
         console.error(errMsg);
         return Promise.reject(errMsg);
+    }
+
+    extractData(res: Response): any {
+        let body = res.json();
+        if(body.data){
+            if(Array.isArray(body.data)){
+                body.data = body.data as M[];
+            } else {
+                body.data = body.data as M;
+            }
+        }
+        return body;
     }
 
 }

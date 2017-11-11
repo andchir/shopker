@@ -3106,18 +3106,6 @@ var CategoriesService = (function (_super) {
         _this.setRequestUrl('admin/categories');
         return _this;
     }
-    CategoriesService.prototype.extractData = function (res) {
-        var body = res.json();
-        if (body.data) {
-            if (Array.isArray(body.data)) {
-                body.data = body.data;
-            }
-            else {
-                body.data = body.data;
-            }
-        }
-        return body;
-    };
     return CategoriesService;
 }(data_service_abstract_1.DataService));
 CategoriesService = __decorate([
@@ -3225,18 +3213,6 @@ var ContentTypesService = (function (_super) {
         _this.setRequestUrl('admin/content_types');
         return _this;
     }
-    ContentTypesService.prototype.extractData = function (res) {
-        var body = res.json();
-        if (body.data) {
-            if (Array.isArray(body.data)) {
-                body.data = body.data;
-            }
-            else {
-                body.data = body.data;
-            }
-        }
-        return body;
-    };
     ContentTypesService.prototype.getItemByName = function (name) {
         var url = this.getRequestUrl() + ("/by_name/" + name);
         return this.http.get(url)
@@ -3366,6 +3342,18 @@ var DataService = (function () {
         console.error(errMsg);
         return Promise.reject(errMsg);
     };
+    DataService.prototype.extractData = function (res) {
+        var body = res.json();
+        if (body.data) {
+            if (Array.isArray(body.data)) {
+                body.data = body.data;
+            }
+            else {
+                body.data = body.data;
+            }
+        }
+        return body;
+    };
     return DataService;
 }());
 exports.DataService = DataService;
@@ -3411,18 +3399,6 @@ var ProductsService = (function (_super) {
         _this.setRequestUrl('admin/products');
         return _this;
     }
-    ProductsService.prototype.extractData = function (res) {
-        var body = res.json();
-        if (body.data) {
-            if (Array.isArray(body.data)) {
-                body.data = body.data;
-            }
-            else {
-                body.data = body.data;
-            }
-        }
-        return body;
-    };
     return ProductsService;
 }(data_service_abstract_1.DataService));
 ProductsService = __decorate([

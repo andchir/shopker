@@ -249,6 +249,7 @@ var animations_1 = __webpack_require__("../../../platform-browser/@angular/platf
 var core_1 = __webpack_require__("../../../core/@angular/core.es5.js");
 var forms_1 = __webpack_require__("../../../forms/@angular/forms.es5.js");
 var http_1 = __webpack_require__("../../../http/@angular/http.es5.js");
+var http_2 = __webpack_require__("../../../common/@angular/common/http.es5.js");
 var ng_bootstrap_1 = __webpack_require__("../../../../@ng-bootstrap/ng-bootstrap/index.js");
 var primeng_1 = __webpack_require__("../../../../primeng/primeng.js");
 var app_component_1 = __webpack_require__("../../../../../src/app/app.component.ts");
@@ -286,6 +287,7 @@ AppModule = __decorate([
             forms_1.FormsModule,
             forms_1.ReactiveFormsModule,
             http_1.HttpModule,
+            http_2.HttpClientModule,
             app_routing_module_1.AppRoutingModule,
             ng_bootstrap_1.NgbModule.forRoot(),
             primeng_1.EditorModule,
@@ -429,18 +431,15 @@ var CatalogCategoryComponent = (function (_super) {
         this.loading = true;
         this.titleService.setTitle(this.title + ' / ' + this.currentCategory.title);
         this.getContentType()
-            .then(function (res) {
+            .subscribe(function (data) {
             _this.loading = false;
-            if (res.success) {
-                _this.currentContentType = res.data;
-                _this.updateTableConfig();
-                _this.getList();
-            }
-            else {
-                _this.items = [];
-                _this.tableFields = [];
-                _this.currentCategory.id = 0;
-            }
+            _this.currentContentType = data;
+            _this.updateTableConfig();
+            _this.getList();
+        }, function () {
+            _this.items = [];
+            _this.tableFields = [];
+            _this.currentCategory.id = 0;
         });
     };
     CatalogCategoryComponent.prototype.openRootCategory = function () {
@@ -1083,17 +1082,17 @@ var ContentTypeModalContent = (function (_super) {
         var _this = this;
         var options = new query_options_1.QueryOptions('title', 'asc', 0, 0, 1);
         this.fieldTypesService.getList(options)
-            .subscribe(function (preparedData) {
-            _this.fieldTypes = preparedData.data;
+            .subscribe(function (data) {
+            _this.fieldTypes = data;
         }, function (error) { return _this.errorMessage = error; });
     };
     /** Get collections list */
     ContentTypeModalContent.prototype.getCollectionsList = function () {
         var _this = this;
         this.collectionsService.getList()
-            .subscribe(function (preparedData) {
-            if (preparedData.data.length > 0) {
-                _this.collections = preparedData.data;
+            .subscribe(function (data) {
+            if (data.length > 0) {
+                _this.collections = data;
             }
         });
     };
@@ -1169,25 +1168,26 @@ var ContentTypeModalContent = (function (_super) {
         popover.placement = 'top';
         popover.popoverTitle = 'Confirm';
         var confirm = function () {
-            var _this = this;
             this.loading = true;
-            this.collectionsService.deleteItemByName(this.model.collection)
-                .then(function (res) {
-                if (res.success) {
-                    var index = _this.collections.indexOf(_this.model.collection);
-                    if (index > -1) {
-                        _this.collections.splice(index, 1);
-                        _this.model.collection = _this.collections[0];
-                    }
-                    popover.close();
-                }
-                else {
-                    if (res.msg) {
-                        popoverContent.message = res.msg;
-                    }
-                }
-                _this.loading = false;
-            });
+            console.log('deleteItemByName', this.model.collection);
+            // this.collectionsService.deleteItemByName(this.model.collection)
+            //     .then((res) => {
+            //         if(res.success){
+            //
+            //             let index = this.collections.indexOf(this.model.collection);
+            //             if(index > -1){
+            //                 this.collections.splice(index, 1);
+            //                 this.model.collection = this.collections[0];
+            //             }
+            //             popover.close();
+            //
+            //         } else {
+            //             if(res.msg){
+            //                 popoverContent.message = res.msg;
+            //             }
+            //         }
+            //         this.loading = false;
+            //     });
         };
         popoverContent = {
             p: popover,
@@ -1451,7 +1451,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = __webpack_require__("../../../core/@angular/core.es5.js");
-var http_1 = __webpack_require__("../../../http/@angular/http.es5.js");
+var http_1 = __webpack_require__("../../../common/@angular/common/http.es5.js");
 var platform_browser_1 = __webpack_require__("../../../platform-browser/@angular/platform-browser.es5.js");
 var ng_bootstrap_1 = __webpack_require__("../../../../@ng-bootstrap/ng-bootstrap/index.js");
 var forms_1 = __webpack_require__("../../../forms/@angular/forms.es5.js");
@@ -1468,23 +1468,11 @@ var FieldTypesService = (function (_super) {
         _this.setRequestUrl('admin/field_types');
         return _this;
     }
-    FieldTypesService.prototype.extractData = function (res) {
-        var body = res.json();
-        if (body.data) {
-            if (Array.isArray(body.data)) {
-                body.data = body.data;
-            }
-            else {
-                body.data = body.data;
-            }
-        }
-        return body;
-    };
     return FieldTypesService;
 }(data_service_abstract_1.DataService));
 FieldTypesService = __decorate([
     core_1.Injectable(),
-    __metadata("design:paramtypes", [typeof (_a = typeof http_1.Http !== "undefined" && http_1.Http) === "function" && _a || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof http_1.HttpClient !== "undefined" && http_1.HttpClient) === "function" && _a || Object])
 ], FieldTypesService);
 exports.FieldTypesService = FieldTypesService;
 var FieldTypeModalContent = (function (_super) {
@@ -2614,12 +2602,11 @@ var ProductModalContent = (function (_super) {
         var _this = this;
         this.loading = true;
         this.categoriesService.getList()
-            .subscribe(function (preparedData) {
-            _this.categories = preparedData.data;
-            if (preparedData.errorMsg) {
-                _this.errorMessage = preparedData.errorMsg;
-            }
+            .subscribe(function (data) {
+            _this.categories = data;
             _this.loading = false;
+        }, function (err) {
+            _this.errorMessage = err;
         });
     };
     ProductModalContent.prototype.getContentType = function () {
@@ -3094,7 +3081,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = __webpack_require__("../../../core/@angular/core.es5.js");
-var http_1 = __webpack_require__("../../../http/@angular/http.es5.js");
+var http_1 = __webpack_require__("../../../common/@angular/common/http.es5.js");
 var data_service_abstract_1 = __webpack_require__("../../../../../src/app/services/data-service.abstract.ts");
 __webpack_require__("../../../../rxjs/_esm5/add/operator/toPromise.js");
 __webpack_require__("../../../../rxjs/_esm5/add/operator/catch.js");
@@ -3110,7 +3097,7 @@ var CategoriesService = (function (_super) {
 }(data_service_abstract_1.DataService));
 CategoriesService = __decorate([
     core_1.Injectable(),
-    __metadata("design:paramtypes", [typeof (_a = typeof http_1.Http !== "undefined" && http_1.Http) === "function" && _a || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof http_1.HttpClient !== "undefined" && http_1.HttpClient) === "function" && _a || Object])
 ], CategoriesService);
 exports.CategoriesService = CategoriesService;
 var _a;
@@ -3144,9 +3131,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = __webpack_require__("../../../core/@angular/core.es5.js");
-var http_1 = __webpack_require__("../../../http/@angular/http.es5.js");
+var http_1 = __webpack_require__("../../../common/@angular/common/http.es5.js");
 var data_service_abstract_1 = __webpack_require__("../../../../../src/app/services/data-service.abstract.ts");
-__webpack_require__("../../../../rxjs/_esm5/add/operator/toPromise.js");
+var operators_1 = __webpack_require__("../../../../rxjs/_esm5/operators/index.js");
 var CollectionsService = (function (_super) {
     __extends(CollectionsService, _super);
     function CollectionsService(http) {
@@ -3158,18 +3145,13 @@ var CollectionsService = (function (_super) {
     CollectionsService.prototype.deleteItemByName = function (itemName) {
         var url = this.getRequestUrl() + "/" + itemName;
         return this.http.delete(url, { headers: this.headers })
-            .toPromise()
-            .then(function (res) { return res.json(); })
-            .catch(this.handleError);
-    };
-    CollectionsService.prototype.extractData = function (res) {
-        return res.json();
+            .pipe(operators_1.catchError(this.handleError()));
     };
     return CollectionsService;
 }(data_service_abstract_1.DataService));
 CollectionsService = __decorate([
     core_1.Injectable(),
-    __metadata("design:paramtypes", [typeof (_a = typeof http_1.Http !== "undefined" && http_1.Http) === "function" && _a || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof http_1.HttpClient !== "undefined" && http_1.HttpClient) === "function" && _a || Object])
 ], CollectionsService);
 exports.CollectionsService = CollectionsService;
 var _a;
@@ -3203,9 +3185,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = __webpack_require__("../../../core/@angular/core.es5.js");
-var http_1 = __webpack_require__("../../../http/@angular/http.es5.js");
+var http_1 = __webpack_require__("../../../common/@angular/common/http.es5.js");
+var operators_1 = __webpack_require__("../../../../rxjs/_esm5/operators/index.js");
 var data_service_abstract_1 = __webpack_require__("../../../../../src/app/services/data-service.abstract.ts");
-__webpack_require__("../../../../rxjs/_esm5/add/operator/toPromise.js");
 var ContentTypesService = (function (_super) {
     __extends(ContentTypesService, _super);
     function ContentTypesService(http) {
@@ -3215,16 +3197,13 @@ var ContentTypesService = (function (_super) {
     }
     ContentTypesService.prototype.getItemByName = function (name) {
         var url = this.getRequestUrl() + ("/by_name/" + name);
-        return this.http.get(url)
-            .toPromise()
-            .then(this.extractData)
-            .catch(this.handleError);
+        return this.http.get(url).pipe(operators_1.catchError(this.handleError()));
     };
     return ContentTypesService;
 }(data_service_abstract_1.DataService));
 ContentTypesService = __decorate([
     core_1.Injectable(),
-    __metadata("design:paramtypes", [typeof (_a = typeof http_1.Http !== "undefined" && http_1.Http) === "function" && _a || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof http_1.HttpClient !== "undefined" && http_1.HttpClient) === "function" && _a || Object])
 ], ContentTypesService);
 exports.ContentTypesService = ContentTypesService;
 var _a;
@@ -3238,17 +3217,14 @@ var _a;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var http_1 = __webpack_require__("../../../http/@angular/http.es5.js");
-var http_2 = __webpack_require__("../../../http/@angular/http.es5.js");
-__webpack_require__("../../../../rxjs/_esm5/add/operator/toPromise.js");
-__webpack_require__("../../../../rxjs/_esm5/add/operator/catch.js");
-__webpack_require__("../../../../rxjs/_esm5/add/operator/map.js");
+var http_1 = __webpack_require__("../../../common/@angular/common/http.es5.js");
+var of_1 = __webpack_require__("../../../../rxjs/_esm5/observable/of.js");
+var operators_1 = __webpack_require__("../../../../rxjs/_esm5/operators/index.js");
 var DataService = (function () {
     function DataService(http) {
         this.http = http;
-        this.headers = new http_2.Headers({ 'Content-Type': 'application/json' });
+        this.headers = new http_1.HttpHeaders({ 'Content-Type': 'application/json' });
         this.requestUrl = '';
-        this.http = http;
         this.requestUrl = 'app/data_list';
     }
     DataService.prototype.setRequestUrl = function (url) {
@@ -3259,36 +3235,30 @@ var DataService = (function () {
     };
     DataService.prototype.getItem = function (id) {
         var url = this.getRequestUrl() + ("/" + id);
-        return this.http.get(url)
-            .toPromise()
-            .then(this.extractData)
-            .catch(this.handleError);
+        return this.http.get(url).pipe(operators_1.catchError(this.handleError()));
     };
     DataService.prototype.getList = function (options) {
-        var params = new http_1.URLSearchParams();
+        var params = new http_1.HttpParams();
         for (var name in options) {
             if (!options.hasOwnProperty(name)) {
                 continue;
             }
             params.set(name, options[name]);
         }
-        return this.http.get(this.getRequestUrl(), { search: params })
-            .map(this.extractData)
-            .catch(this.handleError)
-            .map(DataService.prepareDataArray);
+        return this.http.get(this.getRequestUrl(), { params: params })
+            .pipe(operators_1.catchError(this.handleError()));
     };
     DataService.prototype.deleteItem = function (id) {
         var url = this.getRequestUrl() + ("/" + id);
-        return this.http.delete(url, { headers: this.headers })
-            .toPromise()
-            .then(this.extractData)
-            .catch(this.handleError);
+        return this.http.delete(url, { headers: this.headers }).pipe(operators_1.catchError(this.handleError()));
     };
     DataService.prototype.deleteByArray = function (idsArray) {
         var url = this.getRequestUrl() + '/batch';
+        var params = new http_1.HttpParams();
+        params.set('ids', JSON.stringify(idsArray));
         return this.http.delete(url, {
             headers: this.headers,
-            body: { ids: idsArray }
+            params: params
         })
             .toPromise()
             .then(this.extractData)
@@ -3329,18 +3299,25 @@ var DataService = (function () {
         }
         return output;
     };
-    DataService.prototype.handleError = function (error) {
-        var errMsg;
-        if (error instanceof http_1.Response) {
-            var body = error.json() || '';
-            var err = body.error || JSON.stringify(body);
-            errMsg = error.status + " - " + (error.statusText || '') + " " + err;
-        }
-        else {
-            errMsg = error.message ? error.message : error.toString();
-        }
-        console.error(errMsg);
-        return Promise.reject(errMsg);
+    // handleError(error: Response | any) {
+    //     let errMsg: string;
+    //     if (error instanceof Response) {
+    //         const body = error.json() || '';
+    //         const err = body.error || JSON.stringify(body);
+    //         errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
+    //     } else {
+    //         errMsg = error.message ? error.message : error.toString();
+    //     }
+    //     console.error(errMsg);
+    //     return Promise.reject(errMsg);
+    // }
+    DataService.prototype.handleError = function (operation, result) {
+        if (operation === void 0) { operation = 'operation'; }
+        return function (error) {
+            console.log(error, result);
+            // Let the app keep running by returning an empty result.
+            return of_1.of(result);
+        };
     };
     DataService.prototype.extractData = function (res) {
         var body = res.json();
@@ -3387,11 +3364,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = __webpack_require__("../../../core/@angular/core.es5.js");
-var http_1 = __webpack_require__("../../../http/@angular/http.es5.js");
+var http_1 = __webpack_require__("../../../common/@angular/common/http.es5.js");
 var data_service_abstract_1 = __webpack_require__("../../../../../src/app/services/data-service.abstract.ts");
-__webpack_require__("../../../../rxjs/_esm5/add/operator/toPromise.js");
-__webpack_require__("../../../../rxjs/_esm5/add/operator/catch.js");
-__webpack_require__("../../../../rxjs/_esm5/add/operator/map.js");
 var ProductsService = (function (_super) {
     __extends(ProductsService, _super);
     function ProductsService(http) {
@@ -3403,7 +3377,7 @@ var ProductsService = (function (_super) {
 }(data_service_abstract_1.DataService));
 ProductsService = __decorate([
     core_1.Injectable(),
-    __metadata("design:paramtypes", [typeof (_a = typeof http_1.Http !== "undefined" && http_1.Http) === "function" && _a || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof http_1.HttpClient !== "undefined" && http_1.HttpClient) === "function" && _a || Object])
 ], ProductsService);
 exports.ProductsService = ProductsService;
 var _a;

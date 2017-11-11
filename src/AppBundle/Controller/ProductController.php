@@ -32,18 +32,12 @@ class ProductController extends BaseController
     public function getListByCategory(Request $request, Category $category = null)
     {
         if(!$category){
-            return new JsonResponse([
-                'success' => true,
-                'data' => []
-            ]);
+            return new JsonResponse([]);
         }
 
         $contentType = $category->getContentType();
         if(!$contentType){
-            return new JsonResponse([
-                'success' => false,
-                'msg' => 'Content type not found.'
-            ]);
+            return $this->setError('Content type not found.');
         }
 
         $queryString = $request->getQueryString();
@@ -80,7 +74,6 @@ class ProductController extends BaseController
         ]);
 
         return new JsonResponse([
-            'success' => true,
             'data' => $data,
             'total' => $total
         ]);
@@ -163,7 +156,7 @@ class ProductController extends BaseController
      * @param $data
      * @param Category $category
      * @param int $itemId
-     * @return array
+     * @return JsonResponse
      */
     public function createUpdate($data, Category $category = null, $itemId = null)
     {
@@ -172,10 +165,7 @@ class ProductController extends BaseController
 
         $contentType = $category->getContentType();
         if(!$contentType){
-            return [
-                'success' => false,
-                'msg' => 'Content type not found.'
-            ];
+            return $this->setError('Content type not found.');
         }
 
         $collection = $this->getCollection($contentType->getCollection());
@@ -210,10 +200,11 @@ class ProductController extends BaseController
             $result = $collection->insert($document);
         }
 
-        return [
-            'success' => !empty($result['ok']),
-            'data' => $document
-        ];
+        if (!empty($result['ok'])) {
+            return new JsonResponse($document);
+        } else {
+            return $this->setError('Item not saved.');
+        }
     }
 
     /**
@@ -232,10 +223,10 @@ class ProductController extends BaseController
 
         $output = $this->validateData($data, $category);
         if(!$output['success']){
-            return new JsonResponse($output);
+            return $this->setError($output['msg']);
         }
 
-        return new JsonResponse($this->createUpdate($data, $category));
+        return $this->createUpdate($data, $category);
     }
 
     /**
@@ -255,10 +246,10 @@ class ProductController extends BaseController
 
         $output = $this->validateData($data, $category, $itemId);
         if(!$output['success']){
-            return new JsonResponse($output);
+            return $this->setError($output['msg']);
         }
 
-        return new JsonResponse($this->createUpdate($data, $category, $itemId));
+        return $this->createUpdate($data, $category, $itemId);
     }
 
     /**
@@ -272,10 +263,7 @@ class ProductController extends BaseController
     public function deleteBatch(Request $request, Category $category = null)
     {
         if (!$category) {
-            return new JsonResponse([
-                'success' => false,
-                'msg' => 'Category not found.'
-            ]);
+            return $this->setError('Category not found.');
         }
 
         $data = $request->getContent()
@@ -283,18 +271,12 @@ class ProductController extends BaseController
             : [];
 
         if(empty($data['ids'])){
-            return new JsonResponse([
-                'success' => true,
-                'msg' => 'Bad data.'
-            ]);
+            return $this->setError('Bad data.');
         }
 
         $contentType = $category->getContentType();
         if(!$contentType){
-            return new JsonResponse([
-                'success' => false,
-                'msg' => 'Content type not found.'
-            ]);
+            return $this->setError('Content type not found.');
         }
 
         $collection = $this->getCollection($contentType->getCollection());
@@ -302,9 +284,11 @@ class ProductController extends BaseController
             '_id' => ['$in' => $data['ids']]
         ]);
 
-        return new JsonResponse([
-            'success' => !empty($result['ok'])
-        ]);
+        if (!empty($result['ok'])) {
+            return new JsonResponse([]);
+        } else {
+            return $this->setError('Error.');
+        }
     }
 
     /**
@@ -327,10 +311,7 @@ class ProductController extends BaseController
 
         $contentType = $category->getContentType();
         if(!$contentType){
-            return new JsonResponse([
-                'success' => false,
-                'msg' => 'Content type not found.'
-            ]);
+            return $this->setError('Content type not found.');
         }
 
         $collectionName = $contentType->getCollection();
@@ -338,17 +319,16 @@ class ProductController extends BaseController
         $document = $collection->findOne(['_id' => $itemId]);
 
         if(!$document){
-            return new JsonResponse([
-                'success' => false,
-                'msg' => 'Document not found.'
-            ]);
+            return $this->setError('Document not found.');
         }
 
         $result = $collection->remove(['_id' => $itemId]);
 
-        return new JsonResponse([
-            'success' => !empty($result['ok'])
-        ]);
+        if (!empty($result['ok'])) {
+            return new JsonResponse([]);
+        } else {
+            return $this->setError('Error.');
+        }
     }
 
     /**
@@ -363,20 +343,14 @@ class ProductController extends BaseController
     public function getOneByCategory(Request $request, Category $category = null, $itemId)
     {
         if(!$category){
-            return new JsonResponse([
-                'success' => false,
-                'msg' => 'Category not found.'
-            ]);
+            return $this->setError('Category not found.');
         }
 
         $itemId = intval($itemId);
 
         $contentType = $category->getContentType();
         if(!$contentType){
-            return new JsonResponse([
-                'success' => false,
-                'msg' => 'Content type not found.'
-            ]);
+            return $this->setError('Content type not found.');
         }
 
         $contentTypeFields = $contentType->getFields();
@@ -384,10 +358,7 @@ class ProductController extends BaseController
 
         $entry = $collection->findOne(['_id' => $itemId]);
         if(!$entry){
-            return new JsonResponse([
-                'success' => false,
-                'msg' => 'Product not found.'
-            ]);
+            return $this->setError('Product not found.');
         }
 
         $data = [
@@ -401,10 +372,7 @@ class ProductController extends BaseController
                 : '';
         }
 
-        return new JsonResponse([
-            'success' => true,
-            'data' => $data
-        ]);
+        return new JsonResponse($data);
     }
 
     /**

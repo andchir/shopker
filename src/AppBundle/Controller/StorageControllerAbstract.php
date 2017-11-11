@@ -38,7 +38,6 @@ abstract class StorageControllerAbstract extends BaseController
         }
 
         return new JsonResponse([
-            'success' => true,
             'data' => $data,
             'total' => $results['total']
         ]);
@@ -56,16 +55,10 @@ abstract class StorageControllerAbstract extends BaseController
 
         $item = $repository->find($itemId);
         if (!$item) {
-            return new JsonResponse([
-                'success' => false,
-                'msg' => 'Item not found.'
-            ]);
+            return $this->setError('Item not found.');
         }
 
-        return new JsonResponse([
-            'success' => true,
-            'data' => $item->toArray(true)
-        ]);
+        return new JsonResponse($item->toArray(true));
     }
 
     /**
@@ -81,10 +74,7 @@ abstract class StorageControllerAbstract extends BaseController
             : [];
 
         if(empty($data['ids'])){
-            return new JsonResponse([
-                'success' => true,
-                'msg' => 'Bad data.'
-            ]);
+            return $this->setError('Bad data.');
         }
 
         $repository = $this->getRepository();
@@ -100,9 +90,7 @@ abstract class StorageControllerAbstract extends BaseController
         }
         $dm->flush();
 
-        return new JsonResponse([
-            'success' => true
-        ]);
+        return new JsonResponse([]);
     }
 
     /**
@@ -117,10 +105,7 @@ abstract class StorageControllerAbstract extends BaseController
 
         $item = $repository->find($itemId);
         if(!$item){
-            return new JsonResponse([
-                'success' => false,
-                'msg' => 'Item not found.'
-            ]);
+            return $this->setError('Item not found.');
         }
 
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
@@ -128,9 +113,7 @@ abstract class StorageControllerAbstract extends BaseController
         $dm->remove($item);
         $dm->flush();
 
-        return new JsonResponse([
-            'success' => true
-        ]);
+        return new JsonResponse([]);
     }
 
     /**
@@ -147,10 +130,10 @@ abstract class StorageControllerAbstract extends BaseController
 
         $output = $this->validateData($data);
         if(!$output['success']){
-            return new JsonResponse($output);
+            return $this->setError($output['msg']);
         }
 
-        return new JsonResponse($this->createUpdate($data));
+        return $this->createUpdate($data);
     }
 
     /**
@@ -168,10 +151,10 @@ abstract class StorageControllerAbstract extends BaseController
 
         $output = $this->validateData($data, $itemId);
         if(!$output['success']){
-            return new JsonResponse($output);
+            return $this->setError($output['msg']);
         }
 
-        return new JsonResponse($this->createUpdate($data, $itemId));
+        return $this->createUpdate($data);
     }
 
     /**

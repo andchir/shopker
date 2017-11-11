@@ -1,5 +1,5 @@
 import { Component, Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { Title } from '@angular/platform-browser';
 import { NgbModal, NgbActiveModal, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -12,23 +12,11 @@ import { PageTableAbstractComponent } from './page-table.abstract';
 import { ModalContentAbstractComponent } from './modal.abstract';
 
 @Injectable()
-export class FieldTypesService extends DataService {
+export class FieldTypesService extends DataService<FieldType> {
 
-    constructor(http: Http) {
+    constructor(http: HttpClient) {
         super(http);
         this.setRequestUrl('admin/field_types');
-    }
-
-    extractData(res: Response): any {
-        let body = res.json();
-        if(body.data){
-            if(Array.isArray(body.data)){
-                body.data = body.data as FieldType[];
-            } else {
-                body.data = body.data as FieldType;
-            }
-        }
-        return body;
     }
 }
 

@@ -50,7 +50,7 @@ class CategoryController extends StorageControllerAbstract
      * Create or update item
      * @param $data
      * @param string $itemId
-     * @return array
+     * @return JsonResponse
      */
     public function createUpdate($data, $itemId = null)
     {
@@ -67,10 +67,7 @@ class CategoryController extends StorageControllerAbstract
                     ->setIsFolder(true);
             }
             if(!$item){
-                return [
-                    'success' => false,
-                    'msg' => 'Item not found.'
-                ];
+                return $this->setError('Item not found.');
             }
             $previousParentId = $item->getParentId();
         }
@@ -84,10 +81,7 @@ class CategoryController extends StorageControllerAbstract
             ]);
 
         if(!$contentType){
-            return [
-                'success' => false,
-                'msg' => 'Content type not found.'
-            ];
+            return $this->setError('Content type not found.');
         }
 
         $item
@@ -109,10 +103,7 @@ class CategoryController extends StorageControllerAbstract
         $event = new CategoryUpdatedEvent($this->container, $item, $previousParentId);
         $item = $evenDispatcher->dispatch(CategoryUpdatedEvent::NAME, $event)->getCategory();
 
-        return [
-            'success' => true,
-            'data' => $item->toArray()
-        ];
+        return new JsonResponse($item->toArray());
     }
 
     /**
@@ -128,10 +119,7 @@ class CategoryController extends StorageControllerAbstract
         /** @var Category $item */
         $item = $repository->find($itemId);
         if(!$item){
-            return new JsonResponse([
-                'success' => false,
-                'msg' => 'Item not found.'
-            ]);
+            return $this->setError('Item not found.');
         }
 
         $previousParentId = $item->getParentId();
@@ -148,9 +136,7 @@ class CategoryController extends StorageControllerAbstract
         $event = new CategoryUpdatedEvent($this->container, null, $previousParentId);
         $evenDispatcher->dispatch(CategoryUpdatedEvent::NAME, $event);
 
-        return new JsonResponse([
-            'success' => true
-        ]);
+        return new JsonResponse([]);
     }
 
     /**

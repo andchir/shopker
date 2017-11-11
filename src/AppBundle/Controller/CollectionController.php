@@ -34,10 +34,7 @@ class CollectionController extends BaseController
             $data[] = $item->getName();
         }
 
-        return new JsonResponse([
-            'success' => true,
-            'data' => $data
-        ]);
+        return new JsonResponse($data);
     }
 
     /**
@@ -56,10 +53,7 @@ class CollectionController extends BaseController
             'name' => $itemName
         ]);
         if(!$collection){
-            return new JsonResponse([
-                'success' => false,
-                'msg' => 'Item not found.'
-            ]);
+            return $this->setError('Item not found.');
         }
 
         $contentTypeRepository = $this->get('doctrine_mongodb')
@@ -73,10 +67,7 @@ class CollectionController extends BaseController
             ->count();
 
         if($count > 0){
-            return new JsonResponse([
-                'success' => false,
-                'msg' => 'This collection is not empty.'
-            ]);
+            return $this->setError('This collection is not empty.');
         }
 
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
@@ -84,16 +75,14 @@ class CollectionController extends BaseController
         $dm->remove($collection);
         $dm->flush();
 
-        return new JsonResponse([
-            'success' => true
-        ]);
+        return new JsonResponse([]);
     }
 
     /**
      * Create or update item
      * @param $data
      * @param string $itemId
-     * @return array
+     * @return JsonResponse
      */
     public function createUpdate($data, $itemId = null)
     {
@@ -113,10 +102,7 @@ class CollectionController extends BaseController
         $dm->persist($collection);
         $dm->flush();
 
-        return [
-            'success' => true,
-            'data' => $collection->toArray()
-        ];
+        return new JsonResponse($collection->toArray());
     }
 
     /**

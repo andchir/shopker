@@ -79,12 +79,11 @@ export class ProductModalContent extends ModalContentAbstractComponent<Product> 
     getCategories() {
         this.loading = true;
         this.categoriesService.getList()
-            .subscribe(preparedData => {
-                this.categories = preparedData.data;
-                if (preparedData.errorMsg) {
-                    this.errorMessage = preparedData.errorMsg;
-                }
+            .subscribe(data => {
+                this.categories = data;
                 this.loading = false;
+            }, (err) => {
+                this.errorMessage = err;
             });
     }
 

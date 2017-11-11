@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { NgbModal, NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Observable } from 'rxjs/Observable';
 import * as _ from "lodash";
 
 import { Category } from "./models/category.model";
@@ -65,7 +66,7 @@ export class CatalogCategoryComponent extends PageTableAbstractComponent<Product
         return ProductModalContent;
     }
 
-    getContentType(): Promise<any> {
+    getContentType(): Observable<ContentType> {
         return this.contentTypesService
             .getItemByName(this.currentCategory.contentTypeName);
     }
@@ -83,17 +84,15 @@ export class CatalogCategoryComponent extends PageTableAbstractComponent<Product
         this.loading = true;
         this.titleService.setTitle(this.title + ' / ' + this.currentCategory.title);
         this.getContentType()
-            .then((res) => {
+            .subscribe((data) => {
                 this.loading = false;
-                if (res.success) {
-                    this.currentContentType = res.data as ContentType;
-                    this.updateTableConfig();
-                    this.getList();
-                } else {
-                    this.items = [];
-                    this.tableFields = [];
-                    this.currentCategory.id = 0;
-                }
+                this.currentContentType = data as ContentType;
+                this.updateTableConfig();
+                this.getList();
+            }, () => {
+                this.items = [];
+                this.tableFields = [];
+                this.currentCategory.id = 0;
             });
     }
 

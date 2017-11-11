@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { DataService } from './data-service.abstract';
 
 import 'rxjs/add/operator/toPromise';
@@ -11,7 +11,7 @@ import { Category } from '../models/category.model';
 @Injectable()
 export class CategoriesService extends DataService<Category> {
 
-    constructor(http: Http) {
+    constructor(http: HttpClient) {
         super(http);
         this.setRequestUrl('admin/categories');
     }

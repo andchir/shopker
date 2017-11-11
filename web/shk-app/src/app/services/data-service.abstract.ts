@@ -1,12 +1,11 @@
 import { Http, Response, URLSearchParams } from '@angular/http';
-import { HttpParams } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Headers, RequestOptions } from '@angular/http';
 import { QueryOptions } from '../models/query-options';
 
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/toPromise';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/map';
+import { of } from 'rxjs/observable/of';
+import { catchError, map, tap } from 'rxjs/operators';
 
 export interface outputData {
     data: any | any[] | null;
@@ -17,11 +16,12 @@ export interface outputData {
 
 export abstract class DataService<M> {
 
-    public headers = new Headers({'Content-Type': 'application/json'});
+    public headers = new HttpHeaders({'Content-Type': 'application/json'});
     private requestUrl = '';
 
-    constructor(public http: Http) {
-        this.http = http;
+    constructor(
+        public http: HttpClient
+    ) {
         this.requestUrl = 'app/data_list';
     }
 
@@ -33,41 +33,41 @@ export abstract class DataService<M> {
         return this.requestUrl;
     }
 
-    getItem(id: number): Promise<any> {
+    getItem(id: number): Observable<M> {
         const url = this.getRequestUrl() + `/${id}`;
-        return this.http.get(url)
-            .toPromise()
-            .then(this.extractData)
-            .catch(this.handleError);
+        return this.http.get<M>(url).pipe(
+            catchError(this.handleError<M>())
+        );
     }
 
-    getList(options ?: QueryOptions): Observable<any> {
-        let params = new URLSearchParams();
+    getList(options ?: QueryOptions): Observable<M[]> {
+        let params = new HttpParams();
         for(let name in options){
             if(!options.hasOwnProperty(name)){
                 continue;
             }
             params.set(name, options[name]);
         }
-        return this.http.get(this.getRequestUrl(), {search: params})
-            .map(this.extractData)
-            .catch(this.handleError)
-            .map(DataService.prepareDataArray);
+        return this.http.get<M[]>(this.getRequestUrl(), {params: params})
+            .pipe(
+                catchError(this.handleError())
+            );
     }
 
-    deleteItem(id: number): Promise<any> {
+    deleteItem(id: number): Observable<M> {
         const url = this.getRequestUrl() + `/${id}`;
-        return this.http.delete(url, {headers: this.headers})
-            .toPromise()
-            .then(this.extractData)
-            .catch(this.handleError);
+        return this.http.delete<M>(url, {headers: this.headers}).pipe(
+            catchError(this.handleError<M>())
+        );
     }
 
     deleteByArray(idsArray: number[]): Promise<any> {
         const url = this.getRequestUrl() + '/batch';
+        let params = new HttpParams();
+        params.set('ids', JSON.stringify(idsArray));
         return this.http.delete(url, {
                 headers: this.headers,
-                body: {ids: idsArray}
+                params: params
             })
             .toPromise()
             .then(this.extractData)
@@ -111,20 +111,30 @@ export abstract class DataService<M> {
         return output;
     }
 
-    handleError(error: Response | any) {
-        let errMsg: string;
-        if (error instanceof Response) {
-            const body = error.json() || '';
-            const err = body.error || JSON.stringify(body);
-            errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
-        } else {
-            errMsg = error.message ? error.message : error.toString();
-        }
-        console.error(errMsg);
-        return Promise.reject(errMsg);
+    // handleError(error: Response | any) {
+    //     let errMsg: string;
+    //     if (error instanceof Response) {
+    //         const body = error.json() || '';
+    //         const err = body.error || JSON.stringify(body);
+    //         errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
+    //     } else {
+    //         errMsg = error.message ? error.message : error.toString();
+    //     }
+    //     console.error(errMsg);
+    //     return Promise.reject(errMsg);
+    // }
+
+    handleError<T> (operation = 'operation', result?: T) {
+        return (error: any): Observable<T> => {
+
+            console.log(error, result);
+
+            // Let the app keep running by returning an empty result.
+            return of(result as T);
+        };
     }
 
-    extractData(res: Response): any {
+    extractData(res: any): any {
         let body = res.json();
         if(body.data){
             if(Array.isArray(body.data)){

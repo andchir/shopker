@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use AppBundle\Document\FieldType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Class FieldTypeController
@@ -40,7 +41,7 @@ class FieldTypeController extends StorageControllerAbstract
     /**
      * @param $data
      * @param int $itemId
-     * @return array
+     * @return JsonResponse
      */
     public function createUpdate($data, $itemId = null){
 
@@ -54,10 +55,7 @@ class FieldTypeController extends StorageControllerAbstract
         if($itemId){
             $item = $this->getRepository()->find($itemId);
             if(!$item){
-                return [
-                    'success' => false,
-                    'msg' => 'Item not found.'
-                ];
+                return $this->setError('Item not found.');
             }
         } else {
             $item = new FieldType();
@@ -76,10 +74,7 @@ class FieldTypeController extends StorageControllerAbstract
         $dm->persist($item);
         $dm->flush();
 
-        return [
-            'success' => true,
-            'data' => $item->toArray()
-        ];
+        return new JsonResponse($item->toArray());
     }
 
     /**

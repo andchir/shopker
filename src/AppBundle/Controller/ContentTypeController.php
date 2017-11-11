@@ -24,7 +24,9 @@ class ContentTypeController extends StorageControllerAbstract
         'collection',
         'category',
         'settings',
-        'orders'
+        'orders',
+        'files',
+        'users'
     ];
 
     /**
@@ -64,7 +66,7 @@ class ContentTypeController extends StorageControllerAbstract
      * Create or update item
      * @param $data
      * @param string $itemId
-     * @return array
+     * @return JsonResponse
      */
     public function createUpdate($data, $itemId = null)
     {
@@ -112,10 +114,7 @@ class ContentTypeController extends StorageControllerAbstract
             $dm->flush();
         }
 
-        return [
-            'success' => true,
-            'data' => $contentType->toArray()
-        ];
+        return new JsonResponse($contentType->toArray());
     }
 
     /**
@@ -132,16 +131,10 @@ class ContentTypeController extends StorageControllerAbstract
             'name' => $itemName
         ]);
         if (!$fieldType) {
-            return new JsonResponse([
-                'success' => false,
-                'msg' => 'Item not found.'
-            ]);
+            return $this->setError('Item not found.');
         }
 
-        return new JsonResponse([
-            'success' => true,
-            'data' => $fieldType->toArray(true)
-        ]);
+        return new JsonResponse($fieldType->toArray(true));
     }
 
     /**
@@ -157,10 +150,7 @@ class ContentTypeController extends StorageControllerAbstract
             : [];
 
         if(empty($data['ids'])){
-            return new JsonResponse([
-                'success' => true,
-                'msg' => 'Bad data.'
-            ]);
+            return $this->setError('Bad data.');
         }
 
         $repository = $this->getRepository();
@@ -180,9 +170,7 @@ class ContentTypeController extends StorageControllerAbstract
         }
         $dm->flush();
 
-        return new JsonResponse([
-            'success' => true
-        ]);
+        return new JsonResponse([]);
     }
 
     /**

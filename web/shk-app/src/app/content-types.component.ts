@@ -185,8 +185,8 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent<Conte
         let options = new QueryOptions('title', 'asc', 0, 0, 1);
         this.fieldTypesService.getList(options)
             .subscribe(
-                preparedData => {
-                    this.fieldTypes = preparedData.data;
+                data => {
+                    this.fieldTypes = data;
                 },
                 error =>  this.errorMessage = <any>error
             );
@@ -195,10 +195,9 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent<Conte
     /** Get collections list */
     getCollectionsList(): void {
         this.collectionsService.getList()
-            .subscribe(
-                preparedData => {
-                    if(preparedData.data.length > 0){
-                        this.collections = preparedData.data;
+            .subscribe(data => {
+                    if(data.length > 0){
+                        this.collections = data;
                     }
                 }
             );
@@ -286,24 +285,25 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent<Conte
 
         let confirm = function(){
             this.loading = true;
-            this.collectionsService.deleteItemByName(this.model.collection)
-                .then((res) => {
-                    if(res.success){
-
-                        let index = this.collections.indexOf(this.model.collection);
-                        if(index > -1){
-                            this.collections.splice(index, 1);
-                            this.model.collection = this.collections[0];
-                        }
-                        popover.close();
-
-                    } else {
-                        if(res.msg){
-                            popoverContent.message = res.msg;
-                        }
-                    }
-                    this.loading = false;
-                });
+            console.log('deleteItemByName', this.model.collection);
+            // this.collectionsService.deleteItemByName(this.model.collection)
+            //     .then((res) => {
+            //         if(res.success){
+            //
+            //             let index = this.collections.indexOf(this.model.collection);
+            //             if(index > -1){
+            //                 this.collections.splice(index, 1);
+            //                 this.model.collection = this.collections[0];
+            //             }
+            //             popover.close();
+            //
+            //         } else {
+            //             if(res.msg){
+            //                 popoverContent.message = res.msg;
+            //             }
+            //         }
+            //         this.loading = false;
+            //     });
         };
 
         popoverContent = {

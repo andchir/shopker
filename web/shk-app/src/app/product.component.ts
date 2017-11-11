@@ -5,24 +5,25 @@ import { ContentType } from './models/content_type.model';
 import { Category } from "./models/category.model";
 import * as _ from "lodash";
 
-import { ModalContentAbstractComponent } from './page-table.abstract';
+import { ModalContentAbstractComponent } from './modal.abstract';
 import { CategoriesService } from './services/categories.service';
 import { ContentTypesService } from './services/content_types.service';
 import { ProductsService } from './services/products.service';
 import { SystemNameService } from './services/system-name.service';
+import { Product } from './models/product.model';
 
 @Component({
     selector: 'product-modal-content',
     templateUrl: 'templates/modal-product.html',
     providers: [ SystemNameService ]
 })
-export class ProductModalContent extends ModalContentAbstractComponent {
+export class ProductModalContent extends ModalContentAbstractComponent<Product> {
 
     @Input() category: Category;
     categories: Category[] = [];
     contentTypes: ContentType[] = [];
     currentContentType: ContentType = new ContentType(0, '', '', '', '', [], [], true);
-    model: {[key: string]: any} = {};
+    model: Product = {} as Product;
 
     formFields = {
         parentId: {

@@ -10,7 +10,8 @@ import { ContentType } from './models/content_type.model';
 import { FieldType } from "./models/field-type.model";
 import { FieldTypeProperty } from './models/field-type-property.model';
 import { QueryOptions } from './models/query-options';
-import { PageTableAbstractComponent, ModalContentAbstractComponent } from './page-table.abstract';
+import { PageTableAbstractComponent } from './page-table.abstract';
+import { ModalContentAbstractComponent } from './modal.abstract';
 
 import { ContentTypesService } from './services/content_types.service';
 import { CollectionsService } from './services/collections.service';
@@ -21,7 +22,7 @@ import { SystemNameService } from './services/system-name.service';
     templateUrl: 'templates/modal-content_types.html',
     providers: [ ContentTypesService, FieldTypesService, CollectionsService, SystemNameService ]
 })
-export class ContentTypeModalContent extends ModalContentAbstractComponent {
+export class ContentTypeModalContent extends ModalContentAbstractComponent<ContentType> {
 
     @ViewChild('addCollectionBlock') elementAddCollectionBlock;
     @ViewChild('addGroupBlock') elementAddGroupBlock;
@@ -484,7 +485,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent {
     templateUrl: 'templates/catalog-content_types.html',
     providers: [ ContentTypesService ]
 })
-export class ContentTypesComponent extends PageTableAbstractComponent {
+export class ContentTypesComponent extends PageTableAbstractComponent<ContentType> {
 
     title: string = 'Типы контента';
 

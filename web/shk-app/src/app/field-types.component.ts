@@ -8,7 +8,8 @@ import { FieldTypeProperty } from './models/field-type-property.model';
 
 import { DataService } from './services/data-service.abstract';
 import { SystemNameService } from './services/system-name.service';
-import { PageTableAbstractComponent, ModalContentAbstractComponent } from './page-table.abstract';
+import { PageTableAbstractComponent } from './page-table.abstract';
+import { ModalContentAbstractComponent } from './modal.abstract';
 
 @Injectable()
 export class FieldTypesService extends DataService {
@@ -36,7 +37,7 @@ export class FieldTypesService extends DataService {
     templateUrl: 'templates/modal-field_type.html',
     providers: [ FieldTypesService, SystemNameService ]
 })
-export class FieldTypeModalContent extends ModalContentAbstractComponent {
+export class FieldTypeModalContent extends ModalContentAbstractComponent<FieldType> {
 
     model: FieldType = new FieldType(0, '', '', '', true, [], []);
 
@@ -126,7 +127,7 @@ export class FieldTypeModalContent extends ModalContentAbstractComponent {
     templateUrl: 'templates/catalog-field_types.html',
     providers: [ FieldTypesService ]
 })
-export class FieldTypesComponent extends PageTableAbstractComponent {
+export class FieldTypesComponent extends PageTableAbstractComponent<FieldType> {
     title: string = 'Field types';
 
     constructor(

@@ -9,13 +9,14 @@ import { PageTableAbstractComponent } from './page-table.abstract'
 import { ProductModalContent } from './product.component';
 import { ContentType } from './models/content_type.model';
 import { ContentTypesService } from './services/content_types.service';
+import { Product } from './models/product.model';
 
 @Component({
     selector: 'catalog-category',
     templateUrl: 'templates/catalog-category.html',
     providers: [ProductsService]
 })
-export class CatalogCategoryComponent extends PageTableAbstractComponent {
+export class CatalogCategoryComponent extends PageTableAbstractComponent<Product> {
 
     title: string = 'Каталог';
     currentCategory: Category;

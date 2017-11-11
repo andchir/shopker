@@ -6,7 +6,7 @@ import { ContentType } from './models/content_type.model';
 import { Category } from "./models/category.model";
 import { ConfirmModalContent } from './app.component';
 import { ListRecursiveComponent } from './list-recursive.component';
-import { ModalContentAbstractComponent } from './page-table.abstract';
+import { ModalContentAbstractComponent } from './modal.abstract';
 import 'rxjs/add/operator/switchMap';
 import * as _ from "lodash";
 
@@ -23,7 +23,7 @@ import { Observable } from 'rxjs/Observable';
     templateUrl: 'templates/modal-category.html',
     providers: [CategoriesService, SystemNameService, ContentTypesService]
 })
-export class CategoriesModalComponent extends ModalContentAbstractComponent {
+export class CategoriesModalComponent extends ModalContentAbstractComponent<Category> {
 
     @Input() categories: Category[] = [];
     @Input() currentCategory: Category;

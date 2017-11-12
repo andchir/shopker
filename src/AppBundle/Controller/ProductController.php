@@ -218,7 +218,7 @@ class ProductController extends BaseController
      * @param Category $category
      * @return JsonResponse
      */
-    public function createItem(Request $request, Category $category = null)
+        public function createItem(Request $request, Category $category = null)
     {
         $data = $request->getContent()
             ? json_decode($request->getContent(), true)

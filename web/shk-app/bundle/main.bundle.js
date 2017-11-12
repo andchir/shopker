@@ -2491,9 +2491,10 @@ var categories_service_1 = __webpack_require__("../../../../../src/app/services/
 var content_types_service_1 = __webpack_require__("../../../../../src/app/services/content_types.service.ts");
 var products_service_1 = __webpack_require__("../../../../../src/app/services/products.service.ts");
 var system_name_service_1 = __webpack_require__("../../../../../src/app/services/system-name.service.ts");
+var files_service_1 = __webpack_require__("../../../../../src/app/services/files.service.ts");
 var ProductModalContent = (function (_super) {
     __extends(ProductModalContent, _super);
-    function ProductModalContent(fb, dataService, systemNameService, activeModal, tooltipConfig, contentTypesService, categoriesService) {
+    function ProductModalContent(fb, dataService, systemNameService, activeModal, tooltipConfig, contentTypesService, categoriesService, filesService) {
         var _this = _super.call(this, fb, dataService, systemNameService, activeModal, tooltipConfig) || this;
         _this.fb = fb;
         _this.dataService = dataService;
@@ -2502,6 +2503,7 @@ var ProductModalContent = (function (_super) {
         _this.tooltipConfig = tooltipConfig;
         _this.contentTypesService = contentTypesService;
         _this.categoriesService = categoriesService;
+        _this.filesService = filesService;
         _this.categories = [];
         _this.contentTypes = [];
         _this.currentContentType = new content_type_model_1.ContentType(0, '', '', '', '', [], [], true);
@@ -2602,14 +2604,26 @@ var ProductModalContent = (function (_super) {
         this.getContentType();
     };
     ProductModalContent.prototype.saveFiles = function (itemId) {
-        console.log('SAVE FILES', this.files, itemId);
+        var _this = this;
+        if (Object.keys(this.files).length === 0) {
+            this.closeModal();
+            return;
+        }
         var formData = new FormData();
         for (var key in this.files) {
             if (this.files.hasOwnProperty(key) && this.files[key] instanceof File) {
                 formData.append(key, this.files[key], this.files[key].name);
             }
         }
-        // TODO: Save files
+        formData.append('itemId', itemId);
+        formData.append('ownerType', this.currentContentType.name);
+        this.filesService.postFormData(formData)
+            .subscribe(function () {
+            _this.closeModal();
+        }, function (err) {
+            _this.errorMessage = err.error || 'Error.';
+            _this.submitted = false;
+        });
     };
     ProductModalContent.prototype.save = function () {
         var _this = this;
@@ -2621,7 +2635,14 @@ var ProductModalContent = (function (_super) {
         }
         this.dataService.setRequestUrl('admin/products/' + this.category.id);
         this.saveRequest()
-            .subscribe(function () { return _this.closeModal(); }, function (err) {
+            .subscribe(function (data) {
+            if (Object.keys(_this.files).length > 0) {
+                _this.saveFiles(data._id);
+            }
+            else {
+                _this.closeModal();
+            }
+        }, function (err) {
             _this.errorMessage = err.error || 'Error.';
             _this.submitted = false;
         });
@@ -2636,12 +2657,12 @@ ProductModalContent = __decorate([
     core_1.Component({
         selector: 'product-modal-content',
         template: __webpack_require__("../../../../../src/app/templates/modal-product.html"),
-        providers: [system_name_service_1.SystemNameService]
+        providers: [system_name_service_1.SystemNameService, files_service_1.FilesService]
     }),
-    __metadata("design:paramtypes", [typeof (_b = typeof forms_1.FormBuilder !== "undefined" && forms_1.FormBuilder) === "function" && _b || Object, typeof (_c = typeof products_service_1.ProductsService !== "undefined" && products_service_1.ProductsService) === "function" && _c || Object, typeof (_d = typeof system_name_service_1.SystemNameService !== "undefined" && system_name_service_1.SystemNameService) === "function" && _d || Object, typeof (_e = typeof ng_bootstrap_1.NgbActiveModal !== "undefined" && ng_bootstrap_1.NgbActiveModal) === "function" && _e || Object, typeof (_f = typeof ng_bootstrap_1.NgbTooltipConfig !== "undefined" && ng_bootstrap_1.NgbTooltipConfig) === "function" && _f || Object, typeof (_g = typeof content_types_service_1.ContentTypesService !== "undefined" && content_types_service_1.ContentTypesService) === "function" && _g || Object, typeof (_h = typeof categories_service_1.CategoriesService !== "undefined" && categories_service_1.CategoriesService) === "function" && _h || Object])
+    __metadata("design:paramtypes", [typeof (_b = typeof forms_1.FormBuilder !== "undefined" && forms_1.FormBuilder) === "function" && _b || Object, typeof (_c = typeof products_service_1.ProductsService !== "undefined" && products_service_1.ProductsService) === "function" && _c || Object, typeof (_d = typeof system_name_service_1.SystemNameService !== "undefined" && system_name_service_1.SystemNameService) === "function" && _d || Object, typeof (_e = typeof ng_bootstrap_1.NgbActiveModal !== "undefined" && ng_bootstrap_1.NgbActiveModal) === "function" && _e || Object, typeof (_f = typeof ng_bootstrap_1.NgbTooltipConfig !== "undefined" && ng_bootstrap_1.NgbTooltipConfig) === "function" && _f || Object, typeof (_g = typeof content_types_service_1.ContentTypesService !== "undefined" && content_types_service_1.ContentTypesService) === "function" && _g || Object, typeof (_h = typeof categories_service_1.CategoriesService !== "undefined" && categories_service_1.CategoriesService) === "function" && _h || Object, typeof (_j = typeof files_service_1.FilesService !== "undefined" && files_service_1.FilesService) === "function" && _j || Object])
 ], ProductModalContent);
 exports.ProductModalContent = ProductModalContent;
-var _a, _b, _c, _d, _e, _f, _g, _h;
+var _a, _b, _c, _d, _e, _f, _g, _h, _j;
 //# sourceMappingURL=product.component.js.map
 
 /***/ }),
@@ -3223,6 +3244,61 @@ var DataService = (function () {
 }());
 exports.DataService = DataService;
 //# sourceMappingURL=data-service.abstract.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/services/files.service.ts":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = __webpack_require__("../../../core/@angular/core.es5.js");
+var http_1 = __webpack_require__("../../../common/@angular/common/http.es5.js");
+var operators_1 = __webpack_require__("../../../../rxjs/_esm5/operators/index.js");
+var data_service_abstract_1 = __webpack_require__("../../../../../src/app/services/data-service.abstract.ts");
+var FilesService = (function (_super) {
+    __extends(FilesService, _super);
+    function FilesService(http) {
+        var _this = _super.call(this, http) || this;
+        _this.setRequestUrl('admin/files/upload');
+        return _this;
+    }
+    FilesService.prototype.postFormData = function (formData) {
+        var headers = new http_1.HttpHeaders({
+            'enctype': 'multipart/form-data',
+            'Accept': 'application/json'
+        });
+        return this.http.post(this.getRequestUrl(), formData, { headers: headers }).pipe(operators_1.catchError(this.handleError()));
+    };
+    return FilesService;
+}(data_service_abstract_1.DataService));
+FilesService = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [typeof (_a = typeof http_1.HttpClient !== "undefined" && http_1.HttpClient) === "function" && _a || Object])
+], FilesService);
+exports.FilesService = FilesService;
+var _a;
+//# sourceMappingURL=files.service.js.map
 
 /***/ }),
 

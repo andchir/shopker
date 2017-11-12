@@ -8,6 +8,6 @@ use Doctrine\ODM\MongoDB\DocumentRepository;
  * FileRepository
  *
  */
-class FileRepository extends DocumentRepository
+class FileDocumentRepository extends DocumentRepository
 {
 }

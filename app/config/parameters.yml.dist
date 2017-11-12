@@ -20,5 +20,8 @@ parameters:
     mailer_user: ~
     mailer_password: ~
 
+    files_dir_path: '%kernel.root_dir%/../web/uploads'
+    files_dir_url: '/uploads'
+
     # A secret key that's used to generate certain security-related tokens
     secret: ThisTokenIsNotSoSecretChangeIt

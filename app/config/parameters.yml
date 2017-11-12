@@ -13,4 +13,6 @@ parameters:
     mailer_host: 127.0.0.1
     mailer_user: null
     mailer_password: null
+    files_dir_path: '%kernel.root_dir%/../web/uploads'
+    files_dir_url: /uploads
     secret: ThisTokenIsNotSoSecretChangeIt

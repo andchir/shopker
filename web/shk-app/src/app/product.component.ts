@@ -12,11 +12,12 @@ import { ContentTypesService } from './services/content_types.service';
 import { ProductsService } from './services/products.service';
 import { SystemNameService } from './services/system-name.service';
 import { Product } from './models/product.model';
+import { FilesService } from './services/files.service';
 
 @Component({
     selector: 'product-modal-content',
     templateUrl: 'templates/modal-product.html',
-    providers: [ SystemNameService ]
+    providers: [ SystemNameService, FilesService ]
 })
 export class ProductModalContent extends ModalContentAbstractComponent<Product> {
 
@@ -48,7 +49,8 @@ export class ProductModalContent extends ModalContentAbstractComponent<Product> 
         public activeModal: NgbActiveModal,
         public tooltipConfig: NgbTooltipConfig,
         private contentTypesService: ContentTypesService,
-        private categoriesService: CategoriesService
+        private categoriesService: CategoriesService,
+        private filesService: FilesService
     ) {
         super(fb, dataService, systemNameService, activeModal, tooltipConfig);
 
@@ -139,8 +141,10 @@ export class ProductModalContent extends ModalContentAbstractComponent<Product> 
     }
 
     saveFiles(itemId: number) {
-
-        console.log('SAVE FILES', this.files, itemId);
+        if (Object.keys(this.files).length === 0) {
+            this.closeModal();
+            return;
+        }
 
         const formData: FormData = new FormData();
         for (let key in this.files) {
@@ -148,9 +152,17 @@ export class ProductModalContent extends ModalContentAbstractComponent<Product> 
                 formData.append(key, this.files[key], this.files[key].name);
             }
         }
+        formData.append('itemId', itemId);
+        formData.append('ownerType', this.currentContentType.name);
 
-        // TODO: Save files
-
+        this.filesService.postFormData(formData)
+            .subscribe(() => {
+                this.closeModal();
+            },
+            err => {
+                this.errorMessage = err.error || 'Error.';
+                this.submitted = false;
+            });
     }
 
     save() {
@@ -164,7 +176,13 @@ export class ProductModalContent extends ModalContentAbstractComponent<Product> 
         this.dataService.setRequestUrl('admin/products/' + this.category.id);
 
         this.saveRequest()
-            .subscribe(() => this.closeModal(),
+            .subscribe((data) => {
+                    if (Object.keys(this.files).length > 0) {
+                        this.saveFiles(data._id);
+                    } else {
+                        this.closeModal();
+                    }
+                },
                 err => {
                     this.errorMessage = err.error || 'Error.';
                     this.submitted = false;

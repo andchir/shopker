@@ -74,7 +74,7 @@ class ProductController extends BaseController
         ]);
 
         return new JsonResponse([
-            'data' => $data,
+            'items' => $data,
             'total' => $total
         ]);
     }

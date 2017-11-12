@@ -432,8 +432,8 @@ var CatalogCategoryComponent = (function (_super) {
         this.titleService.setTitle(this.title + ' / ' + this.currentCategory.title);
         this.getContentType()
             .subscribe(function (data) {
-            _this.loading = false;
             _this.currentContentType = data;
+            _this.loading = false;
             _this.updateTableConfig();
             _this.getList();
         }, function () {
@@ -634,35 +634,34 @@ var CategoriesModalComponent = (function (_super) {
     };
     CategoriesModalComponent.prototype.getContentTypes = function () {
         var _this = this;
-        this.contentTypesService.getList()
-            .subscribe(function (preparedData) {
-            _this.contentTypes = preparedData.data;
-            _this.errorMessage = preparedData.errorMsg;
+        this.contentTypesService.getListPage()
+            .subscribe(function (data) {
+            _this.contentTypes = data.items;
         }, function (error) { return _this.errorMessage = error; });
     };
     CategoriesModalComponent.prototype.save = function () {
+        var _this = this;
         this.submitted = true;
         if (!this.form.valid) {
             this.onValueChanged('form');
             this.submitted = false;
             return;
         }
-        var callback = function (res) {
-            if (res.success) {
-                this.closeModal();
-            }
-            else {
-                if (res.msg) {
-                    this.submitted = false;
-                    this.errorMessage = res.msg;
-                }
+        var observer = {
+            next: function (item) { return _this.closeModal(); },
+            error: function (err) {
+                _this.errorMessage = err.error;
+                _this.submitted = false;
+            },
+            complete: function () {
+                _this.submitted = false;
             }
         };
         if (this.isEditMode) {
-            this.dataService.update(this.model).then(callback.bind(this));
+            this.dataService.update(this.model).subscribe(observer);
         }
         else {
-            this.dataService.create(this.model).then(callback.bind(this));
+            this.dataService.create(this.model).subscribe(observer);
         }
     };
     return CategoriesModalComponent;
@@ -725,8 +724,8 @@ var CategoriesMenuComponent = (function () {
     CategoriesMenuComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.getCategoriesRequest()
-            .subscribe(function (preparedData) {
-            _this.categories = _.clone(preparedData.data);
+            .subscribe(function (data) {
+            _this.categories = data.items;
             _this.route.paramMap
                 .subscribe(function (params) {
                 _this.categoryId = params.get('categoryId')
@@ -752,14 +751,14 @@ var CategoriesMenuComponent = (function () {
     };
     /** Get categories */
     CategoriesMenuComponent.prototype.getCategoriesRequest = function () {
-        return this.categoriesService.getList();
+        return this.categoriesService.getListPage();
     };
     /** Get categories */
     CategoriesMenuComponent.prototype.getCategories = function () {
         var _this = this;
         this.getCategoriesRequest()
-            .subscribe(function (preparedData) {
-            _this.categories = _.clone(preparedData.data);
+            .subscribe(function (data) {
+            _this.categories = data.items;
             _this.selectCurrent();
         }, function (error) { return _this.errorMessage = error; });
     };
@@ -836,18 +835,11 @@ var CategoriesMenuComponent = (function () {
     CategoriesMenuComponent.prototype.deleteCategoryItem = function (itemId) {
         var _this = this;
         this.categoriesService.deleteItem(itemId)
-            .then(function (res) {
-            if (res.success) {
-                _this.categoryId = 0;
-                _this.selectCurrent();
-                _this.getCategories();
-            }
-            else {
-                if (res.msg) {
-                    _this.errorMessage = res.msg;
-                }
-            }
-        });
+            .subscribe(function (data) {
+            _this.categoryId = 0;
+            _this.selectCurrent();
+            _this.getCategories();
+        }, function (err) { return _this.errorMessage = err; });
     };
     /** Open root category */
     CategoriesMenuComponent.prototype.openRootCategory = function () {
@@ -1330,21 +1322,21 @@ var ContentTypeModalContent = (function (_super) {
             return;
         }
         var callback = function (res) {
-            if (res.success) {
-                this.closeModal();
-            }
-            else {
-                if (res.msg) {
-                    this.submitted = false;
-                    this.errorMessage = res.msg;
-                }
-            }
+            console.log(res);
+            // if(res.success){
+            //     this.closeModal();
+            // } else {
+            //     if(res.msg){
+            //         this.submitted = false;
+            //         this.errorMessage = res.msg;
+            //     }
+            // }
         };
         if (this.model.id) {
-            this.dataService.update(this.model).then(callback.bind(this));
+            this.dataService.update(this.model).subscribe(callback.bind(this));
         }
         else {
-            this.dataService.create(this.model).then(callback.bind(this));
+            this.dataService.create(this.model).subscribe(callback.bind(this));
         }
     };
     return ContentTypeModalContent;
@@ -1529,21 +1521,22 @@ var FieldTypeModalContent = (function (_super) {
             return;
         }
         var callback = function (res) {
-            if (res.success) {
-                this.closeModal();
-            }
-            else {
-                if (res.msg) {
-                    this.submitted = false;
-                    this.errorMessage = res.msg;
-                }
-            }
+            console.log(res);
+            // if(res.success){
+            //     this.closeModal();
+            // } else {
+            //     if(res.msg){
+            //         this.submitted = false;
+            //         this.errorMessage = res.msg;
+            //     }
+            // }
         };
+        //observer: PartialObserver
         if (this.model.id) {
-            this.dataService.update(this.model).then(callback.bind(this));
+            this.dataService.update(this.model).subscribe(callback.bind(this));
         }
         else {
-            this.dataService.create(this.model).then(callback.bind(this));
+            this.dataService.create(this.model).subscribe(callback.bind(this));
         }
     };
     return FieldTypeModalContent;
@@ -1807,19 +1800,11 @@ var ModalContentAbstractComponent = (function () {
         var _this = this;
         this.loading = true;
         this.dataService.getItem(this.itemId)
-            .then(function (res) {
-            if (res.success) {
-                if (_this.isItemCopy) {
-                    res.data.id = null;
-                    res.data[_this.getSystemFieldName()] = '';
-                }
-                _this.model = res.data;
-            }
-            else {
-                if (res.msg) {
-                    _this.errorMessage = res.msg;
-                }
-            }
+            .subscribe(function (data) {
+            _this.model = data;
+            _this.loading = false;
+        }, function (err) {
+            _this.errorMessage = err;
             _this.loading = false;
         });
     };
@@ -2238,16 +2223,9 @@ var PageTableAbstractComponent = (function () {
             .then(function (result) {
             if (result == 'accept') {
                 _this.dataService.deleteByArray(_this.selectedIds)
-                    .then(function (res) {
-                    if (res.success) {
-                        _this.getList();
-                    }
-                    else {
-                        if (res.msg) {
-                            _this.showAlert(res.msg);
-                        }
-                    }
-                });
+                    .subscribe(function (res) {
+                    _this.getList();
+                }, function (err) { return _this.showAlert(err); });
             }
         });
     };
@@ -2263,15 +2241,10 @@ var PageTableAbstractComponent = (function () {
             .then(function (result) {
             if (result == 'accept') {
                 _this.dataService.deleteItem(itemId)
-                    .then(function (res) {
-                    if (res.success) {
-                        _this.getList();
-                    }
-                    else {
-                        if (res.msg) {
-                            _this.showAlert(res.msg);
-                        }
-                    }
+                    .subscribe(function (res) {
+                    _this.getList();
+                }, function (err) {
+                    _this.showAlert(err);
                 });
             }
         });
@@ -2295,11 +2268,10 @@ var PageTableAbstractComponent = (function () {
     PageTableAbstractComponent.prototype.getList = function () {
         var _this = this;
         this.loading = true;
-        this.dataService.getList(this.queryOptions)
-            .subscribe(function (preparedData) {
-            _this.items = preparedData.data;
-            _this.collectionSize = preparedData.total;
-            _this.errorMessage = preparedData.errorMsg;
+        this.dataService.getListPage(this.queryOptions)
+            .subscribe(function (data) {
+            _this.items = data.items;
+            _this.collectionSize = data.total;
             _this.loading = false;
         }, function (error) { return _this.errorMessage = error; });
     };
@@ -2538,9 +2510,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = __webpack_require__("../../../core/@angular/core.es5.js");
 var ng_bootstrap_1 = __webpack_require__("../../../../@ng-bootstrap/ng-bootstrap/index.js");
 var forms_1 = __webpack_require__("../../../forms/@angular/forms.es5.js");
+var _ = __webpack_require__("../../../../lodash/lodash.js");
 var content_type_model_1 = __webpack_require__("../../../../../src/app/models/content_type.model.ts");
 var category_model_1 = __webpack_require__("../../../../../src/app/models/category.model.ts");
-var _ = __webpack_require__("../../../../lodash/lodash.js");
 var modal_abstract_1 = __webpack_require__("../../../../../src/app/modal.abstract.ts");
 var categories_service_1 = __webpack_require__("../../../../../src/app/services/categories.service.ts");
 var content_types_service_1 = __webpack_require__("../../../../../src/app/services/content_types.service.ts");
@@ -2586,7 +2558,7 @@ var ProductModalContent = (function (_super) {
         this.buildForm();
         this.getCategories();
         this.getContentType()
-            .then(function () {
+            .subscribe(function () {
             if (_this.itemId) {
                 _this.getModelData();
             }
@@ -2610,25 +2582,19 @@ var ProductModalContent = (function (_super) {
         });
     };
     ProductModalContent.prototype.getContentType = function () {
-        var _this = this;
         if (!this.category.contentTypeName) {
-            return Promise.reject('Content type name not found.');
+            // return Promise.reject('Content type name not found.');
         }
         this.loading = true;
-        return this.contentTypesService.getItemByName(this.category.contentTypeName)
-            .then(function (res) {
-            if (res.success) {
-                _this.currentContentType = res.data;
-                _this.errorMessage = '';
-                _this.updateForm();
-            }
-            else {
-                if (res.msg) {
-                    _this.errorMessage = res.msg;
-                }
-            }
-            _this.loading = false;
-        });
+        return this.contentTypesService.getItemByName(this.category.contentTypeName);
+        // .subscribe((data) => {
+        //     this.currentContentType = data as ContentType;
+        //     this.errorMessage = '';
+        //     this.updateForm();
+        //     this.loading = false;
+        // }, (err) => {
+        //     this.errorMessage = err;
+        // });
     };
     ProductModalContent.prototype.updateForm = function (data) {
         if (!data) {
@@ -2692,10 +2658,10 @@ var ProductModalContent = (function (_super) {
             }
         };
         if (this.model.id) {
-            this.dataService.update(this.model).then(callback.bind(this));
+            // this.dataService.update(this.model).then(callback.bind(this));
         }
         else {
-            this.dataService.create(this.model).then(callback.bind(this));
+            // this.dataService.create(this.model).then(callback.bind(this));
         }
     };
     return ProductModalContent;
@@ -3248,6 +3214,17 @@ var DataService = (function () {
         return this.http.get(this.getRequestUrl(), { params: params })
             .pipe(operators_1.catchError(this.handleError()));
     };
+    DataService.prototype.getListPage = function (options) {
+        var params = new http_1.HttpParams();
+        for (var name in options) {
+            if (!options.hasOwnProperty(name)) {
+                continue;
+            }
+            params.set(name, options[name]);
+        }
+        return this.http.get(this.getRequestUrl(), { params: params })
+            .pipe(operators_1.catchError(this.handleError()));
+    };
     DataService.prototype.deleteItem = function (id) {
         var url = this.getRequestUrl() + ("/" + id);
         return this.http.delete(url, { headers: this.headers }).pipe(operators_1.catchError(this.handleError()));
@@ -3260,76 +3237,31 @@ var DataService = (function () {
             headers: this.headers,
             params: params
         })
-            .toPromise()
-            .then(this.extractData)
-            .catch(this.handleError);
+            .pipe(operators_1.catchError(this.handleError()));
     };
     DataService.prototype.create = function (item) {
-        return this.http
-            .post(this.getRequestUrl(), JSON.stringify(item), { headers: this.headers })
-            .toPromise()
-            .then(this.extractData)
-            .catch(this.handleError);
+        return this.http.post(this.getRequestUrl(), item, { headers: this.headers }).pipe(operators_1.catchError(this.handleError()));
     };
+    // update(item: any): Promise<any> {
+    //     const url = this.getRequestUrl() + `/${item.id}`;
+    //     return this.http
+    //         .put(url, JSON.stringify(item), {headers: this.headers})
+    //         .toPromise()
+    //         .then(this.extractData)
+    //         .catch(this.handleError);
+    // }
     DataService.prototype.update = function (item) {
         var url = this.getRequestUrl() + ("/" + item.id);
-        return this.http
-            .put(url, JSON.stringify(item), { headers: this.headers })
-            .toPromise()
-            .then(this.extractData)
-            .catch(this.handleError);
+        return this.http.put(url, item, { headers: this.headers }).pipe(operators_1.catchError(this.handleError()));
     };
-    DataService.prepareDataArray = function (data) {
-        var output = { data: [], successMsg: '', errorMsg: '', total: 0 };
-        if (data.success) {
-            if (data.data) {
-                output.data = data.data;
-            }
-            if (data.total) {
-                output.total = data.total;
-            }
-            if (data.msg) {
-                output.successMsg = data.msg;
-            }
-        }
-        else {
-            if (data.msg) {
-                output.errorMsg = data.msg;
-            }
-        }
-        return output;
-    };
-    // handleError(error: Response | any) {
-    //     let errMsg: string;
-    //     if (error instanceof Response) {
-    //         const body = error.json() || '';
-    //         const err = body.error || JSON.stringify(body);
-    //         errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
-    //     } else {
-    //         errMsg = error.message ? error.message : error.toString();
-    //     }
-    //     console.error(errMsg);
-    //     return Promise.reject(errMsg);
-    // }
     DataService.prototype.handleError = function (operation, result) {
         if (operation === void 0) { operation = 'operation'; }
-        return function (error) {
-            console.log(error, result);
-            // Let the app keep running by returning an empty result.
+        return function (err) {
+            if (err.error) {
+                throw err.error;
+            }
             return of_1.of(result);
         };
-    };
-    DataService.prototype.extractData = function (res) {
-        var body = res.json();
-        if (body.data) {
-            if (Array.isArray(body.data)) {
-                body.data = body.data;
-            }
-            else {
-                body.data = body.data;
-            }
-        }
-        return body;
     };
     return DataService;
 }());

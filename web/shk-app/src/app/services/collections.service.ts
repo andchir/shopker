@@ -7,7 +7,7 @@ import { of } from 'rxjs/observable/of';
 import { catchError, map, tap } from 'rxjs/operators';
 
 @Injectable()
-export class CollectionsService extends DataService<string> {
+export class CollectionsService extends DataService<any> {
 
     constructor(public http: HttpClient) {
         super(http);

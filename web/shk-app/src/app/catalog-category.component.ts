@@ -85,8 +85,8 @@ export class CatalogCategoryComponent extends PageTableAbstractComponent<Product
         this.titleService.setTitle(this.title + ' / ' + this.currentCategory.title);
         this.getContentType()
             .subscribe((data) => {
+                this.currentContentType = data;
                 this.loading = false;
-                this.currentContentType = data as ContentType;
                 this.updateTableConfig();
                 this.getList();
             }, () => {

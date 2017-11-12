@@ -19,7 +19,7 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
     abstract getModalContent();
 
     constructor(
-        public dataService: DataService,
+        public dataService: DataService<any>,
         public activeModal: NgbActiveModal,
         public modalService: NgbModal,
         public titleService: Title
@@ -89,15 +89,9 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
             .then((result) => {
                 if (result == 'accept') {
                     this.dataService.deleteByArray(this.selectedIds)
-                        .then((res) => {
-                            if (res.success) {
-                                this.getList();
-                            } else {
-                                if (res.msg) {
-                                    this.showAlert(res.msg);
-                                }
-                            }
-                        });
+                        .subscribe((res) => {
+                            this.getList();
+                        }, err => this.showAlert(err));
                 }
             });
     }
@@ -114,14 +108,10 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
             .then((result) => {
                 if (result == 'accept') {
                     this.dataService.deleteItem(itemId)
-                        .then((res) => {
-                            if (res.success) {
-                                this.getList();
-                            } else {
-                                if (res.msg) {
-                                    this.showAlert(res.msg);
-                                }
-                            }
+                        .subscribe((res) => {
+                            this.getList();
+                        }, err => {
+                            this.showAlert(err);
                         });
                 }
             });
@@ -146,15 +136,14 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
 
     getList(): void {
         this.loading = true;
-        this.dataService.getList<M>(this.queryOptions)
+        this.dataService.getListPage(this.queryOptions)
             .subscribe(
-                preparedData => {
-                    this.items = preparedData.data as M[];
-                    this.collectionSize = preparedData.total;
-                    this.errorMessage = preparedData.errorMsg;
+                data => {
+                    this.items = data.items;
+                    this.collectionSize = data.total;
                     this.loading = false;
                 },
-                error => this.errorMessage = <any>error
+                error => this.errorMessage = error
             );
     }
 

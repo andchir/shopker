@@ -1,10 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { NgbActiveModal, NgbTooltipConfig  } from '@ng-bootstrap/ng-bootstrap';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
-import { ContentType } from './models/content_type.model';
-import { Category } from "./models/category.model";
+import { Observable } from 'rxjs/Observable';
 import * as _ from "lodash";
 
+import { ContentType } from './models/content_type.model';
+import { Category } from "./models/category.model";
 import { ModalContentAbstractComponent } from './modal.abstract';
 import { CategoriesService } from './services/categories.service';
 import { ContentTypesService } from './services/content_types.service';
@@ -62,7 +63,7 @@ export class ProductModalContent extends ModalContentAbstractComponent<Product> 
         this.buildForm();
         this.getCategories();
         this.getContentType()
-            .then(() => {
+            .subscribe(() => {
                 if (this.itemId) {
                     this.getModelData();
                 }
@@ -87,24 +88,20 @@ export class ProductModalContent extends ModalContentAbstractComponent<Product> 
             });
     }
 
-    getContentType(): Promise<any> {
+    getContentType(): Observable<ContentType> {
         if(!this.category.contentTypeName){
-            return Promise.reject('Content type name not found.');
+            // return Promise.reject('Content type name not found.');
         }
         this.loading = true;
-        return this.contentTypesService.getItemByName(this.category.contentTypeName)
-            .then((res) => {
-                if(res.success){
-                    this.currentContentType = res.data as ContentType;
-                    this.errorMessage = '';
-                    this.updateForm();
-                } else {
-                    if (res.msg) {
-                        this.errorMessage = res.msg;
-                    }
-                }
-                this.loading = false;
-            });
+        return this.contentTypesService.getItemByName(this.category.contentTypeName);
+            // .subscribe((data) => {
+            //     this.currentContentType = data as ContentType;
+            //     this.errorMessage = '';
+            //     this.updateForm();
+            //     this.loading = false;
+            // }, (err) => {
+            //     this.errorMessage = err;
+            // });
     }
 
     updateForm(data ?: any): void {
@@ -178,9 +175,9 @@ export class ProductModalContent extends ModalContentAbstractComponent<Product> 
         };
 
         if (this.model.id) {
-            this.dataService.update(this.model).then(callback.bind(this));
+            // this.dataService.update(this.model).then(callback.bind(this));
         } else {
-            this.dataService.create(this.model).then(callback.bind(this));
+            // this.dataService.create(this.model).then(callback.bind(this));
         }
     }
 }

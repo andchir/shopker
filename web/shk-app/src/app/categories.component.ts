@@ -14,6 +14,7 @@ import { SystemNameService } from './services/system-name.service';
 import { CategoriesService } from './services/categories.service'
 import { ContentTypesService } from './services/content_types.service';
 import { Observable } from 'rxjs/Observable';
+import { Observer } from "rxjs/Observer";
 
 /**
  * @class CategoriesModalComponent
@@ -115,11 +116,10 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
     }
 
     getContentTypes() {
-        this.contentTypesService.getList()
+        this.contentTypesService.getListPage()
             .subscribe(
-                preparedData => {
-                    this.contentTypes = preparedData.data;
-                    this.errorMessage = preparedData.errorMsg;
+                data => {
+                    this.contentTypes = data.items;
                 },
                 error => this.errorMessage = <any>error);
     }
@@ -133,21 +133,21 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
             return;
         }
 
-        let callback = function (res: any) {
-            if (res.success) {
-                this.closeModal();
-            } else {
-                if (res.msg) {
-                    this.submitted = false;
-                    this.errorMessage = res.msg;
-                }
+        const observer: Observer<Category> = {
+            next: item => this.closeModal(),
+            error: err => {
+                this.errorMessage = err.error;
+                this.submitted = false;
+            },
+            complete: () => {
+                this.submitted = false;
             }
         };
 
         if (this.isEditMode) {
-            this.dataService.update(this.model).then(callback.bind(this));
+            this.dataService.update(this.model).subscribe(observer);
         } else {
-            this.dataService.create(this.model).then(callback.bind(this));
+            this.dataService.create(this.model).subscribe(observer);
         }
     }
 }
@@ -203,8 +203,8 @@ export class CategoriesMenuComponent implements OnInit {
     ngOnInit(): void {
         this.getCategoriesRequest()
             .subscribe(
-                preparedData => {
-                    this.categories = _.clone(preparedData.data);
+                data => {
+                    this.categories = data.items;
 
                     this.route.paramMap
                         .subscribe(
@@ -216,7 +216,7 @@ export class CategoriesMenuComponent implements OnInit {
                             }
                         );
                 },
-                error => this.errorMessage = <any>error
+                error => this.errorMessage = error
             );
     }
 
@@ -236,15 +236,15 @@ export class CategoriesMenuComponent implements OnInit {
 
     /** Get categories */
     getCategoriesRequest(): Observable<any> {
-        return this.categoriesService.getList();
+        return this.categoriesService.getListPage();
     }
 
     /** Get categories */
     getCategories(): void {
         this.getCategoriesRequest()
             .subscribe(
-                preparedData => {
-                    this.categories = _.clone(preparedData.data);
+                data => {
+                    this.categories = data.items;
                     this.selectCurrent();
                 },
                 error => this.errorMessage = <any>error
@@ -324,17 +324,13 @@ export class CategoriesMenuComponent implements OnInit {
      */
     deleteCategoryItem(itemId: number): void {
         this.categoriesService.deleteItem(itemId)
-            .then((res) => {
-                if (res.success) {
+            .subscribe((data) => {
                     this.categoryId = 0;
                     this.selectCurrent();
                     this.getCategories();
-                } else {
-                    if (res.msg) {
-                        this.errorMessage = res.msg;
-                    }
-                }
-            });
+                },
+                err => this.errorMessage = err
+            );
     }
 
     /** Open root category */

@@ -65,7 +65,7 @@ abstract class BaseRepository extends DocumentRepository
             ->getQuery()->execute()->count();
 
         return [
-            'data' => $results,
+            'items' => $results,
             'total' => $total
         ];
     }

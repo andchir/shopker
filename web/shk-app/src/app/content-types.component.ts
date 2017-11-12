@@ -462,20 +462,21 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent<Conte
         }
 
         let callback = function(res: any){
-            if(res.success){
-                this.closeModal();
-            } else {
-                if(res.msg){
-                    this.submitted = false;
-                    this.errorMessage = res.msg;
-                }
-            }
+            console.log(res);
+            // if(res.success){
+            //     this.closeModal();
+            // } else {
+            //     if(res.msg){
+            //         this.submitted = false;
+            //         this.errorMessage = res.msg;
+            //     }
+            // }
         };
 
         if(this.model.id){
-            this.dataService.update(this.model).then(callback.bind(this));
+            this.dataService.update(this.model).subscribe(callback.bind(this));
         } else {
-            this.dataService.create(this.model).then(callback.bind(this));
+            this.dataService.create(this.model).subscribe(callback.bind(this));
         }
     }
 }

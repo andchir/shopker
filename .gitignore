@@ -17,4 +17,4 @@
 /web/node_modules/
 /web/lib/
 /web/shk-app/node_modules/
-/web/shk-app/bundle/*
+/web/shk-app/bundle/

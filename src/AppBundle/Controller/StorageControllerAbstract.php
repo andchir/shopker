@@ -33,12 +33,12 @@ abstract class StorageControllerAbstract extends BaseController
 
         $data = [];
         $getFull = !empty($options['full']);
-        foreach ($results['data'] as $item) {
+        foreach ($results['items'] as $item) {
             $data[] = $item->toArray($getFull);
         }
 
         return new JsonResponse([
-            'data' => $data,
+            'items' => $data,
             'total' => $results['total']
         ]);
     }

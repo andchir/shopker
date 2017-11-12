@@ -25,7 +25,7 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
 
     constructor(
         public fb: FormBuilder,
-        public dataService: DataService,
+        public dataService: DataService<any>,
         public systemNameService: SystemNameService,
         public activeModal: NgbActiveModal,
         public tooltipConfig: NgbTooltipConfig
@@ -49,18 +49,11 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
     getModelData(): void {
         this.loading = true;
         this.dataService.getItem(this.itemId)
-            .then(res => {
-                if (res.success) {
-                    if (this.isItemCopy) {
-                        res.data.id = null;
-                        res.data[this.getSystemFieldName()] = '';
-                    }
-                    this.model = res.data as M;
-                } else {
-                    if (res.msg) {
-                        this.errorMessage = res.msg;
-                    }
-                }
+            .subscribe(data => {
+                this.model = data as M;
+                this.loading = false;
+            }, (err) => {
+                this.errorMessage = err;
                 this.loading = false;
             });
     }

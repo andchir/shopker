@@ -1,11 +1,14 @@
 import { Http, Response, URLSearchParams } from '@angular/http';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Headers, RequestOptions } from '@angular/http';
-import { QueryOptions } from '../models/query-options';
 
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { catchError, map, tap } from 'rxjs/operators';
+
+import { QueryOptions } from '../models/query-options';
+import { DataList } from '../models/data-list.interface';
+import { SimpleEntity } from '../models/simple-entity.interface';
 
 export interface outputData {
     data: any | any[] | null;
@@ -14,7 +17,7 @@ export interface outputData {
     total: number;
 }
 
-export abstract class DataService<M> {
+export abstract class DataService<M extends SimpleEntity> {
 
     public headers = new HttpHeaders({'Content-Type': 'application/json'});
     private requestUrl = '';
@@ -54,6 +57,20 @@ export abstract class DataService<M> {
             );
     }
 
+    getListPage(options ?: QueryOptions): Observable<DataList<M>> {
+        let params = new HttpParams();
+        for(let name in options){
+            if(!options.hasOwnProperty(name)){
+                continue;
+            }
+            params.set(name, options[name]);
+        }
+        return this.http.get<DataList<M>>(this.getRequestUrl(), {params: params})
+            .pipe(
+                catchError(this.handleError())
+            );
+    }
+
     deleteItem(id: number): Observable<M> {
         const url = this.getRequestUrl() + `/${id}`;
         return this.http.delete<M>(url, {headers: this.headers}).pipe(
@@ -61,7 +78,7 @@ export abstract class DataService<M> {
         );
     }
 
-    deleteByArray(idsArray: number[]): Promise<any> {
+    deleteByArray(idsArray: number[]): Observable<M> {
         const url = this.getRequestUrl() + '/batch';
         let params = new HttpParams();
         params.set('ids', JSON.stringify(idsArray));
@@ -69,82 +86,41 @@ export abstract class DataService<M> {
                 headers: this.headers,
                 params: params
             })
-            .toPromise()
-            .then(this.extractData)
-            .catch(this.handleError);
+            .pipe(
+                catchError(this.handleError<M>())
+            );
     }
 
-    create(item: any): Promise<any> {
-        return this.http
-            .post(this.getRequestUrl(), JSON.stringify(item), {headers: this.headers})
-            .toPromise()
-            .then(this.extractData)
-            .catch(this.handleError);
+    create(item: M): Observable<M> {
+        return this.http.post<M>(this.getRequestUrl(), item, {headers: this.headers}).pipe(
+            catchError(this.handleError<M>())
+        );
     }
 
-    update(item: any): Promise<any> {
-        const url = this.getRequestUrl() + `/${item.id}`;
-        return this.http
-            .put(url, JSON.stringify(item), {headers: this.headers})
-            .toPromise()
-            .then(this.extractData)
-            .catch(this.handleError);
-    }
-
-    static prepareDataArray(data: any): outputData {
-        let output: outputData = {data: [], successMsg: '', errorMsg: '', total: 0};
-        if (data.success) {
-            if (data.data) {
-                output.data = data.data;
-            }
-            if (data.total) {
-                output.total = data.total;
-            }
-            if (data.msg) {
-                output.successMsg = data.msg;
-            }
-        } else {
-            if (data.msg) {
-                output.errorMsg = data.msg;
-            }
-        }
-        return output;
-    }
-
-    // handleError(error: Response | any) {
-    //     let errMsg: string;
-    //     if (error instanceof Response) {
-    //         const body = error.json() || '';
-    //         const err = body.error || JSON.stringify(body);
-    //         errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
-    //     } else {
-    //         errMsg = error.message ? error.message : error.toString();
-    //     }
-    //     console.error(errMsg);
-    //     return Promise.reject(errMsg);
+    // update(item: any): Promise<any> {
+    //     const url = this.getRequestUrl() + `/${item.id}`;
+    //     return this.http
+    //         .put(url, JSON.stringify(item), {headers: this.headers})
+    //         .toPromise()
+    //         .then(this.extractData)
+    //         .catch(this.handleError);
     // }
 
+    update(item: M): Observable<M> {
+        const url = this.getRequestUrl() + `/${item.id}`;
+        return this.http.put(url, item, {headers: this.headers}).pipe(
+            catchError(this.handleError<M>())
+        );
+    }
+
     handleError<T> (operation = 'operation', result?: T) {
-        return (error: any): Observable<T> => {
+        return (err: any): Observable<T> => {
+            if (err.error) {
+                throw err.error;
+            }
 
-            console.log(error, result);
-
-            // Let the app keep running by returning an empty result.
             return of(result as T);
         };
     }
-
-    extractData(res: any): any {
-        let body = res.json();
-        if(body.data){
-            if(Array.isArray(body.data)){
-                body.data = body.data as M[];
-            } else {
-                body.data = body.data as M;
-            }
-        }
-        return body;
-    }
-
 }
 

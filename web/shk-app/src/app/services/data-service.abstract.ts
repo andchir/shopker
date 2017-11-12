@@ -78,15 +78,10 @@ export abstract class DataService<M extends SimpleEntity> {
 
     deleteByArray(idsArray: number[]): Observable<M> {
         const url = this.getRequestUrl() + '/batch';
-        let params = new HttpParams();
-        params.set('ids', JSON.stringify(idsArray));
-        return this.http.delete(url, {
-                headers: this.headers,
-                params: params
-            })
-            .pipe(
-                catchError(this.handleError<M>())
-            );
+        const data = {ids: idsArray};
+        return this.http.post<M>(url, data, {headers: this.headers}).pipe(
+            catchError(this.handleError<M>())
+        );
     }
 
     create(item: M): Observable<M> {

@@ -257,7 +257,7 @@ class ProductController extends BaseController
 
     /**
      * @Route("/{categoryId}/batch")
-     * @Method({"DELETE"})
+     * @Method({"POST"})
      * @ParamConverter("category", class="AppBundle:Category", options={"id" = "categoryId"})
      * @param Request $request
      * @param Category $category

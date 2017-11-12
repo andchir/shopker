@@ -89,9 +89,10 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
             .then((result) => {
                 if (result == 'accept') {
                     this.dataService.deleteByArray(this.selectedIds)
-                        .subscribe((res) => {
+                        .subscribe(res => {
                             this.getList();
-                        }, err => this.showAlert(err));
+                        },
+                            err => this.showAlert(err.error || 'Error'));
                 }
             });
     }

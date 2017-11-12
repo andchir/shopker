@@ -63,7 +63,7 @@ abstract class StorageControllerAbstract extends BaseController
 
     /**
      * @Route("/batch")
-     * @Method({"DELETE"})
+     * @Method({"POST"})
      * @param Request $request
      * @return JsonResponse
      */

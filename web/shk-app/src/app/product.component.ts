@@ -163,25 +163,11 @@ export class ProductModalContent extends ModalContentAbstractComponent<Product> 
 
         this.dataService.setRequestUrl('admin/products/' + this.category.id);
 
-        let callback = function (res: any) {
-            if (res.success) {
-                if (!_.isEmpty(this.files) && res.data._id) {
-                    this.saveFiles(res.data._id);
-                } else {
-                    this.closeModal();
-                }
-            } else {
-                if (res.msg) {
+        this.saveRequest()
+            .subscribe(() => this.closeModal(),
+                err => {
+                    this.errorMessage = err.error || 'Error.';
                     this.submitted = false;
-                    this.errorMessage = res.msg;
-                }
-            }
-        };
-
-        if (this.model.id) {
-            // this.dataService.update(this.model).then(callback.bind(this));
-        } else {
-            // this.dataService.create(this.model).then(callback.bind(this));
-        }
+                });
     }
 }

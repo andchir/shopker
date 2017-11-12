@@ -2198,7 +2198,7 @@ var PageTableAbstractComponent = (function () {
                 _this.dataService.deleteByArray(_this.selectedIds)
                     .subscribe(function (res) {
                     _this.getList();
-                }, function (err) { return _this.showAlert(err); });
+                }, function (err) { return _this.showAlert(err.error || 'Error'); });
             }
         });
     };
@@ -2612,6 +2612,7 @@ var ProductModalContent = (function (_super) {
         // TODO: Save files
     };
     ProductModalContent.prototype.save = function () {
+        var _this = this;
         this.submitted = true;
         if (!this.form.valid) {
             this.onValueChanged('form');
@@ -2619,28 +2620,11 @@ var ProductModalContent = (function (_super) {
             return;
         }
         this.dataService.setRequestUrl('admin/products/' + this.category.id);
-        var callback = function (res) {
-            if (res.success) {
-                if (!_.isEmpty(this.files) && res.data._id) {
-                    this.saveFiles(res.data._id);
-                }
-                else {
-                    this.closeModal();
-                }
-            }
-            else {
-                if (res.msg) {
-                    this.submitted = false;
-                    this.errorMessage = res.msg;
-                }
-            }
-        };
-        if (this.model.id) {
-            // this.dataService.update(this.model).then(callback.bind(this));
-        }
-        else {
-            // this.dataService.create(this.model).then(callback.bind(this));
-        }
+        this.saveRequest()
+            .subscribe(function () { return _this.closeModal(); }, function (err) {
+            _this.errorMessage = err.error || 'Error.';
+            _this.submitted = false;
+        });
     };
     return ProductModalContent;
 }(modal_abstract_1.ModalContentAbstractComponent));
@@ -3216,13 +3200,8 @@ var DataService = (function () {
     };
     DataService.prototype.deleteByArray = function (idsArray) {
         var url = this.getRequestUrl() + '/batch';
-        var params = new http_1.HttpParams();
-        params.set('ids', JSON.stringify(idsArray));
-        return this.http.delete(url, {
-            headers: this.headers,
-            params: params
-        })
-            .pipe(operators_1.catchError(this.handleError()));
+        var data = { ids: idsArray };
+        return this.http.post(url, data, { headers: this.headers }).pipe(operators_1.catchError(this.handleError()));
     };
     DataService.prototype.create = function (item) {
         return this.http.post(this.getRequestUrl(), item, { headers: this.headers }).pipe(operators_1.catchError(this.handleError()));

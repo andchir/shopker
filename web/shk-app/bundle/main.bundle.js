@@ -639,14 +639,6 @@ var CategoriesModalComponent = (function (_super) {
             _this.contentTypes = data.items;
         }, function (error) { return _this.errorMessage = error; });
     };
-    CategoriesModalComponent.prototype.saveRequest = function () {
-        if (this.isEditMode) {
-            return this.dataService.update(this.model);
-        }
-        else {
-            return this.dataService.create(this.model);
-        }
-    };
     CategoriesModalComponent.prototype.save = function () {
         var _this = this;
         this.submitted = true;
@@ -1052,6 +1044,12 @@ var ContentTypeModalContent = (function (_super) {
         };
         return _this;
     }
+    /** On initialize */
+    ContentTypeModalContent.prototype.ngOnInit = function () {
+        modal_abstract_1.ModalContentAbstractComponent.prototype.ngOnInit.call(this);
+        this.getFieldTypes();
+        this.getCollectionsList();
+    };
     ContentTypeModalContent.prototype.buildForm = function () {
         var _this = this;
         modal_abstract_1.ModalContentAbstractComponent.prototype.buildForm.call(this);
@@ -1060,19 +1058,13 @@ var ContentTypeModalContent = (function (_super) {
         this.fieldForm.valueChanges
             .subscribe(function () { return _this.onValueChanged('fieldForm', 'fld_'); });
     };
-    /** On initialize */
-    ContentTypeModalContent.prototype.ngOnInit = function () {
-        modal_abstract_1.ModalContentAbstractComponent.prototype.ngOnInit.call(this);
-        this.getFieldTypes();
-        this.getCollectionsList();
-    };
     /** Get field types */
     ContentTypeModalContent.prototype.getFieldTypes = function () {
         var _this = this;
         var options = new query_options_1.QueryOptions('title', 'asc', 0, 0, 1);
-        this.fieldTypesService.getList(options)
+        this.fieldTypesService.getListPage(options)
             .subscribe(function (data) {
-            _this.fieldTypes = data;
+            _this.fieldTypes = data.items;
         }, function (error) { return _this.errorMessage = error; });
     };
     /** Get collections list */
@@ -1157,26 +1149,21 @@ var ContentTypeModalContent = (function (_super) {
         popover.placement = 'top';
         popover.popoverTitle = 'Confirm';
         var confirm = function () {
+            var _this = this;
             this.loading = true;
-            console.log('deleteItemByName', this.model.collection);
-            // this.collectionsService.deleteItemByName(this.model.collection)
-            //     .then((res) => {
-            //         if(res.success){
-            //
-            //             let index = this.collections.indexOf(this.model.collection);
-            //             if(index > -1){
-            //                 this.collections.splice(index, 1);
-            //                 this.model.collection = this.collections[0];
-            //             }
-            //             popover.close();
-            //
-            //         } else {
-            //             if(res.msg){
-            //                 popoverContent.message = res.msg;
-            //             }
-            //         }
-            //         this.loading = false;
-            //     });
+            this.collectionsService.deleteItemByName(this.model.collection)
+                .subscribe(function (data) {
+                var index = _this.collections.indexOf(_this.model.collection);
+                if (index > -1) {
+                    _this.collections.splice(index, 1);
+                    _this.model.collection = _this.collections[0];
+                }
+                popover.close();
+                _this.loading = false;
+            }, function (err) {
+                _this.errorMessage = err.error || 'Error.';
+                _this.loading = false;
+            });
         };
         popoverContent = {
             p: popover,
@@ -1312,29 +1299,18 @@ var ContentTypeModalContent = (function (_super) {
         this.resetFieldForm();
     };
     ContentTypeModalContent.prototype.save = function () {
+        var _this = this;
         this.submitted = true;
         if (!this.form.valid) {
             this.onValueChanged('form');
             this.submitted = false;
             return;
         }
-        var callback = function (res) {
-            console.log(res);
-            // if(res.success){
-            //     this.closeModal();
-            // } else {
-            //     if(res.msg){
-            //         this.submitted = false;
-            //         this.errorMessage = res.msg;
-            //     }
-            // }
-        };
-        if (this.model.id) {
-            this.dataService.update(this.model).subscribe(callback.bind(this));
-        }
-        else {
-            this.dataService.create(this.model).subscribe(callback.bind(this));
-        }
+        this.saveRequest()
+            .subscribe(function () { return _this.closeModal(); }, function (err) {
+            _this.errorMessage = err.error || 'Error.';
+            _this.submitted = false;
+        });
     };
     return ContentTypeModalContent;
 }(modal_abstract_1.ModalContentAbstractComponent));
@@ -1883,6 +1859,14 @@ var ModalContentAbstractComponent = (function () {
     ModalContentAbstractComponent.prototype.close = function (e) {
         e.preventDefault();
         this.activeModal.dismiss('canceled');
+    };
+    ModalContentAbstractComponent.prototype.saveRequest = function () {
+        if (this.isEditMode) {
+            return this.dataService.update(this.model);
+        }
+        else {
+            return this.dataService.create(this.model);
+        }
     };
     /** Submit form */
     ModalContentAbstractComponent.prototype.onSubmit = function () {
@@ -3077,16 +3061,6 @@ var _a;
 
 "use strict";
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3099,23 +3073,40 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = __webpack_require__("../../../core/@angular/core.es5.js");
 var http_1 = __webpack_require__("../../../common/@angular/common/http.es5.js");
-var data_service_abstract_1 = __webpack_require__("../../../../../src/app/services/data-service.abstract.ts");
+var of_1 = __webpack_require__("../../../../rxjs/_esm5/observable/of.js");
 var operators_1 = __webpack_require__("../../../../rxjs/_esm5/operators/index.js");
-var CollectionsService = (function (_super) {
-    __extends(CollectionsService, _super);
+var CollectionsService = (function () {
     function CollectionsService(http) {
-        var _this = _super.call(this, http) || this;
-        _this.http = http;
-        _this.setRequestUrl('admin/collections');
-        return _this;
+        this.http = http;
+        this.headers = new http_1.HttpHeaders({ 'Content-Type': 'application/json' });
+        this.requestUrl = 'admin/collections';
     }
+    CollectionsService.prototype.setRequestUrl = function (url) {
+        this.requestUrl = url;
+    };
+    CollectionsService.prototype.getRequestUrl = function () {
+        return this.requestUrl;
+    };
+    CollectionsService.prototype.getList = function () {
+        return this.http.get(this.getRequestUrl())
+            .pipe(operators_1.catchError(this.handleError()));
+    };
     CollectionsService.prototype.deleteItemByName = function (itemName) {
         var url = this.getRequestUrl() + "/" + itemName;
         return this.http.delete(url, { headers: this.headers })
             .pipe(operators_1.catchError(this.handleError()));
     };
+    CollectionsService.prototype.handleError = function (operation, result) {
+        if (operation === void 0) { operation = 'operation'; }
+        return function (err) {
+            if (err.error) {
+                throw err.error;
+            }
+            return of_1.of(result);
+        };
+    };
     return CollectionsService;
-}(data_service_abstract_1.DataService));
+}());
 CollectionsService = __decorate([
     core_1.Injectable(),
     __metadata("design:paramtypes", [typeof (_a = typeof http_1.HttpClient !== "undefined" && http_1.HttpClient) === "function" && _a || Object])
@@ -3210,7 +3201,7 @@ var DataService = (function () {
             if (!options.hasOwnProperty(name)) {
                 continue;
             }
-            params.set(name, options[name]);
+            params = params.append(name, options[name]);
         }
         return this.http.get(this.getRequestUrl(), { params: params })
             .pipe(operators_1.catchError(this.handleError()));
@@ -3221,7 +3212,7 @@ var DataService = (function () {
             if (!options.hasOwnProperty(name)) {
                 continue;
             }
-            params.set(name, options[name]);
+            params = params.append(name, options[name]);
         }
         return this.http.get(this.getRequestUrl(), { params: params })
             .pipe(operators_1.catchError(this.handleError()));
@@ -3243,14 +3234,6 @@ var DataService = (function () {
     DataService.prototype.create = function (item) {
         return this.http.post(this.getRequestUrl(), item, { headers: this.headers }).pipe(operators_1.catchError(this.handleError()));
     };
-    // update(item: any): Promise<any> {
-    //     const url = this.getRequestUrl() + `/${item.id}`;
-    //     return this.http
-    //         .put(url, JSON.stringify(item), {headers: this.headers})
-    //         .toPromise()
-    //         .then(this.extractData)
-    //         .catch(this.handleError);
-    // }
     DataService.prototype.update = function (item) {
         var url = this.getRequestUrl() + ("/" + item.id);
         return this.http.put(url, item, { headers: this.headers }).pipe(operators_1.catchError(this.handleError()));

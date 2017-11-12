@@ -142,6 +142,14 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
         this.activeModal.dismiss('canceled');
     }
 
+    saveRequest() {
+        if (this.isEditMode) {
+            return this.dataService.update(this.model);
+        } else {
+            return this.dataService.create(this.model);
+        }
+    }
+
     /** Submit form */
     onSubmit() {
         this.submitted = true;

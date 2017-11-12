@@ -1,17 +1,35 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { DataService } from './data-service.abstract';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 import { Observable } from "rxjs/Observable";
 import { of } from 'rxjs/observable/of';
 import { catchError, map, tap } from 'rxjs/operators';
 
 @Injectable()
-export class CollectionsService extends DataService<any> {
+export class CollectionsService {
 
-    constructor(public http: HttpClient) {
-        super(http);
-        this.setRequestUrl('admin/collections');
+    public headers = new HttpHeaders({'Content-Type': 'application/json'});
+    private requestUrl = 'admin/collections';
+
+    constructor(
+        public http: HttpClient
+    ) {
+
+    }
+
+    setRequestUrl(url){
+        this.requestUrl = url;
+    }
+
+    getRequestUrl(){
+        return this.requestUrl;
+    }
+
+    getList(): Observable<string[]> {
+        return this.http.get<string[]>(this.getRequestUrl())
+            .pipe(
+                catchError(this.handleError())
+            );
     }
 
     deleteItemByName(itemName: string): Observable<string> {
@@ -20,5 +38,14 @@ export class CollectionsService extends DataService<any> {
             .pipe(
                 catchError(this.handleError<string>())
             );
+    }
+
+    handleError<T> (operation = 'operation', result?: T) {
+        return (err: any): Observable<T> => {
+            if (err.error) {
+                throw err.error;
+            }
+            return of(result as T);
+        };
     }
 }

@@ -124,14 +124,6 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
                 error => this.errorMessage = <any>error);
     }
 
-    saveRequest() {
-        if (this.isEditMode) {
-            return this.dataService.update(this.model);
-        } else {
-            return this.dataService.create(this.model);
-        }
-    }
-
     save(): void {
         this.submitted = true;
 

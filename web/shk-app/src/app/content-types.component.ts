@@ -164,6 +164,13 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent<Conte
         }
     };
 
+    /** On initialize */
+    ngOnInit(): void {
+        ModalContentAbstractComponent.prototype.ngOnInit.call(this);
+        this.getFieldTypes();
+        this.getCollectionsList();
+    }
+
     buildForm(): void {
         ModalContentAbstractComponent.prototype.buildForm.call(this);
 
@@ -173,22 +180,15 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent<Conte
             .subscribe(() => this.onValueChanged('fieldForm', 'fld_'));
     }
 
-    /** On initialize */
-    ngOnInit(): void {
-        ModalContentAbstractComponent.prototype.ngOnInit.call(this);
-        this.getFieldTypes();
-        this.getCollectionsList();
-    }
-
     /** Get field types */
     getFieldTypes(): void {
         let options = new QueryOptions('title', 'asc', 0, 0, 1);
-        this.fieldTypesService.getList(options)
+        this.fieldTypesService.getListPage(options)
             .subscribe(
                 data => {
-                    this.fieldTypes = data;
+                    this.fieldTypes = data.items;
                 },
-                error =>  this.errorMessage = <any>error
+                error =>  this.errorMessage = error
             );
     }
 
@@ -285,25 +285,19 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent<Conte
 
         let confirm = function(){
             this.loading = true;
-            console.log('deleteItemByName', this.model.collection);
-            // this.collectionsService.deleteItemByName(this.model.collection)
-            //     .then((res) => {
-            //         if(res.success){
-            //
-            //             let index = this.collections.indexOf(this.model.collection);
-            //             if(index > -1){
-            //                 this.collections.splice(index, 1);
-            //                 this.model.collection = this.collections[0];
-            //             }
-            //             popover.close();
-            //
-            //         } else {
-            //             if(res.msg){
-            //                 popoverContent.message = res.msg;
-            //             }
-            //         }
-            //         this.loading = false;
-            //     });
+            this.collectionsService.deleteItemByName(this.model.collection)
+                .subscribe((data) => {
+                    let index = this.collections.indexOf(this.model.collection);
+                    if(index > -1){
+                        this.collections.splice(index, 1);
+                        this.model.collection = this.collections[0];
+                    }
+                    popover.close();
+                    this.loading = false;
+                }, (err) => {
+                    this.errorMessage = err.error || 'Error.';
+                    this.loading = false;
+                });
         };
 
         popoverContent = {
@@ -461,23 +455,12 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent<Conte
             return;
         }
 
-        let callback = function(res: any){
-            console.log(res);
-            // if(res.success){
-            //     this.closeModal();
-            // } else {
-            //     if(res.msg){
-            //         this.submitted = false;
-            //         this.errorMessage = res.msg;
-            //     }
-            // }
-        };
-
-        if(this.model.id){
-            this.dataService.update(this.model).subscribe(callback.bind(this));
-        } else {
-            this.dataService.create(this.model).subscribe(callback.bind(this));
-        }
+        this.saveRequest()
+            .subscribe(() => this.closeModal(),
+                err => {
+                    this.errorMessage = err.error || 'Error.';
+                    this.submitted = false;
+                });
     }
 }
 

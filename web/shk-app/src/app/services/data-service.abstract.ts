@@ -1,6 +1,4 @@
-import { Http, Response, URLSearchParams } from '@angular/http';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Headers, RequestOptions } from '@angular/http';
 
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
@@ -49,7 +47,7 @@ export abstract class DataService<M extends SimpleEntity> {
             if(!options.hasOwnProperty(name)){
                 continue;
             }
-            params.set(name, options[name]);
+            params = params.append(name, options[name]);
         }
         return this.http.get<M[]>(this.getRequestUrl(), {params: params})
             .pipe(
@@ -63,7 +61,7 @@ export abstract class DataService<M extends SimpleEntity> {
             if(!options.hasOwnProperty(name)){
                 continue;
             }
-            params.set(name, options[name]);
+            params = params.append(name, options[name]);
         }
         return this.http.get<DataList<M>>(this.getRequestUrl(), {params: params})
             .pipe(
@@ -97,15 +95,6 @@ export abstract class DataService<M extends SimpleEntity> {
         );
     }
 
-    // update(item: any): Promise<any> {
-    //     const url = this.getRequestUrl() + `/${item.id}`;
-    //     return this.http
-    //         .put(url, JSON.stringify(item), {headers: this.headers})
-    //         .toPromise()
-    //         .then(this.extractData)
-    //         .catch(this.handleError);
-    // }
-
     update(item: M): Observable<M> {
         const url = this.getRequestUrl() + `/${item.id}`;
         return this.http.put(url, item, {headers: this.headers}).pipe(
@@ -123,4 +112,3 @@ export abstract class DataService<M extends SimpleEntity> {
         };
     }
 }
-

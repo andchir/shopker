@@ -1487,30 +1487,18 @@ var FieldTypeModalContent = (function (_super) {
         this.model[type].splice(index, 1);
     };
     FieldTypeModalContent.prototype.save = function () {
+        var _this = this;
         this.submitted = true;
         if (!this.form.valid) {
             this.onValueChanged('form');
             this.submitted = false;
             return;
         }
-        var callback = function (res) {
-            console.log(res);
-            // if(res.success){
-            //     this.closeModal();
-            // } else {
-            //     if(res.msg){
-            //         this.submitted = false;
-            //         this.errorMessage = res.msg;
-            //     }
-            // }
-        };
-        //observer: PartialObserver
-        if (this.model.id) {
-            this.dataService.update(this.model).subscribe(callback.bind(this));
-        }
-        else {
-            this.dataService.create(this.model).subscribe(callback.bind(this));
-        }
+        this.saveRequest()
+            .subscribe(function () { return _this.closeModal(); }, function (err) {
+            _this.errorMessage = err.error || 'Error.';
+            _this.submitted = false;
+        });
     };
     return FieldTypeModalContent;
 }(modal_abstract_1.ModalContentAbstractComponent));
@@ -2543,12 +2531,12 @@ var ProductModalContent = (function (_super) {
         this.buildForm();
         this.getCategories();
         this.getContentType()
-            .subscribe(function () {
+            .then(function () {
             if (_this.itemId) {
                 _this.getModelData();
             }
-        }, function (msg) {
-            _this.errorMessage = msg;
+        }, function (err) {
+            _this.errorMessage = err.error || 'Error.';
         });
     };
     ProductModalContent.prototype.getSystemFieldName = function () {
@@ -2558,28 +2546,33 @@ var ProductModalContent = (function (_super) {
     ProductModalContent.prototype.getCategories = function () {
         var _this = this;
         this.loading = true;
-        this.categoriesService.getList()
+        this.categoriesService.getListPage()
             .subscribe(function (data) {
-            _this.categories = data;
+            _this.categories = data.items;
             _this.loading = false;
         }, function (err) {
-            _this.errorMessage = err;
+            _this.errorMessage = err.error || 'Error.';
         });
     };
     ProductModalContent.prototype.getContentType = function () {
+        var _this = this;
         if (!this.category.contentTypeName) {
-            // return Promise.reject('Content type name not found.');
+            return Promise.reject({ error: 'Content type name not found.' });
         }
-        this.loading = true;
-        return this.contentTypesService.getItemByName(this.category.contentTypeName);
-        // .subscribe((data) => {
-        //     this.currentContentType = data as ContentType;
-        //     this.errorMessage = '';
-        //     this.updateForm();
-        //     this.loading = false;
-        // }, (err) => {
-        //     this.errorMessage = err;
-        // });
+        return new Promise(function (resolve, reject) {
+            _this.contentTypesService.getItemByName(_this.category.contentTypeName)
+                .subscribe(function (data) {
+                _this.currentContentType = data;
+                _this.errorMessage = '';
+                _this.updateForm();
+                _this.loading = false;
+                resolve(data);
+            }, function (err) {
+                _this.errorMessage = err.error || 'Error.';
+                _this.loading = false;
+                reject(err);
+            });
+        });
     };
     ProductModalContent.prototype.updateForm = function (data) {
         if (!data) {

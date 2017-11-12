@@ -90,24 +90,12 @@ export class FieldTypeModalContent extends ModalContentAbstractComponent<FieldTy
             return;
         }
 
-        let callback = function(res: any){
-            console.log(res);
-            // if(res.success){
-            //     this.closeModal();
-            // } else {
-            //     if(res.msg){
-            //         this.submitted = false;
-            //         this.errorMessage = res.msg;
-            //     }
-            // }
-        };
-        //observer: PartialObserver
-
-        if(this.model.id){
-            this.dataService.update(this.model).subscribe(callback.bind(this));
-        } else {
-            this.dataService.create(this.model).subscribe(callback.bind(this));
-        }
+        this.saveRequest()
+            .subscribe(() => this.closeModal(),
+                err => {
+                    this.errorMessage = err.error || 'Error.';
+                    this.submitted = false;
+                });
     }
 
 }

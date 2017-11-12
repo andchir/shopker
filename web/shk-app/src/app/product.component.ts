@@ -63,12 +63,12 @@ export class ProductModalContent extends ModalContentAbstractComponent<Product> 
         this.buildForm();
         this.getCategories();
         this.getContentType()
-            .subscribe(() => {
+            .then(() => {
                 if (this.itemId) {
                     this.getModelData();
                 }
-            }, (msg) => {
-                this.errorMessage = msg;
+            }, (err) => {
+                this.errorMessage = err.error || 'Error.';
             });
     }
 
@@ -79,29 +79,33 @@ export class ProductModalContent extends ModalContentAbstractComponent<Product> 
 
     getCategories() {
         this.loading = true;
-        this.categoriesService.getList()
+        this.categoriesService.getListPage()
             .subscribe(data => {
-                this.categories = data;
+                this.categories = data.items;
                 this.loading = false;
             }, (err) => {
-                this.errorMessage = err;
+                this.errorMessage = err.error || 'Error.';
             });
     }
 
-    getContentType(): Observable<ContentType> {
+    getContentType(): Promise<ContentType> {
         if(!this.category.contentTypeName){
-            // return Promise.reject('Content type name not found.');
+            return Promise.reject({error: 'Content type name not found.'});
         }
-        this.loading = true;
-        return this.contentTypesService.getItemByName(this.category.contentTypeName);
-            // .subscribe((data) => {
-            //     this.currentContentType = data as ContentType;
-            //     this.errorMessage = '';
-            //     this.updateForm();
-            //     this.loading = false;
-            // }, (err) => {
-            //     this.errorMessage = err;
-            // });
+        return new Promise((resolve, reject) => {
+            this.contentTypesService.getItemByName(this.category.contentTypeName)
+                .subscribe((data) => {
+                    this.currentContentType = data as ContentType;
+                    this.errorMessage = '';
+                    this.updateForm();
+                    this.loading = false;
+                    resolve(data);
+                }, (err) => {
+                    this.errorMessage = err.error || 'Error.';
+                    this.loading = false;
+                    reject(err);
+                });
+        });
     }
 
     updateForm(data ?: any): void {

@@ -639,6 +639,14 @@ var CategoriesModalComponent = (function (_super) {
             _this.contentTypes = data.items;
         }, function (error) { return _this.errorMessage = error; });
     };
+    CategoriesModalComponent.prototype.saveRequest = function () {
+        if (this.isEditMode) {
+            return this.dataService.update(this.model);
+        }
+        else {
+            return this.dataService.create(this.model);
+        }
+    };
     CategoriesModalComponent.prototype.save = function () {
         var _this = this;
         this.submitted = true;
@@ -647,22 +655,11 @@ var CategoriesModalComponent = (function (_super) {
             this.submitted = false;
             return;
         }
-        var observer = {
-            next: function (item) { return _this.closeModal(); },
-            error: function (err) {
-                _this.errorMessage = err.error;
-                _this.submitted = false;
-            },
-            complete: function () {
-                _this.submitted = false;
-            }
-        };
-        if (this.isEditMode) {
-            this.dataService.update(this.model).subscribe(observer);
-        }
-        else {
-            this.dataService.create(this.model).subscribe(observer);
-        }
+        this.saveRequest()
+            .subscribe(function () { return _this.closeModal(); }, function (err) {
+            _this.errorMessage = err.error;
+            _this.submitted = false;
+        });
     };
     return CategoriesModalComponent;
 }(modal_abstract_1.ModalContentAbstractComponent));
@@ -1801,6 +1798,10 @@ var ModalContentAbstractComponent = (function () {
         this.loading = true;
         this.dataService.getItem(this.itemId)
             .subscribe(function (data) {
+            if (_this.isItemCopy) {
+                data.id = null;
+                data[_this.getSystemFieldName()] = '';
+            }
             _this.model = data;
             _this.loading = false;
         }, function (err) {

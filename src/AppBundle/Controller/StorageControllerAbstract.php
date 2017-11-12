@@ -154,7 +154,7 @@ abstract class StorageControllerAbstract extends BaseController
             return $this->setError($output['msg']);
         }
 
-        return $this->createUpdate($data);
+        return $this->createUpdate($data, $itemId);
     }
 
     /**

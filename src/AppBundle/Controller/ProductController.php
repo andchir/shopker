@@ -172,6 +172,9 @@ class ProductController extends BaseController
 
         if($itemId){
             $document = $collection->findOne(['_id' => $itemId]);
+            if(!$document){
+                return $this->setError('Item not found.');
+            }
         } else {
             $document = [
                 '_id' => $this->getNextId($contentType->getCollection())

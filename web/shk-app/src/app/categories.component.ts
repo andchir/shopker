@@ -124,6 +124,14 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
                 error => this.errorMessage = <any>error);
     }
 
+    saveRequest() {
+        if (this.isEditMode) {
+            return this.dataService.update(this.model);
+        } else {
+            return this.dataService.create(this.model);
+        }
+    }
+
     save(): void {
         this.submitted = true;
 
@@ -133,22 +141,12 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
             return;
         }
 
-        const observer: Observer<Category> = {
-            next: item => this.closeModal(),
-            error: err => {
+        this.saveRequest()
+            .subscribe(() => this.closeModal(),
+                err => {
                 this.errorMessage = err.error;
                 this.submitted = false;
-            },
-            complete: () => {
-                this.submitted = false;
-            }
-        };
-
-        if (this.isEditMode) {
-            this.dataService.update(this.model).subscribe(observer);
-        } else {
-            this.dataService.create(this.model).subscribe(observer);
-        }
+            });
     }
 }
 

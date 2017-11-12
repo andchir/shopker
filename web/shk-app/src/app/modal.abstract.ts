@@ -50,6 +50,10 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
         this.loading = true;
         this.dataService.getItem(this.itemId)
             .subscribe(data => {
+                if (this.isItemCopy) {
+                    data.id = null;
+                    data[this.getSystemFieldName()] = '';
+                }
                 this.model = data as M;
                 this.loading = false;
             }, (err) => {

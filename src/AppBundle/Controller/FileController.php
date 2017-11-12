@@ -23,7 +23,7 @@ class FileController extends BaseController
      * @param Request $request
      * @return JsonResponse
      */
-    public function createItemAction(Request $request)
+    public function uploadFilesAction(Request $request)
     {
         /** @var Filesystem $fs */
         $fs = $this->get('filesystem');
@@ -49,6 +49,9 @@ class FileController extends BaseController
 
         $outputFiles = [];
         foreach ($files as $key => $file) {
+
+            // TODO: check file extension
+
             $fileDocument = new FileDocument();
             $fileDocument
                 ->setUploadRootDir($filesDirPath)

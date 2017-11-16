@@ -130,6 +130,30 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                 field.inputProperties.formats = String(field.inputProperties.formats).split(',');
 
                 break;
+            case 'file':
+
+                propertiesDefault = {
+                    handler: '',
+                    allowed_extensions: '.zip,.rar,.doc,.docx,.xls,.xlsx,.ods,.odt'
+                };
+                field.inputProperties = this.extendProperties(
+                    field.inputProperties,
+                    propertiesDefault
+                );
+
+                break;
+            case 'image':
+
+                propertiesDefault = {
+                    handler: '',
+                    allowed_extensions: 'image/*'
+                };
+                field.inputProperties = this.extendProperties(
+                    field.inputProperties,
+                    propertiesDefault
+                );
+
+                break;
             default:
 
                 break;

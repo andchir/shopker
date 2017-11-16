@@ -270,9 +270,14 @@ class FieldTypesFixtures extends Fixture
                         'default_value' => ''
                     ],
                     [
+                        'name' => 'allowed_extensions',
+                        'title' => 'Разрешенные типы файлов',
+                        'default_value' => '.zip,.rar,.doc,.docx,.xls,.xlsx,.ods,.odt'
+                    ],
+                    [
                         'name' => 'handler',
                         'title' => 'Обработчик',
-                        'default_value' => 'FileHandler'
+                        'default_value' => ''
                     ]
                 ],
                 'outputProperties' => [
@@ -292,6 +297,11 @@ class FieldTypesFixtures extends Fixture
                         'name' => 'value',
                         'title' => 'Значение по умолчанию',
                         'default_value' => ''
+                    ],
+                    [
+                        'name' => 'allowed_extensions',
+                        'title' => 'Разрешенные типы файлов',
+                        'default_value' => 'image/*'
                     ],
                     [
                         'name' => 'handler',

@@ -388,8 +388,9 @@ class FileDocument
             return false;
         }
         if(!$this->getFileName()){
-            $this->setUniqueFileName();
-            $this->setExtension(strtolower($this->getFile()->getClientOriginalExtension()));
+            $this
+                ->setUniqueFileName()
+                ->setExtension(strtolower($this->getFile()->getClientOriginalExtension()));
         }
 
         $uploadDirPath = $this->getUploadDir();

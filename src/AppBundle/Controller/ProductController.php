@@ -108,7 +108,7 @@ class ProductController extends BaseController
         $error = '';
 
         foreach ($contentTypeFields as $field){
-            if($error = $this->validateField($data, $field, $collectionName, $category->getId(), $itemId)){
+            if($error = $this->validateField($data[$field['name']], $field, [], $collectionName, $category->getId(), $itemId)){
                 break;
             }
         }
@@ -120,36 +120,86 @@ class ProductController extends BaseController
     }
 
     /**
-     * @param array $data
-     * @param array $field
-     * @param string $collectionName
-     * @param int $categoryId
-     * @param int $itemId
+     * @param $value
+     * @param $field
+     * @param array $properties
+     * @param string|null $collectionName
+     * @param string|null $categoryId
+     * @param int|null $itemId
      * @return string
      */
-    public function validateField($data, $field, $collectionName, $categoryId, $itemId)
+    public function validateField($value, $field, $properties = [], $collectionName = null, $categoryId = null, $itemId = null)
     {
         $inputProperties = isset($field['inputProperties'])
             ? $field['inputProperties']
             : [];
-        if(!empty($field['required']) && (!isset($data[$field['name']]) || $data[$field['name']] === '')){
+        if(!empty($field['required']) && empty($value)){
             return "Field \"{$field['title']}\" is required.";
         }
         $error = '';
-        // TODO: add validation by input properties
+
+        // Validation by input properties
         switch ($field['inputType']){
             case 'system_name':
 
                 if(
-                    !empty($data[$field['name']])
-                    && $this->checkNameExists($field['name'], $data[$field['name']], $collectionName, $categoryId, $itemId)
+                    !empty($value)
+                    && $this->checkNameExists($field['name'], $value, $collectionName, $categoryId, $itemId)
                 ){
                     $error = 'System name already exists.';
                 }
 
                 break;
+            case 'image':
+            case 'file':
+
+                if (!empty($value) && !empty($inputProperties['allowed_extensions'])) {
+
+                    // Validate by file extension
+                    if (strpos($inputProperties['allowed_extensions'], '/') !== false) {
+
+                        if (!empty($properties['mimeType'])
+                            && !self::isMimeTypeAllowed(explode(',', $inputProperties['allowed_extensions']), $properties['mimeType'])) {
+
+                            $error = 'File type is not allowed.';
+                        }
+
+                    } else {
+                        $allowedExtensions = explode(',', $inputProperties['allowed_extensions']);
+                        $ext = self::getExtension($value);
+                        if (!in_array('.' . $ext, $allowedExtensions)) {
+                            $error = 'File type is not allowed.';
+                        }
+                    }
+
+                }
+
+                break;
         }
         return $error;
+    }
+
+    /**
+     * @param array $allowedMimeTypes
+     * @param string $mimeType
+     * @return bool
+     */
+    public static function isMimeTypeAllowed($allowedMimeTypes, $mimeType)
+    {
+        $output = false;
+        foreach ($allowedMimeTypes as $allowedMimeType) {
+            if (strpos($allowedMimeType, '/*') !== false) {
+                $allowedMimeType = str_replace('/*', '/', $allowedMimeType);
+                if (strpos($mimeType, $allowedMimeType) === 0) {
+                    $output = true;
+                    break;
+                }
+            } else if ($allowedMimeType === $mimeType) {
+                $output = true;
+                break;
+            }
+        }
+        return $output;
     }
 
     /**
@@ -218,7 +268,7 @@ class ProductController extends BaseController
      * @param Category $category
      * @return JsonResponse
      */
-        public function createItem(Request $request, Category $category = null)
+    public function createItem(Request $request, Category $category = null)
     {
         $data = $request->getContent()
             ? json_decode($request->getContent(), true)
@@ -359,19 +409,19 @@ class ProductController extends BaseController
         $contentTypeFields = $contentType->getFields();
         $collection = $this->getCollection($contentType->getCollection());
 
-        $entry = $collection->findOne(['_id' => $itemId]);
-        if(!$entry){
+        $entity = $collection->findOne(['_id' => $itemId]);
+        if(!$entity){
             return $this->setError('Product not found.');
         }
 
         $data = [
-            'id' => $entry['_id'],
-            'parentId' => $entry['parentId'],
-            'isActive' => $entry['isActive']
+            'id' => $entity['_id'],
+            'parentId' => $entity['parentId'],
+            'isActive' => $entity['isActive']
         ];
         foreach ($contentTypeFields as $field){
-            $data[$field['name']] = isset($entry[$field['name']])
-                ? $entry[$field['name']]
+            $data[$field['name']] = isset($entity[$field['name']])
+                ? $entity[$field['name']]
                 : '';
         }
 
@@ -478,6 +528,18 @@ class ProductController extends BaseController
         }
 
         return $queryOptions;
+    }
+
+    /**
+     * Get file extension
+     * @param $filePath
+     * @return string
+     */
+    public static function getExtension($filePath)
+    {
+        $temp_arr = $filePath ? explode('.', $filePath) : [];
+        $ext = !empty($temp_arr) ? end($temp_arr) : '';
+        return strtolower($ext);
     }
 
     /**

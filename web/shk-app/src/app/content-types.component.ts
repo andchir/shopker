@@ -455,11 +455,13 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent<Conte
             return;
         }
 
+        this.loading = true;
         this.saveRequest()
             .subscribe(() => this.closeModal(),
                 err => {
                     this.errorMessage = err.error || 'Error.';
                     this.submitted = false;
+                    this.loading = false;
                 });
     }
 }

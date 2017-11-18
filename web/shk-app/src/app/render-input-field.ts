@@ -8,6 +8,7 @@ import { SystemNameService } from './services/system-name.service';
 import { MultiValues } from './models/multivalues.model';
 import { Properties } from './models/properties.iterface';
 import { FileData } from './models/file-data.model';
+import { AppSettings } from './services/app-settings.service';
 
 @Component({
     selector: 'input-field-renderer',
@@ -47,12 +48,14 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
             clear: 'Сбросить'
         }
     };
+    filesDirBaseUrl: string;
 
     constructor(
         private changeDetectionRef: ChangeDetectorRef,
-        private systemNameService: SystemNameService
+        private systemNameService: SystemNameService,
+        private appSettings: AppSettings
     ) {
-
+        this.filesDirBaseUrl = this.appSettings.settings.filesDirUrl;
     }
 
     ngOnInit(): void {
@@ -284,18 +287,17 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
         this.changeDetectionRef.detectChanges();
     }
 
-    fileChange(event, fieldName: string, imgPreviewEl?: HTMLImageElement) {
+    fileChange(event, fieldName: string, isImage = false) {
         const fileList: FileList = event.target.files;
         if (fileList.length > 0) {
             this.model[fieldName] = this.getFileData(fileList[0]);
             this.files[fieldName] = fileList[0];
 
-            if (imgPreviewEl) {
+            if (isImage) {
                 const reader = new FileReader();
-                reader.onload = function(e: ProgressEvent) {
+                reader.onload = (e: ProgressEvent) => {
                     const fr = e.target as FileReader;
-                    imgPreviewEl.src = fr.result;
-                    imgPreviewEl.style.display = 'block';
+                    this.model[fieldName].dataUrl = fr.result;
                 };
                 reader.readAsDataURL(fileList[0]);
             }
@@ -318,6 +320,21 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
             size = file.size;
 
         return new FileData(0, title, extension, size);
+    }
+
+    getImageUrl(fileData: FileData|null): string {
+        if (!fileData) {
+            return '';
+        }
+        if (fileData.dataUrl) {
+            return fileData.dataUrl;
+        }
+        let output = '';
+        if (fileData.fileName) {
+            output += `${this.filesDirBaseUrl}/${fileData.dirPath}/`;
+            output += `${fileData.fileName}.${fileData.extension}`;
+        }
+        return output;
     }
 
 }

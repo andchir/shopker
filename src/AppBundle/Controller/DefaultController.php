@@ -14,9 +14,12 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        return $this->render('homepage.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
-        ]);
+        $settings = [
+            'filesDirUrl' => $this->getParameter('files_dir_url'),
+            'baseDir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
+            'locale' => 'ru'
+        ];
+        return $this->render('homepage.html.twig', ['settings' => $settings]);
     }
 
 }

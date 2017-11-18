@@ -5,6 +5,7 @@ export class FileData {
         public extension: string,
         public size?: number,
         public fileName?: string,
-        public dirPath?: string
+        public dirPath?: string,
+        public dataUrl?: string
     ) { }
 }

@@ -3,7 +3,14 @@
 {% block body %}
 
     <script>
-        document.locale = 'ru';
+        document.locale = '{{ settings.locale }}';
+        var appSettings = {
+            appName: '{{ app_name }}',
+            webApiUrl: '{{ app.request.baseUrl }}',
+            environment: '{{ app.environment }}',
+            filesDirUrl: '{{ settings.filesDirUrl }}',
+            locale: '{{ settings.locale }}'
+        };
     </script>
 
     <div class="p-3">

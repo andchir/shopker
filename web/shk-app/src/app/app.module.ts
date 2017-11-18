@@ -27,6 +27,7 @@ import { FilterFieldByGroup } from './pipes/filter-field-by-group.pipe';
 import { OrderByPipe } from './pipes/orderby.pipe';
 import { FilterArrayPipe } from './pipes/filter-array-pipe';
 
+import { AppSettings } from './services/app-settings.service';
 import { ProductsService } from './services/products.service';
 import { ContentTypesService } from './services/content_types.service';
 import { CategoriesService } from './services/categories.service';
@@ -74,7 +75,14 @@ import { AppRoutingModule }     from './app-routing.module';
         CategoriesModalComponent,
         FieldTypeModalContent
     ],
-    providers: [ ProductsService, ContentTypesService, CategoriesService, NgbActiveModal, NgbTooltipConfig ],
+    providers: [
+        AppSettings,
+        ProductsService,
+        ContentTypesService,
+        CategoriesService,
+        NgbActiveModal,
+        NgbTooltipConfig
+    ],
     entryComponents: [
         AlertModalContent,
         ConfirmModalContent,

@@ -99,12 +99,12 @@
                                 </label>
                             </div>
                             <div class="col-md-7">
-                                <input type="file" id="field_{{field.name}}" [name]="field.name" [accept]="field.inputProperties.allowed_extensions" style="display:none;" (change)="fileChange($event, field.name, imgPreview)" #fileInput>
+                                <input type="file" id="field_{{field.name}}" [name]="field.name" [accept]="field.inputProperties.allowed_extensions" style="display:none;" (change)="fileChange($event, field.name, true)" #fileInput>
                                 <input type="hidden" [formControlName]="field.name" [(ngModel)]="model[field.name]">
 
                                 <div class="relative" [ngClass]="{'show-on-hover-parent': model[field.name]}" style="min-height: 30px;">
                                     <div>
-                                        <img src="" alt="Preview" class="img-thumbnail" style="width:250px; display:none;" #imgPreview>
+                                        <img [src]="getImageUrl(model[field.name])" alt="Preview" class="img-thumbnail" style="width:250px;" #imgPreview [style.display]="model[field.name] ? 'block' : 'none'">
                                     </div>
                                     <div class="show-on-hover" style="top:10px; left:10px; right:auto;">
                                         <button type="button" class="btn btn-secondary btn-wide" (click)="fileInput.click()">

@@ -22,23 +22,6 @@ parameters:
 
     files_dir_path: '%kernel.root_dir%/../web/uploads'
     files_dir_url: '/uploads'
-    files_allowed_upload:
-        - jpg
-        - jpeg
-        - png
-        - gif
-        - mp3
-        - wav
-        - mp4
-        - webm
-        - zip
-        - doc
-        - docx
-        - pdf
-        - xls
-        - xlsx
-        - ods
-        - odt
 
     # A secret key that's used to generate certain security-related tokens
     secret: ThisTokenIsNotSoSecretChangeIt

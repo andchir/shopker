@@ -328,6 +328,11 @@ class FileDocument
         return $this->uploadRootDir;
     }
 
+    public function getDirBasePath()
+    {
+        return $this->getCreatedDate()->format('Y/m/d');
+    }
+
     /**
      * @return string
      */
@@ -342,7 +347,7 @@ class FileDocument
             chmod($uploadRootDirPath, 0777);
         }
         $uploadRootDirPath = realpath($uploadRootDirPath);
-        $dateArr = explode('/', $this->getCreatedDate()->format('Y/m/d'));
+        $dateArr = explode('/', $this->getDirBasePath());
 
         foreach ($dateArr as $num) {
             $uploadRootDirPath .= DIRECTORY_SEPARATOR . $num;

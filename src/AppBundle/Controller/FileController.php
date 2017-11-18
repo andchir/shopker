@@ -114,15 +114,27 @@ class FileController extends BaseController
                 ->setFile($file);
 
             $dm->persist($fileDocument);
+            $dm->flush();
+
             $outputFiles[] = $fileDocument->toArray();
 
-            $entity[$key] = $fileDocument->getFullFileName();
+            // Delete old file
+            if (!empty($entity[$key]) && !empty($entity[$key]['fileId'])) {
+                // TODO: delete old file
+            }
+
+            $entity[$key] = [
+                'fileId' => $fileDocument->getId(),
+                'title' => $fileDocument->getTitle(),
+                'fileName' => $fileDocument->getFileName(),
+                'ext' => $fileDocument->getExtension(),
+                'dirPath' => $fileDocument->getDirBasePath()
+            ];
         }
 
         if ($error) {
             return $this->setError($error);
         } else {
-            $dm->flush();
             $collection->update(['_id' => $entity['_id']], ['$set' => $entity]);
         }
 

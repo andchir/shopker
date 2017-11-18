@@ -57,7 +57,7 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
                 this.model = data as M;
                 this.loading = false;
             }, (err) => {
-                this.errorMessage = err;
+                this.errorMessage = err.error || 'Error.';
                 this.loading = false;
             });
     }

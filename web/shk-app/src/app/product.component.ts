@@ -154,6 +154,7 @@ export class ProductModalContent extends ModalContentAbstractComponent<Product> 
         }
         formData.append('itemId', itemId);
         formData.append('ownerType', this.currentContentType.name);
+        formData.append('categoryId', this.model.parentId);
 
         this.filesService.postFormData(formData)
             .subscribe(() => {
@@ -162,6 +163,7 @@ export class ProductModalContent extends ModalContentAbstractComponent<Product> 
             err => {
                 this.errorMessage = err.error || 'Error.';
                 this.submitted = false;
+                this.loading = false;
             });
     }
 
@@ -173,6 +175,7 @@ export class ProductModalContent extends ModalContentAbstractComponent<Product> 
             return;
         }
 
+        this.loading = true;
         this.dataService.setRequestUrl('admin/products/' + this.category.id);
 
         this.saveRequest()
@@ -186,6 +189,7 @@ export class ProductModalContent extends ModalContentAbstractComponent<Product> 
                 err => {
                     this.errorMessage = err.error || 'Error.';
                     this.submitted = false;
+                    this.loading = false;
                 });
     }
 }

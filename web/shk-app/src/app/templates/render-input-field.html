@@ -99,7 +99,7 @@
                                 </label>
                             </div>
                             <div class="col-md-7">
-                                <input type="file" id="field_{{field.name}}" [name]="field.name" accept="image/*" style="display:none;" (change)="fileChange($event, field.name, imgPreview)" #fileInput>
+                                <input type="file" id="field_{{field.name}}" [name]="field.name" [accept]="field.inputProperties.allowed_extensions" style="display:none;" (change)="fileChange($event, field.name, imgPreview)" #fileInput>
                                 <input type="hidden" [formControlName]="field.name" [(ngModel)]="model[field.name]">
 
                                 <div class="relative" [ngClass]="{'show-on-hover-parent': selectedItems[field.name]}">
@@ -134,7 +134,7 @@
                                 </label>
                             </div>
                             <div class="col-md-7">
-                                <input type="file" id="field_{{field.name}}" [name]="field.name" style="display:none;" (change)="fileChange($event, field.name)" #fileInput>
+                                <input type="file" id="field_{{field.name}}" [name]="field.name" [accept]="field.inputProperties.allowed_extensions" style="display:none;" (change)="fileChange($event, field.name)" #fileInput>
                                 <input type="hidden" [formControlName]="field.name" [(ngModel)]="model[field.name]">
                                 <button type="button" class="btn btn-secondary btn-wide" (click)="fileInput.click()">
                                     <i class="icon-upload"></i>

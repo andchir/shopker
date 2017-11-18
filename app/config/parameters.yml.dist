@@ -12,7 +12,7 @@ parameters:
 
     mongodb_user: ""
     mongodb_password: ""
-    mongodb_server: "mongodb://localhost:27017"
+    mongodb_server: "localhost:27017"
     mongodb_database: ""
 
     mailer_transport: smtp

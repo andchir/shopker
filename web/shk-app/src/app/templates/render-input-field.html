@@ -1,5 +1,5 @@
 
-<ngb-tabset justify="fill">
+<ngb-tabset (tabChange)="onGroupChange($event)" justify="fill">
     <ngb-tab *ngFor="let groupName of groups; let i=index">
         <ng-template ngbTabTitle>{{groupName}}</ng-template>
         <ng-template ngbTabContent>
@@ -102,7 +102,7 @@
                                 <input type="file" id="field_{{field.name}}" [name]="field.name" [accept]="field.inputProperties.allowed_extensions" style="display:none;" (change)="fileChange($event, field.name, imgPreview)" #fileInput>
                                 <input type="hidden" [formControlName]="field.name" [(ngModel)]="model[field.name]">
 
-                                <div class="relative" [ngClass]="{'show-on-hover-parent': selectedItems[field.name]}">
+                                <div class="relative" [ngClass]="{'show-on-hover-parent': model[field.name]}" style="min-height: 30px;">
                                     <div>
                                         <img src="" alt="Preview" class="img-thumbnail" style="width:250px; display:none;" #imgPreview>
                                     </div>
@@ -116,9 +116,9 @@
                                         </button>
                                     </div>
                                 </div>
-                                <div class="py-2 text-secondary" *ngIf="selectedItems[field.name]">
+                                <div class="py-2 text-secondary" *ngIf="model[field.name] && model[field.name].title">
                                     <i class="icon-file"></i>
-                                    {{selectedItems[field.name]}}
+                                    {{model[field.name].title}}.{{model[field.name].extension}}
                                 </div>
                                 <div *ngIf="formErrors[field.name]" class="alert alert-danger">
                                     {{formErrors[field.name]}}
@@ -143,9 +143,9 @@
                                 <button type="button" class="btn btn-secondary" *ngIf="model[field.name]" (click)="fileClear(field.name)" title="Clear">
                                     <i class="icon-cross"></i>
                                 </button>
-                                <div class="pt-2 text-secondary" *ngIf="selectedItems[field.name]">
+                                <div class="pt-2 text-secondary" *ngIf="model[field.name] && model[field.name].title">
                                     <i class="icon-file"></i>
-                                    {{selectedItems[field.name]}}
+                                    {{model[field.name].title}}.{{model[field.name].extension}}
                                 </div>
                                 <div *ngIf="formErrors[field.name]" class="alert alert-danger">
                                     {{formErrors[field.name]}}

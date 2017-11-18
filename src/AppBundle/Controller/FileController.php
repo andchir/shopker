@@ -53,6 +53,7 @@ class FileController extends BaseController
 
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $this->get('doctrine_mongodb')->getManager();
+        $fileDocumentRepository = $this->getRepository();
 
         $categoryRepository = $this->get('doctrine_mongodb')
             ->getManager()
@@ -104,6 +105,20 @@ class FileController extends BaseController
                 break;
             }
 
+            // Delete old file
+            if (!empty($entity[$key]) && !empty($entity[$key]['fileId'])) {
+                $oldFileDocument = $fileDocumentRepository->findOneBy([
+                    'id' => $entity[$key]['fileId'],
+                    'ownerId' => $itemId,
+                    'ownerType' => $ownerType
+                ]);
+                if ($oldFileDocument) {
+                    $oldFileDocument->setUploadRootDir($filesDirPath);
+                    $dm->remove($oldFileDocument);
+                    $dm->flush();
+                }
+            }
+
             $fileDocument = new FileDocument();
             $fileDocument
                 ->setUploadRootDir($filesDirPath)
@@ -118,16 +133,11 @@ class FileController extends BaseController
 
             $outputFiles[] = $fileDocument->toArray();
 
-            // Delete old file
-            if (!empty($entity[$key]) && !empty($entity[$key]['fileId'])) {
-                // TODO: delete old file
-            }
-
             $entity[$key] = [
                 'fileId' => $fileDocument->getId(),
                 'title' => $fileDocument->getTitle(),
                 'fileName' => $fileDocument->getFileName(),
-                'ext' => $fileDocument->getExtension(),
+                'extension' => $fileDocument->getExtension(),
                 'dirPath' => $fileDocument->getDirBasePath()
             ];
         }
@@ -139,6 +149,16 @@ class FileController extends BaseController
         }
 
         return new JsonResponse($outputFiles);
+    }
+
+    /**
+     * @return \AppBundle\Repository\FileDocumentRepository
+     */
+    public function getRepository()
+    {
+        return $this->get('doctrine_mongodb')
+            ->getManager()
+            ->getRepository('AppBundle:FileDocument');
     }
 
     /**

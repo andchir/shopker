@@ -166,8 +166,8 @@ class ProductController extends BaseController
 
                     } else {
                         $allowedExtensions = explode(',', $inputProperties['allowed_extensions']);
-                        $ext = self::getExtension($value);
-                        if (!in_array('.' . $ext, $allowedExtensions)) {
+                        $ext = !empty($value['extension']) ? $value['extension'] : null;
+                        if ($ext !== null && !in_array('.' . $ext, $allowedExtensions)) {
                             $error = 'File type is not allowed.';
                         }
                     }
@@ -219,12 +219,14 @@ class ProductController extends BaseController
         }
 
         $collection = $this->getCollection($contentType->getCollection());
+        $isEdit = false;
 
         if($itemId){
             $document = $collection->findOne(['_id' => $itemId]);
             if(!$document){
                 return $this->setError('Item not found.');
             }
+            $isEdit = true;
         } else {
             $document = [
                 '_id' => $this->getNextId($contentType->getCollection())
@@ -239,6 +241,16 @@ class ProductController extends BaseController
         foreach ($contentType->getFields() as $field){
             // Files will be saved later by a separate request
             if (in_array($field['inputType'], ['file','image'])) {
+
+                // Delete file and image
+                if ($itemId && empty($data[$field['name']]) && !empty($document[$field['name']])) {
+                    $fieData = $document[$field['name']];
+                    if (!empty($fieData['fileId'])) {
+                        $this->deleteFile($fieData['fileId'], $itemId, $contentType->getName());
+                    }
+                    $document[$field['name']] = null;
+                }
+
                 continue;
             }
             $document[$field['name']] = isset($data[$field['name']])
@@ -531,6 +543,35 @@ class ProductController extends BaseController
     }
 
     /**
+     * @param $itemId
+     * @param $ownerId
+     * @param $ownerType
+     * @return bool
+     */
+    public function deleteFile($itemId, $ownerId, $ownerType)
+    {
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $fileDocumentRepository = $this->getFileDocumentRepository();
+
+        $fileDocument = $fileDocumentRepository->findOneBy([
+            'id' => $itemId,
+            'ownerId' => $ownerId,
+            'ownerType' => $ownerType
+        ]);
+
+        $filesDirPath = $this->getParameter('files_dir_path');
+
+        if ($fileDocument) {
+            $fileDocument->setUploadRootDir($filesDirPath);
+            $dm->remove($fileDocument);
+            $dm->flush();
+        }
+
+        return true;
+    }
+
+    /**
      * Get file extension
      * @param $filePath
      * @return string
@@ -543,13 +584,13 @@ class ProductController extends BaseController
     }
 
     /**
-     * @return \AppBundle\Repository\ContentTypeRepository
+     * @return \AppBundle\Repository\FileDocumentRepository
      */
-    public function getRepository()
+    public function getFileDocumentRepository()
     {
         return $this->get('doctrine_mongodb')
             ->getManager()
-            ->getRepository('AppBundle:Product');
+            ->getRepository('AppBundle:FileDocument');
     }
 
 }

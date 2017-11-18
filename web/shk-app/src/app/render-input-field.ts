@@ -7,6 +7,7 @@ import { ContentField } from "./models/content_field.model";
 import { SystemNameService } from './services/system-name.service';
 import { MultiValues } from './models/multivalues.model';
 import { Properties } from './models/properties.iterface';
+import { FileData } from './models/file-data.model';
 
 @Component({
     selector: 'input-field-renderer',
@@ -17,11 +18,10 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
 
     @Input() fields: ContentField[];
     @Input() groups: string[];
-    @Input() model: any;
+    @Input() model: {[key: string]: any};
     @Input() form: FormGroup;
     @Input() formErrors: {[key: string]: string};
     @Input() validationMessages: {[key: string]: {[key: string]: string}};
-    @Input() selectedItems: { [key: string]: string; } = {};
     @Input() files: { [key: string]: File } = {};
     fieldsMultivalues: {[key: string]: MultiValues} = {};
     submitted = false;
@@ -206,6 +206,10 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
         }
     }
 
+    onGroupChange(e: any): void {
+        // console.log('onGroupChange', e);
+    }
+
     setValue(field: ContentField): void {
         let defaultValue = null,
             modelValue = this.model[field.name] || null;
@@ -283,8 +287,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
     fileChange(event, fieldName: string, imgPreviewEl?: HTMLImageElement) {
         const fileList: FileList = event.target.files;
         if (fileList.length > 0) {
-            this.form.controls[fieldName].setValue(fileList[0].name);
-            this.selectedItems[fieldName] = fileList[0].name;
+            this.model[fieldName] = this.getFileData(fileList[0]);
             this.files[fieldName] = fileList[0];
 
             if (imgPreviewEl) {
@@ -302,12 +305,19 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
     fileClear(fieldName: string, imgPreviewEl?: HTMLImageElement) {
         this.model[fieldName] = null;
         this.form.controls[fieldName].reset(null);
-        delete this.selectedItems[fieldName];
         delete this.files[fieldName];
         if (imgPreviewEl) {
             imgPreviewEl.src = '';
             imgPreviewEl.style.display = 'none';
         }
+    }
+
+    getFileData(file: File): FileData {
+        const title = file.name.substr(0, file.name.lastIndexOf('.')),
+            extension = file.name.substr(file.name.lastIndexOf('.') + 1),
+            size = file.size;
+
+        return new FileData(0, title, extension, size);
     }
 
 }

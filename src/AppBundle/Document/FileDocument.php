@@ -334,7 +334,7 @@ class FileDocument
     }
 
     /**
-     * @return string
+     * @return bool|null|string
      */
     public function getUploadDir()
     {
@@ -342,6 +342,9 @@ class FileDocument
             $this->setCreatedDate(new \DateTime());
         }
         $uploadRootDirPath = $this->getUploadRootDir();
+        if (!$uploadRootDirPath) {
+            return null;
+        }
         if(!is_dir($uploadRootDirPath)){
             mkdir($uploadRootDirPath);
             chmod($uploadRootDirPath, 0777);
@@ -360,10 +363,13 @@ class FileDocument
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getUploadedPath()
     {
+        if (!$this->getUploadDir()) {
+            return null;
+        }
         return $this->getUploadDir() . '/' . $this->getFullFileName();
     }
 
@@ -403,6 +409,11 @@ class FileDocument
             return false;
         }
 
+        if (!$this->getTitle()) {
+            $pathInfo = pathinfo($this->getFile()->getClientOriginalName());
+            $this->setTitle($pathInfo['filename']);
+        }
+
         $fullFileName = $this->getFullFileName();
         $this->getFile()->move($uploadDirPath, $fullFileName);
 
@@ -410,6 +421,20 @@ class FileDocument
 
         $this->file = null;
         return true;
+    }
+
+    /**
+     * @MongoDB\PreRemove()
+     * @return bool
+     */
+    public function removeFile()
+    {
+        $fileUploadedPath = $this->getUploadedPath();
+        if ($fileUploadedPath && file_exists($fileUploadedPath)) {
+            unlink($fileUploadedPath);
+            return true;
+        }
+        return false;
     }
 
     /**

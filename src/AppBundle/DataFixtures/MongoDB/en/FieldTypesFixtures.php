@@ -275,6 +275,11 @@ class FieldTypesFixtures extends Fixture
                         'default_value' => '.zip,.rar,.doc,.docx,.xls,.xlsx,.ods,.odt'
                     ],
                     [
+                        'name' => 'has_preview_image',
+                        'title' => 'Has preview image',
+                        'default_value' => '0'
+                    ],
+                    [
                         'name' => 'handler',
                         'title' => 'Handler',
                         'default_value' => ''
@@ -288,7 +293,7 @@ class FieldTypesFixtures extends Fixture
                     ]
                 ]
             ],
-            'image' => [
+            'file:image' => [
                 'title' => 'Image',
                 'description' => '',
                 'isActive' => true,
@@ -304,9 +309,14 @@ class FieldTypesFixtures extends Fixture
                         'default_value' => 'image/*'
                     ],
                     [
+                        'name' => 'has_preview_image',
+                        'title' => 'Has preview image',
+                        'default_value' => '1'
+                    ],
+                    [
                         'name' => 'handler',
                         'title' => 'Handler',
-                        'default_value' => 'ImageHandler'
+                        'default_value' => ''
                     ]
                 ],
                 'outputProperties' => [

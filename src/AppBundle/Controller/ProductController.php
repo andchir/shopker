@@ -137,9 +137,10 @@ class ProductController extends BaseController
             return "Field \"{$field['title']}\" is required.";
         }
         $error = '';
+        $inpType = explode(':', $field['inputType']);
 
         // Validation by input properties
-        switch ($field['inputType']){
+        switch ($inpType[0]){
             case 'system_name':
 
                 if(
@@ -150,7 +151,6 @@ class ProductController extends BaseController
                 }
 
                 break;
-            case 'image':
             case 'file':
 
                 if (!empty($value) && !empty($inputProperties['allowed_extensions'])) {
@@ -239,8 +239,11 @@ class ProductController extends BaseController
             : true;
 
         foreach ($contentType->getFields() as $field){
+
+            $inpType = explode(':', $field['inputType']);
+
             // Files will be saved later by a separate request
-            if (in_array($field['inputType'], ['file','image'])) {
+            if ($inpType[0] == 'file') {
 
                 // Delete file and image
                 if ($itemId && empty($data[$field['name']]) && !empty($document[$field['name']])) {

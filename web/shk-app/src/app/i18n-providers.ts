@@ -3,7 +3,7 @@ import { TRANSLATION_RU } from '../../locale/messages.ru';
 
 export function getTranslationProviders(): Promise<Object[]> {
     // Get the locale id from the global
-    const locale = document['locale'] as string;
+    const locale = window['appSettings'].locale as string;
     // return no providers if fail to get translation file for locale
     const noProviders: Object[] = [];
     // No locale or U.S. English: no translation providers
@@ -27,5 +27,5 @@ function getTranslations(locale: string) {
             translation = TRANSLATION_RU;
             break;
     }
-    return Promise.resolve( translation );
+    return Promise.resolve(translation);
 }

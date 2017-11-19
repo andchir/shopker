@@ -87,9 +87,10 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
 
     setFieldProperties(field: ContentField): void {
 
-        let propertiesDefault: Properties;
+        let propertiesDefault: Properties,
+            inputTypeParts = field.inputType.split(':');
 
-        switch (field.inputType) {
+        switch (inputTypeParts[0]) {
             case 'number':
 
                 propertiesDefault = {
@@ -137,7 +138,8 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
 
                 propertiesDefault = {
                     handler: '',
-                    allowed_extensions: '.zip,.rar,.doc,.docx,.xls,.xlsx,.ods,.odt'
+                    allowed_extensions: '.zip,.rar,.doc,.docx,.xls,.xlsx,.ods,.odt',
+                    has_preview_image: 0
                 };
                 field.inputProperties = this.extendProperties(
                     field.inputProperties,
@@ -145,18 +147,18 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                 );
 
                 break;
-            case 'image':
-
-                propertiesDefault = {
-                    handler: '',
-                    allowed_extensions: 'image/*'
-                };
-                field.inputProperties = this.extendProperties(
-                    field.inputProperties,
-                    propertiesDefault
-                );
-
-                break;
+            // case 'image':
+            //
+            //     propertiesDefault = {
+            //         handler: '',
+            //         allowed_extensions: 'image/*'
+            //     };
+            //     field.inputProperties = this.extendProperties(
+            //         field.inputProperties,
+            //         propertiesDefault
+            //     );
+            //
+            //     break;
             default:
 
                 break;
@@ -166,9 +168,10 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
     setFieldOptions(field: ContentField): void {
 
         field.options = [];
-        let valueArr;
+        let valueArr,
+            inputTypeParts = field.inputType.split(':');
 
-        switch (field.inputType) {
+        switch (inputTypeParts[0]) {
             case 'radio':
             case 'select':
 
@@ -287,19 +290,30 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
         this.changeDetectionRef.detectChanges();
     }
 
-    fileChange(event, fieldName: string, isImage = false) {
-        const fileList: FileList = event.target.files;
+    fileChange(event, field: ContentField, imgPreview?: HTMLImageElement) {
+        const fileList: FileList = event.target.files,
+            fieldName = field.name;
         if (fileList.length > 0) {
             this.model[fieldName] = this.getFileData(fileList[0]);
             this.files[fieldName] = fileList[0];
 
-            if (isImage) {
+            const parentEl = imgPreview.parentElement.parentElement;
+
+            if (field.inputProperties.has_preview_image
+                && fileList[0].type.indexOf('image/') > -1) {
+
+                imgPreview.style.display = 'block';
+                parentEl.querySelector('.file-buttons').classList.add('show-on-hover');
+
                 const reader = new FileReader();
                 reader.onload = (e: ProgressEvent) => {
                     const fr = e.target as FileReader;
                     this.model[fieldName].dataUrl = fr.result;
                 };
                 reader.readAsDataURL(fileList[0]);
+            } else {
+                imgPreview.style.display = 'none';
+                parentEl.querySelector('.file-buttons').classList.remove('show-on-hover');
             }
         }
     }
@@ -335,6 +349,11 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
             output += `${fileData.fileName}.${fileData.extension}`;
         }
         return output;
+    }
+
+    getInputTypeMain(inputTypeName: string): string {
+        const inputTypeParts = inputTypeName.split(':');
+        return inputTypeParts[0];
     }
 
 }

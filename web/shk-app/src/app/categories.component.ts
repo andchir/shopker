@@ -133,11 +133,14 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
             return;
         }
 
+        this.loading = true;
+
         this.saveRequest()
             .subscribe(() => this.closeModal(),
                 err => {
                 this.errorMessage = err.error;
                 this.submitted = false;
+                this.loading = false;
             });
     }
 }

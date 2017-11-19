@@ -39,7 +39,7 @@ export class FieldTypeModalContent extends ModalContentAbstractComponent<FieldTy
         },
         name: {
             value: '',
-            validators: [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')],
+            validators: [Validators.required, Validators.pattern('[A-Za-z0-9_:-]+')],
             messages: {
                 required: 'Name is required.',
                 pattern: 'The name must contain only Latin letters and numbers.'

@@ -410,8 +410,9 @@ class FileDocument
         }
 
         if (!$this->getTitle()) {
-            $pathInfo = pathinfo($this->getFile()->getClientOriginalName());
-            $this->setTitle($pathInfo['filename']);
+            $originalName = $this->getFile()->getClientOriginalName();
+            $title = mb_substr($originalName, 0, mb_strrpos($originalName, '.'));
+            $this->setTitle($title);
         }
 
         $fullFileName = $this->getFullFileName();

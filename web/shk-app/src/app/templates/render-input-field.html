@@ -7,7 +7,7 @@
 
                 <div class="form-group" [class.form-group-message]="formErrors[field.name]" [formGroup]="form" *ngFor="let field of fields | filterFieldByGroup: groupName">
 
-                    <div [ngSwitch]="field.inputType">
+                    <div [ngSwitch]="getInputTypeMain(field.inputType)">
 
                         <div class="row" *ngSwitchCase="'system_name'">
                             <div class="col-md-5">
@@ -91,7 +91,7 @@
                             </div>
                         </div>
 
-                        <div class="row" *ngSwitchCase="'image'">
+                        <div class="row" *ngSwitchCase="'file'">
                             <div class="col-md-5">
                                 <label for="field_{{field.name}}">
                                     {{field.title}}
@@ -99,14 +99,14 @@
                                 </label>
                             </div>
                             <div class="col-md-7">
-                                <input type="file" id="field_{{field.name}}" [name]="field.name" [accept]="field.inputProperties.allowed_extensions" style="display:none;" (change)="fileChange($event, field.name, true)" #fileInput>
+                                <input type="file" id="field_{{field.name}}" [name]="field.name" [accept]="field.inputProperties.allowed_extensions" style="display:none;" (change)="fileChange($event, field, imgPreview)" #fileInput>
                                 <input type="hidden" [formControlName]="field.name" [(ngModel)]="model[field.name]">
 
-                                <div class="relative" [ngClass]="{'show-on-hover-parent': model[field.name]}" style="min-height: 30px;">
-                                    <div>
-                                        <img [src]="getImageUrl(model[field.name])" alt="Preview" class="img-thumbnail" style="width:250px;" #imgPreview [style.display]="model[field.name] ? 'block' : 'none'">
+                                <div class="relative" [ngClass]="{'show-on-hover-parent': field.inputProperties.has_preview_image && model[field.name]}" style="min-height: 40px;">
+                                    <div [style.display]="field.inputProperties.has_preview_image && model[field.name] ? 'block' : 'none'">
+                                        <img [src]="getImageUrl(model[field.name])" alt="Preview" class="img-thumbnail" style="width:250px;" #imgPreview>
                                     </div>
-                                    <div class="show-on-hover" style="top:10px; left:10px; right:auto;">
+                                    <div class="file-buttons show-on-hover" style="top:10px; left:10px; right:auto;">
                                         <button type="button" class="btn btn-secondary btn-wide" (click)="fileInput.click()">
                                             <i class="icon-upload"></i>
                                             Обзор
@@ -120,33 +120,7 @@
                                     <i class="icon-file"></i>
                                     {{model[field.name].title}}.{{model[field.name].extension}}
                                 </div>
-                                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
-                                    {{formErrors[field.name]}}
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="row" *ngSwitchCase="'file'">
-                            <div class="col-md-5">
-                                <label for="field_{{field.name}}">
-                                    {{field.title}}
-                                    <span class="text-danger" *ngIf="field.required">*</span>
-                                </label>
-                            </div>
-                            <div class="col-md-7">
-                                <input type="file" id="field_{{field.name}}" [name]="field.name" [accept]="field.inputProperties.allowed_extensions" style="display:none;" (change)="fileChange($event, field.name)" #fileInput>
-                                <input type="hidden" [formControlName]="field.name" [(ngModel)]="model[field.name]">
-                                <button type="button" class="btn btn-secondary btn-wide" (click)="fileInput.click()">
-                                    <i class="icon-upload"></i>
-                                    Обзор
-                                </button>
-                                <button type="button" class="btn btn-secondary" *ngIf="model[field.name]" (click)="fileClear(field.name)" title="Clear">
-                                    <i class="icon-cross"></i>
-                                </button>
-                                <div class="pt-2 text-secondary" *ngIf="model[field.name] && model[field.name].title">
-                                    <i class="icon-file"></i>
-                                    {{model[field.name].title}}.{{model[field.name].extension}}
-                                </div>
                                 <div *ngIf="formErrors[field.name]" class="alert alert-danger">
                                     {{formErrors[field.name]}}
                                 </div>

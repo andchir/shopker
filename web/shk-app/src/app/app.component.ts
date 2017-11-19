@@ -3,8 +3,7 @@ import { NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig } from '@ng-boo
 
 @Component({
     selector: 'modal-confirm',
-    templateUrl: 'templates/modal-confirm.html',
-    providers: []
+    templateUrl: 'templates/modal-confirm.html'
 })
 export class ConfirmModalContent {
     @Input() modalTitle;
@@ -20,8 +19,7 @@ export class ConfirmModalContent {
 
 @Component({
     selector: 'modal-alert',
-    templateUrl: 'templates/modal-alert.html',
-    providers: []
+    templateUrl: 'templates/modal-alert.html'
 })
 export class AlertModalContent {
     @Input() modalTitle;

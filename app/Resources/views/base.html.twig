@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8" />
-    <title>{% block title %}Welcome!{% endblock %}</title>
+    <title>{% block title %}{{ app_name }}{% endblock %}</title>
     <base href="/">
 
     {% block stylesheets %}{% endblock %}
@@ -21,15 +21,7 @@
 
 {% block body %}{% endblock %}
 
-{% block javascripts %}
-<script type="text/javascript" src="/shk-app/node_modules/quill/dist/quill.js"></script>
-<script type="text/javascript" src="/shk-app/bundle/inline.bundle.js"></script>
-<script type="text/javascript" src="/shk-app/bundle/polyfills.bundle.js"></script>
-<!--script type="text/javascript" src="/shk-app/bundle/scripts.bundle.js"></script-->
-<script type="text/javascript" src="/shk-app/bundle/styles.bundle.js"></script>
-<script type="text/javascript" src="/shk-app/bundle/vendor.bundle.js"></script>
-<script type="text/javascript" src="/shk-app/bundle/main.bundle.js"></script>
-{% endblock %}
+{% block javascripts %}{% endblock %}
 
 </body>
 </html>

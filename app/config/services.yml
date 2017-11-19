@@ -12,8 +12,19 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.request }
         arguments: [ '@service_container' ]
+
     mongodb_paramconverter:
         class: Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter
         arguments: ["@doctrine_mongodb"]
         tags:
             - { name: request.param_converter }
+
+    mongo.connection:
+        class: Doctrine\MongoDB\Connection
+        factory: ["@doctrine.odm.mongodb.document_manager", getConnection]
+        calls:
+            - [initialize, []]
+
+    mongo:
+        class: Mongo
+        factory: ["@mongo.connection", getMongo]

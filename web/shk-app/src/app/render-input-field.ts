@@ -109,7 +109,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
 
                 propertiesDefault = {
                     handler: '',
-                    format: 'mm/dd/yy',
+                    format: 'MM/dd/yyyy',
                     show_time: 0,
                     hour_format: 24,
                     locale: 'en'
@@ -145,21 +145,6 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                     field.inputProperties,
                     propertiesDefault
                 );
-
-                break;
-            // case 'image':
-            //
-            //     propertiesDefault = {
-            //         handler: '',
-            //         allowed_extensions: 'image/*'
-            //     };
-            //     field.inputProperties = this.extendProperties(
-            //         field.inputProperties,
-            //         propertiesDefault
-            //     );
-            //
-            //     break;
-            default:
 
                 break;
         }

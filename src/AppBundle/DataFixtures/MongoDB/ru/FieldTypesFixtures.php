@@ -365,6 +365,12 @@ class FieldTypesFixtures extends Fixture
                 ],
                 'outputProperties' => [
                     [
+                        'name' => 'format',
+                        'title' => 'Формат даты',
+                        'default_value' => 'MM/dd/yyyy'
+                    ]
+                    ,
+                    [
                         'name' => 'className',
                         'title' => 'CSS класс',
                         'default_value' => ''

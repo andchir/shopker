@@ -98,7 +98,7 @@ class CategoryController extends StorageControllerAbstract
         $dm->persist($item);
         $dm->flush();
 
-        //Dispatch event
+        // Dispatch event
         $evenDispatcher = $this->get('event_dispatcher');
         $event = new CategoryUpdatedEvent($this->container, $item, $previousParentId);
         $item = $evenDispatcher->dispatch(CategoryUpdatedEvent::NAME, $event)->getCategory();

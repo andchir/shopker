@@ -16,7 +16,9 @@ class UserFixtures extends Fixture
         $plainPassword = 'admin';
 
         $user = new User();
-        $user->setEmail('admin');
+        $user
+            ->setUsername('admin')
+            ->setEmail('admin@yourdomain.com');
 
         $encoder = $this->container->get('security.password_encoder');
         $password = $encoder->encodePassword($user, $plainPassword);

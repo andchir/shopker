@@ -5,7 +5,7 @@ security:
     # http://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
         security_mongo_provider:
-            mongodb: {class: AppBundle\Document\User, property: email}
+            mongodb: {class: AppBundle\Document\User}
 
     encoders:
         AppBundle\Document\User:

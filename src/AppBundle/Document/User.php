@@ -14,9 +14,14 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 class User implements AdvancedUserInterface, \Serializable
 {
     /**
-     * @MongoDB\Id
+     * @MongoDB\Id(type="int", strategy="INCREMENT")
      */
     protected $id;
+
+    /**
+     * @MongoDB\Field(type="string", nullable=true)
+     */
+    private $username;
 
     /**
      * @MongoDB\Field(type="string")
@@ -26,8 +31,7 @@ class User implements AdvancedUserInterface, \Serializable
     protected $email;
 
     /**
-     * @MongoDB\Field(type="string")
-     * @Assert\NotBlank()
+     * @MongoDB\Field(type="string", nullable=true)
      */
     protected $fullName;
 
@@ -38,6 +42,11 @@ class User implements AdvancedUserInterface, \Serializable
     protected $password;
 
     /**
+     * @MongoDB\Field(type="string")
+     */
+    private $salt;// Not used
+
+    /**
      * @MongoDB\Field(type="boolean")
      */
     protected $isActive;
@@ -46,6 +55,11 @@ class User implements AdvancedUserInterface, \Serializable
      * @MongoDB\Field(type="collection")
      */
     protected $roles;
+
+    public function __construct()
+    {
+        $this->isActive = true;
+    }
 
     public function getId()
     {
@@ -88,11 +102,6 @@ class User implements AdvancedUserInterface, \Serializable
         return $this;
     }
 
-    public function getUsername()
-    {
-        return $this->email;
-    }
-
     /**
      * @param bool $addDefault
      * @return array
@@ -116,14 +125,9 @@ class User implements AdvancedUserInterface, \Serializable
         return $this;
     }
 
-    public function getSalt()
-    {
-        return null;
-    }
-
     public function eraseCredentials()
     {
-        $this->setPassword(null);
+        //$this->setPassword(null);
     }
 
     public function isAccountNonExpired()
@@ -133,7 +137,7 @@ class User implements AdvancedUserInterface, \Serializable
 
     public function isAccountNonLocked()
     {
-        return $this->isActive;
+        return true;
     }
 
     public function isCredentialsNonExpired()
@@ -153,6 +157,7 @@ class User implements AdvancedUserInterface, \Serializable
             $this->id,
             $this->email,
             $this->password,
+            $this->isActive,
             // see section on salt below
             // $this->salt,
         ));
@@ -165,6 +170,7 @@ class User implements AdvancedUserInterface, \Serializable
             $this->id,
             $this->email,
             $this->password,
+            $this->isActive,
             // see section on salt below
             // $this->salt
             ) = unserialize($serialized);
@@ -212,5 +218,45 @@ class User implements AdvancedUserInterface, \Serializable
     public function getFullName()
     {
         return $this->fullName;
+    }
+
+    /**
+     * Set username
+     *
+     * @param string $username
+     * @return self
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUsername()
+    {
+        return $this->email;
+    }
+
+    /**
+     * Set salt
+     *
+     * @param string $salt
+     * @return self
+     */
+    public function setSalt($salt)
+    {
+        $this->salt = $salt;
+        return $this;
+    }
+
+    /**
+     * @return null
+     */
+    public function getSalt()
+    {
+        return null;// Not used
     }
 }

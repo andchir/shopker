@@ -1,4 +1,4 @@
-import { enableProdMode } from '@angular/core';
+import { CompilerOptions, enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { getTranslationProviders } from './app/i18n-providers';
 
@@ -9,9 +9,7 @@ if (environment.production) {
     enableProdMode();
 }
 
-platformBrowserDynamic().bootstrapModule(AppModule);
-
-// getTranslationProviders().then(providers => {
-//     const options = { providers };
-//     platformBrowserDynamic().bootstrapModule(AppModule, options);
-// });
+getTranslationProviders().then(providers => {
+    const options = { providers } as CompilerOptions;
+    platformBrowserDynamic().bootstrapModule(AppModule, options);
+});

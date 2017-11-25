@@ -44,7 +44,7 @@ https://confluence.jetbrains.com/display/IDEADEV/Inotify+Watches+Limit
 
 Create a translation source file:
 ~~~
-npm run i18n -- --outFile="./locale/messages.xlf" --i18nFormat=xlf -p "./tsconfig.json"
+ng xi18n --outFile="../locale/messages.xlf" --i18nFormat=xlf -p "./tsconfig.json"
 ~~~
 
 Symfony Console Commands

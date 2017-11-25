@@ -51,7 +51,7 @@ export abstract class DataService<M extends SimpleEntity> {
         }
         return this.http.get<M[]>(this.getRequestUrl(), {params: params})
             .pipe(
-                catchError(this.handleError())
+                catchError(this.handleError<any>())
             );
     }
 
@@ -65,14 +65,14 @@ export abstract class DataService<M extends SimpleEntity> {
         }
         return this.http.get<DataList<M>>(this.getRequestUrl(), {params: params})
             .pipe(
-                catchError(this.handleError())
+                catchError(this.handleError<any>())
             );
     }
 
     deleteItem(id: number): Observable<M> {
         const url = this.getRequestUrl() + `/${id}`;
         return this.http.delete<M>(url, {headers: this.headers}).pipe(
-            catchError(this.handleError<M>())
+            catchError(this.handleError<any>())
         );
     }
 
@@ -80,20 +80,20 @@ export abstract class DataService<M extends SimpleEntity> {
         const url = this.getRequestUrl() + '/batch';
         const data = {ids: idsArray};
         return this.http.post<M>(url, data, {headers: this.headers}).pipe(
-            catchError(this.handleError<M>())
+            catchError(this.handleError<any>())
         );
     }
 
     create(item: M): Observable<M> {
         return this.http.post<M>(this.getRequestUrl(), item, {headers: this.headers}).pipe(
-            catchError(this.handleError<M>())
+            catchError(this.handleError<any>())
         );
     }
 
     update(item: M): Observable<M> {
         const url = this.getRequestUrl() + `/${item.id}`;
-        return this.http.put(url, item, {headers: this.headers}).pipe(
-            catchError(this.handleError<M>())
+        return this.http.put<M>(url, item, {headers: this.headers}).pipe(
+            catchError(this.handleError<any>())
         );
     }
 

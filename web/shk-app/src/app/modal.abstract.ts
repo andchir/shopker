@@ -96,7 +96,7 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
     }
 
     /** Callback on form value changed */
-    onValueChanged(formName: string, keyPrefix: string = ''): void {
+    onValueChanged(formName?: string, keyPrefix: string = ''): void {
         if (!this[formName]) {
             return;
         }

@@ -28,7 +28,7 @@ export class CollectionsService {
     getList(): Observable<string[]> {
         return this.http.get<string[]>(this.getRequestUrl())
             .pipe(
-                catchError(this.handleError())
+                catchError(this.handleError<any>())
             );
     }
 

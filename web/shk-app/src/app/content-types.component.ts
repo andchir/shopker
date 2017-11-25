@@ -50,7 +50,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent<Conte
     collections: string[] = ['products'];
     fieldForm: FormGroup;
     fieldTypes: FieldType[];
-    fieldTypeProperties: {} = {
+    fieldTypeProperties = {
         input: [],
         output: []
     };

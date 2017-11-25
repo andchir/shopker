@@ -1,5 +1,7 @@
-export interface SimpleEntity {
-    id: number;
-    title?: string;
-    isActive?: boolean;
+export class SimpleEntity {
+    constructor(
+        public id: number,
+        public title?: string,
+        public isActive?: boolean
+    ) { }
 }

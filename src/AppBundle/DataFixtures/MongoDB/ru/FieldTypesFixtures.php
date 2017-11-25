@@ -293,40 +293,6 @@ class FieldTypesFixtures extends Fixture
                     ]
                 ]
             ],
-            'file:image' => [
-                'title' => 'Картинка',
-                'description' => '',
-                'isActive' => true,
-                'inputProperties' => [
-                    [
-                        'name' => 'value',
-                        'title' => 'Значение по умолчанию',
-                        'default_value' => ''
-                    ],
-                    [
-                        'name' => 'allowed_extensions',
-                        'title' => 'Разрешенные типы файлов',
-                        'default_value' => 'image/*'
-                    ],
-                    [
-                        'name' => 'has_preview_image',
-                        'title' => 'Изображение предпросмотра',
-                        'default_value' => '1'
-                    ],
-                    [
-                        'name' => 'handler',
-                        'title' => 'Обработчик',
-                        'default_value' => ''
-                    ]
-                ],
-                'outputProperties' => [
-                    [
-                        'name' => 'className',
-                        'title' => 'CSS класс',
-                        'default_value' => ''
-                    ]
-                ]
-            ],
             'date' => [
                 'title' => 'Дата',
                 'description' => '',

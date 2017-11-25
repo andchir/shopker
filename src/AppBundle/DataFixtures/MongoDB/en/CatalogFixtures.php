@@ -171,6 +171,26 @@ class CatalogFixtures extends Fixture
                 'required' => false,
                 'showInTable' => false,
                 'isFilter' => true
+            ],
+            [
+                'title' => 'Image',
+                'name' => 'image',
+                'description' => '',
+                'inputType' => 'file',
+                'inputProperties' => [
+                    'value' => '',
+                    'handler' => '',
+                    'allowed_extensions' => 'image/*',
+                    'has_preview_image' => '1'
+                ],
+                'outputType' => 'file',
+                'outputProperties' => [
+                    'className' => ''
+                ],
+                'group' => 'Options',
+                'required' => false,
+                'showInTable' => false,
+                'isFilter' => true
             ]
         ];
 

@@ -87,10 +87,9 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
 
     setFieldProperties(field: ContentField): void {
 
-        let propertiesDefault: Properties,
-            inputTypeParts = field.inputType.split(':');
+        let propertiesDefault: Properties;
 
-        switch (inputTypeParts[0]) {
+        switch (field.inputType) {
             case 'number':
 
                 propertiesDefault = {
@@ -153,10 +152,9 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
     setFieldOptions(field: ContentField): void {
 
         field.options = [];
-        let valueArr,
-            inputTypeParts = field.inputType.split(':');
+        let valueArr;
 
-        switch (inputTypeParts[0]) {
+        switch (field.inputType) {
             case 'radio':
             case 'select':
 
@@ -334,11 +332,6 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
             output += `${fileData.fileName}.${fileData.extension}`;
         }
         return output;
-    }
-
-    getInputTypeMain(inputTypeName: string): string {
-        const inputTypeParts = inputTypeName.split(':');
-        return inputTypeParts[0];
     }
 
 }

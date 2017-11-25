@@ -127,7 +127,7 @@ export class ProductModalContent extends ModalContentAbstractComponent<Product> 
                 }
             }
         }
-        this.model = _.pick(data, newKeys);
+        this.model = _.pick<any>(data, newKeys);
     }
 
     onChangeContentType(): void {
@@ -152,9 +152,9 @@ export class ProductModalContent extends ModalContentAbstractComponent<Product> 
                 formData.append(key, this.files[key], this.files[key].name);
             }
         }
-        formData.append('itemId', itemId);
+        formData.append('itemId', String(itemId));
         formData.append('ownerType', this.currentContentType.name);
-        formData.append('categoryId', this.model.parentId);
+        formData.append('categoryId', String(this.model.parentId));
 
         this.filesService.postFormData(formData)
             .subscribe(() => {

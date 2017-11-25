@@ -47,7 +47,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent<Conte
     errorFieldMessage: string;
     action: string = 'add_field';
     currentFieldName = '';
-    collections: any[] = ['products'];
+    collections: string[] = ['products'];
     fieldForm: FormGroup;
     fieldTypes: FieldType[];
     fieldTypeProperties: {} = {

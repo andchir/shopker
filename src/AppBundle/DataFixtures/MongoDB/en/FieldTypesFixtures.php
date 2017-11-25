@@ -293,40 +293,6 @@ class FieldTypesFixtures extends Fixture
                     ]
                 ]
             ],
-            'file:image' => [
-                'title' => 'Image',
-                'description' => '',
-                'isActive' => true,
-                'inputProperties' => [
-                    [
-                        'name' => 'value',
-                        'title' => 'Default value',
-                        'default_value' => ''
-                    ],
-                    [
-                        'name' => 'allowed_extensions',
-                        'title' => 'Allowed extensions',
-                        'default_value' => 'image/*'
-                    ],
-                    [
-                        'name' => 'has_preview_image',
-                        'title' => 'Has preview image',
-                        'default_value' => '1'
-                    ],
-                    [
-                        'name' => 'handler',
-                        'title' => 'Handler',
-                        'default_value' => ''
-                    ]
-                ],
-                'outputProperties' => [
-                    [
-                        'name' => 'className',
-                        'title' => 'CSS class',
-                        'default_value' => ''
-                    ]
-                ]
-            ],
             'date' => [
                 'title' => 'Date',
                 'description' => '',

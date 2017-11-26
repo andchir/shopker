@@ -23,6 +23,11 @@ class Setting
     /**
      * @MongoDB\Field(type="string")
      */
+    private $type;
+
+    /**
+     * @MongoDB\Field(type="string")
+     */
     private $description;
 
     /**
@@ -60,6 +65,28 @@ class Setting
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     * @return self
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string $type
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 
     /**

@@ -2,7 +2,7 @@
     <div class="card-body">
 
         <h3>
-            <i class="icon-bar-graph-2"></i>
+            <i class="icon-cog"></i>
             {{title}}
         </h3>
 
@@ -12,42 +12,52 @@
             <div class="col-md-6">
 
                 <!-- settings -->
-                <label class="label-filled" i18n>Main Settings</label>
+                <ng-container *ngIf="false">
+                    <ng-container i18n="@@locale">Locale</ng-container>
+                    <ng-container i18n="@@mongodb_user">MongoDB user</ng-container>
+                    <ng-container i18n="@@mongodb_password">MongoDB password</ng-container>
+                    <ng-container i18n="@@mongodb_server">MongoDB server</ng-container>
+                    <ng-container i18n="@@mongodb_database">MongoDB database</ng-container>
+                </ng-container>
 
-                <div class="card mb-4">
-                    <div class="table-responsive">
+                <div *ngIf="forms.main">
+                    <label class="label-filled" i18n>Main Settings</label>
 
-                        <table class="table table-divided mb-0">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        Параметр
-                                    </th>
-                                    <th>
-                                        Значение
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <span>Database host</span>
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control form-control-sm" name="" value="127.0.0.1">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <span>Locale</span>
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control form-control-sm" name="" value="ru">
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="card mb-4">
+                        <div class="table-responsive" [formGroup]="forms.main">
 
+                            <table class="table table-divided mb-0">
+                                <thead>
+                                    <tr>
+                                        <th i18n>Parameter</th>
+                                        <th i18n>Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let setting of settings.main.values">
+                                        <td>
+                                            <span>{{setting.name}}</span>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control form-control-sm" [formControlName]="setting.name" [name]="setting.name">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot *ngIf="settings.main.changed">
+                                    <tr>
+                                        <td colspan="2" class="text-center">
+
+                                            <button type="button" class="btn btn-info btn-sm" (click)="saveSettings('main')">
+                                                <i class="icon-check"></i>
+                                                <span i18n>Save</span>
+                                            </button>
+
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+
+                        </div>
                     </div>
                 </div>
                 <!-- /settings -->
@@ -155,10 +165,17 @@
                             <tfoot>
                             <tr class="bg-faded">
                                 <td colspan="4" class="text-center">
+
                                     <button class="btn btn-secondary btn-sm">
                                         <i class="icon-plus"></i>
                                         Добавить
                                     </button>
+
+                                    <button type="button" class="btn btn-info btn-sm" (click)="saveSettings('order_statuses')" *ngIf="settings.order_statuses.changed">
+                                        <i class="icon-check"></i>
+                                        <span i18n>Save</span>
+                                    </button>
+
                                 </td>
                             </tr>
                             </tfoot>
@@ -250,10 +267,17 @@
                             <tfoot>
                                 <tr class="bg-faded">
                                     <td colspan="4" class="text-center">
+
                                         <button class="btn btn-secondary btn-sm">
                                             <i class="icon-plus"></i>
                                             Добавить
                                         </button>
+
+                                        <button type="button" class="btn btn-info btn-sm" (click)="saveSettings('delivery')"  *ngIf="settings.delivery.changed">
+                                            <i class="icon-check"></i>
+                                            <span i18n>Save</span>
+                                        </button>
+
                                     </td>
                                 </tr>
                             </tfoot>

@@ -1,11 +1,15 @@
 {
-	"SETTINGS_MAIN": "Основные настройки",
+	"CATALOG": "Каталог",
+	"ORDERS": "Заказы",
 	"PARAMETER": "Параметр",
 	"SAVE": "Сохранить",
+	"SETTINGS": "Настройки",
+	"SETTINGS_MAIN": "Основные настройки",
+	"STATISTICS": "Статистика",
 	"VALUE": "Значение",
 	"locale": "Локаль",
-	"mongodb_user": "MongoDB пользоватеь",
+	"mongodb_database": "MongoDB база данных",
 	"mongodb_password": "MongoDB пароль",
 	"mongodb_server": "MongoDB сервер",
-	"mongodb_database": "MongoDB база данных"
+	"mongodb_user": "MongoDB пользоватеь"
 }

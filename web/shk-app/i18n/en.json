@@ -1,11 +1,15 @@
 {
-	"SETTINGS_MAIN": "Main Settings",
+	"CATALOG": "Catalog",
+	"ORDERS": "Orders",
 	"PARAMETER": "Parameter",
 	"SAVE": "Save",
+	"SETTINGS": "Settings",
+	"SETTINGS_MAIN": "Main Settings",
+	"STATISTICS": "Statistics",
 	"VALUE": "Value",
 	"locale": "Locale",
-	"mongodb_user": "MongoDB user",
+	"mongodb_database": "MongoDB database",
 	"mongodb_password": "MongoDB password",
 	"mongodb_server": "MongoDB server",
-	"mongodb_database": "MongoDB database"
+	"mongodb_user": "MongoDB user"
 }

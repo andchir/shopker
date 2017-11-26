@@ -1,6 +1,0 @@
-parameters:
-    locale: ru
-    mongodb_user: 'root'
-    mongodb_password: 'jgggh54Fdder4C'
-    mongodb_server: 'cluster0-shard-00-00-ufbfn.mongodb.net:27017,cluster0-shard-00-01-ufbfn.mongodb.net:27017,cluster0-shard-00-02-ufbfn.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin'
-    mongodb_database: 'shopkeeper4-dev'

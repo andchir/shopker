@@ -9,7 +9,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "i18n": "ng-xi18n"
+    "i18n": "ng-xi18n",
+    "extract": "ngx-translate-extract --input ./src --output ./i18n/*.json --sort --format -m _ namespaced-json"
   },
   "private": true,
   "dependencies": {
@@ -24,6 +25,8 @@
     "@angular/platform-server": "^5.0.3",
     "@angular/router": "^5.0.3",
     "@ng-bootstrap/ng-bootstrap": "^1.0.0-beta.5",
+    "@ngx-translate/core": "^9.0.1",
+    "@ngx-translate/http-loader": "^2.0.0",
     "@types/jquery": "^2.0.47",
     "@types/lodash": "^4.14.85",
     "bootstrap": "^4.0.0-beta.2",
@@ -39,6 +42,7 @@
     "@angular/cli": "^1.5.4",
     "@angular/compiler-cli": "^5.0.3",
     "@angular/language-service": "^4.0.0",
+    "@biesbjerg/ngx-translate-extract": "^2.3.4",
     "@types/jasmine": "2.5.38",
     "@types/node": "^6.0.92",
     "codelyzer": "~2.0.0",

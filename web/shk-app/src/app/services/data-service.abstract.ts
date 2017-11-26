@@ -102,7 +102,6 @@ export abstract class DataService<M extends SimpleEntity> {
             if (err.error) {
                 throw err.error;
             }
-
             return of(result as T);
         };
     }

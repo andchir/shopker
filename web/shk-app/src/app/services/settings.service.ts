@@ -36,6 +36,13 @@ export class SettingsService {
             );
     }
 
+    updateGroup(name: string, data: SettingsGroup): Observable<SettingsGroup> {
+        const url = this.getRequestUrl() + `/${name}`;
+        return this.http.put<SettingsGroup>(url, data, {headers: this.headers}).pipe(
+            catchError(this.handleError<any>())
+        );
+    }
+
     handleError<T> (operation = 'operation', result?: T) {
         return (err: any): Observable<T> => {
             if (err.error) {

@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from '@ngx-translate/core';
+import { AppSettings } from './services/app-settings.service';
 
 @Component({
     selector: 'modal-confirm',
@@ -39,9 +41,17 @@ export class AlertModalContent {
 export class AppComponent {
     title = 'Shopkeeper';
 
-    constructor(tooltipConfig: NgbTooltipConfig) {
+    constructor(
+        tooltipConfig: NgbTooltipConfig,
+        private translate: TranslateService,
+        private appSettings: AppSettings
+    ) {
         tooltipConfig.placement = 'bottom';
         tooltipConfig.container = 'body';
         tooltipConfig.triggers = 'hover click';
+
+        translate.addLangs(['en', 'ru']);
+        translate.setDefaultLang('en');
+        translate.use(this.appSettings.settings.locale);
     }
 }

@@ -19,6 +19,9 @@ use AppBundle\Document\Setting;
  */
 class SettingsController extends BaseController
 {
+    const GROUP_MAIN = 'SETTINGS_MAIN';
+    const GROUP_DELIVERY = 'SETTINGS_DELIVERY';
+    const GROUP_ORDER_STATUSES = 'SETTINGS_ORDER_STATUSES';
 
     /**
      * @Route("")
@@ -28,24 +31,76 @@ class SettingsController extends BaseController
     public function getList(Request $request)
     {
         $output = [
-            'main' => [],
-            'delivery' => [],
-            'order_statuses' => []
+            self::GROUP_MAIN => [],
+            self::GROUP_DELIVERY => [],
+            self::GROUP_ORDER_STATUSES => []
         ];
 
-        $rootPath = $this->getParameter('kernel.root_dir');
-        $settingsFilePath = $rootPath . DIRECTORY_SEPARATOR . 'config/settings.yml';
+        $output[self::GROUP_MAIN] = $this->getSettingsFromYaml('settings');
 
+        return new JsonResponse($output);
+    }
+
+    /**
+     * @Route("/{groupName}")
+     * @Method({"PUT"})
+     * @param Request $request
+     * @param string $groupName
+     * @return JsonResponse
+     */
+    public function updateGroup(Request $request, $groupName)
+    {
+        $settings = [];
+        $data = json_decode($request->getContent(), true);
+
+        switch ($groupName) {
+            case self::GROUP_MAIN:
+
+                $settings = $this->getSettingsFromYaml('settings', false);
+                $settings = array_merge($settings, $data);
+
+                $this->saveSettingsToYaml('settings', $settings);
+
+                break;
+        }
+
+        return new JsonResponse($settings);
+    }
+
+    /**
+     * @param string $yamlFileName
+     * @return array
+     */
+    public function getSettingsFromYaml($yamlFileName = 'settings', $transform = true)
+    {
+        $rootPath = $this->getParameter('kernel.root_dir');
+        $settingsFilePath = $rootPath . DIRECTORY_SEPARATOR . "config/{$yamlFileName}.yml";
         if (file_exists($settingsFilePath)) {
             try {
                 $settings = Yaml::parse(file_get_contents($settingsFilePath));
-                $output['main'] = self::transformParameters($settings['parameters']);
+                if (!$transform) {
+                    return $settings['parameters'];
+                }
+                return self::transformParameters($settings['parameters']);
             } catch (ParseException $e) {
-                return $this->setError(sprintf('Unable to parse the YAML string: %s', $e->getMessage()));
+                return [];
             }
         }
+        return [];
+    }
 
-        return new JsonResponse($output);
+    /**
+     * @param string $yamlFileName
+     * @param $data
+     * @return bool|int
+     */
+    public function saveSettingsToYaml($yamlFileName = 'settings', $data)
+    {
+        $rootPath = $this->getParameter('kernel.root_dir');
+        $settingsFilePath = $rootPath . DIRECTORY_SEPARATOR . "config/{$yamlFileName}.yml";
+        $yaml = Yaml::dump(['parameters' => $data]);
+
+        return file_put_contents($settingsFilePath, $yaml);
     }
 
     /**

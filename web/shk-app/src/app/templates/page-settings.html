@@ -12,44 +12,36 @@
             <div class="col-md-6">
 
                 <!-- settings -->
-                <ng-container *ngIf="false">
-                    <ng-container i18n="@@locale">Locale</ng-container>
-                    <ng-container i18n="@@mongodb_user">MongoDB user</ng-container>
-                    <ng-container i18n="@@mongodb_password">MongoDB password</ng-container>
-                    <ng-container i18n="@@mongodb_server">MongoDB server</ng-container>
-                    <ng-container i18n="@@mongodb_database">MongoDB database</ng-container>
-                </ng-container>
-
-                <div *ngIf="forms.main">
-                    <label class="label-filled" i18n>Main Settings</label>
+                <div *ngIf="forms.SETTINGS_MAIN" [class.loading]="settings.SETTINGS_MAIN.loading">
+                    <label class="label-filled">{{'SETTINGS_MAIN' | translate}}</label>
 
                     <div class="card mb-4">
-                        <div class="table-responsive" [formGroup]="forms.main">
+                        <div class="table-responsive" [formGroup]="forms.SETTINGS_MAIN">
 
                             <table class="table table-divided mb-0">
                                 <thead>
                                     <tr>
-                                        <th i18n>Parameter</th>
-                                        <th i18n>Value</th>
+                                        <th>{{'PARAMETER' | translate}}</th>
+                                        <th>{{'VALUE' | translate}}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let setting of settings.main.values">
+                                    <tr *ngFor="let setting of settings.SETTINGS_MAIN.values">
                                         <td>
-                                            <span>{{setting.name}}</span>
+                                            <span>{{setting.name | translate}}</span>
                                         </td>
                                         <td>
                                             <input type="text" class="form-control form-control-sm" [formControlName]="setting.name" [name]="setting.name">
                                         </td>
                                     </tr>
                                 </tbody>
-                                <tfoot *ngIf="settings.main.changed">
+                                <tfoot *ngIf="settings.SETTINGS_MAIN.changed">
                                     <tr>
                                         <td colspan="2" class="text-center">
 
-                                            <button type="button" class="btn btn-info btn-sm" (click)="saveSettings('main')">
+                                            <button type="button" class="btn btn-info btn-sm" (click)="saveSettings('SETTINGS_MAIN')">
                                                 <i class="icon-check"></i>
-                                                <span i18n>Save</span>
+                                                <span>{{'SAVE' | translate}}</span>
                                             </button>
 
                                         </td>
@@ -171,9 +163,9 @@
                                         Добавить
                                     </button>
 
-                                    <button type="button" class="btn btn-info btn-sm" (click)="saveSettings('order_statuses')" *ngIf="settings.order_statuses.changed">
+                                    <button type="button" class="btn btn-info btn-sm" (click)="saveSettings('SETTINGS_ORDER_STATUSES')" *ngIf="settings.SETTINGS_ORDER_STATUSES.changed">
                                         <i class="icon-check"></i>
-                                        <span i18n>Save</span>
+                                        <span>{{'SAVE' | translate}}</span>
                                     </button>
 
                                 </td>
@@ -273,9 +265,9 @@
                                             Добавить
                                         </button>
 
-                                        <button type="button" class="btn btn-info btn-sm" (click)="saveSettings('delivery')"  *ngIf="settings.delivery.changed">
+                                        <button type="button" class="btn btn-info btn-sm" (click)="saveSettings('SETTINGS_DELIVERY')"  *ngIf="settings.SETTINGS_DELIVERY.changed">
                                             <i class="icon-check"></i>
-                                            <span i18n>Save</span>
+                                            <span>{{'SAVE' | translate}}</span>
                                         </button>
 
                                     </td>

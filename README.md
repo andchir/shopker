@@ -47,6 +47,11 @@ Create a translation source file:
 ng xi18n --outFile="../locale/messages.xlf" --i18nFormat=xlf -p "./tsconfig.json"
 ~~~
 
+Extract translatable (ngx-translate) strings and save as a JSON:
+~~~
+npm run extract
+~~~
+
 Symfony Console Commands
 ------------------------
 

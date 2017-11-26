@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
+import { _ } from '@biesbjerg/ngx-translate-extract';
 
 import { SettingsService } from './services/settings.service';
 import { Setting } from './models/setting.model';
@@ -15,16 +16,19 @@ export class SettingsComponent implements OnInit {
     title = 'Настройки';
     forms: {[key: string]: FormGroup} = {};
     settings = {
-        main: {
+        SETTINGS_MAIN: {
             changed: false,
+            loading: false,
             values: [] as Setting[]
         },
-        delivery: {
+        SETTINGS_DELIVERY: {
             changed: false,
+            loading: false,
             values: [] as Setting[]
         },
-        order_statuses: {
+        SETTINGS_ORDER_STATUSES: {
             changed: false,
+            loading: false,
             values: [] as Setting[]
         }
     };
@@ -44,54 +48,37 @@ export class SettingsComponent implements OnInit {
     }
 
     getSettings(): void {
-
-        console.log('getSettings');
-
         this.settingsService.getList()
             .subscribe((res) => {
-
-                console.log(res);
-
-                if (res['main']) {
-                    this.settings.main.values = res['main'];
-                    this.buildForm('main');
+                if (res['SETTINGS_MAIN']) {
+                    this.settings.SETTINGS_MAIN.values = res['SETTINGS_MAIN'];
+                    this.buildForm('SETTINGS_MAIN');
                 }
-
             });
-
-        // let controls = {};
-        // this.settings.main.values.push({key: 'database_host', value: ''});
-        // this.settings.main.values.push({key: 'locale', value: 'ru'});
-        //
-        // controls['database_host'] = new FormControl(this.settings.main.values[0].value);
-        // controls['locale'] = new FormControl(this.settings.main.values[1].value);
-        //
-        // this.forms.main = new FormGroup(controls);
-        // this.forms.main.valueChanges
-        //     .subscribe((e) => this.onValueChanged(e, 'main'));
     }
 
-    buildForm(formName: string): void {
+    buildForm(groupName: string): void {
         let controls = {};
-        this.settings[formName].values.forEach((setting) => {
+        this.settings[groupName].values.forEach((setting) => {
             controls[setting.name] = new FormControl(setting.value);
         });
-        this.forms[formName] = new FormGroup(controls);
-        this.forms[formName].valueChanges
-            .subscribe((data) => this.onValueChanged(data, formName));
+        this.forms[groupName] = new FormGroup(controls);
+        this.forms[groupName].valueChanges
+            .subscribe((data) => this.onValueChanged(data, groupName));
     }
 
-    saveSettings(key: string): void {
-
-        console.log('saveSettings', key);
-
+    saveSettings(groupName: string): void {
+        const data = this.forms[groupName].value;
+        this.settings[groupName].loading = true;
+        this.settingsService.updateGroup(groupName, data)
+            .subscribe(() => {
+                this.settings[groupName].loading = false;
+                this.settings[groupName].changed = false;
+            });
     }
 
-    onValueChanged(data, key: string): void {
-
-        console.log('onValueChanged', data, key);
-
-        this.settings[key].changed = true;
+    onValueChanged(data, groupName: string): void {
+        this.settings[groupName].changed = true;
     }
 
 }

@@ -1,0 +1,11 @@
+{
+	"SETTINGS_MAIN": "Основные настройки",
+	"PARAMETER": "Параметр",
+	"SAVE": "Сохранить",
+	"VALUE": "Значение",
+	"locale": "Локаль",
+	"mongodb_user": "MongoDB пользоватеь",
+	"mongodb_password": "MongoDB пароль",
+	"mongodb_server": "MongoDB сервер",
+	"mongodb_database": "MongoDB база данных"
+}

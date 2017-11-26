@@ -1,0 +1,11 @@
+{
+	"SETTINGS_MAIN": "Main Settings",
+	"PARAMETER": "Parameter",
+	"SAVE": "Save",
+	"VALUE": "Value",
+	"locale": "Locale",
+	"mongodb_user": "MongoDB user",
+	"mongodb_password": "MongoDB password",
+	"mongodb_server": "MongoDB server",
+	"mongodb_database": "MongoDB database"
+}

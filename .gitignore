@@ -21,3 +21,4 @@
 /web/uploads/
 /app/config/parameters.yml
 /src/AppBundle/Document/**/*.php~
+/app/config/settings.yml

@@ -1,11 +1,12 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
-import { _ } from '@biesbjerg/ngx-translate-extract';
+import * as _ from 'lodash';
 
 import { SettingsService } from './services/settings.service';
 import { Setting } from './models/setting.model';
 import { SettingsGroup } from './models/settings-group.model';
+import { AppSettings } from './services/app-settings.service';
 
 @Component({
     selector: 'shk-settings',
@@ -35,7 +36,8 @@ export class SettingsComponent implements OnInit {
 
     constructor(
         private titleService: Title,
-        private settingsService: SettingsService
+        private settingsService: SettingsService,
+        private appSettings: AppSettings
     ) {}
 
     ngOnInit(): void {
@@ -71,14 +73,33 @@ export class SettingsComponent implements OnInit {
         const data = this.forms[groupName].value;
         this.settings[groupName].loading = true;
         this.settingsService.updateGroup(groupName, data)
-            .subscribe(() => {
+            .subscribe((data) => {
+                if (data.locale) {
+                    this.appSettings.settings.locale = String(data.locale);
+                }
                 this.settings[groupName].loading = false;
                 this.settings[groupName].changed = false;
+
+                if (this.getCurrentLocale() !== this.appSettings.settings.locale) {
+                    this.pageReload();
+                }
             });
+    }
+
+    getCurrentLocale(): string {
+        const index = _.findIndex(this.settings['SETTINGS_MAIN'].values, {name: 'locale'});
+        if (index > -1) {
+            return String(this.settings['SETTINGS_MAIN'].values[index].value);
+        }
+        return '';
     }
 
     onValueChanged(data, groupName: string): void {
         this.settings[groupName].changed = true;
+    }
+
+    pageReload(): void {
+        window.location.reload();
     }
 
 }

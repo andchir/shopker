@@ -158,7 +158,7 @@ class FileController extends BaseController
     {
         return $this->get('doctrine_mongodb')
             ->getManager()
-            ->getRepository('AppBundle:FileDocument');
+            ->getRepository(FileDocument::class);
     }
 
     /**

@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Yaml\Exception\ParseException;
 
@@ -17,7 +18,7 @@ use AppBundle\Document\Setting;
  * @package AppBundle\SettingsController
  * @Route("/admin/settings")
  */
-class SettingsController extends BaseController
+class SettingsController extends Controller
 {
     const GROUP_MAIN = 'SETTINGS_MAIN';
     const GROUP_DELIVERY = 'SETTINGS_DELIVERY';
@@ -26,9 +27,11 @@ class SettingsController extends BaseController
     /**
      * @Route("")
      * @Method({"GET"})
+     *
+     * @param SerializerInterface $serializer
      * @return JsonResponse
      */
-    public function getList(Request $request)
+    public function getList(SerializerInterface $serializer)
     {
         $output = [
             self::GROUP_MAIN => [],
@@ -37,8 +40,13 @@ class SettingsController extends BaseController
         ];
 
         $output[self::GROUP_MAIN] = $this->getSettingsFromYaml('settings');
+        $output[self::GROUP_DELIVERY] = $this->getRepository()->findBy([
+            'groupName' => self::GROUP_DELIVERY
+        ], ['id' => 'asc']);
 
-        return new JsonResponse($output);
+        $output = $serializer->serialize($output, 'json', ['groups' => ['list']]);
+
+        return new JsonResponse($output, 200, [], true);
     }
 
     /**
@@ -114,6 +122,16 @@ class SettingsController extends BaseController
             $output[] = ['name' => $key, 'value' => $value];
         }
         return $output;
+    }
+
+    /**
+     * @return \AppBundle\Repository\FieldTypeRepository
+     */
+    public function getRepository()
+    {
+        return $this->get('doctrine_mongodb')
+            ->getManager()
+            ->getRepository(Setting::class);
     }
 
 }

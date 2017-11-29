@@ -11,5 +11,10 @@
 	"mongodb_database": "MongoDB database",
 	"mongodb_password": "MongoDB password",
 	"mongodb_server": "MongoDB server",
-	"mongodb_user": "MongoDB user"
+	"mongodb_user": "MongoDB user",
+	"mailer_transport": "Mail transport",
+	"mailer_host": "Mail host",
+	"mailer_port": "Mail port",
+	"mailer_user": "Mail user",
+	"mailer_password": "Mail password"
 }

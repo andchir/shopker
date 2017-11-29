@@ -112,6 +112,6 @@ class CollectionController extends BaseController
     {
         return $this->get('doctrine_mongodb')
             ->getManager()
-            ->getRepository('AppBundle:Collection');
+            ->getRepository(Collection::class);
     }
 }

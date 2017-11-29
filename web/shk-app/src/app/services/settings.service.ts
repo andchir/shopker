@@ -8,6 +8,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { DataService } from './data-service.abstract';
 import { Setting } from '../models/setting.model';
 import { SettingsGroup } from '../models/settings-group.model';
+import { Properties } from '../models/properties.iterface';
 
 @Injectable()
 export class SettingsService {
@@ -36,9 +37,9 @@ export class SettingsService {
             );
     }
 
-    updateGroup(name: string, data: SettingsGroup): Observable<SettingsGroup> {
+    updateGroup(name: string, data: SettingsGroup): Observable<Properties> {
         const url = this.getRequestUrl() + `/${name}`;
-        return this.http.put<SettingsGroup>(url, data, {headers: this.headers}).pipe(
+        return this.http.put<Properties>(url, data, {headers: this.headers}).pipe(
             catchError(this.handleError<any>())
         );
     }

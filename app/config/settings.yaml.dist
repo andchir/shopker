@@ -1,6 +1,0 @@
-parameters:
-    locale: en
-    mongodb_user: root
-    mongodb_password: ~
-    mongodb_server: ~
-    mongodb_database: ~

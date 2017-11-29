@@ -8,8 +8,13 @@
 	"STATISTICS": "Статистика",
 	"VALUE": "Значение",
 	"locale": "Локаль",
-	"mongodb_database": "MongoDB база данных",
-	"mongodb_password": "MongoDB пароль",
-	"mongodb_server": "MongoDB сервер",
-	"mongodb_user": "MongoDB пользоватеь"
+	"mongodb_database": "MongoDB: База данных",
+	"mongodb_password": "MongoDB: Пароль",
+	"mongodb_server": "MongoDB: Сервер",
+	"mongodb_user": "MongoDB: Пользоватеь",
+	"mailer_transport": "Почта: Транспорт",
+	"mailer_host": "Почта: Хост сервера",
+	"mailer_port": "Почта: Порт сервера",
+	"mailer_user": "Почта: Имя пользователя",
+	"mailer_password": "Почта: Пароль"
 }

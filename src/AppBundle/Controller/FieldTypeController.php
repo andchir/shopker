@@ -84,7 +84,7 @@ class FieldTypeController extends StorageControllerAbstract
     {
         return $this->get('doctrine_mongodb')
             ->getManager()
-            ->getRepository('AppBundle:FieldType');
+            ->getRepository(FieldType::class);
     }
 
 }

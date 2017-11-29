@@ -45,6 +45,7 @@
     "@biesbjerg/ngx-translate-extract": "^2.3.4",
     "@types/jasmine": "2.5.38",
     "@types/node": "^6.0.92",
+    "@types/yargs": "^8.0.2",
     "codelyzer": "~2.0.0",
     "jasmine-core": "~2.5.2",
     "jasmine-spec-reporter": "~3.2.0",

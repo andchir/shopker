@@ -180,6 +180,6 @@ class ContentTypeController extends StorageControllerAbstract
     {
         return $this->get('doctrine_mongodb')
             ->getManager()
-            ->getRepository('AppBundle:ContentType');
+            ->getRepository(ContentType::class);
     }
 }

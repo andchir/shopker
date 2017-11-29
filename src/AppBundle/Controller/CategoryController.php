@@ -174,7 +174,7 @@ class CategoryController extends StorageControllerAbstract
     {
         return $this->get('doctrine_mongodb')
             ->getManager()
-            ->getRepository('AppBundle:Category');
+            ->getRepository(Category::class);
     }
 
 }

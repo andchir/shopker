@@ -12,11 +12,11 @@
             <div class="col-md-6">
 
                 <!-- settings -->
-                <div *ngIf="forms.SETTINGS_MAIN" [class.loading]="settings.SETTINGS_MAIN.loading">
+                <div [class.loading]="settings.SETTINGS_MAIN.loading">
                     <label class="label-filled">{{'SETTINGS_MAIN' | translate}}</label>
 
                     <div class="card mb-4">
-                        <div class="table-responsive" [formGroup]="forms.SETTINGS_MAIN">
+                        <div class="table-responsive">
 
                             <table class="table table-divided mb-0">
                                 <thead>
@@ -31,22 +31,23 @@
                                             <span>{{setting.name | translate}}</span>
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control form-control-sm" [formControlName]="setting.name" [name]="setting.name">
+                                            <input type="text" class="form-control form-control-sm" [(ngModel)]="setting.value" (ngModelChange)="onValueChanged('SETTINGS_MAIN')">
                                         </td>
                                     </tr>
-                                </tbody>
-                                <tfoot *ngIf="settings.SETTINGS_MAIN.changed">
-                                    <tr>
-                                        <td colspan="2" class="text-center">
+                                    <tr *ngIf="settings.SETTINGS_MAIN.changed">
+                                        <td colspan="2" class="text-right">
 
                                             <button type="button" class="btn btn-info btn-sm" (click)="saveSettings('SETTINGS_MAIN')">
                                                 <i class="icon-check"></i>
                                                 <span>{{'SAVE' | translate}}</span>
                                             </button>
+                                            <button type="button" class="btn btn-secondary btn-sm" (click)="resetSettingsForm('SETTINGS_MAIN')" [title]="'FORM_RESET' | translate">
+                                                <i class="icon-reload"></i>
+                                            </button>
 
                                         </td>
                                     </tr>
-                                </tfoot>
+                                </tbody>
                             </table>
 
                         </div>
@@ -58,10 +59,8 @@
             <div class="col-md-6">
 
                 <!-- statuses -->
-                <div>
-                    <label class="label-filled">
-                        Статусы
-                    </label>
+                <div [class.loading]="settings.SETTINGS_ORDER_STATUSES.loading">
+                    <label class="label-filled">{{'SETTINGS_ORDER_STATUSES' | translate}}</label>
 
                     <div class="card mb-4">
                         <div class="card-body text-muted">
@@ -71,109 +70,64 @@
 
                             <table class="table table-divided mb-0">
                                 <thead>
-                                <tr>
-                                    <th>
-                                        Название
-                                    </th>
-                                    <th>
-                                        Шаблон письма
-                                    </th>
-                                    <th>
-                                        Цвет
-                                    </th>
-                                    <th></th>
-                                </tr>
+                                    <tr>
+                                        <th>
+                                            Название
+                                        </th>
+                                        <th>
+                                            Шаблон письма
+                                        </th>
+                                        <th>
+                                            Цвет
+                                        </th>
+                                        <th></th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>
-                                        <input type="text" class="form-control form-control-sm" name="" value="Новый">
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control form-control-sm" name="" value="userEmailStatus">
-                                    </td>
-                                    <td class="text-center">
-                                        <button class="btn btn-secondary btn-sm bg-info" style="width: 30px;">
-                                            &nbsp;
-                                        </button>
-                                    </td>
-                                    <td class="text-center">
-                                        <button class="btn btn-secondary btn-sm">
-                                            <i class="icon-cross"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input type="text" class="form-control form-control-sm" name="" value="Принят к оплате">
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control form-control-sm" name="" value="userEmailStatus">
-                                    </td>
-                                    <td class="text-center">
-                                        <button class="btn btn-secondary btn-sm bg-success" style="width: 30px;">
-                                            &nbsp;
-                                        </button>
-                                    </td>
-                                    <td class="text-center">
-                                        <button class="btn btn-secondary btn-sm">
-                                            <i class="icon-cross"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input type="text" class="form-control form-control-sm" name="" value="Отправлен">
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control form-control-sm" name="" value="userEmailStatus">
-                                    </td>
-                                    <td class="text-center">
-                                        <button class="btn btn-secondary btn-sm bg-warning" style="width: 30px;">
-                                            &nbsp;
-                                        </button>
-                                    </td>
-                                    <td class="text-center">
-                                        <button class="btn btn-secondary btn-sm">
-                                            <i class="icon-cross"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input type="text" class="form-control form-control-sm" name="" value="Отменен">
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control form-control-sm" name="" value="userEmailStatus">
-                                    </td>
-                                    <td class="text-center">
-                                        <button class="btn btn-secondary btn-sm bg-danger" style="width: 30px;">
-                                            &nbsp;
-                                        </button>
-                                    </td>
-                                    <td class="text-center">
-                                        <button class="btn btn-secondary btn-sm">
-                                            <i class="icon-cross"></i>
-                                        </button>
-                                    </td>
-                                </tr>
+                                    <tr *ngFor="let setting of settings.SETTINGS_ORDER_STATUSES.values; let index=index">
+                                        <td>
+                                            <input type="text" class="form-control form-control-sm" [(ngModel)]="setting.name" (ngModelChange)="onValueChanged('SETTINGS_ORDER_STATUSES')">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control form-control-sm" [(ngModel)]="setting.options.template.value" (ngModelChange)="onValueChanged('SETTINGS_ORDER_STATUSES')">
+                                        </td>
+                                        <td class="text-center">
+                                            <button class="btn btn-secondary btn-sm bg-danger" style="width: 30px;">
+                                                &nbsp;
+                                            </button>
+                                        </td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-secondary btn-sm" [title]="'REMOVE' | translate" (click)="deleteSetting('SETTINGS_ORDER_STATUSES', index)">
+                                                <i class="icon-cross"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
                                 </tbody>
                                 <tfoot>
-                                <tr class="bg-faded">
-                                    <td colspan="4" class="text-center">
+                                    <tr class="bg-faded">
+                                        <td colspan="4" class="text-center">
 
-                                        <button class="btn btn-secondary btn-sm">
-                                            <i class="icon-plus"></i>
-                                            Добавить
-                                        </button>
+                                            <div class="relative">
+                                                <div class="pos-absolute-right" *ngIf="settings.SETTINGS_ORDER_STATUSES.changed">
 
-                                        <button type="button" class="btn btn-info btn-sm" (click)="saveSettings('SETTINGS_ORDER_STATUSES')" *ngIf="settings.SETTINGS_ORDER_STATUSES.changed">
-                                            <i class="icon-check"></i>
-                                            <span>{{'SAVE' | translate}}</span>
-                                        </button>
+                                                    <button type="button" class="btn btn-info btn-sm" (click)="saveSettings('SETTINGS_ORDER_STATUSES')">
+                                                        <i class="icon-check"></i>
+                                                        <span>{{'SAVE' | translate}}</span>
+                                                    </button>
+                                                    <button type="button" class="btn btn-secondary btn-sm" (click)="resetSettingsForm('SETTINGS_ORDER_STATUSES')" [title]="'FORM_RESET' | translate">
+                                                        <i class="icon-reload"></i>
+                                                    </button>
 
-                                    </td>
-                                </tr>
+                                                </div>
+                                            </div>
+
+                                            <button type="button" class="btn btn-secondary btn-sm" (click)="addSetting('SETTINGS_ORDER_STATUSES')">
+                                                <i class="icon-plus"></i>
+                                                Добавить
+                                            </button>
+
+                                        </td>
+                                    </tr>
                                 </tfoot>
                             </table>
 
@@ -183,10 +137,8 @@
                 <!-- /statuses -->
 
                 <!-- delivery -->
-                <div>
-                    <label class="label-filled">
-                        Методы доставки
-                    </label>
+                <div [class.loading]="settings.SETTINGS_DELIVERY.loading">
+                    <label class="label-filled">{{'SETTINGS_DELIVERY' | translate}}</label>
 
                     <div class="card mb-4">
                         <div class="card-body text-muted">
@@ -210,50 +162,18 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
+                                    <tr *ngFor="let setting of settings.SETTINGS_DELIVERY.values; let index=index">
                                         <td>
-                                            <input type="text" class="form-control form-control-sm" name="" value="Самовывоз">
+                                            <input type="text" class="form-control form-control-sm" [(ngModel)]="setting.name" (ngModelChange)="onValueChanged('SETTINGS_DELIVERY')">
                                         </td>
                                         <td class="text-center">
-                                            <input type="number" class="form-control form-control-sm mwidth-80 m-auto" name="" value="0">
+                                            <input type="number" class="form-control form-control-sm mwidth-80 m-auto" [(ngModel)]="setting.options.price.value" (ngModelChange)="onValueChanged('SETTINGS_DELIVERY')">
                                         </td>
                                         <td class="text-center">
-                                            <input type="number" class="form-control form-control-sm mwidth-80 m-auto" name="" value="">
+                                            <input type="number" class="form-control form-control-sm mwidth-80 m-auto" [(ngModel)]="setting.options.priceLimit.value" (ngModelChange)="onValueChanged('SETTINGS_DELIVERY')">
                                         </td>
                                         <td class="text-center">
-                                            <button class="btn btn-secondary btn-sm">
-                                                <i class="icon-cross"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <input type="text" class="form-control form-control-sm" name="" value="Доставка по городу">
-                                        </td>
-                                        <td class="text-center">
-                                            <input type="number" class="form-control form-control-sm mwidth-80 m-auto" name="" value="0">
-                                        </td>
-                                        <td class="text-center">
-                                            <input type="number" class="form-control form-control-sm mwidth-80 m-auto" name="" value="">
-                                        </td>
-                                        <td class="text-center">
-                                            <button class="btn btn-secondary btn-sm">
-                                                <i class="icon-cross"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <input type="text" class="form-control form-control-sm" name="" value="Доставка по городу">
-                                        </td>
-                                        <td class="text-center">
-                                            <input type="number" class="form-control form-control-sm mwidth-80 m-auto" name="" value="0">
-                                        </td>
-                                        <td class="text-center">
-                                            <input type="number" class="form-control form-control-sm mwidth-80 m-auto" name="" value="">
-                                        </td>
-                                        <td class="text-center">
-                                            <button class="btn btn-secondary btn-sm">
+                                            <button type="button" class="btn btn-secondary btn-sm" [title]="'REMOVE' | translate" (click)="deleteSetting('SETTINGS_DELIVERY', index)">
                                                 <i class="icon-cross"></i>
                                             </button>
                                         </td>
@@ -263,14 +183,23 @@
                                     <tr class="bg-faded">
                                         <td colspan="4" class="text-center">
 
-                                            <button class="btn btn-secondary btn-sm">
+                                            <div class="relative">
+                                                <div class="pos-absolute-right" *ngIf="settings.SETTINGS_DELIVERY.changed">
+
+                                                    <button type="button" class="btn btn-info btn-sm" (click)="saveSettings('SETTINGS_DELIVERY')">
+                                                        <i class="icon-check"></i>
+                                                        <span>{{'SAVE' | translate}}</span>
+                                                    </button>
+                                                    <button type="button" class="btn btn-secondary btn-sm" (click)="resetSettingsForm('SETTINGS_DELIVERY')" [title]="'FORM_RESET' | translate">
+                                                        <i class="icon-reload"></i>
+                                                    </button>
+
+                                                </div>
+                                            </div>
+
+                                            <button type="button" class="btn btn-secondary btn-sm" (click)="addSetting('SETTINGS_DELIVERY')">
                                                 <i class="icon-plus"></i>
                                                 Добавить
-                                            </button>
-
-                                            <button type="button" class="btn btn-info btn-sm" (click)="saveSettings('SETTINGS_DELIVERY')"  *ngIf="settings.SETTINGS_DELIVERY.changed">
-                                                <i class="icon-check"></i>
-                                                <span>{{'SAVE' | translate}}</span>
                                             </button>
 
                                         </td>

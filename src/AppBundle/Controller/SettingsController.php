@@ -43,6 +43,9 @@ class SettingsController extends Controller
         $output[self::GROUP_DELIVERY] = $this->getRepository()->findBy([
             'groupName' => self::GROUP_DELIVERY
         ], ['id' => 'asc']);
+        $output[self::GROUP_ORDER_STATUSES] = $this->getRepository()->findBy([
+            'groupName' => self::GROUP_ORDER_STATUSES
+        ], ['id' => 'asc']);
 
         $output = $serializer->serialize($output, 'json', ['groups' => ['list']]);
 
@@ -53,10 +56,11 @@ class SettingsController extends Controller
      * @Route("/{groupName}")
      * @Method({"PUT"})
      * @param Request $request
-     * @param string $groupName
+     * @param $groupName
+     * @param SerializerInterface $serializer
      * @return JsonResponse
      */
-    public function updateGroup(Request $request, $groupName)
+    public function updateGroup(Request $request, $groupName, SerializerInterface $serializer)
     {
         $settings = [];
         $data = json_decode($request->getContent(), true);
@@ -70,9 +74,60 @@ class SettingsController extends Controller
                 $this->saveSettingsToYaml('settings', $settings);
 
                 break;
+            default:
+
+                /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+                $dm = $this->get('doctrine_mongodb')->getManager();
+
+                $settings = $this->getRepository()->findBy([
+                    'groupName' => $groupName
+                ], ['id' => 'asc']);
+
+                /** @var Setting $setting */
+                foreach ($settings as $index => $setting) {
+                    if (!isset($data[$index])) {
+                        $dm->remove($setting);
+                    } else {
+                        if (isset($data[$index]['name'])) {
+                            $setting->setName($data[$index]['name']);
+                        }
+                        if (isset($data[$index]['description'])) {
+                            $setting->setName($data[$index]['description']);
+                        }
+                        if (isset($data[$index]['options']) && is_array($data[$index]['options'])) {
+                            $setting->updateOptionsValues($data[$index]['options']);
+                        }
+                        $dm->persist($setting);
+                    }
+                }
+
+                if (count($data) > count($settings)) {
+                    array_splice($data, 0, count($settings));
+                    foreach ($data as $newSetting) {
+                        $setting = new Setting();
+                        $setting->setGroupName($groupName);
+                        if (isset($newSetting['name'])) {
+                            $setting->setName($newSetting['name']);
+                        }
+                        if (isset($newSetting['description'])) {
+                            $setting->setDescription($newSetting['description']);
+                        }
+                        if (isset($newSetting['options']) && is_array($newSetting['options'])) {
+                            $setting->setOptions($newSetting['options']);
+                        }
+                        $dm->persist($setting);
+                        $settings[] = $setting;
+                    }
+                }
+
+                $dm->flush();
+
+                break;
         }
 
-        return new JsonResponse($settings);
+        $output = $serializer->serialize($settings, 'json', ['groups' => ['list']]);
+
+        return new JsonResponse($output, 200, [], true);
     }
 
     /**

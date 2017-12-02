@@ -24,12 +24,6 @@ class Setting
 
     /**
      * @MongoDB\Field(type="string")
-     * @Groups({"details", "list"})
-     */
-    private $type;
-
-    /**
-     * @MongoDB\Field(type="string")
      * @Groups({"details"})
      */
     private $description;
@@ -41,13 +35,7 @@ class Setting
     private $groupName;
 
     /**
-     * @MongoDB\Field(type="string")
-     * @Groups({"details", "list"})
-     */
-    private $value;
-
-    /**
-     * @MongoDB\Field(type="collection")
+     * @MongoDB\Field(type="hash")
      * @Groups({"details", "list"})
      */
     private $options;
@@ -85,28 +73,6 @@ class Setting
     }
 
     /**
-     * Set type
-     *
-     * @param string $type
-     * @return self
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-        return $this;
-    }
-
-    /**
-     * Get type
-     *
-     * @return string $type
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
      * Set description
      *
      * @param string $description
@@ -126,28 +92,6 @@ class Setting
     public function getDescription()
     {
         return $this->description;
-    }
-
-    /**
-     * Set value
-     *
-     * @param string $value
-     * @return self
-     */
-    public function setValue($value)
-    {
-        $this->value = $value;
-        return $this;
-    }
-
-    /**
-     * Get value
-     *
-     * @return string $value
-     */
-    public function getValue()
-    {
-        return $this->value;
     }
 
     /**
@@ -193,4 +137,23 @@ class Setting
     {
         return $this->options;
     }
+
+    /**
+     * @param array $newOptions
+     */
+    public function updateOptionsValues($newOptions)
+    {
+        $options = $this->getOptions();
+        foreach ($options as $key => &$option) {
+            if (isset($newOptions[$key]) && isset($newOptions[$key]['value'])) {
+                $option['value'] = $newOptions[$key]['value'];
+                if ($option['type'] == 'number' && is_string($newOptions[$key]['value'])) {
+                    $option['value'] = preg_replace('/[^0-9,\.]/', '', strval($option['value']));
+                    $option['value'] = (float) str_replace(',', '.', $option['value']);
+                }
+            }
+        }
+        $this->setOptions($options);
+    }
+
 }

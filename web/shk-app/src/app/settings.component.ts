@@ -16,16 +16,16 @@ export class SettingsComponent implements OnInit {
     title = 'Настройки';
     forms: {[key: string]: FormGroup} = {};
     settings = {
-        SETTINGS_MAIN: new SettingsData(false, false, [], null),
+        SETTINGS_MAIN: new SettingsData(false, true, [], null),
         SETTINGS_DELIVERY: new SettingsData(
-            false, false, [],
+            false, true, [],
             {
                 price: {value: 0, type: 'number'},
                 priceLimit: {value: 0, type: 'number'}
             }
         ),
         SETTINGS_ORDER_STATUSES: new SettingsData(
-            false, false, [],
+            false, true, [],
             {
                 template: {value: '', type: 'text'},
                 color: {value: '', type: 'text'}
@@ -54,14 +54,17 @@ export class SettingsComponent implements OnInit {
                 if (res['SETTINGS_MAIN']) {
                     this.settings.SETTINGS_MAIN.values = res['SETTINGS_MAIN'];
                     this.settings.SETTINGS_MAIN.defaultValues = _.cloneDeep(res['SETTINGS_MAIN']);
+                    this.settings.SETTINGS_MAIN.loading = false;
                 }
                 if (res['SETTINGS_ORDER_STATUSES']) {
                     this.settings.SETTINGS_ORDER_STATUSES.values = res['SETTINGS_ORDER_STATUSES'];
                     this.settings.SETTINGS_ORDER_STATUSES.defaultValues = _.cloneDeep(res['SETTINGS_ORDER_STATUSES']);
+                    this.settings.SETTINGS_ORDER_STATUSES.loading = false;
                 }
                 if (res['SETTINGS_DELIVERY']) {
                     this.settings.SETTINGS_DELIVERY.values = res['SETTINGS_DELIVERY'];
                     this.settings.SETTINGS_DELIVERY.defaultValues = _.cloneDeep(res['SETTINGS_DELIVERY']);
+                    this.settings.SETTINGS_DELIVERY.loading = false;
                 }
             });
     }
@@ -86,9 +89,6 @@ export class SettingsComponent implements OnInit {
         this.settings[groupName].loading = true;
         this.settingsService.updateGroup(groupName, data)
             .subscribe((data) => {
-                if (data.locale) {
-                    this.appSettings.settings.locale = String(data.locale);
-                }
                 this.settings[groupName].defaultValues = data;
                 this.settings[groupName].loading = false;
                 this.settings[groupName].changed = false;

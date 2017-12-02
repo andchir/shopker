@@ -62,13 +62,14 @@ class SettingsController extends Controller
      */
     public function updateGroup(Request $request, $groupName, SerializerInterface $serializer)
     {
-        $settings = [];
         $data = json_decode($request->getContent(), true);
 
         switch ($groupName) {
             case self::GROUP_MAIN:
 
                 $settings = $this->getSettingsFromYaml('settings', false);
+                $data = self::transformParametersInverse($data);
+
                 $settings = array_merge($settings, $data);
 
                 $this->saveSettingsToYaml('settings', $settings);
@@ -83,6 +84,7 @@ class SettingsController extends Controller
                     'groupName' => $groupName
                 ], ['id' => 'asc']);
 
+                // Update
                 /** @var Setting $setting */
                 foreach ($settings as $index => $setting) {
                     if (!isset($data[$index])) {
@@ -101,6 +103,7 @@ class SettingsController extends Controller
                     }
                 }
 
+                // Add new
                 if (count($data) > count($settings)) {
                     array_splice($data, 0, count($settings));
                     foreach ($data as $newSetting) {
@@ -175,6 +178,22 @@ class SettingsController extends Controller
         $output = [];
         foreach ($parameters as $key => $value) {
             $output[] = ['name' => $key, 'value' => $value];
+        }
+        return $output;
+    }
+
+    /**
+     * @param array $parameters
+     * @return array
+     */
+    public static function transformParametersInverse($parameters)
+    {
+        if (!is_array($parameters) || !isset($parameters[0])) {
+            return $parameters;
+        }
+        $output = [];
+        foreach ($parameters as $parameter) {
+            $output[$parameter['name']] = $parameter['value'];
         }
         return $output;
     }

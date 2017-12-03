@@ -92,9 +92,7 @@
                                             <input type="text" class="form-control form-control-sm" [(ngModel)]="setting.options.template.value" (ngModelChange)="onValueChanged('SETTINGS_ORDER_STATUSES')">
                                         </td>
                                         <td class="text-center">
-                                            <button class="btn btn-secondary btn-sm bg-danger" style="width: 30px;">
-                                                &nbsp;
-                                            </button>
+                                            <p-colorPicker [(ngModel)]="setting.options.color.value" (ngModelChange)="onValueChanged('SETTINGS_ORDER_STATUSES')"></p-colorPicker>
                                         </td>
                                         <td class="text-center">
                                             <button type="button" class="btn btn-secondary btn-sm" [title]="'REMOVE' | translate" (click)="deleteSetting('SETTINGS_ORDER_STATUSES', index)">

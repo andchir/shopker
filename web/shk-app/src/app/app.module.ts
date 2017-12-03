@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgbModule, NgbActiveModal, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
-import { EditorModule, CalendarModule, ChipsModule } from 'primeng/primeng';
+import { EditorModule, CalendarModule, ChipsModule, ColorPickerModule } from 'primeng/primeng';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
@@ -51,6 +51,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
         EditorModule,
         CalendarModule,
         ChipsModule,
+        ColorPickerModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,

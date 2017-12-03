@@ -94,7 +94,7 @@ export class AppComponent {
         });
         Promise.all(promises).then(values => {
             values.unshift(this.appSettings.settings.appName);
-            this.setTitle(values.join(' - '));
+            this.setTitle(values.reverse().join(' - '));
         });
     }
 

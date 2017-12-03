@@ -62,11 +62,11 @@
                 <div [class.loading]="settings.SETTINGS_ORDER_STATUSES.loading">
                     <label class="label-filled">{{'SETTINGS_ORDER_STATUSES' | translate}}</label>
 
-                    <div class="card mb-4">
+                    <div class="card mb-4 responsive" #containerStatuses>
                         <div class="card-body text-muted">
                             Названия статусов заказов и цвет для вывода на странице заказов в административной части.
                         </div>
-                        <div class="table-responsive">
+                        <div>
 
                             <table class="table table-divided mb-0">
                                 <thead>
@@ -121,7 +121,7 @@
 
                                             <button type="button" class="btn btn-secondary btn-sm" (click)="addSetting('SETTINGS_ORDER_STATUSES')">
                                                 <i class="icon-plus"></i>
-                                                Добавить
+                                                <span>{{'ADD' | translate}}</span>
                                             </button>
 
                                         </td>
@@ -197,7 +197,7 @@
 
                                             <button type="button" class="btn btn-secondary btn-sm" (click)="addSetting('SETTINGS_DELIVERY')">
                                                 <i class="icon-plus"></i>
-                                                Добавить
+                                                <span>{{'ADD' | translate}}</span>
                                             </button>
 
                                         </td>

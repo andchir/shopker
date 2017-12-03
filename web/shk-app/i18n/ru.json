@@ -1,8 +1,10 @@
 {
+	"ADD": "Добавить",
 	"CATALOG": "Каталог",
 	"FORM_RESET": "Сбросить",
 	"ORDERS": "Заказы",
 	"PARAMETER": "Параметр",
+	"REMOVE": "Удалить",
 	"SAVE": "Сохранить",
 	"SETTINGS": "Настройки",
 	"SETTINGS_DELIVERY": "Методы доставки",

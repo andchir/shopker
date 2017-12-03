@@ -1,8 +1,10 @@
 {
+	"ADD": "Add",
 	"CATALOG": "Catalog",
 	"FORM_RESET": "Reset",
 	"ORDERS": "Orders",
 	"PARAMETER": "Parameter",
+	"REMOVE": "Remove",
 	"SAVE": "Save",
 	"SETTINGS": "Settings",
 	"SETTINGS_DELIVERY": "Delivery methods",

@@ -27,8 +27,8 @@ export class SettingsComponent implements OnInit {
         SETTINGS_ORDER_STATUSES: new SettingsData(
             false, true, [],
             {
-                template: {value: '', type: 'text'},
-                color: {value: '', type: 'text'}
+                template: {value: 'userEmailStatus', type: 'text'},
+                color: {value: '#00aeff', type: 'text'}
             }
         )
     };

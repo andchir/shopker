@@ -6,7 +6,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgbModule, NgbActiveModal, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { EditorModule, CalendarModule, ChipsModule, ColorPickerModule } from 'primeng/primeng';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateCustomLoader } from './services/translateLoader';
 
 import { AppComponent, AlertModalContent, ConfirmModalContent } from './app.component';
 import { NotFoundComponent } from './not-found.component';
@@ -34,11 +34,6 @@ import { ContentTypesService } from './services/content_types.service';
 import { CategoriesService } from './services/categories.service';
 import { AppRoutingModule }     from './app-routing.module';
 
-// AoT requires an exported function for factories
-export function HttpLoaderFactory(httpClient: HttpClient) {
-    return new TranslateHttpLoader(httpClient, 'shk-app/i18n/', '.json');
-}
-
 @NgModule({
     imports: [
         BrowserModule,
@@ -55,8 +50,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
-                useFactory: HttpLoaderFactory,
-                deps: [HttpClient]
+                useClass: TranslateCustomLoader
             }
         })
     ],

@@ -1,5 +1,6 @@
 {
 	"ADD": "Add",
+	"app_name": "Application name",
 	"CATALOG": "Catalog",
 	"FORM_RESET": "Reset",
 	"ORDERS": "Orders",

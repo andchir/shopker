@@ -125,7 +125,7 @@ class FileController extends BaseController
                 ->setCreatedDate($now)
                 ->setOwnerType($ownerType)
                 ->setOwnerId($itemId)
-                //->setUserId($user->getId())
+                ->setUserId($user->getId())
                 ->setFile($file);
 
             $dm->persist($fileDocument);

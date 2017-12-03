@@ -385,11 +385,11 @@
                     <button type="button" class="btn btn-outline-secondary bg-white text-secondary btn-xs" [ngSwitch]="fieldsBlock.style.display" (click)="displayToggle(fieldsBlock)">
                         <span *ngSwitchCase="'none'">
                             <i class="icon-plus"></i>
-                            <span i18n>Expand</span>
+                            <span>{{'EXPAND' | translate}}</span>
                         </span>
                             <span *ngSwitchCase="'block'">
                             <i class="icon-minus"></i>
-                            <span i18n>Collapse</span>
+                            <span>{{'COLLAPSE' | translate}}</span>
                         </span>
                     </button>
                 </div>

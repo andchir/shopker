@@ -2,6 +2,8 @@
 	"ADD": "Add",
 	"CATALOG": "Catalog",
 	"CATEGORY": "Category",
+	"COLLAPSE": "Collapse",
+	"EXPAND": "Expand",
 	"FORM_RESET": "Reset",
 	"LOGOUT": "Log out",
 	"ORDERS": "Orders",

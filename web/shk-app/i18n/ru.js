@@ -2,6 +2,8 @@ var APP_LANG = {
     "ADD": "Добавить",
     "CATALOG": "Каталог",
     "CATEGORY": "Категория",
+    "COLLAPSE": "Свернуть",
+    "EXPAND": "Развернуть",
     "FORM_RESET": "Сбросить",
     "LOGOUT": "Выйти",
     "ORDERS": "Заказы",

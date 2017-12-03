@@ -70,11 +70,11 @@
         <button type="button" class="btn btn-outline-secondary bg-white text-secondary btn-xs" [ngSwitch]="collapseContainer1.style.display" (click)="displayToggle(collapseContainer1)">
             <span *ngSwitchCase="'none'">
                 <i class="icon-plus"></i>
-                <span i18n>Expand</span>
+                {{'EXPAND' | translate}}
             </span>
             <span *ngSwitchCase="'block'">
                 <i class="icon-minus"></i>
-                <span i18n>Collapse</span>
+                <span>{{'COLLAPSE' | translate}}</span>
             </span>
         </button>
     </div>
@@ -135,11 +135,11 @@
         <button type="button" class="btn btn-outline-secondary bg-white text-secondary btn-xs" [ngSwitch]="collapseContainer2.style.display" (click)="displayToggle(collapseContainer2)">
             <span *ngSwitchCase="'none'">
                 <i class="icon-plus"></i>
-                <span i18n>Expand</span>
+                {{'EXPAND' | translate}}
             </span>
             <span *ngSwitchCase="'block'">
                 <i class="icon-minus"></i>
-                <span i18n>Collapse</span>
+                <span>{{'COLLAPSE' | translate}}</span>
             </span>
         </button>
     </div>

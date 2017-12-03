@@ -1,7 +1,7 @@
 <div class="modal-header d-block">
     <div class="d-block float-right">
         <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss()">
-            Close
+            <span>{{'CLOSE' | translate}}</span>
         </button>
     </div>
     <h4 class="modal-title">{{modalTitle}}</h4>
@@ -107,10 +107,10 @@
 
     <div class="modal-footer d-block">
         <button type="submit" class="btn btn-success btn-wide" [disabled]="submitted" (click)="save()">
-            Save
+            <span>{{'SAVE' | translate}}</span>
         </button>
         <button type="button" class="btn btn-secondary btn-wide" (click)="close($event)">
-            Cancel
+            <span>{{'CANCEL' | translate}}</span>
         </button>
     </div>
 

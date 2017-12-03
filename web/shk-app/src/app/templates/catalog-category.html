@@ -3,17 +3,17 @@
 
         <div ngbDropdown class="d-inline-block mr-1">
             <button class="btn btn-info" ngbDropdownToggle>
-                Массовые дейсвия
+                <span>{{'BATCH_ACTIONS' | translate}}</span>
             </button>
             <div ngbDropdownMenu>
-                <button class="dropdown-item" (click)="blockSelected()">Отключить / включить</button>
-                <button class="dropdown-item" (click)="deleteSelected()">Удалить</button>
+                <button class="dropdown-item" (click)="blockSelected()">{{'DISABLE_ENABLE' | translate}}</button>
+                <button class="dropdown-item" (click)="deleteSelected()">{{'DELETE' | translate}}</button>
             </div>
         </div>
 
         <button type="button" class="btn btn-success d-inline-block btn-wide" (click)="modalOpen()">
             <i class="icon-plus"></i>
-            Add
+            <span>{{'ADD' | translate}}</span>
         </button>
 
     </div>

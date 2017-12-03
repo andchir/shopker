@@ -6,6 +6,7 @@ import { Component, OnInit, Input } from '@angular/core';
     providers: []
 })
 export class CatalogComponent implements OnInit {
+    static title = 'CATALOG';
 
     constructor() {
 

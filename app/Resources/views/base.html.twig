@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>{% block title %}{{ app_name }}{% endblock %}</title>
-    <base href="/">
+    <base href="{{ app.request.baseUrl }}">
 
     {% block stylesheets %}{% endblock %}
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />

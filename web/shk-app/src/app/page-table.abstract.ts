@@ -1,5 +1,4 @@
 import { OnInit } from '@angular/core';
-import { Title } from '@angular/platform-browser';
 import { NgbModal, NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { QueryOptions } from './models/query-options';
 import { AlertModalContent, ConfirmModalContent } from './app.component';
@@ -21,19 +20,13 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
     constructor(
         public dataService: DataService<any>,
         public activeModal: NgbActiveModal,
-        public modalService: NgbModal,
-        public titleService: Title
+        public modalService: NgbModal
     ) {
 
     }
 
     ngOnInit(): void {
-        this.setTitle(this.title);
         this.getList();
-    }
-
-    public setTitle(newTitle: string) {
-        this.titleService.setTitle(newTitle);
     }
 
     modalOpen(itemId?: number, isItemCopy: boolean = false): void {

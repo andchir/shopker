@@ -1,23 +1,16 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Title } from '@angular/platform-browser';
 
 @Component({
     selector: 'shk-settings',
     templateUrl: 'templates/page-statistics.html'
 })
 export class StatisticsComponent implements OnInit {
-    title = 'Статистика';
+    static title = 'STATISTICS';
 
-    constructor(
-        private titleService: Title
-    ) {}
+    constructor() {}
 
     ngOnInit(): void {
-        this.setTitle( this.title );
-    }
 
-    public setTitle( newTitle: string ): void {
-        this.titleService.setTitle( newTitle );
     }
 
 }

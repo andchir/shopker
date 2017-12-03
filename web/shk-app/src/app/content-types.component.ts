@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, ViewChild, Injectable, ElementRef } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Title } from '@angular/platform-browser';
 import { NgbModal, NgbActiveModal, NgbModalRef, NgbPopover, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from "lodash";
 
@@ -478,10 +477,9 @@ export class ContentTypesComponent extends PageTableAbstractComponent<ContentTyp
     constructor(
         dataService: ContentTypesService,
         activeModal: NgbActiveModal,
-        modalService: NgbModal,
-        titleService: Title
+        modalService: NgbModal
     ) {
-        super(dataService, activeModal, modalService, titleService);
+        super(dataService, activeModal, modalService);
     }
 
     //TODO: get from settings

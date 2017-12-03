@@ -1,4 +1,4 @@
-import { NgModule }             from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { NotFoundComponent } from './not-found.component';
@@ -13,18 +13,16 @@ import { SettingsComponent } from './settings.component';
 const routes: Routes = [
     {
         path: '',
-        redirectTo: '/orders',
+        redirectTo: 'orders',
         pathMatch: 'full'
     },
     {
         path: 'orders',
-        component: OrdersComponent,
-        data: {title: 'Orders'}
+        component: OrdersComponent
     },
     {
         path: 'catalog',
         component: CatalogComponent,
-        data: {title: 'Catalog'},
         children: [
             {
                 path: '',
@@ -33,35 +31,29 @@ const routes: Routes = [
             },
             {
                 path: 'category/:categoryId',
-                component: CatalogCategoryComponent,
-                data: {title: 'Catalog'}
+                component: CatalogCategoryComponent
             },
             {
                 path: 'content_types',
-                component: ContentTypesComponent,
-                data: {title: 'Content types'}
+                component: ContentTypesComponent
             },
             {
                 path: 'field_types',
-                component: FieldTypesComponent,
-                data: {title: 'Field types'}
+                component: FieldTypesComponent
             },
         ]
     },
     {
         path: 'statistics',
-        component: StatisticsComponent,
-        data: {title: 'Statistics'}
+        component: StatisticsComponent
     },
     {
         path: 'settings',
-        component: SettingsComponent,
-        data: {title: 'Settings'}
+        component: SettingsComponent
     },
     {
         path: '**',
-        component: NotFoundComponent,
-        data: {title: 'Page not found'}
+        component: NotFoundComponent
     }
 ];
 @NgModule({

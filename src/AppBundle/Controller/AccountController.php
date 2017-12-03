@@ -20,7 +20,7 @@ class AccountController extends Controller
     {
         $user = $this->getUser();
         if ($user instanceof AdvancedUserInterface) {
-            return $this->redirectToRoute('/');
+            return $this->redirectToRoute('homepage');
         }
 
         /** @var AuthenticationException $exception */

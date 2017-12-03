@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Title } from '@angular/platform-browser';
 import * as _ from 'lodash';
 
 import { SettingsService } from './services/settings.service';
@@ -13,7 +12,8 @@ import { AppSettings } from './services/app-settings.service';
     providers: [ SettingsService ]
 })
 export class SettingsComponent implements OnInit {
-    title = 'Настройки';
+    static title = 'SETTINGS';
+
     forms: {[key: string]: FormGroup} = {};
     settings = {
         SETTINGS_MAIN: new SettingsData(false, true, [], null),
@@ -34,18 +34,12 @@ export class SettingsComponent implements OnInit {
     };
 
     constructor(
-        private titleService: Title,
         private settingsService: SettingsService,
         private appSettings: AppSettings
     ) {}
 
     ngOnInit(): void {
-        this.setTitle( this.title );
         this.getSettings();
-    }
-
-    public setTitle( newTitle: string ): void {
-        this.titleService.setTitle( newTitle );
     }
 
     getSettings(): void {

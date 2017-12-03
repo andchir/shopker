@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Title } from '@angular/platform-browser';
 import { NgbModal, NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs/Observable';
 import * as _ from "lodash";
@@ -18,8 +17,8 @@ import { Product } from './models/product.model';
     providers: [ProductsService]
 })
 export class CatalogCategoryComponent extends PageTableAbstractComponent<Product> {
+    static title = 'CATEGORY';
 
-    title: string = 'Каталог';
     currentCategory: Category;
     currentContentType: ContentType;
     tableFields = [];
@@ -28,14 +27,13 @@ export class CatalogCategoryComponent extends PageTableAbstractComponent<Product
         public dataService: ProductsService,
         public activeModal: NgbActiveModal,
         public modalService: NgbModal,
-        public titleService: Title,
         private contentTypesService: ContentTypesService
     ) {
-        super(dataService, activeModal, modalService, titleService);
+        super(dataService, activeModal, modalService);
     }
 
     ngOnInit(): void {
-        this.setTitle(this.title);
+
     }
 
     updateTableConfig(): void {
@@ -82,7 +80,6 @@ export class CatalogCategoryComponent extends PageTableAbstractComponent<Product
 
         this.dataService.setRequestUrl('admin/products/' + this.currentCategory.id);
         this.loading = true;
-        this.titleService.setTitle(this.title + ' / ' + this.currentCategory.title);
         this.getContentType()
             .subscribe((data) => {
                 this.currentContentType = data;
@@ -98,7 +95,6 @@ export class CatalogCategoryComponent extends PageTableAbstractComponent<Product
 
     openRootCategory(): void {
         this.currentCategory = new Category(0, false, 0, 'root', '', '', '', true);
-        this.titleService.setTitle(this.title);
         this.dataService.setRequestUrl('admin/products/' + this.currentCategory.id);
         this.getList();
     }

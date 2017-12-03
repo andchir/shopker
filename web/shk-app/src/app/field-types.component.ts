@@ -1,6 +1,5 @@
 import { Component, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Title } from '@angular/platform-browser';
 import { NgbModal, NgbActiveModal, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, Validators } from '@angular/forms';
 import { FieldType } from './models/field-type.model';
@@ -114,10 +113,9 @@ export class FieldTypesComponent extends PageTableAbstractComponent<FieldType> {
     constructor(
         dataService: FieldTypesService,
         activeModal: NgbActiveModal,
-        modalService: NgbModal,
-        titleService: Title
+        modalService: NgbModal
     ) {
-        super(dataService, activeModal, modalService, titleService);
+        super(dataService, activeModal, modalService);
     }
 
     tableFields = [

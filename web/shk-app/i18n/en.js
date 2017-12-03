@@ -1,8 +1,9 @@
 var APP_LANG = {
     "ADD": "Add",
-    "app_name": "Application name",
     "CATALOG": "Catalog",
+    "CATEGORY": "Category",
     "FORM_RESET": "Reset",
+    "LOGOUT": "Log out",
     "ORDERS": "Orders",
     "PARAMETER": "Parameter",
     "REMOVE": "Remove",
@@ -13,6 +14,7 @@ var APP_LANG = {
     "SETTINGS_ORDER_STATUSES": "Orders statuses",
     "STATISTICS": "Statistics",
     "VALUE": "Value",
+    "app_name": "Application name",
     "locale": "Locale",
     "mailer_host": "Mail host",
     "mailer_password": "Mail password",

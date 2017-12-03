@@ -1,8 +1,9 @@
 var APP_LANG = {
     "ADD": "Добавить",
-    "app_name": "Название приложения",
     "CATALOG": "Каталог",
+    "CATEGORY": "Категория",
     "FORM_RESET": "Сбросить",
+    "LOGOUT": "Выйти",
     "ORDERS": "Заказы",
     "PARAMETER": "Параметр",
     "REMOVE": "Удалить",
@@ -13,6 +14,7 @@ var APP_LANG = {
     "SETTINGS_ORDER_STATUSES": "Статусы заказов",
     "STATISTICS": "Статистика",
     "VALUE": "Значение",
+    "app_name": "Название приложения",
     "locale": "Локаль",
     "mailer_host": "Почта: Хост сервера",
     "mailer_password": "Почта: Пароль",

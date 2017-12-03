@@ -193,7 +193,6 @@ server {
 
     location / {
         try_files $uri /app.php$is_args$args;
-        #try_files $uri /app_dev.php$is_args$args;
     }
     #DEV
     location ~ ^/(app_dev|config)\.php(/|$) {

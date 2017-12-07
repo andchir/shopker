@@ -1,4 +1,5 @@
 parameters:
+    app_name: Shopkeeper
     locale: en
     mongodb_server: ''
     mongodb_user: root

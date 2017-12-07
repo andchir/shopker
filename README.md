@@ -33,7 +33,7 @@ ng build --base-href "/" --output-path "./bundle" --watch
 ng build --prod --env=prod --base-href "/" --output-path "./bundle"
 ~~~
 
-Fix changes watches for Ubuntu:
+Fix changes watches for Linux:
 ~~~
 sudo sysctl fs.inotify.max_user_watches=524288
 sudo sysctl -p --system

@@ -113,6 +113,7 @@ input.form-control:disabled { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); cursor
 .ui-calendar .ui-calendar-button { width: 3em; right: 0; margin: 0; }
 
 /* colorpicker */
+.ui-colorpicker-panel { background-color: #fff; box-shadow: 1px 1px 10px rgba(0,0,0,0.5); }
 .ui-colorpicker .ui-colorpicker-preview.ui-inputtext { height: 2rem; }
 
 /* icons */

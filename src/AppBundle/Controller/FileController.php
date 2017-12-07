@@ -109,7 +109,6 @@ class FileController extends BaseController
             if (!empty($entity[$key]) && !empty($entity[$key]['fileId'])) {
                 $oldFileDocument = $fileDocumentRepository->findOneBy([
                     'id' => $entity[$key]['fileId'],
-                    'ownerId' => $itemId,
                     'ownerType' => $ownerType
                 ]);
                 if ($oldFileDocument) {
@@ -124,7 +123,6 @@ class FileController extends BaseController
                 ->setUploadRootDir($filesDirPath)
                 ->setCreatedDate($now)
                 ->setOwnerType($ownerType)
-                ->setOwnerId($itemId)
                 ->setUserId($user->getId())
                 ->setFile($file);
 

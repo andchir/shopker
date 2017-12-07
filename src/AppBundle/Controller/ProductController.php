@@ -133,14 +133,13 @@ class ProductController extends BaseController
         $inputProperties = isset($field['inputProperties'])
             ? $field['inputProperties']
             : [];
-        if(!empty($field['required']) && empty($value)){
+        if (!empty($field['required']) && empty($value)) {
             return "Field \"{$field['title']}\" is required.";
         }
         $error = '';
-        $inpType = explode(':', $field['inputType']);
 
         // Validation by input properties
-        switch ($inpType[0]){
+        switch ($field['inputType']){
             case 'system_name':
 
                 if(
@@ -240,21 +239,16 @@ class ProductController extends BaseController
 
         foreach ($contentType->getFields() as $field){
 
-            $inpType = explode(':', $field['inputType']);
-
             // Files will be saved later by a separate request
-            if ($inpType[0] == 'file') {
+            if ($field['inputType'] == 'file') {
 
-                // Delete file and image
+                // Delete file
                 if ($itemId && empty($data[$field['name']]) && !empty($document[$field['name']])) {
-                    $fieData = $document[$field['name']];
-                    if (!empty($fieData['fileId'])) {
-                        $this->deleteFile($fieData['fileId'], $itemId, $contentType->getName());
+                    $fileData = $document[$field['name']];
+                    if (!empty($fileData['fileId'])) {
+                        $this->deleteFile($fileData['fileId'], $contentType->getName());
                     }
-                    $document[$field['name']] = null;
                 }
-
-                continue;
             }
             $document[$field['name']] = isset($data[$field['name']])
                 ? $data[$field['name']]
@@ -348,6 +342,9 @@ class ProductController extends BaseController
         }
 
         $collection = $this->getCollection($contentType->getCollection());
+//        foreach ($collection as $document) {
+//            $this->onDeleteItem($contentType, $document);
+//        }
         $result = $collection->remove([
             '_id' => ['$in' => $data['ids']]
         ]);
@@ -369,7 +366,7 @@ class ProductController extends BaseController
      */
     public function deleteItem(Category $category = null, $itemId)
     {
-        if(!$category){
+        if (!$category) {
             return new JsonResponse([
                 'success' => false,
                 'msg' => 'Category not found.'
@@ -378,7 +375,7 @@ class ProductController extends BaseController
         $itemId = intval($itemId);
 
         $contentType = $category->getContentType();
-        if(!$contentType){
+        if (!$contentType) {
             return $this->setError('Content type not found.');
         }
 
@@ -389,6 +386,8 @@ class ProductController extends BaseController
         if(!$document){
             return $this->setError('Document not found.');
         }
+
+        $this->onDeleteItem($contentType, $document);
 
         $result = $collection->remove(['_id' => $itemId]);
 
@@ -546,22 +545,52 @@ class ProductController extends BaseController
     }
 
     /**
+     * @param ContentType $contentType
+     * @param $itemData
+     */
+    public function onDeleteItem(ContentType $contentType, $itemData)
+    {
+        $contentTypeName = $contentType->getName();
+        foreach ($contentType->getFields() as $field){
+
+            // Files will be saved later by a separate request
+            if ($field['inputType'] == 'file') {
+
+                // Delete file
+                if (!empty($itemData[$field['name']])) {
+                    $fileData = $itemData[$field['name']];
+                    if (!empty($fileData['fileId'])) {
+
+                        // TODO: Check if file is not used anymore
+
+                        //$this->deleteFile($fileData['fileId'], $contentTypeName);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * @param $itemId
-     * @param $ownerId
      * @param $ownerType
+     * @param $ownerId
      * @return bool
      */
-    public function deleteFile($itemId, $ownerId, $ownerType)
+    public function deleteFile($itemId, $ownerType, $ownerId = 0)
     {
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $this->get('doctrine_mongodb')->getManager();
         $fileDocumentRepository = $this->getFileDocumentRepository();
 
-        $fileDocument = $fileDocumentRepository->findOneBy([
+        $where = [
             'id' => $itemId,
-            'ownerId' => $ownerId,
             'ownerType' => $ownerType
-        ]);
+        ];
+        if ($ownerId) {
+            $where['ownerId'] = $ownerId;
+        }
+
+        $fileDocument = $fileDocumentRepository->findOneBy($where);
 
         $filesDirPath = $this->getParameter('files_dir_path');
 

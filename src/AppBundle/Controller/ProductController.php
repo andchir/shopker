@@ -4,7 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Document\Category;
 use AppBundle\Document\ContentType;
-use AppBundle\Document\Product;
+use AppBundle\Document\FileDocument;
 use Doctrine\ORM\Query\Expr\Base;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -342,14 +342,22 @@ class ProductController extends BaseController
         }
 
         $collection = $this->getCollection($contentType->getCollection());
-//        foreach ($collection as $document) {
-//            $this->onDeleteItem($contentType, $document);
-//        }
-        $result = $collection->remove([
+        $documents = $collection->find([
             '_id' => ['$in' => $data['ids']]
         ]);
 
-        if (!empty($result['ok'])) {
+        $deleted = 0;
+        foreach ($documents as $document) {
+            $this->onBeforeDeleteItem($contentType, $document, $data['ids']);
+            $result = $collection->remove([
+                '_id' => $document['_id']
+            ]);
+            if (!empty($result['ok'])) {
+                $deleted++;
+            }
+        }
+
+        if ($deleted === count($data['ids'])) {
             return new JsonResponse([]);
         } else {
             return $this->setError('Error.');
@@ -387,7 +395,7 @@ class ProductController extends BaseController
             return $this->setError('Document not found.');
         }
 
-        $this->onDeleteItem($contentType, $document);
+        $this->onBeforeDeleteItem($contentType, $document);
 
         $result = $collection->remove(['_id' => $itemId]);
 
@@ -547,9 +555,13 @@ class ProductController extends BaseController
     /**
      * @param ContentType $contentType
      * @param $itemData
+     * @param array $ids
      */
-    public function onDeleteItem(ContentType $contentType, $itemData)
+    public function onBeforeDeleteItem(ContentType $contentType, $itemData, $ids = [])
     {
+        if (empty($ids)) {
+            array_push($ids, $itemData['_id']);
+        }
         $contentTypeName = $contentType->getName();
         foreach ($contentType->getFields() as $field){
 
@@ -561,13 +573,31 @@ class ProductController extends BaseController
                     $fileData = $itemData[$field['name']];
                     if (!empty($fileData['fileId'])) {
 
-                        // TODO: Check if file is not used anymore
+                        $usedTotal = $this->getUsedOtherTotal($contentType, $field['name'], $fileData['fileId'], $ids);
 
-                        //$this->deleteFile($fileData['fileId'], $contentTypeName);
+                        // Delete if not used by other
+                        if (!$usedTotal) {
+                            $this->deleteFile($fileData['fileId'], $contentTypeName);
+                        }
                     }
                 }
             }
         }
+    }
+
+    /**
+     * @param ContentType $contentType
+     * @param string $fieldName
+     * @param int $fileId
+     * @param array $ids
+     * @return int
+     */
+    public function getUsedOtherTotal(ContentType $contentType, $fieldName, $fileId, $ids = []) {
+        $collection = $this->getCollection($contentType->getCollection());
+        return $collection->find([
+            '_id' => ['$nin' => $ids],
+            $fieldName . '.fileId' =>  $fileId
+        ])->count();
     }
 
     /**
@@ -622,7 +652,7 @@ class ProductController extends BaseController
     {
         return $this->get('doctrine_mongodb')
             ->getManager()
-            ->getRepository('AppBundle:FileDocument');
+            ->getRepository(FileDocument::class);
     }
 
 }

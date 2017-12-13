@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgbModule, NgbActiveModal, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
-import { EditorModule, CalendarModule, ChipsModule, ColorPickerModule } from 'primeng/primeng';
+import { EditorModule, CalendarModule, ChipsModule, ColorPickerModule, TreeModule, TreeNode } from 'primeng/primeng';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateCustomLoader } from './services/translateLoader';
 
@@ -47,6 +47,7 @@ import { AppRoutingModule }     from './app-routing.module';
         CalendarModule,
         ChipsModule,
         ColorPickerModule,
+        TreeModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,

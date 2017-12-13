@@ -50,6 +50,49 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
     };
     filesDirBaseUrl: string;
 
+    categories = [
+        {
+            "label": "Documents",
+            "data": "Documents Folder",
+            "children": [
+                {
+                    "label": "Work",
+                    "data": 1,
+                    "children": [{"label": "Expenses.doc", "data": 111}, {"label": "Resume.doc", "data": 112}]
+                },
+                {
+                    "label": "Home",
+                    "data": "Home Folder",
+                    "expandedIcon": "fa-folder-open",
+                    "collapsedIcon": "fa-folder",
+                    "children": [{"label": "Invoices.txt", "data": 121}]
+                }
+            ]
+        },
+        {
+            "label": "Pictures",
+            "data": 2,
+            "children": [
+                {"label": "barcelona.jpg", "data": 21},
+                {"label": "logo.jpg", "data": 22},
+                {"label": "primeui.png", "data": 23}]
+        },
+        {
+            "label": "Movies",
+            "data": 3,
+            "children": [{
+                "label": "Al Pacino",
+                "data": "Pacino Movies",
+                "children": [{"label": "Scarface", "data": 311}, {"label": "Serpico", "data": 312}]
+            },
+                {
+                    "label": "Robert De Niro",
+                    "data": "De Niro Movies",
+                    "children": [{"label": "Goodfellas", "data": 321}, {"label": "Untouchables", "data": 322}]
+                }]
+        }
+    ];
+
     constructor(
         private changeDetectionRef: ChangeDetectorRef,
         private systemNameService: SystemNameService,

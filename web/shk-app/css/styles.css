@@ -116,6 +116,9 @@ input.form-control:disabled { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); cursor
 .ui-colorpicker-panel { background-color: #fff; box-shadow: 1px 1px 10px rgba(0,0,0,0.5); }
 .ui-colorpicker .ui-colorpicker-preview.ui-inputtext { height: 2rem; }
 
+/* tree */
+.ui-tree .ui-treenode-label { padding: 0 .25em !important; }
+
 /* icons */
 body .ui-datepicker .ui-datepicker-header .ui-datepicker-prev:before { font-family: 'icomoon'; content: "\e908"; }
 body .ui-datepicker .ui-datepicker-header .ui-datepicker-next:before { font-family: 'icomoon'; content: "\e907"; }
@@ -124,3 +127,8 @@ body .ui-datepicker .ui-datepicker-header .ui-datepicker-next:before { font-fami
 .fa.fa-angle-up:before { content: "\e906"; }
 .fa.fa-angle-down:before { content: "\e909"; }
 .fa.fa-close:before { content: "\e117"; }
+.fa.fa-caret-right:before { content: "\e907"; }
+.fa.fa-caret-down:before { content: "\e909"; }
+.fa.fa-check:before { content: "\e116"; }
+.fa.fa-minus:before { content: "\e115"; }
+

@@ -31,21 +31,6 @@
                             </div>
                         </div>
 
-                        <div class="row" *ngSwitchCase="'text'">
-                            <div class="col-md-5">
-                                <label for="field_{{field.name}}">
-                                    {{field.title}}
-                                    <span class="text-danger" *ngIf="field.required">*</span>
-                                </label>
-                            </div>
-                            <div class="col-md-7">
-                                <input type="text" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control">
-                                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
-                                    {{formErrors[field.name]}}
-                                </div>
-                            </div>
-                        </div>
-
                         <div class="row" *ngSwitchCase="'name'">
                             <div class="col-md-5">
                                 <label for="field_{{field.name}}">
@@ -279,6 +264,35 @@
 
                                 <p-chips [formControlName]="field.name" [(ngModel)]="model[field.name]"></p-chips>
 
+                                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                                    {{formErrors[field.name]}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" *ngSwitchCase="'categories'">
+                            <div class="col-md-5">
+                                <label for="field_{{field.name}}">
+                                    {{field.title}}
+                                    <span class="text-danger" *ngIf="field.required">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-7">
+
+                                <p-tree [value]="categories" selectionMode="checkbox" [(selection)]="model[field.name]"></p-tree>
+
+                            </div>
+                        </div>
+
+                        <div class="row" *ngSwitchDefault>
+                            <div class="col-md-5">
+                                <label for="field_{{field.name}}">
+                                    {{field.title}}
+                                    <span class="text-danger" *ngIf="field.required">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-7">
+                                <input type="text" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control">
                                 <div *ngIf="formErrors[field.name]" class="alert alert-danger">
                                     {{formErrors[field.name]}}
                                 </div>

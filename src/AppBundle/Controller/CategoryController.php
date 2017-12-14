@@ -107,6 +107,40 @@ class CategoryController extends StorageControllerAbstract
     }
 
     /**
+     * @Route("/tree")
+     * @Method({"GET"})
+     * @return JsonResponse
+     */
+    public function getTree()
+    {
+        $repository = $this->getRepository();
+        $categories = $repository->findBy([], ['title' => 'asc']);
+
+        $data = [];
+        $root = [
+            'id' => 0,
+            'label' => 'Catalog',
+            'parentId' => 0
+        ];
+        /** @var Category $category */
+        foreach ($categories as $category) {
+            if (!$category->getId()) {
+                continue;
+            }
+            $row = [
+                'id' => $category->getId(),
+                'label' => $category->getTitle(),
+                'parentId' => $category->getParentId()
+            ];
+            $data[$row['parentId']][] = $row;
+        }
+
+        $tree = $this->createTree($data, [$root]);
+
+        return new JsonResponse($tree);
+    }
+
+    /**
      * @Route("/{itemId}")
      * @Method({"DELETE"})
      * @param int $itemId
@@ -154,6 +188,18 @@ class CategoryController extends StorageControllerAbstract
             return !empty($result['ok']);
         }
         return false;
+    }
+
+
+    public function createTree(&$list, $parent){
+        $tree = array();
+        foreach ($parent as $k=>$l){
+            if(isset($list[$l['id']])){
+                $l['children'] = $this->createTree($list, $list[$l['id']]);
+            }
+            $tree[] = $l;
+        }
+        return $tree;
     }
 
     /**

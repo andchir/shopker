@@ -279,7 +279,7 @@
                             </div>
                             <div class="col-md-7">
 
-                                <p-tree [value]="categories" selectionMode="checkbox" [(selection)]="model[field.name]"></p-tree>
+                                <p-tree [value]="categories" selectionMode="checkbox" [loading]="loadingCategories" [(selection)]="model[field.name]"></p-tree>
 
                             </div>
                         </div>

@@ -118,6 +118,7 @@ input.form-control:disabled { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); cursor
 
 /* tree */
 .ui-tree .ui-treenode-label { padding: 0 .25em !important; }
+body .ui-tree .ui-treenode .ui-treenode-content .ui-treenode-label.ui-state-highlight { background-color: rgba(2,117,216,0.8); }
 
 /* icons */
 body .ui-datepicker .ui-datepicker-header .ui-datepicker-prev:before { font-family: 'icomoon'; content: "\e908"; }
@@ -131,4 +132,21 @@ body .ui-datepicker .ui-datepicker-header .ui-datepicker-next:before { font-fami
 .fa.fa-caret-down:before { content: "\e909"; }
 .fa.fa-check:before { content: "\e116"; }
 .fa.fa-minus:before { content: "\e115"; }
+.fa.fa-circle-o-notch:before { content: "\e105"; font-style: normal; font-size: 1.5rem; color: rgba(0,0,0,0.5); }
 
+/* spin */
+.fa.fa-spin {
+    display: inline-block;
+    animation-name: spin;
+    animation-duration: 3000ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+@keyframes spin {
+    from {
+        transform:rotate(0deg);
+    }
+    to {
+        transform:rotate(360deg);
+    }
+}

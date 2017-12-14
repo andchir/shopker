@@ -38,7 +38,13 @@
             </div>
         </div>
 
-        <input-field-renderer [(fields)]="currentContentType.fields" [(groups)]="currentContentType.groups" [(formErrors)]="formErrors" [(validationMessages)]="validationMessages" [(model)]="model" [(form)]="form" [(files)]="files"></input-field-renderer>
+        <input-field-renderer [(fields)]="currentContentType.fields"
+                              [(groups)]="currentContentType.groups"
+                              [(formErrors)]="formErrors"
+                              [(validationMessages)]="validationMessages"
+                              [(model)]="model"
+                              [(form)]="form"
+                              [(files)]="files"></input-field-renderer>
 
         <div class="alert alert-danger mt-3 mb-0" [hidden]="!errorMessage">
             <button type="button" class="close" (click)="errorMessage = ''">

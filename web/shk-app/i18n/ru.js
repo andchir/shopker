@@ -1,5 +1,6 @@
 var APP_LANG = {
     "ADD": "Добавить",
+    "ADD_FIELD": "Добавить поле",
     "BATCH_ACTIONS": "Групповые действия",
     "CANCEL": "Отменить",
     "CATALOG": "Каталог",
@@ -18,6 +19,7 @@ var APP_LANG = {
     "PARAMETER": "Параметр",
     "REMOVE": "Удалить",
     "SAVE": "Сохранить",
+    "SAVE_FIELD": "Сохранить поле",
     "SETTINGS": "Настройки",
     "SETTINGS_DELIVERY": "Методы доставки",
     "SETTINGS_MAIN": "Основные настройки",

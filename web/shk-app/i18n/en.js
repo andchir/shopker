@@ -1,5 +1,6 @@
 var APP_LANG = {
     "ADD": "Add",
+    "ADD_FIELD": "Add field",
     "BATCH_ACTIONS": "Batch Actions",
     "CANCEL": "Cancel",
     "CATALOG": "Catalog",
@@ -18,6 +19,7 @@ var APP_LANG = {
     "PARAMETER": "Parameter",
     "REMOVE": "Remove",
     "SAVE": "Save",
+    "SAVE_FIELD": "Save field",
     "SETTINGS": "Settings",
     "SETTINGS_DELIVERY": "Delivery methods",
     "SETTINGS_MAIN": "Main Settings",

@@ -40,7 +40,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent<Conte
         super(fb, dataService, systemNameService, activeModal, tooltipConfig);
     }
 
-    model: ContentType = new ContentType(0, '', '', '', 'products', [], ['Основное','Служебное'], true);
+    model: ContentType = new ContentType(0, '', '', '', 'products', [], ['General','Service'], true);
     fieldModel: ContentField = new ContentField(0, '', '', '', '', {}, '', {}, '', false, false, false);
     fld_submitted: boolean = false;
     errorFieldMessage: string;
@@ -349,7 +349,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent<Conte
      */
     editField(field: ContentField) {
         this.action = 'edit_field';
-        this.fieldModel = _.clone(field);
+        this.fieldModel = _.cloneDeep(field);
         let newFormValue = {};
         for (const key in this.fieldsFormOptions) {
             if (!this.fieldsFormOptions.hasOwnProperty(key)) {
@@ -368,7 +368,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent<Conte
      */
     copyField(field: ContentField) {
         this.action = 'add_field';
-        this.fieldModel = _.clone(field);
+        this.fieldModel = _.cloneDeep(field);
         this.fieldModel.name = '';
         this.fieldForm.setValue(this.fieldModel);
         this.currentFieldName = '';
@@ -426,7 +426,10 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent<Conte
             this.fld_submitted = false;
             return;
         }
-        let data = _.clone(this.fieldModel);
+        let data = _.cloneDeep(this.fieldModel);
+        data.inputProperties = _.extend({}, this.fieldModel.inputProperties);
+        data.outputProperties = _.extend({}, this.fieldModel.outputProperties);
+
         let index = _.findIndex(this.model.fields, {name: data.name});
         if (index > -1 && this.currentFieldName != data.name) {
             this.errorMessage = 'A field named "' + data.name + '" already exists.';
@@ -434,12 +437,12 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent<Conte
         }
 
         if (this.action == 'add_field') {
-            this.model.fields.push(_.clone(data));
+            this.model.fields.push(data);
         }
         else if (this.action == 'edit_field') {
             index = _.findIndex(this.model.fields, {name: this.currentFieldName});
             if (index > -1) {
-                this.model.fields[index] = _.clone(data);
+                this.model.fields[index] = data;
             }
         }
         this.resetFieldForm();

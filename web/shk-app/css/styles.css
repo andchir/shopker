@@ -117,7 +117,8 @@ input.form-control:disabled { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); cursor
 .ui-colorpicker .ui-colorpicker-preview.ui-inputtext { height: 2rem; }
 
 /* tree */
-.ui-tree .ui-treenode-label { padding: 0 .25em !important; }
+body .ui-tree { width: 100%; }
+body .ui-tree .ui-treenode-label { padding: 0 .25em !important; }
 body .ui-tree.ui-tree-horizontal .ui-treenode-content { white-space: nowrap; }
 body .ui-tree .ui-treenode .ui-treenode-content .ui-treenode-label.ui-state-highlight { background-color: rgba(2,117,216,0.8); }
 

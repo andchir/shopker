@@ -1,6 +1,7 @@
 import { Input, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { NgbActiveModal, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
+import * as _ from "lodash";
 
 import { SystemNameService } from './services/system-name.service';
 import { DataService } from './services/data-service.abstract';
@@ -142,11 +143,15 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
         this.activeModal.dismiss('canceled');
     }
 
+    getFormData() {
+        return _.cloneDeep(this.model);
+    }
+
     saveRequest() {
         if (this.isEditMode) {
-            return this.dataService.update(this.model);
+            return this.dataService.update(this.getFormData());
         } else {
-            return this.dataService.create(this.model);
+            return this.dataService.create(this.getFormData());
         }
     }
 

@@ -191,6 +191,25 @@ class CatalogFixtures extends Fixture
                 'required' => false,
                 'showInTable' => false,
                 'isFilter' => true
+            ],
+            [
+                'title' => 'Категории',
+                'name' => 'categories',
+                'description' => 'Вы можете выбрать несколько категорий для товара.',
+                'inputType' => 'categories',
+                'inputProperties' => [
+                    'value' => '',
+                    'handler' => '',
+                    'layout' => 'vertical'
+                ],
+                'outputType' => 'categories',
+                'outputProperties' => [
+                    'className' => ''
+                ],
+                'group' => 'CКатегории',
+                'required' => false,
+                'showInTable' => false,
+                'isFilter' => true
             ]
         ];
 
@@ -201,7 +220,7 @@ class CatalogFixtures extends Fixture
             ->setDescription('Товары каталога')
             ->setCollection('products')
             ->setFields($fields)
-            ->setGroups(['Основное','Параметры'])
+            ->setGroups(['Основное','Параметры','Категории'])
             ->setIsActive(true);
 
         $manager->persist($contentType);
@@ -218,7 +237,7 @@ class CatalogFixtures extends Fixture
         $category
             ->setTitle('Категория каталога')
             ->setName('default')
-            ->setDescription('Default category')
+            ->setDescription('Категория по умолчанию')
             ->setIsActive(true)
             ->setParentId(0)
             ->setContentTypeName($contentType->getName())

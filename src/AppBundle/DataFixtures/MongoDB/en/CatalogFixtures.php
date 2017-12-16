@@ -191,6 +191,25 @@ class CatalogFixtures extends Fixture
                 'required' => false,
                 'showInTable' => false,
                 'isFilter' => true
+            ],
+            [
+                'title' => 'Categories',
+                'name' => 'categories',
+                'description' => 'You can select multiple categories for the item.',
+                'inputType' => 'categories',
+                'inputProperties' => [
+                    'value' => '',
+                    'handler' => '',
+                    'layout' => 'vertical'
+                ],
+                'outputType' => 'categories',
+                'outputProperties' => [
+                    'className' => ''
+                ],
+                'group' => 'Categories',
+                'required' => false,
+                'showInTable' => false,
+                'isFilter' => true
             ]
         ];
 
@@ -201,7 +220,7 @@ class CatalogFixtures extends Fixture
             ->setDescription('Products catalog')
             ->setCollection('products')
             ->setFields($fields)
-            ->setGroups(['General','Options'])
+            ->setGroups(['General','Options','Categories'])
             ->setIsActive(true);
 
         $manager->persist($contentType);
@@ -217,7 +236,7 @@ class CatalogFixtures extends Fixture
         $contentType = $this->getReference('content_type');
 
         $category
-            ->setTitle('Products catalog')
+            ->setTitle('Products category')
             ->setName('default')
             ->setDescription('Default category')
             ->setIsActive(true)

@@ -42,11 +42,6 @@ https://confluence.jetbrains.com/display/IDEADEV/Inotify+Watches+Limit
 
 **Angular internationalization (i18n)**
 
-Create a translation source file:
-~~~
-ng xi18n --outFile="../locale/messages.xlf" --i18nFormat=xlf -p "./tsconfig.json"
-~~~
-
 Extract translatable (ngx-translate) strings and save as a JSON:
 ~~~
 npm run extract

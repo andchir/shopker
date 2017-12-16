@@ -1,6 +1,8 @@
 Shopkeeper 4
 ============
 
+Product catalog and order management.
+
 **Current version: ALPHA (in development)**
 
 ~~~

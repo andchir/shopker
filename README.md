@@ -70,24 +70,6 @@ Doctrine generate the repository class:
 php bin/console doctrine:mongodb:generate:repositories AppBundle
 ~~~
 
-DefinitelyTyped
----------------
-
-https://github.com/DefinitelyTyped/DefinitelyTyped
-
-~~~
-npm install --save @types/jquery
-~~~
-~~~
-// <reference path="node_modules/@types/jquery/jquery.d.ts"/>
-~~~
-~~~
-npm install --save @types/lodash
-~~~
-~~~
-import * as _ from "lodash";
-~~~
-
 MongoDB
 -------
 
@@ -238,3 +220,12 @@ server {
     access_log /var/log/nginx/shopkeeper4_access.log;
 }
 ~~~
+
+Screenshots
+-----------
+
+![Shopkeeper 4 - screenshot #1](https://raw.github.com/andchir/shopkeeper4/master/docs/screenshots/001.png?raw=true "Shopkeeper 4 - screenshot #1")
+
+![Shopkeeper 4 - screenshot #2](https://raw.github.com/andchir/shopkeeper4/master/docs/screenshots/002.png?raw=true "Shopkeeper 4 - screenshot #2")
+
+![Shopkeeper 4 - screenshot #3](https://raw.github.com/andchir/shopkeeper4/master/docs/screenshots/003.png?raw=true "Shopkeeper 4 - screenshot #3")

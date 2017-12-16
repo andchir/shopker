@@ -91,14 +91,17 @@ import * as _ from "lodash";
 MongoDB
 -------
 
-mongo shell - interactive JavaScript interface to MongoDB
+mongo shell - interactive JavaScript interface to MongoDB:
 [https://docs.mongodb.com/manual/mongo/](https://docs.mongodb.com/manual/mongo/)
 
-mongod - primary daemon process for the MongoDB system
+mongod - primary daemon process for the MongoDB system:
 [https://docs.mongodb.com/manual/reference/program/mongod/](https://docs.mongodb.com/manual/reference/program/mongod/)
 
-Enable Auth
+Enable Auth:
 [https://docs.mongodb.com/master/tutorial/enable-authentication/](https://docs.mongodb.com/master/tutorial/enable-authentication/)
+
+MongoDB Cloud:
+[http://mbsy.co/jNpwD](http://mbsy.co/jNpwD)
 
 ~~~
 cd /home/username/mongodb-linux-x.x.x/bin
@@ -235,5 +238,3 @@ server {
     access_log /var/log/nginx/shopkeeper4_access.log;
 }
 ~~~
-
-MongoDB Cloud: [http://mbsy.co/jNpwD](http://mbsy.co/jNpwD)

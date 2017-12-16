@@ -14,7 +14,7 @@
             <div class="col-md-6">
 
                 <div class="form-group form-group-message" [class.form-group-message]="formErrors.title">
-                    <label for="fieldTitle" class="label-filled">Название</label>
+                    <label for="fieldTitle" class="label-filled">{{'TITLE' | translate}}</label>
                     <input type="text" class="form-control" name="title" formControlName="title" id="fieldTitle" [(ngModel)]="model.title">
                     <div *ngIf="formErrors.title" class="alert alert-danger">
                         {{formErrors.title}}
@@ -22,7 +22,7 @@
                 </div>
 
                 <div class="form-group" [class.form-group-message]="formErrors.name">
-                    <label for="fieldName" class="label-filled">Системное имя</label>
+                    <label for="fieldName" class="label-filled">{{'SYSTEM_NAME' | translate}}</label>
                     <div class="input-group">
                         <input type="text" class="form-control" name="name" formControlName="name" id="fieldName" [(ngModel)]="model.name">
                         <div class="input-group-btn">
@@ -44,7 +44,7 @@
                             <label class="custom-control custom-checkbox m-0">
                                 <input type="checkbox" class="custom-control-input" value="1" name="isActive" formControlName="isActive" [(ngModel)]="model.isActive">
                                 <span class="custom-control-indicator"></span>
-                                <span>Активный</span>
+                                <span>{{'ACTIVE' | translate}}</span>
                             </label>
 
                         </div>
@@ -55,7 +55,7 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="fieldDescription" class="label-filled">Описание</label>
+                    <label for="fieldDescription" class="label-filled">{{'DESCRIPTION' | translate}}</label>
                     <textarea class="form-control" rows="5" name="description" formControlName="description" id="fieldDescription" [(ngModel)]="model.description"></textarea>
                 </div>
             </div>
@@ -63,7 +63,7 @@
     </form>
 
     <!-- Input -->
-    <label class="label-filled">Параметры ввода</label>
+    <label class="label-filled">{{'INPUT_OPTIONS' | translate}}</label>
 
     <hr class="mt-0 mb-0">
     <div class="text-center mb-2" style="margin-top: -0.8rem;">
@@ -84,13 +84,13 @@
             <thead>
             <tr>
                 <th>
-                    Системное имя
+                    {{'SYSTEM_NAME' | translate}}
                 </th>
                 <th>
-                    Название
+                    {{'TITLE' | translate}}
                 </th>
                 <th>
-                    По умолчанию
+                    {{'DEFAULT_VALUE' | translate}}
                 </th>
                 <th></th>
             </tr>
@@ -114,21 +114,21 @@
                 </tr>
             </tbody>
             <tfoot>
-            <tr class="bg-faded">
-                <td colspan="4" class="text-center">
-                    <button type="button" class="btn btn-secondary" (click)="addRow('inputProperties')">
-                        <i class="icon-plus"></i>
-                        Добавить
-                    </button>
-                </td>
-            </tr>
+                <tr class="bg-faded">
+                    <td colspan="4" class="text-center">
+                        <button type="button" class="btn btn-secondary" (click)="addRow('inputProperties')">
+                            <i class="icon-plus"></i>
+                            {{'ADD' | translate}}
+                        </button>
+                    </td>
+                </tr>
             </tfoot>
         </table>
     </div>
     <!-- /Input -->
 
     <!-- Output -->
-    <label class="label-filled">Параметры вывода</label>
+    <label class="label-filled">{{'OUTPUT_OPTIONS' | translate}}</label>
 
     <hr class="mt-0 mb-0">
     <div class="text-center mb-2" style="margin-top: -0.8rem;">
@@ -149,13 +149,13 @@
             <thead>
                 <tr>
                     <th>
-                        Системное имя
+                        {{'SYSTEM_NAME' | translate}}
                     </th>
                     <th>
-                        Название
+                        {{'TITLE' | translate}}
                     </th>
                     <th>
-                        По умолчанию
+                        {{'DEFAULT_VALUE' | translate}}
                     </th>
                     <th></th>
                 </tr>
@@ -183,7 +183,7 @@
                     <td colspan="4" class="text-center">
                         <button type="button" class="btn btn-secondary" (click)="addRow('outputProperties')">
                             <i class="icon-plus"></i>
-                            Добавить
+                            {{'ADD' | translate}}
                         </button>
                     </td>
                 </tr>

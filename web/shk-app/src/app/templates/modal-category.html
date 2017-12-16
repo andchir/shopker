@@ -13,11 +13,11 @@
 
         <div class="row form-group" [class.form-group-message]="formErrors.parentId" *ngIf="!isRoot">
             <div class="col-md-5">
-                <label for="fieldContentType">Родительская папка</label>
+                <label for="fieldContentType">{{'PARENT_FOLDER' | translate}}</label>
             </div>
             <div class="col-md-7">
                 <select id="fieldParent" class="form-control" name="parentId" formControlName="parentId" [(ngModel)]="model.parentId">
-                    <option value="0">Корневая категория</option>
+                    <option value="0">{{'ROOT_FOLDER' | translate}}</option>
                     <option value="{{category.id}}" *ngFor="let category of categories | orderBy: 'title'">{{category.title}}</option>
                 </select>
                 <div *ngIf="formErrors.parentId" class="alert alert-danger">
@@ -28,7 +28,7 @@
 
         <div class="row form-group" [class.form-group-message]="formErrors.title">
             <div class="col-md-5">
-                <label for="fieldTitle">Название</label>
+                <label for="fieldTitle">{{'TITLE' | translate}}</label>
             </div>
             <div class="col-md-7">
                 <input type="text" id="fieldTitle" class="form-control" formControlName="title" name="title" [(ngModel)]="model.title">
@@ -40,7 +40,7 @@
 
         <div class="row form-group" [class.form-group-message]="formErrors.name">
             <div class="col-md-5">
-                <label for="fieldName">Системное имя</label>
+                <label for="fieldName">{{'SYSTEM_NAME' | translate}}</label>
             </div>
             <div class="col-md-7">
                 <div class="input-group">
@@ -59,7 +59,7 @@
 
         <div class="row form-group">
             <div class="col-md-5">
-                <label for="fieldDescription">Описание</label>
+                <label for="fieldDescription">{{'DESCRIPTION' | translate}}</label>
             </div>
             <div class="col-md-7">
                 <textarea type="text" id="fieldDescription" rows="4" class="form-control" name="description" formControlName="description" [(ngModel)]="model.description"></textarea>
@@ -68,7 +68,7 @@
 
         <div class="row form-group" [class.form-group-message]="formErrors.contentTypeName">
             <div class="col-md-5">
-                <label for="fieldContentType">Тип контента</label>
+                <label for="fieldContentType">{{'CONTENT_TYPE' | translate}}</label>
             </div>
             <div class="col-md-7">
                 <select id="fieldContentType" class="form-control" name="contentTypeName" formControlName="contentTypeName" [(ngModel)]="model.contentTypeName">
@@ -88,7 +88,7 @@
                     <label class="custom-control custom-checkbox m-0">
                         <input type="checkbox" class="custom-control-input" value="1" name="isActive" formControlName="isActive" [(ngModel)]="model.isActive">
                         <span class="custom-control-indicator"></span>
-                        <span>Активный</span>
+                        <span>{{'ACTIVE' | translate}}</span>
                     </label>
 
                 </div>

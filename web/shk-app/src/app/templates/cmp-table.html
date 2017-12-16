@@ -10,7 +10,7 @@
                 </th>
                 <th *ngFor="let tableField of tableFields; let index=index">
                     <button type="button" class="btn btn-block btn-link" (click)="selectSortBy(tableField.name)">
-                        {{tableField.title}}
+                        {{tableField.title | translate}}
                         <i [class.icon-arrow-down]="queryOptions.sort_dir == 'asc'" [class.icon-arrow-up]="queryOptions.sort_dir == 'desc'" [style.visibility]="tableField.name == queryOptions.sort_by ? 'visible' : 'hidden'"></i>
                     </button>
                 </th>

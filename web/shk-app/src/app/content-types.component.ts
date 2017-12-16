@@ -485,7 +485,6 @@ export class ContentTypesComponent extends PageTableAbstractComponent<ContentTyp
         super(dataService, activeModal, modalService);
     }
 
-    //TODO: get from settings
     tableFields = [
         {
             name: 'id',
@@ -495,25 +494,25 @@ export class ContentTypesComponent extends PageTableAbstractComponent<ContentTyp
         },
         {
             name: 'title',
-            title: 'Название',
+            title: 'TITLE',
             outputType: 'text',
             outputProperties: {}
         },
         {
             name: 'name',
-            title: 'Системное имя',
+            title: 'SYSTEM_NAME',
             outputType: 'text',
             outputProperties: {}
         },
         {
             name: 'collection',
-            title: 'Коллекция',
+            title: 'COLLECTION',
             outputType: 'text',
             outputProperties: {}
         },
         {
             name: 'isActive',
-            title: 'Статус',
+            title: 'STATUS',
             outputType: 'boolean',
             outputProperties: {}
         }

@@ -12,7 +12,7 @@
 
         <div class="row form-group" [class.form-group-message]="formErrors.parentId">
             <div class="col-md-5">
-                <label for="fieldCategory">Основная категория</label>
+                <label for="fieldCategory">{{'PARENT_FOLDER' | translate}}</label>
             </div>
             <div class="col-md-7">
                 <select id="fieldCategory" class="form-control" name="parentId" formControlName="parentId" [(ngModel)]="model.parentId" (change)="onChangeContentType()">
@@ -31,7 +31,7 @@
                     <label class="custom-control custom-checkbox m-0">
                         <input type="checkbox" class="custom-control-input" value="1" name="isActive" formControlName="isActive" [(ngModel)]="model.isActive">
                         <span class="custom-control-indicator"></span>
-                        <span>Активный</span>
+                        <span>{{'ACTIVE' | translate}}</span>
                     </label>
 
                 </div>

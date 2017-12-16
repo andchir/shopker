@@ -127,19 +127,19 @@ export class FieldTypesComponent extends PageTableAbstractComponent<FieldType> {
         },
         {
             name: 'title',
-            title: 'Название',
+            title: 'TITLE',
             outputType: 'text',
             outputProperties: {}
         },
         {
             name: 'name',
-            title: 'Системное имя',
+            title: 'SYSTEM_NAME',
             outputType: 'text',
             outputProperties: {}
         },
         {
             name: 'isActive',
-            title: 'Статус',
+            title: 'STATUS',
             outputType: 'boolean',
             outputProperties: {}
         }

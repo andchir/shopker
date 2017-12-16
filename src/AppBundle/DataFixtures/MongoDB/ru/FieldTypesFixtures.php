@@ -414,6 +414,35 @@ class FieldTypesFixtures extends Fixture
                         'default_value' => ''
                     ]
                 ]
+            ],
+            'categories' => [
+                'title' => 'Категории',
+                'description' => '',
+                'isActive' => true,
+                'inputProperties' => [
+                    [
+                        'name' => 'value',
+                        'title' => 'Значение по умолчанию',
+                        'default_value' => ''
+                    ],
+                    [
+                        'name' => 'layout',
+                        'title' => 'Тип отображения',
+                        'default_value' => 'vertical'
+                    ],
+                    [
+                        'name' => 'handler',
+                        'title' => 'Обработчик',
+                        'default_value' => ''
+                    ]
+                ],
+                'outputProperties' => [
+                    [
+                        'name' => 'className',
+                        'title' => 'CSS класс',
+                        'default_value' => ''
+                    ]
+                ]
             ]
         ];
 

@@ -33,8 +33,8 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
             dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
             dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
             dayNamesMin: ['Su','Mo','Tu','We','Th','Fr','Sa'],
-            monthNames: [ 'January','February','March','April','May','June','July','August','September','October','November','December' ],
-            monthNamesShort: [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun','Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
+            monthNames: ['January','February','March','April','May','June','July','August','September','October','November','December'],
+            monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun','Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             today: 'Today',
             clear: 'Clear'
         },
@@ -43,8 +43,8 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
             dayNames: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'],
             dayNamesShort: ['Вос', 'Пон', 'Втор', 'Среда', 'Чет', 'Пятн', 'Суб'],
             dayNamesMin: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
-            monthNames: [ 'Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь' ],
-            monthNamesShort: [ 'Янв', 'Февр', 'Мар', 'Апр', 'Май', 'Июнь','Июль', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек' ],
+            monthNames: ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'],
+            monthNamesShort: ['Янв', 'Февр', 'Мар', 'Апр', 'Май', 'Июнь','Июль', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
             today: 'Сегодня',
             clear: 'Сбросить'
         }
@@ -52,6 +52,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
     filesDirBaseUrl: string;
     loadingCategories = false;
     categories = [];
+    categoriesSelection: {[key: string]: any} = {};
 
     constructor(
         private changeDetectionRef: ChangeDetectorRef,
@@ -68,12 +69,15 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
 
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
         this.buildControls();
-
+        const changedKeys = Object.keys(changes);
         const fieldNames = _.map(this.fields, (field) => {
             return field.name;
         });
         if (this.categories.length === 0 && fieldNames.indexOf('categories') === -1) {
             this.getCategoriesTree();
+        }
+        if (changedKeys.indexOf('model') > -1) {
+            this.updateTreeSelections();
         }
     }
 
@@ -150,6 +154,18 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                     handler: '',
                     allowed_extensions: '.zip,.rar,.doc,.docx,.xls,.xlsx,.ods,.odt',
                     has_preview_image: 0
+                };
+                field.inputProperties = this.extendProperties(
+                    field.inputProperties,
+                    propertiesDefault
+                );
+
+                break;
+            case 'categories':
+
+                propertiesDefault = {
+                    handler: '',
+                    layout: 'vertical'
                 };
                 field.inputProperties = this.extendProperties(
                     field.inputProperties,
@@ -345,7 +361,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
         return output;
     }
 
-    getCategoriesTree() :void {
+    getCategoriesTree(): void {
         this.loadingCategories = true;
         this.categoriesService.getTree()
             .subscribe((data) => {
@@ -354,6 +370,53 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
             }, (err) => {
                 this.loadingCategories = false;
             });
+    }
+
+    updateTreeSelections(): void {
+        this.fields.forEach((field) => {
+            if (field.inputType === 'categories') {
+                this.categoriesSelection[field.name] = [];
+                if (this.model[field.name] && _.isArray(this.model[field.name])) {
+                    this.model[field.name].forEach((id) => {
+                        const category = this.getCategoryById(id, this.categories);
+                        if (category) {
+                            const parent = this.getCategoryById(category.parentId, this.categories);
+                            if (parent) {
+                                category.parent = parent;
+                            }
+                            this.categoriesSelection[field.name].push(category);
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    getCategoryById(id: number, categoriesArr) {
+        let output = null;
+        categoriesArr.forEach((category) => {
+            if (output) {
+                return;
+            }
+            if (category.id === id) {
+                output = category;
+            }
+            else if (category.children && category.children.length > 0) {
+                output = this.getCategoryById(id, category.children);
+            }
+        });
+        return output;
+    }
+
+    categorySelect(fieldName: string) {
+        this.model[fieldName] = [];
+        _.defer(() => {
+            this.categoriesSelection[fieldName].forEach((category) => {
+                if (this.model[fieldName].indexOf(category.id) === -1) {
+                    this.model[fieldName].push(category.id);
+                }
+            });
+        });
     }
 
 }

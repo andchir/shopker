@@ -279,7 +279,13 @@
                             </div>
                             <div class="col-md-7">
 
-                                <p-tree [value]="categories" selectionMode="checkbox" [loading]="loadingCategories" [(selection)]="model[field.name]"></p-tree>
+                                <p-tree selectionMode="checkbox"
+                                        [value]="categories"
+                                        [(selection)]="categoriesSelection[field.name]"
+                                        [loading]="loadingCategories"
+                                        [layout]="field.inputProperties.layout"
+                                        (onNodeSelect)="categorySelect(field.name)"
+                                        (onNodeUnselect)="categorySelect(field.name)"></p-tree>
 
                             </div>
                         </div>

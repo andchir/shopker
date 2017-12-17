@@ -10,6 +10,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Yaml\Exception\ParseException;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Output\BufferedOutput;
 
 use AppBundle\Document\Setting;
 
@@ -128,9 +131,29 @@ class SettingsController extends Controller
                 break;
         }
 
+        $this->cacheClearAction();
+
         $output = $serializer->serialize($settings, 'json', ['groups' => ['list']]);
 
         return new JsonResponse($output, 200, [], true);
+    }
+
+    /**
+     * Clear app cache
+     */
+    public function cacheClearAction() {
+        $kernel = $this->container->get('kernel');
+        $environment = $kernel->getEnvironment();
+        $application = new Application($kernel);
+        $application->setAutoExit(false);
+
+        $input = new ArrayInput([
+            'command' => 'cache:clear',
+            '--env'   => $environment
+        ]);
+
+        $output = new BufferedOutput();
+        $application->run($input, $output);
     }
 
     /**

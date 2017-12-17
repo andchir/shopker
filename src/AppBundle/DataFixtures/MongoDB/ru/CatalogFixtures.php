@@ -206,7 +206,7 @@ class CatalogFixtures extends Fixture
                 'outputProperties' => [
                     'className' => ''
                 ],
-                'group' => 'CКатегории',
+                'group' => 'Категории',
                 'required' => false,
                 'showInTable' => false,
                 'isFilter' => true

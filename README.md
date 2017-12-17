@@ -87,38 +87,37 @@ Enable Auth:
 MongoDB Cloud:
 [http://mbsy.co/jNpwD](http://mbsy.co/jNpwD)
 
+Mongo Shell:
 ~~~
-cd /home/username/mongodb-linux-x.x.x/bin
-~~~
-
-Start mongod in background:
-~~~
-./mongod --dbpath ../data/db --fork --logpath=../mongodb.log
+mongo
 ~~~
 
-Start mongod with authentication in background:
 ~~~
-./mongod --auth --dbpath ../data/db --fork --logpath=../mongodb.log
+use admin
+db.createUser(
+    {
+        user: "root",
+        pwd: "mypassword",
+        roles: [{role:"root", db:"admin"}]
+    }
+)
+db.createUser(
+    {
+        user: "shopkeeper4user",
+        pwd: "mypassword",
+        roles: [{role: "readWrite", db: "shk4-db"}]
+    }
+)
 ~~~
 
-Start the mongo Shell:
 ~~~
-./mongo
-~~~
-
-Connect and authenticate as the user administrator:
-~~~
-./mongo --port 27017 -u "shopkeeper4user" -p "111111" --authenticationDatabase "shopkeeper4"
+use admin
+db.auth('shopkeeper4user', 'mypassword')
 ~~~
 
-Configuration on Ubuntu:
+Configure:
 ~~~
-sudo nano /lib/systemd/system/mongod.service
-Edit:
-ExecStart=/usr/bin/mongod --quiet --auth --config /etc/mongod.conf
-
-sudo service mongod restart
-mongo -u admin -p 111111 --authenticationDatabase admin
+sudo nano /etc/mongod.conf
 ~~~
 
 Export:

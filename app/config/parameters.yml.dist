@@ -10,6 +10,13 @@ parameters:
 
     files_dir_path: '%kernel.root_dir%/../web/uploads'
     files_dir_url: '/uploads'
+    files_ext_blacklist:
+        - php
+        - php3
+        - php4
+        - php5
+        - pl
+        - cgi
 
     # A secret key that's used to generate certain security-related tokens
     secret: ThisTokenIsNotSoSecretChangeIt

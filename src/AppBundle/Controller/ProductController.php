@@ -154,21 +154,8 @@ class ProductController extends BaseController
 
                 if (!empty($value) && !empty($inputProperties['allowed_extensions'])) {
 
-                    // Validate by file extension
-                    if (strpos($inputProperties['allowed_extensions'], '/') !== false) {
-
-                        if (!empty($properties['mimeType'])
-                            && !self::isMimeTypeAllowed(explode(',', $inputProperties['allowed_extensions']), $properties['mimeType'])) {
-
-                            $error = 'File type is not allowed.';
-                        }
-
-                    } else {
-                        $allowedExtensions = explode(',', $inputProperties['allowed_extensions']);
-                        $ext = !empty($value['extension']) ? $value['extension'] : null;
-                        if ($ext !== null && !in_array('.' . $ext, $allowedExtensions)) {
-                            $error = 'File type is not allowed.';
-                        }
+                    if (!$this->fileUploadAllowed($value, $properties, $inputProperties['allowed_extensions'])) {
+                        $error = 'File type is not allowed.';
                     }
 
                 }
@@ -176,6 +163,43 @@ class ProductController extends BaseController
                 break;
         }
         return $error;
+    }
+
+    /**
+     * @param string | array $value
+     * @param array $properties
+     * @param string $allowedExtensions
+     * @return bool
+     */
+    public function fileUploadAllowed($value, $properties, $allowedExtensions = '')
+    {
+        $filesExtBlacklist = $this->getParameter('files_ext_blacklist');
+        if (is_array($value)) {
+            $ext = !empty($value['extension']) ? $value['extension'] : null;
+        } else {
+            $ext = self::getExtension($value);
+        }
+
+        // Validate by file extension
+        if (strpos($allowedExtensions, '/') !== false) {
+
+            if (!empty($properties['mimeType'])
+                && !self::isMimeTypeAllowed(explode(',', $allowedExtensions), $properties['mimeType'])) {
+
+                return false;
+            }
+
+        } else {
+            $allowedExtensions = explode(',', $allowedExtensions);
+            if ($ext !== null && !in_array('.' . $ext, $allowedExtensions)) {
+                return false;
+            }
+        }
+        if (in_array($ext, $filesExtBlacklist)) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

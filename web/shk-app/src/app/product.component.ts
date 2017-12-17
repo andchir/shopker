@@ -167,6 +167,23 @@ export class ProductModalContent extends ModalContentAbstractComponent<Product> 
             });
     }
 
+    getFormData() {
+        let data = _.cloneDeep(this.model);
+
+        // Delete temporary data
+        for (let key in data) {
+            if (data.hasOwnProperty(key)) {
+                if (data[key]
+                    && typeof data[key] === 'object'
+                    && data[key].dataUrl) {
+                        delete data[key].dataUrl;
+                }
+            }
+        }
+
+        return data;
+    }
+
     save() {
         this.submitted = true;
         if(!this.form.valid){

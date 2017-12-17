@@ -27,13 +27,7 @@ class DefaultControllerTest extends WebTestCase
         $db = $m->selectDatabase($container->getParameter('mongodb_database'));
         $userCollection = $db->createCollection('user');
 
-        $usersCount = 0;
-        try {
-            $usersCount = $userCollection->find()->count();
-
-        } catch (\MongoConnectionException $e) {
-            echo PHP_EOL . $e->getMessage();
-        }
+        $usersCount = $userCollection->find()->count();
 
         $this->assertGreaterThanOrEqual(1, $usersCount);
 

@@ -42,7 +42,7 @@ security:
             remember_me:
                 secret: '%secret%'
                 lifetime: 604800 # 1 week in seconds
-                path: /admin/
+                path: /
 
 #        secured_area:
 #            logout:

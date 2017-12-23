@@ -15,7 +15,7 @@ use AppBundle\Document\ContentType;
 class HomepageController extends Controller
 {
     /**
-     * @Route("/", name="admin_homepage")
+     * @Route("/", name="admin")
      */
     public function indexAction(Request $request)
     {

@@ -1,9 +1,39 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <a href="{{ path('login') }}">Log in</a>
+    {% include 'header.html.html' %}
+
+    <main role="main" class="container">
+        <h1>{{ 'Home page' | trans }}</h1>
+
+        <div class="card bg-light">
+            <div class="card-body">
+                <h4 class="card-title">
+                    {{ 'Catalog' | trans }}
+                </h4>
+                <hr>
+                <div class="card-text">
+                    <p>
+                        {{ 'Total Categories' | trans }}: <b>{{ countCategories }}</b>
+                    </p>
+                    <p>
+                        {{ 'Total products' | trans }}: <b>{{ countProducts }}</b>
+                    </p>
+                </div>
+                <a href="{{ path('catalog', {name: categoriesTopLevel[1].name}) }}" class="btn btn-primary">
+                    {{ 'Go to product catalog' | trans }}
+                </a>
+            </div>
+        </div>
+
+        <div class="py-3">
+            {{ description }}
+        </div>
+    </main>
 {% endblock %}
 
 {% block javascripts %}
-
+    <script type="text/javascript" src="{{ asset('shk-app/node_modules/jquery/dist/jquery.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('shk-app/node_modules/popper.js/dist/umd/popper.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('shk-app/node_modules/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 {% endblock %}

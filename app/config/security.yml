@@ -29,7 +29,7 @@ security:
 
             # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
             form_login:
-                default_target_path: /
+                default_target_path: /admin/
                 login_path: login
                 check_path: login
 
@@ -42,7 +42,7 @@ security:
             remember_me:
                 secret: '%secret%'
                 lifetime: 604800 # 1 week in seconds
-                path: /
+                path: /admin/
 
 #        secured_area:
 #            logout:
@@ -54,5 +54,4 @@ security:
         ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
     access_control:
-        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/, roles: ROLE_ADMIN }
+        - { path: ^/admin, roles: ROLE_ADMIN }

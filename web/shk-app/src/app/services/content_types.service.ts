@@ -13,7 +13,7 @@ export class ContentTypesService extends DataService<ContentType> {
 
     constructor(http: HttpClient) {
         super(http);
-        this.setRequestUrl('admin/content_types');
+        this.setRequestUrl('content_types');
     }
 
     getItemByName(name: string): Observable<ContentType> {

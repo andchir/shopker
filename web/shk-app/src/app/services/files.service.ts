@@ -13,7 +13,7 @@ export class FilesService extends DataService<FileModel> {
 
     constructor(http: HttpClient) {
         super(http);
-        this.setRequestUrl('admin/files/upload');
+        this.setRequestUrl('files/upload');
     }
 
     postFormData(formData: FormData): Observable<FileModel[]> {

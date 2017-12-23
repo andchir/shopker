@@ -78,7 +78,7 @@ export class CatalogCategoryComponent extends PageTableAbstractComponent<Product
             return;
         }
 
-        this.dataService.setRequestUrl('admin/products/' + this.currentCategory.id);
+        this.dataService.setRequestUrl('products/' + this.currentCategory.id);
         this.loading = true;
         this.getContentType()
             .subscribe((data) => {
@@ -95,7 +95,7 @@ export class CatalogCategoryComponent extends PageTableAbstractComponent<Product
 
     openRootCategory(): void {
         this.currentCategory = new Category(0, false, 0, 'root', '', '', '', true);
-        this.dataService.setRequestUrl('admin/products/' + this.currentCategory.id);
+        this.dataService.setRequestUrl('products/' + this.currentCategory.id);
         this.getList();
     }
 

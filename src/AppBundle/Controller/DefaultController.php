@@ -48,4 +48,17 @@ class DefaultController extends CatalogController
         ]);
     }
 
+    /**
+     * @Route("/404", name="404")
+     */
+    public function pageNotFoundAction()
+    {
+        $categoriesTopLevel = $this->getCategoriesTopLevel()->toArray(false);
+
+        return $this->render('404.html.twig', [
+            'currentUri' => '404',
+            'categoriesTopLevel' => $categoriesTopLevel
+        ]);
+    }
+
 }

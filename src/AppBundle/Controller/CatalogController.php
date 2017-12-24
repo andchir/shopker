@@ -25,13 +25,13 @@ class CatalogController extends Controller
         $categoriesRepository = $this->getCategoriesRepository();
         $categoriesTopLevel = $this->getCategoriesTopLevel()->toArray(false);
         $currentCategory = $categoriesRepository->findOneBy(['name' => $uri]);
-
-        $childCategories = [];
-        if ($currentCategory) {
-            $childCategories = $categoriesRepository->findBy([
-                'parentId' => $currentCategory->getId()
-            ], ['title' => 'asc']);
+        if (!$currentCategory) {
+            return $this->redirectToRoute('404');
         }
+
+        $childCategories = $categoriesRepository->findBy([
+            'parentId' => $currentCategory->getId()
+        ], ['title' => 'asc']);
 
         return $this->render('catalog.html.twig', [
             'categoriesTopLevel' => $categoriesTopLevel,

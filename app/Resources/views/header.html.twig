@@ -7,7 +7,7 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item{% if currentUri == 'home' %} active{% endif %}">
+            <li class="nav-item{% if currentUri is defined and currentUri == 'home' %} active{% endif %}">
                 <a class="nav-link" href="{{ path('homepage') }}">
                     {{ 'Home page' | trans }}
                 </a>

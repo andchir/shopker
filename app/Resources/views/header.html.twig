@@ -13,13 +13,11 @@
                 </a>
             </li>
             {% for category in categoriesTopLevel %}
-                {% if category.name != 'root' %}
                 <li class="nav-item{% if category.name == currentName %} active{% endif %}">
-                    <a class="nav-link" href="{{ path('catalog', {name: category.name}) }}">
+                    <a class="nav-link" href="{{ path('catalog', {route: category.name}) }}">
                         {{ category.title }}
                     </a>
                 </li>
-                {% endif %}
             {%  endfor %}
         </ul>
     </div>

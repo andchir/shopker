@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {% include 'header.html.html' %}
+    {% include 'header.html.twig' %}
 
     <main role="main" class="container">
         <h1>{{ 'Home page' | trans }}</h1>
@@ -20,7 +20,7 @@
                         {{ 'Total products' | trans }}: <b>{{ countProducts }}</b>
                     </p>
                 </div>
-                <a href="{{ path('catalog', {name: categoriesTopLevel[1].name}) }}" class="btn btn-primary">
+                <a href="{{ path('catalog', {route: categoriesTopLevel[0].name}) }}" class="btn btn-primary">
                     {{ 'Go to product catalog' | trans }}
                 </a>
             </div>

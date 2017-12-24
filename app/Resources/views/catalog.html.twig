@@ -1,19 +1,17 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {% include 'header.html.html' %}
+    {% include 'header.html.twig' %}
     <main role="main" class="container">
         <div class="row">
             <div class="col-4">
 
                 <div class="list-group">
-                    <a href="#" class="list-group-item list-group-item-action active">
-                        Cras justo odio
+                    {% for category in childCategories %}
+                    <a href="#" class="list-group-item list-group-item-action">
+                        {{ category.title }}
                     </a>
-                    <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
-                    <a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a>
-                    <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a>
-                    <a href="#" class="list-group-item list-group-item-action disabled">Vestibulum at eros</a>
+                    {% endfor %}
                 </div>
 
             </div>

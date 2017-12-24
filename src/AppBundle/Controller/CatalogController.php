@@ -2,6 +2,9 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Repository\CategoryRepository;
+use Doctrine\ODM\MongoDB\Cursor;
+use Doctrine\ODM\MongoDB\DocumentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,26 +15,47 @@ use AppBundle\Document\Category;
 class CatalogController extends Controller
 {
     /**
-     * @Route("/{name}", name="catalog")
+     * @Route("/{route}", name="catalog")
      */
-    public function catalogAction(Request $request, $name)
+    public function catalogAction(Request $request, $route)
     {
-        $categoriesTopLevel = $this->getCategoriesTopLevel();
+        $categoriesRepository = $this->getCategoriesRepository();
+        $categoriesTopLevel = $this->getCategoriesTopLevel()->toArray(false);
+        $currentCategory = $categoriesRepository->findOneBy(['name' => $route]);
+
+        $childCategories = [];
+        if ($currentCategory) {
+            $childCategories = $categoriesRepository->findBy([
+                'parentId' => $currentCategory->getId()
+            ], ['title' => 'asc']);
+        }
 
         return $this->render('catalog.html.twig', [
             'categoriesTopLevel' => $categoriesTopLevel,
-            'currentName' => $name
+            'currentCategory' => $currentCategory,
+            'currentName' => $route,
+            'childCategories' => $childCategories
         ]);
     }
 
+    /**
+     * @return Cursor
+     */
     public function getCategoriesTopLevel()
     {
-        $categoriesRepository = $this->getCategoriesRepository();
-        return $categoriesRepository->findBy([
-            'parentId' => 0
-        ], ['id' => 'asc']);
+        return $this->get('doctrine_mongodb')
+            ->getManager()
+            ->createQueryBuilder(Category::class)
+            ->field('parentId')->equals(0)
+            ->field('name')->notEqual('root')
+            ->sort('id', 'asc')
+            ->getQuery()
+            ->execute();
     }
 
+    /**
+     * @return CategoryRepository
+     */
     public function getCategoriesRepository()
     {
         return $this->get('doctrine_mongodb')

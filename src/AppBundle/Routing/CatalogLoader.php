@@ -22,10 +22,10 @@ class CatalogLoader extends Loader
         // prepare a new route
         $path = '/' . $this->routeName . '/{parameter}';
         $defaults = array(
-            '_controller' => 'App\Controller\CatalogController::catalogAction',
+            '_controller' => 'AppBundle\Controller\CatalogController::indexAction',
         );
         $requirements = array(
-            'parameter' => '\d+',
+            'parameter' => '[a-z1-9\/-_\.]+',
         );
         $route = new Route($path, $defaults, $requirements);
 

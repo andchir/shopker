@@ -4,3 +4,7 @@ app:
 
 logout:
     path: /logout
+
+#app_catalog:
+#    resource: .
+#    type: catalog

@@ -15,28 +15,42 @@ use AppBundle\Document\Category;
 class CatalogController extends Controller
 {
     /**
-     * @Route("/{route}", name="catalog")
+     * @Route("/{uri}", name="catalog", requirements={"uri": "[a-z1-9\/-_\.]+"})
+     * @param Request $request
+     * @param string $uri
+     * @return Response
      */
-    public function catalogAction(Request $request, $route)
+    public function catalogAction(Request $request, $uri)
     {
-        $categoriesRepository = $this->getCategoriesRepository();
-        $categoriesTopLevel = $this->getCategoriesTopLevel()->toArray(false);
-        $currentCategory = $categoriesRepository->findOneBy(['name' => $route]);
 
-        $childCategories = [];
-        if ($currentCategory) {
-            $childCategories = $categoriesRepository->findBy([
-                'parentId' => $currentCategory->getId()
-            ], ['title' => 'asc']);
-        }
 
-        return $this->render('catalog.html.twig', [
-            'categoriesTopLevel' => $categoriesTopLevel,
-            'currentCategory' => $currentCategory,
-            'currentName' => $route,
-            'childCategories' => $childCategories
-        ]);
+
+        return new Response($uri);
     }
+
+//    /**
+//     * @Route("/{route}", name="catalog")
+//     */
+//    public function catalogAction(Request $request, $route)
+//    {
+//        $categoriesRepository = $this->getCategoriesRepository();
+//        $categoriesTopLevel = $this->getCategoriesTopLevel()->toArray(false);
+//        $currentCategory = $categoriesRepository->findOneBy(['name' => $route]);
+//
+//        $childCategories = [];
+//        if ($currentCategory) {
+//            $childCategories = $categoriesRepository->findBy([
+//                'parentId' => $currentCategory->getId()
+//            ], ['title' => 'asc']);
+//        }
+//
+//        return $this->render('catalog.html.twig', [
+//            'categoriesTopLevel' => $categoriesTopLevel,
+//            'currentCategory' => $currentCategory,
+//            'currentName' => $route,
+//            'childCategories' => $childCategories
+//        ]);
+//    }
 
     /**
      * @return Cursor
@@ -48,7 +62,7 @@ class CatalogController extends Controller
             ->createQueryBuilder(Category::class)
             ->field('parentId')->equals(0)
             ->field('name')->notEqual('root')
-            ->sort('id', 'asc')
+            ->sort('title', 'asc')
             ->getQuery()
             ->execute();
     }

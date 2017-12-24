@@ -20,9 +20,11 @@
                         {{ 'Total products' | trans }}: <b>{{ countProducts }}</b>
                     </p>
                 </div>
-                <a href="{{ path('catalog', {route: categoriesTopLevel[0].name}) }}" class="btn btn-primary">
-                    {{ 'Go to product catalog' | trans }}
-                </a>
+                {% if categoriesTopLevel|length > 0 %}
+                    <a href="{{ app.request.baseUrl }}/{{ categoriesTopLevel[0].name }}" class="btn btn-primary">
+                        {{ 'Go to product catalog' | trans }}
+                    </a>
+                {% endif %}
             </div>
         </div>
 

@@ -32,6 +32,11 @@ class Category
     protected $name;
 
     /**
+     * @MongoDB\Field(type="string", nullable=true)
+     */
+    protected $uri;
+
+    /**
      * @MongoDB\Field(type="string")
      */
     protected $description;
@@ -120,6 +125,28 @@ class Category
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set uri
+     *
+     * @param string $uri
+     * @return $this
+     */
+    public function setUri($uri)
+    {
+        $this->uri = $uri;
+        return $this;
+    }
+
+    /**
+     * Get uri
+     *
+     * @return string $uri
+     */
+    public function getUri()
+    {
+        return $this->uri;
     }
 
     /**

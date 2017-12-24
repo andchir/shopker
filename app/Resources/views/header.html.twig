@@ -14,7 +14,7 @@
             </li>
             {% for category in categoriesTopLevel %}
                 <li class="nav-item{% if category.name == currentName %} active{% endif %}">
-                    <a class="nav-link" href="{{ path('catalog', {route: category.name}) }}">
+                    <a class="nav-link" href="{{ app.request.baseUrl }}/{{ category.name }}">
                         {{ category.title }}
                     </a>
                 </li>

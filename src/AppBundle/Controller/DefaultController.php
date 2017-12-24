@@ -13,7 +13,7 @@ class DefaultController extends CatalogController
     /**
      * @Route("/", name="homepage")
      */
-    public function indexAction()
+    public function homepageAction()
     {
         $categoriesRepository = $this->getCategoriesRepository();
         $categoriesTopLevel = $this->getCategoriesTopLevel()->toArray(false);

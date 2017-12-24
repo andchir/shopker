@@ -41,7 +41,7 @@ class DefaultController extends CatalogController
 
         return $this->render('homepage.html.twig', [
             'categoriesTopLevel' => $categoriesTopLevel,
-            'currentName' => 'home',
+            'currentUri' => 'home',
             'description' => $description,
             'countCategories' => $countCategories,
             'countProducts' => $countProducts

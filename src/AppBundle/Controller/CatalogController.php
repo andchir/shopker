@@ -22,35 +22,24 @@ class CatalogController extends Controller
      */
     public function catalogAction(Request $request, $uri)
     {
+        $categoriesRepository = $this->getCategoriesRepository();
+        $categoriesTopLevel = $this->getCategoriesTopLevel()->toArray(false);
+        $currentCategory = $categoriesRepository->findOneBy(['name' => $uri]);
 
+        $childCategories = [];
+        if ($currentCategory) {
+            $childCategories = $categoriesRepository->findBy([
+                'parentId' => $currentCategory->getId()
+            ], ['title' => 'asc']);
+        }
 
-
-        return new Response($uri);
+        return $this->render('catalog.html.twig', [
+            'categoriesTopLevel' => $categoriesTopLevel,
+            'currentCategory' => $currentCategory,
+            'currentUri' => $uri,
+            'childCategories' => $childCategories
+        ]);
     }
-
-//    /**
-//     * @Route("/{route}", name="catalog")
-//     */
-//    public function catalogAction(Request $request, $route)
-//    {
-//        $categoriesRepository = $this->getCategoriesRepository();
-//        $categoriesTopLevel = $this->getCategoriesTopLevel()->toArray(false);
-//        $currentCategory = $categoriesRepository->findOneBy(['name' => $route]);
-//
-//        $childCategories = [];
-//        if ($currentCategory) {
-//            $childCategories = $categoriesRepository->findBy([
-//                'parentId' => $currentCategory->getId()
-//            ], ['title' => 'asc']);
-//        }
-//
-//        return $this->render('catalog.html.twig', [
-//            'categoriesTopLevel' => $categoriesTopLevel,
-//            'currentCategory' => $currentCategory,
-//            'currentName' => $route,
-//            'childCategories' => $childCategories
-//        ]);
-//    }
 
     /**
      * @return Cursor

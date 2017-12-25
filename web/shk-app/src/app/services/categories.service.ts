@@ -13,7 +13,7 @@ export class CategoriesService extends DataService<Category> {
 
     constructor(http: HttpClient) {
         super(http);
-        this.setRequestUrl('categories');
+        this.setRequestUrl('categories32232');
     }
 
     getTree() {

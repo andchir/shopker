@@ -26,7 +26,7 @@ class CatalogController extends Controller
         $categoriesTopLevel = $this->getCategoriesTopLevel()->toArray(false);
         $currentCategory = $categoriesRepository->findOneBy(['name' => $uri]);
         if (!$currentCategory) {
-            return $this->redirectToRoute('404');
+            throw $this->createNotFoundException();
         }
 
         $childCategories = $categoriesRepository->findBy([

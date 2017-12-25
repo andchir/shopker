@@ -17,7 +17,10 @@ export interface outputData {
 
 export abstract class DataService<M extends SimpleEntity> {
 
-    public headers = new HttpHeaders({'Content-Type': 'application/json'});
+    public headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
+    });
     private requestUrl = '';
 
     constructor(
@@ -36,7 +39,7 @@ export abstract class DataService<M extends SimpleEntity> {
 
     getItem(id: number): Observable<M> {
         const url = this.getRequestUrl() + `/${id}`;
-        return this.http.get<M>(url).pipe(
+        return this.http.get<M>(url, {headers: this.headers}).pipe(
             catchError(this.handleError<M>())
         );
     }
@@ -49,7 +52,7 @@ export abstract class DataService<M extends SimpleEntity> {
             }
             params = params.append(name, options[name]);
         }
-        return this.http.get<M[]>(this.getRequestUrl(), {params: params})
+        return this.http.get<M[]>(this.getRequestUrl(), {params: params, headers: this.headers})
             .pipe(
                 catchError(this.handleError<any>())
             );
@@ -63,7 +66,7 @@ export abstract class DataService<M extends SimpleEntity> {
             }
             params = params.append(name, options[name]);
         }
-        return this.http.get<DataList<M>>(this.getRequestUrl(), {params: params})
+        return this.http.get<DataList<M>>(this.getRequestUrl(), {params: params, headers: this.headers})
             .pipe(
                 catchError(this.handleError<any>())
             );

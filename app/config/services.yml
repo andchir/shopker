@@ -24,8 +24,13 @@ services:
         resource: '../../src/AppBundle/Controller/*'
         tags: ['controller.service_arguments']
 
-    kernel_event_listener:
-        class: AppBundle\EventListener\KernelEventListener
+    AppBundle\EventListener\ExceptionListener:
+        public: true
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }
+        arguments: [ '@twig' ]
+
+    AppBundle\EventListener\KernelEventListener:
         tags:
             - { name: kernel.event_listener, event: kernel.request }
         arguments: [ '@service_container' ]

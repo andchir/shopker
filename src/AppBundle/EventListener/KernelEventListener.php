@@ -8,7 +8,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class KernelEventListener
 {
-
     protected $container;
 
     public function __construct(ContainerInterface $container)
@@ -26,7 +25,6 @@ class KernelEventListener
         //Add events listeners
         $categoryUpdateListener = new CategoryUpdateListener();
         $dispatcher->addListener(CategoryUpdatedEvent::NAME, [$categoryUpdateListener, 'onUpdated']);
-
     }
 
 }

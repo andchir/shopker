@@ -1,24 +1,30 @@
-<nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
-    <a class="navbar-brand" href="{{ path('homepage') }}">
-        {{ app_name }}
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarCollapse">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item{% if currentUri is defined and currentUri == 'home' %} active{% endif %}">
-                <a class="nav-link" href="{{ path('homepage') }}">
-                    {{ 'Home page' | trans }}
+<header class="header bg-dark mb-4 py-2">
+    <div class="container">
+        <nav class="navbar-dark">
+            <a class="ml-3 navbar-brand text-white" href="{{ path('homepage') }}">
+                {{ app_name }}
+            </a>
+            <div class="float-right">
+                <a class="btn btn-sm btn-outline-primary mt-1" href="{{ path('admin') }}" target="_blank">
+                    {{ 'Administration' | trans }}
                 </a>
-            </li>
-            {% for category in categoriesTopLevel %}
-                <li class="nav-item{% if category.name == currentUri %} active{% endif %}">
-                    <a class="nav-link" href="{{ path('catalog', {uri: category.name}) }}">
-                        {{ category.title }}
-                    </a>
-                </li>
-            {%  endfor %}
-        </ul>
+            </div>
+            <div class="d-block d-lg-inline-block">
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link{% if currentUri is defined and currentUri == 'home' %} text-white{% else %} text-secondary{% endif %}" href="{{ path('homepage') }}">
+                            {{ 'Home page' | trans }}
+                        </a>
+                    </li>
+                    {% for category in categoriesTopLevel %}
+                        <li class="nav-item">
+                            <a class="nav-link{% if category.name == currentUri %} text-white{% else %} text-secondary{% endif %}" href="{{ path('catalog', {uri: category.name}) }}">
+                                {{ category.title }}
+                            </a>
+                        </li>
+                    {%  endfor %}
+                </ul>
+            </div>
+        </nav>
     </div>
-</nav>
+</header>

@@ -138,13 +138,7 @@ body .ui-datepicker .ui-datepicker-header .ui-datepicker-next:before { font-fami
 .fa.fa-circle-o-notch:before { content: "\e105"; font-style: normal; font-size: 1.5rem; color: rgba(0,0,0,0.5); }
 
 /* spin */
-.fa.fa-spin {
-    display: inline-block;
-    animation-name: spin;
-    animation-duration: 3000ms;
-    animation-iteration-count: infinite;
-    animation-timing-function: linear;
-}
+.fa.fa-spin { display: inline-block; animation-name: spin; animation-duration: 3000ms; animation-iteration-count: infinite; animation-timing-function: linear; }
 @keyframes spin {
     from {
         transform:rotate(0deg);
@@ -153,3 +147,16 @@ body .ui-datepicker .ui-datepicker-header .ui-datepicker-next:before { font-fami
         transform:rotate(360deg);
     }
 }
+
+/** The Magic **/
+.btn-breadcrumb .btn:not(:last-child):after { content: " "; display: block; width: 0; height: 0; border-top: 17px solid transparent; border-bottom: 17px solid transparent; border-left: 10px solid white; position: absolute; top: 50%; margin-top: -17px; left: 100%; z-index: 3; }
+.btn-breadcrumb .btn:not(:last-child):before { content: " "; display: block; width: 0; height: 0; border-top: 17px solid transparent; border-bottom: 17px solid transparent; border-left: 10px solid #727b84; position: absolute; top: 50%; margin-top: -17px; margin-left: 1px; left: 100%; z-index: 3; }
+
+.btn-breadcrumb .btn { padding:6px 12px 6px 24px; transition: none; line-height: 1.2; }
+.btn-breadcrumb .btn:first-child { padding:6px 6px 6px 10px; }
+.btn-breadcrumb .btn:last-child { padding:6px 18px 6px 24px; }
+
+.btn-breadcrumb .btn.btn-secondary:not(:last-child):after { border-left: 10px solid #868e96; }
+.btn-breadcrumb .btn.btn-secondary:not(:last-child):before { border-left: 10px solid #ccc; }
+.btn-breadcrumb .btn.btn-secondary:hover:not(:last-child):after { border-left: 10px solid #727b84; }
+.btn-breadcrumb .btn.btn-secondary:hover:not(:last-child):before { border-left: 10px solid #727b84; }

@@ -28,7 +28,7 @@ services:
         public: true
         tags:
             - { name: kernel.event_listener, event: kernel.exception }
-        arguments: [ '@twig' ]
+        arguments: [ '@twig', '@service_container' ]
 
     AppBundle\EventListener\KernelEventListener:
         tags:

@@ -11,29 +11,51 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class ExceptionListener
 {
     protected $twig;
+    protected $container;
 
-    public function __construct(\Twig_Environment $twig)
+    public function __construct(\Twig_Environment $twig, ContainerInterface $container)
     {
         $this->twig = $twig;
+        $this->container = $container;
     }
 
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
         $exception = $event->getException();
         $request = $event->getRequest();
-        if($request->isXmlHttpRequest()) {
-            $content = ['error' => 'Not found.'];
-            $response = new JsonResponse($content);
+        $environment = $this->container->get('kernel')->getEnvironment();
+        $message = '';
+
+        $headers = [];
+        if ($exception instanceof HttpExceptionInterface) {
+            $statusCode = $exception->getStatusCode();
+            $headers = $exception->getHeaders();
         } else {
-            $content = $this->twig->render('/404.html.twig');
-            $response = new Response($content);
+            $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR;
+        }
+        if ($environment === 'dev') {
+            $message = $exception->getMessage();
         }
 
-        if ($exception instanceof HttpExceptionInterface) {
-            $response->setStatusCode($exception->getStatusCode());
-            $response->headers->replace($exception->getHeaders());
+        if($request->isXmlHttpRequest()) {
+            $content = [
+                'error' => $message ?: 'Not found.',
+                'statusCode' => $statusCode
+            ];
         } else {
-            $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
+            $content = $this->twig->render('/errors/404.html.twig', [
+                'message' => $message
+            ]);
+        }
+
+        if (is_array($content)) {
+            $response = new JsonResponse($content);
+        } else {
+            $response = new Response($content);
+        }
+        $response->setStatusCode($statusCode);
+        if (!empty($headers)) {
+            $response->headers->replace($headers);
         }
 
         $event->setResponse($response);

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Admin;
 
+use AppBundle\Controller\ProductController as BaseProductController;
 use AppBundle\Document\Category;
 use AppBundle\Document\ContentType;
 use AppBundle\Document\FileDocument;
@@ -18,7 +19,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  * @package AppBundle\Controller
  * @Route("/admin/products")
  */
-class ProductController extends BaseController
+class ProductController extends BaseProductController
 {
 
     /**
@@ -655,18 +656,6 @@ class ProductController extends BaseController
         }
 
         return true;
-    }
-
-    /**
-     * Get file extension
-     * @param $filePath
-     * @return string
-     */
-    public static function getExtension($filePath)
-    {
-        $temp_arr = $filePath ? explode('.', $filePath) : [];
-        $ext = !empty($temp_arr) ? end($temp_arr) : '';
-        return strtolower($ext);
     }
 
     /**

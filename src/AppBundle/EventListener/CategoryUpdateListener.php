@@ -95,8 +95,8 @@ class CategoryUpdateListener
             $names[] = $parent->getName();
         }
         $names = array_reverse($names);
-        $uri = !empty($names) ? '/' . implode('/', $names) : '';
-        $uri .= '/' . $category->getName() . '/';
+        $uri = !empty($names) ? implode('/', $names) . '/' : '';
+        $uri .= $category->getName() . '/';
 
         $category->setUri($uri);
 

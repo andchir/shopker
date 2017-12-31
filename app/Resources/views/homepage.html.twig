@@ -21,7 +21,7 @@
                     </p>
                 </div>
                 {% if categoriesTopLevel|length > 0 %}
-                    <a href="{{ path('catalog', {uri: categoriesTopLevel[0].name}) }}" class="btn btn-primary">
+                    <a href="{{ app.request.baseUrl }}/{{ categoriesTopLevel[0].uri }}" class="btn btn-primary">
                         {{ 'Go to product catalog' | trans }}
                     </a>
                 {% endif %}

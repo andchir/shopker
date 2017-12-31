@@ -44,6 +44,7 @@ class DefaultController extends CatalogController
             'currentUri' => 'home',
             'description' => $description,
             'countCategories' => $countCategories,
+            'currentId' => 0,
             'countProducts' => $countProducts
         ]);
     }

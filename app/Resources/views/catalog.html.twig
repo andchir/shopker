@@ -4,21 +4,21 @@
     {% include 'header.html.twig' %}
     <main role="main" class="container">
         <div class="row">
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-3">
 
                 <div class="list-group mb-3">
                     {% for category in childCategories %}
-                    <a href="{{ category.uri }}{#{ path('catalog', {uri: category.uri}) }#}" class="list-group-item list-group-item-action">
-                        {{ category.title }}
-                    </a>
+                        <a href="{{ app.request.baseUrl }}/{{ category.uri }}" class="list-group-item list-group-item-action">
+                            {{ category.title }}
+                        </a>
                     {% endfor %}
                 </div>
 
             </div>
-            <div class="col-12 col-md-8">
+            <div class="col-12 col-md-9">
 
                 <div class="btn-group btn-breadcrumb mb-3">
-                    <a href="#" class="btn btn-secondary">
+                    <a href="{{ app.request.baseUrl }}/" class="btn btn-secondary">
                         <i class="icon-home"></i>
                     </a>
                     <a href="#" class="btn btn-secondary">Snippets</a>
@@ -27,7 +27,7 @@
                 </div>
 
                 <h1>
-                    Catalog
+                    {{ currentPage.title }}
                 </h1>
 
                 <div class="row">
@@ -87,10 +87,4 @@
             </div>
         </div>
     </main>
-{% endblock %}
-
-{% block javascripts %}
-    <script type="text/javascript" src="{{ asset('shk-app/node_modules/jquery/dist/jquery.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('shk-app/node_modules/popper.js/dist/umd/popper.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('shk-app/node_modules/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 {% endblock %}

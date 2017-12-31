@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\Admin;
 
 use AppBundle\Document\User;
 use MongoDB\Driver\Exception\AuthenticationException;

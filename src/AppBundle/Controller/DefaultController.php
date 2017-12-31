@@ -26,7 +26,7 @@ class DefaultController extends CatalogController
             ->count();
 
         // Get products count
-        $productsController = new ProductController();
+        $productsController = new Admin\ProductController();
         $productsController->setContainer($this->container);
         $collection = $productsController->getCollection('products');
         $countProducts = $collection->count();

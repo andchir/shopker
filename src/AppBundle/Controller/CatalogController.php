@@ -23,11 +23,11 @@ class CatalogController extends Controller
     public function catalogAction(Request $request, $uri)
     {
         $categoriesRepository = $this->getCategoriesRepository();
-        $categoriesTopLevel = $this->getCategoriesTopLevel()->toArray(false);
         $currentCategory = $categoriesRepository->findOneBy(['name' => $uri]);
         if (!$currentCategory) {
             throw $this->createNotFoundException();
         }
+        $categoriesTopLevel = $this->getCategoriesTopLevel()->toArray(false);
 
         $childCategories = $categoriesRepository->findBy([
             'parentId' => $currentCategory->getId()

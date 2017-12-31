@@ -54,6 +54,3 @@ services:
     mongo:
         class: Mongo
         factory: ["@mongo.connection", getMongo]
-
-    AppBundle\Routing\CatalogLoader:
-        tags: [routing.loader]

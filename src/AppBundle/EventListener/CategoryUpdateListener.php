@@ -45,6 +45,8 @@ class CategoryUpdateListener
             $this->isFolderUpdate($previousParentId);
         }
 
+        $this->updateUri($category);
+
         return $category;
     }
 
@@ -53,12 +55,13 @@ class CategoryUpdateListener
      * @param $itemId
      * @return Category|null
      */
-    public function isFolderUpdate($itemId){
+    public function isFolderUpdate($itemId)
+    {
 
         /** @var CategoryRepository $repository */
         $repository = $this->container->get('doctrine_mongodb')
             ->getManager()
-            ->getRepository('AppBundle:Category');
+            ->getRepository(Category::class);
             
         /** @var Category $item */
         $item = $repository->find($itemId);
@@ -77,6 +80,58 @@ class CategoryUpdateListener
         $dm->flush();
 
         return $item;
+    }
+
+    /**
+     * @param Category $category
+     * @return bool
+     */
+    public function updateUri(Category &$category)
+    {
+        $parents = $this->getParents($category);
+        $names = [];
+        /** @var Category $parent */
+        foreach ($parents as $parent) {
+            $names[] = $parent->getName();
+        }
+        $names = array_reverse($names);
+        $uri = !empty($names) ? '/' . implode('/', $names) : '';
+        $uri .= '/' . $category->getName() . '/';
+
+        $category->setUri($uri);
+
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->container->get('doctrine_mongodb')->getManager();
+        $dm->persist($category);
+        $dm->flush();
+
+        return true;
+    }
+
+    /**
+     * @param Category $category
+     * @param array $parents
+     * @return array
+     */
+    public function getParents(Category $category, $parents = [])
+    {
+        /** @var CategoryRepository $repository */
+        $repository = $this->container->get('doctrine_mongodb')
+            ->getManager()
+            ->getRepository(Category::class);
+
+        /** @var Category $parent */
+        $parent = $repository->findOneBy([
+            'id' => $category->getParentId()
+        ]);
+        if ($parent) {
+            $parents[] = $parent;
+            if ($category->getParentId() > 0) {
+                $parents = $this->getParents($parent, $parents);
+            }
+        }
+
+        return $parents;
     }
 
 }

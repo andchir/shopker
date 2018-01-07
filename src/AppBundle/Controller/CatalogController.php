@@ -39,6 +39,40 @@ class CatalogController extends ProductController
         $currentId = $currentCategory->getId();
         $categoriesTopLevel = $this->getCategoriesTopLevel()->toArray(false);
 
+        $contentType = $currentCategory->getContentType();
+        $contentTypeFields = $contentType->getFields();
+        $collection = $this->getCollection($contentType->getCollection());
+        $queryString = $request->getQueryString();
+        $queryOptions = $this->getQueryOptions($queryString, $contentType);
+        $skip = ($queryOptions['page'] - 1) * $queryOptions['limit'];
+
+        // Get fields names
+        $fields = [
+            'title' => '',
+            'name' => '',
+            'description' => ''
+        ];
+        foreach ($contentTypeFields as $field) {
+            if (!$fields['title'] && $field['inputType'] == 'text') {
+                $fields['title'] = $field['name'];
+            }
+            if (!$fields['name'] && $field['inputType'] == 'system_name') {
+                $fields['name'] = $field['name'];
+            }
+            if (!$fields['description'] && $field['inputType'] == 'textarea') {
+                $fields['description'] = $field['name'];
+            }
+        }
+
+        // Get child products
+        $childs = $collection->find([
+            'parentId' => $currentCategory->getId()
+        ])
+            ->sort([$queryOptions['sort_by'] => $queryOptions['sort_dir']])
+            ->skip($skip)
+            ->limit($queryOptions['limit']);
+
+        // Get child categories
         $childCategories = $categoriesRepository->findBy([
             'parentId' => $currentCategory->getId()
         ], ['title' => 'asc']);
@@ -49,7 +83,9 @@ class CatalogController extends ProductController
             'currentPage' => $currentPage,
             'currentId' => $currentId,
             'currentUri' => $uri,
-            'childCategories' => $childCategories
+            'childCategories' => $childCategories,
+            'childs' => $childs,
+            'fields' => $fields
         ]);
     }
 

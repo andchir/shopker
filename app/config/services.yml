@@ -24,17 +24,6 @@ services:
         resource: '../../src/AppBundle/Controller/*'
         tags: ['controller.service_arguments']
 
-    AppBundle\EventListener\ExceptionListener:
-        public: true
-        tags:
-            - { name: kernel.event_listener, event: kernel.exception }
-        arguments: [ '@twig', '@service_container' ]
-
-    AppBundle\EventListener\KernelEventListener:
-        tags:
-            - { name: kernel.event_listener, event: kernel.request }
-        arguments: [ '@service_container' ]
-
     get_set_method_normalizer:
         class: Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer
         tags: [serializer.normalizer]
@@ -54,3 +43,18 @@ services:
     mongo:
         class: Mongo
         factory: ["@mongo.connection", getMongo]
+
+    AppBundle\EventListener\ExceptionListener:
+        public: true
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }
+        arguments: [ '@twig', '@service_container' ]
+
+    AppBundle\EventListener\KernelEventListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request }
+        arguments: [ '@service_container' ]
+
+    AppBundle\Twig\AppExtension:
+        tags: ['twig.extension']
+        arguments: [ "@service_container" ]

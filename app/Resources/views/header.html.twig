@@ -6,6 +6,11 @@
             </a>
             <div class="float-right">
                 {% if is_granted('ROLE_USER') %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a class="btn btn-sm btn-outline-primary mt-1" data-toggle="tooltip" data-placement="bottom" title="{{ 'Administration' | trans }}" href="{{ path('admin') }}" target="_blank">
+                            <i class="icon-cog"></i>
+                        </a>
+                    {% endif %}
                     <a class="btn btn-sm btn-outline-primary mt-1" href="{{ path('logout') }}">
                         {{ 'Log out' | trans }}
                         <i class="icon-power"></i>
@@ -19,11 +24,6 @@
             </div>
             <div class="d-block d-lg-inline-block">
                 <ul class="nav">
-                    <li class="nav-item">
-                        <a class="nav-link{% if currentId == 0 %} text-white{% else %} text-secondary{% endif %}" href="{{ path('homepage') }}">
-                            {{ 'Home page' | trans }}
-                        </a>
-                    </li>
                     {% for category in categoriesTopLevel %}
                         <li class="nav-item">
                             <a href="{{ app.request.baseUrl }}/{{ category.uri }}" class="nav-link{% if category.id == currentId %} text-white{% else %} text-secondary{% endif %}">

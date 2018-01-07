@@ -8,7 +8,7 @@
 
                 <div class="list-group mb-3">
                     {% for category in childCategories %}
-                        <a href="{{ app.request.baseUrl }}/{{ category.uri }}" class="list-group-item list-group-item-action">
+                        <a href="{{ catalogPath(category.uri) }}" class="list-group-item list-group-item-action">
                             {{ category.title }}
                         </a>
                     {% endfor %}
@@ -18,7 +18,7 @@
             <div class="col-12 col-md-9">
 
                 <div class="btn-group btn-breadcrumb mb-3">
-                    <a href="{{ app.request.baseUrl }}/" class="btn btn-secondary">
+                    <a href="{{ catalogPath('', '/') }}" class="btn btn-secondary">
                         <i class="icon-home"></i>
                     </a>
                     <a href="#" class="btn btn-secondary">Snippets</a>
@@ -32,56 +32,27 @@
 
                 <div class="row">
 
+                    {% for item in childs %}
                     <div class="col-6 col-lg-4 mb-3">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Card title</h4>
-                                <p class="card-text">
-                                    Some quick example text to build on the card title and
-                                    make up the bulk of the card's content.
-                                    Some quick example text to build on the card title and
-                                    make up the bulk of the card's content.
-                                </p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                                {% if fields.title is not empty %}
+                                    <h4 class="card-title">{{ item[fields.title] }}</h4>
+                                {% endif %}
+                                {% if fields.description is not empty %}
+                                    <p class="card-text">
+                                        {{ item[fields.description] }}
+                                    </p>
+                                {% endif %}
+                                {% if fields.name is not empty %}
+                                    <a href="{{ catalogPath(currentCategory.uri, item[fields.name]) }}" class="btn btn-primary">
+                                        Details
+                                    </a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
-                    <div class="col-6 col-lg-4 mb-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title">Card title</h4>
-                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-lg-4 mb-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title">Card title</h4>
-                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-lg-4 mb-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title">Card title</h4>
-                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-lg-4 mb-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title">Card title</h4>
-                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
-                            </div>
-                        </div>
-                    </div>
+                    {% endfor %}
 
                 </div>
             </div>

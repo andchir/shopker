@@ -533,51 +533,6 @@ class ProductController extends BaseProductController
     }
 
     /**
-     * @param $queryString
-     * @param ContentType $contentType
-     * @return array
-     */
-    public function getQueryOptions($queryString, ContentType $contentType)
-    {
-        $queryOptionsDefault = [
-            'page' => 1,
-            'limit' => 10,
-            'sort_by' => '_id',
-            'sort_dir' => 1,
-            'full' => 1,
-            'only_active' => 1
-        ];
-        parse_str($queryString, $queryOptions);
-
-        $queryOptions = array_merge($queryOptionsDefault, $queryOptions);
-
-        //Field names array
-        $fields = $contentType->getFields();
-        $fieldNames = array_map(function($field){
-            return $field['name'];
-        }, $fields);
-        $fieldNames[] = '_id';
-
-        if($queryOptions['sort_by'] == 'id'){
-            $queryOptions['sort_by'] = '_id';
-        }
-        if(!in_array($queryOptions['sort_by'], $fieldNames)){
-            $opts['sort_by'] = $queryOptionsDefault['sort_by'];
-        }
-        if(!is_numeric($queryOptions['sort_dir'])){
-            $queryOptions['sort_dir'] = $queryOptions['sort_dir'] == 'asc' ? 1 : -1;
-        }
-        if(!is_numeric($queryOptions['limit'])){
-            $queryOptions['limit'] = $queryOptionsDefault['limit'];
-        }
-        if(!is_numeric($queryOptions['page'])){
-            $queryOptions['page'] = $queryOptionsDefault['page'];
-        }
-
-        return $queryOptions;
-    }
-
-    /**
      * @param ContentType $contentType
      * @param $itemData
      * @param array $ids

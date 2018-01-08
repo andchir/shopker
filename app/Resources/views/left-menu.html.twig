@@ -1,0 +1,24 @@
+<!-- left menu -->
+<div class="border border-secondary rounded p-2 mb-3">
+    <ul class="nav flex-column nav-pills">
+        {% for category in categoriesMenu %}
+            <li class="nav-item">
+                <a class="nav-link{% if category.isActive %} active{% endif %}" href="{{ catalogPath(category.uri) }}">
+                    {{ category.title }}
+                </a>
+                {% if category.children | length > 0 %}
+                    <ul class="nav flex-column mt-1 pl-3">
+                        {% for childCategory in category.children %}
+                            <li class="nav-item">
+                                <a href="{{ catalogPath(childCategory.uri) }}" class="nav-link py-1{% if childCategory.isActive %} disabled{% endif %}">
+                                    {{ childCategory.title }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+<!-- /left menu -->

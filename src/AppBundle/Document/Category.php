@@ -307,4 +307,21 @@ class Category
     {
         return $this->contentType;
     }
+
+    /**
+     * @param array $breadcrumbsIds
+     * @return array
+     */
+    public function getMenuData($breadcrumbsIds = [])
+    {
+        return [
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'name' => $this->getName(),
+            'uri' => $this->getUri(),
+            'isActive' => in_array($this->getId(), $breadcrumbsIds),
+            'children' => []
+        ];
+    }
+
 }

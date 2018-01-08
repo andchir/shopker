@@ -6,25 +6,12 @@
         <div class="row">
             <div class="col-12 col-md-3">
 
-                <div class="list-group mb-3">
-                    {% for category in childCategories %}
-                        <a href="{{ catalogPath(category.uri) }}" class="list-group-item list-group-item-action">
-                            {{ category.title }}
-                        </a>
-                    {% endfor %}
-                </div>
+                {% include 'left-menu.html.twig' %}
 
             </div>
             <div class="col-12 col-md-9">
 
-                <div class="btn-group btn-breadcrumb mb-3">
-                    <a href="{{ catalogPath('', '/') }}" class="btn btn-secondary">
-                        <i class="icon-home"></i>
-                    </a>
-                    <a href="#" class="btn btn-secondary">Snippets</a>
-                    <a href="#" class="btn btn-secondary">Breadcrumbs</a>
-                    <a href="#" class="btn btn-secondary">Default</a>
-                </div>
+                {% include 'breadcrumbs.html.twig' %}
 
                 <h1>
                     {{ currentPage.title }}

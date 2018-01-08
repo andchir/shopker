@@ -142,6 +142,9 @@ class CatalogController extends ProductController
      */
     public function getBreadcrumbs($categoryUri, $pop = true)
     {
+        if (empty($categoryUri)) {
+            return [];
+        }
         $breadcrumbs = [];
         $breadcrumbsIds = [];
         $categoryUri = trim($categoryUri, '/');

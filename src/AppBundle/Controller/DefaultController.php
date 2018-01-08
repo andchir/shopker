@@ -16,7 +16,7 @@ class DefaultController extends CatalogController
     public function homepageAction()
     {
         $categoriesRepository = $this->getCategoriesRepository();
-        $categoriesTopLevel = $this->getCategoriesTopLevel()->toArray(false);
+        $categoriesTopLevel = $this->getCategoriesTopLevel();
 
         // Get categorits count
         $countCategories = $categoriesRepository

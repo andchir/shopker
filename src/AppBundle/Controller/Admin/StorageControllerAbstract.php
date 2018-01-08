@@ -159,14 +159,20 @@ abstract class StorageControllerAbstract extends BaseController
 
     /**
      * @param $name
-     * @param int $itemId
+     * @param null $itemId
+     * @param null $parentId
      * @return mixed
      */
-    public function checkNameExists($name, $itemId = null){
+    public function checkNameExists($name, $itemId = null, $parentId = null){
         $repository = $this->getRepository();
-        $query = $repository->createQueryBuilder()
+
+        $query = $repository
+            ->createQueryBuilder()
             ->field('name')->equals($name);
 
+        if ($parentId !== null && is_numeric($parentId)) {
+            $query = $query->field('parentId')->equals($parentId);
+        }
         if($itemId !== null && is_numeric($itemId)){
             $query = $query->field('id')->notEqual($itemId);
         }

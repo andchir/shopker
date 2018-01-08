@@ -23,7 +23,7 @@ class CatalogController extends ProductController
     public function catalogAction(Request $request, $uri)
     {
         $categoriesRepository = $this->getCategoriesRepository();
-        list($pageAlias, $categoryUri) = self::parseUri($uri);
+        list($pageAlias, $categoryUri, $levelNum) = self::parseUri($uri);
 
         /** @var Category $currentCategory */
         $currentCategory = $categoriesRepository->findOneBy(['uri' => $categoryUri]);
@@ -37,8 +37,10 @@ class CatalogController extends ProductController
 
         $currentPage = $currentCategory;
         $currentId = $currentCategory->getId();
+
         list($breadcrumbs, $breadcrumbsIds) = $this->getBreadcrumbs($categoryUri);
-        $categoriesTopLevel = $this->getCategoriesTopLevel($breadcrumbsIds);
+        $categoriesTopLevel = $this->getChildCategories(0, $breadcrumbsIds);
+        $categoriesMenu = $this->getCategoriesMenu($currentCategory, $breadcrumbsIds);
 
         $contentType = $currentCategory->getContentType();
         $contentTypeFields = $contentType->getFields();
@@ -66,25 +68,28 @@ class CatalogController extends ProductController
         }
 
         // Get child products
-        $childs = $collection->find([
+        $items = $collection->find([
             'parentId' => $currentCategory->getId()
         ])
             ->sort([$queryOptions['sort_by'] => $queryOptions['sort_dir']])
             ->skip($skip)
             ->limit($queryOptions['limit']);
 
-        // Get categories menu
-        $categoriesMenu = $this->getCategoriesMenu($categoriesTopLevel, $currentCategory, $breadcrumbsIds);
+        $categoriesSiblings = [];
+        if (count($items) > 0) {
+            $categoriesSiblings = $this->getChildCategories($currentCategory->getParentId(), $breadcrumbsIds);
+        }
 
         return $this->render('catalog.html.twig', [
-            'categoriesTopLevel' => $categoriesTopLevel,
             'currentCategory' => $currentCategory,
             'currentPage' => $currentPage,
             'currentId' => $currentId,
             'currentUri' => $uri,
             'categoriesMenu' => $categoriesMenu,
-            'childs' => $childs,
+            'items' => $items,
             'fields' => $fields,
+            'categoriesTopLevel' => $categoriesTopLevel,
+            'categoriesSiblings' => $categoriesSiblings,
             'breadcrumbs' => $breadcrumbs,
             'breadcrumbsIds' => $breadcrumbsIds
         ]);
@@ -108,7 +113,7 @@ class CatalogController extends ProductController
         $collection = $this->getCollection($contentType->getCollection());
         list($breadcrumbs, $breadcrumbsIds) = $this->getBreadcrumbs($categoryUri, false);
 
-        $categoriesTopLevel = $this->getCategoriesTopLevel($breadcrumbsIds);
+        $categoriesTopLevel = $this->getChildCategories($breadcrumbsIds);
 
         $currentPage = $collection->findOne([
             'name' => $pageAlias,
@@ -121,7 +126,7 @@ class CatalogController extends ProductController
         $currentPage['id'] = $currentId;
 
         // Get categories menu
-        $categoriesMenu = $this->getCategoriesMenu($categoriesTopLevel, $category, $breadcrumbsIds);
+        $categoriesMenu = $this->getCategoriesMenu($category, $breadcrumbsIds);
 
         return $this->render('catalog-product.html.twig', [
             'categoriesTopLevel' => $categoriesTopLevel,
@@ -201,60 +206,46 @@ class CatalogController extends ProductController
     }
 
     /**
-     * @param $categoriesTopLevel
      * @param Category|null $currentCategory
      * @param array $breadcrumbsIds
      * @return array
      */
-    public function getCategoriesMenu($categoriesTopLevel, Category $currentCategory = null, $breadcrumbsIds = [])
+    public function getCategoriesMenu(Category $currentCategory = null, $breadcrumbsIds = [])
     {
         $categoriesRepository = $this->getCategoriesRepository();
         $categories = [];
         $currentId = $currentCategory ? $currentCategory->getId() : 0;
 
-        $childCategories = [];
-        $childs = $categoriesRepository->findBy([
+        $topIdsArr = [];
+
+        // Get top categories
+        $results = $categoriesRepository->findBy([
             'parentId' => $currentId
         ], ['title' => 'asc']);
         /** @var Category $category */
-        foreach ($childs as $category) {
-            $childCategories[] = $category->getMenuData($breadcrumbsIds);
-        }
-        if (!$currentId) {
-            return $childCategories;
+        foreach ($results as $category) {
+            $categories[] = $category->getMenuData($breadcrumbsIds);
+            $topIdsArr[] = $category->getId();
         }
 
-        if (empty($childCategories)) {
+        // Get child categories
+        $results = $this->get('doctrine_mongodb')
+            ->getManager()
+            ->createQueryBuilder(Category::class)
+            ->field('parentId')->in($topIdsArr)
+            ->sort('title', 'asc')
+            ->getQuery()
+            ->execute()
+            ->toArray(false);
 
-            $parentCategory = $categoriesRepository->find($currentCategory->getParentId());
-            return $this->getCategoriesMenu($categoriesTopLevel, $parentCategory, $breadcrumbsIds);
-
-        } else {
-
-            /** @var Category $parentCategory */
-            if ($currentCategory->getParentId()) {
-                $parentCategory = $categoriesRepository->find($currentCategory->getParentId());
-                $parentsCollection = $categoriesRepository->findBy([
-                    'parentId' => $parentCategory->getId()
-                ], ['title' => 'asc']);
-
-                /** @var Category $category */
-                foreach ($parentsCollection as $category) {
-                    $data = $category->getMenuData($breadcrumbsIds);
-                    if ($category->getId() == $currentCategory->getId()) {
-                        $data['children'] = $childCategories;
-                    }
-                    $categories[] = $data;
-                }
-            } else {
-                foreach ($categoriesTopLevel as $categoryData) {
-                    if ($categoryData['id'] == $currentCategory->getId()) {
-                        $categoryData['children'] = $childCategories;
-                    }
-                    $categories[] = $categoryData;
-                }
+        /** @var Category $category */
+        foreach ($results as $category) {
+            $index = array_search($category->getParentId(), $topIdsArr);
+            if ($index !== false) {
+                $categories[$index]['children'][] = $category->getMenuData($breadcrumbsIds);
             }
         }
+
         return $categories;
     }
 
@@ -262,14 +253,23 @@ class CatalogController extends ProductController
      * @param array $breadcrumbsIds
      * @return array
      */
-    public function getCategoriesTopLevel($breadcrumbsIds = [])
+    public function getChildCategories($parentId = 0, $breadcrumbsIds = [])
     {
         $categories = [];
-        $results = $this->get('doctrine_mongodb')
+        $query = $this->get('doctrine_mongodb')
             ->getManager()
-            ->createQueryBuilder(Category::class)
-            ->field('parentId')->equals(0)
-            ->field('name')->notEqual('root')
+            ->createQueryBuilder(Category::class);
+
+        if ($parentId) {
+            $query = $query
+                ->field('parentId')->equals($parentId);
+        } else {
+            $query = $query
+                ->field('parentId')->equals(0)
+                ->field('name')->notEqual('root');
+        }
+
+        $results = $query
             ->sort('title', 'asc')
             ->getQuery()
             ->execute();
@@ -307,7 +307,8 @@ class CatalogController extends ProductController
         $parentUri = strrpos($uri, '/') !== false
             ? substr($uri, 0, strrpos($uri, '/')+1)
             : '';
-        return [$pageAlias, $parentUri];
+        $levelNum = substr_count($parentUri, '/');
+        return [$pageAlias, $parentUri, $levelNum];
     }
 
 }

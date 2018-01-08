@@ -16,7 +16,7 @@ class DefaultController extends CatalogController
     public function homepageAction()
     {
         $categoriesRepository = $this->getCategoriesRepository();
-        $categoriesTopLevel = $this->getCategoriesTopLevel();
+        $categoriesTopLevel = $this->getChildCategories();
 
         // Get categorits count
         $countCategories = $categoriesRepository
@@ -54,7 +54,7 @@ class DefaultController extends CatalogController
      */
     public function pageNotFoundAction()
     {
-        $categoriesTopLevel = $this->getCategoriesTopLevel()->toArray(false);
+        $categoriesTopLevel = $this->getChildCategories();
 
         return $this->render('404.html.twig', [
             'currentUri' => '404',

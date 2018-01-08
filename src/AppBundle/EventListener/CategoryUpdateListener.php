@@ -45,7 +45,9 @@ class CategoryUpdateListener
             $this->isFolderUpdate($previousParentId);
         }
 
-        $this->updateUri($category);
+        if ($category) {
+            $this->updateUri($category);
+        }
 
         return $category;
     }

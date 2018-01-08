@@ -3,21 +3,16 @@
 {% block body %}
     {% include 'header.html.twig' %}
 <main role="main" class="container">
-    <div class="row">
-        <div class="col-12 col-md-3">
 
-            {% include 'left-menu.html.twig' %}
+    {% include 'breadcrumbs.html.twig' %}
 
-        </div>
-        <div class="col-12 col-md-9">
+    {% include 'child-categories-menu.html.twig' %}
 
-            {% include 'breadcrumbs.html.twig' %}
+    <h1>
+        {{ currentPage.title }}
+    </h1>
 
-            <h1>
-                {{ currentPage.title }}
-            </h1>
 
-        </div>
-    </div>
+
 </main>
 {% endblock %}

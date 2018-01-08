@@ -3,46 +3,45 @@
 {% block body %}
     {% include 'header.html.twig' %}
     <main role="main" class="container">
+
+        {% include 'breadcrumbs.html.twig' %}
+
+        <h1>{{ currentPage.title }}</h1>
+
+        {% include 'child-categories-menu.html.twig' %}
+
+        {% include 'siblings-menu.html.twig' %}
+
         <div class="row">
-            <div class="col-12 col-md-3">
 
-                {% include 'left-menu.html.twig' %}
-
-            </div>
-            <div class="col-12 col-md-9">
-
-                {% include 'breadcrumbs.html.twig' %}
-
-                <h1>
-                    {{ currentPage.title }}
-                </h1>
-
-                <div class="row">
-
-                    {% for item in childs %}
-                    <div class="col-6 col-lg-4 mb-3">
-                        <div class="card">
-                            <div class="card-body">
-                                {% if fields.title is not empty %}
-                                    <h4 class="card-title">{{ item[fields.title] }}</h4>
-                                {% endif %}
-                                {% if fields.description is not empty %}
-                                    <p class="card-text">
-                                        {{ item[fields.description] }}
-                                    </p>
-                                {% endif %}
-                                {% if fields.name is not empty %}
-                                    <a href="{{ catalogPath(currentCategory.uri, item[fields.name]) }}" class="btn btn-primary">
-                                        Details
-                                    </a>
-                                {% endif %}
-                            </div>
-                        </div>
+            {% for item in items %}
+            <div class="col-6 col-lg-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        {% if fields.title is not empty %}
+                            <h4 class="card-title">{{ item[fields.title] }}</h4>
+                        {% endif %}
+                        {% if fields.description is not empty %}
+                            <p class="card-text">
+                                {{ item[fields.description] }}
+                            </p>
+                        {% endif %}
+                        {% if fields.name is not empty %}
+                            <a href="{{ catalogPath(currentCategory.uri, item[fields.name]) }}" class="btn btn-primary">
+                                Details
+                            </a>
+                        {% endif %}
                     </div>
-                    {% endfor %}
-
                 </div>
             </div>
+            {% endfor %}
+
         </div>
+
+        {% if items | length == 0 and categoriesMenu | length == 0 %}
+            <div class="alert alert-info">
+                {{ 'This category is empty' | trans }}.
+            </div>
+        {% endif %}
     </main>
 {% endblock %}

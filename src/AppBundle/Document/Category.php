@@ -318,6 +318,7 @@ class Category
             'id' => $this->getId(),
             'title' => $this->getTitle(),
             'name' => $this->getName(),
+            'description' => $this->getDescription(),
             'uri' => $this->getUri(),
             'isActive' => in_array($this->getId(), $breadcrumbsIds),
             'children' => []

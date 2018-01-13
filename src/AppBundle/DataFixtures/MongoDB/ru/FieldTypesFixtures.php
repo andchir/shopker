@@ -38,6 +38,11 @@ class FieldTypesFixtures extends Fixture
                         'name' => 'className',
                         'title' => 'CSS класс',
                         'default_value' => ''
+                    ],
+                    [
+                        'name' => 'chunkName',
+                        'title' => 'Название шаблона',
+                        'default_value' => ''
                     ]
                 ]
             ],
@@ -67,6 +72,11 @@ class FieldTypesFixtures extends Fixture
                         'name' => 'className',
                         'title' => 'CSS класс',
                         'default_value' => ''
+                    ],
+                    [
+                        'name' => 'chunkName',
+                        'title' => 'Название шаблона',
+                        'default_value' => ''
                     ]
                 ]
             ],
@@ -91,6 +101,11 @@ class FieldTypesFixtures extends Fixture
                         'name' => 'className',
                         'title' => 'CSS класс',
                         'default_value' => ''
+                    ],
+                    [
+                        'name' => 'chunkName',
+                        'title' => 'Название шаблона',
+                        'default_value' => ''
                     ]
                 ]
             ],
@@ -114,6 +129,11 @@ class FieldTypesFixtures extends Fixture
                     [
                         'name' => 'className',
                         'title' => 'CSS класс',
+                        'default_value' => ''
+                    ],
+                    [
+                        'name' => 'chunkName',
+                        'title' => 'Название шаблона',
                         'default_value' => ''
                     ]
                 ]
@@ -144,6 +164,11 @@ class FieldTypesFixtures extends Fixture
                         'name' => 'className',
                         'title' => 'CSS класс',
                         'default_value' => ''
+                    ],
+                    [
+                        'name' => 'chunkName',
+                        'title' => 'Название шаблона',
+                        'default_value' => ''
                     ]
                 ]
             ],
@@ -172,6 +197,11 @@ class FieldTypesFixtures extends Fixture
                     [
                         'name' => 'className',
                         'title' => 'CSS класс',
+                        'default_value' => ''
+                    ],
+                    [
+                        'name' => 'chunkName',
+                        'title' => 'Название шаблона',
                         'default_value' => ''
                     ]
                 ]
@@ -227,6 +257,11 @@ class FieldTypesFixtures extends Fixture
                         'name' => 'className',
                         'title' => 'CSS класс',
                         'default_value' => ''
+                    ],
+                    [
+                        'name' => 'chunkName',
+                        'title' => 'Название шаблона',
+                        'default_value' => ''
                     ]
                 ]
             ],
@@ -255,6 +290,11 @@ class FieldTypesFixtures extends Fixture
                     [
                         'name' => 'className',
                         'title' => 'CSS класс',
+                        'default_value' => ''
+                    ],
+                    [
+                        'name' => 'chunkName',
+                        'title' => 'Название шаблона',
                         'default_value' => ''
                     ]
                 ]
@@ -289,6 +329,11 @@ class FieldTypesFixtures extends Fixture
                     [
                         'name' => 'className',
                         'title' => 'CSS класс',
+                        'default_value' => ''
+                    ],
+                    [
+                        'name' => 'chunkName',
+                        'title' => 'Название шаблона',
                         'default_value' => ''
                     ]
                 ]
@@ -334,11 +379,15 @@ class FieldTypesFixtures extends Fixture
                         'name' => 'format',
                         'title' => 'Формат даты',
                         'default_value' => 'MM/dd/yyyy'
-                    ]
-                    ,
+                    ],
                     [
                         'name' => 'className',
                         'title' => 'CSS класс',
+                        'default_value' => ''
+                    ],
+                    [
+                        'name' => 'chunkName',
+                        'title' => 'Название шаблона',
                         'default_value' => ''
                     ]
                 ]
@@ -364,6 +413,11 @@ class FieldTypesFixtures extends Fixture
                         'name' => 'className',
                         'title' => 'CSS класс',
                         'default_value' => ''
+                    ],
+                    [
+                        'name' => 'chunkName',
+                        'title' => 'Название шаблона',
+                        'default_value' => ''
                     ]
                 ]
             ],
@@ -388,6 +442,11 @@ class FieldTypesFixtures extends Fixture
                         'name' => 'className',
                         'title' => 'CSS класс',
                         'default_value' => ''
+                    ],
+                    [
+                        'name' => 'chunkName',
+                        'title' => 'Название шаблона',
+                        'default_value' => ''
                     ]
                 ]
             ],
@@ -411,6 +470,11 @@ class FieldTypesFixtures extends Fixture
                     [
                         'name' => 'className',
                         'title' => 'CSS класс',
+                        'default_value' => ''
+                    ],
+                    [
+                        'name' => 'chunkName',
+                        'title' => 'Название шаблона',
                         'default_value' => ''
                     ]
                 ]
@@ -440,6 +504,11 @@ class FieldTypesFixtures extends Fixture
                     [
                         'name' => 'className',
                         'title' => 'CSS класс',
+                        'default_value' => ''
+                    ],
+                    [
+                        'name' => 'chunkName',
+                        'title' => 'Название шаблона',
                         'default_value' => ''
                     ]
                 ]

@@ -18,19 +18,9 @@
             <div class="col-6 col-lg-4 mb-3">
                 <div class="card">
                     <div class="card-body">
-                        {% if fields.title is not empty %}
-                            <h4 class="card-title">{{ item[fields.title] }}</h4>
-                        {% endif %}
-                        {% if fields.description is not empty %}
-                            <p class="card-text">
-                                {{ item[fields.description] }}
-                            </p>
-                        {% endif %}
-                        {% if fields.name is not empty %}
-                            <a href="{{ catalogPath(currentCategory.uri, item[fields.name]) }}" class="btn btn-primary">
-                                Details
-                            </a>
-                        {% endif %}
+                        {% for field in fields %}
+                            {{ item[field.name] }}
+                        {% endfor %}
                     </div>
                 </div>
             </div>

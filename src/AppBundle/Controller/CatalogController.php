@@ -50,20 +50,14 @@ class CatalogController extends ProductController
         $skip = ($queryOptions['page'] - 1) * $queryOptions['limit'];
 
         // Get fields names
-        $fields = [
-            'title' => '',
-            'name' => '',
-            'description' => ''
-        ];
+        $fields = [];
         foreach ($contentTypeFields as $field) {
-            if (!$fields['title'] && $field['inputType'] == 'text') {
-                $fields['title'] = $field['name'];
-            }
-            if (!$fields['name'] && $field['inputType'] == 'system_name') {
-                $fields['name'] = $field['name'];
-            }
-            if (!$fields['description'] && $field['inputType'] == 'textarea') {
-                $fields['description'] = $field['name'];
+            if (!empty($field)) {
+                $fields[] = [
+                    'name' => $field['name'],
+                    'type' => $field['outputType'],
+                    'outputProperties' => $field['outputProperties']
+                ];
             }
         }
 
@@ -76,7 +70,7 @@ class CatalogController extends ProductController
             ->limit($queryOptions['limit']);
 
         $categoriesSiblings = [];
-        if (count($items) > 0) {
+        if (count($categoriesMenu) === 0 && $levelNum > 1) {
             $categoriesSiblings = $this->getChildCategories($currentCategory->getParentId(), $breadcrumbsIds);
         }
 
@@ -113,7 +107,7 @@ class CatalogController extends ProductController
         $collection = $this->getCollection($contentType->getCollection());
         list($breadcrumbs, $breadcrumbsIds) = $this->getBreadcrumbs($categoryUri, false);
 
-        $categoriesTopLevel = $this->getChildCategories($breadcrumbsIds);
+        $categoriesTopLevel = $this->getChildCategories(0, $breadcrumbsIds);
 
         $currentPage = $collection->findOne([
             'name' => $pageAlias,

@@ -47,6 +47,7 @@ var APP_LANG = {
     "SETTINGS_MAIN": "Main Settings",
     "SETTINGS_ORDER_STATUSES": "Orders statuses",
     "SHOW_IN_FILTER": "Show in filter",
+    "SHOW_IN_LIST": "Show in list",
     "SHOW_IN_TABLE": "Show in table",
     "STATISTICS": "Statistics",
     "STATUS": "Status",

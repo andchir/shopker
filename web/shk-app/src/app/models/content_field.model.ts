@@ -12,6 +12,7 @@ export class ContentField {
         public required: boolean,
         public isFilter: boolean,
         public showInTable: boolean,
+        public showInList?: boolean,
         public options?: {}[],
         public inputTypeMain?: string
     ) { }

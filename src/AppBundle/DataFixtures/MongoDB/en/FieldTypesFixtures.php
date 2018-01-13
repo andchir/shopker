@@ -38,6 +38,11 @@ class FieldTypesFixtures extends Fixture
                         'name' => 'className',
                         'title' => 'CSS class',
                         'default_value' => ''
+                    ],
+                    [
+                        'name' => 'chunkName',
+                        'title' => 'Template name',
+                        'default_value' => ''
                     ]
                 ]
             ],
@@ -67,6 +72,11 @@ class FieldTypesFixtures extends Fixture
                         'name' => 'className',
                         'title' => 'CSS class',
                         'default_value' => ''
+                    ],
+                    [
+                        'name' => 'chunkName',
+                        'title' => 'Template name',
+                        'default_value' => ''
                     ]
                 ]
             ],
@@ -91,6 +101,11 @@ class FieldTypesFixtures extends Fixture
                         'name' => 'className',
                         'title' => 'CSS class',
                         'default_value' => ''
+                    ],
+                    [
+                        'name' => 'chunkName',
+                        'title' => 'Template name',
+                        'default_value' => ''
                     ]
                 ]
             ],
@@ -114,6 +129,11 @@ class FieldTypesFixtures extends Fixture
                     [
                         'name' => 'className',
                         'title' => 'CSS class',
+                        'default_value' => ''
+                    ],
+                    [
+                        'name' => 'chunkName',
+                        'title' => 'Template name',
                         'default_value' => ''
                     ]
                 ]
@@ -144,6 +164,11 @@ class FieldTypesFixtures extends Fixture
                         'name' => 'className',
                         'title' => 'CSS class',
                         'default_value' => ''
+                    ],
+                    [
+                        'name' => 'chunkName',
+                        'title' => 'Template name',
+                        'default_value' => ''
                     ]
                 ]
             ],
@@ -172,6 +197,11 @@ class FieldTypesFixtures extends Fixture
                     [
                         'name' => 'className',
                         'title' => 'CSS class',
+                        'default_value' => ''
+                    ],
+                    [
+                        'name' => 'chunkName',
+                        'title' => 'Template name',
                         'default_value' => ''
                     ]
                 ]
@@ -227,6 +257,11 @@ class FieldTypesFixtures extends Fixture
                         'name' => 'className',
                         'title' => 'CSS class',
                         'default_value' => ''
+                    ],
+                    [
+                        'name' => 'chunkName',
+                        'title' => 'Template name',
+                        'default_value' => ''
                     ]
                 ]
             ],
@@ -255,6 +290,11 @@ class FieldTypesFixtures extends Fixture
                     [
                         'name' => 'className',
                         'title' => 'CSS class',
+                        'default_value' => ''
+                    ],
+                    [
+                        'name' => 'chunkName',
+                        'title' => 'Template name',
                         'default_value' => ''
                     ]
                 ]
@@ -289,6 +329,11 @@ class FieldTypesFixtures extends Fixture
                     [
                         'name' => 'className',
                         'title' => 'CSS class',
+                        'default_value' => ''
+                    ],
+                    [
+                        'name' => 'chunkName',
+                        'title' => 'Template name',
                         'default_value' => ''
                     ]
                 ]
@@ -339,6 +384,11 @@ class FieldTypesFixtures extends Fixture
                         'name' => 'className',
                         'title' => 'CSS class',
                         'default_value' => ''
+                    ],
+                    [
+                        'name' => 'chunkName',
+                        'title' => 'Template name',
+                        'default_value' => ''
                     ]
                 ]
             ],
@@ -362,6 +412,11 @@ class FieldTypesFixtures extends Fixture
                     [
                         'name' => 'className',
                         'title' => 'CSS class',
+                        'default_value' => ''
+                    ],
+                    [
+                        'name' => 'chunkName',
+                        'title' => 'Template name',
                         'default_value' => ''
                     ]
                 ]
@@ -387,6 +442,11 @@ class FieldTypesFixtures extends Fixture
                         'name' => 'className',
                         'title' => 'CSS class',
                         'default_value' => ''
+                    ],
+                    [
+                        'name' => 'chunkName',
+                        'title' => 'Template name',
+                        'default_value' => ''
                     ]
                 ]
             ],
@@ -410,6 +470,11 @@ class FieldTypesFixtures extends Fixture
                     [
                         'name' => 'className',
                         'title' => 'CSS class',
+                        'default_value' => ''
+                    ],
+                    [
+                        'name' => 'chunkName',
+                        'title' => 'Template name',
                         'default_value' => ''
                     ]
                 ]
@@ -439,6 +504,11 @@ class FieldTypesFixtures extends Fixture
                     [
                         'name' => 'className',
                         'title' => 'CSS class',
+                        'default_value' => ''
+                    ],
+                    [
+                        'name' => 'chunkName',
+                        'title' => 'Template name',
                         'default_value' => ''
                     ]
                 ]

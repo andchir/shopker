@@ -156,6 +156,11 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent<Conte
             validators: [],
             messages: {}
         },
+        showInList: {
+            value: '',
+            validators: [],
+            messages: {}
+        },
         isFilter: {
             value: '',
             validators: [],

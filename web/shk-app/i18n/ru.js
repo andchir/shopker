@@ -46,6 +46,7 @@ var APP_LANG = {
     "SETTINGS_MAIN": "Основные настройки",
     "SETTINGS_ORDER_STATUSES": "Статусы заказов",
     "SHOW_IN_FILTER": "Показывать в фильтре",
+    "SHOW_IN_LIST": "Показывать в списке",
     "SHOW_IN_TABLE": "Показывать в таблице",
     "STATISTICS": "Статистика",
     "STATUS": "Статус",

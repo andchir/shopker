@@ -18,9 +18,11 @@
             <div class="col-6 col-lg-4 mb-3">
                 <div class="card">
                     <div class="card-body">
-                        {% for field in fields %}
-                            {{ item[field.name] }}
-                        {% endfor %}
+                        {% autoescape false %}
+                            {% for field in fields %}
+                                {{ item[field.name] | outputType(field.type, field.properties, item) }}
+                            {% endfor %}
+                        {% endautoescape %}
                     </div>
                 </div>
             </div>

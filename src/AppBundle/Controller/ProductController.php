@@ -84,4 +84,20 @@ class ProductController extends BaseController
         return strtolower($ext);
     }
 
+    /**
+     * @param $contentTypeFields
+     * @return string
+     */
+    public function getSystemNameField($contentTypeFields)
+    {
+        $output = '';
+        foreach ($contentTypeFields as $field) {
+            if (!empty($field['inputType']) && $field['inputType'] == 'system_name') {
+                $output = $field['name'];
+                break;
+            }
+        }
+        return $output;
+    }
+
 }

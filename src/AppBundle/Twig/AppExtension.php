@@ -21,7 +21,8 @@ class AppExtension extends AbstractExtension
     public function getFilters()
     {
         return array(
-            new TwigFilter('price', array($this, 'priceFilter'))
+            new TwigFilter('price', array($this, 'priceFilter')),
+            new TwigFilter('outputType', array($this, 'outputTypeFilter'))
         );
     }
 
@@ -43,9 +44,36 @@ class AppExtension extends AbstractExtension
         return $path;
     }
 
-    public function priceFilter($number, $decimals = 0, $decPoint = '.', $thousandsSep = ',')
+    public function priceFilter($number, $decimals = 0, $decPoint = '.', $thousandsSep = ' ')
     {
         $price = number_format($number, $decimals, $decPoint, $thousandsSep);
         return $price;
     }
+
+    /**
+     * @param $value
+     * @param $type
+     * @param $properties
+     * @param array $options
+     * @return string
+     */
+    public function outputTypeFilter($value, $type, $properties, $options = [])
+    {
+        if (!$value) {
+            return '';
+        }
+        /** @var \Twig_Environment $twig */
+        $twig = $this->container->get('twig');
+        $chunkName = !empty($properties['chunkName']) ? $properties['chunkName'] : $type;
+        $properties = array_merge($properties, $options, ['value' => $value]);
+        $properties['systemName'] = !empty($options[$properties['systemNameField']])
+            ? $options[$properties['systemNameField']]
+            : '';
+        $templateName = sprintf('chunks/fields/%s.html.twig', $chunkName);
+        if (!$twig->getLoader()->exists($templateName)) {
+            $templateName = sprintf('chunks/fields/%s.html.twig', 'text');
+        }
+        return $twig->render($templateName, $properties);
+    }
+
 }

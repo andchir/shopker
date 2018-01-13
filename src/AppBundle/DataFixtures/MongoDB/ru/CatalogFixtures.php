@@ -31,7 +31,8 @@ class CatalogFixtures extends Fixture
                 ],
                 'outputType' => 'text',
                 'outputProperties' => [
-                    'className' => ''
+                    'className' => '',
+                    'chunkName' => 'header3'
                 ],
                 'group' => 'Основное',
                 'required' => true,
@@ -93,7 +94,8 @@ class CatalogFixtures extends Fixture
                 ],
                 'outputType' => 'number',
                 'outputProperties' => [
-                    'className' => ''
+                    'className' => '',
+                    'chunkName' => 'price'
                 ],
                 'group' => 'Основное',
                 'required' => false,

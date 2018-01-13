@@ -51,12 +51,16 @@ class CatalogController extends ProductController
 
         // Get fields names
         $fields = [];
+        $options = [
+            'currentCategoryUri' => $currentCategory->getUri(),
+            'systemNameField' => $this->getSystemNameField($contentTypeFields)
+        ];
         foreach ($contentTypeFields as $field) {
             if (!empty($field)) {
                 $fields[] = [
                     'name' => $field['name'],
                     'type' => $field['outputType'],
-                    'outputProperties' => $field['outputProperties']
+                    'properties' => array_merge($field['outputProperties'], $options)
                 ];
             }
         }

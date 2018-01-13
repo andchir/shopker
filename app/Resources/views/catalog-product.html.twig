@@ -8,9 +8,9 @@
 
     {% include 'child-categories-menu.html.twig' %}
 
-    <h1>
-        {{ currentPage.title }}
-    </h1>
+    {% autoescape false %}
+        {{ currentPage | outputTypeArray(fields, 'page_') }}
+    {% endautoescape %}
 
 
 

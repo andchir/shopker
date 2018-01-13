@@ -21,8 +21,9 @@ class AppExtension extends AbstractExtension
     public function getFilters()
     {
         return array(
-            new TwigFilter('price', array($this, 'priceFilter')),
-            new TwigFilter('outputType', array($this, 'outputTypeFilter'))
+            new TwigFilter('price', [$this, 'priceFilter']),
+            new TwigFilter('outputType', [$this, 'outputTypeFilter']),
+            new TwigFilter('outputTypeArray', [$this, 'outputTypeArrayFilter'])
         );
     }
 
@@ -52,28 +53,67 @@ class AppExtension extends AbstractExtension
 
     /**
      * @param $value
-     * @param $type
-     * @param $properties
+     * @param string $type
+     * @param array $properties
      * @param array $options
      * @return string
      */
     public function outputTypeFilter($value, $type, $properties, $options = [])
     {
-        if (!$value) {
-            return '';
+        if (empty($value)) {
+            $value = '';
         }
         /** @var \Twig_Environment $twig */
         $twig = $this->container->get('twig');
         $chunkName = !empty($properties['chunkName']) ? $properties['chunkName'] : $type;
-        $properties = array_merge($properties, $options, ['value' => $value]);
+        $chunkNamePrefix = !empty($properties['chunkPrefix'])
+            ? $properties['chunkPrefix']
+            : '';
+        $chunkNameSuffix = empty($value) ? '_empty' : '';
+        if (is_array($value)) {
+            $properties = array_merge($properties, $options, ['value' => '', 'data' => $value]);
+        } else {
+            $properties = array_merge($properties, $options, ['value' => $value]);
+        }
         $properties['systemName'] = !empty($options[$properties['systemNameField']])
             ? $options[$properties['systemNameField']]
             : '';
-        $templateName = sprintf('chunks/fields/%s.html.twig', $chunkName);
+        $templateName = sprintf('chunks/fields/%s%s%s.html.twig', $chunkNamePrefix, $chunkName, $chunkNameSuffix);
         if (!$twig->getLoader()->exists($templateName)) {
-            $templateName = sprintf('chunks/fields/%s.html.twig', 'text');
+            if (empty($value)) {
+                return '';
+            }
+            if ($chunkNamePrefix
+                && $twig->getLoader()->exists(sprintf('chunks/fields/%s.html.twig',  $chunkName))) {
+                $templateName = sprintf('chunks/fields/%s.html.twig',  $chunkName);
+            } else {
+                $templateName = sprintf('chunks/fields/%s.html.twig', 'text');
+            }
         }
         return $twig->render($templateName, $properties);
+    }
+
+    /**
+     * @param $itemData
+     * @param $fields
+     * @param string $chunkPrefix
+     * @return string
+     */
+    public function outputTypeArrayFilter($itemData, $fields, $chunkPrefix = '')
+    {
+        if (empty($itemData)) {
+            return '';
+        }
+        $output = '';
+        foreach ($fields as $field) {
+            $output .= $this->outputTypeFilter(
+                $itemData[$field['name']],
+                $field['type'],
+                array_merge($field['properties'], ['chunkPrefix' => $chunkPrefix]),
+                $itemData
+            );
+        }
+        return $output;
     }
 
 }

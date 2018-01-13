@@ -19,9 +19,7 @@
                 <div class="card">
                     <div class="card-body">
                         {% autoescape false %}
-                            {% for field in fields %}
-                                {{ item[field.name] | outputType(field.type, field.properties, item) }}
-                            {% endfor %}
+                            {{ item | outputTypeArray(fields) }}
                         {% endautoescape %}
                     </div>
                 </div>

@@ -32,7 +32,7 @@ class CatalogController extends ProductController
         }
 
         if ($pageAlias) {
-            return $this->pageProduct($currentCategory, $pageAlias, $uri);
+            return $this->pageProduct($currentCategory, $uri);
         }
 
         $currentPage = $currentCategory;
@@ -49,14 +49,14 @@ class CatalogController extends ProductController
         $queryOptions = $this->getQueryOptions($queryString, $contentType);
         $skip = ($queryOptions['page'] - 1) * $queryOptions['limit'];
 
-        // Get fields names
+        // Get fields options
         $fields = [];
         $options = [
             'currentCategoryUri' => $currentCategory->getUri(),
             'systemNameField' => $this->getSystemNameField($contentTypeFields)
         ];
         foreach ($contentTypeFields as $field) {
-            if (!empty($field)) {
+            if (!empty($field) && !empty($field['showInList'])) {
                 $fields[] = [
                     'name' => $field['name'],
                     'type' => $field['outputType'],
@@ -95,11 +95,10 @@ class CatalogController extends ProductController
 
     /**
      * @param Category $category
-     * @param $pageAlias
      * @param string $uri
      * @return Response
      */
-    public function pageProduct(Category $category, $pageAlias, $uri = '')
+    public function pageProduct(Category $category, $uri = '')
     {
         $categoriesRepository = $this->getCategoriesRepository();
         $contentType = $category->getContentType();
@@ -123,6 +122,22 @@ class CatalogController extends ProductController
         $currentId = $currentPage['_id'];
         $currentPage['id'] = $currentId;
 
+        // Get fields options
+        $fields = [];
+        $options = [
+            'currentCategoryUri' => $category->getUri(),
+            'systemNameField' => $this->getSystemNameField($contentTypeFields)
+        ];
+        foreach ($contentTypeFields as $field) {
+            if (!empty($field)) {
+                $fields[] = [
+                    'name' => $field['name'],
+                    'type' => $field['outputType'],
+                    'properties' => array_merge($field['outputProperties'], $options)
+                ];
+            }
+        }
+
         // Get categories menu
         $categoriesMenu = $this->getCategoriesMenu($category, $breadcrumbsIds);
 
@@ -134,7 +149,8 @@ class CatalogController extends ProductController
             'currentUri' => $uri,
             'categoriesMenu' => $categoriesMenu,
             'breadcrumbs' => $breadcrumbs,
-            'breadcrumbsIds' => $breadcrumbsIds
+            'breadcrumbsIds' => $breadcrumbsIds,
+            'fields' => $fields
         ]);
     }
 

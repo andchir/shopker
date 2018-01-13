@@ -18,12 +18,10 @@ framework:
     serializer:
         enable_annotations: true
         enabled: true
-        name_converter: 'serializer.name_converter.camel_case_to_snake_case'
     templating:
         engines: ['twig']
     default_locale: '%locale%'
     trusted_hosts: ~
-    trusted_proxies: ~
     session:
         # http://symfony.com/doc/current/reference/configuration/framework.html#handler-id
         handler_id:  session.handler.native_file
@@ -72,6 +70,7 @@ doctrine:
         auto_mapping: true
 
 doctrine_mongodb:
+    auto_generate_hydrator_classes: true
     connections:
         default:
             server: "mongodb://%mongodb_user%:%mongodb_password%@%mongodb_server%"

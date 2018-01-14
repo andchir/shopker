@@ -20,9 +20,9 @@ services:
 
     # controllers are imported separately to make sure they're public
     # and have a tag that allows actions to type-hint services
-#    AppBundle\Controller\:
-#        resource: '../../src/AppBundle/Controller/*'
-#        tags: ['controller.service_arguments']
+    AppBundle\Controller\Admin\:
+        resource: '../../src/AppBundle/Controller/Admin/*'
+        tags: ['controller.service_arguments']
 
     get_set_method_normalizer:
         class: Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer

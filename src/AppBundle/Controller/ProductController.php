@@ -62,6 +62,24 @@ class ProductController extends BaseController
     }
 
     /**
+     * @param $queryOptions
+     * @param $itemsTotal
+     * @return array
+     */
+    public function getPagesOptions($queryOptions, $itemsTotal)
+    {
+        $pagesOptions = [
+            'current' => $queryOptions['page'],
+            'limit' => $queryOptions['limit'],
+            'total' => ceil($itemsTotal / $queryOptions['limit']),
+            'prev' => max(1, $queryOptions['page'] - 1)
+        ];
+        $pagesOptions['next'] = min($pagesOptions['total'], $queryOptions['page'] + 1);
+
+        return $pagesOptions;
+    }
+
+    /**
      * @param string $collectionName
      * @return \Doctrine\MongoDB\Collection
      */

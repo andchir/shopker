@@ -46,8 +46,6 @@ class CatalogController extends ProductController
         $contentTypeFields = $contentType->getFields();
         $collection = $this->getCollection($contentType->getCollection());
         $queryString = $request->getQueryString();
-        $queryOptions = $this->getQueryOptions($queryString, $contentType);
-        $skip = ($queryOptions['page'] - 1) * $queryOptions['limit'];
 
         // Get fields options
         $fields = [];
@@ -64,6 +62,15 @@ class CatalogController extends ProductController
                 ];
             }
         }
+
+        $total = $items = $collection->find([
+            'parentId' => $currentCategory->getId()
+        ])->count();
+
+        /* pages */
+        $queryOptions = $this->getQueryOptions($queryString, $contentType);
+        $skip = ($queryOptions['page'] - 1) * $queryOptions['limit'];
+        $pagesOptions = $this->getPagesoptions($queryOptions, $total);
 
         // Get child products
         $items = $collection->find([
@@ -89,7 +96,8 @@ class CatalogController extends ProductController
             'categoriesTopLevel' => $categoriesTopLevel,
             'categoriesSiblings' => $categoriesSiblings,
             'breadcrumbs' => $breadcrumbs,
-            'breadcrumbsIds' => $breadcrumbsIds
+            'breadcrumbsIds' => $breadcrumbsIds,
+            'pagesOptions' => $pagesOptions
         ]);
     }
 

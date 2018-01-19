@@ -4,15 +4,15 @@
     {% include 'header.html.twig' %}
     <main role="main" class="container">
 
-        {% include 'breadcrumbs.html.twig' %}
+        {% include 'nav/breadcrumbs.html.twig' %}
 
         <div class="min-height400">
 
             <h1>{{ currentPage.title }}</h1>
 
-            {% include 'child-categories-menu.html.twig' %}
+            {% include 'nav/child-categories-menu.html.twig' %}
 
-            {% include 'siblings-menu.html.twig' %}
+            {% include 'nav/siblings-menu.html.twig' %}
 
             {% if items | length == 0 and categoriesMenu | length == 0 %}
                 <div class="alert alert-info">
@@ -35,6 +35,9 @@
                 {% endfor %}
 
             </div>
+
+            {% include 'nav/pagination.html.twig' %}
+
         </div>
 
     </main>

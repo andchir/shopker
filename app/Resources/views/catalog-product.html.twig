@@ -8,11 +8,10 @@
 
     {% include 'child-categories-menu.html.twig' %}
 
-    {% autoescape false %}
-        {{ currentPage | outputTypeArray(fields, 'page_') }}
-    {% endautoescape %}
-
-
-
+    <div class="min-height400">
+        {% autoescape false %}
+            {{ currentPage | outputTypeArray(fields, 'page_') }}
+        {% endautoescape %}
+    </div>
 </main>
 {% endblock %}

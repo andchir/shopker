@@ -6,32 +6,36 @@
 
         {% include 'breadcrumbs.html.twig' %}
 
-        <h1>{{ currentPage.title }}</h1>
+        <div class="min-height400">
 
-        {% include 'child-categories-menu.html.twig' %}
+            <h1>{{ currentPage.title }}</h1>
 
-        {% include 'siblings-menu.html.twig' %}
+            {% include 'child-categories-menu.html.twig' %}
 
-        <div class="row">
+            {% include 'siblings-menu.html.twig' %}
 
-            {% for item in items %}
-            <div class="col-6 col-lg-4 mb-3">
-                <div class="card">
-                    <div class="card-body">
-                        {% autoescape false %}
-                            {{ item | outputTypeArray(fields) }}
-                        {% endautoescape %}
-                    </div>
+            {% if items | length == 0 and categoriesMenu | length == 0 %}
+                <div class="alert alert-info">
+                    {{ 'This category is empty' | trans }}.
                 </div>
-            </div>
-            {% endfor %}
+            {% endif %}
 
+            <div class="row">
+
+                {% for item in items %}
+                    <div class="col-6 col-lg-4 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                {% autoescape false %}
+                                    {{ item | outputTypeArray(fields) }}
+                                {% endautoescape %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+            </div>
         </div>
 
-        {% if items | length == 0 and categoriesMenu | length == 0 %}
-            <div class="alert alert-info">
-                {{ 'This category is empty' | trans }}.
-            </div>
-        {% endif %}
     </main>
 {% endblock %}

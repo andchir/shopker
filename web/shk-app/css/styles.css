@@ -12,6 +12,7 @@
 .relative { position: relative; }
 .pos-absolute-left { position: absolute; left: 0; top: 0; }
 .pos-absolute-right { position: absolute; right: 0; top: 0; }
+.min-height400 { min-height: 400px; }
 
 /* shadow */
 .shadow { box-shadow: 0 0 20px rgba(0,0,0,0.3); }
@@ -156,7 +157,7 @@ body .ui-datepicker .ui-datepicker-header .ui-datepicker-next:before { font-fami
 .btn-breadcrumb .btn:first-child { padding:6px 6px 6px 10px; }
 .btn-breadcrumb .btn:last-child { padding:6px 18px 6px 24px; }
 
-.btn-breadcrumb .btn.btn-secondary:not(:last-child):after { border-left: 10px solid #868e96; }
+.btn-breadcrumb .btn.btn-secondary:not(:last-child):after { border-left: 10px solid #6c757d; }
 .btn-breadcrumb .btn.btn-secondary:not(:last-child):before { border-left: 10px solid #ccc; }
-.btn-breadcrumb .btn.btn-secondary:hover:not(:last-child):after { border-left: 10px solid #727b84; }
+.btn-breadcrumb .btn.btn-secondary:hover:not(:last-child):after { border-left: 10px solid #5a6268; }
 .btn-breadcrumb .btn.btn-secondary:hover:not(:last-child):before { border-left: 10px solid #ccc; }

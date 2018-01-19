@@ -26,6 +26,7 @@ class ProductController extends BaseController
         $queryOptionsDefault = [
             'page' => 1,
             'limit' => 10,
+            'limit_max' => 100,
             'sort_by' => '_id',
             'sort_dir' => 1,
             'full' => 1,
@@ -57,6 +58,8 @@ class ProductController extends BaseController
         if(!is_numeric($queryOptions['page'])){
             $queryOptions['page'] = $queryOptionsDefault['page'];
         }
+        $queryOptions['limit'] = min(abs(intval($queryOptions['limit'])), $queryOptions['limit_max']);
+        $queryOptions['page'] = abs(intval($queryOptions['page']));
 
         return $queryOptions;
     }

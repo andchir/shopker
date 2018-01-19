@@ -1,4 +1,4 @@
-{% if pagesOptions.total > 0 %}
+{% if pagesOptions.total > 1 %}
     {% set pagesUrl = catalogPath(currentUri) ~ '?limit=' ~ pagesOptions.limit ~ '&page=' %}
     <nav>
         <ul class="pagination">

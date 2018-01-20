@@ -1,4 +1,4 @@
-{% macro pagesUrlTemplate(currentUri, limit, page) %}{{ currentUri }}?limit={{ limit }}&page={{ page }}{% endmacro %}
+{% macro pageUrl(currentUri, limit, page) %}{{ currentUri }}?limit={{ limit }}&page={{ page }}{% endmacro %}
 <div>
     {% if pagesOptions.pageSizeArr | length > 1 %}
         <div class="float-right">
@@ -6,7 +6,7 @@
                 <ul class="pagination justify-content-end">
                     {% for pageSize in pagesOptions.pageSizeArr %}
                         <li class="page-item{% if pageSize == pagesOptions.limit %} active{% endif %}">
-                            <a class="page-link" href="{{ _self.pagesUrlTemplate(catalogPath(currentUri), pageSize, pagesOptions.current) }}">{{ pageSize }}</a>
+                            <a class="page-link" href="{{ _self.pageUrl(catalogPath(currentUri), pageSize, pagesOptions.current) }}">{{ pageSize }}</a>
                         </li>
                     {% endfor %}
                 </ul>
@@ -18,7 +18,7 @@
             <ul class="pagination pagination-rounded">
                 {% if pagesOptions.current != pagesOptions.prev %}
                     <li class="page-item">
-                        <a class="page-link" href="{{ _self.pagesUrlTemplate(catalogPath(currentUri), pagesOptions.limit, pagesOptions.prev) }}" aria-label="Previous">
+                        <a class="page-link" href="{{ _self.pageUrl(catalogPath(currentUri), pagesOptions.limit, pagesOptions.prev) }}" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                             <span class="sr-only">Previous</span>
                         </a>
@@ -26,14 +26,14 @@
                 {% endif %}
                 {% for i in 1..pagesOptions.total %}
                     <li class="page-item{% if i == pagesOptions.current %} active{% endif %}">
-                        <a class="page-link" href="{{ _self.pagesUrlTemplate(catalogPath(currentUri), pagesOptions.limit, i) }}">
+                        <a class="page-link" href="{{ _self.pageUrl(catalogPath(currentUri), pagesOptions.limit, i) }}">
                             {{ i }}
                         </a>
                     </li>
                 {% endfor %}
                 {% if pagesOptions.current != pagesOptions.next %}
                     <li class="page-item">
-                        <a class="page-link" href="{{ _self.pagesUrlTemplate(catalogPath(currentUri), pagesOptions.limit, pagesOptions.next) }}" aria-label="Next">
+                        <a class="page-link" href="{{ _self.pageUrl(catalogPath(currentUri), pagesOptions.limit, pagesOptions.next) }}" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                             <span class="sr-only">Next</span>
                         </a>

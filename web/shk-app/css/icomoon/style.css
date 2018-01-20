@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?5nzg6c');
-  src:  url('fonts/icomoon.eot?5nzg6c#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?5nzg6c') format('truetype'),
-    url('fonts/icomoon.woff?5nzg6c') format('woff'),
-    url('fonts/icomoon.svg?5nzg6c#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?acx484');
+  src:  url('fonts/icomoon.eot?acx484#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?acx484') format('truetype'),
+    url('fonts/icomoon.woff?acx484') format('woff'),
+    url('fonts/icomoon.svg?acx484#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -24,8 +24,14 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-calendar:before {
-  content: "\e905";
+.icon-grid2:before {
+  content: "\e90a";
+}
+.icon-home:before {
+  content: "\e902";
+}
+.icon-pencil2:before {
+  content: "\e901";
 }
 .icon-keyboard_arrow_up:before {
   content: "\e906";
@@ -435,12 +441,12 @@
 .icon-ellipsis:before {
   content: "\e129";
 }
-.icon-home:before {
-  content: "\e902";
-}
-.icon-pencil2:before {
-  content: "\e901";
-}
 .icon-home2:before {
   content: "\e903";
+}
+.icon-calendar:before {
+  content: "\e905";
+}
+.icon-list:before {
+  content: "\e9ba";
 }

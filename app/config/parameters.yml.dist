@@ -10,6 +10,10 @@ parameters:
 
     files_dir_path: '%kernel.root_dir%/../web/uploads'
     files_dir_url: '/uploads'
+    catalog_page_size:
+        - 12
+        - 24
+        - 60
     files_ext_blacklist:
         - php
         - php3

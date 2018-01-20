@@ -19,13 +19,14 @@ class ProductController extends BaseController
     /**
      * @param $queryString
      * @param ContentType $contentType
+     * @param array $pageSizeArr
      * @return array
      */
-    public function getQueryOptions($queryString, ContentType $contentType)
+    public function getQueryOptions($queryString, ContentType $contentType, $pageSizeArr = [10])
     {
         $queryOptionsDefault = [
             'page' => 1,
-            'limit' => 10,
+            'limit' => $pageSizeArr[0],
             'limit_max' => 100,
             'sort_by' => '_id',
             'sort_dir' => 1,
@@ -65,13 +66,15 @@ class ProductController extends BaseController
     }
 
     /**
-     * @param $queryOptions
-     * @param $itemsTotal
+     * @param array $queryOptions
+     * @param int $itemsTotal
+     * @param array $pageSizeArr
      * @return array
      */
-    public function getPagesOptions($queryOptions, $itemsTotal)
+    public function getPagesOptions($queryOptions, $itemsTotal, $pageSizeArr = [10])
     {
         $pagesOptions = [
+            'pageSizeArr' => $pageSizeArr,
             'current' => $queryOptions['page'],
             'limit' => $queryOptions['limit'],
             'total' => ceil($itemsTotal / $queryOptions['limit']),

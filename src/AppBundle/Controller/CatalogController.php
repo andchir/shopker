@@ -35,6 +35,7 @@ class CatalogController extends ProductController
             return $this->pageProduct($currentCategory, $uri);
         }
 
+        $pageSizeArr = $this->getParameter('catalog_page_size');
         $currentPage = $currentCategory;
         $currentId = $currentCategory->getId();
 
@@ -68,9 +69,9 @@ class CatalogController extends ProductController
         ])->count();
 
         /* pages */
-        $queryOptions = $this->getQueryOptions($queryString, $contentType);
+        $queryOptions = $this->getQueryOptions($queryString, $contentType, $pageSizeArr);
         $skip = ($queryOptions['page'] - 1) * $queryOptions['limit'];
-        $pagesOptions = $this->getPagesoptions($queryOptions, $total);
+        $pagesOptions = $this->getPagesoptions($queryOptions, $total, $pageSizeArr);
 
         // Get child products
         $items = $collection->find([

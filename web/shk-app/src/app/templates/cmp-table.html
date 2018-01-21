@@ -3,10 +3,10 @@
         <thead>
             <tr>
                 <th class="text-left">
-                    <label class="custom-control custom-checkbox" [hidden]="items.length === 0">
-                        <input type="checkbox" class="custom-control-input" (click)="selectAll($event)">
-                        <span class="custom-control-indicator"></span>
-                    </label>
+                    <div class="custom-control custom-checkbox" [hidden]="items.length === 0">
+                        <input type="checkbox" class="custom-control-input" id="fieldSelectAll" (click)="selectAll($event)">
+                        <label class="custom-control-label" for="fieldSelectAll"></label>
+                    </div>
                 </th>
                 <th *ngFor="let tableField of tableFields; let index=index">
                     <button type="button" class="btn btn-block btn-link" (click)="selectSortBy(tableField.name)">
@@ -19,10 +19,10 @@
         <tbody>
             <tr class="show-on-hover-parent" *ngFor="let item of items">
                 <td>
-                    <label class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" [checked]="getIsSelected(item.id)" (click)="setSelected($event, item.id)">
-                        <span class="custom-control-indicator"></span>
-                    </label>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="fieldCheck{{item.id}}" [checked]="getIsSelected(item.id)" (click)="setSelected($event, item.id)">
+                        <label class="custom-control-label" for="fieldCheck{{item.id}}"></label>
+                    </div>
                 </td>
                 <td *ngFor="let tableField of tableFields; let index=index">
                     <div class="relative" *ngIf="index == tableFields.length - 1">

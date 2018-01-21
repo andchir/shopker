@@ -1,3 +1,4 @@
+{% macro pageUrl(currentUri, limit, page, order_by) %}{{ currentUri }}?limit={{ limit }}&page={{ page }}&order_by={{ order_by }}{% endmacro %}
 <div class="card mb-3">
     <div class="p-2">
         <form action="" method="get">
@@ -16,13 +17,22 @@
             <div class="form-inline">
                 <label for="catalogSortBy">Сортировать по</label>
                 &nbsp;
-                <select class="form-control form-control-sm" id="catalogSortBy" name="sortby">
-                    <option value="new" selected="selected">Новизне</option>
-                    <option value="price_asc">Увеличению цены</option>
-                    <option value="price_desc">Уменьшению цены</option>
-                    <option value="name">Названию</option>
+                <select class="form-control form-control-sm" id="shkNavSortBy" name="sortby">
+                    <option value="id_desc"{% if queryOptions.order_by == 'id_desc' %} selected="selected"{% endif %}>Новизне</option>
+                    <option value="price_asc"{% if queryOptions.order_by == 'price_asc' %} selected="selected"{% endif %}>Увеличению цены</option>
+                    <option value="price_desc"{% if queryOptions.order_by == 'price_desc' %} selected="selected"{% endif %}>Уменьшению цены</option>
+                    <option value="title_asc"{% if queryOptions.order_by == 'title_asc' %} selected="selected"{% endif %}>Названию</option>
                 </select>
             </div>
         </form>
     </div>
 </div>
+<script>
+    var shkCurrentUrl = '{{ _self.pageUrl(catalogPath(currentUri), pagesOptions.limit, pagesOptions.current, queryOptions.order_by) }}';
+    var selectEl = document.getElementById('shkNavSortBy');
+    if (selectEl) {
+        selectEl.addEventListener('change', function(){
+            shk.orderByChange(shkCurrentUrl, selectEl.value);
+        }, false)
+    }
+</script>

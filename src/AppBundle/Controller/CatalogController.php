@@ -47,6 +47,7 @@ class CatalogController extends ProductController
         $contentTypeFields = $contentType->getFields();
         $collection = $this->getCollection($contentType->getCollection());
         $queryString = $request->getQueryString();
+        $queryOptions = $this->getQueryOptions($queryString, $contentType, $pageSizeArr);
 
         // Get fields options
         $fields = [];
@@ -69,7 +70,6 @@ class CatalogController extends ProductController
         ])->count();
 
         /* pages */
-        $queryOptions = $this->getQueryOptions($queryString, $contentType, $pageSizeArr);
         $skip = ($queryOptions['page'] - 1) * $queryOptions['limit'];
         $pagesOptions = $this->getPagesoptions($queryOptions, $total, $pageSizeArr);
 
@@ -98,6 +98,7 @@ class CatalogController extends ProductController
             'categoriesSiblings' => $categoriesSiblings,
             'breadcrumbs' => $breadcrumbs,
             'breadcrumbsIds' => $breadcrumbsIds,
+            'queryOptions' => $queryOptions,
             'pagesOptions' => $pagesOptions
         ]);
     }

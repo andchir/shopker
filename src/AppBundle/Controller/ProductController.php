@@ -30,10 +30,21 @@ class ProductController extends BaseController
             'limit_max' => 100,
             'sort_by' => '_id',
             'sort_dir' => 1,
+            'order_by' => 'id_desc',
             'full' => 1,
             'only_active' => 1
         ];
         parse_str($queryString, $queryOptions);
+
+        if (!empty($queryOptions['order_by']) && strpos($queryOptions['order_by'], '_') !== false) {
+            $orderByArr = explode('_', $queryOptions['order_by']);
+            if (empty($queryOptions['sort_by'])) {
+                $queryOptions['sort_by'] = $orderByArr[0];
+            }
+            if (empty($queryOptions['sort_dir'])) {
+                $queryOptions['sort_dir'] = $orderByArr[1];
+            }
+        }
 
         $queryOptions = array_merge($queryOptionsDefault, $queryOptions);
 

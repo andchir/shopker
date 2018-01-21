@@ -45,7 +45,7 @@
             <div class="col-md-7">
                 <div class="input-group">
                     <input type="text" class="form-control" name="name" formControlName="name" id="fieldName" [(ngModel)]="model.name">
-                    <div class="input-group-btn">
+                    <div class="input-group-append">
                         <button type="button" class="btn btn-secondary" ngbTooltip="Generate" (click)="generateName(model)" [disabled]="getControl('name').disabled">
                             <i class="icon-reload"></i>
                         </button>

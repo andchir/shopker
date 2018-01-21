@@ -41,7 +41,7 @@
                     </label>
                     <div class="input-group">
                         <input type="text" class="form-control" name="name" formControlName="name" id="fieldName" [(ngModel)]="model.name">
-                        <div class="input-group-btn">
+                        <div class="input-group-append">
                             <button type="button" class="btn btn-secondary" ngbTooltip="Generate" (click)="generateName(model)">
                                 <i class="icon-reload"></i>
                             </button>
@@ -69,12 +69,12 @@
                                 <select class="form-control form-control-sm" name="collection" formControlName="collection" [(ngModel)]="model.collection">
                                     <option value="{{collection}}" *ngFor="let collection of collections">{{collection}}</option>
                                 </select>
-                                <div class="input-group-btn">
+                                <div class="input-group-append">
                                     <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Add collection" (click)="displayToggle(addCollectionBlock); addCollectionField.value = ''; onValueChanged(); addCollectionField.focus()">
                                         <i class="icon-plus"></i>
                                     </button>
                                 </div>
-                                <div class="input-group-btn" [ngbPopover]="confirmPopover" #buttonDeleteCollection="ngbPopover" triggers="manual">
+                                <div class="input-group-append" [ngbPopover]="confirmPopover" #buttonDeleteCollection="ngbPopover" triggers="manual">
                                     <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Delete" (click)="deleteCollection(buttonDeleteCollection)">
                                         <i class="icon-cross"></i>
                                     </button>
@@ -153,7 +153,7 @@
 
                                 <div class="input-group">
                                     <input type="text" class="form-control form-control-sm" name="field_name" formControlName="name" [(ngModel)]="fieldModel.name">
-                                    <div class="input-group-btn">
+                                    <div class="input-group-append">
                                         <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Generate" (click)="generateName(fieldModel)">
                                             <i class="icon-reload"></i>
                                         </button>
@@ -186,7 +186,7 @@
                                         <option value=""></option>
                                         <option value="{{fieldType.name}}" *ngFor="let fieldType of fieldTypes">{{fieldType.title}}</option>
                                     </select>
-                                    <div class="input-group-btn">
+                                    <div class="input-group-append">
                                         <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Options" (click)="displayToggle(inputTypeOptionsBlock)">
                                             <i class="icon-cog"></i>
                                         </button>
@@ -231,7 +231,7 @@
                                         <option value=""></option>
                                         <option value="{{fieldType.name}}" *ngFor="let fieldType of fieldTypes">{{fieldType.title}}</option>
                                     </select>
-                                    <div class="input-group-btn">
+                                    <div class="input-group-append">
                                         <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Options" (click)="displayToggle(outputTypeOptionsBlock)">
                                             <i class="icon-cog"></i>
                                         </button>
@@ -275,12 +275,12 @@
                                             <option value=""></option>
                                             <option [value]="groupName" *ngFor="let groupName of model.groups">{{groupName}}</option>
                                         </select>
-                                        <div class="input-group-btn">
+                                        <div class="input-group-append">
                                             <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Add group" (click)="displayToggle(addGroupBlock); addGroupField.value = ''; addGroupField.focus()">
                                                 <i class="icon-plus"></i>
                                             </button>
                                         </div>
-                                        <div class="input-group-btn">
+                                        <div class="input-group-append">
                                             <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Delete group" (click)="deleteGroup()">
                                                 <i class="icon-cross"></i>
                                             </button>

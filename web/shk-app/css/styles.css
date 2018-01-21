@@ -1,9 +1,11 @@
 
 /* common */
+.relative { position: relative; }
 .w-auto { width: auto; }
 .min-width150 { min-width: 150px; }
 .big { font-size: 120%; }
 .min-height400 { min-height: 400px; }
+.image-wrapper img { max-width: 100%; }
 
 /** Bredcrumbs **/
 .btn-breadcrumb .btn:not(:last-child):after { content: " "; display: block; width: 0; height: 0; border-top: 17px solid transparent; border-bottom: 17px solid transparent; border-left: 10px solid white; position: absolute; top: 50%; margin-top: -17px; left: 100%; z-index: 3; }
@@ -21,3 +23,8 @@
 /* pagination */
 .pagination-rounded > li > a,
 .pagination-rounded > li > span { border-radius: 0.5rem !important; margin: 0 5px; }
+
+.catalog-list-item { position: relative; }
+.catalog-list-item-inner { float: left; margin-left: 150px; min-height: 115px; }
+.catalog-list-item .image-wrapper { width: 130px; position: absolute; left: 0; top: 0; }
+.catalog-list-item h3 { font-size: 18px; }

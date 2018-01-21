@@ -107,11 +107,10 @@
 
                         <div class="card card-body p-2 pl-3">
 
-                            <label class="custom-control custom-checkbox m-0">
-                                <input type="checkbox" class="custom-control-input" value="1" name="isActive" formControlName="isActive" [(ngModel)]="model.isActive">
-                                <span class="custom-control-indicator"></span>
-                                <span>{{'ACTIVE' | translate}}</span>
-                            </label>
+                            <div class="custom-control custom-checkbox m-0">
+                                <input type="checkbox" class="custom-control-input" id="fieldIsActive" value="1" name="isActive" formControlName="isActive" [(ngModel)]="model.isActive">
+                                <label class="custom-control-label" for="fieldIsActive">{{'ACTIVE' | translate}}</label>
+                            </div>
 
                         </div>
 
@@ -313,11 +312,10 @@
                         <div class="form-group row mb-0">
                             <div class="col-md-7 offset-md-5">
 
-                                <label class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" value="1" name="required" formControlName="required" [(ngModel)]="fieldModel.required">
-                                    <span class="custom-control-indicator"></span>
-                                    <span>{{'REQUIRED' | translate}}</span>
-                                </label>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="fieldRequired" value="1" name="required" formControlName="required" [(ngModel)]="fieldModel.required">
+                                    <label class="custom-control-label" for="fieldRequired">{{'REQUIRED' | translate}}</label>
+                                </div>
 
                             </div>
                         </div>
@@ -325,11 +323,10 @@
                         <div class="form-group row mb-0">
                             <div class="col-md-7 offset-md-5">
 
-                                <label class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" value="1" name="showInTable" formControlName="showInTable" [(ngModel)]="fieldModel.showInTable">
-                                    <span class="custom-control-indicator"></span>
-                                    <span>{{'SHOW_IN_TABLE' | translate}}</span>
-                                </label>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="fieldShowInTable" value="1" name="showInTable" formControlName="showInTable" [(ngModel)]="fieldModel.showInTable">
+                                    <label class="custom-control-label" for="fieldShowInTable">{{'SHOW_IN_TABLE' | translate}}</label>
+                                </div>
 
                             </div>
                         </div>
@@ -337,11 +334,10 @@
                         <div class="form-group row mb-0">
                             <div class="col-md-7 offset-md-5">
 
-                                <label class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" value="1" name="showInList" formControlName="showInList" [(ngModel)]="fieldModel.showInList">
-                                    <span class="custom-control-indicator"></span>
-                                    <span>{{'SHOW_IN_LIST' | translate}}</span>
-                                </label>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="fieldShowInList" value="1" name="showInList" formControlName="showInList" [(ngModel)]="fieldModel.showInList">
+                                    <label class="custom-control-label" for="fieldShowInList">{{'SHOW_IN_LIST' | translate}}</label>
+                                </div>
 
                             </div>
                         </div>
@@ -349,11 +345,10 @@
                         <div class="form-group row mb-0">
                             <div class="col-md-7 offset-md-5">
 
-                                <label class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" value="1" name="isFilter" formControlName="isFilter" [(ngModel)]="fieldModel.isFilter">
-                                    <span class="custom-control-indicator"></span>
-                                    <span>{{'SHOW_IN_FILTER' | translate}}</span>
-                                </label>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="fieldIsFilter" value="1" name="isFilter" formControlName="isFilter" [(ngModel)]="fieldModel.isFilter">
+                                    <label class="custom-control-label" for="fieldIsFilter">{{'SHOW_IN_FILTER' | translate}}</label>
+                                </div>
 
                             </div>
                         </div>

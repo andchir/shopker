@@ -1,4 +1,4 @@
-{% macro pageUrl(currentUri, limit, page, order_by) %}{{ currentUri }}?limit={{ limit }}&page={{ page }}&order_by={{ order_by }}{% endmacro %}
+{% import "macro.html.twig" as macro %}
 <div class="card mb-3">
     <div class="p-2">
         <div class="float-right">
@@ -24,7 +24,7 @@
     </div>
 </div>
 <script>
-    var shkCurrentUrl = '{{ _self.pageUrl(catalogPath(currentUri), pagesOptions.limit, pagesOptions.current, queryOptions.order_by) }}';
+    var shkCurrentUrl = '{{ macro.pageUrl(catalogPath(currentUri), pagesOptions.limit, pagesOptions.current, queryOptions.order_by) }}';
     var selectEl = document.getElementById('shkNavSortBy');
     if (selectEl) {
         selectEl.addEventListener('change', function(){

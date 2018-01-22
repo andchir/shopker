@@ -35,7 +35,7 @@ class CatalogController extends ProductController
             return $this->pageProduct($currentCategory, $uri);
         }
 
-        $listTemplate = $request->cookies->get('shkListType');
+        $listTemplate = $request->cookies->get('shkListType', 'grid');
         $pageSizeArr = $this->getParameter('catalog_page_size');
         $currentPage = $currentCategory;
         $currentId = $currentCategory->getId();

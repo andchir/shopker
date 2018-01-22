@@ -19,10 +19,12 @@
         </div>
     </nav>
     <main role="main" class="container">
-        <h1>404 - Page not found</h1>
-        {% if message is defined and message is not empty %}
-            <div class="alert alert-danger">{{ message }}</div>
-        {% endif %}
+        <div class="min-height400">
+            <h1>404 - Page not found</h1>
+            {% if message is defined and message is not empty %}
+                <div class="alert alert-danger">{{ message }}</div>
+            {% endif %}
+        </div>
     </main>
 {% endblock %}
 

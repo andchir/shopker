@@ -6,6 +6,7 @@ use AppBundle\Controller\ProductController as BaseProductController;
 use AppBundle\Document\Category;
 use AppBundle\Document\ContentType;
 use AppBundle\Document\FileDocument;
+use AppBundle\Document\Filter;
 use Doctrine\ORM\Query\Expr\Base;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -286,6 +287,8 @@ class ProductController extends BaseProductController
         else {
             $result = $collection->insert($document);
         }
+
+        $this->updateFiltersData($category);
 
         if (!empty($result['ok'])) {
             return new JsonResponse($document);
@@ -608,6 +611,32 @@ class ProductController extends BaseProductController
             $fileDocument->setUploadRootDir($filesDirPath);
             $dm->remove($fileDocument);
             $dm->flush();
+        }
+
+        return true;
+    }
+
+    /***
+     * @param Category $category
+     * @return bool
+     */
+    public function updateFiltersData(Category $category)
+    {
+        $categoriesRepository = $this->get('doctrine_mongodb')
+            ->getManager()
+            ->getRepository(Category::class);
+
+        $filterRepository = $this->get('doctrine_mongodb')
+            ->getManager()
+            ->getRepository(Filter::class);
+
+        list($breadcrumbs, $breadcrumbsIds) = $categoriesRepository->getBreadcrumbs($category->getUri(), false);
+        $categoriesIds = array_reverse($breadcrumbsIds);
+
+        foreach ($categoriesIds as $categoryId) {
+
+            // TODO: update filters for category
+
         }
 
         return true;

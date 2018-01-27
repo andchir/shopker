@@ -2,6 +2,8 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Document\Category;
+
 /**
  * CategoryRepository
  *
@@ -22,6 +24,69 @@ class CategoryRepository extends BaseRepository
             ->getQuery()
             ->execute()
             ->count();
+    }
+
+    /**
+     * @param $categoryUri
+     * @param bool $pop
+     * @return array
+     */
+    public function getBreadcrumbs($categoryUri, $pop = true)
+    {
+        if (empty($categoryUri)) {
+            return [];
+        }
+        $breadcrumbs = [];
+        $breadcrumbsIds = [];
+        $categoryUri = trim($categoryUri, '/');
+        $categoryUriArr = explode('/', $categoryUri);
+
+        $categories = $this->createQueryBuilder()
+            ->field('name')->in($categoryUriArr)
+            ->sort('title', 'asc')
+            ->getQuery()
+            ->execute()
+            ->toArray(false);
+
+        /** @var Category $crumb */
+        $crumb = $this->findOneFromArray($categories, 'parentId', 0);
+        if ($crumb) {
+            $breadcrumbsIds[] = $crumb->getId();
+        }
+        while (!empty($crumb)) {
+            $breadcrumbs[] = $crumb->getMenuData();
+            $crumb = $this->findOneFromArray($categories, 'parentId', $crumb->getId());
+            if ($crumb) {
+                $breadcrumbsIds[] = $crumb->getId();
+            }
+        }
+
+        if (!empty($breadcrumbs) && $pop) {
+            array_pop($breadcrumbs);
+        }
+        return [$breadcrumbs, $breadcrumbsIds];
+    }
+
+    /**
+     * @param array $items
+     * @param string $key
+     * @param string $value
+     * @return null | mixed
+     */
+    public function findOneFromArray($items, $key, $value)
+    {
+        $result = null;
+        foreach ($items as $item) {
+            $method = 'get' . ucfirst($key);
+            if (method_exists($item, $method)) {
+                $curVal = call_user_func([$item, $method]);
+                if ($curVal === $value) {
+                    $result = $item;
+                    break;
+                }
+            }
+        }
+        return $result;
     }
 
 }

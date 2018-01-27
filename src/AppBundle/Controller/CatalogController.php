@@ -23,7 +23,7 @@ class CatalogController extends ProductController
     public function catalogAction(Request $request, $uri)
     {
         $categoriesRepository = $this->getCategoriesRepository();
-        list($pageAlias, $categoryUri, $levelNum) = self::parseUri($uri);
+        list($pageAlias, $categoryUri, $levelNum) = Category::parseUri($uri);
 
         /** @var Category $currentCategory */
         $currentCategory = $categoriesRepository->findOneBy(['uri' => $categoryUri]);
@@ -40,7 +40,7 @@ class CatalogController extends ProductController
         $currentPage = $currentCategory;
         $currentId = $currentCategory->getId();
 
-        list($breadcrumbs, $breadcrumbsIds) = $this->getBreadcrumbs($categoryUri);
+        list($breadcrumbs, $breadcrumbsIds) = $categoriesRepository->getBreadcrumbs($categoryUri);
         $categoriesTopLevel = $this->getChildCategories(0, $breadcrumbsIds);
         $categoriesMenu = $this->getCategoriesMenu($currentCategory, $breadcrumbsIds);
 
@@ -50,21 +50,12 @@ class CatalogController extends ProductController
         $queryString = $request->getQueryString();
         $queryOptions = $this->getQueryOptions($queryString, $contentType, $pageSizeArr);
 
-        // Get fields options
-        $fields = [];
         $options = [
             'currentCategoryUri' => $currentCategory->getUri(),
             'systemNameField' => $this->getSystemNameField($contentTypeFields)
         ];
-        foreach ($contentTypeFields as $field) {
-            if (!empty($field) && !empty($field['showInList'])) {
-                $fields[] = [
-                    'name' => $field['name'],
-                    'type' => $field['outputType'],
-                    'properties' => array_merge($field['outputProperties'], $options)
-                ];
-            }
-        }
+        $filters = [];// TODO: Get filters values from DB
+        list($filters, $fields) = $this->getFieldsData($contentTypeFields,'list', $filters, $options);
 
         $total = $items = $collection->find([
             'parentId' => $currentCategory->getId()
@@ -96,6 +87,7 @@ class CatalogController extends ProductController
             'listTemplate' => $listTemplate,
             'items' => $items,
             'fields' => $fields,
+            'filters' => $filters,
             'categoriesTopLevel' => $categoriesTopLevel,
             'categoriesSiblings' => $categoriesSiblings,
             'breadcrumbs' => $breadcrumbs,
@@ -117,10 +109,10 @@ class CatalogController extends ProductController
         if(!$contentType){
             throw $this->createNotFoundException();
         }
-        list($pageAlias, $categoryUri) = self::parseUri($uri);
+        list($pageAlias, $categoryUri) = Category::parseUri($uri);
         $contentTypeFields = $contentType->getFields();
         $collection = $this->getCollection($contentType->getCollection());
-        list($breadcrumbs, $breadcrumbsIds) = $this->getBreadcrumbs($categoryUri, false);
+        list($breadcrumbs, $breadcrumbsIds) = $categoriesRepository->getBreadcrumbs($categoryUri, false);
 
         $categoriesTopLevel = $this->getChildCategories(0, $breadcrumbsIds);
 
@@ -167,68 +159,34 @@ class CatalogController extends ProductController
     }
 
     /**
-     * @param $categoryUri
-     * @param bool $pop
+     * @param array $contentTypeFields
+     * @param string $type
+     * @param array $filters
+     * @param array $options
      * @return array
      */
-    public function getBreadcrumbs($categoryUri, $pop = true)
+    public function getFieldsData($contentTypeFields, $type, $filters = [], $options = [])
     {
-        if (empty($categoryUri)) {
-            return [];
-        }
-        $breadcrumbs = [];
-        $breadcrumbsIds = [];
-        $categoryUri = trim($categoryUri, '/');
-        $categoryUriArr = explode('/', $categoryUri);
-
-        $categories = $this->get('doctrine_mongodb')
-            ->getManager()
-            ->createQueryBuilder(Category::class)
-            ->field('name')->in($categoryUriArr)
-            ->sort('title', 'asc')
-            ->getQuery()
-            ->execute()
-            ->toArray(false);
-
-        /** @var Category $crumb */
-        $crumb = $this->findOne($categories, 'parentId', 0);
-        if ($crumb) {
-            $breadcrumbsIds[] = $crumb->getId();
-        }
-        while (!empty($crumb)) {
-            $breadcrumbs[] = $crumb->getMenuData();
-            $crumb = $this->findOne($categories, 'parentId', $crumb->getId());
-            if ($crumb) {
-                $breadcrumbsIds[] = $crumb->getId();
+        $filters = [];
+        $fields = [];
+        foreach ($contentTypeFields as $field) {
+            if (!empty($field['showInList'])) {
+                $fields[] = [
+                    'name' => $field['name'],
+                    'type' => $field['outputType'],
+                    'properties' => array_merge($field['outputProperties'], $options)
+                ];
+            }
+            if (!empty($field['isFilter'])) {
+                $filters[] = [
+                    'name' => $field['name'],
+                    'title' => $field['title'],
+                    'outputType' => $field['outputType'],
+                    'values' => []
+                ];
             }
         }
-
-        if (!empty($breadcrumbs) && $pop) {
-            array_pop($breadcrumbs);
-        }
-        return [$breadcrumbs, $breadcrumbsIds];
-    }
-
-    /**
-     * @param array $items
-     * @param string $key
-     * @param string $value
-     * @return null | mixed
-     */
-    public function findOne($items, $key, $value)
-    {
-        $result = null;
-        foreach ($items as $item) {
-            $method = 'get' . ucfirst($key);
-            if (method_exists($item, $method)) {
-                $curVal = call_user_func([$item, $method]);
-                if ($curVal === $value) {
-                    $result = $item;
-                    break;
-                }
-            }
-        }
-        return $result;
+        return [$filters, $fields];
     }
 
     /**
@@ -315,26 +273,6 @@ class CatalogController extends ProductController
         return $this->get('doctrine_mongodb')
             ->getManager()
             ->getRepository(Category::class);
-    }
-
-    /**
-     * @param string $uri
-     * @return array
-     */
-    public static function parseUri($uri)
-    {
-        if (strrpos($uri, '/') === false) {
-            $pageAlias = $uri;
-        } else {
-            $pageAlias = strrpos($uri, '/') < strlen($uri) - 1
-                ? substr($uri, strrpos($uri, '/')+1)
-                : '';
-        }
-        $parentUri = strrpos($uri, '/') !== false
-            ? substr($uri, 0, strrpos($uri, '/')+1)
-            : '';
-        $levelNum = substr_count($parentUri, '/');
-        return [$pageAlias, $parentUri, $levelNum];
     }
 
 }

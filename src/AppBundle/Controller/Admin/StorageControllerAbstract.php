@@ -26,7 +26,7 @@ abstract class StorageControllerAbstract extends BaseController
     public function getList(Request $request)
     {
         $queryString = $request->getQueryString();
-        parse_str($queryString, $options);
+        $options = $this->getQueryOptions($queryString);
 
         $repository = $this->getRepository();
         $results = $repository->findAllByOptions($options);
@@ -41,6 +41,16 @@ abstract class StorageControllerAbstract extends BaseController
             'items' => $data,
             'total' => $results['total']
         ]);
+    }
+
+    /**
+     * @param $queryString
+     * @return mixed
+     */
+    public function getQueryOptions($queryString)
+    {
+        parse_str($queryString, $options);
+        return $options;
     }
 
     /**

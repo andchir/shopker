@@ -45,12 +45,15 @@ abstract class BaseRepository extends DocumentRepository
             $opts['limit'] = $defaults['limit'];
         }
 
-        $skip = ($opts['page'] - 1) * $opts['limit'];
-
         $query = $this->createQueryBuilder()
-            ->sort($opts['sort_by'], $opts['sort_dir'])
-            ->limit($opts['limit'])
-            ->skip($skip);
+            ->sort($opts['sort_by'], $opts['sort_dir']);
+
+        if ($opts['limit']) {
+            $skip = ($opts['page'] - 1) * $opts['limit'];
+            $query = $query
+                ->limit($opts['limit'])
+                ->skip($skip);
+        }
 
 //        if($opts['only_active']){
 //            $query = $query

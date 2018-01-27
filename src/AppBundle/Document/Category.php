@@ -325,4 +325,24 @@ class Category
         ];
     }
 
+    /**
+     * @param string $uri
+     * @return array
+     */
+    public static function parseUri($uri)
+    {
+        if (strrpos($uri, '/') === false) {
+            $pageAlias = $uri;
+        } else {
+            $pageAlias = strrpos($uri, '/') < strlen($uri) - 1
+                ? substr($uri, strrpos($uri, '/')+1)
+                : '';
+        }
+        $parentUri = strrpos($uri, '/') !== false
+            ? substr($uri, 0, strrpos($uri, '/')+1)
+            : '';
+        $levelNum = substr_count($parentUri, '/');
+        return [$pageAlias, $parentUri, $levelNum];
+    }
+
 }

@@ -11,36 +11,17 @@
             <hr>
         </div>
 
-        <div class="filter-block">
-            <h4>
-                Цена
-            </h4>
-            <div class="my-2">
-                <input class="form-control" type="range" min="0" max="100000" value="0">
+        {% for filter in filters %}
+            <div class="filter-block">
+                <h4>
+                    {{ filter.title }}
+                </h4>
+                <div class="my-2">
+                    {#<input class="form-control" type="range" min="0" max="100000" value="0">#}
+                </div>
             </div>
-        </div>
-        <hr>
-
-        <div class="filter-block">
-            <h4>
-                Производитель
-            </h4>
-            <div class="my-2">
-                <label class="p-2">
-                    <input type="checkbox" value="">
-                    Samsung
-                </label>
-                <label class="p-2">
-                    <input type="checkbox" value="">
-                    Sony
-                </label>
-                <label class="p-2">
-                    <input type="checkbox" value="">
-                    LG
-                </label>
-            </div>
-        </div>
-        <hr>
+            <hr>
+        {% endfor %}
 
     </form>
 

@@ -14,10 +14,12 @@
 
             {% include 'nav/siblings-menu.html.twig' %}
 
-            {% if items | length == 0 and categoriesMenu | length == 0 %}
-                <div class="alert alert-info">
-                    {{ 'This category is empty' | trans }}.
-                </div>
+            {% if items | length == 0 %}
+                {% if categoriesMenu | length == 0 %}
+                    <div class="alert alert-info">
+                        {{ 'This category is empty' | trans }}.
+                    </div>
+                {% endif %}
             {% else %}
 
                 {% include 'catalog/sort.html.twig' %}

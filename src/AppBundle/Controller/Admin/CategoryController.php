@@ -21,6 +21,19 @@ class CategoryController extends StorageControllerAbstract
 {
 
     /**
+     * @param $queryString
+     * @return mixed
+     */
+    public function getQueryOptions($queryString)
+    {
+        parse_str($queryString, $options);
+        if (!isset($options['limit'])) {
+            $options['limit'] = 0;
+        }
+        return $options;
+    }
+
+    /**
      * @param $data
      * @param int $itemId
      * @return array

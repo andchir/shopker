@@ -20,45 +20,52 @@
                 </div>
             {% else %}
 
-                {% if items | length > 0 %}
-                    {% include 'nav/catalog-sort.html.twig' %}
-                {% endif %}
+                {% include 'catalog/sort.html.twig' %}
 
                 <div class="row">
+                    <div class="col-md-3">
 
-                    {% for item in items %}
-                        {% if listTemplate == 'grid' %}
-                            <div class="col-6 col-lg-4">
-                                <div class="card mb-3">
-                                    <div class="card-body">
-                                        {% autoescape false %}
-                                            {{ item | outputTypeArray(fields) }}
-                                        {% endautoescape %}
-                                    </div>
-                                </div>
-                            </div>
-                        {% elseif listTemplate == 'list' %}
-                            <div class="col-12">
-                                <div class="card mb-3">
-                                    <div class="card-body">
-                                        <div class="catalog-list-item">
-                                            <div class="catalog-list-item-inner">
+                        {% include 'catalog/filters.html.twig' %}
+
+                    </div>
+                    <div class="col-md-9">
+
+                        <div class="row">
+
+                            {% for item in items %}
+                                {% if listTemplate == 'grid' %}
+                                    <div class="col-6 col-lg-4">
+                                        <div class="card mb-3">
+                                            <div class="card-body">
                                                 {% autoescape false %}
                                                     {{ item | outputTypeArray(fields) }}
                                                 {% endautoescape %}
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
+                                {% elseif listTemplate == 'list' %}
+                                    <div class="col-12">
+                                        <div class="card mb-3">
+                                            <div class="card-body">
+                                                <div class="catalog-list-item">
+                                                    <div class="catalog-list-item-inner">
+                                                        {% autoescape false %}
+                                                            {{ item | outputTypeArray(fields) }}
+                                                        {% endautoescape %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
 
+                        </div>
+
+                        {% include 'nav/pagination.html.twig' %}
+
+                    </div>
                 </div>
-            {% endif %}
-
-            {% if items | length > 0 %}
-                {% include 'nav/pagination.html.twig' %}
             {% endif %}
 
         </div>

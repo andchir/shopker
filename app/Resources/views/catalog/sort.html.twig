@@ -2,7 +2,7 @@
 <div class="card mb-3">
     <div class="p-2">
         <div class="float-right">
-            <div class="btn-group" role="group" id="shkNavListType">
+            <div class="btn-group py-1" role="group" id="shkNavListType">
                 <button type="button" class="btn btn-outline-secondary{% if listTemplate == 'grid' %} active{% endif %}" value="grid">
                     <i class="icon-grid2"></i>
                 </button>
@@ -11,15 +11,22 @@
                 </button>
             </div>
         </div>
-        <div class="form-inline">
-            <label for="catalogSortBy">Сортировать по</label>
-            &nbsp;
-            <select class="form-control form-control-sm" id="shkNavSortBy" name="sortby">
-                <option value="id_desc"{% if queryOptions.order_by == 'id_desc' %} selected{% endif %}>Новизне</option>
-                <option value="price_asc"{% if queryOptions.order_by == 'price_asc' %} selected{% endif %}>Увеличению цены</option>
-                <option value="price_desc"{% if queryOptions.order_by == 'price_desc' %} selected{% endif %}>Уменьшению цены</option>
-                <option value="title_asc"{% if queryOptions.order_by == 'title_asc' %} selected{% endif %}>Названию</option>
-            </select>
+        <div>
+            <span class="mr-2 py-1 d-inline-block d-md-none">
+                <button type="button" class="btn btn-secondary">
+                    <i class="icon-keyboard_arrow_left"></i>
+                    Фильтры
+                </button>
+            </span>
+            <span class="py-1 d-block d-md-inline-block">
+                <label class="mr-2" for="catalogSortBy">Сортировать по</label>
+                <select class="form-control form-control-sm width170 d-inline-block" id="shkNavSortBy" name="sortby">
+                    <option value="id_desc"{% if queryOptions.order_by == 'id_desc' %} selected{% endif %}>Новизне</option>
+                    <option value="price_asc"{% if queryOptions.order_by == 'price_asc' %} selected{% endif %}>Увеличению цены</option>
+                    <option value="price_desc"{% if queryOptions.order_by == 'price_desc' %} selected{% endif %}>Уменьшению цены</option>
+                    <option value="title_asc"{% if queryOptions.order_by == 'title_asc' %} selected{% endif %}>Названию</option>
+                </select>
+            </span>
         </div>
     </div>
 </div>

@@ -26,14 +26,21 @@
     <script>
         var shk = new Shopkeeper();
         $('[data-toggle="tooltip"]').tooltip();
+
+        // Show / hide filters
         $('.shk-button-filters-hide').click(function(e){
             e.preventDefault();
             $('#catalog-filters').hide();
+            shk.setCookie('filters-hidden', 1);
         });
         $('.shk-button-filters-show').click(function(e){
             e.preventDefault();
             $('#catalog-filters').show();
+            shk.setCookie('filters-hidden', 0);
         });
+        if (shk.getCookie('filters-hidden')) {
+            $('#catalog-filters').hide();
+        }
     </script>
 {% endblock %}
 

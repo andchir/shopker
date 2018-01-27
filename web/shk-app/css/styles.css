@@ -29,3 +29,9 @@
 .catalog-list-item-inner { float: left; margin-left: 150px; min-height: 115px; }
 .catalog-list-item .image-wrapper { width: 130px; position: absolute; left: 0; top: 0; }
 .catalog-list-item h3 { font-size: 18px; }
+
+/* catalog-filters */
+.catalog-filters form > hr:last-child { display: none; }
+@media (max-width: 767.98px) {
+    .catalog-filters { width: 300px; height: 100%; box-shadow: 0 0 15px rgba(0, 0, 0, 0.3); padding: 1rem; position: fixed; left: 0; top: 0; z-index: 111; background-color: #fff; }
+}

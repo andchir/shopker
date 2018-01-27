@@ -25,9 +25,20 @@
     <script type="text/javascript" src="{{ asset('shk-app/node_modules/bootstrap/dist/js/bootstrap.min.js') }}"></script>
     <script>
         var shk = new Shopkeeper();
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip();
-        })
+        $('[data-toggle="tooltip"]').tooltip();
+        $('.shk-button-filters-hide').click(function(e){
+            e.preventDefault();
+            $('#catalog-filters').hide();
+        });
+        $('.shk-button-filters-show').click(function(e){
+            e.preventDefault();
+            $('#catalog-filters').show();
+        });
+        $(window).on('resize', function() {
+            if ($(window).width() > 767) {
+                $('#catalog-filters').show();
+            }
+        });
     </script>
 {% endblock %}
 

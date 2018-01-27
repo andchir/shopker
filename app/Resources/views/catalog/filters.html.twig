@@ -1,7 +1,15 @@
 <!-- filters -->
-<div class="catalog-filters">
+<div class="catalog-filters" id="catalog-filters">
 
     <form action="" method="get">
+
+        <div class="d-block d-md-none">
+            <button class="btn btn-secondary btn-block shk-button-filters-hide" type="button">
+                <i class="icon-keyboard_arrow_left"></i>
+                Hide Filters
+            </button>
+            <hr>
+        </div>
 
         <div class="filter-block">
             <h4>
@@ -11,6 +19,28 @@
                 <input class="form-control" type="range" min="0" max="100000" value="0">
             </div>
         </div>
+        <hr>
+
+        <div class="filter-block">
+            <h4>
+                Производитель
+            </h4>
+            <div class="my-2">
+                <label class="p-2">
+                    <input type="checkbox" value="">
+                    Samsung
+                </label>
+                <label class="p-2">
+                    <input type="checkbox" value="">
+                    Sony
+                </label>
+                <label class="p-2">
+                    <input type="checkbox" value="">
+                    LG
+                </label>
+            </div>
+        </div>
+        <hr>
 
     </form>
 

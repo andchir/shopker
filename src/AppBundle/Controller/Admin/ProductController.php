@@ -480,17 +480,6 @@ class ProductController extends BaseProductController
 
     /**
      * @param string $collectionName
-     * @return \Doctrine\MongoDB\Collection
-     */
-    public function getCollection($collectionName)
-    {
-        $m = $this->container->get('doctrine_mongodb.odm.default_connection');
-        $db = $m->selectDatabase($this->getParameter('mongodb_database'));
-        return $db->createCollection($collectionName);
-    }
-
-    /**
-     * @param string $collectionName
      * @return int
      */
     public function getNextId($collectionName)
@@ -622,6 +611,8 @@ class ProductController extends BaseProductController
      */
     public function updateFiltersData(Category $category)
     {
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->get('doctrine_mongodb')->getManager();
         $categoriesRepository = $this->get('doctrine_mongodb')
             ->getManager()
             ->getRepository(Category::class);
@@ -635,8 +626,82 @@ class ProductController extends BaseProductController
 
         foreach ($categoriesIds as $categoryId) {
 
-            // TODO: update filters for category
+            /** @var Category $cat */
+            $cat = $categoriesRepository->find($categoryId);
+            $childCategories = $categoriesRepository->findBy([
+                'parentId' => $cat->getId()
+            ]);
 
+            /** @var ContentType $contentType */
+            $contentType = $cat->getContentType();
+            $contentTypeFields = $contentType->getFields();
+            $collection = $this->getCollection($contentType->getCollection());
+
+            $filterData = [];
+
+            /** @var Category $childCategory */
+            foreach ($childCategories as $childCategory) {
+                /** @var Filter $flt */
+                $flt = $filterRepository->findByCategory($childCategory->getId());
+                if (empty($flt)) {
+                    continue;
+                }
+                $filterValues = $flt->getValues();
+                foreach ($contentTypeFields as $contentTypeField) {
+                    if (!$contentTypeField['isFilter']) {
+                        continue;
+                    }
+                    $fieldName = $contentTypeField['name'];
+                    if (!isset($filterData[$fieldName])) {
+                        $filterData[$fieldName] = [];
+                    }
+                    if (!empty($filterValues[$fieldName])) {
+                        $values = array_merge($filterData[$fieldName], $filterValues[$fieldName]);
+                        $values = array_unique($values);
+                        if ($contentTypeField['outputType'] == 'number') {
+                            sort($values, SORT_NUMERIC);
+                        } else {
+                            sort($values);
+                        }
+                        $filterData[$fieldName] = $values;
+                    }
+                }
+            }
+            unset($childCategories, $childCategory, $values);
+
+            // Get products
+            $entries = $collection->find([
+                'parentId' => $cat->getId()
+            ]);
+
+            foreach ($entries as $entry) {
+
+                foreach ($contentTypeFields as $contentTypeField) {
+                    if (!$contentTypeField['isFilter']) {
+                        continue;
+                    }
+                    $fieldName = $contentTypeField['name'];
+                    if (!isset($filterData[$fieldName])) {
+                        $filterData[$fieldName] = [];
+                    }
+                    if (!empty($entry[$fieldName])
+                        && !in_array($entry[$fieldName], $filterData[$fieldName])) {
+                        $filterData[$fieldName][] = $entry[$fieldName];
+                    }
+                }
+            }
+
+            $filter = $filterRepository->findOneBy([
+                'categoryId' => $cat->getId()
+            ]);
+            if (!$filter) {
+                $filter = new Filter();
+                $filter->setCategoryId($cat->getId());
+            }
+            $filter->setValues($filterData);
+
+            $dm->persist($filter);
+            $dm->flush();
         }
 
         return true;

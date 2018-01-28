@@ -5,7 +5,7 @@ namespace AppBundle\Document;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
 /**
- * @MongoDB\Document(collection="field_type",repositoryClass="AppBundle\Repository\FilterRepository")
+ * @MongoDB\Document(collection="filters",repositoryClass="AppBundle\Repository\FilterRepository")
  */
 class Filter
 {
@@ -20,12 +20,12 @@ class Filter
     protected $categoryId;
 
     /**
-     * @MongoDB\Field(type="string")
+     * @MongoDB\Field(type="string", nullable=true)
      */
     protected $name;
 
     /**
-     * @MongoDB\Field(type="collection")
+     * @MongoDB\Field(type="hash")
      */
     protected $values;
 

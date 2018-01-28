@@ -10,6 +10,15 @@ use Doctrine\ODM\MongoDB\DocumentRepository;
 class FilterRepository extends DocumentRepository
 {
 
-
+    /**
+     * @param int $categoryId
+     * @return object
+     */
+    public function findByCategory($categoryId)
+    {
+        return $this->findOneBy([
+            'categoryId' => $categoryId
+        ]);
+    }
 
 }

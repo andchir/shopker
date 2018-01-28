@@ -41,3 +41,4 @@
 
 /* slider */
 .shk-slider-range input { display: none; }
+.noUi-tooltip { font-size: 11px; background-color: rgba(0,0,0,0.1); padding-top: 3px; padding-bottom: 3px; }

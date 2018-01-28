@@ -11,10 +11,8 @@ class CatalogFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-
         $this->loadContentType($manager);
-        $this->loadCategory($manager);
-
+        $this->loadCatalog($manager);
     }
 
     public function loadContentType(ObjectManager $manager) {
@@ -231,22 +229,142 @@ class CatalogFixtures extends Fixture
         $this->addReference('content_type', $contentType);
     }
 
-    public function loadCategory(ObjectManager $manager) {
+    public function loadCatalog(ObjectManager $manager)
+    {
+        $data = [
+            [
+                'title' => 'Книги',
+                'name' => 'knigi',
+                'children' => [
+                    [
+                        'title' => 'Учебная литература',
+                        'name' => 'uchebnaya-literatura',
+                        'children' => []
+                    ],
+                    [
+                        'title' => 'Художественная литература',
+                        'name' => 'khudozhestvennaya-literatura',
+                        'children' => []
+                    ],
+                    [
+                        'title' => 'Детям',
+                        'name' => 'detyam',
+                        'children' => []
+                    ]
+                ]
+            ],
+            [
+                'title' => 'Одежда, обувь, сумки',
+                'name' => 'odezhda-obuv-sumki',
+                'children' => [
+                    [
+                        'title' => 'Oдежда',
+                        'name' => 'odezhda',
+                        'children' => [
+                            [
+                                'title' => 'Женская одежда',
+                                'name' => 'zhenskaya-odezhda',
+                                'children' => [
 
-        $category = new Category();
+                                ]
+                            ],
+                            [
+                                'title' => 'Мужская одежда',
+                                'name' => 'muzhskaya-odezhda',
+                                'children' => [
+
+                                ]
+                            ],
+                            [
+                                'title' => 'Детская одежда',
+                                'name' => 'detskaya-odezhda',
+                                'children' => [
+
+                                ]
+                            ]
+                        ]
+                    ],
+                    [
+                        'title' => 'Обувь',
+                        'name' => 'obuv',
+                        'children' => [
+                            [
+                                'title' => 'Женская обувь',
+                                'name' => 'zhenskaya-obuv',
+                                'children' => [
+
+                                ]
+                            ],
+                            [
+                                'title' => 'Мужская обувь',
+                                'name' => 'muzhskaya-obuv',
+                                'children' => [
+
+                                ]
+                            ],
+                            [
+                                'title' => 'Детская обувь',
+                                'name' => 'detskaya-obuv',
+                                'children' => [
+
+                                ]
+                            ]
+                        ]
+                    ],
+                    [
+                        'title' => 'Сумки',
+                        'name' => 'sumki',
+                        'children' => [
+                            [
+                                'title' => 'Женские сумки',
+                                'name' => 'zhenskie-sumki',
+                                'children' => [
+
+                                ]
+                            ],
+                            [
+                                'title' => 'Мужские сумки',
+                                'name' => 'muzhskie-sumki',
+                                'children' => [
+
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $this->loadCategories($manager, $data);
+    }
+
+    public function loadCategories(ObjectManager $manager, $data, Category $parent = null) {
+
+        /** @var ContentType $contentType */
         $contentType = $this->getReference('content_type');
 
-        $category
-            ->setTitle('Категория каталога')
-            ->setName('default')
-            ->setDescription('Категория по умолчанию')
-            ->setIsActive(true)
-            ->setParentId(0)
-            ->setContentTypeName($contentType->getName())
-            ->setContentType($contentType);
+        foreach ($data as $item) {
+            $category = new Category();
+            if (!$parent) {
+                $category->setParentId(0);
+            } else {
+                $category->setParentId($parent->getId());
+            }
+            $category
+                ->setTitle($item['title'])
+                ->setName($item['name'])
+                ->setDescription('')
+                ->setIsActive(true)
+                ->setContentTypeName($contentType->getName())
+                ->setContentType($contentType);
 
-        $manager->persist($category);
-        $manager->flush();
+            $manager->persist($category);
+            $manager->flush();
+
+            if (!empty($item['children'])) {
+                $this->loadCategories($manager, $item['children'], $category);
+            }
+        }
     }
 
 }

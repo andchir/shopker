@@ -1,0 +1,18 @@
+<div class="mb-5">
+    <div class="pt-5 pb-2 px-3">
+        <div class="shk-slider-range">
+            <input class="form-control"
+                   name="filter[{{ filter.name }}][from]"
+                   type="range"
+                   min="{{ min(filter.values) }}"
+                   max="{{ max(filter.values) }}"
+                   value="{{ min(filter.values) }}">
+            <input class="form-control"
+                   name="filter[{{ filter.name }}][to]"
+                   type="range"
+                   min="{{ min(filter.values) }}"
+                   max="{{ max(filter.values) }}"
+                   value="{{ max(filter.values) }}">
+        </div>
+    </div>
+</div>

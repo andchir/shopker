@@ -30,7 +30,8 @@ class AppExtension extends AbstractExtension
     public function getFunctions()
     {
         return array(
-            new TwigFunction('catalogPath', array($this, 'catalogPathFunction'))
+            new TwigFunction('catalogPath', array($this, 'catalogPathFunction')),
+            new TwigFunction('outputFilter', [$this, 'outputFilterFunction']),
         );
     }
 
@@ -114,6 +115,25 @@ class AppExtension extends AbstractExtension
             );
         }
         return $output;
+    }
+
+    /**
+     * @param array $filtersData
+     * @param string $chunkNamePrefix
+     * @return string
+     */
+    public function outputFilterFunction($filtersData, $chunkNamePrefix = '')
+    {
+        if (empty($filtersData)) {
+            return '';
+        }
+        /** @var \Twig_Environment $twig */
+        $twig = $this->container->get('twig');
+        $templateName = sprintf('chunks/filters/%s%s.html.twig', $filtersData['outputType'], $chunkNamePrefix);
+        if (!$twig->getLoader()->exists($templateName)) {
+            $templateName = 'chunks/filters/default.html.twig';
+        }
+        return $twig->render($templateName, ['filter' => $filtersData]);
     }
 
 }

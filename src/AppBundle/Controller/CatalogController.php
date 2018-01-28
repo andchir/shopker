@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Document\Filter;
 use AppBundle\Repository\CategoryRepository;
 use Doctrine\ODM\MongoDB\Cursor;
 use Doctrine\ODM\MongoDB\DocumentRepository;
@@ -23,6 +24,9 @@ class CatalogController extends ProductController
     public function catalogAction(Request $request, $uri)
     {
         $categoriesRepository = $this->getCategoriesRepository();
+        $filtersRepository = $this->get('doctrine_mongodb')
+            ->getManager()
+            ->getRepository(Filter::class);
         list($pageAlias, $categoryUri, $levelNum) = Category::parseUri($uri);
 
         /** @var Category $currentCategory */
@@ -54,7 +58,12 @@ class CatalogController extends ProductController
             'currentCategoryUri' => $currentCategory->getUri(),
             'systemNameField' => $this->getSystemNameField($contentTypeFields)
         ];
-        $filtersData = [];// TODO: Get filters values from DB
+        $filtersData = [];
+        /** @var Filter $filters */
+        $filters = $filtersRepository->findByCategory($currentCategory->getId());
+        if (!empty($filters)) {
+            $filtersData = $filters->getValues();
+        }
         list($filters, $fields) = $this->getFieldsData($contentTypeFields,'list', $filtersData, $options);
 
         $total = $items = $collection->find([
@@ -161,11 +170,11 @@ class CatalogController extends ProductController
     /**
      * @param array $contentTypeFields
      * @param string $type
-     * @param array $filters
+     * @param array $filtersData
      * @param array $options
      * @return array
      */
-    public function getFieldsData($contentTypeFields, $type, $filters = [], $options = [])
+    public function getFieldsData($contentTypeFields, $type, $filtersData = [], $options = [])
     {
         $filters = [];
         $fields = [];
@@ -177,12 +186,12 @@ class CatalogController extends ProductController
                     'properties' => array_merge($field['outputProperties'], $options)
                 ];
             }
-            if (!empty($field['isFilter'])) {
+            if (!empty($field['isFilter']) && !empty($filtersData[$field['name']])) {
                 $filters[] = [
                     'name' => $field['name'],
                     'title' => $field['title'],
                     'outputType' => $field['outputType'],
-                    'values' => []
+                    'values' => $filtersData[$field['name']]
                 ];
             }
         }

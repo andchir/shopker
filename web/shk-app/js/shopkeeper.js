@@ -10,6 +10,91 @@ var Shopkeeper = function () {
 
     var self = this;
 
+    this.init = function() {
+        this.onReady(function() {
+
+            self.buttonsInit();
+            self.slidersInit();
+
+        });
+    };
+
+    this.onReady = function(cb) {
+        if (document.readyState !== 'loading') {
+            cb();
+        } else {
+            document.addEventListener('DOMContentLoaded', cb);
+        }
+    };
+
+    this.buttonsInit = function() {
+        var buttonsFiltersHide = document.querySelectorAll('.shk-button-filters-hide');
+        buttonsFiltersHide.forEach(function(button) {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (document.getElementById('catalog-filters')) {
+                    document.getElementById('catalog-filters').style.display = 'none';
+                    self.setCookie('filters-hidden', 1);
+                }
+            }, false);
+        });
+
+        var buttonsFiltersShow = document.querySelectorAll('.shk-button-filters-show');
+        buttonsFiltersShow.forEach(function(button) {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (document.getElementById('catalog-filters')) {
+                    document.getElementById('catalog-filters').style.display = 'block';
+                    self.setCookie('filters-hidden', 0);
+                }
+            }, false);
+        });
+
+        if (this.getCookie('filters-hidden')) {
+            if (document.getElementById('catalog-filters')) {
+                document.getElementById('catalog-filters').style.display = 'none';
+            }
+        }
+    };
+
+    this.slidersInit = function() {
+        if (typeof wNumb === 'undefined' || typeof noUiSlider === 'undefined') {
+            console.log('Libraries noUiSlider and wNumb not found.');
+            return;
+        }
+        var slidersContainers = document.querySelectorAll('div.shk-slider-range');
+        slidersContainers.forEach(function(sliderContainer) {
+            var inputs = sliderContainer.querySelectorAll('input');
+            if (inputs.length < 2) {
+                return;
+            }
+            var minValue = parseFloat(inputs[0].min || 0),
+                maxValue = parseFloat(inputs[0].max || 0),
+                step = parseFloat(inputs[0].step || 1),
+                wNumbFormat = wNumb({mark: '.', thousand: ' ', decimals: 0});
+            noUiSlider.create(sliderContainer, {
+                connect: true,
+                step: step,
+                start: [parseFloat(inputs[0].value), parseFloat(inputs[1].value)],
+                range: {
+                    'min': minValue,
+                    'max': maxValue
+                },
+                format: wNumbFormat,
+                tooltips: [ true, true ],
+                pips: {
+                    mode: 'range',
+                    density: 4,
+                    format: wNumbFormat
+                }
+            });
+            sliderContainer.noUiSlider.on('update', function(values, handle) {
+                inputs[0].value = wNumbFormat.from(values[0]);
+                inputs[1].value = wNumbFormat.from(values[1]);
+            });
+        });
+    };
+
     this.orderByChange = function(currentUrl, orderBy) {
         var qsArr = currentUrl.split(/[\?&]/),
             newUrl = qsArr.shift();
@@ -59,4 +144,5 @@ var Shopkeeper = function () {
         document.cookie = name + '=; Max-Age=-99999999;';
     };
 
+    this.init();
 };

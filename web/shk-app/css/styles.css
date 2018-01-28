@@ -38,3 +38,6 @@
 @media (min-width: 768px) {
     .catalog-filters { display: block !important; }
 }
+
+/* slider */
+.shk-slider-range input { display: none; }

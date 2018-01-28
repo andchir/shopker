@@ -10,6 +10,7 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 
     <link href="{{ asset('shk-app/node_modules/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('shk-app/node_modules/nouislider/distribute/nouislider.min.css') }}" rel="stylesheet">
     <link href="{{ asset('shk-app/css/icomoon/style.css') }}" rel="stylesheet">
     <link href="{{ asset('shk-app/css/styles.css') }}" rel="stylesheet">
 
@@ -19,28 +20,15 @@
 {% block body %}{% endblock %}
 
 {% block javascripts %}
-    <script type="text/javascript" src="{{ asset('shk-app/js/shopkeeper.js') }}"></script>
     <script type="text/javascript" src="{{ asset('shk-app/node_modules/jquery/dist/jquery.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('shk-app/node_modules/popper.js/dist/umd/popper.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('shk-app/node_modules/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('shk-app/node_modules/wnumb/wNumb.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('shk-app/node_modules/nouislider/distribute/nouislider.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('shk-app/js/shopkeeper.js') }}"></script>
     <script>
         var shk = new Shopkeeper();
         $('[data-toggle="tooltip"]').tooltip();
-
-        // Show / hide filters
-        $('.shk-button-filters-hide').click(function(e){
-            e.preventDefault();
-            $('#catalog-filters').hide();
-            shk.setCookie('filters-hidden', 1);
-        });
-        $('.shk-button-filters-show').click(function(e){
-            e.preventDefault();
-            $('#catalog-filters').show();
-            shk.setCookie('filters-hidden', 0);
-        });
-        if (shk.getCookie('filters-hidden')) {
-            $('#catalog-filters').hide();
-        }
     </script>
 {% endblock %}
 

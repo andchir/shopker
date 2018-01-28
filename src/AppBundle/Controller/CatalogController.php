@@ -54,8 +54,8 @@ class CatalogController extends ProductController
             'currentCategoryUri' => $currentCategory->getUri(),
             'systemNameField' => $this->getSystemNameField($contentTypeFields)
         ];
-        $filters = [];// TODO: Get filters values from DB
-        list($filters, $fields) = $this->getFieldsData($contentTypeFields,'list', $filters, $options);
+        $filtersData = [];// TODO: Get filters values from DB
+        list($filters, $fields) = $this->getFieldsData($contentTypeFields,'list', $filtersData, $options);
 
         $total = $items = $collection->find([
             'parentId' => $currentCategory->getId()

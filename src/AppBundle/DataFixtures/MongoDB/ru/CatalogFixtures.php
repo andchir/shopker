@@ -1,16 +1,27 @@
 <?php
 
+namespace AppBundle\DataFixtures\MongoDB\ru;
+
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use AppBundle\Document\FieldType;
 use AppBundle\Document\ContentType;
 use AppBundle\Document\Category;
+use AppBundle\Event\CategoryUpdatedEvent;
+use AppBundle\EventListener\CategoryUpdateListener;
 
 class CatalogFixtures extends Fixture
 {
 
+    private $dispatcher;
+
     public function load(ObjectManager $manager)
     {
+        $this->dispatcher = $this->container->get('event_dispatcher');
+        $categoryUpdateListener = new CategoryUpdateListener();
+        $this->dispatcher->addListener(CategoryUpdatedEvent::NAME, [$categoryUpdateListener, 'onUpdated']);
+
         $this->loadContentType($manager);
         $this->loadCatalog($manager);
     }
@@ -360,6 +371,9 @@ class CatalogFixtures extends Fixture
 
             $manager->persist($category);
             $manager->flush();
+
+            $event = new CategoryUpdatedEvent($this->container, $category);
+            $this->dispatcher->dispatch(CategoryUpdatedEvent::NAME, $event);
 
             if (!empty($item['children'])) {
                 $this->loadCategories($manager, $item['children'], $category);

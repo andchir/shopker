@@ -1,5 +1,7 @@
 <?php
 
+namespace AppBundle\DataFixtures\MongoDB\ru;
+
 use AppBundle\Document\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;

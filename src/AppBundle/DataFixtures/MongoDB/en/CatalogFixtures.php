@@ -1,5 +1,7 @@
 <?php
 
+namespace AppBundle\DataFixtures\MongoDB\en;
+
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use AppBundle\Document\FieldType;

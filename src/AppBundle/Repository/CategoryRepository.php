@@ -34,7 +34,7 @@ class CategoryRepository extends BaseRepository
     public function getBreadcrumbs($categoryUri, $pop = true)
     {
         if (empty($categoryUri)) {
-            return [];
+            return [[],[]];
         }
         $breadcrumbs = [];
         $breadcrumbsIds = [];
@@ -64,6 +64,7 @@ class CategoryRepository extends BaseRepository
         if (!empty($breadcrumbs) && $pop) {
             array_pop($breadcrumbs);
         }
+
         return [$breadcrumbs, $breadcrumbsIds];
     }
 

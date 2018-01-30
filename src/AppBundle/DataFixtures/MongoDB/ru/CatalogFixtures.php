@@ -2,6 +2,7 @@
 
 namespace AppBundle\DataFixtures\MongoDB\ru;
 
+use AppBundle\Controller\Admin\ProductController;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -15,14 +16,25 @@ class CatalogFixtures extends Fixture
 {
 
     private $dispatcher;
+    private $productController;
 
     public function load(ObjectManager $manager)
     {
         $this->dispatcher = $this->container->get('event_dispatcher');
+
+        $this->productController = new ProductController();
+        $this->productController->setContainer($this->container);
+
         $categoryUpdateListener = new CategoryUpdateListener();
         $this->dispatcher->addListener(CategoryUpdatedEvent::NAME, [$categoryUpdateListener, 'onUpdated']);
 
         $this->loadContentType($manager);
+
+        /** @var ContentType $contentType */
+        $contentType = $this->getReference('content_type');
+        $collection = $this->productController->getCollection($contentType->getCollection());
+        $collection->remove([]);
+
         $this->loadCatalog($manager);
     }
 
@@ -311,6 +323,140 @@ class CatalogFixtures extends Fixture
                                 'name' => 'muzhskaya-obuv',
                                 'children' => [
 
+                                ],
+                                'products' => [
+                                    [
+                                        'title' => 'Кроссовки Patrol',
+                                        'name' => 'krossovki-patrol',
+                                        'description' => 'Тут будет описание...',
+                                        'price' => 2090,
+                                        'brand' => 'Patrol',
+                                        'country' => 'Китай',
+                                        'color' => '#984d06',
+                                        'material' => 'Искусственная кожа',
+                                        'image' => ''
+                                    ],
+                                    [
+                                        'title' => 'Кроссовки Patrol',
+                                        'name' => 'krossovki-patrol',
+                                        'description' => 'Тут будет описание...',
+                                        'price' => 1840,
+                                        'brand' => 'Patrol',
+                                        'country' => 'Китай',
+                                        'color' => '#984d06',
+                                        'material' => 'Искусственная кожа',
+                                        'image' => ''
+                                    ],
+                                    [
+                                        'title' => 'Кроссовки Patrol',
+                                        'name' => 'krossovki-patrol',
+                                        'description' => 'Тут будет описание...',
+                                        'price' => 1900,
+                                        'brand' => 'Patrol',
+                                        'country' => 'Китай',
+                                        'color' => '#ffffff',
+                                        'material' => 'Искусственная кожа',
+                                        'image' => ''
+                                    ],
+                                    [
+                                        'title' => 'Кроссовки Nike Air Max Infuriate Low',
+                                        'name' => 'krossovki-nike-air-max-infuriate-low',
+                                        'description' => 'Тут будет описание...',
+                                        'price' => 4466,
+                                        'brand' => 'Nike',
+                                        'country' => 'Вьетнам',
+                                        'color' => '#000000',
+                                        'material' => 'Искусственная кожа',
+                                        'image' => ''
+                                    ],
+                                    [
+                                        'title' => 'Кроссовки Nike Nightgazer',
+                                        'name' => 'krossovki-nike-nightgazer',
+                                        'description' => 'Тут будет описание...',
+                                        'price' => 5690,
+                                        'brand' => 'Nike',
+                                        'country' => 'Вьетнам',
+                                        'color' => '#000000',
+                                        'material' => 'Искусственная кожа',
+                                        'image' => ''
+                                    ],
+                                    [
+                                        'title' => 'Кеды Брис-Босфор',
+                                        'name' => 'kedy-bris-bosfor',
+                                        'description' => 'Тут будет описание...',
+                                        'price' => 684,
+                                        'brand' => 'Bris',
+                                        'country' => 'Россия',
+                                        'color' => '#000000',
+                                        'material' => 'Текстиль',
+                                        'image' => ''
+                                    ],
+                                    [
+                                        'title' => 'Кеды Nike COURT ROYALE',
+                                        'name' => 'kedy-nike-court-royale',
+                                        'description' => 'Тут будет описание...',
+                                        'price' => 3990,
+                                        'brand' => 'Nike',
+                                        'country' => 'Индонезия',
+                                        'color' => '#ffffff',
+                                        'material' => 'Текстиль',
+                                        'image' => ''
+                                    ],
+                                    [
+                                        'title' => 'Кроссовки Nike T-Lite XI',
+                                        'name' => 'krossovki-nike-t-lite-xi',
+                                        'description' => 'Тут будет описание...',
+                                        'price' => 3490,
+                                        'brand' => 'Nike',
+                                        'country' => 'Индонезия',
+                                        'color' => '#ffffff',
+                                        'material' => 'Искусственная кожа',
+                                        'image' => ''
+                                    ],
+                                    [
+                                        'title' => 'Кроссовки Nike Reax 8 TR',
+                                        'name' => 'krossovki-nike-reax-8-tr',
+                                        'description' => 'Тут будет описание...',
+                                        'price' => 5990,
+                                        'brand' => 'Nike',
+                                        'country' => 'Вьетнам',
+                                        'color' => '#ffffff',
+                                        'material' => 'Натуральная кожа',
+                                        'image' => ''
+                                    ],
+                                    [
+                                        'title' => 'Кеды Nike Court Royale Suede',
+                                        'name' => 'kedy-nike-court-royale-suede',
+                                        'description' => 'Тут будет описание...',
+                                        'price' => 4490,
+                                        'brand' => 'Nike',
+                                        'country' => 'Индонезия',
+                                        'color' => '#ffffff',
+                                        'material' => 'Натуральная кожа',
+                                        'image' => ''
+                                    ],
+                                    [
+                                        'title' => 'Кроссовки Adidas Climawarm Atr M',
+                                        'name' => 'krossovki-adidas-climawarm-atr-m',
+                                        'description' => 'Тут будет описание...',
+                                        'price' => 4490,
+                                        'brand' => 'Adidas',
+                                        'country' => 'Китай',
+                                        'color' => '#0f77b0',
+                                        'material' => '	Искусственная кожа, Текстиль',
+                                        'image' => ''
+                                    ],
+                                    [
+                                        'title' => 'Кроссовки Adidas Neo 10K Casual',
+                                        'name' => 'krossovki-adidas-neo-10k-casual',
+                                        'description' => 'Тут будет описание...',
+                                        'price' => 4764,
+                                        'brand' => 'Adidas',
+                                        'country' => 'Китай',
+                                        'color' => '#0f77b0',
+                                        'material' => '	Искусственная кожа, Текстиль',
+                                        'image' => ''
+                                    ]
                                 ]
                             ],
                             [
@@ -375,10 +521,38 @@ class CatalogFixtures extends Fixture
             $event = new CategoryUpdatedEvent($this->container, $category);
             $this->dispatcher->dispatch(CategoryUpdatedEvent::NAME, $event);
 
+            if (!empty($item['products'])) {
+                $this->loadProducts($manager, $category, $item['products']);
+            }
+
             if (!empty($item['children'])) {
                 $this->loadCategories($manager, $item['children'], $category);
             }
         }
+    }
+
+    /**
+     * @param ObjectManager $manager
+     * @param Category $category
+     * @param array $data
+     * @return bool
+     */
+    public function loadProducts(ObjectManager $manager, Category $category, $data)
+    {
+        /** @var ContentType $contentType */
+        $contentType = $category->getContentType();
+        $collection = $this->productController->getCollection($contentType->getCollection());
+
+        foreach ($data as $product) {
+            $product['parentId'] = $category->getId();
+            $product['isActive'] = true;
+            $product['_id'] = $this->productController->getNextId($contentType->getCollection());
+            $collection->insert($product);
+        }
+
+        $this->productController->updateFiltersData($category);
+
+        return true;
     }
 
 }

@@ -39,6 +39,11 @@
     .catalog-filters { display: block !important; }
 }
 
+.catalog-filters .filter-block label { cursor: pointer; }
+.shk-filter-color-label {  }
+.shk-filter-color-label:before { background-color: inherit !important; border: 1px solid rgba(0,0,0,0.5); }
+.shk-filter-color-label:after { background-color: rgba(0,0,0,0.2) !important; }
+
 /* slider */
 .shk-slider-range input { display: none; }
 .noUi-tooltip { font-size: 11px; background-color: rgba(0,0,0,0.1); padding-top: 3px; padding-bottom: 3px; }

@@ -1,0 +1,10 @@
+{% for value in filter.values %}
+    <label class="p-2">
+        <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" name="filter[{{ filter.name }}]" value="{{ value }}" id="filter_{{ filter.name }}{{ loop.index }}">
+            <label class="custom-control-label shk-filter-color-label" for="filter_{{ filter.name }}{{ loop.index }}" style="background-color: {{ value }};">
+
+            </label>
+        </div>
+    </label>
+{% endfor %}

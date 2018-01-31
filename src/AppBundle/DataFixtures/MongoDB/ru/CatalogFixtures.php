@@ -35,6 +35,9 @@ class CatalogFixtures extends Fixture
         $collection = $this->productController->getCollection($contentType->getCollection());
         $collection->remove([]);
 
+        $incrementIdsCollection = $this->productController->getCollection('doctrine_increment_ids');
+        $incrementIdsCollection->remove([]);
+
         $this->loadCatalog($manager);
     }
 
@@ -53,11 +56,12 @@ class CatalogFixtures extends Fixture
                 'outputType' => 'text',
                 'outputProperties' => [
                     'className' => '',
-                    'chunkName' => 'header3'
+                    'chunkName' => 'header'
                 ],
                 'group' => 'Основное',
                 'required' => true,
                 'showInTable' => true,
+                'showInList' => true,
                 'isFilter' => false
             ],
             [
@@ -77,7 +81,30 @@ class CatalogFixtures extends Fixture
                 'group' => 'Основное',
                 'required' => true,
                 'showInTable' => true,
+                'showInList' => false,
                 'isFilter' => false
+            ],
+            [
+                'title' => 'Картинка',
+                'name' => 'image',
+                'description' => '',
+                'inputType' => 'file',
+                'inputProperties' => [
+                    'value' => '',
+                    'handler' => '',
+                    'allowed_extensions' => 'image/*',
+                    'has_preview_image' => '1'
+                ],
+                'outputType' => 'file',
+                'outputProperties' => [
+                    'className' => '',
+                    'chunkName' => 'image'
+                ],
+                'group' => 'Параметры',
+                'required' => false,
+                'showInTable' => false,
+                'showInList' => true,
+                'isFilter' => true
             ],
             [
                 'title' => 'Описание',
@@ -96,6 +123,7 @@ class CatalogFixtures extends Fixture
                 'group' => 'Основное',
                 'required' => false,
                 'showInTable' => false,
+                'showInList' => true,
                 'isFilter' => false
             ],
             [
@@ -121,7 +149,8 @@ class CatalogFixtures extends Fixture
                 'group' => 'Основное',
                 'required' => false,
                 'showInTable' => true,
-                'isFilter' => false
+                'showInList' => true,
+                'isFilter' => true
             ],
             [
                 'title' => 'Бренд',
@@ -139,6 +168,7 @@ class CatalogFixtures extends Fixture
                 'group' => 'Параметры',
                 'required' => false,
                 'showInTable' => false,
+                'showInList' => false,
                 'isFilter' => true
             ],
             [
@@ -157,6 +187,7 @@ class CatalogFixtures extends Fixture
                 'group' => 'Параметры',
                 'required' => false,
                 'showInTable' => false,
+                'showInList' => false,
                 'isFilter' => true
             ],
             [
@@ -175,6 +206,7 @@ class CatalogFixtures extends Fixture
                 'group' => 'Параметры',
                 'required' => false,
                 'showInTable' => false,
+                'showInList' => false,
                 'isFilter' => true
             ],
             [
@@ -193,26 +225,7 @@ class CatalogFixtures extends Fixture
                 'group' => 'Параметры',
                 'required' => false,
                 'showInTable' => false,
-                'isFilter' => true
-            ],
-            [
-                'title' => 'Картинка',
-                'name' => 'image',
-                'description' => '',
-                'inputType' => 'file',
-                'inputProperties' => [
-                    'value' => '',
-                    'handler' => '',
-                    'allowed_extensions' => 'image/*',
-                    'has_preview_image' => '1'
-                ],
-                'outputType' => 'file',
-                'outputProperties' => [
-                    'className' => ''
-                ],
-                'group' => 'Параметры',
-                'required' => false,
-                'showInTable' => false,
+                'showInList' => false,
                 'isFilter' => true
             ],
             [
@@ -232,6 +245,7 @@ class CatalogFixtures extends Fixture
                 'group' => 'Категории',
                 'required' => false,
                 'showInTable' => false,
+                'showInList' => false,
                 'isFilter' => true
             ]
         ];
@@ -326,19 +340,19 @@ class CatalogFixtures extends Fixture
                                 ],
                                 'products' => [
                                     [
-                                        'title' => 'Кроссовки Patrol',
-                                        'name' => 'krossovki-patrol',
+                                        'title' => 'Кроссовки Patrol Black',
+                                        'name' => 'krossovki-patrol-black',
                                         'description' => 'Тут будет описание...',
                                         'price' => 2090,
                                         'brand' => 'Patrol',
                                         'country' => 'Китай',
-                                        'color' => '#984d06',
+                                        'color' => '#000000',
                                         'material' => 'Искусственная кожа',
                                         'image' => ''
                                     ],
                                     [
-                                        'title' => 'Кроссовки Patrol',
-                                        'name' => 'krossovki-patrol',
+                                        'title' => 'Кроссовки Patrol White',
+                                        'name' => 'krossovki-patrol-white',
                                         'description' => 'Тут будет описание...',
                                         'price' => 1840,
                                         'brand' => 'Patrol',
@@ -348,13 +362,13 @@ class CatalogFixtures extends Fixture
                                         'image' => ''
                                     ],
                                     [
-                                        'title' => 'Кроссовки Patrol',
-                                        'name' => 'krossovki-patrol',
+                                        'title' => 'Кроссовки Patrol Brown',
+                                        'name' => 'krossovki-patrol-brown',
                                         'description' => 'Тут будет описание...',
                                         'price' => 1900,
                                         'brand' => 'Patrol',
                                         'country' => 'Китай',
-                                        'color' => '#ffffff',
+                                        'color' => '#66583c',
                                         'material' => 'Искусственная кожа',
                                         'image' => ''
                                     ],
@@ -443,7 +457,7 @@ class CatalogFixtures extends Fixture
                                         'brand' => 'Adidas',
                                         'country' => 'Китай',
                                         'color' => '#0f77b0',
-                                        'material' => '	Искусственная кожа, Текстиль',
+                                        'material' => 'Искусственная кожа, Текстиль',
                                         'image' => ''
                                     ],
                                     [
@@ -454,7 +468,18 @@ class CatalogFixtures extends Fixture
                                         'brand' => 'Adidas',
                                         'country' => 'Китай',
                                         'color' => '#0f77b0',
-                                        'material' => '	Искусственная кожа, Текстиль',
+                                        'material' => 'Искусственная кожа, Текстиль',
+                                        'image' => ''
+                                    ],
+                                    [
+                                        'title' => 'Валенки Котофей',
+                                        'name' => 'valenki-kotofey',
+                                        'description' => 'Тут будет описание...',
+                                        'price' => 3778,
+                                        'brand' => 'Котофей',
+                                        'country' => 'Россия',
+                                        'color' => '#000000',
+                                        'material' => 'Войлок',
                                         'image' => ''
                                     ]
                                 ]

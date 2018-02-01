@@ -14,7 +14,7 @@ var Shopkeeper = function () {
         this.onReady(function() {
 
             self.buttonsInit();
-            self.slidersInit();
+            self.filtersInit();
 
         });
     };
@@ -57,6 +57,37 @@ var Shopkeeper = function () {
         }
     };
 
+    this.filtersInit = function() {
+        this.slidersInit();
+
+        var filtersInputs = document.querySelectorAll('.filter-block input, .filter-block select');
+        filtersInputs.forEach(function(input){
+            switch (input.tagName.toLowerCase()) {
+                case 'input':
+
+                    if (['checkbox', 'radio'].indexOf(input.getAttribute('type'))) {
+                        input.addEventListener('click', self.onFilterChange.bind(self), false);
+                    } else if (['range', 'select'].indexOf(input.getAttribute('type'))) {
+                        input.addEventListener('change', self.onFilterChange.bind(self), false);
+                    }
+
+                    break;
+            }
+        });
+
+    };
+
+    this.onFilterChange = function() {
+
+        console.log('onFilterChange');
+
+        var onFilterChangeElements = document.querySelectorAll('.shk-onfilter-change');
+        onFilterChangeElements.forEach(function(element) {
+            element.style.display = 'block';
+        });
+
+    };
+
     this.slidersInit = function() {
         if (typeof wNumb === 'undefined' || typeof noUiSlider === 'undefined') {
             console.log('Libraries noUiSlider and wNumb not found.');
@@ -91,6 +122,9 @@ var Shopkeeper = function () {
             sliderContainer.noUiSlider.on('update', function(values, handle) {
                 inputs[0].value = wNumbFormat.from(values[0]);
                 inputs[1].value = wNumbFormat.from(values[1]);
+            });
+            sliderContainer.noUiSlider.on('change', function(values, handle) {
+                self.onFilterChange();
             });
         });
     };

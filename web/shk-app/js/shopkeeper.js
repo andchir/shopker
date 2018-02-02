@@ -78,14 +78,10 @@ var Shopkeeper = function () {
     };
 
     this.onFilterChange = function() {
-
-        console.log('onFilterChange');
-
         var onFilterChangeElements = document.querySelectorAll('.shk-onfilter-change');
         onFilterChangeElements.forEach(function(element) {
             element.style.display = 'block';
         });
-
     };
 
     this.slidersInit = function() {

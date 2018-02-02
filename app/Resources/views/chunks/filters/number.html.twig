@@ -1,16 +1,26 @@
+{% set min = min(filter.values) %}
+{% set max = max(filter.values) %}
+{% set minValue = min %}
+{% set maxValue = max %}
+{% if filter.selected.from is not empty %}
+    {% set minValue = filter.selected.from %}
+{% endif %}
+{% if filter.selected.to is not empty %}
+    {% set maxValue = filter.selected.to %}
+{% endif %}
 <div class="mb-5 pt-4 pb-2 px-3">
     <div class="shk-slider-range">
         <input class="form-control"
                name="filter[{{ filter.name }}][from]"
                type="range"
-               min="{{ min(filter.values) }}"
-               max="{{ max(filter.values) }}"
-               value="{{ min(filter.values) }}">
+               min="{{ min }}"
+               max="{{ max }}"
+               value="{{ minValue }}">
         <input class="form-control"
                name="filter[{{ filter.name }}][to]"
                type="range"
-               min="{{ min(filter.values) }}"
-               max="{{ max(filter.values) }}"
-               value="{{ max(filter.values) }}">
+               min="{{ min }}"
+               max="{{ max }}"
+               value="{{ maxValue }}">
     </div>
 </div>

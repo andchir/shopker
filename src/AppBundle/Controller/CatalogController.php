@@ -64,7 +64,8 @@ class CatalogController extends ProductController
         if (!empty($filters)) {
             $filtersData = $filters->getValues();
         }
-        list($filters, $fields) = $this->getFieldsData($contentTypeFields,'list', $filtersData, $options);
+        $filtersQs = $request->get('filter', []);
+        list($filters, $fields) = $this->getFieldsData($request, $contentTypeFields,'list', $filtersData, $options, $filtersQs);
 
         $total = $items = $collection->find([
             'parentId' => $currentCategory->getId()
@@ -168,13 +169,15 @@ class CatalogController extends ProductController
     }
 
     /**
-     * @param array $contentTypeFields
-     * @param string $type
+     * @param Request $request
+     * @param $contentTypeFields
+     * @param $type
      * @param array $filtersData
      * @param array $options
+     * @param array $filtersQs
      * @return array
      */
-    public function getFieldsData($contentTypeFields, $type, $filtersData = [], $options = [])
+    public function getFieldsData(Request $request, $contentTypeFields, $type, $filtersData = [], $options = [], $filtersQs = [])
     {
         $filters = [];
         $fields = [];
@@ -191,7 +194,10 @@ class CatalogController extends ProductController
                     'name' => $field['name'],
                     'title' => $field['title'],
                     'outputType' => $field['outputType'],
-                    'values' => $filtersData[$field['name']]
+                    'values' => $filtersData[$field['name']],
+                    'selected' => isset($filtersQs[$field['name']]) && is_array($filtersQs[$field['name']])
+                        ? $filtersQs[$field['name']]
+                        : []
                 ];
             }
         }

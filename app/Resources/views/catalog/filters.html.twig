@@ -2,7 +2,7 @@
 <form action="{{ catalogPath(currentUri) }}" method="get">
     <input type="hidden" name="limit" value="{{ pagesOptions.limit}}">
     <input type="hidden" name="page" value="1">
-    <input type="hidden" name="order_by" value="{{ pagesOptions.current }}">
+    <input type="hidden" name="order_by" value="{{ queryOptions.order_by }}">
     <div class="catalog-filters" id="catalog-filters">
         <div class="catalog-filters-header d-block d-md-none">
             <button class="btn btn-secondary btn-block shk-button-filters-hide" type="button">

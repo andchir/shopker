@@ -2,10 +2,10 @@
 {% set max = max(filter.values) %}
 {% set minValue = min %}
 {% set maxValue = max %}
-{% if filter.selected.from is not empty %}
+{% if filter.selected.from is defined %}
     {% set minValue = filter.selected.from %}
 {% endif %}
-{% if filter.selected.to is not empty %}
+{% if filter.selected.to is defined %}
     {% set maxValue = filter.selected.to %}
 {% endif %}
 <div class="mb-5 pt-4 pb-2 px-3">

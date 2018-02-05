@@ -64,21 +64,21 @@ class CatalogController extends ProductController
         if (!empty($filters)) {
             $filtersData = $filters->getValues();
         }
-        $filtersQs = $request->get('filter', []);
-        list($filters, $fields) = $this->getFieldsData($request, $contentTypeFields,'list', $filtersData, $options, $filtersQs);
+        list($filters, $fields) = $this->getFieldsData($request, $contentTypeFields,'list', $filtersData, $options, $queryOptions);
 
-        $total = $items = $collection->find([
+        // Get child products
+        $criteria = [
             'parentId' => $currentCategory->getId()
-        ])->count();
+        ];
+        $this->applyFilters($queryOptions['filter'], $criteria);
+
+        $total = $collection->find($criteria)->count();
 
         /* pages */
         $skip = ($queryOptions['page'] - 1) * $queryOptions['limit'];
         $pagesOptions = $this->getPagesoptions($queryOptions, $total, $pageSizeArr);
 
-        // Get child products
-        $items = $collection->find([
-            'parentId' => $currentCategory->getId()
-        ])
+        $items = $collection->find($criteria)
             ->sort([$queryOptions['sort_by'] => $queryOptions['sort_dir']])
             ->skip($skip)
             ->limit($queryOptions['limit']);
@@ -174,13 +174,14 @@ class CatalogController extends ProductController
      * @param $type
      * @param array $filtersData
      * @param array $options
-     * @param array $filtersQs
+     * @param array $queryOptions
      * @return array
      */
-    public function getFieldsData(Request $request, $contentTypeFields, $type, $filtersData = [], $options = [], $filtersQs = [])
+    public function getFieldsData(Request $request, $contentTypeFields, $type, $filtersData = [], $options = [], $queryOptions = [])
     {
         $filters = [];
         $fields = [];
+        $queryOptionsFilter = !empty($queryOptions['filter']) ? $queryOptions['filter'] : [];
         foreach ($contentTypeFields as $field) {
             if (!empty($field['showInList'])) {
                 $fields[] = [
@@ -195,8 +196,8 @@ class CatalogController extends ProductController
                     'title' => $field['title'],
                     'outputType' => $field['outputType'],
                     'values' => $filtersData[$field['name']],
-                    'selected' => isset($filtersQs[$field['name']]) && is_array($filtersQs[$field['name']])
-                        ? $filtersQs[$field['name']]
+                    'selected' => isset($queryOptionsFilter[$field['name']]) && is_array($queryOptionsFilter[$field['name']])
+                        ? $queryOptionsFilter[$field['name']]
                         : []
                 ];
             }

@@ -32,7 +32,8 @@ class ProductController extends BaseController
             'sort_dir' => 1,
             'order_by' => 'id_desc',
             'full' => 1,
-            'only_active' => 1
+            'only_active' => 1,
+            'filter' => []
         ];
         parse_str($queryString, $queryOptions);
 
@@ -94,6 +95,27 @@ class ProductController extends BaseController
         $pagesOptions['next'] = min($pagesOptions['total'], $queryOptions['page'] + 1);
 
         return $pagesOptions;
+    }
+
+    /**
+     * @param array $filters
+     * @param array $criteria
+     */
+    public function applyFilters($filters, &$criteria)
+    {
+        if (empty($filters)) {
+            return;
+        }
+        foreach ($filters as $name => $filter) {
+            if (empty($filter)) {
+                continue;
+            }
+            if (isset($filter['from']) && isset($filter['to'])) {
+                $criteria[$name] = ['$gte' => floatval($filter['from']), '$lte' => floatval($filter['to'])];
+            } else {
+                $criteria[$name] = ['$in' => $filter];
+            }
+        }
     }
 
     /**

@@ -33,6 +33,11 @@
                 {% endfor %}
             </div>
         </div>
+        <div class="my-2"{% if queryOptions.filter | length == 0 %} style="display: none;"{% endif %}>
+            <a class="btn btn-info btn-sm btn-block shk-button-filters-reset" href="{{ catalogPath(currentUri) }}?limit={{ pagesOptions.limit }}&page=1&order_by={{ queryOptions.order_by }}">
+                {{ 'Reset' | trans }}
+            </a>
+        </div>
     </div>
 </form>
 <!-- /filters -->

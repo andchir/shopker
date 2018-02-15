@@ -98,10 +98,11 @@ class ProductController extends BaseController
     }
 
     /**
-     * @param array $filters
-     * @param array $criteria
+     * @param $filters
+     * @param $filtersData
+     * @param $criteria
      */
-    public function applyFilters($filters, &$criteria)
+    public function applyFilters($filters, $filtersData, &$criteria)
     {
         if (empty($filters)) {
             return;
@@ -109,6 +110,19 @@ class ProductController extends BaseController
         foreach ($filters as $name => $filter) {
             if (empty($filter)) {
                 continue;
+            }
+            if (!is_array($filter)) {
+                $filter = [$filter];
+            }
+            $index = array_search($name, array_column($filtersData, 'name'));
+            if ($index !== false) {
+                $flt = $filtersData[$index];
+                // Process coilor filter
+                if ($flt['outputType'] === 'color') {
+                    foreach ($filter as &$val) {
+                        $val = '#' . $val;
+                    }
+                }
             }
             if (isset($filter['from']) && isset($filter['to'])) {
                 $criteria[$name] = ['$gte' => floatval($filter['from']), '$lte' => floatval($filter['to'])];

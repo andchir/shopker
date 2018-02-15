@@ -70,7 +70,7 @@ class CatalogController extends ProductController
         $criteria = [
             'parentId' => $currentCategory->getId()
         ];
-        $this->applyFilters($queryOptions['filter'], $criteria);
+        $this->applyFilters($queryOptions['filter'], $filters, $criteria);
 
         $total = $collection->find($criteria)->count();
 
@@ -196,8 +196,10 @@ class CatalogController extends ProductController
                     'title' => $field['title'],
                     'outputType' => $field['outputType'],
                     'values' => $filtersData[$field['name']],
-                    'selected' => isset($queryOptionsFilter[$field['name']]) && is_array($queryOptionsFilter[$field['name']])
-                        ? $queryOptionsFilter[$field['name']]
+                    'selected' => isset($queryOptionsFilter[$field['name']])
+                        ? is_array($queryOptionsFilter[$field['name']])
+                            ? $queryOptionsFilter[$field['name']]
+                            : [$queryOptionsFilter[$field['name']]]
                         : []
                 ];
             }

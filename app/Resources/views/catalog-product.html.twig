@@ -21,22 +21,20 @@
                     {% endautoescape %}
                 </div>
                 <div class="column-right">
-
                     <div class="my-3">
                         {% autoescape false %}
                             {{ outputTypeChunk(currentPage, fields, 'description') }}
                         {% endautoescape %}
                     </div>
-
                     <div class="my-3">
                         {{ 'Price' | trans }}:
                         {% autoescape false %}
                             {{ outputTypeChunk(currentPage, fields, 'price') }}
                         {% endautoescape %}
                     </div>
-
                     <div class="my-3">
                         <form action="" method="post">
+                            <input type="hidden" name="id" value="{{ currentPage.id }}">
                             <input type="number" class="form-control d-inline-block text-center mr-2" value="1" min="1" step="1" name="count" style="width: 100px;">
 
                             <button type="submit" class="btn btn-info" name="submit_button">
@@ -44,7 +42,6 @@
                             </button>
                         </form>
                     </div>
-
                 </div>
                 <div class="clearfix"></div>
             </div>

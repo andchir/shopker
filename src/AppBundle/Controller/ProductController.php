@@ -33,7 +33,8 @@ class ProductController extends BaseController
             'order_by' => 'id_desc',
             'full' => 1,
             'only_active' => 1,
-            'filter' => []
+            'filter' => [],
+            'filterStr' => ''
         ];
         parse_str($queryString, $queryOptions);
 
@@ -73,6 +74,10 @@ class ProductController extends BaseController
         }
         $queryOptions['limit'] = min(abs(intval($queryOptions['limit'])), $queryOptions['limit_max']);
         $queryOptions['page'] = abs(intval($queryOptions['page']));
+
+        if (!empty($queryOptions['filter']) && is_array($queryOptions['filter'])) {
+            $queryOptions['filterStr'] = '&' . http_build_query(['filter' => $queryOptions['filter']]);
+        }
 
         return $queryOptions;
     }

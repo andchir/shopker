@@ -144,6 +144,9 @@ class CatalogController extends ProductController
         ];
         foreach ($contentTypeFields as $field) {
             if (!empty($field)) {
+                if (!isset($field['outputProperties']['chunkName'])) {
+                    $field['outputProperties']['chunkName'] = '';
+                }
                 $fields[] = [
                     'name' => $field['name'],
                     'type' => $field['outputType'],

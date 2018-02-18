@@ -8,6 +8,14 @@
 .min-height400 { min-height: 400px; }
 .image-wrapper img { max-width: 100%; }
 
+/* columns */
+.column-left { width: 350px; float: left; }
+.column-right { margin-left: 380px; }
+@media (max-width: 767.98px) {
+    .column-left { width: auto; float: none; }
+    .column-right { margin-left: 0; }
+}
+
 /** Bredcrumbs **/
 .btn-breadcrumb .btn:not(:last-child):after { content: " "; display: block; width: 0; height: 0; border-top: 17px solid transparent; border-bottom: 17px solid transparent; border-left: 10px solid white; position: absolute; top: 50%; margin-top: -17px; left: 100%; z-index: 3; }
 .btn-breadcrumb .btn:not(:last-child):before { content: " "; display: block; width: 0; height: 0; border-top: 17px solid transparent; border-bottom: 17px solid transparent; border-left: 10px solid #727b84; position: absolute; top: 50%; margin-top: -17px; margin-left: 1px; left: 100%; z-index: 3; }
@@ -54,7 +62,7 @@
 .shk-color-checkbox:after { width: 24px; height: 24px; }
 .shk-color-checkbox:before {  background-color: inherit !important; border: 1px solid rgba(0,0,0,0.5); }
 .shk-color-checkbox:after { background-image: none !important; color: #fff; padding: 0 0 0 4px; }
-.custom-checkbox .custom-control-input:checked ~ .shk-color-checkbox:after { font-family: 'icomoon' !important; content: "\e116"; text-shadow: 0 0 6px #000; }
+.custom-checkbox .custom-control-input:checked ~ .shk-color-checkbox:after { font-family: 'icomoon' !important; content: "\e116"; text-shadow: 0 0 2px #000, 0 0 2px #000; }
 
 /* slider */
 .shk-slider-range input { display: none; }

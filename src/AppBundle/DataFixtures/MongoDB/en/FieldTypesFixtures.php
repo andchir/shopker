@@ -431,7 +431,12 @@ class FieldTypesFixtures extends Fixture
                     [
                         'name' => 'value',
                         'title' => 'Default value',
-                        'default_value' => ''
+                        'default_value' => '#000000'
+                    ],
+                    [
+                        'name' => 'inline',
+                        'title' => 'Show without button',
+                        'default_value' => '0'
                     ],
                     [
                         'name' => 'handler',

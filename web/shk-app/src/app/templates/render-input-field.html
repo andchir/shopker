@@ -120,7 +120,12 @@
                                 </label>
                             </div>
                             <div class="col-md-7">
-                                <input type="color" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control">
+
+                                <p-colorPicker [inputId]="'field_' + field.name"
+                                               [formControlName]="field.name"
+                                               [inline]="field.inputProperties['inline']"
+                                               [(ngModel)]="model[field.name]"></p-colorPicker>
+
                                 <div *ngIf="formErrors[field.name]" class="alert alert-danger">
                                     {{formErrors[field.name]}}
                                 </div>

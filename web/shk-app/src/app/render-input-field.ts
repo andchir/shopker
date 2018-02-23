@@ -173,6 +173,18 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                 );
 
                 break;
+            case 'color':
+
+                propertiesDefault = {
+                    handler: '',
+                    inline: 0
+                };
+                field.inputProperties = this.extendProperties(
+                    field.inputProperties,
+                    propertiesDefault
+                );
+
+                break;
         }
     }
 

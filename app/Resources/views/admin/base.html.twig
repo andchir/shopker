@@ -5,15 +5,13 @@
     <title>{% block title %}{{ app_name }}{% endblock %}</title>
     <base href="{{ app.request.baseUrl }}/admin/">
 
-    {% block stylesheets %}{% endblock %}
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
 
     <link href="{{ asset('shk-app/node_modules/bootstrap/dist/css/bootstrap.min.css?v=4.0.0') }}" rel="stylesheet">
     <link href="{{ asset('shk-app/css/icomoon/style.css') }}" rel="stylesheet">
-    <link href="{{ asset('shk-app/node_modules/quill/dist/quill.core.css') }}" rel="stylesheet">
-    <link href="{{ asset('shk-app/node_modules/quill/dist/quill.snow.css') }}" rel="stylesheet">
     <link href="{{ asset('shk-app/node_modules/primeng/resources/themes/bootstrap/theme.css') }}" rel="stylesheet">
     <link href="{{ asset('shk-app/node_modules/primeng/resources/primeng.css') }}" rel="stylesheet">
+    {% block stylesheets %}{% endblock %}
     <link href="{{ asset('shk-app/css/admin/styles.css?v=2') }}" rel="stylesheet">
 
 </head>

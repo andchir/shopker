@@ -131,7 +131,7 @@ class SettingsController extends Controller
                 break;
         }
 
-        $this->cacheClearAction();
+        // $this->cacheClearAction();
 
         $output = $serializer->serialize($settings, 'json', ['groups' => ['list']]);
 

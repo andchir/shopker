@@ -244,14 +244,12 @@ class ProductController extends BaseProductController
         }
 
         $collection = $this->getCollection($contentType->getCollection());
-        $isEdit = false;
 
         if($itemId){
             $document = $collection->findOne(['_id' => $itemId]);
             if(!$document){
                 return $this->setError('Item not found.');
             }
-            $isEdit = true;
         } else {
             $document = [
                 '_id' => $this->getNextId($contentType->getCollection())
@@ -621,10 +619,11 @@ class ProductController extends BaseProductController
             ->getManager()
             ->getRepository(Filter::class);
 
-        list($breadcrumbs, $breadcrumbsIds) = $categoriesRepository->getBreadcrumbs($category->getUri(), false);
-        $categoriesIds = array_reverse($breadcrumbsIds);
+        $breadcrumbs = $categoriesRepository->getBreadcrumbs($category->getUri(), false);
+        $breadcrumbs = array_reverse($breadcrumbs);
 
-        foreach ($categoriesIds as $categoryId) {
+        foreach ($breadcrumbs as $category) {
+            $categoryId = $category['id'];
 
             /** @var Category $cat */
             $cat = $categoriesRepository->find($categoryId);

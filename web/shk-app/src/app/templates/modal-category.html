@@ -80,6 +80,18 @@
             </div>
         </div>
 
+        <div class="row form-group" [class.form-group-message]="formErrors.menuIndex">
+            <div class="col-md-5">
+                <label for="fieldMenuIndex">{{'MENU_INDEX' | translate}}</label>
+            </div>
+            <div class="col-md-7">
+                <input type="number" id="fieldMenuIndex" class="form-control" name="menuIndex" formControlName="menuIndex" [(ngModel)]="model.menuIndex">
+                <div *ngIf="formErrors.menuIndex" class="alert alert-danger">
+                    {{formErrors.menuIndex}}
+                </div>
+            </div>
+        </div>
+
         <div class="row form-group">
             <div class="col-md-7 ml-md-auto">
 

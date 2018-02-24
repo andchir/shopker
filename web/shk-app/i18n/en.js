@@ -66,5 +66,6 @@ var APP_LANG = {
     "mongodb_password": "MongoDB password",
     "mongodb_server": "MongoDB server",
     "mongodb_user": "MongoDB user",
-    "PREVIEW_SITE": "Preview site"
+    "PREVIEW_SITE": "Preview site",
+    "MENU_INDEX": "Position in the menu"
 };

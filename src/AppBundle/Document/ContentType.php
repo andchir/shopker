@@ -276,4 +276,21 @@ class ContentType
     {
         return $this->categories;
     }
+
+    /**
+     * @return string
+     */
+    public function getSystemNameField()
+    {
+        $output = '';
+        $contentTypeFields = $this->getFields();
+        foreach ($contentTypeFields as $field) {
+            if (!empty($field['inputType']) && $field['inputType'] == 'system_name') {
+                $output = $field['name'];
+                break;
+            }
+        }
+        return $output;
+    }
+
 }

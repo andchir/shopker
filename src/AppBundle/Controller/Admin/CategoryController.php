@@ -103,6 +103,7 @@ class CategoryController extends StorageControllerAbstract
             ->setDescription(isset($data['description']) ? $data['description'] : '')
             ->setIsActive(isset($data['isActive']) ? $data['isActive'] : true)
             ->setParentId(isset($data['parentId']) ? intval( $data['parentId'] ) : 0)
+            ->setMenuIndex(isset($data['menuIndex']) ? intval( $data['menuIndex'] ) : 0)
             ->setContentTypeName($data['contentTypeName'])
             ->setContentType($contentType);
 

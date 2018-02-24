@@ -94,6 +94,9 @@ class CategoryUpdateListener
         $names = [];
         /** @var Category $parent */
         foreach ($parents as $parent) {
+            if ($parent->getName() === 'root') {
+                continue;
+            }
             $names[] = $parent->getName();
         }
         $names = array_reverse($names);

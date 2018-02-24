@@ -62,6 +62,16 @@ class Category
     protected $contentType;
 
     /**
+     * @MongoDB\Field(type="string")
+     */
+    protected $image;
+
+    /**
+     * @MongoDB\Field(type="int")
+     */
+    protected $menuIndex;
+
+    /**
      * Get id
      *
      * @return string $id
@@ -205,6 +215,7 @@ class Category
             'title' => $this->getTitle(),
             'description' => $this->getDescription(),
             'contentTypeName' => $this->getContentTypeName(),
+            'menuIndex' => $this->getMenuIndex(),
             'isFolder' => $this->getIsFolder(),
             'isActive' => $this->getIsActive()
         ];
@@ -309,10 +320,10 @@ class Category
     }
 
     /**
-     * @param array $breadcrumbsIds
+     * @param array $breadcrumbsUriArr
      * @return array
      */
-    public function getMenuData($breadcrumbsIds = [])
+    public function getMenuData($breadcrumbsUriArr = [])
     {
         return [
             'id' => $this->getId(),
@@ -320,7 +331,8 @@ class Category
             'name' => $this->getName(),
             'description' => $this->getDescription(),
             'uri' => $this->getUri(),
-            'isActive' => in_array($this->getId(), $breadcrumbsIds),
+            'isActive' => in_array($this->getUri(), $breadcrumbsUriArr),
+            'menuIndex' => $this->getMenuIndex(),
             'children' => []
         ];
     }
@@ -345,4 +357,48 @@ class Category
         return [$pageAlias, $parentUri, $levelNum];
     }
 
+
+    /**
+     * Set image
+     *
+     * @param string $image
+     * @return $this
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return string $image
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * Set menuIndex
+     *
+     * @param int $menuIndex
+     * @return $this
+     */
+    public function setMenuIndex($menuIndex)
+    {
+        $this->menuIndex = $menuIndex;
+        return $this;
+    }
+
+    /**
+     * Get menuIndex
+     *
+     * @return int $menuIndex
+     */
+    public function getMenuIndex()
+    {
+        return $this->menuIndex;
+    }
 }

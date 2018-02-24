@@ -69,6 +69,12 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
                 required: 'Content type is required.'
             }
         },
+        menuIndex: {
+            value: 0,
+            disabled: false,
+            validators: [],
+            messages: {}
+        },
         isActive: {
             value: false,
             disabled: false,

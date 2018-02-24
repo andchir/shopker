@@ -7,6 +7,7 @@ export class Category {
         public title: string,
         public description: string,
         public contentTypeName: string,
-        public isActive: boolean
+        public isActive: boolean,
+        public menuIndex?: number
     ) { }
 }

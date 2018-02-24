@@ -34,15 +34,15 @@ class CategoryRepository extends BaseRepository
     public function getBreadcrumbs($categoryUri, $pop = true)
     {
         if (empty($categoryUri)) {
-            return [[],[]];
+            return [];
         }
         $breadcrumbs = [];
-        $breadcrumbsIds = [];
         $categoryUri = trim($categoryUri, '/');
         $categoryUriArr = explode('/', $categoryUri);
 
         $categories = $this->createQueryBuilder()
             ->field('name')->in($categoryUriArr)
+            ->field('name')->notEqual('root')
             ->sort('title', 'asc')
             ->getQuery()
             ->execute()
@@ -50,22 +50,16 @@ class CategoryRepository extends BaseRepository
 
         /** @var Category $crumb */
         $crumb = $this->findOneFromArray($categories, 'parentId', 0);
-        if ($crumb) {
-            $breadcrumbsIds[] = $crumb->getId();
-        }
         while (!empty($crumb)) {
             $breadcrumbs[] = $crumb->getMenuData();
             $crumb = $this->findOneFromArray($categories, 'parentId', $crumb->getId());
-            if ($crumb) {
-                $breadcrumbsIds[] = $crumb->getId();
-            }
         }
 
         if (!empty($breadcrumbs) && $pop) {
             array_pop($breadcrumbs);
         }
 
-        return [$breadcrumbs, $breadcrumbsIds];
+        return $breadcrumbs;
     }
 
     /**

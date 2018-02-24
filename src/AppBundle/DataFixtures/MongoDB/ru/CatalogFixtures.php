@@ -25,6 +25,9 @@ class CatalogFixtures extends Fixture
         $this->productController = new ProductController();
         $this->productController->setContainer($this->container);
 
+        $incrementIdsCollection = $this->productController->getCollection('doctrine_increment_ids');
+        $incrementIdsCollection->remove([]);
+
         $categoryUpdateListener = new CategoryUpdateListener();
         $this->dispatcher->addListener(CategoryUpdatedEvent::NAME, [$categoryUpdateListener, 'onUpdated']);
 
@@ -34,9 +37,6 @@ class CatalogFixtures extends Fixture
         $contentType = $this->getReference('content_type');
         $collection = $this->productController->getCollection($contentType->getCollection());
         $collection->remove([]);
-
-        $incrementIdsCollection = $this->productController->getCollection('doctrine_increment_ids');
-        $incrementIdsCollection->remove([]);
 
         $this->loadCatalog($manager);
     }

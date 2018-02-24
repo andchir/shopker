@@ -65,5 +65,6 @@
 	"mongodb_database": "MongoDB database",
 	"mongodb_password": "MongoDB password",
 	"mongodb_server": "MongoDB server",
-	"mongodb_user": "MongoDB user"
+	"mongodb_user": "MongoDB user",
+	"PREVIEW_SITE": "Preview site"
 }

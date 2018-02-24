@@ -7,8 +7,8 @@ Product catalog and order management.
 
 ~~~
 php bin/console doctrine:mongodb:fixtures:load --fixtures=src/AppBundle/DataFixtures/MongoDB/en
-php bin/console cache:clear --env=dev
-php bin/console cache:clear --env=prod --no-debug
+sudo -u www-data php bin/console cache:clear --env=dev
+sudo -u www-data php bin/console cache:clear --env=prod --no-debug
 php bin/console server:run localhost:8001
 ~~~
 

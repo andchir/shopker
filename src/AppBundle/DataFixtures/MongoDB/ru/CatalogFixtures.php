@@ -31,17 +31,22 @@ class CatalogFixtures extends Fixture
         $categoryUpdateListener = new CategoryUpdateListener();
         $this->dispatcher->addListener(CategoryUpdatedEvent::NAME, [$categoryUpdateListener, 'onUpdated']);
 
-        $this->loadContentType($manager);
+        $this->loadContentTypes($manager);
 
         /** @var ContentType $contentType */
-        $contentType = $this->getReference('content_type');
+        $contentType = $this->getReference('content_type_catalog');
         $collection = $this->productController->getCollection($contentType->getCollection());
         $collection->remove([]);
+
+        /** @var ContentType $contentType */
+        $contentTypeText = $this->getReference('content_type_text');
+        $collectionText = $this->productController->getCollection($contentTypeText->getCollection());
+        $collectionText->remove([]);
 
         $this->loadCatalog($manager);
     }
 
-    public function loadContentType(ObjectManager $manager) {
+    public function loadContentTypes(ObjectManager $manager) {
 
         $fields = [
             [
@@ -252,9 +257,9 @@ class CatalogFixtures extends Fixture
 
         $contentType = new ContentType();
         $contentType
-            ->setTitle('Общий')
-            ->setName('general')
-            ->setDescription('Товары каталога')
+            ->setTitle('Товар каталога')
+            ->setName('products')
+            ->setDescription('Товар каталога')
             ->setCollection('products')
             ->setFields($fields)
             ->setGroups(['Основное','Параметры','Категории'])
@@ -263,7 +268,109 @@ class CatalogFixtures extends Fixture
         $manager->persist($contentType);
         $manager->flush();
 
-        $this->addReference('content_type', $contentType);
+        $this->addReference('content_type_catalog', $contentType);
+
+        /* Text content */
+        $fields = [
+            [
+                'title' => 'Название',
+                'name' => 'title',
+                'description' => '',
+                'inputType' => 'text',
+                'inputProperties' => [
+                    'value' => '',
+                    'handler' => ''
+                ],
+                'outputType' => 'text',
+                'outputProperties' => [
+                    'className' => '',
+                    'chunkName' => 'header'
+                ],
+                'group' => 'Основное',
+                'required' => true,
+                'showInTable' => true,
+                'showInList' => true,
+                'isFilter' => false
+            ],
+            [
+                'title' => 'Системное имя',
+                'name' => 'name',
+                'description' => '',
+                'inputType' => 'system_name',
+                'inputProperties' => [
+                    'value' => '',
+                    'source_field' => 'title',
+                    'handler' => ''
+                ],
+                'outputType' => 'system_name',
+                'outputProperties' => [
+                    'className' => ''
+                ],
+                'group' => 'Основное',
+                'required' => true,
+                'showInTable' => true,
+                'showInList' => false,
+                'isFilter' => false
+            ],
+            [
+                'title' => 'Основной текст',
+                'name' => 'text',
+                'description' => '',
+                'inputType' => 'rich_text',
+                'inputProperties' => [
+                    'value' => '',
+                    'handler' => ''
+                ],
+                'outputType' => 'rich_text',
+                'outputProperties' => [
+                    'className' => '',
+                    'chunkName' => 'description'
+                ],
+                'group' => 'Основное',
+                'required' => false,
+                'showInTable' => false,
+                'showInList' => false,
+                'isFilter' => false
+            ],
+            [
+                'title' => 'Позиция в меню',
+                'name' => 'menuIndex',
+                'description' => '',
+                'inputType' => 'number',
+                'inputProperties' => [
+                    'value' => '0',
+                    'handler' => '',
+                    'min' => 0,
+                    'max' => null,
+                    'step' => 1
+                ],
+                'outputType' => 'number',
+                'outputProperties' => [
+                    'className' => '',
+                    'chunkName' => ''
+                ],
+                'group' => 'Параметры',
+                'required' => false,
+                'showInTable' => true,
+                'showInList' => false,
+                'isFilter' => false
+            ]
+        ];
+
+        $contentType = new ContentType();
+        $contentType
+            ->setTitle('Текстовая страница')
+            ->setName('text-content')
+            ->setDescription('Текстовая страница')
+            ->setCollection('text_content')
+            ->setFields($fields)
+            ->setGroups(['Основное','Параметры'])
+            ->setIsActive(true);
+
+        $manager->persist($contentType);
+        $manager->flush();
+
+        $this->addReference('content_type_text', $contentType);
     }
 
     public function loadCatalog(ObjectManager $manager)
@@ -272,20 +379,24 @@ class CatalogFixtures extends Fixture
             [
                 'title' => 'Книги',
                 'name' => 'knigi',
+                'menuIndex' => 3,
                 'children' => [
                     [
                         'title' => 'Учебная литература',
                         'name' => 'uchebnaya-literatura',
+                        'menuIndex' => 0,
                         'children' => []
                     ],
                     [
                         'title' => 'Художественная литература',
                         'name' => 'khudozhestvennaya-literatura',
+                        'menuIndex' => 0,
                         'children' => []
                     ],
                     [
                         'title' => 'Детям',
                         'name' => 'detyam',
+                        'menuIndex' => 0,
                         'children' => []
                     ]
                 ]
@@ -293,14 +404,17 @@ class CatalogFixtures extends Fixture
             [
                 'title' => 'Одежда, обувь, сумки',
                 'name' => 'odezhda-obuv-sumki',
+                'menuIndex' =>4,
                 'children' => [
                     [
                         'title' => 'Oдежда',
                         'name' => 'odezhda',
+                        'menuIndex' => 0,
                         'children' => [
                             [
                                 'title' => 'Женская одежда',
                                 'name' => 'zhenskaya-odezhda',
+                                'menuIndex' => 0,
                                 'children' => [
 
                                 ]
@@ -308,6 +422,7 @@ class CatalogFixtures extends Fixture
                             [
                                 'title' => 'Мужская одежда',
                                 'name' => 'muzhskaya-odezhda',
+                                'menuIndex' => 0,
                                 'children' => [
 
                                 ]
@@ -315,6 +430,7 @@ class CatalogFixtures extends Fixture
                             [
                                 'title' => 'Детская одежда',
                                 'name' => 'detskaya-odezhda',
+                                'menuIndex' => 0,
                                 'children' => [
 
                                 ]
@@ -324,10 +440,12 @@ class CatalogFixtures extends Fixture
                     [
                         'title' => 'Обувь',
                         'name' => 'obuv',
+                        'menuIndex' => 0,
                         'children' => [
                             [
                                 'title' => 'Женская обувь',
                                 'name' => 'zhenskaya-obuv',
+                                'menuIndex' => 0,
                                 'children' => [
 
                                 ]
@@ -335,10 +453,11 @@ class CatalogFixtures extends Fixture
                             [
                                 'title' => 'Мужская обувь',
                                 'name' => 'muzhskaya-obuv',
+                                'menuIndex' => 0,
                                 'children' => [
 
                                 ],
-                                'products' => [
+                                'content' => [
                                     [
                                         'title' => 'Кроссовки Patrol Black',
                                         'name' => 'krossovki-patrol-black',
@@ -487,6 +606,7 @@ class CatalogFixtures extends Fixture
                             [
                                 'title' => 'Детская обувь',
                                 'name' => 'detskaya-obuv',
+                                'menuIndex' => 0,
                                 'children' => [
 
                                 ]
@@ -496,10 +616,12 @@ class CatalogFixtures extends Fixture
                     [
                         'title' => 'Сумки',
                         'name' => 'sumki',
+                        'menuIndex' => 0,
                         'children' => [
                             [
                                 'title' => 'Женские сумки',
                                 'name' => 'zhenskie-sumki',
+                                'menuIndex' => 0,
                                 'children' => [
 
                                 ]
@@ -507,6 +629,7 @@ class CatalogFixtures extends Fixture
                             [
                                 'title' => 'Мужские сумки',
                                 'name' => 'muzhskie-sumki',
+                                'menuIndex' => 0,
                                 'children' => [
 
                                 ]
@@ -517,13 +640,37 @@ class CatalogFixtures extends Fixture
             ]
         ];
 
-        $this->loadCategories($manager, $data);
-    }
-
-    public function loadCategories(ObjectManager $manager, $data, Category $parent = null) {
+        /** @var ContentType $contentTypeText */
+        $contentTypeText = $this->getReference('content_type_text');
+        $this->loadCategories($manager, $contentTypeText, [
+            [
+                'title' => 'Корневая категория',
+                'name' => 'root',
+                'menuIndex' => 0,
+                'children' => [],
+                'content' => [
+                    [
+                        'title' => 'О магазине',
+                        'name' => 'about',
+                        'text' => 'Тут будет описание...',
+                        'menuIndex' => 1
+                    ],
+                    [
+                        'title' => 'Оплата и доставка',
+                        'name' => 'payment',
+                        'text' => 'Тут будет описание...',
+                        'menuIndex' => 2
+                    ]
+                ]
+            ]
+        ]);
 
         /** @var ContentType $contentType */
-        $contentType = $this->getReference('content_type');
+        $contentType = $this->getReference('content_type_catalog');
+        $this->loadCategories($manager, $contentType, $data);
+    }
+
+    public function loadCategories(ObjectManager $manager, ContentType $contentType, $data, Category $parent = null) {
 
         foreach ($data as $item) {
             $category = new Category();
@@ -537,8 +684,15 @@ class CatalogFixtures extends Fixture
                 ->setName($item['name'])
                 ->setDescription('')
                 ->setIsActive(true)
+                ->setMenuIndex($item['menuIndex'])
                 ->setContentTypeName($contentType->getName())
                 ->setContentType($contentType);
+
+            if ($item['name'] === 'root') {
+                $category
+                    ->setId(0)
+                    ->setIsFolder(true);
+            }
 
             $manager->persist($category);
             $manager->flush();
@@ -546,12 +700,12 @@ class CatalogFixtures extends Fixture
             $event = new CategoryUpdatedEvent($this->container, $category);
             $this->dispatcher->dispatch(CategoryUpdatedEvent::NAME, $event);
 
-            if (!empty($item['products'])) {
-                $this->loadProducts($manager, $category, $item['products']);
+            if (!empty($item['content'])) {
+                $this->loadCategoryContent($manager, $category, $item['content']);
             }
 
             if (!empty($item['children'])) {
-                $this->loadCategories($manager, $item['children'], $category);
+                $this->loadCategories($manager, $contentType, $item['children'], $category);
             }
         }
     }
@@ -562,7 +716,7 @@ class CatalogFixtures extends Fixture
      * @param array $data
      * @return bool
      */
-    public function loadProducts(ObjectManager $manager, Category $category, $data)
+    public function loadCategoryContent(ObjectManager $manager, Category $category, $data)
     {
         /** @var ContentType $contentType */
         $contentType = $category->getContentType();

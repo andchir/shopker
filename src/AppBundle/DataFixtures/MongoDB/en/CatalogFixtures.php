@@ -31,17 +31,17 @@ class CatalogFixtures extends Fixture
         $categoryUpdateListener = new CategoryUpdateListener();
         $this->dispatcher->addListener(CategoryUpdatedEvent::NAME, [$categoryUpdateListener, 'onUpdated']);
 
-        $this->loadContentType($manager);
+        $this->loadContentTypes($manager);
 
         /** @var ContentType $contentType */
-        $contentType = $this->getReference('content_type');
+        $contentType = $this->getReference('content_type_catalog');
         $collection = $this->productController->getCollection($contentType->getCollection());
         $collection->remove([]);
 
         $this->loadCatalog($manager);
     }
 
-    public function loadContentType(ObjectManager $manager) {
+    public function loadContentTypes(ObjectManager $manager) {
 
         $fields = [
             [
@@ -263,7 +263,7 @@ class CatalogFixtures extends Fixture
         $manager->persist($contentType);
         $manager->flush();
 
-        $this->addReference('content_type', $contentType);
+        $this->addReference('content_type_catalog', $contentType);
     }
 
     public function loadCatalog(ObjectManager $manager)
@@ -523,7 +523,7 @@ class CatalogFixtures extends Fixture
     public function loadCategories(ObjectManager $manager, $data, Category $parent = null) {
 
         /** @var ContentType $contentType */
-        $contentType = $this->getReference('content_type');
+        $contentType = $this->getReference('content_type_catalog');
 
         foreach ($data as $item) {
             $category = new Category();

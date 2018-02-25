@@ -67,3 +67,8 @@
 /* slider */
 .shk-slider-range input { display: none; }
 .noUi-tooltip { font-size: 11px; background-color: rgba(0,0,0,0.1); padding-top: 3px; padding-bottom: 3px; }
+.noUi-horizontal .noUi-handle { width: 20px; right: -10px; left: auto; }
+html:not([dir=rtl]) .noUi-horizontal .noUi-handle { right: -10px; left: auto; }
+.noUi-handle:after, .noUi-handle:before { left: 7px; }
+.noUi-handle:after { left: 10px; }
+

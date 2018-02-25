@@ -12,7 +12,9 @@
 .relative { position: relative; }
 .pos-absolute-left { position: absolute; left: 0; top: 0; }
 .pos-absolute-right { position: absolute; right: 0; top: 0; }
+.pos-absolute-right2 { right: 0.6rem; top: 0.6rem; }
 .min-height400 { min-height: 400px; }
+.no-events { pointer-events: none; }
 
 /* shadow */
 .shadow { box-shadow: 0 0 20px rgba(0,0,0,0.3); }

@@ -156,18 +156,7 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
  */
 @Component({
     selector: 'categories-list',
-    template: `
-        <ul class="dropdown-menu dropdown-menu-hover" *ngIf="items.length > 0" [class.shadow]="parentId != 0">
-            <li class="dropdown-item active" *ngFor="let item of items" [class.active]="item.id == currentId"
-                [class.current-level]="getIsActiveParent(item.id)">
-                <i class="icon-keyboard_arrow_right float-right m-2 pt-1" [hidden]="!item.isFolder"></i>
-                <a href="" [routerLink]="['/catalog/category/', item.id]" [class.text-muted]="!item.isActive">
-                    {{item.title}}
-                </a>
-                <categories-list [inputItems]="inputItems" [parentId]="item.id" [currentId]="currentId"></categories-list>
-            </li>
-        </ul>
-    `
+    templateUrl: 'templates/categories-menu-item.html'
 })
 export class CategoriesListComponent extends ListRecursiveComponent {
 

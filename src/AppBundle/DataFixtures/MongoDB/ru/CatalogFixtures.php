@@ -377,292 +377,299 @@ class CatalogFixtures extends Fixture
     {
         $data = [
             [
-                'title' => 'Книги',
-                'name' => 'knigi',
-                'menuIndex' => 3,
+                'title' => 'Каталог',
+                'name' => 'katalog',
+                'menuIndex' => 0,
                 'children' => [
                     [
-                        'title' => 'Учебная литература',
-                        'name' => 'uchebnaya-literatura',
-                        'menuIndex' => 0,
-                        'children' => []
-                    ],
-                    [
-                        'title' => 'Художественная литература',
-                        'name' => 'khudozhestvennaya-literatura',
-                        'menuIndex' => 0,
-                        'children' => []
-                    ],
-                    [
-                        'title' => 'Детям',
-                        'name' => 'detyam',
-                        'menuIndex' => 0,
-                        'children' => []
-                    ]
-                ]
-            ],
-            [
-                'title' => 'Одежда, обувь, сумки',
-                'name' => 'odezhda-obuv-sumki',
-                'menuIndex' =>4,
-                'children' => [
-                    [
-                        'title' => 'Oдежда',
-                        'name' => 'odezhda',
-                        'menuIndex' => 0,
+                        'title' => 'Книги',
+                        'name' => 'knigi',
+                        'menuIndex' => 3,
                         'children' => [
                             [
-                                'title' => 'Женская одежда',
-                                'name' => 'zhenskaya-odezhda',
+                                'title' => 'Учебная литература',
+                                'name' => 'uchebnaya-literatura',
                                 'menuIndex' => 0,
-                                'children' => [
-
-                                ]
+                                'children' => []
                             ],
                             [
-                                'title' => 'Мужская одежда',
-                                'name' => 'muzhskaya-odezhda',
+                                'title' => 'Художественная литература',
+                                'name' => 'khudozhestvennaya-literatura',
                                 'menuIndex' => 0,
-                                'children' => [
-
-                                ]
+                                'children' => []
                             ],
                             [
-                                'title' => 'Детская одежда',
-                                'name' => 'detskaya-odezhda',
+                                'title' => 'Детям',
+                                'name' => 'detyam',
                                 'menuIndex' => 0,
-                                'children' => [
-
-                                ]
+                                'children' => []
                             ]
                         ]
                     ],
                     [
-                        'title' => 'Обувь',
-                        'name' => 'obuv',
-                        'menuIndex' => 0,
+                        'title' => 'Одежда, обувь, сумки',
+                        'name' => 'odezhda-obuv-sumki',
+                        'menuIndex' =>4,
                         'children' => [
                             [
-                                'title' => 'Женская обувь',
-                                'name' => 'zhenskaya-obuv',
+                                'title' => 'Oдежда',
+                                'name' => 'odezhda',
                                 'menuIndex' => 0,
                                 'children' => [
+                                    [
+                                        'title' => 'Женская одежда',
+                                        'name' => 'zhenskaya-odezhda',
+                                        'menuIndex' => 0,
+                                        'children' => [
 
-                                ]
-                            ],
-                            [
-                                'title' => 'Мужская обувь',
-                                'name' => 'muzhskaya-obuv',
-                                'menuIndex' => 0,
-                                'children' => [
+                                        ]
+                                    ],
+                                    [
+                                        'title' => 'Мужская одежда',
+                                        'name' => 'muzhskaya-odezhda',
+                                        'menuIndex' => 0,
+                                        'children' => [
 
-                                ],
-                                'content' => [
-                                    [
-                                        'title' => 'Кроссовки Patrol Black',
-                                        'name' => 'krossovki-patrol-black',
-                                        'description' => 'Тут будет описание...',
-                                        'price' => 2090,
-                                        'brand' => 'Patrol',
-                                        'country' => 'Китай',
-                                        'color' => '#000000',
-                                        'material' => 'Искусственная кожа',
-                                        'image' => ''
+                                        ]
                                     ],
                                     [
-                                        'title' => 'Кроссовки Patrol White',
-                                        'name' => 'krossovki-patrol-white',
-                                        'description' => 'Тут будет описание...',
-                                        'price' => 1840,
-                                        'brand' => 'Patrol',
-                                        'country' => 'Китай',
-                                        'color' => '#984d06',
-                                        'material' => 'Искусственная кожа',
-                                        'image' => ''
-                                    ],
-                                    [
-                                        'title' => 'Кроссовки Patrol Brown',
-                                        'name' => 'krossovki-patrol-brown',
-                                        'description' => 'Тут будет описание...',
-                                        'price' => 1900,
-                                        'brand' => 'Patrol',
-                                        'country' => 'Китай',
-                                        'color' => '#66583c',
-                                        'material' => 'Искусственная кожа',
-                                        'image' => ''
-                                    ],
-                                    [
-                                        'title' => 'Кроссовки Nike Air Max Infuriate Low',
-                                        'name' => 'krossovki-nike-air-max-infuriate-low',
-                                        'description' => 'Тут будет описание...',
-                                        'price' => 4466,
-                                        'brand' => 'Nike',
-                                        'country' => 'Вьетнам',
-                                        'color' => '#000000',
-                                        'material' => 'Искусственная кожа',
-                                        'image' => ''
-                                    ],
-                                    [
-                                        'title' => 'Кроссовки Nike Nightgazer',
-                                        'name' => 'krossovki-nike-nightgazer',
-                                        'description' => 'Тут будет описание...',
-                                        'price' => 5690,
-                                        'brand' => 'Nike',
-                                        'country' => 'Вьетнам',
-                                        'color' => '#000000',
-                                        'material' => 'Искусственная кожа',
-                                        'image' => ''
-                                    ],
-                                    [
-                                        'title' => 'Кеды Брис-Босфор',
-                                        'name' => 'kedy-bris-bosfor',
-                                        'description' => 'Тут будет описание...',
-                                        'price' => 684,
-                                        'brand' => 'Bris',
-                                        'country' => 'Россия',
-                                        'color' => '#000000',
-                                        'material' => 'Текстиль',
-                                        'image' => ''
-                                    ],
-                                    [
-                                        'title' => 'Кеды Nike COURT ROYALE',
-                                        'name' => 'kedy-nike-court-royale',
-                                        'description' => 'Тут будет описание...',
-                                        'price' => 3990,
-                                        'brand' => 'Nike',
-                                        'country' => 'Индонезия',
-                                        'color' => '#ffffff',
-                                        'material' => 'Текстиль',
-                                        'image' => ''
-                                    ],
-                                    [
-                                        'title' => 'Кроссовки Nike T-Lite XI',
-                                        'name' => 'krossovki-nike-t-lite-xi',
-                                        'description' => 'Тут будет описание...',
-                                        'price' => 3490,
-                                        'brand' => 'Nike',
-                                        'country' => 'Индонезия',
-                                        'color' => '#ffffff',
-                                        'material' => 'Искусственная кожа',
-                                        'image' => ''
-                                    ],
-                                    [
-                                        'title' => 'Кроссовки Nike Reax 8 TR',
-                                        'name' => 'krossovki-nike-reax-8-tr',
-                                        'description' => 'Тут будет описание...',
-                                        'price' => 5990,
-                                        'brand' => 'Nike',
-                                        'country' => 'Вьетнам',
-                                        'color' => '#ffffff',
-                                        'material' => 'Натуральная кожа',
-                                        'image' => ''
-                                    ],
-                                    [
-                                        'title' => 'Кеды Nike Court Royale Suede',
-                                        'name' => 'kedy-nike-court-royale-suede',
-                                        'description' => 'Тут будет описание...',
-                                        'price' => 4490,
-                                        'brand' => 'Nike',
-                                        'country' => 'Индонезия',
-                                        'color' => '#ffffff',
-                                        'material' => 'Натуральная кожа',
-                                        'image' => ''
-                                    ],
-                                    [
-                                        'title' => 'Кроссовки Adidas Climawarm Atr M',
-                                        'name' => 'krossovki-adidas-climawarm-atr-m',
-                                        'description' => 'Тут будет описание...',
-                                        'price' => 4490,
-                                        'brand' => 'Adidas',
-                                        'country' => 'Китай',
-                                        'color' => '#0f77b0',
-                                        'material' => 'Искусственная кожа, Текстиль',
-                                        'image' => ''
-                                    ],
-                                    [
-                                        'title' => 'Кроссовки Adidas Neo 10K Casual',
-                                        'name' => 'krossovki-adidas-neo-10k-casual',
-                                        'description' => 'Тут будет описание...',
-                                        'price' => 4764,
-                                        'brand' => 'Adidas',
-                                        'country' => 'Китай',
-                                        'color' => '#0f77b0',
-                                        'material' => 'Искусственная кожа, Текстиль',
-                                        'image' => ''
-                                    ],
-                                    [
-                                        'title' => 'Валенки Котофей',
-                                        'name' => 'valenki-kotofey',
-                                        'description' => 'Тут будет описание...',
-                                        'price' => 3778,
-                                        'brand' => 'Котофей',
-                                        'country' => 'Россия',
-                                        'color' => '#000000',
-                                        'material' => 'Войлок',
-                                        'image' => ''
+                                        'title' => 'Детская одежда',
+                                        'name' => 'detskaya-odezhda',
+                                        'menuIndex' => 0,
+                                        'children' => [
+
+                                        ]
                                     ]
                                 ]
                             ],
                             [
-                                'title' => 'Детская обувь',
-                                'name' => 'detskaya-obuv',
+                                'title' => 'Обувь',
+                                'name' => 'obuv',
                                 'menuIndex' => 0,
                                 'children' => [
+                                    [
+                                        'title' => 'Женская обувь',
+                                        'name' => 'zhenskaya-obuv',
+                                        'menuIndex' => 0,
+                                        'children' => [
 
-                                ]
-                            ]
-                        ]
-                    ],
-                    [
-                        'title' => 'Сумки',
-                        'name' => 'sumki',
-                        'menuIndex' => 0,
-                        'children' => [
-                            [
-                                'title' => 'Женские сумки',
-                                'name' => 'zhenskie-sumki',
-                                'menuIndex' => 0,
-                                'children' => [
+                                        ]
+                                    ],
+                                    [
+                                        'title' => 'Мужская обувь',
+                                        'name' => 'muzhskaya-obuv',
+                                        'menuIndex' => 0,
+                                        'children' => [
 
+                                        ],
+                                        'content' => [
+                                            [
+                                                'title' => 'Кроссовки Patrol Black',
+                                                'name' => 'krossovki-patrol-black',
+                                                'description' => 'Тут будет описание...',
+                                                'price' => 2090,
+                                                'brand' => 'Patrol',
+                                                'country' => 'Китай',
+                                                'color' => '#000000',
+                                                'material' => 'Искусственная кожа',
+                                                'image' => ''
+                                            ],
+                                            [
+                                                'title' => 'Кроссовки Patrol White',
+                                                'name' => 'krossovki-patrol-white',
+                                                'description' => 'Тут будет описание...',
+                                                'price' => 1840,
+                                                'brand' => 'Patrol',
+                                                'country' => 'Китай',
+                                                'color' => '#984d06',
+                                                'material' => 'Искусственная кожа',
+                                                'image' => ''
+                                            ],
+                                            [
+                                                'title' => 'Кроссовки Patrol Brown',
+                                                'name' => 'krossovki-patrol-brown',
+                                                'description' => 'Тут будет описание...',
+                                                'price' => 1900,
+                                                'brand' => 'Patrol',
+                                                'country' => 'Китай',
+                                                'color' => '#66583c',
+                                                'material' => 'Искусственная кожа',
+                                                'image' => ''
+                                            ],
+                                            [
+                                                'title' => 'Кроссовки Nike Air Max Infuriate Low',
+                                                'name' => 'krossovki-nike-air-max-infuriate-low',
+                                                'description' => 'Тут будет описание...',
+                                                'price' => 4466,
+                                                'brand' => 'Nike',
+                                                'country' => 'Вьетнам',
+                                                'color' => '#000000',
+                                                'material' => 'Искусственная кожа',
+                                                'image' => ''
+                                            ],
+                                            [
+                                                'title' => 'Кроссовки Nike Nightgazer',
+                                                'name' => 'krossovki-nike-nightgazer',
+                                                'description' => 'Тут будет описание...',
+                                                'price' => 5690,
+                                                'brand' => 'Nike',
+                                                'country' => 'Вьетнам',
+                                                'color' => '#000000',
+                                                'material' => 'Искусственная кожа',
+                                                'image' => ''
+                                            ],
+                                            [
+                                                'title' => 'Кеды Брис-Босфор',
+                                                'name' => 'kedy-bris-bosfor',
+                                                'description' => 'Тут будет описание...',
+                                                'price' => 684,
+                                                'brand' => 'Bris',
+                                                'country' => 'Россия',
+                                                'color' => '#000000',
+                                                'material' => 'Текстиль',
+                                                'image' => ''
+                                            ],
+                                            [
+                                                'title' => 'Кеды Nike COURT ROYALE',
+                                                'name' => 'kedy-nike-court-royale',
+                                                'description' => 'Тут будет описание...',
+                                                'price' => 3990,
+                                                'brand' => 'Nike',
+                                                'country' => 'Индонезия',
+                                                'color' => '#ffffff',
+                                                'material' => 'Текстиль',
+                                                'image' => ''
+                                            ],
+                                            [
+                                                'title' => 'Кроссовки Nike T-Lite XI',
+                                                'name' => 'krossovki-nike-t-lite-xi',
+                                                'description' => 'Тут будет описание...',
+                                                'price' => 3490,
+                                                'brand' => 'Nike',
+                                                'country' => 'Индонезия',
+                                                'color' => '#ffffff',
+                                                'material' => 'Искусственная кожа',
+                                                'image' => ''
+                                            ],
+                                            [
+                                                'title' => 'Кроссовки Nike Reax 8 TR',
+                                                'name' => 'krossovki-nike-reax-8-tr',
+                                                'description' => 'Тут будет описание...',
+                                                'price' => 5990,
+                                                'brand' => 'Nike',
+                                                'country' => 'Вьетнам',
+                                                'color' => '#ffffff',
+                                                'material' => 'Натуральная кожа',
+                                                'image' => ''
+                                            ],
+                                            [
+                                                'title' => 'Кеды Nike Court Royale Suede',
+                                                'name' => 'kedy-nike-court-royale-suede',
+                                                'description' => 'Тут будет описание...',
+                                                'price' => 4490,
+                                                'brand' => 'Nike',
+                                                'country' => 'Индонезия',
+                                                'color' => '#ffffff',
+                                                'material' => 'Натуральная кожа',
+                                                'image' => ''
+                                            ],
+                                            [
+                                                'title' => 'Кроссовки Adidas Climawarm Atr M',
+                                                'name' => 'krossovki-adidas-climawarm-atr-m',
+                                                'description' => 'Тут будет описание...',
+                                                'price' => 4490,
+                                                'brand' => 'Adidas',
+                                                'country' => 'Китай',
+                                                'color' => '#0f77b0',
+                                                'material' => 'Искусственная кожа, Текстиль',
+                                                'image' => ''
+                                            ],
+                                            [
+                                                'title' => 'Кроссовки Adidas Neo 10K Casual',
+                                                'name' => 'krossovki-adidas-neo-10k-casual',
+                                                'description' => 'Тут будет описание...',
+                                                'price' => 4764,
+                                                'brand' => 'Adidas',
+                                                'country' => 'Китай',
+                                                'color' => '#0f77b0',
+                                                'material' => 'Искусственная кожа, Текстиль',
+                                                'image' => ''
+                                            ],
+                                            [
+                                                'title' => 'Валенки Котофей',
+                                                'name' => 'valenki-kotofey',
+                                                'description' => 'Тут будет описание...',
+                                                'price' => 3778,
+                                                'brand' => 'Котофей',
+                                                'country' => 'Россия',
+                                                'color' => '#000000',
+                                                'material' => 'Войлок',
+                                                'image' => ''
+                                            ]
+                                        ]
+                                    ],
+                                    [
+                                        'title' => 'Детская обувь',
+                                        'name' => 'detskaya-obuv',
+                                        'menuIndex' => 0,
+                                        'children' => [
+
+                                        ]
+                                    ]
                                 ]
                             ],
                             [
-                                'title' => 'Мужские сумки',
-                                'name' => 'muzhskie-sumki',
+                                'title' => 'Сумки',
+                                'name' => 'sumki',
                                 'menuIndex' => 0,
                                 'children' => [
+                                    [
+                                        'title' => 'Женские сумки',
+                                        'name' => 'zhenskie-sumki',
+                                        'menuIndex' => 0,
+                                        'children' => [
 
+                                        ]
+                                    ],
+                                    [
+                                        'title' => 'Мужские сумки',
+                                        'name' => 'muzhskie-sumki',
+                                        'menuIndex' => 0,
+                                        'children' => [
+
+                                        ]
+                                    ]
                                 ]
                             ]
                         ]
                     ]
                 ]
-            ]
-        ];
+                ]
+            ];
 
-        /** @var ContentType $contentTypeText */
-        $contentTypeText = $this->getReference('content_type_text');
-        $this->loadCategories($manager, $contentTypeText, [
-            [
-                'title' => 'Корневая категория',
-                'name' => 'root',
-                'menuIndex' => 0,
-                'children' => [],
-                'content' => [
-                    [
-                        'title' => 'О магазине',
-                        'name' => 'about',
-                        'text' => 'Тут будет описание...',
-                        'menuIndex' => 1
-                    ],
-                    [
-                        'title' => 'Оплата и доставка',
-                        'name' => 'payment',
-                        'text' => 'Тут будет описание...',
-                        'menuIndex' => 2
+            /** @var ContentType $contentTypeText */
+            $contentTypeText = $this->getReference('content_type_text');
+            $this->loadCategories($manager, $contentTypeText, [
+                [
+                    'title' => 'Корневая категория',
+                    'name' => 'root',
+                    'menuIndex' => 0,
+                    'children' => [],
+                    'content' => [
+                        [
+                            'title' => 'О магазине',
+                            'name' => 'about',
+                            'text' => 'Тут будет описание...',
+                            'menuIndex' => 1
+                        ],
+                        [
+                            'title' => 'Оплата и доставка',
+                            'name' => 'payment',
+                            'text' => 'Тут будет описание...',
+                            'menuIndex' => 2
+                        ]
                     ]
                 ]
-            ]
         ]);
 
         /** @var ContentType $contentType */

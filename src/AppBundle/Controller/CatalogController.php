@@ -31,10 +31,20 @@ class CatalogController extends ProductController
         list($pageAlias, $categoryUri, $levelNum) = Category::parseUri($uri);
 
         /** @var Category $currentCategory */
-        $currentCategory = $categoriesRepository->findOneBy(['uri' => $categoryUri]);
+        if ($categoryUri) {
+            $currentCategory = $categoriesRepository->findOneBy([
+                'uri' => $categoryUri,
+                'isActive' => true
+            ]);
+        } else {
+            $currentCategory = $categoriesRepository->find(0);
+        }
 
         if ($pageAlias) {
             return $this->pageProduct($currentCategory, $uri);
+        }
+        if (!$currentCategory) {
+            return $this->render('errors/404.html.twig');
         }
 
         $listTemplate = $request->cookies->get('shkListType', 'grid');
@@ -234,7 +244,8 @@ class CatalogController extends ProductController
 
         // Get top categories
         $results = $categoriesRepository->findBy([
-            'parentId' => $currentId
+            'parentId' => $currentId,
+            'isActive' => true
         ], ['title' => 'asc']);
         /** @var Category $category */
         foreach ($results as $category) {
@@ -247,6 +258,7 @@ class CatalogController extends ProductController
             ->getManager()
             ->createQueryBuilder(Category::class)
             ->field('parentId')->in($topIdsArr)
+            ->field('isActive')->equals(true)
             ->sort('title', 'asc')
             ->getQuery()
             ->execute()
@@ -297,6 +309,7 @@ class CatalogController extends ProductController
         $results = $query
             ->field('parentId')->equals($parentId)
             ->field('name')->notEqual('root')
+            ->field('isActive')->equals(true)
             ->sort('title', 'asc')
             ->getQuery()
             ->execute();

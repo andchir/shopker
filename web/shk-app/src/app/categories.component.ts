@@ -2,19 +2,19 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Observable } from 'rxjs/Observable';
+import { TreeNode } from 'primeng/primeng'
+import 'rxjs/add/operator/switchMap';
+import * as _ from "lodash";
+
 import { ContentType } from './models/content_type.model';
 import { Category } from "./models/category.model";
 import { ConfirmModalContent } from './app.component';
 import { ListRecursiveComponent } from './list-recursive.component';
 import { ModalContentAbstractComponent } from './modal.abstract';
-import 'rxjs/add/operator/switchMap';
-import * as _ from "lodash";
-
 import { SystemNameService } from './services/system-name.service';
 import { CategoriesService } from './services/categories.service'
-import { ContentTypesService } from './services/content_types.service';
-import { Observable } from 'rxjs/Observable';
-import { Observer } from "rxjs/Observer";
+import { ContentTypesService } from './services/content_types.service';;
 
 /**
  * @class CategoriesModalComponent
@@ -26,11 +26,13 @@ import { Observer } from "rxjs/Observer";
 })
 export class CategoriesModalComponent extends ModalContentAbstractComponent<Category> {
 
-    @Input() categories: Category[] = [];
     @Input() currentCategory: Category;
     @Input() isRoot: boolean = false;
     model: Category = new Category(null, false, 0, '', '', '', '', true);
     contentTypes: ContentType[] = [];
+    loadingCategories = false;
+    categories: TreeNode[] = [];
+    currentCategoryNode: TreeNode;
 
     formFields = {
         title: {
@@ -98,14 +100,14 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
     ngOnInit(): void {
 
         // Filter root category and self
-        this.categories = _.filter(this.categories, (category) => {
-            if (this.isEditMode) {
-                return category.name != 'root'
-                    && category.id != this.currentCategory.id;
-            } else {
-                return category.name != 'root';
-            }
-        });
+        // this.categories = _.filter(this.categories, (category) => {
+        //     if (this.isEditMode) {
+        //         return category.name != 'root'
+        //             && category.id != this.currentCategory.id;
+        //     } else {
+        //         return category.name != 'root';
+        //     }
+        // });
 
         this.model.parentId = this.currentCategory.id;
         this.model.contentTypeName = this.currentCategory.contentTypeName;
@@ -118,7 +120,36 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
             this.formFields.isActive.disabled = true;
         }
         ModalContentAbstractComponent.prototype.ngOnInit.call(this);
+        this.getCategoriesTree();
         this.getContentTypes();
+    }
+
+    getCategoriesTree(): void {
+        this.loadingCategories = true;
+        this.dataService.getTree()
+            .subscribe((data) => {
+                this.categories = data;
+                this.currentCategoryNode = this.getTreeCurrentNode(this.categories);
+                this.loadingCategories = false;
+            }, (err) => {
+                this.loadingCategories = false;
+            });
+    }
+
+    getTreeCurrentNode(tree: TreeNode[]): TreeNode | null {
+        let currentNode = null;
+        for (let node of tree) {
+            if (node['id'] === this.currentCategory.id) {
+                currentNode = node;
+                break;
+            } else if (node.children && node.children.length > 0) {
+                currentNode = this.getTreeCurrentNode(node.children);
+                if (currentNode !== null) {
+                    break;
+                }
+            }
+        }
+        return currentNode;
     }
 
     getContentTypes() {
@@ -128,6 +159,12 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
                     this.contentTypes = data.items;
                 },
                 error => this.errorMessage = <any>error);
+    }
+
+    onCategorySelect(e: any): void {
+
+        console.log('onCategorySelect', e);
+
     }
 
     save(): void {
@@ -251,7 +288,6 @@ export class CategoriesMenuComponent implements OnInit {
         this.modalRef.componentInstance.modalTitle = isEditMode ? 'Edit category' : 'Add category';
         this.modalRef.componentInstance.itemId = itemId || 0;
         this.modalRef.componentInstance.isItemCopy = isItemCopy || false;
-        this.modalRef.componentInstance.categories = _.cloneDeep(this.categories);
         this.modalRef.componentInstance.currentCategory = this.currentCategory;
         this.modalRef.componentInstance.isRoot = isRoot;
         this.modalRef.componentInstance.isEditMode = isEditMode;

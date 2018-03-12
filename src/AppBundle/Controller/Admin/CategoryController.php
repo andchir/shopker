@@ -134,7 +134,8 @@ class CategoryController extends StorageControllerAbstract
         $root = [
             'id' => 0,
             'label' => 'Catalog',
-            'parentId' => 0
+            'parentId' => 0,
+            'expanded' => true
         ];
         /** @var Category $category */
         foreach ($categories as $category) {
@@ -144,7 +145,8 @@ class CategoryController extends StorageControllerAbstract
             $row = [
                 'id' => $category->getId(),
                 'label' => $category->getTitle(),
-                'parentId' => $category->getParentId()
+                'parentId' => $category->getParentId(),
+                'expanded' => true
             ];
             $data[$row['parentId']][] = $row;
         }

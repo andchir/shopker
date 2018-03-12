@@ -288,6 +288,7 @@
                                         [(selection)]="categoriesSelection[field.name]"
                                         [loading]="loadingCategories"
                                         [layout]="field.inputProperties.layout"
+                                        [loadingIcon]="'icon-loader'"
                                         (onNodeSelect)="categorySelect(field.name)"
                                         (onNodeUnselect)="categorySelect(field.name)"></p-tree>
                             </div>

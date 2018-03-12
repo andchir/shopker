@@ -16,10 +16,16 @@
                 <label for="fieldContentType">{{'PARENT_FOLDER' | translate}}</label>
             </div>
             <div class="col-md-7">
-                <select id="fieldParent" class="form-control" name="parentId" formControlName="parentId" [(ngModel)]="model.parentId">
-                    <option value="0">{{'ROOT_FOLDER' | translate}}</option>
-                    <option value="{{category.id}}" *ngFor="let category of categories | orderBy: 'title'">{{category.title}}</option>
-                </select>
+
+                <p-tree [selectionMode]="'single'"
+                        [value]="categories"
+                        [(selection)]="currentCategoryNode"
+                        [loading]="loadingCategories"
+                        [loadingIcon]="'icon-loader'"
+                        [layout]="'vertical'"
+                        (onNodeSelect)="onCategorySelect($event)"
+                        (onNodeUnselect)="onCategorySelect($event)"></p-tree>
+
                 <div *ngIf="formErrors.parentId" class="alert alert-danger">
                     {{formErrors.parentId}}
                 </div>
@@ -80,7 +86,7 @@
             </div>
         </div>
 
-        <div class="row form-group" [class.form-group-message]="formErrors.menuIndex">
+        <div class="row form-group" [class.form-group-message]="formErrors.menuIndex" *ngIf="!isRoot">
             <div class="col-md-5">
                 <label for="fieldMenuIndex">{{'MENU_INDEX' | translate}}</label>
             </div>

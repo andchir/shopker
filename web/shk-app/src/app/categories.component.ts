@@ -162,9 +162,8 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
     }
 
     onCategorySelect(e: any): void {
-
-        console.log('onCategorySelect', e);
-
+        this.form.controls.parentId.setValue(e.node.id);
+        this.model.parentId = e.node.id;
     }
 
     save(): void {

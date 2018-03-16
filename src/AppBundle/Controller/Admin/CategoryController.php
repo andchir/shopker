@@ -198,10 +198,22 @@ class CategoryController extends StorageControllerAbstract
     {
         $contentType = $category->getContentType();
         if ($contentType) {
+
+            $productController = new ProductController();
+            $productController->setContainer($this->container);
+
             $collectionName = $contentType->getCollection();
             $collection = $this->getCollection($collectionName);
-            $result = $collection->remove(['parentId' => $category->getId()]);
-            return !empty($result['ok']);
+
+            $documents = $collection->find([
+                'parentId' => $category->getId()
+            ]);
+
+            foreach ($documents as $document) {
+                $productController->deleteItem($contentType, $document);
+            }
+
+            return true;
         }
         return false;
     }

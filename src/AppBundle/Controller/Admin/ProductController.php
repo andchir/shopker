@@ -31,7 +31,7 @@ class ProductController extends BaseProductController
      * @param Category $category
      * @return JsonResponse
      */
-    public function getListByCategory(Request $request, Category $category = null)
+    public function getListByCategoryAction(Request $request, Category $category = null)
     {
         if(!$category){
             return new JsonResponse([]);
@@ -303,7 +303,7 @@ class ProductController extends BaseProductController
      * @param Category $category
      * @return JsonResponse
      */
-    public function createItem(Request $request, Category $category = null)
+    public function createItemAction(Request $request, Category $category = null)
     {
         $data = $request->getContent()
             ? json_decode($request->getContent(), true)
@@ -326,7 +326,7 @@ class ProductController extends BaseProductController
      * @param int $itemId
      * @return JsonResponse
      */
-    public function updateItem(Request $request, Category $category = null, $itemId)
+    public function updateItemAction(Request $request, Category $category = null, $itemId)
     {
         $data = $request->getContent()
             ? json_decode($request->getContent(), true)
@@ -348,7 +348,7 @@ class ProductController extends BaseProductController
      * @param Category $category
      * @return JsonResponse
      */
-    public function deleteBatch(Request $request, Category $category = null)
+    public function deleteBatchAction(Request $request, Category $category = null)
     {
         if (!$category) {
             return $this->setError('Category not found.');
@@ -374,11 +374,7 @@ class ProductController extends BaseProductController
 
         $deleted = 0;
         foreach ($documents as $document) {
-            $this->onBeforeDeleteItem($contentType, $document, $data['ids']);
-            $result = $collection->remove([
-                '_id' => $document['_id']
-            ]);
-            if (!empty($result['ok'])) {
+            if (!empty($this->deleteItem($contentType, $document))) {
                 $deleted++;
             }
         }
@@ -398,7 +394,7 @@ class ProductController extends BaseProductController
      * @param int $itemId
      * @return JsonResponse
      */
-    public function deleteItem(Category $category = null, $itemId)
+    public function deleteItemAction(Category $category = null, $itemId)
     {
         if (!$category) {
             return new JsonResponse([
@@ -421,15 +417,27 @@ class ProductController extends BaseProductController
             return $this->setError('Document not found.');
         }
 
-        $this->onBeforeDeleteItem($contentType, $document);
-
-        $result = $collection->remove(['_id' => $itemId]);
+        $result = $this->deleteItem($contentType, $document);
 
         if (!empty($result['ok'])) {
             return new JsonResponse([]);
         } else {
             return $this->setError('Error.');
         }
+    }
+
+    /**
+     * @param ContentType $contentType
+     * @param $itemData
+     * @return array|bool
+     */
+    public function deleteItem(ContentType $contentType, $itemData)
+    {
+        $collection = $this->getCollection($contentType->getCollection());
+        $this->onBeforeDeleteItem($contentType, $itemData);
+        return $collection->remove([
+            '_id' => $itemData['_id']
+        ]);
     }
 
     /**

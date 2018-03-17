@@ -1,4 +1,4 @@
-<div ngbDropdown [autoClose]="false">
+<div ngbDropdown [autoClose]="false" #dropdownElement="ngbDropdown">
     <button class="btn btn-outline-primary" id="dropdownParent" ngbDropdownToggle>
         <span *ngIf="currentCategoryNode">
             {{currentCategoryNode.label}}

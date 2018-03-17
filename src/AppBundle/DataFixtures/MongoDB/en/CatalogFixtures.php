@@ -273,7 +273,7 @@ class CatalogFixtures extends Fixture
         /* Text content */
         $fields = [
             [
-                'title' => 'Название',
+                'title' => 'Title',
                 'name' => 'title',
                 'description' => '',
                 'inputType' => 'text',
@@ -286,14 +286,14 @@ class CatalogFixtures extends Fixture
                     'className' => '',
                     'chunkName' => 'header'
                 ],
-                'group' => 'Основное',
+                'group' => 'General',
                 'required' => true,
                 'showInTable' => true,
                 'showInList' => true,
                 'isFilter' => false
             ],
             [
-                'title' => 'Системное имя',
+                'title' => 'System name',
                 'name' => 'name',
                 'description' => '',
                 'inputType' => 'system_name',
@@ -306,14 +306,14 @@ class CatalogFixtures extends Fixture
                 'outputProperties' => [
                     'className' => ''
                 ],
-                'group' => 'Основное',
+                'group' => 'General',
                 'required' => true,
                 'showInTable' => true,
                 'showInList' => false,
                 'isFilter' => false
             ],
             [
-                'title' => 'Основной текст',
+                'title' => 'Main text',
                 'name' => 'text',
                 'description' => '',
                 'inputType' => 'rich_text',
@@ -326,14 +326,14 @@ class CatalogFixtures extends Fixture
                     'className' => '',
                     'chunkName' => 'description'
                 ],
-                'group' => 'Основное',
+                'group' => 'General',
                 'required' => false,
                 'showInTable' => false,
                 'showInList' => false,
                 'isFilter' => false
             ],
             [
-                'title' => 'Позиция в меню',
+                'title' => 'Menu position',
                 'name' => 'menuIndex',
                 'description' => '',
                 'inputType' => 'number',
@@ -349,7 +349,7 @@ class CatalogFixtures extends Fixture
                     'className' => '',
                     'chunkName' => ''
                 ],
-                'group' => 'Параметры',
+                'group' => 'Parameters',
                 'required' => false,
                 'showInTable' => true,
                 'showInList' => false,
@@ -359,12 +359,12 @@ class CatalogFixtures extends Fixture
 
         $contentType = new ContentType();
         $contentType
-            ->setTitle('Текстовая страница')
+            ->setTitle('Text page')
             ->setName('text-content')
-            ->setDescription('Текстовая страница')
+            ->setDescription('Text page')
             ->setCollection('text_content')
             ->setFields($fields)
-            ->setGroups(['Основное','Параметры'])
+            ->setGroups(['General','Parameters'])
             ->setIsActive(true);
 
         $manager->persist($contentType);

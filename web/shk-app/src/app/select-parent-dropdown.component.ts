@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, forwardRef } from '@angular/core';
+import { Component, OnInit, Input, forwardRef, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { TreeNode } from 'primeng/primeng'
 import * as _ from "lodash";
@@ -27,6 +27,7 @@ export class SelectParentDropdownComponent implements OnInit, ControlValueAccess
     previousCategoryNode: TreeNode;
     currentId: number = null;
 
+    @ViewChild('dropdownElement') dropdownElement;
     @Input() filterId: number = null;
     @Input()
     set disabled(value: boolean) {
@@ -86,6 +87,7 @@ export class SelectParentDropdownComponent implements OnInit, ControlValueAccess
         }
         this.previousCategoryNode = _.cloneDeep(this.currentCategoryNode);
         this.writeValue(e.node.id);
+        this.dropdownElement.close();
     }
 
     writeValue(value: number): void {

@@ -1,0 +1,20 @@
+<div ngbDropdown [autoClose]="false">
+    <button class="btn btn-outline-primary" id="dropdownParent" ngbDropdownToggle>
+        <span *ngIf="currentCategoryNode">
+            {{currentCategoryNode.label}}
+        </span>
+        <span *ngIf="!currentCategoryNode">
+            Select parent
+        </span>
+    </button>
+    <div ngbDropdownMenu aria-labelledby="dropdownParent" class="p-0 width-350">
+        <p-tree [selectionMode]="'single'"
+                [value]="categoriesTree"
+                [(selection)]="currentCategoryNode"
+                [loading]="loadingCategories"
+                [loadingIcon]="'icon-loader'"
+                [layout]="'vertical'"
+                (onNodeSelect)="onCategorySelect($event)"
+                (onNodeUnselect)="onCategorySelect($event)"></p-tree>
+    </div>
+</div>

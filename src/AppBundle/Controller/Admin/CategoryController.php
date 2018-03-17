@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Translation\TranslatorInterface;
 use AppBundle\Event\CategoryUpdatedEvent;
 
 use AppBundle\Document\Category;
@@ -125,7 +126,7 @@ class CategoryController extends StorageControllerAbstract
      * @Method({"GET"})
      * @return JsonResponse
      */
-    public function getTree()
+    public function getTree(TranslatorInterface $translator)
     {
         $repository = $this->getRepository();
         $categories = $repository->findBy([], ['title' => 'asc']);
@@ -133,7 +134,7 @@ class CategoryController extends StorageControllerAbstract
         $data = [];
         $root = [
             'id' => 0,
-            'label' => 'Catalog',
+            'label' => $translator->trans('Root category'),
             'parentId' => 0,
             'expanded' => true
         ];

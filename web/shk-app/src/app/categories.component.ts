@@ -13,8 +13,8 @@ import { ConfirmModalContent } from './app.component';
 import { ListRecursiveComponent } from './list-recursive.component';
 import { ModalContentAbstractComponent } from './modal.abstract';
 import { SystemNameService } from './services/system-name.service';
-import { CategoriesService } from './services/categories.service'
-import { ContentTypesService } from './services/content_types.service';;
+import { CategoriesService } from './services/categories.service';
+import { ContentTypesService } from './services/content_types.service';
 
 /**
  * @class CategoriesModalComponent
@@ -33,6 +33,7 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
     loadingCategories = false;
     categories: TreeNode[] = [];
     currentCategoryNode: TreeNode;
+    isCollapsed = false;
 
     formFields = {
         title: {
@@ -98,18 +99,14 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
 
     /** On initialize */
     ngOnInit(): void {
-
-        // Filter root category and self
-        // this.categories = _.filter(this.categories, (category) => {
-        //     if (this.isEditMode) {
-        //         return category.name != 'root'
-        //             && category.id != this.currentCategory.id;
-        //     } else {
-        //         return category.name != 'root';
-        //     }
-        // });
-
-        this.model.parentId = this.currentCategory.id;
+        if (this.itemId) {
+            this.model.id = this.itemId;
+        }
+        if (this.isEditMode) {
+            this.model.parentId = this.currentCategory.parentId;
+        } else {
+            this.model.parentId = this.currentCategory.id;
+        }
         this.model.contentTypeName = this.currentCategory.contentTypeName;
         if (this.isRoot) {
             this.model.id = 0;
@@ -120,36 +117,7 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
             this.formFields.isActive.disabled = true;
         }
         ModalContentAbstractComponent.prototype.ngOnInit.call(this);
-        this.getCategoriesTree();
         this.getContentTypes();
-    }
-
-    getCategoriesTree(): void {
-        this.loadingCategories = true;
-        this.dataService.getTree()
-            .subscribe((data) => {
-                this.categories = data;
-                this.currentCategoryNode = this.getTreeCurrentNode(this.categories);
-                this.loadingCategories = false;
-            }, (err) => {
-                this.loadingCategories = false;
-            });
-    }
-
-    getTreeCurrentNode(tree: TreeNode[]): TreeNode | null {
-        let currentNode = null;
-        for (let node of tree) {
-            if (node['id'] === this.currentCategory.id) {
-                currentNode = node;
-                break;
-            } else if (node.children && node.children.length > 0) {
-                currentNode = this.getTreeCurrentNode(node.children);
-                if (currentNode !== null) {
-                    break;
-                }
-            }
-        }
-        return currentNode;
     }
 
     getContentTypes() {
@@ -168,13 +136,11 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
 
     save(): void {
         this.submitted = true;
-
         if (!this.form.valid) {
             this.onValueChanged('form');
             this.submitted = false;
             return;
         }
-
         this.loading = true;
 
         this.saveRequest()

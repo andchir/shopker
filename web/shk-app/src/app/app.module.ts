@@ -23,6 +23,7 @@ import { ListRecursiveComponent } from './list-recursive.component';
 import { TableComponent } from './table.component';
 import { InputFieldRenderComponent } from './render-input-field';
 import { OutputFieldComponent } from './render-output-field';
+import { SelectParentDropdownComponent } from './select-parent-dropdown.component';
 
 import { FilterFieldByGroup } from './pipes/filter-field-by-group.pipe';
 import { OrderByPipe } from './pipes/orderby.pipe';
@@ -71,6 +72,7 @@ import { AppRoutingModule }     from './app-routing.module';
         CategoriesListComponent,
         InputFieldRenderComponent,
         OutputFieldComponent,
+        SelectParentDropdownComponent,
 
         FilterFieldByGroup,
         OrderByPipe,

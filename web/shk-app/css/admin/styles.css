@@ -6,6 +6,7 @@
 .tooltip { pointer-events: none; }
 .no-wrap { white-space: nowrap; }
 .mwidth-80 { max-width: 80px; }
+.width-350 { width: 350px; }
 .m-auto { margin-left: auto; margin-right: auto; }
 .border-t { border-top: 1px solid rgba(0,0,0,0.1); }
 .border-b { border-bottom: 1px solid rgba(0,0,0,0.1); }
@@ -130,6 +131,7 @@ input.form-control:disabled { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); cursor
 .ui-tree.ui-tree-loading { height: auto; min-height: 50px; }
 .ui-tree.ui-tree-loading .ui-tree-container { height: 50px; }
 .ui-tree .ui-tree-loading-content { margin-top: -0.6em; }
+.dropdown-menu .ui-tree.ui-widget-content { border: 0; }
 
 /* icons */
 body .ui-datepicker .ui-datepicker-header .ui-datepicker-prev:before { font-family: 'icomoon'; content: "\e908"; }

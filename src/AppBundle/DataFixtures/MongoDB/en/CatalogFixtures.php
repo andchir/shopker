@@ -38,6 +38,11 @@ class CatalogFixtures extends Fixture
         $collection = $this->productController->getCollection($contentType->getCollection());
         $collection->remove([]);
 
+        /** @var ContentType $contentType */
+        $contentTypeText = $this->getReference('content_type_text');
+        $collectionText = $this->productController->getCollection($contentTypeText->getCollection());
+        $collectionText->remove([]);
+
         $this->loadCatalog($manager);
     }
 
@@ -264,251 +269,376 @@ class CatalogFixtures extends Fixture
         $manager->flush();
 
         $this->addReference('content_type_catalog', $contentType);
+
+        /* Text content */
+        $fields = [
+            [
+                'title' => 'Название',
+                'name' => 'title',
+                'description' => '',
+                'inputType' => 'text',
+                'inputProperties' => [
+                    'value' => '',
+                    'handler' => ''
+                ],
+                'outputType' => 'text',
+                'outputProperties' => [
+                    'className' => '',
+                    'chunkName' => 'header'
+                ],
+                'group' => 'Основное',
+                'required' => true,
+                'showInTable' => true,
+                'showInList' => true,
+                'isFilter' => false
+            ],
+            [
+                'title' => 'Системное имя',
+                'name' => 'name',
+                'description' => '',
+                'inputType' => 'system_name',
+                'inputProperties' => [
+                    'value' => '',
+                    'source_field' => 'title',
+                    'handler' => ''
+                ],
+                'outputType' => 'system_name',
+                'outputProperties' => [
+                    'className' => ''
+                ],
+                'group' => 'Основное',
+                'required' => true,
+                'showInTable' => true,
+                'showInList' => false,
+                'isFilter' => false
+            ],
+            [
+                'title' => 'Основной текст',
+                'name' => 'text',
+                'description' => '',
+                'inputType' => 'rich_text',
+                'inputProperties' => [
+                    'value' => '',
+                    'handler' => ''
+                ],
+                'outputType' => 'rich_text',
+                'outputProperties' => [
+                    'className' => '',
+                    'chunkName' => 'description'
+                ],
+                'group' => 'Основное',
+                'required' => false,
+                'showInTable' => false,
+                'showInList' => false,
+                'isFilter' => false
+            ],
+            [
+                'title' => 'Позиция в меню',
+                'name' => 'menuIndex',
+                'description' => '',
+                'inputType' => 'number',
+                'inputProperties' => [
+                    'value' => '0',
+                    'handler' => '',
+                    'min' => 0,
+                    'max' => null,
+                    'step' => 1
+                ],
+                'outputType' => 'number',
+                'outputProperties' => [
+                    'className' => '',
+                    'chunkName' => ''
+                ],
+                'group' => 'Параметры',
+                'required' => false,
+                'showInTable' => true,
+                'showInList' => false,
+                'isFilter' => false
+            ]
+        ];
+
+        $contentType = new ContentType();
+        $contentType
+            ->setTitle('Текстовая страница')
+            ->setName('text-content')
+            ->setDescription('Текстовая страница')
+            ->setCollection('text_content')
+            ->setFields($fields)
+            ->setGroups(['Основное','Параметры'])
+            ->setIsActive(true);
+
+        $manager->persist($contentType);
+        $manager->flush();
+
+        $this->addReference('content_type_text', $contentType);
     }
 
     public function loadCatalog(ObjectManager $manager)
     {
         $data = [
             [
-                'title' => 'Books',
-                'name' => 'books',
+                'title' => 'Catalog',
+                'name' => 'catalog',
+                'menuIndex' => 0,
                 'children' => [
                     [
-                        'title' => 'Educational literature',
-                        'name' => 'educational-literature',
-                        'children' => []
-                    ],
-                    [
-                        'title' => 'Imaginative literature',
-                        'name' => 'imaginative-literature',
-                        'children' => []
-                    ],
-                    [
-                        'title' => 'Children',
-                        'name' => 'children',
-                        'children' => []
-                    ]
-                ]
-            ],
-            [
-                'title' => 'Clothes, shoes, bags',
-                'name' => 'clothes-shoes-bags',
-                'children' => [
-                    [
-                        'title' => 'Clothes',
-                        'name' => 'clothes',
+                        'title' => 'Books',
+                        'name' => 'books',
+                        'menuIndex' => 3,
                         'children' => [
                             [
-                                'title' => 'Women\'s clothing',
-                                'name' => 'womens-clothing',
-                                'children' => [
-
-                                ]
+                                'title' => 'Educational literature',
+                                'name' => 'educational-literature',
+                                'menuIndex' => 0,
+                                'children' => []
                             ],
                             [
-                                'title' => 'Men\'s clothing',
-                                'name' => 'mens-clothing',
-                                'children' => [
-
-                                ]
+                                'title' => 'Fiction',
+                                'name' => 'fiction',
+                                'menuIndex' => 0,
+                                'children' => []
                             ],
                             [
-                                'title' => 'Children\'s wear',
-                                'name' => 'childrens-wear',
-                                'children' => [
-
-                                ]
+                                'title' => 'For children',
+                                'name' => 'for-children',
+                                'menuIndex' => 0,
+                                'children' => []
                             ]
                         ]
                     ],
                     [
-                        'title' => 'Shoes',
-                        'name' => 'shoes',
+                        'title' => 'Clothes, shoes, bags',
+                        'name' => 'clothes-shoes-bags',
+                        'menuIndex' =>4,
                         'children' => [
                             [
-                                'title' => 'Women\'s shoes',
-                                'name' => 'womens-shoes',
+                                'title' => 'Clothes',
+                                'name' => 'clothes',
+                                'menuIndex' => 0,
                                 'children' => [
+                                    [
+                                        'title' => 'Women\'s clothing',
+                                        'name' => 'womens-clothing',
+                                        'menuIndex' => 0,
+                                        'children' => [
 
-                                ]
-                            ],
-                            [
-                                'title' => 'Men\'s footwear',
-                                'name' => 'mens-footwear',
-                                'children' => [
+                                        ]
+                                    ],
+                                    [
+                                        'title' => 'Men\'s clothing',
+                                        'name' => 'mens-clothing',
+                                        'menuIndex' => 0,
+                                        'children' => [
 
-                                ],
-                                'products' => [
-                                    [
-                                        'title' => 'Sneakers Patrol Black',
-                                        'name' => 'sneakers-patrol-black',
-                                        'description' => 'There will be a description...',
-                                        'price' => 2090,
-                                        'brand' => 'Patrol',
-                                        'country' => 'China',
-                                        'color' => '#000000',
-                                        'material' => 'Artificial leather',
-                                        'image' => ''
+                                        ]
                                     ],
                                     [
-                                        'title' => 'Sneakers Patrol White',
-                                        'name' => 'sneakers-patrol-white',
-                                        'description' => 'There will be a description...',
-                                        'price' => 1840,
-                                        'brand' => 'Patrol',
-                                        'country' => 'China',
-                                        'color' => '#984d06',
-                                        'material' => 'Artificial leather',
-                                        'image' => ''
-                                    ],
-                                    [
-                                        'title' => 'Sneakers Patrol Brown',
-                                        'name' => 'sneakers-patrol-brown',
-                                        'description' => 'There will be a description...',
-                                        'price' => 1900,
-                                        'brand' => 'Patrol',
-                                        'country' => 'China',
-                                        'color' => '#66583c',
-                                        'material' => 'Artificial leather',
-                                        'image' => ''
-                                    ],
-                                    [
-                                        'title' => 'Sneakers Nike Air Max Infuriate Low',
-                                        'name' => 'sneakers-nike-air-max-infuriate-low',
-                                        'description' => 'There will be a description...',
-                                        'price' => 4466,
-                                        'brand' => 'Nike',
-                                        'country' => 'Vietnam',
-                                        'color' => '#000000',
-                                        'material' => 'Artificial leather',
-                                        'image' => ''
-                                    ],
-                                    [
-                                        'title' => 'Sneakers Nike Nightgazer',
-                                        'name' => 'sneakers-nike-nightgazer',
-                                        'description' => 'There will be a description...',
-                                        'price' => 5690,
-                                        'brand' => 'Nike',
-                                        'country' => 'Vietnam',
-                                        'color' => '#000000',
-                                        'material' => 'Artificial leather',
-                                        'image' => ''
-                                    ],
-                                    [
-                                        'title' => 'Gumshoes Bris-Bosfor',
-                                        'name' => 'gumshoes-bris-bosfor',
-                                        'description' => 'There will be a description...',
-                                        'price' => 684,
-                                        'brand' => 'Bris',
-                                        'country' => 'Russia',
-                                        'color' => '#000000',
-                                        'material' => 'Textile',
-                                        'image' => ''
-                                    ],
-                                    [
-                                        'title' => 'Gumshoes Nike COURT ROYALE',
-                                        'name' => 'gumshoes-nike-court-royale',
-                                        'description' => 'There will be a description...',
-                                        'price' => 3990,
-                                        'brand' => 'Nike',
-                                        'country' => 'Indonesia',
-                                        'color' => '#ffffff',
-                                        'material' => 'Textile',
-                                        'image' => ''
-                                    ],
-                                    [
-                                        'title' => 'Sneakers Nike T-Lite XI',
-                                        'name' => 'sneakers-nike-t-lite-xi',
-                                        'description' => 'There will be a description...',
-                                        'price' => 3490,
-                                        'brand' => 'Nike',
-                                        'country' => 'Indonesia',
-                                        'color' => '#ffffff',
-                                        'material' => 'Artificial leather',
-                                        'image' => ''
-                                    ],
-                                    [
-                                        'title' => 'Sneakers Nike Reax 8 TR',
-                                        'name' => 'sneakers-nike-reax-8-tr',
-                                        'description' => 'There will be a description...',
-                                        'price' => 5990,
-                                        'brand' => 'Nike',
-                                        'country' => 'Vietnam',
-                                        'color' => '#ffffff',
-                                        'material' => 'Genuine leather',
-                                        'image' => ''
-                                    ],
-                                    [
-                                        'title' => 'Gumshoes Nike Court Royale Suede',
-                                        'name' => 'gumshoes-nike-court-royale-suede',
-                                        'description' => 'There will be a description...',
-                                        'price' => 4490,
-                                        'brand' => 'Nike',
-                                        'country' => 'Indonesia',
-                                        'color' => '#ffffff',
-                                        'material' => 'Genuine leather',
-                                        'image' => ''
-                                    ],
-                                    [
-                                        'title' => 'Sneakers Adidas Climawarm Atr M',
-                                        'name' => 'sneakers-adidas-climawarm-atr-m',
-                                        'description' => 'There will be a description...',
-                                        'price' => 4490,
-                                        'brand' => 'Adidas',
-                                        'country' => 'China',
-                                        'color' => '#0f77b0',
-                                        'material' => 'Artificial leather, Textile',
-                                        'image' => ''
-                                    ],
-                                    [
-                                        'title' => 'Sneakers Adidas Neo 10K Casual',
-                                        'name' => 'sneakers-adidas-neo-10k-casual',
-                                        'description' => 'There will be a description...',
-                                        'price' => 4764,
-                                        'brand' => 'Adidas',
-                                        'country' => 'China',
-                                        'color' => '#0f77b0',
-                                        'material' => 'Artificial leather, Textile',
-                                        'image' => ''
-                                    ],
-                                    [
-                                        'title' => 'Felt boots Kotofey',
-                                        'name' => 'felt-boots-kotofey',
-                                        'description' => 'There will be a description...',
-                                        'price' => 3778,
-                                        'brand' => 'Kotofey',
-                                        'country' => 'Russia',
-                                        'color' => '#000000',
-                                        'material' => 'Felt',
-                                        'image' => ''
+                                        'title' => 'Baby clothes',
+                                        'name' => 'baby-clothes',
+                                        'menuIndex' => 0,
+                                        'children' => [
+
+                                        ]
                                     ]
                                 ]
                             ],
                             [
-                                'title' => 'Children\'s shoes',
-                                'name' => 'childrens-shoes',
+                                'title' => 'Footwear',
+                                'name' => 'footwear',
+                                'menuIndex' => 0,
                                 'children' => [
+                                    [
+                                        'title' => 'Women\'s shoes',
+                                        'name' => 'womens-shoes',
+                                        'menuIndex' => 0,
+                                        'children' => [
 
-                                ]
-                            ]
-                        ]
-                    ],
-                    [
-                        'title' => 'Bags',
-                        'name' => 'bags',
-                        'children' => [
-                            [
-                                'title' => 'Women\'s Handbags',
-                                'name' => 'womens-handbags',
-                                'children' => [
+                                        ]
+                                    ],
+                                    [
+                                        'title' => 'Men\'s footwear',
+                                        'name' => 'mens-footwear',
+                                        'menuIndex' => 0,
+                                        'children' => [
 
+                                        ],
+                                        'content' => [
+                                            [
+                                                'title' => 'Sneakers Patrol Black',
+                                                'name' => 'sneakers-patrol-black',
+                                                'description' => 'There will be a description...',
+                                                'price' => 2090,
+                                                'brand' => 'Patrol',
+                                                'country' => 'China',
+                                                'color' => '#000000',
+                                                'material' => 'Artificial leather',
+                                                'image' => ''
+                                            ],
+                                            [
+                                                'title' => 'Sneakers Patrol White',
+                                                'name' => 'sneakers-patrol-white',
+                                                'description' => 'There will be a description...',
+                                                'price' => 1840,
+                                                'brand' => 'Patrol',
+                                                'country' => 'China',
+                                                'color' => '#984d06',
+                                                'material' => 'Artificial leather',
+                                                'image' => ''
+                                            ],
+                                            [
+                                                'title' => 'Sneakers Patrol Brown',
+                                                'name' => 'sneakers-patrol-brown',
+                                                'description' => 'There will be a description...',
+                                                'price' => 1900,
+                                                'brand' => 'Patrol',
+                                                'country' => 'China',
+                                                'color' => '#66583c',
+                                                'material' => 'Artificial leather',
+                                                'image' => ''
+                                            ],
+                                            [
+                                                'title' => 'Sneakers Nike Air Max Infuriate Low',
+                                                'name' => 'sneakers-nike-air-max-infuriate-low',
+                                                'description' => 'There will be a description...',
+                                                'price' => 4466,
+                                                'brand' => 'Nike',
+                                                'country' => 'Vietnam',
+                                                'color' => '#000000',
+                                                'material' => 'Artificial leather',
+                                                'image' => ''
+                                            ],
+                                            [
+                                                'title' => 'Sneakers Nike Nightgazer',
+                                                'name' => 'sneakers-nike-nightgazer',
+                                                'description' => 'There will be a description...',
+                                                'price' => 5690,
+                                                'brand' => 'Nike',
+                                                'country' => 'Vietnam',
+                                                'color' => '#000000',
+                                                'material' => 'Artificial leather',
+                                                'image' => ''
+                                            ],
+                                            [
+                                                'title' => 'Sneakers Bris-Bosphorus',
+                                                'name' => 'sneakers-bris-bosphorus',
+                                                'description' => 'There will be a description...',
+                                                'price' => 684,
+                                                'brand' => 'Bris',
+                                                'country' => 'Russia',
+                                                'color' => '#000000',
+                                                'material' => 'Textile',
+                                                'image' => ''
+                                            ],
+                                            [
+                                                'title' => 'Sneakers Nike COURT ROYALE',
+                                                'name' => 'kedy-nike-court-royale',
+                                                'description' => 'There will be a description...',
+                                                'price' => 3990,
+                                                'brand' => 'Nike',
+                                                'country' => 'Indonesia',
+                                                'color' => '#ffffff',
+                                                'material' => 'Textile',
+                                                'image' => ''
+                                            ],
+                                            [
+                                                'title' => 'Sneakers Nike T-Lite XI',
+                                                'name' => 'sneakers-nike-t-lite-xi',
+                                                'description' => 'There will be a description...',
+                                                'price' => 3490,
+                                                'brand' => 'Nike',
+                                                'country' => 'Indonesia',
+                                                'color' => '#ffffff',
+                                                'material' => 'Artificial leather',
+                                                'image' => ''
+                                            ],
+                                            [
+                                                'title' => 'Sneakers Nike Reax 8 TR',
+                                                'name' => 'sneakers-nike-reax-8-tr',
+                                                'description' => 'There will be a description...',
+                                                'price' => 5990,
+                                                'brand' => 'Nike',
+                                                'country' => 'Vietnam',
+                                                'color' => '#ffffff',
+                                                'material' => 'Genuine leather',
+                                                'image' => ''
+                                            ],
+                                            [
+                                                'title' => 'Sneakers Nike Court Royale Suede',
+                                                'name' => 'sneakers-nike-court-royale-suede',
+                                                'description' => 'There will be a description...',
+                                                'price' => 4490,
+                                                'brand' => 'Nike',
+                                                'country' => 'Indonesia',
+                                                'color' => '#ffffff',
+                                                'material' => 'Genuine leather',
+                                                'image' => ''
+                                            ],
+                                            [
+                                                'title' => 'Sneakers Adidas Climawarm Atr M',
+                                                'name' => 'sneakers-adidas-climawarm-atr-m',
+                                                'description' => 'There will be a description...',
+                                                'price' => 4490,
+                                                'brand' => 'Adidas',
+                                                'country' => 'China',
+                                                'color' => '#0f77b0',
+                                                'material' => 'Artificial leather, Textile',
+                                                'image' => ''
+                                            ],
+                                            [
+                                                'title' => 'Sneakers Adidas Neo 10K Casual',
+                                                'name' => 'sneakers-adidas-neo-10k-casual',
+                                                'description' => 'There will be a description...',
+                                                'price' => 4764,
+                                                'brand' => 'Adidas',
+                                                'country' => 'China',
+                                                'color' => '#0f77b0',
+                                                'material' => 'Artificial leather, Textile',
+                                                'image' => ''
+                                            ],
+                                            [
+                                                'title' => 'Valenki Cotofey',
+                                                'name' => 'valenki-kotofey',
+                                                'description' => 'There will be a description...',
+                                                'price' => 3778,
+                                                'brand' => 'Cotofey',
+                                                'country' => 'Russia',
+                                                'color' => '#000000',
+                                                'material' => 'Felt',
+                                                'image' => ''
+                                            ]
+                                        ]
+                                    ],
+                                    [
+                                        'title' => 'Children\'s shoes',
+                                        'name' => 'childrens-shoes',
+                                        'menuIndex' => 0,
+                                        'children' => [
+
+                                        ]
+                                    ]
                                 ]
                             ],
                             [
-                                'title' => 'Men\'s bags',
-                                'name' => 'mens-bags',
+                                'title' => 'Bags',
+                                'name' => 'bags',
+                                'menuIndex' => 0,
                                 'children' => [
+                                    [
+                                        'title' => 'Women\'s handbags',
+                                        'name' => 'womens-handbags',
+                                        'menuIndex' => 0,
+                                        'children' => [
 
+                                        ]
+                                    ],
+                                    [
+                                        'title' => 'Men\'s bags',
+                                        'name' => 'Mens-bags',
+                                        'menuIndex' => 0,
+                                        'children' => [
+
+                                        ]
+                                    ]
                                 ]
                             ]
                         ]
@@ -517,13 +647,37 @@ class CatalogFixtures extends Fixture
             ]
         ];
 
-        $this->loadCategories($manager, $data);
-    }
-
-    public function loadCategories(ObjectManager $manager, $data, Category $parent = null) {
+        /** @var ContentType $contentTypeText */
+        $contentTypeText = $this->getReference('content_type_text');
+        $this->loadCategories($manager, $contentTypeText, [
+            [
+                'title' => 'Root category',
+                'name' => 'root',
+                'menuIndex' => 0,
+                'children' => [],
+                'content' => [
+                    [
+                        'title' => 'About store',
+                        'name' => 'about',
+                        'text' => 'There will be a description...',
+                        'menuIndex' => 1
+                    ],
+                    [
+                        'title' => 'Payment and delivery',
+                        'name' => 'payment',
+                        'text' => 'There will be a description...',
+                        'menuIndex' => 2
+                    ]
+                ]
+            ]
+        ]);
 
         /** @var ContentType $contentType */
         $contentType = $this->getReference('content_type_catalog');
+        $this->loadCategories($manager, $contentType, $data);
+    }
+
+    public function loadCategories(ObjectManager $manager, ContentType $contentType, $data, Category $parent = null) {
 
         foreach ($data as $item) {
             $category = new Category();
@@ -537,8 +691,15 @@ class CatalogFixtures extends Fixture
                 ->setName($item['name'])
                 ->setDescription('')
                 ->setIsActive(true)
+                ->setMenuIndex($item['menuIndex'])
                 ->setContentTypeName($contentType->getName())
                 ->setContentType($contentType);
+
+            if ($item['name'] === 'root') {
+                $category
+                    ->setId(0)
+                    ->setIsFolder(true);
+            }
 
             $manager->persist($category);
             $manager->flush();
@@ -546,12 +707,12 @@ class CatalogFixtures extends Fixture
             $event = new CategoryUpdatedEvent($this->container, $category);
             $this->dispatcher->dispatch(CategoryUpdatedEvent::NAME, $event);
 
-            if (!empty($item['products'])) {
-                $this->loadProducts($manager, $category, $item['products']);
+            if (!empty($item['content'])) {
+                $this->loadCategoryContent($manager, $category, $item['content']);
             }
 
             if (!empty($item['children'])) {
-                $this->loadCategories($manager, $item['children'], $category);
+                $this->loadCategories($manager, $contentType, $item['children'], $category);
             }
         }
     }
@@ -562,7 +723,7 @@ class CatalogFixtures extends Fixture
      * @param array $data
      * @return bool
      */
-    public function loadProducts(ObjectManager $manager, Category $category, $data)
+    public function loadCategoryContent(ObjectManager $manager, Category $category, $data)
     {
         /** @var ContentType $contentType */
         $contentType = $category->getContentType();

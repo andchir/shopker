@@ -16,15 +16,11 @@
                 <label for="fieldContentType">{{'PARENT_FOLDER' | translate}}</label>
             </div>
             <div class="col-md-7">
-
-                <p-tree [selectionMode]="'single'"
-                        [value]="categories"
-                        [(selection)]="currentCategoryNode"
-                        [loading]="loadingCategories"
-                        [loadingIcon]="'icon-loader'"
-                        [layout]="'vertical'"
-                        (onNodeSelect)="onCategorySelect($event)"
-                        (onNodeUnselect)="onCategorySelect($event)"></p-tree>
+                <select-parent-dropdown
+                        name="parentId"
+                        formControlName="parentId"
+                        [filterId]="model.id"
+                        [(ngModel)]="model.parentId"></select-parent-dropdown>
 
                 <div *ngIf="formErrors.parentId" class="alert alert-danger">
                     {{formErrors.parentId}}

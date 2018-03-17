@@ -647,29 +647,29 @@ class CatalogFixtures extends Fixture
                 ]
             ];
 
-            /** @var ContentType $contentTypeText */
-            $contentTypeText = $this->getReference('content_type_text');
-            $this->loadCategories($manager, $contentTypeText, [
-                [
-                    'title' => 'Корневая категория',
-                    'name' => 'root',
-                    'menuIndex' => 0,
-                    'children' => [],
-                    'content' => [
-                        [
-                            'title' => 'О магазине',
-                            'name' => 'about',
-                            'text' => 'Тут будет описание...',
-                            'menuIndex' => 1
-                        ],
-                        [
-                            'title' => 'Оплата и доставка',
-                            'name' => 'payment',
-                            'text' => 'Тут будет описание...',
-                            'menuIndex' => 2
-                        ]
+        /** @var ContentType $contentTypeText */
+        $contentTypeText = $this->getReference('content_type_text');
+        $this->loadCategories($manager, $contentTypeText, [
+            [
+                'title' => 'Корневая категория',
+                'name' => 'root',
+                'menuIndex' => 0,
+                'children' => [],
+                'content' => [
+                    [
+                        'title' => 'О магазине',
+                        'name' => 'about',
+                        'text' => 'Тут будет описание...',
+                        'menuIndex' => 1
+                    ],
+                    [
+                        'title' => 'Оплата и доставка',
+                        'name' => 'payment',
+                        'text' => 'Тут будет описание...',
+                        'menuIndex' => 2
                     ]
                 ]
+            ]
         ]);
 
         /** @var ContentType $contentType */

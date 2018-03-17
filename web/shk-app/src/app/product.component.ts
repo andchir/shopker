@@ -26,6 +26,7 @@ export class ProductModalContent extends ModalContentAbstractComponent<Product> 
     contentTypes: ContentType[] = [];
     currentContentType: ContentType = new ContentType(0, '', '', '', '', [], [], true);
     model: Product = {} as Product;
+    timer: any;
 
     formFields = {
         parentId: {
@@ -91,6 +92,7 @@ export class ProductModalContent extends ModalContentAbstractComponent<Product> 
     }
 
     getContentType(): Promise<ContentType> {
+        this.loading = true;
         if(!this.category.contentTypeName){
             return Promise.reject({error: 'Content type name not found.'});
         }
@@ -131,13 +133,17 @@ export class ProductModalContent extends ModalContentAbstractComponent<Product> 
     }
 
     onChangeContentType(): void {
-        const parentId = parseInt(String(this.model.parentId));
-        let index = _.findIndex(this.categories, {id: parentId});
-        if (index == -1) {
-            return;
-        }
-        this.category = _.clone(this.categories[index]);
-        this.getContentType();
+        this.loading = true;
+        clearTimeout(this.timer);
+        this.timer = setTimeout(() => {
+            const parentId = parseInt(String(this.model.parentId));
+            let index = _.findIndex(this.categories, {id: parentId});
+            if (index == -1) {
+                return;
+            }
+            this.category = _.clone(this.categories[index]);
+            this.getContentType();
+        }, 500);
     }
 
     saveFiles(itemId: number) {

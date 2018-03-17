@@ -15,9 +15,13 @@
                 <label for="fieldCategory">{{'PARENT_FOLDER' | translate}}</label>
             </div>
             <div class="col-md-7">
-                <select id="fieldCategory" class="form-control" name="parentId" formControlName="parentId" [(ngModel)]="model.parentId" (change)="onChangeContentType()">
-                    <option *ngFor="let category of categories" [value]="category.id">{{category.title}}</option>
-                </select>
+
+                <select-parent-dropdown
+                        name="parentId"
+                        formControlName="parentId"
+                        [(ngModel)]="model.parentId"
+                        (ngModelChange)="onChangeContentType()"></select-parent-dropdown>
+
                 <div *ngIf="formErrors.parentId" class="alert alert-danger">
                     {{formErrors.parentId}}
                 </div>

@@ -4,7 +4,7 @@
             {{currentCategoryNode.label}}
         </span>
         <span *ngIf="!currentCategoryNode">
-            Select parent
+            {{'SELECT_PARENT' | translate}}
         </span>
     </button>
     <div ngbDropdownMenu aria-labelledby="dropdownParent" class="p-0 width-350">

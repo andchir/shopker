@@ -29,6 +29,7 @@ var APP_LANG = {
     "LOGOUT": "Log out",
     "MAIL_TEMPLATE": "Mail template",
     "MAX_PRICE": "Max. price",
+    "MENU_INDEX": "Position in the menu",
     "NAME": "Name",
     "NO": "No",
     "ORDERS": "Orders",
@@ -36,12 +37,14 @@ var APP_LANG = {
     "OUTPUT_TYPE": "Output type",
     "PARAMETER": "Parameter",
     "PARENT_FOLDER": "Parent folder",
+    "PREVIEW_SITE": "Preview site",
     "PRICE": "Price",
     "REMOVE": "Remove",
     "REQUIRED": "Required",
     "ROOT_FOLDER": "Root folder",
     "SAVE": "Save",
     "SAVE_FIELD": "Save field",
+    "SELECT_PARENT": "Select parent",
     "SETTINGS": "Settings",
     "SETTINGS_DELIVERY": "Delivery methods",
     "SETTINGS_MAIN": "Main Settings",
@@ -65,7 +68,5 @@ var APP_LANG = {
     "mongodb_database": "MongoDB database",
     "mongodb_password": "MongoDB password",
     "mongodb_server": "MongoDB server",
-    "mongodb_user": "MongoDB user",
-    "PREVIEW_SITE": "Preview site",
-    "MENU_INDEX": "Position in the menu"
+    "mongodb_user": "MongoDB user"
 };

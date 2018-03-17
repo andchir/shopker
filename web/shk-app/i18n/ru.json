@@ -28,6 +28,7 @@
 	"LOGOUT": "Выйти",
 	"MAIL_TEMPLATE": "Шаблон письма",
 	"MAX_PRICE": "Макс. цена",
+	"MENU_INDEX": "Позиция в меню",
 	"NAME": "Название",
 	"NO": "Нет",
 	"ORDERS": "Заказы",
@@ -35,12 +36,14 @@
 	"OUTPUT_TYPE": "Тип вывода",
 	"PARAMETER": "Параметр",
 	"PARENT_FOLDER": "Родительская категория",
+	"PREVIEW_SITE": "Перейти на сайт",
 	"PRICE": "Цена",
 	"REMOVE": "Удалить",
 	"REQUIRED": "Обязательное",
 	"ROOT_FOLDER": "Корневая категория",
 	"SAVE": "Сохранить",
 	"SAVE_FIELD": "Сохранить поле",
+	"SELECT_PARENT": "Выбрать родителя",
 	"SETTINGS": "Настройки",
 	"SETTINGS_DELIVERY": "Методы доставки",
 	"SETTINGS_MAIN": "Основные настройки",
@@ -64,7 +67,5 @@
 	"mongodb_database": "MongoDB: База данных",
 	"mongodb_password": "MongoDB: Пароль",
 	"mongodb_server": "MongoDB: Сервер",
-	"mongodb_user": "MongoDB: Пользоватеь",
-	"PREVIEW_SITE": "Перейти на сайт",
-	"MENU_INDEX": "Позиция в меню"
+	"mongodb_user": "MongoDB: Пользоватеь"
 }

@@ -25,7 +25,7 @@ export class ProductModalContent extends ModalContentAbstractComponent<Product> 
     categories: Category[] = [];
     contentTypes: ContentType[] = [];
     currentContentType: ContentType = new ContentType(0, '', '', '', '', [], [], true);
-    model: Product = {} as Product;
+    model = {} as Product;
     timer: any;
 
     formFields = {
@@ -119,7 +119,7 @@ export class ProductModalContent extends ModalContentAbstractComponent<Product> 
         let newKeys = _.map(this.currentContentType.fields, function(field){
             return field.name;
         });
-        newKeys.push('parentId', 'isActive');
+        newKeys.push('id', 'parentId', 'previousParentId', 'isActive');
 
         //Remove keys
         for (let key in this.form.controls) {
@@ -129,21 +129,21 @@ export class ProductModalContent extends ModalContentAbstractComponent<Product> 
                 }
             }
         }
-        this.model = _.pick<any>(data, newKeys);
+        this.model = _.pick(data, newKeys) as Product;
     }
 
     onChangeContentType(): void {
-        this.loading = true;
-        clearTimeout(this.timer);
-        this.timer = setTimeout(() => {
-            const parentId = parseInt(String(this.model.parentId));
-            let index = _.findIndex(this.categories, {id: parentId});
-            if (index == -1) {
-                return;
-            }
-            this.category = _.clone(this.categories[index]);
-            this.getContentType();
-        }, 500);
+        const parentId = parseInt(String(this.model.parentId));
+        let index = _.findIndex(this.categories, {id: parentId});
+        if (index == -1) {
+            return;
+        }
+        if (!this.currentContentType
+            || (this.currentContentType.name !== this.categories[index].contentTypeName)) {
+                this.model.previousParentId = this.category.id;
+                this.category = _.cloneDeep(this.categories[index]);
+                this.getContentType();
+        }
     }
 
     saveFiles(itemId: number) {

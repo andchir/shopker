@@ -228,6 +228,51 @@ class ProductController extends BaseProductController
     }
 
     /**
+     * @Route("/{categoryId}")
+     * @Method({"POST"})
+     * @ParamConverter("category", class="AppBundle:Category", options={"id" = "categoryId"})
+     * @param Request $request
+     * @param Category $category
+     * @return JsonResponse
+     */
+    public function createItemAction(Request $request, Category $category = null)
+    {
+        $data = $request->getContent()
+            ? json_decode($request->getContent(), true)
+            : [];
+
+        $output = $this->validateData($data, $category);
+        if(!$output['success']){
+            return $this->setError($output['msg']);
+        }
+
+        return $this->createUpdate($data, $category);
+    }
+
+    /**
+     * @Route("/{categoryId}/{itemId}")
+     * @Method({"PUT"})
+     * @ParamConverter("category", class="AppBundle:Category", options={"id" = "categoryId"})
+     * @param Request $request
+     * @param Category $category
+     * @param int $itemId
+     * @return JsonResponse
+     */
+    public function updateItemAction(Request $request, Category $category = null, $itemId)
+    {
+        $data = $request->getContent()
+            ? json_decode($request->getContent(), true)
+            : [];
+
+        $output = $this->validateData($data, $category, $itemId);
+        if(!$output['success']){
+            return $this->setError($output['msg']);
+        }
+
+        return $this->createUpdate($data, $category, $itemId);
+    }
+
+    /**
      * @param $data
      * @param Category $category
      * @param int $itemId
@@ -235,6 +280,7 @@ class ProductController extends BaseProductController
      */
     public function createUpdate($data, Category $category = null, $itemId = null)
     {
+        $categoriesRepository = $this->getCategoriesRepository();
         $parentId = !empty($data['parentId']) ? $data['parentId'] : 0;
         $itemId = intval($itemId);
 
@@ -246,6 +292,15 @@ class ProductController extends BaseProductController
         $collection = $this->getCollection($contentType->getCollection());
 
         if($itemId){
+            if (!empty($data['previousParentId'])
+                && $data['previousParentId'] !== $category['id']) {
+
+                $previousCategory = $categoriesRepository->find($data['previousParentId']);
+                if ($previousCategory) {
+                    // TODO: Delete old document
+                }
+            }
+
             $document = $collection->findOne(['_id' => $itemId]);
             if(!$document){
                 return $this->setError('Item not found.');
@@ -293,51 +348,6 @@ class ProductController extends BaseProductController
         } else {
             return $this->setError('Item not saved.');
         }
-    }
-
-    /**
-     * @Route("/{categoryId}")
-     * @Method({"POST"})
-     * @ParamConverter("category", class="AppBundle:Category", options={"id" = "categoryId"})
-     * @param Request $request
-     * @param Category $category
-     * @return JsonResponse
-     */
-    public function createItemAction(Request $request, Category $category = null)
-    {
-        $data = $request->getContent()
-            ? json_decode($request->getContent(), true)
-            : [];
-
-        $output = $this->validateData($data, $category);
-        if(!$output['success']){
-            return $this->setError($output['msg']);
-        }
-
-        return $this->createUpdate($data, $category);
-    }
-
-    /**
-     * @Route("/{categoryId}/{itemId}")
-     * @Method({"PUT"})
-     * @ParamConverter("category", class="AppBundle:Category", options={"id" = "categoryId"})
-     * @param Request $request
-     * @param Category $category
-     * @param int $itemId
-     * @return JsonResponse
-     */
-    public function updateItemAction(Request $request, Category $category = null, $itemId)
-    {
-        $data = $request->getContent()
-            ? json_decode($request->getContent(), true)
-            : [];
-
-        $output = $this->validateData($data, $category, $itemId);
-        if(!$output['success']){
-            return $this->setError($output['msg']);
-        }
-
-        return $this->createUpdate($data, $category, $itemId);
     }
 
     /**
@@ -712,6 +722,16 @@ class ProductController extends BaseProductController
         }
 
         return true;
+    }
+
+    /**
+     * @return \AppBundle\Repository\CategoryRepository
+     */
+    public function getCategoriesRepository()
+    {
+        return $this->get('doctrine_mongodb')
+            ->getManager()
+            ->getRepository(Category::class);
     }
 
     /**

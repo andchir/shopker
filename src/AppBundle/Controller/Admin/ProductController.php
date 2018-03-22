@@ -292,17 +292,33 @@ class ProductController extends BaseProductController
         $collection = $this->getCollection($contentType->getCollection());
 
         if($itemId){
+            $document = null;
             if (!empty($data['previousParentId'])
-                && $data['previousParentId'] !== $category['id']) {
+                && $data['previousParentId'] !== $category->getId()) {
 
+                // Delete old document in another collection
+                /** @var Category $previousCategory */
                 $previousCategory = $categoriesRepository->find($data['previousParentId']);
                 if ($previousCategory) {
-                    // TODO: Delete old document
+                    $previousContentType = $previousCategory->getContentType();
+                    if ($previousContentType->getCollection() !== $contentType->getCollection()) {
+                        $previousCollection = $this->getCollection($previousContentType->getCollection());
+                        $document = $previousCollection->findOne(['_id' => $itemId]);
+                        if (!$document) {
+                            return $this->setError('Item not found.');
+                        }
+                        $previousCollection->remove([
+                            '_id' => $itemId
+                        ]);
+                        $itemId = null;
+                        $document['_id'] = $this->getNextId($contentType->getCollection());
+                    }
                 }
             }
-
-            $document = $collection->findOne(['_id' => $itemId]);
-            if(!$document){
+            if (empty($document)) {
+                $document = $collection->findOne(['_id' => $itemId]);
+            }
+            if (!$document) {
                 return $this->setError('Item not found.');
             }
         } else {

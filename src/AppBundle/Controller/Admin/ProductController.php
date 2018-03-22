@@ -336,12 +336,16 @@ class ProductController extends BaseProductController
 
             // Files will be saved later by a separate request
             if ($field['inputType'] == 'file') {
-
                 // Delete file
-                if ($itemId && empty($data[$field['name']]) && !empty($document[$field['name']])) {
-                    $fileData = $document[$field['name']];
-                    if (!empty($fileData['fileId'])) {
-                        $this->deleteFile($fileData['fileId'], $contentType->getName());
+                if ($itemId && !empty($document[$field['name']])) {
+                    $oldFileId = !empty($document[$field['name']]) && isset($document[$field['name']]['fileId'])
+                        ? $document[$field['name']]['fileId']
+                        : null;
+                    $newFileId = !empty($data[$field['name']]) && isset($data[$field['name']]['fileId'])
+                        ? $data[$field['name']]['fileId']
+                        : null;
+                    if (!$newFileId || $oldFileId !== $newFileId) {
+                        $this->deleteFile($oldFileId, $contentType->getName());
                     }
                 }
             }

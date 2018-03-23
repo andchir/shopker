@@ -5,6 +5,11 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarContent">
             <ul class="navbar-nav mr-auto">
+                {#<li class="nav-item{% if currentId == 0 %} active{% endif %}">#}
+                    {#<a href="{{ path('homepage') }}" class="nav-link">#}
+                        {#{{ 'Home page' | trans }}#}
+                    {#</a>#}
+                {#</li>#}
                 {% for category in categoriesTopLevel %}
                     <li class="nav-item{% if category.isActive %} active{% endif %}">
                         <a href="{{ catalogPath(category.uri) }}" class="nav-link">
@@ -16,16 +21,16 @@
             <div>
                 {% if is_granted('ROLE_USER') %}
                     {% if is_granted('ROLE_ADMIN') %}
-                        <a class="btn btn-sm btn-outline-primary mt-1 mr-1" data-toggle="tooltip" data-placement="bottom" title="{{ 'Administration' | trans }}" href="{{ path('admin') }}" target="_blank">
+                        <a class="btn btn-sm btn-outline-primary mt-1" data-toggle="tooltip" data-placement="bottom" title="{{ 'Administration' | trans }}" href="{{ path('admin') }}" target="_blank">
                             <i class="icon-cog"></i>
                         </a>
                     {% endif %}
-                    <a class="btn btn-sm btn-outline-primary mt-1 mr-1" href="{{ path('logout') }}">
+                    <a class="btn btn-sm btn-outline-primary mt-1 ml-1" href="{{ path('logout') }}">
                         {{ 'Log out' | trans }}
                         <i class="icon-power"></i>
                     </a>
                 {% else %}
-                    <a class="btn btn-sm btn-outline-primary mt-1 mr-1" href="{{ path('login') }}">
+                    <a class="btn btn-sm btn-outline-primary mt-1 ml-1" href="{{ path('login') }}">
                         {{ 'Log in' | trans }}
                         <i class="icon-unlock"></i>
                     </a>
@@ -37,6 +42,13 @@
 <header>
     <div class="inner">
         <div class="container">
+            <div class="float-right">
+                <select class="form-control form-control-sm">
+                    <option value="rub">Руб</option>
+                    <option value="usd">USD</option>
+                    <option value="eur">EUR</option>
+                </select>
+            </div>
             <a class="header-brand" href="{{ path('homepage') }}">
                 {{ app_name }}
             </a>

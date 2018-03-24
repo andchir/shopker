@@ -44,7 +44,7 @@ class CatalogController extends ProductController
             return $this->pageProduct($currentCategory, $uri);
         }
         if (!$currentCategory) {
-            return $this->render('errors/404.html.twig');
+            throw $this->createNotFoundException();
         }
 
         $listTemplate = $request->cookies->get('shkListType', 'grid');
@@ -93,7 +93,7 @@ class CatalogController extends ProductController
 
         $categoriesSiblings = [];
         if (count($categoriesMenu) === 0 && $levelNum > 1) {
-            $categoriesSiblings = $this->getChildCategories($currentCategory, $breadcrumbs);
+            $categoriesSiblings = $this->getChildCategories($currentCategory->getParentId(), $breadcrumbs);
         }
 
         $breadcrumbs = array_filter($breadcrumbs, function($entry) use ($uri) {
@@ -321,28 +321,8 @@ class CatalogController extends ProductController
 
         // Get category content
         if ($getChildContent && $parentCategory) {
-            /** @var ContentType $contentType */
-            $contentType = $parentCategory->getContentType();
-            $collection = $this->getCollection($contentType->getCollection());
-            $parentUri = $parentCategory->getUri();
-            $items = $collection->find(['parentId' => $parentId]);
-            $systemNameField = $contentType->getSystemNameField();
-            foreach ($items as $item) {
-                $category = [
-                    'id' => $item['_id'],
-                    'title' => !empty($item['title']) ? $item['title'] : '',
-                    'name' => !empty($item[$systemNameField]) ? $item[$systemNameField] : '',
-                    'description' => '',
-                    'uri' => !empty($item[$systemNameField])
-                        ? $parentUri . $item[$systemNameField]
-                        : '',
-                    'menuIndex' => !empty($item['menuIndex']) ? $item['menuIndex'] : 0,
-                    'children' => []
-                ];
-                $category['isActive'] = in_array($category['uri'], $breadcrumbsUriArr);
-                $categories[] = $category;
-            }
-            unset($category);
+            $childContent = $this->getCategoryContent($parentCategory, $breadcrumbsUriArr);
+            $categories = array_merge($categories, $childContent);
         }
         array_multisort(
             array_column($categories, 'menuIndex'),  SORT_ASC,
@@ -351,6 +331,88 @@ class CatalogController extends ProductController
         );
 
         return $categories;
+    }
+
+    /**
+     * @param Category $parentCategory
+     * @param array $breadcrumbsUriArr
+     * @return array
+     */
+    public function getCategoryContent(Category $parentCategory, $breadcrumbsUriArr = [])
+    {
+        $categories = [];
+        /** @var ContentType $contentType */
+        $contentType = $parentCategory->getContentType();
+        $collection = $this->getCollection($contentType->getCollection());
+        $parentUri = $parentCategory->getUri();
+        $items = $collection->find([
+            'parentId' => $parentCategory->getId(),
+            'isActive' => true
+        ]);
+        $systemNameField = $contentType->getSystemNameField();
+        foreach ($items as $item) {
+            $category = [
+                'id' => $item['_id'],
+                'title' => !empty($item['title']) ? $item['title'] : '',
+                'name' => !empty($item[$systemNameField]) ? $item[$systemNameField] : '',
+                'description' => '',
+                'uri' => !empty($item[$systemNameField])
+                    ? $parentUri . $item[$systemNameField]
+                    : '',
+                'menuIndex' => !empty($item['menuIndex']) ? $item['menuIndex'] : 0,
+                'children' => []
+            ];
+            $category['isActive'] = in_array($category['uri'], $breadcrumbsUriArr);
+            $categories[] = $category;
+        }
+        return $categories;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCategoriesTree()
+    {
+        $output = [];
+        $data = [];
+        $uri = '';
+        $categoriesRepository = $this->getCategoriesRepository();
+        /** @var Category $parentCategory */
+        $parentCategory = $categoriesRepository->find(0);
+        $childContent = $parentCategory ? $this->getCategoryContent($parentCategory) : [];
+
+        $query = $this->get('doctrine_mongodb')
+            ->getManager()
+            ->createQueryBuilder(Category::class);
+
+        $results = $query
+            ->field('name')->notEqual('root')
+            ->field('isActive')->equals(true)
+            ->sort('menuIndex', 'asc')
+            ->sort('title', 'asc')
+            ->getQuery()
+            ->execute();
+
+        /** @var Category $category */
+        foreach ($results as $category) {
+            $parentId = $category->getParentId();
+            if (!isset($data[$parentId])) {
+                $data[$parentId] = [];
+            }
+            $data[$parentId][] = $category->getMenuData();
+        }
+
+        if (!empty($childContent)) {
+            foreach ($childContent as $content) {
+                unset($content['id']);
+                $data[0][] = $content;
+            }
+        }
+
+        return self::createTree($data, [[
+            'id' => 0,
+            'title' => 'Root'
+        ]]);
     }
 
     /**

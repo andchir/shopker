@@ -53,7 +53,7 @@ class ProductController extends BaseProductController
         $results = $collection->find([
             'parentId' => $category->getId()
         ])
-            ->sort([$queryOptions['sort_by'] => $queryOptions['sort_dir']])
+            ->sort($queryOptions['sortOptions'])
             ->skip($skip)
             ->limit($queryOptions['limit']);
 

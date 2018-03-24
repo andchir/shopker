@@ -4,20 +4,20 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarContent">
-            <ul class="navbar-nav mr-auto">
-                {#<li class="nav-item{% if currentId == 0 %} active{% endif %}">#}
-                    {#<a href="{{ path('homepage') }}" class="nav-link">#}
-                        {#{{ 'Home page' | trans }}#}
-                    {#</a>#}
-                {#</li>#}
-                {% for category in categoriesTopLevel %}
-                    <li class="nav-item{% if category.isActive %} active{% endif %}">
-                        <a href="{{ catalogPath(category.uri) }}" class="nav-link">
-                            {{ category.title }}
-                        </a>
-                    </li>
-                {%  endfor %}
-            </ul>
+            {#{% if categoriesTopLevel is defined %}#}
+                {#<ul class="navbar-nav mr-auto">#}
+                    {#{% for category in categoriesTopLevel %}#}
+                        {#<li class="nav-item{% if category.isActive %} active{% endif %}">#}
+                            {#<a href="{{ catalogPath(category.uri) }}" class="nav-link">#}
+                                {#{{ category.title }}#}
+                            {#</a>#}
+                        {#</li>#}
+                    {#{%  endfor %}#}
+                {#</ul>#}
+            {#{% endif %}#}
+            {% autoescape false %}
+                {{ categoriesTree(0, 'menu_tree') }}
+            {% endautoescape %}
             <div>
                 {% if is_granted('ROLE_USER') %}
                     {% if is_granted('ROLE_ADMIN') %}

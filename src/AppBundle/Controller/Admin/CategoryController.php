@@ -163,6 +163,9 @@ class CategoryController extends StorageControllerAbstract
                 'parentId' => $category->getParentId(),
                 'expanded' => true
             ];
+            if (!isset($data[$row['parentId']])) {
+                $data[$row['parentId']] = [];
+            }
             $data[$row['parentId']][] = $row;
         }
 

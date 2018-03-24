@@ -2,6 +2,7 @@
 
 namespace AppBundle\Twig;
 
+use AppBundle\Controller\CatalogController;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -36,6 +37,7 @@ class AppExtension extends AbstractExtension
             new TwigFunction('outputType', [$this, 'outputTypeFunction']),
             new TwigFunction('outputTypeArray', [$this, 'outputTypeArrayFunction']),
             new TwigFunction('outputTypeChunk', [$this, 'outputTypeChunkFunction']),
+            new TwigFunction('categoriesTree', [$this, 'categoriesTreeFunction'])
         );
     }
 
@@ -175,6 +177,23 @@ class AppExtension extends AbstractExtension
         }
 
         return $this->twig->render($templateName, $properties);
+    }
+
+    /**
+     * @param $parentId
+     * @param string $chunkName
+     * @param string $chunkNamePrefix
+     * @return string
+     */
+    public function categoriesTreeFunction($parentId = 0, $chunkName = 'menu_tree', $chunkNamePrefix = '')
+    {
+        $catalogController = new CatalogController();
+        $catalogController->setContainer($this->container);
+        $categoriesTree = $catalogController->getCategoriesTree();
+
+        $templateName = $this->getTemplateName('nav/', $chunkName, $chunkNamePrefix);
+
+        return $this->twig->render($templateName, $categoriesTree[0]);
     }
 
     /**

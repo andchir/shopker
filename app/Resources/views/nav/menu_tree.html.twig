@@ -1,0 +1,9 @@
+<ul class="navbar-nav mr-auto">
+    {% for category in children %}
+        <li class="nav-item">
+            <a href="{{ catalogPath(category.uri) }}" class="nav-link">
+                {{ category.title }}
+            </a>
+        </li>
+    {%  endfor %}
+</ul>

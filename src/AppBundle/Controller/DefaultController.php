@@ -54,9 +54,9 @@ class DefaultController extends CatalogController
      */
     public function pageNotFoundAction()
     {
-        $categoriesTopLevel = $this->getChildCategories();
+        $categoriesTopLevel = $this->getChildCategories(0, [], true);
 
-        return $this->render('404.html.twig', [
+        return $this->render('errors/404.html.twig', [
             'currentUri' => '404',
             'categoriesTopLevel' => $categoriesTopLevel
         ]);

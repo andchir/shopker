@@ -7,7 +7,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Translation\TranslatorInterface;
 use AppBundle\Event\CategoryUpdatedEvent;
 
 use AppBundle\Document\Category;
@@ -126,34 +125,9 @@ class CategoryController extends StorageControllerAbstract
      * @Method({"GET"})
      * @return JsonResponse
      */
-    public function getTree(TranslatorInterface $translator)
+    public function getTree()
     {
-        $repository = $this->getRepository();
-        $categories = $repository->findBy([], ['title' => 'asc']);
-
-        $data = [];
-        $root = [
-            'id' => 0,
-            'label' => $translator->trans('Root category'),
-            'parentId' => 0,
-            'expanded' => true
-        ];
-        /** @var Category $category */
-        foreach ($categories as $category) {
-            if (!$category->getId()) {
-                continue;
-            }
-            $row = [
-                'id' => $category->getId(),
-                'label' => $category->getTitle(),
-                'parentId' => $category->getParentId(),
-                'expanded' => true
-            ];
-            $data[$row['parentId']][] = $row;
-        }
-
-        $tree = $this->createTree($data, [$root]);
-
+        $tree = $this->getCategoriesTree();
         return new JsonResponse($tree);
     }
 
@@ -217,18 +191,6 @@ class CategoryController extends StorageControllerAbstract
             return true;
         }
         return false;
-    }
-
-
-    public function createTree(&$list, $parent){
-        $tree = array();
-        foreach ($parent as $k=>$l){
-            if(isset($list[$l['id']])){
-                $l['children'] = $this->createTree($list, $list[$l['id']]);
-            }
-            $tree[] = $l;
-        }
-        return $tree;
     }
 
     /**

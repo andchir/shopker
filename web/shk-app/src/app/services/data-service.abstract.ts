@@ -47,8 +47,9 @@ export abstract class DataService<M extends SimpleEntity> {
     getList(options ?: QueryOptions): Observable<M[]> {
         let params = new HttpParams();
         for(let name in options){
-            if(!options.hasOwnProperty(name)){
-                continue;
+            if(!options.hasOwnProperty(name)
+                || typeof options[name] === 'undefined'){
+                    continue;
             }
             params = params.append(name, options[name]);
         }
@@ -61,8 +62,9 @@ export abstract class DataService<M extends SimpleEntity> {
     getListPage(options ?: QueryOptions): Observable<DataList<M>> {
         let params = new HttpParams();
         for(let name in options){
-            if(!options.hasOwnProperty(name)){
-                continue;
+            if(!options.hasOwnProperty(name)
+                || typeof options[name] === 'undefined'){
+                    continue;
             }
             params = params.append(name, options[name]);
         }

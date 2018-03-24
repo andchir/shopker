@@ -15,6 +15,7 @@ import { ModalContentAbstractComponent } from './modal.abstract';
 import { SystemNameService } from './services/system-name.service';
 import { CategoriesService } from './services/categories.service';
 import { ContentTypesService } from './services/content_types.service';
+import { QueryOptions } from './models/query-options';
 
 /**
  * @class CategoriesModalComponent
@@ -226,7 +227,9 @@ export class CategoriesMenuComponent implements OnInit {
 
     /** Get categories */
     getCategoriesRequest(): Observable<any> {
-        return this.categoriesService.getListPage();
+        return this.categoriesService.getListPage(
+            new QueryOptions('menuIndex,title', 'asc', 1)
+        );
     }
 
     /** Get categories */

@@ -87,7 +87,7 @@ class CatalogController extends ProductController
         $pagesOptions = $this->getPagesoptions($queryOptions, $total, $pageSizeArr);
 
         $items = $collection->find($criteria)
-            ->sort([$queryOptions['sort_by'] => $queryOptions['sort_dir']])
+            ->sort($queryOptions['sortOptions'])
             ->skip($skip)
             ->limit($queryOptions['limit']);
 

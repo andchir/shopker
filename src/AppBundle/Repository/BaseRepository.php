@@ -38,10 +38,10 @@ abstract class BaseRepository extends DocumentRepository
         $opts['sort_dir'] = self::arrayFilter($opts['sort_dir'], ['asc', 'desc']);
 
         if(empty($opts['sort_by'])){
-            $opts['sort_by'] = $defaults['sort_by'];
+            $opts['sort_by'] = [$defaults['sort_by']];
         }
         if(empty($opts['sort_dir'])){
-            $opts['sort_dir'] = $defaults['sort_dir'];
+            $opts['sort_dir'] = [$defaults['sort_dir']];
         }
         if(!is_numeric($opts['page'])){
             $opts['page'] = $defaults['page'];

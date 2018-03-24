@@ -22,4 +22,42 @@ class BaseController extends Controller
         return $response;
     }
 
+    /**
+     * @param array $list
+     * @param array $parent
+     * @return array
+     */
+    public static function createTree(&$list, $parent){
+        $tree = array();
+        foreach ($parent as $k=>$l){
+            if(isset($list[$l['id']])){
+                $l['children'] = self::createTree($list, $list[$l['id']]);
+            }
+            $tree[] = $l;
+        }
+        return $tree;
+    }
+
+    /**
+     * @param $string
+     * @return array
+     */
+    public static function stringToArray($string)
+    {
+        $output = explode(',', $string);
+        return array_map('trim', $output);
+    }
+
+    /**
+     * @param array $inputArr
+     * @param array $targetArr
+     * @return array
+     */
+    public static function arrayFilter($inputArr, $targetArr)
+    {
+        return array_filter($inputArr, function($val) use($targetArr) {
+            return in_array($val, $targetArr);
+        });
+    }
+
 }

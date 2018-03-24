@@ -132,6 +132,44 @@ class CategoryController extends StorageControllerAbstract
     }
 
     /**
+     * @return array
+     */
+    public function getCategoriesTree()
+    {
+        $translator = $this->get('translator');
+        $categoriesRepository = $this->get('doctrine_mongodb')
+            ->getManager()
+            ->getRepository(Category::class);
+        $categories = $categoriesRepository->findBy([], [
+            'menuIndex' => 'asc',
+            'title' => 'asc'
+        ]);
+
+        $data = [];
+        $root = [
+            'id' => 0,
+            'label' => $translator->trans('Root category'),
+            'parentId' => 0,
+            'expanded' => true
+        ];
+        /** @var Category $category */
+        foreach ($categories as $category) {
+            if (!$category->getId()) {
+                continue;
+            }
+            $row = [
+                'id' => $category->getId(),
+                'label' => $category->getTitle(),
+                'parentId' => $category->getParentId(),
+                'expanded' => true
+            ];
+            $data[$row['parentId']][] = $row;
+        }
+
+        return self::createTree($data, [$root]);
+    }
+
+    /**
      * @Route("/{itemId}")
      * @Method({"DELETE"})
      * @param int $itemId

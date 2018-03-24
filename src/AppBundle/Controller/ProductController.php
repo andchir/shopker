@@ -60,12 +60,27 @@ class ProductController extends BaseController
         if($queryOptions['sort_by'] == 'id'){
             $queryOptions['sort_by'] = '_id';
         }
-        if(!in_array($queryOptions['sort_by'], $fieldNames)){
-            $opts['sort_by'] = $queryOptionsDefault['sort_by'];
+
+        $queryOptions['sort_by'] = self::stringToArray($queryOptions['sort_by']);
+        $queryOptions['sort_by'] = self::arrayFilter($queryOptions['sort_by'], $fieldNames);
+        $queryOptions['sort_dir'] = self::stringToArray($queryOptions['sort_dir']);
+        $queryOptions['sort_dir'] = self::arrayFilter($queryOptions['sort_dir'], ['asc', 'desc']);
+
+        if(empty($queryOptions['sort_by'])){
+            $queryOptions['sort_by'] = [$queryOptionsDefault['sort_by']];
         }
-        if(!is_numeric($queryOptions['sort_dir'])){
-            $queryOptions['sort_dir'] = $queryOptions['sort_dir'] == 'asc' ? 1 : -1;
+        if(empty($queryOptions['sort_dir'])){
+            $queryOptions['sort_dir'] = [$queryOptionsDefault['sort_dir']];
         }
+
+        // Sorting options
+        $queryOptions['sortOptions'] = [];
+        foreach ($queryOptions['sort_by'] as $ind => $sortByName) {
+            $queryOptions['sortOptions'][$sortByName] = isset($queryOptions['sort_dir'][$ind])
+                ? $queryOptions['sort_dir'][$ind]
+                : $queryOptions['sort_dir'][0];
+        }
+
         if(!is_numeric($queryOptions['limit'])){
             $queryOptions['limit'] = $queryOptionsDefault['limit'];
         }

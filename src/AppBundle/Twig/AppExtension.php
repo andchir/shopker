@@ -38,7 +38,8 @@ class AppExtension extends AbstractExtension
             new TwigFunction('outputType', [$this, 'outputTypeFunction']),
             new TwigFunction('outputTypeArray', [$this, 'outputTypeArrayFunction']),
             new TwigFunction('outputTypeChunk', [$this, 'outputTypeChunkFunction']),
-            new TwigFunction('categoriesTree', [$this, 'categoriesTreeFunction'])
+            new TwigFunction('categoriesTree', [$this, 'categoriesTreeFunction']),
+            new TwigFunction('twigNextPass', [$this, 'twigNextPassFunction'])
         );
     }
 
@@ -182,29 +183,57 @@ class AppExtension extends AbstractExtension
     /**
      * @param int $parentId
      * @param string $chunkName
-     * @param array|null $data
+     * @param null $data
+     * @param bool $cacheEnabled
      * @return string
      */
-    public function categoriesTreeFunction($parentId = 0, $chunkName = 'menu_tree', $data = null)
+    public function categoriesTreeFunction($parentId = 0, $chunkName = 'menu_tree', $data = null, $cacheEnabled = false)
     {
+        $request = $this->container->get('router.request_context');
+        $currentUri = substr($request->getPathInfo(), 1);
         $cacheKey = 'tree.' . $chunkName;
         $cache = new FilesystemCache();
         if ($data === null) {
-            if ($cache->has($cacheKey)) {
-                return $cache->get($cacheKey);
+            if ($cacheEnabled && $cache->has($cacheKey)) {
+                return $this->twig->createTemplate($cache->get($cacheKey))->render([
+                    'currentUri' => $currentUri
+                ]);
             }
             $catalogController = new CatalogController();
             $catalogController->setContainer($this->container);
-            $categoriesTree = $catalogController->getCategoriesTree();
+            $categoriesTree = $catalogController->getCategoriesTree($parentId);
             $data = $categoriesTree[0];
         }
         $templateName = $this->getTemplateName('nav/', $chunkName);
         if (empty($data['children'])) {
             return '';
         }
+        $data['currentUri'] = $currentUri;
         $output = $this->twig->render($templateName, $data);
+        if (!$cacheEnabled) {
+            return $output;
+        }
+
         $cache->set($cacheKey, $output, 60*60*24);
-        return $output;
+
+        return $this->twig->createTemplate($output)->render([
+            'currentUri' => $currentUri
+        ]);
+    }
+
+    /**
+     * @param string $string
+     * @return mixed|string
+     */
+    public function twigNextPassFunction($string)
+    {
+        $vars = func_get_args();
+        array_splice($vars, 0, 1);
+        $output = '{% '. $string . ' %}';
+        foreach ($vars as $ind => $var) {
+            $output = str_replace('$'.($ind+1), "'{$var}'", $output);
+        }
+        return str_replace('$', '', $output);
     }
 
     /**

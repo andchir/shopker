@@ -369,9 +369,10 @@ class CatalogController extends ProductController
     }
 
     /**
+     * @param int $parentId
      * @return array
      */
-    public function getCategoriesTree()
+    public function getCategoriesTree($parentId)
     {
         $output = [];
         $data = [];

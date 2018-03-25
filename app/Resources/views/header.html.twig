@@ -7,7 +7,7 @@
         </div>
         <div class="collapse navbar-collapse" id="navbarContent">
             {% autoescape false %}
-                {{ categoriesTree(0, 'menu_dropdown') }}
+                {{ categoriesTree(0, 'menu_dropdown', null, true) }}
             {% endautoescape %}
             <div class="d-inline-block pt-2 pb-2 pl-2">
                 {% if is_granted('ROLE_USER') %}

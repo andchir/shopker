@@ -1,12 +1,10 @@
 <ul>
     {% for category in children %}
-        <li class="nav-item{% if category.children|length > 0 %} parent{% endif %}">
+        <li class="nav-item{% if category.children|length > 0 %} parent{% endif %}{{ twigNextPass('if currentUri == $1', category.uri)|raw }} active{{ twigNextPass('endif')|raw }}">
             <a href="{{ catalogPath(category.uri) }}" class="nav-link">
                 {{ category.title }}
             </a>
-            {% autoescape false %}
-                {{ categoriesTree(0, 'menu_dropdown_child', category) }}
-            {% endautoescape %}
+            {{ categoriesTree(0, 'menu_dropdown_child', category)|raw }}
         </li>
     {%  endfor %}
 </ul>

@@ -192,7 +192,11 @@ class AppExtension extends AbstractExtension
         $request = $this->container->get('router.request_context');
         $currentUri = substr($request->getPathInfo(), 1);
         $cacheKey = 'tree.' . $chunkName;
-        $cache = new FilesystemCache();
+        $cache = new FilesystemCache(
+            '',
+            60*60*24,
+            $this->container->getParameter('kernel.root_dir').'/../var/cache/filecache/'
+        );
         if ($data === null) {
             if ($cacheEnabled && $cache->has($cacheKey)) {
                 return $this->twig->createTemplate($cache->get($cacheKey))->render([

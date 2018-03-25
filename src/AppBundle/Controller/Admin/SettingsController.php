@@ -146,7 +146,11 @@ class SettingsController extends Controller
      */
     public function clearCacheAction()
     {
-        $cache = new FilesystemCache();
+        $cache = new FilesystemCache(
+            '',
+            60*60*24,
+            $this->container->getParameter('kernel.root_dir').'/../var/cache/filecache/'
+        );
         $cache->clear();
 
         return new JsonResponse([

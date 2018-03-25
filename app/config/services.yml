@@ -66,3 +66,11 @@ services:
     AppBundle\Twig\AppExtension:
         tags: ['twig.extension']
         arguments: [ "@service_container" ]
+
+    app.filecache:
+        public: true
+        class: Symfony\Component\Cache\Simple\FilesystemCache
+        arguments:
+            - 'app'
+            - 86400
+            - '%kernel.root_dir%/../var/cache/filecache'

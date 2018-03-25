@@ -6,7 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Cache\Simple\FilesystemCache;
 
 class BaseController extends Controller
 {
@@ -60,17 +59,4 @@ class BaseController extends Controller
             return in_array($val, $targetArr);
         });
     }
-
-    /**
-     * @return FilesystemCache
-     */
-    public static function getCacheService()
-    {
-        return new FilesystemCache(
-            '',
-            60*60*24,
-            dirname(dirname(dirname(__DIR__))) . '/var/cache/filecache/'
-        );
-    }
-
 }

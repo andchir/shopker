@@ -7,6 +7,7 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Cache\Simple\FilesystemCache;
 
 class AppExtension extends AbstractExtension
 {
@@ -191,7 +192,9 @@ class AppExtension extends AbstractExtension
         $request = $this->container->get('router.request_context');
         $currentUri = substr($request->getPathInfo(), 1);
         $cacheKey = 'tree.' . $chunkName;
-        $cache = $cache = \AppBundle\Controller\BaseController::getCacheService();
+        /** @var FilesystemCache $cache */
+        $cache = $this->container->get('app.filecache');
+
         if ($data === null) {
             if ($cacheEnabled && $cache->has($cacheKey)) {
                 return $this->twig->createTemplate($cache->get($cacheKey))->render([

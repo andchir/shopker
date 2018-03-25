@@ -3,6 +3,7 @@
 namespace AppBundle\Twig;
 
 use AppBundle\Controller\CatalogController;
+use Symfony\Component\Cache\Simple\FilesystemCache;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -186,7 +187,12 @@ class AppExtension extends AbstractExtension
      */
     public function categoriesTreeFunction($parentId = 0, $chunkName = 'menu_tree', $data = null)
     {
+        $cacheKey = 'tree.' . $chunkName;
+        $cache = new FilesystemCache();
         if ($data === null) {
+            if ($cache->has($cacheKey)) {
+                return $cache->get($cacheKey);
+            }
             $catalogController = new CatalogController();
             $catalogController->setContainer($this->container);
             $categoriesTree = $catalogController->getCategoriesTree();
@@ -196,7 +202,9 @@ class AppExtension extends AbstractExtension
         if (empty($data['children'])) {
             return '';
         }
-        return $this->twig->render($templateName, $data);
+        $output = $this->twig->render($templateName, $data);
+        $cache->set($cacheKey, $output, 60*60*24);
+        return $output;
     }
 
     /**

@@ -6,6 +6,7 @@ var APP_LANG = {
     "CANCEL": "Отменить",
     "CATALOG": "Каталог",
     "CATEGORY": "Категория",
+    "CLEAR_CACHE": "Очистить кэш",
     "CLOSE": "Закрыть",
     "COLLAPSE": "Свернуть",
     "COLLECTION": "Коллекция",

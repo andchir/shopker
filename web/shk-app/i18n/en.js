@@ -6,6 +6,7 @@ var APP_LANG = {
     "CANCEL": "Cancel",
     "CATALOG": "Catalog",
     "CATEGORY": "Category",
+    "CLEAR_CACHE": "Clear cache",
     "CLOSE": "Close",
     "COLLAPSE": "Collapse",
     "COLLECTION": "Collection",

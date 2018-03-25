@@ -14,6 +14,7 @@ import { AppSettings } from './services/app-settings.service';
 export class SettingsComponent implements OnInit {
     static title = 'SETTINGS';
 
+    loading = false;
     forms: {[key: string]: FormGroup} = {};
     settings = {
         SETTINGS_MAIN: new SettingsData(false, true, [], null),
@@ -110,6 +111,14 @@ export class SettingsComponent implements OnInit {
         _.extend(this.settings[groupName].values, _.cloneDeepWith(this.settings[groupName].defaultValues));
         this.settings[groupName].loading = false;
         this.settings[groupName].changed = false;
+    }
+
+    clearCache(): void {
+        this.loading = true;
+        this.settingsService.clearCache()
+            .subscribe(() => {
+                this.loading = false;
+            });
     }
 
     onValueChanged(groupName: string): void {

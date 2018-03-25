@@ -10,7 +10,7 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
     items: M[] = [];
     title: string = 'Page with data table';
     modalRef: NgbModalRef;
-    loading: boolean = false;
+    loading = false;
     selectedIds: number[] = [];
     collectionSize = 0;
     queryOptions: QueryOptions = new QueryOptions('name', 'asc', 1, 10, 0, 0);

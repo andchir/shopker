@@ -1,6 +1,12 @@
 <div class="card">
-    <div class="card-body">
+    <div class="card-body" [class.loading]="loading">
 
+        <div class="float-right">
+            <button type="button" class="btn btn-info btn-sm" (click)="clearCache()">
+                <i class="icon-repeat"></i>
+                <span>{{'CLEAR_CACHE' | translate}}</span>
+            </button>
+        </div>
         <h3>
             <i class="icon-cog"></i>
             {{'SETTINGS' | translate}}

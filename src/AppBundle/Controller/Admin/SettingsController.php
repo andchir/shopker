@@ -13,6 +13,7 @@ use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\Cache\Simple\FilesystemCache;
 
 use AppBundle\Document\Setting;
 
@@ -136,6 +137,21 @@ class SettingsController extends Controller
         $output = $serializer->serialize($settings, 'json', ['groups' => ['list']]);
 
         return new JsonResponse($output, 200, [], true);
+    }
+
+    /**
+     * @Route("/clear_cache")
+     * @Method({"POST"})
+     * @return JsonResponse
+     */
+    public function clearCacheAction()
+    {
+        $cache = new FilesystemCache();
+        $cache->clear();
+
+        return new JsonResponse([
+            'success' => true
+        ]);
     }
 
     /**

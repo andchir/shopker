@@ -175,25 +175,27 @@ class AppExtension extends AbstractExtension
                 'empty'
             );
         }
-
         return $this->twig->render($templateName, $properties);
     }
 
     /**
-     * @param $parentId
+     * @param int $parentId
      * @param string $chunkName
      * @param string $chunkNamePrefix
+     * @param array|null $data
      * @return string
      */
-    public function categoriesTreeFunction($parentId = 0, $chunkName = 'menu_tree', $chunkNamePrefix = '')
+    public function categoriesTreeFunction($parentId = 0, $chunkName = 'menu_tree', $chunkNamePrefix = '', $data = null)
     {
-        $catalogController = new CatalogController();
-        $catalogController->setContainer($this->container);
-        $categoriesTree = $catalogController->getCategoriesTree();
-
+        if ($data === null) {
+            $catalogController = new CatalogController();
+            $catalogController->setContainer($this->container);
+            $categoriesTree = $catalogController->getCategoriesTree();
+            $data = $categoriesTree[0];
+        }
         $templateName = $this->getTemplateName('nav/', $chunkName, $chunkNamePrefix);
 
-        return $this->twig->render($templateName, $categoriesTree[0]);
+        return $this->twig->render($templateName, $data);
     }
 
     /**

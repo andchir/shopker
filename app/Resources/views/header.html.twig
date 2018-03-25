@@ -16,7 +16,7 @@
                 {#</ul>#}
             {#{% endif %}#}
             {% autoescape false %}
-                {{ categoriesTree(0, 'menu_tree') }}
+                {{ categoriesTree(0, 'menu_dropdown') }}
             {% endautoescape %}
             <div>
                 {% if is_granted('ROLE_USER') %}

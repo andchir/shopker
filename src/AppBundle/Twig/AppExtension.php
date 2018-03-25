@@ -181,11 +181,10 @@ class AppExtension extends AbstractExtension
     /**
      * @param int $parentId
      * @param string $chunkName
-     * @param string $chunkNamePrefix
      * @param array|null $data
      * @return string
      */
-    public function categoriesTreeFunction($parentId = 0, $chunkName = 'menu_tree', $chunkNamePrefix = '', $data = null)
+    public function categoriesTreeFunction($parentId = 0, $chunkName = 'menu_tree', $data = null)
     {
         if ($data === null) {
             $catalogController = new CatalogController();
@@ -193,8 +192,10 @@ class AppExtension extends AbstractExtension
             $categoriesTree = $catalogController->getCategoriesTree();
             $data = $categoriesTree[0];
         }
-        $templateName = $this->getTemplateName('nav/', $chunkName, $chunkNamePrefix);
-
+        $templateName = $this->getTemplateName('nav/', $chunkName);
+        if (empty($data['children'])) {
+            return '';
+        }
         return $this->twig->render($templateName, $data);
     }
 

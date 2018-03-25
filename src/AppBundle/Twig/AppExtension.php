@@ -3,7 +3,6 @@
 namespace AppBundle\Twig;
 
 use AppBundle\Controller\CatalogController;
-use Symfony\Component\Cache\Simple\FilesystemCache;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -192,11 +191,7 @@ class AppExtension extends AbstractExtension
         $request = $this->container->get('router.request_context');
         $currentUri = substr($request->getPathInfo(), 1);
         $cacheKey = 'tree.' . $chunkName;
-        $cache = new FilesystemCache(
-            '',
-            60*60*24,
-            $this->container->getParameter('kernel.root_dir').'/../var/cache/filecache/'
-        );
+        $cache = $cache = \AppBundle\Controller\BaseController::getCacheService();
         if ($data === null) {
             if ($cacheEnabled && $cache->has($cacheKey)) {
                 return $this->twig->createTemplate($cache->get($cacheKey))->render([

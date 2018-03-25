@@ -13,7 +13,6 @@ use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Output\BufferedOutput;
-use Symfony\Component\Cache\Simple\FilesystemCache;
 
 use AppBundle\Document\Setting;
 
@@ -146,11 +145,7 @@ class SettingsController extends Controller
      */
     public function clearCacheAction()
     {
-        $cache = new FilesystemCache(
-            '',
-            60*60*24,
-            $this->container->getParameter('kernel.root_dir').'/../var/cache/filecache/'
-        );
+        $cache = \AppBundle\Controller\BaseController::getCacheService();
         $cache->clear();
 
         return new JsonResponse([

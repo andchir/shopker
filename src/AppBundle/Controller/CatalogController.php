@@ -408,6 +408,11 @@ class CatalogController extends ProductController
                 unset($content['id']);
                 $data[0][] = $content;
             }
+            array_multisort(
+                array_column($data[0], 'menuIndex'),  SORT_ASC,
+                array_column($data[0], 'title'), SORT_ASC,
+                $data[0]
+            );
         }
 
         return self::createTree($data, [[

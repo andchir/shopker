@@ -1,6 +1,6 @@
 <ul>
     {% for category in children %}
-        <li class="nav-item{% if category.children|length > 0 %} parent{% endif %}{{ twigNextPass('if currentUri == $1', category.uri)|raw }} active{{ twigNextPass('endif')|raw }}">
+        <li class="nav-item{% if category.children|length > 0 %} parent{% endif %}{{ twigNextPass('if $1 in uriArr', category.uri)|raw }} active{{ twigNextPass('endif')|raw }}">
             <a href="{{ catalogPath(category.uri) }}" class="nav-link">
                 {{ category.title }}
             </a>

@@ -3,6 +3,7 @@
 namespace AppBundle\Twig;
 
 use AppBundle\Controller\CatalogController;
+use AppBundle\Service\UtilsService;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -191,6 +192,8 @@ class AppExtension extends AbstractExtension
     {
         $request = $this->container->get('router.request_context');
         $currentUri = substr($request->getPathInfo(), 1);
+        $uriArr = UtilsService::getUriArray($currentUri);
+
         $cacheKey = 'tree.' . $chunkName;
         /** @var FilesystemCache $cache */
         $cache = $this->container->get('app.filecache');
@@ -198,7 +201,8 @@ class AppExtension extends AbstractExtension
         if ($data === null) {
             if ($cacheEnabled && $cache->has($cacheKey)) {
                 return $this->twig->createTemplate($cache->get($cacheKey))->render([
-                    'currentUri' => $currentUri
+                    'currentUri' => $currentUri,
+                    'uriArr' => $uriArr
                 ]);
             }
             $catalogController = new CatalogController();
@@ -211,6 +215,7 @@ class AppExtension extends AbstractExtension
             return '';
         }
         $data['currentUri'] = $currentUri;
+        $data['uriArr'] = $uriArr;
         $output = $this->twig->render($templateName, $data);
         if (!$cacheEnabled) {
             return $output;
@@ -219,7 +224,8 @@ class AppExtension extends AbstractExtension
         $cache->set($cacheKey, $output, 60*60*24);
 
         return $this->twig->createTemplate($output)->render([
-            'currentUri' => $currentUri
+            'currentUri' => $currentUri,
+            'uriArr' => $uriArr
         ]);
     }
 

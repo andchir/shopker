@@ -191,4 +191,13 @@ class ProductController extends BaseController
         return $output;
     }
 
+    /**
+     * @return CategoryRepository
+     */
+    public function getCategoriesRepository()
+    {
+        return $this->get('doctrine_mongodb')
+            ->getManager()
+            ->getRepository(Category::class);
+    }
 }

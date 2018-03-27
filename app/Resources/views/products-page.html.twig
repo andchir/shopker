@@ -33,13 +33,16 @@
                         {% endautoescape %}
                     </div>
                     <div class="my-3">
-                        <form action="" method="post">
-                            <input type="hidden" name="id" value="{{ currentPage.id }}">
-                            <input type="number" class="form-control d-inline-block text-center mr-2" value="1" min="1" step="1" name="count" style="width: 100px;">
-
-                            <button type="submit" class="btn btn-info" name="submit_button">
-                                {{ 'Add to cart' | trans }}
-                            </button>
+                        <form action="{{ path('shop_cart_add') }}" method="post">
+                            <input type="hidden" name="item_id" value="{{ currentPage.id }}">
+                            <input type="hidden" name="category_id" value="{{ currentPage.parentId }}">
+                            <input type="hidden" name="content_type" value="{{ contentType.name }}">
+                            <div>
+                                <input type="number" class="form-control d-inline-block text-center mr-2" value="1" min="1" step="1" name="count" style="width: 100px;">
+                                <button type="submit" class="btn btn-info" name="submit_button">
+                                    {{ 'Add to cart' | trans }}
+                                </button>
+                            </div>
                         </form>
                     </div>
                 </div>

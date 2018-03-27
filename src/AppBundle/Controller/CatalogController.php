@@ -179,6 +179,7 @@ class CatalogController extends ProductController
             'categoriesTopLevel' => $categoriesTopLevel,
             'currentCategory' => $category,
             'currentPage' => $currentPage,
+            'contentType' => $contentType,
             'currentId' => $currentId,
             'currentUri' => $uri,
             'categoriesMenu' => $categoriesMenu,

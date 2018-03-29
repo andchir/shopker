@@ -4,11 +4,15 @@ namespace AppBundle\Twig;
 
 use AppBundle\Controller\CatalogController;
 use AppBundle\Service\UtilsService;
+use Symfony\Component\BrowserKit\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Routing\RequestContext;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Cache\Simple\FilesystemCache;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class AppExtension extends AbstractExtension
 {
@@ -16,12 +20,15 @@ class AppExtension extends AbstractExtension
     protected $container;
     /** @var \Twig_Environment */
     protected $twig;
+    /** @var  RequestStack */
+    protected $requestStack;
 
     /** @param ContainerInterface $container */
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, RequestStack $requestStack)
     {
         $this->container = $container;
         $this->twig = $this->container->get('twig');
+        $this->requestStack = $requestStack;
     }
 
     public function getFilters()
@@ -40,6 +47,7 @@ class AppExtension extends AbstractExtension
             new TwigFunction('outputTypeArray', [$this, 'outputTypeArrayFunction']),
             new TwigFunction('outputTypeChunk', [$this, 'outputTypeChunkFunction']),
             new TwigFunction('categoriesTree', [$this, 'categoriesTreeFunction']),
+            new TwigFunction('shopCart', [$this, 'shopCartFunction']),
             new TwigFunction('twigNextPass', [$this, 'twigNextPassFunction'])
         );
     }
@@ -242,6 +250,41 @@ class AppExtension extends AbstractExtension
             $output = str_replace('$'.($ind+1), "'{$var}'", $output);
         }
         return str_replace('$', '', $output);
+    }
+
+    /**
+     * @param string $chunkName
+     * @return string
+     */
+    public function shopCartFunction($chunkName = 'shop_cart')
+    {
+        $templateName = $this->getTemplateName('catalog/', $chunkName);
+        $properties = [
+            'countTotal' => 0,
+            'priceTotal' => 0
+        ];
+
+        $request = $this->requestStack->getCurrentRequest();
+        /** @var SessionInterface $session */
+        $session = $request->getSession();
+
+        $shopCartData = $session->get('shop_cart');
+        if (empty($shopCartData)) {
+            return '';
+        }
+
+        foreach ($shopCartData as $cName => $products) {
+            foreach ($products as $product) {
+                if (isset($product['count'])) {
+                    $properties['countTotal'] += $product['count'];
+                }
+                if (isset($product['price'])) {
+                    $properties['priceTotal'] += $product['price'];
+                }
+            }
+        }
+
+        return $this->twig->render($templateName, $properties);
     }
 
     /**

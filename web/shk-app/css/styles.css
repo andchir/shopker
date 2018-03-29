@@ -110,3 +110,7 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle { right: -10px; left: auto; }
 .noUi-handle:after, .noUi-handle:before { left: 7px; }
 .noUi-handle:after { left: 10px; }
 
+/* shop_cart */
+.shop_cart { position: absolute; left: 0; bottom: 0; width: 100%; padding: 10px; background-color: #17a2b8; box-shadow: 0 0 40px rgba(0,0,0,0.4); border-top: 1px solid #fff; color: #fff; }
+
+

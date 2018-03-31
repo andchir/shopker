@@ -27,8 +27,10 @@
     <script type="text/javascript" src="{{ asset('shk-app/node_modules/nouislider/distribute/nouislider.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('shk-app/js/shopkeeper.js?v=0.0.3') }}"></script>
     <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        });
         var shk = new Shopkeeper();
-        $('[data-toggle="tooltip"]').tooltip();
     </script>
 {% endblock %}
 
@@ -40,9 +42,11 @@
     </div>
 </div>
 
-{% autoescape false %}
-{{ shopCart('shop_cart') }}
-{% endautoescape %}
+{% if app.request.attributes.get('_route') not in ['shop_cart_edit'] %}
+    {% autoescape false %}
+    {{ shopCart('shop_cart') }}
+    {% endautoescape %}
+{% endif %}
 
 </body>
 </html>

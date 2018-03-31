@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% include 'header.html.twig' %}
+    <main role="main" class="container">
+        <div class="min-height400">
+
+            <h1>
+                Корзина товаров
+            </h1>
+
+            {% autoescape false %}
+                {{ shopCart('shop_cart_edit') }}
+            {% endautoescape %}
+
+            <div class="float-right">
+                <a class="btn btn-outline-info" href="{{ path('page_checkout') }}">
+                    {{ 'Proceed to checkout' | trans }}
+                    <i class="icon-keyboard_arrow_right"></i>
+                </a>
+            </div>
+            <div class="clearfix"></div>
+
+        </div>
+    </main>
+{% endblock %}

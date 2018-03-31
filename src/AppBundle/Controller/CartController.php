@@ -14,8 +14,6 @@ use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
- * Class CartController
- * @package AppBundle\Controller
  * @Route("/shop_cart")
  */
 class CartController extends ProductController
@@ -57,6 +55,19 @@ class CartController extends ProductController
         ]);
         if ($productDocument) {
 
+            $priceFieldName = '';
+            $contentTypeFields = $contentType->getFields();
+            foreach ($contentTypeFields as $contentTypeField) {
+                if (isset($contentTypeField['outputProperties'])
+                    && isset($contentTypeField['outputProperties']['chunkName'])
+                    && $contentTypeField['outputProperties']['chunkName'] === 'price') {
+                        $priceFieldName = $contentTypeField['name'];
+                }
+            }
+            $priceValue = $priceFieldName && isset($productDocument[$priceFieldName])
+                ? $productDocument[$priceFieldName]
+                : 0;
+
             $shopCartData = $session->get('shop_cart');
             if (!$shopCartData) {
                 $shopCartData = [];
@@ -64,18 +75,51 @@ class CartController extends ProductController
 
             if (isset($shopCartData[$contentTypeName]) && isset($shopCartData[$contentTypeName][$itemId])) {
                 $shopCartData[$contentTypeName][$itemId]['count'] += $count;
+                $shopCartData[$contentTypeName][$itemId]['price'] += $priceValue;
             } else {
                 $shopCartData[$contentTypeName][$itemId] = [
                     'id' => $productDocument['_id'],
                     'title' => $productDocument['title'],
                     'count' => $count,
-                    'price' => 0
+                    'price' => $priceValue
                 ];
             }
 
             $session->set('shop_cart', $shopCartData);
             $this->updateCartCookie($shopCartData);
         }
+
+        return new RedirectResponse($referer);
+    }
+
+    /**
+     * @Route("/edit", name="shop_cart_edit")
+     * @param Request $request
+     * @return Response
+     */
+    public function editAction(Request $request)
+    {
+
+
+
+        return $this->render('page_shop_cart.html.twig', [
+
+        ]);
+    }
+
+    /**
+     * @Route("/clear", name="shop_cart_clear")
+     * @param Request $request
+     * @return Response
+     */
+    public function clearAction(Request $request)
+    {
+        /** @var SessionInterface $session */
+        $session = $request->getSession();
+        $categoriesRepository = $this->getCategoriesRepository();
+        $referer = $request->headers->get('referer');
+
+        $session->remove('shop_cart');
 
         return new RedirectResponse($referer);
     }

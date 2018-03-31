@@ -254,14 +254,15 @@ class AppExtension extends AbstractExtension
 
     /**
      * @param string $chunkName
+     * @param string $emptyChunkName
      * @return string
      */
-    public function shopCartFunction($chunkName = 'shop_cart')
+    public function shopCartFunction($chunkName = 'shop_cart', $emptyChunkName = '')
     {
-        $templateName = $this->getTemplateName('catalog/', $chunkName);
         $properties = [
             'countTotal' => 0,
-            'priceTotal' => 0
+            'priceTotal' => 0,
+            'items' => []
         ];
 
         $request = $this->requestStack->getCurrentRequest();
@@ -270,11 +271,22 @@ class AppExtension extends AbstractExtension
 
         $shopCartData = $session->get('shop_cart');
         if (empty($shopCartData)) {
-            return '';
+            if ($emptyChunkName) {
+                $templateName = $this->getTemplateName('catalog/', $emptyChunkName);
+                return $this->twig->render($templateName, $properties);
+            } else {
+                return '';
+            }
         }
 
+        $templateName = $this->getTemplateName('catalog/', $chunkName);
+
         foreach ($shopCartData as $cName => $products) {
+            if (!isset($properties['items'][$cName])) {
+                $properties['items'][$cName] = [];
+            }
             foreach ($products as $product) {
+                $properties['items'][$cName][] = $product;
                 if (isset($product['count'])) {
                     $properties['countTotal'] += $product['count'];
                 }

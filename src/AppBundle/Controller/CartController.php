@@ -73,11 +73,13 @@ class CartController extends ProductController
                 $shopCartData = [];
             }
 
-            if (isset($shopCartData[$contentTypeName]) && isset($shopCartData[$contentTypeName][$itemId])) {
-                $shopCartData[$contentTypeName][$itemId]['count'] += $count;
-                $shopCartData[$contentTypeName][$itemId]['price'] += $priceValue;
+            if (isset($shopCartData[$contentTypeName])
+                && in_array($itemId, array_column($shopCartData[$contentTypeName], 'id'))) {
+                    $index = array_search($itemId, array_column($shopCartData[$contentTypeName], 'id'));
+                    $shopCartData[$contentTypeName][$index]['count'] += $count;
+                    $shopCartData[$contentTypeName][$index]['price'] += $priceValue;
             } else {
-                $shopCartData[$contentTypeName][$itemId] = [
+                $shopCartData[$contentTypeName][] = [
                     'id' => $productDocument['_id'],
                     'title' => $productDocument['title'],
                     'count' => $count,
@@ -105,6 +107,35 @@ class CartController extends ProductController
         return $this->render('page_shop_cart.html.twig', [
 
         ]);
+    }
+
+    /**
+     * @Route("/remove/{contentTypeName}/{index}", name="shop_cart_remove")
+     * @param Request $request
+     * @param string $contentTypeName
+     * @param int $index
+     * @return Response
+     */
+    public function removeItemAction(Request $request, $contentTypeName, $index)
+    {
+        /** @var SessionInterface $session */
+        $session = $request->getSession();
+        $referer = $request->headers->get('referer');
+
+        $shopCartData = $session->get('shop_cart');
+        if (!empty($shopCartData)
+            && isset($shopCartData[$contentTypeName])
+            && isset($shopCartData[$contentTypeName][$index])) {
+
+            array_splice($shopCartData[$contentTypeName], $index, 1);
+            if (empty($shopCartData[$contentTypeName])) {
+                unset($shopCartData[$contentTypeName]);
+            }
+            $session->set('shop_cart', $shopCartData);
+            $this->updateCartCookie($shopCartData);
+        }
+
+        return new RedirectResponse($referer);
     }
 
     /**

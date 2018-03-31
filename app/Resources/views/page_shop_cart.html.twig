@@ -10,16 +10,8 @@
             </h1>
 
             {% autoescape false %}
-                {{ shopCart('shop_cart_edit') }}
+                {{ shopCart('shop_cart_edit', 'shop_cart_edit_empty') }}
             {% endautoescape %}
-
-            <div class="float-right">
-                <a class="btn btn-outline-info" href="{{ path('page_checkout') }}">
-                    {{ 'Proceed to checkout' | trans }}
-                    <i class="icon-keyboard_arrow_right"></i>
-                </a>
-            </div>
-            <div class="clearfix"></div>
 
         </div>
     </main>

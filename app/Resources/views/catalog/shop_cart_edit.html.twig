@@ -1,27 +1,20 @@
 <table class="table">
     <tbody>
-        <tr>
-            <th>1</th>
-            <td>Название товара</td>
-            <td>1</td>
-            <td>500 руб.</td>
-            <td class="text-right">
-                <a class="btn btn-outline-info ml-1" href="" data-toggle="tooltip" data-placement="bottom" title="{{ 'Delete item' | trans }}">
-                    <i class="icon-cross"></i>
-                </a>
-            </td>
-        </tr>
-        <tr>
-            <th>1</th>
-            <td>Название товара</td>
-            <td>1</td>
-            <td>500 руб.</td>
-            <td class="text-right">
-                <a class="btn btn-outline-info ml-1" href="" data-toggle="tooltip" data-placement="bottom" title="{{ 'Delete item' | trans }}">
-                    <i class="icon-cross"></i>
-                </a>
-            </td>
-        </tr>
+        {% for contentTypeName in items|keys %}
+            {% for item in items[contentTypeName] %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ item.title }}</td>
+                    <td>{{ item.count }}</td>
+                    <td>{{ item.price | price }} руб.</td>
+                    <td class="text-right">
+                        <a class="btn btn-outline-info ml-1" href="{{ path('shop_cart_remove', {"contentTypeName": contentTypeName, "index": loop.index0}) }}" data-toggle="tooltip" data-placement="bottom" title="{{ 'Delete item' | trans }}">
+                        <i class="icon-cross"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
     </tbody>
     <tfoot>
         <tr>
@@ -37,3 +30,10 @@
         </tr>
     </tfoot>
 </table>
+<div class="float-right">
+    <a class="btn btn-outline-info" href="{{ path('page_checkout') }}">
+        {{ 'Proceed to checkout' | trans }}
+        <i class="icon-keyboard_arrow_right"></i>
+    </a>
+</div>
+<div class="clearfix"></div>

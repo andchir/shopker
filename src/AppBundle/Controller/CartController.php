@@ -139,7 +139,11 @@ class CartController extends ProductController
             if (empty($shopCartData[$contentTypeName])) {
                 unset($shopCartData[$contentTypeName]);
             }
-            $mongoCache->save(ShopCartService::getCartId(), $shopCartData);
+            if (!empty($shopCartData)) {
+                $mongoCache->save(ShopCartService::getCartId(), $shopCartData);
+            } else {
+                $mongoCache->delete(ShopCartService::getCartId());
+            }
         }
 
         return new RedirectResponse($referer);

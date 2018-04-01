@@ -129,7 +129,6 @@ class CartController extends ProductController
                 unset($shopCartData[$contentTypeName]);
             }
             $shopCartData->save(self::getCartId(), $shopCartData);
-            $this->updateCartCookie($shopCartData);
         }
 
         return new RedirectResponse($referer);

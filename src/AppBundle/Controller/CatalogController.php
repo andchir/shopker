@@ -64,7 +64,7 @@ class CatalogController extends ProductController
 
         $options = [
             'currentCategoryUri' => $currentCategory->getUri(),
-            'systemNameField' => $this->getSystemNameField($contentTypeFields)
+            'systemNameField' => $contentType->getSystemNameField()
         ];
         $filtersData = [];
         /** @var Filter $filters */
@@ -157,7 +157,7 @@ class CatalogController extends ProductController
         $fields = [];
         $options = [
             'currentCategoryUri' => $category->getUri(),
-            'systemNameField' => $this->getSystemNameField($contentTypeFields)
+            'systemNameField' => $contentType->getSystemNameField()
         ];
         foreach ($contentTypeFields as $field) {
             if (!empty($field)) {

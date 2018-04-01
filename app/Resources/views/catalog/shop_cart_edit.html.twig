@@ -4,12 +4,16 @@
             {% for item in items[contentTypeName] %}
                 <tr>
                     <td>{{ loop.index }}</td>
-                    <td>{{ item.title }}</td>
+                    <td>
+                        <a href="{{ catalogPath(item.parentUri, item.systemName) }}">
+                            {{ item.title }}
+                        </a>
+                    </td>
                     <td>{{ item.count }}</td>
                     <td>{{ item.price | price }} руб.</td>
                     <td class="text-right">
                         <a class="btn btn-outline-info ml-1" href="{{ path('shop_cart_remove', {"contentTypeName": contentTypeName, "index": loop.index0}) }}" data-toggle="tooltip" data-placement="bottom" title="{{ 'Delete item' | trans }}">
-                        <i class="icon-cross"></i>
+                            <i class="icon-cross"></i>
                         </a>
                     </td>
                 </tr>

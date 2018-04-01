@@ -48,6 +48,7 @@ class CartController extends ProductController
         $contentTypeName = $contentType->getName();
         $collectionName = $contentType->getCollection();
         $collection = $this->getCollection($collectionName);
+        $systemNameField = $contentType->getSystemNameField();
 
         $productDocument = $collection->findOne([
             '_id' => $itemId,
@@ -73,6 +74,12 @@ class CartController extends ProductController
                 $shopCartData = [];
             }
 
+            $parentUri = $category->getUri();
+            $systemName = '';
+            if ($systemNameField && isset($productDocument[$systemNameField])) {
+                $systemName = $productDocument[$systemNameField];
+            }
+
             if (isset($shopCartData[$contentTypeName])
                 && in_array($itemId, array_column($shopCartData[$contentTypeName], 'id'))) {
                     $index = array_search($itemId, array_column($shopCartData[$contentTypeName], 'id'));
@@ -82,6 +89,9 @@ class CartController extends ProductController
                 $shopCartData[$contentTypeName][] = [
                     'id' => $productDocument['_id'],
                     'title' => $productDocument['title'],
+                    'parentUri' => $parentUri,
+                    'systemName' => $systemName,
+                    'image' => '',
                     'count' => $count,
                     'price' => $priceValue
                 ];

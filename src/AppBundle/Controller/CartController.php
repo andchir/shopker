@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Document\Category;
 use AppBundle\Repository\CategoryRepository;
+use AppBundle\Service\ShopCartService;
 use Doctrine\ODM\MongoDB\Cursor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -67,7 +68,7 @@ class CartController extends ProductController
                 ? $productDocument[$priceFieldName]
                 : 0;
 
-            $shopCartData = $mongoCache->fetch(self::getCartId());
+            $shopCartData = $mongoCache->fetch(ShopCartService::getCartId());
             if (!$shopCartData) {
                 $shopCartData = [];
             }
@@ -86,7 +87,7 @@ class CartController extends ProductController
                 ];
             }
 
-            $mongoCache->save(self::getCartId(), $shopCartData, 60*60*24);
+            $mongoCache->save(ShopCartService::getCartId(), $shopCartData, 60*60*24);
         }
 
         return new RedirectResponse($referer);
@@ -119,7 +120,7 @@ class CartController extends ProductController
         $mongoCache = $this->container->get('mongodb_cache');
         $referer = $request->headers->get('referer');
 
-        $shopCartData = $mongoCache->fetch(self::getCartId());
+        $shopCartData = $mongoCache->fetch(ShopCartService::getCartId());
         if (!empty($shopCartData)
             && isset($shopCartData[$contentTypeName])
             && isset($shopCartData[$contentTypeName][$index])) {
@@ -128,7 +129,7 @@ class CartController extends ProductController
             if (empty($shopCartData[$contentTypeName])) {
                 unset($shopCartData[$contentTypeName]);
             }
-            $shopCartData->save(self::getCartId(), $shopCartData);
+            $mongoCache->save(ShopCartService::getCartId(), $shopCartData);
         }
 
         return new RedirectResponse($referer);
@@ -144,30 +145,9 @@ class CartController extends ProductController
         $mongoCache = $this->container->get('mongodb_cache');
         $referer = $request->headers->get('referer');
 
-        $mongoCache->delete(self::getCartId());
+        $mongoCache->delete(ShopCartService::getCartId());
 
         return new RedirectResponse($referer);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getCartId()
-    {
-        $request = Request::createFromGlobals();
-        $response = new Response();
-        $cookies = $request->cookies->all();
-        if (isset($cookies['cart_id'])) {
-            return $cookies['cart_id'];
-        }
-        $cartId = uniqid('shop_cart_' . mt_rand(), true);
-        $response->headers->setCookie(new Cookie(
-            'cart_id',
-            $cartId,
-            time() + (60 * 60 * 24 * 7)
-        ));
-        $response->sendHeaders();
-        return $cartId;
     }
 
     /**

@@ -97,7 +97,7 @@ class CartController extends ProductController
                 ];
             }
 
-            $mongoCache->save(ShopCartService::getCartId(), $shopCartData, 60*60*24);
+            $mongoCache->save(ShopCartService::getCartId(), $shopCartData, 60*60*24*7);
         }
 
         return new RedirectResponse($referer);
@@ -140,7 +140,7 @@ class CartController extends ProductController
                 unset($shopCartData[$contentTypeName]);
             }
             if (!empty($shopCartData)) {
-                $mongoCache->save(ShopCartService::getCartId(), $shopCartData);
+                $mongoCache->save(ShopCartService::getCartId(), $shopCartData, 60*60*24*7);
             } else {
                 $mongoCache->delete(ShopCartService::getCartId());
             }

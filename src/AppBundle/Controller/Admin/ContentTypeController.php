@@ -28,7 +28,9 @@ class ContentTypeController extends StorageControllerAbstract
         'filters',
         'files',
         'users',
-        'cache'
+        'cache',
+        'order',
+        'order_content'
     ];
 
     /**

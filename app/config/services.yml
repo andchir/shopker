@@ -83,3 +83,8 @@ services:
             - 'app'
             - 86400
             - '%kernel.root_dir%/../var/cache/filecache'
+
+    app.shop_cart:
+        class: AppBundle\Service\ShopCartService
+        public: true
+        arguments: [ "@service_container" ]

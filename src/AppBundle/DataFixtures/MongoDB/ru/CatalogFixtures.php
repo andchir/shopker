@@ -109,7 +109,7 @@ class CatalogFixtures extends Fixture
                 'required' => false,
                 'showInTable' => false,
                 'showInList' => true,
-                'isFilter' => true
+                'isFilter' => false
             ],
             [
                 'title' => 'Описание',
@@ -123,7 +123,8 @@ class CatalogFixtures extends Fixture
                 ],
                 'outputType' => 'textarea',
                 'outputProperties' => [
-                    'className' => ''
+                    'className' => '',
+                    'chunkName' => 'description'
                 ],
                 'group' => 'Основное',
                 'required' => false,

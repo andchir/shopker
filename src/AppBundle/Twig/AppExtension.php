@@ -200,7 +200,7 @@ class AppExtension extends AbstractExtension
      */
     public function categoriesTreeFunction($parentId = 0, $chunkName = 'menu_tree', $data = null, $cacheEnabled = false)
     {
-        $request = $this->container->get('router.request_context');
+        $request = $request = $this->requestStack->getCurrentRequest();
         $currentUri = substr($request->getPathInfo(), 1);
         $uriArr = UtilsService::getUriArray($currentUri);
 

@@ -723,7 +723,9 @@ class ProductController extends BaseProductController
                     }
                     if (!empty($entry[$fieldName])
                         && !in_array($entry[$fieldName], $filterData[$fieldName])) {
-                        $filterData[$fieldName][] = $entry[$fieldName];
+                        $filterData[$fieldName][] = is_array($entry[$fieldName])
+                            ? json_encode($entry[$fieldName])
+                            : $entry[$fieldName];
                     }
                 }
             }

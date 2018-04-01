@@ -26,8 +26,7 @@ class CartController extends ProductController
      */
     public function addAction(Request $request)
     {
-        /** @var SessionInterface $session */
-        $session = $request->getSession();
+        $mongoCache = $this->container->get('mongodb_cache');
         $categoriesRepository = $this->getCategoriesRepository();
         $referer = $request->headers->get('referer');
 
@@ -68,7 +67,7 @@ class CartController extends ProductController
                 ? $productDocument[$priceFieldName]
                 : 0;
 
-            $shopCartData = $session->get('shop_cart');
+            $shopCartData = $mongoCache->fetch(self::getCartId());
             if (!$shopCartData) {
                 $shopCartData = [];
             }
@@ -87,8 +86,7 @@ class CartController extends ProductController
                 ];
             }
 
-            $session->set('shop_cart', $shopCartData);
-            $this->updateCartCookie($shopCartData);
+            $mongoCache->save(self::getCartId(), $shopCartData, 60*60*24);
         }
 
         return new RedirectResponse($referer);
@@ -118,11 +116,10 @@ class CartController extends ProductController
      */
     public function removeItemAction(Request $request, $contentTypeName, $index)
     {
-        /** @var SessionInterface $session */
-        $session = $request->getSession();
+        $mongoCache = $this->container->get('mongodb_cache');
         $referer = $request->headers->get('referer');
 
-        $shopCartData = $session->get('shop_cart');
+        $shopCartData = $mongoCache->fetch(self::getCartId());
         if (!empty($shopCartData)
             && isset($shopCartData[$contentTypeName])
             && isset($shopCartData[$contentTypeName][$index])) {
@@ -131,7 +128,7 @@ class CartController extends ProductController
             if (empty($shopCartData[$contentTypeName])) {
                 unset($shopCartData[$contentTypeName]);
             }
-            $session->set('shop_cart', $shopCartData);
+            $shopCartData->save(self::getCartId(), $shopCartData);
             $this->updateCartCookie($shopCartData);
         }
 
@@ -145,14 +142,33 @@ class CartController extends ProductController
      */
     public function clearAction(Request $request)
     {
-        /** @var SessionInterface $session */
-        $session = $request->getSession();
-        $categoriesRepository = $this->getCategoriesRepository();
+        $mongoCache = $this->container->get('mongodb_cache');
         $referer = $request->headers->get('referer');
 
-        $session->remove('shop_cart');
+        $mongoCache->delete(self::getCartId());
 
         return new RedirectResponse($referer);
+    }
+
+    /**
+     * @return string
+     */
+    public static function getCartId()
+    {
+        $request = Request::createFromGlobals();
+        $response = new Response();
+        $cookies = $request->cookies->all();
+        if (isset($cookies['cart_id'])) {
+            return $cookies['cart_id'];
+        }
+        $cartId = uniqid('shop_cart_' . mt_rand(), true);
+        $response->headers->setCookie(new Cookie(
+            'cart_id',
+            $cartId,
+            time() + (60 * 60 * 24 * 7)
+        ));
+        $response->sendHeaders();
+        return $cartId;
     }
 
     /**

@@ -79,3 +79,17 @@ doctrine_mongodb:
     document_managers:
         default:
             auto_mapping: true
+
+doctrine_cache:
+    aliases:
+        mongodb_cache: mongodb_cache
+    providers:
+        mongodb_cache:
+            mongodb:
+                connection_id: mongo.connection
+                collection_id: mongo.cache_collection
+                server: "mongodb://%mongodb_user%:%mongodb_password%@%mongodb_server%"
+                database_name: "%mongodb_database%"
+                collection_name: "cache"
+            aliases:
+                - mongodb_cache

@@ -52,6 +52,15 @@ services:
         class: Mongo
         factory: ["@mongo.connection", getMongo]
 
+    mongo.database:
+        class: MongoDB
+        factory: ["@mongo", selectDB]
+        arguments: ["%mongodb_database%"]
+
+    mongo.cache_collection:
+        class: MongoCollection
+        arguments: ["@mongo.database", "cache"]
+
     AppBundle\EventListener\ExceptionListener:
         public: true
         tags:

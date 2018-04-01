@@ -2,6 +2,7 @@
 
 namespace AppBundle\Twig;
 
+use AppBundle\Controller\CartController;
 use AppBundle\Controller\CatalogController;
 use AppBundle\Service\UtilsService;
 use Symfony\Component\BrowserKit\Request;
@@ -266,10 +267,9 @@ class AppExtension extends AbstractExtension
         ];
 
         $request = $this->requestStack->getCurrentRequest();
-        /** @var SessionInterface $session */
-        $session = $request->getSession();
+        $mongoCache = $this->container->get('mongodb_cache');
 
-        $shopCartData = $session->get('shop_cart');
+        $shopCartData = $mongoCache->fetch(CartController::getCartId());
         if (empty($shopCartData)) {
             if ($emptyChunkName) {
                 $templateName = $this->getTemplateName('catalog/', $emptyChunkName);

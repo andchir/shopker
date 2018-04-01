@@ -1,8 +1,19 @@
 <div class="shop-cart-bottom">
     <div class="shop-cart-bottom-b">
         <div class="container">
+            <div class="float-md-left">
+                {{ 'Selected' | trans }}:
+                <span class="badge badge-pill badge-light big mx-2">
+                    {{ countTotal }}
+                </span>
+                {{ 'product with a total cost|products with a total cost' | transchoice(countTotal) }}
+                <span class="badge badge-light big mx-2">
+                    {{ priceTotal | price }}
+                </span>
+                руб.
+            </div>
             {% if app.request.attributes.get('_route') not in ['page_checkout','shop_cart_edit'] %}
-                <div class="float-right">
+                <div class="float-md-right mt-3 mt-md-0">
                     <a class="btn btn-outline-light" href="{{ path('shop_cart_edit') }}">
                         {{ 'Proceed to checkout' | trans }}
                     </a>
@@ -11,15 +22,6 @@
                     </a>
                 </div>
             {% endif %}
-            Выбрано
-            <span class="badge badge-pill badge-light big mx-2">
-            {{ countTotal }}
-        </span>
-            товар(ов) на сумму
-            <span class="badge badge-light big mx-2">
-            {{ priceTotal | price }}
-        </span>
-            руб.
             <div class="clearfix"></div>
         </div>
     </div>

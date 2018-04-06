@@ -4,8 +4,10 @@ namespace AppBundle\Controller;
 
 use AppBundle\Document\Category;
 use AppBundle\Document\Order;
+use AppBundle\Document\Setting;
 use AppBundle\Document\User;
 use AppBundle\Repository\CategoryRepository;
+use AppBundle\Service\SettingsService;
 use AppBundle\Service\ShopCartService;
 use Doctrine\ODM\MongoDB\Cursor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -33,8 +35,20 @@ class CheckoutController extends BaseController
     {
         /** @var User $user */
         $user = $this->getUser();
+        /** @var SettingsService $settingsService */
+        $settingsService = $this->get('app.settings');
+
+        $settingsDelivery = $settingsService->getSettingsGroup(Setting::GROUP_DELIVERY);
+
         $order = new Order();
-        $form = $this->createForm(OrderType::class, $order);
+        $form = $this->createForm(OrderType::class, $order, [
+            'choiceDelivery' => $settingsDelivery,
+            // TODO: Get payment settings from database
+            'choicePayment' => [
+                'Оплата онлайн банковской картой',
+                'Оплата при получении товара'
+            ]
+        ]);
         $form->handleRequest($request);
 
         if ($user) {

@@ -41,6 +41,31 @@ class Order
     protected $status;
 
     /**
+     * @MongoDB\Field(type="string", nullable=true)
+     */
+    protected $deliveryName;
+
+    /**
+     * @MongoDB\Field(type="string", nullable=true)
+     */
+    protected $deliveryTitle;
+
+    /**
+     * @MongoDB\Field(type="string", nullable=true)
+     */
+    protected $deliveryPrice;
+
+    /**
+     * @MongoDB\Field(type="string", nullable=true)
+     */
+    protected $paymentName;
+
+    /**
+     * @MongoDB\Field(type="string", nullable=true)
+     */
+    protected $paymentTitle;
+
+    /**
      * @MongoDB\Field(type="integer")
      */
     protected $userId;
@@ -212,5 +237,115 @@ class Order
     public function getAddress()
     {
         return $this->address;
+    }
+
+    /**
+     * Set deliveryName
+     *
+     * @param string $deliveryName
+     * @return $this
+     */
+    public function setDeliveryName($deliveryName)
+    {
+        $this->deliveryName = $deliveryName;
+        return $this;
+    }
+
+    /**
+     * Get deliveryName
+     *
+     * @return string $deliveryName
+     */
+    public function getDeliveryName()
+    {
+        return $this->deliveryName;
+    }
+
+    /**
+     * Set deliveryTitle
+     *
+     * @param string $deliveryTitle
+     * @return $this
+     */
+    public function setDeliveryTitle($deliveryTitle)
+    {
+        $this->deliveryTitle = $deliveryTitle;
+        return $this;
+    }
+
+    /**
+     * Get deliveryTitle
+     *
+     * @return string $deliveryTitle
+     */
+    public function getDeliveryTitle()
+    {
+        return $this->deliveryTitle;
+    }
+
+    /**
+     * Set deliveryPrice
+     *
+     * @param string $deliveryPrice
+     * @return $this
+     */
+    public function setDeliveryPrice($deliveryPrice)
+    {
+        $this->deliveryPrice = $deliveryPrice;
+        return $this;
+    }
+
+    /**
+     * Get deliveryPrice
+     *
+     * @return string $deliveryPrice
+     */
+    public function getDeliveryPrice()
+    {
+        return $this->deliveryPrice;
+    }
+
+    /**
+     * Set paymentName
+     *
+     * @param string $paymentName
+     * @return $this
+     */
+    public function setPaymentName($paymentName)
+    {
+        $this->paymentName = $paymentName;
+        return $this;
+    }
+
+    /**
+     * Get paymentName
+     *
+     * @return string $paymentName
+     */
+    public function getPaymentName()
+    {
+        return $this->paymentName;
+    }
+
+    /**
+     * Set paymentTitle
+     *
+     * @param string $paymentTitle
+     * @return $this
+     */
+    public function setPaymentTitle($paymentTitle)
+    {
+        $this->paymentTitle = $paymentTitle;
+        return $this;
+    }
+
+    /**
+     * Get paymentTitle
+     *
+     * @return string $paymentTitle
+     */
+    public function getPaymentTitle()
+    {
+        return $this->paymentTitle;
     }
 }

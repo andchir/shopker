@@ -24,10 +24,6 @@ use AppBundle\Document\Setting;
  */
 class SettingsController extends Controller
 {
-    const GROUP_MAIN = 'SETTINGS_MAIN';
-    const GROUP_DELIVERY = 'SETTINGS_DELIVERY';
-    const GROUP_ORDER_STATUSES = 'SETTINGS_ORDER_STATUSES';
-
     /**
      * @Route("")
      * @Method({"GET"})
@@ -38,17 +34,17 @@ class SettingsController extends Controller
     public function getList(SerializerInterface $serializer)
     {
         $output = [
-            self::GROUP_MAIN => [],
-            self::GROUP_DELIVERY => [],
-            self::GROUP_ORDER_STATUSES => []
+            Setting::GROUP_MAIN => [],
+            Setting::GROUP_DELIVERY => [],
+            Setting::GROUP_ORDER_STATUSES => []
         ];
 
-        $output[self::GROUP_MAIN] = $this->getSettingsFromYaml('settings');
-        $output[self::GROUP_DELIVERY] = $this->getRepository()->findBy([
-            'groupName' => self::GROUP_DELIVERY
+        $output[Setting::GROUP_MAIN] = $this->getSettingsFromYaml('settings');
+        $output[Setting::GROUP_DELIVERY] = $this->getRepository()->findBy([
+            'groupName' => Setting::GROUP_DELIVERY
         ], ['id' => 'asc']);
-        $output[self::GROUP_ORDER_STATUSES] = $this->getRepository()->findBy([
-            'groupName' => self::GROUP_ORDER_STATUSES
+        $output[Setting::GROUP_ORDER_STATUSES] = $this->getRepository()->findBy([
+            'groupName' => Setting::GROUP_ORDER_STATUSES
         ], ['id' => 'asc']);
 
         $output = $serializer->serialize($output, 'json', ['groups' => ['list']]);
@@ -69,7 +65,7 @@ class SettingsController extends Controller
         $data = json_decode($request->getContent(), true);
 
         switch ($groupName) {
-            case self::GROUP_MAIN:
+            case Setting::GROUP_MAIN:
 
                 $settings = $this->getSettingsFromYaml('settings', false);
                 $data = self::transformParametersInverse($data);

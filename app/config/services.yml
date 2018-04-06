@@ -32,6 +32,10 @@ services:
         resource: '../../src/AppBundle/Controller/Admin/*'
         tags: ['controller.service_arguments']
 
+    AppBundle\Form\DataTransformer\SettingToStringTransformer:
+        public: true
+        arguments: ["@doctrine.odm.mongodb.document_manager"]
+
     get_set_method_normalizer:
         class: Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer
         tags: [serializer.normalizer]
@@ -61,11 +65,11 @@ services:
         class: MongoCollection
         arguments: ["@mongo.database", "cache"]
 
-    AppBundle\EventListener\ExceptionListener:
-        public: true
-        tags:
-            - { name: kernel.event_listener, event: kernel.exception }
-        arguments: [ '@twig', '@service_container' ]
+#    AppBundle\EventListener\ExceptionListener:
+#        public: true
+#        tags:
+#            - { name: kernel.event_listener, event: kernel.exception }
+#        arguments: [ '@twig', '@service_container' ]
 
     AppBundle\EventListener\KernelEventListener:
         tags:
@@ -86,5 +90,10 @@ services:
 
     app.shop_cart:
         class: AppBundle\Service\ShopCartService
+        public: true
+        arguments: [ "@service_container" ]
+
+    app.settings:
+        class: AppBundle\Service\SettingsService
         public: true
         arguments: [ "@service_container" ]

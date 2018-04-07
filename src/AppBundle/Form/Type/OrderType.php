@@ -18,11 +18,16 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class OrderType extends AbstractType
 {
-    private $transformer;
+    private $deliveryTransformer;
+    private $paymentTransformer;
 
-    public function __construct(SettingToStringTransformer $transformer)
+    public function __construct(
+        SettingToStringTransformer $deliveryTransformer,
+        SettingToStringTransformer $paymentTransformer
+    )
     {
-        $this->transformer = $transformer;
+        $this->deliveryTransformer = $deliveryTransformer->setGroupName(Setting::GROUP_DELIVERY);
+        $this->paymentTransformer = $paymentTransformer->setGroupName(Setting::GROUP_PAYMENT);
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -31,7 +36,12 @@ class OrderType extends AbstractType
             ->add('email', EmailType::class, [
                 'constraints' => new Email()
             ])
-            ->add('fullName', TextType::class)
+            ->add('fullName', TextType::class, [
+                'constraints' => new NotBlank()
+            ])
+            ->add('phone', TextType::class, [
+                'required' => false
+            ])
             ->add('address', TextType::class)
             ->add('deliveryName', ChoiceType::class, [
                 'label' => 'Delivery method',
@@ -40,10 +50,6 @@ class OrderType extends AbstractType
                     /** @var Setting $setting */
                     return $setting->getName();
                 },
-//                'choice_value' => function($setting) {
-//                    /** @var Setting $setting */
-//                    return $setting ? $setting->getName() : '';
-//                },
                 'invalid_message' => 'That is not a valid delivery method.',
                 'constraints' => new NotBlank()
             ])
@@ -51,16 +57,10 @@ class OrderType extends AbstractType
                 'label' => 'Payment method',
                 'choices'  => $options['choicePayment'],
                 'choice_label' => function($setting, $key, $index) {
-//                    /** @var Setting $setting */
-//                    return $setting->getName();
-                    return $setting;
+                    /** @var Setting $setting */
+                    return $setting->getName();
                 },
-                'choice_value' => function($setting) {
-//                    /** @var Setting $setting */
-//                    return $setting->getName();
-                    return $setting;
-                },
-//                'mapped' => false,
+                'invalid_message' => 'That is not a valid payment method.',
                 'constraints' => new NotBlank()
             ])
             ->add('comment', TextareaType::class, [
@@ -72,8 +72,8 @@ class OrderType extends AbstractType
                 'attr' => ['class' => 'btn btn-info btn-lg']
             ]);
 
-        $builder->get('deliveryName')
-            ->addModelTransformer($this->transformer);
+        $builder->get('deliveryName')->addModelTransformer($this->deliveryTransformer);
+        $builder->get('paymentName')->addModelTransformer($this->paymentTransformer);
     }
 
     public function configureOptions(OptionsResolver $resolver)

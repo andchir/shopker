@@ -26,6 +26,11 @@ class Order
     protected $fullName;
 
     /**
+     * @MongoDB\Field(type="string", nullable=true)
+     */
+    protected $phone;
+
+    /**
      * @MongoDB\Field(type="string")
      */
     protected $address;
@@ -34,6 +39,11 @@ class Order
      * @MongoDB\Field(type="date", nullable=true)
      */
     protected $createdDate;
+
+    /**
+     * @MongoDB\Field(type="date", nullable=true)
+     */
+    protected $updatedDate;
 
     /**
      * @MongoDB\Field(type="string")
@@ -48,11 +58,6 @@ class Order
     /**
      * @MongoDB\Field(type="string", nullable=true)
      */
-    protected $deliveryTitle;
-
-    /**
-     * @MongoDB\Field(type="string", nullable=true)
-     */
     protected $deliveryPrice;
 
     /**
@@ -63,7 +68,7 @@ class Order
     /**
      * @MongoDB\Field(type="string", nullable=true)
      */
-    protected $paymentTitle;
+    protected $paymentValue;
 
     /**
      * @MongoDB\Field(type="integer")
@@ -74,6 +79,28 @@ class Order
      * @MongoDB\Field(type="string", nullable=true)
      */
     protected $comment;
+
+    /**
+     * @MongoDB\Field(type="string", nullable=true)
+     */
+    protected $note;
+
+    /**
+     * @MongoDB\PrePersist()
+     */
+    public function prePersist()
+    {
+        $this->createdDate = new \DateTime();
+        $this->updatedDate = new \DateTime();
+    }
+
+    /**
+     * @MongoDB\PreUpdate()
+     */
+    public function preUpdate()
+    {
+        $this->updatedDate = new \DateTime();
+    }
 
     /**
      * Get id
@@ -105,6 +132,28 @@ class Order
     public function getCreatedDate()
     {
         return $this->createdDate;
+    }
+
+    /**
+     * Set updatedDate
+     *
+     * @param \DateTime $updatedDate
+     * @return $this
+     */
+    public function setUpdatedDate($updatedDate)
+    {
+        $this->updatedDate = $updatedDate;
+        return $this;
+    }
+
+    /**
+     * Get updatedDate
+     *
+     * @return \DateTime $updatedDate
+     */
+    public function getUpdatedDate()
+    {
+        return $this->updatedDate;
     }
 
     /**
@@ -218,6 +267,28 @@ class Order
     }
 
     /**
+     * Set phone
+     *
+     * @param string $phone
+     * @return $this
+     */
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+        return $this;
+    }
+
+    /**
+     * Get phone
+     *
+     * @return string $phone
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+    /**
      * Set address
      *
      * @param string $address
@@ -259,28 +330,6 @@ class Order
     public function getDeliveryName()
     {
         return $this->deliveryName;
-    }
-
-    /**
-     * Set deliveryTitle
-     *
-     * @param string $deliveryTitle
-     * @return $this
-     */
-    public function setDeliveryTitle($deliveryTitle)
-    {
-        $this->deliveryTitle = $deliveryTitle;
-        return $this;
-    }
-
-    /**
-     * Get deliveryTitle
-     *
-     * @return string $deliveryTitle
-     */
-    public function getDeliveryTitle()
-    {
-        return $this->deliveryTitle;
     }
 
     /**
@@ -328,24 +377,46 @@ class Order
     }
 
     /**
-     * Set paymentTitle
+     * Set paymentValue
      *
-     * @param string $paymentTitle
+     * @param string $paymentValue
      * @return $this
      */
-    public function setPaymentTitle($paymentTitle)
+    public function setPaymentValue($paymentValue)
     {
-        $this->paymentTitle = $paymentTitle;
+        $this->paymentValue = $paymentValue;
         return $this;
     }
 
     /**
-     * Get paymentTitle
+     * Get paymentValue
      *
-     * @return string $paymentTitle
+     * @return string $paymentValue
      */
-    public function getPaymentTitle()
+    public function getPaymentValue()
     {
-        return $this->paymentTitle;
+        return $this->paymentValue;
+    }
+
+    /**
+     * Set note
+     *
+     * @param string $note
+     * @return $this
+     */
+    public function setNote($note)
+    {
+        $this->note = $note;
+        return $this;
+    }
+
+    /**
+     * Get note
+     *
+     * @return string $note
+     */
+    public function getNote()
+    {
+        return $this->note;
     }
 }

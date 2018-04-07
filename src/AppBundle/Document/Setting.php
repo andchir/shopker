@@ -161,4 +161,19 @@ class Setting
         $this->setOptions($options);
     }
 
+    /**
+     * @param string $optionName
+     * @return mixed
+     */
+    public function getOption($optionName)
+    {
+        $output = null;
+        $options = $this->getOptions();
+        if (isset($options[$optionName])
+            && isset($options[$optionName]['value'])) {
+                $output = $options[$optionName]['value'];
+        }
+        return $output;
+    }
+
 }

@@ -20,11 +20,13 @@ class SettingToStringTransformer implements DataTransformerInterface
     }
 
     /**
-     * @param $groupName
+     * @param string $groupName
+     * @return $this
      */
     public function setGroupName($groupName)
     {
         $this->groupName = $groupName;
+        return $this;
     }
 
     /**

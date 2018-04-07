@@ -39,15 +39,12 @@ class CheckoutController extends BaseController
         $settingsService = $this->get('app.settings');
 
         $settingsDelivery = $settingsService->getSettingsGroup(Setting::GROUP_DELIVERY);
+        $settingsPayment = $settingsService->getSettingsGroup(Setting::GROUP_PAYMENT);
 
         $order = new Order();
         $form = $this->createForm(OrderType::class, $order, [
             'choiceDelivery' => $settingsDelivery,
-            // TODO: Get payment settings from database
-            'choicePayment' => [
-                'Оплата онлайн банковской картой',
-                'Оплата при получении товара'
-            ]
+            'choicePayment' => $settingsPayment
         ]);
         $form->handleRequest($request);
 
@@ -57,6 +54,18 @@ class CheckoutController extends BaseController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // $form->addError(new FormError('Error.'));
+
+            /** @var Setting $delivery */
+            $delivery = $form->get('deliveryName')->getNormData();
+            $deliveryPrice = $delivery ? $delivery->getOption('price') : 0;
+
+            /** @var Setting $payment */
+            $payment = $form->get('paymentName')->getNormData();
+            $paymentName = $payment ? $payment->getOption('value') : '';
+
+            $order
+                ->setDeliveryPrice($deliveryPrice)
+                ->setPaymentValue($paymentName);
 
             /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
             $dm = $this->get('doctrine_mongodb')->getManager();

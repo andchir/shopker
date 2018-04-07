@@ -86,6 +86,11 @@ class Order
     protected $note;
 
     /**
+     * @MongoDB\Field(type="hash", nullable=true)
+     */
+    protected $content;
+
+    /**
      * @MongoDB\PrePersist()
      */
     public function prePersist()
@@ -418,5 +423,27 @@ class Order
     public function getNote()
     {
         return $this->note;
+    }
+
+    /**
+     * Set content
+     *
+     * @param array $content
+     * @return $this
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+        return $this;
+    }
+
+    /**
+     * Get content
+     *
+     * @return array $content
+     */
+    public function getContent()
+    {
+        return $this->content;
     }
 }

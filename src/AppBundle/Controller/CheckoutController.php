@@ -53,7 +53,6 @@ class CheckoutController extends BaseController
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // $form->addError(new FormError('Error.'));
 
             /** @var Setting $delivery */
             $delivery = $form->get('deliveryName')->getNormData();
@@ -63,24 +62,32 @@ class CheckoutController extends BaseController
             $payment = $form->get('paymentName')->getNormData();
             $paymentName = $payment ? $payment->getOption('value') : '';
 
-            $order
-                ->setDeliveryPrice($deliveryPrice)
-                ->setPaymentValue($paymentName);
-
-            /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-            $dm = $this->get('doctrine_mongodb')->getManager();
-            $dm->persist($order);
-            $dm->flush();
-
             /** @var ShopCartService $shopCartService */
             $shopCartService = $this->get('app.shop_cart');
-            $shopCartService->clearContent();
+            $products = $shopCartService->getContent();
+            if (empty($products)) {
+                $form->addError(new FormError('Your cart is empty.'));
+            }
+            if ($form->isValid()) {
 
-            $request->getSession()
-                ->getFlashBag()
-                ->add('messages', 'Thanks for your order!');
+                $order
+                    ->setDeliveryPrice($deliveryPrice)
+                    ->setPaymentValue($paymentName)
+                    ->setContent($products);
 
-            return $this->redirectToRoute('page_checkout_success');
+                /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+                $dm = $this->get('doctrine_mongodb')->getManager();
+                $dm->persist($order);
+                $dm->flush();
+
+                $shopCartService->clearContent();
+
+                $request->getSession()
+                    ->getFlashBag()
+                    ->add('messages', 'Thanks for your order!');
+
+                return $this->redirectToRoute('page_checkout_success');
+            }
         }
 
         return $this->render('page_checkout.html.twig', [

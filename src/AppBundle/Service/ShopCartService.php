@@ -19,6 +19,15 @@ class ShopCartService
     }
 
     /**
+     * @return array|null
+     */
+    public function getContent()
+    {
+        $mongoCache = $this->container->get('mongodb_cache');
+        return $mongoCache->fetch(self::getCartId());
+    }
+
+    /**
      * Clear shopping cart data
      */
     public function clearContent()

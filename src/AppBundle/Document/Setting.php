@@ -11,8 +11,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Setting
 {
     const GROUP_MAIN = 'SETTINGS_MAIN';
-    const GROUP_DELIVERY = 'SETTINGS_DELIVERY';
     const GROUP_ORDER_STATUSES = 'SETTINGS_ORDER_STATUSES';
+    const GROUP_DELIVERY = 'SETTINGS_DELIVERY';
+    const GROUP_PAYMENT = 'SETTINGS_PAYMENT';
 
     /**
      * @MongoDB\Id(type="int", strategy="INCREMENT")

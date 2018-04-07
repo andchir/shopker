@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Admin;
 
+use AppBundle\Service\SettingsService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -33,19 +34,20 @@ class SettingsController extends Controller
      */
     public function getList(SerializerInterface $serializer)
     {
+        /** @var SettingsService $settingsService */
+        $settingsService = $this->get('app.settings');
+
         $output = [
             Setting::GROUP_MAIN => [],
+            Setting::GROUP_ORDER_STATUSES => [],
             Setting::GROUP_DELIVERY => [],
-            Setting::GROUP_ORDER_STATUSES => []
+            Setting::GROUP_PAYMENT => []
         ];
 
         $output[Setting::GROUP_MAIN] = $this->getSettingsFromYaml('settings');
-        $output[Setting::GROUP_DELIVERY] = $this->getRepository()->findBy([
-            'groupName' => Setting::GROUP_DELIVERY
-        ], ['id' => 'asc']);
-        $output[Setting::GROUP_ORDER_STATUSES] = $this->getRepository()->findBy([
-            'groupName' => Setting::GROUP_ORDER_STATUSES
-        ], ['id' => 'asc']);
+        $output[Setting::GROUP_ORDER_STATUSES] = $settingsService->getSettingsGroup(Setting::GROUP_ORDER_STATUSES);
+        $output[Setting::GROUP_DELIVERY] = $settingsService->getSettingsGroup(Setting::GROUP_DELIVERY);
+        $output[Setting::GROUP_PAYMENT] = $settingsService->getSettingsGroup(Setting::GROUP_PAYMENT);
 
         $output = $serializer->serialize($output, 'json', ['groups' => ['list']]);
 

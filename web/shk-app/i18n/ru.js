@@ -49,6 +49,7 @@ var APP_LANG = {
     "SETTINGS_DELIVERY": "Методы доставки",
     "SETTINGS_MAIN": "Основные настройки",
     "SETTINGS_ORDER_STATUSES": "Статусы заказов",
+    "SETTINGS_PAYMENT": "Методы оплаты",
     "SHOW_IN_FILTER": "Показывать в фильтре",
     "SHOW_IN_LIST": "Показывать в списке",
     "SHOW_IN_TABLE": "Показывать в таблице",

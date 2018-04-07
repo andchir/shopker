@@ -18,6 +18,13 @@ export class SettingsComponent implements OnInit {
     forms: {[key: string]: FormGroup} = {};
     settings = {
         SETTINGS_MAIN: new SettingsData(false, true, [], null),
+        SETTINGS_ORDER_STATUSES: new SettingsData(
+            false, true, [],
+            {
+                template: {value: 'userEmailStatus', type: 'text'},
+                color: {value: '#00aeff', type: 'text'}
+            }
+        ),
         SETTINGS_DELIVERY: new SettingsData(
             false, true, [],
             {
@@ -25,11 +32,10 @@ export class SettingsComponent implements OnInit {
                 priceLimit: {value: 0, type: 'number'}
             }
         ),
-        SETTINGS_ORDER_STATUSES: new SettingsData(
+        SETTINGS_PAYMENT: new SettingsData(
             false, true, [],
             {
-                template: {value: 'userEmailStatus', type: 'text'},
-                color: {value: '#00aeff', type: 'text'}
+                value: {value: '', type: 'text'}
             }
         )
     };
@@ -60,6 +66,11 @@ export class SettingsComponent implements OnInit {
                     this.settings.SETTINGS_DELIVERY.values = res['SETTINGS_DELIVERY'];
                     this.settings.SETTINGS_DELIVERY.defaultValues = _.cloneDeep(res['SETTINGS_DELIVERY']);
                     this.settings.SETTINGS_DELIVERY.loading = false;
+                }
+                if (res['SETTINGS_PAYMENT']) {
+                    this.settings.SETTINGS_PAYMENT.values = res['SETTINGS_PAYMENT'];
+                    this.settings.SETTINGS_PAYMENT.defaultValues = _.cloneDeep(res['SETTINGS_PAYMENT']);
+                    this.settings.SETTINGS_PAYMENT.loading = false;
                 }
             });
     }

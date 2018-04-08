@@ -40,7 +40,7 @@ const routes: Routes = [
             {
                 path: 'field_types',
                 component: FieldTypesComponent
-            },
+            }
         ]
     },
     {

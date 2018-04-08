@@ -64,8 +64,8 @@ class CheckoutController extends BaseController
 
             /** @var ShopCartService $shopCartService */
             $shopCartService = $this->get('app.shop_cart');
-            $products = $shopCartService->getContent();
-            if (empty($products)) {
+            $shopCartData = $shopCartService->getContent();
+            if (empty($shopCartData)) {
                 $form->addError(new FormError('Your cart is empty.'));
             }
             if ($form->isValid()) {
@@ -73,7 +73,8 @@ class CheckoutController extends BaseController
                 $order
                     ->setDeliveryPrice($deliveryPrice)
                     ->setPaymentValue($paymentName)
-                    ->setContent($products);
+                    ->setContentFromCart($shopCartData)
+                    ->setPrice($shopCartService->getPriceTotal($shopCartData));
 
                 /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
                 $dm = $this->get('doctrine_mongodb')->getManager();

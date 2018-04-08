@@ -56,4 +56,22 @@ class ShopCartService
         $response->sendHeaders();
         return $cartId;
     }
+
+    /**
+     * @param array|null $shopCartData
+     * @return float
+     */
+    public function getPriceTotal($shopCartData = null)
+    {
+        if ($shopCartData === null) {
+            $shopCartData = $this->getContent();
+        }
+        $priceTotal = 0;
+        foreach ($shopCartData as $cName => $products) {
+            foreach ($products as $product) {
+                $priceTotal += ($product['price'] * $product['count']);
+            }
+        }
+        return $priceTotal;
+    }
 }

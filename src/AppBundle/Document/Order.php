@@ -86,6 +86,11 @@ class Order
     protected $note;
 
     /**
+     * @MongoDB\Field(type="float")
+     */
+    protected $price;
+
+    /**
      * @MongoDB\Field(type="hash", nullable=true)
      */
     protected $content;
@@ -445,5 +450,67 @@ class Order
     public function getContent()
     {
         return $this->content;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'id' => $this->getId(),
+            'userId' => $this->getUserId(),
+            'price' => $this->getPrice(),
+            'email' => $this->getEmail(),
+            'fullName' => $this->getFullName(),
+            'address' => $this->getAddress(),
+            'createdDate' => $this->getCreatedDate(),
+            'updatedDate' => $this->getUpdatedDate(),
+            'deliveryName' => $this->getDeliveryName(),
+            'deliveryPrice' => $this->getDeliveryPrice(),
+            'paymentName' => $this->getPaymentName(),
+            'deliveryValue' => $this->getPaymentValue(),
+            'comment' => $this->getComment()
+        ];
+    }
+
+    /**
+     * @param $shopCartData
+     * @return $this
+     */
+    public function setContentFromCart($shopCartData)
+    {
+        $content = [];
+        foreach ($shopCartData as $contentTypeName => $products) {
+            foreach ($products as $product) {
+                $content[] = array_merge($product, [
+                    'contentTypeName' => $contentTypeName
+                ]);
+            }
+        }
+        $this->content = $content;
+        return $this;
+    }
+
+    /**
+     * Set price
+     *
+     * @param float $price
+     * @return $this
+     */
+    public function setPrice($price)
+    {
+        $this->price = $price;
+        return $this;
+    }
+
+    /**
+     * Get price
+     *
+     * @return float $price
+     */
+    public function getPrice()
+    {
+        return $this->price;
     }
 }

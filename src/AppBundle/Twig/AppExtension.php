@@ -292,7 +292,7 @@ class AppExtension extends AbstractExtension
                     $properties['countTotal'] += $product['count'];
                 }
                 if (isset($product['price'])) {
-                    $properties['priceTotal'] += $product['price'];
+                    $properties['priceTotal'] += $product['price'] * $product['count'];
                 }
             }
         }

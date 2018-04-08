@@ -1,38 +1,32 @@
 <div class="card">
     <div class="card-body">
+
+        <h3>
+            <i class="icon-bag"></i>
+            {{'ORDERS' | translate}}
+        </h3>
+        <hr>
+
         <div class="mb-3">
-            <h3>
-                <i class="icon-bag"></i>
-                {{'ORDERS' | translate}}
-            </h3>
-
-            <hr>
-
             <div class="float-right">
 
-                <div ngbDropdown class="d-inline-block">
-                    <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
-                        {{'BATCH_ACTIONS' | translate}}
+                <div ngbDropdown class="d-inline-block mr-1">
+                    <button class="btn btn-info" ngbDropdownToggle>
+                        <span>{{'BATCH_ACTIONS' | translate}}</span>
                     </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownBasic1">
-                        <button class="dropdown-item">Изменить статус</button>
-                        <button class="dropdown-item">{{'DELETE' | translate}}</button>
+                    <div ngbDropdownMenu>
+                        <button class="dropdown-item" (click)="blockSelected()">{{'DISABLE_ENABLE' | translate}}</button>
+                        <button class="dropdown-item" (click)="deleteSelected()">{{'DELETE' | translate}}</button>
                     </div>
                 </div>
 
             </div>
             <div class="float-left">
 
-                <div class="input-group">
-                    <input type="text" class="form-control" name="dp" ngbDatepicker #d="ngbDatepicker">
-                    <div class="input-group-append">
-                        <button class="btn btn-secondary" (click)="d.toggle()" type="button">
-                            <i class="icon-date_range"></i>
-                        </button>
-                    </div>
-                </div>
+
 
             </div>
+            <div class="clearfix"></div>
         </div>
 
         <cmp-table [items]="items"

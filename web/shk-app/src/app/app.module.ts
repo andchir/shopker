@@ -10,7 +10,7 @@ import { TranslateCustomLoader } from './services/translateLoader';
 
 import { AppComponent, AlertModalContent, ConfirmModalContent } from './app.component';
 import { NotFoundComponent } from './not-found.component';
-import { OrdersComponent } from './orders.component';
+import { ModalOrderContent, OrdersComponent } from './orders.component';
 import { CatalogComponent } from './catalog.component';
 import { CatalogCategoryComponent } from './catalog-category.component';
 import { ProductModalContent } from './product.component';
@@ -83,7 +83,8 @@ import { AppRoutingModule }     from './app-routing.module';
         ProductModalContent,
         ContentTypeModalContent,
         CategoriesModalComponent,
-        FieldTypeModalContent
+        FieldTypeModalContent,
+        ModalOrderContent
     ],
     providers: [
         AppSettings,
@@ -99,7 +100,8 @@ import { AppRoutingModule }     from './app-routing.module';
         ProductModalContent,
         ContentTypeModalContent,
         CategoriesModalComponent,
-        FieldTypeModalContent
+        FieldTypeModalContent,
+        ModalOrderContent
     ],
     bootstrap: [ AppComponent ]
 })

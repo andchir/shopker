@@ -40,8 +40,8 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent<Conte
         super(fb, dataService, systemNameService, activeModal, tooltipConfig);
     }
 
-    model: ContentType = new ContentType(0, '', '', '', 'products', [], ['General','Service'], true);
-    fieldModel: ContentField = new ContentField(0, '', '', '', '', {}, '', {}, '', false, false, false);
+    model = new ContentType(0, '', '', '', 'products', [], ['General','Service'], true);
+    fieldModel = new ContentField(0, '', '', '', '', {}, '', {}, '', false, false, false);
     fld_submitted: boolean = false;
     errorFieldMessage: string;
     action: string = 'add_field';

@@ -10,6 +10,22 @@ use Doctrine\ODM\MongoDB\DocumentRepository;
  */
 class SettingRepository extends DocumentRepository
 {
+    /**
+     * @return array
+     */
+    public function getAll()
+    {
+        $output = [];
+        $settings = $this->findBy([], ['id' => 'asc']);
+        /** @var Setting $setting */
+        foreach ($settings as $setting) {
+            if (!isset($output[$setting->getGroupName()])) {
+                $output[$setting->getGroupName()] = [];
+            }
+            $output[$setting->getGroupName()][] = $setting;
+        }
+        return $output;
+    }
 
     /**
      * @param $groupName

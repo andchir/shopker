@@ -453,6 +453,19 @@ class Order
     }
 
     /**
+     * @return int
+     */
+    public function getContentCount()
+    {
+        $countTotal = 0;
+        $contentArr = $this->getContent();
+        foreach ($contentArr as $content) {
+            $countTotal += $content['count'];
+        }
+        return $countTotal;
+    }
+
+    /**
      * @return array
      */
     public function toArray()
@@ -470,7 +483,9 @@ class Order
             'deliveryPrice' => $this->getDeliveryPrice(),
             'paymentName' => $this->getPaymentName(),
             'deliveryValue' => $this->getPaymentValue(),
-            'comment' => $this->getComment()
+            'comment' => $this->getComment(),
+            'status' => $this->getStatus(),
+            'contentCount' => $this->getContentCount()
         ];
     }
 

@@ -38,13 +38,12 @@ class CheckoutController extends BaseController
         /** @var SettingsService $settingsService */
         $settingsService = $this->get('app.settings');
 
-        $settingsDelivery = $settingsService->getSettingsGroup(Setting::GROUP_DELIVERY);
-        $settingsPayment = $settingsService->getSettingsGroup(Setting::GROUP_PAYMENT);
+        $settings = $settingsService->getAll();
 
         $order = new Order();
         $form = $this->createForm(OrderType::class, $order, [
-            'choiceDelivery' => $settingsDelivery,
-            'choicePayment' => $settingsPayment
+            'choiceDelivery' => $settings[Setting::GROUP_DELIVERY],
+            'choicePayment' => $settings[Setting::GROUP_PAYMENT]
         ]);
         $form->handleRequest($request);
 
@@ -70,11 +69,16 @@ class CheckoutController extends BaseController
             }
             if ($form->isValid()) {
 
+                $statusName = !empty($settings[Setting::GROUP_ORDER_STATUSES])
+                    ? $settings[Setting::GROUP_ORDER_STATUSES][0]->getName()
+                    : '';
+
                 $order
                     ->setDeliveryPrice($deliveryPrice)
                     ->setPaymentValue($paymentName)
                     ->setContentFromCart($shopCartData)
-                    ->setPrice($shopCartService->getPriceTotal($shopCartData));
+                    ->setPrice($shopCartService->getPriceTotal($shopCartData))
+                    ->setStatus($statusName);
 
                 /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
                 $dm = $this->get('doctrine_mongodb')->getManager();

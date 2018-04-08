@@ -55,4 +55,11 @@ export class OutputFieldComponent implements OnInit {
         return object1;
     }
 
+    createDate(dateObject: {date: string, timezone: string, timezone_type: number}): Date {
+        if (typeof dateObject !== 'object' || !dateObject.date) {
+            return null;
+        }
+        return new Date(dateObject.date);
+    }
+
 }

@@ -14,6 +14,8 @@ var APP_LANG = {
     "CONTENT_COUNT": "Кол-во товаров",
     "CONTENT_TYPE": "Тип контента",
     "CONTENT_TYPES": "Типы контента",
+    "DATE": "Дата",
+    "DATE_TIME": "Дата и время",
     "DEFAULT_VALUE": "Значение по умолчанию",
     "DELETE": "Удалить",
     "DESCRIPTION": "Описание",

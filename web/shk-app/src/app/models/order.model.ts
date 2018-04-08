@@ -1,9 +1,22 @@
+export class OrderContent {
+    constructor(
+        public id: number,
+        public title: string,
+        public count: number,
+        public price: number,
+        public contentTypeName: string,
+        public uri?: string,
+        public image?: string
+    ){}
+}
+
 export class Order {
     constructor(
         public id: number,
         public userId: number,
         public status: string,
         public email: string,
+        public phone: string,
         public fullName?: string,
         public address?: string,
         public deliveryName?: string,
@@ -11,6 +24,7 @@ export class Order {
         public paymentName?: string,
         public paymentValue?: string,
         public comment?: string,
-        public contentCount?: number
+        public contentCount?: number,
+        public content?: OrderContent[]
     ) { }
 }

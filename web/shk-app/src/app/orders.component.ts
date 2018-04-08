@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NgbModal, NgbActiveModal, NgbModalRef, NgbPopover, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { SystemNameService } from './services/system-name.service';
 
 import { Order } from './models/order.model';
@@ -18,6 +18,45 @@ export class ModalOrderContent extends ModalContentAbstractComponent<Order> {
     model = new Order(0, 0, '', '');
     modalTitle = 'Order';
 
+    formFields = {
+        id: {
+            value: '',
+            validators: [Validators.required],
+            messages: {
+                required: 'ID is required.'
+            }
+        },
+        email: {
+            value: '',
+            validators: [Validators.required],
+            messages: {
+                required: 'Email is required.'
+            }
+        },
+        phone: {
+            value: '',
+            validators: [],
+            messages: {}
+        },
+        fullName: {
+            value: '',
+            validators: [Validators.required],
+            messages: {
+                required: 'Full name is required.'
+            }
+        },
+        address: {
+            value: '',
+            validators: [],
+            messages: {}
+        },
+        comment: {
+            value: '',
+            validators: [],
+            messages: {}
+        }
+    };
+
     constructor(
         public fb: FormBuilder,
         public dataService: OrdersService,
@@ -30,6 +69,8 @@ export class ModalOrderContent extends ModalContentAbstractComponent<Order> {
     }
 
     save(): void {
+
+        console.log('SAVE');
 
     }
 }
@@ -76,12 +117,21 @@ export class OrdersComponent extends PageTableAbstractComponent<Order> {
             outputProperties: {}
         },
         {
-            name: 'email',
-            title: 'EMAIL',
-            outputType: 'text',
-            outputProperties: {}
+            name: 'createdDate',
+            title: 'DATE_TIME',
+            outputType: 'dateObject',
+            outputProperties: {
+                format: 'dd/MM/y H:mm:s'
+            }
         }
     ];
+
+    setModalInputs(itemId?: number, isItemCopy: boolean = false): void {
+        this.modalRef.componentInstance.modalTitle = `Order #${itemId}`;
+        this.modalRef.componentInstance.itemId = itemId || 0;
+        this.modalRef.componentInstance.isItemCopy = isItemCopy || false;
+        this.modalRef.componentInstance.isEditMode = true;
+    }
 
     getModalContent(){
         return ModalOrderContent;

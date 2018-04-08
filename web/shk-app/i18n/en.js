@@ -14,6 +14,8 @@ var APP_LANG = {
     "CONTENT_COUNT": "Number of products",
     "CONTENT_TYPE": "Content type",
     "CONTENT_TYPES": "Content types",
+    "DATE": "Date",
+    "DATE_TIME": "Date time",
     "DEFAULT_VALUE": "Default value",
     "DELETE": "Delete",
     "DESCRIPTION": "Description",

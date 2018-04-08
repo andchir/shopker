@@ -11,7 +11,71 @@
 
     <div class="modal-body">
 
+        <div class="row">
+            <div class="col-lg-6" [formGroup]="form">
+                <div class="form-group" [class.form-group-message]="formErrors.id">
+                    <label class="label-filled">
+                        {{'ID' | translate}}
+                    </label>
+                    <input type="text" class="form-control" name="id" formControlName="id" [(ngModel)]="model.id" readonly>
+                </div>
+            </div>
+            <div class="col-lg-6" [formGroup]="form">
+                <div class="form-group" [class.form-group-message]="formErrors.fullName">
+                    <label class="label-filled">
+                        {{'FULL_NAME' | translate}}
+                    </label>
+                    <input type="text" class="form-control" name="title" formControlName="fullName" [(ngModel)]="model.fullName">
+                    <div *ngIf="formErrors.fullName" class="alert alert-danger">
+                        {{formErrors.fullName}}
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <div class="row">
+            <div class="col-lg-6" [formGroup]="form">
+                <div class="form-group" [class.form-group-message]="formErrors.email">
+                    <label class="label-filled">
+                        {{'EMAIL' | translate}}
+                    </label>
+                    <input type="text" class="form-control" name="title" formControlName="email" [(ngModel)]="model.email">
+                    <div *ngIf="formErrors.email" class="alert alert-danger">
+                        {{formErrors.email}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6" [formGroup]="form">
+                <div class="form-group" [class.form-group-message]="formErrors.phone">
+                    <label class="label-filled">
+                        {{'PHONE' | translate}}
+                    </label>
+                    <input type="text" class="form-control" name="phone" formControlName="phone" [(ngModel)]="model.phone">
+                    <div *ngIf="formErrors.phone" class="alert alert-danger">
+                        {{formErrors.phone}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6" [formGroup]="form">
+                <div class="form-group" [class.form-group-message]="formErrors.address">
+                    <label class="label-filled">
+                        {{'ADDRESS' | translate}}
+                    </label>
+                    <textarea class="form-control" name="address" formControlName="address" rows="4" [(ngModel)]="model.address"></textarea>
+                </div>
+            </div>
+            <div class="col-lg-6" [formGroup]="form">
+                <div class="form-group" [class.form-group-message]="formErrors.comment">
+                    <label class="label-filled">
+                        {{'COMMENT' | translate}}
+                    </label>
+                    <textarea class="form-control" name="comment" formControlName="comment" rows="4" [(ngModel)]="model.comment"></textarea>
+                </div>
+            </div>
+        </div>
 
     </div>
     <div class="modal-footer d-block">

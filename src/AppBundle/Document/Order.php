@@ -468,13 +468,14 @@ class Order
     /**
      * @return array
      */
-    public function toArray()
+    public function toArray($full = false)
     {
-        return [
+        $output = [
             'id' => $this->getId(),
             'userId' => $this->getUserId(),
             'price' => $this->getPrice(),
             'email' => $this->getEmail(),
+            'phone' => $this->getPhone(),
             'fullName' => $this->getFullName(),
             'address' => $this->getAddress(),
             'createdDate' => $this->getCreatedDate(),
@@ -487,6 +488,12 @@ class Order
             'status' => $this->getStatus(),
             'contentCount' => $this->getContentCount()
         ];
+        if($full){
+            $output = array_merge($output, [
+                'content' => $this->getContent()
+            ]);
+        }
+        return $output;
     }
 
     /**

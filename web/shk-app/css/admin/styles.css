@@ -25,16 +25,17 @@ input[type=text].form-control,
 input[type=number].form-control,
 input[type=password].form-control,
 textarea.form-control { background-color: #F8F8F8; box-shadow: 0 0 7px rgba(0,0,0,0.1) inset; transition: box-shadow 0.3s ease; }
-input[type=text].form-control:focus,
-input[type=number].form-control:focus,
-input[type=password].form-control:focus,
+input[type=text].form-control:focus:not([disabled]):not([readonly]),
+input[type=number].form-control:focus:not([disabled]):not([readonly]),
+input[type=password].form-control:focus:not([disabled]):not([readonly]),
 textarea.form-control:focus { box-shadow: 0 0 6px rgba(0,0,0,0.3) inset; }
 select.form-control { box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); transition: box-shadow 0.3s ease; }
 select.form-control:hover { box-shadow: 0 0 11px rgba(0, 0, 0, 0.3); }
 input[type="color"].form-control { height: 35px; padding: 2px; cursor: pointer; }
-select.form-control:disabled,
-textarea.form-control:disabled,
-input.form-control:disabled { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); cursor: not-allowed; }
+select.form-control[disabled],
+textarea.form-control[disabled],
+input.form-control[disabled],
+input.form-control[readonly] { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); cursor: not-allowed; }
 
 .form-group-message {  }
 .form-group-message .form-control { border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-color: #a94442; }

@@ -7,17 +7,19 @@ import { Order } from './models/order.model';
 import { PageTableAbstractComponent } from './page-table.abstract';
 import { OrdersService } from './services/orders.service';
 import { ModalContentAbstractComponent } from './modal.abstract';
+import { SettingsService } from './services/settings.service';
+import { Setting, SettingsGroup } from './models/setting.model';
 
 @Component({
     selector: 'modal-order',
     templateUrl: 'templates/modal-order.html',
-    providers: [OrdersService, SystemNameService]
+    providers: [OrdersService, SettingsService, SystemNameService]
 })
 export class ModalOrderContent extends ModalContentAbstractComponent<Order> {
 
-    model = new Order(0, 0, '', '');
+    model = new Order(0, 0, '', '', '');
     modalTitle = 'Order';
-
+    settings: SettingsGroup;
     formFields = {
         id: {
             value: '',
@@ -54,6 +56,16 @@ export class ModalOrderContent extends ModalContentAbstractComponent<Order> {
             value: '',
             validators: [],
             messages: {}
+        },
+        deliveryName: {
+            value: '',
+            validators: [],
+            messages: {}
+        },
+        paymentName: {
+            value: '',
+            validators: [],
+            messages: {}
         }
     };
 
@@ -63,9 +75,17 @@ export class ModalOrderContent extends ModalContentAbstractComponent<Order> {
         public systemNameService: SystemNameService,
         public activeModal: NgbActiveModal,
         public tooltipConfig: NgbTooltipConfig,
-        private modalService: NgbModal
+        private modalService: NgbModal,
+        private settingsService: SettingsService
     ) {
         super(fb, dataService, systemNameService, activeModal, tooltipConfig);
+    }
+
+    onBeforeInit(): void {
+        this.settingsService.getList()
+            .subscribe((res) => {
+                this.settings = res;
+            });
     }
 
     save(): void {
@@ -81,6 +101,7 @@ export class ModalOrderContent extends ModalContentAbstractComponent<Order> {
     providers: [OrdersService]
 })
 export class OrdersComponent extends PageTableAbstractComponent<Order> {
+
     static title = 'ORDERS';
 
     constructor(

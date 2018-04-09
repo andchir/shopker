@@ -28,6 +28,7 @@ import { SelectParentDropdownComponent } from './select-parent-dropdown.componen
 import { FilterFieldByGroup } from './pipes/filter-field-by-group.pipe';
 import { OrderByPipe } from './pipes/orderby.pipe';
 import { FilterArrayPipe } from './pipes/filter-array-pipe';
+import { DateFromObject } from './pipes/date-from-object.pipe';
 
 import { AppSettings } from './services/app-settings.service';
 import { ProductsService } from './services/products.service';
@@ -77,6 +78,7 @@ import { AppRoutingModule }     from './app-routing.module';
         FilterFieldByGroup,
         OrderByPipe,
         FilterArrayPipe,
+        DateFromObject,
 
         AlertModalContent,
         ConfirmModalContent,

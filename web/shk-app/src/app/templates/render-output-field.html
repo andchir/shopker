@@ -7,7 +7,7 @@
 
     <div *ngSwitchCase="'date'">{{value | date: options.format}}</div>
 
-    <div *ngSwitchCase="'dateObject'">{{createDate(value) | date: options.format}}</div>
+    <div *ngSwitchCase="'dateObject'">{{value | dateFromObject: options.format}}</div>
 
     <div *ngSwitchDefault>{{value}}</div>
 

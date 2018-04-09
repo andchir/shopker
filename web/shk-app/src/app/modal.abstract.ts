@@ -37,11 +37,15 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
     }
 
     ngOnInit(): void {
+        this.onBeforeInit();
         this.buildForm();
         if (this.isEditMode || this.isItemCopy) {
             this.getModelData();
         }
     }
+
+    onBeforeInit(): void {}
+    onAfterInit(): void {}
 
     getSystemFieldName(): string {
         return 'name';

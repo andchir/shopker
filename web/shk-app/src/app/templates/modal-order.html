@@ -11,6 +11,21 @@
 
     <div class="modal-body">
 
+        <div class="card bg-light mb-3">
+            <div class="card-body p-2">
+                <div class="float-right">
+                    <button class="btn btn-info btn-wide">
+                        <i class="icon-printer"></i>
+                        Print
+                    </button>
+                </div>
+                <div class="d-inline-block p-1 mt-1">
+                    {{model.createdDate | dateFromObject: 'dd/MM/y H:mm:s'}}
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-lg-6" [formGroup]="form">
                 <div class="form-group" [class.form-group-message]="formErrors.id">
@@ -73,6 +88,33 @@
                         {{'COMMENT' | translate}}
                     </label>
                     <textarea class="form-control" name="comment" formControlName="comment" rows="4" [(ngModel)]="model.comment"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6" [formGroup]="form">
+                <div class="form-group" [class.form-group-message]="formErrors.deliveryName">
+                    <label class="label-filled">
+                        {{'DELIVERY_METHOD' | translate}}
+                    </label>
+                    <select class="form-control" name="deliveryName" formControlName="deliveryName" [(ngModel)]="model.deliveryName">
+                        <ng-container *ngIf="settings">
+                            <option [value]="setting.name" *ngFor="let setting of settings.SETTINGS_DELIVERY">{{setting.name}}</option>
+                        </ng-container>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-6" [formGroup]="form">
+                <div class="form-group" [class.form-group-message]="formErrors.paymentName">
+                    <label class="label-filled">
+                        {{'PAYMENT_METHOD' | translate}}
+                    </label>
+                    <select class="form-control" name="paymentName" formControlName="paymentName" [(ngModel)]="model.paymentName">
+                        <ng-container *ngIf="settings">
+                            <option [value]="setting.name" *ngFor="let setting of settings.SETTINGS_PAYMENT">{{setting.name}}</option>
+                        </ng-container>
+                    </select>
                 </div>
             </div>
         </div>

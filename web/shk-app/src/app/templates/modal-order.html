@@ -119,6 +119,58 @@
             </div>
         </div>
 
+        <div *ngIf="model.content">
+
+            <ngb-accordion [closeOthers]="true" activeIds="accordion-order-content" class="ngb-accordion">
+                <ngb-panel id="accordion-order-content" [title]="'ORDER_CONTENT' | translate">
+                    <ng-template ngbPanelContent>
+
+                        <table class="table table-bordered mb-0">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>{{ 'NAME' | translate }}</th>
+                                    <th class="text-center">{{ 'PRICE' | translate }}</th>
+                                    <th class="text-center">{{ 'QUANTITY' | translate }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let content of model.content">
+                                    <td>{{content.id}}</td>
+                                    <td>
+                                        <a href="{{baseUrl}}{{content.uri}}" target="_blank">
+                                            {{ content.title }}
+                                        </a>
+                                    </td>
+                                    <td class="text-center">{{ content.price | number: '1.2-2':'ru-RU' }}</td>
+                                    <td class="text-center">{{ content.count }}</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>{{ 'DELIVERY' | translate }}</td>
+                                    <td class="text-center">
+                                        {{ model.deliveryPrice | number: '1.2-2':'ru-RU' }}
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2"></td>
+                                    <td class="text-center">
+                                        <b>{{ model.price | number: '1.2-2':'ru-RU' }}</b>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                    </ng-template>
+                </ngb-panel>
+            </ngb-accordion>
+
+        </div>
+
     </div>
     <div class="modal-footer d-block">
         <button type="button" class="btn btn-success btn-wide" [disabled]="submitted && form.valid" (click)="save()">

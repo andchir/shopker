@@ -25,6 +25,8 @@ export class Order {
         public paymentValue?: string,
         public comment?: string,
         public contentCount?: number,
+        public price?: number,
+        public currency?: string,
         public content?: OrderContent[]
     ) { }
 }

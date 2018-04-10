@@ -77,7 +77,6 @@ class CheckoutController extends BaseController
                     ->setDeliveryPrice($deliveryPrice)
                     ->setPaymentValue($paymentName)
                     ->setContentFromCart($shopCartData)
-                    ->setPrice($shopCartService->getPriceTotal($shopCartData))
                     ->setStatus($statusName);
 
                 /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */

@@ -36,6 +36,13 @@ import { ContentTypesService } from './services/content_types.service';
 import { CategoriesService } from './services/categories.service';
 import { AppRoutingModule }     from './app-routing.module';
 
+import { registerLocaleData } from '@angular/common';
+import localeEn from '@angular/common/locales/en';
+import localeRu from '@angular/common/locales/ru';
+
+registerLocaleData(localeEn, 'en-EN');
+registerLocaleData(localeRu, 'ru-RU');
+
 @NgModule({
     imports: [
         BrowserModule,

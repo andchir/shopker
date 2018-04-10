@@ -9,6 +9,7 @@ import { OrdersService } from './services/orders.service';
 import { ModalContentAbstractComponent } from './modal.abstract';
 import { SettingsService } from './services/settings.service';
 import { Setting, SettingsGroup } from './models/setting.model';
+import { AppSettings } from './services/app-settings.service';
 
 @Component({
     selector: 'modal-order',
@@ -20,6 +21,7 @@ export class ModalOrderContent extends ModalContentAbstractComponent<Order> {
     model = new Order(0, 0, '', '', '');
     modalTitle = 'Order';
     settings: SettingsGroup;
+    baseUrl: string;
     formFields = {
         id: {
             value: '',
@@ -76,12 +78,14 @@ export class ModalOrderContent extends ModalContentAbstractComponent<Order> {
         public activeModal: NgbActiveModal,
         public tooltipConfig: NgbTooltipConfig,
         private modalService: NgbModal,
-        private settingsService: SettingsService
+        private settingsService: SettingsService,
+        private appSettings: AppSettings
     ) {
         super(fb, dataService, systemNameService, activeModal, tooltipConfig);
     }
 
     onBeforeInit(): void {
+        this.baseUrl = this.appSettings.settings.webApiUrl + '/';
         this.settingsService.getList()
             .subscribe((res) => {
                 this.settings = res;
@@ -134,7 +138,7 @@ export class OrdersComponent extends PageTableAbstractComponent<Order> {
         {
             name: 'contentCount',
             title: 'CONTENT_COUNT',
-            outputType: 'number',
+            outputType: 'text',
             outputProperties: {}
         },
         {

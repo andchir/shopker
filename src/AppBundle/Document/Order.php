@@ -91,6 +91,11 @@ class Order
     protected $price;
 
     /**
+     * @MongoDB\Field(type="string", nullable=true)
+     */
+    protected $currency;
+
+    /**
      * @MongoDB\Field(type="hash", nullable=true)
      */
     protected $content;
@@ -505,12 +510,16 @@ class Order
         $content = [];
         foreach ($shopCartData as $contentTypeName => $products) {
             foreach ($products as $product) {
+                $uri = $product['parentUri'] . $product['systemName'];
+                unset($product['parentUri'], $product['systemName']);
                 $content[] = array_merge($product, [
+                    'uri' => $uri ,
                     'contentTypeName' => $contentTypeName
                 ]);
             }
         }
         $this->content = $content;
+        $this->updatePriceTotal();
         return $this;
     }
 
@@ -534,5 +543,43 @@ class Order
     public function getPrice()
     {
         return $this->price;
+    }
+
+    /**
+     * @return $this
+     */
+    public function updatePriceTotal()
+    {
+        $priceTotal = 0;
+        foreach ($this->content as $content) {
+            $priceTotal += ($content['price'] * $content['count']);
+        }
+        if ($this->deliveryPrice) {
+            $priceTotal += $this->deliveryPrice;
+        }
+        $this->price = $priceTotal;
+        return $this;
+    }
+
+    /**
+     * Set currency
+     *
+     * @param string $currency
+     * @return $this
+     */
+    public function setCurrency($currency)
+    {
+        $this->currency = $currency;
+        return $this;
+    }
+
+    /**
+     * Get currency
+     *
+     * @return string $currency
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
     }
 }

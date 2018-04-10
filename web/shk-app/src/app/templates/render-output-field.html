@@ -5,6 +5,8 @@
         <i class="big text-muted icon-circle-cross" [hidden]="value"></i>
     </div>
 
+    <div *ngSwitchCase="'number'">{{value | number: '1.2-2':'ru-RU'}}</div>
+
     <div *ngSwitchCase="'date'">{{value | date: options.format}}</div>
 
     <div *ngSwitchCase="'dateObject'">{{value | dateFromObject: options.format}}</div>

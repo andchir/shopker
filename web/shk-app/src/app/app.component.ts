@@ -54,7 +54,7 @@ export class AppComponent {
         private translate: TranslateService,
         private appSettings: AppSettings
     ) {
-        this.baseUrl = this.appSettings.settings.webApiUrl || '/';
+        this.baseUrl = this.appSettings.settings.webApiUrl + '/';
 
         tooltipConfig.placement = 'bottom';
         tooltipConfig.container = 'body';

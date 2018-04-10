@@ -107,6 +107,7 @@ class Order
     {
         $this->createdDate = new \DateTime();
         $this->updatedDate = new \DateTime();
+        $this->updatePriceTotal();
     }
 
     /**
@@ -115,6 +116,7 @@ class Order
     public function preUpdate()
     {
         $this->updatedDate = new \DateTime();
+        $this->updatePriceTotal();
     }
 
     /**
@@ -519,7 +521,6 @@ class Order
             }
         }
         $this->content = $content;
-        $this->updatePriceTotal();
         return $this;
     }
 

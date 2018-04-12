@@ -2,8 +2,9 @@ import { Component, OnInit, Input } from '@angular/core';
 import { NgbModal, NgbActiveModal, NgbModalRef, NgbPopover, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, Validators } from '@angular/forms';
 import { SystemNameService } from './services/system-name.service';
+import * as _ from "lodash";
 
-import { Order } from './models/order.model';
+import { Order, OrderContent } from './models/order.model';
 import { PageTableAbstractComponent } from './page-table.abstract';
 import { OrdersService } from './services/orders.service';
 import { ModalContentAbstractComponent } from './modal.abstract';
@@ -70,6 +71,7 @@ export class ModalOrderContent extends ModalContentAbstractComponent<Order> {
             messages: {}
         }
     };
+    contentEdit = {id: 0, contentTypeName: ''};
 
     constructor(
         public fb: FormBuilder,
@@ -94,8 +96,59 @@ export class ModalOrderContent extends ModalContentAbstractComponent<Order> {
 
     save(): void {
 
-        console.log('SAVE');
+        console.log('SAVE', this.model);
 
+    }
+
+    editContentToggle(content: OrderContent): void {
+        if (this.getIsContentEdit(content)) {
+            this.contentEdit.id = 0;
+            this.contentEdit.contentTypeName = '';
+            this.priceTotalUpdate();
+        } else {
+            this.contentEdit.id = content.id;
+            this.contentEdit.contentTypeName = content.contentTypeName;
+        }
+    }
+
+    getIsContentEdit(content: OrderContent): boolean {
+        return this.contentEdit.id === content.id
+            && this.contentEdit.contentTypeName === content.contentTypeName;
+    }
+
+    deleteContent(content: OrderContent): void {
+        const index = _.findIndex(this.model.content, {
+            id: content.id,
+            contentTypeName: content.contentTypeName
+        });
+        if (index > -1) {
+            this.model.content.splice(index, 1);
+            this.priceTotalUpdate();
+        }
+    }
+
+    onDeliveryUpdate(): void {
+        if (!this.settings || !this.settings.SETTINGS_DELIVERY) {
+            return;
+        }
+        const index = _.findIndex(this.settings.SETTINGS_DELIVERY, {name: this.model.deliveryName});
+        if (index > -1) {
+            const deliveryPrice = this.settings.SETTINGS_DELIVERY[index]['options']['price'];
+            if (deliveryPrice && deliveryPrice.value) {
+                this.model.deliveryPrice = parseFloat(String(deliveryPrice['value']));
+            } else {
+                this.model.deliveryPrice = 0;
+            }
+            this.priceTotalUpdate();
+        }
+    }
+
+    priceTotalUpdate(): void {
+        let priceTotal = parseFloat(String(this.model.deliveryPrice));
+        this.model.content.forEach((content) => {
+            priceTotal += content.price * content.count;
+        });
+        this.model.price = priceTotal;
     }
 }
 

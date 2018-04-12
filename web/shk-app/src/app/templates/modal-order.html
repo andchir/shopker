@@ -98,7 +98,7 @@
                     <label class="label-filled">
                         {{'DELIVERY_METHOD' | translate}}
                     </label>
-                    <select class="form-control" name="deliveryName" formControlName="deliveryName" [(ngModel)]="model.deliveryName">
+                    <select class="form-control" name="deliveryName" formControlName="deliveryName" [(ngModel)]="model.deliveryName" (ngModelChange)="onDeliveryUpdate()">
                         <ng-container *ngIf="settings">
                             <option [value]="setting.name" *ngFor="let setting of settings.SETTINGS_DELIVERY">{{setting.name}}</option>
                         </ng-container>
@@ -126,6 +126,12 @@
                     <ng-template ngbPanelContent>
 
                         <table class="table table-bordered mb-0">
+                            <colgroup>
+                                <col width="10%">
+                                <col width="50%">
+                                <col width="20%">
+                                <col width="20%">
+                            </colgroup>
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -135,16 +141,56 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let content of model.content">
-                                    <td>{{content.id}}</td>
-                                    <td>
-                                        <a href="{{baseUrl}}{{content.uri}}" target="_blank">
-                                            {{ content.title }}
-                                        </a>
-                                    </td>
-                                    <td class="text-center">{{ content.price | number: '1.2-2':'ru-RU' }}</td>
-                                    <td class="text-center">{{ content.count }}</td>
-                                </tr>
+                                <ng-container *ngFor="let content of model.content">
+
+                                    <ng-container *ngIf="!getIsContentEdit(content)">
+                                        <tr class="show-on-hover-parent">
+                                            <td>{{content.id}}</td>
+                                            <td>
+                                                <a href="{{baseUrl}}{{content.uri}}" target="_blank">
+                                                    {{ content.title }}
+                                                </a>
+                                            </td>
+                                            <td class="text-center pr-2">
+                                                {{ content.price | number: '1.2-2':'ru-RU' }}
+                                            </td>
+                                            <td class="text-center">
+                                                <div class="relative">
+                                                    <div class="show-on-hover no-wrap">
+                                                        <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Edit" (click)="editContentToggle(content)">
+                                                            <i class="icon-pencil"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Delete" (click)="deleteContent(content)">
+                                                            <i class="icon-cross"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                {{ content.count }}
+                                            </td>
+                                        </tr>
+                                    </ng-container>
+
+                                    <ng-container *ngIf="getIsContentEdit(content)">
+                                        <tr class="table-warning">
+                                            <td>{{content.id}}</td>
+                                            <td>
+                                                <a href="{{baseUrl}}{{content.uri}}" target="_blank">
+                                                    {{ content.title }}
+                                                </a>
+                                            </td>
+                                            <td class="text-center pr-2">
+                                                <input type="number" class="d-inline-block form-control form-control-sm width80" name="price[]" min="0" step="0.01" [(ngModel)]="content.price">
+                                            </td>
+                                            <td class="text-right no-wrap">
+                                                <input type="number" class="d-inline-block form-control form-control-sm width80" name="count[]" min="1" step="1" [(ngModel)]="content.count">
+                                                <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Accept" (click)="editContentToggle(content)">
+                                                    <i class="icon-check"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </ng-container>
+
+                                </ng-container>
                                 <tr>
                                     <td></td>
                                     <td>{{ 'DELIVERY' | translate }}</td>

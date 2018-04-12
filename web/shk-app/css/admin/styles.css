@@ -5,6 +5,7 @@
 .big { font-size: 120%; }
 .tooltip { pointer-events: none; }
 .no-wrap { white-space: nowrap; }
+.width80 { width: 80px; }
 .mwidth-80 { max-width: 80px; }
 .width-350 { width: 350px; }
 .m-auto { margin-left: auto; margin-right: auto; }

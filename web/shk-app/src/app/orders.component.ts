@@ -71,7 +71,7 @@ export class ModalOrderContent extends ModalContentAbstractComponent<Order> {
             messages: {}
         }
     };
-    contentEdit = {id: 0, contentTypeName: ''};
+    contentEdit = {id: 0, contentTypeName: '', previousValues: {} as {[key: string]: number}};
 
     constructor(
         public fb: FormBuilder,
@@ -104,6 +104,7 @@ export class ModalOrderContent extends ModalContentAbstractComponent<Order> {
         if (this.getIsContentEdit(content)) {
             this.contentEdit.id = 0;
             this.contentEdit.contentTypeName = '';
+            this.contentEdit.previousValues = {};
             this.priceTotalUpdate();
         } else {
             this.contentEdit.id = content.id;

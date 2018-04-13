@@ -56,7 +56,7 @@ class Order
     protected $deliveryName;
 
     /**
-     * @MongoDB\Field(type="string", nullable=true)
+     * @MongoDB\Field(type="float", nullable=true)
      */
     protected $deliveryPrice;
 

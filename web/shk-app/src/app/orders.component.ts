@@ -71,7 +71,7 @@ export class ModalOrderContent extends ModalContentAbstractComponent<Order> {
             messages: {}
         }
     };
-    contentEdit = {id: 0, contentTypeName: '', previousValues: {} as {[key: string]: number}};
+    contentEdit = new OrderContent(0, '', 0, 0);
 
     constructor(
         public fb: FormBuilder,
@@ -95,20 +95,33 @@ export class ModalOrderContent extends ModalContentAbstractComponent<Order> {
     }
 
     save(): void {
-
-        console.log('SAVE', this.model);
-
+        this.dataService.update(this.getFormData())
+            .subscribe((res) => {
+                this.closeModal();
+            });
     }
 
     editContentToggle(content: OrderContent): void {
         if (this.getIsContentEdit(content)) {
-            this.contentEdit.id = 0;
-            this.contentEdit.contentTypeName = '';
-            this.contentEdit.previousValues = {};
+            this.contentEdit = new OrderContent(0, '', 0, 0);
             this.priceTotalUpdate();
         } else {
-            this.contentEdit.id = content.id;
-            this.contentEdit.contentTypeName = content.contentTypeName;
+            this.contentEdit = _.cloneDeep<OrderContent>(content);
+        }
+    }
+
+    editContentCancel(): void {
+        if (this.contentEdit.id === 0) {
+            return;
+        }
+        const index = _.findIndex<OrderContent>(this.model.content, {
+            id: this.contentEdit.id,
+            contentTypeName: this.contentEdit.contentTypeName
+        });
+        if (index > -1) {
+            this.model.content[index] = _.cloneDeep(this.contentEdit);
+            this.contentEdit = new OrderContent(0, '', 0, 0);
+            this.priceTotalUpdate();
         }
     }
 
@@ -147,7 +160,9 @@ export class ModalOrderContent extends ModalContentAbstractComponent<Order> {
     priceTotalUpdate(): void {
         let priceTotal = parseFloat(String(this.model.deliveryPrice));
         this.model.content.forEach((content) => {
-            priceTotal += content.price * content.count;
+            if (typeof content.price === 'number') {
+                priceTotal += content.price * content.count;
+            }
         });
         this.model.price = priceTotal;
     }

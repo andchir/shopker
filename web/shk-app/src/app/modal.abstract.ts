@@ -147,7 +147,7 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
         this.activeModal.dismiss('canceled');
     }
 
-    getFormData() {
+    getFormData(): any {
         return _.cloneDeep(this.model);
     }
 

@@ -128,9 +128,9 @@
                         <table class="table table-bordered mb-0">
                             <colgroup>
                                 <col width="10%">
-                                <col width="50%">
-                                <col width="20%">
-                                <col width="20%">
+                                <col width="40%">
+                                <col width="25%">
+                                <col width="25%">
                             </colgroup>
                             <thead>
                                 <tr>
@@ -172,19 +172,20 @@
 
                                     <ng-container *ngIf="getIsContentEdit(content)">
                                         <tr class="table-warning">
-                                            <td>{{content.id}}</td>
+                                            <td>{{ content.id }}</td>
                                             <td>
-                                                <a href="{{baseUrl}}{{content.uri}}" target="_blank">
-                                                    {{ content.title }}
-                                                </a>
+                                                {{ content.title }}
                                             </td>
                                             <td class="text-center pr-2">
-                                                <input type="number" class="d-inline-block form-control form-control-sm width80" name="price[]" min="0" step="0.01" [(ngModel)]="content.price">
+                                                <input type="number" class="d-inline-block form-control form-control-sm" name="price[]" min="0" step="0.01" style="width: 100px;" [(ngModel)]="content.price" (ngModelChange)="priceTotalUpdate()">
                                             </td>
                                             <td class="text-right no-wrap">
-                                                <input type="number" class="d-inline-block form-control form-control-sm width80" name="count[]" min="1" step="1" [(ngModel)]="content.count">
+                                                <input type="number" class="d-inline-block form-control form-control-sm" name="count[]" min="1" step="1" style="width: 60px;" [(ngModel)]="content.count" (ngModelChange)="priceTotalUpdate()">
                                                 <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Accept" (click)="editContentToggle(content)">
                                                     <i class="icon-check"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Cancel" (click)="editContentCancel()">
+                                                    <i class="icon-ban"></i>
                                                 </button>
                                             </td>
                                         </tr>
@@ -203,7 +204,7 @@
                             <tfoot>
                                 <tr>
                                     <td colspan="2"></td>
-                                    <td class="text-center">
+                                    <td class="text-center big">
                                         <b>{{ model.price | number: '1.2-2':'ru-RU' }}</b>
                                     </td>
                                     <td></td>

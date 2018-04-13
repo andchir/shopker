@@ -4,7 +4,7 @@ export class OrderContent {
         public title: string,
         public count: number,
         public price: number,
-        public contentTypeName: string,
+        public contentTypeName?: string,
         public uri?: string,
         public image?: string
     ){}

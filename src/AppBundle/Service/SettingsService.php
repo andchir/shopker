@@ -61,6 +61,16 @@ class SettingsService
     }
 
     /**
+     * @param string $settingName
+     * @param string|null $groupName
+     * @return object
+     */
+    public function getSetting($settingName, $groupName = null)
+    {
+        return $this->getRepository()->getSetting($settingName, $groupName);
+    }
+
+    /**
      * @return \AppBundle\Repository\FieldTypeRepository
      */
     public function getRepository()

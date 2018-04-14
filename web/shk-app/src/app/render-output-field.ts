@@ -3,6 +3,7 @@ import { ContentField } from "./models/content_field.model";
 import * as _ from 'lodash';
 import { isNumeric } from 'rxjs/util/isNumeric';
 
+import { AppSettings } from './services/app-settings.service';
 import { Properties } from './models/properties.iterface';
 
 @Component({
@@ -16,9 +17,9 @@ export class OutputFieldComponent implements OnInit {
     @Input() outputType: string;
     @Input() options: {};
 
-    constructor() {
-
-    }
+    constructor(
+        private appSettings: AppSettings
+    ) { }
 
     ngOnInit(): void {
         this.updateOptions();
@@ -53,5 +54,18 @@ export class OutputFieldComponent implements OnInit {
             }
         }
         return object1;
+    }
+
+    getStatusColor(statusValue): string {
+        let output = null;
+        if (!this.appSettings.settings.systemSettings['SETTINGS_ORDER_STATUSES']) {
+            return output;
+        }
+        const settingsStatuses = this.appSettings.settings.systemSettings['SETTINGS_ORDER_STATUSES'];
+        const index = _.findIndex(settingsStatuses, {name: statusValue});
+        if (index > -1 && settingsStatuses[index].options.color) {
+            output = settingsStatuses[index].options.color;
+        }
+        return output;
     }
 }

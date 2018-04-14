@@ -12,7 +12,7 @@
     <div *ngSwitchCase="'dateObject'">{{value | dateFromObject: options.format}}</div>
 
     <div *ngSwitchCase="'status'">
-        <button class="btn btn-primary btn-xs btn-block">
+        <button class="btn btn-primary btn-xs shk-btn-status" [style.backgroundColor]="getStatusColor(value)">
             {{value}}
         </button>
     </div>

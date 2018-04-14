@@ -54,6 +54,8 @@ input.form-control[readonly] { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); curso
 /* buttons */
 .btn { cursor: pointer; border-radius: 3px; }
 .btn-wide { min-width: 130px; text-align: center; padding-left: 2rem; padding-right: 2rem; }
+.shk-btn-status { display: block; width: 100%; border-color: rgba(0,0,0,0.2); }
+.shk-btn-status:hover { border-color: rgba(0,0,0,0.2); }
 
 /* modals */
 .modal .modal-dialog { box-shadow: 0 0 20px rgba(0,0,0,0.5); }

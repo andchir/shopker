@@ -9,7 +9,7 @@ import { PageTableAbstractComponent } from './page-table.abstract';
 import { OrdersService } from './services/orders.service';
 import { ModalContentAbstractComponent } from './modal.abstract';
 import { SettingsService } from './services/settings.service';
-import { Setting, SettingsGroup } from './models/setting.model';
+import { Setting, SettingPretty, SettingsGroup } from './models/setting.model';
 import { AppSettings } from './services/app-settings.service';
 
 @Component({
@@ -21,7 +21,7 @@ export class ModalOrderContent extends ModalContentAbstractComponent<Order> {
 
     model = new Order(0, 0, '', '', '');
     modalTitle = 'Order';
-    settings: SettingsGroup;
+    settings: {[groupName: string]: SettingPretty[]};
     baseUrl: string;
     formFields = {
         id: {
@@ -88,16 +88,16 @@ export class ModalOrderContent extends ModalContentAbstractComponent<Order> {
 
     onBeforeInit(): void {
         this.baseUrl = this.appSettings.settings.webApiUrl + '/';
-        this.settingsService.getList()
-            .subscribe((res) => {
-                this.settings = res;
-            });
+        this.settings = this.appSettings.settings.systemSettings;
     }
 
     save(): void {
+        this.loading = true;
         this.dataService.update(this.getFormData())
             .subscribe((res) => {
                 this.closeModal();
+            }, () => {
+                this.loading = false;
             });
     }
 
@@ -148,11 +148,9 @@ export class ModalOrderContent extends ModalContentAbstractComponent<Order> {
         const index = _.findIndex(this.settings.SETTINGS_DELIVERY, {name: this.model.deliveryName});
         if (index > -1) {
             const deliveryPrice = this.settings.SETTINGS_DELIVERY[index]['options']['price'];
-            if (deliveryPrice && deliveryPrice.value) {
-                this.model.deliveryPrice = parseFloat(String(deliveryPrice['value']));
-            } else {
-                this.model.deliveryPrice = 0;
-            }
+            this.model.deliveryPrice = deliveryPrice
+                ? parseFloat(String(deliveryPrice))
+                : 0;
             this.priceTotalUpdate();
         }
     }

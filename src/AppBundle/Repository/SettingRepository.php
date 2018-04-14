@@ -11,9 +11,10 @@ use Doctrine\ODM\MongoDB\DocumentRepository;
 class SettingRepository extends DocumentRepository
 {
     /**
+     * @param bool $returnArray
      * @return array
      */
-    public function getAll()
+    public function getAll($returnArray = false)
     {
         $output = [];
         $settings = $this->findBy([], ['id' => 'asc']);
@@ -22,7 +23,9 @@ class SettingRepository extends DocumentRepository
             if (!isset($output[$setting->getGroupName()])) {
                 $output[$setting->getGroupName()] = [];
             }
-            $output[$setting->getGroupName()][] = $setting;
+            $output[$setting->getGroupName()][] = $returnArray
+                ? $setting->toArray()
+                : $setting;
         }
         return $output;
     }

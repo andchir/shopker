@@ -135,12 +135,21 @@ class Setting
 
     /**
      * Get options
-     *
-     * @return array $options
+     * @param bool $pretty
+     * @return mixed
      */
-    public function getOptions()
+    public function getOptions($pretty = false)
     {
-        return $this->options;
+        if (!$pretty) {
+            return $this->options;
+        }
+        $output = [];
+        foreach ($this->options as $key => $val) {
+            $output[$key] = $val['type'] === 'number'
+                ? floatval($val['value'])
+                : $val['value'];
+        }
+        return $output;
     }
 
     /**
@@ -176,4 +185,13 @@ class Setting
         return $output;
     }
 
+    public function toArray()
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'description' => $this->getDescription(),
+            'options' => $this->getOptions(true)
+        ];
+    }
 }

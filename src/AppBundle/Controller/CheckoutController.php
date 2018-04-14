@@ -42,8 +42,12 @@ class CheckoutController extends BaseController
 
         $order = new Order();
         $form = $this->createForm(OrderType::class, $order, [
-            'choiceDelivery' => $settings[Setting::GROUP_DELIVERY],
-            'choicePayment' => $settings[Setting::GROUP_PAYMENT]
+            'choiceDelivery' => isset($settings[Setting::GROUP_DELIVERY])
+                ? $settings[Setting::GROUP_DELIVERY]
+                : [],
+            'choicePayment' => isset($settings[Setting::GROUP_PAYMENT])
+                ? $settings[Setting::GROUP_PAYMENT]
+                : []
         ]);
         $form->handleRequest($request);
 

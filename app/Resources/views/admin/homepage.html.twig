@@ -19,7 +19,8 @@
             webApiUrl: '{{ app.request.baseUrl }}',
             environment: '{{ app.environment }}',
             filesDirUrl: '{{ settings.filesDirUrl }}',
-            locale: '{{ settings.locale }}'
+            locale: '{{ settings.locale }}',
+            systemSettings: {{ settings.systemSettings | json_encode() | raw }}
         };
     </script>
     <script type="text/javascript" src="{{ asset('shk-app/i18n/') }}{{ settings.locale }}.js"></script>

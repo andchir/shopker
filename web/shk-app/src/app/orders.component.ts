@@ -169,7 +169,7 @@ export class ModalOrderContent extends ModalContentAbstractComponent<Order> {
 }
 
 @Component({
-    selector: 'shk-settings',
+    selector: 'shk-orders',
     templateUrl: 'templates/page-orders.html',
     providers: [OrdersService]
 })
@@ -195,7 +195,7 @@ export class OrdersComponent extends PageTableAbstractComponent<Order> {
         {
             name: 'status',
             title: 'STATUS',
-            outputType: 'text',
+            outputType: 'status',
             outputProperties: {}
         },
         {

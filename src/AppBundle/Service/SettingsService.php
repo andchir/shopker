@@ -51,6 +51,15 @@ class SettingsService
     }
 
     /**
+     * @return array
+     */
+    public function getArray()
+    {
+        $settings = $this->getRepository()->getAll(true);
+        return $settings;
+    }
+
+    /**
      * @param $groupName
      * @return array
      */

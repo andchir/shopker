@@ -41,6 +41,10 @@
             {{ order.createdDate | date('d.m.Y H:i:s') }}
         </div>
 
+        <div>
+            <b>{{ 'Status' | trans }}:</b> {{ order.status }}
+        </div>
+
         <h3>
             {{ 'Contacts' | trans }}
         </h3>

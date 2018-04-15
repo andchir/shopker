@@ -13,6 +13,7 @@ Apply: Применить
 Reset: Сбросить
 Filters: Фильтры
 Continue: Продолжить
+Quantity: Кол-во
 Price: Цена
 Add to cart: В корзину
 Empty cart: Очистить корзину
@@ -32,3 +33,7 @@ Address: Адрес
 Comment: Комментарий
 Payment method: Способ оплаты
 Delivery method: Способ доставки
+Delivery: Доставка
+Order: Заказ
+Order list: Состав заказа
+Contacts: Контактная информация

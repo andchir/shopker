@@ -13,6 +13,12 @@
                     </div>
                 {% endif %}
 
+                <div>
+                    {{ app_name }}
+                </div>
+
+                <hr>
+
                 <form action="{{ path('login') }}" method="post">
                     <div class="form-group">
                         <label for="username">Username:</label>
@@ -35,7 +41,13 @@
 
                 <hr>
                 <p>
-                    <a href="{{ path('homepage') }}">{{ 'Go to home page' | trans }}</a>
+                    <a href="{{ path('homepage') }}">
+                        {{ 'Go to home page' | trans }}
+                    </a>
+                    &nbsp;&bull;&nbsp;
+                    <a href="{{ path('register') }}">
+                        {{ 'Sign Up' | trans }}
+                    </a>
                 </p>
 
             </div>

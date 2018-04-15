@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<div class="container p-5">
+
+    <div class="row justify-content-md-center">
+        <div class="col col-md-6">
+
+            <div>
+                {{ app_name }}
+            </div>
+
+            <hr>
+
+            <form action="{{ path('register')}}" method="post">
+                {{ form_widget(form) }}
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" name="button-submit">
+                        Sign Up
+                    </button>
+                </div>
+            </form>
+
+            <hr>
+            <p>
+                <a href="{{ path('homepage') }}">
+                    {{ 'Go to home page' | trans }}
+                </a>
+                &nbsp;&bull;&nbsp;
+                <a href="{{ path('login') }}">
+                    {{ 'Log in' | trans }}
+                </a>
+            </p>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block footer %}{% endblock %}

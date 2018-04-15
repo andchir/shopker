@@ -30,7 +30,7 @@ security:
 
             # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
             form_login:
-                default_target_path: /admin/
+                default_target_path: /
                 login_path: login
                 check_path: login
 

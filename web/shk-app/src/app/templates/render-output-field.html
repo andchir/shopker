@@ -18,7 +18,7 @@
             </button>
             <div ngbDropdownMenu aria-labelledby="dropdownStatus">
                 <ng-container *ngFor="let status of settingsStatuses">
-                    <button class="dropdown-item" *ngIf="status.name !== value" (click)="optionUpdate('status', status.name)">
+                    <button class="dropdown-item" (click)="optionUpdate('status', status.name)" [disabled]="status.name === value">
                         {{status.name}}
                     </button>
                 </ng-container>

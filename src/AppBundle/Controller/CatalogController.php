@@ -17,7 +17,7 @@ use AppBundle\Document\Category;
 class CatalogController extends ProductController
 {
     /**
-     * @Route("/{uri}", name="catalog", requirements={"uri": "[a-z1-9\/\-_\.]+"})
+     * @Route("/{uri}", name="catalog", requirements={"uri": "[a-z0-9\/\-_\.]+"})
      * @param Request $request
      * @param string $uri
      * @return Response

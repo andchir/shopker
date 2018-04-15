@@ -5,6 +5,7 @@ import { isNumeric } from 'rxjs/util/isNumeric';
 
 import { AppSettings } from './services/app-settings.service';
 import { Properties } from './models/properties.iterface';
+import { SettingPretty } from "./models/setting.model";
 
 @Component({
     selector: 'output-field',
@@ -13,15 +14,21 @@ import { Properties } from './models/properties.iterface';
 })
 export class OutputFieldComponent implements OnInit {
 
+    @Input() object: any;
     @Input() value: string | number | boolean;
     @Input() outputType: string;
     @Input() options: {};
+    @Output() changeRequest = new EventEmitter<any>();
+    settingsStatuses: SettingPretty[] = [];
 
     constructor(
         private appSettings: AppSettings
     ) { }
 
     ngOnInit(): void {
+        if (this.appSettings.settings.systemSettings['SETTINGS_ORDER_STATUSES']) {
+            this.settingsStatuses = this.appSettings.settings.systemSettings['SETTINGS_ORDER_STATUSES'];
+        }
         this.updateOptions();
     }
 
@@ -58,14 +65,17 @@ export class OutputFieldComponent implements OnInit {
 
     getStatusColor(statusValue): string {
         let output = null;
-        if (!this.appSettings.settings.systemSettings['SETTINGS_ORDER_STATUSES']) {
+        if (!this.settingsStatuses) {
             return output;
         }
-        const settingsStatuses = this.appSettings.settings.systemSettings['SETTINGS_ORDER_STATUSES'];
-        const index = _.findIndex(settingsStatuses, {name: statusValue});
-        if (index > -1 && settingsStatuses[index].options.color) {
-            output = settingsStatuses[index].options.color;
+        const index = _.findIndex(this.settingsStatuses, {name: statusValue});
+        if (index > -1 && this.settingsStatuses[index].options.color) {
+            output = this.settingsStatuses[index].options.color;
         }
         return output;
+    }
+
+    optionUpdate(optionName: string, value: string | number): void {
+        this.changeRequest.emit([this.object, optionName, value]);
     }
 }

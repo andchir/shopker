@@ -228,4 +228,15 @@ export class OrdersComponent extends PageTableAbstractComponent<Order> {
     getModalContent(){
         return ModalOrderContent;
     }
+
+    changeRequest(e): void {
+        const [object, optionName, value] = e;
+        if (!object['id']) {
+            return;
+        }
+        this.dataService.updateProperty(object['id'], optionName, value)
+            .subscribe(() => {
+                this.getList();
+            });
+    }
 }

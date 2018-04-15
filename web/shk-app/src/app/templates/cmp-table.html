@@ -1,4 +1,4 @@
-<div class="table-responsive" [class.loading]="loading">
+<div class="table-responsive-" [class.loading]="loading">
     <table class="table table-striped table-divided mb-0">
         <thead>
             <tr>
@@ -39,7 +39,12 @@
                         </div>
                     </div>
 
-                    <output-field [value]="item[tableField.name]" [outputType]="tableField.outputType" [options]="tableField.outputProperties"></output-field>
+                    <output-field
+                            [value]="item[tableField.name]"
+                            [outputType]="tableField.outputType"
+                            [options]="tableField.outputProperties"
+                            [object]="item"
+                            (changeRequest)="optionUpdate($event)"></output-field>
 
                 </td>
             </tr>

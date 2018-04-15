@@ -15,4 +15,5 @@ export class OrdersService extends DataService<Order> {
         super(http);
         this.setRequestUrl('orders');
     }
+
 }

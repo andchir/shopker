@@ -21,8 +21,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class OrderController extends StorageControllerAbstract
 {
-
-
     /**
      * Create or update item
      * @param $data
@@ -82,6 +80,40 @@ class OrderController extends StorageControllerAbstract
             return ['success' => false, 'msg' => 'Payment method is empty.'];
         }
         return ['success' => true];
+    }
+
+    /**
+     * @Route("/update/{fieldName}/{itemId}")
+     * @Method({"PATCH"})
+     * @param Request $request
+     * @param $fieldName
+     * @param $itemId
+     * @return JsonResponse
+     */
+    public function updateItemProperty(Request $request, $fieldName, $itemId)
+    {
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $data = $request->getContent()
+            ? json_decode($request->getContent(), true)
+            : [];
+        $value = isset($data['value']) ? $data['value'] : null;
+
+        $repository = $this->getRepository();
+        $item = $repository->find($itemId);
+        if(!$item){
+            return $this->setError('Item not found.');
+        }
+
+        if (method_exists($item, 'set' . $fieldName)) {
+            call_user_func(array($item, 'set' . $fieldName), $value);
+        }
+
+        $dm->flush();
+
+        return new JsonResponse([
+            'success' => true
+        ]);
     }
 
     /**

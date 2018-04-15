@@ -102,6 +102,13 @@ export abstract class DataService<M extends SimpleEntity> {
         );
     }
 
+    updateProperty(itemId: number, optionsName: string, value: string | number): Observable<M> {
+        const url = this.getRequestUrl() + `/update/${optionsName}/${itemId}`;
+        return this.http.patch<M>(url, {value: value}, {headers: this.headers}).pipe(
+            catchError(this.handleError<any>())
+        );
+    }
+
     handleError<T> (operation = 'operation', result?: T) {
         return (err: any): Observable<T> => {
             if (err.error) {

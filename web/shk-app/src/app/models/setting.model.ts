@@ -16,6 +16,10 @@ export interface Setting {
     options?: {[key: string]: SettingOption};
 }
 
+export interface SettingGroupPretty {
+    [groupName: string]: SettingPretty[]
+}
+
 export interface SettingPretty {
     id: number;
     name: string;

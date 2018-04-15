@@ -16,6 +16,7 @@ export class TableComponent implements OnInit {
     @Input() loading: boolean;
     @Input() selectedIds: number[] = [];
     @Output() actionRequest = new EventEmitter();
+    @Output() changeRequest = new EventEmitter();
 
     constructor(
         public router: Router
@@ -68,6 +69,10 @@ export class TableComponent implements OnInit {
 
     getIsSelected(itemId: number): boolean {
         return this.selectedIds.lastIndexOf(itemId) > -1;
+    }
+
+    optionUpdate(e): void {
+        this.changeRequest.emit(e);
     }
 
 }

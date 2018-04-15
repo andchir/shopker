@@ -1,4 +1,4 @@
-import { SettingPretty } from './setting.model';
+import { SettingGroupPretty } from './setting.model';
 
 export interface AppSettingsModel {
     appName: string;
@@ -6,5 +6,5 @@ export interface AppSettingsModel {
     environment: string;
     filesDirUrl: string;
     locale: string;
-    systemSettings: {[groupName: string]: SettingPretty[]}
+    systemSettings: SettingGroupPretty
 }

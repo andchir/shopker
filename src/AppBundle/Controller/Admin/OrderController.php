@@ -13,6 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class OrderController
@@ -90,7 +91,7 @@ class OrderController extends StorageControllerAbstract
      * @param $itemId
      * @return JsonResponse
      */
-    public function updateItemProperty(Request $request, $fieldName, $itemId)
+    public function updateItemPropertyAction(Request $request, $fieldName, $itemId)
     {
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $this->get('doctrine_mongodb')->getManager();
@@ -113,6 +114,26 @@ class OrderController extends StorageControllerAbstract
 
         return new JsonResponse([
             'success' => true
+        ]);
+    }
+
+    /**
+     * @Route("/print/{itemId}")
+     * @Method({"GET"})
+     * @param Request $request
+     * @param $itemId
+     * @return Response
+     */
+    public function printPageAction(Request $request, $itemId)
+    {
+        $repository = $this->getRepository();
+        $item = $repository->find($itemId);
+        if(!$item){
+            throw $this->createNotFoundException('Page not found.');
+        }
+
+        return $this->render('admin/order_print.html.twig', [
+            'order' => $item
         ]);
     }
 

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}{{ app_name }}{% endblock %}</title>
+    <base href="{{ app.request.baseUrl }}/admin/">
+
+    <style>
+        body { padding: 20px; font-family: Arial, sans-serif; color: #000; line-height: 1.3; }
+        hr { background-color: transparent; margin: 15px 0 15px 0; border-top: 1px solid #000; }
+        table { width: 100%; border: 1px solid #000; border-collapse: collapse; }
+        table th,
+        table td { padding: 10px; border: 1px solid #000; }
+        .float-right { float: right; }
+        @media print {
+            .print-hidden { display:none; }
+        }
+    </style>
+    <script>
+        window.onload = window.print;
+    </script>
+
+</head>
+<body>
+
+    <div>
+
+        <div class="print-hidden">
+            <button type="button" onclick="window.print();">{{ 'Print' | trans }}</button>
+        </div>
+
+        <hr>
+        {{ app_name }}
+        <hr>
+
+        <h1>
+            {{ 'Order' | trans }} #{{ order.id }}
+        </h1>
+
+        <div>
+            {{ order.createdDate | date('d.m.Y H:i:s') }}
+        </div>
+
+        <h3>
+            {{ 'Contacts' | trans }}:
+        </h3>
+
+        <div>
+            <b>{{ 'Email' }}:</b> {{ order.email }}
+        </div>
+        <div>
+            <b>{{ 'Full name' }}:</b> {{ order.fullName }}
+        </div>
+        <div>
+            <b>{{ 'Phone' }}:</b> {{ order.phone }}
+        </div>
+        <div>
+            <b>{{ 'Address' }}:</b> {{ order.address }}
+        </div>
+        <div>
+            <b>{{ 'Delivery method' }}:</b> {{ order.deliveryName }}
+        </div>
+        <div>
+            <b>{{ 'Payment method' }}:</b> {{ order.paymentName }}
+        </div>
+        <div>
+            <b>{{ 'Comment' }}:</b> {{ order.comment }}
+        </div>
+
+        <h3>
+            {{ 'Order list' | trans }}:
+        </h3>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>{{ 'Title' | trans }}</th>
+                    <th>{{ 'Price' | trans }}</th>
+                    <th>{{ 'Quantity' | trans }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for content in order.content %}
+                    <tr>
+                        <td>
+                            {{ content.id }}
+                        </td>
+                        <td>
+                            {{ content.title }}
+                        </td>
+                        <td>
+                            {{ content.price | price }}
+                            {{ order.currency }}
+                        </td>
+                        <td>
+                            {{ content.count }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2">
+                        {{ 'Delivery' | trans }}
+                    </td>
+                    <td>
+                        {{ order.deliveryPrice | price }}
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td>
+                        <b>
+                            {{ order.price | price }}
+                            {{ order.currency }}
+                        </b>
+                    </td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+
+    </div>
+
+</body>
+</html>

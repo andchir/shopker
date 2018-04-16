@@ -13,6 +13,20 @@
 
                 <hr>
 
+                {% for type, messages in app.session.flashbag.all() %}
+                    {% for message in messages %}
+                        {% if type == 'errors' %}
+                            <div class="alert alert-danger">
+                                {{ message | trans }}
+                            </div>
+                        {% else %}
+                            <div class="alert alert-info">
+                                {{ message | trans }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+
                 {% if error %}
                     <div class="alert alert-danger">
                         {{ error | trans({}, 'validators') }}
@@ -36,6 +50,10 @@
                         <button type="submit" class="btn btn-primary" name="login">
                             {{ 'Log in' | trans }}
                         </button>
+                        &nbsp;
+                        <a href="{{ path('password_reset') }}">
+                            {{ 'Forgot your password?' | trans }}
+                        </a>
                     </div>
                 </form>
 

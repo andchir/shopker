@@ -3,6 +3,8 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Document\User;
+use AppBundle\Form\Model\ChangePassword;
+use AppBundle\Form\Type\ChangePasswordType;
 use AppBundle\Repository\UserRepository;
 use MongoDB\Driver\Exception\AuthenticationException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -45,7 +47,11 @@ class AccountController extends Controller
      * @Route("/register", name="register")
      * @return Response
      */
-    public function registerAction(Request $request, UserPasswordEncoderInterface $encoder, TranslatorInterface $translator)
+    public function registerAction(
+        Request $request,
+        UserPasswordEncoderInterface $encoder,
+        TranslatorInterface $translator
+    )
     {
         $dm = $this->get('doctrine_mongodb')->getManager();
         $form = $this->createForm(RegistrationType::class, new Registration());
@@ -76,11 +82,36 @@ class AccountController extends Controller
                 $dm->persist($user);
                 $dm->flush();
 
-                return $this->redirectToRoute('homepage');
+                $request->getSession()
+                    ->getFlashBag()
+                    ->add('messages', 'You are successfully registered. Now you can enter.');
+
+                return $this->redirectToRoute('login');
             }
         }
 
         return $this->render('security/register.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/password_reset", name="password_reset")
+     * @param Request $request
+     * @return Response
+     */
+    public function passwordResetAction(Request $request)
+    {
+        $form = $this->createForm(ChangePasswordType::class, new ChangePassword());
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+
+
+        }
+
+        return $this->render('security/password_reset.html.twig', [
             'form' => $form->createView()
         ]);
     }

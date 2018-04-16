@@ -19,11 +19,4 @@ class RegistrationType extends AbstractType
             'property_path' => 'termsAccepted'
         ]);
     }
-
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setDefaults(array(
-            'show_legend' => false
-        ));
-    }
 }

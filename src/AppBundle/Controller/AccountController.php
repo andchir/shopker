@@ -3,8 +3,10 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Document\User;
+use AppBundle\Repository\UserRepository;
 use MongoDB\Driver\Exception\AuthenticationException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Form\Type\RegistrationType;
@@ -12,6 +14,7 @@ use AppBundle\Form\Model\Registration;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class AccountController extends Controller
 {
@@ -42,7 +45,7 @@ class AccountController extends Controller
      * @Route("/register", name="register")
      * @return Response
      */
-    public function registerAction(Request $request, UserPasswordEncoderInterface $encoder)
+    public function registerAction(Request $request, UserPasswordEncoderInterface $encoder, TranslatorInterface $translator)
     {
         $dm = $this->get('doctrine_mongodb')->getManager();
         $form = $this->createForm(RegistrationType::class, new Registration());
@@ -55,21 +58,41 @@ class AccountController extends Controller
             /** @var User $user */
             $user = $registration->getUser();
 
-            $plainPassword = $user->getPassword();
-            $encodedPassword = $encoder->encodePassword($user, $plainPassword);
+            // User existence check
+            $email = $user->getEmail();
+            $usersCount = $this->getUserRepository()->getUsersCountBy('email', $email);
+            if ($usersCount > 0) {
+                $form->addError(new FormError($translator->trans('register.email.already exists', [], 'validators')));
+            }
 
-            $user
-                ->setRoles(['ROLE_USER'])
-                ->setPassword($encodedPassword);
+            if ($form->isValid()) {
+                $plainPassword = $user->getPassword();
+                $encodedPassword = $encoder->encodePassword($user, $plainPassword);
 
-            $dm->persist($user);
-            $dm->flush();
+                $user
+                    ->setRoles(['ROLE_USER'])
+                    ->setPassword($encodedPassword);
 
-            return $this->redirectToRoute('homepage');
+                $dm->persist($user);
+                $dm->flush();
+
+                return $this->redirectToRoute('homepage');
+            }
         }
 
         return $this->render('security/register.html.twig', [
             'form' => $form->createView()
         ]);
     }
+
+    /**
+     * @return UserRepository
+     */
+    public function getUserRepository()
+    {
+        return $this->get('doctrine_mongodb')
+            ->getManager()
+            ->getRepository(User::class);
+    }
+
 }

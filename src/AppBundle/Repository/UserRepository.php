@@ -13,6 +13,10 @@ use Doctrine\ODM\MongoDB\DocumentRepository;
 class UserRepository extends DocumentRepository implements UserLoaderInterface
 {
 
+    /**
+     * @param string $username
+     * @return array|null|object
+     */
     public function loadUserByUsername($username)
     {
         $qb = $this->createQueryBuilder(User::class);
@@ -21,6 +25,20 @@ class UserRepository extends DocumentRepository implements UserLoaderInterface
             ->addOr($qb->expr()->field('email')->equals($username))
             ->getQuery()
             ->getSingleResult();
+    }
+
+    /**
+     * @param $fieldName
+     * @param $value
+     * @return mixed
+     */
+    public function getUsersCountBy($fieldName, $value)
+    {
+        return $this->createQueryBuilder()
+            ->field($fieldName)->equals($value)
+            ->getQuery()
+            ->execute()
+            ->count();
     }
 
 }

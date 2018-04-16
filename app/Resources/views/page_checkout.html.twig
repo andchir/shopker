@@ -22,7 +22,11 @@
 
                     {{ form_start(form) }}
                     {{ form_widget(form) }}
-                    {{ form_row(form.save, {'attr': {'class': 'btn btn-primary btn-lg'}}) }}
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-info btn-lg" name="button-submit">
+                            {{ 'Submit order' | trans }}
+                        </button>
+                    </div>
                     {{ form_end(form) }}
 
                 </div>

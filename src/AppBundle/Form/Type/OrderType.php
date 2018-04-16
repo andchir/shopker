@@ -66,10 +66,6 @@ class OrderType extends AbstractType
             ->add('comment', TextareaType::class, [
                 'attr' => ['rows' => '4'],
                 'required' => false
-            ])
-            ->add('save', SubmitType::class, [
-                'label' => 'Submit order',
-                'attr' => ['class' => 'btn btn-info btn-lg']
             ]);
 
         $builder->get('deliveryName')->addModelTransformer($this->deliveryTransformer);

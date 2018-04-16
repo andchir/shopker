@@ -7,34 +7,34 @@
         <div class="row justify-content-md-center">
             <div class="col col-md-6">
 
-                {% if error %}
-                    <div class="alert alert-danger">
-                        {{ error }}
-                    </div>
-                {% endif %}
-
                 <div>
                     {{ app_name }}
                 </div>
 
                 <hr>
 
+                {% if error %}
+                    <div class="alert alert-danger">
+                        {{ error | trans({}, 'validators') }}
+                    </div>
+                {% endif %}
+
                 <form action="{{ path('login') }}" method="post">
                     <div class="form-group">
-                        <label for="username">Username:</label>
+                        <label for="username">{{ 'Email' | trans }}</label>
                         <input type="text" class="form-control" id="username" name="_username" value="{{ last_username }}">
                     </div>
                     <div class="form-group">
-                        <label for="password">Password:</label>
+                        <label for="password">{{ 'Password' | trans }}</label>
                         <input type="password" class="form-control" id="password" name="_password">
                     </div>
                     <div class="form-group">
                         <input type="checkbox" id="remember_me" name="_remember_me" checked>
-                        <label for="remember_me">Keep me logged in</label>
+                        <label for="remember_me">{{ 'Keep me logged in' | trans }}</label>
                     </div>
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary" name="login">
-                            Log in
+                            {{ 'Log in' | trans }}
                         </button>
                     </div>
                 </form>
@@ -46,7 +46,7 @@
                     </a>
                     &nbsp;&bull;&nbsp;
                     <a href="{{ path('register') }}">
-                        {{ 'Sign Up' | trans }}
+                        {{ 'Sign up' | trans }}
                     </a>
                 </p>
 

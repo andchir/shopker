@@ -1,6 +1,11 @@
 Home page: Главная страница
 Log in: Войти
 Log out: Выйти
+Sign up: Зарегистрироваться
+Registration: Регистрация
+Password: Пароль
+Keep me logged in: Запомнить меня
+Confirm password: Подтвердите пароль
 Catalog: Каталог товаров
 Root category: Корневая категория
 Administration: Администрирование
@@ -24,7 +29,7 @@ Selected: Выбрано
 product with a total cost|products with a total cost: "товар на сумму|товара на сумму|товаров на сумму"
 Your cart is empty.: Ваша корзина пуста.
 Thanks for your order!: Спасибо за заказ! В ближайшее время Вы получите подтверждение по эл. почте.
-Go to home page: Перейти на главную страницу
+Go to home page: На главную страницу
 Submit order: Отправить заказ
 Email: Адрес эл. почты
 Full name: Ф.И.О.
@@ -39,3 +44,4 @@ Status: Статус
 Order list: Состав заказа
 Contacts: Контактная информация
 Print: Печать
+I agree to the processing of personal data: Согласен на обработку персональных данных

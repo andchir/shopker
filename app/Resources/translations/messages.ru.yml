@@ -51,3 +51,4 @@ Reset password: Сбросить пароль
 You are successfully registered. Now you can enter.: Вы успешно зарегистрированы. Теперь Вы можете войти.
 An email with further instructions has been sent to your email address.: На ваш адрес электронной почты отправлено письмо с дальнейшими инструкциями.
 Your password has been changed successfully. Now you can enter.: Ваш пароль успешно изменен. Теперь Вы можете войти.
+reset_password.confirm.email_link: To confirm the change of password, please follow the link

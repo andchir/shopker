@@ -125,11 +125,24 @@ class AccountController extends Controller
             }
             else {
 
+                $confirmCode = UtilsService::generatePassword();
                 $user
                     ->setNewPassword($newPassword)
-                    ->setSecretCode(UtilsService::generatePassword());
+                    ->setSecretCode($confirmCode);
 
                 $dm->flush();
+
+                $siteURL = (isset($_SERVER['HTTPS']) ? 'https' : 'http')
+                    . "://{$_SERVER['HTTP_HOST']}/";
+
+                $emailBody = $this->render('email/email_password_reset.html.twig', array(
+                    'newPassword' => $newPassword,
+                    'email' => $email,
+                    'siteUrl' => $siteURL,
+                    'confirmCode' => $confirmCode
+                ));
+
+                // var_dump($emailBody->getContent()); exit;
 
                 $request->getSession()
                     ->getFlashBag()

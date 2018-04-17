@@ -12,6 +12,17 @@ class ChangePassword
      */
     protected $email;
 
+    /**
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *      min = 6,
+     *      max = 50,
+     *      minMessage = "Password must be at least {{ limit }} characters long",
+     *      maxMessage = "Password cannot be longer than {{ limit }} characters"
+     * )
+     */
+    protected $password;
+
     public function setEmail($email)
     {
         $this->email = $email;
@@ -20,5 +31,15 @@ class ChangePassword
     public function getEmail()
     {
         return $this->email;
+    }
+
+    public function setPassword($password)
+    {
+        $this->password = $password;
+    }
+
+    public function getPassword()
+    {
+        return $this->password;
     }
 }

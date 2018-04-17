@@ -1,2 +1,5 @@
 Bad credentials.: Логин или пароль указаны не верно.
 register.email.already exists: Пользователь с указанным адресом эл. почты уже существует.
+Password must be at least {{ limit }} characters long: Пароль должен быть больше {{ limit }} символов
+Password cannot be longer than {{ limit }} characters: Пароль не может быть больше {{ limit }} символов
+password_reset.user.not_found: Пользователь с указанным адресом эл. почты не найден.

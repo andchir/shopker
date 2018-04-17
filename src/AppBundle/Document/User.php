@@ -42,6 +42,16 @@ class User implements AdvancedUserInterface, \Serializable
     protected $password;
 
     /**
+     * @MongoDB\Field(type="string", nullable=true)
+     */
+    protected $newPassword;
+
+    /**
+     * @MongoDB\Field(type="string", nullable=true)
+     */
+    protected $secretCode;
+
+    /**
      * @MongoDB\Field(type="string")
      */
     private $salt;// Not used
@@ -258,5 +268,49 @@ class User implements AdvancedUserInterface, \Serializable
     public function getSalt()
     {
         return null;// Not used
+    }
+
+    /**
+     * Set newPassword
+     *
+     * @param string $newPassword
+     * @return $this
+     */
+    public function setNewPassword($newPassword)
+    {
+        $this->newPassword = $newPassword;
+        return $this;
+    }
+
+    /**
+     * Get newPassword
+     *
+     * @return string $newPassword
+     */
+    public function getNewPassword()
+    {
+        return $this->newPassword;
+    }
+
+    /**
+     * Set secretCode
+     *
+     * @param string $secretCode
+     * @return $this
+     */
+    public function setSecretCode($secretCode)
+    {
+        $this->secretCode = $secretCode;
+        return $this;
+    }
+
+    /**
+     * Get secretCode
+     *
+     * @return string $secretCode
+     */
+    public function getSecretCode()
+    {
+        return $this->secretCode;
     }
 }

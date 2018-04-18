@@ -2,11 +2,40 @@
 
 namespace AppBundle\Service;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 class UtilsService
 {
-    public function __construct()
-    {
+    /** @var ContainerInterface */
+    protected $container;
 
+    /** @param ContainerInterface $container */
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
+    /**
+     * @param $subject
+     * @param $mailBody
+     * @param $toEmail
+     * @return int
+     */
+    public function sendMail($subject, $mailBody, $toEmail)
+    {
+        /** @var \Swift_Mailer $mailer */
+        $mailer = $this->container->get('mailer');
+        $message = (new \Swift_Message($subject))
+        //$message = \Swift_Message::newInstance()
+            ->setSubject($subject)
+            ->setFrom($this->container->getParameter('mailer_user'), $this->container->getParameter('app_name'))
+            ->setTo($toEmail)
+            ->setBody(
+                $mailBody,
+                'text/html'
+            );
+
+        return $mailer->send($message);
     }
 
     /**

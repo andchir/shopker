@@ -103,9 +103,10 @@ class AccountController extends Controller
      * @Route("/password_reset", name="password_reset")
      * @param Request $request
      * @param TranslatorInterface $translator
+     * @param UtilsService $utilsService
      * @return Response
      */
-    public function passwordResetAction(Request $request, TranslatorInterface $translator)
+    public function passwordResetAction(Request $request, TranslatorInterface $translator, UtilsService $utilsService)
     {
         $dm = $this->get('doctrine_mongodb')->getManager();
         $form = $this->createForm(ChangePasswordType::class, new ChangePassword());
@@ -132,17 +133,17 @@ class AccountController extends Controller
 
                 $dm->flush();
 
-                $siteURL = (isset($_SERVER['HTTPS']) ? 'https' : 'http')
-                    . "://{$_SERVER['HTTP_HOST']}/";
+                $siteURL = ($request->server->get('HTTPS') ? 'https' : 'http')
+                    . "://{$request->server->get('HTTP_HOST')}/";
 
-                $emailBody = $this->render('email/email_password_reset.html.twig', array(
+                $emailBody = $this->renderView('email/email_password_reset.html.twig', array(
                     'newPassword' => $newPassword,
                     'email' => $email,
                     'siteUrl' => $siteURL,
                     'confirmCode' => $confirmCode
                 ));
 
-                // var_dump($emailBody->getContent()); exit;
+                $utilsService->sendMail('Reset password', $emailBody, $email);
 
                 $request->getSession()
                     ->getFlashBag()

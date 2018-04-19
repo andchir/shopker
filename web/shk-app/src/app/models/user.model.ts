@@ -4,6 +4,8 @@ export class User {
         public email: string,
         public fullName: string,
         public roles: string[],
-        public isActive: boolean
+        public isActive: boolean,
+        public phone?: string,
+        public address?: string
     ) { }
 }

@@ -10,6 +10,7 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 /**
  * @MongoDB\Document(collection="user", repositoryClass="AppBundle\Repository\UserRepository")
  * @MongoDBUnique(fields="email")
+ * @MongoDB\HasLifecycleCallbacks()
  */
 class User implements AdvancedUserInterface, \Serializable
 {
@@ -34,6 +35,26 @@ class User implements AdvancedUserInterface, \Serializable
      * @MongoDB\Field(type="string", nullable=true)
      */
     protected $fullName;
+
+    /**
+     * @MongoDB\Field(type="string", nullable=true)
+     */
+    protected $phone;
+
+    /**
+     * @MongoDB\Field(type="string")
+     */
+    protected $address;
+
+    /**
+     * @MongoDB\Field(type="date", nullable=true)
+     */
+    protected $createdDate;
+
+    /**
+     * @MongoDB\Field(type="date", nullable=true)
+     */
+    protected $updatedDate;
 
     /**
      * @MongoDB\Field(type="string")
@@ -69,6 +90,23 @@ class User implements AdvancedUserInterface, \Serializable
     public function __construct()
     {
         $this->isActive = true;
+    }
+
+    /**
+     * @MongoDB\PrePersist()
+     */
+    public function prePersist()
+    {
+        $this->createdDate = new \DateTime();
+        $this->updatedDate = new \DateTime();
+    }
+
+    /**
+     * @MongoDB\PreUpdate()
+     */
+    public function preUpdate()
+    {
+        $this->updatedDate = new \DateTime();
     }
 
     public function getId()
@@ -323,9 +361,99 @@ class User implements AdvancedUserInterface, \Serializable
             'id' => $this->getId(),
             'email' => $this->getEmail(),
             'fullName' => $this->getFullName(),
+            'phone' => $this->getPhone(),
+            'address' => $this->getAddress(),
             'roles' => $this->getRoles(),
             'isActive' => $this->getIsActive()
         ];
         return $output;
+    }
+
+    /**
+     * Set phone
+     *
+     * @param string $phone
+     * @return $this
+     */
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+        return $this;
+    }
+
+    /**
+     * Get phone
+     *
+     * @return string $phone
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+    /**
+     * Set address
+     *
+     * @param string $address
+     * @return $this
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
+        return $this;
+    }
+
+    /**
+     * Get address
+     *
+     * @return string $address
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
+     * Set createdDate
+     *
+     * @param \DateTime $createdDate
+     * @return $this
+     */
+    public function setCreatedDate($createdDate)
+    {
+        $this->createdDate = $createdDate;
+        return $this;
+    }
+
+    /**
+     * Get createdDate
+     *
+     * @return \DateTime $createdDate
+     */
+    public function getCreatedDate()
+    {
+        return $this->createdDate;
+    }
+
+    /**
+     * Set updatedDate
+     *
+     * @param \DateTime $updatedDate
+     * @return $this
+     */
+    public function setUpdatedDate($updatedDate)
+    {
+        $this->updatedDate = $updatedDate;
+        return $this;
+    }
+
+    /**
+     * Get updatedDate
+     *
+     * @return date $updatedDate
+     */
+    public function getUpdatedDate()
+    {
+        return $this->updatedDate;
     }
 }

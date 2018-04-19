@@ -6,7 +6,72 @@ import * as _ from "lodash";
 import { User } from '../models/user.model';
 import { PageTableAbstractComponent } from '../page-table.abstract';
 import { UsersService } from '../services/users.service';
+import { SettingsService } from '../services/settings.service';
+import { SystemNameService } from '../services/system-name.service';
+import { ModalContentAbstractComponent } from '../modal.abstract';
+import { AppSettings } from '../services/app-settings.service';
 
+@Component({
+    selector: 'modal-user',
+    templateUrl: '../templates/modal-user.html',
+    providers: [UsersService, SettingsService, SystemNameService]
+})
+export class ModalUserContent extends ModalContentAbstractComponent<User> {
+
+    model = new User(0, '', '', [], true);
+    modalTitle = 'User';
+
+    formFields = {
+        fullName: {
+            value: '',
+            validators: [Validators.required],
+            messages: {
+                required: 'Full name is required.'
+            }
+        },
+        email: {
+            value: '',
+            validators: [Validators.required],
+            messages: {
+                required: 'Email is required.'
+            }
+        },
+        phone: {
+            value: '',
+            validators: [],
+            messages: {}
+        },
+        address: {
+            value: '',
+            validators: [],
+            messages: {}
+        }
+    };
+
+    constructor(
+        public fb: FormBuilder,
+        public dataService: UsersService,
+        public systemNameService: SystemNameService,
+        public activeModal: NgbActiveModal,
+        public tooltipConfig: NgbTooltipConfig,
+        private modalService: NgbModal,
+        private settingsService: SettingsService,
+        private appSettings: AppSettings
+    ) {
+        super(fb, dataService, systemNameService, activeModal, tooltipConfig);
+    }
+
+    save(): void {
+        this.loading = true;
+        this.dataService.update(this.getFormData())
+            .subscribe((res) => {
+                this.closeModal();
+            }, () => {
+                this.loading = false;
+            });
+    }
+
+}
 
 @Component({
     selector: 'shk-users',
@@ -15,7 +80,7 @@ import { UsersService } from '../services/users.service';
 })
 export class UsersComponent extends PageTableAbstractComponent<User> {
 
-    title: string = 'Users';
+    title: string = 'USERS';
 
     constructor(
         dataService: UsersService,
@@ -39,6 +104,12 @@ export class UsersComponent extends PageTableAbstractComponent<User> {
             outputProperties: {}
         },
         {
+            name: 'fullName',
+            title: 'FULL_NAME',
+            outputType: 'text',
+            outputProperties: {}
+        },
+        {
             name: 'isActive',
             title: 'ACTIVE',
             outputType: 'boolean',
@@ -46,7 +117,14 @@ export class UsersComponent extends PageTableAbstractComponent<User> {
         }
     ];
 
+    setModalInputs(itemId?: number, isItemCopy: boolean = false): void {
+        this.modalRef.componentInstance.modalTitle = `User #${itemId}`;
+        this.modalRef.componentInstance.itemId = itemId || 0;
+        this.modalRef.componentInstance.isItemCopy = isItemCopy || false;
+        this.modalRef.componentInstance.isEditMode = true;
+    }
+
     getModalContent(){
-        return null;// UserModalContent;
+        return ModalUserContent;
     }
 }

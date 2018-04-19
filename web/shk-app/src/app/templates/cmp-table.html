@@ -30,7 +30,7 @@
                             <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Edit" (click)="action('edit', item.id)">
                                 <i class="icon-pencil"></i>
                             </button>
-                            <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Copy" (click)="action('copy', item.id)">
+                            <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Copy" (click)="action('copy', item.id)" *ngIf="isCloneAllowed">
                                 <i class="icon-stack"></i>
                             </button>
                             <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Delete" (click)="action('delete', item.id)">

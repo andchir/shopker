@@ -27,7 +27,21 @@ class UserController extends StorageControllerAbstract
      */
     public function createUpdate($data, $itemId = null)
     {
+        /** @var User $item */
+        $item = $this->getRepository()->find($itemId);
+        if (!$item) {
+            return $this->setError('Item not found.');
+        }
 
+        $item
+            ->setEmail($data['email'])
+            ->setFullName($data['fullName'])
+            ->setAddress($data['address'])
+            ->setPhone($data['phone']);
+
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $dm->flush();
 
         return new JsonResponse([
             'success' => true

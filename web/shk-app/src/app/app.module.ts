@@ -18,7 +18,7 @@ import { CategoriesMenuComponent, CategoriesModalComponent, CategoriesListCompon
 import { ContentTypesComponent, ContentTypeModalContent } from './content-types.component';
 import { FieldTypesComponent, FieldTypeModalContent } from './field-types.component';
 import { StatisticsComponent } from './stat.component';
-import { UsersComponent } from './components/users.component';
+import { ModalUserContent, UsersComponent } from './components/users.component';
 import { SettingsComponent } from './settings.component';
 import { ListRecursiveComponent } from './list-recursive.component';
 import { TableComponent } from './table.component';
@@ -95,7 +95,8 @@ registerLocaleData(localeRu, 'ru-RU');
         ContentTypeModalContent,
         CategoriesModalComponent,
         FieldTypeModalContent,
-        ModalOrderContent
+        ModalOrderContent,
+        ModalUserContent
     ],
     providers: [
         AppSettings,
@@ -112,7 +113,8 @@ registerLocaleData(localeRu, 'ru-RU');
         ContentTypeModalContent,
         CategoriesModalComponent,
         FieldTypeModalContent,
-        ModalOrderContent
+        ModalOrderContent,
+        ModalUserContent
     ],
     bootstrap: [ AppComponent ]
 })

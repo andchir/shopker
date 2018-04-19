@@ -30,9 +30,9 @@ class OrderController extends StorageControllerAbstract
      */
     public function createUpdate($data, $itemId = null)
     {
-        /** @var Order $order */
-        $order = $this->getRepository()->find($itemId);
-        if (!$order) {
+        /** @var Order $item */
+        $item = $this->getRepository()->find($itemId);
+        if (!$item) {
             return $this->setError('Item not found.');
         }
         $deliveryPrice = !empty($data['deliveryPrice']) ? floatval($data['deliveryPrice']) : 0;
@@ -44,7 +44,7 @@ class OrderController extends StorageControllerAbstract
             $deliveryPrice = $settingDelivery->getOption('price');
         }
 
-        $order
+        $item
             ->setEmail($data['email'])
             ->setFullName($data['fullName'])
             ->setAddress($data['address'])

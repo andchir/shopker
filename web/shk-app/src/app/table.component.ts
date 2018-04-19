@@ -14,6 +14,7 @@ export class TableComponent implements OnInit {
     @Input() currentPage: number;
     @Input() queryOptions: QueryOptions;
     @Input() loading: boolean;
+    @Input() isCloneAllowed = false;
     @Input() selectedIds: number[] = [];
     @Output() actionRequest = new EventEmitter();
     @Output() changeRequest = new EventEmitter();

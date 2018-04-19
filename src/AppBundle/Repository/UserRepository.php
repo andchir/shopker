@@ -10,7 +10,7 @@ use Doctrine\ODM\MongoDB\DocumentRepository;
 /**
  * UserRepository
  */
-class UserRepository extends DocumentRepository implements UserLoaderInterface
+class UserRepository extends BaseRepository implements UserLoaderInterface
 {
 
     /**

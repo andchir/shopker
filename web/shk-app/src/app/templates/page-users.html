@@ -1,0 +1,42 @@
+<div class="card">
+    <div class="card-body">
+
+        <h3>
+            <i class="icon-head"></i>
+            {{'USERS' | translate}}
+        </h3>
+        <hr>
+
+        <div class="mb-3">
+            <div class="float-right">
+
+                <div ngbDropdown class="d-inline-block mr-1">
+                    <button class="btn btn-info" ngbDropdownToggle>
+                        <span>{{'BATCH_ACTIONS' | translate}}</span>
+                    </button>
+                    <div ngbDropdownMenu>
+                        <button class="dropdown-item" (click)="blockSelected()">{{'DISABLE_ENABLE' | translate}}</button>
+                        <button class="dropdown-item" (click)="deleteSelected()">{{'DELETE' | translate}}</button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="float-left">
+
+
+
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        <cmp-table [items]="items"
+                   [(selectedIds)]="selectedIds"
+                   [collectionSize]="collectionSize"
+                   [queryOptions]="queryOptions"
+                   [tableFields]="tableFields"
+                   [(loading)]="loading"
+                   (actionRequest)="actionRequest($event)"
+                   (changeRequest)="changeRequest($event)"></cmp-table>
+
+    </div>
+</div>

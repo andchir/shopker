@@ -9,6 +9,7 @@ import { ContentTypesComponent } from './content-types.component';
 import { FieldTypesComponent } from './field-types.component';
 import { StatisticsComponent } from './stat.component';
 import { SettingsComponent } from './settings.component';
+import { UsersComponent } from './components/users.component';
 
 const routes: Routes = [
     {
@@ -46,6 +47,10 @@ const routes: Routes = [
     {
         path: 'statistics',
         component: StatisticsComponent
+    },
+    {
+        path: 'users',
+        component: UsersComponent
     },
     {
         path: 'settings',

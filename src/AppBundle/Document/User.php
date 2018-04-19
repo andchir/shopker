@@ -313,4 +313,19 @@ class User implements AdvancedUserInterface, \Serializable
     {
         return $this->secretCode;
     }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        $output = [
+            'id' => $this->getId(),
+            'email' => $this->getEmail(),
+            'fullName' => $this->getFullName(),
+            'roles' => $this->getRoles(),
+            'isActive' => $this->getIsActive()
+        ];
+        return $output;
+    }
 }

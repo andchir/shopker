@@ -42,9 +42,9 @@ class User implements AdvancedUserInterface, \Serializable
     protected $phone;
 
     /**
-     * @MongoDB\Field(type="string")
+     * @MongoDB\Field(type="hash", nullable=true)
      */
-    protected $address;
+    protected $options;
 
     /**
      * @MongoDB\Field(type="date", nullable=true)
@@ -362,9 +362,10 @@ class User implements AdvancedUserInterface, \Serializable
             'email' => $this->getEmail(),
             'fullName' => $this->getFullName(),
             'phone' => $this->getPhone(),
-            'address' => $this->getAddress(),
+            'options' => $this->getOptions(),
             'roles' => $this->getRoles(),
-            'isActive' => $this->getIsActive()
+            'isActive' => $this->getIsActive(),
+            'role' => current($this->getRoles())
         ];
         return $output;
     }
@@ -389,28 +390,6 @@ class User implements AdvancedUserInterface, \Serializable
     public function getPhone()
     {
         return $this->phone;
-    }
-
-    /**
-     * Set address
-     *
-     * @param string $address
-     * @return $this
-     */
-    public function setAddress($address)
-    {
-        $this->address = $address;
-        return $this;
-    }
-
-    /**
-     * Get address
-     *
-     * @return string $address
-     */
-    public function getAddress()
-    {
-        return $this->address;
     }
 
     /**
@@ -450,10 +429,32 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * Get updatedDate
      *
-     * @return date $updatedDate
+     * @return \DateTime $updatedDate
      */
     public function getUpdatedDate()
     {
         return $this->updatedDate;
+    }
+
+    /**
+     * Set options
+     *
+     * @param array $options
+     * @return $this
+     */
+    public function setOptions($options)
+    {
+        $this->options = $options;
+        return $this;
+    }
+
+    /**
+     * Get options
+     *
+     * @return array $options
+     */
+    public function getOptions()
+    {
+        return $this->options;
     }
 }

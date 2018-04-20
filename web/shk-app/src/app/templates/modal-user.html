@@ -7,34 +7,9 @@
     <h4 class="modal-title">{{modalTitle}}</h4>
 </div>
 
-<form [class.loading]="loading">
+<div class="modal-body" [class.loading]="loading">
 
-    <div class="modal-body">
-
-        <div class="row">
-            <div class="col-lg-6" [formGroup]="form">
-                <div class="form-group" [class.form-group-message]="formErrors.fullName">
-                    <label class="label-filled">
-                        {{'FULL_NAME' | translate}}
-                    </label>
-                    <input type="text" class="form-control" name="title" formControlName="fullName" [(ngModel)]="model.fullName">
-                    <div *ngIf="formErrors.fullName" class="alert alert-danger">
-                        {{formErrors.fullName}}
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6" [formGroup]="form">
-                <div class="form-group" [class.form-group-message]="formErrors.phone">
-                    <label class="label-filled">
-                        {{'PHONE' | translate}}
-                    </label>
-                    <input type="text" class="form-control" name="phone" formControlName="phone" [(ngModel)]="model.phone">
-                    <div *ngIf="formErrors.phone" class="alert alert-danger">
-                        {{formErrors.phone}}
-                    </div>
-                </div>
-            </div>
-        </div>
+    <form>
 
         <div class="row">
             <div class="col-lg-6" [formGroup]="form">
@@ -49,22 +24,116 @@
                 </div>
             </div>
             <div class="col-lg-6" [formGroup]="form">
-                <div class="form-group" [class.form-group-message]="formErrors.address">
+                <div class="form-group" [class.form-group-message]="formErrors.fullName">
                     <label class="label-filled">
-                        {{'ADDRESS' | translate}}
+                        {{'FULL_NAME' | translate}}
                     </label>
-                    <textarea class="form-control" name="address" formControlName="address" rows="4" [(ngModel)]="model.address"></textarea>
+                    <input type="text" class="form-control" name="title" formControlName="fullName" [(ngModel)]="model.fullName">
+                    <div *ngIf="formErrors.fullName" class="alert alert-danger">
+                        {{formErrors.fullName}}
+                    </div>
                 </div>
             </div>
         </div>
 
-    </div>
-    <div class="modal-footer d-block">
-        <button type="button" class="btn btn-success btn-wide" [disabled]="submitted && form.valid" (click)="save()">
-            <span>{{'SAVE' | translate}}</span>
-        </button>
-        <button type="button" class="btn btn-secondary btn-wide" (click)="activeModal.dismiss()">
-            <span>{{'CANCEL' | translate}}</span>
-        </button>
-    </div>
-</form>
+        <div class="row">
+            <div class="col-lg-6" [formGroup]="form">
+                <div class="form-group" [class.form-group-message]="formErrors.phone">
+                    <label class="label-filled">
+                        {{'PHONE' | translate}}
+                    </label>
+                    <input type="text" class="form-control" name="phone" formControlName="phone" [(ngModel)]="model.phone">
+                    <div *ngIf="formErrors.phone" class="alert alert-danger">
+                        {{formErrors.phone}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6" [formGroup]="form">
+                <div class="form-group" [class.form-group-message]="formErrors.role">
+                    <label class="label-filled">
+                        {{'ROLE' | translate}}
+                    </label>
+                    <select class="form-control" name="role" formControlName="role" [(ngModel)]="model.role">
+                        <option [value]="role.name" *ngFor="let role of userRoles">{{role.title}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6" [formGroup]="form">
+                <div class="form-group">
+                    <div class="card card-body p-2 pl-3">
+                        <div class="custom-control custom-checkbox m-0">
+                            <input type="checkbox" class="custom-control-input" id="fieldIsActive" value="1" name="isActive" formControlName="isActive" [(ngModel)]="model.isActive">
+                            <label class="custom-control-label" for="fieldIsActive">{{'ACTIVE' | translate}}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+    <ngb-accordion [closeOthers]="true" activeIds="accordion-order-content" class="ngb-accordion">
+        <ngb-panel id="accordion-order-content" [title]="'OPTIONS' | translate">
+            <ng-template ngbPanelContent>
+
+                <table class="table table-bordered mb-0">
+                    <colgroup>
+                        <col width="27%">
+                        <col width="27%">
+                        <col width="39%">
+                        <col width="7%">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>{{ 'SYSTEM_NAME' | translate }}</th>
+                        <th>{{ 'NAME' | translate }}</th>
+                        <th>{{ 'VALUE' | translate }}</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let option of model.options; let index=index">
+                            <td>
+                                <input type="text" class="form-control form-control-sm" [(ngModel)]="option.name">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control form-control-sm" [(ngModel)]="option.title">
+                            </td>
+                            <td class="text-center">
+                                <input type="text" class="form-control form-control-sm" [(ngModel)]="option.value">
+                            </td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-secondary btn-sm" [title]="'REMOVE' | translate" (click)="addressFieldsDelete(index)">
+                                    <i class="icon-cross"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr class="bg-faded">
+                            <td colspan="4" class="text-center">
+                                <button type="button" class="btn btn-secondary btn-sm" (click)="addressFieldsAdd()">
+                                    <i class="icon-plus"></i>
+                                    <span>{{'ADD' | translate}}</span>
+                                </button>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+            </ng-template>
+        </ngb-panel>
+    </ngb-accordion>
+
+</div>
+<div class="modal-footer d-block">
+    <button type="button" class="btn btn-success btn-wide" [disabled]="submitted && form.valid" (click)="save()">
+        <span>{{'SAVE' | translate}}</span>
+    </button>
+    <button type="button" class="btn btn-secondary btn-wide" (click)="activeModal.dismiss()">
+        <span>{{'CANCEL' | translate}}</span>
+    </button>
+</div>

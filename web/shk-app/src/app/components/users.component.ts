@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbModal, NgbActiveModal, NgbModalRef, NgbPopover, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from "lodash";
 
-import { User } from '../models/user.model';
+import { AddressOption, User } from '../models/user.model';
 import { PageTableAbstractComponent } from '../page-table.abstract';
 import { UsersService } from '../services/users.service';
 import { SettingsService } from '../services/settings.service';
@@ -18,8 +18,9 @@ import { AppSettings } from '../services/app-settings.service';
 })
 export class ModalUserContent extends ModalContentAbstractComponent<User> {
 
-    model = new User(0, '', '', [], true);
+    model = new User(0, '', '', [], true, []);
     modalTitle = 'User';
+    userRoles: {[key: string]: string}[] = [];
 
     formFields = {
         fullName: {
@@ -41,7 +42,14 @@ export class ModalUserContent extends ModalContentAbstractComponent<User> {
             validators: [],
             messages: {}
         },
-        address: {
+        role: {
+            value: '',
+            validators: [Validators.required],
+            messages: {
+                required: 'Role is required.'
+            }
+        },
+        isActive: {
             value: '',
             validators: [],
             messages: {}
@@ -59,6 +67,30 @@ export class ModalUserContent extends ModalContentAbstractComponent<User> {
         private appSettings: AppSettings
     ) {
         super(fb, dataService, systemNameService, activeModal, tooltipConfig);
+    }
+
+    onBeforeInit(): void {
+        this.getUserRoles();
+    }
+
+    getUserRoles(): void {
+        this.dataService.getRolesList()
+            .subscribe((res) => {
+                if (res['roles']) {
+                    this.userRoles = res['roles'];
+                }
+            });
+    }
+
+    addressFieldsAdd(): void {
+        if (!this.model.options) {
+            this.model.options = [];
+        }
+        this.model.options.push(new AddressOption('', '', ''));
+    }
+
+    addressFieldsDelete(index: number): void {
+        this.model.options.splice(index, 1);
     }
 
     save(): void {
@@ -106,6 +138,12 @@ export class UsersComponent extends PageTableAbstractComponent<User> {
         {
             name: 'fullName',
             title: 'FULL_NAME',
+            outputType: 'text',
+            outputProperties: {}
+        },
+        {
+            name: 'role',
+            title: 'ROLE',
             outputType: 'text',
             outputProperties: {}
         },

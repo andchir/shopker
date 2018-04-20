@@ -21,6 +21,7 @@ abstract class StorageControllerAbstract extends BaseController
     /**
      * @Route("")
      * @Method({"GET"})
+     * @param Request $request
      * @return JsonResponse
      */
     public function getList(Request $request)

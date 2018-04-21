@@ -9,6 +9,7 @@ import { DataService } from './services/data-service.abstract';
 import { SystemNameService } from './services/system-name.service';
 import { PageTableAbstractComponent } from './page-table.abstract';
 import { ModalContentAbstractComponent } from './modal.abstract';
+import { QueryOptions } from './models/query-options';
 
 @Injectable()
 export class FieldTypesService extends DataService<FieldType> {
@@ -109,6 +110,7 @@ export class FieldTypeModalContent extends ModalContentAbstractComponent<FieldTy
 })
 export class FieldTypesComponent extends PageTableAbstractComponent<FieldType> {
     title: string = 'Field types';
+    queryOptions: QueryOptions = new QueryOptions('name', 'asc', 1, 10, 0, 0);
 
     constructor(
         dataService: FieldTypesService,

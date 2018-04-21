@@ -1,3 +1,5 @@
+import { UserOption } from './user.model';
+
 export class OrderContent {
     constructor(
         public id: number,
@@ -27,6 +29,7 @@ export class Order {
         public contentCount?: number,
         public price?: number,
         public currency?: string,
-        public content?: OrderContent[]
+        public content?: OrderContent[],
+        public options?: UserOption[]
     ) { }
 }

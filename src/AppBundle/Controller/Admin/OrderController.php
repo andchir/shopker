@@ -47,12 +47,12 @@ class OrderController extends StorageControllerAbstract
         $item
             ->setEmail($data['email'])
             ->setFullName($data['fullName'])
-            ->setAddress($data['address'])
             ->setPhone($data['phone'])
             ->setDeliveryName($data['deliveryName'])
             ->setDeliveryPrice($deliveryPrice)
             ->setPaymentName($data['paymentName'])
             ->setComment($data['comment'])
+            ->setOptions($data['options'])
             ->setContent($data['content']);
 
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */

@@ -43,7 +43,7 @@ class User implements AdvancedUserInterface, \Serializable
     protected $phone;
 
     /**
-     * @MongoDB\Field(type="hash", nullable=true)
+     * @MongoDB\Field(type="collection", nullable=true)
      */
     protected $options;
 

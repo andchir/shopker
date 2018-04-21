@@ -19,27 +19,27 @@ class OrderOptionsType extends AbstractType
 //            ])
             ->add('state', TextType::class, [
                 'constraints' => new NotBlank(),
-                'label' => 'address.state'
+                'label' => 'user_options.state'
             ])
             ->add('zip', TextType::class, [
                 'constraints' => new NotBlank(),
-                'label' => 'address.zip'
+                'label' => 'user_options.zip'
             ])
             ->add('city', TextType::class, [
                 'constraints' => new NotBlank(),
-                'label' => 'address.city'
+                'label' => 'user_options.city'
             ])
             ->add('street', TextType::class, [
                 'constraints' => new NotBlank(),
-                'label' => 'address.street'
+                'label' => 'user_options.street'
             ])
             ->add('house', TextType::class, [
                 'constraints' => new NotBlank(),
-                'label' => 'address.house'
+                'label' => 'user_options.house'
             ])
             ->add('apartment', TextType::class, [
                 'constraints' => new NotBlank(),
-                'label' => 'address.apartment'
+                'label' => 'user_options.apartment'
             ]);
     }
 

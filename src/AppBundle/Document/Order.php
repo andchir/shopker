@@ -91,12 +91,12 @@ class Order
     protected $currency;
 
     /**
-     * @MongoDB\Field(type="hash", nullable=true)
+     * @MongoDB\Field(type="collection", nullable=true)
      */
     protected $options;
 
     /**
-     * @MongoDB\Field(type="hash", nullable=true)
+     * @MongoDB\Field(type="collection", nullable=true)
      */
     protected $content;
 

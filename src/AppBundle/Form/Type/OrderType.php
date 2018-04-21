@@ -13,21 +13,26 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Form\CallbackTransformer;
 
 class OrderType extends AbstractType
 {
     private $deliveryTransformer;
     private $paymentTransformer;
+    protected $translator;
 
     public function __construct(
         SettingToStringTransformer $deliveryTransformer,
-        SettingToStringTransformer $paymentTransformer
+        SettingToStringTransformer $paymentTransformer,
+        TranslatorInterface $translator
     )
     {
         $this->deliveryTransformer = $deliveryTransformer->setGroupName(Setting::GROUP_DELIVERY);
         $this->paymentTransformer = $paymentTransformer->setGroupName(Setting::GROUP_PAYMENT);
+        $this->translator = $translator;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -72,6 +77,40 @@ class OrderType extends AbstractType
 
         $builder->get('deliveryName')->addModelTransformer($this->deliveryTransformer);
         $builder->get('paymentName')->addModelTransformer($this->paymentTransformer);
+        $builder->get('options')->addModelTransformer($this->getOptionsTransformer());
+    }
+
+    /**
+     * @return CallbackTransformer
+     */
+    public function getOptionsTransformer()
+    {
+        return new CallbackTransformer(
+            function ($optionsData) {
+                if (!is_array($optionsData)) {
+                    return [];
+                }
+                $options = [];
+                foreach ($optionsData as $option) {
+                    $options[$option['name']] = $option['value'];
+                }
+                return $options;
+            },
+            function ($options) {
+                if (!is_array($options)) {
+                    return [];
+                }
+                $optionsData = [];
+                foreach ($options as $key => $value) {
+                    $optionsData[] = [
+                        'name' => $key,
+                        'title' => $this->translator->trans('user_options.' . $key),
+                        'value' => $value
+                    ];
+                }
+                return $optionsData;
+            }
+        );
     }
 
     public function configureOptions(OptionsResolver $resolver)

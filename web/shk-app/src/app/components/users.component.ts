@@ -10,6 +10,7 @@ import { SettingsService } from '../services/settings.service';
 import { SystemNameService } from '../services/system-name.service';
 import { ModalContentAbstractComponent } from '../modal.abstract';
 import { AppSettings } from '../services/app-settings.service';
+import { QueryOptions } from '../models/query-options';
 
 @Component({
     selector: 'modal-user',
@@ -113,6 +114,7 @@ export class ModalUserContent extends ModalContentAbstractComponent<User> {
 export class UsersComponent extends PageTableAbstractComponent<User> {
 
     title: string = 'USERS';
+    queryOptions: QueryOptions = new QueryOptions('id', 'desc', 1, 10, 0, 0);
 
     constructor(
         dataService: UsersService,

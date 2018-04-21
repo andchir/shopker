@@ -10,6 +10,7 @@ import { ProductModalContent } from './product.component';
 import { ContentType } from './models/content_type.model';
 import { ContentTypesService } from './services/content_types.service';
 import { Product } from './models/product.model';
+import { QueryOptions } from './models/query-options';
 
 @Component({
     selector: 'catalog-category',
@@ -19,6 +20,7 @@ import { Product } from './models/product.model';
 export class CatalogCategoryComponent extends PageTableAbstractComponent<Product> {
     static title = 'CATEGORY';
 
+    queryOptions: QueryOptions = new QueryOptions('id', 'desc', 1, 10, 0, 0);
     currentCategory: Category;
     currentContentType: ContentType;
     tableFields = [];
@@ -45,7 +47,7 @@ export class CatalogCategoryComponent extends PageTableAbstractComponent<Product
                 name: 'id',
                 sortName: 'id',
                 title: 'ID',
-                outputType: 'number',
+                outputType: 'text',
                 outputProperties: {}
             }
         ];

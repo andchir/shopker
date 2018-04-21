@@ -481,6 +481,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent<Conte
 export class ContentTypesComponent extends PageTableAbstractComponent<ContentType> {
 
     title: string = 'Типы контента';
+    queryOptions: QueryOptions = new QueryOptions('name', 'asc', 1, 10, 0, 0);
 
     constructor(
         dataService: ContentTypesService,

@@ -55,9 +55,9 @@ reset_password.confirm.email_link: Для подтверждения измен�
 ROLE_USER: Пользователь
 ROLE_ADMIN: Администратор
 ROLE_SUPER_ADMIN: Супер-Администратор
-address.state: Регион
-address.zip: Индекс
-address.city: Город
-address.street: Улица
-address.house: Дом
-address.apartment: Квартира
+user_options.state: Регион
+user_options.zip: Индекс
+user_options.city: Город
+user_options.street: Улица
+user_options.house: Дом
+user_options.apartment: Квартира

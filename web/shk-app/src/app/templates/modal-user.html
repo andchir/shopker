@@ -75,8 +75,8 @@
 
     </form>
 
-    <ngb-accordion [closeOthers]="true" activeIds="accordion-order-content" class="ngb-accordion">
-        <ngb-panel id="accordion-order-content" [title]="'OPTIONS' | translate">
+    <ngb-accordion [closeOthers]="true" activeIds="accordion-user-options" class="ngb-accordion">
+        <ngb-panel id="accordion-user-options" [title]="'OPTIONS' | translate">
             <ng-template ngbPanelContent>
 
                 <table class="table table-bordered mb-0">
@@ -87,12 +87,12 @@
                         <col width="7%">
                     </colgroup>
                     <thead>
-                    <tr>
-                        <th>{{ 'SYSTEM_NAME' | translate }}</th>
-                        <th>{{ 'NAME' | translate }}</th>
-                        <th>{{ 'VALUE' | translate }}</th>
-                        <th></th>
-                    </tr>
+                        <tr>
+                            <th>{{ 'SYSTEM_NAME' | translate }}</th>
+                            <th>{{ 'NAME' | translate }}</th>
+                            <th>{{ 'VALUE' | translate }}</th>
+                            <th></th>
+                        </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let option of model.options; let index=index">

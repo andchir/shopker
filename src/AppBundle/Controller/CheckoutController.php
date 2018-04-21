@@ -105,13 +105,9 @@ class CheckoutController extends BaseController
                     if (empty($userOptions)) {
                         $userOptions = [];
                     }
-                    foreach ($optionsData as $key => $value) {
-                        if (empty($userOptions[$key])) {
-                            $userOptions[] = [
-                                'name' => $key,
-                                'title' => $translator->trans('address.' . $key),
-                                'value' => $value
-                            ];
+                    foreach ($optionsData as $option) {
+                        if (array_search($option['name'], array_column($userOptions, 'name')) === false) {
+                            $userOptions[] = $option;
                         }
                     }
                     $user->setOptions($userOptions);

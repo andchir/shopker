@@ -12,6 +12,7 @@ import { SettingsService } from './services/settings.service';
 import { Setting, SettingPretty, SettingsGroup } from './models/setting.model';
 import { AppSettings } from './services/app-settings.service';
 import { QueryOptions } from './models/query-options';
+import { UserOption } from './models/user.model';
 
 @Component({
     selector: 'modal-order',
@@ -50,11 +51,6 @@ export class ModalOrderContent extends ModalContentAbstractComponent<Order> {
             messages: {
                 required: 'Full name is required.'
             }
-        },
-        address: {
-            value: '',
-            validators: [],
-            messages: {}
         },
         comment: {
             value: '',
@@ -165,6 +161,17 @@ export class ModalOrderContent extends ModalContentAbstractComponent<Order> {
         });
         this.model.price = priceTotal;
     }
+
+    optionsAdd(): void {
+        if (!this.model.options) {
+            this.model.options = [];
+        }
+        this.model.options.push(new UserOption('', '', ''));
+    }
+
+    optionsDelete(index: number): void {
+        this.model.options.splice(index, 1);
+    }
 }
 
 @Component({
@@ -175,7 +182,7 @@ export class ModalOrderContent extends ModalContentAbstractComponent<Order> {
 export class OrdersComponent extends PageTableAbstractComponent<Order> {
 
     static title = 'ORDERS';
-    queryOptions: QueryOptions = new QueryOptions('id', 'desc', 1, 10, 0, 0);
+    queryOptions: QueryOptions = new QueryOptions('createdDate', 'desc', 1, 10, 0, 0);
 
     constructor(
         dataService: OrdersService,

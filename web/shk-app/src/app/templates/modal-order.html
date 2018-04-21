@@ -36,20 +36,6 @@
                 </div>
             </div>
             <div class="col-lg-6" [formGroup]="form">
-                <div class="form-group" [class.form-group-message]="formErrors.fullName">
-                    <label class="label-filled">
-                        {{'FULL_NAME' | translate}}
-                    </label>
-                    <input type="text" class="form-control" name="title" formControlName="fullName" [(ngModel)]="model.fullName">
-                    <div *ngIf="formErrors.fullName" class="alert alert-danger">
-                        {{formErrors.fullName}}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-lg-6" [formGroup]="form">
                 <div class="form-group" [class.form-group-message]="formErrors.email">
                     <label class="label-filled">
                         {{'EMAIL' | translate}}
@@ -60,7 +46,21 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="row">
             <div class="col-lg-6" [formGroup]="form">
+
+                <div class="form-group" [class.form-group-message]="formErrors.fullName">
+                    <label class="label-filled">
+                        {{'FULL_NAME' | translate}}
+                    </label>
+                    <input type="text" class="form-control" name="title" formControlName="fullName" [(ngModel)]="model.fullName">
+                    <div *ngIf="formErrors.fullName" class="alert alert-danger">
+                        {{formErrors.fullName}}
+                    </div>
+                </div>
+
                 <div class="form-group" [class.form-group-message]="formErrors.phone">
                     <label class="label-filled">
                         {{'PHONE' | translate}}
@@ -70,24 +70,14 @@
                         {{formErrors.phone}}
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <div class="row">
-            <div class="col-lg-6" [formGroup]="form">
-                <div class="form-group" [class.form-group-message]="formErrors.address">
-                    <label class="label-filled">
-                        {{'ADDRESS' | translate}}
-                    </label>
-                    <textarea class="form-control" name="address" formControlName="address" rows="4" [(ngModel)]="model.address"></textarea>
-                </div>
             </div>
             <div class="col-lg-6" [formGroup]="form">
                 <div class="form-group" [class.form-group-message]="formErrors.comment">
                     <label class="label-filled">
                         {{'COMMENT' | translate}}
                     </label>
-                    <textarea class="form-control" name="comment" formControlName="comment" rows="4" [(ngModel)]="model.comment"></textarea>
+                    <textarea class="form-control" name="comment" formControlName="comment" rows="5" [(ngModel)]="model.comment"></textarea>
                 </div>
             </div>
         </div>
@@ -122,6 +112,58 @@
         <div *ngIf="model.content">
 
             <ngb-accordion [closeOthers]="true" activeIds="accordion-order-content" class="ngb-accordion">
+
+                <ngb-panel id="accordion-order-options" [title]="'OPTIONS' | translate">
+                    <ng-template ngbPanelContent>
+
+                        <table class="table table-bordered mb-0">
+                            <colgroup>
+                                <col width="27%">
+                                <col width="27%">
+                                <col width="39%">
+                                <col width="7%">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>{{ 'SYSTEM_NAME' | translate }}</th>
+                                    <th>{{ 'NAME' | translate }}</th>
+                                    <th>{{ 'VALUE' | translate }}</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let option of model.options; let index=index">
+                                    <td>
+                                        <input type="text" class="form-control form-control-sm" [(ngModel)]="option.name" [ngModelOptions]="{standalone: true}">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control form-control-sm" [(ngModel)]="option.title" [ngModelOptions]="{standalone: true}">
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="text" class="form-control form-control-sm" [(ngModel)]="option.value" [ngModelOptions]="{standalone: true}">
+                                    </td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-secondary btn-sm" [title]="'REMOVE' | translate" (click)="optionsDelete(index)">
+                                            <i class="icon-cross"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr class="bg-faded">
+                                    <td colspan="4" class="text-center">
+                                        <button type="button" class="btn btn-secondary btn-sm" (click)="optionsAdd()">
+                                            <i class="icon-plus"></i>
+                                            <span>{{'ADD' | translate}}</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                    </ng-template>
+                </ngb-panel>
+
                 <ngb-panel id="accordion-order-content" [title]="'ORDER_CONTENT' | translate">
                     <ng-template ngbPanelContent>
 
@@ -177,10 +219,10 @@
                                                 {{ content.title }}
                                             </td>
                                             <td class="text-center pr-2">
-                                                <input type="number" class="d-inline-block form-control form-control-sm" name="price[]" min="0" step="0.01" style="width: 100px;" [(ngModel)]="content.price" (ngModelChange)="priceTotalUpdate()">
+                                                <input type="number" class="d-inline-block form-control form-control-sm" name="price[]" min="0" step="0.01" style="width: 100px;" [(ngModel)]="content.price" (ngModelChange)="priceTotalUpdate()" [ngModelOptions]="{standalone: true}">
                                             </td>
                                             <td class="text-right no-wrap">
-                                                <input type="number" class="d-inline-block form-control form-control-sm" name="count[]" min="1" step="1" style="width: 60px;" [(ngModel)]="content.count" (ngModelChange)="priceTotalUpdate()">
+                                                <input type="number" class="d-inline-block form-control form-control-sm" name="count[]" min="1" step="1" style="width: 60px;" [(ngModel)]="content.count" (ngModelChange)="priceTotalUpdate()" [ngModelOptions]="{standalone: true}">
                                                 <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Accept" (click)="editContentToggle(content)">
                                                     <i class="icon-check"></i>
                                                 </button>

@@ -25,9 +25,7 @@ export class TableComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.queryOptions.sort_by = this.tableFields.length > 0
-            ? this.tableFields[0].name
-            : 'id';
+
     }
 
     selectSortBy(fieldName: string): void {

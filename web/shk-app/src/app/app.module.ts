@@ -30,6 +30,7 @@ import { FilterFieldByGroup } from './pipes/filter-field-by-group.pipe';
 import { OrderByPipe } from './pipes/orderby.pipe';
 import { FilterArrayPipe } from './pipes/filter-array-pipe';
 import { DateFromObject } from './pipes/date-from-object.pipe';
+import { UserRoleColorPipe, UserRoleNamePipe } from './pipes/user-role.pipe';
 
 import { AppSettings } from './services/app-settings.service';
 import { ProductsService } from './services/products.service';
@@ -88,6 +89,8 @@ registerLocaleData(localeRu, 'ru-RU');
         OrderByPipe,
         FilterArrayPipe,
         DateFromObject,
+        UserRoleNamePipe,
+        UserRoleColorPipe,
 
         AlertModalContent,
         ConfirmModalContent,

@@ -186,30 +186,35 @@ export class OrdersComponent extends PageTableAbstractComponent<Order> {
     tableFields = [
         {
             name: 'id',
+            sortName: 'id',
             title: 'ID',
             outputType: 'text',
             outputProperties: {}
         },
         {
             name: 'status',
+            sortName: 'status',
             title: 'STATUS',
             outputType: 'status',
             outputProperties: {}
         },
         {
             name: 'price',
+            sortName: 'price',
             title: 'PRICE',
             outputType: 'number',
             outputProperties: {}
         },
         {
             name: 'contentCount',
+            sortName: 'contentCount',
             title: 'CONTENT_COUNT',
             outputType: 'text',
             outputProperties: {}
         },
         {
             name: 'createdDate',
+            sortName: 'createdDate',
             title: 'DATE_TIME',
             outputType: 'dateObject',
             outputProperties: {

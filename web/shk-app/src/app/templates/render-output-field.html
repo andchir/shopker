@@ -11,6 +11,12 @@
 
     <div *ngSwitchCase="'dateObject'">{{value | dateFromObject: options.format}}</div>
 
+    <div *ngSwitchCase="'userRole'">
+        <span [class]="value | userRoleColor">
+            {{value | userRoleName}}
+        </span>
+    </div>
+
     <div *ngSwitchCase="'status'">
         <div class="d-block" ngbDropdown [placement]="'bottom'" #myDrop="ngbDropdown">
             <button class="btn btn-primary btn-xs shk-btn-status" ngbDropdownToggle [style.backgroundColor]="getStatusColor(value)">

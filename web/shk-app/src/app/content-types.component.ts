@@ -493,30 +493,35 @@ export class ContentTypesComponent extends PageTableAbstractComponent<ContentTyp
     tableFields = [
         {
             name: 'id',
+            sortName: 'id',
             title: 'ID',
             outputType: 'text',
             outputProperties: {}
         },
         {
             name: 'title',
+            sortName: 'title',
             title: 'TITLE',
             outputType: 'text',
             outputProperties: {}
         },
         {
             name: 'name',
+            sortName: 'name',
             title: 'SYSTEM_NAME',
             outputType: 'text',
             outputProperties: {}
         },
         {
             name: 'collection',
+            sortName: 'collection',
             title: 'COLLECTION',
             outputType: 'text',
             outputProperties: {}
         },
         {
             name: 'isActive',
+            sortName: 'isActive',
             title: 'STATUS',
             outputType: 'boolean',
             outputProperties: {}

@@ -1,4 +1,4 @@
-export class AddressOption {
+export class UserOption {
     constructor(
         public name: string,
         public title: string,
@@ -13,7 +13,7 @@ export class User {
         public fullName: string,
         public roles: string[],
         public isActive: boolean,
-        public options: AddressOption[],
+        public options: UserOption[],
         public role?: string,
         public phone?: string
     ) { }

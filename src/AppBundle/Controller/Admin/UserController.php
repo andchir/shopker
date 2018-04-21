@@ -37,7 +37,8 @@ class UserController extends StorageControllerAbstract
         $item
             ->setEmail($data['email'])
             ->setFullName($data['fullName'])
-            ->setPhone($data['phone']);
+            ->setPhone($data['phone'])
+            ->setIsActive(!empty($data['isActive']));
 
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $this->get('doctrine_mongodb')->getManager();
@@ -51,10 +52,19 @@ class UserController extends StorageControllerAbstract
     /**
      * @Route("/roles")
      * @Method({"GET"})
-     * @param Request $request
      * @return JsonResponse
      */
-    public function getRolesHierarchyAction(Request $request)
+    public function getRolesHierarchyAction()
+    {
+        return new JsonResponse([
+            'roles' => $this->getRolesHierarchy()
+        ]);
+    }
+
+    /**
+     * @return array
+     */
+    public function getRolesHierarchy()
     {
         /** @var TranslatorInterface $translator */
         $translator = $this->get('translator');
@@ -73,9 +83,7 @@ class UserController extends StorageControllerAbstract
             ]);
         }
 
-        return new JsonResponse([
-            'roles' => $output
-        ]);
+        return $output;
     }
 
     /**

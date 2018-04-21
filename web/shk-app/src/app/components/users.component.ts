@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbModal, NgbActiveModal, NgbModalRef, NgbPopover, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from "lodash";
 
-import { AddressOption, User } from '../models/user.model';
+import { UserOption, User } from '../models/user.model';
 import { PageTableAbstractComponent } from '../page-table.abstract';
 import { UsersService } from '../services/users.service';
 import { SettingsService } from '../services/settings.service';
@@ -86,7 +86,7 @@ export class ModalUserContent extends ModalContentAbstractComponent<User> {
         if (!this.model.options) {
             this.model.options = [];
         }
-        this.model.options.push(new AddressOption('', '', ''));
+        this.model.options.push(new UserOption('', '', ''));
     }
 
     addressFieldsDelete(index: number): void {
@@ -125,30 +125,35 @@ export class UsersComponent extends PageTableAbstractComponent<User> {
     tableFields = [
         {
             name: 'id',
+            sortName: 'id',
             title: 'ID',
             outputType: 'text',
             outputProperties: {}
         },
         {
             name: 'email',
+            sortName: 'email',
             title: 'EMAIL',
             outputType: 'text',
             outputProperties: {}
         },
         {
             name: 'fullName',
+            sortName: 'fullName',
             title: 'FULL_NAME',
             outputType: 'text',
             outputProperties: {}
         },
         {
             name: 'role',
+            sortName: 'roles',
             title: 'ROLE',
-            outputType: 'text',
+            outputType: 'userRole',
             outputProperties: {}
         },
         {
             name: 'isActive',
+            sortName: 'isActive',
             title: 'ACTIVE',
             outputType: 'boolean',
             outputProperties: {}

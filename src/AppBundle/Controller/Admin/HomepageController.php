@@ -24,11 +24,16 @@ class HomepageController extends Controller
         $settingsService = $this->get('app.settings');
         $settings = $settingsService->getArray();
 
+        $userController = new UserController();
+        $userController->setContainer($this->container);
+        $rolesHierarchy = $userController->getRolesHierarchy();
+
         $settings = [
             'filesDirUrl' => $this->getParameter('files_dir_url'),
             'baseDir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
             'locale' => $this->getParameter('locale'),
-            'systemSettings' => $settings
+            'systemSettings' => $settings,
+            'rolesHierarchy' => $rolesHierarchy
         ];
         return $this->render('admin/homepage.html.twig', ['settings' => $settings]);
     }

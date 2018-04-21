@@ -121,24 +121,28 @@ export class FieldTypesComponent extends PageTableAbstractComponent<FieldType> {
     tableFields = [
         {
             name: 'id',
+            sortName: 'id',
             title: 'ID',
             outputType: 'text',
             outputProperties: {}
         },
         {
             name: 'title',
+            sortName: 'title',
             title: 'TITLE',
             outputType: 'text',
             outputProperties: {}
         },
         {
             name: 'name',
+            sortName: 'name',
             title: 'SYSTEM_NAME',
             outputType: 'text',
             outputProperties: {}
         },
         {
             name: 'isActive',
+            sortName: 'isActive',
             title: 'STATUS',
             outputType: 'boolean',
             outputProperties: {}

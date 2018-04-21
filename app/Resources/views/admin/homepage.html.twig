@@ -20,6 +20,7 @@
             environment: '{{ app.environment }}',
             filesDirUrl: '{{ settings.filesDirUrl }}',
             locale: '{{ settings.locale }}',
+            rolesHierarchy: {{ settings.rolesHierarchy | json_encode() | raw }},
             systemSettings: {{ settings.systemSettings | json_encode() | raw }}
         };
     </script>

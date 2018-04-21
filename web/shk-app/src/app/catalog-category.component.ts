@@ -43,6 +43,7 @@ export class CatalogCategoryComponent extends PageTableAbstractComponent<Product
         this.tableFields = [
             {
                 name: 'id',
+                sortName: 'id',
                 title: 'ID',
                 outputType: 'number',
                 outputProperties: {}
@@ -52,6 +53,7 @@ export class CatalogCategoryComponent extends PageTableAbstractComponent<Product
             if (field.showInTable) {
                 this.tableFields.push({
                     name: field.name,
+                    sortName: field.name,
                     title: field.title,
                     outputType: field.outputType,
                     outputProperties: field.outputProperties

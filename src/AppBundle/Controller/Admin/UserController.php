@@ -40,6 +40,10 @@ class UserController extends StorageControllerAbstract
             ->setPhone($data['phone'])
             ->setIsActive(!empty($data['isActive']));
 
+        if (isset($data['options']) && is_array($data['options'])) {
+            $item->setOptions($data['options']);
+        }
+
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $this->get('doctrine_mongodb')->getManager();
         $dm->flush();

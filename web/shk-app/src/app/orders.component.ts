@@ -11,6 +11,7 @@ import { ModalContentAbstractComponent } from './modal.abstract';
 import { SettingsService } from './services/settings.service';
 import { Setting, SettingPretty, SettingsGroup } from './models/setting.model';
 import { AppSettings } from './services/app-settings.service';
+import { QueryOptions } from './models/query-options';
 
 @Component({
     selector: 'modal-order',
@@ -174,6 +175,7 @@ export class ModalOrderContent extends ModalContentAbstractComponent<Order> {
 export class OrdersComponent extends PageTableAbstractComponent<Order> {
 
     static title = 'ORDERS';
+    queryOptions: QueryOptions = new QueryOptions('id', 'desc', 1, 10, 0, 0);
 
     constructor(
         dataService: OrdersService,

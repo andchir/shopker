@@ -41,6 +41,13 @@ class CheckoutController extends BaseController
         $settings = $settingsService->getAll();
 
         $order = new Order();
+        if ($user) {
+            $order
+                ->setEmail($user->getEmail())
+                ->setFullName($user->getFullName())
+                ->setPhone($user->getPhone());
+        }
+
         $form = $this->createForm(OrderType::class, $order, [
             'choiceDelivery' => isset($settings[Setting::GROUP_DELIVERY])
                 ? $settings[Setting::GROUP_DELIVERY]
@@ -49,11 +56,8 @@ class CheckoutController extends BaseController
                 ? $settings[Setting::GROUP_PAYMENT]
                 : []
         ]);
-        $form->handleRequest($request);
 
-        if ($user) {
-            $order->setUserId($user->getId());
-        }
+        $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
@@ -82,6 +86,20 @@ class CheckoutController extends BaseController
                     ->setPaymentValue($paymentName)
                     ->setContentFromCart($shopCartData)
                     ->setStatus($statusName);
+
+                if ($user) {
+                    $order->setUserId($user->getId());
+
+                    // $userOptions = $user->getOptions();
+                    if (!$user->getFullName()) {
+                        $user->setFullName($order->getFullName());
+                    }
+                    if (!$user->getPhone()) {
+                        $user->setPhone($order->getPhone());
+                    }
+
+                    // $user->setOptions($userOptions);
+                }
 
                 /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
                 $dm = $this->get('doctrine_mongodb')->getManager();

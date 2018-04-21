@@ -10,7 +10,7 @@ export class UserRoleNamePipe implements PipeTransform {
     transform(value: string): string {
         const rolesHierarchy = this.appSettings.settings.rolesHierarchy;
         let output = value;
-        const index = _.findIndex(rolesHierarchy, {name: value};
+        const index = _.findIndex(rolesHierarchy, {name: value});
         if (index > -1) {
             output = rolesHierarchy[index]['title'];
         }

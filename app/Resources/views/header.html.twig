@@ -16,10 +16,29 @@
                             <i class="icon-cog"></i>
                         </a>
                     {% endif %}
-                    <a class="btn btn-sm btn-outline-primary ml-1" href="{{ path('logout') }}">
-                        {{ 'Log out' | trans }}
-                        <i class="icon-power"></i>
-                    </a>
+                    <div class="d-inline-block btn-group ml-1">
+                        <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                            <i class="icon-head"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="#">
+                                <i class="icon-head text-muted"></i>
+                                &nbsp;
+                                Профиль
+                            </a>
+                            <a class="dropdown-item" href="#">
+                                <i class="icon-list text-muted"></i>
+                                &nbsp;
+                                История заказов
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-muted" href="{{ path('logout') }}">
+                                <i class="icon-power"></i>
+                                &nbsp;
+                                {{ 'Log out' | trans }}
+                            </a>
+                        </div>
+                    </div>
                 {% else %}
                     <a class="btn btn-sm btn-outline-primary ml-1" href="{{ path('login') }}">
                         {{ 'Log in' | trans }}

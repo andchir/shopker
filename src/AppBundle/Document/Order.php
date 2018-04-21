@@ -31,11 +31,6 @@ class Order
     protected $phone;
 
     /**
-     * @MongoDB\Field(type="string")
-     */
-    protected $address;
-
-    /**
      * @MongoDB\Field(type="date", nullable=true)
      */
     protected $createdDate;
@@ -94,6 +89,11 @@ class Order
      * @MongoDB\Field(type="string", nullable=true)
      */
     protected $currency;
+
+    /**
+     * @MongoDB\Field(type="hash", nullable=true)
+     */
+    protected $options;
 
     /**
      * @MongoDB\Field(type="hash", nullable=true)
@@ -306,28 +306,6 @@ class Order
     }
 
     /**
-     * Set address
-     *
-     * @param string $address
-     * @return $this
-     */
-    public function setAddress($address)
-    {
-        $this->address = $address;
-        return $this;
-    }
-
-    /**
-     * Get address
-     *
-     * @return string $address
-     */
-    public function getAddress()
-    {
-        return $this->address;
-    }
-
-    /**
      * Set deliveryName
      *
      * @param string $deliveryName
@@ -484,7 +462,6 @@ class Order
             'email' => $this->getEmail(),
             'phone' => $this->getPhone(),
             'fullName' => $this->getFullName(),
-            'address' => $this->getAddress(),
             'createdDate' => $this->getCreatedDate(),
             'updatedDate' => $this->getUpdatedDate(),
             'deliveryName' => $this->getDeliveryName(),
@@ -497,7 +474,8 @@ class Order
         ];
         if($full){
             $output = array_merge($output, [
-                'content' => $this->getContent()
+                'content' => $this->getContent(),
+                'options' => $this->getOptions()
             ]);
         }
         return $output;
@@ -582,5 +560,27 @@ class Order
     public function getCurrency()
     {
         return $this->currency;
+    }
+
+    /**
+     * Set options
+     *
+     * @param array $options
+     * @return $this
+     */
+    public function setOptions($options)
+    {
+        $this->options = $options;
+        return $this;
+    }
+
+    /**
+     * Get options
+     *
+     * @return array $options
+     */
+    public function getOptions()
+    {
+        return $this->options;
     }
 }

@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use AppBundle\Form\Type\OrderType;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * @Route("/checkout")
@@ -37,6 +38,8 @@ class CheckoutController extends BaseController
         $user = $this->getUser();
         /** @var SettingsService $settingsService */
         $settingsService = $this->get('app.settings');
+        /** @var TranslatorInterface $translator */
+        $translator = $this->get('translator');
 
         $settings = $settingsService->getAll();
 
@@ -87,10 +90,9 @@ class CheckoutController extends BaseController
                     ->setContentFromCart($shopCartData)
                     ->setStatus($statusName);
 
+                // Save user data
                 if ($user) {
                     $order->setUserId($user->getId());
-
-                    // $userOptions = $user->getOptions();
                     if (!$user->getFullName()) {
                         $user->setFullName($order->getFullName());
                     }
@@ -98,7 +100,21 @@ class CheckoutController extends BaseController
                         $user->setPhone($order->getPhone());
                     }
 
-                    // $user->setOptions($userOptions);
+                    $optionsData = $form->get('options')->getData();
+                    $userOptions = $user->getOptions();
+                    if (empty($userOptions)) {
+                        $userOptions = [];
+                    }
+                    foreach ($optionsData as $key => $value) {
+                        if (empty($userOptions[$key])) {
+                            $userOptions[] = [
+                                'name' => $key,
+                                'title' => $translator->trans('address.' . $key),
+                                'value' => $value
+                            ];
+                        }
+                    }
+                    $user->setOptions($userOptions);
                 }
 
                 /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */

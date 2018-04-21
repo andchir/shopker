@@ -11,6 +11,7 @@ use AppBundle\Event\CategoryUpdatedEvent;
 
 use AppBundle\Document\Category;
 use AppBundle\Document\ContentType;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class ContentTypeController
@@ -136,6 +137,7 @@ class CategoryController extends StorageControllerAbstract
      */
     public function getCategoriesTree()
     {
+        /** @var TranslatorInterface $translator */
         $translator = $this->get('translator');
         $categoriesRepository = $this->get('doctrine_mongodb')
             ->getManager()

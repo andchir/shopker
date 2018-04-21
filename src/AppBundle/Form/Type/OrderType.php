@@ -33,6 +33,9 @@ class OrderType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('options', OrderOptionsType::class, [
+                'label' => false
+            ])
             ->add('email', EmailType::class, [
                 'constraints' => new Email()
             ])
@@ -42,7 +45,6 @@ class OrderType extends AbstractType
             ->add('phone', TextType::class, [
                 'required' => false
             ])
-            ->add('address', TextType::class)
             ->add('deliveryName', ChoiceType::class, [
                 'label' => 'Delivery method',
                 'choices'  => $options['choiceDelivery'],

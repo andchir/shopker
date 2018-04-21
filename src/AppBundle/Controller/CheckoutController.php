@@ -38,9 +38,6 @@ class CheckoutController extends BaseController
         $user = $this->getUser();
         /** @var SettingsService $settingsService */
         $settingsService = $this->get('app.settings');
-        /** @var TranslatorInterface $translator */
-        $translator = $this->get('translator');
-
         $settings = $settingsService->getAll();
 
         $order = new Order();
@@ -48,7 +45,8 @@ class CheckoutController extends BaseController
             $order
                 ->setEmail($user->getEmail())
                 ->setFullName($user->getFullName())
-                ->setPhone($user->getPhone());
+                ->setPhone($user->getPhone())
+                ->setOptions($user->getOptions());
         }
 
         $form = $this->createForm(OrderType::class, $order, [

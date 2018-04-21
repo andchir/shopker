@@ -222,6 +222,13 @@ export class OrdersComponent extends PageTableAbstractComponent<Order> {
             outputProperties: {}
         },
         {
+            name: 'email',
+            sortName: 'email',
+            title: 'EMAIL',
+            outputType: 'text',
+            outputProperties: {}
+        },
+        {
             name: 'createdDate',
             sortName: 'createdDate',
             title: 'DATE_TIME',

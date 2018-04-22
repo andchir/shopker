@@ -166,10 +166,10 @@
                                                 <input type="text" class="form-control form-control-sm" [(ngModel)]="setting.name" (ngModelChange)="onValueChanged('SETTINGS_DELIVERY')">
                                             </td>
                                             <td class="text-center">
-                                                <input type="number" class="form-control form-control-sm mwidth-80 m-auto" [(ngModel)]="setting.options.price.value" (ngModelChange)="onValueChanged('SETTINGS_DELIVERY')">
+                                                <input type="number" class="form-control form-control-sm mwidth-80 m-auto" step="1" min="0" [(ngModel)]="setting.options.price.value" (ngModelChange)="onValueChanged('SETTINGS_DELIVERY')">
                                             </td>
                                             <td class="text-center">
-                                                <input type="number" class="form-control form-control-sm mwidth-80 m-auto" [(ngModel)]="setting.options.priceLimit.value" (ngModelChange)="onValueChanged('SETTINGS_DELIVERY')">
+                                                <input type="number" class="form-control form-control-sm mwidth-80 m-auto" step="1" min="0" [(ngModel)]="setting.options.priceLimit.value" (ngModelChange)="onValueChanged('SETTINGS_DELIVERY')">
                                             </td>
                                             <td class="text-center">
                                                 <button type="button" class="btn btn-secondary btn-sm" [title]="'REMOVE' | translate" (click)="deleteSetting('SETTINGS_DELIVERY', index)">

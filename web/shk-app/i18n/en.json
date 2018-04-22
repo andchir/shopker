@@ -87,6 +87,8 @@
 	"mailer_port": "Mail port",
 	"mailer_transport": "Mail transport",
 	"mailer_user": "Mail user",
+	"mailer_encryption": "Mail encryption",
+	"mailer_auth_mode": "Mail authorization mode",
 	"mongodb_database": "MongoDB database",
 	"mongodb_password": "MongoDB password",
 	"mongodb_server": "MongoDB server",

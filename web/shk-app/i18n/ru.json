@@ -86,6 +86,8 @@
 	"mailer_port": "Почта: Порт сервера",
 	"mailer_transport": "Почта: Транспорт",
 	"mailer_user": "Почта: Имя пользователя",
+	"mailer_encryption": "Почта: шифрование",
+	"mailer_auth_mode": "Почта: метод авторизации",
 	"mongodb_database": "MongoDB: База данных",
 	"mongodb_password": "MongoDB: Пароль",
 	"mongodb_server": "MongoDB: Сервер",

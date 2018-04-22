@@ -35,8 +35,10 @@ class UserController extends StorageControllerAbstract
         if (!$item) {
             return $this->setError('Item not found.');
         }
-        if ($currentUser->getIsActive() && empty($data['isActive'])) {
-            return $this->setError('You can not block yourself.');
+        if ($currentUser
+            && $currentUser->getId() == $item->getId()
+            && $currentUser->getIsActive() && empty($data['isActive'])) {
+                return $this->setError('You can not block yourself.');
         }
 
         $item

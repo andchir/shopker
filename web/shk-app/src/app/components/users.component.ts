@@ -173,4 +173,8 @@ export class UsersComponent extends PageTableAbstractComponent<User> {
     getModalContent(){
         return ModalUserContent;
     }
+
+    changeRequest(e): void {
+
+    }
 }

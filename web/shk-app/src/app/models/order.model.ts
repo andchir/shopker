@@ -20,7 +20,7 @@ export class Order {
         public email: string,
         public phone: string,
         public fullName?: string,
-        public address?: string,
+        public createdDate?: string,
         public deliveryName?: string,
         public deliveryPrice?: number,
         public paymentName?: string,

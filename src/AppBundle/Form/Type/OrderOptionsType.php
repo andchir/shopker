@@ -13,10 +13,6 @@ class OrderOptionsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-//            ->add('country', TextType::class, [
-//                'constraints' => new NotBlank(),
-//                'label' => 'address.country'
-//            ])
             ->add('state', TextType::class, [
                 'constraints' => new NotBlank(),
                 'label' => 'user_options.state'

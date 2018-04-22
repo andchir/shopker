@@ -55,7 +55,8 @@ class CheckoutController extends BaseController
                 : [],
             'choicePayment' => isset($settings[Setting::GROUP_PAYMENT])
                 ? $settings[Setting::GROUP_PAYMENT]
-                : []
+                : [],
+            'noDeliveryFirst' => true
         ]);
 
         $form->handleRequest($request);

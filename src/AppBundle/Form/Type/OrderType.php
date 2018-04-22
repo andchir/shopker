@@ -6,12 +6,15 @@ use AppBundle\Form\DataTransformer\SettingToStringTransformer;
 use AppBundle\Document\Order;
 use AppBundle\Document\Setting;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraints\Email;
@@ -48,7 +51,7 @@ class OrderType extends AbstractType
                 'constraints' => new NotBlank()
             ])
             ->add('phone', TextType::class, [
-                'required' => false
+                'constraints' => new NotBlank()
             ])
             ->add('deliveryName', ChoiceType::class, [
                 'label' => 'Delivery method',
@@ -78,6 +81,32 @@ class OrderType extends AbstractType
         $builder->get('deliveryName')->addModelTransformer($this->deliveryTransformer);
         $builder->get('paymentName')->addModelTransformer($this->paymentTransformer);
         $builder->get('options')->addModelTransformer($this->getOptionsTransformer());
+
+        $builder->addEventListener(
+            FormEvents::PRE_SET_DATA,
+            function (FormEvent $event) {
+                /** @var FormInterface $form */
+                $form = $event->getForm();
+
+                // Set delivery address not required
+                if ($form->getConfig()->getOption('noDeliveryFirst')) {
+                    $deliveryIndex = isset($_POST['order']) && isset($_POST['order']['deliveryName'])
+                        ? intval($_POST['order']['deliveryName'])
+                        : -1;
+
+                    if ($deliveryIndex === 0) {
+
+                        foreach ($form->get('options')->all() as $fieldName => $field) {
+                            $type = get_class($field->getConfig()->getType()->getInnerType());
+                            $options = $field->getConfig()->getOptions();
+                            $options['required'] = false;
+                            $options['constraints'] = null;
+                            $form->get('options')->add($fieldName, $type, $options);
+                        }
+                    }
+                }
+            }
+        );
     }
 
     /**
@@ -119,7 +148,8 @@ class OrderType extends AbstractType
             'data_class' => Order::class,
             'allow_extra_fields' => true,
             'choiceDelivery' => null,
-            'choicePayment' => null
+            'choicePayment' => null,
+            'noDeliveryFirst' => false
         ));
     }
 }

@@ -24,12 +24,12 @@
                             <a class="dropdown-item" href="#">
                                 <i class="icon-head text-muted"></i>
                                 &nbsp;
-                                Профиль
+                                {{ 'Profile' | trans }}
                             </a>
                             <a class="dropdown-item" href="#">
                                 <i class="icon-list text-muted"></i>
                                 &nbsp;
-                                История заказов
+                                {{ 'History of orders' | trans }}
                             </a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item text-muted" href="{{ path('logout') }}">
@@ -53,11 +53,7 @@
     <div class="inner">
         <div class="container">
             <div class="float-right">
-                <select class="form-control form-control-sm">
-                    <option value="rub">Руб</option>
-                    <option value="usd">USD</option>
-                    <option value="eur">EUR</option>
-                </select>
+                {{ currencyList() | raw }}
             </div>
             <a class="header-brand" href="{{ path('homepage') }}">
                 {{ app_name }}

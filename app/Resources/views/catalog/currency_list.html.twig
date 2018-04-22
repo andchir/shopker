@@ -1,0 +1,5 @@
+<select class="form-control form-control-sm">
+    {% for currency in data %}
+        <option value="{{ currency.name }}" data-rate="{{ currency.options.value.value }}">{{ currency.name }}</option>
+    {% endfor %}
+</select>

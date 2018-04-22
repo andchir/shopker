@@ -4,6 +4,8 @@ namespace AppBundle\Twig;
 
 use AppBundle\Controller\CartController;
 use AppBundle\Controller\CatalogController;
+use AppBundle\Document\Setting;
+use AppBundle\Service\SettingsService;
 use AppBundle\Service\ShopCartService;
 use AppBundle\Service\UtilsService;
 use Symfony\Component\BrowserKit\Request;
@@ -50,7 +52,8 @@ class AppExtension extends AbstractExtension
             new TwigFunction('outputTypeChunk', [$this, 'outputTypeChunkFunction']),
             new TwigFunction('categoriesTree', [$this, 'categoriesTreeFunction']),
             new TwigFunction('shopCart', [$this, 'shopCartFunction']),
-            new TwigFunction('twigNextPass', [$this, 'twigNextPassFunction'])
+            new TwigFunction('twigNextPass', [$this, 'twigNextPassFunction']),
+            new TwigFunction('currencyList', [$this, 'currencyListFunction'])
         );
     }
 
@@ -298,6 +301,32 @@ class AppExtension extends AbstractExtension
         }
 
         return $this->twig->render($templateName, $properties);
+    }
+
+    /**
+     * @return string
+     */
+    public function currencyListFunction()
+    {
+        $cacheKey = 'currency.list';
+        /** @var SettingsService $settingsService */
+        $settingsService = $this->container->get('app.settings');
+        /** @var FilesystemCache $cache */
+        $cache = $this->container->get('app.filecache');
+
+        if ($cache->has($cacheKey)) {
+            return $this->twig->createTemplate($cache->get($cacheKey))->render([]);
+        }
+
+        $templateName = 'catalog/currency_list.html.twig';
+        $properties = [
+            'data' => $settingsService->getSettingsGroup(Setting::GROUP_CURRENCY)
+        ];
+
+        $output = $this->twig->render($templateName, $properties);
+        $cache->set($cacheKey, $output, 60*60*24);
+
+        return $output;
     }
 
     /**

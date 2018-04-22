@@ -65,11 +65,11 @@ services:
         class: MongoCollection
         arguments: ["@mongo.database", "cache"]
 
-#    AppBundle\EventListener\ExceptionListener:
-#        public: true
-#        tags:
-#            - { name: kernel.event_listener, event: kernel.exception }
-#        arguments: [ '@twig', '@service_container' ]
+    AppBundle\EventListener\ExceptionListener:
+        public: true
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }
+        arguments: [ '@twig', '@service_container' ]
 
     AppBundle\EventListener\KernelEventListener:
         tags:

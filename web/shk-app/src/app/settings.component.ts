@@ -37,6 +37,12 @@ export class SettingsComponent implements OnInit {
             {
                 value: {value: '', type: 'text'}
             }
+        ),
+        SETTINGS_CURRENCY: new SettingsData(
+            false, true, [],
+            {
+                value: {value: '', type: 'number'}
+            }
         )
     };
 
@@ -71,6 +77,11 @@ export class SettingsComponent implements OnInit {
                     this.settings.SETTINGS_PAYMENT.values = res['SETTINGS_PAYMENT'];
                     this.settings.SETTINGS_PAYMENT.defaultValues = _.cloneDeep(res['SETTINGS_PAYMENT']);
                     this.settings.SETTINGS_PAYMENT.loading = false;
+                }
+                if (res['SETTINGS_CURRENCY']) {
+                    this.settings.SETTINGS_CURRENCY.values = res['SETTINGS_CURRENCY'];
+                    this.settings.SETTINGS_CURRENCY.defaultValues = _.cloneDeep(res['SETTINGS_CURRENCY']);
+                    this.settings.SETTINGS_CURRENCY.loading = false;
                 }
             });
     }

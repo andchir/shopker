@@ -14,6 +14,7 @@ class Setting
     const GROUP_ORDER_STATUSES = 'SETTINGS_ORDER_STATUSES';
     const GROUP_DELIVERY = 'SETTINGS_DELIVERY';
     const GROUP_PAYMENT = 'SETTINGS_PAYMENT';
+    const GROUP_CURRENCY = 'SETTINGS_CURRENCY';
 
     /**
      * @MongoDB\Id(type="int", strategy="INCREMENT")

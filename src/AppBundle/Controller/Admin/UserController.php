@@ -28,10 +28,15 @@ class UserController extends StorageControllerAbstract
      */
     public function createUpdate($data, $itemId = null)
     {
+        /** @var User $currentUser */
+        $currentUser = $this->getUser();
         /** @var User $item */
         $item = $this->getRepository()->find($itemId);
         if (!$item) {
             return $this->setError('Item not found.');
+        }
+        if ($currentUser->getIsActive() && empty($data['isActive'])) {
+            return $this->setError('You can not block yourself.');
         }
 
         $item

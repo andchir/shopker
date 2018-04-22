@@ -128,6 +128,13 @@
         </ngb-panel>
     </ngb-accordion>
 
+    <div class="alert alert-danger mt-3 mb-0" [hidden]="!errorMessage">
+        <button type="button" class="close" (click)="errorMessage = ''">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        {{errorMessage}}
+    </div>
+
 </div>
 <div class="modal-footer d-block">
     <button type="button" class="btn btn-success btn-wide" [disabled]="submitted && form.valid" (click)="save()">

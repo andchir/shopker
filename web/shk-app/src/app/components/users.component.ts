@@ -99,7 +99,8 @@ export class ModalUserContent extends ModalContentAbstractComponent<User> {
         this.dataService.update(this.getFormData())
             .subscribe((res) => {
                 this.closeModal();
-            }, () => {
+            }, (err) => {
+                this.errorMessage = err.error || 'Error.';
                 this.loading = false;
             });
     }

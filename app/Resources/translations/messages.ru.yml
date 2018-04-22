@@ -54,6 +54,7 @@ Your password has been changed successfully. Now you can enter.: Ваш паро
 reset_password.confirm.email_link: Для подтверждения изменения пароля, пожалуйста, перейдите по ссылке
 Profile: Профиль
 History of orders: История заказов
+Delivery address: Адрес доставки
 ROLE_USER: Пользователь
 ROLE_ADMIN: Администратор
 ROLE_SUPER_ADMIN: Супер-Администратор

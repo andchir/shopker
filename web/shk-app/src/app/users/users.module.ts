@@ -1,4 +1,5 @@
 import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -8,12 +9,14 @@ import {NgbModule, NgbActiveModal, NgbTooltipConfig} from '@ng-bootstrap/ng-boot
 import {TranslateCustomLoader} from '../services/translateLoader';
 import {EditorModule, CalendarModule, ChipsModule, ColorPickerModule, TreeModule} from 'primeng/primeng';
 
+import {ComponentsModule} from '../components.module';
+import {UsersRoutingModule} from './users-routing.module';
 import {UsersService} from './users.service';
 import {ModalUserContent, UsersComponent} from './users.component';
-import {ComponentsModule} from '../components.module';
 
 @NgModule({
     imports: [
+        CommonModule,
         BrowserModule,
         BrowserAnimationsModule,
         FormsModule,
@@ -25,6 +28,7 @@ import {ComponentsModule} from '../components.module';
         ColorPickerModule,
         TreeModule,
         NgbModule.forRoot(),
+        UsersRoutingModule,
         ComponentsModule
     ],
     declarations: [

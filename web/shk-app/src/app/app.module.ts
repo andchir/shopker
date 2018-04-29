@@ -9,7 +9,7 @@ import {TranslateCustomLoader} from './services/translateLoader';
 
 import {AppComponent, AlertModalContent, ConfirmModalContent} from './app.component';
 import {OrdersModule} from './orders/orders.module';
-import {UsersModule} from './users/users.module';
+//import {UsersModule} from './users/users.module';
 
 import {NotFoundComponent} from './not-found.component';
 import {CatalogComponent} from './catalog.component';
@@ -48,7 +48,7 @@ registerLocaleData(localeRu, 'ru-RU');
         AppRoutingModule,
         ComponentsModule,
         OrdersModule,
-        UsersModule,
+        //UsersModule,
         // TranslateModule.forRoot({
         //     loader: {
         //         provide: TranslateLoader,

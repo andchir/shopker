@@ -9,7 +9,7 @@ import {ContentTypesComponent} from './content-types.component';
 import {FieldTypesComponent} from './field-types.component';
 import {StatisticsComponent} from './stat.component';
 import {SettingsComponent} from './settings.component';
-import {UsersComponent} from './users/users.component';
+//import {UsersComponent} from './users/users.component';
 
 const routes: Routes = [
     {
@@ -50,8 +50,12 @@ const routes: Routes = [
     },
     {
         path: 'users',
-        component: UsersComponent
+        loadChildren: 'app/users/users.module#UsersModule'
     },
+    // {
+    //     path: 'users',
+    //     component: UsersComponent
+    // },
     {
         path: 'settings',
         component: SettingsComponent
@@ -62,8 +66,8 @@ const routes: Routes = [
     }
 ];
 @NgModule({
-    imports: [ RouterModule.forRoot(routes, {useHash: true}) ],
-    exports: [ RouterModule ]
+    imports: [RouterModule.forRoot(routes, {useHash: true})],
+    exports: [RouterModule]
 })
 export class AppRoutingModule {
 

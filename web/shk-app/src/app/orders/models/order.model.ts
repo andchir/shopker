@@ -1,4 +1,4 @@
-import { UserOption } from './user.model';
+import { UserOption } from '../../users/models/user.model';
 
 export class OrderContent {
     constructor(

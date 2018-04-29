@@ -1,44 +1,42 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { NgbModule, NgbActiveModal, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
-import { EditorModule, CalendarModule, ChipsModule, ColorPickerModule, TreeModule, TreeNode } from 'primeng/primeng';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { TranslateCustomLoader } from './services/translateLoader';
+import {BrowserModule} from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NgModule} from '@angular/core';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {HttpClientModule} from '@angular/common/http';
+import {NgbModule, NgbActiveModal, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
+import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
+import {TranslateCustomLoader} from './services/translateLoader';
 
-import { AppComponent, AlertModalContent, ConfirmModalContent } from './app.component';
-import { NotFoundComponent } from './not-found.component';
-import { ModalOrderContent, OrdersComponent } from './orders.component';
-import { CatalogComponent } from './catalog.component';
-import { CatalogCategoryComponent } from './catalog-category.component';
-import { ProductModalContent } from './product.component';
-import { CategoriesMenuComponent, CategoriesModalComponent, CategoriesListComponent } from './categories.component';
-import { ContentTypesComponent, ContentTypeModalContent } from './content-types.component';
-import { FieldTypesComponent, FieldTypeModalContent } from './field-types.component';
-import { StatisticsComponent } from './stat.component';
-import { ModalUserContent, UsersComponent } from './components/users.component';
-import { SettingsComponent } from './settings.component';
-import { ListRecursiveComponent } from './list-recursive.component';
-import { TableComponent } from './table.component';
-import { InputFieldRenderComponent } from './render-input-field';
-import { OutputFieldComponent } from './render-output-field';
-import { SelectParentDropdownComponent } from './select-parent-dropdown.component';
+import {AppComponent, AlertModalContent, ConfirmModalContent} from './app.component';
+import {OrdersModule} from './orders/orders.module';
+import {UsersModule} from './users/users.module';
 
-import { FilterFieldByGroup } from './pipes/filter-field-by-group.pipe';
-import { OrderByPipe } from './pipes/orderby.pipe';
-import { FilterArrayPipe } from './pipes/filter-array-pipe';
-import { DateFromObject } from './pipes/date-from-object.pipe';
-import { UserRoleColorPipe, UserRoleNamePipe } from './pipes/user-role.pipe';
+import {NotFoundComponent} from './not-found.component';
+import {CatalogComponent} from './catalog.component';
+import {CatalogCategoryComponent} from './catalog-category.component';
+import {ProductModalContent} from './product.component';
+import {CategoriesMenuComponent, CategoriesModalComponent, CategoriesListComponent} from './categories.component';
+import {ContentTypesComponent, ContentTypeModalContent} from './content-types.component';
+import {FieldTypesComponent, FieldTypeModalContent} from './field-types.component';
+import {StatisticsComponent} from './stat.component';
+import {SettingsComponent} from './settings.component';
+import {ListRecursiveComponent} from './list-recursive.component';
+import {SelectParentDropdownComponent} from './select-parent-dropdown.component';
 
-import { AppSettings } from './services/app-settings.service';
-import { ProductsService } from './services/products.service';
-import { ContentTypesService } from './services/content_types.service';
-import { CategoriesService } from './services/categories.service';
-import { AppRoutingModule }     from './app-routing.module';
+import {FilterFieldByGroupPipe} from './pipes/filter-field-by-group.pipe';
+import {OrderByPipe} from './pipes/orderby.pipe';
+import {FilterArrayPipe} from './pipes/filter-array-pipe';
+import {DateFromObjectPipe} from './pipes/date-from-object.pipe';
+import {UserRoleColorPipe, UserRoleNamePipe} from './pipes/user-role.pipe';
 
-import { registerLocaleData } from '@angular/common';
+import {ComponentsModule} from './components.module';
+import {AppSettings} from './services/app-settings.service';
+import {ProductsService} from './services/products.service';
+import {ContentTypesService} from './services/content_types.service';
+import {CategoriesService} from './services/categories.service';
+import {AppRoutingModule}     from './app-routing.module';
+
+import {registerLocaleData} from '@angular/common';
 import localeEn from '@angular/common/locales/en';
 import localeRu from '@angular/common/locales/ru';
 
@@ -47,78 +45,57 @@ registerLocaleData(localeRu, 'ru-RU');
 
 @NgModule({
     imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        FormsModule,
-        ReactiveFormsModule,
-        HttpClientModule,
         AppRoutingModule,
-        NgbModule.forRoot(),
-        EditorModule,
-        CalendarModule,
-        ChipsModule,
-        ColorPickerModule,
-        TreeModule,
-        TranslateModule.forRoot({
-            loader: {
-                provide: TranslateLoader,
-                useClass: TranslateCustomLoader
-            }
-        })
+        ComponentsModule,
+        OrdersModule,
+        UsersModule,
+        // TranslateModule.forRoot({
+        //     loader: {
+        //         provide: TranslateLoader,
+        //         useClass: TranslateCustomLoader
+        //     }
+        // })
+        //NgbModule.forRoot()
     ],
     declarations: [
         AppComponent,
-        NotFoundComponent,
-        OrdersComponent,
-        CategoriesMenuComponent,
-        CatalogComponent,
-        CatalogCategoryComponent,
-        ContentTypesComponent,
-        FieldTypesComponent,
-        StatisticsComponent,
-        UsersComponent,
-        SettingsComponent,
-        ListRecursiveComponent,
-        TableComponent,
-        CategoriesListComponent,
-        InputFieldRenderComponent,
-        OutputFieldComponent,
-        SelectParentDropdownComponent,
 
-        FilterFieldByGroup,
-        OrderByPipe,
-        FilterArrayPipe,
-        DateFromObject,
-        UserRoleNamePipe,
-        UserRoleColorPipe,
+        NotFoundComponent,
+        //CategoriesMenuComponent,
+        //CatalogComponent,
+        //CatalogCategoryComponent,
+        //ContentTypesComponent,
+        //FieldTypesComponent,
+        StatisticsComponent,
+        SettingsComponent,
+        //ListRecursiveComponent,
+        //CategoriesListComponent,
+        //SelectParentDropdownComponent,
 
         AlertModalContent,
         ConfirmModalContent,
-        ProductModalContent,
-        ContentTypeModalContent,
-        CategoriesModalComponent,
-        FieldTypeModalContent,
-        ModalOrderContent,
-        ModalUserContent
+        //ProductModalContent,
+        //ContentTypeModalContent,
+        //CategoriesModalComponent,
+        //FieldTypeModalContent
     ],
     providers: [
         AppSettings,
         ProductsService,
         ContentTypesService,
-        CategoriesService,
-        NgbActiveModal,
-        NgbTooltipConfig
+        CategoriesService
     ],
     entryComponents: [
         AlertModalContent,
         ConfirmModalContent,
-        ProductModalContent,
-        ContentTypeModalContent,
-        CategoriesModalComponent,
-        FieldTypeModalContent,
-        ModalOrderContent,
-        ModalUserContent
+        //ProductModalContent,
+        //ContentTypeModalContent,
+        //CategoriesModalComponent,
+        //FieldTypeModalContent
     ],
-    bootstrap: [ AppComponent ]
+    exports: [
+        //TranslateModule
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

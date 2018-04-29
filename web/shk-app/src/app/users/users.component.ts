@@ -1,21 +1,21 @@
-import { Component, OnInit, Input, ViewChild, Injectable, ElementRef } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NgbModal, NgbActiveModal, NgbModalRef, NgbPopover, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
+import {Component, OnInit, Input, ViewChild, Injectable, ElementRef} from '@angular/core';
+import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {NgbModal, NgbActiveModal, NgbModalRef, NgbPopover, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import * as _ from "lodash";
 
-import { UserOption, User } from '../models/user.model';
-import { PageTableAbstractComponent } from '../page-table.abstract';
-import { UsersService } from '../services/users.service';
-import { SettingsService } from '../services/settings.service';
-import { SystemNameService } from '../services/system-name.service';
-import { ModalContentAbstractComponent } from '../modal.abstract';
-import { AppSettings } from '../services/app-settings.service';
-import { QueryOptions } from '../models/query-options';
+import {UserOption, User} from './models/user.model';
+import {PageTableAbstractComponent} from '../page-table.abstract';
+import {UsersService} from './users.service';
+import {SettingsService} from '../services/settings.service';
+import {SystemNameService} from '../services/system-name.service';
+import {ModalContentAbstractComponent} from '../modal.abstract';
+import {AppSettings} from '../services/app-settings.service';
+import {QueryOptions} from '../models/query-options';
 
 @Component({
     selector: 'modal-user',
-    templateUrl: '../templates/modal-user.html',
-    providers: [UsersService, SettingsService, SystemNameService]
+    templateUrl: './templates/modal-user.html',
+    providers: [SettingsService, SystemNameService]
 })
 export class ModalUserContent extends ModalContentAbstractComponent<User> {
 
@@ -109,7 +109,7 @@ export class ModalUserContent extends ModalContentAbstractComponent<User> {
 
 @Component({
     selector: 'shk-users',
-    templateUrl: '../templates/page-users.html',
+    templateUrl: './templates/page-users.html',
     providers: [ UsersService ]
 })
 export class UsersComponent extends PageTableAbstractComponent<User> {

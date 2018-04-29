@@ -1,23 +1,23 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { NgbModal, NgbActiveModal, NgbModalRef, NgbPopover, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
-import { FormBuilder, Validators } from '@angular/forms';
-import { SystemNameService } from './services/system-name.service';
+import {Component, OnInit, Input} from '@angular/core';
+import {NgbModal, NgbActiveModal, NgbModalRef, NgbPopover, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
+import {FormBuilder, Validators} from '@angular/forms';
 import * as _ from "lodash";
 
-import { Order, OrderContent } from './models/order.model';
-import { PageTableAbstractComponent } from './page-table.abstract';
-import { OrdersService } from './services/orders.service';
-import { ModalContentAbstractComponent } from './modal.abstract';
-import { SettingsService } from './services/settings.service';
-import { Setting, SettingPretty, SettingsGroup } from './models/setting.model';
-import { AppSettings } from './services/app-settings.service';
-import { QueryOptions } from './models/query-options';
-import { UserOption } from './models/user.model';
+import {SystemNameService} from '../services/system-name.service';
+import {Order, OrderContent} from './models/order.model';
+import {PageTableAbstractComponent} from '../page-table.abstract';
+import {OrdersService} from './orders.service';
+import {ModalContentAbstractComponent} from '../modal.abstract';
+import {SettingsService} from '../services/settings.service';
+import {Setting, SettingPretty, SettingsGroup} from '../models/setting.model';
+import {AppSettings} from '../services/app-settings.service';
+import {QueryOptions} from '../models/query-options';
+import {UserOption} from '../users/models/user.model';
 
 @Component({
     selector: 'modal-order',
     templateUrl: 'templates/modal-order.html',
-    providers: [OrdersService, SettingsService, SystemNameService]
+    providers: [SettingsService, SystemNameService]
 })
 export class ModalOrderContent extends ModalContentAbstractComponent<Order> {
 
@@ -183,6 +183,7 @@ export class OrdersComponent extends PageTableAbstractComponent<Order> {
 
     static title = 'ORDERS';
     queryOptions: QueryOptions = new QueryOptions('createdDate', 'desc', 1, 10, 0, 0);
+    items: Order[] = [];
 
     constructor(
         dataService: OrdersService,

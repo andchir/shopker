@@ -5,8 +5,8 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { catchError, map, tap } from 'rxjs/operators';
 
-import { DataService } from './data-service.abstract';
-import { Order } from '../models/order.model';
+import { DataService } from '../services/data-service.abstract';
+import { Order } from './models/order.model';
 
 @Injectable()
 export class OrdersService extends DataService<Order> {

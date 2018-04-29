@@ -1,7 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router';
-import { QueryOptions } from './models/query-options';
-import * as _ from "lodash";
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Router} from '@angular/router';
+import {QueryOptions} from './models/query-options';
+import * as _ from 'lodash';
 
 @Component({
     selector: 'cmp-table',

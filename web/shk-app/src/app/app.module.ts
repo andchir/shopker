@@ -1,5 +1,5 @@
-import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+// import {BrowserModule} from '@angular/platform-browser';
+// import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
@@ -23,20 +23,20 @@ import {SettingsComponent} from './settings.component';
 import {ListRecursiveComponent} from './list-recursive.component';
 import {SelectParentDropdownComponent} from './select-parent-dropdown.component';
 
-import {FilterFieldByGroupPipe} from './pipes/filter-field-by-group.pipe';
-import {OrderByPipe} from './pipes/orderby.pipe';
-import {FilterArrayPipe} from './pipes/filter-array-pipe';
-import {DateFromObjectPipe} from './pipes/date-from-object.pipe';
-import {UserRoleColorPipe, UserRoleNamePipe} from './pipes/user-role.pipe';
+// import {FilterFieldByGroupPipe} from './pipes/filter-field-by-group.pipe';
+// import {OrderByPipe} from './pipes/orderby.pipe';
+// import {FilterArrayPipe} from './pipes/filter-array-pipe';
+// import {DateFromObjectPipe} from './pipes/date-from-object.pipe';
+// import {UserRoleColorPipe, UserRoleNamePipe} from './pipes/user-role.pipe';
 
-import {ComponentsModule} from './components.module';
+import {SharedModule} from './shared.module';
 import {AppSettings} from './services/app-settings.service';
 import {ProductsService} from './services/products.service';
 import {ContentTypesService} from './services/content_types.service';
 import {CategoriesService} from './services/categories.service';
 import {AppRoutingModule}     from './app-routing.module';
 
-import {registerLocaleData} from '@angular/common';
+import {CommonModule, registerLocaleData} from '@angular/common';
 import localeEn from '@angular/common/locales/en';
 import localeRu from '@angular/common/locales/ru';
 
@@ -45,8 +45,8 @@ registerLocaleData(localeRu, 'ru-RU');
 
 @NgModule({
     imports: [
-        AppRoutingModule,
-        ComponentsModule,
+        CommonModule,
+        SharedModule,
         OrdersModule,
         //UsersModule,
         // TranslateModule.forRoot({
@@ -56,6 +56,7 @@ registerLocaleData(localeRu, 'ru-RU');
         //     }
         // })
         //NgbModule.forRoot()
+        AppRoutingModule,
     ],
     declarations: [
         AppComponent,
@@ -94,7 +95,7 @@ registerLocaleData(localeRu, 'ru-RU');
         //FieldTypeModalContent
     ],
     exports: [
-        //TranslateModule
+
     ],
     bootstrap: [AppComponent]
 })

@@ -1,6 +1,5 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {BrowserModule} from '@angular/platform-browser';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {NgbModule, NgbActiveModal, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
@@ -26,9 +25,8 @@ const components = [
 
 @NgModule({
     imports: [
-        BrowserModule,
-        FormsModule,
         CommonModule,
+        FormsModule,
         ReactiveFormsModule,
         HttpClientModule,
         EditorModule,
@@ -60,8 +58,8 @@ const components = [
     ],
     exports: [
         ...components,
-        BrowserModule,
         FormsModule,
+        ReactiveFormsModule,
         NgbModule,
         TranslateModule,
         EditorModule,
@@ -72,4 +70,4 @@ const components = [
         DateFromObjectPipe
     ]
 })
-export class ComponentsModule {}
+export class SharedModule {}

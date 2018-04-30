@@ -28,11 +28,11 @@ ng serve --open --live-reload 0 --watch --port 4200 --output-path "./dist_dev"
 ~~~
 
 ~~~
-ng build --base-href "/" --output-path "./bundle" --watch
+ng build --base-href "/" --deploy-url "/shk-app/bundle/" --output-path "./bundle" --watch
 ~~~
 
 ~~~
-ng build --prod --env=prod --base-href "/" --output-path "./bundle"
+ng build --prod --env=prod --base-href "/" --deploy-url "/shk-app/bundle/" --output-path "./bundle"
 ~~~
 
 Fix changes watches for Linux:

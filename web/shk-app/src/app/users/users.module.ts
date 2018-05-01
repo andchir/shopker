@@ -10,7 +10,7 @@ import {ModalUserContent, UsersComponent} from './users.component';
     imports: [
         CommonModule,
         SharedModule,
-        UsersRoutingModule
+        UsersRoutingModule,
     ],
     declarations: [
         UsersComponent,

@@ -1,9 +1,6 @@
 // import {BrowserModule} from '@angular/platform-browser';
 // import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {NgModule} from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
-import {NgbModule, NgbActiveModal, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 import {TranslateCustomLoader} from './services/translateLoader';
 
@@ -48,14 +45,12 @@ registerLocaleData(localeRu, 'ru-RU');
         CommonModule,
         SharedModule,
         OrdersModule,
-        //UsersModule,
-        // TranslateModule.forRoot({
-        //     loader: {
-        //         provide: TranslateLoader,
-        //         useClass: TranslateCustomLoader
-        //     }
-        // })
-        //NgbModule.forRoot()
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useClass: TranslateCustomLoader
+            }
+        }),
         AppRoutingModule,
     ],
     declarations: [

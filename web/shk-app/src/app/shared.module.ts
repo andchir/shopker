@@ -1,11 +1,10 @@
-import {NgModule} from '@angular/core';
+import {ModuleWithProviders, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {NgbModule, NgbActiveModal, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import {EditorModule, CalendarModule, ChipsModule, ColorPickerModule, TreeModule} from 'primeng/primeng';
-import {TranslateModule, TranslateLoader, ɵa as TranslateStore} from '@ngx-translate/core';
-import {TranslateCustomLoader} from './services/translateLoader';
+import {TranslateModule} from '@ngx-translate/core';
 
 import {TableComponent} from './table.component';
 import {InputFieldRenderComponent} from './render-input-field';
@@ -35,12 +34,7 @@ const components = [
         ColorPickerModule,
         TreeModule,
         NgbModule.forRoot(),
-        TranslateModule.forChild({
-            loader: {
-                provide: TranslateLoader,
-                useClass: TranslateCustomLoader
-            }
-        })
+        TranslateModule,
     ],
     declarations: [
         ...components,
@@ -52,16 +46,16 @@ const components = [
         FilterArrayPipe,
     ],
     providers: [
-        TranslateStore,
         NgbActiveModal,
         NgbTooltipConfig
     ],
     exports: [
         ...components,
+        CommonModule,
+        TranslateModule,
         FormsModule,
         ReactiveFormsModule,
         NgbModule,
-        TranslateModule,
         EditorModule,
         CalendarModule,
         ChipsModule,
@@ -70,4 +64,5 @@ const components = [
         DateFromObjectPipe
     ]
 })
-export class SharedModule {}
+export class SharedModule {
+}

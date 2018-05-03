@@ -18,12 +18,6 @@ import {StatisticsComponent} from './stat.component';
 import {ListRecursiveComponent} from './list-recursive.component';
 import {SelectParentDropdownComponent} from './select-parent-dropdown.component';
 
-// import {FilterFieldByGroupPipe} from './pipes/filter-field-by-group.pipe';
-// import {OrderByPipe} from './pipes/orderby.pipe';
-// import {FilterArrayPipe} from './pipes/filter-array-pipe';
-// import {DateFromObjectPipe} from './pipes/date-from-object.pipe';
-// import {UserRoleColorPipe, UserRoleNamePipe} from './pipes/user-role.pipe';
-
 import {SharedModule} from './shared.module';
 import {AppSettings} from './services/app-settings.service';
 import {ProductsService} from './services/products.service';
@@ -43,7 +37,6 @@ registerLocaleData(localeRu, 'ru-RU');
         BrowserModule,
         BrowserAnimationsModule,
         SharedModule,
-        //OrdersModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,

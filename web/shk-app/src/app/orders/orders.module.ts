@@ -1,8 +1,8 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {BrowserModule} from '@angular/platform-browser';
 
 import {SharedModule} from '../shared.module';
+import {OrdersRoutingModule} from './orders-routing.module';
 import {OrdersService} from './orders.service';
 import {ModalOrderContent, OrdersComponent} from './orders.component';
 
@@ -10,7 +10,7 @@ import {ModalOrderContent, OrdersComponent} from './orders.component';
     imports: [
         CommonModule,
         SharedModule,
-        BrowserModule
+        OrdersRoutingModule
     ],
     declarations: [
         OrdersComponent,

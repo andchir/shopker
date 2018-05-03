@@ -24,6 +24,11 @@ npm install -g @angular/cli@latest
 ~~~
 
 ~~~
+ng g component my-new-component
+ng g module admin --routing
+~~~
+
+~~~
 ng serve --open --live-reload 0 --watch --port 4200 --output-path "./dist_dev"
 ~~~
 

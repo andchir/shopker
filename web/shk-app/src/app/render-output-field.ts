@@ -5,7 +5,7 @@ import { isNumeric } from 'rxjs/util/isNumeric';
 
 import { AppSettings } from './services/app-settings.service';
 import { Properties } from './models/properties.iterface';
-import { SettingPretty } from "./models/setting.model";
+import { SettingPretty } from "./settings/models/setting.model";
 
 @Component({
     selector: 'output-field',

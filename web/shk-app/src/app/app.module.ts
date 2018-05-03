@@ -1,22 +1,20 @@
-// import {BrowserModule} from '@angular/platform-browser';
-// import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {NgModule} from '@angular/core';
+import {CommonModule, registerLocaleData} from '@angular/common';
+import {BrowserModule} from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 import {TranslateCustomLoader} from './services/translateLoader';
 
 import {AppComponent, AlertModalContent, ConfirmModalContent} from './app.component';
-import {OrdersModule} from './orders/orders.module';
-//import {UsersModule} from './users/users.module';
 
 import {NotFoundComponent} from './not-found.component';
-import {CatalogComponent} from './catalog.component';
-import {CatalogCategoryComponent} from './catalog-category.component';
-import {ProductModalContent} from './product.component';
-import {CategoriesMenuComponent, CategoriesModalComponent, CategoriesListComponent} from './categories.component';
-import {ContentTypesComponent, ContentTypeModalContent} from './content-types.component';
-import {FieldTypesComponent, FieldTypeModalContent} from './field-types.component';
+// import {CatalogComponent} from './catalog.component';
+// import {CatalogCategoryComponent} from './catalog-category.component';
+// import {ProductModalContent} from './product.component';
+// import {CategoriesMenuComponent, CategoriesModalComponent, CategoriesListComponent} from './categories.component';
+// import {ContentTypesComponent, ContentTypeModalContent} from './content-types.component';
+// import {FieldTypesComponent, FieldTypeModalContent} from './field-types.component';
 import {StatisticsComponent} from './stat.component';
-import {SettingsComponent} from './settings.component';
 import {ListRecursiveComponent} from './list-recursive.component';
 import {SelectParentDropdownComponent} from './select-parent-dropdown.component';
 
@@ -33,7 +31,6 @@ import {ContentTypesService} from './services/content_types.service';
 import {CategoriesService} from './services/categories.service';
 import {AppRoutingModule}     from './app-routing.module';
 
-import {CommonModule, registerLocaleData} from '@angular/common';
 import localeEn from '@angular/common/locales/en';
 import localeRu from '@angular/common/locales/ru';
 
@@ -43,8 +40,10 @@ registerLocaleData(localeRu, 'ru-RU');
 @NgModule({
     imports: [
         CommonModule,
+        BrowserModule,
+        BrowserAnimationsModule,
         SharedModule,
-        OrdersModule,
+        //OrdersModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
@@ -63,7 +62,7 @@ registerLocaleData(localeRu, 'ru-RU');
         //ContentTypesComponent,
         //FieldTypesComponent,
         StatisticsComponent,
-        SettingsComponent,
+        //SettingsComponent,
         //ListRecursiveComponent,
         //CategoriesListComponent,
         //SelectParentDropdownComponent,

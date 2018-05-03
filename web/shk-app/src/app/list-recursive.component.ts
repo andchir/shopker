@@ -50,7 +50,7 @@ export class ListRecursiveComponent implements OnInit, OnChanges {
      * Update parents ids
      */
     updateParentsIds(): void {
-        let index = _.findIndex(this.inputItems, {id: this.currentId});
+        let index = _.findIndex(this.inputItems, {'id': this.currentId});
         this.currentParentsIds = [];
         if (index === -1) {
             return;

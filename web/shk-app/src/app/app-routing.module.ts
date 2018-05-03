@@ -2,13 +2,13 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
 import {NotFoundComponent} from './not-found.component';
-import {OrdersComponent} from './orders/orders.component';
-import {CatalogComponent} from './catalog.component';
-import {CatalogCategoryComponent} from './catalog-category.component';
-import {ContentTypesComponent} from './content-types.component';
-import {FieldTypesComponent} from './field-types.component';
+//import {OrdersComponent} from './orders/orders.component';
+// import {CatalogComponent} from './catalog.component';
+// import {CatalogCategoryComponent} from './catalog-category.component';
+// import {ContentTypesComponent} from './content-types.component';
+// import {FieldTypesComponent} from './field-types.component';
 import {StatisticsComponent} from './stat.component';
-import {SettingsComponent} from './settings.component';
+// import {SettingsComponent} from './settings.component';
 //import {UsersComponent} from './users/users.component';
 
 const routes: Routes = [
@@ -17,10 +17,10 @@ const routes: Routes = [
         redirectTo: 'orders',
         pathMatch: 'full'
     },
-    {
-        path: 'orders',
-        component: OrdersComponent
-    },
+    // {
+    //     path: 'orders',
+    //     component: OrdersComponent
+    // },
     // {
     //     path: 'catalog',
     //     component: CatalogComponent,
@@ -49,17 +49,25 @@ const routes: Routes = [
         component: StatisticsComponent
     },
     {
+        path: 'orders',
+        loadChildren: 'app/orders/orders.module#OrdersModule'
+    },
+    {
         path: 'users',
         loadChildren: 'app/users/users.module#UsersModule'
+    },
+    {
+        path: 'settings',
+        loadChildren: 'app/settings/settings.module#SettingsModule'
     },
     // {
     //     path: 'users',
     //     component: UsersComponent
     // },
-    {
-        path: 'settings',
-        component: SettingsComponent
-    },
+    // {
+    //     path: 'settings',
+    //     component: SettingsComponent
+    // },
     {
         path: '**',
         component: NotFoundComponent

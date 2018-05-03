@@ -12,12 +12,12 @@ import {ModalUserContent, UsersComponent} from './users.component';
         SharedModule,
         UsersRoutingModule,
     ],
+    providers: [
+        UsersService
+    ],
     declarations: [
         UsersComponent,
         ModalUserContent
-    ],
-    providers: [
-        UsersService
     ],
     exports: [
 

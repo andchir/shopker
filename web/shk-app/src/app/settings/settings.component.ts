@@ -1,15 +1,14 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import {Component, OnInit, Input} from '@angular/core';
+import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
 import * as _ from 'lodash';
 
-import { SettingsService } from './services/settings.service';
-import { Setting, SettingOption, SettingsGroup, SettingsData } from './models/setting.model';
-import { AppSettings } from './services/app-settings.service';
+import {Setting, SettingOption, SettingsGroup, SettingsData} from './models/setting.model';
+import {AppSettings} from '../services/app-settings.service';
+import {SettingsService} from './settings.service';
 
 @Component({
     selector: 'shk-settings',
-    templateUrl: 'templates/page-settings.html',
-    providers: [ SettingsService ]
+    templateUrl: './templates/settings.component.html'
 })
 export class SettingsComponent implements OnInit {
     static title = 'SETTINGS';

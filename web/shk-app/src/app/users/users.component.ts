@@ -6,7 +6,7 @@ import * as _ from "lodash";
 import {UserOption, User} from './models/user.model';
 import {PageTableAbstractComponent} from '../page-table.abstract';
 import {UsersService} from './users.service';
-import {SettingsService} from '../services/settings.service';
+import {SettingsService} from '../settings/settings.service';
 import {SystemNameService} from '../services/system-name.service';
 import {ModalContentAbstractComponent} from '../modal.abstract';
 import {AppSettings} from '../services/app-settings.service';

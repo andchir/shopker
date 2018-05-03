@@ -1,0 +1,353 @@
+<div class="card">
+    <div class="card-body" [class.loading]="loading">
+
+        <div class="float-right">
+            <button type="button" class="btn btn-info btn-sm" (click)="clearCache()">
+                <i class="icon-repeat"></i>
+                <span>{{'CLEAR_CACHE' | translate}}</span>
+            </button>
+        </div>
+        <h3>
+            <i class="icon-cog"></i>
+            {{'SETTINGS' | translate}}
+        </h3>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-md-6">
+
+                <!-- settings -->
+                <div [class.loading]="settings.SETTINGS_MAIN.loading">
+                    <label class="label-filled">{{'SETTINGS_MAIN' | translate}}</label>
+
+                    <div class="card mb-4">
+                        <div class="table-responsive">
+
+                            <table class="table table-divided mb-0">
+                                <thead>
+                                <tr>
+                                    <th>{{'PARAMETER' | translate}}</th>
+                                    <th>{{'VALUE' | translate}}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr *ngFor="let setting of settings.SETTINGS_MAIN.values">
+                                    <td>
+                                        <span>{{setting.name | translate}}</span>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control form-control-sm" [(ngModel)]="setting.value" (ngModelChange)="onValueChanged('SETTINGS_MAIN')">
+                                    </td>
+                                </tr>
+                                <tr *ngIf="settings.SETTINGS_MAIN.changed">
+                                    <td colspan="2" class="text-right">
+
+                                        <button type="button" class="btn btn-info btn-sm" (click)="saveSettings('SETTINGS_MAIN')">
+                                            <i class="icon-check"></i>
+                                            <span>{{'SAVE' | translate}}</span>
+                                        </button>
+                                        <button type="button" class="btn btn-secondary btn-sm" (click)="resetSettingsForm('SETTINGS_MAIN')" [title]="'FORM_RESET' | translate">
+                                            <i class="icon-reload"></i>
+                                        </button>
+
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- /settings -->
+
+            </div>
+            <div class="col-md-6">
+
+                <ngb-accordion [closeOthers]="true" activeIds="accordion-settings-1" class="ngb-accordion">
+
+                    <!-- statuses -->
+                    <ngb-panel id="accordion-settings-1" [title]="'SETTINGS_ORDER_STATUSES' | translate">
+                        <ng-template ngbPanelContent>
+                            <div [class.loading]="settings.SETTINGS_DELIVERY.loading">
+                                <div class="text-muted">
+                                    Названия статусов заказов и цвет для вывода на странице заказов в административной части.
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-divided mb-0">
+                                        <thead>
+                                        <tr>
+                                            <th>
+                                                {{'NAME' | translate}}
+                                            </th>
+                                            <th>
+                                                {{'MAIL_TEMPLATE' | translate}}
+                                            </th>
+                                            <th>
+                                                {{'COLOR' | translate}}
+                                            </th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr *ngFor="let setting of settings.SETTINGS_ORDER_STATUSES.values; let index=index">
+                                            <td>
+                                                <input type="text" class="form-control form-control-sm" [(ngModel)]="setting.name" (ngModelChange)="onValueChanged('SETTINGS_ORDER_STATUSES')">
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control form-control-sm" [(ngModel)]="setting.options.template.value" (ngModelChange)="onValueChanged('SETTINGS_ORDER_STATUSES')">
+                                            </td>
+                                            <td class="text-center">
+                                                <p-colorPicker [(ngModel)]="setting.options.color.value" (ngModelChange)="onValueChanged('SETTINGS_ORDER_STATUSES')"></p-colorPicker>
+                                            </td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-secondary btn-sm" [title]="'REMOVE' | translate" (click)="deleteSetting('SETTINGS_ORDER_STATUSES', index)">
+                                                    <i class="icon-cross"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                        <tfoot>
+                                        <tr class="bg-faded">
+                                            <td colspan="4" class="text-center">
+                                                <div class="relative">
+                                                    <div class="pos-absolute-right" *ngIf="settings.SETTINGS_ORDER_STATUSES.changed">
+
+                                                        <button type="button" class="btn btn-info btn-sm" (click)="saveSettings('SETTINGS_ORDER_STATUSES')">
+                                                            <i class="icon-check"></i>
+                                                            <span>{{'SAVE' | translate}}</span>
+                                                        </button>
+                                                        <button type="button" class="btn btn-secondary btn-sm" (click)="resetSettingsForm('SETTINGS_ORDER_STATUSES')" [title]="'FORM_RESET' | translate">
+                                                            <i class="icon-reload"></i>
+                                                        </button>
+
+                                                    </div>
+                                                </div>
+                                                <button type="button" class="btn btn-secondary btn-sm" (click)="addSetting('SETTINGS_ORDER_STATUSES')">
+                                                    <i class="icon-plus"></i>
+                                                    <span>{{'ADD' | translate}}</span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngb-panel>
+                    <!-- /statuses -->
+
+                    <!-- delivery -->
+                    <ngb-panel id="accordion-settings-2" [title]="'SETTINGS_DELIVERY' | translate">
+                        <ng-template ngbPanelContent>
+                            <div [class.loading]="settings.SETTINGS_DELIVERY.loading">
+                                <div class="text-muted">
+                                    Список методов доставки для вывода в форме заказа во внешней части сайта.
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-divided mb-0">
+                                        <thead>
+                                        <tr>
+                                            <th>
+                                                {{'NAME' | translate}}
+                                            </th>
+                                            <th>
+                                                {{'PRICE' | translate}}
+                                            </th>
+                                            <th>
+                                                {{'MAX_PRICE' | translate}}
+                                            </th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr *ngFor="let setting of settings.SETTINGS_DELIVERY.values; let index=index">
+                                            <td>
+                                                <input type="text" class="form-control form-control-sm" [(ngModel)]="setting.name" (ngModelChange)="onValueChanged('SETTINGS_DELIVERY')">
+                                            </td>
+                                            <td class="text-center">
+                                                <input type="number" class="form-control form-control-sm mwidth-80 m-auto" step="1" min="0" [(ngModel)]="setting.options.price.value" (ngModelChange)="onValueChanged('SETTINGS_DELIVERY')">
+                                            </td>
+                                            <td class="text-center">
+                                                <input type="number" class="form-control form-control-sm mwidth-80 m-auto" step="1" min="0" [(ngModel)]="setting.options.priceLimit.value" (ngModelChange)="onValueChanged('SETTINGS_DELIVERY')">
+                                            </td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-secondary btn-sm" [title]="'REMOVE' | translate" (click)="deleteSetting('SETTINGS_DELIVERY', index)">
+                                                    <i class="icon-cross"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                        <tfoot>
+                                        <tr class="bg-faded">
+                                            <td colspan="4" class="text-center">
+                                                <div class="relative">
+                                                    <div class="pos-absolute-right" *ngIf="settings.SETTINGS_DELIVERY.changed">
+
+                                                        <button type="button" class="btn btn-info btn-sm" (click)="saveSettings('SETTINGS_DELIVERY')">
+                                                            <i class="icon-check"></i>
+                                                            <span>{{'SAVE' | translate}}</span>
+                                                        </button>
+                                                        <button type="button" class="btn btn-secondary btn-sm" (click)="resetSettingsForm('SETTINGS_DELIVERY')" [title]="'FORM_RESET' | translate">
+                                                            <i class="icon-reload"></i>
+                                                        </button>
+
+                                                    </div>
+                                                </div>
+                                                <button type="button" class="btn btn-secondary btn-sm" (click)="addSetting('SETTINGS_DELIVERY')">
+                                                    <i class="icon-plus"></i>
+                                                    <span>{{'ADD' | translate}}</span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngb-panel>
+                    <!-- /delivery -->
+
+                    <!-- payments -->
+                    <ngb-panel id="accordion-settings-3" [title]="'SETTINGS_PAYMENT' | translate">
+                        <ng-template ngbPanelContent>
+                            <div [class.loading]="settings.SETTINGS_PAYMENT.loading">
+                                <div class="text-muted">
+                                    Список методов оплаты для вывода в форме заказа во внешней части сайта.
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-divided mb-0">
+                                        <thead>
+                                        <tr>
+                                            <th>
+                                                {{'NAME' | translate}}
+                                            </th>
+                                            <th>
+                                                {{'VALUE' | translate}}
+                                            </th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr *ngFor="let setting of settings.SETTINGS_PAYMENT.values; let index=index">
+                                            <td>
+                                                <input type="text" class="form-control form-control-sm" [(ngModel)]="setting.name" (ngModelChange)="onValueChanged('SETTINGS_PAYMENT')">
+                                            </td>
+                                            <td class="text-center">
+                                                <input type="text" class="form-control form-control-sm" [(ngModel)]="setting.options.value.value" (ngModelChange)="onValueChanged('SETTINGS_PAYMENT')">
+                                            </td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-secondary btn-sm" [title]="'REMOVE' | translate" (click)="deleteSetting('SETTINGS_PAYMENT', index)">
+                                                    <i class="icon-cross"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                        <tfoot>
+                                        <tr class="bg-faded">
+                                            <td colspan="4" class="text-center">
+
+                                                <div class="relative">
+                                                    <div class="pos-absolute-right" *ngIf="settings.SETTINGS_PAYMENT.changed">
+
+                                                        <button type="button" class="btn btn-info btn-sm" (click)="saveSettings('SETTINGS_PAYMENT')">
+                                                            <i class="icon-check"></i>
+                                                            <span>{{'SAVE' | translate}}</span>
+                                                        </button>
+                                                        <button type="button" class="btn btn-secondary btn-sm" (click)="resetSettingsForm('SETTINGS_PAYMENT')" [title]="'FORM_RESET' | translate">
+                                                            <i class="icon-reload"></i>
+                                                        </button>
+
+                                                    </div>
+                                                </div>
+
+                                                <button type="button" class="btn btn-secondary btn-sm" (click)="addSetting('SETTINGS_PAYMENT')">
+                                                    <i class="icon-plus"></i>
+                                                    <span>{{'ADD' | translate}}</span>
+                                                </button>
+
+                                            </td>
+                                        </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngb-panel>
+                    <!-- /payments -->
+
+                    <!-- currencies -->
+                    <ngb-panel id="accordion-settings-4" [title]="'SETTINGS_CURRENCY' | translate">
+                        <ng-template ngbPanelContent>
+                            <div [class.loading]="settings.SETTINGS_CURRENCY.loading">
+                                <div class="text-muted">
+                                    Курс валют на сайте.
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-divided mb-0">
+                                        <thead>
+                                        <tr>
+                                            <th>
+                                                {{'CURRENCY' | translate}}
+                                            </th>
+                                            <th>
+                                                {{'VALUE' | translate}}
+                                            </th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr *ngFor="let setting of settings.SETTINGS_CURRENCY.values; let index=index">
+                                            <td>
+                                                <input type="text" class="form-control form-control-sm" [(ngModel)]="setting.name" (ngModelChange)="onValueChanged('SETTINGS_CURRENCY')">
+                                            </td>
+                                            <td class="text-center">
+                                                <input type="number" class="form-control form-control-sm" step="1" min="0" [(ngModel)]="setting.options.value.value" (ngModelChange)="onValueChanged('SETTINGS_CURRENCY')">
+                                            </td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-secondary btn-sm" [title]="'REMOVE' | translate" (click)="deleteSetting('SETTINGS_CURRENCY', index)">
+                                                    <i class="icon-cross"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                        <tfoot>
+                                        <tr class="bg-faded">
+                                            <td colspan="4" class="text-center">
+
+                                                <div class="relative">
+                                                    <div class="pos-absolute-right" *ngIf="settings.SETTINGS_CURRENCY.changed">
+
+                                                        <button type="button" class="btn btn-info btn-sm" (click)="saveSettings('SETTINGS_CURRENCY')">
+                                                            <i class="icon-check"></i>
+                                                            <span>{{'SAVE' | translate}}</span>
+                                                        </button>
+                                                        <button type="button" class="btn btn-secondary btn-sm" (click)="resetSettingsForm('SETTINGS_CURRENCY')" [title]="'FORM_RESET' | translate">
+                                                            <i class="icon-reload"></i>
+                                                        </button>
+
+                                                    </div>
+                                                </div>
+
+                                                <button type="button" class="btn btn-secondary btn-sm" (click)="addSetting('SETTINGS_CURRENCY')">
+                                                    <i class="icon-plus"></i>
+                                                    <span>{{'ADD' | translate}}</span>
+                                                </button>
+
+                                            </td>
+                                        </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngb-panel>
+                    <!-- /currencies -->
+
+                </ngb-accordion>
+
+            </div>
+        </div>
+
+    </div>
+</div>

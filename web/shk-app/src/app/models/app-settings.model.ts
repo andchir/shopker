@@ -1,4 +1,4 @@
-import { SettingGroupPretty } from './setting.model';
+import { SettingGroupPretty } from '../settings/models/setting.model';
 
 export interface AppSettingsModel {
     appName: string;

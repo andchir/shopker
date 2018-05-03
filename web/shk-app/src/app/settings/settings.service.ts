@@ -5,8 +5,8 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { catchError, map, tap } from 'rxjs/operators';
 
-import { DataService } from './data-service.abstract';
-import { Setting, SettingsGroup } from '../models/setting.model';
+import { DataService } from '../services/data-service.abstract';
+import { Setting, SettingsGroup } from './models/setting.model';
 import { Properties } from '../models/properties.iterface';
 
 @Injectable()

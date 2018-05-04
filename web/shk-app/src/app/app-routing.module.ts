@@ -13,32 +13,13 @@ const routes: Routes = [
         redirectTo: 'orders',
         pathMatch: 'full'
     },
-    // {
-    //     path: 'catalog',
-    //     component: CatalogComponent,
-    //     children: [
-    //         {
-    //             path: '',
-    //             redirectTo: 'category/0',
-    //             pathMatch: 'full'
-    //         },
-    //         {
-    //             path: 'category/:categoryId',
-    //             component: CatalogCategoryComponent
-    //         },
-    //         {
-    //             path: 'content_types',
-    //             component: ContentTypesComponent
-    //         },
-    //         {
-    //             path: 'field_types',
-    //             component: FieldTypesComponent
-    //         }
-    //     ]
-    // },
     {
         path: 'orders',
         loadChildren: 'app/orders/orders.module#OrdersModule'
+    },
+    {
+        path: 'catalog',
+        loadChildren: 'app/catalog/catalog.module#CatalogModule'
     },
     {
         path: 'statistics',

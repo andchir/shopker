@@ -14,15 +14,15 @@ import {NotFoundComponent} from './not-found.component';
 // import {CategoriesMenuComponent, CategoriesModalComponent, CategoriesListComponent} from './categories.component';
 // import {ContentTypesComponent, ContentTypeModalContent} from './content-types.component';
 // import {FieldTypesComponent, FieldTypeModalContent} from './field-types.component';
-import {StatisticsComponent} from './stat.component';
-import {ListRecursiveComponent} from './list-recursive.component';
-import {SelectParentDropdownComponent} from './select-parent-dropdown.component';
+//import {StatisticsComponent} from './stat.component';
+//import {ListRecursiveComponent} from './list-recursive.component';
+//import {SelectParentDropdownComponent} from './select-parent-dropdown.component';
 
 import {SharedModule} from './shared.module';
 import {AppSettings} from './services/app-settings.service';
-import {ProductsService} from './services/products.service';
-import {ContentTypesService} from './services/content_types.service';
-import {CategoriesService} from './services/categories.service';
+//import {ProductsService} from './services/products.service';
+//import {ContentTypesService} from './services/content_types.service';
+//mport {CategoriesService} from './services/categories.service';
 import {AppRoutingModule}     from './app-routing.module';
 
 import localeEn from '@angular/common/locales/en';
@@ -54,7 +54,7 @@ registerLocaleData(localeRu, 'ru-RU');
         //CatalogCategoryComponent,
         //ContentTypesComponent,
         //FieldTypesComponent,
-        StatisticsComponent,
+        //StatisticsComponent,
         //SettingsComponent,
         //ListRecursiveComponent,
         //CategoriesListComponent,
@@ -69,9 +69,9 @@ registerLocaleData(localeRu, 'ru-RU');
     ],
     providers: [
         AppSettings,
-        ProductsService,
-        ContentTypesService,
-        CategoriesService
+        //ProductsService,
+        //ContentTypesService,
+        //CategoriesService
     ],
     entryComponents: [
         AlertModalContent,

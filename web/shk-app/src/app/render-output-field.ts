@@ -1,11 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
-import { ContentField } from "./models/content_field.model";
+import {Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef} from '@angular/core';
 import * as _ from 'lodash';
-import { isNumeric } from 'rxjs/util/isNumeric';
+import {isNumeric} from 'rxjs/util/isNumeric';
 
-import { AppSettings } from './services/app-settings.service';
-import { Properties } from './models/properties.iterface';
-import { SettingPretty } from "./settings/models/setting.model";
+import {ContentField} from './catalog/models/content_field.model';
+import {AppSettings} from './services/app-settings.service';
+import {Properties} from './models/properties.iterface';
+import {SettingPretty} from './settings/models/setting.model';
 
 @Component({
     selector: 'output-field',

@@ -1,25 +1,24 @@
-import { Component, OnInit, Input, ViewChild, Injectable, ElementRef } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NgbModal, NgbActiveModal, NgbModalRef, NgbPopover, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
+import {Component, OnInit, Input, ViewChild, Injectable, ElementRef} from '@angular/core';
+import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {NgbModal, NgbActiveModal, NgbModalRef, NgbPopover, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import * as _ from "lodash";
 
-import { FieldTypesService } from './field-types.component';
-import { ContentField } from './models/content_field.model';
-import { ContentType } from './models/content_type.model';
-import { FieldType } from "./models/field-type.model";
-import { FieldTypeProperty } from './models/field-type-property.model';
-import { QueryOptions } from './models/query-options';
-import { PageTableAbstractComponent } from './page-table.abstract';
-import { ModalContentAbstractComponent } from './modal.abstract';
+import {FieldTypesService} from './field-types.component';
+import {ContentField} from './models/content_field.model';
+import {ContentType} from './models/content_type.model';
+import {FieldType} from "./models/field-type.model";
+import {FieldTypeProperty} from './models/field-type-property.model';
+import {QueryOptions} from '../models/query-options';
+import {PageTableAbstractComponent} from '../page-table.abstract';
+import {ModalContentAbstractComponent} from '../modal.abstract';
 
-import { ContentTypesService } from './services/content_types.service';
-import { CollectionsService } from './services/collections.service';
-import { SystemNameService } from './services/system-name.service';
+import {ContentTypesService} from './content_types.service';
+import {SystemNameService} from '../services/system-name.service';
+import {CollectionsService} from './collections.service';
 
 @Component({
     selector: 'content-type-modal-content',
-    templateUrl: 'templates/modal-content_types.html',
-    providers: [ ContentTypesService, FieldTypesService, CollectionsService, SystemNameService ]
+    templateUrl: 'templates/modal-content_types.html'
 })
 export class ContentTypeModalContent extends ModalContentAbstractComponent<ContentType> {
 
@@ -475,8 +474,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent<Conte
 
 @Component({
     selector: 'shk-content-types',
-    templateUrl: 'templates/catalog-content_types.html',
-    providers: [ ContentTypesService ]
+    templateUrl: 'templates/catalog-content_types.html'
 })
 export class ContentTypesComponent extends PageTableAbstractComponent<ContentType> {
 

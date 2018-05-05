@@ -1,20 +1,20 @@
-import { Component, OnInit, Input, OnChanges, SimpleChange, ChangeDetectorRef } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import {Component, OnInit, Input, OnChanges, SimpleChange, ChangeDetectorRef} from '@angular/core';
+import {FormGroup, FormControl, Validators} from '@angular/forms';
 import * as _ from 'lodash';
-import { isNumeric } from 'rxjs/util/isNumeric';
+import {isNumeric} from 'rxjs/util/isNumeric';
 
-import { ContentField } from "./models/content_field.model";
-import { SystemNameService } from './services/system-name.service';
-import { MultiValues } from './models/multivalues.model';
-import { Properties } from './models/properties.iterface';
-import { FileData } from './models/file-data.model';
-import { AppSettings } from './services/app-settings.service';
-import { CategoriesService } from './services/categories.service';
+import {ContentField} from "./catalog/models/content_field.model";
+import {SystemNameService} from './services/system-name.service';
+import {MultiValues} from './models/multivalues.model';
+import {Properties} from './models/properties.iterface';
+import {FileData} from './catalog/models/file-data.model';
+import {AppSettings} from './services/app-settings.service';
+import {CategoriesService} from './catalog/categories.service';
 
 @Component({
     selector: 'input-field-renderer',
     templateUrl: 'templates/render-input-field.html',
-    providers: [ SystemNameService ]
+    providers: [SystemNameService]
 })
 export class InputFieldRenderComponent implements OnInit, OnChanges {
 

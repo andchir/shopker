@@ -1,5 +1,6 @@
-import { Pipe, PipeTransform } from '@angular/core';
-import { ContentField } from "../models/content_field.model";
+import {Pipe, PipeTransform} from '@angular/core';
+
+import {ContentField} from '../catalog/models/content_field.model';
 
 @Pipe({ name: 'filterFieldByGroup' })
 export class FilterFieldByGroupPipe implements PipeTransform {

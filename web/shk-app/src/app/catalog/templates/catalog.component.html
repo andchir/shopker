@@ -1,0 +1,24 @@
+<div class="card">
+    <div class="card-body">
+
+        <div class="float-right">
+            <a class="btn btn-outline-primary mr-1" href="" [routerLink]="['content_types']" routerLinkActive="active">
+                <i class="icon-box"></i>
+                <span>{{'CONTENT_TYPES' | translate}}</span>
+            </a>
+            <a class="btn btn-outline-primary" href="" [routerLink]="['field_types']" routerLinkActive="active">
+                <i class="icon-toggle"></i>
+                <span>{{'FIELD_TYPES' | translate}}</span>
+            </a>
+        </div>
+        <h3>
+            <i class="icon-layers"></i>
+            <span>{{'CATALOG' | translate}}</span>
+        </h3>
+
+        <hr>
+
+        <router-outlet></router-outlet>
+
+    </div>
+</div>

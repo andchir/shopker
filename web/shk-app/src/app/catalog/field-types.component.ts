@@ -1,15 +1,16 @@
-import { Component, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { NgbModal, NgbActiveModal, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
-import { FormBuilder, Validators } from '@angular/forms';
-import { FieldType } from './models/field-type.model';
-import { FieldTypeProperty } from './models/field-type-property.model';
+import {Component, Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {NgbModal, NgbActiveModal, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
+import {FormBuilder, Validators} from '@angular/forms';
 
-import { DataService } from './services/data-service.abstract';
-import { SystemNameService } from './services/system-name.service';
-import { PageTableAbstractComponent } from './page-table.abstract';
-import { ModalContentAbstractComponent } from './modal.abstract';
-import { QueryOptions } from './models/query-options';
+import {FieldType} from './models/field-type.model';
+import {FieldTypeProperty} from './models/field-type-property.model';
+import {DataService} from '../services/data-service.abstract';
+import {PageTableAbstractComponent} from '../page-table.abstract';
+import {ModalContentAbstractComponent} from '../modal.abstract';
+import {QueryOptions} from '../models/query-options';
+
+import {SystemNameService} from '../services/system-name.service';
 
 @Injectable()
 export class FieldTypesService extends DataService<FieldType> {
@@ -22,8 +23,7 @@ export class FieldTypesService extends DataService<FieldType> {
 
 @Component({
     selector: 'field-type-modal-content',
-    templateUrl: 'templates/modal-field_type.html',
-    providers: [ FieldTypesService, SystemNameService ]
+    templateUrl: 'templates/modal-field_type.html'
 })
 export class FieldTypeModalContent extends ModalContentAbstractComponent<FieldType> {
 
@@ -105,8 +105,7 @@ export class FieldTypeModalContent extends ModalContentAbstractComponent<FieldTy
 
 @Component({
     selector: 'shk-field-types',
-    templateUrl: 'templates/catalog-field_types.html',
-    providers: [ FieldTypesService ]
+    templateUrl: 'templates/catalog-field_types.html'
 })
 export class FieldTypesComponent extends PageTableAbstractComponent<FieldType> {
     title: string = 'Field types';

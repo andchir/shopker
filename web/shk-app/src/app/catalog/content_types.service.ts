@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
 
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
-import { catchError, map, tap } from 'rxjs/operators';
+import {Observable} from 'rxjs/Observable';
+import {of} from 'rxjs/observable/of';
+import {catchError, map, tap} from 'rxjs/operators';
 
-import { DataService } from './data-service.abstract';
-import { ContentType } from '../models/content_type.model';
+import {DataService} from '../services/data-service.abstract';
+import {ContentType} from './models/content_type.model';
 
 @Injectable()
 export class ContentTypesService extends DataService<ContentType> {

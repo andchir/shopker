@@ -1,23 +1,23 @@
-import { Component, Input } from '@angular/core';
-import { NgbActiveModal, NgbTooltipConfig  } from '@ng-bootstrap/ng-bootstrap';
-import { FormControl, FormBuilder, Validators } from '@angular/forms';
-import { Observable } from 'rxjs/Observable';
+import {Component, Input} from '@angular/core';
+import {NgbActiveModal, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
+import {FormControl, FormBuilder, Validators} from '@angular/forms';
+import {Observable} from 'rxjs/Observable';
 import * as _ from "lodash";
 
-import { ContentType } from './models/content_type.model';
-import { Category } from "./models/category.model";
-import { ModalContentAbstractComponent } from './modal.abstract';
-import { CategoriesService } from './services/categories.service';
-import { ContentTypesService } from './services/content_types.service';
-import { ProductsService } from './services/products.service';
-import { SystemNameService } from './services/system-name.service';
-import { Product } from './models/product.model';
-import { FilesService } from './services/files.service';
+import {ContentType} from './models/content_type.model';
+import {Category} from "./models/category.model";
+import {ModalContentAbstractComponent} from '../modal.abstract';
+import {SystemNameService} from '../services/system-name.service';
+import {Product} from './models/product.model';
+
+import {CategoriesService} from './categories.service';
+import {ContentTypesService} from './content_types.service';
+import {ProductsService} from './products.service';
+import {FilesService} from './files.service';
 
 @Component({
     selector: 'product-modal-content',
-    templateUrl: 'templates/modal-product.html',
-    providers: [ SystemNameService, FilesService ]
+    templateUrl: 'templates/modal-product.html'
 })
 export class ProductModalContent extends ModalContentAbstractComponent<Product> {
 

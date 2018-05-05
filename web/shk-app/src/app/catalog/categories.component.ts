@@ -1,29 +1,29 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Observable } from 'rxjs/Observable';
-import { TreeNode } from 'primeng/primeng'
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Router, ActivatedRoute} from '@angular/router';
+import {NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
+import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {Observable} from 'rxjs/Observable';
+import {TreeNode} from 'primeng/primeng'
 import 'rxjs/add/operator/switchMap';
 import * as _ from "lodash";
 
-import { ContentType } from './models/content_type.model';
-import { Category } from "./models/category.model";
-import { ConfirmModalContent } from './app.component';
-import { ListRecursiveComponent } from './list-recursive.component';
-import { ModalContentAbstractComponent } from './modal.abstract';
-import { SystemNameService } from './services/system-name.service';
-import { CategoriesService } from './services/categories.service';
-import { ContentTypesService } from './services/content_types.service';
-import { QueryOptions } from './models/query-options';
+import {ContentType} from './models/content_type.model';
+import {Category} from './models/category.model';
+import {ConfirmModalContent} from '../app.component';
+import {ListRecursiveComponent} from '../list-recursive.component';
+import {ModalContentAbstractComponent} from '../modal.abstract';
+import {QueryOptions} from '../models/query-options';
+
+import {SystemNameService} from '../services/system-name.service';
+import {CategoriesService} from './categories.service';
+import {ContentTypesService} from './content_types.service';
 
 /**
  * @class CategoriesModalComponent
  */
 @Component({
     selector: 'category-modal-content',
-    templateUrl: 'templates/modal-category.html',
-    providers: [CategoriesService, SystemNameService, ContentTypesService]
+    templateUrl: 'templates/modal-category.html'
 })
 export class CategoriesModalComponent extends ModalContentAbstractComponent<Category> {
 
@@ -170,8 +170,7 @@ export class CategoriesListComponent extends ListRecursiveComponent {
  */
 @Component({
     selector: 'categories-menu',
-    templateUrl: 'templates/categories-menu.html',
-    providers: [CategoriesService]
+    templateUrl: 'templates/categories-menu.html'
 })
 export class CategoriesMenuComponent implements OnInit {
     @Input() rootTitle: string = 'Категории';

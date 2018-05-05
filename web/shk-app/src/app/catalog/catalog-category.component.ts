@@ -1,21 +1,21 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { NgbModal, NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { Observable } from 'rxjs/Observable';
+import {Component, OnInit, Input} from '@angular/core';
+import {NgbModal, NgbActiveModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
+import {Observable} from 'rxjs/Observable';
 import * as _ from "lodash";
 
-import { Category } from "./models/category.model";
-import { ProductsService } from "./services/products.service";
-import { PageTableAbstractComponent } from './page-table.abstract'
-import { ProductModalContent } from './product.component';
-import { ContentType } from './models/content_type.model';
-import { ContentTypesService } from './services/content_types.service';
-import { Product } from './models/product.model';
-import { QueryOptions } from './models/query-options';
+import {Category} from "./models/category.model";
+import {PageTableAbstractComponent} from '../page-table.abstract'
+import {ProductModalContent} from './product.component';
+import {ContentType} from './models/content_type.model';
+import {Product} from './models/product.model';
+import {QueryOptions} from '../models/query-options';
+
+import {ProductsService} from './products.service';
+import {ContentTypesService} from './content_types.service';
 
 @Component({
     selector: 'catalog-category',
-    templateUrl: 'templates/catalog-category.html',
-    providers: [ProductsService]
+    templateUrl: 'templates/catalog-category.html'
 })
 export class CatalogCategoryComponent extends PageTableAbstractComponent<Product> {
     static title = 'CATEGORY';

@@ -3,7 +3,6 @@ import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {NgbModal, NgbActiveModal, NgbModalRef, NgbPopover, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import * as _ from "lodash";
 
-import {FieldTypesService} from './field-types.component';
 import {ContentField} from './models/content_field.model';
 import {ContentType} from './models/content_type.model';
 import {FieldType} from "./models/field-type.model";
@@ -12,9 +11,10 @@ import {QueryOptions} from '../models/query-options';
 import {PageTableAbstractComponent} from '../page-table.abstract';
 import {ModalContentAbstractComponent} from '../modal.abstract';
 
-import {ContentTypesService} from './content_types.service';
+import {ContentTypesService} from './services/content_types.service';
 import {SystemNameService} from '../services/system-name.service';
-import {CollectionsService} from './collections.service';
+import {CollectionsService} from './services/collections.service';
+import {FieldTypesService} from './services/field-types.service';
 
 @Component({
     selector: 'content-type-modal-content',
@@ -24,6 +24,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent<Conte
 
     @ViewChild('addCollectionBlock') elementAddCollectionBlock;
     @ViewChild('addGroupBlock') elementAddGroupBlock;
+    @ViewChild('accordion') accordion;
     modalRef: NgbModalRef;
 
     constructor(
@@ -352,6 +353,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent<Conte
      * @param field
      */
     editField(field: ContentField) {
+        this.toggleAccordion(this.accordion,'accordion-content-type-fields');
         this.action = 'edit_field';
         this.fieldModel = _.cloneDeep(field);
         let newFormValue = {};
@@ -371,6 +373,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent<Conte
      * @param field
      */
     copyField(field: ContentField) {
+        this.toggleAccordion(this.accordion,'accordion-content-type-fields');
         this.action = 'add_field';
         this.fieldModel = _.cloneDeep(field);
         this.fieldModel.name = '';
@@ -405,6 +408,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent<Conte
 
     /** Cancel edit field */
     editFieldCancel(){
+        this.toggleAccordion(this.accordion,'accordion-content-type-fields', true);
         this.resetFieldForm();
         this.onValueChanged('fieldForm', 'fld_');
     }
@@ -424,6 +428,7 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent<Conte
 
     /** Submit field */
     submitField() {
+        this.toggleAccordion(this.accordion,'accordion-content-type-fields', true);
         this.fld_submitted = true;
         if (!this.fieldForm.valid) {
             this.onValueChanged('fieldForm', 'fld_');

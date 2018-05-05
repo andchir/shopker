@@ -4,12 +4,13 @@ import * as _ from 'lodash';
 import {isNumeric} from 'rxjs/util/isNumeric';
 
 import {ContentField} from "./catalog/models/content_field.model";
-import {SystemNameService} from './services/system-name.service';
 import {MultiValues} from './models/multivalues.model';
 import {Properties} from './models/properties.iterface';
 import {FileData} from './catalog/models/file-data.model';
+
+import {SystemNameService} from './services/system-name.service';
 import {AppSettings} from './services/app-settings.service';
-import {CategoriesService} from './catalog/categories.service';
+import {CategoriesService} from './catalog/services/categories.service';
 
 @Component({
     selector: 'input-field-renderer',

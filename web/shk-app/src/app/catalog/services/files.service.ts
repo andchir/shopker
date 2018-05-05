@@ -5,8 +5,8 @@ import {Observable} from 'rxjs/Observable';
 import {of} from 'rxjs/observable/of';
 import {catchError, map, tap} from 'rxjs/operators';
 
-import {DataService} from '../services/data-service.abstract';
-import {FileModel} from './models/file.model';
+import {DataService} from '../../services/data-service.abstract';
+import {FileModel} from '../models/file.model';
 
 @Injectable()
 export class FilesService extends DataService<FileModel> {

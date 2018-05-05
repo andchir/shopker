@@ -10,8 +10,8 @@ import {ContentType} from './models/content_type.model';
 import {Product} from './models/product.model';
 import {QueryOptions} from '../models/query-options';
 
-import {ProductsService} from './products.service';
-import {ContentTypesService} from './content_types.service';
+import {ProductsService} from './services/products.service';
+import {ContentTypesService} from './services/content_types.service';
 
 @Component({
     selector: 'catalog-category',

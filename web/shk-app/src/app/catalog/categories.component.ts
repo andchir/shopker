@@ -15,8 +15,8 @@ import {ModalContentAbstractComponent} from '../modal.abstract';
 import {QueryOptions} from '../models/query-options';
 
 import {SystemNameService} from '../services/system-name.service';
-import {CategoriesService} from './categories.service';
-import {ContentTypesService} from './content_types.service';
+import {CategoriesService} from './services/categories.service';
+import {ContentTypesService} from './services/content_types.service';
 
 /**
  * @class CategoriesModalComponent

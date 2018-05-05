@@ -1,10 +1,10 @@
-import { Input, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { NgbActiveModal, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
+import {Input, OnInit} from '@angular/core';
+import {AbstractControl, FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {NgbAccordion, NgbActiveModal, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import * as _ from "lodash";
 
-import { SystemNameService } from './services/system-name.service';
-import { DataService } from './services/data-service.abstract';
+import {SystemNameService} from './services/system-name.service';
+import {DataService} from './services/data-service.abstract';
 
 export abstract class ModalContentAbstractComponent<M> implements OnInit {
     @Input() modalTitle: string;
@@ -129,6 +129,14 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
     displayToggle(element: HTMLElement, display?: boolean): void {
         display = display || element.style.display == 'none';
         element.style.display = display ? 'block' : 'none';
+    }
+
+    toggleAccordion(accordion: NgbAccordion, panelId: string, display?: boolean): void {
+        const isOpened = accordion.activeIds.indexOf(panelId) > -1;
+        if (isOpened && display) {
+            return;
+        }
+        accordion.toggle(panelId);
     }
 
     generateName(model): void {

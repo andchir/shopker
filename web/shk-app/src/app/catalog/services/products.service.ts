@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { DataService } from '../services/data-service.abstract';
-import { Product } from './models/product.model';
+import { DataService } from '../../services/data-service.abstract';
+import { Product } from '../models/product.model';
 
 @Injectable()
 export class ProductsService extends DataService<Product> {

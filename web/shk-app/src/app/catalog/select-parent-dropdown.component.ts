@@ -3,7 +3,7 @@ import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {TreeNode} from 'primeng/primeng'
 import * as _ from "lodash";
 
-import {CategoriesService} from './categories.service';
+import {CategoriesService} from './services/categories.service';
 
 @Component({
     selector: 'select-parent-dropdown',

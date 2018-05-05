@@ -10,10 +10,10 @@ import {ModalContentAbstractComponent} from '../modal.abstract';
 import {SystemNameService} from '../services/system-name.service';
 import {Product} from './models/product.model';
 
-import {CategoriesService} from './categories.service';
-import {ContentTypesService} from './content_types.service';
-import {ProductsService} from './products.service';
-import {FilesService} from './files.service';
+import {CategoriesService} from './services/categories.service';
+import {ContentTypesService} from './services/content_types.service';
+import {ProductsService} from './services/products.service';
+import {FilesService} from './services/files.service';
 
 @Component({
     selector: 'product-modal-content',

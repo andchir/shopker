@@ -61,135 +61,113 @@
         </div>
     </form>
 
-    <!-- Input -->
-    <label class="label-filled">{{'INPUT_OPTIONS' | translate}}</label>
+    <ngb-accordion [closeOthers]="false" activeIds="accordion-input-options" class="ngb-accordion" #accordion="ngbAccordion">
 
-    <hr class="mt-0 mb-0">
-    <div class="text-center mb-2" style="margin-top: -0.8rem;">
-        <button type="button" class="btn btn-outline-secondary bg-white text-secondary btn-xs" [ngSwitch]="collapseContainer1.style.display" (click)="displayToggle(collapseContainer1)">
-            <span *ngSwitchCase="'none'">
-                <i class="icon-plus"></i>
-                {{'EXPAND' | translate}}
-            </span>
-            <span *ngSwitchCase="'block'">
-                <i class="icon-minus"></i>
-                <span>{{'COLLAPSE' | translate}}</span>
-            </span>
-        </button>
-    </div>
+        <!-- Input -->
+        <ngb-panel id="accordion-input-options" [title]="'INPUT_OPTIONS' | translate">
+            <ng-template ngbPanelContent>
 
-    <div #collapseContainer1 class="mb-3" style="display: block;">
-        <table class="table table-bordered table-divided mb-0">
-            <thead>
-            <tr>
-                <th>
-                    {{'SYSTEM_NAME' | translate}}
-                </th>
-                <th>
-                    {{'TITLE' | translate}}
-                </th>
-                <th>
-                    {{'DEFAULT_VALUE' | translate}}
-                </th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of model.inputProperties; let index=index">
-                    <td>
-                        <input type="text" class="form-control" [(ngModel)]="item.name" name="name">
-                    </td>
-                    <td class="text-center">
-                        <input type="text" class="form-control" [(ngModel)]="item.title" name="title">
-                    </td>
-                    <td class="text-center">
-                        <input type="text" class="form-control" [(ngModel)]="item.default_value" name="default_value">
-                    </td>
-                    <td class="text-center">
-                        <button type="button" class="btn btn-secondary" (click)="deleteRow(index, 'inputProperties')" ngbTooltip="Remove">
-                            <i class="icon-cross"></i>
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-            <tfoot>
-                <tr class="bg-faded">
-                    <td colspan="4" class="text-center">
-                        <button type="button" class="btn btn-secondary" (click)="addRow('inputProperties')">
-                            <i class="icon-plus"></i>
-                            {{'ADD' | translate}}
-                        </button>
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
-    </div>
-    <!-- /Input -->
+                <table class="table table-bordered table-divided mb-0">
+                    <thead>
+                        <tr>
+                            <th>
+                                {{'SYSTEM_NAME' | translate}}
+                            </th>
+                            <th>
+                                {{'TITLE' | translate}}
+                            </th>
+                            <th>
+                                {{'DEFAULT_VALUE' | translate}}
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of model.inputProperties; let index=index">
+                            <td>
+                                <input type="text" class="form-control" [(ngModel)]="item.name" name="name">
+                            </td>
+                            <td class="text-center">
+                                <input type="text" class="form-control" [(ngModel)]="item.title" name="title">
+                            </td>
+                            <td class="text-center">
+                                <input type="text" class="form-control" [(ngModel)]="item.default_value" name="default_value">
+                            </td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-secondary" (click)="deleteRow(index, 'inputProperties')" ngbTooltip="Remove">
+                                    <i class="icon-cross"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr class="bg-faded">
+                            <td colspan="4" class="text-center">
+                                <button type="button" class="btn btn-secondary" (click)="addRow('inputProperties')">
+                                    <i class="icon-plus"></i>
+                                    {{'ADD' | translate}}
+                                </button>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
 
-    <!-- Output -->
-    <label class="label-filled">{{'OUTPUT_OPTIONS' | translate}}</label>
+            </ng-template>
+        </ngb-panel>
+        <!-- /Input -->
+        <!-- Output -->
+        <ngb-panel id="accordion-output-options" [title]="'OUTPUT_OPTIONS' | translate">
+            <ng-template ngbPanelContent>
 
-    <hr class="mt-0 mb-0">
-    <div class="text-center mb-2" style="margin-top: -0.8rem;">
-        <button type="button" class="btn btn-outline-secondary bg-white text-secondary btn-xs" [ngSwitch]="collapseContainer2.style.display" (click)="displayToggle(collapseContainer2)">
-            <span *ngSwitchCase="'none'">
-                <i class="icon-plus"></i>
-                {{'EXPAND' | translate}}
-            </span>
-            <span *ngSwitchCase="'block'">
-                <i class="icon-minus"></i>
-                <span>{{'COLLAPSE' | translate}}</span>
-            </span>
-        </button>
-    </div>
+                <table class="table table-bordered table-divided mb-0">
+                    <thead>
+                        <tr>
+                            <th>
+                                {{'SYSTEM_NAME' | translate}}
+                            </th>
+                            <th>
+                                {{'TITLE' | translate}}
+                            </th>
+                            <th>
+                                {{'DEFAULT_VALUE' | translate}}
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of model.outputProperties; let index=index">
+                            <td>
+                                <input type="text" class="form-control" [(ngModel)]="item.name" name="name">
+                            </td>
+                            <td class="text-center">
+                                <input type="text" class="form-control" [(ngModel)]="item.title" name="title">
+                            </td>
+                            <td class="text-center">
+                                <input type="text" class="form-control" [(ngModel)]="item.default_value" name="default_value">
+                            </td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-secondary" (click)="deleteRow(index, 'outputProperties')" ngbTooltip="Remove">
+                                    <i class="icon-cross"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr class="bg-faded">
+                            <td colspan="4" class="text-center">
+                                <button type="button" class="btn btn-secondary" (click)="addRow('outputProperties')">
+                                    <i class="icon-plus"></i>
+                                    {{'ADD' | translate}}
+                                </button>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
 
-    <div #collapseContainer2 style="display: none;">
-        <table class="table table-bordered table-divided mb-0">
-            <thead>
-                <tr>
-                    <th>
-                        {{'SYSTEM_NAME' | translate}}
-                    </th>
-                    <th>
-                        {{'TITLE' | translate}}
-                    </th>
-                    <th>
-                        {{'DEFAULT_VALUE' | translate}}
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of model.outputProperties; let index=index">
-                    <td>
-                        <input type="text" class="form-control" [(ngModel)]="item.name" name="name">
-                    </td>
-                    <td class="text-center">
-                        <input type="text" class="form-control" [(ngModel)]="item.title" name="title">
-                    </td>
-                    <td class="text-center">
-                        <input type="text" class="form-control" [(ngModel)]="item.default_value" name="default_value">
-                    </td>
-                    <td class="text-center">
-                        <button type="button" class="btn btn-secondary" (click)="deleteRow(index, 'outputProperties')" ngbTooltip="Remove">
-                            <i class="icon-cross"></i>
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-            <tfoot>
-                <tr class="bg-faded">
-                    <td colspan="4" class="text-center">
-                        <button type="button" class="btn btn-secondary" (click)="addRow('outputProperties')">
-                            <i class="icon-plus"></i>
-                            {{'ADD' | translate}}
-                        </button>
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
-    </div>
-    <!-- /Output -->
+            </ng-template>
+        </ngb-panel>
+        <!-- /Output -->
+    </ngb-accordion>
 
     <div class="alert alert-danger mt-3 mb-0" [hidden]="!errorMessage">
         <button type="button" class="close" (click)="errorMessage = ''">

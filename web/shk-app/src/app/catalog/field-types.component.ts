@@ -11,15 +11,7 @@ import {ModalContentAbstractComponent} from '../modal.abstract';
 import {QueryOptions} from '../models/query-options';
 
 import {SystemNameService} from '../services/system-name.service';
-
-@Injectable()
-export class FieldTypesService extends DataService<FieldType> {
-
-    constructor(http: HttpClient) {
-        super(http);
-        this.setRequestUrl('field_types');
-    }
-}
+import {FieldTypesService} from './services/field-types.service';
 
 @Component({
     selector: 'field-type-modal-content',

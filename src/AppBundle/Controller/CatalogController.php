@@ -166,6 +166,8 @@ class CatalogController extends ProductController
                 }
                 $fields[] = [
                     'name' => $field['name'],
+                    'title' => $field['title'],
+                    'description' => $field['description'],
                     'type' => $field['outputType'],
                     'properties' => array_merge($field['outputProperties'], $options)
                 ];
@@ -206,6 +208,8 @@ class CatalogController extends ProductController
             if (!empty($field['showInList'])) {
                 $fields[] = [
                     'name' => $field['name'],
+                    'title' => $field['title'],
+                    'description' => $field['description'],
                     'type' => $field['outputType'],
                     'properties' => array_merge($field['outputProperties'], $options)
                 ];

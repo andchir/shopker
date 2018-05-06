@@ -6,8 +6,8 @@
 
     {% for item in data %}
         <div class="mb-1">
-            <input type="radio" name="param__{{ fieldName }}" id="{{ fieldName }}_{{ loop.index }}" value="{{ item.value }}"{% if loop.index == 1 and firstSelected %} checked="checked"{% endif %}>
-            <label for="{{ fieldName }}_{{ loop.index }}">
+            <input type="radio" name="param__{{ fieldData.name }}" id="param__{{ fieldData.name }}_{{ loop.index }}" value="{{ item.value }}"{% if loop.index == 1 and firstSelected %} checked="checked"{% endif %}>
+            <label for="param__{{ fieldData.name }}_{{ loop.index }}">
                 {{ item.name }}
             </label>
         </div>
@@ -17,24 +17,39 @@
 
     {% for item in data %}
         <div class="mb-1">
-            <input type="checkbox" name="param__{{ fieldName }}__{{ loop.index0 }}" id="{{ fieldName }}_{{ loop.index }}" value="{{ item.value }}"{% if loop.index == 1 and firstSelected %} checked="checked"{% endif %}>
-            <label for="{{ fieldName }}_{{ loop.index }}">
+            <input type="checkbox" name="param__{{ fieldData.name }}__{{ loop.index0 }}" id="param__{{ fieldData.name }}_{{ loop.index }}" value="{{ item.value }}"{% if loop.index == 1 and firstSelected %} checked="checked"{% endif %}>
+            <label for="param__{{ fieldData.name }}_{{ loop.index }}">
                 {{ item.name }}
             </label>
         </div>
     {% endfor %}
 
-{% elseif type == 'checkbox' %}
+{% elseif type == 'select' %}
 
     <div class="mb-1">
-        <label for="{{ fieldName }}_{{ loop.index }}">
-            {{ item.name }}
+        <label for="param__{{ fieldData.name }}">
+            {{ fieldData.title }}
         </label>
-        <select class="form-control" name="param__{{ fieldName }}" id="{{ fieldName }}_{{ loop.index }}">
+        <select class="form-control" name="param__{{ fieldData.name }}" id="param__{{ fieldData.name }}">
             {% for item in data %}
-
+                <option value="{{ item.value }}">{{ item.name }}</option>
             {% endfor %}
         </select>
     </div>
+
+{% elseif type == 'text' %}
+
+    {% for item in data %}
+        <div class="mb-3 row">
+            <div class="col-md-4">
+                <label for="param__{{ fieldData.name }}_{{ loop.index }}">
+                    {{ item.name }}
+                </label>
+            </div>
+            <div class="col-md-8">
+                <input type="text" class="form-control" name="param__{{ fieldData.name }}__{{ loop.index0 }}" id="param__{{ fieldData.name }}_{{ loop.index }}" value="{{ item.value }}">
+            </div>
+        </div>
+    {% endfor %}
 
 {% endif %}

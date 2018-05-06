@@ -174,12 +174,24 @@ class AppExtension extends AbstractExtension
         }
 
         $field = $fields[$index];
-        $value = $itemData[$field['name']];
-        if (is_array($value)) {
-            $properties = array_merge($field['properties'], ['fieldName' => $field['name'], 'value' => '', 'data' => $value]);
-        } else {
-            $properties = array_merge($field['properties'], ['fieldName' => $field['name'], 'value' => $value]);
+        $value = '';
+        if (isset($itemData[$field['name']])) {
+            $value = $itemData[$field['name']];
         }
+        $propertiesDefault = [
+            'fieldData' => [
+                'name' => $field['name'],
+                'title' => $field['title'],
+                'description' => $field['description']
+            ]
+        ];
+        if (is_array($value)) {
+            $propertiesDefault['value'] = '';
+            $propertiesDefault['data'] = $value;
+        } else {
+            $propertiesDefault['value'] = $value;
+        }
+        $properties = array_merge($field['properties'], $propertiesDefault);
         if (!empty($value)) {
             $templateName = $this->getTemplateName('chunks/fields/', $chunkName, $chunkNamePrefix);
         } else {

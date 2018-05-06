@@ -25,8 +25,10 @@ body { background-color: #eee; }
 
 .btn-primary,
 .btn-outline-primary:hover,
-.btn-outline-primary.active { background-color: #4f91ff !important; border-color: transparent; background-image: linear-gradient(to bottom, #4f91ff 0%, #357ae8 100%) !important; }
-.btn-primary:hover { border-color: #2f5bb7 !important; }
+.btn-outline-primary.active,
+.btn.btn-outline-primary:not(:disabled):not(.disabled).active,
+.btn.btn-outline-primary:not(:disabled):not(.disabled):active { background-color: #4f91ff; border-color: transparent; background-image: linear-gradient(to bottom, #4f91ff 0%, #357ae8 100%); }
+.btn-primary:hover { border-color: #2f5bb7; }
 .btn-primary.disabled, .btn-primary:disabled { color: #fff; background-color: #4285f4; border-color: #3079ed; }
 
 .btn-secondary { color: #212121; background-color: #fff; border-color: #dbdbdb; background-image: linear-gradient(to bottom, #fff 0%, whitesmoke 100%); background-repeat: repeat-x; }
@@ -82,8 +84,11 @@ input.form-control[readonly] { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); curso
 /* buttons */
 .btn { cursor: pointer; border-radius: 3px; }
 .btn-wide { min-width: 130px; text-align: center; padding-left: 2rem; padding-right: 2rem; }
-.shk-btn-status { display: block; width: 100%; border-color: rgba(0,0,0,0.2); }
+.shk-btn-status { display: block; width: 100%; border-color: rgba(0,0,0,0.2); background-image: linear-gradient(to bottom, rgba(255,255,255,0.31) 0%,rgba(229,229,229,0) 100%); }
 .shk-btn-status:hover { border-color: rgba(0,0,0,0.2); }
+
+/* tabs */
+.nav-tabs .nav-link.active { background-image: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%,rgba(0,0,0,0) 40%); }
 
 /* modals */
 .modal .modal-dialog { box-shadow: 0 0 20px rgba(0,0,0,0.5); }

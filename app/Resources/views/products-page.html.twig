@@ -27,6 +27,11 @@
                         {% endautoescape %}
                     </div>
                     <div class="my-3">
+                        {% autoescape false %}
+                            {{ outputTypeChunk(currentPage, fields, 'parameters', 'page_') }}
+                        {% endautoescape %}
+                    </div>
+                    <div class="my-3">
                         {{ 'Price' | trans }}:
                         {% autoescape false %}
                             {{ outputTypeChunk(currentPage, fields, 'price') }}

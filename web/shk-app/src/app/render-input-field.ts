@@ -435,7 +435,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
         });
     }
 
-    parametersRemove(fieldName: fieldName, index: number): void {
+    parametersRemove(fieldName: string, index: number): void {
         if (typeof this.model[fieldName] === 'object') {
             typeof this.model[fieldName].splice(index, 1);
         }

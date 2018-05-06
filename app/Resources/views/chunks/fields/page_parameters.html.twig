@@ -1,0 +1,40 @@
+{% if firstSelected is not defined %}
+    {% set firstSelected = true %}
+{% endif %}
+
+{% if type == 'radio' %}
+
+    {% for item in data %}
+        <div class="mb-1">
+            <input type="radio" name="param__{{ fieldName }}" id="{{ fieldName }}_{{ loop.index }}" value="{{ item.value }}"{% if loop.index == 1 and firstSelected %} checked="checked"{% endif %}>
+            <label for="{{ fieldName }}_{{ loop.index }}">
+                {{ item.name }}
+            </label>
+        </div>
+    {% endfor %}
+
+{% elseif type == 'checkbox' %}
+
+    {% for item in data %}
+        <div class="mb-1">
+            <input type="checkbox" name="param__{{ fieldName }}__{{ loop.index0 }}" id="{{ fieldName }}_{{ loop.index }}" value="{{ item.value }}"{% if loop.index == 1 and firstSelected %} checked="checked"{% endif %}>
+            <label for="{{ fieldName }}_{{ loop.index }}">
+                {{ item.name }}
+            </label>
+        </div>
+    {% endfor %}
+
+{% elseif type == 'checkbox' %}
+
+    <div class="mb-1">
+        <label for="{{ fieldName }}_{{ loop.index }}">
+            {{ item.name }}
+        </label>
+        <select class="form-control" name="param__{{ fieldName }}" id="{{ fieldName }}_{{ loop.index }}">
+            {% for item in data %}
+
+            {% endfor %}
+        </select>
+    </div>
+
+{% endif %}

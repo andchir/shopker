@@ -522,7 +522,7 @@ class FieldTypesFixtures extends Fixture
             ],
             'parameters' => [
                 'title' => 'Параметры товара',
-                'description' => '',
+                'description' => 'Параметры товара могут влиять на цену. Доступные типы вывода: radio, checkbox, select, text.',
                 'isActive' => true,
                 'inputProperties' => [
                     [
@@ -541,6 +541,16 @@ class FieldTypesFixtures extends Fixture
                         'name' => 'type',
                         'title' => 'Тип поля',
                         'default_value' => 'radio'
+                    ],
+                    [
+                        'name' => 'chunkName',
+                        'title' => 'Название шаблона',
+                        'default_value' => ''
+                    ],
+                    [
+                        'name' => 'firstSelected',
+                        'title' => 'Первый выбран?',
+                        'default_value' => '1'
                     ]
                 ]
             ]

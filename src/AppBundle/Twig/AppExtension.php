@@ -176,9 +176,9 @@ class AppExtension extends AbstractExtension
         $field = $fields[$index];
         $value = $itemData[$field['name']];
         if (is_array($value)) {
-            $properties = array_merge($field['properties'], ['value' => '', 'data' => $value]);
+            $properties = array_merge($field['properties'], ['fieldName' => $field['name'], 'value' => '', 'data' => $value]);
         } else {
-            $properties = array_merge($field['properties'], ['value' => $value]);
+            $properties = array_merge($field['properties'], ['fieldName' => $field['name'], 'value' => $value]);
         }
         if (!empty($value)) {
             $templateName = $this->getTemplateName('chunks/fields/', $chunkName, $chunkNamePrefix);

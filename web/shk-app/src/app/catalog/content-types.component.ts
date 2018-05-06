@@ -457,6 +457,18 @@ export class ContentTypeModalContent extends ModalContentAbstractComponent<Conte
         this.resetFieldForm();
     }
 
+    getFieldTypeProperty(inputType: string|null, propertyName: string): string|null {
+        if (!inputType) {
+            return null;
+        }
+        let output = null;
+        const index = _.findIndex(this.fieldTypes, {name: inputType});
+        if (index > -1 && typeof this.fieldTypes[index][propertyName] !== 'undefined') {
+            output = this.fieldTypes[index][propertyName];
+        }
+        return output;
+    }
+
     save() {
         this.submitted = true;
 

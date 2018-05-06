@@ -522,7 +522,7 @@ class FieldTypesFixtures extends Fixture
             ],
             'parameters' => [
                 'title' => 'Product parameters',
-                'description' => '',
+                'description' => 'Product parameters can affect the price. Available output types: radio, checkbox, select, text.',
                 'isActive' => true,
                 'inputProperties' => [
                     [
@@ -541,6 +541,16 @@ class FieldTypesFixtures extends Fixture
                         'name' => 'type',
                         'title' => 'Field type',
                         'default_value' => 'radio'
+                    ],
+                    [
+                        'name' => 'chunkName',
+                        'title' => 'Template name',
+                        'default_value' => ''
+                    ],
+                    [
+                        'name' => 'firstSelected',
+                        'title' => 'First selected?',
+                        'default_value' => '1'
                     ]
                 ]
             ]

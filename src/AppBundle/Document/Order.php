@@ -3,6 +3,8 @@
 namespace AppBundle\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use Doctrine\Common\Collections\ArrayCollection;
+use AppBundle\Document\OrderContent;
 
 /**
  * @MongoDB\Document(collection="order",repositoryClass="AppBundle\Repository\OrderRepository")
@@ -97,8 +99,14 @@ class Order
 
     /**
      * @MongoDB\Field(type="collection", nullable=true)
+     * @MongoDB\EmbedMany(targetDocument="OrderContent")
      */
     protected $content;
+
+    public function __construct()
+    {
+        $this->content = new ArrayCollection();
+    }
 
     /**
      * @MongoDB\PrePersist()
@@ -416,36 +424,15 @@ class Order
     }
 
     /**
-     * Set content
-     *
-     * @param array $content
-     * @return $this
-     */
-    public function setContent($content)
-    {
-        $this->content = $content;
-        return $this;
-    }
-
-    /**
-     * Get content
-     *
-     * @return array $content
-     */
-    public function getContent()
-    {
-        return $this->content;
-    }
-
-    /**
      * @return int
      */
     public function getContentCount()
     {
         $countTotal = 0;
         $contentArr = $this->getContent();
+        /** @var OrderContent $content */
         foreach ($contentArr as $content) {
-            $countTotal += $content['count'];
+            $countTotal += $content->getCount();
         }
         return $countTotal;
     }
@@ -474,7 +461,7 @@ class Order
         ];
         if($full){
             $output = array_merge($output, [
-                'content' => $this->getContent(),
+                'content' => $this->getContentArray(),
                 'options' => $this->getOptions()
             ]);
         }
@@ -487,18 +474,23 @@ class Order
      */
     public function setContentFromCart($shopCartData)
     {
-        $content = [];
         foreach ($shopCartData as $contentTypeName => $products) {
             foreach ($products as $product) {
                 $uri = $product['parentUri'] . $product['systemName'];
-                unset($product['parentUri'], $product['systemName']);
-                $content[] = array_merge($product, [
-                    'uri' => $uri ,
-                    'contentTypeName' => $contentTypeName
-                ]);
+                $orderContent = new OrderContent();
+                $orderContent
+                    ->setId($product['id'])
+                    ->setTitle($product['title'])
+                    ->setCount($product['count'])
+                    ->setPrice($product['price'])
+                    ->setImage($product['image'])
+                    ->setUri($uri)
+                    ->setContentTypeName($contentTypeName)
+                    ->setParameters([]);
+
+                $this->addContent($orderContent);
             }
         }
-        $this->content = $content;
         return $this;
     }
 
@@ -530,8 +522,9 @@ class Order
     public function updatePriceTotal()
     {
         $priceTotal = 0;
+        /** @var OrderContent $content */
         foreach ($this->content as $content) {
-            $priceTotal += ($content['price'] * $content['count']);
+            $priceTotal += ($content->getPrice() * $content->getCount());
         }
         if ($this->deliveryPrice) {
             $priceTotal += $this->deliveryPrice;
@@ -582,5 +575,57 @@ class Order
     public function getOptions()
     {
         return $this->options;
+    }
+
+    /**
+     * Get content
+     *
+     * @return ArrayCollection $content
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    public function getContentArray()
+    {
+        $output = [];
+        /** @var OrderContent $content */
+        foreach ($this->content as $content) {
+            $output[] = $content->toArray();
+        }
+        return $output;
+    }
+
+    /**
+     * Set content
+     *
+     * @param ArrayCollection $content
+     * @return $this
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+        return $this;
+    }
+
+    /**
+     * Add content
+     *
+     * @param OrderContent $content
+     */
+    public function addContent(OrderContent $content)
+    {
+        $this->content->add($content);
+    }
+
+    /**
+     * Remove content
+     *
+     * @param OrderContent $content
+     */
+    public function removeContent(OrderContent $content)
+    {
+        $this->content->removeElement($content);
     }
 }

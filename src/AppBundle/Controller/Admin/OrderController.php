@@ -52,8 +52,8 @@ class OrderController extends StorageControllerAbstract
             ->setDeliveryPrice($deliveryPrice)
             ->setPaymentName($data['paymentName'])
             ->setComment($data['comment'])
-            ->setOptions($data['options'])
-            ->setContent($data['content']);
+            ->setOptions($data['options']);
+            //->setContent($data['content']);
 
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $this->get('doctrine_mongodb')->getManager();

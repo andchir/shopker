@@ -1,4 +1,6 @@
 
+body { background-color: #eee; }
+
 /* common */
 .w-auto { width: auto; }
 .min-width150 { min-width: 150px; }
@@ -17,6 +19,32 @@
 .pos-absolute-right2 { right: 0.6rem; top: 0.6rem; }
 .min-height400 { min-height: 400px; }
 .no-events { pointer-events: none; }
+
+/* buttons */
+.btn:not([disabled]):not(.disabled):not(.btn-link) { box-shadow: 0 1px 5px rgba(0,0,0,0.15); }
+
+.btn-primary,
+.btn-outline-primary:hover,
+.btn-outline-primary.active { background-color: #4f91ff !important; border-color: transparent; background-image: linear-gradient(to bottom, #4f91ff 0%, #357ae8 100%) !important; }
+.btn-primary:hover { border-color: #2f5bb7 !important; }
+.btn-primary.disabled, .btn-primary:disabled { color: #fff; background-color: #4285f4; border-color: #3079ed; }
+
+.btn-secondary { color: #212121; background-color: #fff; border-color: #dbdbdb; background-image: linear-gradient(to bottom, #fff 0%, whitesmoke 100%); background-repeat: repeat-x; }
+.btn-secondary:hover { color: #212121; border-color: #d1d1d1; }
+.btn-secondary.disabled, .btn-secondary:disabled { color: #212121; background-color: #fff; border-color: #dbdbdb; }
+.btn-secondary:focus:not(:active):not(.active):not(.btn-secondary):not(.btn-light),
+.btn-secondary.focus:not(:active):not(.active):not(.btn-secondary):not(.btn-light) { border-color: #dbdbdb; box-shadow: inset 0 0 0 1px #fff; }
+.btn-secondary:not(:disabled):not(.disabled):active,
+.btn-secondary:not(:disabled):not(.disabled).active,
+.show > .btn-secondary.dropdown-toggle { color: #212121; background-image: linear-gradient(to bottom, #fff 0%, #e6e6e6 100%); background-repeat: repeat-x; box-shadow: none; }
+
+.btn-success { color: #fff; background-color: #58c45c; border-color: transparent; background-image: linear-gradient(to bottom, #58c45c 0%, #4baf50 100%); }
+.btn-success:hover { border-color: #306f33; }
+.btn-success.disabled, .btn-success:disabled { color: #fff; background-color: #4caf50; border-color: transparent; }
+
+.btn-info { color: #fff; background-color: #00bcd4; border-color: transparent; background-image: linear-gradient(to bottom, #00bcd4 0%, #00a5bb 100%); background-repeat: repeat-x; }
+.btn-info:hover { border-color: #006b78; }
+.btn-info.disabled, .btn-info:disabled { color: #fff; background-color: #00bcd4; border-color: transparent; }
 
 /* shadow */
 .shadow { box-shadow: 0 0 20px rgba(0,0,0,0.3); }
@@ -71,6 +99,9 @@ input.form-control[readonly] { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); curso
 .label-filled + .form-control,
 .label-filled + .input-group .form-control,
 .label-filled + .card { border-top-left-radius: 0; }
+
+/* card */
+.card-header { /*background-color: rgba(0,0,0,0.2); box-shadow: inset 0 0 10px rgba(255,255,255,0.9);*/ }
 
 /* card-navbar */
 .card-navbar { padding: 7px; display: inline-block; background-color: rgba(0,0,0,.1); border-top-left-radius: 6px; border-top-right-radius: 6px; }
@@ -141,12 +172,12 @@ input.form-control[readonly] { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); curso
 
 /* accordion */
 .ngb-accordion .card { margin-bottom: 0.325em; border: 1px solid rgba(0,0,0,.125) !important; border-radius: .25rem !important; }
-.ngb-accordion .card-header { padding: 0; border-bottom: 0; position: relative; background-color: rgba(0,0,0,0.03); }
+.ngb-accordion .card-header { padding: 0; border-bottom: 0; position: relative; background-image: linear-gradient(to bottom, #f7f7f7 0%, #e8e8e8 100%); text-shadow: 1px 1px 2px #fff, 1px 1px 1px #fff; }
 .ngb-accordion .card-header:before { content: '\e909'; display: inline-block; font-family: 'icomoon'; position: absolute; right: 10px; top: 8px; color: rgba(0,0,0,0.5); }
-.ngb-accordion .card-header.active { border-bottom: 1px solid rgba(0,0,0,.125); background-color: rgba(0,0,0,0.06); }
+.ngb-accordion .card-header.active { border-bottom: 1px solid rgba(0,0,0,.125); background-color: #e8e8e8; background-image: linear-gradient(to bottom, #e8e8e8 0%, #d1d1d1 100%); }
 .ngb-accordion .card-header.active:before { content: '\e906'; }
-.ngb-accordion .card-header > a { display: block; padding: 0.75rem 1.25rem; text-decoration: none; line-height: 1; color: rgba(0,0,0,0.5); }
-.ngb-accordion .card-header:hover { background-color: rgba(0,0,0,0.06); }
+.ngb-accordion .card-header > a { display: block; padding: 0.75rem 1.25rem; text-decoration: none; line-height: 1; color: rgba(0,0,0,0.7); }
+.ngb-accordion .card-header:hover { background-color: #e8e8e8; background-image: linear-gradient(to bottom, #e8e8e8 0%, #d1d1d1 100%); }
 .ngb-accordion .card-header.active a,
 .ngb-accordion .card-header:hover a { color: rgba(0,0,0,0.8); }
 

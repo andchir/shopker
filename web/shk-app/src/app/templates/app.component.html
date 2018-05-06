@@ -1,15 +1,14 @@
 <div>
     <div class="pos-absolute-right" style="top: 1rem; right: 1rem;">
-        <a class="btn btn-secondary btn-sm" placement="bottom" [ngbTooltip]="'PREVIEW_SITE' | translate" href="{{baseUrl}}" target="_blank">
+        <a class="btn btn-secondary btn-sm" placement="bottom" href="{{baseUrl}}" target="_blank" [ngbTooltip]="'PREVIEW_SITE' | translate">
             <i class="icon-home"></i>
         </a>
-        <a class="btn btn-secondary btn-sm ml-1" href="{{baseUrl}}logout">
-            {{'LOGOUT' | translate}}
+        <a class="btn btn-secondary btn-sm ml-1" href="{{baseUrl}}logout" [ngbTooltip]="'LOGOUT' | translate">
             <i class="icon-power"></i>
         </a>
     </div>
 
-    <div class="card-navbar">
+    <div class="mb-3">
         <div class="btn-group" role="group" aria-label="First group">
             <a class="btn btn-outline-primary" [routerLink]="['/orders']" routerLinkActive="active">
                 <i class="icon-bag"></i>

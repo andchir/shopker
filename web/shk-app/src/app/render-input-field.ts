@@ -248,15 +248,18 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
 
         switch (field.inputType){
             case 'date':
-
                 defaultValue = new Date();
                 if (modelValue) {
                     modelValue = new Date(modelValue);
                 }
-
                 break;
             case 'number':
                 defaultValue = parseInt(String(defaultValue));
+                break;
+            case 'parameters':
+                if (typeof defaultValue !== 'object') {
+                    defaultValue = defaultValue ? JSON.parse(defaultValue) : [];
+                }
                 break;
             case 'tags':
             case 'checkbox':
@@ -429,6 +432,21 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                     this.model[fieldName].push(category.id);
                 }
             });
+        });
+    }
+
+    parametersRemove(fieldName: fieldName, index: number): void {
+        if (typeof this.model[fieldName] === 'object') {
+            typeof this.model[fieldName].splice(index, 1);
+        }
+    }
+
+    parametersAdd(fieldName: string): void {
+        if (!this.model[fieldName]) {
+            this.model[fieldName] = [];
+        }
+        this.model[fieldName].push({
+            name: '', value: '', price: 0
         });
     }
 

@@ -294,6 +294,62 @@
                             </div>
                         </div>
 
+                        <div class="row" *ngSwitchCase="'parameters'">
+                            <div class="col-12">
+                                <div class="card card-body">
+                                    <label for="field_{{field.name}}">
+                                        {{field.title}}
+                                        <span class="text-danger" *ngIf="field.required">*</span>
+                                    </label>
+
+                                    <table class="table table-divided mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    {{'NAME' | translate}}
+                                                </th>
+                                                <th>
+                                                    {{'VALUE' | translate}}
+                                                </th>
+                                                <th>
+                                                    {{'PRICE' | translate}}
+                                                </th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of model[field.name]; index as index">
+                                                <td>
+                                                    <input type="text" class="form-control form-control-sm" [(ngModel)]="item.name" [ngModelOptions]="{standalone: true}">
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control form-control-sm" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
+                                                </td>
+                                                <td class="text-center">
+                                                    <input type="number" class="form-control form-control-sm" min="0" [(ngModel)]="item.price" [ngModelOptions]="{standalone: true}">
+                                                </td>
+                                                <td class="text-center">
+                                                    <button type="button" class="btn btn-secondary btn-sm" [title]="'REMOVE' | translate" (click)="parametersRemove(field.name, index)">
+                                                        <i class="icon-cross"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr class="bg-faded">
+                                                <td colspan="4" class="text-center pb-0">
+                                                    <button type="button" class="btn btn-secondary btn-sm" (click)="parametersAdd(field.name)">
+                                                        <i class="icon-plus"></i>
+                                                        <span>{{'ADD' | translate}}</span>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="row" *ngSwitchDefault>
                             <div class="col-md-5">
                                 <label for="field_{{field.name}}">

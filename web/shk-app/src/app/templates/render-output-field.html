@@ -17,8 +17,8 @@
         </span>
     </div>
 
-    <div *ngSwitchCase="'status'">
-        <div class="d-block" ngbDropdown [placement]="'bottom'" #myDrop="ngbDropdown">
+    <div class="text-center" *ngSwitchCase="'status'">
+        <div ngbDropdown [placement]="'bottom'" #myDrop="ngbDropdown">
             <button class="btn btn-primary btn-xs shk-btn-status" ngbDropdownToggle [style.backgroundColor]="getStatusColor(value)">
                 {{value}}
             </button>

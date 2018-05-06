@@ -519,6 +519,30 @@ class FieldTypesFixtures extends Fixture
                         'default_value' => ''
                     ]
                 ]
+            ],
+            'parameters' => [
+                'title' => 'Параметры товара',
+                'description' => '',
+                'isActive' => true,
+                'inputProperties' => [
+                    [
+                        'name' => 'value',
+                        'title' => 'Значение по умолчанию',
+                        'default_value' => ''
+                    ],
+                    [
+                        'name' => 'handler',
+                        'title' => 'Обработчик',
+                        'default_value' => ''
+                    ]
+                ],
+                'outputProperties' => [
+                    [
+                        'name' => 'type',
+                        'title' => 'Тип поля',
+                        'default_value' => 'radio'
+                    ]
+                ]
             ]
         ];
 

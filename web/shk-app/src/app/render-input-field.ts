@@ -260,6 +260,9 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                 if (typeof defaultValue !== 'object') {
                     defaultValue = defaultValue ? JSON.parse(defaultValue) : [];
                 }
+                if (!_.isArray(defaultValue)) {
+                    defaultValue = [defaultValue];
+                }
                 break;
             case 'tags':
             case 'checkbox':

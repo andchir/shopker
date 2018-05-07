@@ -235,6 +235,27 @@ class CatalogFixtures extends Fixture
                 'isFilter' => true
             ],
             [
+                'title' => 'Параметры',
+                'name' => 'parameters',
+                'description' => '',
+                'inputType' => 'parameters',
+                'inputProperties' => [
+                    'value' => '',
+                    'handler' => ''
+                ],
+                'outputType' => 'parameters',
+                'outputProperties' => [
+                    'type' => 'radio',
+                    'chunkName' => 'parameters',
+                    'firstSelected' => '1'
+                ],
+                'group' => 'Параметры',
+                'required' => false,
+                'showInTable' => false,
+                'showInList' => false,
+                'isFilter' => true
+            ],
+            [
                 'title' => 'Категории',
                 'name' => 'categories',
                 'description' => 'Вы можете выбрать несколько категорий для товара.',

@@ -235,6 +235,27 @@ class CatalogFixtures extends Fixture
                 'isFilter' => true
             ],
             [
+                'title' => 'Parameters',
+                'name' => 'parameters',
+                'description' => '',
+                'inputType' => 'parameters',
+                'inputProperties' => [
+                    'value' => '',
+                    'handler' => ''
+                ],
+                'outputType' => 'parameters',
+                'outputProperties' => [
+                    'type' => 'radio',
+                    'chunkName' => 'parameters',
+                    'firstSelected' => '1'
+                ],
+                'group' => 'Options',
+                'required' => false,
+                'showInTable' => false,
+                'showInList' => false,
+                'isFilter' => true
+            ],
+            [
                 'title' => 'Categories',
                 'name' => 'categories',
                 'description' => 'You can select several categories for the product.',

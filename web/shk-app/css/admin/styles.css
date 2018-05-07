@@ -88,7 +88,7 @@ input.form-control[readonly] { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); curso
 .shk-btn-status:hover { border-color: rgba(0,0,0,0.2); }
 
 /* tabs */
-.nav-tabs .nav-link.active { background-image: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%,rgba(0,0,0,0) 40%); }
+.nav-tabs .nav-link.active { background-image: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%,rgba(0,0,0,0) 30%); }
 
 /* modals */
 .modal .modal-dialog { box-shadow: 0 0 20px rgba(0,0,0,0.5); }

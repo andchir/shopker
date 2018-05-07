@@ -69,7 +69,7 @@ input.form-control[disabled],
 input.form-control[readonly] { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); cursor: not-allowed; }
 .custom-checkbox-single .custom-control-label { display: block; }
 .custom-checkbox-single .custom-control-label:before,
-.custom-checkbox-single .custom-control-label:after { top: 0; left: 0; }
+.custom-checkbox-single .custom-control-label:after { top: 0; left: 0; cursor: pointer; }
 
 .form-group-message {  }
 .form-group-message .form-control { border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-color: #a94442; }

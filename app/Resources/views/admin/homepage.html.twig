@@ -31,12 +31,11 @@
         <script type="text/javascript" src="{{ asset('shk-app/bundle/scripts.abc521399cddc9dfff22.bundle.js') }}"></script>
         <script type="text/javascript" src="{{ asset('shk-app/bundle/main.bc63fb26f4ef992e5665.bundle.js') }}"></script>
     {% else %}
-        <script type="text/javascript" src="{{ asset('shk-app/bundle/inline.bundle.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('shk-app/bundle/polyfills.bundle.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('shk-app/bundle/styles.bundle.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('shk-app/bundle/scripts.bundle.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('shk-app/bundle/vendor.bundle.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('shk-app/bundle/main.bundle.js') }}"></script>
-        {#<script type="text/javascript" src="{{ asset('shk-app/bundle/users.module.chunk.js') }}"></script>#}
+        <script type="text/javascript" src="{{ asset('shk-app/bundle-dev/inline.bundle.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('shk-app/bundle-dev/polyfills.bundle.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('shk-app/bundle-dev/styles.bundle.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('shk-app/bundle-dev/scripts.bundle.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('shk-app/bundle-dev/vendor.bundle.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('shk-app/bundle-dev/main.bundle.js') }}"></script>
     {% endif %}
 {% endblock %}

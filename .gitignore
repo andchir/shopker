@@ -18,7 +18,9 @@
 /web/lib/
 /web/shk-app/node_modules/
 /web/shk-app/bundle/
+/web/shk-app/bundle-dev/
 /web/uploads/
 /app/config/parameters.yml
 /src/AppBundle/Document/**/*.php~
 /app/config/settings.yml
+

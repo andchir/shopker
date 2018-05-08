@@ -5,9 +5,20 @@
                 <tr>
                     <td>{{ loop.index }}</td>
                     <td>
-                        <a href="{{ catalogPath(item.parentUri, item.systemName) }}">
-                            {{ item.title }}
-                        </a>
+                        <div>
+                            <a href="{{ catalogPath(item.parentUri, item.systemName) }}">
+                                {{ item.title }}
+                            </a>
+                        </div>
+                        {% if (item.parameters is not empty) %}
+                            <div class="text-muted small">
+                                {% for parameter in item.parameters %}
+                                    <div>
+                                        {{ parameter.name }}: {{ parameter.value }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                     </td>
                     <td>{{ item.count }}</td>
                     <td>{{ item.price | price }} руб.</td>

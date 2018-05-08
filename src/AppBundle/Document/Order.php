@@ -486,7 +486,7 @@ class Order
                     ->setImage($product['image'])
                     ->setUri($uri)
                     ->setContentTypeName($contentTypeName)
-                    ->setParameters([]);
+                    ->setParameters($product['parameters']);
 
                 $this->addContent($orderContent);
             }

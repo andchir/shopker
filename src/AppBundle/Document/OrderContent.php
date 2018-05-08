@@ -5,7 +5,7 @@ namespace AppBundle\Document;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
 /**
- * @MongoDB\Document()
+ * @MongoDB\EmbeddedDocument()
  */
 class OrderContent
 {

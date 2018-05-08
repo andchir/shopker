@@ -80,11 +80,20 @@ class CartController extends ProductController
                 $systemName = $productDocument[$systemNameField];
             }
 
-            if (isset($shopCartData[$contentTypeName])
-                && in_array($itemId, array_column($shopCartData[$contentTypeName], 'id'))) {
-                    $index = array_search($itemId, array_column($shopCartData[$contentTypeName], 'id'));
-                    $shopCartData[$contentTypeName][$index]['count'] += $count;
-                    $shopCartData[$contentTypeName][$index]['price'] += $priceValue;
+            $parameters = $this->getProductParameters($request, $productDocument, $contentTypeFields);
+
+            $productIndex = isset($shopCartData[$contentTypeName])
+                && in_array($itemId, array_column($shopCartData[$contentTypeName], 'id'))
+                ? array_search($itemId, array_column($shopCartData[$contentTypeName], 'id'))
+                : -1;
+
+            $currentProduct = null;
+            if ($productIndex > -1) {
+                $currentProduct = &$shopCartData[$contentTypeName][$productIndex];
+            }
+
+            if (!empty($currentProduct) && $currentProduct['parameters'] == $parameters) {
+                $currentProduct['count'] += $count;
             } else {
                 $shopCartData[$contentTypeName][] = [
                     'id' => $productDocument['_id'],
@@ -93,7 +102,8 @@ class CartController extends ProductController
                     'systemName' => $systemName,
                     'image' => '',
                     'count' => $count,
-                    'price' => $priceValue
+                    'price' => $priceValue,
+                    'parameters' => $parameters
                 ];
             }
 
@@ -101,6 +111,48 @@ class CartController extends ProductController
         }
 
         return new RedirectResponse($referer);
+    }
+
+    /**
+     * @param Request $request
+     * @param array $productDocument
+     * @param array $contentTypeFields
+     * @return array
+     */
+    public function getProductParameters(Request $request, $productDocument, $contentTypeFields)
+    {
+        $postData = $request->request->all();
+        $parameters = [];
+        foreach ($postData as $key => $value) {
+            if (strpos($key, 'param__') !== false) {
+                $paramArr = explode('__', $key);
+                $paramName = isset($paramArr[1]) ? $paramArr[1] : '';
+                $index = array_search($paramName, array_column($contentTypeFields, 'name'));
+                if ($index === false
+                    || !isset($productDocument[$paramName])
+                    || !is_array($productDocument[$paramName])) {
+                    continue;
+                }
+                $contentTypeField = $contentTypeFields[$index];
+                if ($contentTypeField['inputType'] != 'parameters') {
+                    continue;
+                }
+                $paramIndex = array_search($value, array_column($productDocument[$paramName], 'value'));
+                $outputType = isset($contentTypeField['outputProperties']) && isset($contentTypeField['outputProperties']['type'])
+                    ? $contentTypeField['outputProperties']['type']
+                    : 'radio';
+                switch ($outputType) {
+                    case 'checkbox':
+                    case 'select':
+                    case 'radio':
+                        if ($paramIndex !== false) {
+                            $parameters[] = $productDocument[$paramName][$paramIndex];
+                        }
+                        break;
+                }
+            }
+        }
+        return $parameters;
     }
 
     /**

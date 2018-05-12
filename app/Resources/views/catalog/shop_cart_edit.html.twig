@@ -10,19 +10,15 @@
                                 {{ item.title }}
                             </a>
                         </div>
-                        {% if (item.parameters is not empty) %}
+                        {% if item.parametersString is not empty %}
                             <div class="text-muted small">
-                                {% for parameter in item.parameters %}
-                                    <div>
-                                        {{ parameter.name }}: {{ parameter.value }}
-                                    </div>
-                                {% endfor %}
+                                {{ item.parametersString }}
                             </div>
                         {% endif %}
                     </td>
                     <td>{{ item.price | price }} руб.</td>
                     <td>
-                        <input type="number" class="form-control form-control-sm" min="1" step="1" value="{{ item.count }}" style="width: 80px;">
+                        <input type="number" class="form-control" min="1" step="1" value="{{ item.count }}" style="width: 80px;">
                     </td>
                     <td>{{ item.priceTotal | price }} руб.</td>
                     <td class="text-right">

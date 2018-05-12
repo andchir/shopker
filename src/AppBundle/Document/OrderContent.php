@@ -265,6 +265,26 @@ class OrderContent
     }
 
     /**
+     * @param array $parameters
+     * @param string $currency
+     * @return string
+     */
+    public static function getParametersString($parameters, $currency = '')
+    {
+        $outputArr = [];
+        foreach ($parameters as $parameter) {
+            $str = "{$parameter['name']}: {$parameter['value']}";
+            if (!empty($parameter['price'])) {
+                $str .= $currency
+                    ? " ({$parameter['price']} {$currency})"
+                    : " ({$parameter['price']})";
+            }
+            array_push($outputArr, $str);
+        }
+        return implode(', ', $outputArr);
+    }
+
+    /**
      * @return array
      */
     public function toArray()

@@ -4,6 +4,7 @@ namespace AppBundle\Twig;
 
 use AppBundle\Controller\CartController;
 use AppBundle\Controller\CatalogController;
+use AppBundle\Document\OrderContent;
 use AppBundle\Document\Setting;
 use AppBundle\Service\SettingsService;
 use AppBundle\Service\ShopCartService;
@@ -303,6 +304,7 @@ class AppExtension extends AbstractExtension
             }
             foreach ($products as $product) {
                 $product['priceTotal'] = $this->getCartContentPriceTotal($product);
+                $product['parametersString'] = $this->getCartContentParametersString($product);
                 $data['items'][$cName][] = $product;
                 $data['countTotal'] += $product['count'];
                 $data['priceTotal'] += $product['price'] * $product['count'];
@@ -334,6 +336,18 @@ class AppExtension extends AbstractExtension
             }
         }
         return $priceTotal;
+    }
+
+    /**
+     * @param $productData
+     * @return string
+     */
+    public function getCartContentParametersString($productData)
+    {
+        $parameters = isset($productData['parameters']) && is_array($productData['parameters'])
+            ? $productData['parameters']
+            : [];
+        return OrderContent::getParametersString($parameters);
     }
 
     /**

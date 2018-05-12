@@ -137,16 +137,47 @@ class CartController extends ProductController
                 if ($contentTypeField['inputType'] != 'parameters') {
                     continue;
                 }
-                $paramIndex = array_search($value, array_column($productDocument[$paramName], 'value'));
                 $outputType = isset($contentTypeField['outputProperties']) && isset($contentTypeField['outputProperties']['type'])
                     ? $contentTypeField['outputProperties']['type']
                     : 'radio';
                 switch ($outputType) {
-                    case 'checkbox':
                     case 'select':
                     case 'radio':
+                        if (empty($value)) {
+                            break;
+                        }
+                        $paramIndex = array_search($value, array_column($productDocument[$paramName], 'value'));
                         if ($paramIndex !== false) {
                             $parameters[] = $productDocument[$paramName][$paramIndex];
+                        }
+                        break;
+                    case 'checkbox':
+                        if (empty($value) || !is_array($value)) {
+                            break;
+                        }
+                        foreach($value as $val) {
+                            $paramIndex = array_search($val, array_column($productDocument[$paramName], 'value'));
+                            if ($paramIndex !== false) {
+                                $parameters[] = $productDocument[$paramName][$paramIndex];
+                            }
+                        }
+                        break;
+                    case 'text':
+                        if (empty($value) || !is_array($value)) {
+                            break;
+                        }
+                        foreach($value as $index => $val) {
+                            if (empty($val)) {
+                                continue;
+                            }
+                            if (is_array($val)) {
+                                $val = implode(', ', $val);
+                            }
+                            if (isset($productDocument[$paramName][$index])) {
+                                $parameters[] = array_merge($productDocument[$paramName][$index], [
+                                    'value' => strip_tags($val)
+                                ]);
+                            }
                         }
                         break;
                 }

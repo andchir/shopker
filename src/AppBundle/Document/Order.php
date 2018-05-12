@@ -524,7 +524,7 @@ class Order
         $priceTotal = 0;
         /** @var OrderContent $content */
         foreach ($this->content as $content) {
-            $priceTotal += ($content->getPrice() * $content->getCount());
+            $priceTotal += $content->getPriceTotal();
         }
         if ($this->deliveryPrice) {
             $priceTotal += $this->deliveryPrice;

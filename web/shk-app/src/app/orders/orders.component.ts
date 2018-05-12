@@ -88,6 +88,40 @@ export class ModalOrderContent extends ModalContentAbstractComponent<Order> {
         this.settings = this.appSettings.settings.systemSettings;
     }
 
+    getModelData(): void {
+        this.loading = true;
+        this.dataService.getItem(this.itemId)
+            .subscribe(data => {
+                if (this.isItemCopy) {
+                    data.id = null;
+                    data[this.getSystemFieldName()] = '';
+                }
+                this.model = new Order(
+                    data['id'],
+                    data['userId'],
+                    data['status'],
+                    data['email'],
+                    data['phone'],
+                    data['fullName'],
+                    '',
+                    data['deliveryName'],
+                    data['deliveryPrice'],
+                    data['paymentName'],
+                    data['paymentValue'],
+                    data['comment'],
+                    data['contentCount'],
+                    data['price'],
+                    data['currency'],
+                    data['options']
+                );
+                this.model.content = data['content'];
+                this.loading = false;
+            }, (err) => {
+                this.errorMessage = err.error || 'Error.';
+                this.loading = false;
+            });
+    }
+
     save(): void {
         this.loading = true;
         this.dataService.update(this.getFormData())
@@ -155,9 +189,11 @@ export class ModalOrderContent extends ModalContentAbstractComponent<Order> {
     priceTotalUpdate(): void {
         let priceTotal = parseFloat(String(this.model.deliveryPrice));
         this.model.content.forEach((content) => {
-            if (typeof content.price === 'number') {
-                priceTotal += content.price * content.count;
+            if (content instanceof OrderContent) {
+                content.priceUpdate();
             }
+            priceTotal += content.priceTotal;
+
         });
         this.model.price = priceTotal;
     }

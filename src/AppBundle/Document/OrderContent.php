@@ -239,6 +239,32 @@ class OrderContent
     }
 
     /**
+     * @return float|int
+     */
+    public function getParametersPrice()
+    {
+        $parametersPrice = 0;
+        $parameters = $this->getParameters();
+        foreach ($parameters as $parameter) {
+            if (!empty($parameter['price'])) {
+                $parametersPrice += $parameter['price'];
+            }
+        }
+        $parametersPrice *= $this->getCount();
+        return $parametersPrice;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPriceTotal()
+    {
+        $priceTotal = $this->getPrice() * $this->getCount();
+        $parametersPrice = $this->getParametersPrice();
+        return $priceTotal + $parametersPrice;
+    }
+
+    /**
      * @return array
      */
     public function toArray()
@@ -248,6 +274,7 @@ class OrderContent
             'title' => $this->getTitle(),
             'count' => $this->getCount(),
             'price' => $this->getPrice(),
+            'priceTotal' => $this->getPriceTotal(),
             'image' => $this->getImage(),
             'uri' => $this->getUri(),
             'contentTypeName' => $this->getContentTypeName(),

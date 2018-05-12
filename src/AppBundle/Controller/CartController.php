@@ -84,8 +84,8 @@ class CartController extends ProductController
 
             $productIndex = isset($shopCartData[$contentTypeName])
                 && in_array($itemId, array_column($shopCartData[$contentTypeName], 'id'))
-                ? array_search($itemId, array_column($shopCartData[$contentTypeName], 'id'))
-                : -1;
+                    ? array_search($itemId, array_column($shopCartData[$contentTypeName], 'id'))
+                    : -1;
 
             $currentProduct = null;
             if ($productIndex > -1) {

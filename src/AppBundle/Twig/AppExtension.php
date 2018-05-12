@@ -276,7 +276,7 @@ class AppExtension extends AbstractExtension
      */
     public function shopCartFunction($chunkName = 'shop_cart', $emptyChunkName = '')
     {
-        $properties = [
+        $data = [
             'countTotal' => 0,
             'priceTotal' => 0,
             'items' => []
@@ -289,7 +289,7 @@ class AppExtension extends AbstractExtension
         if (empty($shopCartData)) {
             if ($emptyChunkName) {
                 $templateName = $this->getTemplateName('catalog/', $emptyChunkName);
-                return $this->twig->render($templateName, $properties);
+                return $this->twig->render($templateName, $data);
             } else {
                 return '';
             }
@@ -298,21 +298,42 @@ class AppExtension extends AbstractExtension
         $templateName = $this->getTemplateName('catalog/', $chunkName);
 
         foreach ($shopCartData as $cName => $products) {
-            if (!isset($properties['items'][$cName])) {
-                $properties['items'][$cName] = [];
+            if (!isset($data['items'][$cName])) {
+                $data['items'][$cName] = [];
             }
             foreach ($products as $product) {
-                $properties['items'][$cName][] = $product;
-                if (isset($product['count'])) {
-                    $properties['countTotal'] += $product['count'];
-                }
-                if (isset($product['price'])) {
-                    $properties['priceTotal'] += $product['price'] * $product['count'];
+                $product['priceTotal'] = $this->getCartContentPriceTotal($product);
+                $data['items'][$cName][] = $product;
+                $data['countTotal'] += $product['count'];
+                $data['priceTotal'] += $product['price'] * $product['count'];
+                if (!empty($product['parameters'])) {
+                    foreach ($product['parameters'] as $parameters) {
+                        if (!empty($parameters['price'])) {
+                            $data['priceTotal'] += $parameters['price'] * $product['count'];
+                        }
+                    }
                 }
             }
         }
 
-        return $this->twig->render($templateName, $properties);
+        return $this->twig->render($templateName, $data);
+    }
+
+    /**
+     * @param $productData
+     * @return float
+     */
+    public function getCartContentPriceTotal($productData)
+    {
+        $priceTotal = $productData['price'] * $productData['count'];
+        if (!empty($productData['parameters'])) {
+            foreach ($productData['parameters'] as $parameters) {
+                if (!empty($parameters['price'])) {
+                    $priceTotal += $parameters['price'] * $productData['count'];
+                }
+            }
+        }
+        return $priceTotal;
     }
 
     /**

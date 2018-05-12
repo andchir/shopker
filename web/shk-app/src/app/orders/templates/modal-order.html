@@ -170,9 +170,10 @@
                         <table class="table table-bordered mb-0">
                             <colgroup>
                                 <col width="10%">
-                                <col width="40%">
-                                <col width="25%">
-                                <col width="25%">
+                                <col width="35%">
+                                <col width="20%">
+                                <col width="15%">
+                                <col width="20%">
                             </colgroup>
                             <thead>
                                 <tr>
@@ -180,6 +181,7 @@
                                     <th>{{ 'NAME' | translate }}</th>
                                     <th class="text-center">{{ 'PRICE' | translate }}</th>
                                     <th class="text-center">{{ 'QUANTITY' | translate }}</th>
+                                    <th class="text-center">{{ 'PRICE_TOTAL' | translate }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -197,6 +199,9 @@
                                                 {{ content.price | number: '1.2-2':'ru-RU' }}
                                             </td>
                                             <td class="text-center">
+                                                {{ content.count }}
+                                            </td>
+                                            <td class="text-center pr-2">
                                                 <div class="relative">
                                                     <div class="show-on-hover no-wrap">
                                                         <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Edit" (click)="editContentToggle(content)">
@@ -207,7 +212,7 @@
                                                         </button>
                                                     </div>
                                                 </div>
-                                                {{ content.count }}
+                                                {{ content.priceTotal | number: '1.2-2':'ru-RU' }}
                                             </td>
                                         </tr>
                                     </ng-container>
@@ -221,7 +226,7 @@
                                             <td class="text-center pr-2">
                                                 <input type="number" class="d-inline-block form-control form-control-sm" name="price[]" min="0" step="0.01" style="width: 100px;" [(ngModel)]="content.price" (ngModelChange)="priceTotalUpdate()" [ngModelOptions]="{standalone: true}">
                                             </td>
-                                            <td class="text-right no-wrap">
+                                            <td class="no-wrap" colspan="2">
                                                 <input type="number" class="d-inline-block form-control form-control-sm" name="count[]" min="1" step="1" style="width: 60px;" [(ngModel)]="content.count" (ngModelChange)="priceTotalUpdate()" [ngModelOptions]="{standalone: true}">
                                                 <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Accept" (click)="editContentToggle(content)">
                                                     <i class="icon-check"></i>
@@ -240,16 +245,15 @@
                                     <td class="text-center">
                                         {{ model.deliveryPrice | number: '1.2-2':'ru-RU' }}
                                     </td>
-                                    <td></td>
+                                    <td colspan="2"></td>
                                 </tr>
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="2"></td>
+                                    <td colspan="4"></td>
                                     <td class="text-center big">
                                         <b>{{ model.price | number: '1.2-2':'ru-RU' }}</b>
                                     </td>
-                                    <td></td>
                                 </tr>
                             </tfoot>
                         </table>

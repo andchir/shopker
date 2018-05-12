@@ -44,6 +44,8 @@ class OrderController extends StorageControllerAbstract
             $deliveryPrice = $settingDelivery->getOption('price');
         }
 
+        $content = isset($data['_content']) ? $data['_content'] : [];
+
         $item
             ->setEmail($data['email'])
             ->setFullName($data['fullName'])
@@ -52,8 +54,8 @@ class OrderController extends StorageControllerAbstract
             ->setDeliveryPrice($deliveryPrice)
             ->setPaymentName($data['paymentName'])
             ->setComment($data['comment'])
-            ->setOptions($data['options']);
-            //->setContent($data['content']);
+            ->setOptions($data['options'])
+            ->setContentFromArray($content);
 
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $this->get('doctrine_mongodb')->getManager();

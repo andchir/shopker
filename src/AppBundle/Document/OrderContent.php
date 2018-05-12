@@ -281,4 +281,22 @@ class OrderContent
             'parameters' => $this->getParameters()
         ];
     }
+
+    /**
+     * @param array $data
+     * @return $this
+     */
+    public function fromArray($data)
+    {
+        $this
+            ->setId($data['id'])
+            ->setTitle($data['title'])
+            ->setCount($data['count'])
+            ->setPrice($data['price'])
+            ->setImage($data['image'])
+            ->setUri($data['uri'])
+            ->setContentTypeName($data['contentTypeName'])
+            ->setParameters($data['parameters']);
+        return $this;
+    }
 }

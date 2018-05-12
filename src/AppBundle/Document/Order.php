@@ -610,6 +610,21 @@ class Order
     }
 
     /**
+     * @param array $content
+     * @return $this
+     */
+    public function setContentFromArray($content)
+    {
+        $this->content = new ArrayCollection();
+        foreach ($content as $cnt) {
+            $orderContent = new OrderContent();
+            $orderContent->fromArray($cnt);
+            $this->addContent($orderContent);
+        }
+        return $this;
+    }
+
+    /**
      * Add content
      *
      * @param OrderContent $content

@@ -7,7 +7,12 @@ import { DatePipe } from '@angular/common';
 export class DateFromObjectPipe implements PipeTransform {
 
     transform(dateObject: {date: string, timezone: string, timezone_type: number}, format: string): string {
-        let date = this.createDate(dateObject);
+        let date;
+        if (dateObject instanceof Date) {
+            date = dateObject;
+        } else {
+            date = this.createDate(dateObject);
+        }
         return new DatePipe('en-US').transform(date, format);
     }
 

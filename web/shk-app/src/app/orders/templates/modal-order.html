@@ -194,6 +194,9 @@
                                                 <a href="{{baseUrl}}{{content.uri}}" target="_blank">
                                                     {{ content.title }}
                                                 </a>
+                                                <div class="text-muted small">
+                                                    {{ content.parametersString }}
+                                                </div>
                                             </td>
                                             <td class="text-center pr-2">
                                                 {{ content.price | number: '1.2-2':'ru-RU' }}

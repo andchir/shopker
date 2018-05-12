@@ -103,7 +103,7 @@ export class ModalOrderContent extends ModalContentAbstractComponent<Order> {
                     data['email'],
                     data['phone'],
                     data['fullName'],
-                    '',
+                    new Date(data['createdDate']['date']),
                     data['deliveryName'],
                     data['deliveryPrice'],
                     data['paymentName'],
@@ -193,7 +193,6 @@ export class ModalOrderContent extends ModalContentAbstractComponent<Order> {
                 content.priceUpdate();
             }
             priceTotal += content.priceTotal;
-
         });
         this.model.price = priceTotal;
     }

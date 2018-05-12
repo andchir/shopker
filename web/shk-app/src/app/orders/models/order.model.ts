@@ -1,12 +1,15 @@
 import { UserOption } from '../../users/models/user.model';
 
 interface OrderContentParameter {
-    nama: string;
+    name: string;
     price: number;
     value: string|number;
 }
 
 export class OrderContent {
+
+    private _parametersString: string;
+
     constructor(
         public id: number,
         public title: string,
@@ -17,7 +20,17 @@ export class OrderContent {
         public uri?: string,
         public image?: string,
         public parameters?: OrderContentParameter[]
-    ){}
+    ){
+        this.createParametersString();
+    }
+
+    get parametersString(): string {
+        return this._parametersString;
+    }
+
+    set parametersString(parametersString: string) {
+        this._parametersString = parametersString;
+    }
 
     priceUpdate(): void {
         this.priceTotal = this.price * this.count;
@@ -28,6 +41,20 @@ export class OrderContent {
             });
         }
         this.priceTotal += parametersPrice;
+    }
+
+    createParametersString(): void {
+        if (!this.parameters) {
+            return;
+        }
+        let parametersStrArr = [];
+        this.parameters.forEach((parameter) => {
+            parametersStrArr.push(
+                `${parameter.name}: ${parameter.value}`
+                    + (parameter.price ? ` (${parameter.price})` : '')
+            );
+        });
+        this.parametersString = parametersStrArr.join(', ');
     }
 }
 
@@ -40,7 +67,20 @@ export class Order {
     }
 
     set content(content: OrderContent[]) {
-        this._content = content;
+        this._content = [];
+        content.forEach((content) => {
+            this._content.push(new OrderContent(
+                content['id'],
+                content['title'],
+                content['count'],
+                content['price'],
+                content['priceTotal'],
+                content['contentTypeName'],
+                content['uri'],
+                content['image'],
+                content['parameters']
+            ));
+        });
     }
 
     constructor(
@@ -50,7 +90,7 @@ export class Order {
         public email: string,
         public phone: string,
         public fullName?: string,
-        public createdDate?: string,
+        public createdDate?: Date,
         public deliveryName?: string,
         public deliveryPrice?: number,
         public paymentName?: string,

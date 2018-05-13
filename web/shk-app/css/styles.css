@@ -50,7 +50,7 @@ header .header-brand { display: inline-block; padding: 0.1rem 0.2rem 0 1rem; fon
 @media (max-width: 991.98px) {
     .navbar-header .container { padding-left: 0; padding-right: 0; }
     .menu-dropdown.navbar-nav > li > a.nav-link { padding: 0.6rem; }
-    .menu-dropdown.navbar-nav li:hover > ul { display: none; }
+    .menu-dropdown.navbar-nav li.parent > ul { display: none; }
     .menu-dropdown.navbar-nav li.parent:before { display: none; }
 }
 

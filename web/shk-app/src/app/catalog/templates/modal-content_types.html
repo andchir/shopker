@@ -42,7 +42,7 @@
                     <div class="input-group">
                         <input type="text" class="form-control" name="name" formControlName="name" id="fieldName" [(ngModel)]="model.name">
                         <div class="input-group-append">
-                            <button type="button" class="btn btn-secondary" ngbTooltip="Generate" (click)="generateName(model)">
+                            <button type="button" class="btn btn-secondary" ngbTooltip="{{'GENERATE' | translate}}" (click)="generateName(model)">
                                 <i class="icon-reload"></i>
                             </button>
                         </div>
@@ -70,12 +70,12 @@
                                     <option value="{{collection}}" *ngFor="let collection of collections">{{collection}}</option>
                                 </select>
                                 <div class="input-group-append">
-                                    <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Add collection" (click)="displayToggle(addCollectionBlock); addCollectionField.value = ''; onValueChanged(); addCollectionField.focus()">
+                                    <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'ADD_COLLECTION' | translate}}" (click)="displayToggle(addCollectionBlock); addCollectionField.value = ''; onValueChanged(); addCollectionField.focus()">
                                         <i class="icon-plus"></i>
                                     </button>
                                 </div>
                                 <div class="input-group-append" [ngbPopover]="confirmPopover" #buttonDeleteCollection="ngbPopover" triggers="manual">
-                                    <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Delete" (click)="deleteCollection(buttonDeleteCollection)">
+                                    <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'DELETE' | translate}}" (click)="deleteCollection(buttonDeleteCollection)">
                                         <i class="icon-cross"></i>
                                     </button>
                                 </div>
@@ -89,10 +89,10 @@
 
                                 <div class="text-right mt-1">
                                     <button type="button" class="btn btn-secondary btn-sm" (click)="addCollection()">
-                                        Add
+                                        {{'ADD' | translate}}
                                     </button>
                                     <button type="button" class="btn btn-secondary btn-sm" (click)="addCollectionBlock.style.display = 'none'; formErrors.newCollection = ''">
-                                        Cancel
+                                        {{'CANCEL' | translate}}
                                     </button>
                                 </div>
                             </div>
@@ -154,7 +154,7 @@
                                 <div class="input-group">
                                     <input type="text" class="form-control form-control-sm" name="field_name" formControlName="name" [(ngModel)]="fieldModel.name">
                                     <div class="input-group-append">
-                                        <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Generate" (click)="generateName(fieldModel)">
+                                        <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'GENERATE' | translate}}" (click)="generateName(fieldModel)">
                                             <i class="icon-reload"></i>
                                         </button>
                                     </div>
@@ -187,7 +187,7 @@
                                         <option value="{{fieldType.name}}" *ngFor="let fieldType of fieldTypes">{{fieldType.title}}</option>
                                     </select>
                                     <div class="input-group-append">
-                                        <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Options" (click)="displayToggle(inputTypeOptionsBlock)">
+                                        <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'OPTIONS' | translate}}" (click)="displayToggle(inputTypeOptionsBlock)">
                                             <i class="icon-cog"></i>
                                         </button>
                                     </div>
@@ -232,7 +232,7 @@
                                         <option value="{{fieldType.name}}" *ngFor="let fieldType of fieldTypes">{{fieldType.title}}</option>
                                     </select>
                                     <div class="input-group-append">
-                                        <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Options" (click)="displayToggle(outputTypeOptionsBlock)">
+                                        <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'OPTIONS' | translate}}" (click)="displayToggle(outputTypeOptionsBlock)">
                                             <i class="icon-cog"></i>
                                         </button>
                                     </div>
@@ -276,12 +276,12 @@
                                             <option [value]="groupName" *ngFor="let groupName of model.groups">{{groupName}}</option>
                                         </select>
                                         <div class="input-group-append">
-                                            <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Add group" (click)="displayToggle(addGroupBlock); addGroupField.value = ''; addGroupField.focus()">
+                                            <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'ADD_GROUP' | translate}}" (click)="displayToggle(addGroupBlock); addGroupField.value = ''; addGroupField.focus()">
                                                 <i class="icon-plus"></i>
                                             </button>
                                         </div>
                                         <div class="input-group-append">
-                                            <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="Delete group" (click)="deleteGroup()">
+                                            <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'DELETE_GROUP' | translate}}" (click)="deleteGroup()">
                                                 <i class="icon-cross"></i>
                                             </button>
                                         </div>
@@ -415,19 +415,19 @@
                             <td>
                                 <div class="relative">
                                     <div class="show-on-hover">
-                                        <button type="button" class="btn btn-secondary btn-sm" (click)="fieldMove(index, 'up')" ngbTooltip="Move up" *ngIf="index > 0">
+                                        <button type="button" class="btn btn-secondary btn-sm" (click)="fieldMove(index, 'up')" ngbTooltip="{{'MOVE_UP' | translate}}" *ngIf="index > 0">
                                             <i class="icon-arrow-up"></i>
                                         </button>
-                                        <button type="button" class="btn btn-secondary btn-sm" (click)="fieldMove(index, 'down')" ngbTooltip="Move down" *ngIf="index < model.fields.length - 1">
+                                        <button type="button" class="btn btn-secondary btn-sm" (click)="fieldMove(index, 'down')" ngbTooltip="{{'MOVE_DOWN' | translate}}" *ngIf="index < model.fields.length - 1">
                                             <i class="icon-arrow-down"></i>
                                         </button>
-                                        <button type="button" class="btn btn-secondary btn-sm" (click)="editField(field)" [hidden]="field.name == currentFieldName" ngbTooltip="Edit">
+                                        <button type="button" class="btn btn-secondary btn-sm" (click)="editField(field)" [hidden]="field.name == currentFieldName" ngbTooltip="{{'EDIT' | translate}}">
                                             <i class="icon-pencil"></i>
                                         </button>
-                                        <button type="button" class="btn btn-secondary btn-sm" (click)="copyField(field)" ngbTooltip="Copy">
+                                        <button type="button" class="btn btn-secondary btn-sm" (click)="copyField(field)" ngbTooltip="{{'COPY' | translate}}">
                                             <i class="icon-stack"></i>
                                         </button>
-                                        <button type="button" class="btn btn-secondary btn-sm" (click)="deleteField(field)" [hidden]="field.name == currentFieldName" ngbTooltip="Delete">
+                                        <button type="button" class="btn btn-secondary btn-sm" (click)="deleteField(field)" [hidden]="field.name == currentFieldName" ngbTooltip="{{'DELETE' | translate}}">
                                             <i class="icon-cross"></i>
                                         </button>
                                     </div>

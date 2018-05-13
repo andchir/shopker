@@ -20,7 +20,7 @@
                                 <div class="input-group">
                                     <input type="text" class="form-control form-control-sm" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]">
                                     <div class="input-group-append">
-                                        <button type="button" class="btn btn-secondary" ngbTooltip="Generate" (click)="generateName(field)">
+                                        <button type="button" class="btn btn-secondary" ngbTooltip="{{'GENERATE' | translate}}" (click)="generateName(field)">
                                             <i class="icon-reload"></i>
                                         </button>
                                     </div>
@@ -329,7 +329,7 @@
                                                     <input type="number" class="form-control form-control-sm" min="0" [(ngModel)]="item.price" [ngModelOptions]="{standalone: true}">
                                                 </td>
                                                 <td class="text-center">
-                                                    <button type="button" class="btn btn-secondary btn-sm" [title]="'REMOVE' | translate" (click)="parametersRemove(field.name, index)">
+                                                    <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'DELETE' | translate}}" (click)="parametersRemove(field.name, index)">
                                                         <i class="icon-cross"></i>
                                                     </button>
                                                 </td>

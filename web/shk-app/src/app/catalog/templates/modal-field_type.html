@@ -26,7 +26,7 @@
                     <div class="input-group">
                         <input type="text" class="form-control" name="name" formControlName="name" id="fieldName" [(ngModel)]="model.name">
                         <div class="input-group-append">
-                            <button type="button" class="btn btn-secondary" ngbTooltip="Generate" (click)="generateName(model)">
+                            <button type="button" class="btn btn-secondary" ngbTooltip="{{'GENERATE' | translate}}" (click)="generateName(model)">
                                 <i class="icon-reload"></i>
                             </button>
                         </div>
@@ -94,7 +94,7 @@
                                 <input type="text" class="form-control" [(ngModel)]="item.default_value" name="default_value">
                             </td>
                             <td class="text-center">
-                                <button type="button" class="btn btn-secondary" (click)="deleteRow(index, 'inputProperties')" ngbTooltip="Remove">
+                                <button type="button" class="btn btn-secondary" (click)="deleteRow(index, 'inputProperties')" ngbTooltip="{{'DELETE' | translate}}">
                                     <i class="icon-cross"></i>
                                 </button>
                             </td>
@@ -146,7 +146,7 @@
                                 <input type="text" class="form-control" [(ngModel)]="item.default_value" name="default_value">
                             </td>
                             <td class="text-center">
-                                <button type="button" class="btn btn-secondary" (click)="deleteRow(index, 'outputProperties')" ngbTooltip="Remove">
+                                <button type="button" class="btn btn-secondary" (click)="deleteRow(index, 'outputProperties')" ngbTooltip="{{'DELETE' | translate}}">
                                     <i class="icon-cross"></i>
                                 </button>
                             </td>

@@ -19,12 +19,12 @@
                 </button>
             </span>
             <span class="py-1 d-block d-md-inline-block">
-                <label class="mr-2" for="catalogSortBy">Сортировать по</label>
+                <label class="mr-2" for="catalogSortBy">{{ 'Sort by' | trans }}</label>
                 <select class="form-control form-control-sm width170 d-inline-block" id="shkNavSortBy" name="sortby">
-                    <option value="id_desc"{% if queryOptions.order_by == 'id_desc' %} selected{% endif %}>Новизне</option>
-                    <option value="price_asc"{% if queryOptions.order_by == 'price_asc' %} selected{% endif %}>Увеличению цены</option>
-                    <option value="price_desc"{% if queryOptions.order_by == 'price_desc' %} selected{% endif %}>Уменьшению цены</option>
-                    <option value="title_asc"{% if queryOptions.order_by == 'title_asc' %} selected{% endif %}>Названию</option>
+                    <option value="id_desc"{% if queryOptions.order_by == 'id_desc' %} selected{% endif %}>{{ 'catalog.sort_by_novelty' | trans }}</option>
+                    <option value="price_asc"{% if queryOptions.order_by == 'price_asc' %} selected{% endif %}>{{ 'catalog.sort_by_price_increase' | trans }}</option>
+                    <option value="price_desc"{% if queryOptions.order_by == 'price_desc' %} selected{% endif %}>{{ 'catalog.sort_by_price_reduction' | trans }}</option>
+                    <option value="title_asc"{% if queryOptions.order_by == 'title_asc' %} selected{% endif %}>{{ 'catalog.sort_by_name' | trans }}</option>
                 </select>
             </span>
         </div>

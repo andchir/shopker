@@ -45,6 +45,16 @@ Order: Заказ
 Status: Статус
 Order list: Состав заказа
 Contacts: Контактная информация
+
+Sort by: Сортировать по
+catalog.sort_by_novelty: Новизне
+catalog.sort_by_price_increase: Увеличению цены
+catalog.sort_by_price_reduction: Уменьшению цены
+catalog.sort_by_name: Названию
+
+Shopping cart: Корзина товаров
+Order checkout: Оформление заказа
+Delete item: Удалить
 Print: Печать
 I agree to the processing of personal data: Согласен на обработку персональных данных
 Forgot your password?: Забыли пароль?

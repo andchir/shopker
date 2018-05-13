@@ -71,7 +71,7 @@
                         <ng-template ngbPanelContent>
                             <div [class.loading]="settings.SETTINGS_DELIVERY.loading">
                                 <div class="text-muted">
-                                    Названия статусов заказов и цвет для вывода на странице заказов в административной части.
+                                    {{'SETTINGS_STATUSES_DESCRIPTION' | translate}}
                                 </div>
                                 <div class="table-responsive">
                                     <table class="table table-divided mb-0">
@@ -101,7 +101,7 @@
                                                 <p-colorPicker [(ngModel)]="setting.options.color.value" (ngModelChange)="onValueChanged('SETTINGS_ORDER_STATUSES')"></p-colorPicker>
                                             </td>
                                             <td class="text-center">
-                                                <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'REMOVE' | translate}}" (click)="deleteSetting('SETTINGS_ORDER_STATUSES', index)">
+                                                <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'DELETE' | translate}}" (click)="deleteSetting('SETTINGS_ORDER_STATUSES', index)">
                                                     <i class="icon-cross"></i>
                                                 </button>
                                             </td>
@@ -142,7 +142,7 @@
                         <ng-template ngbPanelContent>
                             <div [class.loading]="settings.SETTINGS_DELIVERY.loading">
                                 <div class="text-muted">
-                                    Список методов доставки для вывода в форме заказа во внешней части сайта.
+                                    {{'SETTINGS_DELIVERY_DESCRIPTION' | translate}}
                                 </div>
                                 <div class="table-responsive">
                                     <table class="table table-divided mb-0">
@@ -213,7 +213,7 @@
                         <ng-template ngbPanelContent>
                             <div [class.loading]="settings.SETTINGS_PAYMENT.loading">
                                 <div class="text-muted">
-                                    Список методов оплаты для вывода в форме заказа во внешней части сайта.
+                                    {{'SETTINGS_PAYMENT_DESCRIPTION' | translate}}
                                 </div>
                                 <div class="table-responsive">
                                     <table class="table table-divided mb-0">
@@ -281,7 +281,7 @@
                         <ng-template ngbPanelContent>
                             <div [class.loading]="settings.SETTINGS_CURRENCY.loading">
                                 <div class="text-muted">
-                                    Курс валют на сайте.
+                                    {{'SETTINGS_CURRENCY_RATE_DESCRIPTION' | translate}}
                                 </div>
                                 <div class="table-responsive">
                                     <table class="table table-divided mb-0">

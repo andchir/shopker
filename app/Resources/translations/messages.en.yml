@@ -1,3 +1,10 @@
+catalog.sort_by_novelty: Novelty
+catalog.sort_by_price_increase: Price increase
+catalog.sort_by_price_reduction: Price reduction
+catalog.sort_by_name: Name
+ROLE_USER: User
+ROLE_ADMIN: Administrator
+ROLE_SUPER_ADMIN: Super Administrator
 user_options.state: Region
 user_options.zip: Postcode
 user_options.city: City

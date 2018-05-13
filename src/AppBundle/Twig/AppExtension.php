@@ -2,16 +2,10 @@
 
 namespace AppBundle\Twig;
 
-use AppBundle\Controller\CartController;
 use AppBundle\Controller\CatalogController;
-use AppBundle\Document\OrderContent;
 use AppBundle\Document\Setting;
 use AppBundle\Service\SettingsService;
-use AppBundle\Service\ShopCartService;
 use AppBundle\Service\UtilsService;
-use Symfony\Component\BrowserKit\Request;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Routing\RequestContext;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -38,24 +32,24 @@ class AppExtension extends AbstractExtension
 
     public function getFilters()
     {
-        return array(
-            new TwigFilter('price', [$this, 'priceFilter'])
-        );
+        return [
+            new TwigFilter('price', [AppRuntime::class, 'priceFilter'])
+        ];
     }
 
     public function getFunctions()
     {
-        return array(
+        return [
             new TwigFunction('catalogPath', array($this, 'catalogPathFunction')),
             new TwigFunction('outputFilter', [$this, 'outputFilterFunction']),
             new TwigFunction('outputType', [$this, 'outputTypeFunction']),
             new TwigFunction('outputTypeArray', [$this, 'outputTypeArrayFunction']),
             new TwigFunction('outputTypeChunk', [$this, 'outputTypeChunkFunction']),
             new TwigFunction('categoriesTree', [$this, 'categoriesTreeFunction']),
-            new TwigFunction('shopCart', [$this, 'shopCartFunction']),
             new TwigFunction('twigNextPass', [$this, 'twigNextPassFunction']),
-            new TwigFunction('currencyList', [$this, 'currencyListFunction'])
-        );
+            new TwigFunction('shopCart', [AppRuntime::class, 'shopCartFunction']),
+            new TwigFunction('currencyList', [AppRuntime::class, 'currencyListFunction'])
+        ];
     }
 
     public function catalogPathFunction($parentUri = '', $systemName = '')
@@ -67,12 +61,6 @@ class AppExtension extends AbstractExtension
         }
         $path .= $systemName;
         return $path;
-    }
-
-    public function priceFilter($number, $decimals = 0, $decPoint = '.', $thousandsSep = ' ')
-    {
-        $price = number_format($number, $decimals, $decPoint, $thousandsSep);
-        return $price;
     }
 
     /**
@@ -268,114 +256,6 @@ class AppExtension extends AbstractExtension
             $output = str_replace('$'.($ind+1), "'{$var}'", $output);
         }
         return str_replace('$', '', $output);
-    }
-
-    /**
-     * @param string $chunkName
-     * @param string $emptyChunkName
-     * @return string
-     */
-    public function shopCartFunction($chunkName = 'shop_cart', $emptyChunkName = '')
-    {
-        $data = [
-            'countTotal' => 0,
-            'priceTotal' => 0,
-            'items' => []
-        ];
-
-        $request = $this->requestStack->getCurrentRequest();
-        $mongoCache = $this->container->get('mongodb_cache');
-
-        $shopCartData = $mongoCache->fetch(ShopCartService::getCartId());
-        if (empty($shopCartData)) {
-            if ($emptyChunkName) {
-                $templateName = $this->getTemplateName('catalog/', $emptyChunkName);
-                return $this->twig->render($templateName, $data);
-            } else {
-                return '';
-            }
-        }
-
-        $data['currency'] = $shopCartData['currency'];
-
-        $templateName = $this->getTemplateName('catalog/', $chunkName);
-
-        foreach ($shopCartData['data'] as $cName => $products) {
-            if (!isset($data['items'][$cName])) {
-                $data['items'][$cName] = [];
-            }
-            foreach ($products as $product) {
-                $product['priceTotal'] = $this->getCartContentPriceTotal($product);
-                $product['parametersString'] = $this->getCartContentParametersString($product);
-                $data['items'][$cName][] = $product;
-                $data['countTotal'] += $product['count'];
-                $data['priceTotal'] += $product['price'] * $product['count'];
-                if (!empty($product['parameters'])) {
-                    foreach ($product['parameters'] as $parameters) {
-                        if (!empty($parameters['price'])) {
-                            $data['priceTotal'] += $parameters['price'] * $product['count'];
-                        }
-                    }
-                }
-            }
-        }
-
-        return $this->twig->render($templateName, $data);
-    }
-
-    /**
-     * @param $productData
-     * @return float
-     */
-    public function getCartContentPriceTotal($productData)
-    {
-        $priceTotal = $productData['price'] * $productData['count'];
-        if (!empty($productData['parameters'])) {
-            foreach ($productData['parameters'] as $parameters) {
-                if (!empty($parameters['price'])) {
-                    $priceTotal += $parameters['price'] * $productData['count'];
-                }
-            }
-        }
-        return $priceTotal;
-    }
-
-    /**
-     * @param $productData
-     * @return string
-     */
-    public function getCartContentParametersString($productData)
-    {
-        $parameters = isset($productData['parameters']) && is_array($productData['parameters'])
-            ? $productData['parameters']
-            : [];
-        return OrderContent::getParametersString($parameters);
-    }
-
-    /**
-     * @return string
-     */
-    public function currencyListFunction()
-    {
-        $cacheKey = 'currency.list';
-        /** @var SettingsService $settingsService */
-        $settingsService = $this->container->get('app.settings');
-        /** @var FilesystemCache $cache */
-        $cache = $this->container->get('app.filecache');
-
-        if ($cache->has($cacheKey)) {
-            return $this->twig->createTemplate($cache->get($cacheKey))->render([]);
-        }
-
-        $templateName = 'catalog/currency_list.html.twig';
-        $properties = [
-            'data' => $settingsService->getSettingsGroup(Setting::GROUP_CURRENCY)
-        ];
-
-        $output = $this->twig->render($templateName, $properties);
-        $cache->set($cacheKey, $output, 60*60*24);
-
-        return $output;
     }
 
     /**

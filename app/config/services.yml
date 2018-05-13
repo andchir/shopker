@@ -34,7 +34,7 @@ services:
 
     AppBundle\Form\DataTransformer\SettingToStringTransformer:
         public: true
-        arguments: ["@doctrine.odm.mongodb.document_manager"]
+        arguments: ['@doctrine.odm.mongodb.document_manager']
 
     get_set_method_normalizer:
         class: Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer
@@ -42,28 +42,28 @@ services:
 
     mongodb_paramconverter:
         class: Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter
-        arguments: ["@doctrine_mongodb"]
+        arguments: ['@doctrine_mongodb']
         tags:
             - { name: request.param_converter }
 
     mongo.connection:
         class: Doctrine\MongoDB\Connection
-        factory: ["@doctrine.odm.mongodb.document_manager", getConnection]
+        factory: ['@doctrine.odm.mongodb.document_manager', getConnection]
         calls:
             - [initialize, []]
 
     mongo:
         class: Mongo
-        factory: ["@mongo.connection", getMongo]
+        factory: ['@mongo.connection', getMongo]
 
     mongo.database:
         class: MongoDB
-        factory: ["@mongo", selectDB]
-        arguments: ["%mongodb_database%"]
+        factory: ['@mongo', selectDB]
+        arguments: ['%mongodb_database%']
 
     mongo.cache_collection:
         class: MongoCollection
-        arguments: ["@mongo.database", "cache"]
+        arguments: ['@mongo.database', 'cache']
 
     AppBundle\EventListener\ExceptionListener:
         public: true
@@ -78,7 +78,14 @@ services:
 
     AppBundle\Twig\AppExtension:
         tags: ['twig.extension']
-        arguments: [ "@service_container" ]
+        arguments: ['@service_container']
+
+    app.twig_runtime:
+        class: AppBundle\Twig\AppRuntime
+        public: false
+        arguments: ['@service_container']
+        tags:
+            - { name: twig.runtime }
 
     app.filecache:
         public: true
@@ -91,9 +98,9 @@ services:
     app.shop_cart:
         class: AppBundle\Service\ShopCartService
         public: true
-        arguments: [ "@service_container" ]
+        arguments: [ '@service_container' ]
 
     app.settings:
         class: AppBundle\Service\SettingsService
         public: true
-        arguments: [ "@service_container" ]
+        arguments: [ '@service_container' ]

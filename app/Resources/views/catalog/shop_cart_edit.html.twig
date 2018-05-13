@@ -16,11 +16,11 @@
                             </div>
                         {% endif %}
                     </td>
-                    <td>{{ item.price | price }} руб.</td>
+                    <td>{{ item.price | price }} {{ item.currency }}</td>
                     <td>
                         <input type="number" class="form-control" min="1" step="1" value="{{ item.count }}" style="width: 80px;">
                     </td>
-                    <td>{{ item.priceTotal | price }} руб.</td>
+                    <td>{{ item.priceTotal | price }} {{ item.currency }}</td>
                     <td class="text-right">
                         <a class="btn btn-outline-info ml-1" href="{{ path('shop_cart_remove', {"contentTypeName": contentTypeName, "index": loop.index0}) }}" data-toggle="tooltip" data-placement="bottom" title="{{ 'Delete item' | trans }}">
                             <i class="icon-cross"></i>
@@ -39,7 +39,7 @@
                 <span class="big">
                     {{ priceTotal | price }}
                 </span>
-                руб.
+                {{ currency }}
             </th>
         </tr>
     </tfoot>

@@ -15,6 +15,7 @@ var Shopkeeper = function () {
 
             self.buttonsInit();
             self.filtersInit();
+            self.currencySelectInit();
 
         });
     };
@@ -147,6 +148,29 @@ var Shopkeeper = function () {
         }
         this.setCookie('shkListType', listType, 7);
         window.location.reload();
+    };
+
+    this.currencySelectInit = function() {
+        var selectElement = document.getElementById('shk-currency');
+        if (!selectElement) {
+            return;
+        }
+        selectElement.value = this.getCurrentCurrency();
+        selectElement.addEventListener('change', function(e) {
+            self.setCookie('shkCurrency', this.value, 7);
+        }, false);
+    };
+
+    this.getCurrentCurrency = function() {
+        var currencyCookie = this.getCookie('shkCurrency');
+        if (currencyCookie) {
+            return currencyCookie;
+        }
+        var currentCurrency = document.getElementById('shk-currency')
+            ? document.getElementById('shk-currency').value
+            : '';
+        this.setCookie('shkCurrency', currentCurrency, 7);
+        return currentCurrency;
     };
 
     this.setCookie = function(name, value, days) {

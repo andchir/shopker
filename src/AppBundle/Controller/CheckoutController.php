@@ -74,6 +74,7 @@ class CheckoutController extends BaseController
             /** @var ShopCartService $shopCartService */
             $shopCartService = $this->get('app.shop_cart');
             $shopCartData = $shopCartService->getContent();
+            $currency = ShopCartService::getCurrency();
             if (empty($shopCartData)) {
                 $form->addError(new FormError('Your cart is empty.'));
             }
@@ -87,7 +88,8 @@ class CheckoutController extends BaseController
                     ->setDeliveryPrice($deliveryPrice)
                     ->setPaymentValue($paymentName)
                     ->setContentFromCart($shopCartData)
-                    ->setStatus($statusName);
+                    ->setStatus($statusName)
+                    ->setCurrency($currency);
 
                 // Save user data
                 if ($user) {

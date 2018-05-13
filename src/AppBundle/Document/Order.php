@@ -457,7 +457,8 @@ class Order
             'deliveryValue' => $this->getPaymentValue(),
             'comment' => $this->getComment(),
             'status' => $this->getStatus(),
-            'contentCount' => $this->getContentCount()
+            'contentCount' => $this->getContentCount(),
+            'currency' => $this->getCurrency()
         ];
         if($full){
             $output = array_merge($output, [
@@ -474,7 +475,7 @@ class Order
      */
     public function setContentFromCart($shopCartData)
     {
-        foreach ($shopCartData as $contentTypeName => $products) {
+        foreach ($shopCartData['data'] as $contentTypeName => $products) {
             foreach ($products as $product) {
                 $uri = $product['parentUri'] . $product['systemName'];
                 $orderContent = new OrderContent();

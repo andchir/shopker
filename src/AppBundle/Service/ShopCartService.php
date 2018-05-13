@@ -67,11 +67,21 @@ class ShopCartService
             $shopCartData = $this->getContent();
         }
         $priceTotal = 0;
-        foreach ($shopCartData as $cName => $products) {
+        foreach ($shopCartData['data'] as $cName => $products) {
             foreach ($products as $product) {
                 $priceTotal += ($product['price'] * $product['count']);
             }
         }
         return $priceTotal;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getCurrency()
+    {
+        return isset($_COOKIE['shkCurrency'])
+            ? $_COOKIE['shkCurrency']
+            : '';
     }
 }

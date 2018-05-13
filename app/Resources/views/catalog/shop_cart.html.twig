@@ -10,7 +10,7 @@
                 <span class="badge badge-light big mx-2">
                     {{ priceTotal | price }}
                 </span>
-                руб.
+                {{ currency }}
             </div>
             {% if app.request.attributes.get('_route') not in ['page_checkout','shop_cart_edit'] %}
                 <div class="float-md-right mt-3 mt-md-0">

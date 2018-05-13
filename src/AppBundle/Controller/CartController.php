@@ -44,6 +44,7 @@ class CartController extends ProductController
             return new RedirectResponse($referer);
         }
 
+        $currency = ShopCartService::getCurrency();
         $contentType = $category->getContentType();
         $contentTypeName = $contentType->getName();
         $collectionName = $contentType->getCollection();
@@ -70,8 +71,11 @@ class CartController extends ProductController
                 : 0;
 
             $shopCartData = $mongoCache->fetch(ShopCartService::getCartId());
-            if (!$shopCartData) {
-                $shopCartData = [];
+            if (empty($shopCartData)) {
+                $shopCartData = [
+                    'currency' => $currency,
+                    'data' => []
+                ];
             }
 
             $parentUri = $category->getUri();
@@ -82,20 +86,20 @@ class CartController extends ProductController
 
             $parameters = $this->getProductParameters($request, $productDocument, $contentTypeFields);
 
-            $productIndex = isset($shopCartData[$contentTypeName])
-                && in_array($itemId, array_column($shopCartData[$contentTypeName], 'id'))
-                    ? array_search($itemId, array_column($shopCartData[$contentTypeName], 'id'))
+            $productIndex = isset($shopCartData['data'][$contentTypeName])
+                && in_array($itemId, array_column($shopCartData['data'][$contentTypeName], 'id'))
+                    ? array_search($itemId, array_column($shopCartData['data'][$contentTypeName], 'id'))
                     : -1;
 
             $currentProduct = null;
             if ($productIndex > -1) {
-                $currentProduct = &$shopCartData[$contentTypeName][$productIndex];
+                $currentProduct = &$shopCartData['data'][$contentTypeName][$productIndex];
             }
 
             if (!empty($currentProduct) && $currentProduct['parameters'] == $parameters) {
                 $currentProduct['count'] += $count;
             } else {
-                $shopCartData[$contentTypeName][] = [
+                $shopCartData['data'][$contentTypeName][] = [
                     'id' => $productDocument['_id'],
                     'title' => $productDocument['title'],
                     'parentUri' => $parentUri,
@@ -103,6 +107,7 @@ class CartController extends ProductController
                     'image' => '',
                     'count' => $count,
                     'price' => $priceValue,
+                    'currency' => $currency,
                     'parameters' => $parameters
                 ];
             }
@@ -215,12 +220,12 @@ class CartController extends ProductController
 
         $shopCartData = $mongoCache->fetch(ShopCartService::getCartId());
         if (!empty($shopCartData)
-            && isset($shopCartData[$contentTypeName])
-            && isset($shopCartData[$contentTypeName][$index])) {
+            && isset($shopCartData['data'][$contentTypeName])
+            && isset($shopCartData['data'][$contentTypeName][$index])) {
 
-            array_splice($shopCartData[$contentTypeName], $index, 1);
-            if (empty($shopCartData[$contentTypeName])) {
-                unset($shopCartData[$contentTypeName]);
+            array_splice($shopCartData['data'][$contentTypeName], $index, 1);
+            if (empty($shopCartData['data'][$contentTypeName])) {
+                unset($shopCartData['data'][$contentTypeName]);
             }
             if (!empty($shopCartData)) {
                 $mongoCache->save(ShopCartService::getCartId(), $shopCartData, 60*60*24*7);
@@ -259,7 +264,7 @@ class CartController extends ProductController
             'count' => []
         ];
 
-        foreach ($shopCartData as $cName => $products) {
+        foreach ($shopCartData['data'] as $cName => $products) {
             foreach ($products as $product) {
                 $contentArr['content_type'][] = $cName;
                 $contentArr['id'][] = $product['id'];

@@ -296,9 +296,11 @@ class AppExtension extends AbstractExtension
             }
         }
 
+        $data['currency'] = $shopCartData['currency'];
+
         $templateName = $this->getTemplateName('catalog/', $chunkName);
 
-        foreach ($shopCartData as $cName => $products) {
+        foreach ($shopCartData['data'] as $cName => $products) {
             if (!isset($data['items'][$cName])) {
                 $data['items'][$cName] = [];
             }

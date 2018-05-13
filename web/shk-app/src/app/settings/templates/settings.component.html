@@ -47,7 +47,7 @@
                                             <i class="icon-check"></i>
                                             <span>{{'SAVE' | translate}}</span>
                                         </button>
-                                        <button type="button" class="btn btn-secondary btn-sm" (click)="resetSettingsForm('SETTINGS_MAIN')" [title]="'FORM_RESET' | translate">
+                                        <button type="button" class="btn btn-secondary btn-sm" (click)="resetSettingsForm('SETTINGS_MAIN')" ngbTooltip="{{'FORM_RESET' | translate}}">
                                             <i class="icon-reload"></i>
                                         </button>
 
@@ -101,7 +101,7 @@
                                                 <p-colorPicker [(ngModel)]="setting.options.color.value" (ngModelChange)="onValueChanged('SETTINGS_ORDER_STATUSES')"></p-colorPicker>
                                             </td>
                                             <td class="text-center">
-                                                <button type="button" class="btn btn-secondary btn-sm" [title]="'REMOVE' | translate" (click)="deleteSetting('SETTINGS_ORDER_STATUSES', index)">
+                                                <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'REMOVE' | translate}}" (click)="deleteSetting('SETTINGS_ORDER_STATUSES', index)">
                                                     <i class="icon-cross"></i>
                                                 </button>
                                             </td>
@@ -117,7 +117,7 @@
                                                             <i class="icon-check"></i>
                                                             <span>{{'SAVE' | translate}}</span>
                                                         </button>
-                                                        <button type="button" class="btn btn-secondary btn-sm" (click)="resetSettingsForm('SETTINGS_ORDER_STATUSES')" [title]="'FORM_RESET' | translate">
+                                                        <button type="button" class="btn btn-secondary btn-sm" (click)="resetSettingsForm('SETTINGS_ORDER_STATUSES')" ngbTooltip="{{'FORM_RESET' | translate}}">
                                                             <i class="icon-reload"></i>
                                                         </button>
 
@@ -172,7 +172,7 @@
                                                 <input type="number" class="form-control form-control-sm mwidth-80 m-auto" step="1" min="0" [(ngModel)]="setting.options.priceLimit.value" (ngModelChange)="onValueChanged('SETTINGS_DELIVERY')">
                                             </td>
                                             <td class="text-center">
-                                                <button type="button" class="btn btn-secondary btn-sm" [title]="'REMOVE' | translate" (click)="deleteSetting('SETTINGS_DELIVERY', index)">
+                                                <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'DELETE' | translate}}" (click)="deleteSetting('SETTINGS_DELIVERY', index)">
                                                     <i class="icon-cross"></i>
                                                 </button>
                                             </td>
@@ -188,7 +188,7 @@
                                                             <i class="icon-check"></i>
                                                             <span>{{'SAVE' | translate}}</span>
                                                         </button>
-                                                        <button type="button" class="btn btn-secondary btn-sm" (click)="resetSettingsForm('SETTINGS_DELIVERY')" [title]="'FORM_RESET' | translate">
+                                                        <button type="button" class="btn btn-secondary btn-sm" (click)="resetSettingsForm('SETTINGS_DELIVERY')" ngbTooltip="{{'FORM_RESET' | translate}}">
                                                             <i class="icon-reload"></i>
                                                         </button>
 
@@ -237,7 +237,7 @@
                                                 <input type="text" class="form-control form-control-sm" [(ngModel)]="setting.options.value.value" (ngModelChange)="onValueChanged('SETTINGS_PAYMENT')">
                                             </td>
                                             <td class="text-center">
-                                                <button type="button" class="btn btn-secondary btn-sm" [title]="'REMOVE' | translate" (click)="deleteSetting('SETTINGS_PAYMENT', index)">
+                                                <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'DELETE' | translate}}" (click)="deleteSetting('SETTINGS_PAYMENT', index)">
                                                     <i class="icon-cross"></i>
                                                 </button>
                                             </td>
@@ -254,7 +254,7 @@
                                                             <i class="icon-check"></i>
                                                             <span>{{'SAVE' | translate}}</span>
                                                         </button>
-                                                        <button type="button" class="btn btn-secondary btn-sm" (click)="resetSettingsForm('SETTINGS_PAYMENT')" [title]="'FORM_RESET' | translate">
+                                                        <button type="button" class="btn btn-secondary btn-sm" (click)="resetSettingsForm('SETTINGS_PAYMENT')" ngbTooltip="{{'FORM_RESET' | translate}}">
                                                             <i class="icon-reload"></i>
                                                         </button>
 
@@ -305,7 +305,7 @@
                                                 <input type="number" class="form-control form-control-sm" step="1" min="0" [(ngModel)]="setting.options.value.value" (ngModelChange)="onValueChanged('SETTINGS_CURRENCY')">
                                             </td>
                                             <td class="text-center">
-                                                <button type="button" class="btn btn-secondary btn-sm" [title]="'REMOVE' | translate" (click)="deleteSetting('SETTINGS_CURRENCY', index)">
+                                                <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'REMOVE' | translate}}" (click)="deleteSetting('SETTINGS_CURRENCY', index)">
                                                     <i class="icon-cross"></i>
                                                 </button>
                                             </td>
@@ -322,7 +322,7 @@
                                                             <i class="icon-check"></i>
                                                             <span>{{'SAVE' | translate}}</span>
                                                         </button>
-                                                        <button type="button" class="btn btn-secondary btn-sm" (click)="resetSettingsForm('SETTINGS_CURRENCY')" [title]="'FORM_RESET' | translate">
+                                                        <button type="button" class="btn btn-secondary btn-sm" (click)="resetSettingsForm('SETTINGS_CURRENCY')" ngbTooltip="{{'FORM_RESET' | translate}}">
                                                             <i class="icon-reload"></i>
                                                         </button>
 

@@ -1,0 +1,6 @@
+user_options.state: Region
+user_options.zip: Postcode
+user_options.city: City
+user_options.street: Street
+user_options.house: House number
+user_options.apartment: Apartment

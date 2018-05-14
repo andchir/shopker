@@ -110,12 +110,12 @@ header .header-brand { display: inline-block; padding: 0.1rem 0.2rem 0 1rem; fon
 /* slider */
 .shk-slider-range input { display: none; }
 .noUi-horizontal { height: 8px; }
-.noUi-horizontal .noUi-handle { width: 14px; height: 20px; right: -7px; left: auto; border-radius: 0 0 3px 3px; border: 1px solid #ccc; box-shadow: none; }
+.noUi-horizontal .noUi-handle { width: 14px; height: 20px; right: -7px; left: auto; border-radius: 0 0 3px 3px; border: 1px solid #ccc; box-shadow: none; background: #eee url("../img/slider-handle.gif") center -2px no-repeat; }
 .noUi-horizontal .noUi-handle:focus { outline: none; }
-.noUi-handle:after,
-.noUi-handle:before { content: ''; display: block; height: 0; width: 0; border: solid transparent; position: absolute; bottom: 100%; left: 50%; top: auto; pointer-events: none; background-color: transparent; }
-.noUi-handle:after { border-color: rgba(255, 255, 255, 0); border-bottom-color: #ffffff; border-width: 6px; margin-left: -6px; }
+.noUi-handle:before,
+.noUi-handle:after { content: ''; display: block; height: 0; width: 0; border: solid transparent; position: absolute; bottom: 100%; left: 50%; top: auto; pointer-events: none; background-color: transparent; }
 .noUi-handle:before { border-color: rgba(204, 204, 204, 0); border-bottom-color: #cccccc; border-width: 7px; margin-left: -7px; }
+.noUi-handle:after { border-color: rgba(238, 238, 238, 0); border-bottom-color: #eee; border-width: 6px; margin-left: -6px; }
 html:not([dir=rtl]) .noUi-horizontal .noUi-handle { top: 16px; right: -7px; left: auto; }
 .noUi-pips-horizontal { padding-top: 10px; }
 .noUi-horizontal .noUi-tooltip { font-size: 11px; background-color: rgba(0,0,0,0.1); padding-top: 3px; padding-bottom: 3px; bottom: 40px; }

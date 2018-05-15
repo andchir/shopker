@@ -9,11 +9,11 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ChangePasswordType extends AbstractType
+class ResetPasswordType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('oldPassword', PasswordType::class);
+        $builder->add('email', EmailType::class);
         $builder->add('password', RepeatedType::class, [
             'first_name' => 'password',
             'second_name' => 'confirm',

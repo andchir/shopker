@@ -3,8 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Document\User;
-use AppBundle\Form\Model\ChangePassword;
-use AppBundle\Form\Type\ChangePasswordType;
+
 use AppBundle\Repository\UserRepository;
 use AppBundle\Service\UtilsService;
 use MongoDB\Driver\Exception\AuthenticationException;
@@ -12,12 +11,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use AppBundle\Form\Type\RegistrationType;
-use AppBundle\Form\Model\Registration;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Translation\TranslatorInterface;
+
+use AppBundle\Form\Model\ChangePassword;
+use AppBundle\Form\Type\ChangePasswordType;
+use AppBundle\Form\Type\RegistrationType;
+use AppBundle\Form\Model\Registration;
+use AppBundle\Form\Model\ResetPassword;
+use AppBundle\Form\Type\ResetPasswordType;
+use AppBundle\Form\Type\UserType;
 
 class AccountController extends Controller
 {
@@ -109,7 +114,7 @@ class AccountController extends Controller
     public function passwordResetAction(Request $request, TranslatorInterface $translator, UtilsService $utilsService)
     {
         $dm = $this->get('doctrine_mongodb')->getManager();
-        $form = $this->createForm(ChangePasswordType::class, new ChangePassword());
+        $form = $this->createForm(ResetPasswordType::class, new ResetPassword());
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -198,6 +203,50 @@ class AccountController extends Controller
         }
 
         return new Response('');
+    }
+
+    /**
+     * @Route("/profile/", name="profile")
+     * @param Request $request
+     * @return Response
+     */
+    public function profileAction(Request $request)
+    {
+        if (!$this->isGranted('ROLE_USER')) {
+            return $this->redirectToRoute('login');
+        }
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $formChangePassword = $this->createForm(ChangePasswordType::class, new ChangePassword());
+
+        return $this->render('security/profile.html.twig', [
+            'formChangePassword' => $formChangePassword->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/profile/change_password", name="profile_change_password")
+     * @param Request $request
+     * @return Response
+     */
+    public function profileChangePasswordAction(Request $request)
+    {
+        if (!$this->isGranted('ROLE_USER')) {
+            return $this->redirectToRoute('login');
+        }
+        $form = $this->createForm(ChangePasswordType::class, new ChangePassword());
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            var_dump($form->getData());
+
+        }
+
+        return $this->render('security/profile_change_password.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 
     /**

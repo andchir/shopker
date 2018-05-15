@@ -2,15 +2,17 @@
 
 namespace AppBundle\Form\Model;
 
+use Symfony\Component\Security\Core\Validator\Constraints as SecurityAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class ChangePassword
 {
     /**
-     * @Assert\NotBlank()
-     * @Assert\Email()
+     * @SecurityAssert\UserPassword(
+     *     message = "Wrong value for your current password"
+     * )
      */
-    protected $email;
+    protected $oldPassword;
 
     /**
      * @Assert\NotBlank()
@@ -23,23 +25,31 @@ class ChangePassword
      */
     protected $password;
 
-    public function setEmail($email)
+    public function getOldPassword()
     {
-        $this->email = $email;
+        return $this->oldPassword;
     }
 
-    public function getEmail()
+    public function setOldPassword($oldPassword)
     {
-        return $this->email;
+        $this->oldPassword = $oldPassword;
     }
 
-    public function setPassword($password)
-    {
-        $this->password = $password;
-    }
-
+    /**
+     * @return string
+     */
     public function getPassword()
     {
         return $this->password;
+    }
+
+    /**
+     * @param $password
+     * @return $this
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+        return $this;
     }
 }

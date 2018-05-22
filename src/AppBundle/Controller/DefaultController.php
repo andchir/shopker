@@ -3,10 +3,13 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Document\Category;
+use AppBundle\Form\Type\SetupType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Document\ContentType;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class DefaultController extends CatalogController
 {
@@ -59,6 +62,27 @@ class DefaultController extends CatalogController
         return $this->render('errors/404.html.twig', [
             'currentUri' => '404',
             'categoriesTopLevel' => $categoriesTopLevel
+        ]);
+    }
+
+    /**
+     * @Route("/setup", name="setup")
+     */
+    public function setupAction(Request $request, TranslatorInterface $translator)
+    {
+        $form = $this->createForm(SetupType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $form->addError(new FormError($translator->trans('install.mongodb_connection_fail', [], 'validators')));
+
+            // TODO: Add validation and save data
+
+        }
+
+        return $this->render('setup.twig', [
+            'form' => $form->createView()
         ]);
     }
 

@@ -16,6 +16,9 @@
 .image-wrapper img { max-width: 100%; }
 main h1 { font-family: 'Comfortaa', sans-serif; }
 
+/* buttons */
+.btn-wide { min-width: 130px; text-align: center; padding-left: 2rem; padding-right: 2rem; }
+
 /* columns */
 .column-left { width: 350px; float: left; }
 .column-right { margin-left: 380px; }

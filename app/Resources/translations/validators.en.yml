@@ -1,3 +1,4 @@
 Bad credentials.: Bad credentials.
 register.email.already exists: The user with the specified email already exists.
 password_reset.user.not_found: The user with the specified email address was not found.
+install.mongodb_connection_fail: Unable to connect to MongoDB server.

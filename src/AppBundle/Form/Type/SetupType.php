@@ -20,22 +20,19 @@ class SetupType extends AbstractType
     {
         $builder
             ->add('app_name', TextType::class, [
-                'constraints' => new NotBlank(),
-                'data' => 'Shopkeeper 4'
+                'constraints' => new NotBlank()
             ])
             ->add('locale', ChoiceType::class, [
                 'label' => 'Main language',
                 'choices'  => [
-                    'Russian' => 'ru',
-                    'English' => 'en'
+                    'English' => 'en',
+                    'Russian' => 'ru'
                 ],
-                'constraints' => new NotBlank(),
-                'data' => 'ru'
+                'constraints' => new NotBlank()
             ])
             ->add('mongodb_server', TextType::class, [
                 'label' => 'Server',
-                'constraints' => new NotBlank(),
-                'data' => '127.0.0.1'
+                'constraints' => new NotBlank()
             ])
             ->add('mongodb_user', TextType::class, [
                 'label' => 'User name',
@@ -47,8 +44,7 @@ class SetupType extends AbstractType
             ])
             ->add('mongodb_database', TextType::class, [
                 'label' => 'Database name',
-                'constraints' => new NotBlank(),
-                'data' => 'shopkeeper4'
+                'constraints' => new NotBlank()
             ])
             ->add('admin_email', EmailType::class, [
                 'constraints' => new Email()

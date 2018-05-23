@@ -33,6 +33,10 @@ class AppRuntime
      */
     public function shopCartFunction($chunkName = 'shop_cart', $emptyChunkName = '')
     {
+        if (empty($this->container->getParameter('mongodb_database'))
+            || empty($this->container->getParameter('mongodb_user'))) {
+                return '';
+        }
         $data = [
             'countTotal' => 0,
             'priceTotal' => 0,
@@ -84,6 +88,10 @@ class AppRuntime
      */
     public function currencyListFunction()
     {
+        if (empty($this->container->getParameter('mongodb_database'))
+            || empty($this->container->getParameter('mongodb_user'))) {
+                return '';
+        }
         $cacheKey = 'currency.list';
         /** @var SettingsService $settingsService */
         $settingsService = $this->container->get('app.settings');

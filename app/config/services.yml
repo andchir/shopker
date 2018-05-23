@@ -1,7 +1,20 @@
 # Learn more about services, parameters and containers at
 # http://symfony.com/doc/current/service_container.html
+# Default parameters
 parameters:
-    #parameter_name: value
+    app_name: Shopkeeper
+    locale: ru
+    mongodb_server: 127.0.0.1
+    mongodb_user: ''
+    mongodb_password: ''
+    mongodb_database: ''
+    mailer_transport: smtp
+    mailer_host: ''
+    mailer_port: ''
+    mailer_user: ''
+    mailer_password: ''
+    mailer_encryption: 'ssl'
+    mailer_auth_mode: 'login'
 
 services:
     #service_name:
@@ -65,11 +78,11 @@ services:
         class: MongoCollection
         arguments: ['@mongo.database', 'cache']
 
-    AppBundle\EventListener\ExceptionListener:
-        public: true
-        tags:
-            - { name: kernel.event_listener, event: kernel.exception }
-        arguments: [ '@twig', '@service_container' ]
+#    AppBundle\EventListener\ExceptionListener:
+#        public: true
+#        tags:
+#            - { name: kernel.event_listener, event: kernel.exception }
+#        arguments: [ '@twig', '@service_container' ]
 
     AppBundle\EventListener\KernelEventListener:
         tags:

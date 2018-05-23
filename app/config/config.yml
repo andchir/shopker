@@ -20,7 +20,7 @@ framework:
         enabled: true
     templating:
         engines: ['twig']
-    default_locale: '%locale%'
+    default_locale: 'en'
     trusted_hosts: ~
     session:
         # http://symfony.com/doc/current/reference/configuration/framework.html#handler-id

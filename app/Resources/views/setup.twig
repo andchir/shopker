@@ -81,5 +81,15 @@
         </div>
     </div>
 
+<script>
+    var baseUrl = window.location.protocol + '//' + window.location.hostname;
+    if (window.location.pathname.indexOf('app_dev.php') > -1) {
+        baseUrl += '/app_dev.php';
+    }
+    document.getElementById('setup_locale').addEventListener('change', function(){
+        window.location.href = baseUrl + '/setup/' + this.value;
+    }, false)
+</script>
+
 </body>
 </html>

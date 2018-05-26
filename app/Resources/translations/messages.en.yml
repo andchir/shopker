@@ -11,3 +11,4 @@ user_options.city: City
 user_options.street: Street
 user_options.house: House number
 user_options.apartment: Apartment
+app_install.message.success: The application was successfully installed. Now you can enter the administration panel.

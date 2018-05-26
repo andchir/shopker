@@ -14,6 +14,10 @@ class UserFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
+        $userRepository = $manager->getRepository(User::class);
+        if ($userRepository->getUsersCountBy('roles', ['ROLE_SUPER_ADMIN']) > 0) {
+            return;
+        }
 
         $plainPassword = 'admin';
 

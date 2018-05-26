@@ -88,3 +88,4 @@ user_options.city: Город
 user_options.street: Улица
 user_options.house: Дом
 user_options.apartment: Квартира
+app_install.message.success: Приложение успешно установлено. Теперь Вы можете войти в панель администрирования.

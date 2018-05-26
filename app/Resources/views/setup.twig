@@ -32,7 +32,7 @@
 
                             {% include 'flash_messages.html.twig' %}
 
-                            {{ form_start(form, {'action': path('setup')}) }}
+                            {{ form_start(form, {'action': path('setup'), 'attr': {'id': 'setupForm'}}) }}
 
                                 <div class="row">
                                     <div class="col-md-6">
@@ -87,7 +87,10 @@
         baseUrl += '/app_dev.php';
     }
     document.getElementById('setup_locale').addEventListener('change', function(){
-        window.location.href = baseUrl + '/setup/' + this.value;
+        var form = document.getElementById('setupForm');
+        document.getElementById('setup_form_reload').value = '1';
+        form.action = baseUrl + '/setup/' + this.value;
+        form.submit();
     }, false)
 </script>
 

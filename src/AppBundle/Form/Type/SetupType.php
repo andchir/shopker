@@ -3,6 +3,7 @@
 namespace AppBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -64,6 +65,7 @@ class SetupType extends AbstractType
                     new NotBlank(),
                     new Length(['min' => 6])
                 ]
-            ]);
+            ])
+            ->add('form_reload', HiddenType::class);
     }
 }

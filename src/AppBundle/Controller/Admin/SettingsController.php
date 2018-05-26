@@ -12,8 +12,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Yaml\Exception\ParseException;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Output\BufferedOutput;
 
 use AppBundle\Document\Setting;
@@ -132,7 +132,7 @@ class SettingsController extends Controller
                 break;
         }
 
-        // $this->cacheClearAction();
+        // $this->systemCacheClearAction();
 
         $output = $serializer->serialize($settings, 'json', ['groups' => ['list']]);
 
@@ -158,7 +158,7 @@ class SettingsController extends Controller
     /**
      * Clear app cache
      */
-    public function cacheClearAction() {
+    public function systemCacheClearAction() {
         $kernel = $this->container->get('kernel');
         $environment = $kernel->getEnvironment();
         $application = new Application($kernel);
@@ -171,6 +171,8 @@ class SettingsController extends Controller
 
         $output = new BufferedOutput();
         $application->run($input, $output);
+
+        return $output->fetch();
     }
 
     /**

@@ -515,12 +515,13 @@ class ProductController extends BaseProductController
     }
 
     /**
-     * @param string $collectionName
-     * @return int
+     * @param $collectionName
+     * @param string $databaseName
+     * @return mixed
      */
-    public function getNextId($collectionName)
+    public function getNextId($collectionName, $databaseName = '')
     {
-        $autoincrementCollection = $this->getCollection('doctrine_increment_ids');
+        $autoincrementCollection = $this->getCollection('doctrine_increment_ids', $databaseName);
         $count = $autoincrementCollection->count(['_id' => $collectionName]);
         if(!$count){
             $record = [
@@ -641,11 +642,12 @@ class ProductController extends BaseProductController
         return true;
     }
 
-    /***
+    /**
      * @param Category $category
+     * @param string $databaseName
      * @return bool
      */
-    public function updateFiltersData(Category $category)
+    public function updateFiltersData(Category $category, $databaseName = '')
     {
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $this->get('doctrine_mongodb')->getManager();
@@ -672,7 +674,7 @@ class ProductController extends BaseProductController
             /** @var ContentType $contentType */
             $contentType = $cat->getContentType();
             $contentTypeFields = $contentType->getFields();
-            $collection = $this->getCollection($contentType->getCollection());
+            $collection = $this->getCollection($contentType->getCollection(), $databaseName);
 
             $filterData = [];
 

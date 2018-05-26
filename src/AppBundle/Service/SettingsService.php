@@ -3,9 +3,13 @@
 namespace AppBundle\Service;
 
 use AppBundle\Document\Setting;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Yaml\Exception\ParseException;
 
@@ -22,6 +26,7 @@ class SettingsService
 
     /**
      * @param string $yamlFileName
+     * @param bool $transform
      * @return array
      */
     public function getSettingsFromYaml($yamlFileName = 'settings', $transform = true)
@@ -77,6 +82,46 @@ class SettingsService
     public function getSetting($settingName, $groupName = null)
     {
         return $this->getRepository()->getSetting($settingName, $groupName);
+    }
+
+    /**
+     * Recursively delete directory
+     * @param $dir
+     * @return bool
+     */
+    public static function delDir($dir) {
+        $files = array_diff(scandir($dir), ['.','..']);
+        foreach ($files as $file) {
+            is_dir("$dir/$file")
+                ? self::delDir("$dir/$file")
+                : unlink("$dir/$file");
+        }
+        return rmdir($dir);
+    }
+
+    /**
+     * Delete system cache files
+     * @return bool
+     */
+    public function systemCacheFilesDelete()
+    {
+        $rootPath = dirname($this->container->get('kernel')->getRootDir());
+        $cacheDirPath = $rootPath . '/var/cache';
+        return self::delDir($cacheDirPath);
+    }
+
+    /**
+     * @param string $yamlFileName
+     * @param $data
+     * @return bool|int
+     */
+    public function saveSettingsToYaml($yamlFileName = 'settings', $data)
+    {
+        $rootPath = $this->container->getParameter('kernel.root_dir');
+        $settingsFilePath = $rootPath . DIRECTORY_SEPARATOR . "config/{$yamlFileName}.yml";
+        $yaml = Yaml::dump(['parameters' => $data]);
+
+        return file_put_contents($settingsFilePath, $yaml);
     }
 
     /**

@@ -153,13 +153,17 @@ class ProductController extends BaseController
     }
 
     /**
-     * @param string $collectionName
+     * @param $collectionName
+     * @param string $databaseName
      * @return \Doctrine\MongoDB\Collection
      */
-    public function getCollection($collectionName)
+    public function getCollection($collectionName, $databaseName = '')
     {
+        if (!$databaseName) {
+            $databaseName = $this->getParameter('mongodb_database');
+        }
         $m = $this->container->get('doctrine_mongodb.odm.default_connection');
-        $db = $m->selectDatabase($this->getParameter('mongodb_database'));
+        $db = $m->selectDatabase($databaseName);
         return $db->createCollection($collectionName);
     }
 

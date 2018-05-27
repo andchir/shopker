@@ -3,7 +3,7 @@ Shopkeeper 4
 
 Product catalog and order management.
 
-**Current version: ALPHA (in development)**
+**Current version: BETA (in development)**
 
 [Read Wiki](https://github.com/andchir/shopkeeper4/wiki)
 

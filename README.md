@@ -7,6 +7,8 @@ Product catalog and order management.
 
 [Read Wiki](https://github.com/andchir/shopkeeper4/wiki)
 
+---
+
 Angular CLI
 -----------
 

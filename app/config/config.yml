@@ -116,6 +116,7 @@ liip_imagine:
             filters:
                 relative_resize:
                     widen: 200
+                thumbnail: { size: [200, 200], mode: outbound }
                 background: { size: [200, 200], position: center, color: '#ffffff' }
 
         thumb_medium:
@@ -123,4 +124,13 @@ liip_imagine:
             filters:
                 relative_resize:
                     widen: 400
+                thumbnail: { size: [400, 400], mode: outbound }
                 background: { size: [400, 400], position: center, color: '#ffffff' }
+
+        thumb_big:
+            quality: 90
+            filters:
+                relative_resize:
+                    widen: 800
+                thumbnail: { size: [800, 800], mode: outbound }
+                background: { size: [800, 800], position: center, color: '#ffffff' }

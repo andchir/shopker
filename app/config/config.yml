@@ -25,7 +25,7 @@ framework:
     session:
         # http://symfony.com/doc/current/reference/configuration/framework.html#handler-id
         handler_id:  session.handler.native_file
-        save_path:   "%kernel.root_dir%/../var/sessions/%kernel.environment%"
+        save_path:   '%kernel.root_dir%/../var/sessions/%kernel.environment%'
     fragments: ~
     http_method_override: true
     assets: ~
@@ -92,8 +92,35 @@ doctrine_cache:
             mongodb:
                 connection_id: mongo.connection
                 collection_id: mongo.cache_collection
-                server: "mongodb://%mongodb_user%:%mongodb_password%@%mongodb_server%"
+                server: 'mongodb://%mongodb_user%:%mongodb_password%@%mongodb_server%'
                 database_name: "%mongodb_database%"
                 collection_name: "cache"
             aliases:
                 - mongodb_cache
+
+liip_imagine:
+    loaders:
+        default:
+            filesystem:
+                data_root: '%kernel.root_dir%/../web'
+    resolvers:
+        default:
+            web_path:
+                web_root: '%kernel.root_dir%/../web'
+                cache_prefix: 'uploads/thumbs/cache'
+    filter_sets:
+        cache: ~
+
+        thumb_small:
+            quality: 85
+            filters:
+                relative_resize:
+                    widen: 200
+                background: { size: [200, 200], position: center, color: '#ffffff' }
+
+        thumb_medium:
+            quality: 85
+            filters:
+                relative_resize:
+                    widen: 400
+                background: { size: [400, 400], position: center, color: '#ffffff' }

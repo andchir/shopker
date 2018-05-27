@@ -171,5 +171,19 @@ class AppRuntime
         $price = number_format($number, $decimals, $decPoint, $thousandsSep);
         return $price;
     }
+
+    /**
+     * @param $itemData
+     * @return string
+     */
+    public function imageUrlFunction($itemData)
+    {
+        return sprintf(
+            '/uploads/%s/%s.%s',
+            $itemData['dirPath'],
+            $itemData['fileName'],
+            $itemData['extension']
+        );
+    }
 }
 

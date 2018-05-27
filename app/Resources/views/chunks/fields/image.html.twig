@@ -1,5 +1,5 @@
 <div class="image-wrapper mb-3">
     <a href="{{ catalogPath(currentCategoryUri, systemName) }}">
-        <img src="uploads/{{ data.dirPath }}/{{ data.fileName }}.{{ data.extension }}" alt="">
+        <img src="{{ imageUrl(data) | imagine_filter('thumb_small') }}" alt="">
     </a>
 </div>

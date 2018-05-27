@@ -48,7 +48,8 @@ class AppExtension extends AbstractExtension
             new TwigFunction('categoriesTree', [$this, 'categoriesTreeFunction']),
             new TwigFunction('twigNextPass', [$this, 'twigNextPassFunction']),
             new TwigFunction('shopCart', [AppRuntime::class, 'shopCartFunction']),
-            new TwigFunction('currencyList', [AppRuntime::class, 'currencyListFunction'])
+            new TwigFunction('currencyList', [AppRuntime::class, 'currencyListFunction']),
+            new TwigFunction('imageUrl', [AppRuntime::class, 'imageUrlFunction'])
         ];
     }
 

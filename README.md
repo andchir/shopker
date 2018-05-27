@@ -5,16 +5,7 @@ Product catalog and order management.
 
 **Current version: ALPHA (in development)**
 
-~~~
-php bin/console doctrine:mongodb:fixtures:load --fixtures=src/AppBundle/DataFixtures/MongoDB/en
-php bin/console cache:clear --env=dev
-php bin/console cache:clear --env=prod --no-debug
-php bin/console server:run localhost:8001
-~~~
-
-~~~
-php bin/console cache:clear --env=prod --no-debug
-~~~
+[Read Wiki](https://github.com/andchir/shopkeeper4/wiki)
 
 Angular CLI
 -----------
@@ -60,6 +51,13 @@ Symfony Console Commands
 Commands list:
 ~~~
 php bin/console
+~~~
+
+~~~
+php bin/console doctrine:mongodb:fixtures:load --fixtures=src/AppBundle/DataFixtures/MongoDB/en
+php bin/console cache:clear --env=dev
+php bin/console cache:clear --env=prod --no-debug
+php bin/console server:run localhost:8001
 ~~~
 
 Execute a query and output the results:

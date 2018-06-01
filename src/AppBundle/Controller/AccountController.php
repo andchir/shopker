@@ -9,6 +9,7 @@ use AppBundle\Service\UtilsService;
 use MongoDB\Driver\Exception\AuthenticationException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
@@ -207,41 +208,47 @@ class AccountController extends Controller
 
     /**
      * @Route("/profile/", name="profile")
-     * @param Request $request
      * @return Response
      */
-    public function profileAction(Request $request)
+    public function profileAction()
+    {
+        return $this->redirectToRoute('profile_history_orders');
+    }
+
+    /**
+     * @Route("/profile/change_password", name="profile_change_password")
+     * @param Request $request
+     * @param UserPasswordEncoderInterface $encoder
+     * @return RedirectResponse|Response
+     */
+    public function profileChangePasswordAction(Request $request, UserPasswordEncoderInterface $encoder)
     {
         if (!$this->isGranted('ROLE_USER')) {
             return $this->redirectToRoute('login');
         }
         /** @var User $user */
         $user = $this->getUser();
+        $dm = $this->get('doctrine_mongodb')->getManager();
 
-        $formChangePassword = $this->createForm(ChangePasswordType::class, new ChangePassword());
-
-        return $this->render('profile/profile.html.twig', [
-            'formChangePassword' => $formChangePassword->createView()
-        ]);
-    }
-
-    /**
-     * @Route("/profile/change_password", name="profile_change_password")
-     * @param Request $request
-     * @return Response
-     */
-    public function profileChangePasswordAction(Request $request)
-    {
-        if (!$this->isGranted('ROLE_USER')) {
-            return $this->redirectToRoute('login');
-        }
         $form = $this->createForm(ChangePasswordType::class, new ChangePassword());
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            var_dump($form->getData());
+            $model = $form->getData();
+            $encodedPassword = $encoder->encodePassword($user, $model->getPassword());
 
+            $user
+                ->setPassword($encodedPassword)
+                ->setNewPassword(null)
+                ->setSecretCode(null);
+            $dm->flush();
+
+            $request->getSession()
+                ->getFlashBag()
+                ->add('messages', 'Your password has been changed successfully.');
+
+            return $this->redirectToRoute('profile_change_password');
         }
 
         return $this->render('profile/change_password.html.twig', [

@@ -59,6 +59,7 @@ Order: Заказ
 Status: Статус
 Order list: Состав заказа
 Contacts: Контактная информация
+Submit: Отправить
 
 Sort by: Сортировать по
 catalog.sort_by_novelty: Новизне
@@ -75,6 +76,7 @@ Forgot your password?: Забыли пароль?
 Reset password: Сбросить пароль
 You are successfully registered. Now you can enter.: Вы успешно зарегистрированы. Теперь Вы можете войти.
 An email with further instructions has been sent to your email address.: На ваш адрес электронной почты отправлено письмо с дальнейшими инструкциями.
+Your password has been changed successfully.: Ваш пароль успешно изменен.
 Your password has been changed successfully. Now you can enter.: Ваш пароль успешно изменен. Теперь Вы можете войти.
 reset_password.confirm.email_link: Для подтверждения изменения пароля, пожалуйста, перейдите по ссылке
 Profile: Профиль

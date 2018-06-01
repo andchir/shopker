@@ -220,7 +220,7 @@ class AccountController extends Controller
 
         $formChangePassword = $this->createForm(ChangePasswordType::class, new ChangePassword());
 
-        return $this->render('security/profile.html.twig', [
+        return $this->render('profile/profile.html.twig', [
             'formChangePassword' => $formChangePassword->createView()
         ]);
     }
@@ -244,8 +244,48 @@ class AccountController extends Controller
 
         }
 
-        return $this->render('security/profile_change_password.html.twig', [
+        return $this->render('profile/change_password.html.twig', [
             'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/profile/history_orders", name="profile_history_orders")
+     * @param Request $request
+     * @return Response
+     */
+    public function historyOrdersAction(Request $request)
+    {
+        if (!$this->isGranted('ROLE_USER')) {
+            return $this->redirectToRoute('login');
+        }
+        /** @var User $user */
+        $user = $this->getUser();
+
+
+
+        return $this->render('profile/history_orders.html.twig', [
+
+        ]);
+    }
+
+    /**
+     * @Route("/profile/profile_contacts", name="profile_contacts")
+     * @param Request $request
+     * @return Response
+     */
+    public function contactsAction(Request $request)
+    {
+        if (!$this->isGranted('ROLE_USER')) {
+            return $this->redirectToRoute('login');
+        }
+        /** @var User $user */
+        $user = $this->getUser();
+
+
+
+        return $this->render('profile/contacts.html.twig', [
+
         ]);
     }
 

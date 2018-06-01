@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Document\Order;
 use AppBundle\Document\User;
 
 use AppBundle\Repository\UserRepository;
@@ -257,11 +258,18 @@ class AccountController extends Controller
     }
 
     /**
-     * @Route("/profile/history_orders", name="profile_history_orders")
+     * @Route(
+     *     "/profile/history_orders/{page}/{orderId}",
+     *     name="profile_history_orders",
+     *     requirements={"page", "orderId"},
+     *     defaults={"page": 1, "orderId": 0}
+     * )
      * @param Request $request
-     * @return Response
+     * @param $page
+     * @param $orderId
+     * @return RedirectResponse|Response
      */
-    public function historyOrdersAction(Request $request)
+    public function historyOrdersAction(Request $request, $page, $orderId)
     {
         if (!$this->isGranted('ROLE_USER')) {
             return $this->redirectToRoute('login');
@@ -269,10 +277,35 @@ class AccountController extends Controller
         /** @var User $user */
         $user = $this->getUser();
 
+        $query = $this->get('doctrine_mongodb')
+            ->getManager()
+            ->createQueryBuilder(Order::class);
 
+        $total = $query
+            ->field('userId')->equals($user->getId())
+            ->getQuery()
+            ->execute()
+            ->count();
+
+        $pageLimit = 10;
+
+        $pagesOptions = UtilsService::getPagesOptions([
+            'page' => $page,
+            'limit' => $pageLimit
+        ], $total);
+
+        $orders = $query
+            ->field('userId')->equals($user->getId())
+            ->sort('createdDate', 'desc')
+            ->skip($pagesOptions['skip'])
+            ->limit($pagesOptions['limit'])
+            ->getQuery()
+            ->execute();
 
         return $this->render('profile/history_orders.html.twig', [
-
+            'orders' => $orders,
+            'pagesOptions' => $pagesOptions,
+            'currentOrderId' => $orderId
         ]);
     }
 

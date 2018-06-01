@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Document\ContentType;
 use AppBundle\Document\Filter;
 use AppBundle\Repository\CategoryRepository;
+use AppBundle\Service\UtilsService;
 use Doctrine\ODM\MongoDB\Cursor;
 use Doctrine\ODM\MongoDB\DocumentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -84,7 +85,7 @@ class CatalogController extends ProductController
 
         /* pages */
         $skip = ($queryOptions['page'] - 1) * $queryOptions['limit'];
-        $pagesOptions = $this->getPagesoptions($queryOptions, $total, $pageSizeArr);
+        $pagesOptions = UtilsService::getPagesOptions($queryOptions, $total, $pageSizeArr);
 
         $items = $collection->find($criteria)
             ->sort($queryOptions['sortOptions'])

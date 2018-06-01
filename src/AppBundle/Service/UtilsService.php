@@ -39,6 +39,27 @@ class UtilsService
     }
 
     /**
+     * @param array $queryOptions
+     * @param int $itemsTotal
+     * @param array $pageSizeArr
+     * @return array
+     */
+    public static function getPagesOptions($queryOptions, $itemsTotal, $pageSizeArr = [10])
+    {
+        $pagesOptions = [
+            'pageSizeArr' => $pageSizeArr,
+            'current' => $queryOptions['page'],
+            'limit' => $queryOptions['limit'],
+            'total' => ceil($itemsTotal / $queryOptions['limit']),
+            'prev' => max(1, $queryOptions['page'] - 1),
+            'skip' => $skip = ($queryOptions['page'] - 1) * $queryOptions['limit']
+        ];
+        $pagesOptions['next'] = min($pagesOptions['total'], $queryOptions['page'] + 1);
+
+        return $pagesOptions;
+    }
+
+    /**
      * @param $uri
      * @return array
      */

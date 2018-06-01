@@ -98,26 +98,6 @@ class ProductController extends BaseController
     }
 
     /**
-     * @param array $queryOptions
-     * @param int $itemsTotal
-     * @param array $pageSizeArr
-     * @return array
-     */
-    public function getPagesOptions($queryOptions, $itemsTotal, $pageSizeArr = [10])
-    {
-        $pagesOptions = [
-            'pageSizeArr' => $pageSizeArr,
-            'current' => $queryOptions['page'],
-            'limit' => $queryOptions['limit'],
-            'total' => ceil($itemsTotal / $queryOptions['limit']),
-            'prev' => max(1, $queryOptions['page'] - 1)
-        ];
-        $pagesOptions['next'] = min($pagesOptions['total'], $queryOptions['page'] + 1);
-
-        return $pagesOptions;
-    }
-
-    /**
      * @param $filters
      * @param $filtersData
      * @param $criteria

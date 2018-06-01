@@ -1,13 +1,106 @@
 {% extends 'profile/profile.html.twig' %}
 
 {% block content %}
-    <div class="row">
-        <div class="col-12">
 
-            <h4>{{ 'History of orders' | trans }}</h4>
+    <h4>{{ 'History of orders' | trans }}</h4>
 
-
-
+    {% if orders | length == 0 %}
+        <div class="alert alert-info">
+            {{ 'Empty.' | trans }}
         </div>
-    </div>
+    {% else %}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>
+                        ID
+                    </th>
+                    <th>
+                        {{ 'Order date' | trans }}
+                    </th>
+                    <th>
+                        {{ 'Price' | trans }}
+                    </th>
+                    <th colspan="2">
+                        {{ 'Order status' | trans }}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td>
+                            {{ order.id }}
+                        </td>
+                        <td>
+                            {{ order.createdDate | date("d/m/Y H:i") }}
+                        </td>
+                        <td>
+                            <b>{{ order.price | price }}</b>
+                            {{ order.currency }}
+                        </td>
+                        <td>
+                            {{ order.status }}
+                        </td>
+                        <td class="text-center">
+                            <a class="btn btn-secondary" href="{{ path(app.request.attributes.get('_route'), {'page': pagesOptions.current, 'orderId': order.id}) }}" title="{{ 'Order list' | trans }}" data-toggle="tooltip" data-placement="bottom">
+                                <i class="icon-list"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% if currentOrderId == order.id %}
+                        <tr>
+                            <td colspan="5" class="bg-light">
+
+                                <table class="table bg-light">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                {{ 'Product Name' | trans }}
+                                            </th>
+                                            <th>
+                                                {{ 'Quantity' | trans }}
+                                            </th>
+                                            <th>
+                                                {{ 'Price' | trans }}
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for orderContent in order.content %}
+                                        <tr>
+                                            <td>
+                                                <a href="{{ orderContent.uri }}" target="_blank">
+                                                    {{ orderContent.title }}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                {{ orderContent.count }}
+                                            </td>
+                                            <td>
+                                                {{ orderContent.price | price }}
+                                                {{ order.currency }}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+
+                                <div class="text-right">
+                                    <a class="btn btn-secondary btn-sm" href="{{ path(app.request.attributes.get('_route'), {'page': pagesOptions.current}) }}">
+                                        {{ 'Close' | trans }}
+                                    </a>
+                                </div>
+
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% include 'nav/pagination_simple.html.twig' %}
+
+    {% endif %}
+
 {% endblock %}

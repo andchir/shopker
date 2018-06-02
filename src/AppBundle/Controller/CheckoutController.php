@@ -9,6 +9,7 @@ use AppBundle\Document\User;
 use AppBundle\Repository\CategoryRepository;
 use AppBundle\Service\SettingsService;
 use AppBundle\Service\ShopCartService;
+use AppBundle\Service\UtilsService;
 use Doctrine\ODM\MongoDB\Cursor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\FormError;
@@ -30,9 +31,11 @@ class CheckoutController extends BaseController
     /**
      * @Route("", name="page_checkout")
      * @param Request $request
-     * @return Response
+     * @param UtilsService $utilsService
+     * @param TranslatorInterface $translator
+     * @return RedirectResponse|Response
      */
-    public function checkoutAction(Request $request)
+    public function checkoutAction(Request $request, UtilsService $utilsService, TranslatorInterface $translator)
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -124,6 +127,10 @@ class CheckoutController extends BaseController
                 $dm->flush();
 
                 $shopCartService->clearContent();
+                $utilsService->orderSendMail(
+                    $this->getParameter('app_name') . ' - ' . $translator->trans('mail_subject.new_order'),
+                    $order
+                );
 
                 $request->getSession()
                     ->getFlashBag()

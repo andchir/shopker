@@ -2,6 +2,8 @@
 
 namespace AppBundle\Service;
 
+use AppBundle\Document\Order;
+use AppBundle\Document\Setting;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class UtilsService
@@ -9,13 +11,18 @@ class UtilsService
     /** @var ContainerInterface */
     protected $container;
 
+    /** @var \Twig_Environment */
+    protected $twig;
+
     /** @param ContainerInterface $container */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
+        $this->twig = $this->container->get('twig');
     }
 
     /**
+     * Send mail
      * @param $subject
      * @param $mailBody
      * @param $toEmail
@@ -36,6 +43,52 @@ class UtilsService
             );
 
         return $mailer->send($message);
+    }
+
+    /**
+     * Send mail order status
+     * @param $emailSubject
+     * @param Order $order
+     * @return bool
+     */
+    public function orderSendMail($emailSubject, Order $order)
+    {
+        if (!$order->getEmail()) {
+            return false;
+        }
+
+        /** @var SettingsService $settingsService */
+        $settingsService = $this->container->get('app.settings');
+        $orderStatusSettings = $settingsService->getSettingsGroup(Setting::GROUP_ORDER_STATUSES);
+
+        $orderStatus = $order->getStatus();
+        $statusSetting = array_filter($orderStatusSettings, function($setting) use ($orderStatus) {
+            /** @var Setting $setting */
+            return $setting->getName() == $orderStatus;
+        });
+
+        if (empty($statusSetting)) {
+            return false;
+        }
+
+        $statusSetting = current($statusSetting);
+
+        /** @var Setting $statusSetting */
+        $settingOptions = $statusSetting->getOptions();
+        $templateName = $settingOptions['template']['value'];
+        if (empty($templateName)) {
+            return false;
+        }
+
+        $templatePath = "email/email_order_{$templateName}.html.twig";
+
+        $emailBody = $this->twig->render($templatePath, array(
+            'order' => $order
+        ));
+
+        $this->sendMail($emailSubject, $emailBody, $order->getEmail());
+
+        return true;
     }
 
     /**

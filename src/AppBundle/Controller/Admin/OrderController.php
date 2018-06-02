@@ -6,6 +6,7 @@ use AppBundle\Controller\ProductController as BaseProductController;
 use AppBundle\Document\Order;
 use AppBundle\Document\Setting;
 use AppBundle\Service\SettingsService;
+use AppBundle\Service\UtilsService;
 use Doctrine\ORM\Query\Expr\Base;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -14,6 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class OrderController
@@ -103,16 +105,29 @@ class OrderController extends StorageControllerAbstract
         $value = isset($data['value']) ? $data['value'] : null;
 
         $repository = $this->getRepository();
-        $item = $repository->find($itemId);
-        if(!$item){
+        /** @var Order $order */
+        $order = $repository->find($itemId);
+        if(!$order){
             return $this->setError('Item not found.');
         }
 
-        if (method_exists($item, 'set' . $fieldName)) {
-            call_user_func(array($item, 'set' . $fieldName), $value);
+        if (method_exists($order, 'set' . $fieldName)) {
+            call_user_func(array($order, 'set' . $fieldName), $value);
         }
 
         $dm->flush();
+
+        // Send email for change order status
+        if ($fieldName == 'status') {
+            /** @var UtilsService $utilsService */
+            $utilsService = $this->get('app.utils');
+            /** @var TranslatorInterface $translator */
+            $translator = $this->get('translator');
+            $utilsService->orderSendMail(
+                $this->getParameter('app_name') . ' - ' . $translator->trans('mail_subject.order_status_change'),
+                $order
+            );
+        }
 
         return new JsonResponse([
             'success' => true

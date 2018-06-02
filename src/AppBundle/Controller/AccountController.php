@@ -118,7 +118,11 @@ class AccountController extends Controller
      * @param UtilsService $utilsService
      * @return Response
      */
-    public function passwordResetAction(Request $request, TranslatorInterface $translator, UtilsService $utilsService)
+    public function passwordResetAction(
+        Request $request,
+        TranslatorInterface $translator,
+        UtilsService $utilsService
+    )
     {
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $this->get('doctrine_mongodb')->getManager();
@@ -156,7 +160,11 @@ class AccountController extends Controller
                     'confirmCode' => $confirmCode
                 ));
 
-                $utilsService->sendMail('Reset password', $emailBody, $email);
+                $utilsService->sendMail(
+                    $this->getParameter('app_name') . ' - ' . $translator->trans('password_reset.mail_subject'),
+                    $emailBody,
+                    $email
+                );
 
                 $request->getSession()
                     ->getFlashBag()

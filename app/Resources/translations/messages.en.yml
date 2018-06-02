@@ -12,4 +12,7 @@ user_options.street: Street
 user_options.house: House number
 user_options.apartment: Apartment
 app_install.message.success: The application was successfully installed. Now you can enter the administration panel.
+mail_subject.new_order: New order
+mail_subject.order_status_change: Order status updated
+password_reset.mail_subject: Password reset
 profile.contacts_data_saved_successfully: The data was successfully saved.

@@ -8,11 +8,11 @@
     <style>
         body { padding: 20px; font-family: Arial, sans-serif; color: #000; line-height: 1.3; }
         hr { background-color: transparent; margin: 15px 0 15px 0; border-top: 1px solid #000; }
+        p { margin: 0 0 12px 0; }
         td { vertical-align: top; }
         table.table { width: 100%; border: 1px solid #000; border-collapse: collapse; }
         table.table th,
         table.table td { padding: 10px; border: 1px solid #000; }
-        .float-right { float: right; }
         .text-right { text-align: right; }
         @media print {
             .print-hidden { display:none; }
@@ -25,7 +25,7 @@
 </head>
 <body>
 
-    <tr>
+    <div>
 
         <div class="print-hidden">
             <button type="button" onclick="window.print();">{{ 'Print' | trans }}</button>
@@ -39,13 +39,13 @@
             {{ 'Order' | trans }} #{{ order.id }}
         </h1>
 
-        <div>
-            {{ order.createdDate | date('d.m.Y H:i:s') }}
-        </div>
+        <p>
+            {{ 'Status' | trans }}: <b>{{ order.status }}</b>
+        </p>
 
-        <div>
-            <b>{{ 'Status' | trans }}:</b> {{ order.status }}
-        </div>
+        <p>
+            {{ order.createdDate | date('d.m.Y H:i:s') }}
+        </p>
 
         <h3>
             {{ 'Contacts' | trans }}
@@ -118,7 +118,7 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>{{ 'Title' | trans }}</th>
+                    <th>{{ 'Product Name' | trans }}</th>
                     <th>{{ 'Price' | trans }}</th>
                     <th>{{ 'Quantity' | trans }}</th>
                     <th>{{ 'Price total' | trans }}</th>

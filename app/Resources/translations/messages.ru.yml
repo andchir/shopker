@@ -95,9 +95,12 @@ user_options.city: Город
 user_options.street: Улица
 user_options.house: Дом
 user_options.apartment: Квартира
-app_install.message.success: Приложение успешно установлено. Теперь Вы можете войти в панель администрирования.
 
+app_install.message.success: Приложение успешно установлено. Теперь Вы можете войти в панель администрирования.
+mail_subject.new_order: Новый заказ
+mail_subject.order_status_change: Статус заказа обновлен
 Order date: Дата заказа
 Order status: Статус
 Order list: Состав заказа
-profile.contacts_data_saved_successfully: Данные успешно сохранены.
+password_reset.mail_subject: Сброс пароля
+profile.contacts_data_saved_successfully: Данные успешно созранены.

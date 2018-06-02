@@ -86,6 +86,10 @@ class CartController extends ProductController
 
             $parameters = $this->getProductParameters($request, $productDocument, $contentTypeFields);
 
+            if (!isset($shopCartData['data'][$contentTypeName])) {
+                $shopCartData['data'][$contentTypeName] = [];
+            }
+
             $productIndex = isset($shopCartData['data'][$contentTypeName])
                 && in_array($itemId, array_column($shopCartData['data'][$contentTypeName], 'id'))
                     ? array_search($itemId, array_column($shopCartData['data'][$contentTypeName], 'id'))

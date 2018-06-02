@@ -458,4 +458,17 @@ class User implements AdvancedUserInterface, \Serializable
     {
         return $this->options;
     }
+
+    /**
+     * @return array
+     */
+    public function getOptionsStructured()
+    {
+        $output = [];
+        foreach ($this->options as $option) {
+            $output[$option['name']] = $option['value'];
+        }
+        return $output;
+    }
+
 }

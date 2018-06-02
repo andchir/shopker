@@ -103,12 +103,16 @@ class CheckoutController extends BaseController
 
                     $optionsData = $form->get('options')->getData();
                     $userOptions = $user->getOptions();
+
                     if (empty($userOptions)) {
                         $userOptions = [];
                     }
                     foreach ($optionsData as $option) {
-                        if (array_search($option['name'], array_column($userOptions, 'name')) === false) {
+                        $index = array_search($option['name'], array_column($userOptions, 'name'));
+                        if ($index === false) {
                             $userOptions[] = $option;
+                        } else {
+                            $userOptions[$index]['value'] = $option['value'];
                         }
                     }
                     $user->setOptions($userOptions);

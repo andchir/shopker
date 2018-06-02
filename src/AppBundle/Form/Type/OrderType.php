@@ -80,7 +80,6 @@ class OrderType extends AbstractType
 
         $builder->get('deliveryName')->addModelTransformer($this->deliveryTransformer);
         $builder->get('paymentName')->addModelTransformer($this->paymentTransformer);
-        $builder->get('options')->addModelTransformer($this->getOptionsTransformer());
 
         $builder->addEventListener(
             FormEvents::PRE_SET_DATA,
@@ -109,47 +108,14 @@ class OrderType extends AbstractType
         );
     }
 
-    /**
-     * @return CallbackTransformer
-     */
-    public function getOptionsTransformer()
-    {
-        return new CallbackTransformer(
-            function ($optionsData) {
-                if (!is_array($optionsData)) {
-                    return [];
-                }
-                $options = [];
-                foreach ($optionsData as $option) {
-                    $options[$option['name']] = $option['value'];
-                }
-                return $options;
-            },
-            function ($options) {
-                if (!is_array($options)) {
-                    return [];
-                }
-                $optionsData = [];
-                foreach ($options as $key => $value) {
-                    $optionsData[] = [
-                        'name' => $key,
-                        'title' => $this->translator->trans('user_options.' . $key),
-                        'value' => $value
-                    ];
-                }
-                return $optionsData;
-            }
-        );
-    }
-
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'data_class' => Order::class,
             'allow_extra_fields' => true,
             'choiceDelivery' => null,
             'choicePayment' => null,
             'noDeliveryFirst' => false
-        ));
+        ]);
     }
 }

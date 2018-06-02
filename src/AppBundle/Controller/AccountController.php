@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Document\Order;
 use AppBundle\Document\User;
 
+use AppBundle\Form\Type\OrderOptionsType;
 use AppBundle\Repository\UserRepository;
 use AppBundle\Service\UtilsService;
 use MongoDB\Driver\Exception\AuthenticationException;
@@ -64,6 +65,7 @@ class AccountController extends Controller
         TranslatorInterface $translator
     )
     {
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $this->get('doctrine_mongodb')->getManager();
         $form = $this->createForm(RegistrationType::class, new Registration());
 
@@ -115,6 +117,7 @@ class AccountController extends Controller
      */
     public function passwordResetAction(Request $request, TranslatorInterface $translator, UtilsService $utilsService)
     {
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $this->get('doctrine_mongodb')->getManager();
         $form = $this->createForm(ResetPasswordType::class, new ResetPassword());
         $form->handleRequest($request);
@@ -178,6 +181,7 @@ class AccountController extends Controller
         $code
     )
     {
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $this->get('doctrine_mongodb')->getManager();
         $userRepository = $this->getUserRepository();
         /** @var User $user */
@@ -229,6 +233,7 @@ class AccountController extends Controller
         }
         /** @var User $user */
         $user = $this->getUser();
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $this->get('doctrine_mongodb')->getManager();
 
         $form = $this->createForm(ChangePasswordType::class, new ChangePassword());
@@ -321,11 +326,24 @@ class AccountController extends Controller
         }
         /** @var User $user */
         $user = $this->getUser();
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->get('doctrine_mongodb')->getManager();
 
+        $form = $this->createForm(OrderOptionsType::class, $user->getOptions());
+        $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $user->setOptions($form->getData());
+            $dm->flush();
+
+            $request->getSession()
+                ->getFlashBag()
+                ->add('messages', 'profile.contacts_data_saved_successfully');
+        }
 
         return $this->render('profile/contacts.html.twig', [
-
+            'form' => $form->createView()
         ]);
     }
 

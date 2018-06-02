@@ -2,13 +2,22 @@
 
 namespace AppBundle\Form\Type;
 
+use AppBundle\Form\DataTransformer\UserOptionsTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class OrderOptionsType extends AbstractType
 {
+
+    private $transformer;
+
+    public function __construct(UserOptionsTransformer $transformer)
+    {
+        $this->transformer = $transformer;
+    }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -37,6 +46,8 @@ class OrderOptionsType extends AbstractType
                 'constraints' => new NotBlank(),
                 'label' => 'user_options.apartment'
             ]);
+
+        $builder->addModelTransformer($this->transformer);
     }
 
 }

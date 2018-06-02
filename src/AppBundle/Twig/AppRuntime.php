@@ -139,7 +139,7 @@ class AppRuntime
         $parameters = isset($productData['parameters']) && is_array($productData['parameters'])
             ? $productData['parameters']
             : [];
-        return OrderContent::getParametersString($parameters);
+        return OrderContent::getParametersStrFromArray($parameters);
     }
 
     /**

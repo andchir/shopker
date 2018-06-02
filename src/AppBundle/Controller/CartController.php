@@ -99,7 +99,7 @@ class CartController extends ProductController
             if (!empty($currentProduct) && $currentProduct['parameters'] == $parameters) {
                 $currentProduct['count'] += $count;
             } else {
-                $shopCartData['data'][$contentTypeName][] = [
+                array_unshift($shopCartData['data'][$contentTypeName], [
                     'id' => $productDocument['_id'],
                     'title' => $productDocument['title'],
                     'parentUri' => $parentUri,
@@ -109,7 +109,7 @@ class CartController extends ProductController
                     'price' => $priceValue,
                     'currency' => $currency,
                     'parameters' => $parameters
-                ];
+                ]);
             }
 
             $mongoCache->save(ShopCartService::getCartId(), $shopCartData, 60*60*24*7);
@@ -227,7 +227,7 @@ class CartController extends ProductController
             if (empty($shopCartData['data'][$contentTypeName])) {
                 unset($shopCartData['data'][$contentTypeName]);
             }
-            if (!empty($shopCartData)) {
+            if (!empty($shopCartData['data'])) {
                 $mongoCache->save(ShopCartService::getCartId(), $shopCartData, 60*60*24*7);
             } else {
                 $mongoCache->delete(ShopCartService::getCartId());

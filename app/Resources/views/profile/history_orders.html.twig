@@ -60,10 +60,13 @@
                                                 {{ 'Product Name' | trans }}
                                             </th>
                                             <th>
+                                                {{ 'Price' | trans }}
+                                            </th>
+                                            <th>
                                                 {{ 'Quantity' | trans }}
                                             </th>
                                             <th>
-                                                {{ 'Price' | trans }}
+                                                {{ 'Price total' | trans }}
                                             </th>
                                         </tr>
                                     </thead>
@@ -74,12 +77,21 @@
                                                 <a href="{{ orderContent.uri }}" target="_blank">
                                                     {{ orderContent.title }}
                                                 </a>
+                                                {% if orderContent.parametersString is not empty %}
+                                                    <div class="text-muted small">
+                                                        {{ orderContent.parametersString }}
+                                                    </div>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {{ orderContent.price | price }}
+                                                {{ order.currency }}
                                             </td>
                                             <td>
                                                 {{ orderContent.count }}
                                             </td>
                                             <td>
-                                                {{ orderContent.price | price }}
+                                                {{ orderContent.priceTotal | price }}
                                                 {{ order.currency }}
                                             </td>
                                         </tr>

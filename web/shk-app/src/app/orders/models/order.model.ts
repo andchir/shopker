@@ -49,10 +49,13 @@ export class OrderContent {
         }
         let parametersStrArr = [];
         this.parameters.forEach((parameter) => {
-            parametersStrArr.push(
-                `${parameter.name}: ${parameter.value}`
-                    + (parameter.price ? ` (${parameter.price})` : '')
-            );
+            let parametersStr = '';
+            if (parameter.name) {
+                parametersStr += `${parameter.name}: `;
+            }
+            parametersStr += parameter.value
+                + (parameter.price ? ` (${parameter.price})` : '');
+            parametersStrArr.push(parametersStr);
         });
         this.parametersString = parametersStrArr.join(', ');
     }

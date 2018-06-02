@@ -265,15 +265,28 @@ class OrderContent
     }
 
     /**
-     * @param array $parameters
+     * Get parameters string
+     * @return string
+     */
+    public function getParametersString()
+    {
+        return self::getParametersStrFromArray($this->getParameters());
+    }
+
+    /**
+     * @param array|null $parameters
      * @param string $currency
      * @return string
      */
-    public static function getParametersString($parameters, $currency = '')
+    public static function getParametersStrFromArray($parameters = null, $currency = '')
     {
         $outputArr = [];
         foreach ($parameters as $parameter) {
-            $str = "{$parameter['name']}: {$parameter['value']}";
+            $str = '';
+            if ($parameter['name']) {
+                $str = "{$parameter['name']}: ";
+            }
+            $str .= $parameter['value'];
             if (!empty($parameter['price'])) {
                 $str .= $currency
                     ? " ({$parameter['price']} {$currency})"

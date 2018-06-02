@@ -125,23 +125,28 @@
                 </tr>
             </thead>
             <tbody>
-                {% for content in order.content %}
+                {% for orderContent in order.content %}
                     <tr>
                         <td>
-                            {{ content.id }}
+                            {{ orderContent.id }}
                         </td>
                         <td>
-                            {{ content.title }}
+                            {{ orderContent.title }}
+                            {% if orderContent.parametersString is not empty %}
+                                <div>
+                                    <small>{{ orderContent.parametersString }}</small>
+                                </div>
+                            {% endif %}
                         </td>
                         <td>
-                            {{ content.price | price }}
+                            {{ orderContent.price | price }}
                             {{ order.currency }}
                         </td>
                         <td>
-                            {{ content.count }}
+                            {{ orderContent.count }}
                         </td>
                         <td>
-                            {{ content.priceTotal | price }}
+                            {{ orderContent.priceTotal | price }}
                         </td>
                     </tr>
                 {% endfor %}

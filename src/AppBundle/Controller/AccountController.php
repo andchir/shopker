@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Translation\TranslatorInterface;
 
 use AppBundle\Form\Model\ChangePassword;
@@ -33,21 +34,23 @@ class AccountController extends Controller
     /**
      * @Route("/login", name="login")
      * @param Request $request
-     * @return Response
+     * @param AuthenticationUtils $authenticationUtils
+     * @return RedirectResponse|Response
      */
-    public function loginAction(Request $request)
+    public function loginAction(Request $request, AuthenticationUtils $authenticationUtils)
     {
+        /** @var User $user */
         $user = $this->getUser();
         if ($user instanceof AdvancedUserInterface) {
             return $this->redirectToRoute('homepage');
         }
 
         /** @var AuthenticationException $exception */
-        $exception = $this->get('security.authentication_utils')
-            ->getLastAuthenticationError();
+        $exception = $authenticationUtils->getLastAuthenticationError();
+        $lastUsername = $authenticationUtils->getLastUsername();
 
         return $this->render('security/login.html.twig', [
-            'last_username' => '',
+            'last_username' => $lastUsername,
             'error' => $exception ? $exception->getMessage() : null
         ]);
     }

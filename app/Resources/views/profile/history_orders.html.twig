@@ -40,11 +40,13 @@
                             <b>{{ order.price | price }}</b>
                             {{ order.currency }}
                         </td>
-                        <td>
-                            {{ order.status }}
+                        <td class="text-center">
+                            <span class="badge text-white" style="background-color: {{ order.statusColor(orderStatusSettings) }};">
+                                {{ order.status }}
+                            </span>
                         </td>
                         <td class="text-center">
-                            <a class="btn btn-secondary" href="{{ path(app.request.attributes.get('_route'), {'page': pagesOptions.current, 'orderId': order.id}) }}#order_details{{ order.id }}" title="{{ 'Order list' | trans }}" data-toggle="tooltip" data-placement="bottom">
+                            <a class="btn btn-secondary btn-sm" href="{{ path(app.request.attributes.get('_route'), {'page': pagesOptions.current, 'orderId': order.id}) }}#order_details{{ order.id }}" title="{{ 'Order list' | trans }}" data-toggle="tooltip" data-placement="bottom">
                                 <i class="icon-list"></i>
                             </a>
                         </td>

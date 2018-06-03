@@ -644,4 +644,28 @@ class Order
     {
         $this->content->removeElement($content);
     }
+
+    /**
+     * Get status color
+     * @param $orderStatusSettings
+     * @return string
+     */
+    public function getStatusColor($orderStatusSettings)
+    {
+        $color = '';
+        $orderStatus = $this->getStatus();
+        $statusSetting = array_filter($orderStatusSettings, function($setting) use ($orderStatus) {
+            /** @var Setting $setting */
+            return $setting->getName() == $orderStatus;
+        });
+        if (!empty($statusSetting)) {
+            $statusSetting = current($statusSetting);
+            /** @var Setting $statusSetting */
+            $settingOptions = $statusSetting->getOptions();
+
+            return $settingOptions['color']['value'];
+        }
+        return $color;
+    }
+
 }

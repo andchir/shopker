@@ -3,10 +3,12 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Document\Order;
+use AppBundle\Document\Setting;
 use AppBundle\Document\User;
 
 use AppBundle\Form\Type\OrderOptionsType;
 use AppBundle\Repository\UserRepository;
+use AppBundle\Service\SettingsService;
 use AppBundle\Service\UtilsService;
 use MongoDB\Driver\Exception\AuthenticationException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -60,7 +62,7 @@ class AccountController extends Controller
      * @param Request $request
      * @param UserPasswordEncoderInterface $encoder
      * @param TranslatorInterface $translator
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @return RedirectResponse|Response
      */
     public function registerAction(
         Request $request,
@@ -183,7 +185,7 @@ class AccountController extends Controller
      * @param UserPasswordEncoderInterface $encoder
      * @param $email
      * @param $code
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @return Response
      */
     public function passwordConfirmAction(
         Request $request,
@@ -224,7 +226,7 @@ class AccountController extends Controller
 
     /**
      * @Route("/profile/", name="profile")
-     * @return Response
+     * @return RedirectResponse
      */
     public function profileAction()
     {
@@ -239,9 +241,6 @@ class AccountController extends Controller
      */
     public function profileChangePasswordAction(Request $request, UserPasswordEncoderInterface $encoder)
     {
-        if (!$this->isGranted('ROLE_USER')) {
-            return $this->redirectToRoute('login');
-        }
         /** @var User $user */
         $user = $this->getUser();
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
@@ -287,11 +286,13 @@ class AccountController extends Controller
      */
     public function historyOrdersAction(Request $request, $page, $orderId)
     {
-        if (!$this->isGranted('ROLE_USER')) {
-            return $this->redirectToRoute('login');
-        }
+        $pageLimit = 10;
+
         /** @var User $user */
         $user = $this->getUser();
+        /** @var SettingsService $settingsService */
+        $settingsService = $this->container->get('app.settings');
+        $orderStatusSettings = $settingsService->getSettingsGroup(Setting::GROUP_ORDER_STATUSES);
 
         $query = $this->get('doctrine_mongodb')
             ->getManager()
@@ -302,8 +303,6 @@ class AccountController extends Controller
             ->getQuery()
             ->execute()
             ->count();
-
-        $pageLimit = 10;
 
         $pagesOptions = UtilsService::getPagesOptions([
             'page' => $page,
@@ -321,20 +320,18 @@ class AccountController extends Controller
         return $this->render('profile/history_orders.html.twig', [
             'orders' => $orders,
             'pagesOptions' => $pagesOptions,
-            'currentOrderId' => $orderId
+            'currentOrderId' => $orderId,
+            'orderStatusSettings' => $orderStatusSettings
         ]);
     }
 
     /**
      * @Route("/profile/profile_contacts", name="profile_contacts")
      * @param Request $request
-     * @return Response
+     * @return RedirectResponse|Response
      */
     public function contactsAction(Request $request)
     {
-        if (!$this->isGranted('ROLE_USER')) {
-            return $this->redirectToRoute('login');
-        }
         /** @var User $user */
         $user = $this->getUser();
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */

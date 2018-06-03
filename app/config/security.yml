@@ -45,11 +45,6 @@ security:
                 lifetime: 604800 # 1 week in seconds
                 path: /
 
-#        secured_area:
-#            logout:
-#                path: /logout
-#                target: /
-
     role_hierarchy:
         ROLE_ADMIN: ROLE_USER
         ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]

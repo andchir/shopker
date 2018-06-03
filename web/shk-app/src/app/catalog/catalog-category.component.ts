@@ -42,15 +42,7 @@ export class CatalogCategoryComponent extends PageTableAbstractComponent<Product
         if(!this.currentContentType){
             return;
         }
-        this.tableFields = [
-            {
-                name: 'id',
-                sortName: 'id',
-                title: 'ID',
-                outputType: 'text',
-                outputProperties: {}
-            }
-        ];
+        this.tableFields = [];
         this.currentContentType.fields.forEach((field) => {
             if (field.showInTable) {
                 this.tableFields.push({
@@ -61,6 +53,20 @@ export class CatalogCategoryComponent extends PageTableAbstractComponent<Product
                     outputProperties: field.outputProperties
                 });
             }
+        });
+        this.tableFields.unshift({
+            name: 'id',
+            sortName: 'id',
+            title: 'ID',
+            outputType: 'text',
+            outputProperties: {}
+        });
+        this.tableFields.push({
+            name: 'isActive',
+            sortName: 'isActive',
+            title: 'STATUS',
+            outputType: 'boolean',
+            outputProperties: {}
         });
     }
 

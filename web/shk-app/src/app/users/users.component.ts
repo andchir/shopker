@@ -157,7 +157,7 @@ export class UsersComponent extends PageTableAbstractComponent<User> {
         {
             name: 'isActive',
             sortName: 'isActive',
-            title: 'ACTIVE',
+            title: 'STATUS',
             outputType: 'boolean',
             outputProperties: {}
         }

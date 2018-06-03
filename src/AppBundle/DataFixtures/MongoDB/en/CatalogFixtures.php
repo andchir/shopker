@@ -3,6 +3,7 @@
 namespace AppBundle\DataFixtures\MongoDB\en;
 
 use AppBundle\Controller\Admin\ProductController;
+use AppBundle\Service\SettingsService;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -22,10 +23,14 @@ class CatalogFixtures extends Fixture
     {
         $this->dispatcher = $this->container->get('event_dispatcher');
 
+        /** @var SettingsService $settingsService */
+        $settingsService = $this->container->get('app.settings');
+        $settings = $settingsService->getSettingsFromYaml('settings', false);
+
         $this->productController = new ProductController();
         $this->productController->setContainer($this->container);
 
-        $incrementIdsCollection = $this->productController->getCollection('doctrine_increment_ids');
+        $incrementIdsCollection = $this->productController->getCollection('doctrine_increment_ids', $settings['mongodb_database']);
         $incrementIdsCollection->remove([]);
 
         $categoryUpdateListener = new CategoryUpdateListener();
@@ -35,12 +40,12 @@ class CatalogFixtures extends Fixture
 
         /** @var ContentType $contentType */
         $contentType = $this->getReference('content_type_catalog');
-        $collection = $this->productController->getCollection($contentType->getCollection());
+        $collection = $this->productController->getCollection($contentType->getCollection(), $settings['mongodb_database']);
         $collection->remove([]);
 
         /** @var ContentType $contentType */
         $contentTypeText = $this->getReference('content_type_text');
-        $collectionText = $this->productController->getCollection($contentTypeText->getCollection());
+        $collectionText = $this->productController->getCollection($contentTypeText->getCollection(), $settings['mongodb_database']);
         $collectionText->remove([]);
 
         $this->loadCatalog($manager);
@@ -747,18 +752,22 @@ class CatalogFixtures extends Fixture
      */
     public function loadCategoryContent(ObjectManager $manager, Category $category, $data)
     {
+        /** @var SettingsService $settingsService */
+        $settingsService = $this->container->get('app.settings');
+        $settings = $settingsService->getSettingsFromYaml('settings', false);
+
         /** @var ContentType $contentType */
         $contentType = $category->getContentType();
-        $collection = $this->productController->getCollection($contentType->getCollection());
+        $collection = $this->productController->getCollection($contentType->getCollection(), $settings['mongodb_database']);
 
         foreach ($data as $product) {
             $product['parentId'] = $category->getId();
             $product['isActive'] = true;
-            $product['_id'] = $this->productController->getNextId($contentType->getCollection());
+            $product['_id'] = $this->productController->getNextId($contentType->getCollection(), $settings['mongodb_database']);
             $collection->insert($product);
         }
 
-        $this->productController->updateFiltersData($category);
+        $this->productController->updateFiltersData($category, $settings['mongodb_database']);
 
         return true;
     }

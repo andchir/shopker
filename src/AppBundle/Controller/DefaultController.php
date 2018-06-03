@@ -15,8 +15,6 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\TranslatorInterface;
-use Symfony\Component\Yaml\Yaml;
-use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\HttpKernel\KernelInterface;

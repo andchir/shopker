@@ -1,6 +1,7 @@
 homepage:
-    path: '/'
-    defaults: { _controller: AppBundle\Controller\DefaultController::homepageAction }
+    path: /
+    defaults:
+        _controller: AppBundle\Controller\DefaultController::homepageAction
 
 logout:
     path: /logout
@@ -12,6 +13,6 @@ admin:
 _liip_imagine:
     resource: '@LiipImagineBundle/Resources/config/routing.xml'
 
-app:
+app_annotations:
     resource: '@AppBundle/Controller/'
     type: annotation

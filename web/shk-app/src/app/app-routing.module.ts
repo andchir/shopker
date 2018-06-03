@@ -2,10 +2,6 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
 import {NotFoundComponent} from './not-found.component';
-// import {CatalogComponent} from './catalog.component';
-// import {CatalogCategoryComponent} from './catalog-category.component';
-// import {ContentTypesComponent} from './content-types.component';
-// import {FieldTypesComponent} from './field-types.component';
 
 const routes: Routes = [
     {

@@ -1,11 +1,11 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {NgbModal, NgbActiveModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {Observable} from 'rxjs/Observable';
-import * as _ from "lodash";
+import * as _ from 'lodash';
 
-import {Category} from "./models/category.model";
-import {PageTableAbstractComponent} from '../page-table.abstract'
-import {ProductModalContent} from './product.component';
+import {Category} from './models/category.model';
+import {PageTableAbstractComponent} from '../page-table.abstract';
+import {ProductModalContentComponent} from './product.component';
 import {ContentType} from './models/content_type.model';
 import {Product} from './models/product.model';
 import {QueryOptions} from '../models/query-options';
@@ -14,7 +14,7 @@ import {ProductsService} from './services/products.service';
 import {ContentTypesService} from './services/content_types.service';
 
 @Component({
-    selector: 'catalog-category',
+    selector: 'app-catalog-category',
     templateUrl: 'templates/catalog-category.html'
 })
 export class CatalogCategoryComponent extends PageTableAbstractComponent<Product> {
@@ -34,12 +34,8 @@ export class CatalogCategoryComponent extends PageTableAbstractComponent<Product
         super(dataService, activeModal, modalService);
     }
 
-    ngOnInit(): void {
-
-    }
-
     updateTableConfig(): void {
-        if(!this.currentContentType){
+        if (!this.currentContentType) {
             return;
         }
         this.tableFields = [];
@@ -71,7 +67,7 @@ export class CatalogCategoryComponent extends PageTableAbstractComponent<Product
     }
 
     getModalContent() {
-        return ProductModalContent;
+        return ProductModalContentComponent;
     }
 
     getContentType(): Observable<ContentType> {

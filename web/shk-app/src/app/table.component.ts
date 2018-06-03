@@ -29,8 +29,8 @@ export class TableComponent implements OnInit {
     }
 
     selectSortBy(fieldName: string): void {
-        if (this.queryOptions.sort_by == fieldName) {
-            this.queryOptions.sort_dir = this.queryOptions.sort_dir == 'asc' ? 'desc' : 'asc';
+        if (this.queryOptions.sort_by === fieldName) {
+            this.queryOptions.sort_dir = this.queryOptions.sort_dir === 'asc' ? 'desc' : 'asc';
         } else {
             this.queryOptions.sort_by = fieldName;
         }
@@ -50,7 +50,7 @@ export class TableComponent implements OnInit {
     setSelected(event, itemId: number): void {
         const index = this.selectedIds.indexOf(itemId);
         if (event.target.checked) {
-            if (index == -1) {
+            if (index === -1) {
                 this.selectedIds.push(itemId);
             }
         } else if (index > -1) {
@@ -58,7 +58,7 @@ export class TableComponent implements OnInit {
         }
     }
 
-    pageChange(): void{
+    pageChange(): void {
         this.actionRequest.emit(['changeQuery', this.queryOptions]);
     }
 

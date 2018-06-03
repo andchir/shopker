@@ -9,7 +9,7 @@ import {AppComponent, AlertModalContent, ConfirmModalContent} from './app.compon
 import {NotFoundComponent} from './not-found.component';
 import {SharedModule} from './shared.module';
 import {AppSettings} from './services/app-settings.service';
-import {AppRoutingModule}     from './app-routing.module';
+import {AppRoutingModule} from './app-routing.module';
 
 import localeEn from '@angular/common/locales/en';
 import localeRu from '@angular/common/locales/ru';

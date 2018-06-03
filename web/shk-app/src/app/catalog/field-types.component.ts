@@ -1,11 +1,9 @@
 import {Component, Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
 import {NgbModal, NgbActiveModal, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import {FormBuilder, Validators} from '@angular/forms';
 
 import {FieldType} from './models/field-type.model';
 import {FieldTypeProperty} from './models/field-type-property.model';
-import {DataService} from '../services/data-service.abstract';
 import {PageTableAbstractComponent} from '../page-table.abstract';
 import {ModalContentAbstractComponent} from '../modal.abstract';
 import {QueryOptions} from '../models/query-options';
@@ -17,7 +15,7 @@ import {FieldTypesService} from './services/field-types.service';
     selector: 'field-type-modal-content',
     templateUrl: 'templates/modal-field_type.html'
 })
-export class FieldTypeModalContent extends ModalContentAbstractComponent<FieldType> {
+export class FieldTypeModalContentComponent extends ModalContentAbstractComponent<FieldType> {
 
     model: FieldType = new FieldType(0, '', '', '', true, [], []);
 
@@ -63,20 +61,20 @@ export class FieldTypeModalContent extends ModalContentAbstractComponent<FieldTy
         if(!this.model[type]){
             this.model[type] = [];
         }
-        this.model[type].push(new FieldTypeProperty('','',''));
+        this.model[type].push(new FieldTypeProperty('', '', ''));
     }
 
-    deleteRow(index: number, type: string){
-        if(this.model[type].length < index + 1){
+    deleteRow(index: number, type: string) {
+        if (this.model[type].length < index + 1) {
             return;
         }
         this.model[type].splice(index, 1);
     }
 
-    save(){
+    save() {
         this.submitted = true;
 
-        if(!this.form.valid){
+        if (!this.form.valid) {
             this.onValueChanged('form');
             this.submitted = false;
             return;
@@ -100,16 +98,9 @@ export class FieldTypeModalContent extends ModalContentAbstractComponent<FieldTy
     templateUrl: 'templates/catalog-field_types.html'
 })
 export class FieldTypesComponent extends PageTableAbstractComponent<FieldType> {
-    title: string = 'Field types';
-    queryOptions: QueryOptions = new QueryOptions('name', 'asc', 1, 10, 0, 0);
 
-    constructor(
-        dataService: FieldTypesService,
-        activeModal: NgbActiveModal,
-        modalService: NgbModal
-    ) {
-        super(dataService, activeModal, modalService);
-    }
+    title = 'Field types';
+    queryOptions: QueryOptions = new QueryOptions('name', 'asc', 1, 10, 0, 0);
 
     tableFields = [
         {
@@ -142,8 +133,16 @@ export class FieldTypesComponent extends PageTableAbstractComponent<FieldType> {
         }
     ];
 
-    getModalContent(){
-        return FieldTypeModalContent;
+    constructor(
+        dataService: FieldTypesService,
+        activeModal: NgbActiveModal,
+        modalService: NgbModal
+    ) {
+        super(dataService, activeModal, modalService);
+    }
+
+    getModalContent() {
+        return FieldTypeModalContentComponent;
     }
 
 }

@@ -33,9 +33,9 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
             firstDayOfWeek: 0,
             dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
             dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-            dayNamesMin: ['Su','Mo','Tu','We','Th','Fr','Sa'],
-            monthNames: ['January','February','March','April','May','June','July','August','September','October','November','December'],
-            monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun','Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            dayNamesMin: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+            monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             today: 'Today',
             clear: 'Clear'
         },
@@ -44,8 +44,8 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
             dayNames: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'],
             dayNamesShort: ['Вос', 'Пон', 'Втор', 'Среда', 'Чет', 'Пятн', 'Суб'],
             dayNamesMin: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
-            monthNames: ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'],
-            monthNamesShort: ['Янв', 'Февр', 'Мар', 'Апр', 'Май', 'Июнь','Июль', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
+            monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+            monthNamesShort: ['Янв', 'Февр', 'Мар', 'Апр', 'Май', 'Июнь', 'Июль', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
             today: 'Сегодня',
             clear: 'Сбросить'
         }
@@ -88,13 +88,13 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
             this.setFieldOptions(field);
             this.setValue(field);
             this.formErrors[field.name] = '';
-            if(!this.validationMessages[field.name]){
+            if (!this.validationMessages[field.name]) {
                 this.validationMessages[field.name] = {};
             }
 
             if (!this.form.controls[field.name]) {
-                let validators = this.getValidators(field);
-                let control = new FormControl(this.model[field.name], validators);
+                const validators = this.getValidators(field);
+                const control = new FormControl(this.model[field.name], validators);
                 this.form.addControl(field.name, control);
             }
         }.bind(this));
@@ -202,11 +202,11 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                     ? String(field.inputProperties.values_list).split('||')
                     : [];
                 valueArr.forEach((optStr, index) => {
-                    let opts = optStr.split('==');
+                    const opts = optStr.split('==');
                     if (!opts[1]) {
                         opts[1] = opts[0];
                     }
-                    field.options.push(_.zipObject(['title','value'], opts));
+                    field.options.push(_.zipObject(['title', 'value'], opts));
                 });
 
                 break;
@@ -222,11 +222,11 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
 
                 this.fieldsMultivalues[field.name] = new MultiValues([], []);
                 valueArr.forEach((optStr, index) => {
-                    let opts = optStr.split('==');
+                    const opts = optStr.split('==');
                     if (!opts[1]) {
                         opts[1] = opts[0];
                     }
-                    field.options.push(_.zipObject(['title','value'], opts));
+                    field.options.push(_.zipObject(['title', 'value'], opts));
                     this.fieldsMultivalues[field.name].values.push(opts[1]);
                     this.fieldsMultivalues[field.name].checked.push(this.model[field.name].indexOf(opts[1]) > -1);
                 });
@@ -254,7 +254,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                 }
                 break;
             case 'number':
-                defaultValue = parseInt(String(defaultValue));
+                defaultValue = parseInt(String(defaultValue), 10);
                 break;
             case 'parameters':
                 if (typeof defaultValue !== 'object') {
@@ -290,7 +290,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
     }
 
     getValidators(field: ContentField): any[] {
-        let validators = [];
+        const validators = [];
         if(field.required){
             validators.push(Validators.required);
             this.validationMessages[field.name].required = field.title + ' is required.';
@@ -303,7 +303,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
         for (let key in object1) {
             if (object1.hasOwnProperty(key)) {
                 if (isNumeric(object1[key])) {
-                    object1[key] = parseInt(String(object1[key]));
+                    object1[key] = parseInt(String(object1[key]), 10);
                 }
             }
         }

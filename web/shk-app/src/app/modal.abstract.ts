@@ -1,7 +1,7 @@
 import {Input, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {NgbAccordion, NgbActiveModal, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
-import * as _ from "lodash";
+import * as _ from 'lodash';
 
 import {SystemNameService} from './services/system-name.service';
 import {DataService} from './services/data-service.abstract';
@@ -12,8 +12,8 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
     @Input() isItemCopy: boolean;
     @Input() isEditMode: boolean;
 
-    submitted: boolean = false;
-    loading: boolean = false;
+    submitted = false;
+    loading = false;
     errorMessage: string;
     form: FormGroup;
     formErrors: { [key: string]: string } = {};
@@ -69,7 +69,7 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
 
     /** Build form groups */
     buildForm(): void {
-        let controls = this.buildControls(this.formFields, 'model');
+        const controls = this.buildControls(this.formFields, 'model');
         this.form = this.fb.group(controls);
         this.form.valueChanges
             .subscribe(() => this.onValueChanged('form'));
@@ -82,7 +82,7 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
             if (!options.hasOwnProperty(key)) {
                 continue;
             }
-            let opts = options[key];
+            const opts = options[key];
             if (!this[modelName][key]) {
                 this[modelName][key] = opts.value;
             }
@@ -105,14 +105,14 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
         if (!this[formName]) {
             return;
         }
-        let data = this[formName].value;
+        const data = this[formName].value;
 
         for (let fieldName in data) {
             if (!data.hasOwnProperty(fieldName)) {
                 continue;
             }
             this.formErrors[keyPrefix + fieldName] = '';
-            let control = this[formName].get(fieldName);
+            const control = this[formName].get(fieldName);
             if (control && (control.dirty || this[keyPrefix + 'submitted']) && !control.valid) {
                 for (let key in control.errors) {
                     if (this.validationMessages[keyPrefix + fieldName][key]) {
@@ -127,7 +127,7 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
 
     /** Element display toggle */
     displayToggle(element: HTMLElement, display?: boolean): void {
-        display = display || element.style.display == 'none';
+        display = display || element.style.display === 'none';
         element.style.display = display ? 'block' : 'none';
     }
 
@@ -140,13 +140,13 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
     }
 
     generateName(model): void {
-        let title = model.title || '';
+        const title = model.title || '';
         model.name = this.systemNameService.generateName(title);
     }
 
     /** Close modal */
     closeModal() {
-        let reason = this.itemId ? 'edit' : 'create';
+        const reason = this.itemId ? 'edit' : 'create';
         this.activeModal.close({reason: reason, data: this.model});
     }
 

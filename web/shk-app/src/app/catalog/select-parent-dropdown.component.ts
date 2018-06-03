@@ -1,7 +1,7 @@
 import {Component, OnInit, Input, forwardRef, ViewChild} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {TreeNode} from 'primeng/primeng'
-import * as _ from "lodash";
+import * as _ from 'lodash';
 
 import {CategoriesService} from './services/categories.service';
 
@@ -11,7 +11,7 @@ import {CategoriesService} from './services/categories.service';
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(()=> SelectParentDropdownComponent),
+            useExisting: forwardRef(() => SelectParentDropdownComponent),
             multi: true
         }
     ]
@@ -19,8 +19,6 @@ import {CategoriesService} from './services/categories.service';
 export class SelectParentDropdownComponent implements OnInit, ControlValueAccessor {
 
     private _disabled = false;
-    onChange: (value: number) => void = () => null;
-    onTouched: () => void = () => null;
     loadingCategories = false;
     categoriesTree: TreeNode[] = [];
     currentCategoryNode: TreeNode;
@@ -45,6 +43,9 @@ export class SelectParentDropdownComponent implements OnInit, ControlValueAccess
     ngOnInit(): void {
         this.getCategoriesTree();
     }
+
+    onChange: (value: number) => void = () => null;
+    onTouched: () => void = () => null;
 
     getCategoriesTree(): void {
         this.loadingCategories = true;

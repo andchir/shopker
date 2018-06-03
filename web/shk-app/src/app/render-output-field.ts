@@ -56,7 +56,7 @@ export class OutputFieldComponent implements OnInit {
         for (let key in object1) {
             if (object1.hasOwnProperty(key)) {
                 if (isNumeric(object1[key])) {
-                    object1[key] = parseInt(String(object1[key]));
+                    object1[key] = parseInt(String(object1[key]), 10);
                 }
             }
         }

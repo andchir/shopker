@@ -5,13 +5,13 @@ import {SharedModule} from '../shared.module';
 import {CatalogRoutingModule} from './catalog-routing.module';
 import {CatalogComponent} from './catalog.component';
 import {CatalogCategoryComponent} from './catalog-category.component';
-import {ContentTypeModalContent, ContentTypesComponent} from './content-types.component';
-import {FieldTypeModalContent, FieldTypesComponent} from './field-types.component';
+import {ContentTypeModalContentComponent, ContentTypesComponent} from './content-types.component';
+import {FieldTypeModalContentComponent, FieldTypesComponent} from './field-types.component';
 import {ListRecursiveComponent} from '../list-recursive.component';
 import {SelectParentDropdownComponent} from './select-parent-dropdown.component';
 
 import {CategoriesListComponent, CategoriesMenuComponent, CategoriesModalComponent} from './categories.component';
-import {ProductModalContent} from './product.component';
+import {ProductModalContentComponent} from './product.component';
 
 import {ProductsService} from './services/products.service';
 import {SystemNameService} from '../services/system-name.service';
@@ -38,9 +38,9 @@ import {FieldTypesService} from './services/field-types.service';
         CategoriesMenuComponent,
 
         CategoriesModalComponent,
-        ProductModalContent,
-        ContentTypeModalContent,
-        FieldTypeModalContent
+        ProductModalContentComponent,
+        ContentTypeModalContentComponent,
+        FieldTypeModalContentComponent
     ],
     providers: [
         ProductsService,
@@ -53,9 +53,9 @@ import {FieldTypesService} from './services/field-types.service';
     ],
     entryComponents: [
         CategoriesModalComponent,
-        ProductModalContent,
-        ContentTypeModalContent,
-        FieldTypeModalContent
+        ProductModalContentComponent,
+        ContentTypeModalContentComponent,
+        FieldTypeModalContentComponent
     ]
 })
 export class CatalogModule {

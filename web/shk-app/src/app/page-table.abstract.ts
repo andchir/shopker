@@ -8,7 +8,7 @@ import { DataService } from './services/data-service.abstract';
 export abstract class PageTableAbstractComponent<M> implements OnInit {
     errorMessage: string;
     items: M[] = [];
-    title: string = 'Page with data table';
+    title = 'Page with data table';
     modalRef: NgbModalRef;
     loading = false;
     selectedIds: number[] = [];
@@ -35,7 +35,7 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
         this.modalRef.result.then((result) => {
             this.getList();
         }, (reason) => {
-            //console.log( 'reason', reason );
+            // console.log( 'reason', reason );
         });
     }
 
@@ -52,7 +52,7 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
         this.modalRef.componentInstance.modalTitle = 'Confirm';
         this.modalRef.componentInstance.modalContent = 'Are you sure you want to remove this item?';
         this.modalRef.result.then((result) => {
-            if (result == 'accept') {
+            if (result === 'accept') {
                 this.deleteItem(itemId);
             }
         });
@@ -80,7 +80,7 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
         }
         this.confirmAction('Are you sure you want to delete all selected items?')
             .then((result) => {
-                if (result == 'accept') {
+                if (result === 'accept') {
                     this.dataService.deleteByArray(this.selectedIds)
                         .subscribe(res => {
                             this.getList();
@@ -100,7 +100,7 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
     deleteItem(itemId: number): void {
         this.confirmAction('Are you sure you want to remove this item?')
             .then((result) => {
-                if (result == 'accept') {
+                if (result === 'accept') {
                     this.dataService.deleteItem(itemId)
                         .subscribe((res) => {
                             this.getList();

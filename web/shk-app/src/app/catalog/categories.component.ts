@@ -5,7 +5,7 @@ import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {Observable} from 'rxjs/Observable';
 import {TreeNode} from 'primeng/primeng'
 import 'rxjs/add/operator/switchMap';
-import * as _ from "lodash";
+import * as _ from 'lodash';
 
 import {ContentType} from './models/content_type.model';
 import {Category} from './models/category.model';
@@ -22,13 +22,13 @@ import {ContentTypesService} from './services/content_types.service';
  * @class CategoriesModalComponent
  */
 @Component({
-    selector: 'category-modal-content',
+    selector: 'app-category-modal-content',
     templateUrl: 'templates/modal-category.html'
 })
 export class CategoriesModalComponent extends ModalContentAbstractComponent<Category> {
 
     @Input() currentCategory: Category;
-    @Input() isRoot: boolean = false;
+    @Input() isRoot = false;
     model: Category = new Category(null, false, 0, '', '', '', '', true);
     contentTypes: ContentType[] = [];
     loadingCategories = false;
@@ -200,7 +200,7 @@ export class CategoriesMenuComponent implements OnInit {
                         .subscribe(
                             params => {
                                 this.categoryId = params.get('categoryId')
-                                    ? parseInt(params.get('categoryId'))
+                                    ? parseInt(params.get('categoryId'), 10)
                                     : 0;
                                 this.selectCurrent();
                             }
@@ -259,7 +259,7 @@ export class CategoriesMenuComponent implements OnInit {
         this.modalRef.componentInstance.isRoot = isRoot;
         this.modalRef.componentInstance.isEditMode = isEditMode;
         this.modalRef.result.then((result) => {
-            this.currentCategory.id = null;// For update current category data
+            this.currentCategory.id = null; // For update current category data
             this.getCategories();
         }, (reason) => {
 
@@ -272,12 +272,12 @@ export class CategoriesMenuComponent implements OnInit {
      * @param data
      */
     updateCategoryData(itemId: number, data: any): void {
-        let index = _.findIndex(this.categories, {id: itemId});
+        const index = _.findIndex(this.categories, {id: itemId});
         if (index === -1) {
             return;
         }
         let category = this.categories[index];
-        if (category.parentId == data.parentId) {
+        if (category.parentId === data.parentId) {
             Object.keys(category).forEach(function (k, i) {
                 if (data[k]) {
                     category[k] = data[k];
@@ -293,15 +293,15 @@ export class CategoriesMenuComponent implements OnInit {
      * @param itemId
      */
     deleteCategoryItemConfirm(itemId: number): void {
-        let index = _.findIndex(this.categories, {id: itemId});
-        if (index == -1) {
+        const index = _.findIndex(this.categories, {id: itemId});
+        if (index === -1) {
             return;
         }
         this.modalRef = this.modalService.open(ConfirmModalContent);
         this.modalRef.componentInstance.modalTitle = 'Confirm';
         this.modalRef.componentInstance.modalContent = 'Are you sure you want to remove category "' + this.categories[index].title + '"?';
         this.modalRef.result.then((result) => {
-            if (result == 'accept') {
+            if (result === 'accept') {
                 this.deleteCategoryItem(itemId);
             }
         }, (reason) => {

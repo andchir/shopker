@@ -169,6 +169,52 @@ abstract class StorageControllerAbstract extends BaseController
     }
 
     /**
+     * @Route(
+     *     "/{action}/batch",
+     *     requirements={"action"},
+     *     defaults={"action": "delete"}
+     * )
+     * @Method({"POST"})
+     * @param Request $request
+     * @param string $action
+     * @return JsonResponse
+     */
+    public function batchAction(Request $request, $action = 'delete')
+    {
+        $data = $request->getContent()
+            ? json_decode($request->getContent(), true)
+            : [];
+
+        if(empty($data['ids'])){
+            return $this->setError('Bad data.');
+        }
+
+        $repository = $this->getRepository();
+
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $qb = $dm->createQueryBuilder($repository->getClassName())
+            ->field('_id')->in($data['ids']);
+
+        $items = $qb->getQuery()->execute();
+
+        foreach ($items as $item) {
+
+            switch ($action) {
+                case 'delete':
+                    $this->deleteItem($item->getId());
+                    break;
+                case 'block':
+                    $item->setIsActive(!$item->getIsActive());
+                    break;
+            }
+        }
+        $dm->flush();
+
+        return new JsonResponse([]);
+    }
+
+    /**
      * @param $name
      * @param null $itemId
      * @param null $parentId

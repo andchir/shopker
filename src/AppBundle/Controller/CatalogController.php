@@ -77,7 +77,8 @@ class CatalogController extends ProductController
 
         // Get child products
         $criteria = [
-            'parentId' => $currentCategory->getId()
+            'parentId' => $currentCategory->getId(),
+            'isActive' => true
         ];
         $this->applyFilters($queryOptions['filter'], $filters, $criteria);
 
@@ -146,7 +147,8 @@ class CatalogController extends ProductController
 
         $currentPage = $collection->findOne([
             'name' => $pageAlias,
-            'parentId' => $category->getId()
+            'parentId' => $category->getId(),
+            'isActive' => true
         ]);
         if (!$currentPage) {
             throw $this->createNotFoundException();

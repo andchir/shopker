@@ -1,11 +1,11 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter, ViewChild} from '@angular/core';
 import {Router} from '@angular/router';
 import {QueryOptions} from './models/query-options';
 import * as _ from 'lodash';
 
 @Component({
-    selector: 'cmp-table',
-    templateUrl: 'templates/cmp-table.html'
+    selector: 'app-table',
+    templateUrl: 'templates/app-table.html'
 })
 export class TableComponent implements OnInit {
     @Input() items: any[];
@@ -18,6 +18,7 @@ export class TableComponent implements OnInit {
     @Input() selectedIds: number[] = [];
     @Output() actionRequest = new EventEmitter();
     @Output() changeRequest = new EventEmitter();
+    @ViewChild('tableElement') tableElement;
 
     constructor(
         public router: Router
@@ -39,7 +40,7 @@ export class TableComponent implements OnInit {
 
     selectAll(event): void {
         if (event.target.checked) {
-            for (let item of this.items) {
+            for (const item of this.items) {
                 this.selectedIds.push(item.id);
             }
         } else {
@@ -58,6 +59,14 @@ export class TableComponent implements OnInit {
         }
     }
 
+    clearSelected(): void {
+        this.selectedIds.splice(0);
+        const checkboxSelectAllElement = this.tableElement.nativeElement.querySelector('input[type="checkbox"]');
+        if (checkboxSelectAllElement) {
+            checkboxSelectAllElement.checked = false;
+        }
+    }
+
     pageChange(): void {
         this.actionRequest.emit(['changeQuery', this.queryOptions]);
     }
@@ -68,6 +77,10 @@ export class TableComponent implements OnInit {
 
     getIsSelected(itemId: number): boolean {
         return this.selectedIds.lastIndexOf(itemId) > -1;
+    }
+
+    getIsSelectedAll(): boolean {
+        return this.selectedIds.length === this.items.length;
     }
 
     optionUpdate(e): void {

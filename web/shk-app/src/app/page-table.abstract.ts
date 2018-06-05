@@ -1,9 +1,9 @@
-import { OnInit } from '@angular/core';
-import { NgbModal, NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { QueryOptions } from './models/query-options';
-import { AlertModalContent, ConfirmModalContent } from './app.component';
+import {OnInit, ViewChild} from '@angular/core';
+import {NgbModal, NgbActiveModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
+import {QueryOptions} from './models/query-options';
+import {AlertModalContent, ConfirmModalContent} from './app.component';
 
-import { DataService } from './services/data-service.abstract';
+import {DataService} from './services/data-service.abstract';
 
 export abstract class PageTableAbstractComponent<M> implements OnInit {
     errorMessage: string;
@@ -14,6 +14,7 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
     selectedIds: number[] = [];
     collectionSize = 0;
     queryOptions: QueryOptions = new QueryOptions('name', 'asc', 1, 10, 0, 0);
+    @ViewChild('table') table;
 
     abstract getModalContent();
 
@@ -70,7 +71,12 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
             this.showAlert('Nothing is selected.');
             return;
         }
-        console.log('blockSelected', this.selectedIds);
+        this.dataService.actionBatch(this.selectedIds, 'block')
+            .subscribe(res => {
+                    this.clearSelected();
+                    this.getList();
+                },
+                err => this.showAlert(err.error || 'Error'));
     }
 
     deleteSelected() {
@@ -81,8 +87,9 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
         this.confirmAction('Are you sure you want to delete all selected items?')
             .then((result) => {
                 if (result === 'accept') {
-                    this.dataService.deleteByArray(this.selectedIds)
+                    this.dataService.actionBatch(this.selectedIds, 'delete')
                         .subscribe(res => {
+                            this.clearSelected();
                             this.getList();
                         },
                             err => this.showAlert(err.error || 'Error'));
@@ -109,6 +116,12 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
                         });
                 }
             });
+    }
+
+    clearSelected(): void {
+        if (this.table) {
+            this.table.clearSelected();
+        }
     }
 
     actionRequest(actionValue: [string, number]): void {

@@ -27,4 +27,11 @@
     <div class="clearfix"></div>
 </div>
 
-<cmp-table [items]="items" [(selectedIds)]="selectedIds" [collectionSize]="collectionSize" [queryOptions]="queryOptions" [tableFields]="tableFields" [(loading)]="loading" (actionRequest)="actionRequest($event)"></cmp-table>
+<app-table
+        [items]="items"
+        [(selectedIds)]="selectedIds"
+        [collectionSize]="collectionSize"
+        [queryOptions]="queryOptions"
+        [tableFields]="tableFields"
+        [(loading)]="loading"
+        (actionRequest)="actionRequest($event)" #table></app-table>

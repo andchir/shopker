@@ -371,14 +371,19 @@ class ProductController extends BaseProductController
     }
 
     /**
-     * @Route("/{categoryId}/batch")
+     * @Route(
+     *     "/{categoryId}/{action}/batch",
+     *     requirements={"action"},
+     *     defaults={"action": "delete"}
+     * )
      * @Method({"POST"})
      * @ParamConverter("category", class="AppBundle:Category", options={"id" = "categoryId"})
      * @param Request $request
-     * @param Category $category
+     * @param Category|null $category
+     * @param string $action
      * @return JsonResponse
      */
-    public function deleteBatchAction(Request $request, Category $category = null)
+    public function batchAction(Request $request, Category $category = null, $action = 'delete')
     {
         if (!$category) {
             return $this->setError('Category not found.');
@@ -402,14 +407,23 @@ class ProductController extends BaseProductController
             '_id' => ['$in' => $data['ids']]
         ]);
 
-        $deleted = 0;
+        $count = 0;
         foreach ($documents as $document) {
-            if (!empty($this->deleteItem($contentType, $document))) {
-                $deleted++;
+            switch ($action) {
+                case 'delete':
+                    if (!empty($this->deleteItem($contentType, $document))) {
+                        $count++;
+                    }
+                    break;
+                case 'block':
+                    if (!empty($this->blockItem($contentType, $document))) {
+                        $count++;
+                    }
+                    break;
             }
         }
 
-        if ($deleted === count($data['ids'])) {
+        if ($count === count($data['ids'])) {
             return new JsonResponse([]);
         } else {
             return $this->setError('Error.');
@@ -468,6 +482,24 @@ class ProductController extends BaseProductController
         return $collection->remove([
             '_id' => $itemData['_id']
         ]);
+    }
+
+    /**
+     * @param ContentType $contentType
+     * @param $itemData
+     * @return array|bool
+     */
+    public function blockItem(ContentType $contentType, $itemData)
+    {
+        $collection = $this->getCollection($contentType->getCollection());
+        return $collection->update(
+            [
+                '_id' => $itemData['_id']
+            ],
+            [
+                '$set' => ['isActive' => !$itemData['isActive']]
+            ]
+        );
     }
 
     /**

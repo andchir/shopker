@@ -142,39 +142,11 @@ class ContentTypeController extends StorageControllerAbstract
     }
 
     /**
-     * @Route("/batch")
-     * @Method({"DELETE"})
-     * @param Request $request
-     * @return JsonResponse
+     * @param int $itemId
      */
-    public function deleteBatch(Request $request)
+    public function deleteItem($itemId)
     {
-        $data = $request->getContent()
-            ? json_decode($request->getContent(), true)
-            : [];
-
-        if(empty($data['ids'])){
-            return $this->setError('Bad data.');
-        }
-
-        $repository = $this->getRepository();
-
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
-        $qb = $dm->createQueryBuilder($repository->getClassName())
-            ->field('_id')->in($data['ids']);
-
-        $contentTypes = $qb->getQuery()->execute();
-
-        foreach ($contentTypes as $contentType) {
-
-            // TODO: delete cascade
-
-            //$dm->remove($contentType);
-        }
-        $dm->flush();
-
-        return new JsonResponse([]);
+        // return parent::deleteItem($itemId); // TODO: Change
     }
 
     /**

@@ -1,10 +1,10 @@
 <div class="table-responsive-" [class.loading]="loading">
-    <table class="table table-striped table-divided mb-0">
+    <table class="table table-striped table-divided mb-0" #tableElement>
         <thead>
             <tr>
                 <th class="text-left">
                     <div class="custom-control custom-checkbox custom-checkbox-single" [hidden]="items.length === 0">
-                        <input type="checkbox" class="custom-control-input" id="fieldSelectAll" (click)="selectAll($event)">
+                        <input type="checkbox" class="custom-control-input" id="fieldSelectAll" (click)="selectAll($event)" [checked]="getIsSelectedAll()">
                         <label class="custom-control-label" for="fieldSelectAll"></label>
                     </div>
                 </th>

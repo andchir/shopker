@@ -29,7 +29,7 @@
             <div class="clearfix"></div>
         </div>
 
-        <cmp-table [items]="items"
+        <app-table [items]="items"
                    [(selectedIds)]="selectedIds"
                    [collectionSize]="collectionSize"
                    [queryOptions]="queryOptions"
@@ -37,7 +37,7 @@
                    [(loading)]="loading"
                    [isCloneAllowed]="false"
                    (actionRequest)="actionRequest($event)"
-                   (changeRequest)="changeRequest($event)"></cmp-table>
+                   (changeRequest)="changeRequest($event)"></app-table>
 
     </div>
 </div>

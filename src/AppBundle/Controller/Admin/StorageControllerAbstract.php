@@ -110,13 +110,25 @@ abstract class StorageControllerAbstract extends BaseController
      * @param int $itemId
      * @return JsonResponse
      */
+    public function deleteItemAction($itemId)
+    {
+        if(!$this->deleteItem($itemId)){
+            return $this->setError('Item not found.');
+        }
+        return new JsonResponse([]);
+    }
+
+    /**
+     * @param $itemId
+     * @return bool
+     */
     public function deleteItem($itemId)
     {
         $repository = $this->getRepository();
 
         $item = $repository->find($itemId);
         if(!$item){
-            return $this->setError('Item not found.');
+            return false;
         }
 
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
@@ -124,7 +136,30 @@ abstract class StorageControllerAbstract extends BaseController
         $dm->remove($item);
         $dm->flush();
 
-        return new JsonResponse([]);
+        return true;
+    }
+
+    /**
+     * @param $itemId
+     * @param bool $isActive
+     * @return bool
+     */
+    public function blockItem($itemId, $isActive = false)
+    {
+        $repository = $this->getRepository();
+
+        $item = $repository->find($itemId);
+        if(!$item){
+            return false;
+        }
+
+        $item->setIsActive($isActive);
+
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $dm->flush();
+
+        return true;
     }
 
     /**
@@ -205,11 +240,10 @@ abstract class StorageControllerAbstract extends BaseController
                     $this->deleteItem($item->getId());
                     break;
                 case 'block':
-                    $item->setIsActive(!$item->getIsActive());
+                    $this->blockItem($item->getId(), !$item->getIsActive());
                     break;
             }
         }
-        $dm->flush();
 
         return new JsonResponse([]);
     }

@@ -61,6 +61,56 @@ class UserController extends StorageControllerAbstract
     }
 
     /**
+     * @param $itemId
+     * @return bool
+     */
+    public function deleteItem($itemId)
+    {
+        /** @var User $currentUser */
+        $currentUser = $this->getUser();
+        $repository = $this->getRepository();
+
+        /** @var User $item */
+        $item = $repository->find($itemId);
+        if(!$item || $item->getId() === $currentUser->getId()){
+            return false;
+        }
+
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $dm->remove($item);
+        $dm->flush();
+
+        return true;
+    }
+
+    /**
+     * @param $itemId
+     * @param bool $isActive
+     * @return bool
+     */
+    public function blockItem($itemId, $isActive = false)
+    {
+        /** @var User $currentUser */
+        $currentUser = $this->getUser();
+        $repository = $this->getRepository();
+
+        /** @var User $item */
+        $item = $repository->find($itemId);
+        if(!$item || $item->getId() === $currentUser->getId()){
+            return false;
+        }
+
+        $item->setIsActive($isActive);
+
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $dm->flush();
+
+        return true;
+    }
+
+    /**
      * @Route("/roles")
      * @Method({"GET"})
      * @return JsonResponse

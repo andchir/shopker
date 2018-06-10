@@ -205,10 +205,6 @@ class AppExtension extends AbstractExtension
      */
     public function categoriesTreeFunction($parentId = 0, $chunkName = 'menu_tree', $data = null, $cacheEnabled = false)
     {
-        if (empty($this->container->getParameter('mongodb_database'))
-            || empty($this->container->getParameter('mongodb_user'))) {
-                return '';
-        }
         $request = $request = $this->requestStack->getCurrentRequest();
         $currentUri = substr($request->getPathInfo(), 1);
         $uriArr = UtilsService::getUriArray($currentUri);

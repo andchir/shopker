@@ -25,6 +25,10 @@ class CatalogController extends ProductController
      */
     public function catalogAction(Request $request, $uri)
     {
+        if (empty($this->getParameter('mongodb_database'))
+            || empty($this->getParameter('mongodb_user'))) {
+                return $this->redirectToRoute('setup');
+        }
         $categoriesRepository = $this->getCategoriesRepository();
         $filtersRepository = $this->get('doctrine_mongodb')
             ->getManager()
@@ -413,7 +417,7 @@ class CatalogController extends ProductController
 
         if (!empty($childContent)) {
             foreach ($childContent as $content) {
-                unset($content['id']);
+                $content['id'] = -1;// This is not categories
                 $data[0][] = $content;
             }
             array_multisort(

@@ -28,8 +28,8 @@ class DefaultController extends CatalogController
      */
     public function homepageAction()
     {
-        if (empty($this->container->getParameter('mongodb_database'))
-            || empty($this->container->getParameter('mongodb_user'))) {
+        if (empty($this->getParameter('mongodb_database'))
+            || empty($this->getParameter('mongodb_user'))) {
                 return $this->redirectToRoute('setup');
         }
         $categoriesRepository = $this->getCategoriesRepository();
@@ -92,8 +92,8 @@ class DefaultController extends CatalogController
         UserPasswordEncoderInterface $encoder
     )
     {
-        if (!empty($this->container->getParameter('mongodb_database'))
-            || !empty($this->container->getParameter('mongodb_user'))) {
+        if (!empty($this->getParameter('mongodb_database'))
+            || !empty($this->getParameter('mongodb_user'))) {
                 return $this->redirectToRoute('homepage');
         }
         $settingsDefault = [

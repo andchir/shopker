@@ -77,7 +77,7 @@ class CatalogController extends ProductController
         if (!empty($filters)) {
             $filtersData = $filters->getValues();
         }
-        list($filters, $fieldsAll) = $this->getFieldsData($request, $contentTypeFields, $options,'page', $filtersData, $queryOptions);
+        list($filters, $fieldsAll) = $this->getFieldsData($contentTypeFields, $options,'page', $filtersData, $queryOptions);
         $fields = array_filter($fieldsAll, function($v) {
             return $v['showInList'];
         });
@@ -165,25 +165,11 @@ class CatalogController extends ProductController
         $currentPage['id'] = $currentId;
 
         // Get fields options
-        $fields = [];
         $options = [
             'currentCategoryUri' => $category->getUri(),
             'systemNameField' => $contentType->getSystemNameField()
         ];
-        foreach ($contentTypeFields as $field) {
-            if (!empty($field)) {
-                if (!isset($field['outputProperties']['chunkName'])) {
-                    $field['outputProperties']['chunkName'] = '';
-                }
-                $fields[] = [
-                    'name' => $field['name'],
-                    'title' => $field['title'],
-                    'description' => $field['description'],
-                    'type' => $field['outputType'],
-                    'properties' => array_merge($field['outputProperties'], $options)
-                ];
-            }
-        }
+        list($filters, $fields) = $this->getFieldsData($contentTypeFields, $options);
 
         // Get categories menu
         $categoriesMenu = $this->getCategoriesMenu($category, $breadcrumbs);
@@ -202,7 +188,6 @@ class CatalogController extends ProductController
     }
 
     /**
-     * @param Request $request
      * @param $contentTypeFields
      * @param array $options
      * @param $type
@@ -210,7 +195,7 @@ class CatalogController extends ProductController
      * @param array $queryOptions
      * @return array
      */
-    public function getFieldsData(Request $request, $contentTypeFields, $options = [], $type = 'page', $filtersData = [], $queryOptions = [])
+    public function getFieldsData($contentTypeFields, $options = [], $type = 'page', $filtersData = [], $queryOptions = [])
     {
         $filters = [];
         $fields = [];

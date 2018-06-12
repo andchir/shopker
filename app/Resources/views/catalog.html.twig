@@ -40,7 +40,7 @@
                                         <div class="card mb-3">
                                             <div class="card-body">
                                                 {% autoescape false %}
-                                                    {{ outputTypeArray(item, fields) }}
+                                                    {{ renderOutputTypeArray(item, fields) }}
                                                 {% endautoescape %}
                                             </div>
                                         </div>
@@ -52,10 +52,10 @@
                                                 <div class="catalog-list-item">
                                                     <div class="catalog-list-item-inner">
                                                         {% autoescape false %}
-                                                            {{ outputTypeChunk(item, fieldsAll, 'image') }}
-                                                            {{ outputTypeChunk(item, fieldsAll, 'header') }}
-                                                            {{ outputTypeChunk(item, fieldsAll, 'description') }}
-                                                            {{ outputTypeChunk(item, fieldsAll, 'price') }}
+                                                            {{ renderOutputTypeChunk(item, fieldsAll, 'image') }}
+                                                            {{ renderOutputTypeChunk(item, fieldsAll, 'header') }}
+                                                            {{ renderOutputTypeChunk(item, fieldsAll, 'description') }}
+                                                            {{ renderOutputTypeChunk(item, fieldsAll, 'price') }}
                                                         {% endautoescape %}
                                                     </div>
                                                 </div>

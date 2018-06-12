@@ -42,9 +42,11 @@ class AppExtension extends AbstractExtension
         return [
             new TwigFunction('catalogPath', array($this, 'catalogPathFunction')),
             new TwigFunction('outputFilter', [$this, 'outputFilterFunction']),
-            new TwigFunction('outputType', [$this, 'outputTypeFunction']),
-            new TwigFunction('outputTypeArray', [$this, 'outputTypeArrayFunction']),
-            new TwigFunction('outputTypeChunk', [$this, 'outputTypeChunkFunction']),
+            new TwigFunction('getFieldOption', [$this, 'getFieldOptionFunction']),
+            new TwigFunction('renderOutputType', [$this, 'renderOutputTypeFunction']),
+            new TwigFunction('renderOutputTypeArray', [$this, 'renderOutputTypeArrayFunction']),
+            new TwigFunction('renderOutputTypeField', [$this, 'renderOutputTypeFieldFunction']),
+            new TwigFunction('renderOutputTypeChunk', [$this, 'renderOutputTypeChunkFunction']),
             new TwigFunction('categoriesTree', [$this, 'categoriesTreeFunction']),
             new TwigFunction('twigNextPass', [$this, 'twigNextPassFunction']),
             new TwigFunction('shopCart', [AppRuntime::class, 'shopCartFunction']),
@@ -53,6 +55,11 @@ class AppExtension extends AbstractExtension
         ];
     }
 
+    /**
+     * @param string $parentUri
+     * @param string $systemName
+     * @return string
+     */
     public function catalogPathFunction($parentUri = '', $systemName = '')
     {
         $baseUrl = $this->container->get('router')->getContext()->getBaseUrl();
@@ -65,13 +72,28 @@ class AppExtension extends AbstractExtension
     }
 
     /**
+     * @param $fieldsData
+     * @param $fieldName
+     * @param string $optionName
+     * @return string|array
+     */
+    public function getFieldOptionFunction($fieldsData, $fieldName, $optionName = 'type')
+    {
+        $index = array_search($fieldName, array_column($fieldsData, 'name'));
+        if ($index === false) {
+            return '';
+        }
+        return isset($fieldsData[$index][$optionName]) ? $fieldsData[$index][$optionName] : '';
+    }
+
+    /**
      * @param $value
      * @param string $type
      * @param array $properties
      * @param array $options
      * @return string
      */
-    public function outputTypeFunction($value, $type, $properties, $options = [])
+    public function renderOutputTypeFunction($value, $type, $properties = [], $options = [])
     {
         if (empty($value)) {
             $value = '';
@@ -84,6 +106,12 @@ class AppExtension extends AbstractExtension
             $properties = array_merge($properties, $options, ['value' => '', 'data' => $value]);
         } else {
             $properties = array_merge($properties, $options, ['value' => $value]);
+        }
+        if (!isset($properties['systemNameField'])) {
+            $properties['systemNameField'] = '';
+        }
+        if (!isset($properties['currentCategoryUri'])) {
+            $properties['currentCategoryUri'] = '';
         }
         $properties['systemName'] = !empty($options[$properties['systemNameField']])
             ? $options[$properties['systemNameField']]
@@ -110,21 +138,21 @@ class AppExtension extends AbstractExtension
 
     /**
      * @param $itemData
-     * @param $fields
+     * @param $fieldsData
      * @param string $chunkNamePrefix
      * @return string
      */
-    public function outputTypeArrayFunction($itemData, $fields, $chunkNamePrefix = '')
+    public function renderOutputTypeArrayFunction($itemData, $fieldsData, $chunkNamePrefix = '')
     {
         if (empty($itemData)) {
             return '';
         }
         $output = '';
-        foreach ($fields as $field) {
+        foreach ($fieldsData as $field) {
             if (!isset($itemData[$field['name']])) {
                 continue;
             }
-            $output .= $this->outputTypeFunction(
+            $output .= $this->renderOutputTypeFunction(
                 $itemData[$field['name']],
                 $field['type'],
                 array_merge($field['properties'], ['chunkNamePrefix' => $chunkNamePrefix]),
@@ -150,19 +178,19 @@ class AppExtension extends AbstractExtension
 
     /**
      * @param array $itemData
-     * @param array $fields
+     * @param array $fieldsData
      * @param string $chunkName
      * @param string $chunkNamePrefix
      * @return string
      */
-    public function outputTypeChunkFunction($itemData, $fields, $chunkName, $chunkNamePrefix = '')
+    public function renderOutputTypeChunkFunction($itemData, $fieldsData, $chunkName, $chunkNamePrefix = '')
     {
-        $chunkNamesArr = array_column(array_column($fields, 'properties'), 'chunkName');
+        $chunkNamesArr = array_column(array_column($fieldsData, 'properties'), 'chunkName');
         $index = array_search($chunkName, $chunkNamesArr);
         if ($index === false) {
             return '';
         }
-        $field = $fields[$index];
+        $field = $fieldsData[$index];
         $value = '';
         if (isset($itemData[$field['name']])) {
             $value = $itemData[$field['name']];
@@ -196,6 +224,27 @@ class AppExtension extends AbstractExtension
             );
         }
         return $this->twig->render($templateName, $properties);
+    }
+
+    /**
+     * @param array $itemData
+     * @param array $fieldsData
+     * @param string $fieldName
+     * @return string
+     */
+    public function renderOutputTypeFieldFunction($itemData, $fieldsData, $fieldName)
+    {
+        $outputType = $this->getFieldOptionFunction($fieldsData, $fieldName, 'type');
+        $outputTypeProperties = $this->getFieldOptionFunction($fieldsData, $fieldName, 'properties');
+        if (empty($outputTypeProperties['chunkName'])) {
+            return '';
+        }
+        return $this->renderOutputTypeFunction(
+            $itemData[$fieldName],
+            $outputType,
+            $outputTypeProperties,
+            $itemData
+        );
     }
 
     /**

@@ -162,7 +162,6 @@ class AppExtension extends AbstractExtension
         if ($index === false) {
             return '';
         }
-
         $field = $fields[$index];
         $value = '';
         if (isset($itemData[$field['name']])) {
@@ -182,6 +181,9 @@ class AppExtension extends AbstractExtension
             $propertiesDefault['value'] = $value;
         }
         $properties = array_merge($field['properties'], $propertiesDefault);
+        $properties['systemName'] = !empty($itemData[$properties['systemNameField']])
+            ? $itemData[$properties['systemNameField']]
+            : '';
         if (!empty($value)) {
             $templateName = $this->getTemplateName('chunks/fields/', $chunkName, $chunkNamePrefix);
         } else {

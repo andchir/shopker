@@ -52,7 +52,10 @@
                                                 <div class="catalog-list-item">
                                                     <div class="catalog-list-item-inner">
                                                         {% autoescape false %}
-                                                            {{ outputTypeArray(item, fields) }}
+                                                            {{ outputTypeChunk(item, fieldsAll, 'image') }}
+                                                            {{ outputTypeChunk(item, fieldsAll, 'header') }}
+                                                            {{ outputTypeChunk(item, fieldsAll, 'description') }}
+                                                            {{ outputTypeChunk(item, fieldsAll, 'price') }}
                                                         {% endautoescape %}
                                                     </div>
                                                 </div>

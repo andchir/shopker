@@ -77,7 +77,10 @@ class CatalogController extends ProductController
         if (!empty($filters)) {
             $filtersData = $filters->getValues();
         }
-        list($filters, $fields) = $this->getFieldsData($request, $contentTypeFields,'list', $filtersData, $options, $queryOptions);
+        list($filters, $fieldsAll) = $this->getFieldsData($request, $contentTypeFields, $options,'page', $filtersData, $queryOptions);
+        $fields = array_filter($fieldsAll, function($v) {
+            return $v['showInList'];
+        });
 
         // Get child products
         $criteria = [
@@ -115,6 +118,7 @@ class CatalogController extends ProductController
             'listTemplate' => $listTemplate,
             'items' => $items,
             'fields' => $fields,
+            'fieldsAll' => $fieldsAll,
             'filters' => $filters,
             'categoriesTopLevel' => $categoriesTopLevel,
             'categoriesSiblings' => $categoriesSiblings,
@@ -200,24 +204,28 @@ class CatalogController extends ProductController
     /**
      * @param Request $request
      * @param $contentTypeFields
+     * @param array $options
      * @param $type
      * @param array $filtersData
-     * @param array $options
      * @param array $queryOptions
      * @return array
      */
-    public function getFieldsData(Request $request, $contentTypeFields, $type, $filtersData = [], $options = [], $queryOptions = [])
+    public function getFieldsData(Request $request, $contentTypeFields, $options = [], $type = 'page', $filtersData = [], $queryOptions = [])
     {
         $filters = [];
         $fields = [];
         $queryOptionsFilter = !empty($queryOptions['filter']) ? $queryOptions['filter'] : [];
         foreach ($contentTypeFields as $field) {
-            if (!empty($field['showInList'])) {
+            if ($type != 'list' || !empty($field['showInList'])) {
+                if (!isset($field['outputProperties']['chunkName'])) {
+                    $field['outputProperties']['chunkName'] = '';
+                }
                 $fields[] = [
                     'name' => $field['name'],
                     'title' => $field['title'],
                     'description' => $field['description'],
                     'type' => $field['outputType'],
+                    'showInList' => $field['showInList'],
                     'properties' => array_merge($field['outputProperties'], $options)
                 ];
             }

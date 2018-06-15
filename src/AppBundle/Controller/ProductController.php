@@ -176,6 +176,22 @@ class ProductController extends BaseController
     }
 
     /**
+     * @param $mainTemplateName
+     * @param $prefix
+     * @return string
+     */
+    public function getTemplateName($mainTemplateName, $prefix)
+    {
+        /** @var \Twig_Environment */
+        $twig = $this->get('twig');
+        $templateName = sprintf('%s_%s.html.twig', $prefix, $mainTemplateName);
+        if ($twig->getLoader()->exists($templateName)) {
+            return $templateName;
+        }
+        return sprintf('%s.html.twig', $mainTemplateName);
+    }
+
+    /**
      * @return CategoryRepository
      */
     public function getCategoriesRepository()

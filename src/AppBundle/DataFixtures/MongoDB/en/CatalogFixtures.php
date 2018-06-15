@@ -134,7 +134,7 @@ class CatalogFixtures extends Fixture
                 'group' => 'General',
                 'required' => false,
                 'showInTable' => false,
-                'showInList' => true,
+                'showInList' => false,
                 'isFilter' => false
             ],
             [

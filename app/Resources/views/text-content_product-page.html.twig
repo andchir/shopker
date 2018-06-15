@@ -5,8 +5,8 @@
     <main role="main" class="container min-height400">
 
         {% autoescape false %}
-            {{ outputTypeChunk(currentPage, fields, 'header', 'page_') }}
-            {{ outputTypeChunk(currentPage, fields, 'description') }}
+            {{ renderOutputTypeChunk(currentPage, fields, 'header', 'page_') }}
+            {{ renderOutputTypeChunk(currentPage, fields, 'description') }}
         {% endautoescape %}
 
     </main>

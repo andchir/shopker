@@ -109,7 +109,7 @@ class CatalogController extends ProductController
             return $entry['uri'] !== $uri;
         });
 
-        return $this->render('catalog.html.twig', [
+        return $this->render($this->getTemplateName('catalog', $contentType->getName()), [
             'currentCategory' => $currentCategory,
             'currentPage' => $currentPage,
             'currentId' => $currentId,
@@ -174,7 +174,7 @@ class CatalogController extends ProductController
         // Get categories menu
         $categoriesMenu = $this->getCategoriesMenu($category, $breadcrumbs);
 
-        return $this->render($collectionName . '-page.html.twig', [
+        return $this->render($this->getTemplateName('product-page', $contentType->getName()), [
             'categoriesTopLevel' => $categoriesTopLevel,
             'currentCategory' => $category,
             'currentPage' => $currentPage,

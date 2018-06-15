@@ -43,7 +43,7 @@ class FieldTypesFixtures extends Fixture
                     ],
                     [
                         'name' => 'chunkName',
-                        'title' => 'Название шаблона',
+                        'title' => 'Название чанка',
                         'default_value' => ''
                     ]
                 ]
@@ -77,7 +77,7 @@ class FieldTypesFixtures extends Fixture
                     ],
                     [
                         'name' => 'chunkName',
-                        'title' => 'Название шаблона',
+                        'title' => 'Название чанка',
                         'default_value' => ''
                     ]
                 ]
@@ -106,7 +106,7 @@ class FieldTypesFixtures extends Fixture
                     ],
                     [
                         'name' => 'chunkName',
-                        'title' => 'Название шаблона',
+                        'title' => 'Название чанка',
                         'default_value' => ''
                     ]
                 ]
@@ -135,7 +135,7 @@ class FieldTypesFixtures extends Fixture
                     ],
                     [
                         'name' => 'chunkName',
-                        'title' => 'Название шаблона',
+                        'title' => 'Название чанка',
                         'default_value' => ''
                     ]
                 ]
@@ -169,7 +169,7 @@ class FieldTypesFixtures extends Fixture
                     ],
                     [
                         'name' => 'chunkName',
-                        'title' => 'Название шаблона',
+                        'title' => 'Название чанка',
                         'default_value' => ''
                     ]
                 ]
@@ -203,7 +203,7 @@ class FieldTypesFixtures extends Fixture
                     ],
                     [
                         'name' => 'chunkName',
-                        'title' => 'Название шаблона',
+                        'title' => 'Название чанка',
                         'default_value' => ''
                     ]
                 ]
@@ -262,7 +262,7 @@ class FieldTypesFixtures extends Fixture
                     ],
                     [
                         'name' => 'chunkName',
-                        'title' => 'Название шаблона',
+                        'title' => 'Название чанка',
                         'default_value' => ''
                     ]
                 ]
@@ -296,7 +296,7 @@ class FieldTypesFixtures extends Fixture
                     ],
                     [
                         'name' => 'chunkName',
-                        'title' => 'Название шаблона',
+                        'title' => 'Название чанка',
                         'default_value' => ''
                     ]
                 ]
@@ -335,7 +335,7 @@ class FieldTypesFixtures extends Fixture
                     ],
                     [
                         'name' => 'chunkName',
-                        'title' => 'Название шаблона',
+                        'title' => 'Название чанка',
                         'default_value' => ''
                     ]
                 ]
@@ -389,7 +389,7 @@ class FieldTypesFixtures extends Fixture
                     ],
                     [
                         'name' => 'chunkName',
-                        'title' => 'Название шаблона',
+                        'title' => 'Название чанка',
                         'default_value' => ''
                     ]
                 ]
@@ -418,7 +418,7 @@ class FieldTypesFixtures extends Fixture
                     ],
                     [
                         'name' => 'chunkName',
-                        'title' => 'Название шаблона',
+                        'title' => 'Название чанка',
                         'default_value' => ''
                     ]
                 ]
@@ -452,7 +452,7 @@ class FieldTypesFixtures extends Fixture
                     ],
                     [
                         'name' => 'chunkName',
-                        'title' => 'Название шаблона',
+                        'title' => 'Название чанка',
                         'default_value' => ''
                     ]
                 ]
@@ -481,7 +481,7 @@ class FieldTypesFixtures extends Fixture
                     ],
                     [
                         'name' => 'chunkName',
-                        'title' => 'Название шаблона',
+                        'title' => 'Название чанка',
                         'default_value' => ''
                     ]
                 ]
@@ -515,7 +515,7 @@ class FieldTypesFixtures extends Fixture
                     ],
                     [
                         'name' => 'chunkName',
-                        'title' => 'Название шаблона',
+                        'title' => 'Название чанка',
                         'default_value' => ''
                     ]
                 ]
@@ -544,7 +544,7 @@ class FieldTypesFixtures extends Fixture
                     ],
                     [
                         'name' => 'chunkName',
-                        'title' => 'Название шаблона',
+                        'title' => 'Название чанка',
                         'default_value' => ''
                     ],
                     [

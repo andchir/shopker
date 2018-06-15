@@ -58,7 +58,6 @@ class CatalogController extends ProductController
         $currentId = $currentCategory->getId();
 
         $breadcrumbs = $categoriesRepository->getBreadcrumbs($categoryUri, false);
-        $categoriesTopLevel = $this->getChildCategories(0, $breadcrumbs, true);
         $categoriesMenu = $this->getCategoriesMenu($currentCategory, $breadcrumbs);
 
         $contentType = $currentCategory->getContentType();
@@ -120,7 +119,6 @@ class CatalogController extends ProductController
             'fields' => $fields,
             'fieldsAll' => $fieldsAll,
             'filters' => $filters,
-            'categoriesTopLevel' => $categoriesTopLevel,
             'categoriesSiblings' => $categoriesSiblings,
             'breadcrumbs' => $breadcrumbs,
             'queryOptions' => $queryOptions,
@@ -151,8 +149,6 @@ class CatalogController extends ProductController
         $collection = $this->getCollection($collectionName);
         $breadcrumbs = $categoriesRepository->getBreadcrumbs($categoryUri, false);
 
-        $categoriesTopLevel = $this->getChildCategories(0, $breadcrumbs, true, $uri);
-
         $currentPage = $collection->findOne([
             'name' => $pageAlias,
             'parentId' => $category->getId(),
@@ -175,7 +171,6 @@ class CatalogController extends ProductController
         $categoriesMenu = $this->getCategoriesMenu($category, $breadcrumbs);
 
         return $this->render($this->getTemplateName('product-page', $contentType->getName()), [
-            'categoriesTopLevel' => $categoriesTopLevel,
             'currentCategory' => $category,
             'currentPage' => $currentPage,
             'contentType' => $contentType,

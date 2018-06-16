@@ -24,7 +24,7 @@
             systemSettings: {{ settings.systemSettings | json_encode() | raw }}
         };
     </script>
-    <script type="text/javascript" src="{{ asset('shk-app/i18n/') }}{{ settings.locale }}.js"></script>
+    <script type="text/javascript" src="/shk-app/i18n/{{ settings.locale }}.js"></script>
     {% if app.environment == 'prod' %}
         <script type="text/javascript" src="{{ asset('shk-app/bundle/inline.263c099ec7989922f12d.bundle.js') }}"></script>
         <script type="text/javascript" src="{{ asset('shk-app/bundle/polyfills.d0585b9258099ba9cb37.bundle.js') }}"></script>

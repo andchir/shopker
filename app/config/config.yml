@@ -28,7 +28,11 @@ framework:
         save_path:   '%kernel.root_dir%/../var/sessions/%kernel.environment%'
     fragments: ~
     http_method_override: true
-    assets: ~
+    assets:
+        version: '%app_version%'
+        packages:
+            vendor:
+                version: ~
     php_errors:
         log: true
 
@@ -39,6 +43,7 @@ twig:
     strict_variables: '%kernel.debug%'
     globals:
         app_name: '%app_name%'
+        app_logo_image_url: '%logo_image_url%'
 
 # Swiftmailer Configuration
 swiftmailer:

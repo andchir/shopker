@@ -13,6 +13,8 @@ The engine for creating an online store using Symfony, Angular, MongoDB.
 
 [Demo](http://shk4-demo.modx-shopkeeper.ru/)
 
+[Download latest version](http://modx-shopkeeper.ru/assets/files/shk4/shk4-latest.zip)
+
 ---
 
 Screenshots

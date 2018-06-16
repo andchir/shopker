@@ -9,6 +9,7 @@ parameters:
     database_password: ~
 
     files_dir_path: '%kernel.root_dir%/../web/uploads'
+    logo_image_url: '/img/shk-logo-small-blue.png'
     files_dir_url: '/uploads'
     catalog_page_size:
         - 12

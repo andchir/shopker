@@ -55,69 +55,71 @@ class CartController extends ProductController
             '_id' => $itemId,
             'isActive' => true
         ]);
-        if ($productDocument) {
-
-            $priceFieldName = '';
-            $contentTypeFields = $contentType->getFields();
-            foreach ($contentTypeFields as $contentTypeField) {
-                if (isset($contentTypeField['outputProperties'])
-                    && isset($contentTypeField['outputProperties']['chunkName'])
-                    && $contentTypeField['outputProperties']['chunkName'] === 'price') {
-                        $priceFieldName = $contentTypeField['name'];
-                }
-            }
-            $priceValue = $priceFieldName && isset($productDocument[$priceFieldName])
-                ? $productDocument[$priceFieldName]
-                : 0;
-
-            $shopCartData = $mongoCache->fetch(ShopCartService::getCartId());
-            if (empty($shopCartData)) {
-                $shopCartData = [
-                    'currency' => $currency,
-                    'data' => []
-                ];
-            }
-
-            $parentUri = $category->getUri();
-            $systemName = '';
-            if ($systemNameField && isset($productDocument[$systemNameField])) {
-                $systemName = $productDocument[$systemNameField];
-            }
-
-            $parameters = $this->getProductParameters($request, $productDocument, $contentTypeFields);
-
-            if (!isset($shopCartData['data'][$contentTypeName])) {
-                $shopCartData['data'][$contentTypeName] = [];
-            }
-
-            $productIndex = isset($shopCartData['data'][$contentTypeName])
-                && in_array($itemId, array_column($shopCartData['data'][$contentTypeName], 'id'))
-                    ? array_search($itemId, array_column($shopCartData['data'][$contentTypeName], 'id'))
-                    : -1;
-
-            $currentProduct = null;
-            if ($productIndex > -1) {
-                $currentProduct = &$shopCartData['data'][$contentTypeName][$productIndex];
-            }
-
-            if (!empty($currentProduct) && $currentProduct['parameters'] == $parameters) {
-                $currentProduct['count'] += $count;
-            } else {
-                array_unshift($shopCartData['data'][$contentTypeName], [
-                    'id' => $productDocument['_id'],
-                    'title' => $productDocument['title'],
-                    'parentUri' => $parentUri,
-                    'systemName' => $systemName,
-                    'image' => '',
-                    'count' => $count,
-                    'price' => $priceValue,
-                    'currency' => $currency,
-                    'parameters' => $parameters
-                ]);
-            }
-
-            $mongoCache->save(ShopCartService::getCartId(), $shopCartData, 60*60*24*7);
+        if (!$productDocument) {
+            return new RedirectResponse($referer);
         }
+
+        $priceFieldName = '';
+        $contentTypeFields = $contentType->getFields();
+        foreach ($contentTypeFields as $contentTypeField) {
+            if (isset($contentTypeField['outputProperties'])
+                && isset($contentTypeField['outputProperties']['chunkName'])
+                && $contentTypeField['outputProperties']['chunkName'] === 'price') {
+                    $priceFieldName = $contentTypeField['name'];
+                    break;
+            }
+        }
+        $priceValue = $priceFieldName && isset($productDocument[$priceFieldName])
+            ? $productDocument[$priceFieldName]
+            : 0;
+
+        $shopCartData = $mongoCache->fetch(ShopCartService::getCartId());
+        if (empty($shopCartData)) {
+            $shopCartData = [
+                'currency' => $currency,
+                'data' => []
+            ];
+        }
+
+        $parentUri = $category->getUri();
+        $systemName = '';
+        if ($systemNameField && isset($productDocument[$systemNameField])) {
+            $systemName = $productDocument[$systemNameField];
+        }
+
+        $parameters = $this->getProductParameters($request, $productDocument, $contentTypeFields);
+
+        if (!isset($shopCartData['data'][$contentTypeName])) {
+            $shopCartData['data'][$contentTypeName] = [];
+        }
+
+        $productIndex = isset($shopCartData['data'][$contentTypeName])
+            && in_array($itemId, array_column($shopCartData['data'][$contentTypeName], 'id'))
+                ? array_search($itemId, array_column($shopCartData['data'][$contentTypeName], 'id'))
+                : -1;
+
+        $currentProduct = null;
+        if ($productIndex > -1) {
+            $currentProduct = &$shopCartData['data'][$contentTypeName][$productIndex];
+        }
+
+        if (!empty($currentProduct) && $currentProduct['parameters'] == $parameters) {
+            $currentProduct['count'] += $count;
+        } else {
+            array_unshift($shopCartData['data'][$contentTypeName], [
+                'id' => $productDocument['_id'],
+                'title' => $productDocument['title'],
+                'parentUri' => $parentUri,
+                'systemName' => $systemName,
+                'image' => '',
+                'count' => $count,
+                'price' => $priceValue,
+                'currency' => $currency,
+                'parameters' => $parameters
+            ]);
+        }
+
+        $mongoCache->save(ShopCartService::getCartId(), $shopCartData, 60*60*24*7);
 
         return new RedirectResponse($referer);
     }

@@ -10,27 +10,19 @@
 
         <div class="min-height400">
 
-            {% autoescape false %}
-                {{ renderOutputTypeChunk(currentPage, fields, 'header', 'page_') }}
-            {% endautoescape %}
+            {{ renderOutputTypeChunk(currentPage, fields, 'header', 'page_') }}
 
             <div>
                 <div class="column-left">
-                    {% autoescape false %}
-                        {{ renderOutputTypeChunk(currentPage, fields, 'image', 'page_') }}
-                    {% endautoescape %}
+                    {{ renderOutputTypeChunk(currentPage, fields, 'image', 'page_') }}
                 </div>
                 <div class="column-right">
                     <div class="my-3">
-                        {% autoescape false %}
-                            {{ renderOutputTypeChunk(currentPage, fields, 'description') }}
-                        {% endautoescape %}
+                        {{ renderOutputTypeChunk(currentPage, fields, 'description') }}
                     </div>
                     <div class="my-3">
                         {{ 'Price' | trans }}:
-                        {% autoescape false %}
-                            {{ renderOutputTypeChunk(currentPage, fields, 'price') }}
-                        {% endautoescape %}
+                        {{ renderOutputTypeChunk(currentPage, fields, 'price') }}
                     </div>
                     <div class="my-3">
                         <form action="" method="post">

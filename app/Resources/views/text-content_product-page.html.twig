@@ -4,10 +4,8 @@
     {% include 'header.html.twig' %}
     <main role="main" class="container min-height400">
 
-        {% autoescape false %}
-            {{ renderOutputTypeChunk(currentPage, fields, 'header', 'page_') }}
-            {{ renderOutputTypeChunk(currentPage, fields, 'description') }}
-        {% endautoescape %}
+        {{ renderOutputTypeChunk(currentPage, fields, 'header', 'page_') }}
+        {{ renderOutputTypeChunk(currentPage, fields, 'description') }}
 
     </main>
 {% endblock %}

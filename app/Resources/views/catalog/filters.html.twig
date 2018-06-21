@@ -24,9 +24,7 @@
                             {{ filter.title }}
                         </h4>
                         <div class="my-2">
-                            {% autoescape false %}
-                                {{ outputFilter( filter ) }}
-                            {% endautoescape %}
+                            {{ outputFilter( filter ) }}
                         </div>
                     </div>
                     <hr>

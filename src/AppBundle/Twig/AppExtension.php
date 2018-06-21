@@ -17,8 +17,6 @@ class AppExtension extends AbstractExtension
 {
     /** @var ContainerInterface */
     protected $container;
-    /** @var \Twig_Environment */
-    protected $twig;
     /** @var  RequestStack */
     protected $requestStack;
 
@@ -26,7 +24,6 @@ class AppExtension extends AbstractExtension
     public function __construct(ContainerInterface $container, RequestStack $requestStack)
     {
         $this->container = $container;
-        $this->twig = $this->container->get('twig');
         $this->requestStack = $requestStack;
     }
 
@@ -41,16 +38,40 @@ class AppExtension extends AbstractExtension
     {
         return [
             new TwigFunction('catalogPath', array($this, 'catalogPathFunction')),
-            new TwigFunction('outputFilter', [$this, 'outputFilterFunction']),
+            new TwigFunction('outputFilter', [$this, 'outputFilterFunction'], [
+                'is_safe' => ['html'],
+                'needs_environment' => true
+            ]),
             new TwigFunction('getFieldOption', [$this, 'getFieldOptionFunction']),
-            new TwigFunction('renderOutputType', [$this, 'renderOutputTypeFunction']),
-            new TwigFunction('renderOutputTypeArray', [$this, 'renderOutputTypeArrayFunction']),
-            new TwigFunction('renderOutputTypeField', [$this, 'renderOutputTypeFieldFunction']),
-            new TwigFunction('renderOutputTypeChunk', [$this, 'renderOutputTypeChunkFunction']),
-            new TwigFunction('categoriesTree', [$this, 'categoriesTreeFunction']),
+            new TwigFunction('renderOutputType', [$this, 'renderOutputTypeFunction'], [
+                'is_safe' => ['html'],
+                'needs_environment' => true
+            ]),
+            new TwigFunction('renderOutputTypeArray', [$this, 'renderOutputTypeArrayFunction'], [
+                'is_safe' => ['html'],
+                'needs_environment' => true
+            ]),
+            new TwigFunction('renderOutputTypeField', [$this, 'renderOutputTypeFieldFunction'], [
+                'is_safe' => ['html'],
+                'needs_environment' => true
+            ]),
+            new TwigFunction('renderOutputTypeChunk', [$this, 'renderOutputTypeChunkFunction'], [
+                'is_safe' => ['html'],
+                'needs_environment' => true
+            ]),
+            new TwigFunction('categoriesTree', [$this, 'categoriesTreeFunction'], [
+                'is_safe' => ['html'],
+                'needs_environment' => true
+            ]),
             new TwigFunction('twigNextPass', [$this, 'twigNextPassFunction']),
-            new TwigFunction('shopCart', [AppRuntime::class, 'shopCartFunction']),
-            new TwigFunction('currencyList', [AppRuntime::class, 'currencyListFunction']),
+            new TwigFunction('shopCart', [AppRuntime::class, 'shopCartFunction'], [
+                'is_safe' => ['html'],
+                'needs_environment' => true
+            ]),
+            new TwigFunction('currencyList', [AppRuntime::class, 'currencyListFunction'], [
+                'is_safe' => ['html'],
+                'needs_environment' => true
+            ]),
             new TwigFunction('imageUrl', [AppRuntime::class, 'imageUrlFunction'])
         ];
     }
@@ -87,13 +108,14 @@ class AppExtension extends AbstractExtension
     }
 
     /**
+     * @param \Twig_Environment $environment
      * @param $value
-     * @param string $type
+     * @param $type
      * @param array $properties
      * @param array $options
-     * @return string
+     * @return mixed
      */
-    public function renderOutputTypeFunction($value, $type, $properties = [], $options = [])
+    public function renderOutputTypeFunction(\Twig_Environment $environment, $value, $type, $properties = [], $options = [])
     {
         if (empty($value)) {
             $value = '';
@@ -118,6 +140,7 @@ class AppExtension extends AbstractExtension
             : '';
         if (!empty($value)) {
             $templateName = $this->getTemplateName(
+                $environment,
                 'chunks/fields/',
                 $chunkName,
                 $chunkNamePrefix,
@@ -126,6 +149,7 @@ class AppExtension extends AbstractExtension
             );
         } else {
             $templateName = $this->getTemplateName(
+                $environment,
                 'chunks/fields/',
                 $chunkName,
                 $chunkNamePrefix,
@@ -133,16 +157,17 @@ class AppExtension extends AbstractExtension
                 'empty'
             );
         }
-        return $this->twig->render($templateName, $properties);
+        return $environment->render($templateName, $properties);
     }
 
     /**
+     * @param \Twig_Environment $environment
      * @param $itemData
      * @param $fieldsData
      * @param string $chunkNamePrefix
      * @return string
      */
-    public function renderOutputTypeArrayFunction($itemData, $fieldsData, $chunkNamePrefix = '')
+    public function renderOutputTypeArrayFunction(\Twig_Environment $environment, $itemData, $fieldsData, $chunkNamePrefix = '')
     {
         if (empty($itemData)) {
             return '';
@@ -153,6 +178,7 @@ class AppExtension extends AbstractExtension
                 continue;
             }
             $output .= $this->renderOutputTypeFunction(
+                $environment,
                 $itemData[$field['name']],
                 $field['type'],
                 array_merge($field['properties'], ['chunkNamePrefix' => $chunkNamePrefix]),
@@ -163,27 +189,29 @@ class AppExtension extends AbstractExtension
     }
 
     /**
-     * @param array $filtersData
+     * @param \Twig_Environment $environment
+     * @param $filtersData
      * @param string $chunkNamePrefix
      * @return string
      */
-    public function outputFilterFunction($filtersData, $chunkNamePrefix = '')
+    public function outputFilterFunction(\Twig_Environment $environment, $filtersData, $chunkNamePrefix = '')
     {
         if (empty($filtersData)) {
             return '';
         }
-        $templateName = $this->getTemplateName('chunks/filters/', $filtersData['outputType'], $chunkNamePrefix);
-        return $this->twig->render($templateName, ['filter' => $filtersData]);
+        $templateName = $this->getTemplateName($environment, 'chunks/filters/', $filtersData['outputType'], $chunkNamePrefix);
+        return $environment->render($templateName, ['filter' => $filtersData]);
     }
 
     /**
-     * @param array $itemData
-     * @param array $fieldsData
-     * @param string $chunkName
+     * @param \Twig_Environment $environment
+     * @param $itemData
+     * @param $fieldsData
+     * @param $chunkName
      * @param string $chunkNamePrefix
      * @return string
      */
-    public function renderOutputTypeChunkFunction($itemData, $fieldsData, $chunkName, $chunkNamePrefix = '')
+    public function renderOutputTypeChunkFunction(\Twig_Environment $environment, $itemData, $fieldsData, $chunkName, $chunkNamePrefix = '')
     {
         $chunkNamesArr = array_column(array_column($fieldsData, 'properties'), 'chunkName');
         $index = array_search($chunkName, $chunkNamesArr);
@@ -213,9 +241,10 @@ class AppExtension extends AbstractExtension
             ? $itemData[$properties['systemNameField']]
             : '';
         if (!empty($value)) {
-            $templateName = $this->getTemplateName('chunks/fields/', $chunkName, $chunkNamePrefix);
+            $templateName = $this->getTemplateName($environment, 'chunks/fields/', $chunkName, $chunkNamePrefix);
         } else {
             $templateName = $this->getTemplateName(
+                $environment,
                 'chunks/fields/',
                 $chunkName,
                 $chunkNamePrefix,
@@ -223,16 +252,17 @@ class AppExtension extends AbstractExtension
                 'empty'
             );
         }
-        return $this->twig->render($templateName, $properties);
+        return $environment->render($templateName, $properties);
     }
 
     /**
-     * @param array $itemData
-     * @param array $fieldsData
-     * @param string $fieldName
-     * @return string
+     * @param \Twig_Environment $environment
+     * @param $itemData
+     * @param $fieldsData
+     * @param $fieldName
+     * @return mixed|string
      */
-    public function renderOutputTypeFieldFunction($itemData, $fieldsData, $fieldName)
+    public function renderOutputTypeFieldFunction(\Twig_Environment $environment, $itemData, $fieldsData, $fieldName)
     {
         $outputType = $this->getFieldOptionFunction($fieldsData, $fieldName, 'type');
         $outputTypeProperties = $this->getFieldOptionFunction($fieldsData, $fieldName, 'properties');
@@ -240,6 +270,7 @@ class AppExtension extends AbstractExtension
             return '';
         }
         return $this->renderOutputTypeFunction(
+            $environment,
             $itemData[$fieldName],
             $outputType,
             $outputTypeProperties,
@@ -248,13 +279,14 @@ class AppExtension extends AbstractExtension
     }
 
     /**
+     * @param \Twig_Environment $environment
      * @param int $parentId
      * @param string $chunkName
      * @param null $data
      * @param bool $cacheEnabled
      * @return string
      */
-    public function categoriesTreeFunction($parentId = 0, $chunkName = 'menu_tree', $data = null, $cacheEnabled = false)
+    public function categoriesTreeFunction(\Twig_Environment $environment, $parentId = 0, $chunkName = 'menu_tree', $data = null, $cacheEnabled = false)
     {
         $request = $request = $this->requestStack->getCurrentRequest();
         $currentUri = substr($request->getPathInfo(), 1);
@@ -266,7 +298,7 @@ class AppExtension extends AbstractExtension
 
         if ($data === null) {
             if ($cacheEnabled && $cache->has($cacheKey)) {
-                return $this->twig->createTemplate($cache->get($cacheKey))->render([
+                return $environment->createTemplate($cache->get($cacheKey))->render([
                     'currentUri' => $currentUri,
                     'uriArr' => $uriArr
                 ]);
@@ -276,20 +308,20 @@ class AppExtension extends AbstractExtension
             $categoriesTree = $catalogController->getCategoriesTree($parentId);
             $data = $categoriesTree[0];
         }
-        $templateName = $this->getTemplateName('nav/', $chunkName);
+        $templateName = $this->getTemplateName($environment, 'nav/', $chunkName);
         if (empty($data['children'])) {
             return '';
         }
         $data['currentUri'] = $currentUri;
         $data['uriArr'] = $uriArr;
-        $output = $this->twig->render($templateName, $data);
+        $output = $environment->render($templateName, $data);
         if (!$cacheEnabled) {
             return $output;
         }
 
         $cache->set($cacheKey, $output, 60*60*24);
 
-        return $this->twig->createTemplate($output)->render([
+        return $environment->createTemplate($output)->render([
             'currentUri' => $currentUri,
             'uriArr' => $uriArr
         ]);
@@ -311,17 +343,24 @@ class AppExtension extends AbstractExtension
     }
 
     /**
+     * @param \Twig_Environment $environment
      * @param $path
-     * @param string $chunkName
+     * @param $chunkName
      * @param string $chunkNamePrefix
      * @param string $chunkNameSuffix
      * @param string $defaultName
      * @return string
      */
-    public function getTemplateName($path, $chunkName, $chunkNamePrefix = '', $chunkNameSuffix = '', $defaultName = 'default')
+    public function getTemplateName(
+        \Twig_Environment $environment,
+        $path, $chunkName,
+        $chunkNamePrefix = '',
+        $chunkNameSuffix = '',
+        $defaultName = 'default'
+    )
     {
         $templateName = sprintf($path . '%s%s%s.html.twig', $chunkNamePrefix, $chunkName, $chunkNameSuffix);
-        if (!$this->twig->getLoader()->exists($templateName)) {
+        if (!$environment->getLoader()->exists($templateName)) {
             $templateName = $path . $defaultName . '.html.twig';
         }
         return $templateName;

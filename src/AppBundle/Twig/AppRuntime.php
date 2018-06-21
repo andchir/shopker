@@ -14,24 +14,22 @@ class AppRuntime
 {
     /** @var ContainerInterface */
     protected $container;
-    /** @var \Twig_Environment */
-    protected $twig;
     /** @var  RequestStack */
     protected $requestStack;
 
     public function __construct(ContainerInterface $container, RequestStack $requestStack)
     {
         $this->container = $container;
-        $this->twig = $this->container->get('twig');
         $this->requestStack = $requestStack;
     }
 
     /**
+     * @param \Twig_Environment $environment
      * @param string $chunkName
      * @param string $emptyChunkName
      * @return string
      */
-    public function shopCartFunction($chunkName = 'shop_cart', $emptyChunkName = '')
+    public function shopCartFunction(\Twig_Environment $environment, $chunkName = 'shop_cart', $emptyChunkName = '')
     {
         if (empty($this->container->getParameter('mongodb_database'))
             || empty($this->container->getParameter('mongodb_user'))) {
@@ -49,8 +47,8 @@ class AppRuntime
         $shopCartData = $mongoCache->fetch(ShopCartService::getCartId());
         if (empty($shopCartData)) {
             if ($emptyChunkName) {
-                $templateName = $this->getTemplateName('catalog/', $emptyChunkName);
-                return $this->twig->render($templateName, $data);
+                $templateName = $this->getTemplateName($environment, 'catalog/', $emptyChunkName);
+                return $environment->render($templateName, $data);
             } else {
                 return '';
             }
@@ -58,7 +56,7 @@ class AppRuntime
 
         $data['currency'] = $shopCartData['currency'];
 
-        $templateName = $this->getTemplateName('catalog/', $chunkName);
+        $templateName = $this->getTemplateName($environment, 'catalog/', $chunkName);
 
         foreach ($shopCartData['data'] as $cName => $products) {
             if (!isset($data['items'][$cName])) {
@@ -80,13 +78,14 @@ class AppRuntime
             }
         }
 
-        return $this->twig->render($templateName, $data);
+        return $environment->render($templateName, $data);
     }
 
     /**
+     * @param \Twig_Environment $environment
      * @return string
      */
-    public function currencyListFunction()
+    public function currencyListFunction(\Twig_Environment $environment)
     {
         if (empty($this->container->getParameter('mongodb_database'))
             || empty($this->container->getParameter('mongodb_user'))) {
@@ -99,7 +98,7 @@ class AppRuntime
         $cache = $this->container->get('app.filecache');
 
         if ($cache->has($cacheKey)) {
-            return $this->twig->createTemplate($cache->get($cacheKey))->render([]);
+            return $environment->createTemplate($cache->get($cacheKey))->render([]);
         }
 
         $templateName = 'catalog/currency_list.html.twig';
@@ -107,7 +106,7 @@ class AppRuntime
             'data' => $settingsService->getSettingsGroup(Setting::GROUP_CURRENCY)
         ];
 
-        $output = $this->twig->render($templateName, $properties);
+        $output = $environment->render($templateName, $properties);
         $cache->set($cacheKey, $output, 60*60*24);
 
         return $output;
@@ -143,17 +142,25 @@ class AppRuntime
     }
 
     /**
+     * @param \Twig_Environment $environment
      * @param $path
-     * @param string $chunkName
+     * @param $chunkName
      * @param string $chunkNamePrefix
      * @param string $chunkNameSuffix
      * @param string $defaultName
      * @return string
      */
-    public function getTemplateName($path, $chunkName, $chunkNamePrefix = '', $chunkNameSuffix = '', $defaultName = 'default')
+    public function getTemplateName(
+        \Twig_Environment $environment,
+        $path,
+        $chunkName,
+        $chunkNamePrefix = '',
+        $chunkNameSuffix = '',
+        $defaultName = 'default'
+    )
     {
         $templateName = sprintf($path . '%s%s%s.html.twig', $chunkNamePrefix, $chunkName, $chunkNameSuffix);
-        if (!$this->twig->getLoader()->exists($templateName)) {
+        if (!$environment->getLoader()->exists($templateName)) {
             $templateName = $path . $defaultName . '.html.twig';
         }
         return $templateName;

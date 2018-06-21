@@ -9,9 +9,7 @@
                 {{ 'Shopping cart' | trans }}
             </h1>
 
-            {% autoescape false %}
-                {{ shopCart('shop_cart_edit', 'shop_cart_edit_empty') }}
-            {% endautoescape %}
+            {{ shopCart('shop_cart_edit', 'shop_cart_edit_empty') }}
 
         </div>
     </main>

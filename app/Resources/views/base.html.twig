@@ -48,9 +48,7 @@
         </div>
     </div>
     {% if app.request.attributes.get('_route') not in ['shop_cart_edit'] %}
-        {% autoescape false %}
-            {{ shopCart('shop_cart') }}
-        {% endautoescape %}
+        {{ shopCart('shop_cart') }}
     {% endif %}
 {% endblock %}
 

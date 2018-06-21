@@ -39,9 +39,7 @@
                                     <div class="col-6 col-lg-4">
                                         <div class="card mb-3">
                                             <div class="card-body">
-                                                {% autoescape false %}
-                                                    {{ renderOutputTypeArray(item, fields) }}
-                                                {% endautoescape %}
+                                                {{ renderOutputTypeArray(item, fields) }}
                                             </div>
                                         </div>
                                     </div>
@@ -51,12 +49,10 @@
                                             <div class="card-body">
                                                 <div class="catalog-list-item">
                                                     <div class="catalog-list-item-inner">
-                                                        {% autoescape false %}
-                                                            {{ renderOutputTypeChunk(item, fieldsAll, 'image') }}
-                                                            {{ renderOutputTypeChunk(item, fieldsAll, 'header') }}
-                                                            {{ renderOutputTypeChunk(item, fieldsAll, 'description') }}
-                                                            {{ renderOutputTypeChunk(item, fieldsAll, 'price') }}
-                                                        {% endautoescape %}
+                                                        {{ renderOutputTypeChunk(item, fieldsAll, 'image') }}
+                                                        {{ renderOutputTypeChunk(item, fieldsAll, 'header') }}
+                                                        {{ renderOutputTypeChunk(item, fieldsAll, 'description') }}
+                                                        {{ renderOutputTypeChunk(item, fieldsAll, 'price') }}
                                                     </div>
                                                 </div>
                                             </div>

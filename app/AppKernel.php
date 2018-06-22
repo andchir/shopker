@@ -18,8 +18,8 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle(),
             new Liip\ImagineBundle\LiipImagineBundle(),
-
             new AppBundle\AppBundle(),
+            new Andchir\OmnipayBundle\OmnipayBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

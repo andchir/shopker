@@ -5,7 +5,8 @@
     "description": "The \"Symfony Standard Edition\" distribution",
     "autoload": {
         "psr-4": {
-            "AppBundle\\": "src/AppBundle"
+            "AppBundle\\": "src/AppBundle",
+            "Andchir\\OmnipayBundle\\": "vendor/andchir/omnipay-bundle"
         },
         "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
     },
@@ -28,6 +29,7 @@
         "doctrine/phpcr-odm": "^1.4",
         "incenteev/composer-parameter-handler": "^2.0",
         "jackalope/jackalope-doctrine-dbal": "1.2.*",
+        "league/omnipay": "^3",
         "liip/imagine-bundle": "^1.9",
         "phpunit/phpunit": "^4.8",
         "sensio/distribution-bundle": "^5.0",

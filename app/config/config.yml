@@ -139,3 +139,11 @@ liip_imagine:
                     widen: 800
                 thumbnail: { size: [800, 800], mode: inset }
                 background: { size: [800, 800], position: center, color: '#ffffff' }
+
+omnipay:
+    gateways:
+        PayPal_Express:
+            username: test_api1.example.com
+            password: testpassword
+            signature: xxxxxxxxxxxxxxx
+            testMode: false

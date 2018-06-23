@@ -294,9 +294,11 @@ class AccountController extends Controller
         /** @var SettingsService $settingsService */
         $settingsService = $this->container->get('app.settings');
         $orderStatusSettings = $settingsService->getSettingsGroup(Setting::GROUP_ORDER_STATUSES);
+        $orderId = intval($orderId);
 
         $orderRepository = $this->getOrderRepository();
         $total = $orderRepository->getCountByUserId($user->getId());
+        $paymentStatusNumber = (int) $this->getParameter('payment_status_number');
 
         $pagesOptions = UtilsService::getPagesOptions([
             'page' => $page,
@@ -309,11 +311,29 @@ class AccountController extends Controller
             $pagesOptions['limit']
         );
 
+        $currentOrderStatusNumber = 0;
+        if (!empty($orderId)) {
+            $currentOrder = array_filter($orders->toArray(), function($order) use ($orderId) {
+                return $order->getId() === $orderId;
+            });
+            if (!empty($currentOrder)) {
+                /** @var Order $currentOrder */
+                $currentOrder = current($currentOrder);
+                $currentOrderStatusNumber = $settingsService->getStatusNumber(
+                    $currentOrder->getStatus(),
+                    $orderStatusSettings
+                );
+            }
+        }
+
         return $this->render('profile/history_orders.html.twig', [
             'orders' => $orders,
             'pagesOptions' => $pagesOptions,
             'currentOrderId' => $orderId,
-            'orderStatusSettings' => $orderStatusSettings
+            'orderStatusSettings' => $orderStatusSettings,
+            'paymentStatusNumber' => $paymentStatusNumber,
+            'currentOrderStatusNumber' => $currentOrderStatusNumber,
+            'isPaymentAllowed' => $paymentStatusNumber === $currentOrderStatusNumber
         ]);
     }
 

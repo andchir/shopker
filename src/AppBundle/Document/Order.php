@@ -103,6 +103,11 @@ class Order
      */
     protected $content;
 
+    /**
+     * @MongoDB\Field(type="boolean")
+     */
+    protected $isPaid;
+
     public function __construct()
     {
         $this->content = new ArrayCollection();
@@ -643,6 +648,28 @@ class Order
     public function removeContent(OrderContent $content)
     {
         $this->content->removeElement($content);
+    }
+
+    /**
+     * Set isPaid
+     *
+     * @param boolean $isPaid
+     * @return self
+     */
+    public function setIsPaid($isPaid)
+    {
+        $this->isPaid = $isPaid;
+        return $this;
+    }
+
+    /**
+     * Get isPaid
+     *
+     * @return boolean
+     */
+    public function getIsPaid()
+    {
+        return $this->isPaid;
     }
 
     /**

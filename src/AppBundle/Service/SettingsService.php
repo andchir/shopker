@@ -125,6 +125,20 @@ class SettingsService
     }
 
     /**
+     * @param $statusName
+     * @param $orderStatusSettings
+     * @return int
+     */
+    public function getStatusNumber($statusName, $orderStatusSettings)
+    {
+        $index = self::array_find($orderStatusSettings, function($setting) use ($statusName) {
+            /** @var Setting $setting */
+            return $setting->getName() === $statusName;
+        });
+        return $index !== null ? $index + 1 : 0;
+    }
+
+    /**
      * @return \AppBundle\Repository\FieldTypeRepository
      */
     public function getRepository()
@@ -145,5 +159,18 @@ class SettingsService
             $output[] = ['name' => $key, 'value' => $value];
         }
         return $output;
+    }
+
+    /**
+     * @param $array
+     * @param $f
+     * @return null
+     */
+    public static function array_find($array, $f) {
+        foreach ($array as $k => $x) {
+            if (call_user_func($f, $x) === true)
+                return $k;
+        }
+        return null;
     }
 }

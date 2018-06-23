@@ -102,11 +102,13 @@
                                 </table>
 
                                 <div class="text-right">
-                                    <!--div class="float-left">
-                                        <a class="btn btn-primary btn-sm" href="{{ app.request.getBaseURL() }}/omnipay_start/{{ order.id }}">
-                                            {{ 'Pay now' | trans }}
-                                        </a>
-                                    </div-->
+                                    {% if isPaymentAllowed %}
+                                        <div class="float-left">
+                                            <a class="btn btn-primary btn-sm" href="{{ app.request.getBaseURL() }}/omnipay_start/{{ order.id }}">
+                                                {{ 'Pay now' | trans }}
+                                            </a>
+                                        </div>
+                                    {% endif %}
                                     <a class="btn btn-secondary btn-sm" href="{{ path(app.request.attributes.get('_route'), {'page': pagesOptions.current}) }}">
                                         {{ 'Close' | trans }}
                                     </a>

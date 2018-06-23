@@ -12,3 +12,4 @@ parameters:
     mailer_auth_mode: 'login'
     mailer_user: ''
     mailer_password: ''
+    payment_status_number: 1

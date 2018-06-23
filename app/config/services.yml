@@ -3,7 +3,7 @@
 # Default parameters
 parameters:
     app_name: Shopkeeper
-    app_version: '4.0beta3'
+    app_version: '4.0beta4'
     locale: ru
     mongodb_server: 127.0.0.1
     mongodb_user: ''
@@ -16,6 +16,7 @@ parameters:
     mailer_password: ''
     mailer_encryption: 'ssl'
     mailer_auth_mode: 'login'
+    payment_status_number: 1
 
 services:
     #service_name:

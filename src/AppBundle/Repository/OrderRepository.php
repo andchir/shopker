@@ -31,7 +31,7 @@ class OrderRepository extends BaseRepository
      * @param $userId
      * @param int $skip
      * @param int $limit
-     * @return mixed
+     * @return \Doctrine\ODM\MongoDB\Cursor
      */
     public function getAllByUserId($userId, $skip = 0, $limit = 100)
     {

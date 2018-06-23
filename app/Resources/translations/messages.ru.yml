@@ -87,6 +87,7 @@ Profile: Профиль
 History of orders: История заказов
 Delivery address: Адрес доставки
 Pay now: Оплатить
+Paid: Оплачен
 ROLE_USER: Пользователь
 ROLE_ADMIN: Администратор
 ROLE_SUPER_ADMIN: Супер-Администратор

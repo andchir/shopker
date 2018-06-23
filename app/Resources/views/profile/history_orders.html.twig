@@ -102,13 +102,16 @@
                                 </table>
 
                                 <div class="text-right">
-                                    {% if isPaymentAllowed %}
-                                        <div class="float-left">
+                                    <div class="float-left">
+                                        {% if isPaymentAllowed and not order.isPaid %}
                                             <a class="btn btn-primary btn-sm" href="{{ app.request.getBaseURL() }}/omnipay_start/{{ order.id }}">
                                                 {{ 'Pay now' | trans }}
                                             </a>
-                                        </div>
-                                    {% endif %}
+                                        {% endif %}
+                                        {% if order.isPaid %}
+                                            <strong class="text-success">{{ 'Paid' | trans }}</strong>
+                                        {% endif %}
+                                    </div>
                                     <a class="btn btn-secondary btn-sm" href="{{ path(app.request.attributes.get('_route'), {'page': pagesOptions.current}) }}">
                                         {{ 'Close' | trans }}
                                     </a>

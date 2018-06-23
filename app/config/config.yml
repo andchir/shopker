@@ -143,7 +143,7 @@ liip_imagine:
 omnipay:
     gateways:
         PayPal_Express:
-            username: test_api1.example.com
-            password: testpassword
-            signature: xxxxxxxxxxxxxxx
+            username: xxxxx_api1.gmail.com
+            password: xxxxxxxxxx
+            signature: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
             testMode: false

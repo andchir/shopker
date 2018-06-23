@@ -7,6 +7,7 @@ use AppBundle\Document\Setting;
 use AppBundle\Document\User;
 
 use AppBundle\Form\Type\OrderOptionsType;
+use AppBundle\Repository\OrderRepository;
 use AppBundle\Repository\UserRepository;
 use AppBundle\Service\SettingsService;
 use AppBundle\Service\UtilsService;
@@ -294,28 +295,19 @@ class AccountController extends Controller
         $settingsService = $this->container->get('app.settings');
         $orderStatusSettings = $settingsService->getSettingsGroup(Setting::GROUP_ORDER_STATUSES);
 
-        $query = $this->get('doctrine_mongodb')
-            ->getManager()
-            ->createQueryBuilder(Order::class);
-
-        $total = $query
-            ->field('userId')->equals($user->getId())
-            ->getQuery()
-            ->execute()
-            ->count();
+        $orderRepository = $this->getOrderRepository();
+        $total = $orderRepository->getCountByUserId($user->getId());
 
         $pagesOptions = UtilsService::getPagesOptions([
             'page' => $page,
             'limit' => $pageLimit
         ], $total);
 
-        $orders = $query
-            ->field('userId')->equals($user->getId())
-            ->sort('createdDate', 'desc')
-            ->skip($pagesOptions['skip'])
-            ->limit($pagesOptions['limit'])
-            ->getQuery()
-            ->execute();
+        $orders = $orderRepository->getAllByUserId(
+            $user->getId(),
+            $pagesOptions['skip'],
+            $pagesOptions['limit']
+        );
 
         return $this->render('profile/history_orders.html.twig', [
             'orders' => $orders,
@@ -363,6 +355,16 @@ class AccountController extends Controller
         return $this->get('doctrine_mongodb')
             ->getManager()
             ->getRepository(User::class);
+    }
+
+    /**
+     * @return OrderRepository
+     */
+    public function getOrderRepository()
+    {
+        return $this->get('doctrine_mongodb')
+            ->getManager()
+            ->getRepository(Order::class);
     }
 
 }

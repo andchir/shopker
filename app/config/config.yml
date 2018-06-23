@@ -141,9 +141,11 @@ liip_imagine:
                 background: { size: [800, 800], position: center, color: '#ffffff' }
 
 omnipay:
+    success_url: "/profile/history_orders"
+    fail_url: "/profile/history_orders"
     gateways:
         PayPal_Express:
-            username: xxxxx_api1.gmail.com
-            password: xxxxxxxxxx
-            signature: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-            testMode: false
+            username: sdk-three_api1.sdk.com
+            password: QFZCWN5HZM8VBG7Q
+            signature: A-IzJhZZjhg29XQ2qnhapuwxIDzyAZQ92FRP5dqBzVesOkzbdUONzmOU
+            testMode: true

@@ -30,7 +30,8 @@ class ContentTypeController extends StorageControllerAbstract
         'users',
         'cache',
         'order',
-        'order_content'
+        'order_content',
+        'payment'
     ];
 
     /**

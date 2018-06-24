@@ -121,7 +121,7 @@ class AppRuntime
      * @param $orderBy
      * @param int $limit
      * @param int $groupSize
-     * @param bool $cacheEnabled
+     * @param string $cacheKey
      * @return string
      */
     public function contentListFunction(
@@ -132,16 +132,15 @@ class AppRuntime
         $orderBy = ['_id' => 'asc'],
         $limit = 20,
         $groupSize = 1,
-        $cacheEnabled = false
+        $cacheKey = ''
     )
     {
         if (!$collectionName) {
             return '';
         }
-        $cacheKey = 'content_list.' . $chunkName;
         /** @var FilesystemCache $cache */
         $cache = $this->container->get('app.filecache');
-        if ($cacheEnabled && $cache->has($cacheKey)) {
+        if (!empty($cacheKey) && $cache->has($cacheKey)) {
             return $cache->get($cacheKey);
         }
 
@@ -162,7 +161,7 @@ class AppRuntime
             'groupSize' => $groupSize,
             'groupCount' => ceil(count($items) / $groupSize)
         ]);
-        if ($cacheEnabled) {
+        if (!empty($cacheKey)) {
             $cache->set($cacheKey, $output, 60*60*24);
         }
         return $output;

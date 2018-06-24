@@ -520,7 +520,8 @@ class CatalogFixtures extends Fixture
                                                 'country' => 'China',
                                                 'color' => '#000000',
                                                 'material' => 'Artificial leather',
-                                                'image' => ''
+                                                'image' => '',
+                                                'tags' => ['New', 'Leader of sales']
                                             ],
                                             [
                                                 'title' => 'Sneakers Patrol White',
@@ -531,7 +532,8 @@ class CatalogFixtures extends Fixture
                                                 'country' => 'China',
                                                 'color' => '#984d06',
                                                 'material' => 'Artificial leather',
-                                                'image' => ''
+                                                'image' => '',
+                                                'tags' => ['New']
                                             ],
                                             [
                                                 'title' => 'Sneakers Patrol Brown',
@@ -575,7 +577,8 @@ class CatalogFixtures extends Fixture
                                                 'country' => 'Russia',
                                                 'color' => '#000000',
                                                 'material' => 'Textile',
-                                                'image' => ''
+                                                'image' => '',
+                                                'tags' => ['New']
                                             ],
                                             [
                                                 'title' => 'Sneakers Nike COURT ROYALE',
@@ -608,7 +611,8 @@ class CatalogFixtures extends Fixture
                                                 'country' => 'Vietnam',
                                                 'color' => '#ffffff',
                                                 'material' => 'Genuine leather',
-                                                'image' => ''
+                                                'image' => '',
+                                                'tags' => ['New']
                                             ],
                                             [
                                                 'title' => 'Sneakers Nike Court Royale Suede',
@@ -641,7 +645,8 @@ class CatalogFixtures extends Fixture
                                                 'country' => 'China',
                                                 'color' => '#0f77b0',
                                                 'material' => 'Artificial leather, Textile',
-                                                'image' => ''
+                                                'image' => '',
+                                                'tags' => ['New']
                                             ],
                                             [
                                                 'title' => 'Valenki Cotofey',
@@ -652,7 +657,8 @@ class CatalogFixtures extends Fixture
                                                 'country' => 'Russia',
                                                 'color' => '#000000',
                                                 'material' => 'Felt',
-                                                'image' => ''
+                                                'image' => '',
+                                                'tags' => ['New']
                                             ]
                                         ]
                                     ],

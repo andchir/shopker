@@ -520,7 +520,8 @@ class CatalogFixtures extends Fixture
                                                 'country' => 'Китай',
                                                 'color' => '#000000',
                                                 'material' => 'Искусственная кожа',
-                                                'image' => ''
+                                                'image' => '',
+                                                'tags' => ['Новинка', 'Лидер продаж']
                                             ],
                                             [
                                                 'title' => 'Кроссовки Patrol White',
@@ -531,7 +532,8 @@ class CatalogFixtures extends Fixture
                                                 'country' => 'Китай',
                                                 'color' => '#984d06',
                                                 'material' => 'Искусственная кожа',
-                                                'image' => ''
+                                                'image' => '',
+                                                'tags' => ['Новинка']
                                             ],
                                             [
                                                 'title' => 'Кроссовки Patrol Brown',
@@ -575,7 +577,8 @@ class CatalogFixtures extends Fixture
                                                 'country' => 'Россия',
                                                 'color' => '#000000',
                                                 'material' => 'Текстиль',
-                                                'image' => ''
+                                                'image' => '',
+                                                'tags' => ['Новинка']
                                             ],
                                             [
                                                 'title' => 'Кеды Nike COURT ROYALE',
@@ -597,7 +600,8 @@ class CatalogFixtures extends Fixture
                                                 'country' => 'Индонезия',
                                                 'color' => '#ffffff',
                                                 'material' => 'Искусственная кожа',
-                                                'image' => ''
+                                                'image' => '',
+                                                'tags' => ['Новинка']
                                             ],
                                             [
                                                 'title' => 'Кроссовки Nike Reax 8 TR',
@@ -608,7 +612,8 @@ class CatalogFixtures extends Fixture
                                                 'country' => 'Вьетнам',
                                                 'color' => '#ffffff',
                                                 'material' => 'Натуральная кожа',
-                                                'image' => ''
+                                                'image' => '',
+                                                'tags' => ['Новинка']
                                             ],
                                             [
                                                 'title' => 'Кеды Nike Court Royale Suede',
@@ -641,7 +646,8 @@ class CatalogFixtures extends Fixture
                                                 'country' => 'Китай',
                                                 'color' => '#0f77b0',
                                                 'material' => 'Искусственная кожа, Текстиль',
-                                                'image' => ''
+                                                'image' => '',
+                                                'tags' => ['Новинка']
                                             ],
                                             [
                                                 'title' => 'Валенки Котофей',

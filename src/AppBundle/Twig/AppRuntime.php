@@ -140,8 +140,8 @@ class AppRuntime
         }
         /** @var FilesystemCache $cache */
         $cache = $this->container->get('app.filecache');
-        if (!empty($cacheKey) && $cache->has($cacheKey)) {
-            return $cache->get($cacheKey);
+        if (!empty($cacheKey) && $cache->has("content.{$cacheKey}")) {
+            return $cache->get("content.{$cacheKey}");
         }
 
         $templateName = sprintf('catalog/%s.html.twig', $chunkName);
@@ -162,7 +162,7 @@ class AppRuntime
             'groupCount' => ceil(count($items) / $groupSize)
         ]);
         if (!empty($cacheKey)) {
-            $cache->set($cacheKey, $output, 60*60*24);
+            $cache->set("content.{$cacheKey}", $output, 60*60*24);
         }
         return $output;
     }

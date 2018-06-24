@@ -114,6 +114,7 @@ var APP_LANG = {
     "mongodb_password": "MongoDB password",
     "mongodb_server": "MongoDB server",
     "mongodb_user": "MongoDB user",
+    "admin_email": "Admin email",
     "payment_status_number": "Order status number for payment",
     "payment_status_after_number": "Order status number after payment"
 };

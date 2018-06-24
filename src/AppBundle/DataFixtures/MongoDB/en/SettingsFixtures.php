@@ -40,7 +40,7 @@ class SettingsFixtures extends Fixture
                     'description' => '',
                     'options' => [
                         'template' => ['value' => 'userEmailStatus', 'type' => 'text'],
-                        'color' => ['value' => '#42c5f4', 'type' => 'text']
+                        'color' => ['value' => '#e65c00', 'type' => 'text']
                     ]
                 ],
                 [

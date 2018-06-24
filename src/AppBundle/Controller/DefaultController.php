@@ -110,7 +110,9 @@ class DefaultController extends CatalogController
             'mailer_password' => $this->getParameter('mailer_password'),
             'mailer_encryption' => $this->getParameter('mailer_encryption'),
             'mailer_auth_mode' => $this->getParameter('mailer_auth_mode'),
-            'payment_status_number' => 1
+            'admin_email' => '',
+            'payment_status_number' => 1,
+            'payment_status_after_number' => 2
         ];
 
         /** @var SettingsService $settingsService */

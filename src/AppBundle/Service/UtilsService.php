@@ -26,17 +26,28 @@ class UtilsService
      * @param $subject
      * @param $mailBody
      * @param $toEmail
-     * @return int
+     * @return bool|int
      */
     public function sendMail($subject, $mailBody, $toEmail)
     {
+        if (empty($this->container->getParameter('mailer_user'))) {
+            return false;
+        }
         /** @var \Swift_Mailer $mailer */
         $mailer = $this->container->get('mailer');
         $message = (new \Swift_Message($subject))
         //$message = \Swift_Message::newInstance()
             ->setSubject($subject)
-            ->setFrom($this->container->getParameter('mailer_user'), $this->container->getParameter('app_name'))
+            ->setFrom(
+                $this->container->getParameter('mailer_user'),
+                $this->container->getParameter('app_name')
+            )
             ->setTo($toEmail)
+            ->setReplyTo(
+                !empty($this->container->getParameter('admin_email'))
+                    ? $this->container->getParameter('admin_email')
+                    : $this->container->getParameter('mailer_user')
+            )
             ->setBody(
                 $mailBody,
                 'text/html'

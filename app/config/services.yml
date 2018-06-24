@@ -16,7 +16,9 @@ parameters:
     mailer_password: ''
     mailer_encryption: 'ssl'
     mailer_auth_mode: 'login'
+    admin_email: ''
     payment_status_number: 1
+    payment_status_after_number: 2
 
 services:
     #service_name:

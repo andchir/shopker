@@ -113,6 +113,7 @@ var APP_LANG = {
     "mongodb_password": "MongoDB: Пароль",
     "mongodb_server": "MongoDB: Сервер",
     "mongodb_user": "MongoDB: Пользоватеь",
+    "admin_email": "Адрес эл. почты администратора",
     "payment_status_number": "Номер статуса заказа для оплаты",
     "payment_status_after_number": "Номер статуса заказа после оплаты"
 };

@@ -142,7 +142,7 @@ liip_imagine:
 
 omnipay:
     success_url: "/profile/history_orders"
-    fail_url: "/profile/history_orders"
+    fail_url: "/"
     gateways:
         PayPal_Express:
             username: xxxxx_api1.gmail.com

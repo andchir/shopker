@@ -36,6 +36,14 @@ class SettingsFixtures extends Fixture
                     ]
                 ],
                 [
+                    'name' => 'Ожидается отправка',
+                    'description' => '',
+                    'options' => [
+                        'template' => ['value' => 'userEmailStatus', 'type' => 'text'],
+                        'color' => ['value' => '#42c5f4', 'type' => 'text']
+                    ]
+                ],
+                [
                     'name' => 'Отправлен',
                     'description' => '',
                     'options' => [

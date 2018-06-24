@@ -36,6 +36,14 @@ class SettingsFixtures extends Fixture
                     ]
                 ],
                 [
+                    'name' => 'Awaiting shipment',
+                    'description' => '',
+                    'options' => [
+                        'template' => ['value' => 'userEmailStatus', 'type' => 'text'],
+                        'color' => ['value' => '#42c5f4', 'type' => 'text']
+                    ]
+                ],
+                [
                     'name' => 'Sent',
                     'description' => '',
                     'options' => [

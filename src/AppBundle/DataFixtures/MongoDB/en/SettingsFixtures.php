@@ -96,17 +96,17 @@ class SettingsFixtures extends Fixture
             ],
             'SETTINGS_PAYMENT' => [
                 [
-                    'name' => 'Online payment by credit card',
+                    'name' => 'Payment upon receipt',
                     'description' => '',
                     'options' => [
                         'value' => ['value' => '', 'type' => 'text']
                     ]
                 ],
                 [
-                    'name' => 'Payment upon receipt',
+                    'name' => 'PayPal',
                     'description' => '',
                     'options' => [
-                        'value' => ['value' => '', 'type' => 'text']
+                        'value' => ['value' => 'PayPal_Express', 'type' => 'text']
                     ]
                 ]
             ],

@@ -96,17 +96,17 @@ class SettingsFixtures extends Fixture
             ],
             'SETTINGS_PAYMENT' => [
                 [
-                    'name' => 'Онлайн банковской картой',
+                    'name' => 'Оплата при получении',
                     'description' => '',
                     'options' => [
                         'value' => ['value' => '', 'type' => 'text']
                     ]
                 ],
                 [
-                    'name' => 'Оплата при получении',
+                    'name' => 'PayPal',
                     'description' => '',
                     'options' => [
-                        'value' => ['value' => '', 'type' => 'text']
+                        'value' => ['value' => 'PayPal_Express', 'type' => 'text']
                     ]
                 ]
             ],

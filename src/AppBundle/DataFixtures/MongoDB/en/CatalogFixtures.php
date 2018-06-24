@@ -240,6 +240,27 @@ class CatalogFixtures extends Fixture
                 'isFilter' => true
             ],
             [
+                'title' => 'Tags',
+                'name' => 'tags',
+                'description' => '',
+                'inputType' => 'checkbox',
+                'inputProperties' => [
+                    'value' => '',
+                    'handler' => '',
+                    'values_list' => 'New||Leader of sales||Action'
+                ],
+                'outputType' => 'text',
+                'outputProperties' => [
+                    'className' => '',
+                    'chunkName' => ''
+                ],
+                'group' => 'Options',
+                'required' => false,
+                'showInTable' => false,
+                'showInList' => false,
+                'isFilter' => false
+            ],
+            [
                 'title' => 'Parameters',
                 'name' => 'parameters',
                 'description' => '',

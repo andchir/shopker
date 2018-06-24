@@ -2,6 +2,7 @@
 
 namespace AppBundle\Twig;
 
+use AppBundle\Controller\CatalogController;
 use AppBundle\Document\OrderContent;
 use AppBundle\Document\Setting;
 use AppBundle\Service\SettingsService;
@@ -109,6 +110,61 @@ class AppRuntime
         $output = $environment->render($templateName, $properties);
         $cache->set($cacheKey, $output, 60*60*24);
 
+        return $output;
+    }
+
+    /**
+     * @param \Twig_Environment $environment
+     * @param string $chunkName
+     * @param $collectionName
+     * @param array $criteria
+     * @param $orderBy
+     * @param int $limit
+     * @param int $groupSize
+     * @param bool $cacheEnabled
+     * @return string
+     */
+    public function contentListFunction(
+        \Twig_Environment $environment,
+        $chunkName = 'content_list',
+        $collectionName,
+        $criteria,
+        $orderBy = ['_id' => 'asc'],
+        $limit = 20,
+        $groupSize = 1,
+        $cacheEnabled = false
+    )
+    {
+        if (!$collectionName) {
+            return '';
+        }
+        $cacheKey = 'content_list.' . $chunkName;
+        /** @var FilesystemCache $cache */
+        $cache = $this->container->get('app.filecache');
+        if ($cacheEnabled && $cache->has($cacheKey)) {
+            return $cache->get($cacheKey);
+        }
+
+        $templateName = sprintf('catalog/%s.html.twig', $chunkName);
+
+        $catalogController = new CatalogController();
+        $catalogController->setContainer($this->container);
+        $collection = $catalogController->getCollection($collectionName);
+
+        $items = $collection
+            ->find($criteria)
+            ->sort($orderBy)
+            ->limit($limit);
+
+        $output = $environment->render($templateName, [
+            'items' => $items,
+            'total' => count($items),
+            'groupSize' => $groupSize,
+            'groupCount' => ceil(count($items) / $groupSize)
+        ]);
+        if ($cacheEnabled) {
+            $cache->set($cacheKey, $output, 60*60*24);
+        }
         return $output;
     }
 

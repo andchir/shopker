@@ -240,6 +240,27 @@ class CatalogFixtures extends Fixture
                 'isFilter' => true
             ],
             [
+                'title' => 'Метки',
+                'name' => 'tags',
+                'description' => '',
+                'inputType' => 'checkbox',
+                'inputProperties' => [
+                    'value' => '',
+                    'handler' => '',
+                    'values_list' => 'Новинка||Лидер продаж||Акция'
+                ],
+                'outputType' => 'text',
+                'outputProperties' => [
+                    'className' => '',
+                    'chunkName' => ''
+                ],
+                'group' => 'Параметры',
+                'required' => false,
+                'showInTable' => false,
+                'showInList' => false,
+                'isFilter' => false
+            ],
+            [
                 'title' => 'Параметры',
                 'name' => 'parameters',
                 'description' => '',

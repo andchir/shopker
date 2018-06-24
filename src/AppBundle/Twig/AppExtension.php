@@ -3,6 +3,7 @@
 namespace AppBundle\Twig;
 
 use AppBundle\Controller\CatalogController;
+use AppBundle\Document\Category;
 use AppBundle\Document\Setting;
 use AppBundle\Service\SettingsService;
 use AppBundle\Service\UtilsService;
@@ -19,6 +20,8 @@ class AppExtension extends AbstractExtension
     protected $container;
     /** @var  RequestStack */
     protected $requestStack;
+    /** @var array */
+    protected $cache = [];
 
     /** @param ContainerInterface $container */
     public function __construct(ContainerInterface $container, RequestStack $requestStack)
@@ -72,19 +75,63 @@ class AppExtension extends AbstractExtension
                 'is_safe' => ['html'],
                 'needs_environment' => true
             ]),
-            new TwigFunction('imageUrl', [AppRuntime::class, 'imageUrlFunction'])
+            new TwigFunction('imageUrl', [AppRuntime::class, 'imageUrlFunction']),
+            new TwigFunction('contentList', [AppRuntime::class, 'contentListFunction'], [
+                'is_safe' => ['html'],
+                'needs_environment' => true
+            ])
         ];
     }
 
     /**
      * @param string $parentUri
      * @param string $systemName
+     * @param array $itemData
      * @return string
      */
-    public function catalogPathFunction($parentUri = '', $systemName = '')
+    public function catalogPathFunction($parentUri = '', $systemName = '', $itemData = [])
     {
         $baseUrl = $this->container->get('router')->getContext()->getBaseUrl();
         $path = $baseUrl;
+
+        if (!$parentUri && !$systemName) {
+            $parentId = isset($itemData['parentId']) ? $itemData['parentId'] : 0;
+            if ($parentId) {
+                if (isset($this->cache['categoryUriData'][$parentId])) {
+                    $parentUri = $this->cache['categoryUriData'][$parentId]['uri'];
+                    $systemNameField = isset($this->cache['categoryUriData'][$parentId]['systemNameField'])
+                        ? $this->cache['categoryUriData'][$parentId]['systemNameField']
+                        : '';
+                    $systemName = $systemNameField && !empty($itemData[$systemNameField])
+                        ? $itemData[$systemNameField]
+                        : '';
+                } else {
+                    /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+                    $dm = $this->container->get('doctrine_mongodb')->getManager();
+                    $categoryRepository = $dm->getRepository(Category::class);
+                    /** @var Category $category */
+                    $category = $categoryRepository->findOneBy([
+                        'id' => $parentId,
+                        'isActive' => true
+                    ]);
+                    $systemNameField = '';
+                    if ($category) {
+                        $parentUri = $category->getUri();
+                        $systemNameField = $category->getContentType()->getSystemNameField();
+                        $systemName = $systemNameField && !empty($itemData[$systemNameField])
+                            ? $itemData[$systemNameField]
+                            : '';
+                    }
+                    if (!isset($this->cache['categoryUriData'])) {
+                        $this->cache['categoryUriData'] = [];
+                    }
+                    $this->cache['categoryUriData'][$parentId] = [
+                        'uri' => $parentUri,
+                        'systemNameField' => $systemNameField
+                    ];
+                }
+            }
+        }
         if ($parentUri) {
             $path .= '/' . $parentUri;
         }

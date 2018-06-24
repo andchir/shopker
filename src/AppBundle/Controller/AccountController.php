@@ -319,9 +319,8 @@ class AccountController extends Controller
             if (!empty($currentOrder)) {
                 /** @var Order $currentOrder */
                 $currentOrder = current($currentOrder);
-                $currentOrderStatusNumber = $settingsService->getStatusNumber(
-                    $currentOrder->getStatus(),
-                    $orderStatusSettings
+                $currentOrderStatusNumber = $settingsService->getOrderStatusNumber(
+                    $currentOrder->getStatus()
                 );
             }
         }

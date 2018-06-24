@@ -13,3 +13,4 @@ parameters:
     mailer_user: ''
     mailer_password: ''
     payment_status_number: 1
+    payment_status_after_number: 2

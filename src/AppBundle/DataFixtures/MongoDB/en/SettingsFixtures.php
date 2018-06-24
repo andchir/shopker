@@ -28,7 +28,7 @@ class SettingsFixtures extends Fixture
                     ]
                 ],
                 [
-                    'name' => 'Accepted for payment',
+                    'name' => 'Paid',
                     'description' => '',
                     'options' => [
                         'template' => ['value' => 'userEmailStatus', 'type' => 'text'],

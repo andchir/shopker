@@ -126,16 +126,29 @@ class SettingsService
 
     /**
      * @param $statusName
-     * @param $orderStatusSettings
      * @return int
      */
-    public function getStatusNumber($statusName, $orderStatusSettings)
+    public function getOrderStatusNumber($statusName)
     {
+        $orderStatusSettings = $this->getSettingsGroup(Setting::GROUP_ORDER_STATUSES);
+
         $index = self::array_find($orderStatusSettings, function($setting) use ($statusName) {
             /** @var Setting $setting */
             return $setting->getName() === $statusName;
         });
         return $index !== null ? $index + 1 : 0;
+    }
+
+    /**
+     * @param $statusNumber
+     * @return Setting|null
+     */
+    public function getOrderStatusByNumber($statusNumber)
+    {
+        $orderStatusSettings = $this->getSettingsGroup(Setting::GROUP_ORDER_STATUSES);
+        return isset($orderStatusSettings[$statusNumber-1])
+            ? $orderStatusSettings[$statusNumber-1]
+            : null;
     }
 
     /**

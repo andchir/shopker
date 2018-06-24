@@ -97,41 +97,75 @@ class OrderController extends StorageControllerAbstract
      */
     public function updateItemPropertyAction(Request $request, $fieldName, $itemId)
     {
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
         $data = $request->getContent()
             ? json_decode($request->getContent(), true)
             : [];
         $value = isset($data['value']) ? $data['value'] : null;
 
-        $repository = $this->getRepository();
-        /** @var Order $order */
-        $order = $repository->find($itemId);
-        if(!$order){
+        if (!$this->updateItemProperty($itemId, $fieldName, $value)) {
             return $this->setError('Item not found.');
-        }
-
-        if (method_exists($order, 'set' . $fieldName)) {
-            call_user_func(array($order, 'set' . $fieldName), $value);
-        }
-
-        $dm->flush();
-
-        // Send email for change order status
-        if ($fieldName == 'status') {
-            /** @var UtilsService $utilsService */
-            $utilsService = $this->get('app.utils');
-            /** @var TranslatorInterface $translator */
-            $translator = $this->get('translator');
-            $utilsService->orderSendMail(
-                $this->getParameter('app_name') . ' - ' . $translator->trans('mail_subject.order_status_change'),
-                $order
-            );
         }
 
         return new JsonResponse([
             'success' => true
         ]);
+    }
+
+    /**
+     * @param $itemId
+     * @param $fieldName
+     * @param $value
+     * @return bool
+     */
+    public function updateItemProperty($itemId, $fieldName, $value)
+    {
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $repository = $this->getRepository();
+        /** @var Order $order */
+        $order = $repository->find($itemId);
+        if(!$order){
+            return false;
+        }
+        $previousValue = '';
+
+        if (method_exists($order, 'set' . $fieldName)) {
+            $previousValue = call_user_func(array($order, 'get' . $fieldName), $value);
+            call_user_func(array($order, 'set' . $fieldName), $value);
+        }
+
+        // Send email for change order status
+        if ($fieldName == 'status') {
+
+            /** @var SettingsService $settingsService */
+            $settingsService = $this->container->get('app.settings');
+
+            $paymentStatusNumber = (int) $this->getParameter('payment_status_number');
+            $paymentStatusAfterNumber = (int) $this->getParameter('payment_status_after_number');
+            $currentOrderStatusNumber = $settingsService->getOrderStatusNumber(
+                $order->getStatus()
+            );
+            if ($currentOrderStatusNumber === $paymentStatusAfterNumber) {
+                $order->setIsPaid(true);
+            }
+            if ($currentOrderStatusNumber === $paymentStatusNumber) {
+                $order->setIsPaid(false);
+            }
+
+            /** @var UtilsService $utilsService */
+            $utilsService = $this->get('app.utils');
+            /** @var TranslatorInterface $translator */
+            $translator = $this->get('translator');
+            $utilsService->orderSendMail(
+                $this->getParameter('app_name') . ' - '
+                    . $translator->trans('mail_subject.order_status_change'),
+                $order
+            );
+        }
+
+        $dm->flush();
+
+        return true;
     }
 
     /**

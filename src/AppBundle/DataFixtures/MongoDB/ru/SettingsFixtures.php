@@ -28,7 +28,7 @@ class SettingsFixtures extends Fixture
                     ]
                 ],
                 [
-                    'name' => 'Принят к оплате',
+                    'name' => 'Оплачен',
                     'description' => '',
                     'options' => [
                         'template' => ['value' => 'userEmailStatus', 'type' => 'text'],

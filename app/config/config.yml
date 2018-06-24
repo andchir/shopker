@@ -145,7 +145,7 @@ omnipay:
     fail_url: "/profile/history_orders"
     gateways:
         PayPal_Express:
-            username: sdk-three_api1.sdk.com
-            password: QFZCWN5HZM8VBG7Q
-            signature: A-IzJhZZjhg29XQ2qnhapuwxIDzyAZQ92FRP5dqBzVesOkzbdUONzmOU
-            testMode: true
+            username: xxxxx_api1.gmail.com
+            password: xxxxxxxxxxxxxxxx
+            signature: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+            testMode: false

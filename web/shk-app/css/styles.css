@@ -104,6 +104,7 @@ header .header-brand { display: inline-block; padding: 0.1rem 0.2rem 0 1rem; fon
 .card .card-header > * { display: inline-block; padding-bottom: 0.7rem; border-bottom: 1px solid rgba(0,0,0,0.125); }
 
 /* carousel */
+.carousel-indicators { bottom: -30px; }
 .carousel-indicators.carousel-indicators-inverted li { background-color: #ddd; }
 .carousel-indicators.carousel-indicators-inverted li.active { background-color: #6c757d; }
 .carousel-control-icon { font-size: 70px; color: #6c757d; }

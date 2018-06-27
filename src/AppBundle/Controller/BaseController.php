@@ -37,26 +37,4 @@ class BaseController extends Controller
         }
         return $tree;
     }
-
-    /**
-     * @param $string
-     * @return array
-     */
-    public static function stringToArray($string)
-    {
-        $output = explode(',', $string);
-        return array_map('trim', $output);
-    }
-
-    /**
-     * @param array $inputArr
-     * @param array $targetArr
-     * @return array
-     */
-    public static function arrayFilter($inputArr, $targetArr)
-    {
-        return array_filter($inputArr, function($val) use($targetArr) {
-            return in_array($val, $targetArr);
-        });
-    }
 }

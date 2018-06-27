@@ -2,6 +2,7 @@
 
 namespace AppBundle\Service;
 
+use AppBundle\Document\ContentType;
 use AppBundle\Document\Order;
 use AppBundle\Document\Setting;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -106,9 +107,10 @@ class UtilsService
      * @param array $queryOptions
      * @param int $itemsTotal
      * @param array $pageSizeArr
+     * @param array $options
      * @return array
      */
-    public static function getPagesOptions($queryOptions, $itemsTotal, $pageSizeArr = [10])
+    public static function getPagesOptions($queryOptions, $itemsTotal, $pageSizeArr = [10], $options = [])
     {
         $pagesOptions = [
             'pageSizeArr' => $pageSizeArr,
@@ -116,11 +118,128 @@ class UtilsService
             'limit' => $queryOptions['limit'],
             'total' => ceil($itemsTotal / $queryOptions['limit']),
             'prev' => max(1, $queryOptions['page'] - 1),
-            'skip' => $skip = ($queryOptions['page'] - 1) * $queryOptions['limit']
+            'skip' => ($queryOptions['page'] - 1) * $queryOptions['limit'],
+            'pageVar' => isset($options['pageVar']) ? $options['pageVar'] : 'page',
+            'limitVar' => isset($options['limitVar']) ? $options['limitVar'] : 'limit'
         ];
         $pagesOptions['next'] = min($pagesOptions['total'], $queryOptions['page'] + 1);
 
         return $pagesOptions;
+    }
+
+    /**
+     * @param string $currentUri
+     * @param string $queryString
+     * @param array $contentTypeFields
+     * @param array $pageSizeArr
+     * @param array $options
+     * @return array
+     */
+    public static function getQueryOptions($currentUri, $queryString, $contentTypeFields = [], $pageSizeArr = [10], $options = [])
+    {
+        $queryOptionsDefault = [
+            'uri' => '',
+            'page' => 1,
+            'limit' => $pageSizeArr[0],
+            'limit_max' => 100,
+            'sort_by' => '_id',
+            'sort_dir' => 1,
+            'order_by' => 'id_desc',
+            'full' => 1,
+            'only_active' => 1,
+            'filter' => [],
+            'filterStr' => ''
+        ];
+        parse_str($queryString, $queryOptions);
+        if (isset($options['pageVar']) && isset($queryOptions[$options['pageVar']])) {
+            $queryOptions['page'] = $queryOptions[$options['pageVar']];
+        }
+        if (isset($options['limitVar']) && isset($queryOptions[$options['limitVar']])) {
+            $queryOptions['limit'] = $queryOptions[$options['limitVar']];
+        }
+
+        $queryOptions['uri'] = $currentUri;
+        if (!empty($queryOptions['order_by']) && strpos($queryOptions['order_by'], '_') !== false) {
+            $orderByArr = explode('_', $queryOptions['order_by']);
+            if (empty($queryOptions['sort_by'])) {
+                $queryOptions['sort_by'] = $orderByArr[0];
+            }
+            if (empty($queryOptions['sort_dir'])) {
+                $queryOptions['sort_dir'] = $orderByArr[1];
+            }
+        }
+
+        $queryOptions = array_merge($queryOptionsDefault, $queryOptions);
+
+        //Field names array
+        $fieldNames = [];
+        if (!empty($contentTypeFields)) {
+            $fieldNames = array_column($contentTypeFields, 'name');
+            $fieldNames[] = '_id';
+        }
+
+        if($queryOptions['sort_by'] == 'id'){
+            $queryOptions['sort_by'] = '_id';
+        }
+
+        $queryOptions['sort_by'] = UtilsService::stringToArray($queryOptions['sort_by']);
+        if (!empty($fieldNames)) {
+            $queryOptions['sort_by'] = UtilsService::arrayFilter($queryOptions['sort_by'], $fieldNames);
+        }
+        $queryOptions['sort_dir'] = UtilsService::stringToArray($queryOptions['sort_dir']);
+        $queryOptions['sort_dir'] = UtilsService::arrayFilter($queryOptions['sort_dir'], ['asc', 'desc']);
+
+        if(empty($queryOptions['sort_by'])){
+            $queryOptions['sort_by'] = [$queryOptionsDefault['sort_by']];
+        }
+        if(empty($queryOptions['sort_dir'])){
+            $queryOptions['sort_dir'] = [$queryOptionsDefault['sort_dir']];
+        }
+
+        // Sorting options
+        $queryOptions['sortOptions'] = [];
+        foreach ($queryOptions['sort_by'] as $ind => $sortByName) {
+            $queryOptions['sortOptions'][$sortByName] = isset($queryOptions['sort_dir'][$ind])
+                ? $queryOptions['sort_dir'][$ind]
+                : $queryOptions['sort_dir'][0];
+        }
+
+        if(!is_numeric($queryOptions['limit'])){
+            $queryOptions['limit'] = $queryOptionsDefault['limit'];
+        }
+        if(!is_numeric($queryOptions['page'])){
+            $queryOptions['page'] = $queryOptionsDefault['page'];
+        }
+        $queryOptions['limit'] = min(abs(intval($queryOptions['limit'])), $queryOptions['limit_max']);
+        $queryOptions['page'] = abs(intval($queryOptions['page']));
+
+        if (!empty($queryOptions['filter']) && is_array($queryOptions['filter'])) {
+            $queryOptions['filterStr'] = '&' . http_build_query(['filter' => $queryOptions['filter']]);
+        }
+
+        return $queryOptions;
+    }
+
+    /**
+     * @param $string
+     * @return array
+     */
+    public static function stringToArray($string)
+    {
+        $output = explode(',', $string);
+        return array_map('trim', $output);
+    }
+
+    /**
+     * @param array $inputArr
+     * @param array $targetArr
+     * @return array
+     */
+    public static function arrayFilter($inputArr, $targetArr)
+    {
+        return array_filter($inputArr, function($val) use ($targetArr) {
+            return in_array($val, $targetArr);
+        });
     }
 
     /**

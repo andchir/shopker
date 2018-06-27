@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Repository\CategoryRepository;
+use AppBundle\Service\UtilsService;
 use Doctrine\ODM\MongoDB\Cursor;
 use Doctrine\ODM\MongoDB\DocumentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -15,87 +16,6 @@ use AppBundle\Document\ContentType;
 
 class ProductController extends BaseController
 {
-
-    /**
-     * @param $queryString
-     * @param ContentType $contentType
-     * @param array $pageSizeArr
-     * @return array
-     */
-    public function getQueryOptions($queryString, ContentType $contentType, $pageSizeArr = [10])
-    {
-        $queryOptionsDefault = [
-            'page' => 1,
-            'limit' => $pageSizeArr[0],
-            'limit_max' => 100,
-            'sort_by' => '_id',
-            'sort_dir' => 1,
-            'order_by' => 'id_desc',
-            'full' => 1,
-            'only_active' => 1,
-            'filter' => [],
-            'filterStr' => ''
-        ];
-        parse_str($queryString, $queryOptions);
-
-        if (!empty($queryOptions['order_by']) && strpos($queryOptions['order_by'], '_') !== false) {
-            $orderByArr = explode('_', $queryOptions['order_by']);
-            if (empty($queryOptions['sort_by'])) {
-                $queryOptions['sort_by'] = $orderByArr[0];
-            }
-            if (empty($queryOptions['sort_dir'])) {
-                $queryOptions['sort_dir'] = $orderByArr[1];
-            }
-        }
-
-        $queryOptions = array_merge($queryOptionsDefault, $queryOptions);
-
-        //Field names array
-        $fields = $contentType->getFields();
-        $fieldNames = array_map(function($field){
-            return $field['name'];
-        }, $fields);
-        $fieldNames[] = '_id';
-
-        if($queryOptions['sort_by'] == 'id'){
-            $queryOptions['sort_by'] = '_id';
-        }
-
-        $queryOptions['sort_by'] = self::stringToArray($queryOptions['sort_by']);
-        $queryOptions['sort_by'] = self::arrayFilter($queryOptions['sort_by'], $fieldNames);
-        $queryOptions['sort_dir'] = self::stringToArray($queryOptions['sort_dir']);
-        $queryOptions['sort_dir'] = self::arrayFilter($queryOptions['sort_dir'], ['asc', 'desc']);
-
-        if(empty($queryOptions['sort_by'])){
-            $queryOptions['sort_by'] = [$queryOptionsDefault['sort_by']];
-        }
-        if(empty($queryOptions['sort_dir'])){
-            $queryOptions['sort_dir'] = [$queryOptionsDefault['sort_dir']];
-        }
-
-        // Sorting options
-        $queryOptions['sortOptions'] = [];
-        foreach ($queryOptions['sort_by'] as $ind => $sortByName) {
-            $queryOptions['sortOptions'][$sortByName] = isset($queryOptions['sort_dir'][$ind])
-                ? $queryOptions['sort_dir'][$ind]
-                : $queryOptions['sort_dir'][0];
-        }
-
-        if(!is_numeric($queryOptions['limit'])){
-            $queryOptions['limit'] = $queryOptionsDefault['limit'];
-        }
-        if(!is_numeric($queryOptions['page'])){
-            $queryOptions['page'] = $queryOptionsDefault['page'];
-        }
-        $queryOptions['limit'] = min(abs(intval($queryOptions['limit'])), $queryOptions['limit_max']);
-        $queryOptions['page'] = abs(intval($queryOptions['page']));
-
-        if (!empty($queryOptions['filter']) && is_array($queryOptions['filter'])) {
-            $queryOptions['filterStr'] = '&' . http_build_query(['filter' => $queryOptions['filter']]);
-        }
-
-        return $queryOptions;
-    }
 
     /**
      * @param $filters

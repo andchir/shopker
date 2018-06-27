@@ -64,7 +64,7 @@ class CatalogController extends ProductController
         $contentTypeFields = $contentType->getFields();
         $collection = $this->getCollection($contentType->getCollection());
         $queryString = $request->getQueryString();
-        $queryOptions = $this->getQueryOptions($queryString, $contentType, $pageSizeArr);
+        $queryOptions = UtilsService::getQueryOptions($uri, $queryString, $contentTypeFields, $pageSizeArr);
 
         $options = [
             'currentCategoryUri' => $currentCategory->getUri(),
@@ -91,12 +91,11 @@ class CatalogController extends ProductController
         $total = $collection->find($criteria)->count();
 
         /* pages */
-        $skip = ($queryOptions['page'] - 1) * $queryOptions['limit'];
         $pagesOptions = UtilsService::getPagesOptions($queryOptions, $total, $pageSizeArr);
 
         $items = $collection->find($criteria)
             ->sort($queryOptions['sortOptions'])
-            ->skip($skip)
+            ->skip($pagesOptions['skip'])
             ->limit($queryOptions['limit']);
 
         $categoriesSiblings = [];

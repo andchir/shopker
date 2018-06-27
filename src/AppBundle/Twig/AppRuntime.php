@@ -7,6 +7,7 @@ use AppBundle\Document\OrderContent;
 use AppBundle\Document\Setting;
 use AppBundle\Service\SettingsService;
 use AppBundle\Service\ShopCartService;
+use AppBundle\Service\UtilsService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Cache\Simple\FilesystemCache;
@@ -122,6 +123,8 @@ class AppRuntime
      * @param int $limit
      * @param int $groupSize
      * @param string $cacheKey
+     * @param string $pageVar
+     * @param string $limitVar
      * @return string
      */
     public function contentListFunction(
@@ -132,7 +135,9 @@ class AppRuntime
         $orderBy = ['_id' => 'asc'],
         $limit = 20,
         $groupSize = 1,
-        $cacheKey = ''
+        $cacheKey = '',
+        $pageVar = 'page',
+        $limitVar = 'limit'
     )
     {
         if (!$collectionName) {
@@ -150,16 +155,34 @@ class AppRuntime
         $catalogController->setContainer($this->container);
         $collection = $catalogController->getCollection($collectionName);
 
+        $total = $collection->find($criteria)->count();
+
+        $request = $this->requestStack->getCurrentRequest();
+        $currentUri = str_replace($request->getBaseUrl(), '', $request->getRequestUri());
+        if (strpos($currentUri, '?') !== false) {
+            $currentUri = substr($currentUri, 0, strpos($currentUri, '?'));
+        }
+        $queryString = $request->getQueryString();
+        $options = [
+            'pageVar' => $pageVar,
+            'limitVar' => $limitVar
+        ];
+        $queryOptions = UtilsService::getQueryOptions($currentUri, $queryString, [], [$limit], $options);
+        $pagesOptions = UtilsService::getPagesOptions($queryOptions, $total, [], $options);
+
         $items = $collection
             ->find($criteria)
             ->sort($orderBy)
+            ->skip($pagesOptions['skip'])
             ->limit($limit);
 
         $output = $environment->render($templateName, [
             'items' => $items,
-            'total' => count($items),
+            'total' => $total,
             'groupSize' => $groupSize,
-            'groupCount' => ceil(count($items) / $groupSize)
+            'groupCount' => ceil($items->count(true) / $groupSize),
+            'queryOptions' => $queryOptions,
+            'pagesOptions' => $pagesOptions
         ]);
         if (!empty($cacheKey)) {
             $cache->set("content.{$cacheKey}", $output, 60*60*24);

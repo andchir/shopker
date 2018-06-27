@@ -1,12 +1,11 @@
 {
-    "name": "symfony/framework-standard-edition",
+    "name": "andchir/shopkeeper4",
     "license": "MIT",
     "type": "project",
-    "description": "The \"Symfony Standard Edition\" distribution",
+    "description": "Symfony application to create online store",
     "autoload": {
         "psr-4": {
-            "AppBundle\\": "src/AppBundle",
-            "Andchir\\OmnipayBundle\\": "vendor/andchir/omnipay-bundle"
+            "AppBundle\\": "src/AppBundle"
         },
         "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
     },
@@ -17,6 +16,7 @@
     "require": {
         "php": ">=5.5.9",
         "alcaeus/mongo-php-adapter": "^1.1",
+        "andchir/omnipay-bundle": "^1.0",
         "doctrine/cache": "^1.6",
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/doctrine-cache-bundle": "^1.2",

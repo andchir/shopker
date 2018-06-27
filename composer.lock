@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c5b52c0bae75afd41b4ed28752cd867c",
+    "content-hash": "9f83fc089da92e0aff3899d9c4f48669",
     "packages": [
         {
             "name": "alcaeus/mongo-php-adapter",
@@ -70,6 +70,52 @@
                 "mongodb"
             ],
             "time": "2018-03-05T20:40:55+00:00"
+        },
+        {
+            "name": "andchir/omnipay-bundle",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/andchir/omnipay-bundle.git",
+                "reference": "6ff3871772f1e84254b0c059efb53439c165affc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/andchir/omnipay-bundle/zipball/6ff3871772f1e84254b0c059efb53439c165affc",
+                "reference": "6ff3871772f1e84254b0c059efb53439c165affc",
+                "shasum": ""
+            },
+            "require": {
+                "league/omnipay": "^3",
+                "omnipay/paypal": "^3.0",
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Andchir\\OmnipayBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "andchir",
+                    "email": "andchir@gmail.com"
+                }
+            ],
+            "description": "Omnipay bundle for Symfony 3.x",
+            "homepage": "http://modx-shopkeeper.ru/",
+            "keywords": [
+                "bundle",
+                "omnipay",
+                "payment",
+                "shopkeeper",
+                "symfony"
+            ],
+            "time": "2018-06-27T10:53:09+00:00"
         },
         {
             "name": "clue/stream-filter",

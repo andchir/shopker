@@ -675,11 +675,11 @@ class ProductController extends BaseProductController
     }
 
     /**
-     * @param Category $category
+     * @param Category $parentCategory
      * @param string $databaseName
      * @return bool
      */
-    public function updateFiltersData(Category $category, $databaseName = '')
+    public function updateFiltersData(Category $parentCategory, $databaseName = '')
     {
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $this->get('doctrine_mongodb')->getManager();
@@ -691,7 +691,7 @@ class ProductController extends BaseProductController
             ->getManager()
             ->getRepository(Filter::class);
 
-        $breadcrumbs = $categoriesRepository->getBreadcrumbs($category->getUri(), false);
+        $breadcrumbs = $categoriesRepository->getBreadcrumbs($parentCategory->getUri(), false);
         $breadcrumbs = array_reverse($breadcrumbs);
 
         foreach ($breadcrumbs as $category) {

@@ -248,7 +248,7 @@ class CategoryController extends StorageControllerAbstract
     }
 
     /**
-     * @return \AppBundle\Repository\ContentTypeRepository
+     * @return \AppBundle\Repository\CategoryRepository
      */
     public function getRepository()
     {

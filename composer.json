@@ -17,6 +17,7 @@
         "php": ">=5.5.9",
         "alcaeus/mongo-php-adapter": "^1.1",
         "andchir/omnipay-bundle": "^1.0",
+        "coresphere/console-bundle": "^0.5.0",
         "doctrine/cache": "^1.6",
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/doctrine-cache-bundle": "^1.2",

@@ -7,6 +7,7 @@ use AppBundle\Document\Category;
 use AppBundle\Document\ContentType;
 use AppBundle\Document\FileDocument;
 use AppBundle\Document\Filter;
+use AppBundle\Service\UtilsService;
 use Doctrine\ORM\Query\Expr\Base;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -43,7 +44,7 @@ class ProductController extends BaseProductController
         }
 
         $queryString = $request->getQueryString();
-        $queryOptions = $this->getQueryOptions($queryString, $contentType);
+        $queryOptions = UtilsService::getQueryOptions('', $queryString, $contentType->getFields());
         $contentTypeFields = $contentType->getFields();
         $collection = $this->getCollection($contentType->getCollection());
 

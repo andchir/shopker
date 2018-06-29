@@ -2,6 +2,11 @@ omnipay:
     resource: "@OmnipayBundle/Resources/config/routing.yml"
     prefix: /
 
+coresphere_console:
+    resource: "@CoreSphere/Resources/config/routing.yml"
+    type: extra
+    prefix: /admin/
+
 homepage:
     path: /
     defaults:

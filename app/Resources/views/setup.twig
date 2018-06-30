@@ -30,6 +30,10 @@
                         </div>
                         <div class="card-body">
 
+                            <div class="mb-4 text-center">
+                                <img src="{{ app_logo_image_url }}" width="200" alt="{{ app_name }}">
+                            </div>
+
                             {% include 'flash_messages.html.twig' %}
 
                             {{ form_start(form, {'action': path('setup'), 'attr': {'id': 'setupForm'}}) }}

@@ -12,6 +12,7 @@ var APP_LANG = {
     "CATALOG": "Catalog",
     "CATEGORY": "Category",
     "CLEAR_CACHE": "Clear cache",
+    "CONSOLE": "Console",
     "CLOSE": "Close",
     "COLLAPSE": "Collapse",
     "COLLECTION": "Collection",

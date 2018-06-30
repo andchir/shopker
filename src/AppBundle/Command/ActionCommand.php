@@ -25,6 +25,7 @@ class ActionCommand extends ContainerAwareCommand
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
+     * @return void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -33,7 +34,7 @@ class ActionCommand extends ContainerAwareCommand
         $option = $input->getArgument('option');
 
         switch ($action) {
-            case 'update_filters':
+            case 'filters_update':
 
                 $count = 0;
 

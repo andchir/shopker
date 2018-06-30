@@ -7,12 +7,13 @@ import {AppSettings} from '../services/app-settings.service';
 import {SettingsService} from './settings.service';
 
 @Component({
-    selector: 'shk-settings',
+    selector: 'app-settings',
     templateUrl: './templates/settings.component.html'
 })
 export class SettingsComponent implements OnInit {
     static title = 'SETTINGS';
 
+    baseUrl: string;
     loading = false;
     forms: {[key: string]: FormGroup} = {};
     settings = {
@@ -48,7 +49,9 @@ export class SettingsComponent implements OnInit {
     constructor(
         private settingsService: SettingsService,
         private appSettings: AppSettings
-    ) {}
+    ) {
+        this.baseUrl = this.appSettings.settings.webApiUrl + '/';
+    }
 
     ngOnInit(): void {
         this.getSettings();

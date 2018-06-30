@@ -12,6 +12,7 @@ var APP_LANG = {
     "CATALOG": "Каталог",
     "CATEGORY": "Категория",
     "CLEAR_CACHE": "Очистить кэш",
+    "CONSOLE": "Консоль",
     "CLOSE": "Закрыть",
     "COLLAPSE": "Свернуть",
     "COLLECTION": "Коллекция",

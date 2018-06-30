@@ -104,6 +104,5 @@ mail_subject.new_order: Новый заказ
 mail_subject.order_status_change: Статус заказа обновлен
 Order date: Дата заказа
 Order status: Статус
-Order list: Состав заказа
 password_reset.mail_subject: Сброс пароля
 profile.contacts_data_saved_successfully: Данные успешно созранены.

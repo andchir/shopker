@@ -120,7 +120,8 @@ class UtilsService
             'prev' => max(1, $queryOptions['page'] - 1),
             'skip' => ($queryOptions['page'] - 1) * $queryOptions['limit'],
             'pageVar' => isset($options['pageVar']) ? $options['pageVar'] : 'page',
-            'limitVar' => isset($options['limitVar']) ? $options['limitVar'] : 'limit'
+            'limitVar' => isset($options['limitVar']) ? $options['limitVar'] : 'limit',
+            'orderByVar' => isset($options['orderByVar']) ? $options['orderByVar'] : 'order_by'
         ];
         $pagesOptions['next'] = min($pagesOptions['total'], $queryOptions['page'] + 1);
 
@@ -143,7 +144,7 @@ class UtilsService
             'limit' => $pageSizeArr[0],
             'limit_max' => 100,
             'sort_by' => '_id',
-            'sort_dir' => 1,
+            'sort_dir' => 'desc',
             'order_by' => 'id_desc',
             'full' => 1,
             'only_active' => 1,

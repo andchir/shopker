@@ -158,10 +158,7 @@ class AppRuntime
         $total = $collection->find($criteria)->count();
 
         $request = $this->requestStack->getCurrentRequest();
-        $currentUri = str_replace($request->getBaseUrl(), '', $request->getRequestUri());
-        if (strpos($currentUri, '?') !== false) {
-            $currentUri = substr($currentUri, 0, strpos($currentUri, '?'));
-        }
+        $currentUri = $this->getCurrentURI();
         $queryString = $request->getQueryString();
         $options = [
             'pageVar' => $pageVar,
@@ -269,6 +266,43 @@ class AppRuntime
             $itemData['fileName'],
             $itemData['extension']
         );
+    }
+
+    /**
+     * @param $pagesOptions
+     * @param $pageNumber
+     * @param int $limit
+     * @return string
+     */
+    public function pageUrlFunction($pagesOptions, $pageNumber, $limit = 0)
+    {
+        $currentUri = $this->getCurrentURI();
+        $orderBy = isset($_GET[$pagesOptions['orderByVar']])
+            ? $_GET[$pagesOptions['orderByVar']]
+            : 'id_desc';
+        if (!$limit) {
+            $limit = isset($_GET[$pagesOptions['limitVar']])
+                ? $_GET[$pagesOptions['limitVar']]
+                : $pagesOptions['limit'];
+        }
+        $output = $currentUri;
+        $output .= "?{$pagesOptions['limitVar']}={$limit}";
+        $output .= "&{$pagesOptions['pageVar']}={$pageNumber}";
+        $output .= "&{$pagesOptions['orderByVar']}={$orderBy}";
+        return $output;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrentURI()
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        $currentUri = $request->getRequestUri();
+        if (strpos($currentUri, '?') !== false) {
+            $currentUri = substr($currentUri, 0, strpos($currentUri, '?'));
+        }
+        return $currentUri;
     }
 }
 

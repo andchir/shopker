@@ -76,6 +76,7 @@ class AppExtension extends AbstractExtension
                 'needs_environment' => true
             ]),
             new TwigFunction('imageUrl', [AppRuntime::class, 'imageUrlFunction']),
+            new TwigFunction('pageUrl', [AppRuntime::class, 'pageUrlFunction']),
             new TwigFunction('contentList', [AppRuntime::class, 'contentListFunction'], [
                 'is_safe' => ['html'],
                 'needs_environment' => true

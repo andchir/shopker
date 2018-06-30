@@ -270,16 +270,24 @@ class AppRuntime
 
     /**
      * @param $pagesOptions
-     * @param $pageNumber
+     * @param int $pageNumber
      * @param int $limit
+     * @param string $orderBy
      * @return string
      */
-    public function pageUrlFunction($pagesOptions, $pageNumber, $limit = 0)
+    public function pageUrlFunction($pagesOptions, $pageNumber = 0, $limit = 0, $orderBy = '')
     {
         $currentUri = $this->getCurrentURI();
-        $orderBy = isset($_GET[$pagesOptions['orderByVar']])
-            ? $_GET[$pagesOptions['orderByVar']]
-            : 'id_desc';
+        if (!$orderBy) {
+            $orderBy = isset($_GET[$pagesOptions['orderByVar']])
+                ? $_GET[$pagesOptions['orderByVar']]
+                : 'id_desc';
+        }
+        if (!$pageNumber) {
+            $pageNumber = isset($_GET[$pagesOptions['pageVar']])
+                ? $_GET[$pagesOptions['pageVar']]
+                : $pagesOptions['current'];
+        }
         if (!$limit) {
             $limit = isset($_GET[$pagesOptions['limitVar']])
                 ? $_GET[$pagesOptions['limitVar']]

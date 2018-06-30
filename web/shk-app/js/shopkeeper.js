@@ -126,14 +126,15 @@ var Shopkeeper = function () {
         });
     };
 
-    this.orderByChange = function(currentUrl, orderBy) {
+    this.orderByChange = function(currentUrl, orderBy, orderByVar) {
         var qsArr = currentUrl.split(/[\?&]/),
             newUrl = qsArr.shift();
+        orderByVar = orderByVar || 'order_by';
         qsArr.forEach(function(qs){
             var tmpArr = qs.split('='),
                 sep = newUrl.indexOf('?') > -1 ? '&' : '?';
-            if (tmpArr[0] === 'order_by') {
-                newUrl += sep + 'order_by=' + orderBy;
+            if (tmpArr[0] === orderByVar) {
+                newUrl += sep + orderByVar + '=' + orderBy;
             } else {
                 newUrl += sep + qs;
             }

@@ -31,11 +31,11 @@
     </div>
 </div>
 <script>
-    var shkCurrentUrl = '{{ macro.pageUrl(catalogPath(currentUri), pagesOptions.limit, pagesOptions.current, queryOptions.order_by) }}';
+    var shkCurrentUrl = '{{ pageUrl(pagesOptions) | raw }}';
     var selectEl = document.getElementById('shkNavSortBy');
     if (selectEl) {
         selectEl.addEventListener('change', function(){
-            shk.orderByChange(shkCurrentUrl, this.value);
+            shk.orderByChange(shkCurrentUrl, this.value, '{{ pagesOptions.orderByVar }}');
         }, false);
     }
     if (document.querySelectorAll('#shkNavListType button').length > 0) {

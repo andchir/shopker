@@ -83,10 +83,10 @@ class CatalogController extends ProductController
 
         // Get child products
         $criteria = [
-            'parentId' => $currentCategory->getId(),
             'isActive' => true
         ];
         $this->applyFilters($queryOptions['filter'], $filters, $criteria);
+        $this->applyCategoryFilter($currentCategory, $contentTypeFields, $criteria);
 
         $total = $collection->find($criteria)->count();
 

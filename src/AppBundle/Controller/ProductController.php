@@ -53,6 +53,35 @@ class ProductController extends BaseController
     }
 
     /**
+     * @param Category $currentCategory
+     * @param array $contentTypeFields
+     * @param array $criteria
+     */
+    public function applyCategoryFilter(Category $currentCategory, $contentTypeFields, &$criteria)
+    {
+        $categoriesField = array_filter($contentTypeFields, function($field){
+            return $field['inputType'] == 'categories';
+        });
+        $categoriesField = current($categoriesField);
+
+        if (!empty($categoriesField)) {
+
+            $orCriteria = [
+                '$or' => [
+                    ['parentId' => $currentCategory->getId()]
+                ]
+            ];
+            $orCriteria['$or'][] = ["{$categoriesField['name']}" => [
+                '$elemMatch' => ['$in' => [$currentCategory->getId()]]
+            ]];
+            $criteria = ['$and' => [$criteria, $orCriteria]];
+
+        } else {
+            $criteria['parentId'] = $currentCategory->getId();
+        }
+    }
+
+    /**
      * @param $collectionName
      * @param string $databaseName
      * @return \Doctrine\MongoDB\Collection

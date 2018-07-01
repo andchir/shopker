@@ -724,10 +724,10 @@ class ProductController extends BaseProductController
                         continue;
                     }
                     $fieldName = $contentTypeField['name'];
-                    if (!isset($filterData[$fieldName])) {
-                        $filterData[$fieldName] = [];
-                    }
                     if (!empty($filterValues[$fieldName])) {
+                        if (!isset($filterData[$fieldName])) {
+                            $filterData[$fieldName] = [];
+                        }
                         $values = array_merge($filterData[$fieldName], $filterValues[$fieldName]);
                         $values = array_unique($values);
                         if ($contentTypeField['outputType'] == 'number') {
@@ -741,27 +741,25 @@ class ProductController extends BaseProductController
             }
             unset($childCategories, $childCategory, $values);
 
-            // Get products
-            $entries = $collection->find([
-                'parentId' => $cat->getId()
-            ]);
+            foreach ($contentTypeFields as $contentTypeField) {
+                if (!$contentTypeField['isFilter']) {
+                    continue;
+                }
+                $fieldName = $contentTypeField['name'];
 
-            foreach ($entries as $entry) {
+                // Get products fields unique data
+                $criteria = [
+                    'isActive' => true
+                ];
+                $this->applyCategoryFilter($cat, $contentTypeFields, $criteria);
+                $uniqueValues = $collection->distinct($fieldName, $criteria)->toArray();
 
-                foreach ($contentTypeFields as $contentTypeField) {
-                    if (!$contentTypeField['isFilter']) {
-                        continue;
-                    }
-                    $fieldName = $contentTypeField['name'];
+                if (!empty($uniqueValues)) {
                     if (!isset($filterData[$fieldName])) {
                         $filterData[$fieldName] = [];
                     }
-                    if (!empty($entry[$fieldName])
-                        && !in_array($entry[$fieldName], $filterData[$fieldName])) {
-                        $filterData[$fieldName][] = is_array($entry[$fieldName])
-                            ? json_encode($entry[$fieldName])
-                            : $entry[$fieldName];
-                    }
+                    $filterData[$fieldName] = array_unique(array_merge($filterData[$fieldName], $uniqueValues));
+                    sort($filterData[$fieldName]);
                 }
             }
 
@@ -769,6 +767,9 @@ class ProductController extends BaseProductController
                 'categoryId' => $cat->getId()
             ]);
             if (!$filter) {
+                if (empty($filterData)) {
+                    continue;
+                }
                 $filter = new Filter();
                 $filter->setCategoryId($cat->getId());
             }

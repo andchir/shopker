@@ -17,7 +17,7 @@ class ActionCommand extends ContainerAwareCommand
         $this
             ->setName('app:action')
             ->setDescription('Application actions commands.')
-            ->setHelp('Migrations to update database content.')
+            ->setHelp('Available actions: filters_update')
             ->addArgument('action', InputArgument::REQUIRED, 'Action name.')
             ->addArgument('option', InputArgument::OPTIONAL, 'Action option.');
     }

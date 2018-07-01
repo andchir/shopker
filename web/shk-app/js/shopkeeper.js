@@ -93,8 +93,9 @@ var Shopkeeper = function () {
         var slidersContainers = document.querySelectorAll('div.shk-slider-range');
         slidersContainers.forEach(function(sliderContainer) {
             var inputs = sliderContainer.querySelectorAll('input');
-            if (inputs.length < 2) {
-                return;
+            if (inputs.length < 2
+                || parseFloat(inputs[0].value) === parseFloat(inputs[1].value)) {
+                    return;
             }
             var minValue = parseFloat(inputs[0].min || 0),
                 maxValue = parseFloat(inputs[0].max || 0),

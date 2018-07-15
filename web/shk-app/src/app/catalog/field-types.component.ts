@@ -12,7 +12,7 @@ import {SystemNameService} from '../services/system-name.service';
 import {FieldTypesService} from './services/field-types.service';
 
 @Component({
-    selector: 'field-type-modal-content',
+    selector: 'app-field-type-modal-content',
     templateUrl: 'templates/modal-field_type.html'
 })
 export class FieldTypeModalContentComponent extends ModalContentAbstractComponent<FieldType> {
@@ -57,8 +57,8 @@ export class FieldTypeModalContentComponent extends ModalContentAbstractComponen
         super(fb, dataService, systemNameService, activeModal, tooltipConfig);
     }
 
-    addRow(type: string){
-        if(!this.model[type]){
+    addRow(type: string) {
+        if (!this.model[type]) {
             this.model[type] = [];
         }
         this.model[type].push(new FieldTypeProperty('', '', ''));
@@ -94,7 +94,7 @@ export class FieldTypeModalContentComponent extends ModalContentAbstractComponen
 }
 
 @Component({
-    selector: 'shk-field-types',
+    selector: 'app-shk-field-types',
     templateUrl: 'templates/catalog-field_types.html'
 })
 export class FieldTypesComponent extends PageTableAbstractComponent<FieldType> {

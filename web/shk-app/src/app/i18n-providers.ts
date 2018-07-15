@@ -21,7 +21,7 @@ export function getTranslationProviders(): Promise<Object[]> {
 
 function getTranslations(locale: string) {
     let translation;
-    switch (locale){
+    switch (locale) {
         case 'ru':
         case 'ru-RU':
             translation = TRANSLATION_RU;

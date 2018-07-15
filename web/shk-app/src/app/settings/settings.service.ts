@@ -21,11 +21,11 @@ export class SettingsService {
         this.requestUrl = 'settings';
     }
 
-    setRequestUrl(url){
+    setRequestUrl(url) {
         this.requestUrl = url;
     }
 
-    getRequestUrl(){
+    getRequestUrl() {
         return this.requestUrl;
     }
 

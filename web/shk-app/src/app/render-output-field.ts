@@ -8,7 +8,7 @@ import {Properties} from './models/properties.iterface';
 import {SettingPretty} from './settings/models/setting.model';
 
 @Component({
-    selector: 'output-field',
+    selector: 'app-output-field',
     templateUrl: 'templates/render-output-field.html',
     providers: []
 })
@@ -53,7 +53,7 @@ export class OutputFieldComponent implements OnInit {
 
     extendProperties(object1: Properties, object2: Properties): Properties {
         object1 = _.extend({}, object2, object1);
-        for (let key in object1) {
+        for (const key in object1) {
             if (object1.hasOwnProperty(key)) {
                 if (isNumeric(object1[key])) {
                     object1[key] = parseInt(String(object1[key]), 10);

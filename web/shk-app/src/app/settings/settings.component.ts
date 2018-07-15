@@ -104,11 +104,10 @@ export class SettingsComponent implements OnInit {
 
     saveSettings(groupName: string): void {
         const data = this.settings[groupName].values;
-
         this.settings[groupName].loading = true;
         this.settingsService.updateGroup(groupName, data)
-            .subscribe((data) => {
-                this.settings[groupName].defaultValues = data;
+            .subscribe((res: any) => {
+                this.settings[groupName].defaultValues = res;
                 this.settings[groupName].loading = false;
                 this.settings[groupName].changed = false;
 
@@ -127,7 +126,7 @@ export class SettingsComponent implements OnInit {
     }
 
     resetSettingsForm(groupName: string): void {
-        let dataLength = this.settings[groupName].defaultValues.length;
+        const dataLength = this.settings[groupName].defaultValues.length;
         if (dataLength < this.settings[groupName].values.length) {
             this.settings[groupName].values.splice(dataLength - 1, this.settings[groupName].values.length - dataLength);
         }

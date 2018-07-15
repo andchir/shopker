@@ -1,5 +1,5 @@
 export interface Product {
-    //[key: string]: number | string | string[];
+    // [key: string]: number | string | string[];
     id: number;
     parentId: number;
     previousParentId?: number;

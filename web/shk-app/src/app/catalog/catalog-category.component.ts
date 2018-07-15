@@ -77,7 +77,7 @@ export class CatalogCategoryComponent extends PageTableAbstractComponent<Product
 
     openCategory(category: Category): void {
         this.currentCategory = _.clone(category);
-        if(!this.currentCategory.contentTypeName){
+        if (!this.currentCategory.contentTypeName) {
             this.items = [];
             this.tableFields = [];
             this.currentCategory.id = 0;

@@ -1,4 +1,4 @@
-import { ContentField } from './content_field.model';
+import {ContentField} from './content_field.model';
 
 export class ContentType {
     constructor(

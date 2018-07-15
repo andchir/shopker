@@ -5,7 +5,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 import {TranslateCustomLoader} from './services/translateLoader';
 
-import {AppComponent, AlertModalContent, ConfirmModalContent} from './app.component';
+import {AppComponent, AlertModalContentComponent, ConfirmModalContentComponent} from './app.component';
 import {NotFoundComponent} from './not-found.component';
 import {SharedModule} from './shared.module';
 import {AppSettings} from './services/app-settings.service';
@@ -34,15 +34,15 @@ registerLocaleData(localeRu, 'ru-RU');
     declarations: [
         AppComponent,
         NotFoundComponent,
-        AlertModalContent,
-        ConfirmModalContent,
+        AlertModalContentComponent,
+        ConfirmModalContentComponent,
     ],
     providers: [
         AppSettings,
     ],
     entryComponents: [
-        AlertModalContent,
-        ConfirmModalContent,
+        AlertModalContentComponent,
+        ConfirmModalContentComponent,
     ],
     exports: [
 

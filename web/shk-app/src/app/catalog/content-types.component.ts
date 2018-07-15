@@ -213,10 +213,10 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
      * @param {string} fieldTypeName
      */
     selectFieldTypeProperties(type: string, fieldTypeName?: string): void {
-        if(fieldTypeName){
+        if (fieldTypeName) {
             this.fieldModel[type + 'Type'] = fieldTypeName;
         }
-        let fieldType = _.find(this.fieldTypes, {name: this.fieldModel[type + 'Type']});
+        const fieldType = _.find(this.fieldTypes, {name: this.fieldModel[type + 'Type']});
         if (!fieldType) {
             this.fieldTypeProperties[type] = [];
             return;
@@ -230,7 +230,7 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
             this.fieldTypeProperties[type].push(v);
         });
 
-        for (let prop in this.fieldModel[modelPropertiesField]) {
+        for (const prop in this.fieldModel[modelPropertiesField]) {
             if (this.fieldModel[modelPropertiesField].hasOwnProperty(prop)) {
                 if (propNames.indexOf(prop) === -1) {
                     delete this.fieldModel[modelPropertiesField][prop];
@@ -238,7 +238,7 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
             }
         }
 
-        for (let i in this.fieldTypeProperties[type]) {
+        for (const i in this.fieldTypeProperties[type]) {
             if (this.fieldTypeProperties[type].hasOwnProperty(i)) {
                 const fldName = this.fieldTypeProperties[type][i].name;
                 if (typeof this.fieldModel[modelPropertiesField][fldName] === 'undefined') {
@@ -272,7 +272,7 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
     }
 
     /** Delete collection */
-    deleteCollection(popover: NgbPopover){
+    deleteCollection(popover: NgbPopover) {
         if (!this.model.collection) {
             return;
         }
@@ -286,12 +286,12 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
         popover.placement = 'top';
         popover.popoverTitle = 'Confirm';
 
-        let confirm = function(){
+        const confirm = function(){
             this.loading = true;
             this.collectionsService.deleteItemByName(this.model.collection)
                 .subscribe((data) => {
                     const index = this.collections.indexOf(this.model.collection);
-                    if(index > -1){
+                    if (index > -1) {
                         this.collections.splice(index, 1);
                         this.model.collection = this.collections[0];
                     }
@@ -355,7 +355,7 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
         this.toggleAccordion(this.accordion, 'accordion-content-type-fields');
         this.action = 'edit_field';
         this.fieldModel = _.cloneDeep(field);
-        let newFormValue = {};
+        const newFormValue = {};
         for (const key in this.fieldsFormOptions) {
             if (!this.fieldsFormOptions.hasOwnProperty(key)) {
                 continue;
@@ -385,7 +385,7 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
      * Delete field
      * @param field
      */
-    deleteField(field: ContentField){
+    deleteField(field: ContentField) {
         const index = _.findIndex( this.model.fields, {name: field.name} );
         if (index === -1 ) {
             this.errorMessage = 'Field not found.';
@@ -395,7 +395,7 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
     }
 
     /** Reset field form */
-    resetFieldForm(){
+    resetFieldForm() {
         this.action = 'add_field';
         this.errorMessage = '';
         this.errorFieldMessage = '';
@@ -413,7 +413,7 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
     }
 
     /** Change field order index */
-    fieldMove(index: number, direction: string): void{
+    fieldMove(index: number, direction: string): void {
         if ((direction === 'up' && index === 0)
             || (direction === 'down' && index === this.model.fields.length - 1)) {
                 return;
@@ -434,7 +434,7 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
             this.fld_submitted = false;
             return;
         }
-        let data = _.cloneDeep(this.fieldModel);
+        const data = _.cloneDeep(this.fieldModel);
         data.inputProperties = _.extend({}, this.fieldModel.inputProperties);
         data.outputProperties = _.extend({}, this.fieldModel.outputProperties);
 
@@ -470,7 +470,7 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
     save() {
         this.submitted = true;
 
-        if(!this.form.valid){
+        if (!this.form.valid) {
             this.onValueChanged('form');
             this.submitted = false;
             return;
@@ -488,7 +488,7 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
 }
 
 @Component({
-    selector: 'shk-content-types',
+    selector: 'app-shk-content-types',
     templateUrl: 'templates/catalog-content_types.html'
 })
 export class ContentTypesComponent extends PageTableAbstractComponent<ContentType> {
@@ -542,7 +542,7 @@ export class ContentTypesComponent extends PageTableAbstractComponent<ContentTyp
         super(dataService, activeModal, modalService);
     }
 
-    getModalContent(){
+    getModalContent() {
         return ContentTypeModalContentComponent;
     }
 

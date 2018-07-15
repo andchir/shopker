@@ -2,14 +2,14 @@ import {Component, OnInit, Input, OnChanges, SimpleChanges} from '@angular/core'
 import * as _ from 'lodash';
 
 @Component({
-    selector: 'list-recursive',
+    selector: 'app-list-recursive',
     template: `
         <ul>
             <li *ngFor="let item of items">
                 <a class="dropdown-item">
                     {{item.title}}
                 </a>
-                <list-recursive [inputItems]="inputItems" [parentId]="item.id" [currentId]="currentId"></list-recursive>
+                <app-list-recursive [inputItems]="inputItems" [parentId]="item.id" [currentId]="currentId"></app-list-recursive>
             </li>
         </ul>
     `
@@ -36,7 +36,7 @@ export class ListRecursiveComponent implements OnInit, OnChanges {
 
     filterInputItems() {
         this.items = [];
-        let items = this.items;
+        const items = this.items;
         const parentId = this.parentId;
         this.inputItems.forEach(function (item) {
             if (item.id !== item.parentId && item.parentId === parentId) {

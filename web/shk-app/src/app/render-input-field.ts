@@ -3,7 +3,7 @@ import {FormGroup, FormControl, Validators} from '@angular/forms';
 import * as _ from 'lodash';
 import {isNumeric} from 'rxjs/util/isNumeric';
 
-import {ContentField} from "./catalog/models/content_field.model";
+import {ContentField} from './catalog/models/content_field.model';
 import {MultiValues} from './models/multivalues.model';
 import {Properties} from './models/properties.iterface';
 import {FileData} from './catalog/models/file-data.model';
@@ -13,7 +13,7 @@ import {AppSettings} from './services/app-settings.service';
 import {CategoriesService} from './catalog/services/categories.service';
 
 @Component({
-    selector: 'input-field-renderer',
+    selector: 'app-input-field-renderer',
     templateUrl: 'templates/render-input-field.html',
     providers: [SystemNameService]
 })
@@ -34,7 +34,12 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
             dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
             dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
             dayNamesMin: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-            monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            monthNames: [
+                'January', 'February', 'March',
+                'April', 'May', 'June',
+                'July', 'August', 'September',
+                'October', 'November', 'December'
+            ],
             monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             today: 'Today',
             clear: 'Clear'
@@ -44,7 +49,12 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
             dayNames: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'],
             dayNamesShort: ['Вос', 'Пон', 'Втор', 'Среда', 'Чет', 'Пятн', 'Суб'],
             dayNamesMin: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
-            monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+            monthNames: [
+                'Январь', 'Февраль', 'Март',
+                'Апрель', 'Май', 'Июнь',
+                'Июль', 'Август', 'Сентябрь',
+                'Октябрь', 'Ноябрь', 'Декабрь'
+            ],
             monthNamesShort: ['Янв', 'Февр', 'Мар', 'Апр', 'Май', 'Июнь', 'Июль', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
             today: 'Сегодня',
             clear: 'Сбросить'
@@ -140,7 +150,9 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
 
                 propertiesDefault = {
                     handler: '',
-                    formats: 'background,bold,color,font,code,italic,link,strike,script,underline,blockquote,header,indent,list,align,direction,code-block,formula,image,video,clean'
+                    formats: 'background,bold,color,font,code,italic,link,'
+                    + 'strike,script,underline,blockquote,header,indent,'
+                    + 'list,align,direction,code-block,formula,image,video,clean'
                 };
                 field.inputProperties = this.extendProperties(
                     field.inputProperties,
@@ -246,7 +258,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
             defaultValue = field.inputProperties.value;
         }
 
-        switch (field.inputType){
+        switch (field.inputType) {
             case 'date':
                 defaultValue = new Date();
                 if (modelValue) {
@@ -291,7 +303,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
 
     getValidators(field: ContentField): any[] {
         const validators = [];
-        if(field.required){
+        if (field.required) {
             validators.push(Validators.required);
             this.validationMessages[field.name].required = field.title + ' is required.';
         }
@@ -300,7 +312,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
 
     extendProperties(object1: Properties, object2: Properties): Properties {
         object1 = _.extend({}, object2, object1);
-        for (let key in object1) {
+        for (const key in object1) {
             if (object1.hasOwnProperty(key)) {
                 if (isNumeric(object1[key])) {
                     object1[key] = parseInt(String(object1[key]), 10);
@@ -419,8 +431,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
             }
             if (category.id === id) {
                 output = category;
-            }
-            else if (category.children && category.children.length > 0) {
+            } else if (category.children && category.children.length > 0) {
                 output = this.getCategoryById(id, category.children);
             }
         });

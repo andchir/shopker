@@ -39,12 +39,12 @@
                         </div>
                     </div>
 
-                    <output-field
+                    <app-output-field
                             [value]="item[tableField.name]"
                             [outputType]="tableField.outputType"
                             [options]="tableField.outputProperties"
                             [object]="item"
-                            (changeRequest)="optionUpdate($event)"></output-field>
+                            (changeRequest)="optionUpdate($event)"></app-output-field>
 
                 </td>
             </tr>

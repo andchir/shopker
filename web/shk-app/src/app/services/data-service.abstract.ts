@@ -1,14 +1,14 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
-import { catchError, map, tap } from 'rxjs/operators';
+import {Observable} from 'rxjs/Observable';
+import {of} from 'rxjs/observable/of';
+import {catchError, map, tap} from 'rxjs/operators';
 
-import { QueryOptions } from '../models/query-options';
-import { DataList } from '../models/data-list.interface';
-import { SimpleEntity } from '../models/simple-entity.interface';
+import {QueryOptions} from '../models/query-options';
+import {DataList} from '../models/data-list.interface';
+import {SimpleEntity} from '../models/simple-entity.interface';
 
-export interface outputData {
+export interface OutputData {
     data: any | any[] | null;
     successMsg: string;
     errorMsg: string;
@@ -29,11 +29,11 @@ export abstract class DataService<M extends SimpleEntity> {
         this.requestUrl = 'app/data_list';
     }
 
-    setRequestUrl(url){
+    setRequestUrl(url) {
         this.requestUrl = url;
     }
 
-    getRequestUrl(){
+    getRequestUrl() {
         return this.requestUrl;
     }
 
@@ -46,9 +46,9 @@ export abstract class DataService<M extends SimpleEntity> {
 
     getList(options ?: QueryOptions): Observable<M[]> {
         let params = new HttpParams();
-        for(let name in options){
-            if(!options.hasOwnProperty(name)
-                || typeof options[name] === 'undefined'){
+        for (const name in options) {
+            if (!options.hasOwnProperty(name)
+                || typeof options[name] === 'undefined') {
                     continue;
             }
             params = params.append(name, options[name]);
@@ -61,9 +61,9 @@ export abstract class DataService<M extends SimpleEntity> {
 
     getListPage(options ?: QueryOptions): Observable<DataList<M>> {
         let params = new HttpParams();
-        for(let name in options){
-            if(!options.hasOwnProperty(name)
-                || typeof options[name] === 'undefined'){
+        for (const name in options) {
+            if (!options.hasOwnProperty(name)
+                || typeof options[name] === 'undefined') {
                     continue;
             }
             params = params.append(name, options[name]);

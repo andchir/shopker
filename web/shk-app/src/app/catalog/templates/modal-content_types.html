@@ -410,7 +410,7 @@
                                 {{field.group}}
                             </td>
                             <td>
-                                <output-field [value]="field.required" outputType="boolean"></output-field>
+                                <app-output-field [value]="field.required" outputType="boolean"></app-output-field>
                             </td>
                             <td>
                                 <div class="relative">
@@ -433,7 +433,7 @@
                                     </div>
                                 </div>
 
-                                <output-field [value]="field.showInTable" outputType="boolean"></output-field>
+                                <app-output-field [value]="field.showInTable" outputType="boolean"></app-output-field>
                             </td>
                         </tr>
                         <tr [hidden]="model.fields.length > 0" class="table-active">

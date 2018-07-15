@@ -154,6 +154,9 @@ input.form-control[readonly] { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); curso
 .dropdown-menu-second .current-level { background-color: rgba(0,0,0,.1); }
 .dropdown-menu-second .item-inactive { color: rgba(0,0,0,0.4); }
 .dropdown-menu-second .dropdown-item.active > .item-inactive { color: rgba(255,255,255,0.4); }
+@media (max-width: 768px) {
+    .dropdown-menu-second .dropdown-menu-second { position: static; }
+}
 
 /* popover */
 .popover { box-shadow: 0 0 20px rgba(0,0,0,0.3); }

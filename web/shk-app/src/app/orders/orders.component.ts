@@ -1,7 +1,7 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {NgbModal, NgbActiveModal, NgbModalRef, NgbPopover, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import {FormBuilder, Validators} from '@angular/forms';
-import * as _ from "lodash";
+import * as _ from 'lodash';
 
 import {SystemNameService} from '../services/system-name.service';
 import {Order, OrderContent} from './models/order.model';
@@ -15,11 +15,11 @@ import {QueryOptions} from '../models/query-options';
 import {UserOption} from '../users/models/user.model';
 
 @Component({
-    selector: 'modal-order',
+    selector: 'app-modal-order',
     templateUrl: 'templates/modal-order.html',
     providers: [SettingsService, SystemNameService]
 })
-export class ModalOrderContent extends ModalContentAbstractComponent<Order> {
+export class ModalOrderContentComponent extends ModalContentAbstractComponent<Order> {
 
     model = new Order(0, 0, '', '', '');
     modalTitle = 'Order';
@@ -210,7 +210,7 @@ export class ModalOrderContent extends ModalContentAbstractComponent<Order> {
 }
 
 @Component({
-    selector: 'shk-orders',
+    selector: 'app-shk-orders',
     templateUrl: 'templates/page-orders.html',
     providers: [OrdersService]
 })
@@ -219,14 +219,6 @@ export class OrdersComponent extends PageTableAbstractComponent<Order> {
     static title = 'ORDERS';
     queryOptions: QueryOptions = new QueryOptions('createdDate', 'desc', 1, 10, 0, 0);
     items: Order[] = [];
-
-    constructor(
-        dataService: OrdersService,
-        activeModal: NgbActiveModal,
-        modalService: NgbModal
-    ) {
-        super(dataService, activeModal, modalService);
-    }
 
     tableFields = [
         {
@@ -275,6 +267,14 @@ export class OrdersComponent extends PageTableAbstractComponent<Order> {
         }
     ];
 
+    constructor(
+        dataService: OrdersService,
+        activeModal: NgbActiveModal,
+        modalService: NgbModal
+    ) {
+        super(dataService, activeModal, modalService);
+    }
+
     setModalInputs(itemId?: number, isItemCopy: boolean = false): void {
         this.modalRef.componentInstance.modalTitle = `Order #${itemId}`;
         this.modalRef.componentInstance.itemId = itemId || 0;
@@ -282,8 +282,8 @@ export class OrdersComponent extends PageTableAbstractComponent<Order> {
         this.modalRef.componentInstance.isEditMode = true;
     }
 
-    getModalContent(){
-        return ModalOrderContent;
+    getModalContent() {
+        return ModalOrderContentComponent;
     }
 
     changeRequest(e): void {

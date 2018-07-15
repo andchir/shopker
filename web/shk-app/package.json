@@ -4,8 +4,9 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start": "ng serve --open --live-reload 0 --watch --port 4200 --output-path \"./dist_dev\"",
+    "build:dev": "ng build --base-href \"/\" --deploy-url \"/shk-app/bundle-dev/\" --output-path \"./bundle-dev\" --watch",
+    "build:prod": "ng build --prod --env=prod --base-href \"/\" --deploy-url \"/shk-app/bundle/\" --output-path \"./bundle\"",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",

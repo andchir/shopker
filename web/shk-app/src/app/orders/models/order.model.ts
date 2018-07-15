@@ -20,7 +20,7 @@ export class OrderContent {
         public uri?: string,
         public image?: string,
         public parameters?: OrderContentParameter[]
-    ){
+    ) {
         this.createParametersString();
     }
 
@@ -47,7 +47,7 @@ export class OrderContent {
         if (!this.parameters) {
             return;
         }
-        let parametersStrArr = [];
+        const parametersStrArr = [];
         this.parameters.forEach((parameter) => {
             let parametersStr = '';
             if (parameter.name) {
@@ -71,17 +71,17 @@ export class Order {
 
     set content(content: OrderContent[]) {
         this._content = [];
-        content.forEach((content) => {
+        content.forEach((cont: any) => {
             this._content.push(new OrderContent(
-                content['id'],
-                content['title'],
-                content['count'],
-                content['price'],
-                content['priceTotal'],
-                content['contentTypeName'],
-                content['uri'],
-                content['image'],
-                content['parameters']
+                cont['id'],
+                cont['title'],
+                cont['count'],
+                cont['price'],
+                cont['priceTotal'],
+                cont['contentTypeName'],
+                cont['uri'],
+                cont['image'],
+                cont['parameters']
             ));
         });
     }

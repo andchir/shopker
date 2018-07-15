@@ -6,6 +6,6 @@ export interface AppSettingsModel {
     environment: string;
     filesDirUrl: string;
     locale: string;
-    rolesHierarchy: any[],
-    systemSettings: SettingGroupPretty
+    rolesHierarchy: any[];
+    systemSettings: SettingGroupPretty;
 }

@@ -1,7 +1,7 @@
 import {Component, OnInit, Input, ViewChild, Injectable, ElementRef} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {NgbModal, NgbActiveModal, NgbModalRef, NgbPopover, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
-import * as _ from "lodash";
+import * as _ from 'lodash';
 
 import {UserOption, User} from './models/user.model';
 import {PageTableAbstractComponent} from '../page-table.abstract';
@@ -13,11 +13,11 @@ import {AppSettings} from '../services/app-settings.service';
 import {QueryOptions} from '../models/query-options';
 
 @Component({
-    selector: 'modal-user',
+    selector: 'app-modal-user',
     templateUrl: './templates/modal-user.html',
     providers: [SettingsService, SystemNameService]
 })
-export class ModalUserContent extends ModalContentAbstractComponent<User> {
+export class ModalUserContentComponent extends ModalContentAbstractComponent<User> {
 
     model = new User(0, '', '', [], true, []);
     modalTitle = 'User';
@@ -108,22 +108,14 @@ export class ModalUserContent extends ModalContentAbstractComponent<User> {
 }
 
 @Component({
-    selector: 'shk-users',
+    selector: 'app-shk-users',
     templateUrl: './templates/page-users.html',
     providers: [ UsersService ]
 })
 export class UsersComponent extends PageTableAbstractComponent<User> {
 
-    title: string = 'USERS';
+    title = 'USERS';
     queryOptions: QueryOptions = new QueryOptions('id', 'desc', 1, 10, 0, 0);
-
-    constructor(
-        dataService: UsersService,
-        activeModal: NgbActiveModal,
-        modalService: NgbModal
-    ) {
-        super(dataService, activeModal, modalService);
-    }
 
     tableFields = [
         {
@@ -163,6 +155,14 @@ export class UsersComponent extends PageTableAbstractComponent<User> {
         }
     ];
 
+    constructor(
+        dataService: UsersService,
+        activeModal: NgbActiveModal,
+        modalService: NgbModal
+    ) {
+        super(dataService, activeModal, modalService);
+    }
+
     setModalInputs(itemId?: number, isItemCopy: boolean = false): void {
         this.modalRef.componentInstance.modalTitle = `User #${itemId}`;
         this.modalRef.componentInstance.itemId = itemId || 0;
@@ -170,8 +170,8 @@ export class UsersComponent extends PageTableAbstractComponent<User> {
         this.modalRef.componentInstance.isEditMode = true;
     }
 
-    getModalContent(){
-        return ModalUserContent;
+    getModalContent() {
+        return ModalUserContentComponent;
     }
 
     changeRequest(e): void {

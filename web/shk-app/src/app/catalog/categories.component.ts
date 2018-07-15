@@ -3,13 +3,13 @@ import {Router, ActivatedRoute} from '@angular/router';
 import {NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {Observable} from 'rxjs/Observable';
-import {TreeNode} from 'primeng/primeng'
+import {TreeNode} from 'primeng/primeng';
 import 'rxjs/add/operator/switchMap';
 import * as _ from 'lodash';
 
 import {ContentType} from './models/content_type.model';
 import {Category} from './models/category.model';
-import {ConfirmModalContent} from '../app.component';
+import {ConfirmModalContentComponent} from '../app.component';
 import {ListRecursiveComponent} from '../list-recursive.component';
 import {ModalContentAbstractComponent} from '../modal.abstract';
 import {QueryOptions} from '../models/query-options';
@@ -158,7 +158,7 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
  * @class CategoriesListComponent
  */
 @Component({
-    selector: 'categories-list',
+    selector: 'app-categories-list',
     templateUrl: 'templates/categories-menu-item.html'
 })
 export class CategoriesListComponent extends ListRecursiveComponent {
@@ -169,17 +169,17 @@ export class CategoriesListComponent extends ListRecursiveComponent {
  * @class CategoriesMenuComponent
  */
 @Component({
-    selector: 'categories-menu',
+    selector: 'app-categories-menu',
     templateUrl: 'templates/categories-menu.html'
 })
 export class CategoriesMenuComponent implements OnInit {
-    @Input() rootTitle: string = 'Категории';
+    @Input() rootTitle = 'Категории';
     @Output() changeRequest = new EventEmitter<Category>();
     currentCategory: Category = new Category(null, false, 0, 'root', this.rootTitle, '', '', true);
     categories: Category[] = [];
-    errorMessage: string = '';
+    errorMessage = '';
     modalRef: NgbModalRef;
-    categoryId: number = 0;
+    categoryId = 0;
 
     constructor(
         public router: Router,
@@ -216,7 +216,7 @@ export class CategoriesMenuComponent implements OnInit {
             return;
         }
         const index = _.findIndex(this.categories, {id: this.categoryId});
-        if(index > -1){
+        if (index > -1) {
             this.currentCategory = _.clone(this.categories[index]);
             this.changeRequest.emit(this.currentCategory);
         } else {
@@ -276,7 +276,7 @@ export class CategoriesMenuComponent implements OnInit {
         if (index === -1) {
             return;
         }
-        let category = this.categories[index];
+        const category = this.categories[index];
         if (category.parentId === data.parentId) {
             Object.keys(category).forEach(function (k, i) {
                 if (data[k]) {
@@ -297,7 +297,7 @@ export class CategoriesMenuComponent implements OnInit {
         if (index === -1) {
             return;
         }
-        this.modalRef = this.modalService.open(ConfirmModalContent);
+        this.modalRef = this.modalService.open(ConfirmModalContentComponent);
         this.modalRef.componentInstance.modalTitle = 'Confirm';
         this.modalRef.componentInstance.modalContent = 'Are you sure you want to remove category "' + this.categories[index].title + '"?';
         this.modalRef.result.then((result) => {

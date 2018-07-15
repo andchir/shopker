@@ -16,11 +16,11 @@
                 <label for="fieldContentType">{{'PARENT_FOLDER' | translate}}</label>
             </div>
             <div class="col-md-7">
-                <select-parent-dropdown
+                <app-select-parent-dropdown
                         name="parentId"
                         formControlName="parentId"
                         [filterId]="model.id"
-                        [(ngModel)]="model.parentId"></select-parent-dropdown>
+                        [(ngModel)]="model.parentId"></app-select-parent-dropdown>
 
                 <div *ngIf="formErrors.parentId" class="alert alert-danger">
                     {{formErrors.parentId}}

@@ -4,7 +4,7 @@ export interface SettingOption {
 }
 
 export interface SettingOptionArr {
-    [key: string]: string | number
+    [key: string]: string | number;
 }
 
 export interface Setting {
@@ -17,7 +17,7 @@ export interface Setting {
 }
 
 export interface SettingGroupPretty {
-    [groupName: string]: SettingPretty[]
+    [groupName: string]: SettingPretty[];
 }
 
 export interface SettingPretty {
@@ -28,7 +28,7 @@ export interface SettingPretty {
 }
 
 export interface SettingsGroup {
-    [key: string]: Setting[]
+    [key: string]: Setting[];
 }
 
 export class SettingsData {

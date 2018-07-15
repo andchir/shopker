@@ -6,13 +6,13 @@ import {TranslateService} from '@ngx-translate/core';
 import {Observable} from 'rxjs/Observable';
 import {of} from 'rxjs/observable/of';
 
-import { AppSettings } from './services/app-settings.service';
+import {AppSettings} from './services/app-settings.service';
 
 @Component({
-    selector: 'modal-confirm',
+    selector: 'app-modal-confirm',
     templateUrl: 'templates/modal-confirm.html'
 })
-export class ConfirmModalContent {
+export class ConfirmModalContentComponent {
     @Input() modalTitle;
     @Input() modalContent;
 
@@ -25,10 +25,10 @@ export class ConfirmModalContent {
 }
 
 @Component({
-    selector: 'modal-alert',
+    selector: 'app-modal-alert',
     templateUrl: 'templates/modal-alert.html'
 })
-export class AlertModalContent {
+export class AlertModalContentComponent {
     @Input() modalTitle;
     @Input() modalContent;
     @Input() messageType;
@@ -73,7 +73,7 @@ export class AppComponent {
     }
 
     getRouteData(state, parent) {
-        let data = [];
+        const data = [];
         if (parent && parent.snapshot) {
             data.push(parent.snapshot);
         }
@@ -84,7 +84,7 @@ export class AppComponent {
     }
 
     updateTitle(): void {
-        let promises = [];
+        const promises = [];
         this.routeData.forEach((data) => {
             if (data.component && data.component.title) {
                 const promise = this.translate.get(data.component.title)

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
-import { Observable } from "rxjs/Observable";
+import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { catchError, map, tap } from 'rxjs/operators';
 
@@ -17,11 +17,11 @@ export class CollectionsService {
 
     }
 
-    setRequestUrl(url){
+    setRequestUrl(url) {
         this.requestUrl = url;
     }
 
-    getRequestUrl(){
+    getRequestUrl() {
         return this.requestUrl;
     }
 

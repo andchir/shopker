@@ -4,7 +4,7 @@ import {CommonModule} from '@angular/common';
 import {SharedModule} from '../shared.module';
 import {OrdersRoutingModule} from './orders-routing.module';
 import {OrdersService} from './orders.service';
-import {ModalOrderContent, OrdersComponent} from './orders.component';
+import {ModalOrderContentComponent, OrdersComponent} from './orders.component';
 
 @NgModule({
     imports: [
@@ -14,7 +14,7 @@ import {ModalOrderContent, OrdersComponent} from './orders.component';
     ],
     declarations: [
         OrdersComponent,
-        ModalOrderContent
+        ModalOrderContentComponent
     ],
     providers: [
         OrdersService
@@ -23,7 +23,7 @@ import {ModalOrderContent, OrdersComponent} from './orders.component';
 
     ],
     entryComponents: [
-        ModalOrderContent
+        ModalOrderContentComponent
     ]
 })
 export class OrdersModule {

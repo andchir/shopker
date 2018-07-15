@@ -4,7 +4,7 @@ import {CommonModule} from '@angular/common';
 import {SharedModule} from '../shared.module';
 import {UsersRoutingModule} from './users-routing.module';
 import {UsersService} from './users.service';
-import {ModalUserContent, UsersComponent} from './users.component';
+import {ModalUserContentComponent, UsersComponent} from './users.component';
 
 @NgModule({
     imports: [
@@ -17,13 +17,13 @@ import {ModalUserContent, UsersComponent} from './users.component';
     ],
     declarations: [
         UsersComponent,
-        ModalUserContent
+        ModalUserContentComponent
     ],
     exports: [
 
     ],
     entryComponents: [
-        ModalUserContent
+        ModalUserContentComponent
     ]
 })
 export class UsersModule {

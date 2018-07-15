@@ -8,6 +8,6 @@
         <a href="" [routerLink]="['/catalog/category/', item.id]" [class.item-inactive]="!item.isActive">
             {{item.title}}
         </a>
-        <categories-list [inputItems]="inputItems" [parentId]="item.id" [currentId]="currentId"></categories-list>
+        <app-categories-list [inputItems]="inputItems" [parentId]="item.id" [currentId]="currentId"></app-categories-list>
     </li>
 </ul>

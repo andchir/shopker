@@ -1,12 +1,12 @@
 import {Component, OnInit, Input, forwardRef, ViewChild} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
-import {TreeNode} from 'primeng/primeng'
+import {TreeNode} from 'primeng/primeng';
 import * as _ from 'lodash';
 
 import {CategoriesService} from './services/categories.service';
 
 @Component({
-    selector: 'select-parent-dropdown',
+    selector: 'app-select-parent-dropdown',
     templateUrl: 'templates/select-parent-dropdown.html',
     providers: [
         {
@@ -61,7 +61,7 @@ export class SelectParentDropdownComponent implements OnInit, ControlValueAccess
 
     getTreeCurrentNode(tree: TreeNode[]): TreeNode | null {
         let currentNode = null;
-        for (let node of tree) {
+        for (const node of tree) {
             if (node['id'] === this.currentId) {
                 currentNode = node;
                 break;

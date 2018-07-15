@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
 @Injectable()
 export class SystemNameService {
@@ -26,11 +26,11 @@ export class SystemNameService {
 
     transliterate(word: string) {
         return word.split('')
-            .map((char) => this.mapWords(char,'ru'))
+            .map((char) => this.mapWords(char, 'ru'))
             .join('');
     }
 
-    generateName(title: string): string{
+    generateName(title: string): string {
         title = this.transliterate(title);
         return title.toLowerCase();
     }

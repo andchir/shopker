@@ -1,7 +1,7 @@
 import {OnInit, ViewChild} from '@angular/core';
 import {NgbModal, NgbActiveModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {QueryOptions} from './models/query-options';
-import {AlertModalContent, ConfirmModalContent} from './app.component';
+import {AlertModalContentComponent, ConfirmModalContentComponent} from './app.component';
 
 import {DataService} from './services/data-service.abstract';
 
@@ -49,7 +49,7 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
     }
 
     deleteItemConfirm(itemId: number): void {
-        this.modalRef = this.modalService.open(ConfirmModalContent);
+        this.modalRef = this.modalService.open(ConfirmModalContentComponent);
         this.modalRef.componentInstance.modalTitle = 'Confirm';
         this.modalRef.componentInstance.modalContent = 'Are you sure you want to remove this item?';
         this.modalRef.result.then((result) => {
@@ -60,7 +60,7 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
     }
 
     confirmAction(message: string) {
-        this.modalRef = this.modalService.open(ConfirmModalContent);
+        this.modalRef = this.modalService.open(ConfirmModalContentComponent);
         this.modalRef.componentInstance.modalTitle = 'Confirm';
         this.modalRef.componentInstance.modalContent = message;
         return this.modalRef.result;
@@ -98,7 +98,7 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
     }
 
     showAlert(message: string) {
-        this.modalRef = this.modalService.open(AlertModalContent);
+        this.modalRef = this.modalService.open(AlertModalContentComponent);
         this.modalRef.componentInstance.modalContent = message;
         this.modalRef.componentInstance.modalTitle = 'Error';
         this.modalRef.componentInstance.messageType = 'error';

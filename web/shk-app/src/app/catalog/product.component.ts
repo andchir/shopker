@@ -16,7 +16,7 @@ import {ProductsService} from './services/products.service';
 import {FilesService} from './services/files.service';
 
 @Component({
-    selector: 'product-modal-content',
+    selector: 'app-product-modal-content',
     templateUrl: 'templates/modal-product.html'
 })
 export class ProductModalContentComponent extends ModalContentAbstractComponent<Product> {
@@ -93,7 +93,7 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
 
     getContentType(): Promise<ContentType> {
         this.loading = true;
-        if(!this.category.contentTypeName){
+        if (!this.category.contentTypeName) {
             return Promise.reject({error: 'Content type name not found.'});
         }
         return new Promise((resolve, reject) => {
@@ -116,13 +116,13 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
         if (!data) {
             data = _.clone(this.model);
         }
-        let newKeys = _.map(this.currentContentType.fields, function(field){
+        const newKeys = _.map(this.currentContentType.fields, function(field){
             return field.name;
         });
         newKeys.push('id', 'parentId', 'previousParentId', 'isActive');
 
-        //Remove keys
-        for (let key in this.form.controls) {
+        // Remove keys
+        for (const key in this.form.controls) {
             if (this.form.controls.hasOwnProperty(key)) {
                 if (newKeys.indexOf(key) === -1) {
                     this.form.removeControl(key);
@@ -153,7 +153,7 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
         }
 
         const formData: FormData = new FormData();
-        for (let key in this.files) {
+        for (const key in this.files) {
             if (this.files.hasOwnProperty(key) && this.files[key] instanceof File) {
                 formData.append(key, this.files[key], this.files[key].name);
             }
@@ -174,10 +174,10 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
     }
 
     getFormData() {
-        let data = _.cloneDeep(this.model);
+        const data = _.cloneDeep(this.model);
 
         // Delete temporary data
-        for (let key in data) {
+        for (const key in data) {
             if (data.hasOwnProperty(key)) {
                 if (data[key]
                     && typeof data[key] === 'object'

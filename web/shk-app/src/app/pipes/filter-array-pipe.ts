@@ -1,11 +1,11 @@
-import { Pipe } from '@angular/core';
+import {Pipe, PipeTransform} from '@angular/core';
 
 // Filter Array of Objects
 @Pipe({
     name: 'filter',
     pure: false
 })
-export class FilterArrayPipe {
+export class FilterArrayPipe implements PipeTransform {
     transform(value: any, filter: {[key: string]: string}): any {
         if (filter && Array.isArray(value)) {
             const filterKeys = Object.keys(filter);

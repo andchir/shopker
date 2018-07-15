@@ -16,11 +16,11 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
     loading = false;
     errorMessage: string;
     form: FormGroup;
-    formErrors: { [key: string]: string } = {};
-    validationMessages: { [key: string]: { [key: string]: string } } = {};
+    formErrors: {[key: string]: string} = {};
+    validationMessages: {[key: string]: { [key: string]: string }} = {};
     formFields = {};
-    model: { [key: string]: any } = {};
-    files: { [key: string]: File } = {};
+    model: {[key: string]: any} = {};
+    files: {[key: string]: File} = {};
 
     abstract save();
 
@@ -77,8 +77,8 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
 
     /** Build controls */
     buildControls(options: {}, modelName: string, keyPrefix: string = ''): { [s: string]: FormControl; } {
-        let controls = {};
-        for (let key in options) {
+        const controls = {};
+        for (const key in options) {
             if (!options.hasOwnProperty(key)) {
                 continue;
             }
@@ -107,14 +107,14 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
         }
         const data = this[formName].value;
 
-        for (let fieldName in data) {
+        for (const fieldName in data) {
             if (!data.hasOwnProperty(fieldName)) {
                 continue;
             }
             this.formErrors[keyPrefix + fieldName] = '';
             const control = this[formName].get(fieldName);
             if (control && (control.dirty || this[keyPrefix + 'submitted']) && !control.valid) {
-                for (let key in control.errors) {
+                for (const key in control.errors) {
                     if (this.validationMessages[keyPrefix + fieldName][key]) {
                         this.formErrors[keyPrefix + fieldName] += this.validationMessages[keyPrefix + fieldName][key] + ' ';
                     } else {

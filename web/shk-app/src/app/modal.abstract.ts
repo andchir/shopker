@@ -2,6 +2,7 @@ import {Input, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {NgbAccordion, NgbActiveModal, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
+import {TranslateService} from '@ngx-translate/core';
 
 import {SystemNameService} from './services/system-name.service';
 import {DataService} from './services/data-service.abstract';
@@ -29,7 +30,8 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
         public dataService: DataService<any>,
         public systemNameService: SystemNameService,
         public activeModal: NgbActiveModal,
-        public tooltipConfig: NgbTooltipConfig
+        public tooltipConfig: NgbTooltipConfig,
+        public translateService: TranslateService
     ) {
         tooltipConfig.placement = 'bottom';
         tooltipConfig.container = 'body';
@@ -49,6 +51,11 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
 
     getSystemFieldName(): string {
         return 'name';
+    }
+
+    getLangString(value: string): string {
+        const translations = this.translateService.store.translations[this.translateService.currentLang];
+        return translations[value] || value;
     }
 
     getModelData(): void {

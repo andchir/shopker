@@ -2,6 +2,7 @@ import {Component, OnInit, Input} from '@angular/core';
 import {NgbModal, NgbActiveModal, NgbModalRef, NgbPopover, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import {FormBuilder, Validators} from '@angular/forms';
 import * as _ from 'lodash';
+import {TranslateService} from '@ngx-translate/core';
 
 import {SystemNameService} from '../services/system-name.service';
 import {Order, OrderContent} from './models/order.model';
@@ -76,11 +77,12 @@ export class ModalOrderContentComponent extends ModalContentAbstractComponent<Or
         public systemNameService: SystemNameService,
         public activeModal: NgbActiveModal,
         public tooltipConfig: NgbTooltipConfig,
+        public translateService: TranslateService,
         private modalService: NgbModal,
         private settingsService: SettingsService,
         private appSettings: AppSettings
     ) {
-        super(fb, dataService, systemNameService, activeModal, tooltipConfig);
+        super(fb, dataService, systemNameService, activeModal, tooltipConfig, translateService);
     }
 
     onBeforeInit(): void {
@@ -268,11 +270,12 @@ export class OrdersComponent extends PageTableAbstractComponent<Order> {
     ];
 
     constructor(
-        dataService: OrdersService,
-        activeModal: NgbActiveModal,
-        modalService: NgbModal
+        public dataService: OrdersService,
+        public activeModal: NgbActiveModal,
+        public modalService: NgbModal,
+        public translateService: TranslateService
     ) {
-        super(dataService, activeModal, modalService);
+        super(dataService, activeModal, modalService, translateService);
     }
 
     setModalInputs(itemId?: number, isItemCopy: boolean = false): void {

@@ -2,6 +2,7 @@ import {Component, OnInit, Input} from '@angular/core';
 import {NgbModal, NgbActiveModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {Observable} from 'rxjs/Observable';
 import * as _ from 'lodash';
+import {TranslateService} from '@ngx-translate/core';
 
 import {Category} from './models/category.model';
 import {PageTableAbstractComponent} from '../page-table.abstract';
@@ -29,9 +30,10 @@ export class CatalogCategoryComponent extends PageTableAbstractComponent<Product
         public dataService: ProductsService,
         public activeModal: NgbActiveModal,
         public modalService: NgbModal,
+        public translateService: TranslateService,
         private contentTypesService: ContentTypesService
     ) {
-        super(dataService, activeModal, modalService);
+        super(dataService, activeModal, modalService, translateService);
     }
 
     updateTableConfig(): void {

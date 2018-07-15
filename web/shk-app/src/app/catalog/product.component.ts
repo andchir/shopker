@@ -3,6 +3,7 @@ import {NgbActiveModal, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import {FormControl, FormBuilder, Validators} from '@angular/forms';
 import {Observable} from 'rxjs/Observable';
 import * as _ from 'lodash';
+import {TranslateService} from '@ngx-translate/core';
 
 import {ContentType} from './models/content_type.model';
 import {Category} from './models/category.model';
@@ -49,11 +50,12 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
         public systemNameService: SystemNameService,
         public activeModal: NgbActiveModal,
         public tooltipConfig: NgbTooltipConfig,
+        public translateService: TranslateService,
         private contentTypesService: ContentTypesService,
         private categoriesService: CategoriesService,
         private filesService: FilesService
     ) {
-        super(fb, dataService, systemNameService, activeModal, tooltipConfig);
+        super(fb, dataService, systemNameService, activeModal, tooltipConfig, translateService);
 
         this.model.id = 0;
         this.model.parentId = 0;

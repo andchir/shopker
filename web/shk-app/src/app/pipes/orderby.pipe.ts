@@ -77,7 +77,7 @@ export class OrderByPipe implements PipeTransform {
         } else {
             // Loop over property of the array in order and sort
             return value.sort(function(a: any, b: any) {
-                for (const i = 0; i < config.length; i++) {
+                for (let i = 0; i < config.length; i++) {
                     const desc = config[i].substr(0, 1) === '-';
                     const property = config[i].substr(0, 1) === '+' || config[i].substr(0, 1) === '-'
                         ? config[i].substr(1)

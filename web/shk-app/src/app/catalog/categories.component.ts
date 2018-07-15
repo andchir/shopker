@@ -6,6 +6,7 @@ import {Observable} from 'rxjs/Observable';
 import {TreeNode} from 'primeng/primeng';
 import 'rxjs/add/operator/switchMap';
 import * as _ from 'lodash';
+import {TranslateService} from '@ngx-translate/core';
 
 import {ContentType} from './models/content_type.model';
 import {Category} from './models/category.model';
@@ -93,9 +94,10 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
         public systemNameService: SystemNameService,
         public activeModal: NgbActiveModal,
         public tooltipConfig: NgbTooltipConfig,
+        public translateService: TranslateService,
         private contentTypesService: ContentTypesService
     ) {
-        super(fb, dataService, systemNameService, activeModal, tooltipConfig);
+        super(fb, dataService, systemNameService, activeModal, tooltipConfig, translateService);
     }
 
     /** On initialize */

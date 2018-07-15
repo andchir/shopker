@@ -2,6 +2,7 @@ import {Component, OnInit, Input, ViewChild, Injectable, ElementRef} from '@angu
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {NgbModal, NgbActiveModal, NgbModalRef, NgbPopover, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
+import {TranslateService} from '@ngx-translate/core';
 
 import {UserOption, User} from './models/user.model';
 import {PageTableAbstractComponent} from '../page-table.abstract';
@@ -63,11 +64,12 @@ export class ModalUserContentComponent extends ModalContentAbstractComponent<Use
         public systemNameService: SystemNameService,
         public activeModal: NgbActiveModal,
         public tooltipConfig: NgbTooltipConfig,
+        public translateService: TranslateService,
         private modalService: NgbModal,
         private settingsService: SettingsService,
         private appSettings: AppSettings
     ) {
-        super(fb, dataService, systemNameService, activeModal, tooltipConfig);
+        super(fb, dataService, systemNameService, activeModal, tooltipConfig, translateService);
     }
 
     onBeforeInit(): void {
@@ -156,11 +158,12 @@ export class UsersComponent extends PageTableAbstractComponent<User> {
     ];
 
     constructor(
-        dataService: UsersService,
-        activeModal: NgbActiveModal,
-        modalService: NgbModal
+        public dataService: UsersService,
+        public activeModal: NgbActiveModal,
+        public modalService: NgbModal,
+        public translateService: TranslateService
     ) {
-        super(dataService, activeModal, modalService);
+        super(dataService, activeModal, modalService, translateService);
     }
 
     setModalInputs(itemId?: number, isItemCopy: boolean = false): void {

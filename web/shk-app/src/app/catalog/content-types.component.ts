@@ -2,6 +2,7 @@ import {Component, OnInit, Input, ViewChild, Injectable, ElementRef} from '@angu
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {NgbModal, NgbActiveModal, NgbModalRef, NgbPopover, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
+import {TranslateService} from '@ngx-translate/core';
 
 import {ContentField} from './models/content_field.model';
 import {ContentType} from './models/content_type.model';
@@ -161,11 +162,12 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
         public systemNameService: SystemNameService,
         public activeModal: NgbActiveModal,
         public tooltipConfig: NgbTooltipConfig,
+        public translateService: TranslateService,
         private fieldTypesService: FieldTypesService,
         private collectionsService: CollectionsService,
         private modalService: NgbModal
     ) {
-        super(fb, dataService, systemNameService, activeModal, tooltipConfig);
+        super(fb, dataService, systemNameService, activeModal, tooltipConfig, translateService);
     }
 
     /** On initialize */
@@ -535,11 +537,12 @@ export class ContentTypesComponent extends PageTableAbstractComponent<ContentTyp
     ];
 
     constructor(
-        dataService: ContentTypesService,
-        activeModal: NgbActiveModal,
-        modalService: NgbModal
+        public dataService: ContentTypesService,
+        public activeModal: NgbActiveModal,
+        public modalService: NgbModal,
+        public translateService: TranslateService
     ) {
-        super(dataService, activeModal, modalService);
+        super(dataService, activeModal, modalService, translateService);
     }
 
     getModalContent() {

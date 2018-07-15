@@ -1,8 +1,9 @@
 import {OnInit, ViewChild} from '@angular/core';
 import {NgbModal, NgbActiveModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
+import {TranslateService} from '@ngx-translate/core';
+
 import {QueryOptions} from './models/query-options';
 import {AlertModalContentComponent, ConfirmModalContentComponent} from './app.component';
-
 import {DataService} from './services/data-service.abstract';
 
 export abstract class PageTableAbstractComponent<M> implements OnInit {
@@ -21,7 +22,8 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
     constructor(
         public dataService: DataService<any>,
         public activeModal: NgbActiveModal,
-        public modalService: NgbModal
+        public modalService: NgbModal,
+        public translateService: TranslateService
     ) {
 
     }
@@ -42,7 +44,9 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
 
     setModalInputs(itemId?: number, isItemCopy: boolean = false): void {
         const isEditMode = typeof itemId !== 'undefined' && !isItemCopy;
-        this.modalRef.componentInstance.modalTitle = isEditMode ? 'Edit' : 'Add';
+        this.modalRef.componentInstance.modalTitle = isEditMode
+            ? this.getLangString('EDITING')
+            : this.getLangString('ADD');
         this.modalRef.componentInstance.itemId = itemId || 0;
         this.modalRef.componentInstance.isItemCopy = isItemCopy || false;
         this.modalRef.componentInstance.isEditMode = isEditMode;
@@ -50,8 +54,8 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
 
     deleteItemConfirm(itemId: number): void {
         this.modalRef = this.modalService.open(ConfirmModalContentComponent);
-        this.modalRef.componentInstance.modalTitle = 'Confirm';
-        this.modalRef.componentInstance.modalContent = 'Are you sure you want to remove this item?';
+        this.modalRef.componentInstance.modalTitle = this.getLangString('CONFIRM');
+        this.modalRef.componentInstance.modalContent = this.getLangString('YOU_SURE_YOU_WANT_DELETE');
         this.modalRef.result.then((result) => {
             if (result === 'accept') {
                 this.deleteItem(itemId);
@@ -59,16 +63,21 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
         });
     }
 
+    getLangString(value: string): string {
+        const translations = this.translateService.store.translations[this.translateService.currentLang];
+        return translations[value] || value;
+    }
+
     confirmAction(message: string) {
         this.modalRef = this.modalService.open(ConfirmModalContentComponent);
-        this.modalRef.componentInstance.modalTitle = 'Confirm';
+        this.modalRef.componentInstance.modalTitle = this.getLangString('CONFIRM');
         this.modalRef.componentInstance.modalContent = message;
         return this.modalRef.result;
     }
 
     blockSelected() {
         if (this.selectedIds.length === 0) {
-            this.showAlert('Nothing is selected.');
+            this.showAlert(this.getLangString('NOTHING_IS_SELECTED'));
             return;
         }
         this.dataService.actionBatch(this.selectedIds, 'block')
@@ -76,23 +85,23 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
                     this.clearSelected();
                     this.getList();
                 },
-                err => this.showAlert(err.error || 'Error'));
+                err => this.showAlert(err.error || this.getLangString('ERROR')));
     }
 
     deleteSelected() {
         if (this.selectedIds.length === 0) {
-            this.showAlert('Nothing is selected.');
+            this.showAlert(this.getLangString('NOTHING_IS_SELECTED'));
             return;
         }
-        this.confirmAction('Are you sure you want to delete all selected items?')
+        this.confirmAction(this.getLangString('YOU_SURE_YOU_WANT_DELETE_SELECTED'))
             .then((result) => {
                 if (result === 'accept') {
                     this.dataService.actionBatch(this.selectedIds, 'delete')
                         .subscribe(res => {
-                            this.clearSelected();
-                            this.getList();
-                        },
-                            err => this.showAlert(err.error || 'Error'));
+                                this.clearSelected();
+                                this.getList();
+                            },
+                            err => this.showAlert(err.error || this.getLangString('ERROR')));
                 }
             });
     }
@@ -100,12 +109,12 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
     showAlert(message: string) {
         this.modalRef = this.modalService.open(AlertModalContentComponent);
         this.modalRef.componentInstance.modalContent = message;
-        this.modalRef.componentInstance.modalTitle = 'Error';
+        this.modalRef.componentInstance.modalTitle = this.getLangString('ERROR');
         this.modalRef.componentInstance.messageType = 'error';
     }
 
     deleteItem(itemId: number): void {
-        this.confirmAction('Are you sure you want to remove this item?')
+        this.confirmAction(this.getLangString('YOU_SURE_YOU_WANT_DELETE'))
             .then((result) => {
                 if (result === 'accept') {
                     this.dataService.deleteItem(itemId)

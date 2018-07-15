@@ -1,6 +1,7 @@
 import {Component, Injectable} from '@angular/core';
 import {NgbModal, NgbActiveModal, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import {FormBuilder, Validators} from '@angular/forms';
+import {TranslateService} from '@ngx-translate/core';
 
 import {FieldType} from './models/field-type.model';
 import {FieldTypeProperty} from './models/field-type-property.model';
@@ -48,13 +49,14 @@ export class FieldTypeModalContentComponent extends ModalContentAbstractComponen
     };
 
     constructor(
-        fb: FormBuilder,
-        dataService: FieldTypesService,
-        systemNameService: SystemNameService,
-        activeModal: NgbActiveModal,
-        tooltipConfig: NgbTooltipConfig
+        public fb: FormBuilder,
+        public dataService: FieldTypesService,
+        public systemNameService: SystemNameService,
+        public activeModal: NgbActiveModal,
+        public tooltipConfig: NgbTooltipConfig,
+        public translateService: TranslateService
     ) {
-        super(fb, dataService, systemNameService, activeModal, tooltipConfig);
+        super(fb, dataService, systemNameService, activeModal, tooltipConfig, translateService);
     }
 
     addRow(type: string) {
@@ -134,11 +136,12 @@ export class FieldTypesComponent extends PageTableAbstractComponent<FieldType> {
     ];
 
     constructor(
-        dataService: FieldTypesService,
-        activeModal: NgbActiveModal,
-        modalService: NgbModal
+        public dataService: FieldTypesService,
+        public activeModal: NgbActiveModal,
+        public modalService: NgbModal,
+        public translateService: TranslateService
     ) {
-        super(dataService, activeModal, modalService);
+        super(dataService, activeModal, modalService, translateService);
     }
 
     getModalContent() {

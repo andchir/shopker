@@ -107,6 +107,7 @@ var APP_LANG = {
     "NOTHING_IS_SELECTED": "Nothing is selected.",
     "CONFIRM": "Подтверждение",
     "YOU_SURE_YOU_WANT_DELETE": "Are you sure you want to remove this item?",
+    "YOU_SURE_YOU_WANT_DELETE_CATEGORY": "Are you sure you want to remove category",
     "YOU_SURE_YOU_WANT_DELETE_SELECTED": "Are you sure you want to delete all selected items?",
     "app_name": "Application name",
     "locale": "Locale",

@@ -113,7 +113,7 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
         this.model.contentTypeName = this.currentCategory.contentTypeName;
         if (this.isRoot) {
             this.model.id = 0;
-            this.model.title = 'Корневая категория';
+            this.model.title = this.getLangString('ROOT_FOLDER');
             this.model.name = 'root';
             this.formFields.title.disabled = true;
             this.formFields.name.disabled = true;
@@ -187,8 +187,14 @@ export class CategoriesMenuComponent implements OnInit {
         public router: Router,
         private route: ActivatedRoute,
         private modalService: NgbModal,
-        private categoriesService: CategoriesService
+        private categoriesService: CategoriesService,
+        private translateService: TranslateService
     ) {
+    }
+
+    getLangString(value: string): string {
+        const translations = this.translateService.store.translations[this.translateService.currentLang];
+        return translations[value] || value;
     }
 
     /** On initialize component */
@@ -254,7 +260,9 @@ export class CategoriesMenuComponent implements OnInit {
         const isRoot = itemId === 0 || itemId === null;
         const isEditMode = typeof itemId !== 'undefined' && !isItemCopy;
         this.modalRef = this.modalService.open(CategoriesModalComponent, {size: 'lg'});
-        this.modalRef.componentInstance.modalTitle = isEditMode ? 'Edit category' : 'Add category';
+        this.modalRef.componentInstance.modalTitle = isEditMode
+            ? this.getLangString('EDIT_CATEGORY')
+            : this.getLangString('ADD_NEW_CATEGORY');
         this.modalRef.componentInstance.itemId = itemId || 0;
         this.modalRef.componentInstance.isItemCopy = isItemCopy || false;
         this.modalRef.componentInstance.currentCategory = this.currentCategory;
@@ -300,8 +308,9 @@ export class CategoriesMenuComponent implements OnInit {
             return;
         }
         this.modalRef = this.modalService.open(ConfirmModalContentComponent);
-        this.modalRef.componentInstance.modalTitle = 'Confirm';
-        this.modalRef.componentInstance.modalContent = 'Are you sure you want to remove category "' + this.categories[index].title + '"?';
+        this.modalRef.componentInstance.modalTitle = this.getLangString('CONFIRM');
+        this.modalRef.componentInstance.modalContent = this.getLangString('YOU_SURE_YOU_WANT_DELETE_CATEGORY')
+            + ` "${this.categories[index].title}"?`;
         this.modalRef.result.then((result) => {
             if (result === 'accept') {
                 this.deleteCategoryItem(itemId);

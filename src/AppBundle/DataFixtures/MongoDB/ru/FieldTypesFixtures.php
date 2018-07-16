@@ -322,6 +322,11 @@ class FieldTypesFixtures extends Fixture
                         'default_value' => '0'
                     ],
                     [
+                        'name' => 'multiple',
+                        'title' => 'Разрешить добавление полей',
+                        'default_value' => '1'
+                    ],
+                    [
                         'name' => 'handler',
                         'title' => 'Обработчик',
                         'default_value' => ''

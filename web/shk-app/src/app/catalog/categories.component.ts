@@ -26,7 +26,7 @@ import {ContentTypesService} from './services/content_types.service';
     selector: 'app-category-modal-content',
     templateUrl: 'templates/modal-category.html'
 })
-export class CategoriesModalComponent extends ModalContentAbstractComponent<Category> {
+export class CategoriesModalComponent extends ModalContentAbstractComponent<Category> implements OnInit {
 
     @Input() currentCategory: Category;
     @Input() isRoot = false;

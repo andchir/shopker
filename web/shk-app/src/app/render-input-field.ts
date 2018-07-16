@@ -166,7 +166,8 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                 propertiesDefault = {
                     handler: '',
                     allowed_extensions: '.zip,.rar,.doc,.docx,.xls,.xlsx,.ods,.odt',
-                    has_preview_image: 0
+                    has_preview_image: 0,
+                    multiple: 0
                 };
                 field.inputProperties = this.extendProperties(
                     field.inputProperties,
@@ -462,6 +463,21 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
         this.model[fieldName].push({
             name: '', value: '', price: 0
         });
+    }
+
+    fieldAdd(field): void {
+        const fieldName = 'image1';
+        const newField = _.cloneDeep(field);
+        newField.name = fieldName;
+
+        const index = _.findIndex(this.fields, {name: field.name});
+        if (index === -1) {
+            return;
+        }
+        this.fields.splice(index + 1, 0, newField);
+        this.buildControls();
+
+        console.log('fieldAdd', this.model);
     }
 
 }

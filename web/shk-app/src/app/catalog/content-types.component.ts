@@ -21,7 +21,7 @@ import {FieldTypesService} from './services/field-types.service';
     selector: 'app-content-type-modal-content',
     templateUrl: 'templates/modal-content_types.html'
 })
-export class ContentTypeModalContentComponent extends ModalContentAbstractComponent<ContentType> {
+export class ContentTypeModalContentComponent extends ModalContentAbstractComponent<ContentType> implements OnInit {
 
     @ViewChild('addCollectionBlock') elementAddCollectionBlock;
     @ViewChild('addGroupBlock') elementAddGroupBlock;

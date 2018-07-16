@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {NgbActiveModal, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import {FormControl, FormBuilder, Validators} from '@angular/forms';
 import {Observable} from 'rxjs/Observable';
@@ -20,7 +20,7 @@ import {FilesService} from './services/files.service';
     selector: 'app-product-modal-content',
     templateUrl: 'templates/modal-product.html'
 })
-export class ProductModalContentComponent extends ModalContentAbstractComponent<Product> {
+export class ProductModalContentComponent extends ModalContentAbstractComponent<Product> implements OnInit {
 
     @Input() category: Category;
     categories: Category[] = [];

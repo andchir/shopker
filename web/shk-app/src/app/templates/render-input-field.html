@@ -5,10 +5,14 @@
         <ng-template ngbTabContent>
             <div class="pt-3">
 
-                <div class="form-group" [class.form-group-message]="formErrors[field.name]" [formGroup]="form" *ngFor="let field of fields | filterFieldByGroup: groupName">
+                <div class="form-group"
+                     [class.form-group-message]="formErrors[field.name]"
+                     [formGroup]="form"
+                     *ngFor="let field of fields | filterFieldByGroup: groupName">
 
                     <div [ngSwitch]="field.inputType">
 
+                        <!-- system_name -->
                         <div class="row" *ngSwitchCase="'system_name'">
                             <div class="col-md-5">
                                 <label for="field_{{field.name}}">
@@ -31,6 +35,7 @@
                             </div>
                         </div>
 
+                        <!-- name -->
                         <div class="row" *ngSwitchCase="'name'">
                             <div class="col-md-5">
                                 <label for="field_{{field.name}}">
@@ -46,6 +51,7 @@
                             </div>
                         </div>
 
+                        <!-- number -->
                         <div class="row" *ngSwitchCase="'number'">
                             <div class="col-md-5">
                                 <label for="field_{{field.name}}">
@@ -61,6 +67,7 @@
                             </div>
                         </div>
 
+                        <!-- textarea -->
                         <div class="row" *ngSwitchCase="'textarea'">
                             <div class="col-md-5">
                                 <label for="field_{{field.name}}">
@@ -76,6 +83,7 @@
                             </div>
                         </div>
 
+                        <!-- file -->
                         <div class="row" *ngSwitchCase="'file'">
                             <div class="col-md-5">
                                 <label for="field_{{field.name}}">
@@ -112,6 +120,7 @@
                             </div>
                         </div>
 
+                        <!-- color -->
                         <div class="row" *ngSwitchCase="'color'">
                             <div class="col-md-5">
                                 <label for="field_{{field.name}}">
@@ -132,6 +141,7 @@
                             </div>
                         </div>
 
+                        <!-- rich_text -->
                         <div class="row" *ngSwitchCase="'rich_text'">
                             <div class="col-12">
                                 <label for="field_{{field.name}}">
@@ -180,6 +190,7 @@
                             </div>
                         </div>
 
+                        <!-- date -->
                         <div class="row" *ngSwitchCase="'date'">
                             <div class="col-md-5">
                                 <label for="field_{{field.name}}">
@@ -205,6 +216,7 @@
                             </div>
                         </div>
 
+                        <!-- select -->
                         <div class="row" *ngSwitchCase="'select'">
                             <div class="col-md-5">
                                 <label for="field_{{field.name}}">
@@ -222,6 +234,7 @@
                             </div>
                         </div>
 
+                        <!-- radio -->
                         <div class="row" *ngSwitchCase="'radio'">
                             <div class="col-md-5">
                                 <label for="field_{{field.name}}">
@@ -240,6 +253,7 @@
                             </div>
                         </div>
 
+                        <!-- checkbox -->
                         <div class="row" *ngSwitchCase="'checkbox'">
                             <div class="col-md-5">
                                 <label for="field_{{field.name}}">
@@ -258,6 +272,7 @@
                             </div>
                         </div>
 
+                        <!-- tags -->
                         <div class="row" *ngSwitchCase="'tags'">
                             <div class="col-md-5">
                                 <label for="field_{{field.name}}">
@@ -275,6 +290,7 @@
                             </div>
                         </div>
 
+                        <!-- categories -->
                         <div class="row" *ngSwitchCase="'categories'">
                             <div class="col-md-5">
                                 <label for="field_{{field.name}}">
@@ -294,6 +310,7 @@
                             </div>
                         </div>
 
+                        <!-- parameters -->
                         <div class="row" *ngSwitchCase="'parameters'">
                             <div class="col-12">
                                 <div class="card card-body">
@@ -365,6 +382,13 @@
                             </div>
                         </div>
 
+                    </div>
+
+                    <div class="text-center py-2 border-bottom" *ngIf="field.inputProperties.multiple">
+                        <button type="button" class="btn btn-secondary btn-sm" (click)="fieldAdd(field)">
+                            <i class="icon-plus"></i>
+                            <span>{{'ADD' | translate}}</span>
+                        </button>
                     </div>
 
                 </div>

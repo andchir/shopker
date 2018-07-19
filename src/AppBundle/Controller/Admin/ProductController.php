@@ -111,7 +111,15 @@ class ProductController extends BaseProductController
         $error = '';
 
         foreach ($contentTypeFields as $field){
-            if($error = $this->validateField($data[$field['name']], $field, [], $collectionName, $category->getId(), $itemId)){
+            if($error = $this->validateField(
+                    $data[$field['name']],
+                    $field,
+                    [],
+                    $collectionName,
+                    $category->getId(),
+                    $itemId
+                )
+            ){
                 break;
             }
         }
@@ -186,9 +194,11 @@ class ProductController extends BaseProductController
         // Validate by file extension
         if (strpos($allowedExtensions, '/') !== false) {
 
-            if (!empty($properties['mimeType'])
-                && !self::isMimeTypeAllowed(explode(',', $allowedExtensions), $properties['mimeType'])) {
-
+            if (empty($properties['mimeType'])) {
+                $mimes = new \Mimey\MimeTypes;
+                $properties['mimeType'] = $mimes->getMimeType($ext);
+            }
+            if (!self::isMimeTypeAllowed(explode(',', $allowedExtensions), $properties['mimeType'])) {
                 return false;
             }
 

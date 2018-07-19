@@ -466,18 +466,25 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
     }
 
     fieldAdd(field): void {
-        const fieldName = 'image1';
-        const newField = _.cloneDeep(field);
-        newField.name = fieldName;
-
-        const index = _.findIndex(this.fields, {name: field.name});
+        let index = -1,
+            additFieldsCount = 0;
+        this.fields.forEach((fld, ind) => {
+            if (fld.name === field.name) { index = ind; }
+            if (fld.name.indexOf('__') > -1) { additFieldsCount++; }
+        });
         if (index === -1) {
             return;
         }
+        let fieldName = field.name;
+        if (fieldName.indexOf('__') > -1) {
+            fieldName = fieldName.substr(0, fieldName.indexOf('__'));
+        }
+        fieldName += `__${additFieldsCount + 1}`;
+        const newField = _.cloneDeep(field);
+        newField.name = fieldName;
+
         this.fields.splice(index + 1, 0, newField);
         this.buildControls();
-
-        console.log('fieldAdd', this.model);
     }
 
 }

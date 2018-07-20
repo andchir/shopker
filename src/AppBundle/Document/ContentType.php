@@ -293,4 +293,15 @@ class ContentType
         return $output;
     }
 
+    /**
+     * @param string $fieldName
+     * @return string
+     */
+    public static function getCleanFieldName($fieldName) {
+        if (strpos($fieldName, '__') !== false) {
+            $fieldName = substr($fieldName, 0, strpos($fieldName, '__'));
+        }
+        return $fieldName;
+    }
+
 }

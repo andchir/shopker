@@ -15,6 +15,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use \Mimey\MimeTypes;
 
 /**
  * Class ProductController
@@ -195,7 +196,7 @@ class ProductController extends BaseProductController
         if (strpos($allowedExtensions, '/') !== false) {
 
             if (empty($properties['mimeType'])) {
-                $mimes = new \Mimey\MimeTypes;
+                $mimes = new MimeTypes;
                 $properties['mimeType'] = $mimes->getMimeType($ext);
             }
             if (!self::isMimeTypeAllowed(explode(',', $allowedExtensions), $properties['mimeType'])) {
@@ -343,26 +344,36 @@ class ProductController extends BaseProductController
             ? $data['isActive']
             : true;
 
-        foreach ($contentType->getFields() as $field){
+        $contentTypeFields = $contentType->getFields();
+
+        //foreach ($contentType->getFields() as $field){
+        foreach ($data as $key => $value) {
+            if (in_array($key, ['id', '_id', 'parentId', 'isActive'])) {
+                continue;
+            }
+            $fieldName = ContentType::getCleanFieldName($key);
+            $fIndex = array_search($fieldName, array_column($contentTypeFields, 'name'));
+            if ($fIndex === false) {
+                continue;
+            }
+            $field = $contentTypeFields[$fIndex];
 
             // Files will be saved later by a separate request
             if ($field['inputType'] == 'file') {
                 // Delete file
-                if ($itemId && !empty($document[$field['name']])) {
-                    $oldFileId = !empty($document[$field['name']]) && isset($document[$field['name']]['fileId'])
-                        ? $document[$field['name']]['fileId']
+                if ($itemId && !empty($document[$key])) {
+                    $oldFileId = !empty($document[$key]) && isset($document[$key]['fileId'])
+                        ? $document[$key]['fileId']
                         : null;
-                    $newFileId = !empty($data[$field['name']]) && isset($data[$field['name']]['fileId'])
-                        ? $data[$field['name']]['fileId']
+                    $newFileId = !empty($data[$key]) && isset($data[$key]['fileId'])
+                        ? $data[$key]['fileId']
                         : null;
                     if (!$newFileId || $oldFileId !== $newFileId) {
                         $this->deleteFile($oldFileId, $contentType->getName());
                     }
                 }
             }
-            $document[$field['name']] = isset($data[$field['name']])
-                ? $data[$field['name']]
-                : null;
+            $document[$key] = $value;
         }
 
         if($itemId){
@@ -535,7 +546,6 @@ class ProductController extends BaseProductController
             return $this->setError('Content type not found.');
         }
 
-        $contentTypeFields = $contentType->getFields();
         $collection = $this->getCollection($contentType->getCollection());
 
         $entity = $collection->findOne(['_id' => $itemId]);
@@ -543,18 +553,7 @@ class ProductController extends BaseProductController
             return $this->setError('Product not found.');
         }
 
-        $data = [
-            'id' => $entity['_id'],
-            'parentId' => $entity['parentId'],
-            'isActive' => $entity['isActive']
-        ];
-        foreach ($contentTypeFields as $field){
-            $data[$field['name']] = isset($entity[$field['name']])
-                ? $entity[$field['name']]
-                : '';
-        }
-
-        return new JsonResponse($data);
+        return new JsonResponse(array_merge($entity, ['id' => $entity['_id']]));
     }
 
     /**

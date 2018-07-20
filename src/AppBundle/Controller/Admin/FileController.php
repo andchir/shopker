@@ -93,8 +93,9 @@ class FileController extends BaseController
         foreach ($files as $key => $file) {
 
             $error = '';
+            $fieldName = ContentType::getCleanFieldName($key);
 
-            $fields = self::search($contentTypeFields, 'name', $key);
+            $fields = self::search($contentTypeFields, 'name', $fieldName);
             if (empty($fields)) {
                 continue;
             }

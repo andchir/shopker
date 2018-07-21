@@ -374,10 +374,7 @@ class ProductController extends BaseProductController
             }
             if (empty($value) && strpos($key, '__') !== false) {
                 if (isset($document[$key]) || is_null($document[$key])) {
-                    $document = array_filter($document, function($k) use ($key) {
-                        return $k !== $key;
-                    }, ARRAY_FILTER_USE_KEY);
-                    //var_dump($document);
+                    unset($document[$key]);
                 }
                 continue;
             }

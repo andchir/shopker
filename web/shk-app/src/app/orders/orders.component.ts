@@ -90,38 +90,42 @@ export class ModalOrderContentComponent extends ModalContentAbstractComponent<Or
         this.settings = this.appSettings.settings.systemSettings;
     }
 
-    getModelData(): void {
+    getModelData(): Promise<Order> {
         this.loading = true;
-        this.dataService.getItem(this.itemId)
-            .subscribe(data => {
-                if (this.isItemCopy) {
-                    data.id = null;
-                    data[this.getSystemFieldName()] = '';
-                }
-                this.model = new Order(
-                    data['id'],
-                    data['userId'],
-                    data['status'],
-                    data['email'],
-                    data['phone'],
-                    data['fullName'],
-                    new Date(data['createdDate']['date']),
-                    data['deliveryName'],
-                    data['deliveryPrice'],
-                    data['paymentName'],
-                    data['paymentValue'],
-                    data['comment'],
-                    data['contentCount'],
-                    data['price'],
-                    data['currency'],
-                    data['options']
-                );
-                this.model.content = data['content'];
-                this.loading = false;
-            }, (err) => {
-                this.errorMessage = err.error || 'Error.';
-                this.loading = false;
-            });
+        return new Promise((resolve, reject) => {
+            this.dataService.getItem(this.itemId)
+                .subscribe(data => {
+                    if (this.isItemCopy) {
+                        data.id = null;
+                        data[this.getSystemFieldName()] = '';
+                    }
+                    this.model = new Order(
+                        data['id'],
+                        data['userId'],
+                        data['status'],
+                        data['email'],
+                        data['phone'],
+                        data['fullName'],
+                        new Date(data['createdDate']['date']),
+                        data['deliveryName'],
+                        data['deliveryPrice'],
+                        data['paymentName'],
+                        data['paymentValue'],
+                        data['comment'],
+                        data['contentCount'],
+                        data['price'],
+                        data['currency'],
+                        data['options']
+                    );
+                    this.model.content = data['content'];
+                    this.loading = false;
+                    resolve(data as Order);
+                }, (err) => {
+                    this.errorMessage = err.error || 'Error.';
+                    this.loading = false;
+                    reject(err);
+                });
+        });
     }
 
     save(): void {

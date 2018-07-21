@@ -58,20 +58,24 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
         return translations[value] || value;
     }
 
-    getModelData(): void {
+    getModelData(): Promise<M> {
         this.loading = true;
-        this.dataService.getItem(this.itemId)
-            .subscribe(data => {
-                if (this.isItemCopy) {
-                    data.id = null;
-                    data[this.getSystemFieldName()] = '';
-                }
-                this.model = data as M;
-                this.loading = false;
-            }, (err) => {
-                this.errorMessage = err.error || 'Error.';
-                this.loading = false;
-            });
+        return new Promise((resolve, reject) => {
+            this.dataService.getItem(this.itemId)
+                .subscribe(data => {
+                    if (this.isItemCopy) {
+                        data.id = null;
+                        data[this.getSystemFieldName()] = '';
+                    }
+                    this.model = data as M;
+                    this.loading = false;
+                    resolve(data as M);
+                }, (err) => {
+                    this.errorMessage = err.error || 'Error.';
+                    this.loading = false;
+                    reject(err);
+                });
+        });
     }
 
     /** Build form groups */

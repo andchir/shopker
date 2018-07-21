@@ -1,4 +1,28 @@
+
+export interface FieldIndexData {
+    index: number;
+    additFieldsCount: number;
+}
+
 export class ContentField {
+
+    static getFieldBaseName(fieldName: string): string {
+        if (fieldName.indexOf('__') > -1) {
+            fieldName = fieldName.substr(0, fieldName.indexOf('__'));
+        }
+        return fieldName;
+    }
+
+    static getFieldIndexData(fields: ContentField[], fieldName): FieldIndexData {
+        let index = -1,
+            additFieldsCount = 0;
+        fields.forEach((fld, ind) => {
+            if (fld.name === fieldName) { index = ind; }
+            if (fld.name.indexOf('__') > -1) { additFieldsCount++; }
+        });
+        return {index: index, additFieldsCount: additFieldsCount};
+    }
+
     constructor(
         public id: number,
         public name: string,

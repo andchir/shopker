@@ -15,6 +15,7 @@ import {CategoriesService} from './services/categories.service';
 import {ContentTypesService} from './services/content_types.service';
 import {ProductsService} from './services/products.service';
 import {FilesService} from './services/files.service';
+import {ContentField, FieldIndexData} from './models/content_field.model';
 
 @Component({
     selector: 'app-product-modal-content',
@@ -68,12 +69,18 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
         this.buildForm();
         this.getCategories();
         this.getContentType()
-            .then(() => {
+            .then((data) => {
                 if (this.itemId) {
-                    this.getModelData();
+                    return this.getModelData();
+                } else {
+                    return Promise.reject('');
                 }
             }, (err) => {
                 this.errorMessage = err.error || 'Error.';
+                return Promise.reject('');
+            })
+            .then((data) => {
+                this.updateForm();
             });
     }
 
@@ -103,7 +110,6 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
                 .subscribe((data) => {
                     this.currentContentType = data as ContentType;
                     this.errorMessage = '';
-                    this.updateForm();
                     this.loading = false;
                     resolve(data);
                 }, (err) => {
@@ -114,6 +120,10 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
         });
     }
 
+    /**
+     * Update form
+     * @param data
+     */
     updateForm(data ?: any): void {
         if (!data) {
             data = _.clone(this.model);
@@ -122,6 +132,25 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
             return field.name;
         });
         newKeys.push('id', 'parentId', 'previousParentId', 'isActive');
+
+        Object.keys(this.model).forEach((key) => {
+            if (key.indexOf('__') > -1) {
+                const fieldBaseName = ContentField.getFieldBaseName(key);
+                const fieldIndexData: FieldIndexData = ContentField.getFieldIndexData(this.currentContentType.fields, fieldBaseName);
+                if (fieldIndexData.index === -1) {
+                    return;
+                }
+                const newField = _.cloneDeep(this.currentContentType.fields[fieldIndexData.index]);
+                newField.name = key;
+
+                this.currentContentType.fields.splice(
+                    fieldIndexData.index + fieldIndexData.additFieldsCount,
+                    0,
+                    newField
+                );
+                newKeys.push(key);
+            }
+        });
 
         // Remove keys
         for (const key in this.form.controls) {

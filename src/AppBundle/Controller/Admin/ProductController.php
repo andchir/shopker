@@ -346,7 +346,6 @@ class ProductController extends BaseProductController
 
         $contentTypeFields = $contentType->getFields();
 
-        //foreach ($contentType->getFields() as $field){
         foreach ($data as $key => $value) {
             if (in_array($key, ['id', '_id', 'parentId', 'isActive'])) {
                 continue;
@@ -372,6 +371,15 @@ class ProductController extends BaseProductController
                         $this->deleteFile($oldFileId, $contentType->getName());
                     }
                 }
+            }
+            if (empty($value) && strpos($key, '__') !== false) {
+                if (isset($document[$key]) || is_null($document[$key])) {
+                    $document = array_filter($document, function($k) use ($key) {
+                        return $k !== $key;
+                    }, ARRAY_FILTER_USE_KEY);
+                    //var_dump($document);
+                }
+                continue;
             }
             $document[$key] = $value;
         }

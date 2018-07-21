@@ -345,6 +345,7 @@ class ProductController extends BaseProductController
             : true;
 
         $contentTypeFields = $contentType->getFields();
+        $unset = [];
 
         foreach ($data as $key => $value) {
             if (in_array($key, ['id', '_id', 'parentId', 'isActive'])) {
@@ -375,6 +376,7 @@ class ProductController extends BaseProductController
             if (empty($value) && strpos($key, '__') !== false) {
                 if (isset($document[$key]) || is_null($document[$key])) {
                     unset($document[$key]);
+                    $unset[$key] = 1;
                 }
                 continue;
             }
@@ -382,7 +384,11 @@ class ProductController extends BaseProductController
         }
 
         if($itemId){
-            $result = $collection->update(['_id' => $itemId], ['$set' => $document]);
+            $unsetQuery = !empty($unset) ? ['$unset' => $unset] : [];
+            $result = $collection->update(
+                ['_id' => $itemId],
+                array_merge(['$set' => $document], $unsetQuery)
+            );
         }
         else {
             $result = $collection->insert($document);

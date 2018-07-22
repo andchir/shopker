@@ -176,7 +176,7 @@ input.form-control[readonly] { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); curso
 .ui-tree .ui-treenode-label { padding: 0 .25em !important; }
 .ui-tree.ui-tree-horizontal .ui-treenode-content { white-space: nowrap; }
 .ui-tree .ui-treenode .ui-treenode-content .ui-treenode-label.ui-state-highlight { background-color: rgba(2,117,216,0.8); }
-.ui-tree .ui-tree-container { max-height: 200px; }
+.ui-tree .ui-tree-container { max-height: 350px; }
 .ui-tree.ui-tree-loading { height: auto; min-height: 50px; }
 .ui-tree.ui-tree-loading .ui-tree-container { height: 50px; }
 .ui-tree .ui-tree-loading-content { margin-top: -0.6em; }

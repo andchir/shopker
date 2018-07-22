@@ -302,6 +302,7 @@ class ProductController extends BaseProductController
         }
 
         $collection = $this->getCollection($contentType->getCollection());
+        $docKeys = [];
 
         if($itemId){
             $document = null;
@@ -333,6 +334,7 @@ class ProductController extends BaseProductController
             if (!$document) {
                 return $this->setError('Item not found.');
             }
+            $docKeys = array_keys($document);
         } else {
             $document = [
                 '_id' => $this->getNextId($contentType->getCollection())
@@ -345,7 +347,6 @@ class ProductController extends BaseProductController
             : true;
 
         $contentTypeFields = $contentType->getFields();
-        $unset = [];
 
         foreach ($data as $key => $value) {
             if (in_array($key, ['id', '_id', 'parentId', 'isActive'])) {
@@ -376,14 +377,35 @@ class ProductController extends BaseProductController
             if (empty($value) && strpos($key, '__') !== false) {
                 if (isset($document[$key]) || is_null($document[$key])) {
                     unset($document[$key]);
-                    $unset[$key] = 1;
                 }
                 continue;
             }
             $document[$key] = $value;
         }
 
+        // Save document
         if($itemId){
+
+            // Delete unnecessary fields and sorting
+            $docKeysData = [];
+            foreach ($document as $key => $value) {
+                if (strpos($key, '__') !== false) {
+                    $fieldBaseName = substr($key, 0, strpos($key, '__'));
+                    if (!isset($docKeysData[$fieldBaseName])) {
+                        $docKeysData[$fieldBaseName] = 0;
+                    }
+                    $docKeysData[$fieldBaseName]++;
+                    unset($document[$key]);
+                    $document[$fieldBaseName . '__' . $docKeysData[$fieldBaseName]] = $value;
+                }
+            }
+
+            $unset = [];
+            $unusedKeys = array_diff($docKeys, array_keys($document));
+            foreach ($unusedKeys as $k) {
+                $unset[$k] = 1;
+            }
+
             $unsetQuery = !empty($unset) ? ['$unset' => $unset] : [];
             $result = $collection->update(
                 ['_id' => $itemId],

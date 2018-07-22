@@ -144,7 +144,7 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
                 newField.name = key;
 
                 this.currentContentType.fields.splice(
-                    fieldIndexData.index + fieldIndexData.additFieldsCount,
+                    fieldIndexData.index + fieldIndexData.additFieldsCount + 1,
                     0,
                     newField
                 );

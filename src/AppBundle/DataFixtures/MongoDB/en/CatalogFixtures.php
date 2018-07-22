@@ -103,14 +103,15 @@ class CatalogFixtures extends Fixture
                     'value' => '',
                     'handler' => '',
                     'allowed_extensions' => 'image/*',
-                    'has_preview_image' => '1'
+                    'has_preview_image' => '1',
+                    'multiple' => 1
                 ],
                 'outputType' => 'file',
                 'outputProperties' => [
                     'className' => '',
                     'chunkName' => 'image'
                 ],
-                'group' => 'Options',
+                'group' => 'Images',
                 'required' => false,
                 'showInTable' => false,
                 'showInList' => true,
@@ -310,7 +311,7 @@ class CatalogFixtures extends Fixture
             ->setDescription('Products catalog')
             ->setCollection('products')
             ->setFields($fields)
-            ->setGroups(['General','Options','Categories'])
+            ->setGroups(['General', 'Options', 'Images', 'Categories'])
             ->setIsActive(true);
 
         $manager->persist($contentType);
@@ -392,7 +393,7 @@ class CatalogFixtures extends Fixture
                     'max' => null,
                     'step' => 1
                 ],
-                'outputType' => 'number',
+                'outputType' => 'text',
                 'outputProperties' => [
                     'className' => '',
                     'chunkName' => ''

@@ -302,6 +302,8 @@ class ProductController extends BaseProductController
         }
 
         $collection = $this->getCollection($contentType->getCollection());
+        $fieldsSort = $data['fieldsSort'];
+        unset($data['fieldsSort']);
         $docKeys = [];
 
         if($itemId){
@@ -346,6 +348,7 @@ class ProductController extends BaseProductController
             ? $data['isActive']
             : true;
 
+        $additFields = [];
         $contentTypeFields = $contentType->getFields();
 
         foreach ($data as $key => $value) {
@@ -380,26 +383,34 @@ class ProductController extends BaseProductController
                 }
                 continue;
             }
-            $document[$key] = $value;
+            if (strpos($key, '__') !== false) {
+                $additFields[$key] = $value;
+                unset($document[$key]);
+            } else {
+                $document[$key] = $value;
+            }
         }
 
         // Save document
         if($itemId){
 
-            // Delete unnecessary fields and sorting
+            // Sort additional fields
+            uksort($additFields, function($a, $b) use ($fieldsSort) {
+                return (array_search($a, $fieldsSort) < array_search($b, $fieldsSort)) ? -1 : 1;
+            });
+
+            // Merge fields
             $docKeysData = [];
-            foreach ($document as $key => $value) {
-                if (strpos($key, '__') !== false) {
-                    $fieldBaseName = substr($key, 0, strpos($key, '__'));
-                    if (!isset($docKeysData[$fieldBaseName])) {
-                        $docKeysData[$fieldBaseName] = 0;
-                    }
-                    $docKeysData[$fieldBaseName]++;
-                    unset($document[$key]);
-                    $document[$fieldBaseName . '__' . $docKeysData[$fieldBaseName]] = $value;
+            foreach ($additFields as $k => $v) {
+                $fieldBaseName = ContentType::getCleanFieldName($k);
+                if (!isset($docKeysData[$fieldBaseName])) {
+                    $docKeysData[$fieldBaseName] = 0;
                 }
+                $docKeysData[$fieldBaseName]++;
+                $document[$fieldBaseName . '__' . $docKeysData[$fieldBaseName]] = $v;
             }
 
+            // Collect unused additional fields
             $unset = [];
             $unusedKeys = array_diff($docKeys, array_keys($document));
             foreach ($unusedKeys as $k) {

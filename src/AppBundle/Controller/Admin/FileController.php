@@ -35,6 +35,7 @@ class FileController extends BaseController
         $itemId = (int) $request->get('itemId');
         $ownerType = $request->get('ownerType');
         $categoryId = $request->get('categoryId');
+        $fieldsSort = explode(',', $request->get('fieldsSort', ''));
         $files = $request->files;
 
         $now = new \DateTime();
@@ -94,6 +95,7 @@ class FileController extends BaseController
 
             $error = '';
             $fieldName = ContentType::getCleanFieldName($key);
+            $currentFieldName = ContentType::getCurrentFieldName($key, $fieldsSort);
 
             $fields = self::search($contentTypeFields, 'name', $fieldName);
             if (empty($fields)) {
@@ -107,9 +109,9 @@ class FileController extends BaseController
             }
 
             // Delete old file
-            if (!empty($entity[$key]) && !empty($entity[$key]['fileId'])) {
+            if (!empty($entity[$currentFieldName]) && !empty($entity[$currentFieldName]['fileId'])) {
                 $oldFileDocument = $fileDocumentRepository->findOneBy([
-                    'id' => $entity[$key]['fileId'],
+                    'id' => $entity[$currentFieldName]['fileId'],
                     'ownerType' => $ownerType
                 ]);
                 if ($oldFileDocument) {
@@ -132,7 +134,7 @@ class FileController extends BaseController
 
             $outputFiles[] = $fileDocument->toArray();
 
-            $entity[$key] = [
+            $entity[$currentFieldName] = [
                 'fileId' => $fileDocument->getId(),
                 'title' => $fileDocument->getTitle(),
                 'fileName' => $fileDocument->getFileName(),

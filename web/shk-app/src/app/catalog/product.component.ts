@@ -192,6 +192,7 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
         formData.append('itemId', String(itemId));
         formData.append('ownerType', this.currentContentType.name);
         formData.append('categoryId', String(this.model.parentId));
+        formData.append('fieldsSort', this.getFieldsSortData().join(','));
 
         this.filesService.postFormData(formData)
             .subscribe(() => {
@@ -218,7 +219,18 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
             }
         }
 
+        data['fieldsSort'] = this.getFieldsSortData();
         return data;
+    }
+
+    getFieldsSortData(): string[] {
+        let sordData = this.currentContentType.fields.map((field) => {
+            return field.name;
+        });
+        sordData = sordData.filter((fieldName) => {
+            return !!this.model[fieldName] && fieldName.indexOf('__') > -1;
+        });
+        return sordData;
     }
 
     save() {

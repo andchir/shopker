@@ -304,4 +304,27 @@ class ContentType
         return $fieldName;
     }
 
+    /**
+     * @param string $fieldKey
+     * @param array $fieldsSort
+     * @return string
+     */
+    public static function getCurrentFieldName($fieldKey, $fieldsSort)
+    {
+        if (!in_array($fieldKey, $fieldsSort)) {
+            return $fieldKey;
+        }
+        $fieldName = ContentType::getCleanFieldName($fieldKey);
+        $num = 0;
+        foreach ($fieldsSort as $fldName) {
+            if (strpos($fldName, $fieldName . '__') !== false) {
+                $num++;
+                if ($fldName === $fieldKey) {
+                    break;
+                }
+            }
+        }
+        return $fieldName . '__' . $num;
+    }
+
 }

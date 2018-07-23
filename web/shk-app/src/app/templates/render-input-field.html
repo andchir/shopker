@@ -5,7 +5,7 @@
         <ng-template ngbTabContent>
             <div class="pt-3">
 
-                <div class="form-group"
+                <div class="form-group show-on-hover-parent"
                      [class.form-group-message]="formErrors[field.name]"
                      [formGroup]="form"
                      *ngFor="let field of fields | filterFieldByGroup: groupName">
@@ -84,8 +84,8 @@
                         </div>
 
                         <!-- file -->
-                        <div *ngSwitchCase="'file'">
-                            <div>
+                        <div class="min-height110" *ngSwitchCase="'file'">
+                            <div class="mb-1">
                                 <label for="field_{{field.name}}">
                                     {{field.title}}
                                     <span class="text-danger" *ngIf="field.required">*</span>
@@ -99,7 +99,7 @@
                                     <div [style.display]="field.inputProperties.has_preview_image && model[field.name] ? 'block' : 'none'">
                                         <img [src]="getImageUrl(model[field.name])" alt="Preview" class="img-thumbnail" #imgPreview>
                                     </div>
-                                    <div class="file-buttons show-on-hover" style="top:10px; left:10px; right:auto;">
+                                    <div class="file-buttons show-on-hover-child-left">
                                         <button type="button" class="btn btn-secondary btn-wide" (click)="fileInput.click()">
                                             <i class="icon-upload"></i>
                                             Обзор
@@ -313,7 +313,7 @@
                         <!-- parameters -->
                         <div class="row" *ngSwitchCase="'parameters'">
                             <div class="col-12">
-                                <div class="card card-body">
+                                <div class="card card-body p-2">
                                     <label for="field_{{field.name}}">
                                         {{field.title}}
                                         <span class="text-danger" *ngIf="field.required">*</span>
@@ -354,7 +354,7 @@
                                         </tbody>
                                         <tfoot>
                                             <tr class="bg-faded">
-                                                <td colspan="4" class="text-center pb-0">
+                                                <td colspan="4" class="text-center pb-2">
                                                     <button type="button" class="btn btn-secondary btn-sm" (click)="parametersAdd(field.name)">
                                                         <i class="icon-plus"></i>
                                                         <span>{{'ADD' | translate}}</span>
@@ -384,12 +384,26 @@
 
                     </div>
 
-                    <div class="text-center py-3 border-bottom" *ngIf="field.inputProperties.multiple">
-                        <button type="button" class="btn btn-secondary btn-sm" (click)="fieldAdd(field)">
-                            <i class="icon-plus"></i>
-                            <span>{{'ADD' | translate}}</span>
-                        </button>
-                    </div>
+                    <ng-container *ngIf="field.inputProperties.multiple">
+                        <div class="show-on-hover-child pos-absolute-right-bottom">
+                            <div class="py-1">
+                                <button type="button" class="btn btn-secondary btn-sm" [ngbTooltip]="'MOVE_UP' | translate" placement="left" (click)="fieldMove(field, 'up', $event)">
+                                    <i class="icon-arrow-up"></i>
+                                </button>
+                            </div>
+                            <div class="py-1">
+                                <button type="button" class="btn btn-secondary btn-sm" [ngbTooltip]="'MOVE_DOWN' | translate" placement="left" (click)="fieldMove(field, 'down', $event)">
+                                    <i class="icon-arrow-down"></i>
+                                </button>
+                            </div>
+                            <div class="py-1">
+                                <button type="button" class="btn btn-secondary btn-sm" [ngbTooltip]="'ADD' | translate" placement="left" (click)="fieldAdd(field, $event)">
+                                    <i class="icon-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <hr>
+                    </ng-container>
 
                 </div>
 

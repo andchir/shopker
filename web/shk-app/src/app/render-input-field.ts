@@ -345,7 +345,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                 && fileList[0].type.indexOf('image/') > -1) {
 
                 imgPreview.style.display = 'block';
-                parentEl.querySelector('.file-buttons').classList.add('show-on-hover');
+                parentEl.querySelector('.file-buttons').classList.add('show-on-hover-child-left');
 
                 const reader = new FileReader();
                 reader.onload = (e: ProgressEvent) => {
@@ -355,7 +355,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                 reader.readAsDataURL(fileList[0]);
             } else {
                 imgPreview.style.display = 'none';
-                parentEl.querySelector('.file-buttons').classList.remove('show-on-hover');
+                parentEl.querySelector('.file-buttons').classList.remove('show-on-hover-child-left');
             }
         }
     }
@@ -465,7 +465,50 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
         });
     }
 
-    fieldAdd(field): void {
+    /**
+     * Move field
+     * @param field
+     * @param direction
+     * @param event
+     */
+    fieldMove(field: ContentField, direction: string, event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        if (direction === 'up' && field.name.indexOf('__') === -1) {
+            return;
+        }
+        const fieldBaseName = ContentField.getFieldBaseName(field.name),
+            baseFieldIndexData = ContentField.getFieldIndexData(this.fields, fieldBaseName),
+            fieldIndexData = ContentField.getFieldIndexData(this.fields, field.name);
+        if (fieldIndexData.index === -1) {
+            return;
+        }
+        if (direction === 'up') {
+            if (fieldIndexData.index - 1 === baseFieldIndexData.index) {
+                return;
+            }
+            this.fields.splice(fieldIndexData.index, 1);
+            this.fields.splice(fieldIndexData.index - 1, 0, field);
+        }
+        if (direction === 'down') {
+            if (fieldIndexData.index - baseFieldIndexData.index === fieldIndexData.additFieldsCount) {
+                return;
+            }
+            this.fields.splice(fieldIndexData.index, 1);
+            this.fields.splice(fieldIndexData.index + 1, 0, field);
+        }
+    }
+
+    /**
+     * Add field
+     * @param field
+     * @param event
+     */
+    fieldAdd(field: ContentField, event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
         const fieldIndexData = ContentField.getFieldIndexData(this.fields, field.name);
         if (fieldIndexData.index === -1) {
             return;

@@ -26,7 +26,7 @@
                 </td>
                 <td *ngFor="let tableField of tableFields; let index=index">
                     <div class="relative" *ngIf="index == tableFields.length - 1">
-                        <div class="show-on-hover no-wrap">
+                        <div class="show-on-hover-right no-wrap">
                             <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'EDIT' | translate}}" (click)="action('edit', item.id)">
                                 <i class="icon-pencil"></i>
                             </button>

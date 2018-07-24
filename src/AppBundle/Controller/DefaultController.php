@@ -155,12 +155,20 @@ class DefaultController extends CatalogController
                     $form->addError(new FormError($translator->trans('install.mongodb_connection_fail', [], 'validators')));
                 } else {
 
-                    $dbsList = $dbConnection->getMongo()->listDBs();
-                    if (array_search($data['mongodb_database'], array_column($dbsList['databases'], 'name')) === false) {
-                        $form->addError(new FormError($translator->trans('install.mongodb_database_not_exist', [], 'validators')));
+                    //$dbsList = $dbConnection->getMongo()->listDBs();
+                    //if (array_search($data['mongodb_database'], array_column($dbsList['databases'], 'name')) === false) {
+                    if (count($dbConnection->getMongo()->selectDB($data['mongodb_database'])->listCollections()) > 0) {
+                        $form->addError(new FormError($translator->trans('install.mongodb_database_not_empty', [], 'validators')));
+                    }
+
+                    if (!is_writable($settingsService->getConfigYamlFilePath('settings'))) {
+                        $form->addError(new FormError($translator->trans('install.settings_file_not_writable', [], 'validators')));
                     }
 
                     if ($form->isValid()) {
+
+                        $settingsService->saveSettingsToYaml('settings', array_merge($settingsDefault, $data));
+                        $this->systemCacheClear();
 
                         $adminEmail = $data['admin_email'];
                         $adminPassword = $data['admin_password'];
@@ -183,15 +191,17 @@ class DefaultController extends CatalogController
                         $dm->persist($user);
                         $dm->flush();
 
+                        $this->loadDataFixtures($data['locale'], $data['mongodb_database']);
+
+                        // Create user auto_increment record
+                        $productsController = new Admin\ProductController();
+                        $productsController->setContainer($this->container);
+                        $productsController->getNextId('user', $data['mongodb_database']);
+
                         // Success message
                         $request->getSession()
                             ->getFlashBag()
                             ->add('messages', 'app_install.message.success');
-
-                        $settingsService->saveSettingsToYaml('settings', array_merge($settingsDefault, $data));
-
-                        $this->systemCacheClear();
-                        $this->loadDataFixtures($data['locale'], $data['mongodb_database']);
 
                         return $this->redirectToRoute('login');
                     }

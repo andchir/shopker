@@ -3,3 +3,5 @@ register.email.already exists: The user with the specified email already exists.
 password_reset.user.not_found: The user with the specified email address was not found.
 install.mongodb_connection_fail: Unable to connect to MongoDB server.
 install.mongodb_database_not_exist: The database does not exist.
+install.mongodb_database_not_empty: The database is not empty.
+install.settings_file_not_writable: The file settings.yml is not writable.

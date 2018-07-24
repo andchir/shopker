@@ -39,7 +39,7 @@ class SetupType extends AbstractType
                 'label' => 'User name',
                 'constraints' => new NotBlank()
             ])
-            ->add('mongodb_password', TextType::class, [
+            ->add('mongodb_password', PasswordType::class, [
                 'label' => 'Password',
                 'constraints' => new NotBlank()
             ])

@@ -7,3 +7,5 @@ Password cannot be longer than {{ limit }} characters: Пароль не мож�
 password_reset.user.not_found: Пользователь с указанным адресом эл. почты не найден.
 install.mongodb_connection_fail: Невозможно подключиться к серверу MongoDB.
 install.mongodb_database_not_exist: База данных не существует.
+install.mongodb_database_not_empty: База данных не пуста.
+install.settings_file_not_writable: Файл settings.yml не доступен для записи.

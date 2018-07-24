@@ -117,11 +117,24 @@ class SettingsService
      */
     public function saveSettingsToYaml($yamlFileName = 'settings', $data)
     {
-        $rootPath = $this->container->getParameter('kernel.root_dir');
-        $settingsFilePath = $rootPath . DIRECTORY_SEPARATOR . "config/{$yamlFileName}.yml";
+        $settingsFilePath = $this->getConfigYamlFilePath($yamlFileName);
         $yaml = Yaml::dump(['parameters' => $data]);
+        if (!is_writable($settingsFilePath)) {
+            return false;
+        } else {
+            return file_put_contents($settingsFilePath, $yaml);
+        }
+    }
 
-        return file_put_contents($settingsFilePath, $yaml);
+    /**
+     * Get config yml file path
+     * @param $yamlFileName
+     * @return string
+     */
+    public function getConfigYamlFilePath($yamlFileName)
+    {
+        $rootPath = $this->container->getParameter('kernel.root_dir');
+        return $rootPath . DIRECTORY_SEPARATOR . "config/{$yamlFileName}.yml";
     }
 
     /**

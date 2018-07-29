@@ -4,23 +4,29 @@ namespace AppBundle\Event;
 
 use AppBundle\Document\User;
 use Symfony\Component\EventDispatcher\Event;
-use AppBundle\Document\Category;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class UserRegisteredEvent extends Event
 {
     const NAME = 'user.registered';
 
     protected $user;
+    protected $request;
 
-    public function __construct(User $user)
+    public function __construct(User $user, Request $request)
     {
         $this->user = $user;
+        $this->request = $request;
     }
 
     public function getUser()
     {
         return $this->user;
+    }
+
+    public function getRequest()
+    {
+        return $this->request;
     }
 
 }

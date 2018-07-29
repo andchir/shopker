@@ -109,7 +109,7 @@ class AccountController extends Controller
 
                 /** @var EventDispatcher $evenDispatcher */
                 $evenDispatcher = $this->get('event_dispatcher');
-                $event = new UserRegisteredEvent($user);
+                $event = new UserRegisteredEvent($user, $request);
                 $evenDispatcher->dispatch(UserRegisteredEvent::NAME, $event);
 
                 return $this->redirectToRoute('login');

@@ -481,7 +481,7 @@ class User implements AdvancedUserInterface, \Serializable
         if ($optIndex > -1) {
             $this->options[$optIndex]['title'] = $option['title'];
             if ($addValue && $this->options[$optIndex]['value']) {
-                $this->options[$optIndex]['value'] += ',' . $option['value'];
+                $this->options[$optIndex]['value'] .= ',' . $option['value'];
             } else {
                 $this->options[$optIndex]['value'] = $option['value'];
             }

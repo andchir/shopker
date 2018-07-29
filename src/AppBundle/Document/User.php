@@ -477,6 +477,9 @@ class User implements AdvancedUserInterface, \Serializable
      */
     public function updateOption($option, $addValue = false)
     {
+        if (!is_array($this->options)) {
+            $this->options = [];
+        }
         $optIndex = array_search($option['name'], array_column($this->options, 'name'));
         if ($optIndex > -1) {
             $this->options[$optIndex]['title'] = $option['title'];

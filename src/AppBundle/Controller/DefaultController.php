@@ -176,6 +176,7 @@ class DefaultController extends CatalogController
                         unset($data['admin_email'], $data['admin_password'], $data['form_reload']);
 
                         // Add Super Admin
+                        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
                         $dm = $this->get('doctrine_mongodb')->getManager();
                         $dm->getConfiguration()->setDefaultDb($data['mongodb_database']);
                         $user = new User();
@@ -228,6 +229,7 @@ class DefaultController extends CatalogController
             return false;
         }
 
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $this->get('doctrine_mongodb')->getManager();
         $dm->getConfiguration()->setDefaultDb($databaseName);
 

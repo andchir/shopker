@@ -6,6 +6,7 @@ use AppBundle\Document\Order;
 use AppBundle\Document\Setting;
 use AppBundle\Document\User;
 
+use AppBundle\Event\UserRegisteredEvent;
 use AppBundle\Form\Type\OrderOptionsType;
 use AppBundle\Repository\OrderRepository;
 use AppBundle\Repository\UserRepository;
@@ -13,6 +14,7 @@ use AppBundle\Service\SettingsService;
 use AppBundle\Service\UtilsService;
 use MongoDB\Driver\Exception\AuthenticationException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -104,6 +106,11 @@ class AccountController extends Controller
                 $request->getSession()
                     ->getFlashBag()
                     ->add('messages', 'You are successfully registered. Now you can enter.');
+
+                /** @var EventDispatcher $evenDispatcher */
+                $evenDispatcher = $this->get('event_dispatcher');
+                $event = new UserRegisteredEvent($user);
+                $evenDispatcher->dispatch(UserRegisteredEvent::NAME, $event);
 
                 return $this->redirectToRoute('login');
             }

@@ -2,8 +2,9 @@
 
 namespace AppBundle\EventListener;
 
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use AppBundle\Event\CategoryUpdatedEvent;
+use AppBundle\Event\UserRegisteredEvent;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class KernelEventListener
@@ -25,6 +26,9 @@ class KernelEventListener
         //Add events listeners
         $categoryUpdateListener = new CategoryUpdateListener();
         $dispatcher->addListener(CategoryUpdatedEvent::NAME, [$categoryUpdateListener, 'onUpdated']);
+
+        $userRegisteredListener = new UserRegisteredListener($this->container);
+        $dispatcher->addListener(UserRegisteredEvent::NAME, [$userRegisteredListener, 'onCalled']);
     }
 
 }

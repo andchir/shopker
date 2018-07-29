@@ -471,4 +471,22 @@ class User implements AdvancedUserInterface, \Serializable
         return $output;
     }
 
+    /**
+     * @param array $option
+     * @param bool $addValue
+     */
+    public function updateOption($option, $addValue = false)
+    {
+        $optIndex = array_search($option['name'], array_column($this->options, 'name'));
+        if ($optIndex > -1) {
+            $this->options[$optIndex]['title'] = $option['title'];
+            if ($addValue && $this->options[$optIndex]['value']) {
+                $this->options[$optIndex]['value'] += ',' . $option['value'];
+            } else {
+                $this->options[$optIndex]['value'] = $option['value'];
+            }
+        } else {
+            array_push($this->options, $option);
+        }
+    }
 }

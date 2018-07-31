@@ -15,7 +15,9 @@
             <form action="{{ path('shop_cart_add') }}" method="post">
                 <div>
                     <div class="column-left">
-                        {{ renderOutputTypeChunk(currentPage, fields, 'image', 'page_') }}
+
+                        {{ renderOutputImageGallery(currentPage, fields, 'image') }}
+
                     </div>
                     <div class="column-right">
                         <div class="my-3">
@@ -47,4 +49,5 @@
 
         </div>
     </main>
+
 {% endblock %}

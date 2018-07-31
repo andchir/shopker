@@ -62,6 +62,10 @@ class AppExtension extends AbstractExtension
                 'is_safe' => ['html'],
                 'needs_environment' => true
             ]),
+            new TwigFunction('renderOutputImageGallery', [AppRuntime::class, 'renderOutputImageGalleryFunction'], [
+                'is_safe' => ['html'],
+                'needs_environment' => true
+            ]),
             new TwigFunction('categoriesTree', [$this, 'categoriesTreeFunction'], [
                 'is_safe' => ['html'],
                 'needs_environment' => true

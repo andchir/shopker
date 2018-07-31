@@ -301,6 +301,29 @@ class AppRuntime
     }
 
     /**
+     * @param \Twig_Environment $environment
+     * @param $itemData
+     * @param $fieldsData
+     * @param $fieldBaseName
+     * @param string $chunkNamePrefix
+     * @return string
+     */
+    public function renderOutputImageGalleryFunction(\Twig_Environment $environment, $itemData, $fieldsData, $fieldBaseName, $chunkNamePrefix = '')
+    {
+        $templateName = $this->getTemplateName($environment, 'chunks/fields/', 'gallery', $chunkNamePrefix);
+
+        $imageFields = array_filter($itemData, function($key) use ($fieldBaseName) {
+            return $key === $fieldBaseName
+                || strpos($key, "{$fieldBaseName}__") !== false;
+        }, ARRAY_FILTER_USE_KEY);
+
+        return $environment->render($templateName, [
+            'fieldBaseName' => $fieldBaseName,
+            'imageFields' => $imageFields
+        ]);
+    }
+
+    /**
      * @return string
      */
     public function getCurrentURI()

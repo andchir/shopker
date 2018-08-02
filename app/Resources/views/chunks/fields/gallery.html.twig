@@ -12,9 +12,13 @@
 
         {% for fieldName in imageFields|keys %}
             <div class="carousel-item{% if fieldName == fieldBaseName %} active{% endif %}">
-                <a data-toggle="modal" data-target="#imageModal" href="{{ imageUrl(imageFields[fieldName]) }}" target="_blank">
-                    <img class="d-block w-100" src="{{ imageUrl(imageFields[fieldName]) | imagine_filter('thumb_medium') }}" alt="">
-                </a>
+                {% if imageFields[fieldName] is not empty %}
+                    <a data-toggle="modal" data-target="#imageModal" href="{{ imageUrl(imageFields[fieldName]) }}" target="_blank">
+                        <img class="d-block w-100" src="{{ imageUrl(imageFields[fieldName]) | imagine_filter('thumb_medium') }}" alt="">
+                    </a>
+                {% else %}
+                    <img src="/img/nofoto.png" alt="" style="width: 100%;">
+                {% endif %}
             </div>
         {% endfor %}
 

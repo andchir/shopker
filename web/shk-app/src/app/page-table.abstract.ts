@@ -121,7 +121,9 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
                         .subscribe((res) => {
                             this.getList();
                         }, err => {
-                            this.showAlert(err);
+                            if (err['error']) {
+                                this.showAlert(err['error']);
+                            }
                         });
                 }
             });
@@ -159,7 +161,14 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
                     this.collectionSize = data.total;
                     this.loading = false;
                 },
-                error => this.errorMessage = error
+                err => {
+                    this.items = [];
+                    this.collectionSize = 0;
+                    if (err['error']) {
+                        this.showAlert(err['error']);
+                    }
+                    this.loading = false;
+                }
             );
     }
 

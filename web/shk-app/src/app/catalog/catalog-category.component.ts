@@ -18,7 +18,7 @@ import {ContentTypesService} from './services/content_types.service';
     selector: 'app-catalog-category',
     templateUrl: 'templates/catalog-category.html'
 })
-export class CatalogCategoryComponent extends PageTableAbstractComponent<Product> {
+export class CatalogCategoryComponent extends PageTableAbstractComponent<Product> implements OnInit {
     static title = 'CATEGORY';
 
     queryOptions: QueryOptions = new QueryOptions('id', 'desc', 1, 10, 0, 0);
@@ -34,6 +34,10 @@ export class CatalogCategoryComponent extends PageTableAbstractComponent<Product
         private contentTypesService: ContentTypesService
     ) {
         super(dataService, activeModal, modalService, translateService);
+    }
+
+    ngOnInit(): void {
+
     }
 
     updateTableConfig(): void {

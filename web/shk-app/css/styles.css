@@ -143,4 +143,6 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle { top: 16px; right: -7px; left
 /* show-on-hover */
 .show-on-hover-parent { position: relative; }
 .show-on-hover-parent .show-on-hover { display: none; }
+.show-on-hover-parent .slide-on-hover { max-height: 0; overflow: hidden; transition: 300ms max-height; }
 .show-on-hover-parent:hover .show-on-hover { display: block; }
+.show-on-hover-parent:hover .slide-on-hover { max-height: 100px; }

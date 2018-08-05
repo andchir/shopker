@@ -30,6 +30,11 @@ class Filter
     protected $values;
 
     /**
+     * @MongoDB\ReferenceOne(targetDocument="Category", inversedBy="filterData")
+     */
+    protected $category;
+
+    /**
      * Get id
      *
      * @return int $id
@@ -103,5 +108,30 @@ class Filter
     public function getValues()
     {
         return $this->values;
+    }
+
+    /**
+     * Set category
+     *
+     * @param Category category
+     * @return self
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
+        if ($category) {
+            $this->setCategoryId($category->getId());
+        }
+        return $this;
+    }
+
+    /**
+     * Get category
+     *
+     * @return Category category
+     */
+    public function getCategory()
+    {
+        return $this->category;
     }
 }

@@ -32,20 +32,23 @@ class CategoryUpdateListener
             return $category;
         }
 
-        if(!empty($category)){
-            $category = $this->isFolderUpdate($category->getId());
-            if($category->getParentId()){
-                $this->isFolderUpdate($category->getParentId());
-            }
+        $ids = [];
+        if ($previousParentId) {
+            $ids[] = $previousParentId;
+        }
+        if ($category && $category->getId()) {
+            $ids[] = $category->getId();
+        }
+        if ($category && $category->getParentId()) {
+            $ids[] = $category->getParentId();
         }
 
-        //Previous parent
-        if($previousParentId
-            && (!$category || $previousParentId != $category->getParentId())){
-            $this->isFolderUpdate($previousParentId);
+        $ids = array_unique($ids);
+        foreach ($ids as $id) {
+            $this->updateIsFolder($id);
         }
 
-        if ($category) {
+        if ($category && $category->getId()) {
             $this->updateUri($category);
         }
 
@@ -57,9 +60,8 @@ class CategoryUpdateListener
      * @param $itemId
      * @return Category|null
      */
-    public function isFolderUpdate($itemId)
+    public function updateIsFolder($itemId)
     {
-
         /** @var CategoryRepository $repository */
         $repository = $this->container->get('doctrine_mongodb')
             ->getManager()
@@ -67,7 +69,7 @@ class CategoryUpdateListener
             
         /** @var Category $item */
         $item = $repository->find($itemId);
-        if(!$item){
+        if(!$item || !$item->getId()){
             return null;
         }
 
@@ -90,7 +92,15 @@ class CategoryUpdateListener
      */
     public function updateUri(Category &$category)
     {
-        $parents = $this->getParents($category);
+        if (!$category->getId()) {
+            return false;
+        }
+        /** @var CategoryRepository $repository */
+        $repository = $this->container->get('doctrine_mongodb')
+            ->getManager()
+            ->getRepository(Category::class);
+
+        $parents = $repository->getParents($category);
         $names = [];
         /** @var Category $parent */
         foreach ($parents as $parent) {
@@ -111,32 +121,6 @@ class CategoryUpdateListener
         $dm->flush();
 
         return true;
-    }
-
-    /**
-     * @param Category $category
-     * @param array $parents
-     * @return array
-     */
-    public function getParents(Category $category, $parents = [])
-    {
-        /** @var CategoryRepository $repository */
-        $repository = $this->container->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository(Category::class);
-
-        /** @var Category $parent */
-        $parent = $repository->findOneBy([
-            'id' => $category->getParentId()
-        ]);
-        if ($parent) {
-            $parents[] = $parent;
-            if ($category->getParentId() > 0) {
-                $parents = $this->getParents($parent, $parents);
-            }
-        }
-
-        return $parents;
     }
 
 }

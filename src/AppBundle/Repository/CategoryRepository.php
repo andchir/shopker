@@ -20,7 +20,7 @@ class CategoryRepository extends BaseRepository
     public function getChildCountByParentId($parentId)
     {
         return $this->createQueryBuilder()
-            ->field('parent_id')->equals($parentId)
+            ->field('parentId')->equals($parentId)
             ->getQuery()
             ->execute()
             ->count();
@@ -82,6 +82,41 @@ class CategoryRepository extends BaseRepository
             }
         }
         return $result;
+    }
+
+    /**
+     * @param Category $category
+     * @param array $parents
+     * @return array
+     */
+    public function getParents(Category $category, $parents = [])
+    {
+        /** @var Category $parent */
+        $parent = $this->findOneBy([
+            'id' => $category->getParentId()
+        ]);
+        if ($parent) {
+            $parents[] = $parent;
+            if ($category->getParentId() > 0) {
+                $parents = $this->getParents($parent, $parents);
+            }
+        }
+        return $parents;
+    }
+
+    /**
+     * @param Category $category
+     * @param array $children
+     * @return array
+     */
+    public function getChildren(Category $category, $children = [])
+    {
+        $childs = $this->findBy(['parentId' => $category->getId()]);
+        foreach ($childs as $child) {
+            $children[] = $child;
+            $children = $this->getChildren($child, $children);
+        }
+        return $children;
     }
 
 }

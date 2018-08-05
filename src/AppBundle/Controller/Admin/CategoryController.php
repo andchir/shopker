@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Admin;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Event\CategoryUpdatedEvent;
@@ -190,19 +191,26 @@ class CategoryController extends StorageControllerAbstract
             return $this->setError('Item not found.');
         }
 
-        $previousParentId = $item->getParentId();
-
-        $this->deleteProductsByCategory($item);
-
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
-        $dm->remove($item);
-        $dm->flush();
-
-        //Dispatch event
+        /** @var EventDispatcher $evenDispatcher */
         $evenDispatcher = $this->get('event_dispatcher');
-        $event = new CategoryUpdatedEvent($this->container, null, $previousParentId);
-        $evenDispatcher->dispatch(CategoryUpdatedEvent::NAME, $event);
+        $previousParentId = $item->getParentId();
+        $children = $repository->getChildren($item, [$item]);
+
+        /** @var Category $child */
+        foreach ($children as $child) {
+            $this->deleteProductsByCategory($child);
+
+            /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+            $dm = $this->get('doctrine_mongodb')->getManager();
+            $dm->remove($child);
+            $dm->flush();
+
+            $child->setId(null);
+
+            //Dispatch event
+            $event = new CategoryUpdatedEvent($this->container, $child, $previousParentId);
+            $evenDispatcher->dispatch(CategoryUpdatedEvent::NAME, $event);
+        }
 
         return new JsonResponse([]);
     }

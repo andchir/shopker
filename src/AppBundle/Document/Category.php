@@ -57,11 +57,6 @@ class Category
     protected $isActive;
 
     /**
-     * @MongoDB\ReferenceOne(targetDocument="ContentType", inversedBy="category")
-     */
-    protected $contentType;
-
-    /**
      * @MongoDB\Field(type="string")
      */
     protected $image;
@@ -70,6 +65,16 @@ class Category
      * @MongoDB\Field(type="int")
      */
     protected $menuIndex;
+
+    /**
+     * @MongoDB\ReferenceOne(targetDocument="ContentType", inversedBy="category")
+     */
+    protected $contentType;
+
+    /**
+     * @MongoDB\ReferenceOne(targetDocument="Filter", mappedBy="category")
+     */
+    protected $filterData;
 
     /**
      * Get id
@@ -241,6 +246,28 @@ class Category
     public function getContentTypeName()
     {
         return $this->contentTypeName;
+    }
+
+    /**
+     * Set filterData
+     *
+     * @param Filter filterData
+     * @return self
+     */
+    public function setFilterData($filterData)
+    {
+        $this->filterData = $filterData;
+        return $this;
+    }
+
+    /**
+     * Get filterData
+     *
+     * @return Filter filterData
+     */
+    public function getFilterData()
+    {
+        return $this->filterData;
     }
 
     /**

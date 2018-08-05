@@ -427,7 +427,7 @@ class ProductController extends BaseProductController
             $result = $collection->insert($document);
         }
 
-        $this->updateFiltersData($category);
+        $this->onAfterUpdateItem($contentType, $document, $category->getId());
 
         if (!empty($result['ok'])) {
             return new JsonResponse($document);
@@ -545,9 +545,14 @@ class ProductController extends BaseProductController
     {
         $collection = $this->getCollection($contentType->getCollection());
         $this->onBeforeDeleteItem($contentType, $itemData);
-        return $collection->remove([
+        $result = $collection->remove([
             '_id' => $itemData['_id']
         ]);
+
+        $categoryId = isset($itemData['parentId']) ? $itemData['parentId'] : 0;
+        $this->onAfterUpdateItem($contentType, [], $categoryId);
+
+        return $result;
     }
 
     /**
@@ -558,7 +563,7 @@ class ProductController extends BaseProductController
     public function blockItem(ContentType $contentType, $itemData)
     {
         $collection = $this->getCollection($contentType->getCollection());
-        return $collection->update(
+        $result = $collection->update(
             [
                 '_id' => $itemData['_id']
             ],
@@ -566,6 +571,11 @@ class ProductController extends BaseProductController
                 '$set' => ['isActive' => !$itemData['isActive']]
             ]
         );
+
+        $categoryId = isset($itemData['parentId']) ? $itemData['parentId'] : 0;
+        $this->onAfterUpdateItem($contentType, $itemData, $categoryId);
+
+        return $result;
     }
 
     /**
@@ -681,6 +691,23 @@ class ProductController extends BaseProductController
     }
 
     /**
+     * @param $contentType
+     * @param $itemData
+     * @param int $categoryId
+     */
+    public function onAfterUpdateItem($contentType, $itemData, $categoryId = 0)
+    {
+        if ($categoryId) {
+            $categoriesRepository = $this->getCategoriesRepository();
+            /** @var Category $category */
+            $category = $categoriesRepository->find($categoryId);
+            if ($category) {
+                $this->updateFiltersData($category);
+            }
+        }
+    }
+
+    /**
      * @param ContentType $contentType
      * @param string $fieldName
      * @param int $fileId
@@ -737,13 +764,7 @@ class ProductController extends BaseProductController
     {
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $this->get('doctrine_mongodb')->getManager();
-        $categoriesRepository = $this->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository(Category::class);
-
-        $filterRepository = $this->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository(Filter::class);
+        $categoriesRepository = $this->getCategoriesRepository();
 
         $breadcrumbs = $categoriesRepository->getBreadcrumbs($parentCategory->getUri(), false);
         $breadcrumbs = array_reverse($breadcrumbs);
@@ -767,7 +788,7 @@ class ProductController extends BaseProductController
             /** @var Category $childCategory */
             foreach ($childCategories as $childCategory) {
                 /** @var Filter $flt */
-                $flt = $filterRepository->findByCategory($childCategory->getId());
+                $flt = $childCategory->getFilterData();
                 if (empty($flt)) {
                     continue;
                 }
@@ -816,15 +837,13 @@ class ProductController extends BaseProductController
                 }
             }
 
-            $filter = $filterRepository->findOneBy([
-                'categoryId' => $cat->getId()
-            ]);
+            $filter = $cat->getFilterData();
             if (!$filter) {
                 if (empty($filterData)) {
                     continue;
                 }
                 $filter = new Filter();
-                $filter->setCategoryId($cat->getId());
+                $filter->setCategory($cat);
             }
             $filter->setValues($filterData);
 

@@ -199,13 +199,18 @@ class CatalogController extends ProductController
                 if (!isset($field['outputProperties']['chunkName'])) {
                     $field['outputProperties']['chunkName'] = '';
                 }
+                $inputProperties = !empty($field['inputProperties']) ? $field['inputProperties'] : [];
+                if (isset($inputProperties['values_list'])) {
+                    $inputProperties['values_list'] = explode('||', $inputProperties['values_list']);
+                }
                 $fields[] = [
                     'name' => $field['name'],
                     'title' => $field['title'],
                     'description' => $field['description'],
                     'type' => $field['outputType'],
                     'showInList' => $field['showInList'],
-                    'properties' => array_merge($field['outputProperties'], $options)
+                    'properties' => array_merge($field['outputProperties'], $options),
+                    'inputProperties' => $inputProperties
                 ];
             }
             if (!empty($field['isFilter']) && !empty($filtersData[$field['name']])) {

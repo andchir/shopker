@@ -324,6 +324,35 @@ class AppRuntime
     }
 
     /**
+     * @param mixed $needle
+     * @param array $haystack
+     * @return int
+     */
+    public function arraySearchFunction($needle, $haystack)
+    {
+        $index = array_search($needle, $haystack);
+        if ($index === false) {
+            return -1;
+        }
+        return $index;
+    }
+
+    /**
+     * @param $input
+     * @param $caseArr
+     * @param $valuesArr
+     * @return mixed
+     */
+    public function switchFunction($input, $caseArr, $valuesArr)
+    {
+        $index = array_search($input, $caseArr);
+        if ($index === false) {
+            return end($valuesArr);
+        }
+        return $valuesArr[$index];
+    }
+
+    /**
      * @return string
      */
     public function getCurrentURI()

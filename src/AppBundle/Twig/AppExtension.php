@@ -84,6 +84,10 @@ class AppExtension extends AbstractExtension
             new TwigFunction('contentList', [AppRuntime::class, 'contentListFunction'], [
                 'is_safe' => ['html'],
                 'needs_environment' => true
+            ]),
+            new TwigFunction('arraySearch', [AppRuntime::class, 'arraySearchFunction']),
+            new TwigFunction('switch', [AppRuntime::class, 'switchFunction'], [
+                'is_safe' => ['html']
             ])
         ];
     }
@@ -165,9 +169,10 @@ class AppExtension extends AbstractExtension
      * @param $type
      * @param array $properties
      * @param array $options
+     * @param array $fieldProperties
      * @return mixed
      */
-    public function renderOutputTypeFunction(\Twig_Environment $environment, $value, $type, $properties = [], $options = [])
+    public function renderOutputTypeFunction(\Twig_Environment $environment, $value, $type, $properties = [], $options = [], $fieldProperties = [])
     {
         if (empty($value)) {
             $value = '';
@@ -190,6 +195,7 @@ class AppExtension extends AbstractExtension
         $properties['systemName'] = !empty($options[$properties['systemNameField']])
             ? $options[$properties['systemNameField']]
             : '';
+
         if (!empty($value)) {
             $templateName = $this->getTemplateName(
                 $environment,
@@ -209,6 +215,9 @@ class AppExtension extends AbstractExtension
                 'empty'
             );
         }
+
+        $properties['fieldProperties'] = $fieldProperties;
+
         return $environment->render($templateName, $properties);
     }
 
@@ -234,7 +243,8 @@ class AppExtension extends AbstractExtension
                 $itemData[$field['name']],
                 $field['type'],
                 array_merge($field['properties'], ['chunkNamePrefix' => $chunkNamePrefix]),
-                $itemData
+                $itemData,
+                $field
             );
         }
         return $output;

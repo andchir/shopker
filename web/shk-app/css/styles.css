@@ -18,6 +18,16 @@
 .image-wrapper img { max-width: 100%; }
 main h1 { font-family: 'Comfortaa', sans-serif; }
 
+/* position */
+.pos-left-top { left: 0; top: 0; }
+.pos-right-top { right: 0; top: 0; }
+.pos-left-bottom { left: 0; bottom: 0; }
+.pos-right-bottom { right: 0; bottom: 0; }
+.pos-left-top10 { left: 10px; top: 10px; }
+.pos-right-top10 { right: 10px; top: 10px; }
+.pos-left-bottom10 { left: 10px; bottom: 10px; }
+.pos-right-bottom10 { right: 10px; bottom: 10px; }
+
 /* buttons */
 .btn-wide { min-width: 130px; text-align: center; padding-left: 2rem; padding-right: 2rem; }
 

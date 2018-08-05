@@ -3,7 +3,6 @@
 namespace AppBundle\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
-use AppBundle\Document\ContentType;
 
 /**
  * @MongoDB\Document(collection="category",repositoryClass="AppBundle\Repository\CategoryRepository")
@@ -68,18 +67,20 @@ class Category
 
     /**
      * @MongoDB\ReferenceOne(targetDocument="ContentType", inversedBy="category")
+     * @var ContentType
      */
     protected $contentType;
 
     /**
-     * @MongoDB\ReferenceOne(targetDocument="Filter", mappedBy="category")
+     * @MongoDB\ReferenceOne(targetDocument="Filter", inversedBy="category", orphanRemoval=true, cascade={"all"})
+     * @var Filter
      */
     protected $filterData;
 
     /**
      * Get id
      *
-     * @return string $id
+     * @return string
      */
     public function getId()
     {
@@ -113,7 +114,7 @@ class Category
     /**
      * Get title
      *
-     * @return string $title
+     * @return string
      */
     public function getTitle()
     {
@@ -135,7 +136,7 @@ class Category
     /**
      * Get name
      *
-     * @return string $name
+     * @return string
      */
     public function getName()
     {
@@ -157,7 +158,7 @@ class Category
     /**
      * Get uri
      *
-     * @return string $uri
+     * @return string
      */
     public function getUri()
     {
@@ -178,8 +179,7 @@ class Category
 
     /**
      * Get description
-     *
-     * @return string $description
+     * @return string
      */
     public function getDescription()
     {
@@ -201,7 +201,7 @@ class Category
     /**
      * Get parentId
      *
-     * @return int $parentId
+     * @return int
      */
     public function getParentId()
     {
@@ -241,7 +241,7 @@ class Category
     /**
      * Get contentTypeName
      *
-     * @return string $contentTypeName
+     * @return string
      */
     public function getContentTypeName()
     {
@@ -251,7 +251,7 @@ class Category
     /**
      * Set filterData
      *
-     * @param Filter filterData
+     * @param Filter $filterData
      * @return self
      */
     public function setFilterData($filterData)
@@ -262,8 +262,7 @@ class Category
 
     /**
      * Get filterData
-     *
-     * @return Filter filterData
+     * @return Filter
      */
     public function getFilterData()
     {
@@ -285,7 +284,7 @@ class Category
     /**
      * Get isFolder
      *
-     * @return boolean $isFolder
+     * @return boolean
      */
     public function getIsFolder()
     {
@@ -307,7 +306,7 @@ class Category
     /**
      * Get isActive
      *
-     * @return boolean $isActive
+     * @return boolean
      */
     public function getIsActive()
     {
@@ -422,7 +421,7 @@ class Category
     /**
      * Get menuIndex
      *
-     * @return int $menuIndex
+     * @return int
      */
     public function getMenuIndex()
     {

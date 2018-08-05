@@ -828,6 +828,10 @@ class ProductController extends BaseProductController
                 $this->applyCategoryFilter($cat, $contentTypeFields, $criteria);
                 $uniqueValues = $collection->distinct($fieldName, $criteria)->toArray();
 
+                $uniqueValues = array_filter($uniqueValues, function($val) {
+                    return !empty($val);
+                });
+
                 if (!empty($uniqueValues)) {
                     if (!isset($filterData[$fieldName])) {
                         $filterData[$fieldName] = [];
@@ -844,10 +848,10 @@ class ProductController extends BaseProductController
                 }
                 $filter = new Filter();
                 $filter->setCategory($cat);
+                $cat->setFilterData($filter);
             }
             $filter->setValues($filterData);
 
-            $dm->persist($filter);
             $dm->flush();
         }
 

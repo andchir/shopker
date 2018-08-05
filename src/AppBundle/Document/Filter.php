@@ -31,6 +31,7 @@ class Filter
 
     /**
      * @MongoDB\ReferenceOne(targetDocument="Category", inversedBy="filterData")
+     * @var Category
      */
     protected $category;
 

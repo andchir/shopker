@@ -30,6 +30,7 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
 
     model = new ContentType(0, '', '', '', 'products', [], ['General', 'Service'], true);
     fieldModel = new ContentField(0, '', '', '', '', {}, '', {}, '', false, false, false);
+    filtersFields: ContentField[];
     fld_submitted = false;
     errorFieldMessage: string;
     action = 'add_field';
@@ -467,6 +468,46 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
             output = this.fieldTypes[index][propertyName];
         }
         return output;
+    }
+
+    sortFiltersInit(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.action = 'sort_filters';
+        this.filtersFields = this.model.fields.filter((field) => {
+            return field.isFilter;
+        });
+        this.filtersFields.sort(function(a, b) {
+            return a.filterOrder - b.filterOrder;
+        });
+    }
+
+    sortFiltersApply(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.filtersFields.forEach((field, index) => {
+            const ind = this.model.fields.findIndex((fld) => {
+                return fld.name === field.name;
+            });
+            if (ind > -1) {
+                this.model.fields[ind].filterOrder = index;
+            }
+        });
+        this.sortFiltersCancel();
+    }
+
+    sortFiltersCancel(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        const index = _.findIndex(this.model.fields, {name: this.currentFieldName});
+        if (index > -1) {
+            this.action = 'edit_field';
+        } else {
+            this.action = 'add_field';
+        }
     }
 
     save() {

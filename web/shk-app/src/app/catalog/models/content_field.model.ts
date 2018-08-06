@@ -38,6 +38,11 @@ export class ContentField {
         public showInTable: boolean,
         public showInList?: boolean,
         public options?: {}[],
-        public inputTypeMain?: string
-    ) { }
+        public inputTypeMain?: string,
+        public filterOrder?: number
+    ) {
+        if (typeof this.filterOrder === 'undefined') {
+            this.filterOrder = 0;
+        }
+    }
 }

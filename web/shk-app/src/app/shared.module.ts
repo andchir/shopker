@@ -2,9 +2,11 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
+
 import {NgbModule, NgbActiveModal, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import {EditorModule, CalendarModule, ChipsModule, ColorPickerModule, TreeModule} from 'primeng/primeng';
 import {TranslateModule} from '@ngx-translate/core';
+import {DragulaModule} from 'ng2-dragula';
 
 import {TableComponent} from './table.component';
 import {InputFieldRenderComponent} from './render-input-field';
@@ -35,6 +37,7 @@ const components = [
         TreeModule,
         NgbModule.forRoot(),
         TranslateModule,
+        DragulaModule.forRoot()
     ],
     declarations: [
         ...components,
@@ -61,7 +64,8 @@ const components = [
         ColorPickerModule,
         TreeModule,
         TranslateModule,
-        DateFromObjectPipe
+        DateFromObjectPipe,
+        DragulaModule
     ]
 })
 export class SharedModule {

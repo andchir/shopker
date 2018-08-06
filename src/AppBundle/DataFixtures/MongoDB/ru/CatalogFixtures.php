@@ -280,7 +280,7 @@ class CatalogFixtures extends Fixture
                 'required' => false,
                 'showInTable' => false,
                 'showInList' => false,
-                'isFilter' => true
+                'isFilter' => false
             ],
             [
                 'title' => 'Категории',

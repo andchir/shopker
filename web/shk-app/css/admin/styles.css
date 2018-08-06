@@ -23,6 +23,11 @@ body { background-color: #eee; }
 .min-height400 { min-height: 400px; }
 .no-events { pointer-events: none; }
 
+/* cursors */
+.cursor-pointer { cursor: pointer; }
+.cursor-ew-resize { cursor: ew-resize; }
+.cursor-ns-resize { cursor: ns-resize; }
+
 /* buttons */
 .btn:not([disabled]):not(.disabled):not(.btn-link) { box-shadow: 0 1px 5px rgba(0,0,0,0.15); }
 

@@ -219,6 +219,7 @@ class CatalogController extends ProductController
                     'title' => $field['title'],
                     'outputType' => $field['outputType'],
                     'values' => $filtersData[$field['name']],
+                    'order' => !empty($field['filterOrder']) ? $field['filterOrder'] : 0,
                     'selected' => isset($queryOptionsFilter[$field['name']])
                         ? is_array($queryOptionsFilter[$field['name']])
                             ? $queryOptionsFilter[$field['name']]
@@ -227,6 +228,14 @@ class CatalogController extends ProductController
                 ];
             }
         }
+
+        usort($filters, function($a, $b) {
+            if ($a['order'] == $b['order']) {
+                return 0;
+            }
+            return ($a['order'] < $b['order']) ? -1 : 1;
+        });
+
         return [$filters, $fields];
     }
 

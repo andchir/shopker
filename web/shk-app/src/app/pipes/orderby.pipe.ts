@@ -54,7 +54,7 @@ export class OrderByPipe implements PipeTransform {
                     ? propertyToCheck.substr(1)
                     : propertyToCheck;
 
-                return value.sort(function(a: any, b: any){
+                return value.sort(function(a: any, b: any) {
                     let aValue = a[property];
                     let bValue = b[property];
 

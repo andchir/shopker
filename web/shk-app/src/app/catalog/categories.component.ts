@@ -2,9 +2,9 @@ import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import {TreeNode} from 'primeng/primeng';
-import 'rxjs/add/operator/switchMap';
+
 import * as _ from 'lodash';
 import {TranslateService} from '@ngx-translate/core';
 

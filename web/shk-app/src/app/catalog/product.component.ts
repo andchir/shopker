@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {NgbActiveModal, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import {FormControl, FormBuilder, Validators} from '@angular/forms';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import * as _ from 'lodash';
 import {TranslateService} from '@ngx-translate/core';
 
@@ -128,7 +128,7 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
         if (!data) {
             data = _.clone(this.model);
         }
-        const newKeys = _.map(this.currentContentType.fields, function(field){
+        const newKeys = _.map(this.currentContentType.fields, function(field) {
             return field.name;
         });
         newKeys.push('id', 'parentId', 'previousParentId', 'isActive');

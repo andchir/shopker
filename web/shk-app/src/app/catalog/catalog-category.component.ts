@@ -1,6 +1,6 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {NgbModal, NgbActiveModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import * as _ from 'lodash';
 import {TranslateService} from '@ngx-translate/core';
 

@@ -289,7 +289,7 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
         popover.placement = 'top';
         popover.popoverTitle = 'Confirm';
 
-        const confirm = function(){
+        const confirm = function() {
             this.loading = true;
             this.collectionsService.deleteItemByName(this.model.collection)
                 .subscribe((data) => {

@@ -1,7 +1,6 @@
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 
-import {Observable} from 'rxjs/Observable';
-import {of} from 'rxjs/observable/of';
+import {Observable, of} from 'rxjs';
 import {catchError, map, tap} from 'rxjs/operators';
 
 import {QueryOptions} from '../models/query-options';

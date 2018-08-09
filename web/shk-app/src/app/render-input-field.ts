@@ -93,7 +93,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
     }
 
     buildControls() {
-        this.fields.forEach(function(field){
+        this.fields.forEach(function(field) {
             this.setFieldProperties(field);
             this.setFieldOptions(field);
             this.setValue(field);
@@ -452,7 +452,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
 
     parametersRemove(fieldName: string, index: number): void {
         if (typeof this.model[fieldName] === 'object') {
-            typeof this.model[fieldName].splice(index, 1);
+            this.model[fieldName].splice(index, 1);
         }
     }
 

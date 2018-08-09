@@ -22,7 +22,7 @@
                             </div>
                             <div class="col-md-7">
                                 <div class="input-group">
-                                    <input type="text" class="form-control form-control-sm" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]">
+                                    <input type="text" class="form-control" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]">
                                     <div class="input-group-append">
                                         <button type="button" class="btn btn-secondary" ngbTooltip="{{'GENERATE' | translate}}" (click)="generateName(field)">
                                             <i class="icon-reload"></i>
@@ -44,7 +44,7 @@
                                 </label>
                             </div>
                             <div class="col-md-7">
-                                <input type="text" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control">
+                                <input type="text" class="form-control" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]">
                                 <div *ngIf="formErrors[field.name]" class="alert alert-danger">
                                     {{formErrors[field.name]}}
                                 </div>

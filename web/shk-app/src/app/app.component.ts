@@ -3,8 +3,7 @@ import {Router, NavigationEnd} from '@angular/router';
 import {Title} from '@angular/platform-browser';
 import {NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateService} from '@ngx-translate/core';
-import {Observable} from 'rxjs/Observable';
-import {of} from 'rxjs/observable/of';
+import {Observable, of} from 'rxjs';
 
 import {AppSettings} from './services/app-settings.service';
 

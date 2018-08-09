@@ -210,10 +210,13 @@ input.form-control[readonly] { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); curso
 .ngb-accordion .card-header:before { content: '\e909'; display: inline-block; font-family: 'icomoon'; position: absolute; right: 10px; top: 8px; color: rgba(0,0,0,0.5); }
 .ngb-accordion .card-header.active { border-bottom: 1px solid rgba(0,0,0,.125); background-color: #e8e8e8; background-image: linear-gradient(to bottom, #e8e8e8 0%, #d1d1d1 100%); }
 .ngb-accordion .card-header.active:before { content: '\e906'; }
-.ngb-accordion .card-header > a { display: block; padding: 0.75rem 1.25rem; text-decoration: none; line-height: 1; color: rgba(0,0,0,0.7); }
+.ngb-accordion .card-header > a,
+.ngb-accordion .card-header button.btn-link { display: block; width: 100%; padding: 0.75rem 1.25rem; text-decoration: none; text-align: left; line-height: 1; color: rgba(0,0,0,0.7); }
 .ngb-accordion .card-header:hover { background-color: #e8e8e8; background-image: linear-gradient(to bottom, #e8e8e8 0%, #d1d1d1 100%); }
 .ngb-accordion .card-header.active a,
-.ngb-accordion .card-header:hover a { color: rgba(0,0,0,0.8); }
+.ngb-accordion .card-header:hover a,
+.ngb-accordion .card-header.active button.btn-link,
+.ngb-accordion .card-header:hover button.btn-link { color: rgba(0,0,0,0.8); }
 
 /* icons */
 body .ui-datepicker .ui-datepicker-header .ui-datepicker-prev:before { font-family: 'icomoon'; content: "\e908"; }

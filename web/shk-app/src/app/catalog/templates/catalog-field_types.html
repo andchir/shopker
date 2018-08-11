@@ -10,9 +10,10 @@
                 <button class="dropdown-item" (click)="deleteSelected()">{{'DELETE' | translate}}</button>
             </div>
         </div>
-
+        &nbsp;
         <button type="button" class="btn btn-success d-inline-block btn-wide" (click)="modalOpen()">
             <i class="icon-plus"></i>
+            &nbsp;
             <span>{{'ADD' | translate}}</span>
         </button>
 
@@ -21,6 +22,7 @@
     <div class="float-left">
         <a class="btn btn-outline-secondary" [routerLink]="['/catalog']">
             <i class="icon-arrow-left"></i>
+            &nbsp;
             <span>{{'CATALOG' | translate}}</span>
         </a>
     </div>

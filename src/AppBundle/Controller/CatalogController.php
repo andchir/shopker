@@ -209,6 +209,7 @@ class CatalogController extends ProductController
                     'description' => $field['description'],
                     'type' => $field['outputType'],
                     'showInList' => $field['showInList'],
+                    'order' => !empty($field['listOrder']) ? $field['listOrder'] : 0,
                     'properties' => array_merge($field['outputProperties'], $options),
                     'inputProperties' => $inputProperties
                 ];
@@ -230,6 +231,13 @@ class CatalogController extends ProductController
         }
 
         usort($filters, function($a, $b) {
+            if ($a['order'] == $b['order']) {
+                return 0;
+            }
+            return ($a['order'] < $b['order']) ? -1 : 1;
+        });
+
+        usort($fields, function($a, $b) {
             if ($a['order'] == $b['order']) {
                 return 0;
             }

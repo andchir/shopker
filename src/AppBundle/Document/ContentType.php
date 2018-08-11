@@ -55,6 +55,11 @@ class ContentType
      */
     protected $categories;
 
+    public function __construct()
+    {
+        $this->categories = new ArrayCollection();
+    }
+
     /**
      * Get id
      *
@@ -240,11 +245,6 @@ class ContentType
             ]);
         }
         return $output;
-    }
-
-    public function __construct()
-    {
-        $this->categories = new ArrayCollection();
     }
     
     /**

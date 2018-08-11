@@ -162,7 +162,8 @@ class CatalogFixtures extends Fixture
                 'required' => false,
                 'showInTable' => true,
                 'showInList' => true,
-                'isFilter' => true
+                'isFilter' => true,
+                'filterOrder' => 0
             ],
             [
                 'title' => 'Бренд',
@@ -181,7 +182,8 @@ class CatalogFixtures extends Fixture
                 'required' => false,
                 'showInTable' => false,
                 'showInList' => false,
-                'isFilter' => true
+                'isFilter' => true,
+                'filterOrder' => 1
             ],
             [
                 'title' => 'Страна',
@@ -200,7 +202,8 @@ class CatalogFixtures extends Fixture
                 'required' => false,
                 'showInTable' => false,
                 'showInList' => false,
-                'isFilter' => true
+                'isFilter' => true,
+                'filterOrder' => 2
             ],
             [
                 'title' => 'Цвет',
@@ -219,7 +222,8 @@ class CatalogFixtures extends Fixture
                 'required' => false,
                 'showInTable' => false,
                 'showInList' => false,
-                'isFilter' => true
+                'isFilter' => true,
+                'filterOrder' => 3
             ],
             [
                 'title' => 'Материал',
@@ -238,7 +242,8 @@ class CatalogFixtures extends Fixture
                 'required' => false,
                 'showInTable' => false,
                 'showInList' => false,
-                'isFilter' => true
+                'isFilter' => true,
+                'filterOrder' => 4
             ],
             [
                 'title' => 'Метки',
@@ -253,13 +258,14 @@ class CatalogFixtures extends Fixture
                 'outputType' => 'text',
                 'outputProperties' => [
                     'className' => '',
-                    'chunkName' => ''
+                    'chunkName' => 'tag'
                 ],
                 'group' => 'Параметры',
                 'required' => false,
                 'showInTable' => false,
-                'showInList' => false,
-                'isFilter' => false
+                'showInList' => true,
+                'isFilter' => true,
+                'filterOrder' => 5
             ],
             [
                 'title' => 'Параметры',
@@ -579,7 +585,7 @@ class CatalogFixtures extends Fixture
                                                 'color' => '#000000',
                                                 'material' => 'Текстиль',
                                                 'image' => '',
-                                                'tags' => ['Новинка']
+                                                'tags' => ['Новинка', 'Акция']
                                             ],
                                             [
                                                 'title' => 'Кеды Nike COURT ROYALE',
@@ -602,7 +608,7 @@ class CatalogFixtures extends Fixture
                                                 'color' => '#ffffff',
                                                 'material' => 'Искусственная кожа',
                                                 'image' => '',
-                                                'tags' => ['Новинка']
+                                                'tags' => ['Новинка', 'Акция']
                                             ],
                                             [
                                                 'title' => 'Кроссовки Nike Reax 8 TR',
@@ -648,7 +654,7 @@ class CatalogFixtures extends Fixture
                                                 'color' => '#0f77b0',
                                                 'material' => 'Искусственная кожа, Текстиль',
                                                 'image' => '',
-                                                'tags' => ['Новинка']
+                                                'tags' => ['Новинка', 'Лидер продаж']
                                             ],
                                             [
                                                 'title' => 'Валенки Котофей',

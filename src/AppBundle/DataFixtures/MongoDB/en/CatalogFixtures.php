@@ -162,7 +162,8 @@ class CatalogFixtures extends Fixture
                 'required' => false,
                 'showInTable' => true,
                 'showInList' => true,
-                'isFilter' => true
+                'isFilter' => true,
+                'filterOrder' => 0
             ],
             [
                 'title' => 'Brand',
@@ -181,7 +182,8 @@ class CatalogFixtures extends Fixture
                 'required' => false,
                 'showInTable' => false,
                 'showInList' => false,
-                'isFilter' => true
+                'isFilter' => true,
+                'filterOrder' => 1
             ],
             [
                 'title' => 'Country',
@@ -200,7 +202,8 @@ class CatalogFixtures extends Fixture
                 'required' => false,
                 'showInTable' => false,
                 'showInList' => false,
-                'isFilter' => true
+                'isFilter' => true,
+                'filterOrder' => 2
             ],
             [
                 'title' => 'Color',
@@ -219,7 +222,8 @@ class CatalogFixtures extends Fixture
                 'required' => false,
                 'showInTable' => false,
                 'showInList' => false,
-                'isFilter' => true
+                'isFilter' => true,
+                'filterOrder' => 3
             ],
             [
                 'title' => 'Material',
@@ -238,7 +242,8 @@ class CatalogFixtures extends Fixture
                 'required' => false,
                 'showInTable' => false,
                 'showInList' => false,
-                'isFilter' => true
+                'isFilter' => true,
+                'filterOrder' => 4
             ],
             [
                 'title' => 'Tags',
@@ -253,13 +258,14 @@ class CatalogFixtures extends Fixture
                 'outputType' => 'text',
                 'outputProperties' => [
                     'className' => '',
-                    'chunkName' => ''
+                    'chunkName' => 'tag'
                 ],
                 'group' => 'Options',
                 'required' => false,
                 'showInTable' => false,
-                'showInList' => false,
-                'isFilter' => false
+                'showInList' => true,
+                'isFilter' => true,
+                'filterOrder' => 5
             ],
             [
                 'title' => 'Parameters',
@@ -579,7 +585,7 @@ class CatalogFixtures extends Fixture
                                                 'color' => '#000000',
                                                 'material' => 'Textile',
                                                 'image' => '',
-                                                'tags' => ['New']
+                                                'tags' => ['New', 'Action']
                                             ],
                                             [
                                                 'title' => 'Sneakers Nike COURT ROYALE',
@@ -613,7 +619,7 @@ class CatalogFixtures extends Fixture
                                                 'color' => '#ffffff',
                                                 'material' => 'Genuine leather',
                                                 'image' => '',
-                                                'tags' => ['New']
+                                                'tags' => ['New', 'Action']
                                             ],
                                             [
                                                 'title' => 'Sneakers Nike Court Royale Suede',
@@ -647,7 +653,7 @@ class CatalogFixtures extends Fixture
                                                 'color' => '#0f77b0',
                                                 'material' => 'Artificial leather, Textile',
                                                 'image' => '',
-                                                'tags' => ['New']
+                                                'tags' => ['New', 'Leader of sales']
                                             ],
                                             [
                                                 'title' => 'Valenki Cotofey',

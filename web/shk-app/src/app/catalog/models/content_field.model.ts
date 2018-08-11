@@ -39,10 +39,14 @@ export class ContentField {
         public showInList?: boolean,
         public options?: {}[],
         public inputTypeMain?: string,
-        public filterOrder?: number
+        public filterOrder?: number,
+        public listOrder?: number
     ) {
         if (typeof this.filterOrder === 'undefined') {
             this.filterOrder = 0;
+        }
+        if (typeof this.listOrder === 'undefined') {
+            this.listOrder = 0;
         }
     }
 }

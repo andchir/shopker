@@ -10,6 +10,7 @@ import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {DragulaModule} from 'ng2-dragula';
 
 import {TableComponent} from './table.component';
+import {SortingComponent} from './sorting-dnd.conponent';
 import {InputFieldRenderComponent} from './render-input-field';
 import {OutputFieldComponent} from './render-output-field';
 
@@ -18,10 +19,10 @@ import {DateFromObjectPipe} from './pipes/date-from-object.pipe';
 import {UserRoleColorPipe, UserRoleNamePipe} from './pipes/user-role.pipe';
 import {OrderByPipe} from './pipes/orderby.pipe';
 import {FilterArrayPipe} from './pipes/filter-array-pipe';
-import {TranslateCustomLoader} from './services/translateLoader';
 
 const components = [
     TableComponent,
+    SortingComponent,
     InputFieldRenderComponent,
     OutputFieldComponent
 ];

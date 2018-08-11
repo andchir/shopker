@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, ViewChild, Injectable, ElementRef} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {NgbModal, NgbActiveModal, NgbModalRef, NgbPopover, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
@@ -16,21 +16,24 @@ import {ContentTypesService} from './services/content_types.service';
 import {SystemNameService} from '../services/system-name.service';
 import {CollectionsService} from './services/collections.service';
 import {FieldTypesService} from './services/field-types.service';
+import {SortData} from '../sorting-dnd.conponent';
 
 @Component({
     selector: 'app-content-type-modal-content',
-    templateUrl: 'templates/modal-content_types.html'
+    templateUrl: 'templates/modal-content_type.html'
 })
 export class ContentTypeModalContentComponent extends ModalContentAbstractComponent<ContentType> implements OnInit {
 
     @ViewChild('addCollectionBlock') elementAddCollectionBlock;
     @ViewChild('addGroupBlock') elementAddGroupBlock;
     @ViewChild('accordion') accordion;
+    @ViewChild('blockFieldList') blockFieldList;
     modalRef: NgbModalRef;
 
     model = new ContentType(0, '', '', '', 'products', [], ['General', 'Service'], true);
     fieldModel = new ContentField(0, '', '', '', '', {}, '', {}, '', false, false, false);
-    filtersFields: ContentField[];
+    sortData: SortData[] = [];
+    sortingfieldName = '';
     fld_submitted = false;
     errorFieldMessage: string;
     action = 'add_field';
@@ -470,44 +473,50 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
         return output;
     }
 
-    sortFiltersInit(event?: MouseEvent): void {
+    sortingInit(sortingfieldName: string, filterFieldName: string, event?: MouseEvent): void {
         if (event) {
             event.preventDefault();
         }
-        this.action = 'sort_filters';
-        this.filtersFields = this.model.fields.filter((field) => {
-            return field.isFilter;
+        this.sortingfieldName = sortingfieldName;
+        const filteredData = this.model.fields.filter((field) => {
+            return field[filterFieldName];
         });
-        this.filtersFields.sort(function(a, b) {
-            return a.filterOrder - b.filterOrder;
+        filteredData.sort(function(a, b) {
+            return a[sortingfieldName] - b[sortingfieldName]
         });
+
+        this.sortData = [];
+        filteredData.forEach((data) => {
+            this.sortData.push({
+                name: data['name'],
+                title: data['title']
+            });
+        });
+
+        this.blockFieldList.nativeElement.style.display = 'none';
     }
 
-    sortFiltersApply(event?: MouseEvent): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.filtersFields.forEach((field, index) => {
+    sortingApply(): void {
+        this.sortData.forEach((field, index) => {
             const ind = this.model.fields.findIndex((fld) => {
                 return fld.name === field.name;
             });
             if (ind > -1) {
-                this.model.fields[ind].filterOrder = index;
+                this.model.fields[ind][this.sortingfieldName] = index;
             }
         });
-        this.sortFiltersCancel();
+        this.sortingCancel();
     }
 
-    sortFiltersCancel(event?: MouseEvent): void {
-        if (event) {
-            event.preventDefault();
-        }
+    sortingCancel(): void {
         const index = _.findIndex(this.model.fields, {name: this.currentFieldName});
         if (index > -1) {
             this.action = 'edit_field';
         } else {
             this.action = 'add_field';
         }
+        this.sortData.splice(0, this.sortData.length);
+        this.blockFieldList.nativeElement.style.display = 'block';
     }
 
     save() {

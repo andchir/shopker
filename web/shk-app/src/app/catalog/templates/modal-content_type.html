@@ -391,10 +391,15 @@
             <ngb-panel id="accordion-content-type-fields" [title]="'FIELDS' | translate">
                 <ng-template ngbPanelContent>
 
-                    <ng-container *ngIf="action != 'sort_filters'; else sortFilters">
-                        <div class="slide-on-hover-parent">
-                            <div class="slide-on-hover-child text-right" [hidden]="model.fields.length < 2">
-                                <button type="button" class="btn btn-sm btn-secondary" (click)="sortFiltersInit($event)">
+                    <div #blockFieldList>
+                        <div>
+                            <div class="text-right mb-2" [hidden]="model.fields.length < 2">
+                                <button type="button" class="btn btn-sm btn-secondary" (click)="sortingInit('listOrder', 'showInList', $event)">
+                                    <i class="icon-shuffle"></i>
+                                    {{'SORT_FIELDS_LIST' | translate}}
+                                </button>
+                                &nbsp;
+                                <button type="button" class="btn btn-sm btn-secondary" (click)="sortingInit('filterOrder', 'isFilter', $event)">
                                     <i class="icon-shuffle"></i>
                                     {{'SORT_FILTERS' | translate}}
                                 </button>
@@ -457,26 +462,12 @@
                                 </tbody>
                             </table>
                         </div>
-                    </ng-container>
+                    </div>
 
-                    <ng-template #sortFilters>
-                        <div class="text-right mb-3">
-                            <button type="button" class="btn btn-sm btn-secondary" (click)="sortFiltersApply($event)">
-                                <i class="icon-check"></i>
-                                {{'APPLY' | translate}}
-                            </button>
-                            &nbsp;
-                            <button type="button" class="btn btn-sm btn-secondary" (click)="sortFiltersCancel($event)">
-                                {{'CANCEL' | translate}}
-                            </button>
-                        </div>
-                        <div dragula="filters" [(dragulaModel)]="filtersFields">
-                            <div class="card card-body d-block p-2 bg-light cursor-ns-resize" *ngFor="let field of filtersFields">
-                                {{field.title}}
-                                <span class="text-muted">({{field.name}})</span>
-                            </div>
-                        </div>
-                    </ng-template>
+                    <app-sorting-dnd
+                            [(items)]="sortData"
+                            (save)="sortingApply($event)"
+                            (cancel)="sortingCancel()"></app-sorting-dnd>
 
                 </ng-template>
             </ngb-panel>

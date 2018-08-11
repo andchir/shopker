@@ -1,0 +1,22 @@
+<div *ngIf="items.length > 0">
+    <div class="mb-3">
+        <div class="float-right">
+            <button type="button" class="btn btn-sm btn-secondary" (click)="sortApply($event)">
+                <i class="icon-check"></i>
+                {{'APPLY' | translate}}
+            </button>
+            &nbsp;
+            <button type="button" class="btn btn-sm btn-secondary" (click)="sortCancel($event)">
+                {{'CANCEL' | translate}}
+            </button>
+        </div>
+        <div *ngIf="title">{{title}}</div>
+        <div class="clearfix"></div>
+    </div>
+    <div dragula="filters" [(dragulaModel)]="items">
+        <div class="card card-body d-block p-2 bg-light cursor-ns-resize" *ngFor="let item of items">
+            {{item.title}}
+            <span class="text-muted">({{item.name}})</span>
+        </div>
+    </div>
+</div>

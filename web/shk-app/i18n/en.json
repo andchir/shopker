@@ -101,6 +101,7 @@
 	"SHOW_IN_FILTER": "Show in filter",
 	"SHOW_IN_LIST": "Show in list",
 	"SHOW_IN_TABLE": "Show in table",
+	"SORT_FIELDS_LIST": "Sort fields in the list",
 	"SORT_FILTERS": "Sort filters",
 	"STATISTICS": "Statistics",
 	"STATUS": "Status",

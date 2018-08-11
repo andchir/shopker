@@ -72,7 +72,8 @@ class CatalogFixtures extends Fixture
                 'required' => true,
                 'showInTable' => true,
                 'showInList' => true,
-                'isFilter' => false
+                'isFilter' => false,
+                'listOrder' => 0
             ],
             [
                 'title' => 'System name',
@@ -115,7 +116,8 @@ class CatalogFixtures extends Fixture
                 'required' => false,
                 'showInTable' => false,
                 'showInList' => true,
-                'isFilter' => false
+                'isFilter' => false,
+                'listOrder' => 2
             ],
             [
                 'title' => 'Description',
@@ -163,7 +165,8 @@ class CatalogFixtures extends Fixture
                 'showInTable' => true,
                 'showInList' => true,
                 'isFilter' => true,
-                'filterOrder' => 0
+                'filterOrder' => 0,
+                'listOrder' => 3
             ],
             [
                 'title' => 'Brand',
@@ -265,7 +268,8 @@ class CatalogFixtures extends Fixture
                 'showInTable' => false,
                 'showInList' => true,
                 'isFilter' => true,
-                'filterOrder' => 5
+                'filterOrder' => 5,
+                'listOrder' => 1
             ],
             [
                 'title' => 'Parameters',

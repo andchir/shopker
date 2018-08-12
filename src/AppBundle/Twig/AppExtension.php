@@ -302,11 +302,8 @@ class AppExtension extends AbstractExtension
         $properties['systemName'] = !empty($itemData[$properties['systemNameField']])
             ? $itemData[$properties['systemNameField']]
             : '';
-        $properties['fieldProperties'] = [
-            'inputProperties' => [
-                'values_list' => []
-            ]
-        ];
+        $properties['fieldProperties'] = $field;
+
         if (!empty($value)) {
             $templateName = $this->getTemplateName($environment, 'chunks/fields/', $chunkName, $chunkNamePrefix);
         } else {

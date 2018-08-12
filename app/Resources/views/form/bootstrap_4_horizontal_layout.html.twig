@@ -4,7 +4,7 @@
 
 {% block form_label -%}
     {%- if label is same as(false) -%}
-        <div class="{{ block('form_label_class') }}"></div>
+
     {%- else -%}
         {%- if expanded is not defined or not expanded -%}
             {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' col-form-label')|trim}) -%}
@@ -24,12 +24,16 @@
     {%- if expanded is defined and expanded -%}
         {{ block('fieldset_form_row') }}
     {%- else -%}
-        <div class="form-group row{% if (not compound or force_error|default(false)) and not valid %} is-invalid{% endif %}">
-            {{- form_label(form) -}}
-            <div class="{{ block('form_group_class') }}">
-                {{- form_widget(form) -}}
+        {%- if label is same as(false) -%}
+            {{- parent() -}}
+        {%- else -%}
+            <div class="form-group row{% if (not compound or force_error|default(false)) and not valid %} is-invalid{% endif %}">
+                {{- form_label(form) -}}
+                <div class="{{ block('form_group_class') }}">
+                    {{- form_widget(form) -}}
+                </div>
             </div>
-            {##}</div>
+        {%- endif -%}
     {%- endif -%}
 {%- endblock form_row %}
 

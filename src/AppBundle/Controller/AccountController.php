@@ -7,7 +7,7 @@ use AppBundle\Document\Setting;
 use AppBundle\Document\User;
 
 use AppBundle\Event\UserRegisteredEvent;
-use AppBundle\Form\Type\OrderOptionsType;
+use AppBundle\Form\Type\UserProfileType;
 use AppBundle\Repository\OrderRepository;
 use AppBundle\Repository\UserRepository;
 use AppBundle\Service\SettingsService;
@@ -355,12 +355,11 @@ class AccountController extends Controller
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $this->get('doctrine_mongodb')->getManager();
 
-        $form = $this->createForm(OrderOptionsType::class, $user->getOptions());
+        $form = $this->createForm(UserProfileType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $user->setOptions($form->getData());
             $dm->flush();
 
             $request->getSession()

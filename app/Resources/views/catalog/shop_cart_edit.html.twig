@@ -1,49 +1,60 @@
-<table class="table">
-    <tbody>
-        {% for contentTypeName in items|keys %}
-            {% for item in items[contentTypeName] %}
-                <tr>
-                    <td>{{ loop.index }}</td>
-                    <td>
-                        <div>
-                            <a href="{{ catalogPath(item.parentUri, item.systemName) }}">
-                                {{ item.title }}
-                            </a>
-                        </div>
-                        {% if item.parametersString is not empty %}
-                            <div class="text-muted small">
-                                {{ item.parametersString }}
+<form method="post">
+    <table class="table">
+        <tbody>
+            {% for contentTypeName in items|keys %}
+                {% for item in items[contentTypeName] %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>
+                            <div>
+                                <a href="{{ catalogPath(item.parentUri, item.systemName) }}">
+                                    {{ item.title }}
+                                </a>
                             </div>
-                        {% endif %}
-                    </td>
-                    <td>{{ item.price | price }} {{ item.currency }}</td>
-                    <td>
-                        <input type="number" class="form-control" min="1" step="1" value="{{ item.count }}" style="width: 80px;">
-                    </td>
-                    <td>{{ item.priceTotal | price }} {{ item.currency }}</td>
-                    <td class="text-right">
-                        <a class="btn btn-outline-info ml-1" href="{{ path('shop_cart_remove', {"contentTypeName": contentTypeName, "index": loop.index0}) }}" data-toggle="tooltip" data-placement="bottom" title="{{ 'Delete item' | trans }}">
-                            <i class="icon-cross"></i>
-                        </a>
-                    </td>
-                </tr>
+                            {% if item.parametersString is not empty %}
+                                <div class="text-muted small">
+                                    {{ item.parametersString }}
+                                </div>
+                            {% endif %}
+                        </td>
+                        <td>{{ item.price | price }} {{ item.currency }}</td>
+                        <td>
+                            <input type="number" class="form-control" min="1" step="1" name="count[]" value="{{ item.count }}" style="width: 80px;">
+                        </td>
+                        <td>{{ item.priceTotal | price }} {{ item.currency }}</td>
+                        <td class="text-right">
+                            <a class="btn btn-outline-info ml-1" href="{{ path('shop_cart_remove', {"contentTypeName": contentTypeName, "index": loop.index0}) }}" data-toggle="tooltip" data-placement="bottom" title="{{ 'Delete item' | trans }}">
+                                <i class="icon-cross"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
             {% endfor %}
-        {% endfor %}
-    </tbody>
-    <tfoot>
-        <tr>
-            <th colspan="4" class="text-right">
-                Общая сумма:
-            </th>
-            <th colspan="2">
-                <span class="big">
-                    {{ priceTotal | price }}
-                </span>
-                {{ currency }}
-            </th>
-        </tr>
-    </tfoot>
-</table>
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="4">
+                    <noscript>
+                        <div class="float-left">
+                            <button type="submit" class="btn btn-sm btn-info" name="action" value="update">
+                                {{ 'Recalculate' | trans }}
+                            </button>
+                        </div>
+                    </noscript>
+                    <div class="text-right">
+                        Общая сумма:
+                    </div>
+                </th>
+                <th colspan="2">
+                    <span class="big">
+                        {{ priceTotal | price }}
+                    </span>
+                    {{ currency }}
+                </th>
+            </tr>
+        </tfoot>
+    </table>
+</form>
 <div class="float-right">
     <a class="btn btn-outline-info" href="{{ path('page_checkout') }}">
         {{ 'Continue' | trans }}

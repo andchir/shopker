@@ -37,6 +37,15 @@ class ShopCartService
     }
 
     /**
+     * @param $shopCartData
+     */
+    public function saveContent($shopCartData)
+    {
+        $mongoCache = $this->container->get('mongodb_cache');
+        $mongoCache->save(self::getCartId(), $shopCartData, 60*60*24*7);
+    }
+
+    /**
      * @return string
      */
     public static function getCartId()

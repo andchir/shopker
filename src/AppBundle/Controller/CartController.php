@@ -111,7 +111,9 @@ class CartController extends ProductController
             ]);
         }
 
-        $mongoCache->save(ShopCartService::getCartId(), $shopCartData, 60*60*24*7);
+        /** @var ShopCartService $shopCartService */
+        $shopCartService = $this->get('app.shop_cart');
+        $shopCartService->saveContent($shopCartData);
 
         return new RedirectResponse($referer);
     }
@@ -195,7 +197,42 @@ class CartController extends ProductController
      */
     public function editAction(Request $request)
     {
+        $action = $request->get('action');
 
+        switch ($action) {
+            case 'update':
+
+                $countArr = $request->get('count');
+                $mongoCache = $this->container->get('mongodb_cache');
+
+                $shopCartData = $mongoCache->fetch(ShopCartService::getCartId());
+                if (empty($shopCartData)
+                    || empty($shopCartData['data'])
+                    || empty($countArr)) {
+                        return $this->redirectToRoute('shop_cart_edit');
+                }
+
+                $index = 0;
+                foreach ($shopCartData['data'] as $cName => &$products) {
+                    if (!isset($data['items'][$cName])) {
+                        $data['items'][$cName] = [];
+                    }
+                    foreach ($products as $ind => &$product) {
+                        if (isset($countArr[$index]) && is_numeric($countArr[$index])) {
+                            $product['count'] = intval($countArr[$index]);
+                        }
+                        $index++;
+                    }
+                }
+
+                /** @var ShopCartService $shopCartService */
+                $shopCartService = $this->get('app.shop_cart');
+                $shopCartService->saveContent($shopCartData);
+
+                return $this->redirectToRoute('shop_cart_edit');
+
+                break;
+        }
 
 
         return $this->render('page_shop_cart.html.twig', [
@@ -214,6 +251,8 @@ class CartController extends ProductController
     {
         $mongoCache = $this->container->get('mongodb_cache');
         $referer = $request->headers->get('referer');
+        /** @var ShopCartService $shopCartService */
+        $shopCartService = $this->get('app.shop_cart');
 
         $shopCartData = $mongoCache->fetch(ShopCartService::getCartId());
         if (!empty($shopCartData)
@@ -225,9 +264,9 @@ class CartController extends ProductController
                 unset($shopCartData['data'][$contentTypeName]);
             }
             if (!empty($shopCartData['data'])) {
-                $mongoCache->save(ShopCartService::getCartId(), $shopCartData, 60*60*24*7);
+                $shopCartService->saveContent($shopCartData);
             } else {
-                $mongoCache->delete(ShopCartService::getCartId());
+                $shopCartService->clearContent();
             }
         }
 

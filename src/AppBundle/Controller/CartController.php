@@ -59,16 +59,8 @@ class CartController extends ProductController
             return new RedirectResponse($referer);
         }
 
-        $priceFieldName = '';
         $contentTypeFields = $contentType->getFields();
-        foreach ($contentTypeFields as $contentTypeField) {
-            if (isset($contentTypeField['outputProperties'])
-                && isset($contentTypeField['outputProperties']['chunkName'])
-                && $contentTypeField['outputProperties']['chunkName'] === 'price') {
-                    $priceFieldName = $contentTypeField['name'];
-                    break;
-            }
-        }
+        $priceFieldName = $contentType->getPriceFieldName();
         $priceValue = $priceFieldName && isset($productDocument[$priceFieldName])
             ? $productDocument[$priceFieldName]
             : 0;
@@ -135,63 +127,62 @@ class CartController extends ProductController
         $postData = $request->request->all();
         $parameters = [];
         foreach ($postData as $key => $value) {
-            if (strpos($key, 'param__') !== false) {
-                $paramArr = explode('__', $key);
-                $paramName = isset($paramArr[1]) ? $paramArr[1] : '';
-                $index = array_search($paramName, array_column($contentTypeFields, 'name'));
-                if ($index === false
-                    || !isset($productDocument[$paramName])
-                    || !is_array($productDocument[$paramName])) {
-                    continue;
-                }
-                $contentTypeField = $contentTypeFields[$index];
-                if ($contentTypeField['inputType'] != 'parameters') {
-                    continue;
-                }
-                $outputType = isset($contentTypeField['outputProperties']) && isset($contentTypeField['outputProperties']['type'])
-                    ? $contentTypeField['outputProperties']['type']
-                    : 'radio';
-                switch ($outputType) {
-                    case 'select':
-                    case 'radio':
-                        if (empty($value)) {
-                            break;
+            if (strpos($key, 'param__') === false) {
+                continue;
+            }
+            $paramArr = explode('__', $key);
+            $paramName = isset($paramArr[1]) ? $paramArr[1] : '';
+            $index = array_search($paramName, array_column($contentTypeFields, 'name'));
+            if ($index === false
+                || !isset($productDocument[$paramName])
+                || !is_array($productDocument[$paramName])) {
+                continue;
+            }
+            $contentTypeField = $contentTypeFields[$index];
+            if ($contentTypeField['inputType'] != 'parameters') {
+                continue;
+            }
+            $outputType = isset($contentTypeField['outputProperties']) && isset($contentTypeField['outputProperties']['type'])
+                ? $contentTypeField['outputProperties']['type']
+                : 'radio';
+            switch ($outputType) {
+                case 'select':
+                case 'radio':
+                case 'checkbox':
+                    if (empty($value)) {
+                        break;
+                    }
+                    if (!is_array($value)) {
+                        $value = [$value];
+                    }
+                    foreach($value as $val) {
+                        $paramIndex = array_search($val, array_column($productDocument[$paramName], 'value'));
+                        if ($paramIndex === false) {
+                            $paramIndex = array_search($val, array_column($productDocument[$paramName], 'name'));
                         }
-                        $paramIndex = array_search($value, array_column($productDocument[$paramName], 'value'));
                         if ($paramIndex !== false) {
                             $parameters[] = $productDocument[$paramName][$paramIndex];
                         }
+                    }
+                    break;
+                case 'text':
+                    if (empty($value) || !is_array($value)) {
                         break;
-                    case 'checkbox':
-                        if (empty($value) || !is_array($value)) {
-                            break;
+                    }
+                    foreach($value as $index => $val) {
+                        if (empty($val)) {
+                            continue;
                         }
-                        foreach($value as $val) {
-                            $paramIndex = array_search($val, array_column($productDocument[$paramName], 'value'));
-                            if ($paramIndex !== false) {
-                                $parameters[] = $productDocument[$paramName][$paramIndex];
-                            }
+                        if (is_array($val)) {
+                            $val = implode(', ', $val);
                         }
-                        break;
-                    case 'text':
-                        if (empty($value) || !is_array($value)) {
-                            break;
+                        if (isset($productDocument[$paramName][$index])) {
+                            $parameters[] = array_merge($productDocument[$paramName][$index], [
+                                'value' => strip_tags($val)
+                            ]);
                         }
-                        foreach($value as $index => $val) {
-                            if (empty($val)) {
-                                continue;
-                            }
-                            if (is_array($val)) {
-                                $val = implode(', ', $val);
-                            }
-                            if (isset($productDocument[$paramName][$index])) {
-                                $parameters[] = array_merge($productDocument[$paramName][$index], [
-                                    'value' => strip_tags($val)
-                                ]);
-                            }
-                        }
-                        break;
-                }
+                    }
+                    break;
             }
         }
         return $parameters;

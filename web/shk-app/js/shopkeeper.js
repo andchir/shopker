@@ -152,6 +152,115 @@ var Shopkeeper = function () {
         window.location.reload();
     };
 
+    /**
+     * Initialize product parameters
+     * @param formSelector
+     * @param priceElSelector
+     */
+    this.productParametersInit = function(formSelector, priceElSelector) {
+        var formEl = document.querySelector(formSelector),
+            priceEl = document.querySelector(priceElSelector);
+        if (!formEl || !priceEl) {
+            return;
+        }
+        priceEl.dataset.price = this.parsePrice(priceEl.textContent);
+
+        var parametersInputs = formEl.querySelectorAll('input, select');
+
+        parametersInputs.forEach(function(inputEl) {
+            var name = inputEl.getAttribute('name').toLowerCase();
+            if (name.indexOf('param__') === -1) {
+                return;
+            }
+            var inputType = self.getInputType(inputEl);
+            switch (inputType) {
+                case 'checkbox':
+                case 'radio':
+                    inputEl.addEventListener('click', function(){
+                        self.productParametersApply(formSelector, priceElSelector);
+                    });
+                    break;
+                case 'select':
+                    inputEl.addEventListener('change', function(){
+                        self.productParametersApply(formSelector, priceElSelector);
+                    });
+                    break;
+            }
+        });
+
+        this.productParametersApply(formSelector, priceElSelector);
+    };
+
+    /**
+     * Apply product parameters
+     * @param formSelector
+     * @param priceElSelector
+     */
+    this.productParametersApply = function(formSelector, priceElSelector) {
+        var formEl = document.querySelector(formSelector),
+            priceEl = document.querySelector(priceElSelector);
+        if (!formEl || !priceEl) {
+            return;
+        }
+
+        var price = this.parsePrice(priceEl.dataset.price || priceEl.textContent),
+            parametersInputs = formEl.querySelectorAll('input, select');
+
+        parametersInputs.forEach(function(inputEl) {
+            var name = inputEl.getAttribute('name').toLowerCase();
+            if (name.indexOf('param__') === -1) {
+                return;
+            }
+            var inputType = self.getInputType(inputEl);
+            switch (inputType) {
+                case 'checkbox':
+                case 'radio':
+                    if (inputEl.checked) {
+                        price += self.parsePrice(inputEl.dataset.price || '0');
+                    }
+                    break;
+                case 'select':
+
+                    var value = inputEl.value,
+                        optionElArr = inputEl.querySelectorAll('option');
+
+                    optionElArr.forEach(function(optionEl) {
+                        if (optionEl.value === value) {
+                            price += self.parsePrice(optionEl.dataset.price || '0');
+                        }
+                    });
+                    break;
+            }
+        });
+
+        priceEl.textContent = this.numFormat(price);
+    };
+
+    /**
+     * Parse price string
+     * @param priceStr
+     * @returns {Number}
+     */
+    this.parsePrice = function(priceStr) {
+        return parseFloat(priceStr.replace(/[^\d\.]/g,''));
+    };
+
+    /**
+     * Get type of the input element
+     * @param inputEl
+     * @returns {string}
+     */
+    this.getInputType = function(inputEl) {
+        var tagName = inputEl.tagName.toLowerCase(),
+            inputType = tagName === 'input'
+                ? inputEl.getAttribute('type').toLowerCase()
+                : '';
+        if (tagName === 'select') {
+            inputType = 'select';
+        }
+        return inputType;
+    };
+
     this.currencySelectInit = function() {
         var selectElement = document.getElementById('shk-currency');
         if (!selectElement) {
@@ -198,6 +307,33 @@ var Shopkeeper = function () {
 
     this.eraseCookie = function(name) {
         document.cookie = name + '=; Max-Age=-99999999;';
+    };
+
+    this.numFormat = function(n){
+        return this.number_format(n, (Math.floor(n)===n ? 0 : 2), '.', ' ');
+    };
+
+    this.number_format = function(number, decimals, dec_point, thousands_sep) {
+        number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
+        var n = !isFinite(+number) ? 0 : +number,
+            prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+            sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+            dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+            s = '',
+            toFixedFix = function (n, prec) {
+                var k = Math.pow(10, prec);
+                return '' + Math.round(n * k) / k;
+            };
+        // Fix for IE parseFloat(0.55).toFixed(0) = 0;
+        s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+        if (s[0].length > 3) {
+            s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+        }
+        if ((s[1] || '').length < prec) {
+            s[1] = s[1] || '';
+            s[1] += new Array(prec - s[1].length + 1).join('0');
+        }
+        return s.join(dec);
     };
 
     this.init();

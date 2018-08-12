@@ -6,7 +6,7 @@
 
     {% for item in data %}
         <div class="mb-1">
-            <input type="radio" name="param__{{ fieldData.name }}" id="param__{{ fieldData.name }}_{{ loop.index }}" value="{{ item.value }}"{% if loop.index == 1 and firstSelected %} checked="checked"{% endif %}>
+            <input type="radio" name="param__{{ fieldData.name }}" id="param__{{ fieldData.name }}_{{ loop.index }}" value="{{ item.value | default(item.name) }}"{% if loop.index == 1 and firstSelected %} checked="checked"{% endif %} data-price="{{ item.price }}">
             <label for="param__{{ fieldData.name }}_{{ loop.index }}">
                 {{ item.name | default(item.value) }}
             </label>
@@ -17,7 +17,7 @@
 
     {% for item in data %}
         <div class="mb-1">
-            <input type="checkbox" name="param__{{ fieldData.name }}[]" id="param__{{ fieldData.name }}_{{ loop.index }}" value="{{ item.value }}"{% if loop.index == 1 and firstSelected %} checked="checked"{% endif %}>
+            <input type="checkbox" name="param__{{ fieldData.name }}[]" id="param__{{ fieldData.name }}_{{ loop.index }}" value="{{ item.value | default(item.name) }}"{% if loop.index == 1 and firstSelected %} checked="checked"{% endif %} data-price="{{ item.price }}">
             <label for="param__{{ fieldData.name }}_{{ loop.index }}">
                 {{ item.name | default(item.value) }}
             </label>
@@ -32,7 +32,9 @@
         </label>
         <select class="form-control" name="param__{{ fieldData.name }}" id="param__{{ fieldData.name }}">
             {% for item in data %}
-                <option value="{{ item.value }}">{{ item.name | default(item.value) }}</option>
+                <option value="{{ item.value | default(item.name) }}" data-price="{{ item.price }}">
+                    {{ item.name | default(item.value) }}
+                </option>
             {% endfor %}
         </select>
     </div>
@@ -47,7 +49,7 @@
                 </label>
             </div>
             <div class="col-md-8">
-                <input type="text" class="form-control" name="param__{{ fieldData.name }}[]" id="param__{{ fieldData.name }}_{{ loop.index }}" value="{{ item.value }}">
+                <input type="text" class="form-control" name="param__{{ fieldData.name }}[]" id="param__{{ fieldData.name }}_{{ loop.index }}" value="{{ item.value }}" data-price="{{ item.price }}">
             </div>
         </div>
     {% endfor %}

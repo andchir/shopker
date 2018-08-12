@@ -327,4 +327,22 @@ class ContentType
         return $fieldName . '__' . $num;
     }
 
+    /**
+     * @return string
+     */
+    public function getPriceFieldName()
+    {
+        $priceFieldName = '';
+        $contentTypeFields = $this->getFields();
+        foreach ($contentTypeFields as $contentTypeField) {
+            if (isset($contentTypeField['outputProperties'])
+                && isset($contentTypeField['outputProperties']['chunkName'])
+                && $contentTypeField['outputProperties']['chunkName'] === 'price') {
+                    $priceFieldName = $contentTypeField['name'];
+                    break;
+            }
+        }
+        return $priceFieldName;
+    }
+
 }

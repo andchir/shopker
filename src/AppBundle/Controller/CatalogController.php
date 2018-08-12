@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Document\ContentType;
 use AppBundle\Document\Filter;
 use AppBundle\Repository\CategoryRepository;
+use AppBundle\Service\ShopCartService;
 use AppBundle\Service\UtilsService;
 use Doctrine\ODM\MongoDB\Cursor;
 use Doctrine\ODM\MongoDB\DocumentRepository;
@@ -106,12 +107,14 @@ class CatalogController extends ProductController
         $breadcrumbs = array_filter($breadcrumbs, function($entry) use ($uri) {
             return $entry['uri'] !== $uri;
         });
+        $currency = ShopCartService::getCurrency();
 
         return $this->render($this->getTemplateName('catalog', $contentType->getName()), [
             'currentCategory' => $currentCategory,
             'currentPage' => $currentPage,
             'currentId' => $currentId,
             'currentUri' => $uri,
+            'currency' => $currency,
             'categoriesMenu' => $categoriesMenu,
             'listTemplate' => $listTemplate,
             'items' => $items,
@@ -168,6 +171,7 @@ class CatalogController extends ProductController
 
         // Get categories menu
         $categoriesMenu = $this->getCategoriesMenu($category, $breadcrumbs);
+        $currency = ShopCartService::getCurrency();
 
         return $this->render($this->getTemplateName('product-page', $contentType->getName()), [
             'currentCategory' => $category,
@@ -175,6 +179,7 @@ class CatalogController extends ProductController
             'contentType' => $contentType,
             'currentId' => $currentId,
             'currentUri' => $uri,
+            'currency' => $currency,
             'categoriesMenu' => $categoriesMenu,
             'breadcrumbs' => $breadcrumbs,
             'fields' => $fields

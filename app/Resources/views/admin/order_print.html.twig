@@ -147,19 +147,19 @@
                         </td>
                         <td>
                             {{ orderContent.priceTotal | price }}
+                            {{ order.currency }}
                         </td>
                     </tr>
                 {% endfor %}
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="2">
-                        {{ 'Delivery' | trans }}
+                    <td colspan="4">
+                        {{ 'Delivery method' | trans }}: {{ order.deliveryName }}
                     </td>
                     <td>
-                        {{ order.deliveryPrice | price }}
+                        {{ order.deliveryPrice | price }} {{ order.currency }}
                     </td>
-                    <td colspan="2"></td>
                 </tr>
                 <tr>
                     <td colspan="4" class="text-right">

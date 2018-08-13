@@ -43,6 +43,8 @@ class CheckoutController extends BaseController
         $settingsService = $this->get('app.settings');
         $settings = $settingsService->getAll();
 
+        $currency = ShopCartService::getCurrency();
+
         $order = new Order();
         if ($user) {
             $order
@@ -59,6 +61,7 @@ class CheckoutController extends BaseController
             'choicePayment' => isset($settings[Setting::GROUP_PAYMENT])
                 ? $settings[Setting::GROUP_PAYMENT]
                 : [],
+            'currency' => $currency,
             'noDeliveryFirst' => true
         ]);
 
@@ -77,7 +80,6 @@ class CheckoutController extends BaseController
             /** @var ShopCartService $shopCartService */
             $shopCartService = $this->get('app.shop_cart');
             $shopCartData = $shopCartService->getContent();
-            $currency = ShopCartService::getCurrency();
             if (empty($shopCartData)) {
                 $form->addError(new FormError('Your cart is empty.'));
             }

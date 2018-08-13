@@ -98,6 +98,24 @@
                                             </td>
                                         </tr>
                                         {% endfor %}
+                                        <tr>
+                                            <td colspan="3">
+                                                {{ 'Delivery method' | trans }}:
+                                                {{ order.deliveryName }}
+                                            </td>
+                                            <td>
+                                                {{ order.deliveryPrice }}
+                                                {{ order.currency }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-right">
+                                                {{ 'Price total' | trans }}:
+                                            </td>
+                                            <td>
+                                                {{ order.price | price }} {{ order.currency }}
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
 

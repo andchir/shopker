@@ -112,17 +112,10 @@ class SettingsFixtures extends Fixture
             ],
             'SETTINGS_CURRENCY' => [
                 [
-                    'name' => 'Руб.',
+                    'name' => 'руб.',
                     'description' => '',
                     'options' => [
                         'value' => ['value' => 1, 'type' => 'number']
-                    ]
-                ],
-                [
-                    'name' => 'USD',
-                    'description' => '',
-                    'options' => [
-                        'value' => ['value' => 61, 'type' => 'number']
                     ]
                 ]
             ]

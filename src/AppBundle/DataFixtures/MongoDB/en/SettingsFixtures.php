@@ -117,13 +117,6 @@ class SettingsFixtures extends Fixture
                     'options' => [
                         'value' => ['value' => 1, 'type' => 'number']
                     ]
-                ],
-                [
-                    'name' => 'Euro',
-                    'description' => '',
-                    'options' => [
-                        'value' => ['value' => 1, 'type' => 'number']
-                    ]
                 ]
             ]
         ];

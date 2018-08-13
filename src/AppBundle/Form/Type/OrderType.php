@@ -56,9 +56,13 @@ class OrderType extends AbstractType
             ->add('deliveryName', ChoiceType::class, [
                 'label' => 'Delivery method',
                 'choices'  => $options['choiceDelivery'],
-                'choice_label' => function($setting, $key, $index) {
+                'choice_label' => function($setting, $key, $index) use ($options) {
                     /** @var Setting $setting */
-                    return $setting->getName();
+                    return $setting->getName() . (
+                        $setting->getOption('price')
+                            ? " ({$setting->getOption('price')} {$options['currency']})"
+                            : ''
+                        );
                 },
                 'invalid_message' => 'That is not a valid delivery method.',
                 'constraints' => new NotBlank()
@@ -115,7 +119,8 @@ class OrderType extends AbstractType
             'allow_extra_fields' => true,
             'choiceDelivery' => null,
             'choicePayment' => null,
-            'noDeliveryFirst' => false
+            'noDeliveryFirst' => false,
+            'currency' => ''
         ]);
     }
 }

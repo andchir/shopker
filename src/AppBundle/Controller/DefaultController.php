@@ -155,10 +155,20 @@ class DefaultController extends CatalogController
                     $form->addError(new FormError($translator->trans('install.mongodb_connection_fail', [], 'validators')));
                 } else {
 
-                    //$dbsList = $dbConnection->getMongo()->listDBs();
-                    //if (array_search($data['mongodb_database'], array_column($dbsList['databases'], 'name')) === false) {
-                    if (count($dbConnection->getMongo()->selectDB($data['mongodb_database'])->listCollections()) > 0) {
-                        $form->addError(new FormError($translator->trans('install.mongodb_database_not_empty', [], 'validators')));
+                    /** @var \MongoDB $dataBase */
+                    $dataBase = $dbConnection->getMongo()->selectDB($data['mongodb_database']);
+                    $collections = [];
+                    try {
+                        $collections = $dataBase->getCollectionNames();
+                    } catch (\Exception $e) {
+                        $form->addError(new FormError($translator->trans('install.mongodb_database_not_permitted', [], 'validators')));
+                    }
+
+                    if ($form->isValid() && !empty($collections)) {
+                        if (in_array('user', $collections)) {
+                            $form->addError(new FormError($translator->trans('install.mongodb_database_not_empty', [],
+                                'validators')));
+                        }
                     }
 
                     if (!is_writable($settingsService->getConfigYamlFilePath('settings'))) {
@@ -167,7 +177,11 @@ class DefaultController extends CatalogController
 
                     if ($form->isValid()) {
 
-                        $settingsService->saveSettingsToYaml('settings', array_merge($settingsDefault, $data));
+                        $settings = array_merge($settingsDefault, $data);
+                        $settings = array_filter($settings, function ($key) use ($settingsDefault) {
+                            return in_array($key, array_keys($settingsDefault));
+                        }, ARRAY_FILTER_USE_KEY);
+                        $settingsService->saveSettingsToYaml('settings', $settings);
                         $this->systemCacheClear();
 
                         $adminEmail = $data['admin_email'];

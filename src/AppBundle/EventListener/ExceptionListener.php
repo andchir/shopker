@@ -27,6 +27,10 @@ class ExceptionListener
         $environment = $this->container->get('kernel')->getEnvironment();
         $message = '';
 
+        if ($request->get('_route') == 'setup') {
+            return;
+        }
+
         $headers = [];
         if ($exception instanceof HttpExceptionInterface) {
             $statusCode = $exception->getStatusCode();

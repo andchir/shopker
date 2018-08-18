@@ -6,13 +6,18 @@
     <title>{% block title %}{{ app_name }}{% endblock %}</title>
     <base href="{{ app.request.baseUrl }}">
 
-    {% block stylesheets %}{% endblock %}
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 
-    <link href="{{ asset('shk-app/node_modules/bootstrap/dist/css/bootstrap.min.css', 'vendor') }}" rel="stylesheet">
-    <link href="{{ asset('shk-app/node_modules/nouislider/distribute/nouislider.min.css', 'vendor') }}" rel="stylesheet">
-    <link href="{{ asset('shk-app/css/icomoon/style.css') }}" rel="stylesheet">
-    <link href="{{ asset('shk-app/css/styles.css') }}" rel="stylesheet">
+    {% block stylesheets -%}
+        {% stylesheets
+            'shk-app/node_modules/bootstrap/dist/css/bootstrap.min.css'
+            'shk-app/node_modules/nouislider/distribute/nouislider.min.css'
+            'shk-app/css/icomoon/style.css'
+            'shk-app/css/styles.css'
+            filter='minifycsscompressor'
+            output='css/app.min.css'%}{% endstylesheets %}
+        <link href="{{ asset('css/app.min.css') }}" rel="stylesheet">
+    {% endblock %}
 
 </head>
 <body>
@@ -20,12 +25,17 @@
 {% block body %}{% endblock %}
 
 {% block javascripts %}
-    <script type="text/javascript" src="{{ asset('shk-app/node_modules/jquery/dist/jquery.min.js', 'vendor') }}"></script>
-    <script type="text/javascript" src="{{ asset('shk-app/node_modules/popper.js/dist/umd/popper.min.js', 'vendor') }}"></script>
-    <script type="text/javascript" src="{{ asset('shk-app/node_modules/bootstrap/dist/js/bootstrap.min.js', 'vendor') }}"></script>
-    <script type="text/javascript" src="{{ asset('shk-app/node_modules/wnumb/wNumb.js', 'vendor') }}"></script>
-    <script type="text/javascript" src="{{ asset('shk-app/node_modules/nouislider/distribute/nouislider.min.js', 'vendor') }}"></script>
-    <script type="text/javascript" src="{{ asset('shk-app/js/shopkeeper.js') }}"></script>
+    {% javascripts
+        'shk-app/node_modules/jquery/dist/jquery.min.js'
+        'shk-app/node_modules/popper.js/dist/umd/popper.min.js'
+        'shk-app/node_modules/bootstrap/dist/js/bootstrap.min.js'
+        'shk-app/node_modules/wnumb/wNumb.js'
+        'shk-app/node_modules/nouislider/distribute/nouislider.min.js'
+        'shk-app/js/shopkeeper.js'
+        filter='jsmin'
+        output='js/app.min.js' %}{% endjavascripts %}
+
+    <script src="{{ asset('js/app.min.js') }}"></script>
     <script>
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()

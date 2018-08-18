@@ -20,7 +20,8 @@ class AppKernel extends Kernel
             new Liip\ImagineBundle\LiipImagineBundle(),
             new AppBundle\AppBundle(),
             new Andchir\OmnipayBundle\OmnipayBundle(),
-            new CoreSphere\ConsoleBundle\CoreSphereConsoleBundle()
+            new CoreSphere\ConsoleBundle\CoreSphereConsoleBundle(),
+            new Symfony\Bundle\AsseticBundle\AsseticBundle()
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

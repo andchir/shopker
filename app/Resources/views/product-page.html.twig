@@ -57,6 +57,19 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             shk.productParametersInit('#shk-form', '#shk-price');
+
+            // Display image for parameter
+            var $carousel = jQuery('#carouselImageGallery');
+            jQuery('#shk-form input[name="param__parameters"]').each(function() {
+                jQuery(this).on('click', function() {
+                    var imageNumber = jQuery(this).data('image-number') || 0;
+                    if (!imageNumber) {
+                        return;
+                    }
+                    $carousel.carousel(imageNumber - 1);
+                });
+            });
+
         });
     </script>
 

@@ -181,10 +181,11 @@ class AppExtension extends AbstractExtension
         $chunkNamePrefix = !empty($properties['chunkNamePrefix'])
             ? $properties['chunkNamePrefix']
             : '';
+
         if (is_array($value)) {
-            $properties = array_merge($properties, $options, ['value' => '', 'data' => $value]);
+            $properties = array_merge($properties, ['value' => '', 'data' => $value]);
         } else {
-            $properties = array_merge($properties, $options, ['value' => $value]);
+            $properties = array_merge($properties, ['value' => $value]);
         }
         if (!isset($properties['systemNameField'])) {
             $properties['systemNameField'] = '';
@@ -195,6 +196,14 @@ class AppExtension extends AbstractExtension
         $properties['systemName'] = !empty($options[$properties['systemNameField']])
             ? $options[$properties['systemNameField']]
             : '';
+        $properties['itemData'] = $options;
+        if (!empty($fieldProperties)) {
+            $properties['fieldData'] = [
+                'name' => $fieldProperties['name'],
+                'title' => $fieldProperties['title'],
+                'description' => $fieldProperties['description']
+            ];
+        }
 
         if (!empty($value)) {
             $templateName = $this->getTemplateName(
@@ -328,6 +337,15 @@ class AppExtension extends AbstractExtension
      */
     public function renderOutputTypeFieldFunction(\Twig_Environment $environment, $itemData, $fieldsData, $fieldName)
     {
+        $fIndex = array_search($fieldName, array_column($fieldsData, 'name'));
+        if ($fIndex === false) {
+            return $environment->render('chunks/fields/default.html.twig', [
+                'itemData' => $itemData,
+                'value' => isset($itemData[$fieldName])
+                    ? (is_array($itemData[$fieldName]) ? json_encode($itemData[$fieldName]) : '')
+                    : ''
+            ]);
+        }
         $outputType = $this->getFieldOptionFunction($fieldsData, $fieldName, 'type');
         $outputTypeProperties = $this->getFieldOptionFunction($fieldsData, $fieldName, 'properties');
         if (empty($outputTypeProperties['chunkName'])) {
@@ -338,7 +356,8 @@ class AppExtension extends AbstractExtension
             $itemData[$fieldName],
             $outputType,
             $outputTypeProperties,
-            $itemData
+            $itemData,
+            $fieldsData[$fIndex]
         );
     }
 

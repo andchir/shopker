@@ -105,7 +105,7 @@ doctrine_cache:
 
 assetic:
     debug:          '%kernel.debug%'
-    use_controller: '%kernel.debug%'
+    use_controller: false
     filters:
         minifycsscompressor: ~
         jsmin: ~

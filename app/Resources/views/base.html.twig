@@ -15,8 +15,10 @@
             'shk-app/css/icomoon/style.css'
             'shk-app/css/styles.css'
             filter='minifycsscompressor'
-            output='css/app.min.css'%}{% endstylesheets %}
-        <link href="{{ asset('css/app.min.css') }}" rel="stylesheet">
+            output='css/app.min.css'
+        -%}
+            <link href="{{ asset_url }}" rel="stylesheet">
+        {% endstylesheets %}
     {% endblock %}
 
 </head>
@@ -33,8 +35,10 @@
         'shk-app/node_modules/nouislider/distribute/nouislider.min.js'
         'shk-app/js/shopkeeper.js'
         filter='jsmin'
-        output='js/app.min.js' %}{% endjavascripts %}
-    <script src="{{ asset('js/app.min.js') }}"></script>
+        output='js/app.min.js'
+    -%}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts -%}
     <script>
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()

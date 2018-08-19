@@ -258,7 +258,7 @@ class AppRuntime
      * @param $itemData
      * @return string
      */
-    public function imageUrlFunction($itemData)
+    public function fileUrlFunction($itemData)
     {
         return sprintf(
             '/uploads/%s/%s.%s',

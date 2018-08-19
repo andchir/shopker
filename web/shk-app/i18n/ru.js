@@ -53,6 +53,7 @@ var APP_LANG = {
     "GENERATE": "Генерировать",
     "GROUP": "Группа",
     "ID": "ID",
+    "IMAGE_NUMBER": "Номер картинки",
     "INPUT_OPTIONS": "Параметры ввода",
     "INPUT_TYPE": "Тип ввода",
     "LOGOUT": "Выйти",

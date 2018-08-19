@@ -331,6 +331,9 @@
                                                 <th>
                                                     {{'PRICE' | translate}}
                                                 </th>
+                                                <th>
+                                                    {{'IMAGE_NUMBER' | translate}}
+                                                </th>
                                                 <th></th>
                                             </tr>
                                         </thead>
@@ -344,6 +347,9 @@
                                                 </td>
                                                 <td class="text-center">
                                                     <input type="number" class="form-control form-control-sm" min="0" [(ngModel)]="item.price" [ngModelOptions]="{standalone: true}">
+                                                </td>
+                                                <td class="text-center">
+                                                    <input type="number" class="form-control form-control-sm" min="0" [(ngModel)]="item.imageNum" [ngModelOptions]="{standalone: true}">
                                                 </td>
                                                 <td class="text-center">
                                                     <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'DELETE' | translate}}" (click)="parametersRemove(field.name, index)">

@@ -461,7 +461,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
             this.model[fieldName] = [];
         }
         this.model[fieldName].push({
-            name: '', value: '', price: 0
+            name: '', value: '', price: 0, imageNum: 0
         });
     }
 

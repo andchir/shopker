@@ -54,6 +54,7 @@ var APP_LANG = {
     "GENERATE": "Generate",
     "GROUP": "Group",
     "ID": "ID",
+    "IMAGE_NUMBER": "Number of the image",
     "INPUT_OPTIONS": "Input options",
     "INPUT_TYPE": "Input type",
     "LOGOUT": "Log out",

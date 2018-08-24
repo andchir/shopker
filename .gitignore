@@ -24,3 +24,4 @@
 /src/AppBundle/Document/**/*.php~
 /app/config/settings.yml
 /docs/wiki/
+/node_modules/

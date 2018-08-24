@@ -9,16 +9,7 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 
     {% block stylesheets -%}
-        {% stylesheets
-            'shk-app/node_modules/bootstrap/dist/css/bootstrap.min.css'
-            'shk-app/node_modules/nouislider/distribute/nouislider.min.css'
-            'shk-app/css/icomoon/style.css'
-            'shk-app/css/styles.css'
-            filter='minifycsscompressor'
-            output='css/app.min.css'
-        -%}
-            <link href="{{ asset_url }}" rel="stylesheet">
-        {% endstylesheets %}
+         <link href="{{ asset('bundles/app_build/app_styles.css') }}" rel="stylesheet">
     {% endblock %}
 
 </head>
@@ -27,18 +18,7 @@
 {% block body %}{% endblock %}
 
 {% block javascripts %}
-    {% javascripts
-        'shk-app/node_modules/jquery/dist/jquery.min.js'
-        'shk-app/node_modules/popper.js/dist/umd/popper.min.js'
-        'shk-app/node_modules/bootstrap/dist/js/bootstrap.min.js'
-        'shk-app/node_modules/wnumb/wNumb.js'
-        'shk-app/node_modules/nouislider/distribute/nouislider.min.js'
-        'shk-app/js/shopkeeper.js'
-        filter='jsmin'
-        output='js/app.min.js'
-    -%}
-        <script src="{{ asset_url }}"></script>
-    {% endjavascripts -%}
+    <script src="{{ asset('bundles/app_build/app.js') }}"></script>
     <script>
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()

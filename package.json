@@ -4,14 +4,13 @@
   "description": "Shopping cart and orders management",
   "main": "",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "encore": "./node_modules/.bin/encore"
   },
   "author": "Andchir",
   "license": "MIT",
   "devDependencies": {
-    "@angular/cli": "^1.0.0"
+    "@symfony/webpack-encore": "^0.20.1"
   },
-  "dependencies": {
-    "@angular/cli": "^1.1.2"
-  }
+  "dependencies": {}
 }

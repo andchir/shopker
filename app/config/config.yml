@@ -103,13 +103,6 @@ doctrine_cache:
             aliases:
                 - mongodb_cache
 
-assetic:
-    debug:          '%kernel.debug%'
-    use_controller: false
-    filters:
-        minifycsscompressor: ~
-        jsmin: ~
-
 liip_imagine:
     loaders:
         default:

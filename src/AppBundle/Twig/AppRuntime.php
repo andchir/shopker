@@ -313,10 +313,10 @@ class AppRuntime
     {
         $templateName = $this->getTemplateName($environment, 'chunks/fields/', $chunkName, $chunkNamePrefix);
 
-        $fileFields = array_filter($itemData, function($key) use ($fieldBaseName) {
-            return $key === $fieldBaseName
-                || strpos($key, "{$fieldBaseName}__") !== false;
-        }, ARRAY_FILTER_USE_KEY);
+        $fileFields = array_filter($itemData, function($val, $key) use ($fieldBaseName) {
+            return ($key === $fieldBaseName || strpos($key, "{$fieldBaseName}__") !== false)
+                && is_array($val);
+        }, ARRAY_FILTER_USE_BOTH);
 
         return $environment->render($templateName, [
             'fieldBaseName' => $fieldBaseName,

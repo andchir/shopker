@@ -13,7 +13,6 @@
 !var/sessions/.gitkeep
 !var/SymfonyRequirements.php
 /vendor/
-/web/bundles/
 /web/node_modules/
 /web/lib/
 /web/shk-app/node_modules/

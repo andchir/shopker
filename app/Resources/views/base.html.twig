@@ -18,11 +18,10 @@
 {% block body %}{% endblock %}
 
 {% block javascripts %}
+    <script src="{{ asset('bundles/app_build/manifest.js') }}"></script>
+    <script src="{{ asset('bundles/app_build/common.js') }}"></script>
     <script src="{{ asset('bundles/app_build/app.js') }}"></script>
     <script>
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        });
         var shk = new Shopkeeper();
     </script>
 {% endblock %}

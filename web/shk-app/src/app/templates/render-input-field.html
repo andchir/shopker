@@ -151,10 +151,19 @@
                             </div>
                             <div class="col-md-7">
 
-                                <p-colorPicker [inputId]="'field_' + field.name"
-                                               [formControlName]="field.name"
-                                               [inline]="field.inputProperties['inline']"
-                                               [(ngModel)]="model[field.name]"></p-colorPicker>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="position-relative">
+                                            <div class="position-absolute pos-absolute-right" style="right: 3px; top: 3px;">
+                                                <p-colorPicker [inputId]="'field_' + field.name"
+                                                               [formControlName]="field.name"
+                                                               [inline]="field.inputProperties['inline']"
+                                                               [(ngModel)]="model[field.name]"></p-colorPicker>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control" maxlength="7" [(ngModel)]="model[field.name]" [ngModelOptions]="{standalone: true}">
+                                    </div>
+                                </div>
 
                                 <div *ngIf="formErrors[field.name]" class="alert alert-danger">
                                     {{formErrors[field.name]}}

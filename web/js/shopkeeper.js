@@ -1,6 +1,6 @@
 /**
  * Shopkeeper
- * @version 4.0.0alpha
+ * @version 4.0.0beta5
  * @author Andchir<andchir@gmail.com>
  */
 

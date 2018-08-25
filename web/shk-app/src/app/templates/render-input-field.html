@@ -5,7 +5,7 @@
         <ng-template ngbTabContent>
             <div class="pt-3">
 
-                <div class="form-group show-on-hover-parent"
+                <div class="form-group"
                      [class.form-group-message]="formErrors[field.name]"
                      [formGroup]="form"
                      *ngFor="let field of fields | filterFieldByGroup: groupName">
@@ -84,39 +84,60 @@
                         </div>
 
                         <!-- file -->
-                        <div class="min-height110" *ngSwitchCase="'file'">
-                            <div class="mb-1">
-                                <label for="field_{{field.name}}">
-                                    {{field.title}}
-                                    <span class="text-danger" *ngIf="field.required">*</span>
-                                </label>
-                            </div>
-                            <div class="text-center">
-                                <input type="file" id="field_{{field.name}}" [name]="field.name" [accept]="field.inputProperties.allowed_extensions" style="display:none;" (change)="fileChange($event, field, imgPreview)" #fileInput>
-                                <input type="hidden" [formControlName]="field.name" [(ngModel)]="model[field.name]">
+                        <div class="card card-body p-2" *ngSwitchCase="'file'">
+                            <div class="min-height110 show-on-hover-parent">
+                                <div class="mb-1">
+                                    <label for="field_{{field.name}}">
+                                        {{field.title}}
+                                        <span class="text-danger" *ngIf="field.required">*</span>
+                                    </label>
+                                </div>
+                                <div class="text-center">
+                                    <input type="file" id="field_{{field.name}}" [name]="field.name" [accept]="field.inputProperties.allowed_extensions" style="display:none;" (change)="fileChange($event, field, imgPreview)" #fileInput>
+                                    <input type="hidden" [formControlName]="field.name" [(ngModel)]="model[field.name]">
 
-                                <div class="mx-auto relative" [ngClass]="{'show-on-hover-parent': field.inputProperties.has_preview_image && model[field.name]}" style="width:250px; min-height: 40px;">
-                                    <div [style.display]="field.inputProperties.has_preview_image && model[field.name] ? 'block' : 'none'">
-                                        <img [src]="getImageUrl(model[field.name])" alt="Preview" class="img-thumbnail" #imgPreview>
+                                    <div class="mx-auto relative" [ngClass]="{'show-on-hover-parent': field.inputProperties.has_preview_image && model[field.name]}" style="width:250px; min-height: 40px;">
+                                        <div [style.display]="field.inputProperties.has_preview_image && model[field.name] ? 'block' : 'none'">
+                                            <img [src]="getImageUrl(model[field.name])" alt="Preview" class="img-thumbnail" #imgPreview>
+                                        </div>
+                                        <div class="file-buttons show-on-hover-child-left">
+                                            <button type="button" class="btn btn-secondary btn-wide mr-2" (click)="fileInput.click()">
+                                                <i class="icon-upload"></i>
+                                                Обзор
+                                            </button>
+                                            <button type="button" class="btn btn-secondary" *ngIf="model[field.name]" (click)="fileClear(field.name, imgPreview)" title="Clear">
+                                                <i class="icon-cross"></i>
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div class="file-buttons show-on-hover-child-left">
-                                        <button type="button" class="btn btn-secondary btn-wide mr-2" (click)="fileInput.click()">
-                                            <i class="icon-upload"></i>
-                                            Обзор
-                                        </button>
-                                        <button type="button" class="btn btn-secondary" *ngIf="model[field.name]" (click)="fileClear(field.name, imgPreview)" title="Clear">
-                                            <i class="icon-cross"></i>
-                                        </button>
+                                    <div class="pt-3 text-secondary" *ngIf="model[field.name] && model[field.name].title">
+                                        <i class="icon-file"></i>
+                                        {{model[field.name].title}}.{{model[field.name].extension}}
                                     </div>
-                                </div>
-                                <div class="pt-3 text-secondary" *ngIf="model[field.name] && model[field.name].title">
-                                    <i class="icon-file"></i>
-                                    {{model[field.name].title}}.{{model[field.name].extension}}
-                                </div>
 
-                                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
-                                    {{formErrors[field.name]}}
+                                    <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                                        {{formErrors[field.name]}}
+                                    </div>
                                 </div>
+                                <ng-container *ngIf="field.inputProperties.multiple">
+                                    <div class="show-on-hover-child pos-absolute-right-bottom">
+                                        <div class="py-1">
+                                            <button type="button" class="btn btn-secondary btn-sm" [ngbTooltip]="'MOVE_UP' | translate" placement="left" (click)="fieldMove(field, 'up', $event)">
+                                                <i class="icon-arrow-up"></i>
+                                            </button>
+                                        </div>
+                                        <div class="py-1">
+                                            <button type="button" class="btn btn-secondary btn-sm" [ngbTooltip]="'MOVE_DOWN' | translate" placement="left" (click)="fieldMove(field, 'down', $event)">
+                                                <i class="icon-arrow-down"></i>
+                                            </button>
+                                        </div>
+                                        <div class="py-1">
+                                            <button type="button" class="btn btn-secondary btn-sm" [ngbTooltip]="'ADD' | translate" placement="left" (click)="fieldAdd(field, $event)">
+                                                <i class="icon-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </ng-container>
                             </div>
                         </div>
 
@@ -390,27 +411,6 @@
                         </div>
 
                     </div>
-
-                    <ng-container *ngIf="field.inputProperties.multiple">
-                        <div class="show-on-hover-child pos-absolute-right-bottom">
-                            <div class="py-1">
-                                <button type="button" class="btn btn-secondary btn-sm" [ngbTooltip]="'MOVE_UP' | translate" placement="left" (click)="fieldMove(field, 'up', $event)">
-                                    <i class="icon-arrow-up"></i>
-                                </button>
-                            </div>
-                            <div class="py-1">
-                                <button type="button" class="btn btn-secondary btn-sm" [ngbTooltip]="'MOVE_DOWN' | translate" placement="left" (click)="fieldMove(field, 'down', $event)">
-                                    <i class="icon-arrow-down"></i>
-                                </button>
-                            </div>
-                            <div class="py-1">
-                                <button type="button" class="btn btn-secondary btn-sm" [ngbTooltip]="'ADD' | translate" placement="left" (click)="fieldAdd(field, $event)">
-                                    <i class="icon-plus"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <hr>
-                    </ng-container>
 
                 </div>
 

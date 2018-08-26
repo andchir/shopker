@@ -346,14 +346,14 @@ class AppRuntime
         $utilsService = $this->container->get('app.utils');
         /** @var FormBuilder $formBuilder */
         $formBuilder = $this->container->get('form.factory')->createBuilder();
-        $formFields = $utilsService->parseYaml($formName, 'forms/');
+        $formOptions = $utilsService->parseYaml($formName, 'forms/');
         $formTypeClassPath = 'Symfony\Component\Form\Extension\Core\Type\\';
 
-        if (empty($formFields) || !is_array($formFields) || empty($formFields['fields'])) {
+        if (empty($formOptions) || !is_array($formOptions) || empty($formOptions['fields'])) {
             return '';
         }
 
-        foreach ($formFields['fields'] as $field) {
+        foreach ($formOptions['fields'] as $field) {
             if (empty($field['type'])) {
                 $field['type'] = 'TextType';
             }

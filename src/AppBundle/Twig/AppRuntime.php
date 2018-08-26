@@ -384,13 +384,13 @@ class AppRuntime
                     'formData' => $formData
                 ]);
 
-                $utilsService->sendMail($emailSubject, $emailBody, $emailTo);
+                if ($utilsService->sendMail($emailSubject, $emailBody, $emailTo)) {
+                    $request->getSession()
+                        ->getFlashBag()
+                        ->add('messages', 'email.send_successful');
 
-                $request->getSession()
-                    ->getFlashBag()
-                    ->add('messages', 'email.send_successful');
-
-                return '';
+                    return '';
+                }
             }
         }
 

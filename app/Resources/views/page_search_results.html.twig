@@ -27,7 +27,7 @@
             {% if totalItems is defined and totalItems > 0 %}
 
                 <p>
-                    {{ '%count% product found|%count%  products found' | transchoice(totalItems) }}.
+                    {{ '%count% product found|%count% products found' | transchoice(totalItems) }}.
                 </p>
 
                 {% for item in items %}

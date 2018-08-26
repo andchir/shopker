@@ -69,6 +69,8 @@ Recalculate: Пересчитать
 Your name: Ваше имя
 Your email: Ваш адрес эл. почты
 E-mail text: Тест письма
+Captcha: Защитный код
+Email from your website: Письмо с вашего сайта
 
 Sort by: Сортировать по
 catalog.sort_by_novelty: Новизне
@@ -111,3 +113,4 @@ Order status: Статус
 password_reset.mail_subject: Сброс пароля
 profile.contacts_data_saved_successfully: Данные успешно созранены.
 email.send_successful: Письмо успешно отправлено.
+email.recipient_error: Не указан адрес получателя.

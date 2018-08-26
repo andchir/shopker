@@ -10,11 +10,11 @@ use AppBundle\Service\ShopCartService;
 use AppBundle\Service\UtilsService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormBuilder;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Cache\Simple\FilesystemCache;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class AppRuntime
 {
@@ -342,62 +342,62 @@ class AppRuntime
         }
         /** @var Request $request */
         $request = $this->requestStack->getCurrentRequest();
+        /** @var TranslatorInterface $translator */
+        $translator = $this->container->get('translator');
         /** @var UtilsService $utilsService */
         $utilsService = $this->container->get('app.utils');
         /** @var FormBuilder $formBuilder */
         $formBuilder = $this->container->get('form.factory')->createBuilder();
         $formOptions = $utilsService->parseYaml($formName, 'forms/');
-        $formTypeClassPath = 'Symfony\Component\Form\Extension\Core\Type\\';
 
         if (empty($formOptions) || !is_array($formOptions) || empty($formOptions['fields'])) {
             return '';
         }
 
-        foreach ($formOptions['fields'] as $field) {
-            if (empty($field['type'])) {
-                $field['type'] = 'TextType';
-            }
-            if (empty($field['label'])) {
-                $field['label'] = $field['name'];
-            }
-            if (empty($field['attr'])) {
-                $field['attr'] = [];
-            }
-            $formBuilder->add(
-                $field['name'],
-                "{$formTypeClassPath}{$field['type']}",
-                [
-                    'label' => $field['label'],
-                    'attr' => $field['attr']
-                ]
-            );
-        }
+        UtilsService::formAddFields($formBuilder, $formOptions['fields']);
 
         $form = $formBuilder->getForm();
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $formData = $form->getData();
+            $emailTo = !empty($formOptions['emailTo'])
+                ? $formOptions['emailTo']
+                : $this->container->getParameter('admin_email');
 
-            // TODO: send email
-            var_dump($formData);
+            if (empty($emailTo)) {
 
-            $request->getSession()
-                ->getFlashBag()
-                ->add('messages', 'email.send_successful');
+                $form->addError(new FormError($translator->trans('email.recipient_error')));
 
-            return '';
+            } else {
+
+                $formData = $form->getData();
+                $emailSubject = !empty($formOptions['emailSubject'])
+                    ? $translator->trans($formOptions['emailSubject'])
+                    : '';
+
+                $formTextFields = array_filter($formOptions['fields'], function($field) {
+                    return !in_array($field['type'], ['SubmitType', 'CaptchaType']);
+                });
+                $emailBody = $environment->render('email/email_custom_form.html.twig', [
+                    'fields' => $formTextFields,
+                    'formData' => $formData
+                ]);
+
+                $utilsService->sendMail($emailSubject, $emailBody, $emailTo);
+
+                $request->getSession()
+                    ->getFlashBag()
+                    ->add('messages', 'email.send_successful');
+
+                return '';
+            }
         }
 
-        $tpl = '';
-        if (!is_null($layoutPath)) {
-            $tpl .= "{% form_theme {$varName} '{$layoutPath}' %}";
-        }
-        $tpl .= "{{ form_start({$varName}) }}{{ form_widget({$varName}) }}{{ form_end({$varName}) }}";
-
-        return $environment->createTemplate($tpl)->render([
-            'form' => $form->createView()
+        return $environment->render('form/custom_form.html.twig', [
+            'form' => $form->createView(),
+            'varName' => $varName,
+            'layoutPath' => $layoutPath
         ]);
     }
 

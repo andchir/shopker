@@ -20,6 +20,7 @@ class AppKernel extends Kernel
             new Liip\ImagineBundle\LiipImagineBundle(),
             new AppBundle\AppBundle(),
             new Andchir\OmnipayBundle\OmnipayBundle(),
+            new Gregwar\CaptchaBundle\GregwarCaptchaBundle(),
             new CoreSphere\ConsoleBundle\CoreSphereConsoleBundle()
         ];
 

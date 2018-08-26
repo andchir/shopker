@@ -6,6 +6,7 @@ use AppBundle\Document\ContentType;
 use AppBundle\Document\Order;
 use AppBundle\Document\Setting;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
 
@@ -185,12 +186,12 @@ class UtilsService
             $queryOptions['sort_by'] = '_id';
         }
 
-        $queryOptions['sort_by'] = UtilsService::stringToArray($queryOptions['sort_by']);
+        $queryOptions['sort_by'] = self::stringToArray($queryOptions['sort_by']);
         if (!empty($fieldNames)) {
-            $queryOptions['sort_by'] = UtilsService::arrayFilter($queryOptions['sort_by'], $fieldNames);
+            $queryOptions['sort_by'] = self::arrayFilter($queryOptions['sort_by'], $fieldNames);
         }
-        $queryOptions['sort_dir'] = UtilsService::stringToArray($queryOptions['sort_dir']);
-        $queryOptions['sort_dir'] = UtilsService::arrayFilter($queryOptions['sort_dir'], ['asc', 'desc']);
+        $queryOptions['sort_dir'] = self::stringToArray($queryOptions['sort_dir']);
+        $queryOptions['sort_dir'] = self::arrayFilter($queryOptions['sort_dir'], ['asc', 'desc']);
 
         if(empty($queryOptions['sort_by'])){
             $queryOptions['sort_by'] = [$queryOptionsDefault['sort_by']];
@@ -241,6 +242,35 @@ class UtilsService
             }
         }
         return $output;
+    }
+
+    /**
+     * @param FormBuilder $formBuilder
+     * @param array $fields
+     */
+    public static function formAddFields(FormBuilder $formBuilder, $fields)
+    {
+        $formTypeClassPath = 'Symfony\Component\Form\Extension\Core\Type\\';
+        $formCaptchaTypeClassPath = 'Gregwar\CaptchaBundle\Type\\';
+        $fieldDefaults = [
+            'type' => 'TextType',
+            'label' => '',
+            'attr' => []
+        ];
+        foreach ($fields as $field) {
+            $field = array_merge($fieldDefaults, $field);
+            $classPath = $field['type'] == 'CaptchaType'
+                ? "{$formCaptchaTypeClassPath}{$field['type']}"
+                : "{$formTypeClassPath}{$field['type']}";
+            $formBuilder->add(
+                $field['name'],
+                $classPath,
+                [
+                    'label' => $field['label'],
+                    'attr' => $field['attr']
+                ]
+            );
+        }
     }
 
     /**

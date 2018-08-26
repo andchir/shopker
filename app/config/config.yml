@@ -140,6 +140,8 @@ liip_imagine:
                 thumbnail: { size: [800, 800], mode: inset }
                 background: { size: [800, 800], position: center, color: '#ffffff' }
 
+gregwar_captcha: ~
+
 omnipay:
     success_url: "/profile/history_orders"
     fail_url: "/"

@@ -79,3 +79,15 @@
         </div>{#--#}
     </div>
 {%- endblock checkbox_row %}
+
+{% block captcha_widget %}
+    <div class="form-group-captcha">
+        <div class="float-left">
+            <img src="{{ captcha_code }}" width="{{ captcha_width }}" height="{{ captcha_height }}" alt="">
+        </div>
+        <div style="margin-left: {{ captcha_width }}px; padding-left: 15px;">
+            {{ form_widget(form) }}
+        </div>
+        <div class="clearfix"></div>
+    </div>
+{% endblock %}

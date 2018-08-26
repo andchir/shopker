@@ -9,6 +9,10 @@ use AppBundle\Service\SettingsService;
 use AppBundle\Service\ShopCartService;
 use AppBundle\Service\UtilsService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Cache\Simple\FilesystemCache;
 
@@ -321,6 +325,79 @@ class AppRuntime
         return $environment->render($templateName, [
             'fieldBaseName' => $fieldBaseName,
             'fileFields' => $fileFields
+        ]);
+    }
+
+    /**
+     * @param \Twig_Environment $environment
+     * @param string $formName
+     * @param string|null $layoutPath
+     * @param string $varName
+     * @return string
+     */
+    public function renderFormFunction(\Twig_Environment $environment, $formName = '', $layoutPath = null, $varName = 'form')
+    {
+        if (!$formName) {
+            return '';
+        }
+        /** @var Request $request */
+        $request = $this->requestStack->getCurrentRequest();
+        /** @var UtilsService $utilsService */
+        $utilsService = $this->container->get('app.utils');
+        /** @var FormBuilder $formBuilder */
+        $formBuilder = $this->container->get('form.factory')->createBuilder();
+        $formFields = $utilsService->parseYaml($formName, 'forms/');
+        $formTypeClassPath = 'Symfony\Component\Form\Extension\Core\Type\\';
+
+        if (empty($formFields) || !is_array($formFields) || empty($formFields['fields'])) {
+            return '';
+        }
+
+        foreach ($formFields['fields'] as $field) {
+            if (empty($field['type'])) {
+                $field['type'] = 'TextType';
+            }
+            if (empty($field['label'])) {
+                $field['label'] = $field['name'];
+            }
+            if (empty($field['attr'])) {
+                $field['attr'] = [];
+            }
+            $formBuilder->add(
+                $field['name'],
+                "{$formTypeClassPath}{$field['type']}",
+                [
+                    'label' => $field['label'],
+                    'attr' => $field['attr']
+                ]
+            );
+        }
+
+        $form = $formBuilder->getForm();
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $formData = $form->getData();
+
+            // TODO: send email
+            var_dump($formData);
+
+            $request->getSession()
+                ->getFlashBag()
+                ->add('messages', 'email.send_successful');
+
+            return '';
+        }
+
+        $tpl = '';
+        if (!is_null($layoutPath)) {
+            $tpl .= "{% form_theme {$varName} '{$layoutPath}' %}";
+        }
+        $tpl .= "{{ form_start({$varName}) }}{{ form_widget({$varName}) }}{{ form_end({$varName}) }}";
+
+        return $environment->createTemplate($tpl)->render([
+            'form' => $form->createView()
         ]);
     }
 

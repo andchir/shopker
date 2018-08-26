@@ -1,11 +1,19 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}{{ currentPage.title | default('') }} - {{ app_name }}{% endblock %}
+
 {% block body %}
     {% include 'header.html.twig' %}
     <main role="main" class="container min-height400">
 
         {{ renderOutputTypeChunk(currentPage, fields, 'header', 'page_') }}
         {{ renderOutputTypeChunk(currentPage, fields, 'description') }}
+
+        {% if currentPage.form_name is defined -%}
+            {{ renderForm(currentPage.form_name, 'form/bootstrap_4_horizontal_layout.html.twig') }}
+        {% endif %}
+
+        {% include 'flash_messages.html.twig' %}
 
     </main>
 {% endblock %}

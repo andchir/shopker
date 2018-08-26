@@ -89,7 +89,11 @@ class AppExtension extends AbstractExtension
             new TwigFunction('arraySearch', [AppRuntime::class, 'arraySearchFunction']),
             new TwigFunction('switch', [AppRuntime::class, 'switchFunction'], [
                 'is_safe' => ['html']
-            ])
+            ]),
+            new TwigFunction('renderForm', [AppRuntime::class, 'renderFormFunction'], [
+                'is_safe' => ['html'],
+                'needs_environment' => true
+            ]),
         ];
     }
 

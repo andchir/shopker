@@ -16,3 +16,4 @@ mail_subject.new_order: New order
 mail_subject.order_status_change: Order status updated
 password_reset.mail_subject: Password reset
 profile.contacts_data_saved_successfully: The data was successfully saved.
+email.send_successful: Email sent successfully.

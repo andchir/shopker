@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}{{ currentPage.title | default('') }} - {{ app_name }}{% endblock %}
+
 {% block body %}
     {% include 'header.html.twig' %}
     <main role="main" class="container">

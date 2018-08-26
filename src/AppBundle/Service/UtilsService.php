@@ -6,6 +6,8 @@ use AppBundle\Document\ContentType;
 use AppBundle\Document\Order;
 use AppBundle\Document\Setting;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Yaml\Exception\ParseException;
+use Symfony\Component\Yaml\Yaml;
 
 class UtilsService
 {
@@ -219,6 +221,26 @@ class UtilsService
         }
 
         return $queryOptions;
+    }
+
+    /**
+     * @param string $yamlFileName
+     * @param string $path
+     * @return array|mixed
+     */
+    public function parseYaml($yamlFileName, $path)
+    {
+        $rootPath = $this->container->getParameter('kernel.root_dir');
+        $ymlFilePath = $rootPath . DIRECTORY_SEPARATOR . "Resources/{$path}{$yamlFileName}.yml";
+        $output = [];
+        if (file_exists($ymlFilePath)) {
+            try {
+                $output = Yaml::parse(file_get_contents($ymlFilePath));
+            } catch (ParseException $e) {
+                return [];
+            }
+        }
+        return $output;
     }
 
     /**

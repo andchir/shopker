@@ -1,0 +1,5 @@
+fields:
+    - { name: name, label: Your name, type: TextType }
+    - { name: email, label: Your email, type: EmailType }
+    - { name: content, label: E-mail text, type: TextareaType, attr: { rows: 6 } }
+    - { name: submit, label: Submit, type: SubmitType }

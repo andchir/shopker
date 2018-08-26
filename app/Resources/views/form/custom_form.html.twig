@@ -1,4 +1,6 @@
+{% if layoutPath is not empty %}
 {% form_theme form layoutPath %}
+{% endif %}
 
 {{ form_start(form) }}
 {{ form_widget(form) }}

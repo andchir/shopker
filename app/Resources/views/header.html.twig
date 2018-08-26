@@ -50,16 +50,16 @@
 <header>
     <div class="inner">
         <div class="container">
-            <div class="float-right">
+            <div class="float-right ml-2">
                 {{ currencyList() }}
             </div>
 
             {% if app.request.attributes.get('_route') not in ['search'] %}
-                <div class="float-right mr-2 position-relative">
+                <div class="float-right position-relative">
                     <div class="position-absolute pos-right-top">
                         <form class="d-block" action="{{ path('search_results') }}" method="get" id="formSearch">
                             <div class="input-group input-group-sm" style="width: 220px;">
-                                <input type="text" class="form-control" placeholder="Search..." name="query" value="{{ app.request.get('query') }}">
+                                <input type="text" class="form-control" placeholder="{{ 'Search' | trans }}..." name="query">
                                 <div class="input-group-append">
                                     <button type="submit" class="btn btn-outline-secondary">
                                         <i class="icon-search"></i>

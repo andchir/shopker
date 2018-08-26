@@ -10,17 +10,21 @@
 
     <div class="carousel-inner border">
 
-        {% for fieldName in fileFields|keys %}
-            <div class="carousel-item{% if fieldName == fieldBaseName %} active{% endif %}">
-                {% if fileFields[fieldName] is not empty %}
-                    <a data-toggle="modal" data-target="#imageModal" href="{{ imageUrl(fileFields[fieldName]) }}" target="_blank">
-                        <img class="d-block w-100" src="{{ imageUrl(fileFields[fieldName]) | imagine_filter('thumb_medium') }}" alt="">
-                    </a>
-                {% else %}
-                    <img src="/img/nofoto.png" alt="" style="width: 100%;">
-                {% endif %}
-            </div>
-        {% endfor %}
+        {% if fileFields | length > 0 %}
+            {% for fieldName in fileFields|keys %}
+                <div class="carousel-item{% if fieldName == fieldBaseName %} active{% endif %}">
+                    {% if fileFields[fieldName] is not empty %}
+                        <a data-toggle="modal" data-target="#imageModal" href="{{ imageUrl(fileFields[fieldName]) }}" target="_blank">
+                            <img class="d-block w-100" src="{{ imageUrl(fileFields[fieldName]) | imagine_filter('thumb_medium') }}" alt="">
+                        </a>
+                    {% else %}
+                        <img src="/img/nofoto.png" alt="" style="width: 100%;">
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <img src="/img/nofoto.png" alt="" style="width: 100%;">
+        {% endif %}
 
     </div>
 

@@ -373,7 +373,7 @@ class CatalogFixtures extends Fixture
             ],
             [
                 'title' => 'Основной текст',
-                'name' => 'text',
+                'name' => 'description',
                 'description' => '',
                 'inputType' => 'rich_text',
                 'inputProperties' => [
@@ -744,19 +744,19 @@ class CatalogFixtures extends Fixture
                     [
                         'title' => 'О магазине',
                         'name' => 'about',
-                        'text' => 'Тут будет описание...',
+                        'description' => 'Тут будет описание...',
                         'menuIndex' => 1
                     ],
                     [
                         'title' => 'Оплата и доставка',
                         'name' => 'payment',
-                        'text' => 'Тут будет описание...',
+                        'description' => 'Тут будет описание...',
                         'menuIndex' => 2
                     ],
                     [
                         'title' => 'Контакты',
                         'name' => 'contacts',
-                        'text' => '',
+                        'description' => '',
                         'form_name' => 'contacts',
                         'menuIndex' => 3
                     ]

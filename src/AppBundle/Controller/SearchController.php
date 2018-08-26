@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Document\ContentType;
 use AppBundle\Service\UtilsService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -36,13 +37,26 @@ class SearchController extends CatalogController
         $queryOptions = UtilsService::getQueryOptions('', $queryString, [], $pageSizeArr);
         $queryOptions['sortOptions'] = ['parentId' => 'asc', 'title' => 'asc'];
 
+        /** @var ContentType $contentType */
+        $contentType = $this->getContentTypeRepository()->findOneBy([
+            'collection' => $searchCollections[0]
+        ]);
+        if (!$contentType) {
+            return $this->render('page_search_results.html.twig');
+        }
+
+        $contentTypeFields = $contentType->getFields();
+        $options = [
+            'currentCategoryUri' => '',
+            'systemNameField' => $contentType->getSystemNameField()
+        ];
+        list($filters, $fieldsAll) = $this->getFieldsData($contentTypeFields, $options,'page', [], $queryOptions);
+
         $collection = $this->getCollection($searchCollections[0]);
 
         $criteria = [
             'isActive' => true,
-            '$text' => [
-                '$search' => $searchWord
-            ]
+            '$text' => [ '$search' => $searchWord ]
         ];
 
         $total = $collection->find($criteria)->count();
@@ -50,12 +64,14 @@ class SearchController extends CatalogController
         /* pages */
         $pagesOptions = UtilsService::getPagesOptions($queryOptions, $total, $pageSizeArr);
 
-        $items = $collection->find($criteria)
-            ->sort($queryOptions['sortOptions'])
+        $items = $collection
+            ->find($criteria, ['score' => [ '$meta' => 'textScore' ]])
+            ->sort(['score' => [ '$meta' => 'textScore' ]])
             ->skip($pagesOptions['skip'])
             ->limit($queryOptions['limit']);
 
         return $this->render('page_search_results.html.twig', [
+            'fieldsAll' => $fieldsAll,
             'totalItems' => $total,
             'items' => $items,
             'searchWord' => $searchWord,

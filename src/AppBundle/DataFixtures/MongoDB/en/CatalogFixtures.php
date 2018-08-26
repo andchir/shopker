@@ -373,7 +373,7 @@ class CatalogFixtures extends Fixture
             ],
             [
                 'title' => 'Main text',
-                'name' => 'text',
+                'name' => 'description',
                 'description' => '',
                 'inputType' => 'rich_text',
                 'inputProperties' => [
@@ -744,21 +744,21 @@ class CatalogFixtures extends Fixture
                     [
                         'title' => 'About store',
                         'name' => 'about',
-                        'text' => 'There will be a description...',
+                        'description' => 'There will be a description...',
                         'form_name' => '',
                         'menuIndex' => 1
                     ],
                     [
                         'title' => 'Payment and delivery',
                         'name' => 'payment',
-                        'text' => 'There will be a description...',
+                        'description' => 'There will be a description...',
                         'form_name' => '',
                         'menuIndex' => 2
                     ],
                     [
                         'title' => 'Contacts',
                         'name' => 'contacts',
-                        'text' => '',
+                        'description' => '',
                         'form_name' => 'contacts',
                         'menuIndex' => 3
                     ]

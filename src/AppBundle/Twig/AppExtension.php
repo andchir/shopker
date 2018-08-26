@@ -107,18 +107,19 @@ class AppExtension extends AbstractExtension
     {
         $baseUrl = $this->container->get('router')->getContext()->getBaseUrl();
         $path = $baseUrl;
-
-        if (!$parentUri && !$systemName) {
+        if (!$parentUri || !$systemName) {
             $parentId = isset($itemData['parentId']) ? $itemData['parentId'] : 0;
             if ($parentId) {
                 if (isset($this->cache['categoryUriData'][$parentId])) {
                     $parentUri = $this->cache['categoryUriData'][$parentId]['uri'];
-                    $systemNameField = isset($this->cache['categoryUriData'][$parentId]['systemNameField'])
-                        ? $this->cache['categoryUriData'][$parentId]['systemNameField']
-                        : '';
-                    $systemName = $systemNameField && !empty($itemData[$systemNameField])
-                        ? $itemData[$systemNameField]
-                        : '';
+                    if (!$systemName) {
+                        $systemNameField = isset($this->cache['categoryUriData'][$parentId]['systemNameField'])
+                            ? $this->cache['categoryUriData'][$parentId]['systemNameField']
+                            : '';
+                        $systemName = $systemNameField && !empty($itemData[$systemNameField])
+                            ? $itemData[$systemNameField]
+                            : '';
+                    }
                 } else {
                     /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
                     $dm = $this->container->get('doctrine_mongodb')->getManager();
@@ -131,10 +132,12 @@ class AppExtension extends AbstractExtension
                     $systemNameField = '';
                     if ($category) {
                         $parentUri = $category->getUri();
-                        $systemNameField = $category->getContentType()->getSystemNameField();
-                        $systemName = $systemNameField && !empty($itemData[$systemNameField])
-                            ? $itemData[$systemNameField]
-                            : '';
+                        if (!$systemName) {
+                            $systemNameField = $category->getContentType()->getSystemNameField();
+                            $systemName = $systemNameField && !empty($itemData[$systemNameField])
+                                ? $itemData[$systemNameField]
+                                : '';
+                        }
                     }
                     if (!isset($this->cache['categoryUriData'])) {
                         $this->cache['categoryUriData'] = [];
@@ -317,6 +320,7 @@ class AppExtension extends AbstractExtension
             ? $itemData[$properties['systemNameField']]
             : '';
         $properties['fieldProperties'] = $field;
+        $properties['itemData'] = $itemData;
 
         if (!empty($value)) {
             $templateName = $this->getTemplateName($environment, 'chunks/fields/', $chunkName, $chunkNamePrefix);

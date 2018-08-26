@@ -45,7 +45,9 @@ Proceed to checkout: Оформить заказ
 Edit an order: Редактировать заказ
 Selected: Выбрано
 Close: Закрыть
-product with a total cost|products with a total cost: "товар на сумму|товара на сумму|товаров на сумму"
+product|products: товар|товара|товаров
+%count% product found|%count%  products found: Найден %count% товар|Найдено %count% товара|Найдено %count%  товаров
+product with a total cost|products with a total cost: товар на сумму|товара на сумму|товаров на сумму
 Your cart is empty.: Ваша корзина пуста.
 Thanks for your order!: Спасибо за заказ! В ближайшее время Вы получите подтверждение по эл. почте.
 Go to home page: На главную страницу

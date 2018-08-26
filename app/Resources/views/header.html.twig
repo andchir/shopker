@@ -10,7 +10,7 @@
             <div class="d-inline-block pt-2 pb-2 pl-2">
                 {% if is_granted('ROLE_USER') %}
                     {% if is_granted('ROLE_ADMIN') %}
-                        <a class="btn btn-sm btn-outline-primary" data-toggle="tooltip" data-placement="bottom" title="{{ 'Administration' | trans }}" href="{{ path('admin') }}" target="_blank">
+                        <a class="btn btn-sm btn-outline-primary" data-toggle="tooltip" title="{{ 'Administration' | trans }}" href="{{ path('admin') }}" target="_blank">
                             <i class="icon-cog"></i>
                         </a>
                     {% endif %}
@@ -53,6 +53,24 @@
             <div class="float-right">
                 {{ currencyList() }}
             </div>
+
+            {% if app.request.attributes.get('_route') not in ['search'] %}
+                <div class="float-right mr-2 position-relative">
+                    <div class="position-absolute pos-right-top">
+                        <form class="d-block" action="{{ path('search_results') }}" method="get" id="formSearch">
+                            <div class="input-group input-group-sm" style="width: 220px;">
+                                <input type="text" class="form-control" placeholder="Search..." name="query" value="{{ app.request.get('query') }}">
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-outline-secondary">
+                                        <i class="icon-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            {% endif %}
+
             <a class="header-brand" href="{{ path('homepage') }}">
                 {{ app_name }}
             </a>

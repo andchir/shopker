@@ -107,12 +107,16 @@ class AppRuntime
             return $environment->createTemplate($cache->get($cacheKey))->render([]);
         }
 
-        $templateName = 'catalog/currency_list.html.twig';
         $properties = [
             'data' => $settingsService->getSettingsGroup(Setting::GROUP_CURRENCY)
         ];
+        $templateName = 'catalog/currency_list.html.twig';
 
-        $output = $environment->render($templateName, $properties);
+        if (count($properties['data']) <= 1) {
+            $output = '';
+        } else {
+            $output = $environment->render($templateName, $properties);
+        }
         $cache->set($cacheKey, $output, 60*60*24);
 
         return $output;

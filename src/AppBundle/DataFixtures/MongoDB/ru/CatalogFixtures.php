@@ -413,6 +413,26 @@ class CatalogFixtures extends Fixture
                 'showInTable' => true,
                 'showInList' => false,
                 'isFilter' => false
+            ],
+            [
+                'title' => 'Прикрепить форму',
+                'name' => 'form_name',
+                'description' => '',
+                'inputType' => 'text',
+                'inputProperties' => [
+                    'value' => '',
+                    'handler' => ''
+                ],
+                'outputType' => 'text',
+                'outputProperties' => [
+                    'className' => '',
+                    'chunkName' => ''
+                ],
+                'group' => 'Параметры',
+                'required' => false,
+                'showInTable' => true,
+                'showInList' => false,
+                'isFilter' => false
             ]
         ];
 
@@ -732,6 +752,13 @@ class CatalogFixtures extends Fixture
                         'name' => 'payment',
                         'text' => 'Тут будет описание...',
                         'menuIndex' => 2
+                    ],
+                    [
+                        'title' => 'Контакты',
+                        'name' => 'contacts',
+                        'text' => '',
+                        'form_name' => 'contacts',
+                        'menuIndex' => 3
                     ]
                 ]
             ]
@@ -803,6 +830,17 @@ class CatalogFixtures extends Fixture
             $product['isActive'] = true;
             $product['_id'] = $this->productController->getNextId($contentType->getCollection(), $settings['mongodb_database']);
             $collection->insert($product);
+        }
+
+        // Add text index
+        $indexInfo = $collection->getIndexInfo();
+        $textIndex = array_filter($indexInfo, function($val) {
+            return $val['name'] === 'title_text_description_text';
+        });
+        if (!count($textIndex)) {
+            $collection->ensureIndex(array_fill_keys(['title', 'description'], 'text'), [
+                'default_language' => 'russian'
+            ]);
         }
 
         $this->productController->updateFiltersData($category, $settings['mongodb_database']);

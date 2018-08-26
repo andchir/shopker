@@ -413,6 +413,26 @@ class CatalogFixtures extends Fixture
                 'showInTable' => true,
                 'showInList' => false,
                 'isFilter' => false
+            ],
+            [
+                'title' => 'Attach Form',
+                'name' => 'form_name',
+                'description' => '',
+                'inputType' => 'text',
+                'inputProperties' => [
+                    'value' => '',
+                    'handler' => ''
+                ],
+                'outputType' => 'text',
+                'outputProperties' => [
+                    'className' => '',
+                    'chunkName' => ''
+                ],
+                'group' => 'Parameters',
+                'required' => false,
+                'showInTable' => true,
+                'showInList' => false,
+                'isFilter' => false
             ]
         ];
 
@@ -725,13 +745,22 @@ class CatalogFixtures extends Fixture
                         'title' => 'About store',
                         'name' => 'about',
                         'text' => 'There will be a description...',
+                        'form_name' => '',
                         'menuIndex' => 1
                     ],
                     [
                         'title' => 'Payment and delivery',
                         'name' => 'payment',
                         'text' => 'There will be a description...',
+                        'form_name' => '',
                         'menuIndex' => 2
+                    ],
+                    [
+                        'title' => 'Contacts',
+                        'name' => 'contacts',
+                        'text' => '',
+                        'form_name' => 'contacts',
+                        'menuIndex' => 3
                     ]
                 ]
             ]
@@ -803,6 +832,17 @@ class CatalogFixtures extends Fixture
             $product['isActive'] = true;
             $product['_id'] = $this->productController->getNextId($contentType->getCollection(), $settings['mongodb_database']);
             $collection->insert($product);
+        }
+
+        // Add text index
+        $indexInfo = $collection->getIndexInfo();
+        $textIndex = array_filter($indexInfo, function($val) {
+            return $val['name'] === 'title_text_description_text';
+        });
+        if (!count($textIndex)) {
+            $collection->ensureIndex(array_fill_keys(['title', 'description'], 'text'), [
+                'default_language' => 'english'
+            ]);
         }
 
         $this->productController->updateFiltersData($category, $settings['mongodb_database']);

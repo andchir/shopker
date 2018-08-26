@@ -220,6 +220,9 @@ class UtilsService
         if (!empty($queryOptions['filter']) && is_array($queryOptions['filter'])) {
             $queryOptions['filterStr'] = '&' . http_build_query(['filter' => $queryOptions['filter']]);
         }
+        if (!empty($queryOptions['query']) && !is_array($queryOptions['query'])) {
+            $queryOptions['filterStr'] = '&' . http_build_query(['query' => $queryOptions['query']]);
+        }
 
         return $queryOptions;
     }
@@ -327,6 +330,18 @@ class UtilsService
             $result .= mb_substr($chars, $index, 1);
         }
         return $result;
+    }
+
+    /**
+     * Get file extension
+     * @param string $filePath
+     * @return string
+     */
+    public static function getExtension($filePath)
+    {
+        $temp_arr = $filePath ? explode('.', $filePath) : [];
+        $ext = !empty($temp_arr) ? end($temp_arr) : '';
+        return strtolower($ext);
     }
 
     /**

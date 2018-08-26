@@ -11,7 +11,8 @@ global.noUiSlider = noUiSlider;
 global.shk = new Shopkeeper();
 
 $(document).ready(function() {
-    $('[data-toggle="tooltip"]').tooltip({
-        trigger: 'hover'
+    $('[data-toggle="tooltip"],.js-tooltip').tooltip({
+        trigger: 'hover',
+        placement: 'bottom'
     });
 });

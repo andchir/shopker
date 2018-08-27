@@ -14,6 +14,8 @@ var APP_LANG = {
     "CATALOG": "Каталог",
     "CATEGORY": "Категория",
     "CLEAR_CACHE": "Очистить кэш",
+    "CLEAR_FILE_CACHE": "Очистить файловый кэш",
+    "CLEAR_SYSTEM_CACHE": "Очистить системный кэш",
     "CLOSE": "Закрыть",
     "COLLAPSE": "Свернуть",
     "COLLECTION": "Коллекция",

@@ -2,11 +2,17 @@
     <div class="card-body" [class.loading]="loading">
 
         <div class="float-right">
-            <button type="button" class="btn btn-info btn-sm" (click)="clearCache()">
-                <i class="icon-repeat"></i>
-                &nbsp;
-                <span>{{'CLEAR_CACHE' | translate}}</span>
-            </button>
+            <div ngbDropdown class="d-inline-block" placement="bottom-right">
+                <button class="btn btn-info btn-sm" ngbDropdownToggle>
+                    <i class="icon-repeat"></i>
+                    &nbsp;
+                    <span>{{'CLEAR_CACHE' | translate}}</span>
+                </button>
+                <div ngbDropdownMenu>
+                    <button class="dropdown-item" (click)="clearCache()">{{'CLEAR_FILE_CACHE' | translate}}</button>
+                    <button class="dropdown-item" (click)="clearSystemCache()">{{'CLEAR_SYSTEM_CACHE' | translate}}</button>
+                </div>
+            </div>
             &nbsp;
             <a class="btn btn-secondary btn-sm" href="{{baseUrl}}admin/_console" target="_blank">
                 <i class="icon-terminal"></i>

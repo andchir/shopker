@@ -144,6 +144,14 @@ export class SettingsComponent implements OnInit {
             });
     }
 
+    clearSystemCache(): void {
+        this.loading = true;
+        this.settingsService.clearSystemCache()
+            .subscribe(() => {
+                this.loading = false;
+            });
+    }
+
     onValueChanged(groupName: string): void {
         this.settings[groupName].changed = true;
     }

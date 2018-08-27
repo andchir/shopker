@@ -42,6 +42,13 @@ export class SettingsService {
         );
     }
 
+    clearSystemCache(): Observable<any> {
+        const url = this.getRequestUrl() + '/clear_system_cache';
+        return this.http.post<any>(url, {}, {headers: this.headers}).pipe(
+            catchError(this.handleError<any>())
+        );
+    }
+
     updateGroup(name: string, data: SettingsGroup): Observable<Properties> {
         const url = this.getRequestUrl() + `/${name}`;
         return this.http.put<Properties>(url, data, {headers: this.headers}).pipe(

@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Cache\Simple\FilesystemCache;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Yaml\Exception\ParseException;
@@ -140,7 +141,7 @@ class SettingsController extends Controller
     }
 
     /**
-     * @Route("/clear_cache")
+     * @Route("/clear_cache", name="clear_cache")
      * @Method({"POST"})
      * @return JsonResponse
      */
@@ -156,17 +157,38 @@ class SettingsController extends Controller
     }
 
     /**
-     * Clear app cache
+     * @Route("/clear_system_cache", name="clear_system_cache")
+     * @Method({"POST"})
+     * @return JsonResponse
      */
-    public function systemCacheClearAction() {
+    public function systemCacheClearAction()
+    {
+        $result = $this->systemCacheClear();
+
+        return new JsonResponse([
+            'success' => true
+        ]);
+    }
+
+    /**
+     * Clear system cache
+     * @param null $environment
+     * @return string
+     */
+    public function systemCacheClear($environment = null)
+    {
+        /** @var KernelInterface $kernel */
         $kernel = $this->container->get('kernel');
-        $environment = $kernel->getEnvironment();
+        if (!$environment) {
+            $environment = $kernel->getEnvironment();
+        }
         $application = new Application($kernel);
         $application->setAutoExit(false);
 
         $input = new ArrayInput([
             'command' => 'cache:clear',
-            '--env'   => $environment
+            '--env' => $environment,
+            '--quiet' => ''
         ]);
 
         $output = new BufferedOutput();

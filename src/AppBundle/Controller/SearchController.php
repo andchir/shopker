@@ -29,7 +29,10 @@ class SearchController extends CatalogController
         $searchCollections = UtilsService::stringToArray($searchCollections);
 
         if (empty($searchWord)) {
-            return $this->render('page_search_results.html.twig');
+            return $this->render('page_search_results.html.twig', [
+                'totalItems' => 0,
+                'searchWord' => $searchWord
+            ]);
         }
 
         $pageSizeArr = $this->getParameter('catalog_page_size');
@@ -42,7 +45,10 @@ class SearchController extends CatalogController
             'collection' => $searchCollections[0]
         ]);
         if (!$contentType) {
-            return $this->render('page_search_results.html.twig');
+            return $this->render('page_search_results.html.twig', [
+                'totalItems' => 0,
+                'searchWord' => $searchWord
+            ]);
         }
 
         $contentTypeFields = $contentType->getFields();

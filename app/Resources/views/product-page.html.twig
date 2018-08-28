@@ -32,6 +32,9 @@
                             {{ renderOutputTypeChunk(currentPage, fields, 'parameters', 'page_') }}
                         </div>
                         <div class="my-3">
+                            {{ renderOutputTypeChunk(currentPage, fields, 'file') }}
+                        </div>
+                        <div class="my-3">
                             {{ 'Price' | trans }}:
                             <span class="big font-weight-bold" id="shk-price">{{ currentPage.price | price }}</span>
                             {{ currency }}
@@ -43,7 +46,7 @@
                                 <input type="hidden" name="content_type" value="{{ contentType.name }}">
                                 <div>
                                     <input type="number" class="form-control d-inline-block text-center mr-2" value="1" min="1" step="1" name="count" style="width: 100px;">
-                                    <button type="submit" class="btn btn-info" name="submit_button">
+                                    <button type="submit" class="btn btn-primary" name="submit_button">
                                         {{ 'Add to cart' | trans }}
                                     </button>
                                 </div>

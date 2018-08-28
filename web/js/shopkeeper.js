@@ -190,7 +190,7 @@
             var parametersInputs = formEl.querySelectorAll('input, select');
 
             parametersInputs.forEach(function(inputEl) {
-                var name = inputEl.getAttribute('name').toLowerCase();
+                var name = (inputEl.getAttribute('name') || '').toLowerCase();
                 if (name.indexOf('param__') === -1) {
                     return;
                 }
@@ -229,7 +229,7 @@
                 parametersInputs = formEl.querySelectorAll('input, select');
 
             parametersInputs.forEach(function(inputEl) {
-                var name = inputEl.getAttribute('name').toLowerCase();
+                var name = (inputEl.getAttribute('name') || '').toLowerCase();
                 if (name.indexOf('param__') === -1) {
                     return;
                 }
@@ -306,6 +306,87 @@
             return currentCurrency;
         };
 
+        /**
+         * Upload file to order
+         * @param buttonUploadSelector
+         * @param buttonUploadCancelSelector
+         * @param fileNameSelector
+         */
+        this.orderUploadFileInit = function(buttonUploadSelector, buttonUploadCancelSelector, fileNameSelector) {
+            var buttonUploadEl = document.querySelector(buttonUploadSelector),
+                buttonUploadCancelEl = document.querySelector(buttonUploadCancelSelector),
+                fileNameEl = document.querySelector(fileNameSelector),
+                fileAccept = buttonUploadEl.dataset.accept || '',
+                fileFieldEl = document.createElement('input'),
+                fieldName = buttonUploadEl.name || 'file';
+
+            fileFieldEl.type = 'file';
+            fileFieldEl.name = fieldName;
+            fileFieldEl.style.display = 'none';
+            if (fileAccept) {
+                fileFieldEl.accept = fileAccept;
+            }
+            buttonUploadEl.name = 'button-' + fieldName;
+            buttonUploadEl.parentNode.appendChild(fileFieldEl);
+            buttonUploadCancelEl.style.display = 'none';
+            fileNameEl.style.display = 'none';
+
+            fileFieldEl.addEventListener('change', function(event) {
+                var fileList = event.target.files;
+                if (fileList.length === 0) {
+                    return;
+                }
+                buttonUploadEl.disabled = true;
+                buttonUploadCancelEl.style.display = 'inline-block';
+                //buttonUploadCancelEl.disabled = true;
+
+                if (fileNameEl) {
+                    var fileData = self.getFileData(fileList[0]);
+                    fileNameEl.textContent = fileData.title + '.' + fileData.extension;
+                    fileNameEl.style.display = fileNameEl.tagName.toLowerCase() === 'div'
+                        ? 'block'
+                        : 'inline-block';
+                }
+            });
+
+            buttonUploadEl.addEventListener('click', function(event) {
+                event.preventDefault();
+                fileFieldEl.click();
+            });
+
+            buttonUploadCancelEl.addEventListener('click', function(event) {
+                event.preventDefault();
+                buttonUploadEl.disabled = false;
+                fileFieldEl.value = '';
+                buttonUploadCancelEl.style.display = 'none';
+                fileNameEl.textContent = '';
+                fileNameEl.style.display = 'none';
+            });
+        };
+
+        /**
+         * Get file data from field
+         * @param file
+         * @returns {{title: (string|*), extension: (string|*), size}}
+         */
+        this.getFileData = function(file) {
+            var title = file.name.substr(0, file.name.lastIndexOf('.')),
+                extension = file.name.substr(file.name.lastIndexOf('.') + 1),
+                size = file.size;
+
+            return {
+                title: title,
+                extension: extension,
+                size: size
+            };
+        };
+
+        /**
+         * Set cookie
+         * @param name
+         * @param value
+         * @param days
+         */
         this.setCookie = function(name, value, days) {
             var expires = '';
             if (days) {
@@ -316,6 +397,11 @@
             document.cookie = name + '=' + (value || '')  + expires + '; path=/';
         };
 
+        /**
+         * Get cookie
+         * @param name
+         * @returns {*}
+         */
         this.getCookie = function(name) {
             var nameEQ = name + "=";
             var ca = document.cookie.split(';');
@@ -327,14 +413,29 @@
             return null;
         };
 
+        /**
+         * Erase cookie
+         * @param name
+         */
         this.eraseCookie = function(name) {
             document.cookie = name + '=; Max-Age=-99999999;';
         };
 
+        /**
+         * Number format for price
+         * @param n
+         */
         this.numFormat = function(n){
             return this.number_format(n, (Math.floor(n)===n ? 0 : 2), '.', ' ');
         };
 
+        /**
+         * Number format
+         * @param number
+         * @param decimals
+         * @param dec_point
+         * @param thousands_sep
+         */
         this.number_format = function(number, decimals, dec_point, thousands_sep) {
             number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
             var n = !isFinite(+number) ? 0 : +number,

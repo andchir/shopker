@@ -17,6 +17,9 @@
 .max-height200 { max-height: 200px; overflow: hidden; overflow-y: auto; }
 .image-wrapper img { max-width: 100%; }
 main h1 { font-family: 'Comfortaa', sans-serif; }
+button:disabled,
+input:disabled,
+textarea:disabled { cursor: not-allowed; }
 
 /* position */
 .pos-left-top { left: 0; top: 0; }

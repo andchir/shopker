@@ -1,0 +1,26 @@
+<div>
+    <div class="mb-2">
+        {{ 'You can upload file' | trans }}:
+        <b>{{ fieldProperties.properties.allowed_extensions }}</b>
+    </div>
+    <div class="card card-body d-inline-block">
+        <button type="button" class="btn btn-info px-5" name="{{ fieldData.name }}" data-accept="{{ fieldProperties.properties.allowed_extensions }}" id="buttonFileUpload-{{ fieldData.name }}">
+            <i class="icon-upload"></i>
+            {{ 'Upload file' | trans }}
+        </button>
+        <button type="button" class="btn btn-secondary ml-2" id="buttonFileUploadCancel-{{ fieldData.name }}" title="{{ 'Cancel' | trans }}" style="display: none;">
+            <i class="icon-cross"></i>
+        </button>
+        <div class="mt-2 text-muted" id="fileNameContainer-{{ fieldData.name }}"></div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        shk.orderUploadFileInit(
+            '#buttonFileUpload-{{ fieldData.name }}',
+            '#buttonFileUploadCancel-{{ fieldData.name }}',
+            '#fileNameContainer-{{ fieldData.name }}'
+        );
+    });
+</script>

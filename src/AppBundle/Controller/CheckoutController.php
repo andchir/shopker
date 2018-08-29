@@ -6,12 +6,15 @@ use AppBundle\Document\Category;
 use AppBundle\Document\Order;
 use AppBundle\Document\Setting;
 use AppBundle\Document\User;
+use AppBundle\Events;
 use AppBundle\Repository\CategoryRepository;
 use AppBundle\Service\SettingsService;
 use AppBundle\Service\ShopCartService;
 use AppBundle\Service\UtilsService;
 use Doctrine\ODM\MongoDB\Cursor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,9 +36,10 @@ class CheckoutController extends BaseController
      * @param Request $request
      * @param UtilsService $utilsService
      * @param TranslatorInterface $translator
+     * @param EventDispatcherInterface $eventDispatcher
      * @return RedirectResponse|Response
      */
-    public function checkoutAction(Request $request, UtilsService $utilsService, TranslatorInterface $translator)
+    public function checkoutAction(Request $request, UtilsService $utilsService, TranslatorInterface $translator, EventDispatcherInterface $eventDispatcher)
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -127,6 +131,10 @@ class CheckoutController extends BaseController
                 $dm = $this->get('doctrine_mongodb')->getManager();
                 $dm->persist($order);
                 $dm->flush();
+
+                // Dispatch event
+                $event = new GenericEvent($order);
+                $eventDispatcher->dispatch(Events::ORDER_CREATED, $event);
 
                 $shopCartService->clearContent();
                 $utilsService->orderSendMail(

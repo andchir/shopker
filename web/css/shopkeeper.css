@@ -1,0 +1,12 @@
+
+/* preloader */
+#shk-preloader { display: block; width: 100%; height: 100%; position: fixed; left: 0; top: 0; z-index: 1111; background-color: rgba(255,255,255,0.5); }
+#shk-preloader > div { width: 70px; height: 70px; position: absolute; left: 50%; top: 50%; margin: -35px 0 0 -35px; border: 9px solid #adadad; border-radius: 50%; border-top-color: transparent; -webkit-animation: spin 1000ms linear infinite; animation: spin 1000ms linear infinite; }
+@-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

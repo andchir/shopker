@@ -317,16 +317,20 @@
                 buttonUploadCancelEl = document.querySelector(buttonUploadCancelSelector),
                 fileNameEl = document.querySelector(fileNameSelector),
                 fileAccept = buttonUploadEl.dataset.accept || '',
+                hiddenFieldEl = document.createElement('input'),
                 fileFieldEl = document.createElement('input'),
-                fieldName = buttonUploadEl.name || 'file';
+                fileFieldName = buttonUploadEl.name || 'file';
+
+            hiddenFieldEl.type = 'hidden';
+            hiddenFieldEl.name = fileFieldName;
+            buttonUploadEl.parentNode.appendChild(hiddenFieldEl);
 
             fileFieldEl.type = 'file';
-            fileFieldEl.name = fieldName;
             fileFieldEl.style.display = 'none';
             if (fileAccept) {
                 fileFieldEl.accept = fileAccept;
             }
-            buttonUploadEl.name = 'button-' + fieldName;
+            buttonUploadEl.name = 'button-' + fileFieldName;
             buttonUploadEl.parentNode.appendChild(fileFieldEl);
             buttonUploadCancelEl.style.display = 'none';
             fileNameEl.style.display = 'none';
@@ -338,7 +342,7 @@
                 }
                 buttonUploadEl.disabled = true;
                 buttonUploadCancelEl.style.display = 'inline-block';
-                //buttonUploadCancelEl.disabled = true;
+                buttonUploadCancelEl.disabled = true;
 
                 if (fileNameEl) {
                     var fileData = self.getFileData(fileList[0]);
@@ -347,6 +351,14 @@
                         ? 'block'
                         : 'inline-block';
                 }
+
+                self.showPreloaderToggle(true);
+
+                // TODO: upload file by ajax
+                setTimeout(function() {
+                    buttonUploadCancelEl.disabled = false;
+                    self.showPreloaderToggle(false);
+                }, 2000);
             });
 
             buttonUploadEl.addEventListener('click', function(event) {
@@ -358,10 +370,27 @@
                 event.preventDefault();
                 buttonUploadEl.disabled = false;
                 fileFieldEl.value = '';
+                hiddenFieldEl.value = '';
                 buttonUploadCancelEl.style.display = 'none';
                 fileNameEl.textContent = '';
                 fileNameEl.style.display = 'none';
             });
+        };
+
+        /**
+         * Show loading animation
+         * @param show
+         */
+        this.showPreloaderToggle = function(show) {
+            show = show || false;
+            var preloaderEl = document.getElementById('shk-preloader');
+            if (!preloaderEl) {
+                preloaderEl = document.createElement('div');
+                preloaderEl.id = 'shk-preloader';
+                preloaderEl.innerHTML = '<div></div>';
+                document.body.appendChild(preloaderEl);
+            }
+            preloaderEl.style.display = show ? 'block' : 'none';
         };
 
         /**

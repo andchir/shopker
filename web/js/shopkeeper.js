@@ -28,11 +28,23 @@
 
     function Shopkeeper () {
 
-        'use strict';
-
         var self = this;
 
-        this.init = function() {
+        var mainOptions = {
+            baseUrl: '/'
+        };
+
+        /**
+         * Initialization
+         * @param options
+         */
+        this.init = function(options) {
+
+            options = options || {};
+            if (Object.keys(options).length > 0) {
+                this.extend(mainOptions, options);
+            }
+
             this.onReady(function() {
 
                 self.buttonsInit();
@@ -42,11 +54,25 @@
             });
         };
 
+        /**
+         * Call function on document ready
+         * @param cb
+         */
         this.onReady = function(cb) {
             if (document.readyState !== 'loading') {
                 cb();
             } else {
                 document.addEventListener('DOMContentLoaded', cb);
+            }
+        };
+
+        /**
+         * Update options
+         * @param options
+         */
+        this.updateOptions = function(options) {
+            if (Object.keys(options).length > 0) {
+                this.extend(mainOptions, options);
             }
         };
 
@@ -308,11 +334,12 @@
 
         /**
          * Upload file to order
-         * @param buttonUploadSelector
-         * @param buttonUploadCancelSelector
-         * @param fileNameSelector
+         * @param {number} categoryId
+         * @param {string} buttonUploadSelector
+         * @param {string} buttonUploadCancelSelector
+         * @param {string} fileNameSelector
          */
-        this.orderUploadFileInit = function(buttonUploadSelector, buttonUploadCancelSelector, fileNameSelector) {
+        this.orderUploadFileInit = function(categoryId, buttonUploadSelector, buttonUploadCancelSelector, fileNameSelector) {
             var buttonUploadEl = document.querySelector(buttonUploadSelector),
                 buttonUploadCancelEl = document.querySelector(buttonUploadCancelSelector),
                 fileNameEl = document.querySelector(fileNameSelector),
@@ -344,8 +371,9 @@
                 buttonUploadCancelEl.style.display = 'inline-block';
                 buttonUploadCancelEl.disabled = true;
 
+                var fileData;
                 if (fileNameEl) {
-                    var fileData = self.getFileData(fileList[0]);
+                    fileData = self.getFileData(fileList[0]);
                     fileNameEl.textContent = fileData.title + '.' + fileData.extension;
                     fileNameEl.style.display = fileNameEl.tagName.toLowerCase() === 'div'
                         ? 'block'
@@ -354,11 +382,27 @@
 
                 self.showPreloaderToggle(true);
 
-                // TODO: upload file by ajax
-                setTimeout(function() {
+                var formData = new FormData();
+                formData.append(fileFieldName, fileList[0]);
+                formData.append('categoryId', categoryId);
+
+                self.ajax(mainOptions.baseUrl + 'files/user_upload', formData, function(data) {
+                    if (data.filesIds && Array.isArray(data.filesIds)) {
+                        hiddenFieldEl.value = data.filesIds;
+                    }
                     buttonUploadCancelEl.disabled = false;
                     self.showPreloaderToggle(false);
-                }, 2000);
+                }, function (data) {
+                    if (data.error) {
+                        if (fileFieldEl) {
+                            fileNameEl.innerHTML = '<span style="color: red;">' + data.error + '</span>';
+                        } else {
+                            alert(data.error);
+                        }
+                    }
+                    buttonUploadCancelEl.disabled = false;
+                    self.showPreloaderToggle(false);
+                }, 'POST');
             });
 
             buttonUploadEl.addEventListener('click', function(event) {
@@ -448,6 +492,70 @@
          */
         this.eraseCookie = function(name) {
             document.cookie = name + '=; Max-Age=-99999999;';
+        };
+
+        /**
+         * Extend object
+         * @param out
+         * @returns {*|{}}
+         */
+        this.extend = function(out) {
+            out = out || {};
+            for (var i = 1; i < arguments.length; i++) {
+                if (!arguments[i])
+                    continue;
+                for (var key in arguments[i]) {
+                    if (arguments[i].hasOwnProperty(key))
+                        out[key] = arguments[i][key];
+                }
+            }
+            return out;
+        };
+
+        /**
+         * Ajax request
+         * @param url
+         * @param data
+         * @param successFn
+         * @param failFn
+         * @param method
+         */
+        this.ajax = function(url, data, successFn, failFn, method) {
+            method = method || 'GET';
+            var request = new XMLHttpRequest();
+            request.open(method, url, true);
+
+            request.onload = function() {
+                var result = ['{','['].indexOf(request.responseText.substr(0,1)) > -1
+                    ? JSON.parse(request.responseText)
+                    : {};
+                if (request.status >= 200 && request.status < 400) {
+                    if (typeof successFn === 'function') {
+                        successFn(result);
+                    }
+                } else {
+                    if (typeof failFn === 'function') {
+                        failFn(result);
+                    }
+                }
+            };
+
+            request.onerror = function() {
+                if (typeof failFn === 'function') {
+                    failFn(request);
+                }
+            };
+
+            request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            if (!(data instanceof FormData)) {
+                request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+            }
+
+            if (method === 'POST') {
+                request.send(data);
+            } else {
+                request.send();
+            }
         };
 
         /**

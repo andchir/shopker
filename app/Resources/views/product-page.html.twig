@@ -34,11 +34,13 @@
                         <div class="my-3">
                             {{ renderOutputTypeChunk(currentPage, fields, 'file') }}
                         </div>
-                        <div class="my-3">
-                            {{ 'Price' | trans }}:
-                            <span class="big font-weight-bold" id="shk-price">{{ currentPage.price | price }}</span>
-                            {{ currency }}
-                        </div>
+                        {% if currentPage.price > 0 %}
+                            <div class="my-3">
+                                {{ 'Price' | trans }}:
+                                <span class="big font-weight-bold" id="shk-price">{{ currentPage.price | price }}</span>
+                                {{ currency }}
+                            </div>
+                        {% endif %}
                         <div class="my-3">
 
                                 <input type="hidden" name="item_id" value="{{ currentPage.id }}">

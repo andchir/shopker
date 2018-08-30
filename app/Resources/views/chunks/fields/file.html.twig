@@ -17,7 +17,9 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        shk.updateOptions({baseUrl: '{{ app.request.baseUrl }}/'});
         shk.orderUploadFileInit(
+            {{ itemData.parentId }},
             '#buttonFileUpload-{{ fieldData.name }}',
             '#buttonFileUploadCancel-{{ fieldData.name }}',
             '#fileNameContainer-{{ fieldData.name }}'

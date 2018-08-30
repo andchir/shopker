@@ -11,6 +11,11 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class FileDocument
 {
+    const OWNER_DOCUMENT = 'document';
+    const OWNER_TEMPORARY = 'temporary';
+    const OWNER_ORDER_TEMPORARY = 'order_temporary';
+    const OWNER_ORDER_PRODUCT = 'order_product';
+
     /**
      * @MongoDB\Id(type="int", strategy="INCREMENT")
      */
@@ -52,7 +57,7 @@ class FileDocument
     protected $userId;
 
     /**
-     * @MongoDB\Field(type="integer", nullable=true)
+     * @MongoDB\Field(type="string", nullable=true)
      */
     protected $ownerId;
 

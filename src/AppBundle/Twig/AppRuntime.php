@@ -71,6 +71,7 @@ class AppRuntime
             foreach ($products as $product) {
                 $product['priceTotal'] = $this->getCartContentPriceTotal($product);
                 $product['parametersString'] = $this->getCartContentParametersString($product);
+                $product['filesString'] = $this->getCartContentfilesString($product);
                 $data['items'][$cName][] = $product;
                 $data['countTotal'] += $product['count'];
                 $data['priceTotal'] += $product['price'] * $product['count'];
@@ -222,6 +223,18 @@ class AppRuntime
             ? $productData['parameters']
             : [];
         return OrderContent::getParametersStrFromArray($parameters);
+    }
+
+    /**
+     * @param $productData
+     * @return string
+     */
+    public function getCartContentFilesString($productData)
+    {
+        $files = isset($productData['files']) && is_array($productData['files'])
+            ? $productData['files']
+            : [];
+        return OrderContent::getFilesStrFromArray($files);
     }
 
     /**

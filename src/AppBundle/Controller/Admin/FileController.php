@@ -134,13 +134,7 @@ class FileController extends BaseController
 
             $outputFiles[] = $fileDocument->toArray();
 
-            $entity[$currentFieldName] = [
-                'fileId' => $fileDocument->getId(),
-                'title' => $fileDocument->getTitle(),
-                'fileName' => $fileDocument->getFileName(),
-                'extension' => $fileDocument->getExtension(),
-                'dirPath' => $fileDocument->getDirBasePath()
-            ];
+            $entity[$currentFieldName] = $fileDocument->getRecordData();
         }
 
         if ($error) {

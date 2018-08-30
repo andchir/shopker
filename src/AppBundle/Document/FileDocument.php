@@ -384,12 +384,18 @@ class FileDocument
      */
     public function preUpload()
     {
-        if (null !== $this->file) {
+        if (null !== $this->getFile()) {
             $this
                 ->setUniqueFileName()
                 ->setExtension(strtolower($this->getFile()->getClientOriginalExtension()))
                 ->setMimeType($this->getFile()->getMimeType())
                 ->setSize($this->getFile()->getSize());
+
+            if (!$this->getTitle()) {
+                $originalName = $this->getFile()->getClientOriginalName();
+                $title = mb_substr($originalName, 0, mb_strrpos($originalName, '.'));
+                $this->setTitle($title);
+            }
         }
     }
 
@@ -414,16 +420,10 @@ class FileDocument
             return false;
         }
 
-        if (!$this->getTitle()) {
-            $originalName = $this->getFile()->getClientOriginalName();
-            $title = mb_substr($originalName, 0, mb_strrpos($originalName, '.'));
-            $this->setTitle($title);
-        }
-
         $fullFileName = $this->getFullFileName();
         $this->getFile()->move($uploadDirPath, $fullFileName);
 
-        chmod($this->getUploadedPath(), 0777);
+        chmod($this->getUploadedPath(), 0775);
 
         $this->file = null;
         return true;
@@ -458,6 +458,21 @@ class FileDocument
             'ownerType' => $this->getOwnerType(),
             'ownerId' => $this->getOwnerId(),
             'createdDate' => $this->getCreatedDate()
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getRecordData()
+    {
+        return [
+            'fileId' => $this->getId(),
+            'title' => $this->getTitle(),
+            'fileName' => $this->getFileName(),
+            'extension' => $this->getExtension(),
+            'dirPath' => $this->getDirBasePath(),
+            'size' => $this->getSize()
         ];
     }
 }

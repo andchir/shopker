@@ -3,6 +3,8 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Document\Category;
+use AppBundle\Document\FileDocument;
+use AppBundle\Document\User;
 use AppBundle\Repository\CategoryRepository;
 use AppBundle\Service\ShopCartService;
 use Doctrine\ODM\MongoDB\Cursor;
@@ -12,6 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
@@ -79,7 +82,11 @@ class CartController extends ProductController
             $systemName = $productDocument[$systemNameField];
         }
 
+        // Product parameters
         $parameters = $this->getProductParameters($request, $productDocument, $contentTypeFields);
+
+        // Product files
+        $files = $this->getProductFiles($request, $productDocument, $contentTypeFields);
 
         if (!isset($shopCartData['data'][$contentTypeName])) {
             $shopCartData['data'][$contentTypeName] = [];
@@ -95,8 +102,10 @@ class CartController extends ProductController
             $currentProduct = &$shopCartData['data'][$contentTypeName][$productIndex];
         }
 
-        if (!empty($currentProduct) && $currentProduct['parameters'] == $parameters) {
-            $currentProduct['count'] += $count;
+        if (!empty($currentProduct)
+            && $currentProduct['parameters'] == $parameters
+            && $currentProduct['files'] == $files) {
+                $currentProduct['count'] += $count;
         } else {
             array_unshift($shopCartData['data'][$contentTypeName], [
                 'id' => $productDocument['_id'],
@@ -107,7 +116,8 @@ class CartController extends ProductController
                 'count' => $count,
                 'price' => $priceValue,
                 'currency' => $currency,
-                'parameters' => $parameters
+                'parameters' => $parameters,
+                'files' => $files
             ]);
         }
 
@@ -188,6 +198,50 @@ class CartController extends ProductController
             }
         }
         return $parameters;
+    }
+
+    /**
+     * @param Request $request
+     * @param array $productDocument
+     * @param array $contentTypeFields
+     * @return array
+     */
+    public function getProductFiles(Request $request, $productDocument, $contentTypeFields)
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $userId = $user ? $user->getId() : 0;
+        $ownerId = ShopCartService::getCartId();
+
+        $postData = $request->request->all();
+        $files = [];
+        $fileFields = array_filter($contentTypeFields, function($field) {
+            return $field['outputType'] == 'file';
+        });
+        $fileFieldsNames = array_map(function($field) {
+            return $field['name'];
+        }, $fileFields);
+
+        $fileRepository = $this->getFileRepository();
+
+        foreach ($postData as $key => $value) {
+            if (!in_array($key, $fileFieldsNames) || empty($postData[$key])) {
+                continue;
+            }
+            $fileId = (int) $postData[$key];
+            /** @var FileDocument $fileDocument */
+            $fileDocument = $fileRepository->findOneBy([
+                'id' => $fileId,
+                'ownerType' => FileDocument::OWNER_ORDER_TEMPORARY,
+                'userId' => $userId,
+                'ownerId' => $ownerId
+            ]);
+            if (!$fileDocument) {
+                continue;
+            }
+            $files[] = $fileDocument->getRecordData();
+        }
+        return $files;
     }
 
     /**
@@ -315,5 +369,15 @@ class CartController extends ProductController
             ));
         }
         $response->sendHeaders();
+    }
+
+    /**
+     * @return \AppBundle\Repository\FileDocumentRepository
+     */
+    public function getFileRepository()
+    {
+        return $this->get('doctrine_mongodb')
+            ->getManager()
+            ->getRepository(FileDocument::class);
     }
 }

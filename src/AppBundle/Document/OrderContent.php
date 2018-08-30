@@ -298,6 +298,20 @@ class OrderContent
     }
 
     /**
+     * @param array|null $files
+     * @return string
+     */
+    public static function getFilesStrFromArray($files = null)
+    {
+        $outputArr = [];
+        foreach ($files as $file) {
+            $str = $file['title'] . '.' . $file['extension'];
+            array_push($outputArr, $str);
+        }
+        return implode(', ', $outputArr);
+    }
+
+    /**
      * @return array
      */
     public function toArray()

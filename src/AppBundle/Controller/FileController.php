@@ -7,6 +7,7 @@ use AppBundle\Document\ContentType;
 use AppBundle\Document\FileDocument;
 use AppBundle\Document\User;
 use AppBundle\Repository\CategoryRepository;
+use AppBundle\Service\ShopCartService;
 use AppBundle\Service\UtilsService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Filesystem\Filesystem;
@@ -14,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Controller\Admin\ProductController as AdminProductController;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
@@ -36,7 +38,8 @@ class FileController extends BaseController
         /** @var User $user */
         $user = $this->getUser();
         $userId = $user ? $user->getId() : 0;
-        $sessionId = !$user ? $request->getSession()->getId() : null;
+        $ownerId = ShopCartService::getCartId();
+
         $categoryId = (int) $request->get('categoryId');
         if (!$categoryId) {
             return new JsonResponse([]);
@@ -97,7 +100,7 @@ class FileController extends BaseController
                 ->setUploadRootDir($filesDirPath)
                 ->setCreatedDate(new \DateTime())
                 ->setOwnerType(FileDocument::OWNER_ORDER_TEMPORARY)
-                ->setOwnerId($sessionId)
+                ->setOwnerId($ownerId)
                 ->setUserId($userId)
                 ->setFile($file);
 

@@ -16,6 +16,12 @@
                                     {{ item.parametersString }}
                                 </div>
                             {% endif %}
+                            {% if item.filesString is not empty %}
+                                <div class="text-muted small">
+                                    <i class="icon-file"></i>
+                                    {{ 'File|Files' | transchoice(item.files | length) }}: {{ item.filesString }}
+                                </div>
+                            {% endif %}
                         </td>
                         <td>{{ item.price | price }} {{ item.currency }}</td>
                         <td>
@@ -41,7 +47,7 @@
                         </button>
                     </div>
                     <div class="text-right">
-                        Общая сумма:
+                        {{ 'Total' | trans }}:
                     </div>
                 </th>
                 <th colspan="2">

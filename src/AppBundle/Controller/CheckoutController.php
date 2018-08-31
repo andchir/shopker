@@ -134,12 +134,15 @@ class CheckoutController extends BaseController
                 $dm->persist($order);
                 $dm->flush();
 
-                // Save order files
-                $this->saveOrderFiles($order);
-
                 // Dispatch event
                 $event = new GenericEvent($order);
                 $eventDispatcher->dispatch(Events::ORDER_CREATED, $event);
+
+                // Save order files
+                $this->saveOrderFiles($order);
+
+                // Delete temporary files
+                $this->deleteTemporaryFiles(FileDocument::OWNER_ORDER_TEMPORARY);
 
                 $shopCartService->clearContent();
                 $utilsService->orderSendMail(
@@ -158,6 +161,32 @@ class CheckoutController extends BaseController
         return $this->render('page_checkout.html.twig', [
             'form' => $form->createView()
         ]);
+    }
+
+    /**
+     * Delete temporary files
+     * @param string|null $ownerType
+     * @return bool
+     */
+    public function deleteTemporaryFiles($ownerType = null)
+    {
+        if (!$ownerType) {
+            $ownerType = FileDocument::OWNER_TEMPORARY;
+        }
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->get('doctrine_mongodb')->getManager();
+
+        $fileDocumentRepository = $this->getFileRepository();
+
+        $fileDocuments = $fileDocumentRepository->findTemporaryByTime($ownerType, 30 * 60);
+        /** @var FileDocument $fileDocument */
+        foreach ($fileDocuments as $fileDocument) {
+            $dm->remove($fileDocument);// File will delete by event
+        }
+
+        $dm->flush();
+
+        return true;
     }
 
     /**

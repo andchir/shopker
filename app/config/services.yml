@@ -82,6 +82,11 @@ services:
         class: MongoCollection
         arguments: ['@mongo.database', 'cache']
 
+    AppBundle\EventSubscriber\DoctrineEventSubscriber:
+        tags:
+            - { name: doctrine_mongodb.odm.event_subscriber, connection: default, lazy: true }
+        arguments: [ '@service_container' ]
+
     AppBundle\EventListener\ExceptionListener:
         public: true
         tags:

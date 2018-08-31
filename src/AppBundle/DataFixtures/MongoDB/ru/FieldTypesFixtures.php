@@ -342,6 +342,16 @@ class FieldTypesFixtures extends Fixture
                         'name' => 'chunkName',
                         'title' => 'Название чанка',
                         'default_value' => ''
+                    ],
+                    [
+                        'name' => 'allowed_extensions',
+                        'title' => 'Разрешенные типы файлов',
+                        'default_value' => '.zip,.rar,.doc,.docx,.xls,.xlsx,.ods,.odt'
+                    ],
+                    [
+                        'name' => 'required',
+                        'title' => 'Обязательный',
+                        'default_value' => '1'
                     ]
                 ]
             ],

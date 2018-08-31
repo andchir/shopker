@@ -88,6 +88,20 @@ class CartController extends ProductController
         // Product files
         $files = $this->getProductFiles($request, $productDocument, $contentTypeFields);
 
+        // Files required?
+        if (!count($files)) {
+            $fileRequiredFields = array_filter($contentTypeFields, function($field) {
+                return $field['outputType'] == 'file'
+                    && !empty($field['outputProperties']['required']);
+            });
+            if (count($fileRequiredFields) > 0) {
+                $request->getSession()
+                    ->getFlashBag()
+                    ->add('errors', 'File is required.');
+                return new RedirectResponse($referer);
+            }
+        }
+
         if (!isset($shopCartData['data'][$contentTypeName])) {
             $shopCartData['data'][$contentTypeName] = [];
         }

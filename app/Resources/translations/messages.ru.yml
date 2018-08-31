@@ -85,6 +85,7 @@ Searching results: Результаты поиска
 search.nothing_found: По Вашему запросу ничего не найдено.
 The file type is not allowed to be uploaded.: Тип файла не разрешен для загрузки.
 File type is not allowed.: Тип файла не разрешен для загрузки.
+File is required.: Необходимо загрузить файл.
 
 Sort by: Сортировать по
 catalog.sort_by_novelty: Новизне

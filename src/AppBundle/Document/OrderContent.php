@@ -55,6 +55,11 @@ class OrderContent
     protected $parameters;
 
     /**
+     * @MongoDB\Field(type="collection", nullable=true)
+     */
+    protected $files;
+
+    /**
      * Get uniqId
      *
      * @return $uniqId
@@ -236,6 +241,28 @@ class OrderContent
     public function getParameters()
     {
         return $this->parameters;
+    }
+
+    /**
+     * Set files
+     *
+     * @param array $files
+     * @return $this
+     */
+    public function setFiles($files)
+    {
+        $this->files = $files;
+        return $this;
+    }
+
+    /**
+     * Get files
+     *
+     * @return array $files
+     */
+    public function getFiles()
+    {
+        return $this->files;
     }
 
     /**

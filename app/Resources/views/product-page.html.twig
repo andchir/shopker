@@ -23,6 +23,8 @@
                     </div>
                     <div class="column-right">
 
+                        {% include 'flash_messages.html.twig' %}
+
                         {{ renderOutputTypeChunk(currentPage, fields, 'tag', 'page_') }}
 
                         <div class="my-3">

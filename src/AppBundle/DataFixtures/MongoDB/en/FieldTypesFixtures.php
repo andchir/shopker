@@ -342,6 +342,16 @@ class FieldTypesFixtures extends Fixture
                         'name' => 'chunkName',
                         'title' => 'Chunk name',
                         'default_value' => ''
+                    ],
+                    [
+                        'name' => 'allowed_extensions',
+                        'title' => 'Allowed extensions',
+                        'default_value' => '.zip,.rar,.doc,.docx,.xls,.xlsx,.ods,.odt'
+                    ],
+                    [
+                        'name' => 'required',
+                        'title' => 'Required',
+                        'default_value' => '1'
                     ]
                 ]
             ],

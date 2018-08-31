@@ -3,7 +3,9 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Document\Category;
+use AppBundle\Document\FileDocument;
 use AppBundle\Document\Order;
+use AppBundle\Document\OrderContent;
 use AppBundle\Document\Setting;
 use AppBundle\Document\User;
 use AppBundle\Events;
@@ -132,6 +134,9 @@ class CheckoutController extends BaseController
                 $dm->persist($order);
                 $dm->flush();
 
+                // Save order files
+                $this->saveOrderFiles($order);
+
                 // Dispatch event
                 $event = new GenericEvent($order);
                 $eventDispatcher->dispatch(Events::ORDER_CREATED, $event);
@@ -153,6 +158,53 @@ class CheckoutController extends BaseController
         return $this->render('page_checkout.html.twig', [
             'form' => $form->createView()
         ]);
+    }
+
+    /**
+     * @param Order $order
+     * @return bool
+     */
+    public function saveOrderFiles(Order $order)
+    {
+        $orderId = $order->getId();
+        $orderContent = $order->getContent();
+
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->get('doctrine_mongodb')->getManager();
+
+        /** @var OrderContent $item */
+        foreach ($orderContent as $item) {
+            $files = $item->getFiles();
+            if (empty($files)) {
+                continue;
+            }
+            foreach ($files as $file) {
+                /** @var FileDocument $fileDocument */
+                $fileDocument = $this->getFileRepository()->findOneBy([
+                    'id' => $file['fileId'],
+                    'ownerType' => FileDocument::OWNER_ORDER_TEMPORARY
+                ]);
+                if ($fileDocument) {
+                    $fileDocument
+                        ->setOwnerType(FileDocument::OWNER_ORDER_PRODUCT)
+                        ->setOwnerId($orderId);
+
+                    $dm->flush();
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @return \AppBundle\Repository\FileDocumentRepository
+     */
+    public function getFileRepository()
+    {
+        return $this->get('doctrine_mongodb')
+            ->getManager()
+            ->getRepository(FileDocument::class);
     }
 
     /**

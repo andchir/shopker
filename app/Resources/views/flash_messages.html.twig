@@ -1,4 +1,4 @@
-{% for type, messages in app.session.flashbag.all() %}
+{% for type, messages in app.flashes %}
     {% for message in messages %}
         {% if type == 'errors' %}
             <div class="alert alert-danger">

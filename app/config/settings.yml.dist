@@ -15,3 +15,5 @@ parameters:
     admin_email: ''
     payment_status_number: 1
     payment_status_after_number: 2
+    max_user_files_size: 10
+    max_temp_files_keep_minutes: 30

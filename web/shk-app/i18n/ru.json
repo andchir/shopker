@@ -130,5 +130,7 @@
 	"mongodb_server": "MongoDB: Сервер",
 	"mongodb_user": "MongoDB: Пользоватеь",
 	"payment_status_after_number": "Номер статуса заказа после оплаты",
-	"payment_status_number": "Номер статуса заказа для оплаты"
+	"payment_status_number": "Номер статуса заказа для оплаты",
+	"max_user_files_size": "Максимальный размер файлов пользователей, МБ",
+	"max_temp_files_keep_minutes": "Время хранения временных файлов, мин."
 }

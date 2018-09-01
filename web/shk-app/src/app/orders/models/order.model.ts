@@ -1,4 +1,6 @@
-import { UserOption } from '../../users/models/user.model';
+import {UserOption} from '../../users/models/user.model';
+import {FileData} from '../../catalog/models/file-data.model';
+import {AppSettings} from "../../services/app-settings.service";
 
 interface OrderContentParameter {
     name: string;
@@ -9,6 +11,7 @@ interface OrderContentParameter {
 export class OrderContent {
 
     private _parametersString: string;
+    private _filesString: string;
 
     constructor(
         public id: number,
@@ -19,9 +22,11 @@ export class OrderContent {
         public contentTypeName?: string,
         public uri?: string,
         public image?: string,
-        public parameters?: OrderContentParameter[]
+        public parameters?: OrderContentParameter[],
+        public files?: FileData[]
     ) {
         this.createParametersString();
+        this.createFilesString();
     }
 
     get parametersString(): string {
@@ -30,6 +35,14 @@ export class OrderContent {
 
     set parametersString(parametersString: string) {
         this._parametersString = parametersString;
+    }
+
+    get filesString(): string {
+        return this._filesString;
+    }
+
+    set filesString(filesString: string) {
+        this._filesString = filesString;
     }
 
     priceUpdate(): void {
@@ -59,6 +72,21 @@ export class OrderContent {
         });
         this.parametersString = parametersStrArr.join(', ');
     }
+
+    createFilesString(): void {
+        if (!this.files) {
+            return;
+        }
+        const filesStrArr = [],
+            baseUrl = AppSettings.getBaseUrl();
+        this.files.forEach((fileData) => {
+            const downloadLink = `${baseUrl}admin/files/download/${fileData.fileId}`;
+            let fileStr = `<a href="${downloadLink}" target="_blank">`;
+            fileStr += `${fileData.title}.${fileData.extension}</a>`;
+            filesStrArr.push(fileStr);
+        });
+        this.filesString = filesStrArr.join(', ');
+    }
 }
 
 export class Order {
@@ -81,7 +109,8 @@ export class Order {
                 cont['contentTypeName'],
                 cont['uri'],
                 cont['image'],
-                cont['parameters']
+                cont['parameters'],
+                cont['files'] || []
             ));
         });
     }

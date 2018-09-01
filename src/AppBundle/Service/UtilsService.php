@@ -7,6 +7,9 @@ use AppBundle\Document\Order;
 use AppBundle\Document\Setting;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
 
@@ -225,6 +228,79 @@ class UtilsService
         }
 
         return $queryOptions;
+    }
+
+    /**
+     * Download file
+     *
+     * @param string $filePath
+     * @param string $fileName
+     * @return Response
+     */
+    public static function downloadFile($filePath, $fileName = ''){
+
+        if(!file_exists($filePath)) {
+            return new Response('File not found.', Response::HTTP_NOT_FOUND);
+        }
+
+        $pathInfo = pathinfo($filePath);
+
+        if(!$fileName){
+            $fileName = $pathInfo['filename'];
+        }
+        $fileName = str_replace('%', '', $fileName);
+        $fileName .= '.' . $pathInfo['extension'];
+        $fileName = preg_replace('~[\\\/]+~', '', $fileName);
+
+        $response = new BinaryFileResponse($filePath);
+        $disposition = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            $fileName,
+            self::toAscii($fileName)
+        );
+        $response->headers->set('Content-Disposition', $disposition);
+
+        return $response;
+    }
+
+    /**
+     * Converts UTF-8 string to ASCII.
+     * @param $s
+     * @return string
+     */
+    public static function toAscii($s)
+    {
+        static $transliterator = null;
+        if ($transliterator === null && class_exists('Transliterator', false)) {
+            $transliterator = \Transliterator::create('Any-Latin; Latin-ASCII');
+        }
+        $s = preg_replace('#[^\x09\x0A\x0D\x20-\x7E\xA0-\x{2FF}\x{370}-\x{10FFFF}]#u', '', $s);
+        $s = strtr($s, '`\'"^~?', "\x01\x02\x03\x04\x05\x06");
+        $s = str_replace(
+            ["\u{201E}", "\u{201C}", "\u{201D}", "\u{201A}", "\u{2018}", "\u{2019}", "\u{B0}"],
+            ["\x03", "\x03", "\x03", "\x02", "\x02", "\x02", "\x04"], $s
+        );
+        if ($transliterator !== null) {
+            $s = $transliterator->transliterate($s);
+        }
+        if (ICONV_IMPL === 'glibc') {
+            $s = str_replace(
+                ["\u{BB}", "\u{AB}", "\u{2026}", "\u{2122}", "\u{A9}", "\u{AE}"],
+                ['>>', '<<', '...', 'TM', '(c)', '(R)'], $s
+            );
+            $s = iconv('UTF-8', 'WINDOWS-1250//TRANSLIT//IGNORE', $s);
+            $s = strtr($s, "\xa5\xa3\xbc\x8c\xa7\x8a\xaa\x8d\x8f\x8e\xaf\xb9\xb3\xbe\x9c\x9a\xba\x9d\x9f\x9e"
+                . "\xbf\xc0\xc1\xc2\xc3\xc4\xc5\xc6\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd0\xd1\xd2\xd3"
+                . "\xd4\xd5\xd6\xd7\xd8\xd9\xda\xdb\xdc\xdd\xde\xdf\xe0\xe1\xe2\xe3\xe4\xe5\xe6\xe7\xe8"
+                . "\xe9\xea\xeb\xec\xed\xee\xef\xf0\xf1\xf2\xf3\xf4\xf5\xf6\xf8\xf9\xfa\xfb\xfc\xfd\xfe"
+                . "\x96\xa0\x8b\x97\x9b\xa6\xad\xb7",
+                'ALLSSSSTZZZallssstzzzRAAAALCCCEEEEIIDDNNOOOOxRUUUUYTsraaaalccceeeeiiddnnooooruuuuyt- <->|-.');
+            $s = preg_replace('#[^\x00-\x7F]++#', '', $s);
+        } else {
+            $s = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $s);
+        }
+        $s = str_replace(['`', "'", '"', '^', '~', '?'], '', $s);
+        return strtr($s, "\x01\x02\x03\x04\x05\x06", '`\'"^~?');
     }
 
     /**

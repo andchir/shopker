@@ -11,6 +11,7 @@ use AppBundle\Service\ShopCartService;
 use AppBundle\Service\UtilsService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -39,6 +40,7 @@ class FileController extends BaseController
         $user = $this->getUser();
         $userId = $user ? $user->getId() : 0;
         $ownerId = ShopCartService::getCartId();
+        $max_user_files_size = (int) $this->getParameter('max_user_files_size');
 
         $categoryId = (int) $request->get('categoryId');
         if (!$categoryId) {
@@ -71,9 +73,15 @@ class FileController extends BaseController
         $error = '';
         $filesIds = [];
 
+        /** @var UploadedFile $file */
         foreach ($files as $key => $file) {
 
             $fieldName = $key;
+            $fileSize = $file->getSize();
+            if ($fileSize > $max_user_files_size * 1024 * 1024) {
+                $error = $translator->trans('You can not upload a file larger than %size% MB.', ['%size%' => $max_user_files_size]);
+                break;
+            }
 
             $currentField = array_filter($contentTypeFields, function($field) use ($fieldName) {
                 return $field['name'] === $fieldName;

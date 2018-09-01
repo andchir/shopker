@@ -178,7 +178,8 @@ class CheckoutController extends BaseController
 
         $fileDocumentRepository = $this->getFileRepository();
 
-        $fileDocuments = $fileDocumentRepository->findTemporaryByTime($ownerType, 30 * 60);
+        $max_temp_files_keep_minutes = (int) $this->getParameter('max_temp_files_keep_minutes');
+        $fileDocuments = $fileDocumentRepository->findTemporaryByTime($ownerType, $max_temp_files_keep_minutes * 60);
         /** @var FileDocument $fileDocument */
         foreach ($fileDocuments as $fileDocument) {
             $dm->remove($fileDocument);// File will delete by event

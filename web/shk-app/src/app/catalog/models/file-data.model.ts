@@ -1,4 +1,9 @@
 export class FileData {
+
+    public toString = (): string => {
+        return `${this.title}.${this.extension}`;
+    };
+
     constructor(
         public fileId: number,
         public title: string,

@@ -197,6 +197,10 @@
                                                 </a>
                                                 <div class="text-muted small">
                                                     {{ content.parametersString }}
+                                                    <div *ngIf="content.filesString">
+                                                        <i class="icon-file"></i>&nbsp;
+                                                        <span [innerHTML]="content.filesString"></span>
+                                                    </div>
                                                 </div>
                                             </td>
                                             <td class="text-center pr-2">

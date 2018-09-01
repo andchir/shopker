@@ -352,7 +352,8 @@ class OrderContent
             'image' => $this->getImage(),
             'uri' => $this->getUri(),
             'contentTypeName' => $this->getContentTypeName(),
-            'parameters' => $this->getParameters()
+            'parameters' => $this->getParameters(),
+            'files' => $this->getFiles()
         ];
     }
 
@@ -370,7 +371,8 @@ class OrderContent
             ->setImage($data['image'])
             ->setUri($data['uri'])
             ->setContentTypeName($data['contentTypeName'])
-            ->setParameters($data['parameters']);
+            ->setParameters($data['parameters'])
+            ->setFiles($data['fiels']);
         return $this;
     }
 }

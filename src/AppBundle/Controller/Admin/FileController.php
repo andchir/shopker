@@ -5,12 +5,14 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Document\Category;
 use AppBundle\Document\ContentType;
 use AppBundle\Document\FileDocument;
+use AppBundle\Service\UtilsService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class FileControllerAbstract
@@ -147,6 +149,28 @@ class FileController extends BaseController
     }
 
     /**
+     * @Route("/download/{id}")
+     * @Method({"GET"})
+     * @param FileDocument $fileDocument
+     * @return Response
+     */
+    public function downloadFileAction(FileDocument $fileDocument)
+    {
+        if (!$fileDocument) {
+            throw $this->createNotFoundException();
+        }
+        $filesDirPath = $this->getParameter('files_dir_path');
+        $fileDocument->setUploadRootDir($filesDirPath);
+        $filePath = $fileDocument->getUploadedPath();
+
+        if (!$filePath || !file_exists($filePath)) {
+            throw $this->createNotFoundException();
+        }
+
+        return UtilsService::downloadFile($filePath, $fileDocument->getTitle());
+    }
+
+    /**
      * @return \AppBundle\Repository\FileDocumentRepository
      */
     public function getRepository()
@@ -175,5 +199,4 @@ class FileController extends BaseController
         }
         return $results;
     }
-
 }

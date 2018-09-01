@@ -131,5 +131,7 @@ var APP_LANG = {
     "mongodb_server": "MongoDB server",
     "mongodb_user": "MongoDB user",
     "payment_status_after_number": "Order status number after payment",
-    "payment_status_number": "Order status number for payment"
+    "payment_status_number": "Order status number for payment",
+    "max_user_files_size": "Maximum user files size, MB",
+    "max_temp_files_keep_minutes": "Time of temporary files storage, minutes"
 };

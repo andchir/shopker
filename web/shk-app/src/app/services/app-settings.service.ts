@@ -6,6 +6,11 @@ export class AppSettings {
     public location = window.location;
     public settings = window['appSettings'] as AppSettingsModel;
 
+    static getBaseUrl(): string {
+        const settings = window['appSettings'];
+        return `${settings.webApiUrl}/`;
+    }
+
     constructor () {
 
     }

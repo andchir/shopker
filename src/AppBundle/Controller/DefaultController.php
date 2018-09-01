@@ -112,7 +112,9 @@ class DefaultController extends CatalogController
             'mailer_auth_mode' => $this->getParameter('mailer_auth_mode'),
             'admin_email' => '',
             'payment_status_number' => 1,
-            'payment_status_after_number' => 2
+            'payment_status_after_number' => 2,
+            'max_user_files_size' => 20,
+            'max_temp_files_keep_minutes' => 30
         ];
 
         /** @var SettingsService $settingsService */

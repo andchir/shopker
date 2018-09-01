@@ -6,6 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Class StorageControllerAbstract
@@ -22,9 +23,10 @@ abstract class StorageControllerAbstract extends BaseController
      * @Route("")
      * @Method({"GET"})
      * @param Request $request
+     * @param SerializerInterface $serializer
      * @return JsonResponse
      */
-    public function getList(Request $request)
+    public function getList(Request $request, SerializerInterface $serializer)
     {
         $queryString = $request->getQueryString();
         $options = $this->getQueryOptions($queryString);
@@ -32,16 +34,13 @@ abstract class StorageControllerAbstract extends BaseController
         $repository = $this->getRepository();
         $results = $repository->findAllByOptions($options);
 
-        $data = [];
-        $getFull = !empty($options['full']);
-        foreach ($results['items'] as $item) {
-            $data[] = $item->toArray($getFull);
-        }
-
-        return new JsonResponse([
-            'items' => $data,
-            'total' => $results['total']
-        ]);
+        return new JsonResponse(
+            $serializer->serialize([
+                'items' => array_values($results['items']->toArray()),
+                'total' => $results['total']
+            ], 'json', ['groups' => ['list']]),
+            200, [], true
+        );
     }
 
     /**
@@ -58,9 +57,10 @@ abstract class StorageControllerAbstract extends BaseController
      * @Route("/{itemId}")
      * @Method({"GET"})
      * @param $itemId
+     * @param SerializerInterface $serializer
      * @return JsonResponse
      */
-    public function getItem($itemId)
+    public function getItem($itemId, SerializerInterface $serializer)
     {
         $repository = $this->getRepository();
 
@@ -69,7 +69,10 @@ abstract class StorageControllerAbstract extends BaseController
             return $this->setError('Item not found.');
         }
 
-        return new JsonResponse($item->toArray(true));
+        return new JsonResponse(
+            $serializer->serialize($item, 'json', ['groups' => ['details']]),
+            200, [], true
+        );
     }
 
     /**

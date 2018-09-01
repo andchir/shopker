@@ -5,6 +5,7 @@ namespace AppBundle\Document;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Document\OrderContent;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @MongoDB\Document(collection="order",repositoryClass="AppBundle\Repository\OrderRepository")
@@ -14,99 +15,124 @@ class Order
 {
     /**
      * @MongoDB\Id(type="int", strategy="INCREMENT")
+     * @Groups({"details", "list"})
      */
     protected $id;
 
     /**
      * @MongoDB\Field(type="string")
+     * @Groups({"details", "list"})
      */
     protected $email;
 
     /**
      * @MongoDB\Field(type="string")
+     * @Groups({"details", "list"})
      */
     protected $fullName;
 
     /**
      * @MongoDB\Field(type="string", nullable=true)
+     * @Groups({"details", "list"})
      */
     protected $phone;
 
     /**
      * @MongoDB\Field(type="date", nullable=true)
+     * @Groups({"details", "list"})
      */
     protected $createdDate;
 
     /**
      * @MongoDB\Field(type="date", nullable=true)
+     * @Groups({"details", "list"})
      */
     protected $updatedDate;
 
     /**
      * @MongoDB\Field(type="string")
+     * @Groups({"details", "list"})
      */
     protected $status;
 
     /**
      * @MongoDB\Field(type="string", nullable=true)
+     * @Groups({"details", "list"})
      */
     protected $deliveryName;
 
     /**
      * @MongoDB\Field(type="float", nullable=true)
+     * @Groups({"details", "list"})
      */
     protected $deliveryPrice;
 
     /**
      * @MongoDB\Field(type="string", nullable=true)
+     * @Groups({"details", "list"})
      */
     protected $paymentName;
 
     /**
      * @MongoDB\Field(type="string", nullable=true)
+     * @Groups({"details", "list"})
      */
     protected $paymentValue;
 
     /**
      * @MongoDB\Field(type="integer")
+     * @Groups({"details", "list"})
      */
     protected $userId;
 
     /**
      * @MongoDB\Field(type="string", nullable=true)
+     * @Groups({"details", "list"})
      */
     protected $comment;
 
     /**
      * @MongoDB\Field(type="string", nullable=true)
+     * @Groups({"details", "list"})
      */
     protected $note;
 
     /**
      * @MongoDB\Field(type="float")
+     * @Groups({"details", "list"})
      */
     protected $price;
 
     /**
      * @MongoDB\Field(type="string", nullable=true)
+     * @Groups({"details", "list"})
      */
     protected $currency;
 
     /**
      * @MongoDB\Field(type="collection", nullable=true)
+     * @Groups({"details"})
      */
     protected $options;
 
     /**
      * @MongoDB\Field(type="collection", nullable=true)
      * @MongoDB\EmbedMany(targetDocument="OrderContent")
+     * @Groups({"details"})
      */
     protected $content;
 
     /**
      * @MongoDB\Field(type="boolean")
+     * @Groups({"details", "list"})
      */
     protected $isPaid;
+
+    /**
+     * @Groups({"details", "list"})
+     * @var int
+     */
+    protected $contentCount;
 
     public function __construct()
     {
@@ -476,14 +502,16 @@ class Order
 
     /**
      * @param $shopCartData
+     * @param ArrayCollection $filesCollection
      * @return $this
      */
-    public function setContentFromCart($shopCartData)
+    public function setContentFromCart($shopCartData, $filesCollection)
     {
         foreach ($shopCartData['data'] as $contentTypeName => $products) {
             foreach ($products as $product) {
                 $uri = $product['parentUri'] . $product['systemName'];
                 $orderContent = new OrderContent();
+                $files = isset($product['files']) ? $product['files'] : [];
                 $orderContent
                     ->setId($product['id'])
                     ->setTitle($product['title'])
@@ -492,8 +520,25 @@ class Order
                     ->setImage($product['image'])
                     ->setUri($uri)
                     ->setContentTypeName($contentTypeName)
-                    ->setParameters($product['parameters'])
-                    ->setFiles($product['files']);
+                    ->setParameters($product['parameters']);
+
+                if (!empty($files)) {
+                    foreach ($files as $fileData) {
+                        $fileDocuments = $filesCollection->filter(function($entry) use ($fileData) {
+                            return $entry->getId() === $fileData['fileId'];
+                        });
+                        if (!empty($fileDocuments)) {
+                            /** @var FileDocument $fileDocument */
+                            $fileDocument = $fileDocuments->current();
+                            $fileDocument
+                                ->setOrderContent($orderContent)
+                                ->setOwnerType(FileDocument::OWNER_ORDER_PRODUCT)
+                                ->setOwnerId(0);
+
+                            $orderContent->addFile($fileDocument);
+                        }
+                    }
+                }
 
                 $this->addContent($orderContent);
             }
@@ -613,21 +658,6 @@ class Order
     public function setContent($content)
     {
         $this->content = $content;
-        return $this;
-    }
-
-    /**
-     * @param array $content
-     * @return $this
-     */
-    public function setContentFromArray($content)
-    {
-        $this->content = new ArrayCollection();
-        foreach ($content as $cnt) {
-            $orderContent = new OrderContent();
-            $orderContent->fromArray($cnt);
-            $this->addContent($orderContent);
-        }
         return $this;
     }
 

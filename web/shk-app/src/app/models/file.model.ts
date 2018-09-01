@@ -1,4 +1,9 @@
 export class FileModel {
+
+    public toString = (): string => {
+        return `${this.title}.${this.extension}`;
+    };
+
     constructor(
         public id: number,
         public title: string,

@@ -13,6 +13,7 @@ use AppBundle\Repository\CategoryRepository;
 use AppBundle\Service\SettingsService;
 use AppBundle\Service\ShopCartService;
 use AppBundle\Service\UtilsService;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ODM\MongoDB\Cursor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -95,10 +96,12 @@ class CheckoutController extends BaseController
                     ? $settings[Setting::GROUP_ORDER_STATUSES][0]->getName()
                     : '';
 
+                $filesCollection = $this->getOrderFilesCollection($shopCartData);
+
                 $order
                     ->setDeliveryPrice($deliveryPrice)
                     ->setPaymentValue($paymentName)
-                    ->setContentFromCart($shopCartData)
+                    ->setContentFromCart($shopCartData, $filesCollection)
                     ->setStatus($statusName)
                     ->setCurrency($currency);
 
@@ -129,6 +132,9 @@ class CheckoutController extends BaseController
                     $user->setOptions($userOptions);
                 }
 
+                // Save order files
+                //$this->saveOrderFiles($order);
+
                 /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
                 $dm = $this->get('doctrine_mongodb')->getManager();
                 $dm->persist($order);
@@ -137,9 +143,6 @@ class CheckoutController extends BaseController
                 // Dispatch event
                 $event = new GenericEvent($order);
                 $eventDispatcher->dispatch(Events::ORDER_CREATED, $event);
-
-                // Save order files
-                $this->saveOrderFiles($order);
 
                 // Delete temporary files
                 $this->deleteTemporaryFiles(FileDocument::OWNER_ORDER_TEMPORARY);
@@ -161,6 +164,30 @@ class CheckoutController extends BaseController
         return $this->render('page_checkout.html.twig', [
             'form' => $form->createView()
         ]);
+    }
+
+    /**
+     * @param array $shopCartData
+     * @return ArrayCollection
+     */
+    public function getOrderFilesCollection($shopCartData)
+    {
+        $fileDocumentRepository = $this->getFileRepository();
+        $collection = new ArrayCollection();
+        foreach ($shopCartData['data'] as $contentTypeName => $products) {
+            foreach ($products as $product) {
+                if (empty($product['files'])) {
+                    continue;
+                }
+                foreach ($product['files'] as $fileData) {
+                    $fileDocument = $fileDocumentRepository->find($fileData['fileId']);
+                    if ($fileDocument) {
+                        $collection->add($fileDocument);
+                    }
+                }
+            }
+        }
+        return $collection;
     }
 
     /**
@@ -197,14 +224,14 @@ class CheckoutController extends BaseController
     public function saveOrderFiles(Order $order)
     {
         $orderId = $order->getId();
-        $orderContent = $order->getContent();
+        $orderContents = $order->getContent();
 
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $this->get('doctrine_mongodb')->getManager();
 
-        /** @var OrderContent $item */
-        foreach ($orderContent as $item) {
-            $files = $item->getFiles();
+        /** @var OrderContent $orderContent */
+        foreach ($orderContents as $orderContent) {
+            $files = $orderContent->getFiles();
             if (empty($files)) {
                 continue;
             }
@@ -217,7 +244,8 @@ class CheckoutController extends BaseController
                 if ($fileDocument) {
                     $fileDocument
                         ->setOwnerType(FileDocument::OWNER_ORDER_PRODUCT)
-                        ->setOwnerId($orderId);
+                        ->setOwnerId($orderId)
+                        ->setOrderContent($orderContent);
 
                     $dm->flush();
                 }

@@ -106,7 +106,7 @@ export class ModalOrderContentComponent extends ModalContentAbstractComponent<Or
                         data['email'],
                         data['phone'],
                         data['fullName'],
-                        new Date(data['createdDate']['date']),
+                        data['createdDate'],
                         data['deliveryName'],
                         data['deliveryPrice'],
                         data['paymentName'],
@@ -148,28 +148,28 @@ export class ModalOrderContentComponent extends ModalContentAbstractComponent<Or
     }
 
     editContentCancel(): void {
-        if (this.contentEdit.id === 0) {
+        if (!this.contentEdit.uniqId) {
             return;
         }
         const index = _.findIndex<OrderContent>(this.model.content, {
-            id: this.contentEdit.id,
+            uniqId: this.contentEdit.uniqId,
             contentTypeName: this.contentEdit.contentTypeName
         });
         if (index > -1) {
             this.model.content[index] = _.cloneDeep(this.contentEdit);
-            this.contentEdit = new OrderContent(0, '', 0, 0);
+            this.contentEdit = new OrderContent(0, '', 0, 0, '');
             this.priceTotalUpdate();
         }
     }
 
     getIsContentEdit(content: OrderContent): boolean {
-        return this.contentEdit.id === content.id
+        return this.contentEdit.uniqId === content.uniqId
             && this.contentEdit.contentTypeName === content.contentTypeName;
     }
 
     deleteContent(content: OrderContent): void {
         const index = _.findIndex(this.model.content, {
-            id: content.id,
+            uniqId: content.uniqId,
             contentTypeName: content.contentTypeName
         });
         if (index > -1) {
@@ -266,7 +266,7 @@ export class OrdersComponent extends PageTableAbstractComponent<Order> {
             name: 'createdDate',
             sortName: 'createdDate',
             title: 'DATE_TIME',
-            outputType: 'dateObject',
+            outputType: 'date',
             outputProperties: {
                 format: 'dd/MM/y H:mm:s'
             }

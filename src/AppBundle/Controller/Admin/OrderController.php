@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Controller\ProductController as BaseProductController;
 use AppBundle\Document\Order;
+use AppBundle\Document\OrderContent;
 use AppBundle\Document\Setting;
 use AppBundle\Service\SettingsService;
 use AppBundle\Service\UtilsService;
@@ -40,6 +41,8 @@ class OrderController extends StorageControllerAbstract
         $deliveryPrice = !empty($data['deliveryPrice']) ? floatval($data['deliveryPrice']) : 0;
         /** @var SettingsService $settingsService */
         $settingsService = $this->get('app.settings');
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->get('doctrine_mongodb')->getManager();
         /** @var Setting $settingDelivery */
         $settingDelivery = $settingsService->getSetting($data['deliveryName'], Setting::GROUP_DELIVERY);
         if ($settingDelivery) {
@@ -56,11 +59,20 @@ class OrderController extends StorageControllerAbstract
             ->setDeliveryPrice($deliveryPrice)
             ->setPaymentName($data['paymentName'])
             ->setComment($data['comment'])
-            ->setOptions($data['options'])
-            ->setContentFromArray($content);
+            ->setOptions($data['options']);
 
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
+        /** @var OrderContent $orderContent */
+        foreach ($item->getContent() as $orderContent) {
+            $index = array_search($orderContent->getUniqId(), array_column($content, 'uniqId'));
+            if ($index === false) {
+                $dm->remove($orderContent);
+            } else {
+                $orderContent
+                    ->setPrice($content[$index]['price'])
+                    ->setCount($content[$index]['count']);
+            }
+        }
+
         $dm->flush();
 
         return new JsonResponse([

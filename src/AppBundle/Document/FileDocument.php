@@ -4,6 +4,7 @@ namespace AppBundle\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @MongoDB\Document(collection="file",repositoryClass="AppBundle\Repository\FileDocumentRepository")
@@ -18,53 +19,69 @@ class FileDocument
 
     /**
      * @MongoDB\Id(type="int", strategy="INCREMENT")
+     * @Groups({"details", "list"})
      */
     protected $id;
 
     /**
      * @MongoDB\Field(type="string")
+     * @Groups({"details", "list"})
      */
     protected $title;
 
     /**
      * @MongoDB\Field(type="string")
+     * @Groups({"details", "list"})
      */
     protected $fileName;
 
     /**
      * @MongoDB\Field(type="string")
+     * @Groups({"details", "list"})
      */
     protected $extension;
 
     /**
      * @MongoDB\Field(type="string")
+     * @Groups({"details", "list"})
      */
     protected $mimeType;
 
     /**
      * @MongoDB\Field(type="string", nullable=true)
+     * @Groups({"details"})
      */
     protected $ownerType;
 
     /**
      * @MongoDB\Field(type="integer")
+     * @Groups({"details", "list"})
      */
     protected $size;
 
     /**
      * @MongoDB\Field(type="integer")
+     * @Groups({"details", "list"})
      */
     protected $userId;
 
     /**
      * @MongoDB\Field(type="string", nullable=true)
+     * @Groups({"details"})
      */
     protected $ownerId;
 
     /**
      * @MongoDB\Field(type="date", nullable=true)
+     * @Groups({"details", "list"})
      */
     protected $createdDate;
+
+    /**
+     * @MongoDB\ReferenceOne(targetDocument="OrderContent")
+     * @var ContentType
+     */
+    protected $orderContent;
 
     private $uploadRootDir = '';
     private $file;
@@ -441,6 +458,28 @@ class FileDocument
             return true;
         }
         return false;
+    }
+
+    /**
+     * Set order content
+     *
+     * @param OrderContent $orderContent
+     * @return $this
+     */
+    public function setOrderContent(OrderContent $orderContent)
+    {
+        $this->orderContent = $orderContent;
+        return $this;
+    }
+
+    /**
+     * Get order content
+     *
+     * @return ContentType
+     */
+    public function getOrderContent()
+    {
+        return $this->orderContent;
     }
 
     /**

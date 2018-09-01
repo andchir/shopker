@@ -2,7 +2,9 @@
 
 namespace AppBundle\Document;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @MongoDB\EmbeddedDocument()
@@ -11,53 +13,69 @@ class OrderContent
 {
     /**
      * @MongoDB\Id(type="int")
+     * @Groups({"details", "list"})
      */
     protected $uniqId;
 
     /**
      * @MongoDB\Field(type="int")
+     * @Groups({"details", "list"})
      */
     protected $id;
 
     /**
      * @MongoDB\Field(type="string")
+     * @Groups({"details", "list"})
      */
     protected $title;
 
     /**
      * @MongoDB\Field(type="string")
+     * @Groups({"details", "list"})
      */
     protected $image;
 
     /**
      * @MongoDB\Field(type="string")
+     * @Groups({"details", "list"})
      */
     protected $uri;
 
     /**
      * @MongoDB\Field(type="string")
+     * @Groups({"details", "list"})
      */
     protected $contentTypeName;
 
     /**
      * @MongoDB\Field(type="float")
+     * @Groups({"details", "list"})
      */
     protected $count;
 
     /**
      * @MongoDB\Field(type="float")
+     * @Groups({"details", "list"})
      */
     protected $price;
 
     /**
      * @MongoDB\Field(type="collection", nullable=true)
+     * @Groups({"details", "list"})
      */
     protected $parameters;
 
     /**
-     * @MongoDB\Field(type="collection", nullable=true)
+     * @MongoDB\ReferenceMany(targetDocument="FileDocument", mappedBy="orderContent", orphanRemoval=true, cascade={"all"})
+     * @Groups({"details", "list"})
+     * @var ArrayCollection
      */
     protected $files;
+
+    public function __construct()
+    {
+        $this->files = new ArrayCollection();
+    }
 
     /**
      * Get uniqId
@@ -244,21 +262,33 @@ class OrderContent
     }
 
     /**
-     * Set files
+     * Add file
      *
-     * @param array $files
+     * @param FileDocument $file
      * @return $this
      */
-    public function setFiles($files)
+    public function addFile(FileDocument $file)
     {
-        $this->files = $files;
+        $this->files->add($file);
+        return $this;
+    }
+
+    /**
+     * Remove file
+     *
+     * @param FileDocument $file
+     * @return $this
+     */
+    public function removeFile(FileDocument $file)
+    {
+        $this->files->removeElement($file);
         return $this;
     }
 
     /**
      * Get files
      *
-     * @return array $files
+     * @return ArrayCollection
      */
     public function getFiles()
     {
@@ -353,7 +383,7 @@ class OrderContent
             'uri' => $this->getUri(),
             'contentTypeName' => $this->getContentTypeName(),
             'parameters' => $this->getParameters(),
-            'files' => $this->getFiles()
+            'files' => $this->getFilesArray()
         ];
     }
 
@@ -371,8 +401,8 @@ class OrderContent
             ->setImage($data['image'])
             ->setUri($data['uri'])
             ->setContentTypeName($data['contentTypeName'])
-            ->setParameters($data['parameters'])
-            ->setFiles($data['fiels']);
+            ->setParameters($data['parameters']);
+            //->setFiles($data['files']);
         return $this;
     }
 }

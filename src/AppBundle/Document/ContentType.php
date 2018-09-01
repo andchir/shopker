@@ -246,25 +246,29 @@ class ContentType
         }
         return $output;
     }
-    
+
     /**
      * Add category
      *
      * @param Category $category
+     * @return $this
      */
     public function addCategory(Category $category)
     {
         $this->categories[] = $category;
+        return $this;
     }
 
     /**
      * Remove category
      *
      * @param Category $category
+     * @return $this
      */
     public function removeCategory(Category $category)
     {
         $this->categories->removeElement($category);
+        return $this;
     }
 
     /**

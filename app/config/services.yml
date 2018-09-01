@@ -53,10 +53,6 @@ services:
         public: true
         arguments: ['@doctrine.odm.mongodb.document_manager']
 
-    get_set_method_normalizer:
-        class: Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer
-        tags: [serializer.normalizer]
-
     mongodb_paramconverter:
         class: Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter
         arguments: ['@doctrine_mongodb']

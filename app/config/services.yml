@@ -78,6 +78,12 @@ services:
         class: MongoCollection
         arguments: ['@mongo.database', 'cache']
 
+    event_subscribers:
+        namespace: AppBundle\EventSubscriber\
+        resource: '../../src/AppBundle/EventSubscriber'
+        tags: [event_subscriber]
+        arguments: [ '@service_container' ]
+
     AppBundle\EventSubscriber\DoctrineEventSubscriber:
         tags:
             - { name: doctrine_mongodb.odm.event_subscriber, connection: default, lazy: true }

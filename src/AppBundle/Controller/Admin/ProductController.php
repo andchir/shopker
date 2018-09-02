@@ -7,12 +7,14 @@ use AppBundle\Document\Category;
 use AppBundle\Document\ContentType;
 use AppBundle\Document\FileDocument;
 use AppBundle\Document\Filter;
+use AppBundle\Events;
 use AppBundle\Service\UtilsService;
 use Doctrine\ORM\Query\Expr\Base;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use \Mimey\MimeTypes;
@@ -425,6 +427,11 @@ class ProductController extends BaseProductController
         }
         else {
             $result = $collection->insert($document);
+
+            // Dispatch event
+            $eventDispatcher = $this->get('event_dispatcher');
+            $event = new GenericEvent($contentType, $document);
+            $eventDispatcher->dispatch(Events::PRODUCT_CREATED, $event);
         }
 
         $this->onAfterUpdateItem($contentType, $document, $category->getId());
@@ -544,13 +551,20 @@ class ProductController extends BaseProductController
     public function deleteItem(ContentType $contentType, $itemData)
     {
         $collection = $this->getCollection($contentType->getCollection());
-        $this->onBeforeDeleteItem($contentType, $itemData);
         $result = $collection->remove([
             '_id' => $itemData['_id']
         ]);
+        if (empty($result['ok'])) {
+            return $result;
+        }
 
         $categoryId = isset($itemData['parentId']) ? $itemData['parentId'] : 0;
         $this->onAfterUpdateItem($contentType, [], $categoryId);
+
+        // Dispatch event
+        $eventDispatcher = $this->get('event_dispatcher');
+        $event = new GenericEvent($itemData, ['contentType' => $contentType]);
+        $eventDispatcher->dispatch(Events::PRODUCT_DELETED, $event);
 
         return $result;
     }
@@ -655,39 +669,6 @@ class ProductController extends BaseProductController
         }
 
         return $collection->count($where);
-    }
-
-    /**
-     * @param ContentType $contentType
-     * @param $itemData
-     * @param array $ids
-     */
-    public function onBeforeDeleteItem(ContentType $contentType, $itemData, $ids = [])
-    {
-        if (empty($ids)) {
-            array_push($ids, $itemData['_id']);
-        }
-        $contentTypeName = $contentType->getName();
-        foreach ($contentType->getFields() as $field){
-
-            // Files will be saved later by a separate request
-            if ($field['inputType'] == 'file') {
-
-                // Delete file
-                if (!empty($itemData[$field['name']])) {
-                    $fileData = $itemData[$field['name']];
-                    if (!empty($fileData['fileId'])) {
-
-                        $usedTotal = $this->getUsedOtherTotal($contentType, $field['name'], $fileData['fileId'], $ids);
-
-                        // Delete if not used by other
-                        if (!$usedTotal) {
-                            $this->deleteFile($fileData['fileId'], $contentTypeName);
-                        }
-                    }
-                }
-            }
-        }
     }
 
     /**

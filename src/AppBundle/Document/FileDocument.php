@@ -78,7 +78,7 @@ class FileDocument
     protected $createdDate;
 
     /**
-     * @MongoDB\ReferenceOne(targetDocument="OrderContent")
+     * @MongoDB\ReferenceOne(targetDocument="OrderContent", mappedBy="files")
      * @var ContentType
      */
     protected $orderContent;

@@ -84,6 +84,11 @@
                                                         {{ orderContent.parametersString }}
                                                     </div>
                                                 {% endif %}
+                                                {% if orderContent.filesString is not empty %}
+                                                    <div class="text-muted small">
+                                                        {{ orderContent.filesString }}
+                                                    </div>
+                                                {% endif %}
                                             </td>
                                             <td>
                                                 {{ orderContent.price | price }}

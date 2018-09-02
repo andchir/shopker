@@ -123,6 +123,12 @@ class Order
     protected $content;
 
     /**
+     * @MongoDB\ReferenceMany(targetDocument="FileDocument", mappedBy="order", orphanRemoval=true, cascade={"all"}, storeAs="id")
+     * @Groups({"details"})
+     */
+    protected $files;
+
+    /**
      * @MongoDB\Field(type="boolean")
      * @Groups({"details", "list"})
      */
@@ -137,6 +143,7 @@ class Order
     public function __construct()
     {
         $this->content = new ArrayCollection();
+        $this->files = new ArrayCollection();
     }
 
     /**
@@ -531,11 +538,12 @@ class Order
                             /** @var FileDocument $fileDocument */
                             $fileDocument = $fileDocuments->current();
                             $fileDocument
-                                ->setOrderContent($orderContent)
+                                ->setOrder($this)
                                 ->setOwnerType(FileDocument::OWNER_ORDER_PRODUCT)
                                 ->setOwnerId(0);
 
-                            $orderContent->addFile($fileDocument);
+                            $orderContent->addFile($fileDocument);//Add array data
+                            $this->addFile($fileDocument);
                         }
                     }
                 }
@@ -679,6 +687,40 @@ class Order
     public function removeContent(OrderContent $content)
     {
         $this->content->removeElement($content);
+    }
+
+    /**
+     * Add file
+     *
+     * @param FileDocument $file
+     * @return $this
+     */
+    public function addFile(FileDocument $file)
+    {
+        $this->files->add($file);
+        return $this;
+    }
+
+    /**
+     * Remove file
+     *
+     * @param FileDocument $file
+     * @return $this
+     */
+    public function removeFile(FileDocument $file)
+    {
+        $this->files->removeElement($file);
+        return $this;
+    }
+
+    /**
+     * Get files
+     *
+     * @return ArrayCollection
+     */
+    public function getFiles()
+    {
+        return $this->files;
     }
 
     /**

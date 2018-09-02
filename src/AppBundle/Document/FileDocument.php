@@ -78,10 +78,10 @@ class FileDocument
     protected $createdDate;
 
     /**
-     * @MongoDB\ReferenceOne(targetDocument="OrderContent", mappedBy="files")
-     * @var ContentType
+     * @MongoDB\ReferenceOne(targetDocument="Order", storeAs="id")
+     * @var Order
      */
-    protected $orderContent;
+    protected $order;
 
     private $uploadRootDir = '';
     private $file;
@@ -461,25 +461,25 @@ class FileDocument
     }
 
     /**
-     * Set order content
+     * Set order
      *
-     * @param OrderContent $orderContent
+     * @param Order $order
      * @return $this
      */
-    public function setOrderContent(OrderContent $orderContent)
+    public function setOrder(Order $order)
     {
-        $this->orderContent = $orderContent;
+        $this->order = $order;
         return $this;
     }
 
     /**
-     * Get order content
+     * Get order
      *
-     * @return ContentType
+     * @return Order
      */
-    public function getOrderContent()
+    public function getOrder()
     {
-        return $this->orderContent;
+        return $this->order;
     }
 
     /**

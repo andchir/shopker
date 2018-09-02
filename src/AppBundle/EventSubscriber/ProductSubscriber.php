@@ -36,7 +36,6 @@ class ProductSubscriber implements EventSubscriberInterface
         $itemData = $event->getSubject();
         /** @var ContentType $contentType */
         $contentType = $event->getArgument('contentType');
-        $filesDirPath = $this->container->getParameter('files_dir_path');
 
         $contentTypeFields = $contentType->getFields();
 
@@ -58,13 +57,11 @@ class ProductSubscriber implements EventSubscriberInterface
                 /** @var FileDocument $fileDocument */
                 $fileDocument = $fileDocumentRepository->find($val['fileId']);
                 if ($fileDocument) {
-                    $fileDocument->setUploadRootDir($filesDirPath);
                     $dm->remove($fileDocument);
+                    $dm->flush();
                 }
             }
         }
-
-        $dm->flush();
     }
 }
 

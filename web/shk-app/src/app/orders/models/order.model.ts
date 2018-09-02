@@ -1,7 +1,6 @@
 import {UserOption} from '../../users/models/user.model';
 import {FileData} from '../../catalog/models/file-data.model';
 import {AppSettings} from '../../services/app-settings.service';
-import {FileModel} from '../../models/file.model';
 
 interface OrderContentParameter {
     name: string;
@@ -25,7 +24,7 @@ export class OrderContent {
         public uri?: string,
         public image?: string,
         public parameters?: OrderContentParameter[],
-        public files?: FileModel[]
+        public files?: FileData[]
     ) {
         this.createParametersString();
         this.createFilesString();
@@ -82,7 +81,7 @@ export class OrderContent {
         const filesStrArr = [],
             baseUrl = AppSettings.getBaseUrl();
         this.files.forEach((fileData) => {
-            const downloadLink = `${baseUrl}admin/files/download/${fileData.id}`;
+            const downloadLink = `${baseUrl}admin/files/download/${fileData.fileId}`;
             let fileStr = `<a href="${downloadLink}" target="_blank">`;
             fileStr += `${fileData.title}.${fileData.extension}</a>`;
             filesStrArr.push(fileStr);

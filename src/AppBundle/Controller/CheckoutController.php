@@ -132,9 +132,6 @@ class CheckoutController extends BaseController
                     $user->setOptions($userOptions);
                 }
 
-                // Save order files
-                //$this->saveOrderFiles($order);
-
                 /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
                 $dm = $this->get('doctrine_mongodb')->getManager();
                 $dm->persist($order);
@@ -213,44 +210,6 @@ class CheckoutController extends BaseController
         }
 
         $dm->flush();
-
-        return true;
-    }
-
-    /**
-     * @param Order $order
-     * @return bool
-     */
-    public function saveOrderFiles(Order $order)
-    {
-        $orderId = $order->getId();
-        $orderContents = $order->getContent();
-
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
-
-        /** @var OrderContent $orderContent */
-        foreach ($orderContents as $orderContent) {
-            $files = $orderContent->getFiles();
-            if (empty($files)) {
-                continue;
-            }
-            foreach ($files as $file) {
-                /** @var FileDocument $fileDocument */
-                $fileDocument = $this->getFileRepository()->findOneBy([
-                    'id' => $file['fileId'],
-                    'ownerType' => FileDocument::OWNER_ORDER_TEMPORARY
-                ]);
-                if ($fileDocument) {
-                    $fileDocument
-                        ->setOwnerType(FileDocument::OWNER_ORDER_PRODUCT)
-                        ->setOwnerId($orderId)
-                        ->setOrderContent($orderContent);
-
-                    $dm->flush();
-                }
-            }
-        }
 
         return true;
     }

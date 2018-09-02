@@ -2,7 +2,6 @@
 
 namespace AppBundle\Document;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -61,21 +60,15 @@ class OrderContent
 
     /**
      * @MongoDB\Field(type="collection", nullable=true)
-     * @Groups({"details", "list"})
+     * @Groups({"details"})
      */
-    protected $parameters;
+    protected $parameters = [];
 
     /**
-     * @MongoDB\ReferenceMany(targetDocument="FileDocument", mappedBy="orderContent", orphanRemoval=true, cascade={"all"})
-     * @Groups({"details", "list"})
-     * @var ArrayCollection
+     * @MongoDB\Field(type="collection", nullable=true)
+     * @Groups({"details"})
      */
-    protected $files;
-
-    public function __construct()
-    {
-        $this->files = new ArrayCollection();
-    }
+    protected $files = [];
 
     /**
      * Get uniqId
@@ -264,35 +257,33 @@ class OrderContent
     /**
      * Add file
      *
-     * @param FileDocument $file
+     * @param array $files
      * @return $this
      */
-    public function addFile(FileDocument $file)
+    public function setFiles($files)
     {
-        $this->files->add($file);
-        return $this;
-    }
-
-    /**
-     * Remove file
-     *
-     * @param FileDocument $file
-     * @return $this
-     */
-    public function removeFile(FileDocument $file)
-    {
-        $this->files->removeElement($file);
+        $this->files = $files;
         return $this;
     }
 
     /**
      * Get files
      *
-     * @return ArrayCollection
+     * @return array
      */
     public function getFiles()
     {
         return $this->files;
+    }
+
+    /**
+     * @param FileDocument $fileDocument
+     * @return $this
+     */
+    public function addFile(FileDocument $fileDocument)
+    {
+        $this->files[] = $fileDocument->getRecordData();
+        return $this;
     }
 
     /**
@@ -331,11 +322,11 @@ class OrderContent
     }
 
     /**
-     * @param array|null $parameters
+     * @param array $parameters
      * @param string $currency
      * @return string
      */
-    public static function getParametersStrFromArray($parameters = null, $currency = '')
+    public static function getParametersStrFromArray($parameters = [], $currency = '')
     {
         $outputArr = [];
         foreach ($parameters as $parameter) {
@@ -355,6 +346,15 @@ class OrderContent
     }
 
     /**
+     * Get files string
+     * @return string
+     */
+    public function getFilesString()
+    {
+        return self::getFilesStrFromArray($this->getFiles());
+    }
+
+    /**
      * @param array|null $files
      * @return string
      */
@@ -362,7 +362,12 @@ class OrderContent
     {
         $outputArr = [];
         foreach ($files as $file) {
-            $str = $file['title'] . '.' . $file['extension'];
+            if ($file instanceof FileDocument) {
+                /** @var FileDocument $file */
+                $str = $file->getTitle() . '.' . $file->getExtension();
+            } else {
+                $str = $file['title'] . '.' . $file['extension'];
+            }
             array_push($outputArr, $str);
         }
         return implode(', ', $outputArr);
@@ -382,8 +387,7 @@ class OrderContent
             'image' => $this->getImage(),
             'uri' => $this->getUri(),
             'contentTypeName' => $this->getContentTypeName(),
-            'parameters' => $this->getParameters(),
-            'files' => $this->getFilesArray()
+            'parameters' => $this->getParameters()
         ];
     }
 

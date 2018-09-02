@@ -95,10 +95,18 @@ class CartController extends ProductController
                     && !empty($field['outputProperties']['required']);
             });
             if (count($fileRequiredFields) > 0) {
-                $request->getSession()
-                    ->getFlashBag()
-                    ->add('errors', 'File is required.');
-                return new RedirectResponse($referer);
+                $c = 0;
+                foreach ($fileRequiredFields as $index => $field) {
+                    if (!empty($productDocument[$field['name']])) {
+                        $c++;
+                    }
+                }
+                if ($c > 0) {
+                    $request->getSession()
+                        ->getFlashBag()
+                        ->add('errors', 'File is required.');
+                    return new RedirectResponse($referer);
+                }
             }
         }
 

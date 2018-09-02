@@ -1,4 +1,4 @@
-primeng@5.2.7
+primeng@6.1.2
 MIT
 The MIT License (MIT)
 

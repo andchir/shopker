@@ -34,12 +34,11 @@ abstract class StorageControllerAbstract extends BaseController
         $repository = $this->getRepository();
         $results = $repository->findAllByOptions($options);
 
-        return new JsonResponse(
-            $serializer->serialize([
+        return $this->json([
                 'items' => array_values($results['items']->toArray()),
                 'total' => $results['total']
-            ], 'json', ['groups' => ['list']]),
-            200, [], true
+            ],
+            200, [], ['groups' => ['list']]
         );
     }
 
@@ -69,10 +68,7 @@ abstract class StorageControllerAbstract extends BaseController
             return $this->setError('Item not found.');
         }
 
-        return new JsonResponse(
-            $serializer->serialize($item, 'json', ['groups' => ['details']]),
-            200, [], true
-        );
+        return $this->json($item, 200, [], ['groups' => ['details']]);
     }
 
     /**

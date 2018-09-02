@@ -3,6 +3,7 @@
 namespace AppBundle\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @MongoDB\Document(collection="filters",repositoryClass="AppBundle\Repository\FilterRepository")
@@ -11,21 +12,25 @@ class Filter
 {
     /**
      * @MongoDB\Id(type="int", strategy="INCREMENT")
+     * @Groups({"details", "list"})
      */
     protected $id;
 
     /**
      * @MongoDB\Field(type="int")
+     * @Groups({"details", "list"})
      */
     protected $categoryId;
 
     /**
      * @MongoDB\Field(type="string", nullable=true)
+     * @Groups({"details", "list"})
      */
     protected $name;
 
     /**
      * @MongoDB\Field(type="hash")
+     * @Groups({"details", "list"})
      */
     protected $values;
 

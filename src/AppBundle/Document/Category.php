@@ -3,6 +3,7 @@
 namespace AppBundle\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @MongoDB\Document(collection="category",repositoryClass="AppBundle\Repository\CategoryRepository")
@@ -12,67 +13,80 @@ class Category
 {
     /**
      * @MongoDB\Id(type="int", strategy="INCREMENT")
+     * @Groups({"details", "list"})
      */
     protected $id;
 
     /**
      * @MongoDB\Field(type="int")
+     * @Groups({"details", "list"})
      */
     protected $parentId;
 
     /**
      * @MongoDB\Field(type="string")
+     * @Groups({"details", "list"})
      */
     protected $title;
 
     /**
      * @MongoDB\Field(type="string")
+     * @Groups({"details", "list"})
      */
     protected $name;
 
     /**
      * @MongoDB\Field(type="string", nullable=true)
+     * @Groups({"details", "list"})
      */
     protected $uri;
 
     /**
      * @MongoDB\Field(type="string")
+     * @Groups({"details", "list"})
      */
     protected $description;
 
     /**
      * @MongoDB\Field(type="string")
+     * @Groups({"details", "list"})
      */
     protected $contentTypeName;
 
     /**
      * @MongoDB\Field(type="boolean")
+     * @Groups({"details", "list"})
      */
     protected $isFolder;
 
     /**
      * @MongoDB\Field(type="boolean")
+     * @Groups({"details", "list"})
      */
     protected $isActive;
 
     /**
      * @MongoDB\Field(type="string")
+     * @Groups({"details", "list"})
      */
     protected $image;
 
     /**
      * @MongoDB\Field(type="int")
+     * @Groups({"details", "list"})
      */
     protected $menuIndex;
 
     /**
      * @MongoDB\ReferenceOne(targetDocument="ContentType", inversedBy="category")
+     * @Groups({"details", "list"})
      * @var ContentType
      */
     protected $contentType;
 
     /**
      * @MongoDB\ReferenceOne(targetDocument="Filter", inversedBy="category", orphanRemoval=true, cascade={"all"})
+     * @Groups({"details", "list"})
      * @var Filter
      */
     protected $filterData;

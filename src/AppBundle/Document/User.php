@@ -7,6 +7,7 @@ use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Bundle\MongoDBBundle\Validator\Constraints\Unique as MongoDBUnique;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @MongoDB\Document(collection="user", repositoryClass="AppBundle\Repository\UserRepository")
@@ -17,16 +18,19 @@ class User implements AdvancedUserInterface, \Serializable
 {
     /**
      * @MongoDB\Id(type="int", strategy="INCREMENT")
+     * @Groups({"details", "list"})
      */
     protected $id;
 
     /**
      * @MongoDB\Field(type="string", nullable=true)
+     * @Groups({"details", "list"})
      */
     private $username;
 
     /**
      * @MongoDB\Field(type="string")
+     * @Groups({"details", "list"})
      * @Assert\NotBlank()
      * @Assert\Email()
      */
@@ -34,26 +38,31 @@ class User implements AdvancedUserInterface, \Serializable
 
     /**
      * @MongoDB\Field(type="string", nullable=true)
+     * @Groups({"details", "list"})
      */
     protected $fullName;
 
     /**
      * @MongoDB\Field(type="string", nullable=true)
+     * @Groups({"details", "list"})
      */
     protected $phone;
 
     /**
      * @MongoDB\Field(type="collection", nullable=true)
+     * @Groups({"details", "list"})
      */
     protected $options;
 
     /**
      * @MongoDB\Field(type="date", nullable=true)
+     * @Groups({"details", "list"})
      */
     protected $createdDate;
 
     /**
      * @MongoDB\Field(type="date", nullable=true)
+     * @Groups({"details", "list"})
      */
     protected $updatedDate;
 
@@ -70,6 +79,7 @@ class User implements AdvancedUserInterface, \Serializable
 
     /**
      * @MongoDB\Field(type="string", nullable=true)
+     * @Groups({"details"})
      */
     protected $secretCode;
 
@@ -80,13 +90,20 @@ class User implements AdvancedUserInterface, \Serializable
 
     /**
      * @MongoDB\Field(type="boolean")
+     * @Groups({"details", "list"})
      */
     protected $isActive;
 
     /**
      * @MongoDB\Field(type="collection")
+     * @Groups({"details", "list"})
      */
     protected $roles;
+
+    /**
+     * @Groups({"details", "list"})
+     */
+    protected $role;
 
     public function __construct()
     {
@@ -162,6 +179,14 @@ class User implements AdvancedUserInterface, \Serializable
             $roles[] = 'ROLE_USER';
         }
         return array_unique($roles);
+    }
+
+    /**
+     * @return string
+     */
+    public function getRole()
+    {
+        return current($this->getRoles());
     }
 
     /**

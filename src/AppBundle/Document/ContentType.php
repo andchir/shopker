@@ -4,6 +4,7 @@ namespace AppBundle\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use \Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @MongoDB\Document(collection="content_type",repositoryClass="AppBundle\Repository\ContentTypeRepository")
@@ -12,41 +13,49 @@ class ContentType
 {
     /**
      * @MongoDB\Id(type="int", strategy="INCREMENT")
+     * @Groups({"details", "list"})
      */
     protected $id;
 
     /**
      * @MongoDB\Field(type="string")
+     * @Groups({"details", "list"})
      */
     protected $title;
 
     /**
      * @MongoDB\Field(type="string")
+     * @Groups({"details", "list"})
      */
     protected $name;
 
     /**
      * @MongoDB\Field(type="string")
+     * @Groups({"details", "list"})
      */
     protected $description;
 
     /**
      * @MongoDB\Field(type="string")
+     * @Groups({"details", "list"})
      */
     protected $collection;
 
     /**
      * @MongoDB\Field(type="collection")
+     * @Groups({"details"})
      */
     protected $fields;
 
     /**
      * @MongoDB\Field(type="collection")
+     * @Groups({"details"})
      */
     protected $groups;
 
     /**
      * @MongoDB\Field(type="boolean")
+     * @Groups({"details", "list"})
      */
     protected $isActive;
 

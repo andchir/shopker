@@ -2,7 +2,10 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Document\Setting;
 use AppBundle\Repository\CategoryRepository;
+use AppBundle\Service\SettingsService;
+use AppBundle\Service\ShopCartService;
 use AppBundle\Service\UtilsService;
 use Doctrine\ODM\MongoDB\Cursor;
 use Doctrine\ODM\MongoDB\DocumentRepository;
@@ -94,6 +97,30 @@ class ProductController extends BaseController
         $m = $this->container->get('doctrine_mongodb.odm.default_connection');
         $db = $m->selectDatabase($databaseName);
         return $db->createCollection($collectionName);
+    }
+
+    /**
+     * Get currency
+     * @return string
+     */
+    public function getCurrency()
+    {
+        /** @var SettingsService $settingsService */
+        $settingsService = $this->get('app.settings');
+        $currencySettings = $settingsService->getSettingsGroup(Setting::GROUP_CURRENCY);
+        if (empty($currencySettings)) {
+            return '';
+        }
+        $currency = ShopCartService::getCurrency();
+        $currentCurrencySettings = array_filter($currencySettings, function($setting) use ($currency) {
+            /** @var Setting $setting */
+            return $setting->getName() == $currency;
+        });
+        if (!empty($currentCurrencySettings)) {
+            return current($currentCurrencySettings)->getName();
+        } else {
+            return current($currencySettings)->getName();
+        }
     }
 
     /**

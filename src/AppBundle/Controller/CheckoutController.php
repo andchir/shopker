@@ -50,7 +50,10 @@ class CheckoutController extends BaseController
         $settingsService = $this->get('app.settings');
         $settings = $settingsService->getAll();
 
-        $currency = ShopCartService::getCurrency();
+        // Get currency
+        $productController = new ProductController();
+        $productController->setContainer($this->container);
+        $currency = $productController->getCurrency();
 
         $order = new Order();
         if ($user) {

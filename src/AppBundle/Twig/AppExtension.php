@@ -178,9 +178,17 @@ class AppExtension extends AbstractExtension
      * @param array $properties
      * @param array $options
      * @param array $fieldProperties
+     * @param array $data
      * @return mixed
      */
-    public function renderOutputTypeFunction(\Twig_Environment $environment, $value, $type, $properties = [], $options = [], $fieldProperties = [])
+    public function renderOutputTypeFunction(\Twig_Environment $environment,
+        $value,
+        $type,
+        $properties = [],
+        $options = [],
+        $fieldProperties = [],
+        $data = []
+    )
     {
         if (empty($value)) {
             $value = '';
@@ -191,9 +199,9 @@ class AppExtension extends AbstractExtension
             : '';
 
         if (is_array($value)) {
-            $properties = array_merge($properties, ['value' => '', 'data' => $value]);
+            $properties = array_merge($properties, ['value' => '', 'data' => $value], $data);
         } else {
-            $properties = array_merge($properties, ['value' => $value]);
+            $properties = array_merge($properties, ['value' => $value], $data);
         }
         if (!isset($properties['systemNameField'])) {
             $properties['systemNameField'] = '';
@@ -243,9 +251,10 @@ class AppExtension extends AbstractExtension
      * @param $itemData
      * @param $fieldsData
      * @param string $chunkNamePrefix
+     * @param array $data
      * @return string
      */
-    public function renderOutputTypeArrayFunction(\Twig_Environment $environment, $itemData, $fieldsData, $chunkNamePrefix = '')
+    public function renderOutputTypeArrayFunction(\Twig_Environment $environment, $itemData, $fieldsData, $chunkNamePrefix = '', $data = [])
     {
         if (empty($itemData)) {
             return '';
@@ -261,7 +270,8 @@ class AppExtension extends AbstractExtension
                 $field['type'],
                 array_merge($field['properties'], ['chunkNamePrefix' => $chunkNamePrefix]),
                 $itemData,
-                $field
+                $field,
+                $data
             );
         }
         return $output;
@@ -288,9 +298,10 @@ class AppExtension extends AbstractExtension
      * @param $fieldsData
      * @param $chunkName
      * @param string $chunkNamePrefix
+     * @param array $data
      * @return string
      */
-    public function renderOutputTypeChunkFunction(\Twig_Environment $environment, $itemData, $fieldsData, $chunkName, $chunkNamePrefix = '')
+    public function renderOutputTypeChunkFunction(\Twig_Environment $environment, $itemData, $fieldsData, $chunkName, $chunkNamePrefix = '', $data = [])
     {
         $chunkNamesArr = array_column(array_column($fieldsData, 'properties'), 'chunkName');
         $index = array_search($chunkName, $chunkNamesArr);
@@ -315,7 +326,7 @@ class AppExtension extends AbstractExtension
         } else {
             $propertiesDefault['value'] = $value;
         }
-        $properties = array_merge($field['properties'], $propertiesDefault);
+        $properties = array_merge($field['properties'], $propertiesDefault, $data);
         $properties['systemName'] = !empty($itemData[$properties['systemNameField']])
             ? $itemData[$properties['systemNameField']]
             : '';

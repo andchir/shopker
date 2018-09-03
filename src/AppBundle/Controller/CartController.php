@@ -47,7 +47,11 @@ class CartController extends ProductController
             return new RedirectResponse($referer);
         }
 
-        $currency = ShopCartService::getCurrency();
+        // Get currency
+        $productController = new ProductController();
+        $productController->setContainer($this->container);
+        $currency = $productController->getCurrency();
+
         $contentType = $category->getContentType();
         $contentTypeName = $contentType->getName();
         $collectionName = $contentType->getCollection();

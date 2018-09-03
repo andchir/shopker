@@ -41,7 +41,7 @@
                                     <div class="col-6 col-lg-4">
                                         <div class="card mb-3">
                                             <div class="card-body">
-                                                {{ renderOutputTypeArray(item, fields) }}
+                                                {{ renderOutputTypeArray(item, fields, '', {"currency": currency}) }}
                                             </div>
                                         </div>
                                     </div>
@@ -55,7 +55,7 @@
                                                         {{ renderOutputTypeChunk(item, fieldsAll, 'image') }}
                                                         {{ renderOutputTypeChunk(item, fieldsAll, 'header') }}
                                                         {{ renderOutputTypeChunk(item, fieldsAll, 'description') }}
-                                                        {{ renderOutputTypeChunk(item, fieldsAll, 'price') }}
+                                                        {{ renderOutputTypeChunk(item, fieldsAll, 'price', '', {"currency": currency}) }}
                                                     </div>
                                                 </div>
                                             </div>

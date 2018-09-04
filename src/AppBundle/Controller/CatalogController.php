@@ -4,10 +4,8 @@ namespace AppBundle\Controller;
 
 use AppBundle\Document\ContentType;
 use AppBundle\Document\Filter;
-use AppBundle\Document\Setting;
 use AppBundle\Repository\CategoryRepository;
 use AppBundle\Service\SettingsService;
-use AppBundle\Service\ShopCartService;
 use AppBundle\Service\UtilsService;
 use Doctrine\ODM\MongoDB\Cursor;
 use Doctrine\ODM\MongoDB\DocumentRepository;
@@ -109,7 +107,9 @@ class CatalogController extends ProductController
         $breadcrumbs = array_filter($breadcrumbs, function($entry) use ($uri) {
             return $entry['uri'] !== $uri;
         });
-        $currency = $this->getCurrency();
+        /** @var SettingsService $settingsService */
+        $settingsService = $this->get('app.settings');
+        $currency = $settingsService->getCurrency();
 
         return $this->render($this->getTemplateName('catalog', $contentType->getName()), [
             'currentCategory' => $currentCategory,
@@ -173,7 +173,9 @@ class CatalogController extends ProductController
 
         // Get categories menu
         $categoriesMenu = $this->getCategoriesMenu($category, $breadcrumbs);
-        $currency = $this->getCurrency();
+        /** @var SettingsService $settingsService */
+        $settingsService = $this->get('app.settings');
+        $currency = $settingsService->getCurrency();
 
         return $this->render($this->getTemplateName('product-page', $contentType->getName()), [
             'currentCategory' => $category,

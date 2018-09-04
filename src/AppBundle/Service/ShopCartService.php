@@ -87,7 +87,7 @@ class ShopCartService
     /**
      * @return string
      */
-    public static function getCurrency()
+    public static function getCurrencyCookie()
     {
         return isset($_COOKIE['shkCurrency'])
             ? $_COOKIE['shkCurrency']

@@ -5,7 +5,6 @@ namespace AppBundle\Controller;
 use AppBundle\Document\Category;
 use AppBundle\Document\FileDocument;
 use AppBundle\Document\Order;
-use AppBundle\Document\OrderContent;
 use AppBundle\Document\Setting;
 use AppBundle\Document\User;
 use AppBundle\Events;
@@ -51,9 +50,7 @@ class CheckoutController extends BaseController
         $settings = $settingsService->getAll();
 
         // Get currency
-        $productController = new ProductController();
-        $productController->setContainer($this->container);
-        $currency = $productController->getCurrency();
+        $currency = $settingsService->getCurrency();
 
         $order = new Order();
         if ($user) {

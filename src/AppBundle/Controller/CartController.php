@@ -6,6 +6,7 @@ use AppBundle\Document\Category;
 use AppBundle\Document\FileDocument;
 use AppBundle\Document\User;
 use AppBundle\Repository\CategoryRepository;
+use AppBundle\Service\SettingsService;
 use AppBundle\Service\ShopCartService;
 use Doctrine\ODM\MongoDB\Cursor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -48,9 +49,9 @@ class CartController extends ProductController
         }
 
         // Get currency
-        $productController = new ProductController();
-        $productController->setContainer($this->container);
-        $currency = $productController->getCurrency();
+        /** @var SettingsService $settingsService */
+        $settingsService = $this->get('app.settings');
+        $currency = $settingsService->getCurrency();
 
         $contentType = $category->getContentType();
         $contentTypeName = $contentType->getName();

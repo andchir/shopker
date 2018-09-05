@@ -19,7 +19,7 @@
 
 <form [class.loading]="loading">
 
-    <div class="modal-body">
+    <div class="modal-body py-0">
 
         <div class="row mb-3">
 
@@ -474,17 +474,11 @@
         </ngb-accordion>
         <!-- /Fields -->
 
-        <div class="form-group row mt-3">
-            <div class="col-12">
-
-                <div class="alert alert-danger mt-3 mb-0" [hidden]="!errorMessage">
-                    <button type="button" class="close" (click)="errorMessage = ''">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    {{errorMessage}}
-                </div>
-
-            </div>
+        <div class="alert alert-danger mt-3 mb-0" [hidden]="!errorMessage">
+            <button type="button" class="close" (click)="errorMessage = ''">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {{errorMessage}}
         </div>
 
     </div>

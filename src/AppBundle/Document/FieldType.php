@@ -37,13 +37,13 @@ class FieldType
 
     /**
      * @MongoDB\Field(type="collection")
-     * @Groups({"details"})
+     * @Groups({"details", "list"})
      */
     protected $inputProperties;
 
     /**
      * @MongoDB\Field(type="collection")
-     * @Groups({"details"})
+     * @Groups({"details", "list"})
      */
     protected $outputProperties;
 

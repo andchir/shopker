@@ -1,7 +1,7 @@
 parameters:
     app_name: Shopkeeper
     locale: en
-    mongodb_server: ''
+    mongodb_server: '127.0.0.1'
     mongodb_user: root
     mongodb_password: ''
     mongodb_database: ''

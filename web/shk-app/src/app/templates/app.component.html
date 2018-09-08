@@ -1,37 +1,46 @@
-<div>
-    <div class="pos-absolute-right" style="top: 1rem; right: 1rem;">
-        <a class="btn btn-secondary btn-sm" placement="bottom" href="{{baseUrl}}" target="_blank" [ngbTooltip]="'PREVIEW_SITE' | translate">
-            <i class="icon-home"></i>
-        </a>
-        <a class="btn btn-secondary btn-sm ml-1" href="{{baseUrl}}logout" [ngbTooltip]="'LOGOUT' | translate">
-            <i class="icon-power"></i>
-        </a>
-    </div>
+<div class="pl-5">
 
-    <div class="mb-3">
-        <div class="btn-group" role="group" aria-label="First group">
-            <a class="btn btn-outline-primary" [routerLink]="['/orders']" routerLinkActive="active">
-                <i class="icon-bag"></i>
-                <span class="d-none d-md-inline-block pl-2">{{'ORDERS' | translate}}</span>
-            </a>
-            <!--<a class="btn btn-outline-primary" [routerLink]="['/statistics']" routerLinkActive="active">-->
-                <!--<i class="icon-bar-graph-2"></i>-->
-                <!--&nbsp;-->
-                <!--<span class="d-none d-md-inline-block pl-2">{{'STATISTICS' | translate}}</span>-->
-            <!--</a>-->
-            <a class="btn btn-outline-primary" [routerLink]="['/catalog']" routerLinkActive="active">
-                <i class="icon-layers"></i>
-                <span class="d-none d-md-inline-block pl-2">{{'CATALOG' | translate}}</span>
-            </a>
-            <a class="btn btn-outline-primary" [routerLink]="['/users']" routerLinkActive="active">
-                <i class="icon-head"></i>
-                <span class="d-none d-md-inline-block pl-2">{{'USERS' | translate}}</span>
-            </a>
-            <a class="btn btn-outline-primary" [routerLink]="['/settings']" routerLinkActive="active">
-                <i class="icon-cog"></i>
-                <span class="d-none d-md-inline-block pl-2">{{'SETTINGS' | translate}}</span>
-            </a>
-        </div>
+    <div class="navbar-vertical-left bg-primary">
+        <ul>
+            <li class="nav-item">
+                <a class="nav-link" [routerLink]="['/orders']" routerLinkActive="active" [ngbTooltip]="'ORDERS' | translate" placement="right" tooltipClass="tooltip-left-blue">
+                    <i class="icon-bag item-icon"></i>
+                </a>
+            </li>
+            <!--<li class="nav-item">-->
+                <!--<a class="nav-link" [routerLink]="['/statistics']" routerLinkActive="active" [ngbTooltip]="'STATISTICS' | translate" placement="right" tooltipClass="tooltip-left-blue">-->
+                    <!--<i class="icon-bar-graph-2 item-icon"></i>-->
+                <!--</a>-->
+            <!--</li>-->
+            <li class="nav-item">
+                <a class="nav-link" [routerLink]="['/catalog']" routerLinkActive="active" [ngbTooltip]="'CATALOG' | translate" placement="right" tooltipClass="tooltip-left-blue">
+                    <i class="icon-layers item-icon"></i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" [routerLink]="['/users']" routerLinkActive="active" [ngbTooltip]="'USERS' | translate" placement="right" tooltipClass="tooltip-left-blue">
+                    <i class="icon-head item-icon"></i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" [routerLink]="['/settings']" routerLinkActive="active" [ngbTooltip]="'SETTINGS' | translate" placement="right" tooltipClass="tooltip-left-blue">
+                    <i class="icon-cog item-icon"></i>
+                </a>
+            </li>
+        </ul>
+
+        <ul class="navbar-vertical-left-bottom">
+            <li class="nav-item">
+                <a class="nav-link" href="{{baseUrl}}" target="_blank" [ngbTooltip]="'PREVIEW_SITE' | translate" placement="right" tooltipClass="tooltip-left-blue">
+                    <i class="icon-home item-icon"></i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{baseUrl}}logout" [ngbTooltip]="'LOGOUT' | translate" placement="right" tooltipClass="tooltip-left-blue">
+                    <i class="icon-power item-icon"></i>
+                </a>
+            </li>
+        </ul>
     </div>
 
     <router-outlet></router-outlet>

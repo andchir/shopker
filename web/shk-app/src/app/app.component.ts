@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, ViewEncapsulation} from '@angular/core';
 import {Router, NavigationEnd} from '@angular/router';
 import {Title} from '@angular/platform-browser';
 import {NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
@@ -40,7 +40,18 @@ export class AlertModalContentComponent {
     selector: 'app-root',
     templateUrl: './templates/app.component.html',
     styleUrls: [ './app.component.css' ],
-    providers: [ NgbTooltipConfig ]
+    providers: [ NgbTooltipConfig ],
+    encapsulation: ViewEncapsulation.None,
+    styles: [`
+        .tooltip-left-blue .tooltip-inner {
+            background-color: #007bff;
+            font-size: 125%;
+            border-radius: 0;
+        }
+        .tooltip-left-blue .arrow::before {
+            border-right-color: #007bff;
+        }
+    `]
 })
 export class AppComponent {
     baseUrl: string;

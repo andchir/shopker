@@ -143,6 +143,8 @@ class DefaultController extends CatalogController
 
                 $dbConnection = $this->get('doctrine_mongodb.odm.default_connection');
                 if (empty($data['mongodb_user']) && empty($data['mongodb_password'])) {
+                    $data['mongodb_user'] = '';
+                    $data['mongodb_password'] = '';
                     $serverUrl = "mongodb://{$data['mongodb_server']}:{$data['mongodb_port']}";
                 } else {
                     $serverUrl = "mongodb://{$data['mongodb_user']}:{$data['mongodb_password']}@{$data['mongodb_server']}:{$data['mongodb_port']}";

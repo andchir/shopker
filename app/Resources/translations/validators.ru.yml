@@ -11,4 +11,5 @@ install.mongodb_database_not_exist: База данных не существу�
 install.mongodb_database_not_permitted: Не достаточно прав для записи в базу данных.
 install.mongodb_database_not_empty: База данных не пуста.
 install.settings_file_not_writable: Файл settings.yml не доступен для записи.
+install.mongodb_database_clear_error: Ошибка при очистке базы данных.
 email.recipient_error: Не указан адрес получателя.

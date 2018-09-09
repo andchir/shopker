@@ -3,6 +3,7 @@
 namespace AppBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -50,6 +51,10 @@ class SetupType extends AbstractType
             ->add('mongodb_database', TextType::class, [
                 'label' => 'Database name',
                 'constraints' => new NotBlank()
+            ])
+            ->add('drop_database', CheckboxType::class, [
+                'label' => 'Clear the database',
+                'required' => false
             ])
             ->add('admin_email', EmailType::class, [
                 'constraints' => new Email()

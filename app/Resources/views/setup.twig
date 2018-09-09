@@ -51,6 +51,7 @@
                                                 {{ form_row(form.mongodb_user) }}
                                                 {{ form_row(form.mongodb_password) }}
                                                 {{ form_row(form.mongodb_database) }}
+                                                {{ form_row(form.drop_database) }}
                                             </div>
                                         </div>
 
@@ -96,7 +97,10 @@
         document.getElementById('setup_form_reload').value = '1';
         form.action = baseUrl + '/setup/' + this.value;
         form.submit();
-    }, false)
+    }, false);
+    document.getElementById('setupForm').addEventListener('submit', function(){
+        document.querySelector('button[type="submit"]').disabled = true;
+    }, false);
 </script>
 
 </body>

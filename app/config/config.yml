@@ -82,7 +82,7 @@ doctrine_mongodb:
     auto_generate_hydrator_classes: true
     connections:
         default:
-            server: "mongodb://%mongodb_user%:%mongodb_password%@%mongodb_server%"
+            server: 'mongodb://%mongodb_user%:%mongodb_password%@%mongodb_server%:%mongodb_port%'
             options: {}
     default_database: "%mongodb_database%"
     document_managers:
@@ -107,11 +107,11 @@ liip_imagine:
     loaders:
         default:
             filesystem:
-                data_root: '%kernel.root_dir%/../web'
+                data_root: '%web_dir_path%'
     resolvers:
         default:
             web_path:
-                web_root: '%kernel.root_dir%/../web'
+                web_root: '%web_dir_path%'
                 cache_prefix: 'uploads/thumbs/cache'
     filter_sets:
         cache: ~

@@ -172,7 +172,16 @@ class DefaultController extends CatalogController
                     }
 
                     if ($form->isValid() && !empty($collections)) {
-                        if (in_array('user', $collections)) {
+                        if ($data['drop_database']) {
+
+                            // Drop database
+                            $result = $dataBase->drop();
+                            if (empty($result['ok'])) {
+                                $form->addError(new FormError($translator->trans('install.mongodb_database_clear_error', [],
+                                    'validators')));
+                            }
+
+                        }else if (in_array('user', $collections)) {
                             $form->addError(new FormError($translator->trans('install.mongodb_database_not_empty', [],
                                 'validators')));
                         }

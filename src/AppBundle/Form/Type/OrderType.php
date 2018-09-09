@@ -45,7 +45,7 @@ class OrderType extends AbstractType
                 'label' => false
             ])
             ->add('email', EmailType::class, [
-                'constraints' => new Email()
+                'constraints' => [new NotBlank(), new Email()]
             ])
             ->add('fullName', TextType::class, [
                 'constraints' => new NotBlank()

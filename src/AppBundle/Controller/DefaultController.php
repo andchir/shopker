@@ -28,9 +28,8 @@ class DefaultController extends CatalogController
      */
     public function homepageAction()
     {
-        if (empty($this->getParameter('mongodb_database'))
-            || empty($this->getParameter('mongodb_user'))) {
-                return $this->redirectToRoute('setup');
+        if (empty($this->getParameter('mongodb_database'))) {
+            return $this->redirectToRoute('setup');
         }
         $categoriesRepository = $this->getCategoriesRepository();
         $categoriesTopLevel = $this->getChildCategories(0, [], true);
@@ -92,14 +91,14 @@ class DefaultController extends CatalogController
         UserPasswordEncoderInterface $encoder
     )
     {
-        if (!empty($this->getParameter('mongodb_database'))
-            || !empty($this->getParameter('mongodb_user'))) {
-                return $this->redirectToRoute('homepage');
+        if (!empty($this->getParameter('mongodb_database'))) {
+            return $this->redirectToRoute('homepage');
         }
         $settingsDefault = [
             'locale' => $request->getLocale(),
             'app_name' => $this->getParameter('app_name'),
             'mongodb_server' => $this->getParameter('mongodb_server'),
+            'mongodb_port' => $this->getParameter('mongodb_port'),
             'mongodb_user' => '',
             'mongodb_password' => '',
             'mongodb_database' => '',
@@ -143,7 +142,11 @@ class DefaultController extends CatalogController
                 $data = $form->getData();
 
                 $dbConnection = $this->get('doctrine_mongodb.odm.default_connection');
-                $serverUrl = "mongodb://{$data['mongodb_user']}:{$data['mongodb_password']}@{$data['mongodb_server']}";
+                if (empty($data['mongodb_user']) && empty($data['mongodb_password'])) {
+                    $serverUrl = "mongodb://{$data['mongodb_server']}:{$data['mongodb_port']}";
+                } else {
+                    $serverUrl = "mongodb://{$data['mongodb_user']}:{$data['mongodb_password']}@{$data['mongodb_server']}:{$data['mongodb_port']}";
+                }
 
                 try {
                     $mongoClient = new \MongoClient($serverUrl);

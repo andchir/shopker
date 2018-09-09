@@ -126,6 +126,7 @@ var APP_LANG = {
     "mailer_transport": "Почта: Транспорт",
     "mailer_user": "Почта: Имя пользователя",
     "mongodb_database": "MongoDB: База данных",
+    "mongodb_port": "MongoDB: Порт",
     "mongodb_password": "MongoDB: Пароль",
     "mongodb_server": "MongoDB: Сервер",
     "mongodb_user": "MongoDB: Пользоватеь",

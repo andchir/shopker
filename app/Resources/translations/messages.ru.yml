@@ -5,6 +5,7 @@ Main language: Основной язык
 Admin email: Адрес эл. почты администратора
 MongoDB Setup: Настройки MongoDB
 Server: Сервер
+Port: Порт
 User name: Имя пользователя
 Database name: Имя базы данных
 Russian: Русский

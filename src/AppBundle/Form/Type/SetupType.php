@@ -35,13 +35,17 @@ class SetupType extends AbstractType
                 'label' => 'Server',
                 'constraints' => new NotBlank()
             ])
+            ->add('mongodb_port', TextType::class, [
+                'label' => 'Port',
+                'constraints' => new NotBlank()
+            ])
             ->add('mongodb_user', TextType::class, [
                 'label' => 'User name',
-                'constraints' => new NotBlank()
+                'required' => false
             ])
             ->add('mongodb_password', PasswordType::class, [
                 'label' => 'Password',
-                'constraints' => new NotBlank()
+                'required' => false
             ])
             ->add('mongodb_database', TextType::class, [
                 'label' => 'Database name',

@@ -26,8 +26,7 @@ class CatalogController extends ProductController
      */
     public function catalogAction(Request $request, $uri)
     {
-        if (empty($this->getParameter('mongodb_database'))
-            || empty($this->getParameter('mongodb_user'))) {
+        if (empty($this->getParameter('mongodb_database'))) {
                 return $this->redirectToRoute('setup');
         }
         $categoriesRepository = $this->getCategoriesRepository();

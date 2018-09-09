@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Document\ContentType;
+use AppBundle\Service\SettingsService;
 use AppBundle\Service\UtilsService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -34,6 +35,10 @@ class SearchController extends CatalogController
                 'searchWord' => $searchWord
             ]);
         }
+
+        /** @var SettingsService $settingsService */
+        $settingsService = $this->get('app.settings');
+        $currency = $settingsService->getCurrency();
 
         $pageSizeArr = $this->getParameter('catalog_page_size');
         $queryString = $request->getQueryString();
@@ -77,6 +82,7 @@ class SearchController extends CatalogController
             ->limit($queryOptions['limit']);
 
         return $this->render('page_search_results.html.twig', [
+            'currency' => $currency,
             'fieldsAll' => $fieldsAll,
             'totalItems' => $total,
             'items' => $items,

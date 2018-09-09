@@ -1,8 +1,15 @@
 <div class="mb-3">
-    <div class="float-right">
+    <div class="float-md-left">
+        <a class="btn btn-outline-secondary btn-wide mb-2 mb-md-0" [routerLink]="['/catalog']">
+            <i class="icon-arrow-left"></i>
+            &nbsp;
+            <span>{{'CATALOG' | translate}}</span>
+        </a>
+    </div>
+    <div class="float-md-right">
 
-        <div ngbDropdown class="d-inline-block mr-1" placement="bottom-right">
-            <button class="btn btn-info" ngbDropdownToggle>
+        <div ngbDropdown class="d-block d-md-inline-block" placement="bottom-right">
+            <button class="btn btn-info d-block d-md-inline-block width-100 width-md-auto mb-2 mb-md-0" ngbDropdownToggle>
                 <span>{{'BATCH_ACTIONS' | translate}}</span>
             </button>
             <div ngbDropdownMenu>
@@ -10,21 +17,12 @@
                 <button class="dropdown-item" (click)="deleteSelected()">{{'DELETE' | translate}}</button>
             </div>
         </div>
-        &nbsp;
-        <button type="button" class="btn btn-success d-inline-block btn-wide" (click)="modalOpen()">
+        <button type="button" class="btn btn-success btn-wide d-block d-md-inline-block width-100 width-md-auto ml-md-2" (click)="modalOpen()">
             <i class="icon-plus"></i>
             &nbsp;
             <span>{{'ADD' | translate}}</span>
         </button>
 
-    </div>
-
-    <div class="float-left">
-        <a class="btn btn-outline-secondary" [routerLink]="['/catalog']">
-            <i class="icon-arrow-left"></i>
-            &nbsp;
-            <span>{{'CATALOG' | translate}}</span>
-        </a>
     </div>
     <div class="clearfix"></div>
 </div>

@@ -1,9 +1,16 @@
 <div class="card">
     <div class="card-body" [class.loading]="loading">
 
-        <div class="float-right">
-            <div ngbDropdown class="d-inline-block" placement="bottom-right">
-                <button class="btn btn-info btn-sm" ngbDropdownToggle>
+        <div class="float-md-left">
+            <h3>
+                <i class="icon-cog"></i>
+                {{'SETTINGS' | translate}}
+            </h3>
+        </div>
+
+        <div class="float-md-right">
+            <div ngbDropdown class="d-block d-md-inline-block" placement="bottom-right">
+                <button class="btn btn-info btn-sm d-block d-md-inline-block width-100 width-md-auto mb-2 mb-md-0" ngbDropdownToggle>
                     <i class="icon-repeat"></i>
                     &nbsp;
                     <span>{{'CLEAR_CACHE' | translate}}</span>
@@ -13,18 +20,14 @@
                     <button class="dropdown-item" (click)="clearSystemCache()">{{'CLEAR_SYSTEM_CACHE' | translate}}</button>
                 </div>
             </div>
-            &nbsp;
-            <a class="btn btn-secondary btn-sm" href="{{baseUrl}}admin/_console" target="_blank">
+            <a class="btn btn-secondary btn-sm ml-md-2 d-block d-md-inline-block width-100 width-md-auto" href="{{baseUrl}}admin/_console" target="_blank">
                 <i class="icon-terminal"></i>
                 &nbsp;
                 <span>{{'CONSOLE' | translate}}</span>
             </a>
         </div>
-        <h3>
-            <i class="icon-cog"></i>
-            {{'SETTINGS' | translate}}
-        </h3>
 
+        <div class="clearfix"></div>
         <hr>
 
         <div class="row">

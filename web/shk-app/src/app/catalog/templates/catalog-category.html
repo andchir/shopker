@@ -1,29 +1,32 @@
 <div class="mb-3">
-    <div class="float-right">
 
-        <div ngbDropdown class="d-inline-block mr-1" placement="bottom-right">
-            <button class="btn btn-info" ngbDropdownToggle>
-                <span>{{'BATCH_ACTIONS' | translate}}</span>
-            </button>
-            <div ngbDropdownMenu>
-                <button class="dropdown-item" (click)="blockSelected()">{{'DISABLE_ENABLE' | translate}}</button>
-                <button class="dropdown-item" (click)="deleteSelected()">{{'DELETE' | translate}}</button>
-            </div>
+    <div>
+        <div class="float-md-left">
+
+            <app-categories-menu (changeRequest)="openCategory($event)"></app-categories-menu>
+
         </div>
-        &nbsp;
-        <button type="button" class="btn btn-success d-inline-block btn-wide" (click)="modalOpen()">
-            <i class="icon-plus"></i>
-            &nbsp;
-            <span>{{'ADD' | translate}}</span>
-        </button>
+        <div class="float-md-right">
 
+            <div ngbDropdown class="d-block d-md-inline-block mb-2 mb-md-0" placement="bottom-right">
+                <button class="btn btn-info d-block d-md-inline-block width-100 width-md-auto" ngbDropdownToggle>
+                    <span>{{'BATCH_ACTIONS' | translate}}</span>
+                </button>
+                <div ngbDropdownMenu>
+                    <button class="dropdown-item" (click)="blockSelected()">{{'DISABLE_ENABLE' | translate}}</button>
+                    <button class="dropdown-item" (click)="deleteSelected()">{{'DELETE' | translate}}</button>
+                </div>
+            </div>
+            <button type="button" class="btn btn-success btn-wide d-block d-md-inline-block width-100 width-md-auto ml-md-2" (click)="modalOpen()">
+                <i class="icon-plus"></i>
+                &nbsp;
+                <span>{{'ADD' | translate}}</span>
+            </button>
+
+        </div>
+        <div class="clearfix"></div>
     </div>
-    <div class="float-left">
 
-        <app-categories-menu (changeRequest)="openCategory($event)"></app-categories-menu>
-
-    </div>
-    <div class="clearfix"></div>
 </div>
 
 <app-table

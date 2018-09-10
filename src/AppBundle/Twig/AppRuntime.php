@@ -37,8 +37,7 @@ class AppRuntime
      */
     public function shopCartFunction(\Twig_Environment $environment, $chunkName = 'shop_cart', $emptyChunkName = '')
     {
-        if (empty($this->container->getParameter('mongodb_database'))
-            || empty($this->container->getParameter('mongodb_user'))) {
+        if (empty($this->container->getParameter('mongodb_database'))) {
                 return '';
         }
         $data = [
@@ -94,8 +93,7 @@ class AppRuntime
      */
     public function currencyListFunction(\Twig_Environment $environment)
     {
-        if (empty($this->container->getParameter('mongodb_database'))
-            || empty($this->container->getParameter('mongodb_user'))) {
+        if (empty($this->container->getParameter('mongodb_database'))) {
                 return '';
         }
         $cacheKey = 'currency.list';

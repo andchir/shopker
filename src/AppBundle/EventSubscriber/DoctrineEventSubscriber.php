@@ -2,6 +2,9 @@
 
 namespace AppBundle\EventSubscriber;
 
+use AppBundle\Controller\Admin\ProductController;
+use AppBundle\Document\Category;
+use AppBundle\Document\ContentType;
 use AppBundle\Document\FileDocument;
 use AppBundle\Document\OrderContent;
 use Doctrine\Common\EventSubscriber;
@@ -29,7 +32,9 @@ class DoctrineEventSubscriber implements EventSubscriber
     public function getSubscribedEvents()
     {
         return [
-            Events::postRemove => 'postRemove'
+            Events::postRemove => 'postRemove',
+            Events::postPersist => 'postPersist',
+            Events::postUpdate => 'postUpdate'
         ];
     }
 
@@ -64,6 +69,41 @@ class DoctrineEventSubscriber implements EventSubscriber
                     $dm->flush();
                 }
             }
+        }
+    }
+
+    /**
+     * @param LifecycleEventArgs $args
+     */
+    public function postPersist(LifecycleEventArgs $args)
+    {
+        $document = $args->getDocument();
+        if ($document instanceof ContentType) {
+            $this->contentTypeUpdateFilters($document);
+        }
+    }
+
+    public function postUpdate(LifecycleEventArgs $args)
+    {
+        $document = $args->getDocument();
+        if ($document instanceof ContentType) {
+            $this->contentTypeUpdateFilters($document);
+        }
+    }
+
+    /**
+     * @param ContentType $contentType
+     */
+    public function contentTypeUpdateFilters(ContentType $contentType)
+    {
+        $productController = new ProductController();
+        $productController->setContainer($this->container);
+
+        /** @var ContentType $document */
+        $categories = $contentType->getCategories();
+        /** @var Category $category */
+        foreach ($categories as $category) {
+            $productController->updateFiltersData($category);
         }
     }
 

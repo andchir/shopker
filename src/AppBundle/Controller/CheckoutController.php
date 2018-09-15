@@ -41,7 +41,11 @@ class CheckoutController extends BaseController
      * @param EventDispatcherInterface $eventDispatcher
      * @return RedirectResponse|Response
      */
-    public function checkoutAction(Request $request, UtilsService $utilsService, TranslatorInterface $translator, EventDispatcherInterface $eventDispatcher)
+    public function checkoutAction(Request $request,
+        UtilsService $utilsService,
+        TranslatorInterface $translator,
+        EventDispatcherInterface $eventDispatcher
+    )
     {
         /** @var User $user */
         $user = $this->getUser();

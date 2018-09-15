@@ -31,7 +31,9 @@
         var self = this;
 
         var mainOptions = {
-            baseUrl: '/'
+            baseUrl: '/',
+            multiCurrency: false,
+            currencyOptions: []
         };
 
         /**
@@ -207,7 +209,7 @@
          */
         this.productParametersInit = function(formSelector, priceElSelector) {
             var formEl = document.querySelector(formSelector),
-                priceEl = document.querySelector(priceElSelector);
+                priceEl = formEl.querySelector(priceElSelector);
             if (!formEl || !priceEl) {
                 return;
             }
@@ -281,7 +283,9 @@
                 }
             });
 
+            delete priceEl.dataset.originalPrice;
             priceEl.textContent = this.numFormat(price);
+            this.updateProductsPrice(null, formEl);
         };
 
         /**
@@ -317,7 +321,21 @@
             selectElement.value = this.getCurrentCurrency();
             selectElement.addEventListener('change', function(e) {
                 self.setCookie('shkCurrency', this.value, 7);
+                self.updateProductsPrice(this.value);
             }, false);
+
+            if (mainOptions.currencyOptions.length === 0) {
+                var optionEls = selectElement.querySelectorAll('option');
+                if (optionEls.length > 1) {
+                    mainOptions.multiCurrency = true;
+                    optionEls.forEach(function(optionEl) {
+                        var rate = optionEl.dataset.rate || '1';
+                        rate = parseFloat(rate);
+                        mainOptions.currencyOptions.push({name: optionEl.value, rate: rate});
+                    });
+                    this.updateProductsPrice();
+                }
+            }
         };
 
         this.getCurrentCurrency = function() {
@@ -330,6 +348,47 @@
                 : '';
             this.setCookie('shkCurrency', currentCurrency, 7);
             return currentCurrency;
+        };
+
+        /**
+         * Update products price
+         * @param currency
+         * @param parentEl
+         */
+        this.updateProductsPrice = function(currency, parentEl) {
+            parentEl = parentEl || document;
+            if (!mainOptions.multiCurrency) {
+                return;
+            }
+            if (!currency) {
+                currency = this.getCurrentCurrency();
+            }
+            var currentRate, tmp = mainOptions.currencyOptions.filter(function(opt) {
+                return opt.name === currency;
+            });
+            if (tmp.length === 0) {
+                return;
+            }
+            currentRate = tmp[0].rate;
+
+            var priceElArr = parentEl.querySelectorAll('.shk-price'),
+                currencyElArr = parentEl.querySelectorAll('.shk-currency');
+            // Update price
+            priceElArr.forEach(function(priceEl) {
+                if (!priceEl.dataset.originalPrice) {
+                    priceEl.dataset.originalPrice = self.parsePrice(priceEl.textContent);
+                }
+                var originalPrice = parseFloat(priceEl.dataset.originalPrice);
+                priceEl.textContent = self.numFormat(self.getPriceByRate(originalPrice, currentRate));
+            });
+            // Update currency
+            currencyElArr.forEach(function(currencyEl) {
+                currencyEl.textContent = currency;
+            });
+        };
+
+        this.getPriceByRate = function(price, rate) {
+            return price / rate;
         };
 
         /**

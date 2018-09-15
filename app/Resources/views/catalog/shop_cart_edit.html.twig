@@ -23,11 +23,17 @@
                                 </div>
                             {% endif %}
                         </td>
-                        <td>{{ item.price | price }} {{ item.currency }}</td>
+                        <td>
+                            <span class="shk-price">{{ item.price | price }}</span>
+                            <span class="shk-currency">{{ currencySelected }}</span>
+                        </td>
                         <td>
                             <input type="number" class="form-control" min="1" step="1" name="count[]" value="{{ item.count }}" style="width: 80px;">
                         </td>
-                        <td>{{ item.priceTotal | price }} {{ item.currency }}</td>
+                        <td>
+                            <span class="shk-price">{{ item.priceTotal | price }}</span>
+                            <span class="shk-currency">{{ currencySelected }}</span>
+                        </td>
                         <td class="text-right">
                             <a class="btn btn-outline-info ml-1" href="{{ path('shop_cart_remove', {"contentTypeName": contentTypeName, "index": loop.index0}) }}" data-toggle="tooltip" data-placement="bottom" title="{{ 'Delete item' | trans }}">
                                 <i class="icon-cross"></i>
@@ -51,10 +57,8 @@
                     </div>
                 </th>
                 <th colspan="2">
-                    <span class="big">
-                        {{ priceTotal | price }}
-                    </span>
-                    {{ currency }}
+                    <span class="big shk-price">{{ priceTotal | price }}</span>
+                    <span class="shk-currency">{{ currencySelected }}</span>
                 </th>
             </tr>
         </tfoot>

@@ -41,12 +41,12 @@ class AppRuntime
                 return '';
         }
         $data = [
+            'currencySelected' => ShopCartService::getCurrencyCookie(),
             'countTotal' => 0,
             'priceTotal' => 0,
             'items' => []
         ];
 
-        $request = $this->requestStack->getCurrentRequest();
         $mongoCache = $this->container->get('mongodb_cache');
 
         $shopCartData = $mongoCache->fetch(ShopCartService::getCartId());

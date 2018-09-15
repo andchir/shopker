@@ -110,6 +110,9 @@ class AppExtension extends AbstractExtension
         if (!$parentUri || !$systemName) {
             $parentId = isset($itemData['parentId']) ? $itemData['parentId'] : 0;
             if ($parentId) {
+                if (!isset($this->cache['categoryUriData'])) {
+                    $this->cache['categoryUriData'] = [];
+                }
                 if (isset($this->cache['categoryUriData'][$parentId])) {
                     $parentUri = $this->cache['categoryUriData'][$parentId]['uri'];
                     if (!$systemName) {
@@ -138,9 +141,6 @@ class AppExtension extends AbstractExtension
                                 ? $itemData[$systemNameField]
                                 : '';
                         }
-                    }
-                    if (!isset($this->cache['categoryUriData'])) {
-                        $this->cache['categoryUriData'] = [];
                     }
                     $this->cache['categoryUriData'][$parentId] = [
                         'uri' => $parentUri,

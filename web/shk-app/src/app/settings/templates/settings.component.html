@@ -41,36 +41,40 @@
                         <div class="table-responsive">
 
                             <table class="table table-divided mb-0">
+                                <colgroup>
+                                    <col width="60%">
+                                    <col width="40%">
+                                </colgroup>
                                 <thead>
-                                <tr>
-                                    <th>{{'PARAMETER' | translate}}</th>
-                                    <th>{{'VALUE' | translate}}</th>
-                                </tr>
+                                    <tr>
+                                        <th>{{'PARAMETER' | translate}}</th>
+                                        <th>{{'VALUE' | translate}}</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                <tr *ngFor="let setting of settings.SETTINGS_MAIN.values">
-                                    <td>
-                                        <span>{{setting.name | translate}}</span>
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control form-control-sm" [(ngModel)]="setting.value" (ngModelChange)="onValueChanged('SETTINGS_MAIN')">
-                                    </td>
-                                </tr>
-                                <tr *ngIf="settings.SETTINGS_MAIN.changed">
-                                    <td colspan="2" class="text-right">
+                                    <tr *ngFor="let setting of settings.SETTINGS_MAIN.values">
+                                        <td>
+                                            <span>{{setting.name | translate}}</span>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control form-control-sm" [(ngModel)]="setting.value" (ngModelChange)="onValueChanged('SETTINGS_MAIN')">
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="settings.SETTINGS_MAIN.changed">
+                                        <td colspan="2" class="text-right">
 
-                                        <button type="button" class="btn btn-info btn-sm" (click)="saveSettings('SETTINGS_MAIN')">
-                                            <i class="icon-check"></i>
+                                            <button type="button" class="btn btn-info btn-sm" (click)="saveSettings('SETTINGS_MAIN')">
+                                                <i class="icon-check"></i>
+                                                &nbsp;
+                                                <span>{{'SAVE' | translate}}</span>
+                                            </button>
                                             &nbsp;
-                                            <span>{{'SAVE' | translate}}</span>
-                                        </button>
-                                        &nbsp;
-                                        <button type="button" class="btn btn-secondary btn-sm" (click)="resetSettingsForm('SETTINGS_MAIN')" ngbTooltip="{{'FORM_RESET' | translate}}">
-                                            <i class="icon-reload"></i>
-                                        </button>
+                                            <button type="button" class="btn btn-secondary btn-sm" (click)="resetSettingsForm('SETTINGS_MAIN')" ngbTooltip="{{'FORM_RESET' | translate}}">
+                                                <i class="icon-reload"></i>
+                                            </button>
 
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
 
@@ -93,66 +97,72 @@
                                 </div>
                                 <div class="table-responsive">
                                     <table class="table table-divided mb-0">
+                                        <colgroup>
+                                            <col width="40%">
+                                            <col width="40%">
+                                            <col width="10%">
+                                            <col width="10%">
+                                        </colgroup>
                                         <thead>
-                                        <tr>
-                                            <th>
-                                                {{'NAME' | translate}}
-                                            </th>
-                                            <th>
-                                                {{'MAIL_TEMPLATE' | translate}}
-                                            </th>
-                                            <th>
-                                                {{'COLOR' | translate}}
-                                            </th>
-                                            <th></th>
-                                        </tr>
+                                            <tr>
+                                                <th>
+                                                    {{'NAME' | translate}}
+                                                </th>
+                                                <th>
+                                                    {{'MAIL_TEMPLATE' | translate}}
+                                                </th>
+                                                <th>
+                                                    {{'COLOR' | translate}}
+                                                </th>
+                                                <th></th>
+                                            </tr>
                                         </thead>
                                         <tbody>
-                                        <tr *ngFor="let setting of settings.SETTINGS_ORDER_STATUSES.values; let index=index">
-                                            <td>
-                                                <input type="text" class="form-control form-control-sm" [(ngModel)]="setting.name" (ngModelChange)="onValueChanged('SETTINGS_ORDER_STATUSES')">
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control form-control-sm" [(ngModel)]="setting.options.template.value" (ngModelChange)="onValueChanged('SETTINGS_ORDER_STATUSES')">
-                                            </td>
-                                            <td class="text-center">
-                                                <p-colorPicker
-                                                        [appendTo]="'body'"
-                                                        [(ngModel)]="setting.options.color.value"
-                                                        (ngModelChange)="onValueChanged('SETTINGS_ORDER_STATUSES')"></p-colorPicker>
-                                            </td>
-                                            <td class="text-center">
-                                                <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'DELETE' | translate}}" (click)="deleteSetting('SETTINGS_ORDER_STATUSES', index)">
-                                                    <i class="icon-cross"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
+                                            <tr *ngFor="let setting of settings.SETTINGS_ORDER_STATUSES.values; let index=index">
+                                                <td>
+                                                    <input type="text" class="form-control form-control-sm" [(ngModel)]="setting.name" (ngModelChange)="onValueChanged('SETTINGS_ORDER_STATUSES')">
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control form-control-sm" [(ngModel)]="setting.options.template.value" (ngModelChange)="onValueChanged('SETTINGS_ORDER_STATUSES')">
+                                                </td>
+                                                <td class="text-center">
+                                                    <p-colorPicker
+                                                            [appendTo]="'body'"
+                                                            [(ngModel)]="setting.options.color.value"
+                                                            (ngModelChange)="onValueChanged('SETTINGS_ORDER_STATUSES')"></p-colorPicker>
+                                                </td>
+                                                <td class="text-center">
+                                                    <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'DELETE' | translate}}" (click)="deleteSetting('SETTINGS_ORDER_STATUSES', index)">
+                                                        <i class="icon-cross"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
                                         </tbody>
                                         <tfoot>
-                                        <tr class="bg-faded">
-                                            <td colspan="4" class="text-center">
-                                                <div class="relative">
-                                                    <div class="pos-absolute-right" *ngIf="settings.SETTINGS_ORDER_STATUSES.changed">
+                                            <tr class="bg-faded">
+                                                <td colspan="4" class="text-center">
+                                                    <div class="relative">
+                                                        <div class="pos-absolute-right" *ngIf="settings.SETTINGS_ORDER_STATUSES.changed">
 
-                                                        <button type="button" class="btn btn-info btn-sm" (click)="saveSettings('SETTINGS_ORDER_STATUSES')">
-                                                            <i class="icon-check"></i>
+                                                            <button type="button" class="btn btn-info btn-sm" (click)="saveSettings('SETTINGS_ORDER_STATUSES')">
+                                                                <i class="icon-check"></i>
+                                                                &nbsp;
+                                                                <span>{{'SAVE' | translate}}</span>
+                                                            </button>
                                                             &nbsp;
-                                                            <span>{{'SAVE' | translate}}</span>
-                                                        </button>
-                                                        &nbsp;
-                                                        <button type="button" class="btn btn-secondary btn-sm" (click)="resetSettingsForm('SETTINGS_ORDER_STATUSES')" ngbTooltip="{{'FORM_RESET' | translate}}">
-                                                            <i class="icon-reload"></i>
-                                                        </button>
+                                                            <button type="button" class="btn btn-secondary btn-sm" (click)="resetSettingsForm('SETTINGS_ORDER_STATUSES')" ngbTooltip="{{'FORM_RESET' | translate}}">
+                                                                <i class="icon-reload"></i>
+                                                            </button>
 
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <button type="button" class="btn btn-secondary btn-sm" (click)="addSetting('SETTINGS_ORDER_STATUSES')">
-                                                    <i class="icon-plus"></i>
-                                                    &nbsp;
-                                                    <span>{{'ADD' | translate}}</span>
-                                                </button>
-                                            </td>
-                                        </tr>
+                                                    <button type="button" class="btn btn-secondary btn-sm" (click)="addSetting('SETTINGS_ORDER_STATUSES')">
+                                                        <i class="icon-plus"></i>
+                                                        &nbsp;
+                                                        <span>{{'ADD' | translate}}</span>
+                                                    </button>
+                                                </td>
+                                            </tr>
                                         </tfoot>
                                     </table>
                                 </div>
@@ -171,62 +181,62 @@
                                 <div class="table-responsive">
                                     <table class="table table-divided mb-0">
                                         <thead>
-                                        <tr>
-                                            <th>
-                                                {{'NAME' | translate}}
-                                            </th>
-                                            <th>
-                                                {{'PRICE' | translate}}
-                                            </th>
-                                            <th>
-                                                {{'MAX_PRICE' | translate}}
-                                            </th>
-                                            <th></th>
-                                        </tr>
+                                            <tr>
+                                                <th>
+                                                    {{'NAME' | translate}}
+                                                </th>
+                                                <th>
+                                                    {{'PRICE' | translate}}
+                                                </th>
+                                                <th>
+                                                    {{'MAX_PRICE' | translate}}
+                                                </th>
+                                                <th></th>
+                                            </tr>
                                         </thead>
                                         <tbody>
-                                        <tr *ngFor="let setting of settings.SETTINGS_DELIVERY.values; let index=index">
-                                            <td>
-                                                <input type="text" class="form-control form-control-sm" [(ngModel)]="setting.name" (ngModelChange)="onValueChanged('SETTINGS_DELIVERY')">
-                                            </td>
-                                            <td class="text-center">
-                                                <input type="number" class="form-control form-control-sm mwidth-80 m-auto" step="1" min="0" [(ngModel)]="setting.options.price.value" (ngModelChange)="onValueChanged('SETTINGS_DELIVERY')">
-                                            </td>
-                                            <td class="text-center">
-                                                <input type="number" class="form-control form-control-sm mwidth-80 m-auto" step="1" min="0" [(ngModel)]="setting.options.priceLimit.value" (ngModelChange)="onValueChanged('SETTINGS_DELIVERY')">
-                                            </td>
-                                            <td class="text-center">
-                                                <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'DELETE' | translate}}" (click)="deleteSetting('SETTINGS_DELIVERY', index)">
-                                                    <i class="icon-cross"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
+                                            <tr *ngFor="let setting of settings.SETTINGS_DELIVERY.values; let index=index">
+                                                <td>
+                                                    <input type="text" class="form-control form-control-sm" [(ngModel)]="setting.name" (ngModelChange)="onValueChanged('SETTINGS_DELIVERY')">
+                                                </td>
+                                                <td class="text-center">
+                                                    <input type="number" class="form-control form-control-sm mwidth-80 m-auto" step="1" min="0" [(ngModel)]="setting.options.price.value" (ngModelChange)="onValueChanged('SETTINGS_DELIVERY')">
+                                                </td>
+                                                <td class="text-center">
+                                                    <input type="number" class="form-control form-control-sm mwidth-80 m-auto" step="1" min="0" [(ngModel)]="setting.options.priceLimit.value" (ngModelChange)="onValueChanged('SETTINGS_DELIVERY')">
+                                                </td>
+                                                <td class="text-center">
+                                                    <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'DELETE' | translate}}" (click)="deleteSetting('SETTINGS_DELIVERY', index)">
+                                                        <i class="icon-cross"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
                                         </tbody>
                                         <tfoot>
-                                        <tr class="bg-faded">
-                                            <td colspan="4" class="text-center">
-                                                <div class="relative">
-                                                    <div class="pos-absolute-right" *ngIf="settings.SETTINGS_DELIVERY.changed">
+                                            <tr class="bg-faded">
+                                                <td colspan="4" class="text-center">
+                                                    <div class="relative">
+                                                        <div class="pos-absolute-right" *ngIf="settings.SETTINGS_DELIVERY.changed">
 
-                                                        <button type="button" class="btn btn-info btn-sm" (click)="saveSettings('SETTINGS_DELIVERY')">
-                                                            <i class="icon-check"></i>
+                                                            <button type="button" class="btn btn-info btn-sm" (click)="saveSettings('SETTINGS_DELIVERY')">
+                                                                <i class="icon-check"></i>
+                                                                &nbsp;
+                                                                <span>{{'SAVE' | translate}}</span>
+                                                            </button>
                                                             &nbsp;
-                                                            <span>{{'SAVE' | translate}}</span>
-                                                        </button>
-                                                        &nbsp;
-                                                        <button type="button" class="btn btn-secondary btn-sm" (click)="resetSettingsForm('SETTINGS_DELIVERY')" ngbTooltip="{{'FORM_RESET' | translate}}">
-                                                            <i class="icon-reload"></i>
-                                                        </button>
+                                                            <button type="button" class="btn btn-secondary btn-sm" (click)="resetSettingsForm('SETTINGS_DELIVERY')" ngbTooltip="{{'FORM_RESET' | translate}}">
+                                                                <i class="icon-reload"></i>
+                                                            </button>
 
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <button type="button" class="btn btn-secondary btn-sm" (click)="addSetting('SETTINGS_DELIVERY')">
-                                                    <i class="icon-plus"></i>
-                                                    &nbsp;
-                                                    <span>{{'ADD' | translate}}</span>
-                                                </button>
-                                            </td>
-                                        </tr>
+                                                    <button type="button" class="btn btn-secondary btn-sm" (click)="addSetting('SETTINGS_DELIVERY')">
+                                                        <i class="icon-plus"></i>
+                                                        &nbsp;
+                                                        <span>{{'ADD' | translate}}</span>
+                                                    </button>
+                                                </td>
+                                            </tr>
                                         </tfoot>
                                     </table>
                                 </div>
@@ -244,60 +254,65 @@
                                 </div>
                                 <div class="table-responsive">
                                     <table class="table table-divided mb-0">
+                                        <colgroup>
+                                            <col width="45%">
+                                            <col width="45%">
+                                            <col width="10%">
+                                        </colgroup>
                                         <thead>
-                                        <tr>
-                                            <th>
-                                                {{'NAME' | translate}}
-                                            </th>
-                                            <th>
-                                                {{'VALUE' | translate}}
-                                            </th>
-                                            <th></th>
-                                        </tr>
+                                            <tr>
+                                                <th>
+                                                    {{'NAME' | translate}}
+                                                </th>
+                                                <th>
+                                                    {{'VALUE' | translate}}
+                                                </th>
+                                                <th></th>
+                                            </tr>
                                         </thead>
                                         <tbody>
-                                        <tr *ngFor="let setting of settings.SETTINGS_PAYMENT.values; let index=index">
-                                            <td>
-                                                <input type="text" class="form-control form-control-sm" [(ngModel)]="setting.name" (ngModelChange)="onValueChanged('SETTINGS_PAYMENT')">
-                                            </td>
-                                            <td class="text-center">
-                                                <input type="text" class="form-control form-control-sm" [(ngModel)]="setting.options.value.value" (ngModelChange)="onValueChanged('SETTINGS_PAYMENT')">
-                                            </td>
-                                            <td class="text-center">
-                                                <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'DELETE' | translate}}" (click)="deleteSetting('SETTINGS_PAYMENT', index)">
-                                                    <i class="icon-cross"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
+                                            <tr *ngFor="let setting of settings.SETTINGS_PAYMENT.values; let index=index">
+                                                <td>
+                                                    <input type="text" class="form-control form-control-sm" [(ngModel)]="setting.name" (ngModelChange)="onValueChanged('SETTINGS_PAYMENT')">
+                                                </td>
+                                                <td class="text-center">
+                                                    <input type="text" class="form-control form-control-sm" [(ngModel)]="setting.options.value.value" (ngModelChange)="onValueChanged('SETTINGS_PAYMENT')">
+                                                </td>
+                                                <td class="text-center">
+                                                    <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'DELETE' | translate}}" (click)="deleteSetting('SETTINGS_PAYMENT', index)">
+                                                        <i class="icon-cross"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
                                         </tbody>
                                         <tfoot>
-                                        <tr class="bg-faded">
-                                            <td colspan="4" class="text-center">
+                                            <tr class="bg-faded">
+                                                <td colspan="4" class="text-center">
 
-                                                <div class="relative">
-                                                    <div class="pos-absolute-right" *ngIf="settings.SETTINGS_PAYMENT.changed">
+                                                    <div class="relative">
+                                                        <div class="pos-absolute-right" *ngIf="settings.SETTINGS_PAYMENT.changed">
 
-                                                        <button type="button" class="btn btn-info btn-sm" (click)="saveSettings('SETTINGS_PAYMENT')">
-                                                            <i class="icon-check"></i>
+                                                            <button type="button" class="btn btn-info btn-sm" (click)="saveSettings('SETTINGS_PAYMENT')">
+                                                                <i class="icon-check"></i>
+                                                                &nbsp;
+                                                                <span>{{'SAVE' | translate}}</span>
+                                                            </button>
                                                             &nbsp;
-                                                            <span>{{'SAVE' | translate}}</span>
-                                                        </button>
-                                                        &nbsp;
-                                                        <button type="button" class="btn btn-secondary btn-sm" (click)="resetSettingsForm('SETTINGS_PAYMENT')" ngbTooltip="{{'FORM_RESET' | translate}}">
-                                                            <i class="icon-reload"></i>
-                                                        </button>
+                                                            <button type="button" class="btn btn-secondary btn-sm" (click)="resetSettingsForm('SETTINGS_PAYMENT')" ngbTooltip="{{'FORM_RESET' | translate}}">
+                                                                <i class="icon-reload"></i>
+                                                            </button>
 
+                                                        </div>
                                                     </div>
-                                                </div>
 
-                                                <button type="button" class="btn btn-secondary btn-sm" (click)="addSetting('SETTINGS_PAYMENT')">
-                                                    <i class="icon-plus"></i>
-                                                    &nbsp;
-                                                    <span>{{'ADD' | translate}}</span>
-                                                </button>
+                                                    <button type="button" class="btn btn-secondary btn-sm" (click)="addSetting('SETTINGS_PAYMENT')">
+                                                        <i class="icon-plus"></i>
+                                                        &nbsp;
+                                                        <span>{{'ADD' | translate}}</span>
+                                                    </button>
 
-                                            </td>
-                                        </tr>
+                                                </td>
+                                            </tr>
                                         </tfoot>
                                     </table>
                                 </div>
@@ -315,60 +330,65 @@
                                 </div>
                                 <div class="table-responsive">
                                     <table class="table table-divided mb-0">
+                                        <colgroup>
+                                            <col width="45%">
+                                            <col width="45%">
+                                            <col width="10%">
+                                        </colgroup>
                                         <thead>
-                                        <tr>
-                                            <th>
-                                                {{'CURRENCY' | translate}}
-                                            </th>
-                                            <th>
-                                                {{'VALUE' | translate}}
-                                            </th>
-                                            <th></th>
-                                        </tr>
+                                            <tr>
+                                                <th>
+                                                    {{'CURRENCY' | translate}}
+                                                </th>
+                                                <th>
+                                                    {{'VALUE' | translate}}
+                                                </th>
+                                                <th></th>
+                                            </tr>
                                         </thead>
                                         <tbody>
-                                        <tr *ngFor="let setting of settings.SETTINGS_CURRENCY.values; let index=index">
-                                            <td>
-                                                <input type="text" class="form-control form-control-sm" [(ngModel)]="setting.name" (ngModelChange)="onValueChanged('SETTINGS_CURRENCY')">
-                                            </td>
-                                            <td class="text-center">
-                                                <input type="number" class="form-control form-control-sm" step="1" min="0" [(ngModel)]="setting.options.value.value" (ngModelChange)="onValueChanged('SETTINGS_CURRENCY')">
-                                            </td>
-                                            <td class="text-center">
-                                                <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'REMOVE' | translate}}" (click)="deleteSetting('SETTINGS_CURRENCY', index)">
-                                                    <i class="icon-cross"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
+                                            <tr *ngFor="let setting of settings.SETTINGS_CURRENCY.values; let index=index">
+                                                <td>
+                                                    <input type="text" class="form-control form-control-sm" [(ngModel)]="setting.name" (ngModelChange)="onValueChanged('SETTINGS_CURRENCY')">
+                                                </td>
+                                                <td class="text-center">
+                                                    <input type="number" class="form-control form-control-sm" step="1" min="0" [(ngModel)]="setting.options.value.value" (ngModelChange)="onValueChanged('SETTINGS_CURRENCY')">
+                                                </td>
+                                                <td class="text-center">
+                                                    <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'REMOVE' | translate}}" (click)="deleteSetting('SETTINGS_CURRENCY', index)">
+                                                        <i class="icon-cross"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
                                         </tbody>
                                         <tfoot>
-                                        <tr class="bg-faded">
-                                            <td colspan="4" class="text-center">
+                                            <tr class="bg-faded">
+                                                <td colspan="4" class="text-center">
 
-                                                <div class="relative">
-                                                    <div class="pos-absolute-right" *ngIf="settings.SETTINGS_CURRENCY.changed">
+                                                    <div class="relative">
+                                                        <div class="pos-absolute-right" *ngIf="settings.SETTINGS_CURRENCY.changed">
 
-                                                        <button type="button" class="btn btn-info btn-sm" (click)="saveSettings('SETTINGS_CURRENCY')">
-                                                            <i class="icon-check"></i>
+                                                            <button type="button" class="btn btn-info btn-sm" (click)="saveSettings('SETTINGS_CURRENCY')">
+                                                                <i class="icon-check"></i>
+                                                                &nbsp;
+                                                                <span>{{'SAVE' | translate}}</span>
+                                                            </button>
                                                             &nbsp;
-                                                            <span>{{'SAVE' | translate}}</span>
-                                                        </button>
-                                                        &nbsp;
-                                                        <button type="button" class="btn btn-secondary btn-sm" (click)="resetSettingsForm('SETTINGS_CURRENCY')" ngbTooltip="{{'FORM_RESET' | translate}}">
-                                                            <i class="icon-reload"></i>
-                                                        </button>
+                                                            <button type="button" class="btn btn-secondary btn-sm" (click)="resetSettingsForm('SETTINGS_CURRENCY')" ngbTooltip="{{'FORM_RESET' | translate}}">
+                                                                <i class="icon-reload"></i>
+                                                            </button>
 
+                                                        </div>
                                                     </div>
-                                                </div>
 
-                                                <button type="button" class="btn btn-secondary btn-sm" (click)="addSetting('SETTINGS_CURRENCY')">
-                                                    <i class="icon-plus"></i>
-                                                    &nbsp;
-                                                    <span>{{'ADD' | translate}}</span>
-                                                </button>
+                                                    <button type="button" class="btn btn-secondary btn-sm" (click)="addSetting('SETTINGS_CURRENCY')">
+                                                        <i class="icon-plus"></i>
+                                                        &nbsp;
+                                                        <span>{{'ADD' | translate}}</span>
+                                                    </button>
 
-                                            </td>
-                                        </tr>
+                                                </td>
+                                            </tr>
                                         </tfoot>
                                     </table>
                                 </div>

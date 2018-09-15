@@ -84,7 +84,19 @@ export class TableComponent implements OnInit {
     }
 
     optionUpdate(e): void {
-        this.changeRequest.emit(e);
+        const [object, optionName, value] = e;
+        switch (optionName) {
+            case 'dropDownOpenChange':
+                const tableParentEl = this.tableElement.nativeElement.parentNode;
+                if (value) {
+                    tableParentEl.classList.remove('table-responsive');
+                } else {
+                    tableParentEl.classList.add('table-responsive');
+                }
+                break;
+            default:
+                this.changeRequest.emit(e);
+        }
     }
 
 }

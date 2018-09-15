@@ -18,7 +18,7 @@ export class ContentField {
             additFieldsCount = 0;
         fields.forEach((fld, ind) => {
             if (fld.name === fieldName) { index = ind; }
-            if (fld.name.indexOf('__') > -1) { additFieldsCount++; }
+            if (fld.name.indexOf(`${fieldName}__`) > -1) { additFieldsCount++; }
         });
         return {index: index, additFieldsCount: additFieldsCount};
     }

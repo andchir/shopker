@@ -146,13 +146,9 @@
             }
             var slidersContainers = document.querySelectorAll('div.shk-slider-range');
             slidersContainers.forEach(function(sliderContainer) {
-                var inputs = sliderContainer.querySelectorAll('input');
-                if (inputs.length < 2
-                    || parseFloat(inputs[0].value) === parseFloat(inputs[1].value)) {
-                        return;
-                }
+                var inputs = sliderContainer.querySelectorAll('input'),
+                    filterName = sliderContainer.dataset.name;
 
-                var filterName = sliderContainer.dataset.name;
                 // Update price filter only
                 if (isFiltersInitialized
                     && filterName !== mainOptions.priceFilterName) {
@@ -204,7 +200,7 @@
                 }
 
                 sliderContainer.noUiSlider.on('update', function(values, handle) {
-                    if (mainOptions.multiCurrency) {
+                    if (mainOptions.multiCurrency && filterName === mainOptions.priceFilterName) {
                         inputs[0].value = wNumbFormat.from(values[0]) * currencyRate;
                         inputs[1].value = wNumbFormat.from(values[1]) * currencyRate;
                     } else {

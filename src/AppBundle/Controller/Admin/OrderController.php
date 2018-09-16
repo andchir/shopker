@@ -47,6 +47,9 @@ class OrderController extends StorageControllerAbstract
         $settingDelivery = $settingsService->getSetting($data['deliveryName'], Setting::GROUP_DELIVERY);
         if ($settingDelivery) {
             $deliveryPrice = $settingDelivery->getOption('price');
+            if (!is_null($item->getCurrencyRate())) {
+                $deliveryPrice = round($deliveryPrice / $item->getCurrencyRate(), 2);
+            }
         }
 
         $content = isset($data['_content']) ? $data['_content'] : [];

@@ -24,7 +24,8 @@ export class OrderContent {
         public uri?: string,
         public image?: string,
         public parameters?: OrderContentParameter[],
-        public files?: FileData[]
+        public files?: FileData[],
+        public currency?: string
     ) {
         this.createParametersString();
         this.createFilesString();
@@ -133,6 +134,7 @@ export class Order {
         public contentCount?: number,
         public price?: number,
         public currency?: string,
-        public options?: UserOption[]
+        public options?: UserOption[],
+        public currencyRate?: number
     ) { }
 }

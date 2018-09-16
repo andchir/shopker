@@ -115,7 +115,8 @@ export class ModalOrderContentComponent extends ModalContentAbstractComponent<Or
                         data['contentCount'],
                         data['price'],
                         data['currency'],
-                        data['options']
+                        data['options'],
+                        data['currencyRate'] || 1
                     );
                     this.model.content = data['content'];
                     this.loading = false;
@@ -184,10 +185,9 @@ export class ModalOrderContentComponent extends ModalContentAbstractComponent<Or
         }
         const index = _.findIndex(this.settings.SETTINGS_DELIVERY, {name: this.model.deliveryName});
         if (index > -1) {
-            const deliveryPrice = this.settings.SETTINGS_DELIVERY[index]['options']['price'];
-            this.model.deliveryPrice = deliveryPrice
-                ? parseFloat(String(deliveryPrice))
-                : 0;
+            const deliveryPrice = parseFloat(String(this.settings.SETTINGS_DELIVERY[index]['options']['price']));
+            const currencyRate = this.model.currencyRate || 1;
+            this.model.deliveryPrice = deliveryPrice / currencyRate;
             this.priceTotalUpdate();
         }
     }

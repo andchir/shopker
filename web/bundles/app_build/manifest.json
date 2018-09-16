@@ -1,10 +1,4 @@
 {
   "app_build/app.js": "/bundles/app_build/app.js",
-  "app_build/app_styles.css": "/bundles/app_build/app_styles.css",
-  "app_build/fonts/Comfortaa-Light.ttf": "/bundles/app_build/fonts/Comfortaa-Light.30790de0.ttf",
-  "app_build/images/slider-handle.gif": "/bundles/app_build/images/slider-handle.879a34e1.gif",
-  "app_build/images/icomoon.svg?acx484": "/bundles/app_build/images/icomoon.81c3a64e.svg",
-  "app_build/fonts/icomoon.ttf?acx484": "/bundles/app_build/fonts/icomoon.dce154e2.ttf",
-  "app_build/fonts/icomoon.eot?acx484": "/bundles/app_build/fonts/icomoon.46f37733.eot",
-  "app_build/fonts/icomoon.woff?acx484": "/bundles/app_build/fonts/icomoon.906d56be.woff"
+  "app_build/app_styles.css": "/bundles/app_build/app_styles.css"
 }

@@ -28,12 +28,13 @@
 
     function Shopkeeper () {
 
-        var self = this;
+        var self = this, isInitialized = false, isFiltersInitialized = false;
 
         var mainOptions = {
             baseUrl: '/',
             multiCurrency: false,
-            currencyOptions: []
+            currencyOptions: [],
+            priceFilterName: ''
         };
 
         /**
@@ -48,11 +49,10 @@
             }
 
             this.onReady(function() {
-
                 self.buttonsInit();
-                self.filtersInit();
                 self.currencySelectInit();
-
+                self.filtersInit();
+                isInitialized = true;
             });
         };
 
@@ -110,6 +110,9 @@
 
         this.filtersInit = function() {
             this.slidersInit();
+            if (isFiltersInitialized) {
+                return;
+            }
 
             var filtersInputs = document.querySelectorAll('.filter-block input, .filter-block select');
             filtersInputs.forEach(function(input){
@@ -126,6 +129,7 @@
                 }
             });
 
+            isFiltersInitialized = true;
         };
 
         this.onFilterChange = function() {
@@ -147,14 +151,38 @@
                     || parseFloat(inputs[0].value) === parseFloat(inputs[1].value)) {
                         return;
                 }
-                var minValue = parseFloat(inputs[0].min || 0),
+
+                var filterName = sliderContainer.dataset.name;
+                // Update price filter only
+                if (isFiltersInitialized
+                    && filterName !== mainOptions.priceFilterName) {
+                        return;
+                }
+
+                var currencyRate = self.getCurrentCurrencyRate(),
+                    startValueFrom = parseFloat(inputs[0].value),
+                    startValueTo = parseFloat(inputs[1].value),
+                    minValue = parseFloat(inputs[0].min || 0),
                     maxValue = parseFloat(inputs[0].max || 0),
                     step = parseFloat(inputs[0].step || 1),
                     wNumbFormat = wNumb({mark: '.', thousand: ' ', decimals: 0});
-                noUiSlider.create(sliderContainer, {
+
+                if (mainOptions.multiCurrency && filterName === mainOptions.priceFilterName) {
+                    startValueFrom = Math.floor(startValueFrom / currencyRate);
+                    startValueTo = Math.ceil(startValueTo / currencyRate);
+                    minValue = Math.floor(minValue / currencyRate);
+                    maxValue = Math.ceil(maxValue / currencyRate);
+                }
+
+                if (startValueTo - startValueFrom <= 10) {
+                    wNumbFormat = wNumb({mark: '.', thousand: ' ', decimals: 2});
+                    step = 0.1;
+                }
+
+                var options = {
                     connect: true,
                     step: step,
-                    start: [parseFloat(inputs[0].value), parseFloat(inputs[1].value)],
+                    start: [startValueFrom, startValueTo],
                     range: {
                         'min': minValue,
                         'max': maxValue
@@ -162,14 +190,27 @@
                     format: wNumbFormat,
                     tooltips: [ true, true ],
                     pips: {
-                        mode: 'range',
+                        mode: 'positions',
+                        values: [0, 105],
                         density: 4,
                         format: wNumbFormat
                     }
-                });
+                };
+
+                if (!sliderContainer.noUiSlider) {
+                    noUiSlider.create(sliderContainer, options);
+                } else {
+                    sliderContainer.noUiSlider.updateOptions(options);
+                }
+
                 sliderContainer.noUiSlider.on('update', function(values, handle) {
-                    inputs[0].value = wNumbFormat.from(values[0]);
-                    inputs[1].value = wNumbFormat.from(values[1]);
+                    if (mainOptions.multiCurrency) {
+                        inputs[0].value = wNumbFormat.from(values[0]) * currencyRate;
+                        inputs[1].value = wNumbFormat.from(values[1]) * currencyRate;
+                    } else {
+                        inputs[0].value = wNumbFormat.from(values[0]);
+                        inputs[1].value = wNumbFormat.from(values[1]);
+                    }
                 });
                 sliderContainer.noUiSlider.on('change', function(values, handle) {
                     self.onFilterChange();
@@ -177,6 +218,12 @@
             });
         };
 
+        /**
+         *
+         * @param currentUrl
+         * @param orderBy
+         * @param orderByVar
+         */
         this.orderByChange = function(currentUrl, orderBy, orderByVar) {
             var qsArr = currentUrl.split(/[\?&]/),
                 newUrl = qsArr.shift();
@@ -193,6 +240,10 @@
             window.location.href = newUrl;
         };
 
+        /**
+         *
+         * @param listType
+         */
         this.catalogListChange = function(listType) {
             var currentValue = this.getCookie('shkListType');
             if (currentValue === listType) {
@@ -322,6 +373,7 @@
             selectElement.addEventListener('change', function(e) {
                 self.setCookie('shkCurrency', this.value, 7);
                 self.updateProductsPrice(this.value);
+                self.slidersInit();
             }, false);
 
             if (mainOptions.currencyOptions.length === 0) {
@@ -348,6 +400,24 @@
                 : '';
             this.setCookie('shkCurrency', currentCurrency, 7);
             return currentCurrency;
+        };
+
+        /**
+         * Get currency rate
+         * @param currency
+         * @returns {number}
+         */
+        this.getCurrentCurrencyRate = function(currency) {
+            if (!currency) {
+                currency = this.getCurrentCurrency();
+            }
+            var currentRate, tmp = mainOptions.currencyOptions.filter(function(opt) {
+                return opt.name === currency;
+            });
+            if (tmp.length === 0) {
+                return 1;
+            }
+            return tmp[0].rate;
         };
 
         /**
@@ -653,6 +723,15 @@
                 s[1] += new Array(prec - s[1].length + 1).join('0');
             }
             return s.join(dec);
+        };
+
+        /**
+         * Get is float
+         * @param number
+         * @returns {boolean}
+         */
+        this.isFloat = function(number) {
+            return /[^\d]/.test(number.toString());
         };
 
         this.init();

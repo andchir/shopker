@@ -61,6 +61,7 @@ class CatalogController extends ProductController
         $categoriesMenu = $this->getCategoriesMenu($currentCategory, $breadcrumbs);
 
         $contentType = $currentCategory->getContentType();
+        $priceFieldName = $contentType->getPriceFieldName();
         $contentTypeFields = $contentType->getFields();
         $collection = $this->getCollection($contentType->getCollection());
         $queryString = $request->getQueryString();
@@ -119,6 +120,7 @@ class CatalogController extends ProductController
             'categoriesMenu' => $categoriesMenu,
             'listTemplate' => $listTemplate,
             'items' => $items,
+            'priceFieldName' => $priceFieldName,
             'fields' => $fields,
             'fieldsAll' => $fieldsAll,
             'filters' => $filters,
@@ -149,6 +151,7 @@ class CatalogController extends ProductController
 
         $collectionName = $contentType->getCollection();
         $contentTypeFields = $contentType->getFields();
+        $priceFieldName = $contentType->getPriceFieldName();
         $collection = $this->getCollection($collectionName);
         $breadcrumbs = $categoriesRepository->getBreadcrumbs($categoryUri, false);
 
@@ -185,7 +188,8 @@ class CatalogController extends ProductController
             'currency' => $currency,
             'categoriesMenu' => $categoriesMenu,
             'breadcrumbs' => $breadcrumbs,
-            'fields' => $fields
+            'fields' => $fields,
+            'priceFieldName' => $priceFieldName
         ]);
     }
 

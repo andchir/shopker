@@ -32,19 +32,19 @@ class Order
     protected $fullName;
 
     /**
-     * @MongoDB\Field(type="string", nullable=true)
+     * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
      */
     protected $phone;
 
     /**
-     * @MongoDB\Field(type="date", nullable=true)
+     * @MongoDB\Field(type="date")
      * @Groups({"details", "list"})
      */
     protected $createdDate;
 
     /**
-     * @MongoDB\Field(type="date", nullable=true)
+     * @MongoDB\Field(type="date")
      * @Groups({"details", "list"})
      */
     protected $updatedDate;
@@ -56,25 +56,25 @@ class Order
     protected $status;
 
     /**
-     * @MongoDB\Field(type="string", nullable=true)
+     * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
      */
     protected $deliveryName;
 
     /**
-     * @MongoDB\Field(type="float", nullable=true)
+     * @MongoDB\Field(type="float")
      * @Groups({"details", "list"})
      */
     protected $deliveryPrice;
 
     /**
-     * @MongoDB\Field(type="string", nullable=true)
+     * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
      */
     protected $paymentName;
 
     /**
-     * @MongoDB\Field(type="string", nullable=true)
+     * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
      */
     protected $paymentValue;
@@ -86,13 +86,13 @@ class Order
     protected $userId;
 
     /**
-     * @MongoDB\Field(type="string", nullable=true)
+     * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
      */
     protected $comment;
 
     /**
-     * @MongoDB\Field(type="string", nullable=true)
+     * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
      */
     protected $note;
@@ -104,19 +104,25 @@ class Order
     protected $price;
 
     /**
-     * @MongoDB\Field(type="string", nullable=true)
+     * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
      */
     protected $currency;
 
     /**
-     * @MongoDB\Field(type="collection", nullable=true)
+     * @MongoDB\Field(type="float")
+     * @Groups({"details", "list"})
+     */
+    protected $currencyRate;
+
+    /**
+     * @MongoDB\Field(type="collection")
      * @Groups({"details"})
      */
     protected $options;
 
     /**
-     * @MongoDB\Field(type="collection", nullable=true)
+     * @MongoDB\Field(type="collection")
      * @MongoDB\EmbedMany(targetDocument="OrderContent")
      * @Groups({"details"})
      */
@@ -376,12 +382,13 @@ class Order
     /**
      * Set deliveryPrice
      *
-     * @param string $deliveryPrice
+     * @param $deliveryPrice
+     * @param int $currencyRate
      * @return $this
      */
-    public function setDeliveryPrice($deliveryPrice)
+    public function setDeliveryPrice($deliveryPrice, $currencyRate = 1)
     {
-        $this->deliveryPrice = $deliveryPrice;
+        $this->deliveryPrice = round($deliveryPrice / $currencyRate, 2);
         return $this;
     }
 
@@ -509,10 +516,11 @@ class Order
 
     /**
      * @param $shopCartData
-     * @param ArrayCollection $filesCollection
+     * @param $filesCollection
+     * @param int $currencyRate
      * @return $this
      */
-    public function setContentFromCart($shopCartData, $filesCollection)
+    public function setContentFromCart($shopCartData, $filesCollection, $currencyRate = 1)
     {
         foreach ($shopCartData['data'] as $contentTypeName => $products) {
             foreach ($products as $product) {
@@ -523,11 +531,11 @@ class Order
                     ->setId($product['id'])
                     ->setTitle($product['title'])
                     ->setCount($product['count'])
-                    ->setPrice($product['price'])
+                    ->setPrice($product['price'], $currencyRate)
                     ->setImage($product['image'])
                     ->setUri($uri)
                     ->setContentTypeName($contentTypeName)
-                    ->setParameters($product['parameters']);
+                    ->setParameters($product['parameters'], $currencyRate);
 
                 if (!empty($files)) {
                     foreach ($files as $fileData) {
@@ -557,12 +565,13 @@ class Order
     /**
      * Set price
      *
-     * @param float $price
+     * @param $price
+     * @param int $currencyRate
      * @return $this
      */
-    public function setPrice($price)
+    public function setPrice($price, $currencyRate = 1)
     {
-        $this->price = $price;
+        $this->price = round($price / $currencyRate, 2);
         return $this;
     }
 
@@ -613,6 +622,28 @@ class Order
     public function getCurrency()
     {
         return $this->currency;
+    }
+
+    /**
+     * Set currency rate
+     *
+     * @param float $currencyRate
+     * @return $this
+     */
+    public function setCurrencyRate($currencyRate)
+    {
+        $this->currencyRate = $currencyRate;
+        return $this;
+    }
+
+    /**
+     * Get currency rate
+     *
+     * @return float $currencyRate
+     */
+    public function getCurrencyRate()
+    {
+        return $this->currencyRate;
     }
 
     /**

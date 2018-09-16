@@ -213,12 +213,13 @@ class OrderContent
     /**
      * Set price
      *
-     * @param float $price
+     * @param $price
+     * @param int $currencyRate
      * @return $this
      */
-    public function setPrice($price)
+    public function setPrice($price, $currencyRate = 1)
     {
-        $this->price = $price;
+        $this->price = round($price / $currencyRate, 2);
         return $this;
     }
 
@@ -235,11 +236,17 @@ class OrderContent
     /**
      * Set parameters
      *
-     * @param array $parameters
+     * @param $parameters
+     * @param int $currencyRate
      * @return $this
      */
-    public function setParameters($parameters)
+    public function setParameters($parameters, $currencyRate = 1)
     {
+        if (!empty($parameters) && $currencyRate !== 1) {
+            foreach ($parameters as &$parameter) {
+                $parameter['price'] = round($parameter['price'] / $currencyRate, 2);
+            }
+        }
         $this->parameters = $parameters;
         return $this;
     }

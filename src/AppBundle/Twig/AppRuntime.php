@@ -262,13 +262,16 @@ class AppRuntime
 
     /**
      * @param $number
-     * @param int $decimals
+     * @param int|null $decimals
      * @param string $decPoint
      * @param string $thousandsSep
      * @return string
      */
-    public function priceFilter($number, $decimals = 0, $decPoint = '.', $thousandsSep = ' ')
+    public function priceFilter($number, $decimals = null, $decPoint = '.', $thousandsSep = ' ')
     {
+        if ($decimals === null) {
+            $decimals = $number - floor($number) === (float) 0 ? 0 : 2;
+        }
         $price = number_format($number, $decimals, $decPoint, $thousandsSep);
         return $price;
     }

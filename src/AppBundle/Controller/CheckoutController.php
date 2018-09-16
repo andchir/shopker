@@ -80,6 +80,8 @@ class CheckoutController extends BaseController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            $currencyRate = $settingsService->getCurrencyRate($currency);
+
             /** @var Setting $delivery */
             $delivery = $form->get('deliveryName')->getNormData();
             $deliveryPrice = $delivery ? $delivery->getOption('price') : 0;
@@ -103,11 +105,12 @@ class CheckoutController extends BaseController
                 $filesCollection = $this->getOrderFilesCollection($shopCartData);
 
                 $order
-                    ->setDeliveryPrice($deliveryPrice)
+                    ->setDeliveryPrice($deliveryPrice, $currencyRate)
                     ->setPaymentValue($paymentName)
-                    ->setContentFromCart($shopCartData, $filesCollection)
+                    ->setContentFromCart($shopCartData, $filesCollection, $currencyRate)
                     ->setStatus($statusName)
-                    ->setCurrency($currency);
+                    ->setCurrency($currency)
+                    ->setCurrencyRate($currencyRate);
 
                 // Save user data
                 if ($user) {

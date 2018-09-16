@@ -189,6 +189,28 @@ class SettingsService
     }
 
     /**
+     * Get currency rate
+     * @param $currency
+     * @return int
+     */
+    public function getCurrencyRate($currency)
+    {
+        $currencySettings = $this->getSettingsGroup(Setting::GROUP_CURRENCY);
+        if (empty($currencySettings)) {
+            return 1;
+        }
+        $currentCurrencySettings = array_filter($currencySettings, function($setting) use ($currency) {
+            /** @var Setting $setting */
+            return $setting->getName() == $currency;
+        });
+        if (!empty($currentCurrencySettings)) {
+            return current($currentCurrencySettings)->getOption('value');
+        } else {
+            return current($currencySettings)->getOption('value');
+        }
+    }
+
+    /**
      * @return \AppBundle\Repository\FieldTypeRepository
      */
     public function getRepository()

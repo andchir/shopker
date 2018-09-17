@@ -307,49 +307,52 @@ class AppExtension extends AbstractExtension
      */
     public function renderOutputTypeChunkFunction(\Twig_Environment $environment, $itemData, $fieldsData, $chunkName, $chunkNamePrefix = '', $data = [])
     {
-        $chunkNamesArr = array_column(array_column($fieldsData, 'properties'), 'chunkName');
-        $index = array_search($chunkName, $chunkNamesArr);
-        if ($index === false) {
-            return '';
+        $fields = array_filter($fieldsData, function($field) use ($chunkName) {
+            return $field['properties']['chunkName'] === $chunkName;
+        });
+        $output = '';
+        foreach ($fields as $key => $field) {
+            $value = '';
+            if (isset($itemData[$field['name']])) {
+                $value = $itemData[$field['name']];
+            }
+            $propertiesDefault = [
+                'fieldData' => [
+                    'name' => $field['name'],
+                    'title' => $field['title'],
+                    'description' => $field['description']
+                ]
+            ];
+            if (is_array($value)) {
+                $propertiesDefault['value'] = '';
+                $propertiesDefault['data'] = $value;
+            } else {
+                $propertiesDefault['value'] = $value;
+            }
+            $properties = array_merge($field['properties'], $propertiesDefault, $data);
+            $properties['systemName'] = !empty($itemData[$properties['systemNameField']])
+                ? $itemData[$properties['systemNameField']]
+                : '';
+            $properties['fieldProperties'] = $field;
+            $properties['itemData'] = $itemData;
+            if (!empty($value)) {
+                $templateName = $this->getTemplateName($environment, 'chunks/fields/', $chunkName, $chunkNamePrefix);
+            } else {
+                $templateName = $this->getTemplateName(
+                    $environment,
+                    'chunks/fields/',
+                    $chunkName,
+                    $chunkNamePrefix,
+                    '_empty',
+                    'empty'
+                );
+            }
+            if ($key > 0) {
+                $output .= PHP_EOL;
+            }
+            $output .= $environment->render($templateName, $properties);
         }
-        $field = $fieldsData[$index];
-        $value = '';
-        if (isset($itemData[$field['name']])) {
-            $value = $itemData[$field['name']];
-        }
-        $propertiesDefault = [
-            'fieldData' => [
-                'name' => $field['name'],
-                'title' => $field['title'],
-                'description' => $field['description']
-            ]
-        ];
-        if (is_array($value)) {
-            $propertiesDefault['value'] = '';
-            $propertiesDefault['data'] = $value;
-        } else {
-            $propertiesDefault['value'] = $value;
-        }
-        $properties = array_merge($field['properties'], $propertiesDefault, $data);
-        $properties['systemName'] = !empty($itemData[$properties['systemNameField']])
-            ? $itemData[$properties['systemNameField']]
-            : '';
-        $properties['fieldProperties'] = $field;
-        $properties['itemData'] = $itemData;
-
-        if (!empty($value)) {
-            $templateName = $this->getTemplateName($environment, 'chunks/fields/', $chunkName, $chunkNamePrefix);
-        } else {
-            $templateName = $this->getTemplateName(
-                $environment,
-                'chunks/fields/',
-                $chunkName,
-                $chunkNamePrefix,
-                '_empty',
-                'empty'
-            );
-        }
-        return $environment->render($templateName, $properties);
+        return $output;
     }
 
     /**

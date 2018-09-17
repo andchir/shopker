@@ -339,9 +339,11 @@ class OrderContent
         foreach ($parameters as $parameter) {
             $str = '';
             if ($parameter['name']) {
-                $str = "{$parameter['name']}: ";
+                $str = $parameter['name'];
             }
-            $str .= $parameter['value'];
+            if ($parameter['value']) {
+                $str .= ": {$parameter['value']}";
+            }
             if (!empty($parameter['price'])) {
                 $str .= $currency
                     ? " ({$parameter['price']} {$currency})"

@@ -11,11 +11,7 @@
                                     {{ item.title }}
                                 </a>
                             </div>
-                            {% if item.parametersString is not empty %}
-                                <div class="text-muted small">
-                                    {{ item.parametersString }}
-                                </div>
-                            {% endif %}
+                            {{ item.parametersString | raw }}
                             {% if item.filesString is not empty %}
                                 <div class="text-muted small">
                                     <i class="icon-file"></i>

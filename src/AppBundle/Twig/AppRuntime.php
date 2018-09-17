@@ -212,15 +212,25 @@ class AppRuntime
     }
 
     /**
-     * @param $productData
+     * @param array $productData
+     * @param string $fieldName
      * @return string
      */
-    public function getCartContentParametersString($productData)
+    public function getCartContentParametersString($productData, $fieldName = 'parameters')
     {
-        $parameters = isset($productData['parameters']) && is_array($productData['parameters'])
-            ? $productData['parameters']
+        $parameters = isset($productData[$fieldName]) && is_array($productData[$fieldName])
+            ? $productData[$fieldName]
             : [];
-        return OrderContent::getParametersStrFromArray($parameters);
+        if (empty($parameters)) {
+            return '';
+        }
+
+        /** @var \Twig_Environment */
+        $twig = $this->container->get('twig');
+
+        return $twig->render('catalog/shop_cart_parameter.html.twig', [
+            'parameters' => $parameters
+        ]);
     }
 
     /**

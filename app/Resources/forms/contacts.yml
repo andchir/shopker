@@ -1,8 +1,8 @@
 emailTo: ~
 emailSubject: Email from your website
 fields:
-    - { name: name, label: Your name, type: TextType }
-    - { name: email, label: Your email, type: EmailType }
-    - { name: content, label: E-mail text, type: TextareaType, attr: { rows: 6 } }
+    - { name: name, label: Your name, type: TextType, required: true }
+    - { name: email, label: Your email, type: EmailType, required: true }
+    - { name: content, label: E-mail text, type: TextareaType, required: true, attr: { rows: 6 } }
     - { name: captcha, label: Captcha, type: CaptchaType }
     - { name: submit, label: Submit, type: SubmitType }

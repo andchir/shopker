@@ -86,6 +86,7 @@
                                                 {% endif %}
                                                 {% if orderContent.filesString is not empty %}
                                                     <div class="text-muted small">
+                                                        <i class="icon-file"></i>
                                                         {{ orderContent.filesString }}
                                                     </div>
                                                 {% endif %}
@@ -126,7 +127,7 @@
 
                                 <div class="text-right">
                                     <div class="float-left">
-                                        {% if isPaymentAllowed and not order.isPaid %}
+                                        {% if isPaymentAllowed %}
                                             <a class="btn btn-primary btn-sm" href="{{ app.request.getBaseURL() }}/omnipay_start/{{ order.id }}">
                                                 {{ 'Pay now' | trans }}
                                             </a>

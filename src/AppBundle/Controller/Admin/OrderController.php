@@ -51,6 +51,12 @@ class OrderController extends StorageControllerAbstract
                 $deliveryPrice = round($deliveryPrice / $item->getCurrencyRate(), 2);
             }
         }
+        $paymentValue = '';
+        $settingPayment = $settingsService->getSetting($data['paymentName'], Setting::GROUP_PAYMENT);
+        if ($settingPayment) {
+            /** @var Setting $settingPayment */
+            $paymentValue = $settingPayment->getOption('value');
+        }
 
         $content = isset($data['_content']) ? $data['_content'] : [];
 
@@ -61,6 +67,7 @@ class OrderController extends StorageControllerAbstract
             ->setDeliveryName($data['deliveryName'])
             ->setDeliveryPrice($deliveryPrice)
             ->setPaymentName($data['paymentName'])
+            ->setPaymentValue($paymentValue)
             ->setComment($data['comment'])
             ->setOptions($data['options']);
 

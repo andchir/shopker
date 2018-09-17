@@ -319,6 +319,7 @@ class AccountController extends Controller
         );
 
         $currentOrderStatusNumber = 0;
+        $isPaymentAllowed = false;
         if (!empty($orderId)) {
             $currentOrder = array_filter($orders->toArray(), function($order) use ($orderId) {
                 return $order->getId() === $orderId;
@@ -329,6 +330,11 @@ class AccountController extends Controller
                 $currentOrderStatusNumber = $settingsService->getOrderStatusNumber(
                     $currentOrder->getStatus()
                 );
+                if ($currentOrder->getPaymentValue()
+                    && $paymentStatusNumber === $currentOrderStatusNumber
+                    && !$currentOrder->getIsPaid()) {
+                        $isPaymentAllowed = true;
+                }
             }
         }
 
@@ -339,7 +345,7 @@ class AccountController extends Controller
             'orderStatusSettings' => $orderStatusSettings,
             'paymentStatusNumber' => $paymentStatusNumber,
             'currentOrderStatusNumber' => $currentOrderStatusNumber,
-            'isPaymentAllowed' => $paymentStatusNumber === $currentOrderStatusNumber
+            'isPaymentAllowed' => $isPaymentAllowed
         ]);
     }
 

@@ -5,8 +5,6 @@ Shopkeeper 4
 
 The engine for creating an online store using Symfony, Angular, MongoDB.
 
-**Current version: BETA (in development)**
-
 [Read Wiki](https://github.com/andchir/shopkeeper4/wiki)
 
 [Official site](http://modx-shopkeeper.ru/)

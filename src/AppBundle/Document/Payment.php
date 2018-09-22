@@ -20,67 +20,77 @@ class Payment
     /**
      * @MongoDB\Id(type="int", strategy="INCREMENT")
      * @Groups({"details", "list"})
+     * @var int
      */
     protected $id;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $email;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $status;
 
     /**
      * @MongoDB\Field(type="integer")
      * @Groups({"details", "list"})
+     * @var int
      */
     protected $userId;
 
     /**
      * @MongoDB\Field(type="integer")
      * @Groups({"details", "list"})
+     * @var int
      */
     protected $orderId;
 
     /**
      * @MongoDB\Field(type="float")
      * @Groups({"details", "list"})
+     * @var float
      */
     protected $amount;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $currency;
 
     /**
      * @MongoDB\Field(type="hash")
      * @Groups({"details", "list"})
+     * @var array
      */
     protected $options;
 
     /**
      * @MongoDB\Field(type="date", nullable=true)
      * @Groups({"details", "list"})
+     * @var \DateTime
      */
     protected $createdDate;
 
     /**
      * @MongoDB\Field(type="date", nullable=true)
      * @Groups({"details", "list"})
+     * @var \DateTime
      */
     protected $updatedDate;
 
     /**
      * Get id
      *
-     * @return int $id
+     * @return int
      */
     public function getId()
     {
@@ -119,7 +129,7 @@ class Payment
     /**
      * Get email
      *
-     * @return string $email
+     * @return string
      */
     public function getEmail()
     {
@@ -141,7 +151,7 @@ class Payment
     /**
      * Get status
      *
-     * @return string $status
+     * @return string
      */
     public function getStatus()
     {
@@ -163,7 +173,7 @@ class Payment
     /**
      * Get userId
      *
-     * @return integer $userId
+     * @return integer
      */
     public function getUserId()
     {
@@ -185,7 +195,7 @@ class Payment
     /**
      * Get amount
      *
-     * @return float $amount
+     * @return float
      */
     public function getAmount()
     {
@@ -207,7 +217,7 @@ class Payment
     /**
      * Get currency
      *
-     * @return string $currency
+     * @return string
      */
     public function getCurrency()
     {
@@ -229,7 +239,7 @@ class Payment
     /**
      * Get options
      *
-     * @return array $options
+     * @return array
      */
     public function getOptions()
     {
@@ -251,7 +261,7 @@ class Payment
     /**
      * Get createdDate
      *
-     * @return \DateTime $createdDate
+     * @return \DateTime
      */
     public function getCreatedDate()
     {
@@ -273,7 +283,7 @@ class Payment
     /**
      * Get updatedDate
      *
-     * @return \DateTime $updatedDate
+     * @return \DateTime
      */
     public function getUpdatedDate()
     {
@@ -295,7 +305,7 @@ class Payment
     /**
      * Get orderId
      *
-     * @return integer $orderId
+     * @return integer
      */
     public function getOrderId()
     {

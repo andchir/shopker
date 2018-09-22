@@ -5,6 +5,7 @@ parameters:
     web_dir_path: '%kernel.root_dir%/../web'
     files_dir_path: '%web_dir_path%/uploads'
     files_dir_url: '/uploads'
+    logo_image_url: '/img/shk-logo-small-blue.png'
     catalog_page_size:
         - 12
         - 24

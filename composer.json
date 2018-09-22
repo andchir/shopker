@@ -49,7 +49,9 @@
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
         "symfony/phpunit-bridge": "^3.0",
-        "jackalope/jackalope-jackrabbit": "1.*"
+        "jackalope/jackalope-jackrabbit": "1.*",
+        "apigen/apigen": "dev-master",
+        "roave/better-reflection": "dev-master"
     },
     "scripts": {
         "symfony-scripts": [

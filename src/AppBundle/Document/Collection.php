@@ -13,19 +13,21 @@ class Collection
     /**
      * @MongoDB\Id(type="int", strategy="INCREMENT")
      * @Groups({"details", "list"})
+     * @var int
      */
     protected $id;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $name;
 
     /**
      * Get id
      *
-     * @return int $id
+     * @return int
      */
     public function getId()
     {
@@ -36,7 +38,7 @@ class Collection
      * Set name
      *
      * @param string $name
-     * @return self
+     * @return $this
      */
     public function setName($name)
     {
@@ -47,7 +49,7 @@ class Collection
     /**
      * Get name
      *
-     * @return string $name
+     * @return string
      */
     public function getName()
     {

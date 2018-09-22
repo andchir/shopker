@@ -14,53 +14,62 @@ class ContentType
     /**
      * @MongoDB\Id(type="int", strategy="INCREMENT")
      * @Groups({"details", "list"})
+     * @var int
      */
     protected $id;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $title;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $name;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $description;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $collection;
 
     /**
      * @MongoDB\Field(type="collection")
      * @Groups({"details"})
+     * @var array
      */
     protected $fields;
 
     /**
      * @MongoDB\Field(type="collection")
      * @Groups({"details"})
+     * @var array
      */
     protected $groups;
 
     /**
      * @MongoDB\Field(type="boolean")
      * @Groups({"details", "list"})
+     * @var boolean
      */
     protected $isActive;
 
     /**
      * @MongoDB\ReferenceMany(targetDocument="Category", mappedBy="contentType")
+     * @var array
      */
     protected $categories;
 
@@ -72,7 +81,7 @@ class ContentType
     /**
      * Get id
      *
-     * @return int $id
+     * @return int
      */
     public function getId()
     {
@@ -83,7 +92,7 @@ class ContentType
      * Set title
      *
      * @param string $title
-     * @return self
+     * @return $this
      */
     public function setTitle($title)
     {
@@ -94,7 +103,7 @@ class ContentType
     /**
      * Get title
      *
-     * @return string $title
+     * @return string
      */
     public function getTitle()
     {
@@ -105,7 +114,7 @@ class ContentType
      * Set name
      *
      * @param string $name
-     * @return self
+     * @return $this
      */
     public function setName($name)
     {
@@ -116,7 +125,7 @@ class ContentType
     /**
      * Get name
      *
-     * @return string $name
+     * @return string
      */
     public function getName()
     {
@@ -127,7 +136,7 @@ class ContentType
      * Set description
      *
      * @param string $description
-     * @return self
+     * @return $this
      */
     public function setDescription($description)
     {
@@ -138,7 +147,7 @@ class ContentType
     /**
      * Get description
      *
-     * @return string $description
+     * @return string
      */
     public function getDescription()
     {
@@ -149,7 +158,7 @@ class ContentType
      * Set fields
      *
      * @param array $fields
-     * @return self
+     * @return $this
      */
     public function setFields($fields)
     {
@@ -160,7 +169,7 @@ class ContentType
     /**
      * Get fields
      *
-     * @return array $fields
+     * @return array
      */
     public function getFields()
     {
@@ -171,7 +180,7 @@ class ContentType
      * Set groups
      *
      * @param array $groups
-     * @return self
+     * @return $this
      */
     public function setGroups($groups)
     {
@@ -182,7 +191,7 @@ class ContentType
     /**
      * Get groups
      *
-     * @return array $groups
+     * @return array
      */
     public function getGroups()
     {
@@ -193,7 +202,7 @@ class ContentType
      * Set collection
      *
      * @param string $collection
-     * @return self
+     * @return $this
      */
     public function setCollection($collection)
     {
@@ -204,7 +213,7 @@ class ContentType
     /**
      * Get collection
      *
-     * @return string $collection
+     * @return string
      */
     public function getCollection()
     {
@@ -215,7 +224,7 @@ class ContentType
      * Set isActive
      *
      * @param boolean $isActive
-     * @return self
+     * @return $this
      */
     public function setIsActive($isActive)
     {
@@ -226,7 +235,7 @@ class ContentType
     /**
      * Get isActive
      *
-     * @return boolean $isActive
+     * @return boolean
      */
     public function getIsActive()
     {
@@ -264,7 +273,7 @@ class ContentType
      */
     public function addCategory(Category $category)
     {
-        $this->categories[] = $category;
+        $this->categories->add($category);
         return $this;
     }
 
@@ -283,7 +292,7 @@ class ContentType
     /**
      * Get categories
      *
-     * @return \Doctrine\Common\Collections\Collection $categories
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCategories()
     {
@@ -291,6 +300,7 @@ class ContentType
     }
 
     /**
+     * Get system field name
      * @return string
      */
     public function getSystemNameField()
@@ -307,6 +317,7 @@ class ContentType
     }
 
     /**
+     * Clean field name
      * @param string $fieldName
      * @return string
      */
@@ -318,6 +329,7 @@ class ContentType
     }
 
     /**
+     * Get current file name
      * @param string $fieldKey
      * @param array $fieldsSort
      * @return string
@@ -341,6 +353,7 @@ class ContentType
     }
 
     /**
+     * Get price field name
      * @return string
      */
     public function getPriceFieldName()

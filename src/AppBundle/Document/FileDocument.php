@@ -20,60 +20,70 @@ class FileDocument
     /**
      * @MongoDB\Id(type="int", strategy="INCREMENT")
      * @Groups({"details", "list"})
+     * @var int
      */
     protected $id;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $title;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $fileName;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $extension;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $mimeType;
 
     /**
      * @MongoDB\Field(type="string", nullable=true)
      * @Groups({"details"})
+     * @var string
      */
     protected $ownerType;
 
     /**
      * @MongoDB\Field(type="integer")
      * @Groups({"details", "list"})
+     * @var int
      */
     protected $size;
 
     /**
      * @MongoDB\Field(type="integer")
      * @Groups({"details", "list"})
+     * @var int
      */
     protected $userId;
 
     /**
      * @MongoDB\Field(type="string", nullable=true)
      * @Groups({"details"})
+     * @var string
      */
     protected $ownerId;
 
     /**
      * @MongoDB\Field(type="date", nullable=true)
      * @Groups({"details", "list"})
+     * @var \DateTime
      */
     protected $createdDate;
 
@@ -83,13 +93,15 @@ class FileDocument
      */
     protected $order;
 
+    /** @var string */
     private $uploadRootDir = '';
+    /** @var  UploadedFile */
     private $file;
 
     /**
      * Get id
      *
-     * @return int $id
+     * @return int
      */
     public function getId()
     {
@@ -100,7 +112,7 @@ class FileDocument
      * Set title
      *
      * @param string $title
-     * @return self
+     * @return $this
      */
     public function setTitle($title)
     {
@@ -111,7 +123,7 @@ class FileDocument
     /**
      * Get title
      *
-     * @return string $title
+     * @return string
      */
     public function getTitle()
     {
@@ -122,7 +134,7 @@ class FileDocument
      * Set extension
      *
      * @param string $extension
-     * @return self
+     * @return $this
      */
     public function setExtension($extension)
     {
@@ -133,7 +145,7 @@ class FileDocument
     /**
      * Get extension
      *
-     * @return string $extension
+     * @return string
      */
     public function getExtension()
     {
@@ -144,7 +156,7 @@ class FileDocument
      * Set mimeType
      *
      * @param string $mimeType
-     * @return self
+     * @return $this
      */
     public function setMimeType($mimeType)
     {
@@ -155,7 +167,7 @@ class FileDocument
     /**
      * Get mimeType
      *
-     * @return string $mimeType
+     * @return string
      */
     public function getMimeType()
     {
@@ -166,7 +178,7 @@ class FileDocument
      * Set ownerType
      *
      * @param string $ownerType
-     * @return self
+     * @return $this
      */
     public function setOwnerType($ownerType)
     {
@@ -177,7 +189,7 @@ class FileDocument
     /**
      * Get ownerType
      *
-     * @return string $ownerType
+     * @return string
      */
     public function getOwnerType()
     {
@@ -188,7 +200,7 @@ class FileDocument
      * Set size
      *
      * @param integer $size
-     * @return self
+     * @return $this
      */
     public function setSize($size)
     {
@@ -199,7 +211,7 @@ class FileDocument
     /**
      * Get size
      *
-     * @return integer $size
+     * @return integer
      */
     public function getSize()
     {
@@ -210,7 +222,7 @@ class FileDocument
      * Set userId
      *
      * @param integer $userId
-     * @return self
+     * @return $this
      */
     public function setUserId($userId)
     {
@@ -221,7 +233,7 @@ class FileDocument
     /**
      * Get userId
      *
-     * @return integer $userId
+     * @return integer
      */
     public function getUserId()
     {
@@ -232,7 +244,7 @@ class FileDocument
      * Set ownerId
      *
      * @param integer $ownerId
-     * @return self
+     * @return $this
      */
     public function setOwnerId($ownerId)
     {
@@ -243,7 +255,7 @@ class FileDocument
     /**
      * Get ownerId
      *
-     * @return integer $ownerId
+     * @return integer
      */
     public function getOwnerId()
     {
@@ -254,7 +266,7 @@ class FileDocument
      * Set fileName
      *
      * @param string $fileName
-     * @return self
+     * @return $this
      */
     public function setFileName($fileName)
     {
@@ -265,7 +277,7 @@ class FileDocument
     /**
      * Get fileName
      *
-     * @return string $fileName
+     * @return string
      */
     public function getFileName()
     {
@@ -276,7 +288,7 @@ class FileDocument
      * Set createdDate
      *
      * @param \DateTime $createdDate
-     * @return self
+     * @return $this
      */
     public function setCreatedDate($createdDate)
     {
@@ -287,7 +299,7 @@ class FileDocument
     /**
      * Get createdDate
      *
-     * @return \DateTime $createdDate
+     * @return \DateTime
      */
     public function getCreatedDate()
     {

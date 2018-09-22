@@ -13,24 +13,28 @@ class Filter
     /**
      * @MongoDB\Id(type="int", strategy="INCREMENT")
      * @Groups({"details", "list"})
+     * @var int
      */
     protected $id;
 
     /**
      * @MongoDB\Field(type="int")
      * @Groups({"details", "list"})
+     * @var int
      */
     protected $categoryId;
 
     /**
      * @MongoDB\Field(type="string", nullable=true)
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $name;
 
     /**
      * @MongoDB\Field(type="hash")
      * @Groups({"details", "list"})
+     * @var array
      */
     protected $values;
 
@@ -43,7 +47,7 @@ class Filter
     /**
      * Get id
      *
-     * @return int $id
+     * @return int
      */
     public function getId()
     {
@@ -65,7 +69,7 @@ class Filter
     /**
      * Get categoryId
      *
-     * @return int $categoryId
+     * @return int
      */
     public function getCategoryId()
     {
@@ -87,7 +91,7 @@ class Filter
     /**
      * Get name
      *
-     * @return string $name
+     * @return string
      */
     public function getName()
     {
@@ -109,7 +113,7 @@ class Filter
     /**
      * Get values
      *
-     * @return array $values
+     * @return array
      */
     public function getValues()
     {
@@ -120,7 +124,7 @@ class Filter
      * Set category
      *
      * @param Category category
-     * @return self
+     * @return $this
      */
     public function setCategory($category)
     {
@@ -134,7 +138,7 @@ class Filter
     /**
      * Get category
      *
-     * @return Category category
+     * @return Category
      */
     public function getCategory()
     {

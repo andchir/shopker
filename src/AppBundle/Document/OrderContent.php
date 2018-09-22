@@ -13,67 +13,76 @@ class OrderContent
     /**
      * @MongoDB\Id(type="int")
      * @Groups({"details", "list"})
+     * @var int
      */
     protected $uniqId;
 
     /**
      * @MongoDB\Field(type="int")
      * @Groups({"details", "list"})
+     * @var int
      */
     protected $id;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $title;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $image;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $uri;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $contentTypeName;
 
     /**
      * @MongoDB\Field(type="float")
      * @Groups({"details", "list"})
+     * @var float
      */
     protected $count;
 
     /**
      * @MongoDB\Field(type="float")
      * @Groups({"details", "list"})
+     * @var float
      */
     protected $price;
 
     /**
      * @MongoDB\Field(type="collection", nullable=true)
      * @Groups({"details"})
+     * @var array
      */
     protected $parameters = [];
 
     /**
      * @MongoDB\Field(type="collection", nullable=true)
      * @Groups({"details"})
+     * @var array
      */
     protected $files = [];
 
     /**
      * Get uniqId
-     *
-     * @return $uniqId
+     * @return int
      */
     public function getUniqId()
     {
@@ -82,8 +91,7 @@ class OrderContent
 
     /**
      * Get id
-     *
-     * @return int $id
+     * @return int
      */
     public function getId()
     {
@@ -91,6 +99,7 @@ class OrderContent
     }
 
     /**
+     * Set id
      * @param int $id
      * @return $this
      */
@@ -102,7 +111,6 @@ class OrderContent
 
     /**
      * Set title
-     *
      * @param string $title
      * @return $this
      */
@@ -114,8 +122,7 @@ class OrderContent
 
     /**
      * Get title
-     *
-     * @return string $title
+     * @return string
      */
     public function getTitle()
     {
@@ -124,7 +131,6 @@ class OrderContent
 
     /**
      * Set image
-     *
      * @param string $image
      * @return $this
      */
@@ -136,8 +142,7 @@ class OrderContent
 
     /**
      * Get image
-     *
-     * @return string $image
+     * @return string
      */
     public function getImage()
     {
@@ -146,7 +151,6 @@ class OrderContent
 
     /**
      * Set uri
-     *
      * @param string $uri
      * @return $this
      */
@@ -158,8 +162,7 @@ class OrderContent
 
     /**
      * Get uri
-     *
-     * @return string $uri
+     * @return string
      */
     public function getUri()
     {
@@ -168,7 +171,6 @@ class OrderContent
 
     /**
      * Set contentTypeName
-     *
      * @param string $contentTypeName
      * @return $this
      */
@@ -180,8 +182,7 @@ class OrderContent
 
     /**
      * Get contentTypeName
-     *
-     * @return string $contentTypeName
+     * @return string
      */
     public function getContentTypeName()
     {
@@ -190,7 +191,6 @@ class OrderContent
 
     /**
      * Set count
-     *
      * @param float $count
      * @return $this
      */
@@ -202,8 +202,7 @@ class OrderContent
 
     /**
      * Get count
-     *
-     * @return float $count
+     * @return float
      */
     public function getCount()
     {
@@ -212,8 +211,7 @@ class OrderContent
 
     /**
      * Set price
-     *
-     * @param $price
+     * @param float $price
      * @param int $currencyRate
      * @return $this
      */
@@ -225,8 +223,7 @@ class OrderContent
 
     /**
      * Get price
-     *
-     * @return float $price
+     * @return float
      */
     public function getPrice()
     {
@@ -235,8 +232,7 @@ class OrderContent
 
     /**
      * Set parameters
-     *
-     * @param $parameters
+     * @param array $parameters
      * @param int $currencyRate
      * @return $this
      */
@@ -253,8 +249,7 @@ class OrderContent
 
     /**
      * Get parameters
-     *
-     * @return array $parameters
+     * @return array
      */
     public function getParameters()
     {
@@ -263,7 +258,6 @@ class OrderContent
 
     /**
      * Add file
-     *
      * @param array $files
      * @return $this
      */
@@ -275,7 +269,6 @@ class OrderContent
 
     /**
      * Get files
-     *
      * @return array
      */
     public function getFiles()
@@ -284,6 +277,7 @@ class OrderContent
     }
 
     /**
+     * Add file
      * @param FileDocument $fileDocument
      * @return $this
      */
@@ -294,6 +288,7 @@ class OrderContent
     }
 
     /**
+     * Get parameters price
      * @return float|int
      */
     public function getParametersPrice()
@@ -310,6 +305,7 @@ class OrderContent
     }
 
     /**
+     * Get price total
      * @return float
      */
     public function getPriceTotal()
@@ -364,11 +360,15 @@ class OrderContent
     }
 
     /**
+     * Get files string from array
      * @param array|null $files
      * @return string
      */
     public static function getFilesStrFromArray($files = null)
     {
+        if (!$files) {
+            return '';
+        }
         $outputArr = [];
         foreach ($files as $file) {
             if ($file instanceof FileDocument) {
@@ -383,6 +383,7 @@ class OrderContent
     }
 
     /**
+     * To array
      * @return array
      */
     public function toArray()
@@ -401,6 +402,7 @@ class OrderContent
     }
 
     /**
+     * From array
      * @param array $data
      * @return $this
      */

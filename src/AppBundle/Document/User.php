@@ -19,12 +19,14 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * @MongoDB\Id(type="int", strategy="INCREMENT")
      * @Groups({"details", "list"})
+     * @var int
      */
     protected $id;
 
     /**
      * @MongoDB\Field(type="string", nullable=true)
      * @Groups({"details", "list"})
+     * @var string
      */
     private $username;
 
@@ -33,75 +35,88 @@ class User implements AdvancedUserInterface, \Serializable
      * @Groups({"details", "list"})
      * @Assert\NotBlank()
      * @Assert\Email()
+     * @var string
      */
     protected $email;
 
     /**
      * @MongoDB\Field(type="string", nullable=true)
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $fullName;
 
     /**
      * @MongoDB\Field(type="string", nullable=true)
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $phone;
 
     /**
      * @MongoDB\Field(type="collection", nullable=true)
      * @Groups({"details", "list"})
+     * @var array
      */
     protected $options;
 
     /**
      * @MongoDB\Field(type="date", nullable=true)
      * @Groups({"details", "list"})
+     * @var \DateTime
      */
     protected $createdDate;
 
     /**
      * @MongoDB\Field(type="date", nullable=true)
      * @Groups({"details", "list"})
+     * @var \DateTime
      */
     protected $updatedDate;
 
     /**
      * @MongoDB\Field(type="string")
      * @Assert\NotBlank()
+     * @var string
      */
     protected $password;
 
     /**
      * @MongoDB\Field(type="string", nullable=true)
+     * @var string
      */
     protected $newPassword;
 
     /**
      * @MongoDB\Field(type="string", nullable=true)
      * @Groups({"details"})
+     * @var string
      */
     protected $secretCode;
 
     /**
      * @MongoDB\Field(type="string")
+     * @var string
      */
     private $salt;// Not used
 
     /**
      * @MongoDB\Field(type="boolean")
      * @Groups({"details", "list"})
+     * @var boolean
      */
     protected $isActive;
 
     /**
      * @MongoDB\Field(type="collection")
      * @Groups({"details", "list"})
+     * @var array
      */
     protected $roles;
 
     /**
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $role;
 
@@ -127,6 +142,10 @@ class User implements AdvancedUserInterface, \Serializable
         $this->updatedDate = new \DateTime();
     }
 
+    /**
+     * Get int
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -159,7 +178,7 @@ class User implements AdvancedUserInterface, \Serializable
     }
 
     /**
-     * @param $password
+     * @param string $password
      * @return $this
      */
     public function setPassword($password)
@@ -254,7 +273,7 @@ class User implements AdvancedUserInterface, \Serializable
      * Set isActive
      *
      * @param boolean $isActive
-     * @return self
+     * @return $this
      */
     public function setIsActive($isActive)
     {
@@ -265,7 +284,7 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * Get isActive
      *
-     * @return boolean $isActive
+     * @return boolean
      */
     public function getIsActive()
     {
@@ -276,7 +295,7 @@ class User implements AdvancedUserInterface, \Serializable
      * Set fullName
      *
      * @param string $fullName
-     * @return self
+     * @return $this
      */
     public function setFullName($fullName)
     {
@@ -287,7 +306,7 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * Get fullName
      *
-     * @return string $fullName
+     * @return string
      */
     public function getFullName()
     {
@@ -298,7 +317,7 @@ class User implements AdvancedUserInterface, \Serializable
      * Set username
      *
      * @param string $username
-     * @return self
+     * @return $this
      */
     public function setUsername($username)
     {
@@ -318,7 +337,7 @@ class User implements AdvancedUserInterface, \Serializable
      * Set salt
      *
      * @param string $salt
-     * @return self
+     * @return $this
      */
     public function setSalt($salt)
     {
@@ -349,7 +368,7 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * Get newPassword
      *
-     * @return string $newPassword
+     * @return string
      */
     public function getNewPassword()
     {
@@ -371,7 +390,7 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * Get secretCode
      *
-     * @return string $secretCode
+     * @return string
      */
     public function getSecretCode()
     {
@@ -411,7 +430,7 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * Get phone
      *
-     * @return string $phone
+     * @return string
      */
     public function getPhone()
     {
@@ -433,7 +452,7 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * Get createdDate
      *
-     * @return \DateTime $createdDate
+     * @return \DateTime
      */
     public function getCreatedDate()
     {
@@ -455,7 +474,7 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * Get updatedDate
      *
-     * @return \DateTime $updatedDate
+     * @return \DateTime
      */
     public function getUpdatedDate()
     {
@@ -477,7 +496,7 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * Get options
      *
-     * @return array $options
+     * @return array
      */
     public function getOptions()
     {

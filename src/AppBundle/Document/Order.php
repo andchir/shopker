@@ -16,108 +16,126 @@ class Order
     /**
      * @MongoDB\Id(type="int", strategy="INCREMENT")
      * @Groups({"details", "list"})
+     * @var int
      */
     protected $id;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $email;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $fullName;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $phone;
 
     /**
      * @MongoDB\Field(type="date")
      * @Groups({"details", "list"})
+     * @var \DateTime
      */
     protected $createdDate;
 
     /**
      * @MongoDB\Field(type="date")
      * @Groups({"details", "list"})
+     * @var \DateTime
      */
     protected $updatedDate;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $status;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $deliveryName;
 
     /**
      * @MongoDB\Field(type="float")
      * @Groups({"details", "list"})
+     * @var float
      */
     protected $deliveryPrice;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $paymentName;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $paymentValue;
 
     /**
      * @MongoDB\Field(type="integer")
      * @Groups({"details", "list"})
+     * @var int
      */
     protected $userId;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $comment;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $note;
 
     /**
      * @MongoDB\Field(type="float")
      * @Groups({"details", "list"})
+     * @var float
      */
     protected $price;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $currency;
 
     /**
      * @MongoDB\Field(type="float")
      * @Groups({"details", "list"})
+     * @var float
      */
     protected $currencyRate;
 
     /**
      * @MongoDB\Field(type="collection")
      * @Groups({"details"})
+     * @var array
      */
     protected $options;
 
@@ -125,18 +143,21 @@ class Order
      * @MongoDB\Field(type="collection")
      * @MongoDB\EmbedMany(targetDocument="OrderContent")
      * @Groups({"details"})
+     * @var array
      */
     protected $content;
 
     /**
      * @MongoDB\ReferenceMany(targetDocument="FileDocument", mappedBy="order", orphanRemoval=true, cascade={"all"}, storeAs="id")
      * @Groups({"details"})
+     * @var array
      */
     protected $files;
 
     /**
      * @MongoDB\Field(type="boolean")
      * @Groups({"details", "list"})
+     * @var boolean
      */
     protected $isPaid;
 
@@ -174,7 +195,7 @@ class Order
     /**
      * Get id
      *
-     * @return int $id
+     * @return int
      */
     public function getId()
     {
@@ -196,7 +217,7 @@ class Order
     /**
      * Get createdDate
      *
-     * @return \DateTime $createdDate
+     * @return \DateTime
      */
     public function getCreatedDate()
     {
@@ -218,7 +239,7 @@ class Order
     /**
      * Get updatedDate
      *
-     * @return \DateTime $updatedDate
+     * @return \DateTime
      */
     public function getUpdatedDate()
     {
@@ -240,7 +261,7 @@ class Order
     /**
      * Get status
      *
-     * @return string $status
+     * @return string
      */
     public function getStatus()
     {
@@ -262,7 +283,7 @@ class Order
     /**
      * Get userId
      *
-     * @return integer $userId
+     * @return integer
      */
     public function getUserId()
     {
@@ -284,7 +305,7 @@ class Order
     /**
      * Get comment
      *
-     * @return string $comment
+     * @return string
      */
     public function getComment()
     {
@@ -306,7 +327,7 @@ class Order
     /**
      * Get email
      *
-     * @return string $email
+     * @return string
      */
     public function getEmail()
     {
@@ -328,7 +349,7 @@ class Order
     /**
      * Get fullName
      *
-     * @return string $fullName
+     * @return string
      */
     public function getFullName()
     {
@@ -350,7 +371,7 @@ class Order
     /**
      * Get phone
      *
-     * @return string $phone
+     * @return string
      */
     public function getPhone()
     {
@@ -372,7 +393,7 @@ class Order
     /**
      * Get deliveryName
      *
-     * @return string $deliveryName
+     * @return string
      */
     public function getDeliveryName()
     {
@@ -395,7 +416,7 @@ class Order
     /**
      * Get deliveryPrice
      *
-     * @return string $deliveryPrice
+     * @return string
      */
     public function getDeliveryPrice()
     {
@@ -417,7 +438,7 @@ class Order
     /**
      * Get paymentName
      *
-     * @return string $paymentName
+     * @return string
      */
     public function getPaymentName()
     {
@@ -439,7 +460,7 @@ class Order
     /**
      * Get paymentValue
      *
-     * @return string $paymentValue
+     * @return string
      */
     public function getPaymentValue()
     {
@@ -461,7 +482,7 @@ class Order
     /**
      * Get note
      *
-     * @return string $note
+     * @return string
      */
     public function getNote()
     {
@@ -578,7 +599,7 @@ class Order
     /**
      * Get price
      *
-     * @return float $price
+     * @return float
      */
     public function getPrice()
     {
@@ -617,7 +638,7 @@ class Order
     /**
      * Get currency
      *
-     * @return string $currency
+     * @return string
      */
     public function getCurrency()
     {
@@ -639,7 +660,7 @@ class Order
     /**
      * Get currency rate
      *
-     * @return float $currencyRate
+     * @return float
      */
     public function getCurrencyRate()
     {
@@ -661,7 +682,7 @@ class Order
     /**
      * Get options
      *
-     * @return array $options
+     * @return array
      */
     public function getOptions()
     {
@@ -671,7 +692,7 @@ class Order
     /**
      * Get content
      *
-     * @return ArrayCollection $content
+     * @return ArrayCollection
      */
     public function getContent()
     {
@@ -758,7 +779,7 @@ class Order
      * Set isPaid
      *
      * @param boolean $isPaid
-     * @return self
+     * @return $this
      */
     public function setIsPaid($isPaid)
     {

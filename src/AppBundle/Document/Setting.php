@@ -19,37 +19,42 @@ class Setting
     /**
      * @MongoDB\Id(type="int", strategy="INCREMENT")
      * @Groups({"details"})
+     * @var int
      */
     private $id;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
+     * @var string
      */
     private $name;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details"})
+     * @var string
      */
     private $description;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details"})
+     * @var string
      */
     private $groupName;
 
     /**
      * @MongoDB\Field(type="hash")
      * @Groups({"details", "list"})
+     * @var array
      */
     private $options;
 
     /**
      * Get id
      *
-     * @return int $id
+     * @return int
      */
     public function getId()
     {
@@ -60,7 +65,7 @@ class Setting
      * Set name
      *
      * @param string $name
-     * @return self
+     * @return $this
      */
     public function setName($name)
     {
@@ -71,7 +76,7 @@ class Setting
     /**
      * Get name
      *
-     * @return string $name
+     * @return string
      */
     public function getName()
     {
@@ -82,7 +87,7 @@ class Setting
      * Set description
      *
      * @param string $description
-     * @return self
+     * @return $this
      */
     public function setDescription($description)
     {
@@ -93,7 +98,7 @@ class Setting
     /**
      * Get description
      *
-     * @return string $description
+     * @return string
      */
     public function getDescription()
     {
@@ -104,7 +109,7 @@ class Setting
      * Set groupName
      *
      * @param string $groupName
-     * @return self
+     * @return $this
      */
     public function setGroupName($groupName)
     {
@@ -115,7 +120,7 @@ class Setting
     /**
      * Get groupName
      *
-     * @return string $groupName
+     * @return string
      */
     public function getGroupName()
     {
@@ -126,7 +131,7 @@ class Setting
      * Set options
      *
      * @param array $options
-     * @return self
+     * @return $this
      */
     public function setOptions($options)
     {

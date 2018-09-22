@@ -14,66 +14,77 @@ class Category
     /**
      * @MongoDB\Id(type="int", strategy="INCREMENT")
      * @Groups({"details", "list"})
+     * @var int
      */
     protected $id;
 
     /**
      * @MongoDB\Field(type="int")
      * @Groups({"details", "list"})
+     * @var int
      */
     protected $parentId;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $title;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $name;
 
     /**
      * @MongoDB\Field(type="string", nullable=true)
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $uri;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $description;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $contentTypeName;
 
     /**
      * @MongoDB\Field(type="boolean")
      * @Groups({"details", "list"})
+     * @var boolean
      */
     protected $isFolder;
 
     /**
      * @MongoDB\Field(type="boolean")
      * @Groups({"details", "list"})
+     * @var boolean
      */
     protected $isActive;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $image;
 
     /**
      * @MongoDB\Field(type="int")
      * @Groups({"details", "list"})
+     * @var int
      */
     protected $menuIndex;
 
@@ -93,8 +104,7 @@ class Category
 
     /**
      * Get id
-     *
-     * @return string
+     * @return int
      */
     public function getId()
     {
@@ -105,7 +115,7 @@ class Category
      * Set ID
      *
      * @param int $id
-     * @return self
+     * @return $this
      */
     public function setId($id)
     {
@@ -117,7 +127,7 @@ class Category
      * Set title
      *
      * @param string $title
-     * @return self
+     * @return $this
      */
     public function setTitle($title)
     {
@@ -139,7 +149,7 @@ class Category
      * Set name
      *
      * @param string $name
-     * @return self
+     * @return $this
      */
     public function setName($name)
     {
@@ -183,7 +193,7 @@ class Category
      * Set description
      *
      * @param string $description
-     * @return self
+     * @return $this
      */
     public function setDescription($description)
     {
@@ -204,7 +214,7 @@ class Category
      * Set parentId
      *
      * @param int $parentId
-     * @return self
+     * @return $this
      */
     public function setParentId($parentId)
     {
@@ -223,6 +233,7 @@ class Category
     }
 
     /**
+     * To array
      * @return array
      */
     public function toArray()
@@ -244,7 +255,7 @@ class Category
      * Set contentTypeName
      *
      * @param string $contentTypeName
-     * @return self
+     * @return $this
      */
     public function setContentTypeName($contentTypeName)
     {
@@ -266,7 +277,7 @@ class Category
      * Set filterData
      *
      * @param Filter $filterData
-     * @return self
+     * @return $this
      */
     public function setFilterData($filterData)
     {
@@ -287,7 +298,7 @@ class Category
      * Set isFolder
      *
      * @param boolean $isFolder
-     * @return self
+     * @return $this
      */
     public function setIsFolder($isFolder)
     {
@@ -309,7 +320,7 @@ class Category
      * Set isActive
      *
      * @param boolean $isActive
-     * @return self
+     * @return $this
      */
     public function setIsActive($isActive)
     {
@@ -328,20 +339,10 @@ class Category
     }
 
     /**
-     * @MongoDB\PostUpdate
-     */
-    public function updateParentIsFolder()
-    {
-
-        //var_dump('updateParentIsFolder', $this); exit;
-
-    }
-
-    /**
      * Set contentType
      *
      * @param ContentType $contentType
-     * @return self
+     * @return $this
      */
     public function setContentType(ContentType $contentType)
     {
@@ -360,6 +361,7 @@ class Category
     }
 
     /**
+     * Get menu data
      * @param array $breadcrumbsUriArr
      * @return array
      */
@@ -378,6 +380,7 @@ class Category
     }
 
     /**
+     * Parse uri
      * @param string $uri
      * @return array
      */
@@ -413,7 +416,7 @@ class Category
     /**
      * Get image
      *
-     * @return string $image
+     * @return string
      */
     public function getImage()
     {

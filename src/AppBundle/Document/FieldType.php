@@ -14,42 +14,49 @@ class FieldType
     /**
      * @MongoDB\Id(type="int", strategy="INCREMENT")
      * @Groups({"details", "list"})
+     * @var int
      */
     protected $id;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $title;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $name;
 
     /**
      * @MongoDB\Field(type="string")
      * @Groups({"details", "list"})
+     * @var string
      */
     protected $description;
 
     /**
      * @MongoDB\Field(type="collection")
      * @Groups({"details", "list"})
+     * @var array
      */
     protected $inputProperties;
 
     /**
      * @MongoDB\Field(type="collection")
      * @Groups({"details", "list"})
+     * @var array
      */
     protected $outputProperties;
 
     /**
      * @MongoDB\Field(type="boolean")
      * @Groups({"details", "list"})
+     * @var boolean
      */
     protected $isActive;
 
@@ -57,7 +64,7 @@ class FieldType
     /**
      * Get id
      *
-     * @return int $id
+     * @return int
      */
     public function getId()
     {
@@ -68,7 +75,7 @@ class FieldType
      * Set title
      *
      * @param string $title
-     * @return self
+     * @return $this
      */
     public function setTitle($title)
     {
@@ -79,7 +86,7 @@ class FieldType
     /**
      * Get title
      *
-     * @return string $title
+     * @return string
      */
     public function getTitle()
     {
@@ -90,7 +97,7 @@ class FieldType
      * Set name
      *
      * @param string $name
-     * @return self
+     * @return $this
      */
     public function setName($name)
     {
@@ -101,7 +108,7 @@ class FieldType
     /**
      * Get name
      *
-     * @return string $name
+     * @return string
      */
     public function getName()
     {
@@ -112,7 +119,7 @@ class FieldType
      * Set description
      *
      * @param string $description
-     * @return self
+     * @return $this
      */
     public function setDescription($description)
     {
@@ -123,7 +130,7 @@ class FieldType
     /**
      * Get description
      *
-     * @return string $description
+     * @return string
      */
     public function getDescription()
     {
@@ -134,7 +141,7 @@ class FieldType
      * Set isActive
      *
      * @param boolean $isActive
-     * @return self
+     * @return $this
      */
     public function setIsActive($isActive)
     {
@@ -145,7 +152,7 @@ class FieldType
     /**
      * Get isActive
      *
-     * @return boolean $isActive
+     * @return boolean
      */
     public function getIsActive()
     {
@@ -176,7 +183,7 @@ class FieldType
      * Set inputProperties
      *
      * @param array $inputProperties
-     * @return self
+     * @return $this
      */
     public function setInputProperties($inputProperties)
     {
@@ -187,7 +194,7 @@ class FieldType
     /**
      * Get inputProperties
      *
-     * @return array $inputProperties
+     * @return array
      */
     public function getInputProperties()
     {
@@ -198,7 +205,7 @@ class FieldType
      * Set outputProperties
      *
      * @param array $outputProperties
-     * @return self
+     * @return $this
      */
     public function setOutputProperties($outputProperties)
     {
@@ -209,7 +216,7 @@ class FieldType
     /**
      * Get outputProperties
      *
-     * @return array $outputProperties
+     * @return array
      */
     public function getOutputProperties()
     {

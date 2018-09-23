@@ -1,7 +1,6 @@
 import {Component, OnInit, Input, Output, EventEmitter, ViewChild} from '@angular/core';
 import {Router} from '@angular/router';
 import {QueryOptions} from './models/query-options';
-import * as _ from 'lodash';
 
 @Component({
     selector: 'app-table',

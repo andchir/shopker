@@ -1,5 +1,5 @@
 import {Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef} from '@angular/core';
-import * as _ from 'lodash';
+import {extend, findIndex} from 'lodash';
 import {isNumeric} from 'rxjs/util/isNumeric';
 
 import {ContentField} from './catalog/models/content_field.model';
@@ -52,7 +52,7 @@ export class OutputFieldComponent implements OnInit {
     }
 
     extendProperties(object1: Properties, object2: Properties): Properties {
-        object1 = _.extend({}, object2, object1);
+        object1 = extend({}, object2, object1);
         for (const key in object1) {
             if (object1.hasOwnProperty(key)) {
                 if (isNumeric(object1[key])) {
@@ -68,7 +68,7 @@ export class OutputFieldComponent implements OnInit {
         if (!this.settingsStatuses) {
             return output;
         }
-        const index = _.findIndex(this.settingsStatuses, {name: statusValue});
+        const index = findIndex(this.settingsStatuses, {name: statusValue});
         if (index > -1 && this.settingsStatuses[index].options.color) {
             output = this.settingsStatuses[index].options.color;
         }

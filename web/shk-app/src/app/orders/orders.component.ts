@@ -1,7 +1,7 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {NgbModal, NgbActiveModal, NgbModalRef, NgbPopover, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import {FormBuilder, Validators} from '@angular/forms';
-import * as _ from 'lodash';
+import {cloneDeep, findIndex} from 'lodash';
 import {TranslateService} from '@ngx-translate/core';
 
 import {SystemNameService} from '../services/system-name.service';
@@ -144,7 +144,7 @@ export class ModalOrderContentComponent extends ModalContentAbstractComponent<Or
             this.contentEdit = new OrderContent(0, '', 0, 0);
             this.priceTotalUpdate();
         } else {
-            this.contentEdit = _.cloneDeep<OrderContent>(content);
+            this.contentEdit = cloneDeep<OrderContent>(content);
         }
     }
 
@@ -152,12 +152,12 @@ export class ModalOrderContentComponent extends ModalContentAbstractComponent<Or
         if (!this.contentEdit.uniqId) {
             return;
         }
-        const index = _.findIndex<OrderContent>(this.model.content, {
+        const index = findIndex<OrderContent>(this.model.content, {
             uniqId: this.contentEdit.uniqId,
             contentTypeName: this.contentEdit.contentTypeName
         });
         if (index > -1) {
-            this.model.content[index] = _.cloneDeep(this.contentEdit);
+            this.model.content[index] = cloneDeep(this.contentEdit);
             this.contentEdit = new OrderContent(0, '', 0, 0, '');
             this.priceTotalUpdate();
         }
@@ -169,7 +169,7 @@ export class ModalOrderContentComponent extends ModalContentAbstractComponent<Or
     }
 
     deleteContent(content: OrderContent): void {
-        const index = _.findIndex(this.model.content, {
+        const index = findIndex(this.model.content, {
             uniqId: content.uniqId,
             contentTypeName: content.contentTypeName
         });
@@ -183,7 +183,7 @@ export class ModalOrderContentComponent extends ModalContentAbstractComponent<Or
         if (!this.settings || !this.settings.SETTINGS_DELIVERY) {
             return;
         }
-        const index = _.findIndex(this.settings.SETTINGS_DELIVERY, {name: this.model.deliveryName});
+        const index = findIndex(this.settings.SETTINGS_DELIVERY, {name: this.model.deliveryName});
         if (index > -1) {
             const deliveryPrice = parseFloat(String(this.settings.SETTINGS_DELIVERY[index]['options']['price']));
             const currencyRate = this.model.currencyRate || 1;

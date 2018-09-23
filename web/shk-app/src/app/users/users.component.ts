@@ -1,7 +1,6 @@
 import {Component, OnInit, Input, ViewChild, Injectable, ElementRef} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {NgbModal, NgbActiveModal, NgbModalRef, NgbPopover, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
-import * as _ from 'lodash';
 import {TranslateService} from '@ngx-translate/core';
 
 import {UserOption, User} from './models/user.model';

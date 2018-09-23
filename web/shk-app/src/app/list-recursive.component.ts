@@ -1,5 +1,5 @@
 import {Component, OnInit, Input, OnChanges, SimpleChanges} from '@angular/core';
-import * as _ from 'lodash';
+import {findIndex} from 'lodash';
 
 @Component({
     selector: 'app-list-recursive',
@@ -70,7 +70,7 @@ export class ListRecursiveComponent implements OnInit, OnChanges {
         parentIds = parentIds || [];
         if (parentId > 0) {
             parentIds.push(parentId);
-            const index = _.findIndex(this.inputItems, {id: parentId});
+            const index = findIndex(this.inputItems, {id: parentId});
             if (index === -1) {
                 return parentIds;
             }

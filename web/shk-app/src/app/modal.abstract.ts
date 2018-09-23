@@ -1,7 +1,7 @@
 import {Input, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {NgbAccordion, NgbActiveModal, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
-import * as _ from 'lodash';
+import {cloneDeep} from 'lodash';
 import {TranslateService} from '@ngx-translate/core';
 
 import {SystemNameService} from './services/system-name.service';
@@ -167,7 +167,7 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
     }
 
     getFormData(): any {
-        return _.cloneDeep(this.model);
+        return cloneDeep(this.model);
     }
 
     saveRequest() {

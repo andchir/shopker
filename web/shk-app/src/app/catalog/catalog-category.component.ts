@@ -1,7 +1,7 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {NgbModal, NgbActiveModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {Observable} from 'rxjs';
-import * as _ from 'lodash';
+import {clone} from 'lodash';
 import {TranslateService} from '@ngx-translate/core';
 
 import {Category} from './models/category.model';
@@ -82,7 +82,7 @@ export class CatalogCategoryComponent extends PageTableAbstractComponent<Product
     }
 
     openCategory(category: Category): void {
-        this.currentCategory = _.clone(category);
+        this.currentCategory = clone(category);
         if (!this.currentCategory.contentTypeName) {
             this.items = [];
             this.tableFields = [];

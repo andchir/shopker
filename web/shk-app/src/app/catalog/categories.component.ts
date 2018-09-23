@@ -5,7 +5,7 @@ import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {TreeNode} from 'primeng/primeng';
 
-import * as _ from 'lodash';
+import {findIndex, clone} from 'lodash';
 import {TranslateService} from '@ngx-translate/core';
 
 import {ContentType} from './models/content_type.model';
@@ -223,9 +223,9 @@ export class CategoriesMenuComponent implements OnInit {
         if (this.currentCategory.id === this.categoryId) {
             return;
         }
-        const index = _.findIndex(this.categories, {id: this.categoryId});
+        const index = findIndex(this.categories, {id: this.categoryId});
         if (index > -1) {
-            this.currentCategory = _.clone(this.categories[index]);
+            this.currentCategory = clone(this.categories[index]);
             this.changeRequest.emit(this.currentCategory);
         } else {
             this.openRootCategory();
@@ -282,7 +282,7 @@ export class CategoriesMenuComponent implements OnInit {
      * @param data
      */
     updateCategoryData(itemId: number, data: any): void {
-        const index = _.findIndex(this.categories, {id: itemId});
+        const index = findIndex(this.categories, {id: itemId});
         if (index === -1) {
             return;
         }
@@ -303,7 +303,7 @@ export class CategoriesMenuComponent implements OnInit {
      * @param itemId
      */
     deleteCategoryItemConfirm(itemId: number): void {
-        const index = _.findIndex(this.categories, {id: itemId});
+        const index = findIndex(this.categories, {id: itemId});
         if (index === -1) {
             return;
         }

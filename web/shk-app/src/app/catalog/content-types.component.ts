@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {NgbModal, NgbActiveModal, NgbModalRef, NgbPopover, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
-import * as _ from 'lodash';
+import {find, map, findIndex, cloneDeep, extend} from 'lodash';
 import {TranslateService} from '@ngx-translate/core';
 
 import {ContentField} from './models/content_field.model';
@@ -222,14 +222,14 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
         if (fieldTypeName) {
             this.fieldModel[type + 'Type'] = fieldTypeName;
         }
-        const fieldType = _.find(this.fieldTypes, {name: this.fieldModel[type + 'Type']});
+        const fieldType = find(this.fieldTypes, {name: this.fieldModel[type + 'Type']});
         if (!fieldType) {
             this.fieldTypeProperties[type] = [];
             return;
         }
 
         const modelPropertiesField = type + 'Properties';
-        const propNames = _.map(fieldType[type + 'Properties'], 'name');
+        const propNames = map(fieldType[type + 'Properties'], 'name');
         this.fieldTypeProperties[type].splice(0);
 
         fieldType[type + 'Properties'].forEach((v, i) => {
@@ -341,7 +341,7 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
     /** Delete group */
     deleteGroup() {
         const currentGroupName = this.fieldForm.get('group').value;
-        let index = _.findIndex(this.model.fields, {group: currentGroupName});
+        let index = findIndex(this.model.fields, {group: currentGroupName});
         this.errorFieldMessage = '';
         if (index > -1) {
             this.errorFieldMessage = 'You can\'t delete a group because it is not empty.';
@@ -360,7 +360,7 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
     editField(field: ContentField) {
         this.toggleAccordion(this.accordion, 'accordion-content-type-fields');
         this.action = 'edit_field';
-        this.fieldModel = _.cloneDeep(field);
+        this.fieldModel = cloneDeep(field);
         const newFormValue = {};
         for (const key in this.fieldsFormOptions) {
             if (!this.fieldsFormOptions.hasOwnProperty(key)) {
@@ -380,7 +380,7 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
     copyField(field: ContentField) {
         this.toggleAccordion(this.accordion, 'accordion-content-type-fields');
         this.action = 'add_field';
-        this.fieldModel = _.cloneDeep(field);
+        this.fieldModel = cloneDeep(field);
         this.fieldModel.name = '';
         this.fieldForm.setValue(this.fieldModel);
         this.currentFieldName = '';
@@ -392,7 +392,7 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
      * @param field
      */
     deleteField(field: ContentField) {
-        const index = _.findIndex( this.model.fields, {name: field.name} );
+        const index = findIndex( this.model.fields, {name: field.name} );
         if (index === -1 ) {
             this.errorMessage = 'Field not found.';
             return;
@@ -440,11 +440,11 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
             this.fld_submitted = false;
             return;
         }
-        const data = _.cloneDeep(this.fieldModel);
-        data.inputProperties = _.extend({}, this.fieldModel.inputProperties);
-        data.outputProperties = _.extend({}, this.fieldModel.outputProperties);
+        const data = cloneDeep(this.fieldModel);
+        data.inputProperties = extend({}, this.fieldModel.inputProperties);
+        data.outputProperties = extend({}, this.fieldModel.outputProperties);
 
-        let index = _.findIndex(this.model.fields, {name: data.name});
+        let index = findIndex(this.model.fields, {name: data.name});
         if (index > -1 && this.currentFieldName !== data.name) {
             this.errorMessage = 'A field named "' + data.name + '" already exists.';
             return;
@@ -453,7 +453,7 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
         if (this.action === 'add_field') {
             this.model.fields.push(data);
         } else if (this.action === 'edit_field') {
-            index = _.findIndex(this.model.fields, {name: this.currentFieldName});
+            index = findIndex(this.model.fields, {name: this.currentFieldName});
             if (index > -1) {
                 this.model.fields[index] = data;
             }
@@ -466,7 +466,7 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
             return null;
         }
         let output = null;
-        const index = _.findIndex(this.fieldTypes, {name: inputType});
+        const index = findIndex(this.fieldTypes, {name: inputType});
         if (index > -1 && typeof this.fieldTypes[index][propertyName] !== 'undefined') {
             output = this.fieldTypes[index][propertyName];
         }
@@ -509,7 +509,7 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
     }
 
     sortingCancel(): void {
-        const index = _.findIndex(this.model.fields, {name: this.currentFieldName});
+        const index = findIndex(this.model.fields, {name: this.currentFieldName});
         if (index > -1) {
             this.action = 'edit_field';
         } else {

@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {NgbActiveModal, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import {FormControl, FormBuilder, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
-import * as _ from 'lodash';
+import {findIndex, clone, cloneDeep, map, pick} from 'lodash';
 import {TranslateService} from '@ngx-translate/core';
 
 import {ContentType} from './models/content_type.model';
@@ -85,7 +85,7 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
     }
 
     getSystemFieldName(): string {
-        const index = _.findIndex(this.currentContentType.fields, {inputType: 'system_name'});
+        const index = findIndex(this.currentContentType.fields, {inputType: 'system_name'});
         return index > -1 ? this.currentContentType.fields[index].name : 'name';
     }
 
@@ -126,9 +126,9 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
      */
     updateForm(data ?: any): void {
         if (!data) {
-            data = _.clone(this.model);
+            data = clone(this.model);
         }
-        const newKeys = _.map(this.currentContentType.fields, function(field) {
+        const newKeys = map(this.currentContentType.fields, function(field) {
             return field.name;
         });
         newKeys.push('id', 'parentId', 'previousParentId', 'isActive');
@@ -140,7 +140,7 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
                 if (fieldIndexData.index === -1) {
                     return;
                 }
-                const newField = _.cloneDeep(this.currentContentType.fields[fieldIndexData.index]);
+                const newField = cloneDeep(this.currentContentType.fields[fieldIndexData.index]);
                 newField.name = key;
 
                 this.currentContentType.fields.splice(
@@ -160,19 +160,19 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
                 }
             }
         }
-        this.model = _.pick(data, newKeys) as Product;
+        this.model = pick(data, newKeys) as Product;
     }
 
     onChangeContentType(): void {
         const parentId = parseInt(String(this.model.parentId), 10);
-        const index = _.findIndex(this.categories, {id: parentId});
+        const index = findIndex(this.categories, {id: parentId});
         if (index === -1) {
             return;
         }
         if (!this.currentContentType
             || (this.currentContentType.name !== this.categories[index].contentTypeName)) {
                 this.model.previousParentId = this.category.id;
-                this.category = _.cloneDeep(this.categories[index]);
+                this.category = cloneDeep(this.categories[index]);
                 this.getContentType();
         }
     }
@@ -206,7 +206,7 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
     }
 
     getFormData() {
-        const data = _.cloneDeep(this.model);
+        const data = cloneDeep(this.model);
 
         // Delete temporary data
         for (const key in data) {

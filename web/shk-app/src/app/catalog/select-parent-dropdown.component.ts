@@ -1,7 +1,7 @@
 import {Component, OnInit, Input, forwardRef, ViewChild} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {TreeNode} from 'primeng/primeng';
-import * as _ from 'lodash';
+import {cloneDeep} from 'lodash';
 
 import {CategoriesService} from './services/categories.service';
 
@@ -78,7 +78,7 @@ export class SelectParentDropdownComponent implements OnInit, ControlValueAccess
     onCategorySelect(e: any): void {
         if (e.node.id && e.node.id === this.filterId) {
             if (this.previousCategoryNode) {
-                this.currentCategoryNode = _.cloneDeep(this.previousCategoryNode);
+                this.currentCategoryNode = cloneDeep(this.previousCategoryNode);
                 this.currentId = this.currentCategoryNode['id'];
             } else {
                 this.currentCategoryNode = null;
@@ -86,7 +86,7 @@ export class SelectParentDropdownComponent implements OnInit, ControlValueAccess
             }
             return;
         }
-        this.previousCategoryNode = _.cloneDeep(this.currentCategoryNode);
+        this.previousCategoryNode = cloneDeep(this.currentCategoryNode);
         this.writeValue(e.node.id);
         this.dropdownElement.close();
     }

@@ -1,6 +1,6 @@
 import {Component, OnInit, Input, OnChanges, SimpleChange, ChangeDetectorRef} from '@angular/core';
 import {FormGroup, FormControl, Validators} from '@angular/forms';
-import * as _ from 'lodash';
+import {cloneDeep, map, zipObject, isArray, extend, defer} from 'lodash';
 import {isNumeric} from 'rxjs/util/isNumeric';
 
 import {ContentField} from './catalog/models/content_field.model';
@@ -81,7 +81,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
         this.buildControls();
         const changedKeys = Object.keys(changes);
-        const fieldNames = _.map(this.fields, (field) => {
+        const fieldNames = map(this.fields, (field) => {
             return field.name;
         });
         if (this.categories.length === 0 && fieldNames.indexOf('categories') === -1) {
@@ -219,7 +219,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                     if (!opts[1]) {
                         opts[1] = opts[0];
                     }
-                    field.options.push(_.zipObject(['title', 'value'], opts));
+                    field.options.push(zipObject(['title', 'value'], opts));
                 });
 
                 break;
@@ -229,7 +229,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                     ? String(field.inputProperties.values_list).split('||')
                     : [];
 
-                if (!_.isArray(this.model[field.name])) {
+                if (!isArray(this.model[field.name])) {
                     this.model[field.name] = [];
                 }
 
@@ -239,7 +239,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                     if (!opts[1]) {
                         opts[1] = opts[0];
                     }
-                    field.options.push(_.zipObject(['title', 'value'], opts));
+                    field.options.push(zipObject(['title', 'value'], opts));
                     this.fieldsMultivalues[field.name].values.push(opts[1]);
                     this.fieldsMultivalues[field.name].checked.push(this.model[field.name].indexOf(opts[1]) > -1);
                 });
@@ -273,7 +273,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                 if (typeof defaultValue !== 'object') {
                     defaultValue = defaultValue ? JSON.parse(defaultValue) : [];
                 }
-                if (!_.isArray(defaultValue)) {
+                if (!isArray(defaultValue)) {
                     defaultValue = [defaultValue];
                 }
                 break;
@@ -286,7 +286,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
     }
 
     selectValue(e, fieldName: string, value: string): void {
-        if (!_.isArray(this.model[fieldName])) {
+        if (!isArray(this.model[fieldName])) {
             this.model[fieldName] = [];
         }
         const valIndex = this.fieldsMultivalues[fieldName].values.indexOf(value);
@@ -312,7 +312,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
     }
 
     extendProperties(object1: Properties, object2: Properties): Properties {
-        object1 = _.extend({}, object2, object1);
+        object1 = extend({}, object2, object1);
         for (const key in object1) {
             if (object1.hasOwnProperty(key)) {
                 if (isNumeric(object1[key])) {
@@ -408,7 +408,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
         this.fields.forEach((field) => {
             if (field.inputType === 'categories') {
                 this.categoriesSelection[field.name] = [];
-                if (this.model[field.name] && _.isArray(this.model[field.name])) {
+                if (this.model[field.name] && isArray(this.model[field.name])) {
                     this.model[field.name].forEach((id) => {
                         const category = this.getCategoryById(id, this.categories);
                         if (category) {
@@ -441,7 +441,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
 
     categorySelect(fieldName: string) {
         this.model[fieldName] = [];
-        _.defer(() => {
+        defer(() => {
             this.categoriesSelection[fieldName].forEach((category) => {
                 if (this.model[fieldName].indexOf(category.id) === -1) {
                     this.model[fieldName].push(category.id);
@@ -515,7 +515,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
         }
         let fieldName = ContentField.getFieldBaseName(field.name);
         fieldName += `__${fieldIndexData.additFieldsCount + 1}`;
-        const newField = _.cloneDeep(field);
+        const newField = cloneDeep(field);
         newField.name = fieldName;
 
         this.fields.splice(fieldIndexData.index + 1, 0, newField);

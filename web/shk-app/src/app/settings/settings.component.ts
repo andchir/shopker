@@ -1,6 +1,6 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
-import * as _ from 'lodash';
+import {cloneDeep, findIndex, cloneDeepWith, extend} from 'lodash';
 
 import {Setting, SettingOption, SettingsGroup, SettingsData} from './models/setting.model';
 import {AppSettings} from '../services/app-settings.service';
@@ -62,27 +62,27 @@ export class SettingsComponent implements OnInit {
             .subscribe((res) => {
                 if (res['SETTINGS_MAIN']) {
                     this.settings.SETTINGS_MAIN.values = res['SETTINGS_MAIN'];
-                    this.settings.SETTINGS_MAIN.defaultValues = _.cloneDeep(res['SETTINGS_MAIN']);
+                    this.settings.SETTINGS_MAIN.defaultValues = cloneDeep(res['SETTINGS_MAIN']);
                     this.settings.SETTINGS_MAIN.loading = false;
                 }
                 if (res['SETTINGS_ORDER_STATUSES']) {
                     this.settings.SETTINGS_ORDER_STATUSES.values = res['SETTINGS_ORDER_STATUSES'];
-                    this.settings.SETTINGS_ORDER_STATUSES.defaultValues = _.cloneDeep(res['SETTINGS_ORDER_STATUSES']);
+                    this.settings.SETTINGS_ORDER_STATUSES.defaultValues = cloneDeep(res['SETTINGS_ORDER_STATUSES']);
                     this.settings.SETTINGS_ORDER_STATUSES.loading = false;
                 }
                 if (res['SETTINGS_DELIVERY']) {
                     this.settings.SETTINGS_DELIVERY.values = res['SETTINGS_DELIVERY'];
-                    this.settings.SETTINGS_DELIVERY.defaultValues = _.cloneDeep(res['SETTINGS_DELIVERY']);
+                    this.settings.SETTINGS_DELIVERY.defaultValues = cloneDeep(res['SETTINGS_DELIVERY']);
                     this.settings.SETTINGS_DELIVERY.loading = false;
                 }
                 if (res['SETTINGS_PAYMENT']) {
                     this.settings.SETTINGS_PAYMENT.values = res['SETTINGS_PAYMENT'];
-                    this.settings.SETTINGS_PAYMENT.defaultValues = _.cloneDeep(res['SETTINGS_PAYMENT']);
+                    this.settings.SETTINGS_PAYMENT.defaultValues = cloneDeep(res['SETTINGS_PAYMENT']);
                     this.settings.SETTINGS_PAYMENT.loading = false;
                 }
                 if (res['SETTINGS_CURRENCY']) {
                     this.settings.SETTINGS_CURRENCY.values = res['SETTINGS_CURRENCY'];
-                    this.settings.SETTINGS_CURRENCY.defaultValues = _.cloneDeep(res['SETTINGS_CURRENCY']);
+                    this.settings.SETTINGS_CURRENCY.defaultValues = cloneDeep(res['SETTINGS_CURRENCY']);
                     this.settings.SETTINGS_CURRENCY.loading = false;
                 }
             });
@@ -92,7 +92,7 @@ export class SettingsComponent implements OnInit {
         const newSetting = {
             name: '',
             description: '',
-            options: _.cloneDeep(this.settings[groupName].defaultOptions)
+            options: cloneDeep(this.settings[groupName].defaultOptions)
         };
         this.settings[groupName].values.push(newSetting);
     }
@@ -118,7 +118,7 @@ export class SettingsComponent implements OnInit {
     }
 
     getCurrentLocale(): string {
-        const index = _.findIndex(this.settings['SETTINGS_MAIN'].values, {name: 'locale'});
+        const index = findIndex(this.settings['SETTINGS_MAIN'].values, {name: 'locale'});
         if (index > -1) {
             return String(this.settings['SETTINGS_MAIN'].values[index].value);
         }
@@ -131,7 +131,7 @@ export class SettingsComponent implements OnInit {
             this.settings[groupName].values.splice(dataLength - 1, this.settings[groupName].values.length - dataLength);
         }
 
-        _.extend(this.settings[groupName].values, _.cloneDeepWith(this.settings[groupName].defaultValues));
+        extend(this.settings[groupName].values, cloneDeepWith(this.settings[groupName].defaultValues));
         this.settings[groupName].loading = false;
         this.settings[groupName].changed = false;
     }

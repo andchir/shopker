@@ -8,6 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Bundle\MongoDBBundle\Validator\Constraints\Unique as MongoDBUnique;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Security\Core\Role\Role;
 
 /**
  * @MongoDB\Document(collection="user", repositoryClass="AppBundle\Repository\UserRepository")
@@ -98,7 +99,7 @@ class User implements AdvancedUserInterface, \Serializable
      * @MongoDB\Field(type="string")
      * @var string
      */
-    private $salt;// Not used
+    private $salt;
 
     /**
      * @MongoDB\Field(type="boolean")
@@ -110,7 +111,7 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * @MongoDB\Field(type="collection")
      * @Groups({"details", "list"})
-     * @var array
+     * @var string[]
      */
     protected $roles;
 
@@ -189,12 +190,12 @@ class User implements AdvancedUserInterface, \Serializable
 
     /**
      * @param bool $addDefault
-     * @return array
+     * @return string[]
      */
     public function getRoles($addDefault = true)
     {
-        $roles = $this->roles ? $this->roles : [];
-        if( $addDefault ){
+        $roles = !empty($this->roles) ? $this->roles : [];
+        if($addDefault){
             $roles[] = 'ROLE_USER';
         }
         return array_unique($roles);
@@ -205,12 +206,13 @@ class User implements AdvancedUserInterface, \Serializable
      */
     public function getRole()
     {
-        return current($this->getRoles());
+        $roles = $this->getRoles();
+        return current($roles);
     }
 
     /**
      * @param array $roles
-     * @return User
+     * @return $this
      */
     public function setRoles(array $roles)
     {
@@ -250,7 +252,7 @@ class User implements AdvancedUserInterface, \Serializable
             $this->id,
             $this->email,
             $this->password,
-            $this->isActive,
+            $this->isActive
             // see section on salt below
             // $this->salt,
         ));
@@ -263,7 +265,7 @@ class User implements AdvancedUserInterface, \Serializable
             $this->id,
             $this->email,
             $this->password,
-            $this->isActive,
+            $this->isActive
             // see section on salt below
             // $this->salt
             ) = unserialize($serialized);
@@ -517,7 +519,7 @@ class User implements AdvancedUserInterface, \Serializable
 
     /**
      * @param array $option
-     * @param bool $addValue
+     * @param bool
      */
     public function updateOption($option, $addValue = false)
     {

@@ -23,13 +23,20 @@ class AppExtension extends AbstractExtension
     /** @var array */
     protected $cache = [];
 
-    /** @param ContainerInterface $container */
+    /**
+     * AppExtension constructor.
+     * @param ContainerInterface $container
+     * @param RequestStack $requestStack
+     */
     public function __construct(ContainerInterface $container, RequestStack $requestStack)
     {
         $this->container = $container;
         $this->requestStack = $requestStack;
     }
 
+    /**
+     * @return array
+     */
     public function getFilters()
     {
         return [
@@ -37,6 +44,9 @@ class AppExtension extends AbstractExtension
         ];
     }
 
+    /**
+     * @return array
+     */
     public function getFunctions()
     {
         return [
@@ -360,7 +370,7 @@ class AppExtension extends AbstractExtension
      * @param $itemData
      * @param $fieldsData
      * @param $fieldName
-     * @return mixed|string
+     * @return string
      */
     public function renderOutputTypeFieldFunction(\Twig_Environment $environment, $itemData, $fieldsData, $fieldName)
     {
@@ -439,7 +449,7 @@ class AppExtension extends AbstractExtension
 
     /**
      * @param string $string
-     * @return mixed|string
+     * @return string
      */
     public function twigNextPassFunction($string)
     {

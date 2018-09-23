@@ -10,7 +10,27 @@
                      [formGroup]="form"
                      *ngFor="let field of fields | filterFieldByGroup: groupName">
 
-                    <div [ngSwitch]="field.inputType">
+                    <div class="show-on-hover-parent" [ngSwitch]="field.inputType" [ngClass]="{'pr-5': field.inputProperties.multiple}">
+
+                        <ng-container *ngIf="field.inputProperties.multiple">
+                            <div class="show-on-hover-child pos-absolute-right-bottom" style="z-index: 11;">
+                                <div class="mb-2">
+                                    <button type="button" class="btn btn-secondary btn-sm" [ngbTooltip]="'MOVE_UP' | translate" placement="left" (click)="fieldMove(field, 'up', $event)">
+                                        <i class="icon-arrow-up"></i>
+                                    </button>
+                                </div>
+                                <div class="mb-2">
+                                    <button type="button" class="btn btn-secondary btn-sm" [ngbTooltip]="'MOVE_DOWN' | translate" placement="left" (click)="fieldMove(field, 'down', $event)">
+                                        <i class="icon-arrow-down"></i>
+                                    </button>
+                                </div>
+                                <div>
+                                    <button type="button" class="btn btn-secondary btn-sm" [ngbTooltip]="'ADD' | translate" placement="left" (click)="fieldAdd(field, $event)">
+                                        <i class="icon-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </ng-container>
 
                         <!-- system_name -->
                         <div class="row" *ngSwitchCase="'system_name'">
@@ -89,7 +109,7 @@
 
                         <!-- file -->
                         <div class="card card-body p-2" *ngSwitchCase="'file'">
-                            <div class="min-height110 show-on-hover-parent">
+                            <div class="min-height110">
                                 <div class="mb-1">
                                     <label for="field_{{field.name}}">
                                         {{field.title}}
@@ -124,25 +144,6 @@
                                         {{formErrors[field.name]}}
                                     </div>
                                 </div>
-                                <ng-container *ngIf="field.inputProperties.multiple">
-                                    <div class="show-on-hover-child pos-absolute-right-bottom">
-                                        <div class="mb-2">
-                                            <button type="button" class="btn btn-secondary btn-sm" [ngbTooltip]="'MOVE_UP' | translate" placement="left" (click)="fieldMove(field, 'up', $event)">
-                                                <i class="icon-arrow-up"></i>
-                                            </button>
-                                        </div>
-                                        <div class="mb-2">
-                                            <button type="button" class="btn btn-secondary btn-sm" [ngbTooltip]="'MOVE_DOWN' | translate" placement="left" (click)="fieldMove(field, 'down', $event)">
-                                                <i class="icon-arrow-down"></i>
-                                            </button>
-                                        </div>
-                                        <div>
-                                            <button type="button" class="btn btn-secondary btn-sm" [ngbTooltip]="'ADD' | translate" placement="left" (click)="fieldAdd(field, $event)">
-                                                <i class="icon-plus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </ng-container>
                             </div>
                         </div>
 

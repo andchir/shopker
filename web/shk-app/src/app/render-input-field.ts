@@ -120,6 +120,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
 
                 propertiesDefault = {
                     handler: '',
+                    multiple: 0,
                     min: null,
                     max: null,
                     step: 1
@@ -134,6 +135,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
 
                 propertiesDefault = {
                     handler: '',
+                    multiple: 0,
                     format: 'MM/dd/yyyy',
                     show_time: 0,
                     hour_format: 24,
@@ -150,6 +152,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
 
                 propertiesDefault = {
                     handler: '',
+                    multiple: 0,
                     formats: 'background,bold,color,font,code,italic,link,'
                     + 'strike,script,underline,blockquote,header,indent,'
                     + 'list,align,direction,code-block,formula,image,video,clean'
@@ -165,9 +168,9 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
 
                 propertiesDefault = {
                     handler: '',
+                    multiple: 0,
                     allowed_extensions: '.zip,.rar,.doc,.docx,.xls,.xlsx,.ods,.odt',
-                    has_preview_image: 0,
-                    multiple: 0
+                    has_preview_image: 0
                 };
                 field.inputProperties = this.extendProperties(
                     field.inputProperties,
@@ -179,6 +182,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
 
                 propertiesDefault = {
                     handler: '',
+                    multiple: 0,
                     layout: 'vertical'
                 };
                 field.inputProperties = this.extendProperties(
@@ -191,6 +195,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
 
                 propertiesDefault = {
                     handler: '',
+                    multiple: 0,
                     inline: 0
                 };
                 field.inputProperties = this.extendProperties(
@@ -199,6 +204,16 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                 );
 
                 break;
+            default:
+
+                propertiesDefault = {
+                    handler: '',
+                    multiple: 0
+                };
+                field.inputProperties = this.extendProperties(
+                    field.inputProperties,
+                    propertiesDefault
+                );
         }
     }
 

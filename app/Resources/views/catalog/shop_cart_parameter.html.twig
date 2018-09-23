@@ -2,7 +2,7 @@
 {% for parameter in parameters %}
     {{ parameter.name }}
     {%- if parameter.value is not empty %}: {{ parameter.value }}{% endif %}
-    {%- if parameter.price is not empty %} (<span class="shk-price">{{ parameter.price }}</span>){% endif %}
+    {%- if parameter.price is not empty and parameter.price > 0 %} (<span class="shk-price">{{ parameter.price }}</span>){% endif %}
     {%- if not loop.last %}, {% endif %}
 {% endfor %}
 </div>

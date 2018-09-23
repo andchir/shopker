@@ -566,6 +566,11 @@ class FieldTypesFixtures extends Fixture
                         'name' => 'firstSelected',
                         'title' => 'First selected?',
                         'default_value' => '1'
+                    ],
+                    [
+                        'name' => 'groupByName',
+                        'title' => 'Group by name',
+                        'default_value' => '0'
                     ]
                 ]
             ]

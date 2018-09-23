@@ -3,7 +3,7 @@
 # Default parameters
 parameters:
     app_name: Shopkeeper
-    app_version: '4.0rc1'
+    app_version: '4.0rc2'
     locale: ru
     mongodb_server: 127.0.0.1
     mongodb_port: 27017

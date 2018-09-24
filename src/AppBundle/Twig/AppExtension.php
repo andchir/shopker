@@ -4,6 +4,7 @@ namespace AppBundle\Twig;
 
 use AppBundle\Controller\CatalogController;
 use AppBundle\Document\Category;
+use AppBundle\Document\ContentType;
 use AppBundle\Document\Setting;
 use AppBundle\Service\SettingsService;
 use AppBundle\Service\UtilsService;
@@ -320,15 +321,25 @@ class AppExtension extends AbstractExtension
         $fields = array_filter($fieldsData, function($field) use ($chunkName) {
             return $field['properties']['chunkName'] === $chunkName;
         });
+        if (empty($fields)) {
+            return '';
+        }
+        $fields = array_merge($fields);
         $output = '';
-        foreach ($fields as $key => $field) {
-            $value = '';
-            if (isset($itemData[$field['name']])) {
-                $value = $itemData[$field['name']];
+        foreach ($itemData as $key => $value) {
+            if (in_array($key, ['id', '_id', 'parentId', 'isActive'])) {
+                continue;
             }
+            $fieldBaseName = ContentType::getCleanFieldName($key);
+            $fIndex = array_search($fieldBaseName, array_column($fields, 'name'));
+            if ($fIndex === false) {
+                continue;
+            }
+            $field = $fields[$fIndex];
+
             $propertiesDefault = [
                 'fieldData' => [
-                    'name' => $field['name'],
+                    'name' => $key,
                     'title' => $field['title'],
                     'description' => $field['description']
                 ]

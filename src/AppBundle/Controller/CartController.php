@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Document\Category;
+use AppBundle\Document\ContentType;
 use AppBundle\Document\FileDocument;
 use AppBundle\Document\User;
 use AppBundle\Repository\CategoryRepository;
@@ -169,15 +170,17 @@ class CartController extends ProductController
             if (strpos($key, 'param__') === false) {
                 continue;
             }
-            $paramArr = explode('__', $key);
-            $paramName = isset($paramArr[1]) ? $paramArr[1] : '';
-            $index = array_search($paramName, array_column($contentTypeFields, 'name'));
+            $paramName = str_replace('param__', '', $key);
+            $fieldBaseName = ContentType::getCleanFieldName($paramName);
+
+            $index = array_search($fieldBaseName, array_column($contentTypeFields, 'name'));
             if ($index === false
                 || !isset($productDocument[$paramName])
                 || !is_array($productDocument[$paramName])) {
                 continue;
             }
             $contentTypeField = $contentTypeFields[$index];
+
             if ($contentTypeField['inputType'] != 'parameters') {
                 continue;
             }

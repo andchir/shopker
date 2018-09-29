@@ -16,9 +16,10 @@ export class ContentField {
     static getFieldIndexData(fields: ContentField[], fieldName): FieldIndexData {
         let index = -1,
             additFieldsCount = 0;
+        const baseFieldName = ContentField.getFieldBaseName(fieldName);
         fields.forEach((fld, ind) => {
             if (fld.name === fieldName) { index = ind; }
-            if (fld.name.indexOf(`${fieldName}__`) > -1) { additFieldsCount++; }
+            if (fld.name.indexOf(`${baseFieldName}__`) > -1) { additFieldsCount++; }
         });
         return {index: index, additFieldsCount: additFieldsCount};
     }

@@ -528,10 +528,9 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
         if (fieldIndexData.index === -1) {
             return;
         }
-        let fieldName = ContentField.getFieldBaseName(field.name);
-        fieldName += `__${fieldIndexData.additFieldsCount + 1}`;
-        const newField = cloneDeep(field);
-        newField.name = fieldName;
+        const baseFieldName = ContentField.getFieldBaseName(field.name),
+            newField = cloneDeep(field);
+        newField.name = `${baseFieldName}__${fieldIndexData.additFieldsCount + 1}`;
 
         this.fields.splice(fieldIndexData.index + 1, 0, newField);
         this.buildControls();

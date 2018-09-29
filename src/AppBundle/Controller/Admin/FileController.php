@@ -88,56 +88,55 @@ class FileController extends BaseController
 
         $error = '';
         $outputFiles = [];
+        $fileIds = [];
 
-        /**
-         * @var string $key
-         * @var UploadedFile $file
-         */
-        foreach ($files as $key => $file) {
-
-            $error = '';
-            $fieldName = ContentType::getCleanFieldName($key);
-            $currentFieldName = ContentType::getCurrentFieldName($key, $fieldsSort);
-
-            $fields = self::search($contentTypeFields, 'name', $fieldName);
-            if (empty($fields)) {
+        foreach($entity as $fieldName => $value) {
+            if (in_array($fieldName, ['_id', 'parentId', 'isActive'])) {
                 continue;
             }
 
-            if($error = $productController->validateField($file->getClientOriginalName(), $fields[0], [
-                'mimeType' => $file->getMimeType()
-            ])){
-                break;
+            $baseFieldName = ContentType::getCleanFieldName($fieldName);
+            $fields = self::search($contentTypeFields, 'name', $baseFieldName);
+            if (empty($fields)) {
+                continue;
+            }
+            if ($fields[0]['inputType'] === 'file' && !empty($value['fileId'])) {
+                $fileIds[] = $value['fileId'];
             }
 
-            // Delete old file
-            if (!empty($entity[$currentFieldName]) && !empty($entity[$currentFieldName]['fileId'])) {
-                $oldFileDocument = $fileDocumentRepository->findOneBy([
-                    'id' => $entity[$currentFieldName]['fileId'],
-                    'ownerType' => $ownerType
-                ]);
-                if ($oldFileDocument) {
-                    $oldFileDocument->setUploadRootDir($filesDirPath);
-                    $dm->remove($oldFileDocument);
-                    $dm->flush();
+            /** @var UploadedFile $file */
+            $file = $files->get($fieldName);
+
+            if (isset($file)) {
+                if($error = $productController->validateField($file->getClientOriginalName(), $fields[0], [
+                    'mimeType' => $file->getMimeType()
+                ])){
+                    break;
                 }
+
+                $fileDocument = new FileDocument();
+                $fileDocument
+                    ->setUploadRootDir($filesDirPath)
+                    ->setCreatedDate($now)
+                    ->setOwnerType($ownerType)
+                    ->setOwnerId($itemId)
+                    ->setUserId($user->getId())
+                    ->setFile($file);
+
+                $dm->persist($fileDocument);
+                $dm->flush();
+
+                $fileIds[] = $fileDocument->getId();
+                $outputFiles[] = $fileDocument->toArray();
+                $entity[$fieldName] = $fileDocument->getRecordData();
             }
-
-            $fileDocument = new FileDocument();
-            $fileDocument
-                ->setUploadRootDir($filesDirPath)
-                ->setCreatedDate($now)
-                ->setOwnerType($ownerType)
-                ->setUserId($user->getId())
-                ->setFile($file);
-
-            $dm->persist($fileDocument);
-            $dm->flush();
-
-            $outputFiles[] = $fileDocument->toArray();
-
-            $entity[$currentFieldName] = $fileDocument->getRecordData();
         }
+
+        $dm->flush();
+
+        $fileIds = array_unique($fileIds);
+        $this->deleteUnused($ownerType, strval($itemId), $fileIds);
+        $productController->sortAdditionalFields($contentType->getCollection(), $entity);
 
         if ($error) {
             return $this->setError($error);
@@ -146,6 +145,21 @@ class FileController extends BaseController
         }
 
         return new JsonResponse($outputFiles);
+    }
+
+    /**
+     * @param string $ownerType
+     * @param string $ownerId
+     * @param array $usedIds
+     * @return int
+     */
+    public function deleteUnused($ownerType, $ownerId, $usedIds)
+    {
+        $count = 0;
+
+
+
+        return $count;
     }
 
     /**

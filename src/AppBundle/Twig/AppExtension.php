@@ -370,7 +370,7 @@ class AppExtension extends AbstractExtension
                     'empty'
                 );
             }
-            if ($key > 0) {
+            if ($count > 0) {
                 $output .= PHP_EOL;
             }
             $output .= $environment->render($templateName, $properties);

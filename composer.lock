@@ -1387,36 +1387,37 @@
         },
         {
             "name": "doctrine/mongodb-odm-bundle",
-            "version": "3.4.4",
+            "version": "3.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineMongoDBBundle.git",
-                "reference": "d9e400c94a14e2c3bb07553dfb9cc6bfa81e7efc"
+                "reference": "cae44260f1dc21c2b1bb3b4d7f5c0c89aac802d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineMongoDBBundle/zipball/d9e400c94a14e2c3bb07553dfb9cc6bfa81e7efc",
-                "reference": "d9e400c94a14e2c3bb07553dfb9cc6bfa81e7efc",
+                "url": "https://api.github.com/repos/doctrine/DoctrineMongoDBBundle/zipball/cae44260f1dc21c2b1bb3b4d7f5c0c89aac802d5",
+                "reference": "cae44260f1dc21c2b1bb3b4d7f5c0c89aac802d5",
                 "shasum": ""
             },
             "require": {
+                "doctrine/annotations": "^1.2",
                 "doctrine/mongodb": "^1.4",
                 "doctrine/mongodb-odm": "^1.1",
                 "php": "^5.6 || ^7.0",
                 "psr/log": "^1.0",
-                "symfony/config": "^2.7 || ^3.0 || ^4.0",
-                "symfony/console": "^2.7 || ^3.0 || ^4.0",
-                "symfony/dependency-injection": "^2.7 || ^3.0 || ^4.0",
-                "symfony/doctrine-bridge": "^2.7 || ^3.0 || ^4.0",
-                "symfony/framework-bundle": "^2.7 || ^3.0 || ^4.0",
-                "symfony/options-resolver": "^2.7 || ^3.0 || ^4.0"
+                "symfony/config": "^3.4 || ^4.0",
+                "symfony/console": "^3.4 || ^4.0",
+                "symfony/dependency-injection": "^3.4 || ^4.0",
+                "symfony/doctrine-bridge": "^3.4 || ^4.0",
+                "symfony/framework-bundle": "^3.4 || ^4.0",
+                "symfony/options-resolver": "^3.4 || ^4.0"
             },
             "require-dev": {
                 "doctrine/data-fixtures": "@dev",
                 "phpunit/phpunit": "^5.7 || ^6.5",
-                "symfony/form": "^2.7 || ^3.0 || ^4.0",
-                "symfony/phpunit-bridge": "^2.7 || ^3.0 || ^4.0",
-                "symfony/yaml": "^2.7 || ^3.0 || ^4.0"
+                "symfony/form": "^3.4 || ^4.0",
+                "symfony/phpunit-bridge": "^3.4 || ^4.0",
+                "symfony/yaml": "^3.4 || ^4.0"
             },
             "suggest": {
                 "doctrine/data-fixtures": "Load data fixtures"
@@ -1457,7 +1458,7 @@
                 "persistence",
                 "symfony"
             ],
-            "time": "2018-05-23T18:12:40+00:00"
+            "time": "2018-09-24T07:36:36+00:00"
         },
         {
             "name": "doctrine/orm",
@@ -5864,16 +5865,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v3.4.15",
+            "version": "v3.4.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "5bb5c2d4b0d5cf10672015b68519a199e6ac27c1"
+                "reference": "43421aaec946240f79c2768edd2753b8b9080ffa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/5bb5c2d4b0d5cf10672015b68519a199e6ac27c1",
-                "reference": "5bb5c2d4b0d5cf10672015b68519a199e6ac27c1",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/43421aaec946240f79c2768edd2753b8b9080ffa",
+                "reference": "43421aaec946240f79c2768edd2753b8b9080ffa",
                 "shasum": ""
             },
             "require": {
@@ -6015,7 +6016,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2018-08-28T06:06:28+00:00"
+            "time": "2018-09-30T04:54:04+00:00"
         },
         {
             "name": "tubalmartin/cssmin",
@@ -6915,12 +6916,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/BetterReflection.git",
-                "reference": "c022c6c998251a5af8a51ca9b8662c323a183bf2"
+                "reference": "ffe74cae76a35d09cdc913fda5390a6317d170f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/BetterReflection/zipball/c022c6c998251a5af8a51ca9b8662c323a183bf2",
-                "reference": "c022c6c998251a5af8a51ca9b8662c323a183bf2",
+                "url": "https://api.github.com/repos/Roave/BetterReflection/zipball/ffe74cae76a35d09cdc913fda5390a6317d170f6",
+                "reference": "ffe74cae76a35d09cdc913fda5390a6317d170f6",
                 "shasum": ""
             },
             "require": {
@@ -6974,7 +6975,7 @@
                 }
             ],
             "description": "Better Reflection - an improved code reflection API",
-            "time": "2018-07-31 06:56:38"
+            "time": "2018-09-24T02:48:42+00:00"
         },
         {
             "name": "roave/signature",
@@ -7065,16 +7066,16 @@
         },
         {
             "name": "symfony/phpunit-bridge",
-            "version": "v3.4.15",
+            "version": "v3.4.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/phpunit-bridge.git",
-                "reference": "f4fde1ede82c7ca2a4f06cf48521a185b26c0fed"
+                "reference": "4f2bbc1a84681e0dc59ee69d57d8dd32163f4eb0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/f4fde1ede82c7ca2a4f06cf48521a185b26c0fed",
-                "reference": "f4fde1ede82c7ca2a4f06cf48521a185b26c0fed",
+                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/4f2bbc1a84681e0dc59ee69d57d8dd32163f4eb0",
+                "reference": "4f2bbc1a84681e0dc59ee69d57d8dd32163f4eb0",
                 "shasum": ""
             },
             "require": {
@@ -7127,7 +7128,7 @@
             ],
             "description": "Symfony PHPUnit Bridge",
             "homepage": "https://symfony.com",
-            "time": "2018-08-27T15:17:06+00:00"
+            "time": "2018-09-21T12:47:54+00:00"
         },
         {
             "name": "symplify/package-builder",

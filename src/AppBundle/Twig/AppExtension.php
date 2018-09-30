@@ -314,9 +314,10 @@ class AppExtension extends AbstractExtension
      * @param $chunkName
      * @param string $chunkNamePrefix
      * @param array $data
+     * @param int $limit
      * @return string
      */
-    public function renderOutputTypeChunkFunction(\Twig_Environment $environment, $itemData, $fieldsData, $chunkName, $chunkNamePrefix = '', $data = [])
+    public function renderOutputTypeChunkFunction(\Twig_Environment $environment, $itemData, $fieldsData, $chunkName, $chunkNamePrefix = '', $data = [], $limit = 0)
     {
         $fields = array_filter($fieldsData, function($field) use ($chunkName) {
             return $field['properties']['chunkName'] === $chunkName;
@@ -326,6 +327,7 @@ class AppExtension extends AbstractExtension
         }
         $fields = array_merge($fields);
         $output = '';
+        $count = 0;
         foreach ($itemData as $key => $value) {
             if (in_array($key, ['id', '_id', 'parentId', 'isActive'])) {
                 continue;
@@ -372,6 +374,10 @@ class AppExtension extends AbstractExtension
                 $output .= PHP_EOL;
             }
             $output .= $environment->render($templateName, $properties);
+            $count++;
+            if ($limit && $count >= $limit) {
+                break;
+            }
         }
         return $output;
     }

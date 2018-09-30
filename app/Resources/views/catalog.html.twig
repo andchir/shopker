@@ -51,11 +51,11 @@
                                             <div class="card-body">
                                                 <div class="catalog-list-item">
                                                     <div class="catalog-list-item-inner">
-                                                        {{ renderOutputTypeChunk(item, fieldsAll, 'tag', 'list_') }}
-                                                        {{ renderOutputTypeChunk(item, fieldsAll, 'image') }}
-                                                        {{ renderOutputTypeChunk(item, fieldsAll, 'header') }}
-                                                        {{ renderOutputTypeChunk(item, fieldsAll, 'description') }}
-                                                        {{ renderOutputTypeChunk(item, fieldsAll, 'price', '', {"currency": currency}) }}
+                                                        {{ renderOutputTypeChunk(item, fieldsAll, 'tag', 'list_', [], 1) }}
+                                                        {{ renderOutputTypeChunk(item, fieldsAll, 'image', '', [], 1) }}
+                                                        {{ renderOutputTypeChunk(item, fieldsAll, 'header', '', [], 1) }}
+                                                        {{ renderOutputTypeChunk(item, fieldsAll, 'description', '', [], 1) }}
+                                                        {{ renderOutputTypeChunk(item, fieldsAll, 'price', '', {"currency": currency}, 1) }}
                                                     </div>
                                                 </div>
                                             </div>

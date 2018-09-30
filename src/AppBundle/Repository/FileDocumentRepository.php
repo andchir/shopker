@@ -25,5 +25,21 @@ class FileDocumentRepository extends DocumentRepository
             ->execute();
     }
 
+    /**
+     * @param string $ownerType
+     * @param int $ownerDocId
+     * @param array $usedIds
+     * @return mixed
+     */
+    public function findUnused($ownerType, $ownerDocId, $usedIds)
+    {
+        return $this->createQueryBuilder()
+            ->field('ownerType')->equals($ownerType)
+            ->field('ownerDocId')->equals($ownerDocId)
+            ->field('id')->notIn($usedIds)
+            ->getQuery()
+            ->execute();
+    }
+
 
 }

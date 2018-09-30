@@ -296,6 +296,9 @@ class ProductController extends BaseProductController
     {
         $categoriesRepository = $this->getCategoriesRepository();
         $parentId = !empty($data['parentId']) ? $data['parentId'] : 0;
+        $fieldsSort = !empty($data['fieldsSort']) && is_array($data['fieldsSort'])
+            ? $data['fieldsSort']
+            : [];
         $itemId = intval($itemId);
 
         $contentType = $category->getContentType();
@@ -304,9 +307,7 @@ class ProductController extends BaseProductController
         }
 
         $collection = $this->getCollection($contentType->getCollection());
-        $fieldsSort = $data['fieldsSort'];
         unset($data['fieldsSort']);
-        $docKeys = [];
 
         if($itemId){
             $document = null;
@@ -338,7 +339,6 @@ class ProductController extends BaseProductController
             if (!$document) {
                 return $this->setError('Item not found.');
             }
-            $docKeys = array_keys($document);
         } else {
             $document = [
                 '_id' => $this->getNextId($contentType->getCollection())
@@ -350,6 +350,8 @@ class ProductController extends BaseProductController
             ? $data['isActive']
             : true;
 
+        $fileFields = [];
+        $fileIds = [];
         $contentTypeFields = $contentType->getFields();
 
         foreach ($data as $key => $value) {
@@ -361,6 +363,16 @@ class ProductController extends BaseProductController
             if ($fIndex === false) {
                 continue;
             }
+
+            $field = $contentTypeFields[$fIndex];
+            if ($field['inputType'] == 'file') {
+                if (isset($value['fileId']) && $value['fileId'] === 0) {
+                    $fileFields[] = $key;
+                } else if (!empty($value['fileId'])) {
+                    $fileIds[] = $value['fileId'];
+                }
+            }
+
             $document[$key] = $value;
         }
 
@@ -378,6 +390,16 @@ class ProductController extends BaseProductController
             $eventDispatcher = $this->get('event_dispatcher');
             $event = new GenericEvent($contentType, $document);
             $eventDispatcher->dispatch(Events::PRODUCT_CREATED, $event);
+        }
+
+        // If $fileFields is not empty it will be done after saving the files
+        // Otherwise do it now
+        if (empty($fileFields)) {
+            $fileIds = array_unique($fileIds);
+            $fileController = new FileController();
+            $fileController->setContainer($this->container);
+            $fileController->deleteUnused('products', $itemId, $fileIds);
+            $this->sortAdditionalFields($contentType->getCollection(), $document, $fieldsSort);
         }
 
         $this->onAfterUpdateItem($contentType, $document, $category->getId());
@@ -574,43 +596,66 @@ class ProductController extends BaseProductController
      * Sorting additional fields
      * @param string $collectionName
      * @param array $document
+     * @param array $fieldsSort
      * @return bool
      */
-    public function sortAdditionalFields($collectionName, $document)
+    public function sortAdditionalFields($collectionName, $document, $fieldsSort)
     {
         $collection = $this->getCollection($collectionName);
+        $docKeys = array_keys($document);
+        $itemId = isset($document['_id']) ? $document['_id'] : 0;
+        if (!$itemId) {
+            return false;
+        }
 
+        $additFields = [];
+        foreach ($document as $key => $value) {
+            if (in_array($key, ['id', '_id', 'parentId', 'isActive'])) {
+                continue;
+            }
+            if (strpos($key, '__') !== false) {
+                if (!empty($value)) {
+                    $additFields[$key] = $value;
+                }
+                unset($document[$key]);
+            } else {
+                $document[$key] = $value;
+            }
+        }
+        if (empty($additFields)) {
+            return false;
+        }
 
-        //        // Sort additional fields
-//        uksort($additFields, function($a, $b) use ($fieldsSort) {
-//            return (array_search($a, $fieldsSort) < array_search($b, $fieldsSort)) ? -1 : 1;
-//        });
-//
-//        // Merge fields
-//        $docKeysData = [];
-//        foreach ($additFields as $k => $v) {
-//            $fieldBaseName = ContentType::getCleanFieldName($k);
-//            if (!isset($docKeysData[$fieldBaseName])) {
-//                $docKeysData[$fieldBaseName] = 0;
-//            }
-//            $docKeysData[$fieldBaseName]++;
-//            $document[$fieldBaseName . '__' . $docKeysData[$fieldBaseName]] = $v;
-//        }
-//
-//        // Collect unused additional fields
-//        $unset = [];
-//        $unusedKeys = array_diff($docKeys, array_keys($document));
-//        foreach ($unusedKeys as $k) {
-//            $unset[$k] = 1;
-//        }
-//
-//        $unsetQuery = !empty($unset) ? ['$unset' => $unset] : [];
-//        $result = $collection->update(
-//            ['_id' => $itemId],
-//            array_merge(['$set' => $document], $unsetQuery)
-//        );
+        // Sort additional fields
+        uksort($additFields, function($a, $b) use ($fieldsSort) {
+            return (array_search($a, $fieldsSort) < array_search($b, $fieldsSort)) ? -1 : 1;
+        });
 
-        return true;
+        // Merge fields
+        $docKeysData = [];
+        foreach ($additFields as $k => $v) {
+            $fieldBaseName = ContentType::getCleanFieldName($k);
+            if (!isset($docKeysData[$fieldBaseName])) {
+                $docKeysData[$fieldBaseName] = 0;
+            }
+            $docKeysData[$fieldBaseName]++;
+            $document[$fieldBaseName . '__' . $docKeysData[$fieldBaseName]] = $v;
+        }
+
+        // Collect unused additional fields
+        $unset = [];
+        $unusedKeys = array_diff($docKeys, array_keys($document));
+        foreach ($unusedKeys as $k) {
+            $unset[$k] = 1;
+        }
+
+        $unsetQuery = !empty($unset) ? ['$unset' => $unset] : [];
+        $result = $collection->update(
+            ['_id' => $itemId],
+            array_merge(['$set' => $document], $unsetQuery)
+        );
+
+        return !empty($result['ok']);
     }
 
     /**

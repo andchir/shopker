@@ -53,13 +53,6 @@ class FileDocument
     protected $mimeType;
 
     /**
-     * @MongoDB\Field(type="string", nullable=true)
-     * @Groups({"details"})
-     * @var string
-     */
-    protected $ownerType;
-
-    /**
      * @MongoDB\Field(type="integer")
      * @Groups({"details", "list"})
      * @var int
@@ -74,14 +67,28 @@ class FileDocument
     protected $userId;
 
     /**
-     * @MongoDB\Field(type="string", nullable=true)
+     * @MongoDB\Field(type="string")
+     * @Groups({"details"})
+     * @var string
+     */
+    protected $ownerType;
+
+    /**
+     * @MongoDB\Field(type="string")
      * @Groups({"details"})
      * @var string
      */
     protected $ownerId;
 
     /**
-     * @MongoDB\Field(type="date", nullable=true)
+     * @MongoDB\Field(type="int")
+     * @Groups({"details"})
+     * @var string
+     */
+    protected $ownerDocId;
+
+    /**
+     * @MongoDB\Field(type="date")
      * @Groups({"details", "list"})
      * @var \DateTime
      */
@@ -243,7 +250,7 @@ class FileDocument
     /**
      * Set ownerId
      *
-     * @param integer $ownerId
+     * @param string $ownerId
      * @return $this
      */
     public function setOwnerId($ownerId)
@@ -255,11 +262,33 @@ class FileDocument
     /**
      * Get ownerId
      *
-     * @return integer
+     * @return string
      */
     public function getOwnerId()
     {
         return $this->ownerId;
+    }
+
+    /**
+     * Set ownerDocId
+     *
+     * @param int $ownerDocId
+     * @return $this
+     */
+    public function setOwnerDocId($ownerDocId)
+    {
+        $this->ownerDocId = $ownerDocId;
+        return $this;
+    }
+
+    /**
+     * Get ownerDocId
+     *
+     * @return int
+     */
+    public function getOwnerDocId()
+    {
+        return $this->ownerDocId;
     }
 
     /**

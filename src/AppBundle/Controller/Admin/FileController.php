@@ -56,7 +56,6 @@ class FileController extends BaseController
 
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $this->get('doctrine_mongodb')->getManager();
-        $fileDocumentRepository = $this->getRepository();
 
         $categoryRepository = $this->get('doctrine_mongodb')
             ->getManager()
@@ -119,7 +118,7 @@ class FileController extends BaseController
                     ->setUploadRootDir($filesDirPath)
                     ->setCreatedDate($now)
                     ->setOwnerType($ownerType)
-                    ->setOwnerId($itemId)
+                    ->setOwnerDocId($itemId)
                     ->setUserId($user->getId())
                     ->setFile($file);
 
@@ -134,30 +133,38 @@ class FileController extends BaseController
 
         $dm->flush();
 
-        $fileIds = array_unique($fileIds);
-        $this->deleteUnused($ownerType, strval($itemId), $fileIds);
-        $productController->sortAdditionalFields($contentType->getCollection(), $entity);
-
         if ($error) {
             return $this->setError($error);
         } else {
             $collection->update(['_id' => $entity['_id']], ['$set' => $entity]);
         }
 
+        $fileIds = array_unique($fileIds);
+        $this->deleteUnused($ownerType, $itemId, $fileIds);
+        $productController->sortAdditionalFields($contentType->getCollection(), $entity, $fieldsSort);
+
         return new JsonResponse($outputFiles);
     }
 
     /**
      * @param string $ownerType
-     * @param string $ownerId
+     * @param int $ownerDocId
      * @param array $usedIds
      * @return int
      */
-    public function deleteUnused($ownerType, $ownerId, $usedIds)
+    public function deleteUnused($ownerType, $ownerDocId, $usedIds)
     {
         $count = 0;
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $fileDocumentRepository = $this->getRepository();
 
-
+        $fileDocumentsUnused = $fileDocumentRepository->findUnused($ownerType, $ownerDocId, $usedIds);
+        /** @var FileDocument $fileDocument */
+        foreach ($fileDocumentsUnused as $fileDocument) {
+            $dm->remove($fileDocument);
+        }
+        $dm->flush();
 
         return $count;
     }

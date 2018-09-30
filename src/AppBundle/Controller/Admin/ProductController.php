@@ -388,7 +388,7 @@ class ProductController extends BaseProductController
 
             // Dispatch event
             $eventDispatcher = $this->get('event_dispatcher');
-            $event = new GenericEvent($contentType, $document);
+            $event = new GenericEvent($document, ['contentType' => $contentType]);
             $eventDispatcher->dispatch(Events::PRODUCT_CREATED, $event);
         }
 
@@ -706,11 +706,11 @@ class ProductController extends BaseProductController
     }
 
     /**
-     * @param $contentType
-     * @param $itemData
+     * @param ContentType $contentType
+     * @param array $itemData
      * @param int $categoryId
      */
-    public function onAfterUpdateItem($contentType, $itemData, $categoryId = 0)
+    public function onAfterUpdateItem(ContentType $contentType, $itemData, $categoryId = 0)
     {
         if ($categoryId) {
             $categoriesRepository = $this->getCategoriesRepository();

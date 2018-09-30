@@ -8,7 +8,7 @@ final class Events
      * @Event("Symfony\Component\EventDispatcher\GenericEvent")
      * @var string
      */
-    const PRODUCT_CREATED = 'product.deleted';
+    const PRODUCT_CREATED = 'product.created';
     /**
      * @Event("Symfony\Component\EventDispatcher\GenericEvent")
      * @var string

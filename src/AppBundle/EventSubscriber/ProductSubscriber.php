@@ -52,7 +52,7 @@ class ProductSubscriber implements EventSubscriberInterface
             $field = $contentTypeFields[$fIndex];
 
             // Delete file
-            if ($field['inputType'] == 'file') {
+            if ($field['inputType'] == 'file' && !empty($val['fileId'])) {
 
                 /** @var FileDocument $fileDocument */
                 $fileDocument = $fileDocumentRepository->find($val['fileId']);

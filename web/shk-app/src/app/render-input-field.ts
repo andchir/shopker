@@ -2,6 +2,7 @@ import {Component, OnInit, Input, OnChanges, SimpleChange, ChangeDetectorRef} fr
 import {FormGroup, FormControl, Validators} from '@angular/forms';
 import {cloneDeep, map, zipObject, isArray, extend, defer} from 'lodash';
 import {isNumeric} from 'rxjs/util/isNumeric';
+import {TranslateService} from '@ngx-translate/core';
 
 import {ContentField} from './catalog/models/content_field.model';
 import {MultiValues} from './models/multivalues.model';
@@ -69,6 +70,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
         private changeDetectionRef: ChangeDetectorRef,
         private systemNameService: SystemNameService,
         private categoriesService: CategoriesService,
+        private translateService: TranslateService,
         private appSettings: AppSettings
     ) {
         this.filesDirBaseUrl = this.appSettings.settings.filesDirUrl;
@@ -321,7 +323,10 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
         const validators = [];
         if (field.required) {
             validators.push(Validators.required);
-            this.validationMessages[field.name].required = field.title + ' is required.';
+            this.translateService.get('FIELD_REQUIRED', {name: field.title})
+                .subscribe((res: string) => {
+                    this.validationMessages[field.name].required = res;
+                });
         }
         return validators;
     }

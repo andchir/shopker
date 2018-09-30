@@ -85,8 +85,7 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
     }
 
     getSystemFieldName(): string {
-        const index = findIndex(this.currentContentType.fields, {inputType: 'system_name'});
-        return index > -1 ? this.currentContentType.fields[index].name : 'name';
+        return ContentType.getSystemFieldName(this.currentContentType);
     }
 
     getCategories() {
@@ -205,6 +204,29 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
             });
     }
 
+    getErrorsString(): string {
+        const errors: string[] = [];
+        Object.keys(this.form.controls).forEach((key) => {
+            if (this.form.controls[key].invalid) {
+                if (this.validationMessages[key]) {
+                    const fieldBaseName = ContentField.getFieldBaseName(key);
+                    const field = ContentType.getFieldByName(this.currentContentType, fieldBaseName);
+                    if (!field) {
+                        return;
+                    }
+                    let err = '';
+                    if (this.formErrors[key]) {
+                        err = this.formErrors[key];
+                    } else {
+                        err = `${field.title} - error.`;
+                    }
+                    errors.push(err);
+                }
+            }
+        });
+        return errors.join(' ');
+    }
+
     getFormData() {
         const data = cloneDeep(this.model);
 
@@ -235,8 +257,11 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
 
     save() {
         this.submitted = true;
+        this.errorMessage = null;
+
         if (!this.form.valid) {
             this.onValueChanged('form');
+            this.errorMessage = this.getErrorsString();
             this.submitted = false;
             return;
         }

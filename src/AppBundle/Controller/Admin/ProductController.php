@@ -189,7 +189,7 @@ class ProductController extends BaseProductController
     {
         $filesExtBlacklist = $this->getParameter('files_ext_blacklist');
         if (is_array($value)) {
-            $ext = !empty($value['extension']) ? $value['extension'] : null;
+            $ext = !empty($value['extension']) ? strtolower($value['extension']) : null;
         } else {
             $ext = self::getExtension($value);
         }

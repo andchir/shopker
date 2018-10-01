@@ -36,7 +36,7 @@ class FileController extends BaseController
 
         $itemId = (int) $request->get('itemId');
         $ownerType = $request->get('ownerType');
-        $categoryId = $request->get('categoryId');
+        $categoryId = (int) $request->get('categoryId');
         $fieldsSort = explode(',', $request->get('fieldsSort', ''));
         $files = $request->files;
 
@@ -48,7 +48,7 @@ class FileController extends BaseController
         }
 
         if (!$itemId) {
-            return $this->setError('item not found.');
+            return $this->setError('Item not found.');
         }
         if (!$categoryId) {
             return $this->setError('Category not found.');
@@ -106,7 +106,7 @@ class FileController extends BaseController
             /** @var UploadedFile $file */
             $file = $files->get($fieldName);
 
-            if (isset($file)) {
+            if (!empty($file)) {
                 if($error = $productController->validateField($file->getClientOriginalName(), $fields[0], [
                     'mimeType' => $file->getMimeType()
                 ])){

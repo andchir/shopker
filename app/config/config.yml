@@ -142,15 +142,16 @@ liip_imagine:
 
 gregwar_captcha: ~
 
-#omnipay:
-#    success_url: "/profile/history_orders"
-#    fail_url: "/"
-#    gateways:
-#        PayPal_Express:
-#            username: xxxxx_api1.gmail.com
-#            password: xxxxxxxxxxxxxxxx
-#            signature: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-#            testMode: false
-#        Sberbank:
-#            merchant_login: xxxxxx
-#            merchant_password: xxxxxx
+omnipay:
+    success_url: "/profile/history_orders"
+    fail_url: "/"
+    gateways:
+        PayPal_Express:
+            username: xxxxx_api1.gmail.com
+            password: xxxxxxxxxxxxxxxx
+            signature: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+            testMode: false
+        Sberbank:
+            merchant_login: xxxxxx
+            merchant_password: xxxxxx
+            testMode: true

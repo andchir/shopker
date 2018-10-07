@@ -1,6 +1,6 @@
-#omnipay:
-#    resource: "@OmnipayBundle/Resources/config/routing.yml"
-#    prefix: /
+omnipay:
+    resource: "@OmnipayBundle/Resources/config/routing.yml"
+    prefix: /
 
 homepage:
     path: /

@@ -19,7 +19,7 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle(),
             new Liip\ImagineBundle\LiipImagineBundle(),
             new AppBundle\AppBundle(),
-            //new Andchir\OmnipayBundle\OmnipayBundle(),
+            new Andchir\OmnipayBundle\OmnipayBundle(),
             new Gregwar\CaptchaBundle\GregwarCaptchaBundle()
         ];
 

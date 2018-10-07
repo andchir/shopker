@@ -73,23 +73,23 @@
         },
         {
             "name": "andchir/omnipay-bundle",
-            "version": "1.0.1",
+            "version": "v1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/andchir/omnipay-bundle.git",
-                "reference": "99f4e589af9a61968cdb2383d233461d6fa377ca"
+                "reference": "134bc46f484602536ffdc311b76427292450b806"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/andchir/omnipay-bundle/zipball/99f4e589af9a61968cdb2383d233461d6fa377ca",
-                "reference": "99f4e589af9a61968cdb2383d233461d6fa377ca",
+                "url": "https://api.github.com/repos/andchir/omnipay-bundle/zipball/134bc46f484602536ffdc311b76427292450b806",
+                "reference": "134bc46f484602536ffdc311b76427292450b806",
                 "shasum": ""
             },
             "require": {
+                "andchir/omnipay3-yandexkassa": "1.0.5",
                 "andrewnovikof/omnipay-sberbank": "^3.1",
                 "league/omnipay": "^3",
-                "omnipay/paypal": "^3.0",
-                "php": ">=5.3.0"
+                "omnipay/paypal": "^3.0"
             },
             "type": "library",
             "autoload": {
@@ -103,7 +103,7 @@
             ],
             "authors": [
                 {
-                    "name": "andchir",
+                    "name": "Andchir",
                     "email": "andchir@gmail.com"
                 }
             ],
@@ -116,7 +116,52 @@
                 "shopkeeper",
                 "symfony"
             ],
-            "time": "2018-10-07T14:13:39+00:00"
+            "time": "2018-10-07T22:22:40+00:00"
+        },
+        {
+            "name": "andchir/omnipay3-yandexkassa",
+            "version": "v1.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/andchir/yandex-money-cms-omnipay3.git",
+                "reference": "3eabd6c418a849dfaefc8021a173c7b29d5b7066"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/andchir/yandex-money-cms-omnipay3/zipball/3eabd6c418a849dfaefc8021a173c7b29d5b7066",
+                "reference": "3eabd6c418a849dfaefc8021a173c7b29d5b7066",
+                "shasum": ""
+            },
+            "require": {
+                "omnipay/common": "^3",
+                "php": ">=5.5.0"
+            },
+            "require-dev": {
+                "omnipay/tests": "^3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Omnipay\\YandexMoney\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Yandex.Money",
+                    "email": "cms@yamoney.ru"
+                },
+                {
+                    "name": "BAGArt",
+                    "email": "baltaev.artur+opensource@gmail.com"
+                },
+                {
+                    "name": "Andchir",
+                    "email": "andchir@gmail.com"
+                }
+            ],
+            "description": "Payment gateway module for Omnipay: Yandex kassa(checkout) forked from official for version compatible with Laravel 5.6",
+            "time": "2018-10-07T22:19:46+00:00"
         },
         {
             "name": "andrewnovikof/omnipay-sberbank",
@@ -6011,7 +6056,7 @@
                 }
             ],
             "description": "Better Reflection - an improved code reflection API",
-            "time": "2018-09-24 02:48:42"
+            "time": "2018-09-24T02:48:42+00:00"
         },
         {
             "name": "roave/signature",

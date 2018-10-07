@@ -19,9 +19,8 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle(),
             new Liip\ImagineBundle\LiipImagineBundle(),
             new AppBundle\AppBundle(),
-            new Andchir\OmnipayBundle\OmnipayBundle(),
-            new Gregwar\CaptchaBundle\GregwarCaptchaBundle(),
-            new CoreSphere\ConsoleBundle\CoreSphereConsoleBundle()
+            //new Andchir\OmnipayBundle\OmnipayBundle(),
+            new Gregwar\CaptchaBundle\GregwarCaptchaBundle()
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

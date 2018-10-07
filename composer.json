@@ -17,7 +17,6 @@
         "php": ">=5.5.9",
         "alcaeus/mongo-php-adapter": "^1.1",
         "andchir/omnipay-bundle": "^1.0",
-        "coresphere/console-bundle": "^0.5.0",
         "doctrine/cache": "^1.6",
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/doctrine-cache-bundle": "^1.2",
@@ -33,7 +32,6 @@
         "jackalope/jackalope-doctrine-dbal": "1.2.*",
         "liip/imagine-bundle": "^1.9",
         "mongodb/mongodb": "^1.4",
-        "mrclay/minify": "^3.0",
         "phpunit/phpunit": "^4.8",
         "ralouphie/mimey": "^2.0",
         "sensio/distribution-bundle": "^5.0",
@@ -48,7 +46,6 @@
         "sensio/generator-bundle": "^3.0",
         "symfony/phpunit-bridge": "^3.0",
         "jackalope/jackalope-jackrabbit": "1.*",
-        "apigen/apigen": "dev-master",
         "roave/better-reflection": "dev-master"
     },
     "scripts": {

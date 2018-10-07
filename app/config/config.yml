@@ -152,6 +152,6 @@ omnipay:
             signature: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
             testMode: false
         Sberbank:
-            merchant_login: xxxxxx
-            merchant_password: xxxxxx
+            username: xxxxxx
+            password: xxxxxx
             testMode: true

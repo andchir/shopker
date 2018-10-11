@@ -125,6 +125,13 @@
                                     </tbody>
                                 </table>
 
+                                {% if order.paymentName is not empty %}
+                                    <div class="mb-3">
+                                        <span>{{ 'Payment method' | trans }}:</span>
+                                        <b>{{ order.paymentName }}</b>
+                                    </div>
+                                {% endif %}
+
                                 <div class="text-right">
                                     <div class="float-left">
                                         {% if isPaymentAllowed %}

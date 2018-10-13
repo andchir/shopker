@@ -137,6 +137,8 @@ class CheckoutController extends BaseController
                         }
                     }
                     $user->setOptions($userOptions);
+                } else {
+                    $order->setUserId(0);
                 }
 
                 /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */

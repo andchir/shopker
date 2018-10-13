@@ -143,8 +143,11 @@ liip_imagine:
 gregwar_captcha: ~
 
 omnipay:
-    success_url: "/profile/history_orders"
-    fail_url: "/"
+    success_url: '/profile/history_orders'
+    fail_url: '/'
+    return_url: '/omnipay_return'
+    notify_url: '/omnipay_notify'
+    cancel_url: '/omnipay_cancel'
     gateways:
         PayPal_Express:
             username: xxxxx_api1.gmail.com
@@ -156,6 +159,12 @@ omnipay:
             password: xxxxxx
             testMode: true
         YandexMoney:
-            shopid: xxxxxx
-            scid: xxxxxx
+            shopid: xxxxxxx
+            scid: xxxxxxx
+            amount: AMOUNT
+            customerNumber: CUSTOMER_EMAIL
+            orderId: PAYMENT_ID
+            method: ~
+            returnUrl: RETURN_URL
+            cancelUrl: CANCEL_URL
             testMode: true

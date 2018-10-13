@@ -36,6 +36,13 @@ class Payment
      * @Groups({"details", "list"})
      * @var string
      */
+    protected $description;
+
+    /**
+     * @MongoDB\Field(type="string")
+     * @Groups({"details", "list"})
+     * @var string
+     */
     protected $status;
 
     /**
@@ -310,5 +317,27 @@ class Payment
     public function getOrderId()
     {
         return $this->orderId;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return $this
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string $description
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 }

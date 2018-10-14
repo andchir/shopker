@@ -168,6 +168,7 @@ omnipay:
             parameters:
                 shopid: xxxxxx
                 scid: xxxxxx
+                password: xxxxxxxxxxxxxxxxx
                 customerNumber: CUSTOMER_EMAIL
                 amount: AMOUNT
                 orderId: PAYMENT_ID
@@ -179,14 +180,18 @@ omnipay:
                 currency: RUB
                 testMode: true
             complete:
+                shopid: ~
+                scid: ~
                 action: ~
+                md5: ~
+                orderNumber: PAYMENT_ID
                 orderSumAmount: AMOUNT
                 orderSumCurrencyPaycash: ~
                 orderSumBankPaycash: ~
                 shopid: ~
                 invoiceId: ~
                 customerNumber: CUSTOMER_EMAIL
-                password: xxxxxxxxxxxxxxxxxxx
+                password: ~
         Sberbank:
             purchase:
                 username: xxxxxx

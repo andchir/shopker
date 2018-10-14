@@ -186,7 +186,7 @@ omnipay:
                 shopid: ~
                 invoiceId: ~
                 customerNumber: CUSTOMER_EMAIL
-                password: xfDsr56dsSfggppprtdvSf65
+                password: xxxxxxxxxxxxxxxxxxx
         Sberbank:
             purchase:
                 username: xxxxxx

@@ -108,6 +108,13 @@ class SettingsFixtures extends Fixture
                     'options' => [
                         'value' => ['value' => 'PayPal_Express', 'type' => 'text']
                     ]
+                ],
+                [
+                    'name' => 'Yandex.Kassa',
+                    'description' => '',
+                    'options' => [
+                        'value' => ['value' => 'YandexMoney', 'type' => 'text']
+                    ]
                 ]
             ],
             'SETTINGS_CURRENCY' => [

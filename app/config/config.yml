@@ -148,33 +148,47 @@ omnipay:
     return_url: '/omnipay_return'
     notify_url: '/omnipay_notify'
     cancel_url: '/omnipay_cancel'
+    data_keys:
+        paymentId: ['orderNumber']
+        customerEmail: ['customerNumber']
     gateways:
         PayPal_Express:
-            validate(: xxxxx_api1.gmail.com
-            password: xxxxxxxxxxxxxxxx
-            signature: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-            testMode: false
+            parameters:
+                username: xxxxx_api1.gmail.com
+                password: xxxxxxxxxxxxxxxx
+                signature: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+            purchase:
+                amount: AMOUNT
+                currency: RUB
+                testMode: true
+                returnUrl: RETURN_URL
+                cancelUrl: CANCEL_URL
+            complete: []
+        YandexMoney:
+            parameters:
+                shopid: xxxxxx
+                scid: xxxxxx
+                customerNumber: CUSTOMER_EMAIL
+                amount: AMOUNT
+                orderId: PAYMENT_ID
+                method: ~
+                returnUrl: RETURN_URL
+                cancelUrl: CANCEL_URL
+            purchase:
+                amount: AMOUNT
+                currency: RUB
+                testMode: true
+            complete:
+                action: ~
+                orderSumAmount: AMOUNT
+                orderSumCurrencyPaycash: ~
+                orderSumBankPaycash: ~
+                shopid: ~
+                invoiceId: ~
+                customerNumber: CUSTOMER_EMAIL
+                password: xfDsr56dsSfggppprtdvSf65
         Sberbank:
-            username: xxxxxx
-            password: xxxxxx
-            testMode: true
-        YandexMoney:
-            shopid: xxxxxx
-            scid: xxxxxx
-            amount: AMOUNT
-            customerNumber: CUSTOMER_EMAIL
-            orderId: PAYMENT_ID
-            method: ~
-            returnUrl: RETURN_URL
-            cancelUrl: CANCEL_URL
-            testMode: true
-    gateways_complete:
-        YandexMoney:
-            action: ~
-            orderSumAmount: AMOUNT
-            orderSumCurrencyPaycash: ~
-            orderSumBankPaycash: ~
-            shopid: ~
-            invoiceId: ~
-            customerNumber: CUSTOMER_EMAIL
-            password: xfDsr56dsSfggppprtdvSf65
+            purchase:
+                username: xxxxxx
+                password: xxxxxx
+                testMode: true

@@ -27,8 +27,9 @@ class ExceptionListener
         $environment = $this->container->get('kernel')->getEnvironment();
         $message = '';
 
-        if ($request->get('_route') == 'setup') {
-            return;
+        if ($request->get('_route') == 'setup'
+            || strpos($request->get('_route'), 'omnipay_') !== false) {
+                return;
         }
 
         $headers = [];

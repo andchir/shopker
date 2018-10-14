@@ -150,7 +150,7 @@ omnipay:
     cancel_url: '/omnipay_cancel'
     gateways:
         PayPal_Express:
-            username: xxxxx_api1.gmail.com
+            validate(: xxxxx_api1.gmail.com
             password: xxxxxxxxxxxxxxxx
             signature: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
             testMode: false
@@ -159,8 +159,8 @@ omnipay:
             password: xxxxxx
             testMode: true
         YandexMoney:
-            shopid: xxxxxxx
-            scid: xxxxxxx
+            shopid: xxxxxx
+            scid: xxxxxx
             amount: AMOUNT
             customerNumber: CUSTOMER_EMAIL
             orderId: PAYMENT_ID
@@ -168,3 +168,13 @@ omnipay:
             returnUrl: RETURN_URL
             cancelUrl: CANCEL_URL
             testMode: true
+    gateways_complete:
+        YandexMoney:
+            action: ~
+            orderSumAmount: AMOUNT
+            orderSumCurrencyPaycash: ~
+            orderSumBankPaycash: ~
+            shopid: ~
+            invoiceId: ~
+            customerNumber: CUSTOMER_EMAIL
+            password: xfDsr56dsSfggppprtdvSf65

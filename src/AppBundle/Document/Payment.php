@@ -14,7 +14,7 @@ class Payment
 
     const STATUS_CREATED = 'created';
     const STATUS_CANCELED = 'canceled';
-    const STATUS_SUCCESS = 'success';
+    const STATUS_COMPLETED = 'completed';
     const STATUS_ERROR = 'error';
 
     /**
@@ -251,6 +251,17 @@ class Payment
     public function getOptions()
     {
         return $this->options;
+    }
+
+    /**
+     * @param $key
+     * @return mixed|string
+     */
+    public function getOptionValue($key)
+    {
+        return isset($this->options[$key])
+            ? $this->options[$key]
+            : '';
     }
 
     /**

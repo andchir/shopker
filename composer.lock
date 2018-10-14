@@ -73,16 +73,16 @@
         },
         {
             "name": "andchir/omnipay-bundle",
-            "version": "1.0.6",
+            "version": "1.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/andchir/omnipay-bundle.git",
-                "reference": "1016eeb2c584736464ec076bc57234d2b8d80a39"
+                "reference": "99828d970554b941e640bf02f30e7b8cc831244e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/andchir/omnipay-bundle/zipball/1016eeb2c584736464ec076bc57234d2b8d80a39",
-                "reference": "1016eeb2c584736464ec076bc57234d2b8d80a39",
+                "url": "https://api.github.com/repos/andchir/omnipay-bundle/zipball/99828d970554b941e640bf02f30e7b8cc831244e",
+                "reference": "99828d970554b941e640bf02f30e7b8cc831244e",
                 "shasum": ""
             },
             "require": {
@@ -116,7 +116,7 @@
                 "shopkeeper",
                 "symfony"
             ],
-            "time": "2018-10-14T20:42:55+00:00"
+            "time": "2018-10-14T21:57:25+00:00"
         },
         {
             "name": "andchir/omnipay3-yandexkassa",

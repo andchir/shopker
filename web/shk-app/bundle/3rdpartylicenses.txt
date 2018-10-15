@@ -284,23 +284,23 @@ If the Work includes a "NOTICE" text file as part of its distribution, then any 
 
 END OF TERMS AND CONDITIONS
 
-@angular/common@6.1.9
+@angular/common@6.1.10
 MIT
 MIT
 
-@angular/core@6.1.9
+@angular/core@6.1.10
 MIT
 MIT
 
-@angular/platform-browser@6.1.9
+@angular/platform-browser@6.1.10
 MIT
 MIT
 
-@angular/forms@6.1.9
+@angular/forms@6.1.10
 MIT
 MIT
 
-@angular/animations@6.1.9
+@angular/animations@6.1.10
 MIT
 MIT
 
@@ -377,7 +377,7 @@ CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-@ng-bootstrap/ng-bootstrap@3.2.2
+@ng-bootstrap/ng-bootstrap@3.3.0
 MIT
 The MIT License (MIT)
 
@@ -401,7 +401,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-@angular/router@6.1.9
+@angular/router@6.1.10
 MIT
 MIT
 

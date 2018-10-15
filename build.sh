@@ -29,7 +29,7 @@ cp "$DIR"/var/SymfonyRequirements.php "$DIR"/"$OUTPUT_DIRNAME"/var
 mkdir "$DIR"/"$OUTPUT_DIRNAME"/web
 cp "$DIR"/web/*.* "$DIR"/"$OUTPUT_DIRNAME"/web
 rm "$DIR"/"$OUTPUT_DIRNAME"/web/package-lock.json
-cp -r "$DIR"/web/bundles "$DIR"/"$OUTPUT_DIRNAME"/web
+cp -r "$DIR"/web/app_build "$DIR"/"$OUTPUT_DIRNAME"/web
 cp -r "$DIR"/web/css "$DIR"/"$OUTPUT_DIRNAME"/web
 cp -r "$DIR"/web/img "$DIR"/"$OUTPUT_DIRNAME"/web
 cp -r "$DIR"/web/js "$DIR"/"$OUTPUT_DIRNAME"/web

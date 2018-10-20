@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% include 'header.html.twig' %}
+
+    <main role="main" class="container">
+        <div class="float-right mt-3">
+            {{ app.user.email }}
+        </div>
+        <h1>{{ 'Profile' | trans }}</h1>
+
+        {% include 'flash_messages.html.twig' %}
+
+        <div class="min-height400">
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="list-group mb-3" id="list-tab" role="tablist">
+                        <a class="list-group-item list-group-item-action{% if app.request.attributes.get('_route') == 'profile_history_orders' %} active{% endif %}" href="{{ path('profile_history_orders') }}">
+                            {{ 'History of orders' | trans }}
+                        </a>
+                        <a class="list-group-item list-group-item-action{% if app.request.attributes.get('_route') == 'profile_contacts' %} active{% endif %}" href="{{ path('profile_contacts') }}">
+                            {{ 'Contact details' | trans }}
+                        </a>
+                        <a class="list-group-item list-group-item-action{% if app.request.attributes.get('_route') == 'profile_change_password' %} active{% endif %}" href="{{ path('profile_change_password') }}">
+                            {{ 'Change password' | trans }}
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-8">
+
+                    {% block content %}{% endblock %}
+
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+{% endblock %}

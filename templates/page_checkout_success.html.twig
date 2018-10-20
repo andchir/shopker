@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% include 'header.html.twig' %}
+    <main role="main" class="container">
+
+        <div class="min-height400">
+
+            <div class="row">
+                <div class="col-md-8 offset-md-2">
+
+                    <h1>
+                        {{ 'Order checkout' | trans }}
+                    </h1>
+
+                    {% for type, messages in app.session.flashbag.all() %}
+                        {% for message in messages %}
+                            {% if type == 'errors' %}
+                                <div class="alert alert-danger">
+                                    {{ message | trans }}
+                                </div>
+                            {% else %}
+                                <div class="alert alert-info">
+                                    {{ message | trans }}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+
+                    <p>
+                        <a href="{{ path('homepage') }}">{{ 'Go to home page' | trans }}</a>
+                    </p>
+
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+{% endblock %}

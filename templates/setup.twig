@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{{ 'Installing the application' | trans }}</title>
+    <base href="{{ app.request.baseUrl }}">
+
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+
+    <link href="{{ asset('node_modules/bootstrap/dist/css/bootstrap.min.css?v=4.1.0') }}" rel="stylesheet">
+    <link href="{{ asset('node_modules/nouislider/distribute/nouislider.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/icomoon/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/app.css?v=0.0.8') }}" rel="stylesheet">
+
+</head>
+<body>
+
+    <div class="py-4">
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-8 offset-lg-2">
+
+                    <div class="card bg-light">
+                        <div class="card-header">
+                    <span>
+                        {{ 'Installing the application' | trans }}
+                    </span>
+                        </div>
+                        <div class="card-body">
+
+                            <div class="mb-4 text-center">
+                                <img src="{{ app_logo_image_url }}" width="200" alt="{{ app_name }}">
+                            </div>
+
+                            {% include 'flash_messages.html.twig' %}
+
+                            {{ form_start(form, {'action': path('setup'), 'attr': {'id': 'setupForm'}}) }}
+
+                                <div class="row">
+                                    <div class="col-md-6">
+
+                                        <div class="card mb-3">
+                                            <div class="card-header">
+                                                <span>{{ 'MongoDB Setup' | trans }}</span>
+                                            </div>
+                                            <div class="card-body">
+                                                {{ form_row(form.mongodb_server) }}
+                                                {{ form_row(form.mongodb_port) }}
+                                                {{ form_row(form.mongodb_user) }}
+                                                {{ form_row(form.mongodb_password) }}
+                                                {{ form_row(form.mongodb_database) }}
+                                                {{ form_row(form.drop_database) }}
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-6">
+
+                                        {{ form_row(form.app_name) }}
+                                        {{ form_row(form.locale) }}
+                                        <hr class="my-4">
+                                        {{ form_row(form.admin_email) }}
+                                        {{ form_row(form.admin_password) }}
+
+                                    </div>
+                                </div>
+
+                            {{ form_widget(form) }}
+
+                            <hr>
+                            <div class="form-group text-center mb-0">
+                                <button type="submit" class="btn btn-primary btn-lg btn-wide" name="button-submit">
+                                    {{ 'Install' | trans }}
+                                </button>
+                            </div>
+
+                            {{ form_end(form) }}
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+<script>
+    var baseUrl = window.location.protocol + '//' + window.location.hostname;
+    if (window.location.pathname.indexOf('app_dev.php') > -1) {
+        baseUrl += '/app_dev.php';
+    }
+    document.getElementById('setup_locale').addEventListener('change', function(){
+        var form = document.getElementById('setupForm');
+        document.getElementById('setup_form_reload').value = '1';
+        form.action = baseUrl + '/setup/' + this.value;
+        form.submit();
+    }, false);
+    document.getElementById('setupForm').addEventListener('submit', function(){
+        document.querySelector('button[type="submit"]').disabled = true;
+    }, false);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ currentPage.title | default('') }} - {{ app_name }}{% endblock %}
+
+{% block body %}
+    {% include 'header.html.twig' %}
+    <main role="main" class="container">
+
+        {% include 'nav/breadcrumbs.html.twig' %}
+
+        <div class="min-height400">
+
+            <h1>{{ currentPage.title }}</h1>
+
+            {% include 'nav/child-categories-menu.html.twig' %}
+
+            {% include 'nav/siblings-menu.html.twig' %}
+
+            {% if items | length == 0 and queryOptions.filter | length == 0 %}
+                {% if categoriesMenu | length == 0 %}
+                    <div class="alert alert-info">
+                        {{ 'This category is empty' | trans }}.
+                    </div>
+                {% endif %}
+            {% else %}
+
+                {% include 'catalog/sort.html.twig' %}
+
+                <div class="row">
+                    <div class="col-md-3">
+
+                        {% include 'catalog/filters.html.twig' %}
+
+                    </div>
+                    <div class="col-md-9">
+
+                        <div class="row">
+
+                            {% for item in items %}
+                                {% if listTemplate == 'grid' %}
+                                    <div class="col-6 col-lg-4">
+                                        <div class="card mb-3">
+                                            <div class="card-body">
+                                                {{ renderOutputTypeArray(item, fields, '', {"currency": currency}) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% elseif listTemplate == 'list' %}
+                                    <div class="col-12">
+                                        <div class="card mb-3">
+                                            <div class="card-body">
+                                                <div class="catalog-list-item">
+                                                    <div class="catalog-list-item-inner">
+                                                        {{ renderOutputTypeChunk(item, fieldsAll, 'tag', 'list_', [], 1) }}
+                                                        {{ renderOutputTypeChunk(item, fieldsAll, 'image', '', [], 1) }}
+                                                        {{ renderOutputTypeChunk(item, fieldsAll, 'header', '', [], 1) }}
+                                                        {{ renderOutputTypeChunk(item, fieldsAll, 'description', '', [], 1) }}
+                                                        {{ renderOutputTypeChunk(item, fieldsAll, 'price', '', {"currency": currency}, 1) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+
+                        </div>
+
+                        {% include 'nav/pagination.html.twig' %}
+
+                    </div>
+                </div>
+            {% endif %}
+
+        </div>
+
+    </main>
+{% endblock %}

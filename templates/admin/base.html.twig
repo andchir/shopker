@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}{{ app_name }}{% endblock %}</title>
+    <base href="{{ app.request.baseUrl }}/admin/">
+
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    {% block stylesheets %}{% endblock %}
+
+</head>
+<body>
+
+{% block body %}{% endblock %}
+
+{% block javascripts %}{% endblock %}
+
+</body>
+</html>

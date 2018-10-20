@@ -1,0 +1,42 @@
+{% if total > 0 %}
+    <div class="pt-3">
+        <h3>
+            {{ 'New items' | trans }}
+        </h3>
+        <div id="carouselContentNovelty" class="carousel slide" data-ride="carousel" data-interval="8000">
+            <ol class="carousel-indicators carousel-indicators-inverted">
+                {% for i in 1..groupCount %}
+                    <li data-target="#carouselContentNovelty" data-slide-to="{{ loop.index0 }}"{% if loop.index0 == 0 %} class="active"{% endif %}></li>
+                {% endfor %}
+            </ol>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <div class="row">
+                        {% for item in items %}
+                            <div class="col-6 col-md-{{ 12 / groupSize }}">
+                                <div class="card mb-3 mb-md-0">
+                                    <div class="card-header">
+                                        {{ item.title }}
+                                    </div>
+                                    <div class="card-body">
+                                        {{ renderOutputType(item.image, 'image', [], item) }}
+                                    </div>
+                                </div>
+                            </div>
+                            {% if loop.index != total and loop.index % groupSize == 0 %}
+                                </div></div>
+                                <div class="carousel-item"><div class="row">
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <a class="carousel-control-prev carousel-control-icon" href="#carouselContentNovelty" role="button" data-slide="prev">
+                <i class="icon-keyboard_arrow_left"></i>
+            </a>
+            <a class="carousel-control-next carousel-control-icon" href="#carouselContentNovelty" role="button" data-slide="next">
+                <i class="icon-keyboard_arrow_right"></i>
+            </a>
+        </div>
+    </div>
+{% endif %}

@@ -1,0 +1,12 @@
+<!-- breadcrumbs -->
+{% if breadcrumbs | length > 0 %}
+    <div class="btn-group btn-breadcrumb mb-3">
+        <a href="{{ catalogPath('', '/') }}" class="btn btn-secondary">
+            <i class="icon-home"></i>
+        </a>
+        {% for crumb in breadcrumbs %}
+            <a href="{{ catalogPath(crumb.uri) }}" class="btn btn-secondary">{{ crumb.title }}</a>
+        {% endfor %}
+    </div>
+{% endif %}
+<!-- /breadcrumbs -->

@@ -1,0 +1,69 @@
+<form method="post">
+    <table class="table">
+        <tbody>
+            {% for contentTypeName in items|keys %}
+                {% for item in items[contentTypeName] %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>
+                            <div>
+                                <a href="{{ catalogPath(item.parentUri, item.systemName) }}">
+                                    {{ item.title }}
+                                </a>
+                            </div>
+                            {{ item.parametersString | raw }}
+                            {% if item.filesString is not empty %}
+                                <div class="text-muted small">
+                                    <i class="icon-file"></i>
+                                    {{ 'File|Files' | transchoice(item.files | length) }}: {{ item.filesString }}
+                                </div>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="shk-price">{{ item.price | price }}</span>
+                            <span class="shk-currency">{{ currencySelected }}</span>
+                        </td>
+                        <td>
+                            <input type="number" class="form-control" min="1" step="1" name="count[]" value="{{ item.count }}" style="width: 80px;">
+                        </td>
+                        <td>
+                            <span class="shk-price">{{ item.priceTotal | price }}</span>
+                            <span class="shk-currency">{{ currencySelected }}</span>
+                        </td>
+                        <td class="text-right">
+                            <a class="btn btn-outline-info ml-1" href="{{ path('shop_cart_remove', {"contentTypeName": contentTypeName, "index": loop.index0}) }}" data-toggle="tooltip" data-placement="bottom" title="{{ 'Delete item' | trans }}">
+                                <i class="icon-cross"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="4">
+                    <div class="float-left">
+                        <button type="submit" class="btn btn-sm btn-info" name="action" value="update">
+                            <i class="icon-reload"></i>
+                            {{ 'Recalculate' | trans }}
+                        </button>
+                    </div>
+                    <div class="text-right">
+                        {{ 'Total' | trans }}:
+                    </div>
+                </th>
+                <th colspan="2">
+                    <span class="big shk-price">{{ priceTotal | price }}</span>
+                    <span class="shk-currency">{{ currencySelected }}</span>
+                </th>
+            </tr>
+        </tfoot>
+    </table>
+</form>
+<div class="float-right">
+    <a class="btn btn-outline-info" href="{{ path('page_checkout') }}">
+        {{ 'Continue' | trans }}
+        <i class="icon-keyboard_arrow_right"></i>
+    </a>
+</div>
+<div class="clearfix"></div>

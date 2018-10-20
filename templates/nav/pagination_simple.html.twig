@@ -1,0 +1,31 @@
+{% if pagesOptions.total > 1 %}
+<nav>
+    <ul class="pagination pagination-rounded">
+        {% if pagesOptions.current != pagesOptions.prev %}
+            <li class="page-item">
+                <a class="page-link" href="{{ path(app.request.attributes.get('_route'), {'page': pagesOptions.prev}) }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                </a>
+            </li>
+        {% endif %}
+
+        {% for i in 1..pagesOptions.total %}
+            <li class="page-item{% if i == pagesOptions.current %} active{% endif %}">
+                <a class="page-link" href="{{ path(app.request.attributes.get('_route'), {'page': i}) }}">
+                    {{ i }}
+                </a>
+            </li>
+        {% endfor %}
+
+        {% if pagesOptions.current != pagesOptions.next %}
+            <li class="page-item">
+                <a class="page-link" href="{{ path(app.request.attributes.get('_route'), {'page': pagesOptions.next}) }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}

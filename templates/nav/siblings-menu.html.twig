@@ -1,0 +1,15 @@
+<!-- siblings menu -->
+{% if categoriesSiblings | length > 0 %}
+<div class="border border-secondary rounded p-2 mb-3">
+    <ul class="nav">
+        {% for category in categoriesSiblings %}
+            <li class="nav-item">
+                <a class="nav-link{% if category.isActive %} disabled{% endif %}" href="{{ catalogPath(category.uri) }}">
+                    {{ category.title }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+<!-- /siblings menu -->

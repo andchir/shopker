@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% include 'header.html.twig' %}
+    <main role="main" class="container">
+
+        {% include 'nav/breadcrumbs.html.twig' %}
+
+        {% include 'nav/child-categories-menu.html.twig' %}
+
+        <div class="min-height400">
+
+            {{ renderOutputTypeChunk(currentPage, fields, 'header', 'page_') }}
+
+            <div>
+                <div class="column-left">
+                    {{ renderOutputTypeChunk(currentPage, fields, 'image', 'page_') }}
+                </div>
+                <div class="column-right">
+                    <div class="my-3">
+                        {{ renderOutputTypeChunk(currentPage, fields, 'description') }}
+                    </div>
+                    <div class="my-3">
+                        {{ 'Price' | trans }}:
+                        {{ renderOutputTypeChunk(currentPage, fields, 'price') }}
+                    </div>
+                    <div class="my-3">
+                        <form action="" method="post">
+                            <input type="hidden" name="id" value="{{ currentPage.id }}">
+                            <input type="number" class="form-control d-inline-block text-center mr-2" value="1" min="1" step="1" name="count" style="width: 100px;">
+
+                            <button type="submit" class="btn btn-info" name="submit_button">
+                                {{ 'Add to cart' | trans }}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+        </div>
+    </main>
+{% endblock %}

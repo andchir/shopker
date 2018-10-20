@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% include 'header.html.twig' %}
+
+    <main role="main" class="container">
+        <div class="min-height400">
+            <h1>404 - Page not found</h1>
+            {% if message is defined and message is not empty %}
+                <div class="alert alert-danger">{{ message }}</div>
+            {% endif %}
+        </div>
+    </main>
+{% endblock %}

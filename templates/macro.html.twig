@@ -1,0 +1,1 @@
+{% macro pageUrl(currentUri, limit, page, order_by, pageVar, limitVar) %}{{ currentUri }}?{{ limitVar }}={{ limit }}&{{ pageVar }}={{ page }}&order_by={{ order_by }}{% endmacro %}

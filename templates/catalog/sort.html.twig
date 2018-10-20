@@ -1,0 +1,48 @@
+{% import "macro.html.twig" as macro %}
+<div class="card mb-3">
+    <div class="p-2">
+        <div class="float-right">
+            <div class="btn-group py-1" role="group" id="shkNavListType">
+                <button type="button" class="btn btn-outline-secondary{% if listTemplate == 'grid' %} active{% endif %}" value="grid">
+                    <i class="icon-grid2"></i>
+                </button>
+                <button type="button" class="btn btn-outline-secondary{% if listTemplate == 'list' %} active{% endif %}" value="list">
+                    <i class="icon-list"></i>
+                </button>
+            </div>
+        </div>
+        <div>
+            <span class="mr-2 py-1 d-inline-block d-md-none">
+                <button type="button" class="btn btn-secondary shk-button-filters-show">
+                    {{ 'Filters' | trans }}
+                    <i class="icon-keyboard_arrow_right"></i>
+                </button>
+            </span>
+            <span class="py-1 d-block d-md-inline-block">
+                <label class="mr-2" for="catalogSortBy">{{ 'Sort by' | trans }}</label>
+                <select class="form-control form-control-sm width170 d-inline-block" id="shkNavSortBy" name="sortby">
+                    <option value="id_desc"{% if queryOptions.order_by == 'id_desc' %} selected{% endif %}>{{ 'catalog.sort_by_novelty' | trans }}</option>
+                    <option value="price_asc"{% if queryOptions.order_by == 'price_asc' %} selected{% endif %}>{{ 'catalog.sort_by_price_increase' | trans }}</option>
+                    <option value="price_desc"{% if queryOptions.order_by == 'price_desc' %} selected{% endif %}>{{ 'catalog.sort_by_price_reduction' | trans }}</option>
+                    <option value="title_asc"{% if queryOptions.order_by == 'title_asc' %} selected{% endif %}>{{ 'catalog.sort_by_name' | trans }}</option>
+                </select>
+            </span>
+        </div>
+    </div>
+</div>
+<script>
+    var shkCurrentUrl = '{{ pageUrl(pagesOptions) | raw }}';
+    var selectEl = document.getElementById('shkNavSortBy');
+    if (selectEl) {
+        selectEl.addEventListener('change', function(){
+            shk.orderByChange(shkCurrentUrl, this.value, '{{ pagesOptions.orderByVar }}');
+        }, false);
+    }
+    if (document.querySelectorAll('#shkNavListType button').length > 0) {
+        document.querySelectorAll('#shkNavListType button').forEach(function(buttonEl) {
+            buttonEl.addEventListener('click', function(){
+                shk.catalogListChange(this.value);
+            }, false);
+        });
+    }
+</script>

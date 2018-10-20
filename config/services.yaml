@@ -1,0 +1,117 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+imports:
+    - { resource: parameters.yaml }
+    - { resource: settings.yaml }
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        public: false       # Allows optimizing the container by removing unused services; this also means
+                            # fetching services directly from the container via $container->get() won't work.
+                            # The best practice is to be explicit about your dependencies anyway.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/App/*'
+        exclude: '../src/App/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/App/Controller'
+        tags: ['controller.service_arguments']
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+
+    App\Form\DataTransformer\SettingToStringTransformer:
+        public: true
+        arguments: ['@doctrine.odm.mongodb.document_manager']
+
+    mongodb_paramconverter:
+        class: Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter
+        arguments: ['@doctrine_mongodb']
+        tags:
+            - { name: request.param_converter }
+
+    mongo.connection:
+        class: Doctrine\MongoDB\Connection
+        factory: ['@doctrine.odm.mongodb.document_manager', getConnection]
+        calls:
+            - [initialize, []]
+
+    mongo:
+        class: Mongo
+        factory: ['@mongo.connection', getMongo]
+
+    mongo.database:
+        class: MongoDB
+        factory: ['@mongo', selectDB]
+        arguments: ['%mongodb_database%']
+
+    mongo.cache_collection:
+        class: MongoCollection
+        arguments: ['@mongo.database', 'cache']
+
+    event_subscribers:
+        namespace: App\EventSubscriber\
+        resource: '../src/App/EventSubscriber'
+        tags: [event_subscriber]
+        arguments: [ '@service_container' ]
+
+    App\EventSubscriber\DoctrineEventSubscriber:
+        tags:
+            - { name: doctrine_mongodb.odm.event_subscriber, connection: default, lazy: true }
+        arguments: [ '@service_container' ]
+
+    App\EventListener\ExceptionListener:
+        public: true
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }
+        arguments: [ '@twig', '@service_container' ]
+
+    App\EventListener\KernelEventListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request }
+        arguments: [ '@service_container' ]
+
+    App\Twig\AppExtension:
+        tags: ['twig.extension']
+        arguments: ['@service_container']
+
+    app.twig_runtime:
+        class: App\Twig\AppRuntime
+        public: false
+        arguments: ['@service_container']
+        tags:
+            - { name: twig.runtime }
+
+    app.filecache:
+        public: true
+        class: Symfony\Component\Cache\Simple\FilesystemCache
+        arguments:
+            - 'app'
+            - 86400
+            - '%kernel.root_dir%/../../var/cache/filecache'
+
+    app.shop_cart:
+        class: App\Service\ShopCartService
+        public: true
+        arguments: [ '@service_container' ]
+
+    app.settings:
+        class: App\Service\SettingsService
+        public: true
+        arguments: [ '@service_container' ]
+
+    app.utils:
+        class: App\Service\UtilsService
+        public: true
+        arguments: [ '@service_container' ]

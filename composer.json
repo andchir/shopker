@@ -1,88 +1,94 @@
 {
-    "name": "andchir/shopkeeper4",
-    "license": "MIT",
     "type": "project",
-    "description": "Symfony application to create online store",
-    "autoload": {
-        "psr-4": {
-            "AppBundle\\": "src/AppBundle"
-        },
-        "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
-    },
-    "autoload-dev": {
-        "psr-4": { "Tests\\": "tests/" },
-        "files": [ "vendor/symfony/symfony/src/Symfony/Component/VarDumper/Resources/functions/dump.php" ]
-    },
+    "license": "proprietary",
     "require": {
-        "php": ">=5.5.9",
+        "php": "^7.1.3",
+        "ext-ctype": "*",
+        "ext-iconv": "*",
         "alcaeus/mongo-php-adapter": "^1.1",
         "andchir/omnipay-bundle": "^1.0",
-        "doctrine/cache": "^1.6",
-        "doctrine/doctrine-bundle": "^1.6",
-        "doctrine/doctrine-cache-bundle": "^1.2",
-        "doctrine/doctrine-fixtures-bundle": "^2.4",
-        "doctrine/mongodb": "^1.6",
-        "doctrine/mongodb-odm": "1.2.*",
-        "doctrine/mongodb-odm-bundle": "^3.1",
-        "doctrine/orm": "^2.6",
-        "doctrine/phpcr-bundle": "^1.3",
-        "doctrine/phpcr-odm": "^1.4",
+        "doctrine/cache": "^1.8",
+        "doctrine/doctrine-cache-bundle": "^1.3",
+        "doctrine/doctrine-fixtures-bundle": "^3.0",
+        "doctrine/mongodb-odm-bundle": "^3.5",
         "gregwar/captcha-bundle": "^2.0",
-        "incenteev/composer-parameter-handler": "^2.0",
-        "jackalope/jackalope-doctrine-dbal": "1.2.*",
-        "liip/imagine-bundle": "^1.9",
+        "liip/imagine-bundle": "^2.1",
         "mongodb/mongodb": "^1.4",
-        "phpunit/phpunit": "^4.8",
         "ralouphie/mimey": "^2.0",
-        "sensio/distribution-bundle": "^5.0",
-        "sensio/framework-extra-bundle": "^3.0.2",
-        "symfony/monolog-bundle": "^3.0.2",
-        "symfony/polyfill-apcu": "^1.0",
-        "symfony/swiftmailer-bundle": "^2.3.10",
-        "symfony/symfony": "3.4.*",
-        "twig/twig": "^1.0||^2.0"
+        "sensio/framework-extra-bundle": "^5.2",
+        "symfony/asset": "*",
+        "symfony/console": "*",
+        "symfony/dotenv": "*",
+        "symfony/expression-language": "*",
+        "symfony/flex": "^1.1",
+        "symfony/form": "*",
+        "symfony/framework-bundle": "*",
+        "symfony/monolog-bundle": "^3.1",
+        "symfony/orm-pack": "*",
+        "symfony/process": "*",
+        "symfony/security-bundle": "*",
+        "symfony/serializer": "*",
+        "symfony/serializer-pack": "*",
+        "symfony/swiftmailer-bundle": "^3.1",
+        "symfony/translation": "*",
+        "symfony/twig-bundle": "*",
+        "symfony/validator": "*",
+        "symfony/web-link": "*",
+        "symfony/yaml": "*"
     },
     "require-dev": {
-        "sensio/generator-bundle": "^3.0",
-        "symfony/phpunit-bridge": "^3.0",
-        "jackalope/jackalope-jackrabbit": "1.*",
-        "roave/better-reflection": "dev-master"
-    },
-    "scripts": {
-        "symfony-scripts": [
-            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
-        ],
-        "post-install-cmd": [
-            "@symfony-scripts"
-        ],
-        "post-update-cmd": [
-            "@symfony-scripts"
-        ]
+        "symfony/debug-pack": "*",
+        "symfony/maker-bundle": "^1.7",
+        "symfony/profiler-pack": "*",
+        "symfony/test-pack": "*",
+        "symfony/web-server-bundle": "*"
     },
     "config": {
-        "platform": {
-            "php": "7.1",
-            "ext-mongo": "1.6.16"
+        "preferred-install": {
+            "*": "dist"
         },
-        "sort-packages": true
+        "sort-packages": true,
+        "platform": {
+            "ext-mongo": "1.6.16"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/App/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\Tests\\": "tests/"
+        }
+    },
+    "replace": {
+        "paragonie/random_compat": "2.*",
+        "symfony/polyfill-ctype": "*",
+        "symfony/polyfill-iconv": "*",
+        "symfony/polyfill-php71": "*",
+        "symfony/polyfill-php70": "*",
+        "symfony/polyfill-php56": "*"
+    },
+    "scripts": {
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+        },
+        "post-install-cmd": [
+            "@auto-scripts"
+        ],
+        "post-update-cmd": [
+            "@auto-scripts"
+        ]
+    },
+    "conflict": {
+        "symfony/symfony": "*"
     },
     "extra": {
-        "symfony-app-dir": "app",
-        "symfony-bin-dir": "bin",
-        "symfony-var-dir": "var",
-        "symfony-web-dir": "web",
-        "symfony-tests-dir": "tests",
-        "symfony-assets-install": "relative",
-        "incenteev-parameters": {
-            "file": "app/config/parameters.yml"
-        },
-        "branch-alias": {
-            "dev-master": "3.2-dev"
+        "symfony": {
+            "allow-contrib": false,
+            "require": "4.1.*"
         }
     }
 }

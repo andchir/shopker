@@ -1,0 +1,57 @@
+security:
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+        security_mongo_provider:
+            mongodb: { class: App\MainBundle\Document\User }
+
+    encoders:
+        # bcrypt or argon21 are recommended
+        # argon21 is more secure, but requires PHP 7.2 or the Sodium extension
+        App\MainBundle\Document\User:
+            algorithm: bcrypt
+            cost: 12
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            pattern: ^/
+            anonymous: ~
+            provider: security_mongo_provider
+
+            form_login:
+                login_path: login
+                check_path: login
+                csrf_token_generator: security.csrf.token_manager
+                default_target_path: homepage
+                always_use_default_target_path: true
+
+            logout:
+                path: logout
+                target: homepage
+
+            remember_me:
+                secret: '%env(APP_SECRET)%'
+                lifetime: 604800 # 1 week in seconds
+                path: /
+
+            guard:
+                authenticators:
+                    - App\Security\LoginFormAuthenticator
+
+            # http_basic: true
+            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
+
+            # form_login: true
+            # https://symfony.com/doc/current/security/form_login_setup.html
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
+    access_control:
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/profile/, roles: ROLE_USER }

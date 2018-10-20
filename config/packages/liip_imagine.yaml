@@ -1,0 +1,36 @@
+liip_imagine:
+    loaders:
+        default:
+            filesystem:
+                data_root: '%app.web_dir_path%'
+    resolvers:
+        default:
+            web_path:
+                web_root: '%app.web_dir_path%'
+                cache_prefix: 'uploads/thumbs/cache'
+    filter_sets:
+        cache: ~
+
+        thumb_small:
+            quality: 85
+            filters:
+                relative_resize:
+                    widen: 200
+                thumbnail: { size: [200, 200], mode: inset }
+                background: { size: [200, 200], position: center, color: '#ffffff' }
+
+        thumb_medium:
+            quality: 85
+            filters:
+                relative_resize:
+                    widen: 400
+                thumbnail: { size: [400, 400], mode: inset }
+                background: { size: [400, 400], position: center, color: '#ffffff' }
+
+        thumb_big:
+            quality: 90
+            filters:
+                relative_resize:
+                    widen: 800
+                thumbnail: { size: [800, 800], mode: inset }
+                background: { size: [800, 800], position: center, color: '#ffffff' }

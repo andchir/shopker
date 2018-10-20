@@ -1,0 +1,21 @@
+parameters:
+    app.name: Shopkeeper
+    locale: en
+    mongodb_server: '127.0.0.1'
+    mongodb_user: root
+    mongodb_password: ''
+    mongodb_database: ''
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_port: 25
+    mailer_encryption: 'ssl'
+    mailer_auth_mode: 'login'
+    mailer_user: ''
+    mailer_password: ''
+    app.admin_email: ''
+    app.payment_status_number: 1
+    app.payment_status_after_number: 2
+    app.max_user_files_size: 10
+    app.max_temp_files_keep_minutes: 30
+    app.tax_system: 3
+    app.nds_rate: 3

@@ -1,0 +1,34 @@
+parameters:
+    locale: 'en'
+    app.name: Shopkeeper
+    app.version: '4.0rc4'
+    app.web_dir_path: '%kernel.root_dir%/../../public'
+    app.files_dir_path: '%app.web_dir_path%/uploads'
+    app.logo_image_url: /img/shk-logo-small-blue.png
+    app.files_dir_url: /uploads
+    app.files_ext_blacklist:
+        - php
+        - php3
+        - php4
+        - php5
+        - pl
+        - cgi
+    app.catalog_page_size:
+        - 12
+        - 24
+        - 60
+    mongodb_server: 127.0.0.1
+    mongodb_port: 27017
+    mongodb_user: ''
+    mongodb_password: ''
+    mongodb_database: ''
+    mailer_transport: smtp
+    mailer_host: ''
+    mailer_port: ''
+    mailer_user: ''
+    mailer_password: ''
+    mailer_encryption: 'ssl'
+    mailer_auth_mode: 'login'
+    app.admin_email: ''
+    app.payment_status_number: 1
+    app.payment_status_after_number: 2

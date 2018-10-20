@@ -1,27 +1,21 @@
-/.idea/
-/build/
-/phpunit.xml
-/var/*
-!/var/cache
-/var/cache/*
-!var/cache/.gitkeep
-!/var/logs
-/var/logs/*
-!var/logs/.gitkeep
-!/var/sessions
-/var/sessions/*
-!var/sessions/.gitkeep
-!var/SymfonyRequirements.php
+
+###> symfony/framework-bundle ###
+/var/
 /vendor/
-/web/node_modules/
-/web/lib/
-/web/shk-app/node_modules/
-/web/shk-app/bundle-dev/
-/web/uploads/
-/web/media/
-/app/config/parameters.yml
-/src/AppBundle/Document/**/*.php~
-/app/config/settings.yml
-/docs/wiki/
-/node_modules/
-/docs/api/
+###< symfony/framework-bundle ###
+
+###> symfony/phpunit-bridge ###
+.phpunit
+/phpunit.xml
+###< symfony/phpunit-bridge ###
+
+###> symfony/web-server-bundle ###
+/.web-server-pid
+###< symfony/web-server-bundle ###
+/frontend/node_modules/
+/public/node_modules/
+/.idea
+
+/public/media/cache/
+/public/admin/bundle-dev/
+/config/settings.yaml

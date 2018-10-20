@@ -1,0 +1,18 @@
+omnipay:
+    resource: "@OmnipayBundle/Resources/config/routing.yml"
+    prefix: /
+
+_liip_imagine:
+    resource: "@LiipImagineBundle/Resources/config/routing.yaml"
+
+homepage:
+    path: /
+    defaults:
+        _controller: App\Controller\DefaultController::homepageAction
+
+logout:
+    path: /logout
+
+controllers:
+    resource: ../../src/App/Controller/
+    type: annotation

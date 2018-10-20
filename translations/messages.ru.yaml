@@ -1,0 +1,134 @@
+Installing the application: Установка приложения
+Install: Установить
+App name: Название сайта
+Main language: Основной язык
+Admin email: Адрес эл. почты администратора
+MongoDB Setup: Настройки MongoDB
+Server: Сервер
+Port: Порт
+User name: Имя пользователя
+Database name: Имя базы данных
+Clear the database: Очистить базу данных
+Russian: Русский
+
+Home page: Главная страница
+Log in: Войти
+Log out: Выйти
+Sign up: Зарегистрироваться
+Registration: Регистрация
+Password: Пароль
+Old password: Старый пароль
+Change password: Изменить пароль
+New password: Новый пароль
+Keep me logged in: Запомнить меня
+Confirm password: Подтвердите пароль
+Contact details: Контактные данные
+Catalog: Каталог товаров
+Root category: Корневая категория
+Administration: Администрирование
+Go to product catalog: Перейти в каталог
+Total Categories: Всего категорий
+Total products: Всего товаров
+This category is empty: Данная категория пуста
+Hide Filters: Скрыть фильтры
+Apply: Применить
+Reset: Сбросить
+Filters: Фильтры
+Product Name: Наименование
+Name: Название
+Continue: Продолжить
+Quantity: Кол-во
+Price: Цена
+Price total: Итого
+Add to cart: В корзину
+Empty cart: Очистить корзину
+The cart is empty: Корзина пуста
+Proceed to checkout: Оформить заказ
+Edit an order: Редактировать заказ
+Selected: Выбрано
+Close: Закрыть
+Total: Общая сумма
+Files: Файлы
+File|Files: Файл|Файлы
+product|products: товар|товара|товаров
+'%count% product found|%count% products found': 'Найден %count% товар|Найдено %count% товара|Найдено %count%  товаров'
+product with a total cost|products with a total cost: товар на сумму|товара на сумму|товаров на сумму
+Your cart is empty.: Ваша корзина пуста.
+Thanks for your order!: Спасибо за заказ! В ближайшее время Вы получите подтверждение по эл. почте.
+Go to home page: На главную страницу
+Submit order: Отправить заказ
+Email: Адрес эл. почты
+Full name: Ф.И.О.
+Phone: Номер телефона
+Address: Адрес
+Comment: Комментарий
+Payment method: Способ оплаты
+Delivery method: Способ доставки
+Delivery: Доставка
+Order: Заказ
+Status: Статус
+Order list: Состав заказа
+Contacts: Контактная информация
+Submit: Отправить
+Empty.: Пусто.
+New items: Новинки
+Recalculate: Пересчитать
+Your name: Ваше имя
+Your email: Ваш адрес эл. почты
+E-mail text: Тест письма
+Captcha: Защитный код
+Upload file: Загрузить файл
+You can upload files: Вы можете загрузить файлы
+You can upload file: Вы можете загрузить файл
+Cancel: Отменить
+Email from your website: Письмо с вашего сайта
+Search: Поиск
+Searching results: Результаты поиска
+search.nothing_found: По Вашему запросу ничего не найдено.
+The file type is not allowed to be uploaded.: Тип файла не разрешен для загрузки.
+File type is not allowed.: Тип файла не разрешен для загрузки.
+File is required.: Необходимо загрузить файл.
+You can not upload a file larger than %size% MB.: Вы не можете загрузить файл больше %size% МБ.
+
+Sort by: Сортировать по
+catalog.sort_by_novelty: Новизне
+catalog.sort_by_price_increase: Увеличению цены
+catalog.sort_by_price_reduction: Уменьшению цены
+catalog.sort_by_name: Названию
+
+Shopping cart: Корзина товаров
+Order checkout: Оформление заказа
+Delete item: Удалить
+Print: Печать
+I agree to the processing of personal data: Согласен на обработку персональных данных
+Forgot your password?: Забыли пароль?
+Reset password: Сбросить пароль
+You are successfully registered. Now you can enter.: Вы успешно зарегистрированы. Теперь Вы можете войти.
+An email with further instructions has been sent to your email address.: На ваш адрес электронной почты отправлено письмо с дальнейшими инструкциями.
+Your password has been changed successfully.: Ваш пароль успешно изменен.
+Your password has been changed successfully. Now you can enter.: Ваш пароль успешно изменен. Теперь Вы можете войти.
+reset_password.confirm.email_link: Для подтверждения изменения пароля, пожалуйста, перейдите по ссылке
+Profile: Профиль
+History of orders: История заказов
+Delivery address: Адрес доставки
+Pay now: Оплатить
+Paid: Оплачен
+ROLE_USER: Пользователь
+ROLE_ADMIN: Администратор
+ROLE_SUPER_ADMIN: Супер-Администратор
+user_options.state: Регион
+user_options.zip: Индекс
+user_options.city: Город
+user_options.street: Улица
+user_options.house: Дом
+user_options.apartment: Квартира
+
+app_install.message.success: Приложение успешно установлено. Теперь Вы можете войти в панель администрирования.
+mail_subject.new_order: Новый заказ
+mail_subject.order_status_change: Статус заказа обновлен
+Order date: Дата заказа
+Order status: Статус
+password_reset.mail_subject: Сброс пароля
+profile.contacts_data_saved_successfully: Данные успешно созранены.
+email.send_successful: Письмо успешно отправлено.
+email.recipient_error: Не указан адрес получателя.

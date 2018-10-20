@@ -1,0 +1,15 @@
+Bad credentials.: Логин или пароль указаны не верно.
+User account is disabled.: Аккаунт пользователя отключен.
+The password fields must match.: Пароли не совпадают.
+Wrong value for your current password: Не верное значение текущего пароля
+register.email.already exists: Пользователь с указанным адресом эл. почты уже существует.
+Password must be at least {{ limit }} characters long: Пароль должен быть больше {{ limit }} символов
+Password cannot be longer than {{ limit }} characters: Пароль не может быть больше {{ limit }} символов
+password_reset.user.not_found: Пользователь с указанным адресом эл. почты не найден.
+install.mongodb_connection_fail: Невозможно подключиться к серверу MongoDB.
+install.mongodb_database_not_exist: База данных не существует.
+install.mongodb_database_not_permitted: Не достаточно прав для записи в базу данных.
+install.mongodb_database_not_empty: База данных не пуста.
+install.settings_file_not_writable: Файл settings.yaml не доступен для записи.
+install.mongodb_database_clear_error: Ошибка при очистке базы данных.
+email.recipient_error: Не указан адрес получателя.

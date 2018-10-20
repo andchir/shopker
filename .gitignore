@@ -19,3 +19,7 @@
 /public/media/cache/
 /public/admin/bundle-dev/
 /config/settings.yaml
+
+###> liip/imagine-bundle ###
+/public/media/cache/
+###< liip/imagine-bundle ###

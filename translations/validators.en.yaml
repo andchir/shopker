@@ -1,0 +1,10 @@
+Bad credentials.: Bad credentials.
+register.email.already exists: The user with the specified email already exists.
+password_reset.user.not_found: The user with the specified email address was not found.
+install.mongodb_connection_fail: Unable to connect to MongoDB server.
+install.mongodb_database_not_exist: The database does not exist.
+install.mongodb_database_not_permitted: Не достаточно прав для записи в базу данных.
+install.mongodb_database_not_empty: The database is not empty.
+install.settings_file_not_writable: The file settings.yaml is not writable.
+install.mongodb_database_clear_error: An error occurred while cleaning the database.
+email.recipient_error: The address of the recipient is not specified.

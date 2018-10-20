@@ -3,7 +3,7 @@ Shopkeeper 4
 
 ![Shopkeeper 4 logo](https://raw.github.com/andchir/shopkeeper4/master/public/img/shk-logo-big-blue.png?raw=true "Shopkeeper 4 logo")
 
-The engine for creating an online store using Symfony, Angular, MongoDB.
+The engine for creating an online store using Symfony 4.x, Angular 6+, MongoDB 3+.
 
 [Read Wiki](https://github.com/andchir/shopkeeper4/wiki)
 

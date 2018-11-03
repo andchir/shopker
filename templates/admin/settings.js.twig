@@ -4,6 +4,7 @@ var process = process || {
         version: []
     };
 var adminRoutes = {{ adminRoutes | raw }};
+var adminMenu = {{ adminMenu | raw }};
 var appSettings = {
     appName: '{{ app_name }}',
     webApiUrl: '{{ app.request.baseUrl }}',

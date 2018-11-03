@@ -64,9 +64,11 @@ class HomepageController extends Controller
         ];
 
         $adminRoutes = $utilsService->parseYaml('admin_routes');
+        $adminMenu = $utilsService->parseYaml('admin_menu');
         $content = $this->renderView('admin/settings.js.twig', [
             'settings' => $settings,
-            'adminRoutes' => json_encode($adminRoutes['routes'])
+            'adminRoutes' => json_encode($adminRoutes['routes']),
+            'adminMenu' => json_encode($adminMenu['menu'])
         ]);
 
         $response = new Response($content);
@@ -74,17 +76,4 @@ class HomepageController extends Controller
 
         return $response;
     }
-
-    /**
-     * @Route("/config_routes", name="admin_routes_config")
-     * @param UtilsService $utilsService
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
-    public function routesConfigAction(UtilsService $utilsService)
-    {
-        $adminRoutes = $utilsService->parseYaml('admin_routes');
-
-        return $this->json($adminRoutes['routes']);
-    }
-
 }

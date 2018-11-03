@@ -2,29 +2,9 @@
 
     <div class="navbar-vertical-left bg-primary">
         <ul>
-            <li class="nav-item">
-                <a class="nav-link" [routerLink]="['/orders']" routerLinkActive="active" [ngbTooltip]="'ORDERS' | translate" placement="right" tooltipClass="tooltip-left-blue">
-                    <i class="icon-bag item-icon"></i>
-                </a>
-            </li>
-            <!--<li class="nav-item">-->
-                <!--<a class="nav-link" [routerLink]="['/statistics']" routerLinkActive="active" [ngbTooltip]="'STATISTICS' | translate" placement="right" tooltipClass="tooltip-left-blue">-->
-                    <!--<i class="icon-bar-graph-2 item-icon"></i>-->
-                <!--</a>-->
-            <!--</li>-->
-            <li class="nav-item">
-                <a class="nav-link" [routerLink]="['/catalog']" routerLinkActive="active" [ngbTooltip]="'CATALOG' | translate" placement="right" tooltipClass="tooltip-left-blue">
-                    <i class="icon-layers item-icon"></i>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" [routerLink]="['/users']" routerLinkActive="active" [ngbTooltip]="'USERS' | translate" placement="right" tooltipClass="tooltip-left-blue">
-                    <i class="icon-head item-icon"></i>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" [routerLink]="['/settings']" routerLinkActive="active" [ngbTooltip]="'SETTINGS' | translate" placement="right" tooltipClass="tooltip-left-blue">
-                    <i class="icon-cog item-icon"></i>
+            <li class="nav-item" *ngFor="let menuItem of menuItems">
+                <a class="nav-link" [routerLink]="[menuItem.route]" routerLinkActive="active" [ngbTooltip]="menuItem.title | translate" placement="right" tooltipClass="tooltip-left-blue">
+                    <i class="item-icon" [ngClass]="menuItem.icon"></i>
                 </a>
             </li>
         </ul>

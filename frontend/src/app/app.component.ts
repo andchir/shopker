@@ -6,8 +6,10 @@ import {TranslateService} from '@ngx-translate/core';
 import {Observable, of} from 'rxjs';
 
 import {AppSettings} from './services/app-settings.service';
+import {MenuItem} from './models/menu-item.interface';
 
 declare const adminRoutes: Routes;
+declare const adminMenu: MenuItem[];
 
 @Component({
     selector: 'app-modal-confirm',
@@ -43,21 +45,13 @@ export class AlertModalContentComponent {
     templateUrl: './templates/app.component.html',
     styleUrls: [ './app.component.css' ],
     providers: [ NgbTooltipConfig ],
-    encapsulation: ViewEncapsulation.None,
-    styles: [`
-        .tooltip-left-blue .tooltip-inner {
-            background-color: #007bff;
-            font-size: 125%;
-            border-radius: 0;
-        }
-        .tooltip-left-blue .arrow::before {
-            border-right-color: #007bff;
-        }
-    `]
+    encapsulation: ViewEncapsulation.None
 })
 export class AppComponent {
+
     baseUrl: string;
     routeData: any[];
+    menuItems: MenuItem[] = [...adminMenu];
 
     constructor(
         tooltipConfig: NgbTooltipConfig,

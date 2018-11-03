@@ -1,0 +1,15 @@
+var global = global || window;
+var process = process || {
+        env: { DEBUG: undefined },
+        version: []
+    };
+var adminRoutes = {{ adminRoutes | raw }};
+var appSettings = {
+    appName: '{{ app_name }}',
+    webApiUrl: '{{ app.request.baseUrl }}',
+    environment: '{{ app.environment }}',
+    filesDirUrl: '{{ settings.filesDirUrl }}',
+    locale: '{{ settings.locale }}',
+    rolesHierarchy: {{ settings.rolesHierarchy | json_encode() | raw }},
+    systemSettings: {{ settings.systemSettings | json_encode() | raw }}
+};

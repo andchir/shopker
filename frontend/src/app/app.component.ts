@@ -1,11 +1,13 @@
 import {Component, Input, ViewEncapsulation} from '@angular/core';
-import {Router, NavigationEnd} from '@angular/router';
+import {Router, NavigationEnd, Routes} from '@angular/router';
 import {Title} from '@angular/platform-browser';
 import {NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateService} from '@ngx-translate/core';
 import {Observable, of} from 'rxjs';
 
 import {AppSettings} from './services/app-settings.service';
+
+declare const adminRoutes: Routes;
 
 @Component({
     selector: 'app-modal-confirm',
@@ -73,6 +75,8 @@ export class AppComponent {
         this.translate.addLangs(['en', 'ru']);
         this.translate.setDefaultLang('en');
         this.translate.use(this.appSettings.settings.locale);
+
+        this.router.config.unshift(...adminRoutes);
 
         this.router.events.subscribe(event => {
             if (event instanceof NavigationEnd) {

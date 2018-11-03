@@ -1,0 +1,7 @@
+routes:
+    - { path: '', redirectTo: 'orders', pathMatch: 'full' }
+    - { path: 'orders', loadChildren: 'src/app/orders/orders.module#OrdersModule' }
+    - { path: 'catalog', loadChildren: 'src/app/catalog/catalog.module#CatalogModule' }
+    - { path: 'statistics', loadChildren: 'src/app/statistics/statistics.module#StatisticsModule' }
+    - { path: 'users', loadChildren: 'src/app/users/users.module#UsersModule' }
+    - { path: 'settings', loadChildren: 'src/app/settings/settings.module#SettingsModule' }

@@ -308,7 +308,7 @@ class UtilsService
      * @param string $path
      * @return array|mixed
      */
-    public function parseYaml($yamlFileName, $path)
+    public function parseYaml($yamlFileName, $path = '')
     {
         $rootPath = realpath($this->container->getParameter('kernel.root_dir').'/../..');
         $ymlFilePath = $rootPath . DIRECTORY_SEPARATOR . "config/resources/{$path}{$yamlFileName}.yaml";

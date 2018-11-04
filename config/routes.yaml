@@ -13,6 +13,10 @@ homepage:
 logout:
     path: /logout
 
+plugins:
+    resource: ../../vendor/shk4-plugins/
+    type: annotation
+
 controllers:
     resource: ../../src/App/Controller/
     type: annotation

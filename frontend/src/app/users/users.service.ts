@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
 
-import { Observable ,  of } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import {Observable} from 'rxjs';
+import {catchError} from 'rxjs/operators';
 
-import { DataService } from '../services/data-service.abstract';
-import { User } from './models/user.model';
+import {DataService} from '../services/data-service.abstract';
+import {User} from './models/user.model';
 
 @Injectable()
 export class UsersService extends DataService<User> {

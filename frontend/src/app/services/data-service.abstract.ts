@@ -6,6 +6,7 @@ import {catchError, map, tap} from 'rxjs/operators';
 import {QueryOptions} from '../models/query-options';
 import {DataList} from '../models/data-list.interface';
 import {SimpleEntity} from '../models/simple-entity.interface';
+import {FileModel} from '../models/file.model';
 
 export interface OutputData {
     data: any | any[] | null;
@@ -106,6 +107,16 @@ export abstract class DataService<M extends SimpleEntity> {
         const url = this.getRequestUrl() + `/${item.id}`;
         return this.http.put<M>(url, item, {headers: this.headers}).pipe(
             catchError(this.handleError<any>())
+        );
+    }
+
+    postFormData(formData: FormData): Observable<FileModel[]> {
+        const headers = new HttpHeaders({
+            'enctype': 'multipart/form-data',
+            'Accept': 'application/json'
+        });
+        return this.http.post<FileModel[]>(`${this.getRequestUrl()}/upload`, formData, {headers: headers}).pipe(
+            catchError(this.handleError<FileModel[]>())
         );
     }
 

@@ -1,6 +1,6 @@
 <div class="table-responsive" [class.loading]="loading">
     <table class="table table-striped table-divided mb-0" #tableElement>
-        <thead>
+        <thead *ngIf="items.length > 0">
             <tr>
                 <th class="text-left">
                     <div class="custom-control custom-checkbox custom-checkbox-single" [hidden]="items.length === 0">

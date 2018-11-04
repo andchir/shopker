@@ -94,18 +94,6 @@ export class ModalUserContentComponent extends ModalContentAbstractComponent<Use
     addressFieldsDelete(index: number): void {
         this.model.options.splice(index, 1);
     }
-
-    save(): void {
-        this.loading = true;
-        this.dataService.update(this.getFormData())
-            .subscribe((res) => {
-                this.closeModal();
-            }, (err) => {
-                this.errorMessage = err.error || 'Error.';
-                this.loading = false;
-            });
-    }
-
 }
 
 @Component({

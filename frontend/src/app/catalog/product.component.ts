@@ -272,7 +272,7 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
         this.saveRequest()
             .subscribe((data) => {
                     if (Object.keys(this.files).length > 0) {
-                        this.saveFiles(data._id);
+                        this.saveFiles(data._id || data.id);
                     } else {
                         this.closeModal();
                     }

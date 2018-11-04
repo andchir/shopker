@@ -12,16 +12,6 @@ export class FilesService extends DataService<FileModel> {
 
     constructor(http: HttpClient) {
         super(http);
-        this.setRequestUrl('files/upload');
-    }
-
-    postFormData(formData: FormData): Observable<FileModel[]> {
-        const headers = new HttpHeaders({
-            'enctype': 'multipart/form-data',
-            'Accept': 'application/json'
-        });
-        return this.http.post<FileModel[]>(this.getRequestUrl(), formData, {headers: headers}).pipe(
-            catchError(this.handleError<FileModel[]>())
-        );
+        this.setRequestUrl('files');
     }
 }

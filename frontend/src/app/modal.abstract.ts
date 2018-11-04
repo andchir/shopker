@@ -6,6 +6,7 @@ import {TranslateService} from '@ngx-translate/core';
 
 import {SystemNameService} from './services/system-name.service';
 import {DataService} from './services/data-service.abstract';
+import {FileModel} from './models/file.model';
 
 export abstract class ModalContentAbstractComponent<M> implements OnInit {
     @Input() modalTitle: string;
@@ -22,8 +23,6 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
     formFields = {};
     model: {[key: string]: any} = {};
     files: {[key: string]: File} = {};
-
-    abstract save();
 
     constructor(
         public fb: FormBuilder,
@@ -170,6 +169,23 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
         return cloneDeep(this.model);
     }
 
+    fileChange(event, fieldName: string) {
+        const fileList: FileList = event.target.files;
+        if (fileList.length > 0) {
+            this.model[fieldName] = FileModel.getFileData(fileList[0]);
+            this.files[fieldName] = fileList[0];
+            this.form.controls[fieldName].setValue(this.files[fieldName].name);
+        }
+    }
+
+    fileClear(fieldName: string, inputElement: HTMLInputElement) {
+        this.model[fieldName] = null;
+        this.form.controls[fieldName].reset(null);
+        inputElement.files = null;
+        inputElement.value = '';
+        delete this.files[fieldName];
+    }
+
     saveRequest() {
         if (this.isEditMode) {
             return this.dataService.update(this.getFormData());
@@ -182,5 +198,61 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
     onSubmit() {
         this.submitted = true;
         this.closeModal();
+    }
+
+    appendFormData(formData: FormData): void {
+
+    }
+
+    saveFiles(itemId: number) {
+        if (Object.keys(this.files).length === 0) {
+            this.closeModal();
+            return;
+        }
+
+        const formData: FormData = new FormData();
+        for (const key in this.files) {
+            if (this.files.hasOwnProperty(key) && this.files[key] instanceof File) {
+                formData.append(key, this.files[key], this.files[key].name);
+            }
+        }
+        formData.append('itemId', String(itemId));
+        this.appendFormData(formData);
+
+        this.dataService.postFormData(formData)
+            .subscribe(() => {
+                    this.closeModal();
+                },
+                err => {
+                    this.errorMessage = err.error || 'Error.';
+                    this.submitted = false;
+                    this.loading = false;
+                });
+    }
+
+    save(): void {
+        this.submitted = true;
+
+        console.log(this.form.valid, this.form);
+
+        if (!this.form.valid) {
+            this.onValueChanged('form');
+            this.submitted = false;
+            return;
+        }
+
+        this.loading = true;
+        this.saveRequest()
+            .subscribe((res) => {
+                if (Object.keys(this.files).length > 0) {
+                    this.saveFiles(res._id || res.id);
+                } else {
+                    this.closeModal();
+                }
+            }, (err) => {
+                this.errorMessage = err.error || 'Error.';
+                this.loading = false;
+                this.submitted = false;
+            });
     }
 }

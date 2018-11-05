@@ -1,5 +1,9 @@
 export class FileData {
 
+    static getFileName(fileData: FileData): string {
+        return `${fileData.title}.${fileData.extension}`;
+    }
+
     public toString = (): string => {
         return `${this.title}.${this.extension}`;
     };

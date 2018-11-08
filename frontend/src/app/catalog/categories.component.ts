@@ -18,6 +18,7 @@ import {QueryOptions} from '../models/query-options';
 import {SystemNameService} from '../services/system-name.service';
 import {CategoriesService} from './services/categories.service';
 import {ContentTypesService} from './services/content_types.service';
+import {FormFieldInterface} from '../models/form-field.interface';
 
 /**
  * @class CategoriesModalComponent
@@ -37,7 +38,7 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
     currentCategoryNode: TreeNode;
     isCollapsed = false;
 
-    formFields = {
+    formFields: FormFieldInterface = {
         title: {
             value: '',
             disabled: false,

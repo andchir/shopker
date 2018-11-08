@@ -39,7 +39,8 @@
               "src/app/catalog/catalog.module.ts",
               "src/app/statistics/statistics.module.ts",
               "src/app/users/users.module.ts",
-              "src/app/settings/settings.module.ts"
+              "src/app/settings/settings.module.ts",
+              "src/app/import-export/import-export.module.ts"
             ]
           },
           "configurations": {

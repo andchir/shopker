@@ -7,6 +7,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {SystemNameService} from './services/system-name.service';
 import {DataService} from './services/data-service.abstract';
 import {FileModel} from './models/file.model';
+import {FormFieldInterface} from './models/form-field.interface';
 
 export abstract class ModalContentAbstractComponent<M> implements OnInit {
     @Input() modalTitle: string;
@@ -20,8 +21,8 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
     form: FormGroup;
     formErrors: {[key: string]: string} = {};
     validationMessages: {[key: string]: { [key: string]: string }} = {};
-    formFields = {};
-    model: {[key: string]: any} = {};
+    formFields: FormFieldInterface = {};
+    model: any;
     files: {[key: string]: File} = {};
 
     constructor(

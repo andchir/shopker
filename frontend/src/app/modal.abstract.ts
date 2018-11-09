@@ -83,7 +83,7 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
         const controls = this.buildControls(this.formFields, 'model');
         this.form = this.fb.group(controls);
         this.form.valueChanges
-            .subscribe(() => this.onValueChanged('form'));
+            .subscribe((value: any) => this.onValueChanged('form', '', value));
     }
 
     /** Build controls */
@@ -94,11 +94,12 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
                 continue;
             }
             const opts = options[key];
-            if (!this[modelName][key]) {
-                this[modelName][key] = opts.value;
+            const object = opts['dataKey'] ? this[modelName][opts['dataKey']] : this[modelName];
+            if (!object[key]) {
+                object[key] = opts.value;
             }
             controls[key] = new FormControl({
-                value: this[modelName][key] || '',
+                value: object[key] || '',
                 disabled: opts.disabled || false
             }, opts.validators);
             this.formErrors[keyPrefix + key] = '';
@@ -112,12 +113,11 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
     }
 
     /** Callback on form value changed */
-    onValueChanged(formName?: string, keyPrefix: string = ''): void {
+    onValueChanged(formName?: string, keyPrefix: string = '', value?: any): void {
         if (!this[formName]) {
             return;
         }
         const data = this[formName].value;
-
         for (const fieldName in data) {
             if (!data.hasOwnProperty(fieldName)) {
                 continue;
@@ -167,7 +167,15 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
     }
 
     getFormData(): any {
-        return cloneDeep(this.model);
+        const data = {};
+        Object.keys(this.model).forEach((key) => {
+            if (this.files[key]) {
+                data[key] = FileModel.getFileData(this.files[key]);
+            } else {
+                data[key] = this.model[key];
+            }
+        });
+        return data;
     }
 
     fileChange(event, fieldName: string) {
@@ -233,8 +241,6 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
 
     save(): void {
         this.submitted = true;
-
-        console.log(this.form.valid, this.form);
 
         if (!this.form.valid) {
             this.onValueChanged('form');

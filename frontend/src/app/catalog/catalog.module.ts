@@ -8,7 +8,6 @@ import {CatalogCategoryComponent} from './catalog-category.component';
 import {ContentTypeModalContentComponent, ContentTypesComponent} from './content-types.component';
 import {FieldTypeModalContentComponent, FieldTypesComponent} from './field-types.component';
 import {ListRecursiveComponent} from '../list-recursive.component';
-import {SelectParentDropdownComponent} from './select-parent-dropdown.component';
 
 import {CategoriesListComponent, CategoriesMenuComponent, CategoriesModalComponent} from './categories.component';
 import {ProductModalContentComponent} from './product.component';
@@ -34,7 +33,6 @@ import {FieldTypesService} from './services/field-types.service';
         FieldTypesComponent,
         ListRecursiveComponent,
         CategoriesListComponent,
-        SelectParentDropdownComponent,
         CategoriesMenuComponent,
 
         CategoriesModalComponent,

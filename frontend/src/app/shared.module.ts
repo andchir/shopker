@@ -13,6 +13,7 @@ import {TableComponent} from './table.component';
 import {SortingComponent} from './sorting-dnd.conponent';
 import {InputFieldRenderComponent} from './render-input-field';
 import {OutputFieldComponent} from './render-output-field';
+import {SelectParentDropdownComponent} from './catalog/select-parent-dropdown.component';
 
 import {FilterFieldByGroupPipe} from './pipes/filter-field-by-group.pipe';
 import {DateFromObjectPipe} from './pipes/date-from-object.pipe';
@@ -24,7 +25,8 @@ const components = [
     TableComponent,
     SortingComponent,
     InputFieldRenderComponent,
-    OutputFieldComponent
+    OutputFieldComponent,
+    SelectParentDropdownComponent
 ];
 
 @NgModule({
@@ -38,7 +40,7 @@ const components = [
         ChipsModule,
         ColorPickerModule,
         TreeModule,
-        NgbModule.forRoot(),
+        NgbModule,
         TranslateModule,
         DragulaModule.forRoot()
     ],

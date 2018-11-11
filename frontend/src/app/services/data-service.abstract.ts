@@ -7,6 +7,7 @@ import {QueryOptions} from '../models/query-options';
 import {DataList} from '../models/data-list.interface';
 import {SimpleEntity} from '../models/simple-entity.interface';
 import {FileModel} from '../models/file.model';
+import {Properties} from '../models/properties.iterface';
 
 export interface OutputData {
     data: any | any[] | null;
@@ -42,6 +43,14 @@ export abstract class DataService<M extends SimpleEntity> {
         return this.http.get<M>(url, {headers: this.headers}).pipe(
             catchError(this.handleError<M>())
         );
+    }
+
+    createHttpParams(properties: Properties): HttpParams {
+        let params = new HttpParams();
+        Object.keys(properties).forEach((key) => {
+            params = params.append(key, properties[key] as string);
+        });
+        return params;
     }
 
     getList(options ?: QueryOptions): Observable<M[]> {

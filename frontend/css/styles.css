@@ -74,10 +74,13 @@ input[type=text].form-control:focus:not([disabled]):not([readonly]),
 input[type=number].form-control:focus:not([disabled]):not([readonly]),
 input[type=password].form-control:focus:not([disabled]):not([readonly]),
 textarea.form-control:focus { box-shadow: 0 0 6px rgba(0,0,0,0.3) inset; }
-select.form-control { box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); transition: box-shadow 0.3s ease; }
-select.form-control:hover { box-shadow: 0 0 11px rgba(0, 0, 0, 0.3); }
+select.form-control,
+select.custom-select { box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); transition: box-shadow 0.3s ease; }
+select.form-control:hover,
+select.custom-select:hover { box-shadow: 0 0 11px rgba(0, 0, 0, 0.3); }
 input[type="color"].form-control { height: 35px; padding: 2px; cursor: pointer; }
 select.form-control[disabled],
+select.custom-select[disabled],
 textarea.form-control[disabled],
 input.form-control[disabled],
 input.form-control[readonly] { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); cursor: not-allowed; }

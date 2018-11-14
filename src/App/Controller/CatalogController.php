@@ -405,14 +405,14 @@ class CatalogController extends ProductController
      * @param int $parentId
      * @return array
      */
-    public function getCategoriesTree($parentId)
+    public function getCategoriesTree($parentId = 0)
     {
         $output = [];
         $data = [];
         $uri = '';
         $categoriesRepository = $this->getCategoriesRepository();
         /** @var Category $parentCategory */
-        $parentCategory = $categoriesRepository->find(0);
+        $parentCategory = $categoriesRepository->find($parentId);
         $childContent = $parentCategory ? $this->getCategoryContent($parentCategory) : [];
 
         $query = $this->get('doctrine_mongodb')

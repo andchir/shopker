@@ -300,23 +300,6 @@ class ContentType
     }
 
     /**
-     * Get system field name
-     * @return string
-     */
-    public function getSystemNameField()
-    {
-        $output = '';
-        $contentTypeFields = $this->getFields();
-        foreach ($contentTypeFields as $field) {
-            if (!empty($field['inputType']) && $field['inputType'] == 'system_name') {
-                $output = $field['name'];
-                break;
-            }
-        }
-        return $output;
-    }
-
-    /**
      * Clean field name
      * @param string $fieldName
      * @return string
@@ -353,22 +336,46 @@ class ContentType
     }
 
     /**
+     * @param string $chunkName
+     * @return false|int|string
+     */
+    public function getFieldByChunkName($chunkName)
+    {
+        $contentTypeFields = $this->getFields();
+        $index = array_search(
+            $chunkName,
+            array_map( function($outputProperties) {
+                return $outputProperties['chunkName'] ?? '';
+            }, array_column($contentTypeFields, 'outputProperties'))
+        );
+        return $index !== false ? $contentTypeFields[$index]['name'] : '';
+    }
+
+    /**
+     * Get system field name
+     * @return string
+     */
+    public function getSystemNameField()
+    {
+        $output = '';
+        $contentTypeFields = $this->getFields();
+        foreach ($contentTypeFields as $contentTypeField) {
+            if (!empty($contentTypeField['inputType'])
+                && $contentTypeField['inputType'] == 'system_name') {
+                    $output = $contentTypeField['name'];
+                    break;
+            }
+        }
+        return $output;
+    }
+
+    /**
      * Get price field name
      * @return string
      */
     public function getPriceFieldName()
     {
-        $priceFieldName = '';
-        $contentTypeFields = $this->getFields();
-        foreach ($contentTypeFields as $contentTypeField) {
-            if (isset($contentTypeField['outputProperties'])
-                && isset($contentTypeField['outputProperties']['chunkName'])
-                && $contentTypeField['outputProperties']['chunkName'] === 'price') {
-                    $priceFieldName = $contentTypeField['name'];
-                    break;
-            }
-        }
-        return $priceFieldName;
+        return $this->getFieldByChunkName('price');
     }
 
 }

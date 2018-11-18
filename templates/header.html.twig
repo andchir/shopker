@@ -10,7 +10,7 @@
             <div class="d-inline-block pt-2 pb-2 pl-2">
                 {% if is_granted('ROLE_USER') %}
                     {% if is_granted('ROLE_ADMIN') %}
-                        <a class="btn btn-sm btn-outline-primary" data-toggle="tooltip" title="{{ 'Administration' | trans }}" href="{{ path('admin') }}" target="_blank">
+                        <a class="btn btn-sm btn-outline-primary" data-toggle="tooltip" title="{{ 'Administration' | trans }}" href="{{ path('admin') }}">
                             <i class="icon-cog"></i>
                         </a>
                     {% endif %}

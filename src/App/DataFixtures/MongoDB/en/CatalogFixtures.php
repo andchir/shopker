@@ -283,6 +283,26 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface
                 'listOrder' => 1
             ],
             [
+                'title' => 'Vendor code',
+                'name' => 'vendorCode',
+                'description' => '',
+                'inputType' => 'text',
+                'inputProperties' => [
+                    'value' => '',
+                    'handler' => ''
+                ],
+                'outputType' => 'text',
+                'outputProperties' => [
+                    'className' => ''
+                ],
+                'group' => 'Options',
+                'required' => false,
+                'showInTable' => false,
+                'showInList' => false,
+                'isFilter' => false,
+                'filterOrder' => 5
+            ],
+            [
                 'title' => 'Parameters',
                 'name' => 'parameters',
                 'description' => '',

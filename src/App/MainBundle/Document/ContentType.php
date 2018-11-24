@@ -378,4 +378,17 @@ class ContentType
         return $this->getFieldByChunkName('price');
     }
 
+    /**
+     * @return array
+     */
+    public function getParametersFields()
+    {
+        $parametersFields = array_filter($this->getFields(), function($field) {
+            return $field['inputType'] === 'parameters';
+        });
+        return array_map(function($field) {
+            return $field['name'];
+        }, $parametersFields);
+    }
+
 }

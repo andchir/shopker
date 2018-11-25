@@ -89,9 +89,9 @@ export class CatalogCategoryComponent extends PageTableAbstractComponent<Product
             this.currentCategory.id = 0;
             return;
         }
-
         this.dataService.setRequestUrl('products/' + this.currentCategory.id);
         this.loading = true;
+        this.queryOptions.page = 1;
         this.getContentType()
             .subscribe((data) => {
                 this.currentContentType = data;

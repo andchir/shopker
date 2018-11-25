@@ -407,13 +407,13 @@ class CatalogController extends ProductController
      */
     public function getCategoriesTree($parentId = 0)
     {
-        $output = [];
         $data = [];
-        $uri = '';
         $categoriesRepository = $this->getCategoriesRepository();
         /** @var Category $parentCategory */
         $parentCategory = $categoriesRepository->find($parentId);
-        $childContent = $parentCategory ? $this->getCategoryContent($parentCategory) : [];
+        if (!$parentCategory) {
+            return [];
+        }
 
         $query = $this->get('doctrine_mongodb')
             ->getManager()
@@ -423,19 +423,30 @@ class CatalogController extends ProductController
             ->field('name')->notEqual('root')
             ->field('isActive')->equals(true)
             ->sort('menuIndex', 'asc')
-            ->sort('title', 'asc')
+            ->sort('id', 'asc')
             ->getQuery()
             ->execute();
 
+        $parentIdsArr = [$parentId];
         /** @var Category $category */
         foreach ($results as $category) {
-            $parentId = $category->getParentId();
-            if (!isset($data[$parentId])) {
-                $data[$parentId] = [];
+            $pId = $category->getParentId();
+            if (!in_array($category->getId(), $parentIdsArr)
+                && !in_array($pId, $parentIdsArr)) {
+                    continue;
             }
-            $data[$parentId][] = $category->getMenuData();
+            if (!in_array($pId, $parentIdsArr)) {
+                $parentIdsArr[] = $pId;
+            }
+            if (!isset($data[$pId])) {
+                $data[$pId] = [];
+            }
+            $data[$pId][] = $category->getMenuData();
         }
 
+        $childContent = $parentCategory ? $this->getCategoryContent($parentCategory) : [];
+
+        // Content pages (not categories)
         if (!empty($childContent)) {
             foreach ($childContent as $content) {
                 $content['id'] = -1;// This is not categories
@@ -448,10 +459,19 @@ class CatalogController extends ProductController
             );
         }
 
-        return self::createTree($data, [[
-            'id' => 0,
-            'title' => 'Root'
-        ]]);
+        if (empty($data)) {
+            return [];
+        }
+
+        if (!$parentId) {
+            return self::createTree($data, [[
+                'id' => 0,
+                'title' => 'Root'
+            ]]);
+        }
+        else {
+            return self::createTree($data, [$parentCategory->getMenuData()]);
+        }
     }
 
     /**

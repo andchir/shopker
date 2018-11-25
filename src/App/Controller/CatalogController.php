@@ -422,7 +422,6 @@ class CatalogController extends ProductController
         $results = $query
             ->field('name')->notEqual('root')
             ->field('isActive')->equals(true)
-            ->sort('menuIndex', 'asc')
             ->sort('id', 'asc')
             ->getQuery()
             ->execute();
@@ -435,8 +434,8 @@ class CatalogController extends ProductController
                 && !in_array($pId, $parentIdsArr)) {
                     continue;
             }
-            if (!in_array($pId, $parentIdsArr)) {
-                $parentIdsArr[] = $pId;
+            if (!in_array($category->getId(), $parentIdsArr)) {
+                $parentIdsArr[] = $category->getId();
             }
             if (!isset($data[$pId])) {
                 $data[$pId] = [];

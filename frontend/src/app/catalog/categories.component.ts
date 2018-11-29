@@ -183,6 +183,7 @@ export class CategoriesMenuComponent implements OnInit {
     errorMessage = '';
     modalRef: NgbModalRef;
     categoryId = 0;
+    loading = false;
 
     constructor(
         public router: Router,
@@ -326,11 +327,13 @@ export class CategoriesMenuComponent implements OnInit {
      * @param itemId
      */
     deleteCategoryItem(itemId: number): void {
+        this.loading = true;
         this.categoriesService.deleteItem(itemId)
             .subscribe((data) => {
                     this.categoryId = 0;
                     this.selectCurrent();
                     this.getCategories();
+                    this.loading = false;
                 },
                 err => this.errorMessage = err
             );

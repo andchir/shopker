@@ -11,7 +11,7 @@ export class TableComponent implements OnInit {
     @Input() tableFields: any[];
     @Input() collectionSize: number;
     @Input() currentPage: number;
-    @Input() queryOptions: QueryOptions;
+    @Input() queryOptions = new QueryOptions('name', 'asc', 1, 10, 0, 0);
     @Input() loading: boolean;
     @Input() isCloneAllowed = false;
     @Input() selectedIds: number[] = [];
@@ -66,7 +66,11 @@ export class TableComponent implements OnInit {
         }
     }
 
-    pageChange(): void {
+    pageChange(type: string): void {
+        if (type === 'limit') {
+            this.queryOptions.page = 1;
+            this.queryOptions.limit = parseInt(String(this.queryOptions.limit), 10);
+        }
         this.actionRequest.emit(['changeQuery', this.queryOptions]);
     }
 

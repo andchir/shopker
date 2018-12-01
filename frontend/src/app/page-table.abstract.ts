@@ -14,7 +14,7 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
     loading = false;
     selectedIds: number[] = [];
     collectionSize = 0;
-    queryOptions: QueryOptions = new QueryOptions('name', 'asc', 1, 10, 0, 0);
+    queryOptions = new QueryOptions('name', 'asc', 1, 10, 0, 0);
     @ViewChild('table') table;
 
     abstract getModalContent();

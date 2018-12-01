@@ -66,8 +66,6 @@
             </select>
         </div>
 
-        <div>{{queryOptions.limit | json}}</div>
-
         <ngb-pagination *ngIf="collectionSize > queryOptions.limit"
                         [class]="'mb-0'"
                         [collectionSize]="collectionSize"

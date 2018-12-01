@@ -3,7 +3,7 @@
         <thead *ngIf="items.length > 0">
             <tr>
                 <th class="text-left">
-                    <div class="custom-control custom-checkbox custom-checkbox-single" [hidden]="items.length === 0">
+                    <div class="custom-control custom-checkbox custom-checkbox-single mr-4" [hidden]="items.length === 0">
                         <input type="checkbox" class="custom-control-input" id="fieldSelectAll" (click)="selectAll($event)" [checked]="getIsSelectedAll()">
                         <label class="custom-control-label" for="fieldSelectAll"></label>
                     </div>
@@ -19,7 +19,7 @@
         <tbody>
             <tr class="show-on-hover-parent" *ngFor="let item of items">
                 <td>
-                    <div class="custom-control custom-checkbox custom-checkbox-single">
+                    <div class="custom-control custom-checkbox custom-checkbox-single mr-4">
                         <input type="checkbox" class="custom-control-input" id="fieldCheck{{item.id}}" [checked]="getIsSelected(item.id)" (click)="setSelected($event, item.id)">
                         <label class="custom-control-label" for="fieldCheck{{item.id}}"></label>
                     </div>

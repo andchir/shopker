@@ -33,7 +33,11 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
     }
 
     modalOpen(itemId?: number, isItemCopy: boolean = false): void {
-        this.modalRef = this.modalService.open(this.getModalContent(), {size: 'lg', backdrop: 'static'});
+        this.modalRef = this.modalService.open(this.getModalContent(), {
+            size: 'lg',
+            backdrop: 'static',
+            keyboard: false
+        });
         this.setModalInputs(itemId, isItemCopy);
         this.modalRef.result.then((result) => {
             this.getList();

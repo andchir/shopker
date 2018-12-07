@@ -387,9 +387,9 @@ class ContentType
         $fields = array_filter($this->getFields(), function($field) use ($inputType) {
             return $field['inputType'] === $inputType;
         });
-        $fieldNames = array_map(function($field) {
+        $fields = array_merge($fields);
+        return array_map(function($field) {
             return $field['name'];
         }, $fields);
-        return array_merge($fieldNames);
     }
 }

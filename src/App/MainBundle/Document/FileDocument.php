@@ -455,6 +455,10 @@ class FileDocument
                 $this->setTitle($title);
             }
         }
+        $filePath = $this->getUploadedPath();
+        if ($filePath && file_exists($filePath)) {
+            $this->setSize(filesize($filePath));
+        }
     }
 
     /**

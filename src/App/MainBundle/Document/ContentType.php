@@ -379,16 +379,17 @@ class ContentType
     }
 
     /**
+     * @param string $inputType
      * @return array
      */
-    public function getParametersFields()
+    public function getByInputType($inputType)
     {
-        $parametersFields = array_filter($this->getFields(), function($field) {
-            return $field['inputType'] === 'parameters';
+        $fields = array_filter($this->getFields(), function($field) use ($inputType) {
+            return $field['inputType'] === $inputType;
         });
-        return array_map(function($field) {
+        $fieldNames = array_map(function($field) {
             return $field['name'];
-        }, $parametersFields);
+        }, $fields);
+        return array_merge($fieldNames);
     }
-
 }

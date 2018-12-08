@@ -134,18 +134,12 @@ export class SettingsComponent implements OnInit {
         this.settings[groupName].changed = false;
     }
 
-    clearCache(): void {
+    runActionPost(actionName: string): void {
         this.loading = true;
-        this.settingsService.clearCache()
+        this.settingsService.runActionPost(actionName)
             .subscribe(() => {
                 this.loading = false;
-            });
-    }
-
-    clearSystemCache(): void {
-        this.loading = true;
-        this.settingsService.clearSystemCache()
-            .subscribe(() => {
+            }, () => {
                 this.loading = false;
             });
     }
@@ -157,5 +151,4 @@ export class SettingsComponent implements OnInit {
     pageReload(): void {
         window.location.reload();
     }
-
 }

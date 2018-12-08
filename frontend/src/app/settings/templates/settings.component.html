@@ -16,8 +16,9 @@
                     <span>{{'CLEAR_CACHE' | translate}}</span>
                 </button>
                 <div ngbDropdownMenu>
-                    <button class="dropdown-item" (click)="clearCache()">{{'CLEAR_FILE_CACHE' | translate}}</button>
-                    <button class="dropdown-item" (click)="clearSystemCache()">{{'CLEAR_SYSTEM_CACHE' | translate}}</button>
+                    <button class="dropdown-item" (click)="runActionPost('clear_cache')">{{'CLEAR_FILE_CACHE' | translate}}</button>
+                    <button class="dropdown-item" (click)="runActionPost('clear_system_cache')">{{'CLEAR_SYSTEM_CACHE' | translate}}</button>
+                    <button class="dropdown-item" (click)="runActionPost('update_filters')">{{'UPDATE_FILTERS' | translate}}</button>
                 </div>
             </div>
         </div>

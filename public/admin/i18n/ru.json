@@ -112,6 +112,7 @@
 	"STATUS": "Статус",
 	"SYSTEM_NAME": "Системное имя",
 	"TITLE": "Заголовок",
+	"UPDATE_FILTERS": "Обновить фильтры",
 	"USERS": "Пользователи",
 	"VALUE": "Значение",
 	"YES": "Да",
@@ -119,7 +120,15 @@
 	"YOU_SURE_YOU_WANT_DELETE_CATEGORY": "Вы уверены, что хотите удалить категорию",
 	"YOU_SURE_YOU_WANT_DELETE_SELECTED": "Вы уверены, что хотите удалить все выбранные элементы?",
 	"admin_email": "Адрес эл. почты администратора",
-	"app.name": "Название приложения",
+	"app": {
+		"max_temp_files_keep_minutes": "Время хранения временных файлов, мин.",
+		"max_user_files_size": "Максимальный размер файлов пользователей, МБ",
+		"name": "Название приложения",
+		"nds_rate": "Ставка НДС",
+		"payment_status_after_number": "Номер статуса заказа после оплаты",
+		"payment_status_number": "Номер статуса заказа для оплаты",
+		"tax_system": "Система налогообложения магазина (СНО)"
+	},
 	"locale": "Локаль",
 	"mailer_auth_mode": "Почта: метод авторизации",
 	"mailer_encryption": "Почта: шифрование",
@@ -130,13 +139,7 @@
 	"mailer_user": "Почта: Имя пользователя",
 	"mongodb_database": "MongoDB: База данных",
 	"mongodb_password": "MongoDB: Пароль",
-	"mongodb_server": "MongoDB: Сервер",
 	"mongodb_port": "MongoDB: Порт",
-	"mongodb_user": "MongoDB: Пользоватеь",
-	"app.payment_status_after_number": "Номер статуса заказа после оплаты",
-	"app.payment_status_number": "Номер статуса заказа для оплаты",
-	"app.max_user_files_size": "Максимальный размер файлов пользователей, МБ",
-	"app.max_temp_files_keep_minutes": "Время хранения временных файлов, мин.",
-	"app.tax_system": "Система налогообложения магазина (СНО)",
-	"app.nds_rate": "Ставка НДС"
+	"mongodb_server": "MongoDB: Сервер",
+	"mongodb_user": "MongoDB: Пользоватеь"
 }

@@ -112,6 +112,7 @@
 	"STATUS": "Status",
 	"SYSTEM_NAME": "System name",
 	"TITLE": "Title",
+	"UPDATE_FILTERS": "Update filters",
 	"USERS": "Users",
 	"VALUE": "Value",
 	"YES": "Yes",
@@ -119,6 +120,10 @@
 	"YOU_SURE_YOU_WANT_DELETE_CATEGORY": "Are you sure you want to remove category",
 	"YOU_SURE_YOU_WANT_DELETE_SELECTED": "Are you sure you want to delete all selected items?",
 	"admin_email": "Admin email",
+	"app": {
+		"nds_rate": "Tax rate",
+		"tax_system": "Store taxation system"
+	},
 	"app_name": "Application name",
 	"locale": "Locale",
 	"mailer_auth_mode": "Mail authorization mode",
@@ -128,15 +133,13 @@
 	"mailer_port": "Mail port",
 	"mailer_transport": "Mail transport",
 	"mailer_user": "Mail user",
+	"max_temp_files_keep_minutes": "Time of temporary files storage, minutes",
+	"max_user_files_size": "Maximum user files size, MB",
 	"mongodb_database": "MongoDB database",
 	"mongodb_password": "MongoDB password",
-	"mongodb_server": "MongoDB server",
 	"mongodb_port": "MongoDB: Port",
+	"mongodb_server": "MongoDB server",
 	"mongodb_user": "MongoDB user",
 	"payment_status_after_number": "Order status number after payment",
-	"payment_status_number": "Order status number for payment",
-	"max_user_files_size": "Maximum user files size, MB",
-	"max_temp_files_keep_minutes": "Time of temporary files storage, minutes",
-	"app.tax_system": "Store taxation system",
-	"app.nds_rate": "Tax rate"
+	"payment_status_number": "Order status number for payment"
 }

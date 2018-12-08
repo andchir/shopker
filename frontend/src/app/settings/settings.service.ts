@@ -35,15 +35,15 @@ export class SettingsService {
             );
     }
 
-    clearCache(): Observable<any> {
-        const url = this.getRequestUrl() + '/clear_cache';
+    clearSystemCache(): Observable<any> {
+        const url = this.getRequestUrl() + '/clear_system_cache';
         return this.http.post<any>(url, {}, {headers: this.headers}).pipe(
             catchError(this.handleError<any>())
         );
     }
 
-    clearSystemCache(): Observable<any> {
-        const url = this.getRequestUrl() + '/clear_system_cache';
+    runActionPost(actionName: string): Observable<any> {
+        const url = this.getRequestUrl() + `/${actionName}`;
         return this.http.post<any>(url, {}, {headers: this.headers}).pipe(
             catchError(this.handleError<any>())
         );

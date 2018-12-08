@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\MainBundle\Document\Category;
 use App\Service\SettingsService;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -20,7 +21,7 @@ use App\MainBundle\Document\Setting;
 /**
  * Class SettingsController
  * @package App\SettingsController
- * @Route("/admin/settings")
+ * @Route("/admin/settings", name="settings_")
  */
 class SettingsController extends Controller
 {
@@ -160,6 +161,33 @@ class SettingsController extends Controller
 
         return new JsonResponse([
             'success' => true
+        ]);
+    }
+
+    /**
+     * @Route("/update_filters", name="update_filters", methods={"POST"})
+     * @return JsonResponse
+     */
+    public function updateFiltersAction()
+    {
+        $productController = new ProductController();
+        $productController->setContainer($this->container);
+
+        /** @var \App\Repository\CategoryRepository $categoryRepository */
+        $categoryRepository = $this->get('doctrine_mongodb')
+            ->getManager()
+            ->getRepository(Category::class);
+
+        $count = 0;
+        $categories = $categoryRepository->findAll();
+        foreach ($categories as $category) {
+            $productController->updateFiltersData($category);
+            $count++;
+        }
+
+        return new JsonResponse([
+            'success' => true,
+            'count' => $count
         ]);
     }
 

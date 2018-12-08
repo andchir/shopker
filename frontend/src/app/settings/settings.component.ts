@@ -111,9 +111,7 @@ export class SettingsComponent implements OnInit {
                 this.settings[groupName].loading = false;
                 this.settings[groupName].changed = false;
 
-                if (this.getCurrentLocale() !== this.appSettings.settings.locale) {
-                    this.pageReload();
-                }
+                this.pageReload();
             });
     }
 

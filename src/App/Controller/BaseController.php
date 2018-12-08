@@ -9,6 +9,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class BaseController extends Controller
 {
+    /** Get locale */
+    public function getLocale()
+    {
+        return $this->get('request_stack')
+            ->getCurrentRequest()
+            ->getLocale();
+    }
 
     /**
      * @param $message

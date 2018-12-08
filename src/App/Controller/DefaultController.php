@@ -31,6 +31,7 @@ class DefaultController extends CatalogController
         if (empty($this->getParameter('mongodb_database'))) {
             return $this->redirectToRoute('setup');
         }
+
         $categoriesRepository = $this->getCategoriesRepository();
         $categoriesTopLevel = $this->getChildCategories(0, [], true);
 
@@ -63,6 +64,19 @@ class DefaultController extends CatalogController
             'currentId' => 0,
             'countProducts' => $countProducts
         ]);
+    }
+
+    /**
+     * @Route("/locale_switch/{locale}", name="locale_switch")
+     * @param Request $request
+     * @param string $locale
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function localeSwitchAction(Request $request, $locale)
+    {
+        $referer = $request->headers->get('referer');
+        $request->getSession()->set('_locale', $locale);
+        return $this->redirect($referer);
     }
 
     /**

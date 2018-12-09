@@ -40,48 +40,49 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
 
     formFields: FormFieldInterface = {
         title: {
+            fieldLabel: 'TITLE',
             value: '',
             disabled: false,
             validators: [Validators.required],
-            messages: {
-                required: 'Title is required.'
-            }
+            messages: {}
         },
         name: {
+            fieldLabel: 'SYSTEM_NAME',
             value: '',
             disabled: false,
             validators: [Validators.required],
-            messages: {
-                required: 'Name is required.'
-            }
+            messages: {}
         },
         description: {
+            fieldLabel: 'DESCRIPTION',
             value: '',
             disabled: false,
             validators: [],
             messages: {}
         },
         parentId: {
+            fieldLabel: 'PARENT_FOLDER',
             value: 0,
             disabled: false,
             validators: [],
             messages: {}
         },
         contentTypeName: {
+            fieldLabel: 'CONTENT_TYPE',
             value: '',
             disabled: false,
             validators: [Validators.required],
-            messages: {
-                required: 'Content type is required.'
-            }
+            messages: {}
         },
         menuIndex: {
+            fieldLabel: 'MENU_INDEX',
             value: 0,
             disabled: false,
             validators: [],
             messages: {}
         },
         isActive: {
+            fieldLabel: 'ACTIVE',
             value: false,
             disabled: false,
             validators: [],

@@ -1,5 +1,5 @@
 import {Input, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {NgbAccordion, NgbActiveModal, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import {cloneDeep} from 'lodash';
 import {TranslateService} from '@ngx-translate/core';
@@ -107,9 +107,25 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
                 disabled: opts.disabled || false
             }, opts.validators);
             this.formErrors[keyPrefix + key] = '';
-            this.validationMessages[keyPrefix + key] = opts.messages;
+            this.translateValidationMessages(keyPrefix, key, opts);
         }
         return controls;
+    }
+
+    translateValidationMessages(keyPrefix: string, fieldKey: string, fieldOptions: FormFieldInterface): void {
+        this.validationMessages[keyPrefix + fieldKey] = {};
+        if (!fieldOptions.fieldLabel) {
+            return;
+        }
+        if (fieldOptions.validators.indexOf(Validators.required) > -1) {
+            this.translateService.get(fieldOptions.fieldLabel)
+                .subscribe((fieldLabel: string) => {
+                    this.translateService.get('FIELD_REQUIRED', {name: fieldLabel})
+                        .subscribe((res: string) => {
+                            this.validationMessages[keyPrefix + fieldKey].required = res;
+                        });
+                });
+        }
     }
 
     getControl(name: string): AbstractControl {

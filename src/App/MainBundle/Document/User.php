@@ -167,7 +167,7 @@ class User implements UserInterface, \Serializable
      */
     public function setEmail($email)
     {
-        $this->email = $email;
+        $this->email = mb_strtolower($email);
         return $this;
     }
 

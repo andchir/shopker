@@ -11,6 +11,7 @@ import {SystemNameService} from '../services/system-name.service';
 import {ModalContentAbstractComponent} from '../modal.abstract';
 import {AppSettings} from '../services/app-settings.service';
 import {QueryOptions} from '../models/query-options';
+import {FormFieldInterface} from '../models/form-field.interface';
 
 @Component({
     selector: 'app-modal-user',
@@ -23,34 +24,33 @@ export class ModalUserContentComponent extends ModalContentAbstractComponent<Use
     modalTitle = 'User';
     userRoles: {[key: string]: string}[] = [];
 
-    formFields = {
+    formFields: FormFieldInterface = {
         fullName: {
+            fieldLabel: 'EMAIL',
             value: '',
             validators: [Validators.required],
-            messages: {
-                required: 'Full name is required.'
-            }
+            messages: {}
         },
         email: {
+            fieldLabel: 'EMAIL',
             value: '',
             validators: [Validators.required],
-            messages: {
-                required: 'Email is required.'
-            }
+            messages: {}
         },
         phone: {
+            fieldLabel: 'EMAIL',
             value: '',
             validators: [],
             messages: {}
         },
         role: {
+            fieldLabel: 'ROLE',
             value: '',
             validators: [Validators.required],
-            messages: {
-                required: 'Role is required.'
-            }
+            messages: {}
         },
         isActive: {
+            fieldLabel: 'ACTIVE',
             value: '',
             validators: [],
             messages: {}

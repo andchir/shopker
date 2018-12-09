@@ -7,7 +7,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {SystemNameService} from './services/system-name.service';
 import {DataService} from './services/data-service.abstract';
 import {FileModel} from './models/file.model';
-import {FormFieldInterface} from './models/form-field.interface';
+import {FormFieldInterface, FormFieldOptionsInterface} from './models/form-field.interface';
 
 export abstract class ModalContentAbstractComponent<M> implements OnInit {
     @Input() modalTitle: string;
@@ -97,7 +97,7 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
             if (!options.hasOwnProperty(key)) {
                 continue;
             }
-            const opts = options[key];
+            const opts = options[key] as FormFieldOptionsInterface;
             const object = opts['dataKey'] ? this[modelName][opts['dataKey']] : this[modelName];
             if (!object[key]) {
                 object[key] = opts.value;
@@ -112,7 +112,7 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
         return controls;
     }
 
-    translateValidationMessages(keyPrefix: string, fieldKey: string, fieldOptions: FormFieldInterface): void {
+    translateValidationMessages(keyPrefix: string, fieldKey: string, fieldOptions: FormFieldOptionsInterface): void {
         this.validationMessages[keyPrefix + fieldKey] = {};
         if (!fieldOptions.fieldLabel) {
             return;

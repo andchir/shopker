@@ -22,26 +22,27 @@ export class FieldTypeModalContentComponent extends ModalContentAbstractComponen
 
     formFields = {
         title: {
+            fieldLabel: 'TITLE',
             value: '',
             validators: [Validators.required],
-            messages: {
-                required: 'Title is required.'
-            }
+            messages: {}
         },
         name: {
+            fieldLabel: 'SYSTEM_NAME',
             value: '',
             validators: [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')],
             messages: {
-                required: 'Name is required.',
                 pattern: 'The name must contain only Latin letters and numbers.'
             }
         },
         description: {
+            fieldLabel: 'DESCRIPTION',
             value: '',
             validators: [],
             messages: {}
         },
         isActive: {
+            fieldLabel: 'ACTIVE',
             value: true,
             validators: [],
             messages: {}

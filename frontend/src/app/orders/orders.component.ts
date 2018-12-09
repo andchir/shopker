@@ -14,6 +14,7 @@ import {Setting, SettingPretty, SettingsGroup} from '../settings/models/setting.
 import {AppSettings} from '../services/app-settings.service';
 import {QueryOptions} from '../models/query-options';
 import {UserOption} from '../users/models/user.model';
+import {FormFieldInterface} from '../models/form-field.interface';
 
 @Component({
     selector: 'app-modal-order',
@@ -26,44 +27,45 @@ export class ModalOrderContentComponent extends ModalContentAbstractComponent<Or
     modalTitle = 'Order';
     settings: {[groupName: string]: SettingPretty[]};
     baseUrl: string;
-    formFields = {
+    formFields: FormFieldInterface = {
         id: {
+            fieldLabel: 'ID',
             value: '',
             validators: [Validators.required],
-            messages: {
-                required: 'ID is required.'
-            }
+            messages: {}
         },
         email: {
+            fieldLabel: 'EMAIL',
             value: '',
             validators: [Validators.required],
-            messages: {
-                required: 'Email is required.'
-            }
+            messages: {}
         },
         phone: {
+            fieldLabel: 'PHONE',
             value: '',
             validators: [],
             messages: {}
         },
         fullName: {
+            fieldLabel: 'FULL_NAME',
             value: '',
             validators: [Validators.required],
-            messages: {
-                required: 'Full name is required.'
-            }
+            messages: {}
         },
         comment: {
+            fieldLabel: 'COMMENT',
             value: '',
             validators: [],
             messages: {}
         },
         deliveryName: {
+            fieldLabel: 'DELIVERY_METHOD',
             value: '',
             validators: [],
             messages: {}
         },
         paymentName: {
+            fieldLabel: 'PAYMENT_METHOD',
             value: '',
             validators: [],
             messages: {}

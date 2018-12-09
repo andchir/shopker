@@ -4,6 +4,7 @@ import {NgbModal, NgbActiveModal, NgbModalRef, NgbPopover, NgbTooltipConfig} fro
 import {find, map, findIndex, cloneDeep, extend} from 'lodash';
 import {TranslateService} from '@ngx-translate/core';
 
+import {FormFieldInterface} from '../models/form-field.interface';
 import {ContentField} from './models/content_field.model';
 import {ContentType} from './models/content_type.model';
 import {FieldType} from './models/field-type.model';
@@ -46,35 +47,35 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
         output: []
     };
 
-    formFields = {
+    formFields: FormFieldInterface = {
         name: {
+            fieldLabel: 'SYSTEM_NAME',
             value: '',
             validators: [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')],
             messages: {
-                required: 'Name is required.',
                 pattern: 'The name must contain only Latin letters and numbers.'
             }
         },
         title: {
+            fieldLabel: 'TITLE',
             value: '',
             validators: [Validators.required],
-            messages: {
-                required: 'Title is required.'
-            }
+            messages: {}
         },
         description: {
+            fieldLabel: 'DESCRIPTION',
             value: '',
             validators: [],
             messages: {}
         },
         collection: {
+            fieldLabel: 'COLLECTION',
             value: '',
             validators: [Validators.required],
-            messages: {
-                required: 'Title is required.'
-            }
+            messages: {}
         },
         newCollection: {
+            fieldLabel: 'COLLECTION',
             value: '',
             validators: [Validators.pattern('[A-Za-z0-9_-]+')],
             messages: {
@@ -83,6 +84,7 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
             }
         },
         isActive: {
+            fieldLabel: 'ACTIVE',
             value: '',
             validators: [],
             messages: {}
@@ -91,52 +93,48 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
 
     fieldsFormOptions = {
         title: {
+            fieldLabel: 'TITLE',
             value: '',
             validators: [Validators.required],
-            messages: {
-                required: 'Title is required.'
-            }
+            messages: {}
         },
         name: {
+            fieldLabel: 'SYSTEM_NAME',
             value: '',
             validators: [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')],
             messages: {
-                required: 'Name is required.',
                 pattern: 'The name must contain only Latin letters.'
             }
         },
         description: {
+            fieldLabel: 'DESCRIPTION',
             value: '',
             validators: [],
             messages: {}
         },
         inputType: {
+            fieldLabel: 'INPUT_TYPE',
             value: '',
             validators: [Validators.required],
-            messages: {
-                required: 'Input type is required.'
-            }
+            messages: {}
         },
         outputType: {
+            fieldLabel: 'OUTPUT_TYPE',
             value: '',
             validators: [Validators.required],
-            messages: {
-                required: 'Output type is required.'
-            }
+            messages: {}
         },
         group: {
+            fieldLabel: 'GROUP',
             value: '',
             validators: [Validators.required],
-            messages: {
-                required: 'Group is required.'
-            }
+            messages: {}
         },
         newGroup: {
+            fieldLabel: 'GROUP',
             value: '',
             validators: [],
-            messages: {
-                exists: 'Group with the same name already exists.'
-            }
+            messages: {}
         },
         required: {
             value: '',

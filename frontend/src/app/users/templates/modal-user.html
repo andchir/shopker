@@ -138,6 +138,11 @@
 
 </div>
 <div class="modal-footer d-block">
+    <div class="float-right" *ngIf="model.role != 'ROLE_SUPER_ADMIN'">
+        <a class="btn btn-primary" href="{{baseUrl}}?_switch_user={{model.email}}">
+            <span>{{'IMPERSONATION' | translate}}</span>
+        </a>
+    </div>
     <button type="button" class="btn btn-success btn-wide" [disabled]="submitted && form.valid" (click)="save()">
         <span>{{'SAVE' | translate}}</span>
     </button>

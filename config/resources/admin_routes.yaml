@@ -5,4 +5,3 @@ routes:
     - { path: 'statistics', loadChildren: 'src/app/statistics/statistics.module#StatisticsModule' }
     - { path: 'users', loadChildren: 'src/app/users/users.module#UsersModule' }
     - { path: 'settings', loadChildren: 'src/app/settings/settings.module#SettingsModule' }
-    - { path: 'import_export', loadChildren: 'src/app/import-export/import-export.module#ImportExportModule' }

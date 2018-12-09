@@ -23,6 +23,7 @@ export class ModalUserContentComponent extends ModalContentAbstractComponent<Use
     model = new User(0, '', '', [], true, []);
     modalTitle = 'User';
     userRoles: {[key: string]: string}[] = [];
+    baseUrl: string;
 
     formFields: FormFieldInterface = {
         fullName: {
@@ -72,6 +73,7 @@ export class ModalUserContentComponent extends ModalContentAbstractComponent<Use
     }
 
     onBeforeInit(): void {
+        this.baseUrl = AppSettings.getBaseUrl();
         this.getUserRoles();
     }
 

@@ -18,6 +18,7 @@ security:
         main:
             pattern: ^/
             anonymous: ~
+            switch_user: true
             provider: security_mongo_provider
 
             form_login:

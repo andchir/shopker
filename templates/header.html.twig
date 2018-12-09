@@ -30,6 +30,13 @@
                                 {{ 'Contact details' | trans }}
                             </a>
                             <div class="dropdown-divider"></div>
+                            {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+                                <a class="dropdown-item text-muted" href="{{ path('homepage', {'_switch_user': '_exit'}) }}">
+                                    <i class="icon-esc"></i>
+                                    &nbsp;
+                                    {{ 'Exit impersonation' | trans }}
+                                </a>
+                            {% endif %}
                             <a class="dropdown-item text-muted" href="{{ logout_path() }}">
                                 <i class="icon-power"></i>
                                 &nbsp;

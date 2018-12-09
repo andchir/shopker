@@ -194,7 +194,7 @@ class SettingsController extends Controller
     /**
      * Clear system cache
      * @param null $environment
-     * @return string
+     * @return array
      */
     public function systemCacheClear($environment = null)
     {
@@ -214,8 +214,79 @@ class SettingsController extends Controller
 
         $output = new BufferedOutput();
         $application->run($input, $output);
+        $output->fetch();
 
-        return $output->fetch();
+        return $this->updateInternationalization();
+    }
+
+    /**
+     * Update Internationalization files
+     * @return array
+     */
+    public function updateInternationalization()
+    {
+        $rootPath = realpath($this->getParameter('kernel.root_dir').'/../..');
+        $jsonDirPath = $rootPath . '/frontend/src/i18n';
+        $jsPublicDirPath = $rootPath . '/public/admin/i18n';
+        $pluginsDirPath = $rootPath . '/vendor/shk4-plugins';
+
+        $sourceFiles = array_diff(scandir($jsonDirPath), ['..', '.']);
+        $sourceFiles = array_map(function($value) use ($jsonDirPath) {
+            return $jsonDirPath . DIRECTORY_SEPARATOR . $value;
+        }, $sourceFiles);
+
+        if (is_dir($pluginsDirPath)) {
+            $pluginsDirs = array_diff(scandir($pluginsDirPath), ['..', '.']);
+            $pluginsDirs = array_filter($pluginsDirs, function ($fileName) {
+                return mb_substr($fileName, 0, 1) !== '.';
+            });
+            foreach ($pluginsDirs as $pluginsDir) {
+                $dirPath = $pluginsDirPath . DIRECTORY_SEPARATOR . $pluginsDir . '/frontend/src/i18n';
+                if (!is_dir($dirPath)) {
+                    continue;
+                }
+                $files = array_diff(scandir($dirPath), ['..', '.']);
+                $files = array_map(function($value) use ($dirPath) {
+                    return $dirPath . DIRECTORY_SEPARATOR . $value;
+                }, $files);
+                if (!empty($files)) {
+                    $sourceFiles = array_merge($sourceFiles, $files);
+                }
+            }
+        }
+
+        $lang = [];
+        foreach ($sourceFiles as $jsonFilePath) {
+            $pathInfo = pathinfo($jsonFilePath);
+            if (!isset($lang[$pathInfo['filename']])) {
+                $lang[$pathInfo['filename']] = [];
+            }
+            $content = file_get_contents($jsonFilePath);
+            $content = json_decode($content, true);
+            if (is_array($content)) {
+                $lang[$pathInfo['filename']] = array_merge($lang[$pathInfo['filename']], $content);
+            }
+        }
+        unset($content);
+
+        // Update JS files
+        $error = '';
+        foreach ($lang as $k => $value) {
+            $targetFilePath = $jsPublicDirPath . "/{$k}.js";
+            if (file_exists($targetFilePath) && !is_writable($targetFilePath)) {
+                $error = 'File is not writable.';
+                continue;
+            }
+            $content  = 'var APP_LANG = ';
+            $content .= json_encode($value, JSON_FORCE_OBJECT | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+            $content .= ';';
+            file_put_contents($targetFilePath, $content);
+        }
+
+        return [
+            'success' => empty($error),
+            'msg' => $error
+        ];
     }
 
     /**

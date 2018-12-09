@@ -39,7 +39,7 @@ var APP_LANG = {
     "DELIVERY": "Доставка",
     "DELIVERY_METHOD": "Способ доставки",
     "DESCRIPTION": "Описание",
-    "DISABLE_ENABLE": "Отключить / включить",
+    "DISABLE_ENABLE": "Отключить \/ включить",
     "EDIT": "Редактировать",
     "EDITING": "Редактирование",
     "EDIT_CATEGORY": "Редактировать категорию",

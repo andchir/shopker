@@ -14,7 +14,7 @@
 
 {% block javascripts %}
     <script type="text/javascript" src="{{ path('admin_settings_script') }}?time={{ date().timestamp }}"></script>
-    <script type="text/javascript" src="/admin/i18n/{{ settings.locale }}.js"></script>
+    <script type="text/javascript" src="/admin/i18n/{{ settings.locale }}.js?v={{ app_version }}"></script>
     {% if app.environment == 'prod' %}
         <script type="text/javascript" src="{{ asset('admin/bundle/runtime.d627049f898f01e17541.js') }}"></script>
         <script type="text/javascript" src="{{ asset('admin/bundle/polyfills.dd0e0f3b68172ea522a4.js') }}"></script>

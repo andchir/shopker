@@ -11,7 +11,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "i18n": "ng-xi18n",
-    "extract": "ngx-translate-extract --input ./src --output ../public/admin/i18n/*.json --sort -m _ --format namespaced-json"
+    "extract": "ngx-translate-extract --input ./src --output ./src/i18n/*.json --sort -m _ --format namespaced-json"
   },
   "private": true,
   "dependencies": {

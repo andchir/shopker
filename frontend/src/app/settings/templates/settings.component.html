@@ -16,9 +16,26 @@
                     <span>{{'CLEAR_CACHE' | translate}}</span>
                 </button>
                 <div ngbDropdownMenu>
-                    <button class="dropdown-item" (click)="runActionPost('clear_cache')">{{'CLEAR_FILE_CACHE' | translate}}</button>
-                    <button class="dropdown-item" (click)="runActionPost('clear_system_cache')">{{'CLEAR_SYSTEM_CACHE' | translate}}</button>
-                    <button class="dropdown-item" (click)="runActionPost('update_filters')">{{'UPDATE_FILTERS' | translate}}</button>
+                    <button class="dropdown-item" (click)="runActionPost('clear_cache')">
+                        <i class="icon-reload text-info"></i>
+                        &nbsp;
+                        {{'CLEAR_FILE_CACHE' | translate}}
+                    </button>
+                    <button class="dropdown-item" (click)="runActionPost('clear_system_cache')">
+                        <i class="icon-repeat text-info"></i>
+                        &nbsp;
+                        {{'CLEAR_SYSTEM_CACHE' | translate}}
+                    </button>
+                    <button class="dropdown-item" (click)="runActionPost('update_internationalization')">
+                        <i class="icon-globe text-info"></i>
+                        &nbsp;
+                        {{'UPDATE_DICTIONARIES' | translate}}
+                    </button>
+                    <button class="dropdown-item" (click)="runActionPost('update_filters')">
+                        <i class="icon-tag text-info"></i>
+                        &nbsp;
+                        {{'UPDATE_FILTERS' | translate}}
+                    </button>
                 </div>
             </div>
         </div>
@@ -400,3 +417,5 @@
 
     </div>
 </div>
+
+<p-toast key="message" position="bottom-right"></p-toast>

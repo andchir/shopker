@@ -68,6 +68,9 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
     }
 
     getLangString(value: string): string {
+        if (!this.translateService.store.translations[this.translateService.currentLang]) {
+            return value;
+        }
         const translations = this.translateService.store.translations[this.translateService.currentLang];
         return translations[value] || value;
     }

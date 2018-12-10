@@ -257,6 +257,8 @@ body .ui-datepicker .ui-datepicker-header .ui-datepicker-next:before { font-fami
 .fa.fa-plus:before { content: "\e114"; }
 .fa.fa-minus:before { content: "\e115"; }
 .fa.fa-circle-o-notch:before { content: "\e105"; font-style: normal; font-size: 1.5rem; color: rgba(0,0,0,0.5); }
+.pi.pi-times:before { content: "\e117"; }
+.ui-toast .ui-toast-icon:before { content: "\e006"; }
 
 /* spin */
 .fa.fa-spin { display: inline-block; animation-name: spin; animation-duration: 3000ms; animation-iteration-count: infinite; animation-timing-function: linear; }

@@ -8,6 +8,7 @@ import {NgbModule, NgbActiveModal, NgbTooltipConfig} from '@ng-bootstrap/ng-boot
 import {EditorModule, CalendarModule, ChipsModule, ColorPickerModule, TreeModule} from 'primeng/primeng';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {DragulaModule} from 'ng2-dragula';
+import {ToastModule} from 'primeng/toast';
 
 import {TableComponent} from './table.component';
 import {SortingComponent} from './sorting-dnd.conponent';
@@ -40,6 +41,7 @@ const components = [
         ChipsModule,
         ColorPickerModule,
         TreeModule,
+        ToastModule,
         NgbModule,
         TranslateModule,
         DragulaModule.forRoot()
@@ -68,6 +70,7 @@ const components = [
         ChipsModule,
         ColorPickerModule,
         TreeModule,
+        ToastModule,
         TranslateModule,
         DateFromObjectPipe,
         DragulaModule

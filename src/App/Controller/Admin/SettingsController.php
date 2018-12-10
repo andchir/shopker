@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\MainBundle\Document\Category;
 use App\Service\SettingsService;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Cache\Simple\FilesystemCache;
@@ -154,6 +155,7 @@ class SettingsController extends Controller
     /**
      * @Route("/clear_system_cache", name="clear_system_cache", methods={"POST"})
      * @return JsonResponse
+     * @throws \Exception
      */
     public function systemCacheClearAction()
     {
@@ -192,9 +194,21 @@ class SettingsController extends Controller
     }
 
     /**
+     * @Route("/update_internationalization", name="update_internationalization", methods={"POST"})
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function updateInternationalizationAction()
+    {
+        $result = $this->updateInternationalization();
+        return $result['success'] ? $this->json($result) : $this->setError($result['msg']);
+    }
+
+    /**
      * Clear system cache
      * @param null $environment
-     * @return array
+     * @return string
+     * @throws \Exception
      */
     public function systemCacheClear($environment = null)
     {
@@ -216,7 +230,7 @@ class SettingsController extends Controller
         $application->run($input, $output);
         $output->fetch();
 
-        return $this->updateInternationalization();
+        return $output->fetch();
     }
 
     /**
@@ -273,7 +287,7 @@ class SettingsController extends Controller
         $error = '';
         foreach ($lang as $k => $value) {
             $targetFilePath = $jsPublicDirPath . "/{$k}.js";
-            if (file_exists($targetFilePath) && !is_writable($targetFilePath)) {
+            if (!is_writable($targetFilePath)) {
                 $error = 'File is not writable.';
                 continue;
             }
@@ -352,6 +366,18 @@ class SettingsController extends Controller
             $output[$parameter['name']] = $parameter['value'];
         }
         return $output;
+    }
+
+    /**
+     * @param $message
+     * @param int $status
+     * @return JsonResponse
+     */
+    public function setError($message, $status = Response::HTTP_UNPROCESSABLE_ENTITY)
+    {
+        $response = new JsonResponse(["error" => $message]);
+        $response = $response->setStatusCode($status);
+        return $response;
     }
 
     /**

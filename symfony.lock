@@ -224,6 +224,9 @@
     "psr/simple-cache": {
         "version": "1.0.1"
     },
+    "ralouphie/getallheaders": {
+        "version": "2.0.5"
+    },
     "ralouphie/mimey": {
         "version": "2.0.0"
     },

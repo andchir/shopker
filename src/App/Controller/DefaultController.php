@@ -123,6 +123,7 @@ class DefaultController extends CatalogController
             'mailer_password' => $this->getParameter('mailer_password'),
             'mailer_encryption' => $this->getParameter('mailer_encryption'),
             'mailer_auth_mode' => $this->getParameter('mailer_auth_mode'),
+            'add.template_theme' => 'default',
             'app.admin_email' => '',
             'app.payment_status_number' => 1,
             'app.payment_status_after_number' => 2,

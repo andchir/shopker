@@ -6,15 +6,15 @@
     {% include 'header.html.twig' %}
     <main role="main" class="container">
 
-        {% include 'nav/breadcrumbs.html.twig' %}
+        {% include 'nav' %}
 
         <div class="min-height400">
 
             <h1>{{ currentPage.title }}</h1>
 
-            {% include 'nav/child-categories-menu.html.twig' %}
+            {% include 'nav' %}
 
-            {% include 'nav/siblings-menu.html.twig' %}
+            {% include 'nav' %}
 
             {% if items | length == 0 and queryOptions.filter | length == 0 %}
                 {% if categoriesMenu | length == 0 %}
@@ -24,12 +24,12 @@
                 {% endif %}
             {% else %}
 
-                {% include 'catalog/sort.html.twig' %}
+                {% include 'catalog' %}
 
                 <div class="row">
                     <div class="col-md-3">
 
-                        {% include 'catalog/filters.html.twig' %}
+                        {% include 'catalog' %}
 
                     </div>
                     <div class="col-md-9">
@@ -66,7 +66,7 @@
 
                         </div>
 
-                        {% include 'nav/pagination.html.twig' %}
+                        {% include 'nav' %}
 
                     </div>
                 </div>

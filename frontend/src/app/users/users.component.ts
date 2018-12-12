@@ -24,10 +24,11 @@ export class ModalUserContentComponent extends ModalContentAbstractComponent<Use
     modalTitle = 'User';
     userRoles: {[key: string]: string}[] = [];
     baseUrl: string;
+    allowImpersonation = false;
 
     formFields: FormFieldInterface = {
         fullName: {
-            fieldLabel: 'EMAIL',
+            fieldLabel: 'FULL_NAME',
             value: '',
             validators: [Validators.required],
             messages: {}
@@ -39,7 +40,19 @@ export class ModalUserContentComponent extends ModalContentAbstractComponent<Use
             messages: {}
         },
         phone: {
-            fieldLabel: 'EMAIL',
+            fieldLabel: 'PHONE',
+            value: '',
+            validators: [],
+            messages: {}
+        },
+        password: {
+            fieldLabel: 'PASSWORD',
+            value: '',
+            validators: [],
+            messages: {}
+        },
+        confirmPassword: {
+            fieldLabel: 'CONFIRM_PASSWORD',
             value: '',
             validators: [],
             messages: {}
@@ -73,8 +86,20 @@ export class ModalUserContentComponent extends ModalContentAbstractComponent<Use
     }
 
     onBeforeInit(): void {
+        if (!this.isEditMode) {
+            this.formFields.password.validators.push(Validators.required);
+            this.formFields.confirmPassword.validators.push(Validators.required);
+        }
         this.baseUrl = AppSettings.getBaseUrl();
         this.getUserRoles();
+    }
+
+    onAfterGetData(): void {
+        if (this.isEditMode
+            && this.appSettings.isSuperAdmin
+            && this.appSettings.settings.userEmail !== this.model.email) {
+                this.allowImpersonation = true;
+        }
     }
 
     getUserRoles(): void {
@@ -156,10 +181,11 @@ export class UsersComponent extends PageTableAbstractComponent<User> {
     }
 
     setModalInputs(itemId?: number, isItemCopy: boolean = false): void {
-        this.modalRef.componentInstance.modalTitle = `User #${itemId}`;
+        const isEditMode = typeof itemId !== 'undefined' && !isItemCopy;
+        this.modalRef.componentInstance.modalTitle = itemId ? `User #${itemId}` : this.getLangString('ADD');
         this.modalRef.componentInstance.itemId = itemId || 0;
         this.modalRef.componentInstance.isItemCopy = isItemCopy || false;
-        this.modalRef.componentInstance.isEditMode = true;
+        this.modalRef.componentInstance.isEditMode = isEditMode;
     }
 
     getModalContent() {

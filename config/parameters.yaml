@@ -6,6 +6,7 @@ parameters:
     app.files_dir_path: '%app.web_dir_path%/uploads'
     app.logo_image_url: /img/shk-logo-small-blue.png
     app.files_dir_url: /uploads
+    app.template_theme: default
     app.files_ext_blacklist:
         - php
         - php3

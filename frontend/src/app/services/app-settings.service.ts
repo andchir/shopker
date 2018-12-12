@@ -5,6 +5,8 @@ import { AppSettingsModel } from '../models/app-settings.model';
 export class AppSettings {
     public location = window.location;
     public settings = window['appSettings'] as AppSettingsModel;
+    public isAdmin = false;
+    public isSuperAdmin = false;
 
     static getBaseUrl(): string {
         const settings = window['appSettings'];
@@ -12,7 +14,13 @@ export class AppSettings {
     }
 
     constructor () {
-
+        if (this.settings.userRoles.indexOf('ROLE_ADMIN') > -1) {
+            this.isAdmin = true;
+        }
+        if (this.settings.userRoles.indexOf('ROLE_SUPER_ADMIN') > -1) {
+            this.isAdmin = true;
+            this.isSuperAdmin = true;
+        }
     }
 
     getMediaBaseUrl(): string {

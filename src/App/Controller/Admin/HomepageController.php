@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\MainBundle\Document\User;
 use App\Service\SettingsService;
 use App\Service\UtilsService;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,6 +51,8 @@ class HomepageController extends Controller
         /** @var SettingsService $settingsService */
         $settingsService = $this->get('app.settings');
         $settings = $settingsService->getArray();
+        /** @var User $user */
+        $user = $this->getUser();
 
         $userController = new UserController();
         $userController->setContainer($this->container);
@@ -59,6 +62,8 @@ class HomepageController extends Controller
             'filesDirUrl' => $this->getParameter('app.files_dir_url'),
             'baseDir' => realpath($this->getParameter('kernel.root_dir').'/../..') . DIRECTORY_SEPARATOR,
             'locale' => $this->getParameter('locale'),
+            'userEmail' => $user->getEmail(),
+            'userRoles' => $user->getRoles(),
             'systemSettings' => $settings,
             'rolesHierarchy' => $rolesHierarchy
         ];

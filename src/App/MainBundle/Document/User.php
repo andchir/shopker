@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\Role\Role;
 
 /**
  * @MongoDB\Document(collection="user", repositoryClass="App\Repository\UserRepository")
- * @MongoDBUnique(fields="email")
+ * @MongoDBUnique(fields="email", message="This email is already used.")
  * @MongoDB\HasLifecycleCallbacks()
  */
 class User implements UserInterface, \Serializable
@@ -78,10 +78,16 @@ class User implements UserInterface, \Serializable
 
     /**
      * @MongoDB\Field(type="string")
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="Password should not be blank.")
      * @var string
      */
     protected $password;
+
+    /**
+     * @Assert\Length(min=6, max=50)
+     * @var string
+     */
+    protected $plainPassword;
 
     /**
      * @MongoDB\Field(type="string", nullable=true)
@@ -112,6 +118,7 @@ class User implements UserInterface, \Serializable
     /**
      * @MongoDB\Field(type="collection")
      * @Groups({"details", "list"})
+     * @Assert\NotBlank(message="Role should not be blank.")
      * @var string[]
      */
     protected $roles;
@@ -190,6 +197,24 @@ class User implements UserInterface, \Serializable
     }
 
     /**
+     * @return string
+     */
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
+    /**
+     * @param $plainPassword
+     * @return $this
+     */
+    public function setPlainPassword($plainPassword)
+    {
+        $this->plainPassword = $plainPassword;
+        return $this;
+    }
+
+    /**
      * @param bool $addDefault
      * @return string[]
      */
@@ -217,6 +242,9 @@ class User implements UserInterface, \Serializable
      */
     public function setRoles(array $roles)
     {
+        if (!in_array('ROLE_USER', $roles)) {
+            $roles[] = 'ROLE_USER';
+        }
         $this->roles = array_unique(array_values($roles));
         return $this;
     }

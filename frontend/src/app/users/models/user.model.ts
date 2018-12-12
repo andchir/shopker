@@ -15,6 +15,8 @@ export class User {
         public isActive: boolean,
         public options: UserOption[],
         public role?: string,
-        public phone?: string
+        public phone?: string,
+        public password?: string,
+        public confirmPassword?: string
     ) { }
 }

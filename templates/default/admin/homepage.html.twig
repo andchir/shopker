@@ -16,10 +16,10 @@
     <script type="text/javascript" src="{{ path('admin_settings_script') }}?time={{ date().timestamp }}"></script>
     <script type="text/javascript" src="/admin/i18n/{{ settings.locale }}.js?v={{ app_version }}"></script>
     {% if app.environment == 'prod' %}
-        <script type="text/javascript" src="{{ asset('admin/bundle/runtime.77cf30a5ddd317b60f67.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('admin/bundle/runtime.c471b3ef449452a03756.js') }}"></script>
         <script type="text/javascript" src="{{ asset('admin/bundle/polyfills.27c0825e0a7e45fbb028.js') }}"></script>
         <script type="text/javascript" src="{{ asset('admin/bundle/scripts.abc521399cddc9dfff22.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('admin/bundle/main.4506e485390b58ab8a3d.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('admin/bundle/main.dfbebd3cd0ec1513bcd0.js') }}"></script>
     {% else %}
         <script type="text/javascript" src="{{ asset('admin/bundle-dev/runtime.js') }}"></script>
         <script type="text/javascript" src="{{ asset('admin/bundle-dev/polyfills.js') }}"></script>

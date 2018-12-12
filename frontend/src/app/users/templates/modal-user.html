@@ -9,7 +9,7 @@
 
 <div class="modal-body py-0" [class.loading]="loading">
 
-    <form>
+    <form autocomplete="off">
 
         <div class="row">
             <div class="col-lg-6" [formGroup]="form">
@@ -17,7 +17,7 @@
                     <label class="label-filled">
                         {{'EMAIL' | translate}}
                     </label>
-                    <input type="text" class="form-control" name="title" formControlName="email" [(ngModel)]="model.email">
+                    <input type="text" class="form-control" name="title" formControlName="email" [(ngModel)]="model.email" autocomplete="off">
                     <div *ngIf="formErrors.email" class="alert alert-danger">
                         {{formErrors.email}}
                     </div>
@@ -28,7 +28,7 @@
                     <label class="label-filled">
                         {{'FULL_NAME' | translate}}
                     </label>
-                    <input type="text" class="form-control" name="title" formControlName="fullName" [(ngModel)]="model.fullName">
+                    <input type="text" class="form-control" name="title" formControlName="fullName" [(ngModel)]="model.fullName" autocomplete="off">
                     <div *ngIf="formErrors.fullName" class="alert alert-danger">
                         {{formErrors.fullName}}
                     </div>
@@ -42,7 +42,7 @@
                     <label class="label-filled">
                         {{'PHONE' | translate}}
                     </label>
-                    <input type="text" class="form-control" name="phone" formControlName="phone" [(ngModel)]="model.phone">
+                    <input type="text" class="form-control" name="phone" formControlName="phone" [(ngModel)]="model.phone" autocomplete="off">
                     <div *ngIf="formErrors.phone" class="alert alert-danger">
                         {{formErrors.phone}}
                     </div>
@@ -56,6 +56,31 @@
                     <select class="form-control" name="role" formControlName="role" [(ngModel)]="model.role">
                         <option [value]="role.name" *ngFor="let role of userRoles">{{role.title}}</option>
                     </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6" [formGroup]="form">
+                <div class="form-group" [class.form-group-message]="formErrors.password">
+                    <label class="label-filled">
+                        {{'PASSWORD' | translate}}
+                    </label>
+                    <input type="password" class="form-control" name="password" formControlName="password" [(ngModel)]="model.password" autocomplete="off">
+                    <div *ngIf="formErrors.password" class="alert alert-danger">
+                        {{formErrors.password}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6" [formGroup]="form">
+                <div class="form-group" [class.form-group-message]="formErrors.confirmPassword">
+                    <label class="label-filled">
+                        {{'CONFIRM_PASSWORD' | translate}}
+                    </label>
+                    <input type="password" class="form-control" name="confirmPassword" formControlName="confirmPassword" [(ngModel)]="model.confirmPassword" autocomplete="off">
+                    <div *ngIf="formErrors.confirmPassword" class="alert alert-danger">
+                        {{formErrors.confirmPassword}}
+                    </div>
                 </div>
             </div>
         </div>
@@ -138,7 +163,7 @@
 
 </div>
 <div class="modal-footer d-block">
-    <div class="float-right" *ngIf="model.role != 'ROLE_SUPER_ADMIN'">
+    <div class="float-right" *ngIf="allowImpersonation">
         <a class="btn btn-primary" href="{{baseUrl}}?_switch_user={{model.email}}">
             <span>{{'IMPERSONATION' | translate}}</span>
         </a>

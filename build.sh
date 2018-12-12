@@ -20,7 +20,7 @@ cp -r "$DIR"/bin "$DIR"/"$OUTPUT_DIRNAME"
 cp -r "$DIR"/config "$DIR"/"$OUTPUT_DIRNAME"
 cp -r "$DIR"/src "$DIR"/"$OUTPUT_DIRNAME"
 cp -r "$DIR"/templates "$DIR"/"$OUTPUT_DIRNAME"
-cp -r "$DIR"/tests "$DIR"/"$OUTPUT_DIRNAME"
+#cp -r "$DIR"/tests "$DIR"/"$OUTPUT_DIRNAME"
 cp -r "$DIR"/translations "$DIR"/"$OUTPUT_DIRNAME"
 cp -r "$DIR"/vendor "$DIR"/"$OUTPUT_DIRNAME"
 

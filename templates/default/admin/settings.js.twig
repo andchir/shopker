@@ -10,6 +10,8 @@ var appSettings = {
     webApiUrl: '{{ app.request.baseUrl }}',
     environment: '{{ app.environment }}',
     filesDirUrl: '{{ settings.filesDirUrl }}',
+    userEmail: '{{ settings.userEmail }}',
+    userRoles: {{ settings.userRoles | json_encode | raw }},
     locale: '{{ settings.locale }}',
     rolesHierarchy: {{ settings.rolesHierarchy | json_encode() | raw }},
     systemSettings: {{ settings.systemSettings | json_encode() | raw }}

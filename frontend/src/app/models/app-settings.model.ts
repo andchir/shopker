@@ -5,6 +5,8 @@ export interface AppSettingsModel {
     webApiUrl: string;
     environment: string;
     filesDirUrl: string;
+    userEmail: string;
+    userRoles: string[];
     locale: string;
     rolesHierarchy: any[];
     systemSettings: SettingGroupPretty;

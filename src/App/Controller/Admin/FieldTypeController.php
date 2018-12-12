@@ -21,16 +21,16 @@ class FieldTypeController extends StorageControllerAbstract
      */
     public function validateData($data, $itemId = null)
     {
-        if( empty($data) ){
+        if (empty($data)) {
             return ['success' => false, 'msg' => 'Data is empty.'];
         }
-        if( empty($data['title']) ){
+        if (empty($data['title'])) {
             return ['success' => false, 'msg' => 'Title is empty.'];
         }
-        if( empty($data['name']) ){
+        if (empty($data['name'])) {
             return ['success' => false, 'msg' => 'System name is empty.'];
         }
-        if($this->checkNameExists($data['name'], $itemId)){
+        if ($this->checkNameExists($data['name'], $itemId)) {
             return ['success' => false, 'msg' => 'System name already exists.'];
         }
 
@@ -41,6 +41,8 @@ class FieldTypeController extends StorageControllerAbstract
      * @param $data
      * @param int $itemId
      * @return JsonResponse
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
      */
     public function createUpdate($data, $itemId = null){
 
@@ -70,7 +72,9 @@ class FieldTypeController extends StorageControllerAbstract
 
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $this->get('doctrine_mongodb')->getManager();
-        $dm->persist($item);
+        if (!$item->getId()) {
+            $dm->persist($item);
+        }
         $dm->flush();
 
         return new JsonResponse($item->toArray());

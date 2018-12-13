@@ -39,7 +39,7 @@ registerLocaleData(localeRu, 'ru-RU');
         ConfirmModalContentComponent,
     ],
     providers: [
-        AppSettings,
+        AppSettings
     ],
     entryComponents: [
         AlertModalContentComponent,

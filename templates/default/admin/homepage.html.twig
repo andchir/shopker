@@ -8,7 +8,7 @@
 
 {% block stylesheets %}
     {% if app.environment == 'prod' %}
-        <link href="{{ asset('admin/bundle/styles.a92d731d9a5aa8039bf1.css') }}" rel="stylesheet">
+        <link href="{{ asset('admin/bundle/styles.1a4fff11c8ac49613a1d.css') }}" rel="stylesheet">
     {% endif %}
 {% endblock %}
 
@@ -16,10 +16,10 @@
     <script type="text/javascript" src="{{ path('admin_settings_script') }}?time={{ date().timestamp }}"></script>
     <script type="text/javascript" src="/admin/i18n/{{ settings.locale }}.js?v={{ app_version }}"></script>
     {% if app.environment == 'prod' %}
-        <script type="text/javascript" src="{{ asset('admin/bundle/runtime.f5880052722b1e247c3f.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('admin/bundle/polyfills.27c0825e0a7e45fbb028.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('admin/bundle/runtime.6383357333fc288490a6.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('admin/bundle/polyfills.35f57f53144465a45ab1.js') }}"></script>
         <script type="text/javascript" src="{{ asset('admin/bundle/scripts.abc521399cddc9dfff22.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('admin/bundle/main.4b77234d8a7b2894b0cd.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('admin/bundle/main.85ea962850f72a7b49d1.js') }}"></script>
     {% else %}
         <script type="text/javascript" src="{{ asset('admin/bundle-dev/runtime.js') }}"></script>
         <script type="text/javascript" src="{{ asset('admin/bundle-dev/polyfills.js') }}"></script>

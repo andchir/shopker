@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -113,6 +114,38 @@ class UserController extends StorageControllerAbstract
         return new JsonResponse([
             'success' => true
         ]);
+    }
+
+    /**
+     * @Route("", methods={"GET"})
+     * @param Request $request
+     * @param SerializerInterface $serializer
+     * @return JsonResponse
+     */
+    public function getList(Request $request, SerializerInterface $serializer)
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $queryString = $request->getQueryString();
+        $options = $this->getQueryOptions($queryString);
+
+        $repository = $this->getRepository();
+
+        $filterIds = [];
+        if (!$user->getIsSuperAdmin()) {
+            $filterIds = $repository->getAdminIds();
+        }
+        // $filterIds[] = $user->getId();
+        $filterIds = array_unique($filterIds);
+
+        $results = $repository->findAllByOptions($options, $user->getId(), $filterIds);
+
+        return $this->json([
+            'items' => array_values($results['items']->toArray()),
+            'total' => $results['total']
+        ],
+            200, [], ['groups' => ['list']]
+        );
     }
 
     /**

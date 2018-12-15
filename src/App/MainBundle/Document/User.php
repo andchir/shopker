@@ -563,4 +563,20 @@ class User implements UserInterface, \Serializable
             array_push($this->options, $option);
         }
     }
+
+    /**
+     * @return bool
+     */
+    public function getIsAdmin()
+    {
+        return in_array('ROLE_ADMIN', $this->getRoles());
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsSuperAdmin()
+    {
+        return in_array('ROLE_SUPER_ADMIN', $this->getRoles());
+    }
 }

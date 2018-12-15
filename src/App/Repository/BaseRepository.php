@@ -11,9 +11,11 @@ abstract class BaseRepository extends DocumentRepository
 {
     /**
      * @param array $options
+     * @param int $userId
+     * @param array $filterIds
      * @return array
      */
-    public function findAllByOptions($options = [])
+    public function findAllByOptions($options = [], $userId = 0, $filterIds = [])
     {
         $defaults = [
             'page' => 1,
@@ -71,6 +73,9 @@ abstract class BaseRepository extends DocumentRepository
         if($opts['only_active']){
             $query = $query
                 ->field('isActive')->equals(true);
+        }
+        if (!empty($filterIds)) {
+            $query = $query->field('id')->notIn($filterIds);
         }
 
         $results = $query

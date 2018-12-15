@@ -41,4 +41,26 @@ class UserRepository extends BaseRepository implements UserLoaderInterface
             ->count();
     }
 
+    /**
+     * @param bool $superAdminsOnly
+     * @return array
+     */
+    public function getAdminIds($superAdminsOnly = false)
+    {
+        $qb = $this->createQueryBuilder();
+        if ($superAdminsOnly) {
+            $qb->field('roles')->all(['ROLE_SUPER_ADMIN']);
+        } else {
+            $qb->addOr($qb->expr()->field('roles')->equals('ROLE_ADMIN'));
+            $qb->addOr($qb->expr()->field('roles')->equals('ROLE_SUPER_ADMIN'));
+        }
+        $admins = $qb->getQuery()->toArray();
+
+        $output = array_map(function($admin) {
+            /** @var User $admin */
+            return $admin->getId();
+        }, $admins);
+
+        return array_merge($output);
+    }
 }

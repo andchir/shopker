@@ -19,15 +19,37 @@ use App\MainBundle\Document\Category;
 class CatalogController extends ProductController
 {
     /**
-     * @Route("/{uri}", name="catalog", requirements={"uri": "[a-z0-9\/\-_\.]+"})
+     * @Route("/{uri<^[a-z0-9\/\-_\.]+\/$>}", name="catalog_category", requirements={"uri": "^[a-z0-9\/\-_\.]+\/$"}, defaults={"uri": ""})
      * @param Request $request
      * @param string $uri
      * @return Response
      */
-    public function catalogAction(Request $request, $uri)
+    public function catalogCategoryAction(Request $request, $uri)
+    {
+        return $this->catalogAction($request, $uri, 'catalog_category');
+    }
+
+    /**
+     * @Route("/{uri<[a-z0-9\/\-_\.]+>}", name="catalog_page", requirements={"uri": "[a-z0-9\/\-_\.]+"}, defaults={"uri": ""})
+     * @param Request $request
+     * @param string $uri
+     * @return Response
+     */
+    public function catalogPageAction(Request $request, $uri)
+    {
+        return $this->catalogAction($request, $uri, 'catalog_page');
+    }
+
+    /**
+     * @param Request $request
+     * @param string $uri
+     * @param string $routeName
+     * @return Response
+     */
+    public function catalogAction(Request $request, $uri, $routeName)
     {
         if (empty($this->getParameter('mongodb_database'))) {
-                return $this->redirectToRoute('setup');
+            return $this->redirectToRoute('setup');
         }
         $categoriesRepository = $this->getCategoriesRepository();
         $filtersRepository = $this->get('doctrine_mongodb')
@@ -45,7 +67,7 @@ class CatalogController extends ProductController
             $currentCategory = $categoriesRepository->find(0);
         }
 
-        if ($pageAlias) {
+        if ($routeName === 'catalog_page') {
             return $this->pageProduct($currentCategory, $uri);
         }
         if (!$currentCategory) {

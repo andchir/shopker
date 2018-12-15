@@ -27,7 +27,7 @@ class UserFixtures extends Fixture implements ContainerAwareInterface
     public function load(ObjectManager $manager)
     {
         $userRepository = $manager->getRepository(User::class);
-        if ($userRepository->getUsersCountBy('roles', ['ROLE_SUPER_ADMIN']) > 0) {
+        if ($userRepository->getUsersCountBy('roles', ['ROLE_SUPER_ADMIN', 'ROLE_USER']) > 0) {
             return;
         }
 

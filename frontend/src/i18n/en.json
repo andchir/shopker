@@ -126,7 +126,9 @@
 	"admin_email": "Admin email",
 	"app": {
 		"nds_rate": "Tax rate",
-		"tax_system": "Store taxation system"
+		"tax_system": "Store taxation system",
+		"admin_email": "Admin email",
+		"template_theme": "Template theme"
 	},
 	"app_name": "Application name",
 	"locale": "Locale",

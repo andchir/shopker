@@ -490,28 +490,43 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface
                 'title' => 'Каталог',
                 'name' => 'katalog',
                 'menuIndex' => 0,
+                'translations' => [
+                    ['fieldName' => 'title', 'lang' => 'en', 'value' => 'Catalog']
+                ],
                 'children' => [
                     [
                         'title' => 'Книги',
                         'name' => 'knigi',
                         'menuIndex' => 3,
+                        'translations' => [
+                            ['fieldName' => 'title', 'lang' => 'en', 'value' => 'Books']
+                        ],
                         'children' => [
                             [
                                 'title' => 'Учебная литература',
                                 'name' => 'uchebnaya-literatura',
                                 'menuIndex' => 0,
+                                'translations' => [
+                                    ['fieldName' => 'title', 'lang' => 'en', 'value' => 'Educational literature']
+                                ],
                                 'children' => []
                             ],
                             [
                                 'title' => 'Художественная литература',
                                 'name' => 'khudozhestvennaya-literatura',
                                 'menuIndex' => 0,
+                                'translations' => [
+                                    ['fieldName' => 'title', 'lang' => 'en', 'value' => 'Fiction']
+                                ],
                                 'children' => []
                             ],
                             [
                                 'title' => 'Детям',
                                 'name' => 'detyam',
                                 'menuIndex' => 0,
+                                'translations' => [
+                                    ['fieldName' => 'title', 'lang' => 'en', 'value' => 'For children']
+                                ],
                                 'children' => []
                             ]
                         ]
@@ -519,17 +534,26 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface
                     [
                         'title' => 'Одежда, обувь, сумки',
                         'name' => 'odezhda-obuv-sumki',
-                        'menuIndex' =>4,
+                        'menuIndex' => 4,
+                        'translations' => [
+                            ['fieldName' => 'title', 'lang' => 'en', 'value' => 'Clothes, shoes, bags']
+                        ],
                         'children' => [
                             [
                                 'title' => 'Oдежда',
                                 'name' => 'odezhda',
                                 'menuIndex' => 0,
+                                'translations' => [
+                                    ['fieldName' => 'title', 'lang' => 'en', 'value' => 'Clothes']
+                                ],
                                 'children' => [
                                     [
                                         'title' => 'Женская одежда',
                                         'name' => 'zhenskaya-odezhda',
                                         'menuIndex' => 0,
+                                        'translations' => [
+                                            ['fieldName' => 'title', 'lang' => 'en', 'value' => 'Women\'s clothing']
+                                        ],
                                         'children' => [
 
                                         ]
@@ -538,6 +562,9 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface
                                         'title' => 'Мужская одежда',
                                         'name' => 'muzhskaya-odezhda',
                                         'menuIndex' => 0,
+                                        'translations' => [
+                                            ['fieldName' => 'title', 'lang' => 'en', 'value' => 'Men\'s clothing']
+                                        ],
                                         'children' => [
 
                                         ]
@@ -546,6 +573,9 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface
                                         'title' => 'Детская одежда',
                                         'name' => 'detskaya-odezhda',
                                         'menuIndex' => 0,
+                                        'translations' => [
+                                            ['fieldName' => 'title', 'lang' => 'en', 'value' => 'Baby clothes']
+                                        ],
                                         'children' => [
 
                                         ]
@@ -556,11 +586,17 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface
                                 'title' => 'Обувь',
                                 'name' => 'obuv',
                                 'menuIndex' => 0,
+                                'translations' => [
+                                    ['fieldName' => 'title', 'lang' => 'en', 'value' => 'Footwear']
+                                ],
                                 'children' => [
                                     [
                                         'title' => 'Женская обувь',
                                         'name' => 'zhenskaya-obuv',
                                         'menuIndex' => 0,
+                                        'translations' => [
+                                            ['fieldName' => 'title', 'lang' => 'en', 'value' => 'Women\'s shoes']
+                                        ],
                                         'children' => [
 
                                         ]
@@ -569,6 +605,9 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface
                                         'title' => 'Мужская обувь',
                                         'name' => 'muzhskaya-obuv',
                                         'menuIndex' => 0,
+                                        'translations' => [
+                                            ['fieldName' => 'title', 'lang' => 'en', 'value' => 'Men\'s footwear']
+                                        ],
                                         'children' => [
 
                                         ],
@@ -728,6 +767,9 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface
                                         'title' => 'Детская обувь',
                                         'name' => 'detskaya-obuv',
                                         'menuIndex' => 0,
+                                        'translations' => [
+                                            ['fieldName' => 'title', 'lang' => 'en', 'value' => 'Children\'s shoes']
+                                        ],
                                         'children' => [
 
                                         ]
@@ -738,11 +780,17 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface
                                 'title' => 'Сумки',
                                 'name' => 'sumki',
                                 'menuIndex' => 0,
+                                'translations' => [
+                                    ['fieldName' => 'title', 'lang' => 'en', 'value' => 'Bags']
+                                ],
                                 'children' => [
                                     [
                                         'title' => 'Женские сумки',
                                         'name' => 'zhenskie-sumki',
                                         'menuIndex' => 0,
+                                        'translations' => [
+                                            ['fieldName' => 'title', 'lang' => 'en', 'value' => 'Women\'s handbags']
+                                        ],
                                         'children' => [
 
                                         ]
@@ -751,6 +799,9 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface
                                         'title' => 'Мужские сумки',
                                         'name' => 'muzhskie-sumki',
                                         'menuIndex' => 0,
+                                        'translations' => [
+                                            ['fieldName' => 'title', 'lang' => 'en', 'value' => 'Men\'s bags']
+                                        ],
                                         'children' => [
 
                                         ]
@@ -815,6 +866,7 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface
                 ->setDescription('')
                 ->setIsActive(true)
                 ->setMenuIndex($item['menuIndex'])
+                ->setTranslations($item['translations'] ?? [])
                 ->setContentTypeName($contentType->getName())
                 ->setContentType($contentType);
 

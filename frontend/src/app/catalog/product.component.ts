@@ -252,12 +252,12 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
         let sordData = this.currentContentType.fields.map((field) => {
             return field.name;
         });
-        sordData = sordData.filter((fieldName) => {
+        sordData = sordData.filter((fieldName: string) => {
             if (!this.model[fieldName] || fieldName.indexOf('__') === -1) {
                 return false;
             }
             const tmp = fieldName.split('__');
-            return !isNaN(tmp);
+            return !isNaN(tmp[1] as any);
         });
         return sordData;
     }

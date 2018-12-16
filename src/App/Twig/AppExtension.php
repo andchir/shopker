@@ -105,6 +105,7 @@ class AppExtension extends AbstractExtension
                 'is_safe' => ['html'],
                 'needs_environment' => true
             ]),
+            new TwigFunction('fieldByLocale', [AppRuntime::class, 'fieldByLocaleFunction'])
         ];
     }
 
@@ -425,11 +426,12 @@ class AppExtension extends AbstractExtension
      */
     public function categoriesTreeFunction(\Twig_Environment $environment, $parentId = 0, $chunkName = 'menu_tree', $data = null, $cacheEnabled = false)
     {
-        $request = $request = $this->requestStack->getCurrentRequest();
+        $request = $this->requestStack->getCurrentRequest();
         $currentUri = substr($request->getPathInfo(), 1);
         $uriArr = UtilsService::getUriArray($currentUri);
+        $locale = $request->getLocale();
 
-        $cacheKey = 'tree.' . $chunkName;
+        $cacheKey = "tree.{$chunkName}.{$locale}";
         /** @var FilesystemCache $cache */
         $cache = $this->container->get('app.filecache');
 
@@ -452,12 +454,10 @@ class AppExtension extends AbstractExtension
         $data['currentUri'] = $currentUri;
         $data['uriArr'] = $uriArr;
         $output = $environment->render($templateName, $data);
-        if (!$cacheEnabled) {
-            return $output;
+
+        if ($cacheEnabled) {
+            $cache->set($cacheKey, $output, 60*60*24);
         }
-
-        $cache->set($cacheKey, $output, 60*60*24);
-
         return $environment->createTemplate($output)->render([
             'currentUri' => $currentUri,
             'uriArr' => $uriArr

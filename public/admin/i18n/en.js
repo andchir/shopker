@@ -63,6 +63,7 @@ var APP_LANG = {
     "INPUT_OPTIONS": "Input options",
     "INPUT_TYPE": "Input type",
     "IS_REQUIRED": "is required",
+    "LOCALE": "Locale",
     "LOGOUT": "Log out",
     "MAIL_TEMPLATE": "Mail template",
     "MAX_PRICE": "Max. price",
@@ -115,6 +116,7 @@ var APP_LANG = {
     "STATUS": "Status",
     "SYSTEM_NAME": "System name",
     "TITLE": "Title",
+    "TRANSLATIONS": "Translations",
     "UPDATE_DICTIONARIES": "Update dictionaries",
     "UPDATE_FILTERS": "Update filters",
     "USERS": "Users",
@@ -125,9 +127,9 @@ var APP_LANG = {
     "YOU_SURE_YOU_WANT_DELETE_SELECTED": "Are you sure you want to delete all selected items?",
     "admin_email": "Admin email",
     "app": {
+        "admin_email": "Admin email",
         "nds_rate": "Tax rate",
         "tax_system": "Store taxation system",
-        "admin_email": "Admin email",
         "template_theme": "Template theme"
     },
     "app_name": "Application name",

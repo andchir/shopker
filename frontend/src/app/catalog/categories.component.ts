@@ -139,6 +139,23 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
         this.model.parentId = e.node.id;
     }
 
+    addTranslation(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        if (!Array.isArray(this.model.translations)) {
+            this.model.translations = [];
+        }
+        this.model.translations.push({fieldName: '', lang: '', value: ''});
+    }
+
+    removeTranslation(index: number, event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.model.translations.splice(index, 1);
+    }
+
     save(): void {
         this.submitted = true;
         if (!this.form.valid) {

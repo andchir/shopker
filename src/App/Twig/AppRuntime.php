@@ -430,6 +430,26 @@ class AppRuntime
     }
 
     /**
+     * @param array $dataArr
+     * @param string $fieldName
+     * @return string
+     */
+    public function fieldByLocaleFunction($dataArr, $fieldName)
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        $locale = $request->getLocale();
+        if (empty($dataArr['translations'])) {
+            return $dataArr[$fieldName] ?? '';
+        }
+        $translations = array_filter($dataArr['translations'], function($translation) use ($locale) {
+            return $translation['lang'] === $locale;
+        });
+        return !empty($translations)
+            ? $translations[0]['value']
+            : ($dataArr[$fieldName] ?? '');
+    }
+
+    /**
      * @param mixed $needle
      * @param array $haystack
      * @return int

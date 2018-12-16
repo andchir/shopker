@@ -2,7 +2,7 @@
     {% for category in children %}
         <li class="nav-item{% if category.children|length > 0 %} parent{% endif %}">
             <a href="{{ catalogPath(category.uri) }}" class="nav-link{{ twigNextPass('if $1 in uriArr', category.uri)|raw }} active{{ twigNextPass('endif')|raw }}">
-                {{ category.title }}
+                {{ fieldByLocale(category, 'title') }}
             </a>
             {{ categoriesTree(category.id, 'menu_dropdown_child', category)|raw }}
         </li>

@@ -8,7 +8,7 @@ export class ContentField {
     static getFieldBaseName(fieldName: string): string {
         if (fieldName.indexOf('__') > -1) {
             const tmp = fieldName.split('__');
-            if (!isNaN(tmp[1])) {
+            if (!isNaN(tmp[1] as any)) {
                 fieldName = tmp[0];
             }
         }

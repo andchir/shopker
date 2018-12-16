@@ -101,12 +101,13 @@ class CategoryController extends StorageControllerAbstract
         $item
             ->setTitle($data['title'])
             ->setName($data['name'])
-            ->setDescription(isset($data['description']) ? $data['description'] : '')
-            ->setIsActive(isset($data['isActive']) ? $data['isActive'] : true)
-            ->setParentId(isset($data['parentId']) ? intval( $data['parentId'] ) : 0)
-            ->setMenuIndex(isset($data['menuIndex']) ? intval( $data['menuIndex'] ) : 0)
+            ->setDescription($data['description'] ?? '')
+            ->setIsActive($data['isActive'] ?? true)
+            ->setParentId($data['parentId'] ?? 0)
+            ->setMenuIndex($data['menuIndex'] ?? 0)
             ->setContentTypeName($data['contentTypeName'])
-            ->setContentType($contentType);
+            ->setContentType($contentType)
+            ->setTranslations($data['translations'] ?? []);
 
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $this->get('doctrine_mongodb')->getManager();

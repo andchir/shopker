@@ -103,6 +103,13 @@ class Category
     protected $filterData;
 
     /**
+     * @MongoDB\Field(type="collection")
+     * @Groups({"details", "list"})
+     * @var array
+     */
+    protected $translations;
+
+    /**
      * Get id
      * @return int
      */
@@ -375,6 +382,7 @@ class Category
             'uri' => $this->getUri(),
             'isActive' => in_array($this->getUri(), $breadcrumbsUriArr),
             'menuIndex' => $this->getMenuIndex(),
+            'translations' => $this->getTranslations(),
             'children' => []
         ];
     }
@@ -443,5 +451,27 @@ class Category
     public function getMenuIndex()
     {
         return $this->menuIndex;
+    }
+
+    /**
+     * Set translations
+     *
+     * @param array $translations
+     * @return $this
+     */
+    public function setTranslations($translations)
+    {
+        $this->translations = $translations;
+        return $this;
+    }
+
+    /**
+     * Get translations
+     *
+     * @return array $translations
+     */
+    public function getTranslations()
+    {
+        return $this->translations;
     }
 }

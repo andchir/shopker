@@ -30,7 +30,9 @@
 
         <div class="row form-group" [class.form-group-message]="formErrors.title">
             <div class="col-md-5">
-                <label for="fieldTitle">{{'TITLE' | translate}}</label>
+                <label for="fieldTitle">
+                    {{'TITLE' | translate}}
+                </label>
             </div>
             <div class="col-md-7">
                 <input type="text" id="fieldTitle" class="form-control" formControlName="title" name="title" [(ngModel)]="model.title">
@@ -42,7 +44,9 @@
 
         <div class="row form-group" [class.form-group-message]="formErrors.name">
             <div class="col-md-5">
-                <label for="fieldName">{{'SYSTEM_NAME' | translate}}</label>
+                <label for="fieldName">
+                    {{'SYSTEM_NAME' | translate}}
+                </label>
             </div>
             <div class="col-md-7">
                 <div class="input-group">
@@ -61,7 +65,9 @@
 
         <div class="row form-group">
             <div class="col-md-5">
-                <label for="fieldDescription">{{'DESCRIPTION' | translate}}</label>
+                <label for="fieldDescription">
+                    {{'DESCRIPTION' | translate}}
+                </label>
             </div>
             <div class="col-md-7">
                 <textarea type="text" id="fieldDescription" rows="4" class="form-control" name="description" formControlName="description" [(ngModel)]="model.description"></textarea>
@@ -70,7 +76,9 @@
 
         <div class="row form-group" [class.form-group-message]="formErrors.contentTypeName">
             <div class="col-md-5">
-                <label for="fieldContentType">{{'CONTENT_TYPE' | translate}}</label>
+                <label for="fieldContentType">
+                    {{'CONTENT_TYPE' | translate}}
+                </label>
             </div>
             <div class="col-md-7">
                 <select id="fieldContentType" class="form-control" name="contentTypeName" formControlName="contentTypeName" [(ngModel)]="model.contentTypeName">
@@ -84,7 +92,9 @@
 
         <div class="row form-group" [class.form-group-message]="formErrors.menuIndex" *ngIf="!isRoot">
             <div class="col-md-5">
-                <label for="fieldMenuIndex">{{'MENU_INDEX' | translate}}</label>
+                <label for="fieldMenuIndex">
+                    {{'MENU_INDEX' | translate}}
+                </label>
             </div>
             <div class="col-md-7">
                 <input type="number" id="fieldMenuIndex" class="form-control" name="menuIndex" formControlName="menuIndex" [(ngModel)]="model.menuIndex">
@@ -108,6 +118,64 @@
 
             </div>
         </div>
+
+        <!-- Translations -->
+        <ngb-accordion [closeOthers]="true" class="ngb-accordion" #accordion="ngbAccordion">
+            <ngb-panel id="accordion-translations" [title]="'TRANSLATIONS' | translate">
+                <ng-template ngbPanelContent>
+
+                    <table class="table table-bordered">
+                        <colgroup>
+                            <col width="30%">
+                            <col width="20%">
+                            <col width="45%">
+                            <col width="5%">
+                        </colgroup>
+                        <tr>
+                            <th>
+                                {{ 'FIELD' | translate }}
+                            </th>
+                            <th>
+                                {{ 'LOCALE' | translate }}
+                            </th>
+                            <th>
+                                {{ 'VALUE' | translate }}
+                            </th>
+                            <th></th>
+                        </tr>
+                        <tr *ngFor="let translation of model.translations; index as index">
+                            <td>
+                                <select class="custom-select" [(ngModel)]="translation.fieldName" [ngModelOptions]="{standalone: true}">
+                                    <option value=""></option>
+                                    <option value="title">{{ 'TITLE' | translate }}</option>
+                                    <option value="description">{{ 'DESCRIPTION' | translate }}</option>
+                                </select>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" [(ngModel)]="translation.lang" [ngModelOptions]="{standalone: true}">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" [(ngModel)]="translation.value" [ngModelOptions]="{standalone: true}">
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-secondary" (click)="removeTranslation(index, $event)" ngbTooltip="{{'DELETE' | translate}}">
+                                    <i class="icon-cross"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="text-center">
+                        <button type="button" class="btn btn-secondary btn-sm" (click)="addTranslation($event)">
+                            <i class="icon-plus"></i>
+                            &nbsp;
+                            {{ 'ADD' | translate }}
+                        </button>
+                    </div>
+
+                </ng-template>
+            </ngb-panel>
+        </ngb-accordion>
+        <!-- /Translations -->
 
         <div class="alert alert-danger mt-3 mb-0" [hidden]="!errorMessage">
             <button type="button" class="close" (click)="errorMessage = ''">

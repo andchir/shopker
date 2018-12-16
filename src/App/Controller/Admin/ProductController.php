@@ -608,13 +608,16 @@ class ProductController extends BaseProductController
                 continue;
             }
             if (strpos($key, '__') !== false) {
-                if (!empty($value)) {
-                    $additFields[$key] = $value;
+                $tmp = explode('__', $key);
+                if (!empty($tmp[1]) && is_numeric($tmp[1])) {
+                    if (!empty($value)) {
+                        $additFields[$key] = $value;
+                    }
+                    unset($document[$key]);
+                    continue;
                 }
-                unset($document[$key]);
-            } else {
-                $document[$key] = $value;
             }
+            $document[$key] = $value;
         }
         if (empty($additFields)) {
             return false;

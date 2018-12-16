@@ -135,6 +135,9 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
         Object.keys(this.model).forEach((key) => {
             if (key.indexOf('__') > -1) {
                 const fieldBaseName = ContentField.getFieldBaseName(key);
+                if (fieldBaseName === key) {
+                    return;
+                }
                 const fieldIndexData: FieldIndexData = ContentField.getFieldIndexData(this.currentContentType.fields, fieldBaseName);
                 if (fieldIndexData.index === -1) {
                     return;
@@ -250,7 +253,11 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
             return field.name;
         });
         sordData = sordData.filter((fieldName) => {
-            return !!this.model[fieldName] && fieldName.indexOf('__') > -1;
+            if (!this.model[fieldName] || fieldName.indexOf('__') === -1) {
+                return false;
+            }
+            const tmp = fieldName.split('__');
+            return !isNaN(tmp);
         });
         return sordData;
     }

@@ -1,4 +1,3 @@
-
 export interface FieldIndexData {
     index: number;
     additFieldsCount: number;
@@ -8,7 +7,10 @@ export class ContentField {
 
     static getFieldBaseName(fieldName: string): string {
         if (fieldName.indexOf('__') > -1) {
-            fieldName = fieldName.substr(0, fieldName.indexOf('__'));
+            const tmp = fieldName.split('__');
+            if (!isNaN(tmp[1])) {
+                fieldName = tmp[0];
+            }
         }
         return fieldName;
     }

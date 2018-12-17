@@ -438,14 +438,11 @@ class AppRuntime
     {
         $request = $this->requestStack->getCurrentRequest();
         $locale = $request->getLocale();
-        if (empty($dataArr['translations'])) {
+        if (empty($dataArr['translations']) || empty($dataArr['translations'][$fieldName])) {
             return $dataArr[$fieldName] ?? '';
         }
-        $translations = array_filter($dataArr['translations'], function($translation) use ($locale) {
-            return $translation['lang'] === $locale;
-        });
-        return !empty($translations)
-            ? $translations[0]['value']
+        return isset($dataArr['translations'][$fieldName][$locale])
+            ? $dataArr['translations'][$fieldName][$locale]
             : ($dataArr[$fieldName] ?? '');
     }
 

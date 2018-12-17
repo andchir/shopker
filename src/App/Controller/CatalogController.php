@@ -408,13 +408,12 @@ class CatalogController extends ProductController
         foreach ($items as $item) {
             $category = [
                 'id' => $item['_id'],
-                'title' => !empty($item['title']) ? $item['title'] : '',
-                'name' => !empty($item[$systemNameField]) ? $item[$systemNameField] : '',
+                'title' => $item['title'] ?? '',
+                'name' => $item[$systemNameField] ?? '',
                 'description' => '',
-                'uri' => !empty($item[$systemNameField])
-                    ? $parentUri . $item[$systemNameField]
-                    : '',
-                'menuIndex' => !empty($item['menuIndex']) ? $item['menuIndex'] : 0,
+                'uri' => !empty($item[$systemNameField]) ? $parentUri . $item[$systemNameField] : '',
+                'menuIndex' => $item['menuIndex'] ?? 0,
+                'translations' => $item['translations'] ?? [],
                 'children' => []
             ];
             $category['isActive'] = in_array($category['uri'], $breadcrumbsUriArr);

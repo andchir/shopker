@@ -103,7 +103,7 @@ class Category
     protected $filterData;
 
     /**
-     * @MongoDB\Field(type="collection")
+     * @MongoDB\Field(type="hash")
      * @Groups({"details", "list"})
      * @var array
      */

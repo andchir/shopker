@@ -1,9 +1,3 @@
-export interface EntityTranslations {
-    fieldName: string;
-    lang: string;
-    value: string;
-}
-
 export class Category {
     constructor(
         public id: number,
@@ -15,10 +9,10 @@ export class Category {
         public contentTypeName: string,
         public isActive: boolean,
         public menuIndex?: number,
-        public translations?: EntityTranslations[]
+        public translations?: {[fieldName: string]: {[lang: string]: string}}
     ) {
         if (typeof this.translations === 'undefined') {
-            this.translations = [];
+            this.translations = {};
         }
     }
 }

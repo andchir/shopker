@@ -28,10 +28,11 @@ class CategoryRepository extends BaseRepository
 
     /**
      * @param $categoryUri
+     * @param string $locale
      * @param bool $pop
      * @return array
      */
-    public function getBreadcrumbs($categoryUri, $pop = true)
+    public function getBreadcrumbs($categoryUri, $locale = '', $pop = true)
     {
         if (empty($categoryUri)) {
             return [];
@@ -51,7 +52,7 @@ class CategoryRepository extends BaseRepository
         /** @var Category $crumb */
         $crumb = $this->findOneFromArray($categories, 'parentId', 0);
         while (!empty($crumb)) {
-            $breadcrumbs[] = $crumb->getMenuData();
+            $breadcrumbs[] = $crumb->getMenuData([], $locale);
             $crumb = $this->findOneFromArray($categories, 'parentId', $crumb->getId());
         }
 

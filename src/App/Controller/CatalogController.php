@@ -51,6 +51,7 @@ class CatalogController extends ProductController
         if (empty($this->getParameter('mongodb_database'))) {
             return $this->redirectToRoute('setup');
         }
+        $locale = $request->getLocale();
         $categoriesRepository = $this->getCategoriesRepository();
         $filtersRepository = $this->get('doctrine_mongodb')
             ->getManager()
@@ -68,7 +69,7 @@ class CatalogController extends ProductController
         }
 
         if ($routeName === 'catalog_page') {
-            return $this->pageProduct($currentCategory, $uri);
+            return $this->pageProduct($currentCategory, $uri, $locale);
         }
         if (!$currentCategory) {
             throw $this->createNotFoundException();
@@ -79,8 +80,8 @@ class CatalogController extends ProductController
         $currentPage = $currentCategory;
         $currentId = $currentCategory->getId();
 
-        $breadcrumbs = $categoriesRepository->getBreadcrumbs($categoryUri, false);
-        $categoriesMenu = $this->getCategoriesMenu($currentCategory, $breadcrumbs);
+        $breadcrumbs = $categoriesRepository->getBreadcrumbs($categoryUri, $locale, false);
+        $categoriesMenu = $this->getCategoriesMenu($currentCategory, $breadcrumbs, $locale);
 
         $contentType = $currentCategory->getContentType();
         $priceFieldName = $contentType->getPriceFieldName();
@@ -123,7 +124,7 @@ class CatalogController extends ProductController
 
         $categoriesSiblings = [];
         if (count($categoriesMenu) === 0 && $levelNum > 1) {
-            $categoriesSiblings = $this->getChildCategories($currentCategory->getParentId(), $breadcrumbs);
+            $categoriesSiblings = $this->getChildCategories($currentCategory->getParentId(), $breadcrumbs, false, '', $locale);
         }
 
         $breadcrumbs = array_filter($breadcrumbs, function($entry) use ($uri) {
@@ -156,9 +157,10 @@ class CatalogController extends ProductController
     /**
      * @param null|Category $category
      * @param string $uri
+     * @param string $locale
      * @return Response
      */
-    public function pageProduct(Category $category = null, $uri = '')
+    public function pageProduct(Category $category = null, $uri = '', $locale = '')
     {
         $categoriesRepository = $this->getCategoriesRepository();
         list($pageAlias, $categoryUri) = Category::parseUri($uri);
@@ -175,7 +177,7 @@ class CatalogController extends ProductController
         $contentTypeFields = $contentType->getFields();
         $priceFieldName = $contentType->getPriceFieldName();
         $collection = $this->getCollection($collectionName);
-        $breadcrumbs = $categoriesRepository->getBreadcrumbs($categoryUri, false);
+        $breadcrumbs = $categoriesRepository->getBreadcrumbs($categoryUri, $locale, false);
 
         $currentPage = $collection->findOne([
             'name' => $pageAlias,
@@ -196,7 +198,7 @@ class CatalogController extends ProductController
         list($filters, $fields) = $this->getFieldsData($contentTypeFields, $options);
 
         // Get categories menu
-        $categoriesMenu = $this->getCategoriesMenu($category, $breadcrumbs);
+        $categoriesMenu = $this->getCategoriesMenu($category, $breadcrumbs, $locale);
         /** @var SettingsService $settingsService */
         $settingsService = $this->get('app.settings');
         $currency = $settingsService->getCurrency();
@@ -284,9 +286,10 @@ class CatalogController extends ProductController
     /**
      * @param Category|null $currentCategory
      * @param array $breadcrumbs
+     * @param string $locale
      * @return array
      */
-    public function getCategoriesMenu(Category $currentCategory = null, $breadcrumbs = [])
+    public function getCategoriesMenu(Category $currentCategory = null, $breadcrumbs = [], $locale = '')
     {
         $categoriesRepository = $this->getCategoriesRepository();
         $categories = [];
@@ -304,7 +307,7 @@ class CatalogController extends ProductController
         ], ['title' => 'asc']);
         /** @var Category $category */
         foreach ($results as $category) {
-            $categories[] = $category->getMenuData($breadcrumbsUriArr);
+            $categories[] = $category->getMenuData($breadcrumbsUriArr, $locale);
             $topIdsArr[] = $category->getId();
         }
 
@@ -323,7 +326,7 @@ class CatalogController extends ProductController
         foreach ($results as $category) {
             $index = array_search($category->getParentId(), $topIdsArr);
             if ($index !== false) {
-                $categories[$index]['children'][] = $category->getMenuData($breadcrumbsUriArr);
+                $categories[$index]['children'][] = $category->getMenuData($breadcrumbsUriArr, $locale);
             }
         }
 
@@ -335,9 +338,10 @@ class CatalogController extends ProductController
      * @param array $breadcrumbs
      * @param bool $getChildContent
      * @param string $currentUri
+     * @param string $locale
      * @return array
      */
-    public function getChildCategories($parent = 0, $breadcrumbs = [], $getChildContent = false, $currentUri = '')
+    public function getChildCategories($parent = 0, $breadcrumbs = [], $getChildContent = false, $currentUri = '', $locale = '')
     {
         $parentCategory = null;
         /** @var Category $parentCategory */
@@ -371,12 +375,12 @@ class CatalogController extends ProductController
 
         /** @var Category $category */
         foreach ($results as $category) {
-            $categories[] = $category->getMenuData($breadcrumbsUriArr);
+            $categories[] = $category->getMenuData($breadcrumbsUriArr, $locale);
         }
 
         // Get category content
         if ($getChildContent && $parentCategory) {
-            $childContent = $this->getCategoryContent($parentCategory, $breadcrumbsUriArr);
+            $childContent = $this->getCategoryContent($parentCategory, $breadcrumbsUriArr, $locale);
             $categories = array_merge($categories, $childContent);
         }
         array_multisort(
@@ -391,9 +395,10 @@ class CatalogController extends ProductController
     /**
      * @param Category $parentCategory
      * @param array $breadcrumbsUriArr
+     * @param string $locale
      * @return array
      */
-    public function getCategoryContent(Category $parentCategory, $breadcrumbsUriArr = [])
+    public function getCategoryContent(Category $parentCategory, $breadcrumbsUriArr = [], $locale = '')
     {
         $categories = [];
         /** @var ContentType $contentType */
@@ -408,7 +413,7 @@ class CatalogController extends ProductController
         foreach ($items as $item) {
             $category = [
                 'id' => $item['_id'],
-                'title' => $item['title'] ?? '',
+                'title' => ContentType::getValueByLocale($item, $locale),
                 'name' => $item[$systemNameField] ?? '',
                 'description' => '',
                 'uri' => !empty($item[$systemNameField]) ? $parentUri . $item[$systemNameField] : '',
@@ -424,9 +429,10 @@ class CatalogController extends ProductController
 
     /**
      * @param int $parentId
+     * @param string $locale
      * @return array
      */
-    public function getCategoriesTree($parentId = 0)
+    public function getCategoriesTree($parentId = 0, $locale = '')
     {
         $data = [];
         $categoriesRepository = $this->getCategoriesRepository();
@@ -461,10 +467,10 @@ class CatalogController extends ProductController
             if (!isset($data[$pId])) {
                 $data[$pId] = [];
             }
-            $data[$pId][] = $category->getMenuData();
+            $data[$pId][] = $category->getMenuData([], $locale);
         }
 
-        $childContent = $parentCategory ? $this->getCategoryContent($parentCategory) : [];
+        $childContent = $parentCategory ? $this->getCategoryContent($parentCategory, [], $locale) : [];
 
         // Content pages (not categories)
         if (!empty($childContent)) {
@@ -490,7 +496,7 @@ class CatalogController extends ProductController
             ]]);
         }
         else {
-            return self::createTree($data, [$parentCategory->getMenuData()]);
+            return self::createTree($data, [$parentCategory->getMenuData([], $locale)]);
         }
     }
 

@@ -145,11 +145,17 @@ class Category
     /**
      * Get title
      *
+     * @param string $locale
      * @return string
      */
-    public function getTitle()
+    public function getTitle($locale = '')
     {
-        return $this->title;
+        if (!$locale || !is_array($this->translations)) {
+            return $this->title;
+        }
+        return !empty($this->translations['title']) && !empty($this->translations['title'][$locale])
+            ? $this->translations['title'][$locale]
+            : $this->title;
     }
 
     /**
@@ -241,15 +247,16 @@ class Category
 
     /**
      * To array
+     * @param string $locale
      * @return array
      */
-    public function toArray()
+    public function toArray($locale = '')
     {
         return [
             'id' => $this->getId(),
             'parentId' => $this->getParentId(),
             'name' => $this->getName(),
-            'title' => $this->getTitle(),
+            'title' => $this->getTitle($locale),
             'description' => $this->getDescription(),
             'contentTypeName' => $this->getContentTypeName(),
             'menuIndex' => $this->getMenuIndex(),
@@ -370,13 +377,14 @@ class Category
     /**
      * Get menu data
      * @param array $breadcrumbsUriArr
+     * @param string $locale
      * @return array
      */
-    public function getMenuData($breadcrumbsUriArr = [])
+    public function getMenuData($breadcrumbsUriArr = [], $locale = '')
     {
         return [
             'id' => $this->getId(),
-            'title' => $this->getTitle(),
+            'title' => $this->getTitle($locale),
             'name' => $this->getName(),
             'description' => $this->getDescription(),
             'uri' => $this->getUri(),

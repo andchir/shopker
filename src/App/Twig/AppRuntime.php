@@ -430,6 +430,24 @@ class AppRuntime
     }
 
     /**
+     * @param array $itemData
+     * @param array $fieldsData
+     * @param string $chunkName
+     * @return string
+     */
+    public function getFieldNameByChunkFunction($itemData, $fieldsData, $chunkName)
+    {
+        $fields = array_filter($fieldsData, function($field) use ($chunkName) {
+            return $field['properties']['chunkName'] === $chunkName;
+        });
+        if (empty($fields)) {
+            return '';
+        }
+        $fields = array_merge($fields);
+        return !empty($fields) ? $fields[0]['name'] : '';
+    }
+
+    /**
      * @param array $dataArr
      * @param string $fieldName
      * @return string
@@ -443,7 +461,7 @@ class AppRuntime
         }
         return isset($dataArr['translations'][$fieldName][$locale])
             ? $dataArr['translations'][$fieldName][$locale]
-            : ($dataArr[$fieldName] ?? '');
+            : $dataArr[$fieldName] ?? '';
     }
 
     /**

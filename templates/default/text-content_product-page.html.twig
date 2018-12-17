@@ -6,8 +6,9 @@
     {% include 'header.html.twig' %}
     <main role="main" class="container min-height400">
 
-        {{ renderOutputTypeChunk(currentPage, fields, 'header', 'page_') }}
-        {{ renderOutputTypeChunk(currentPage, fields, 'description') }}
+        <h1>{{ fieldByLocale(currentPage, getFieldNameByChunk(currentPage, fields, 'header')) }}</h1>
+
+        {{ fieldByLocale(currentPage, getFieldNameByChunk(currentPage, fields, 'description')) }}
 
         {% if currentPage.form_name is defined and currentPage.form_name is not empty -%}
             <div class="row">

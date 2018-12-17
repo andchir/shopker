@@ -73,6 +73,7 @@ class AppExtension extends AbstractExtension
                 'is_safe' => ['html'],
                 'needs_environment' => true
             ]),
+            new TwigFunction('getFieldNameByChunk', [AppRuntime::class, 'getFieldNameByChunkFunction']),
             new TwigFunction('renderOutputGallery', [AppRuntime::class, 'renderOutputGalleryFunction'], [
                 'is_safe' => ['html'],
                 'needs_environment' => true
@@ -444,7 +445,7 @@ class AppExtension extends AbstractExtension
             }
             $catalogController = new CatalogController();
             $catalogController->setContainer($this->container);
-            $categoriesTree = $catalogController->getCategoriesTree($parentId);
+            $categoriesTree = $catalogController->getCategoriesTree($parentId, $locale);
             $data = $categoriesTree[0];
         }
         $templateName = $this->getTemplateName($environment, 'nav/', $chunkName);

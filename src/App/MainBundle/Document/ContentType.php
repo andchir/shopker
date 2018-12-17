@@ -395,4 +395,20 @@ class ContentType
             return $field['name'];
         }, $fields);
     }
+
+    /**
+     * @param array $data
+     * @param string $locale
+     * @param string $fieldName
+     * @return string
+     */
+    public static function getValueByLocale($data, $locale = '', $fieldName = 'title')
+    {
+        if (!$locale || !is_array($data['translations'])) {
+            return $data[$fieldName] ?? '';
+        }
+        return !empty($data['translations'][$fieldName]) && !empty($data['translations'][$fieldName][$locale])
+            ? $data['translations'][$fieldName][$locale]
+            : $data[$fieldName] ?? '';
+    }
 }

@@ -1,0 +1,57 @@
+<ngb-accordion [closeOthers]="true" class="ngb-accordion" #accordionTranslations="ngbAccordion">
+    <ngb-panel id="accordion-translations" [title]="'TRANSLATIONS' | translate">
+        <ng-template ngbPanelContent>
+
+            <table class="table table-bordered my-0">
+                <colgroup>
+                    <col width="30%">
+                    <col width="70%">
+                </colgroup>
+                <ng-container *ngFor="let translation of translations | keyvalue">
+                    <tr>
+                        <td>
+                            {{ translation.key }}
+                        </td>
+                        <td>
+                            <ng-container *ngFor="let item of translations[translation.key]; index as index">
+                                <div class="mb-2">
+                                    <div class="float-right">
+                                        <button type="button" class="btn btn-secondary" (click)="removeTranslation(translation.key, index, $event)" ngbTooltip="{{'DELETE' | translate}}">
+                                            <i class="icon-cross"></i>
+                                        </button>
+                                    </div>
+                                    <div class="row no-gutters" style="margin-right: 55px;">
+                                        <div class="col-4 pr-1">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                                            <span class="input-group-text">
+                                                                                <i class="icon-globe"></i>
+                                                                            </span>
+                                                </div>
+                                                <input type="text" class="form-control" [(ngModel)]="item.lang" (ngModelChange)="onUpdateTranslation()" [ngModelOptions]="{standalone: true}">
+                                            </div>
+                                        </div>
+                                        <div class="col-8 pl-1">
+                                            <input type="text" class="form-control" [(ngModel)]="item.value" (ngModelChange)="onUpdateTranslation()" [ngModelOptions]="{standalone: true}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <div class="text-center">
+                                <button type="button" class="btn btn-secondary btn-sm" (click)="addTranslation(translation.key, $event)">
+                                    <i class="icon-plus"></i>
+                                    &nbsp;
+                                    {{ 'ADD' | translate }}
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-container>
+            </table>
+
+            <div class="alert alert-info my-0" *ngIf="!_value">{{ 'EMPTY' | translate }}</div>
+
+        </ng-template>
+    </ngb-panel>
+</ngb-accordion>
+

@@ -21,6 +21,7 @@ import {CategoriesService} from './services/categories.service';
 import {ContentTypesService} from './services/content_types.service';
 import {FormFieldInterface} from '../models/form-field.interface';
 import {EntityTranslation} from "../models/entity-translation";
+import {TranslationsComponent} from '../translations.component';
 
 /**
  * @class CategoriesModalComponent
@@ -33,7 +34,7 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
 
     @Input() currentCategory: Category;
     @Input() isRoot = false;
-    @ViewChild('accordionTranslations') accordionTranslations: NgbAccordion;
+    @ViewChild('appTranslations') appTranslations: TranslationsComponent;
     model: Category = new Category(null, false, 0, '', '', '', '', true);
     contentTypes: ContentType[] = [];
     loadingCategories = false;
@@ -131,7 +132,7 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
     }
 
     onAfterGetData() {
-        this.translationsSyncInit();
+
     }
 
     getContentTypes() {
@@ -152,81 +153,7 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
         if (event) {
             event.preventDefault();
         }
-        if (!this.translations[fieldName]) {
-            this.translations[fieldName] = [];
-        }
-        this.translations[fieldName].push({lang: '', value: ''});
-        this.translationsSync();
-        setTimeout(() => {
-            this.accordionTranslations.expand('accordion-translations');
-        }, 1);
-    }
-
-    removeTranslation(fieldName: string, index: number, event?: MouseEvent): void {
-        if (event) {
-            event.preventDefault();
-        }
-        if (!this.translations[fieldName]) {
-            return;
-        }
-        this.translations[fieldName].splice(index, 1);
-        if (this.translations[fieldName].length === 0) {
-            delete this.translations[fieldName];
-        }
-        this.translationsSync();
-    }
-
-    translationsSyncInit(): void {
-        if (!this.model.translations) {
-            return;
-        }
-        const fields = Object.keys(this.model.translations);
-        fields.forEach((fieldName) => {
-            this.translations[fieldName] = [];
-            Object.keys(this.model.translations[fieldName]).forEach((lang) => {
-                const value = this.model.translations[fieldName][lang];
-                this.translations[fieldName].push({lang: lang, value: value});
-            });
-        });
-    }
-
-    translationsSync(): void {
-        const langs = Object.keys(this.translations);
-        if (langs.length === 0) {
-            this.model.translations = null;
-            return;
-        }
-        if (!this.model.translations) {
-            this.model.translations = {};
-        }
-        Object.keys(this.model.translations).forEach((fieldName) => {
-            Object.keys(this.model.translations[fieldName]).forEach((lang) => {
-                if (langs.indexOf(lang) === -1) {
-                    delete this.model.translations[fieldName][lang];
-                }
-                if (Object.keys(this.model.translations[fieldName]).length === 0) {
-                    delete this.model.translations[fieldName];
-                }
-            });
-        });
-        Object.keys(this.translations).forEach((fieldName) => {
-            this.translations[fieldName].forEach((translation) => {
-                if (!translation.lang) {
-                    return;
-                }
-                if (!this.model.translations[fieldName]) {
-                    this.model.translations[fieldName] = {};
-                }
-                this.model.translations[fieldName][translation.lang] = translation.value;
-            });
-        });
-    }
-
-    onUpdateTranslation(): void {
-        clearTimeout(this.translateTimer);
-        this.translateTimer = setTimeout(() => {
-            this.translationsSync();
-        }, 500);
+        this.appTranslations.addTranslation(fieldName);
     }
 
     save(): void {

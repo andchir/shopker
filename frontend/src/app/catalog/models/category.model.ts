@@ -11,8 +11,6 @@ export class Category {
         public menuIndex?: number,
         public translations?: {[fieldName: string]: {[lang: string]: string}}
     ) {
-        if (typeof this.translations === 'undefined') {
-            this.translations = {};
-        }
+
     }
 }

@@ -11,6 +11,7 @@ import {DragulaModule} from 'ng2-dragula';
 import {ToastModule} from 'primeng/toast';
 
 import {TableComponent} from './table.component';
+import {TranslationsComponent} from './translations.component';
 import {SortingComponent} from './sorting-dnd.conponent';
 import {InputFieldRenderComponent} from './render-input-field';
 import {OutputFieldComponent} from './render-output-field';
@@ -24,6 +25,7 @@ import {FilterArrayPipe} from './pipes/filter-array-pipe';
 
 const components = [
     TableComponent,
+    TranslationsComponent,
     SortingComponent,
     InputFieldRenderComponent,
     OutputFieldComponent,

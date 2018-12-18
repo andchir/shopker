@@ -132,7 +132,9 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
     }
 
     onAfterGetData() {
-
+        if (!this.model.translations) {
+            this.model.translations = {};
+        }
     }
 
     getContentTypes() {

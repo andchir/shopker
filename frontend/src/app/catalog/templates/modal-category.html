@@ -28,8 +28,8 @@
             </div>
         </div>
 
-        <div class="row form-group" [class.form-group-message]="formErrors.title">
-            <div class="col-md-5 show-on-hover-parent">
+        <div class="row form-group show-on-hover-parent" [class.form-group-message]="formErrors.title">
+            <div class="col-md-5">
                 <div class="pos-absolute-right show-on-hover">
                     <button type="button" class="btn btn-secondary btn-sm" (click)="addTranslation('title', $event)" ngbTooltip="{{'ADD_TRANSLATION' | translate}}">
                         <i class="icon-globe"></i>
@@ -68,8 +68,8 @@
             </div>
         </div>
 
-        <div class="row form-group">
-            <div class="col-md-5 show-on-hover-parent">
+        <div class="row form-group show-on-hover-parent">
+            <div class="col-md-5">
                 <div class="pos-absolute-right show-on-hover">
                     <button type="button" class="btn btn-secondary btn-sm" (click)="addTranslation('description', $event)" ngbTooltip="{{'ADD_TRANSLATION' | translate}}">
                         <i class="icon-globe"></i>
@@ -128,8 +128,6 @@
 
             </div>
         </div>
-
-        ===<pre>{{model.translations | json}}</pre>===
 
         <app-translations [(ngModel)]="model.translations" [ngModelOptions]="{standalone: true}" #appTranslations></app-translations>
 

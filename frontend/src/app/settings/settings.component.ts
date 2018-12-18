@@ -154,6 +154,9 @@ export class SettingsComponent implements OnInit {
         this.settingsService.runActionPost(actionName)
             .subscribe((res) => {
                 this.loading = false;
+                if (['update_internationalization'].indexOf(actionName) > -1) {
+                    this.pageReload();
+                }
             }, (err) => {
                 if (err['error']) {
                     this.messageService.add({

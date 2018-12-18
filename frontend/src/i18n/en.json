@@ -119,6 +119,7 @@
 	"SYSTEM_NAME": "System name",
 	"TITLE": "Title",
 	"TRANSLATIONS": "Translations",
+	"TRANSLATIONS_HINT": "To add a translation of the field value, you can click the button that is located next to the field name.",
 	"UPDATE_DICTIONARIES": "Update dictionaries",
 	"UPDATE_FILTERS": "Update filters",
 	"USERS": "Users",

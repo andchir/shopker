@@ -85,14 +85,10 @@ export class TranslationsComponent implements ControlValueAccessor {
     }
 
     translationsSync(): void {
-        const langs = Object.keys(this.translations);
-        if (langs.length === 0) {
-            this._value = null;
-            return;
-        }
         if (!this._value) {
             this._value = {};
         }
+        const langs = Object.keys(this.translations);
         Object.keys(this._value).forEach((fieldName) => {
             Object.keys(this._value[fieldName]).forEach((lang) => {
                 if (langs.indexOf(lang) === -1) {
@@ -114,6 +110,10 @@ export class TranslationsComponent implements ControlValueAccessor {
                 this._value[fieldName][translation.lang] = translation.value;
             });
         });
+    }
+
+    isValueEmpty(): boolean {
+        return Object.keys(this.translations).length === 0;
     }
 
     onUpdateTranslation(): void {

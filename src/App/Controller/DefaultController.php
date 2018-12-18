@@ -25,6 +25,7 @@ class DefaultController extends CatalogController
     /**
      * @Route("/", name="homepage")
      * @return Response
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function homepageAction()
     {

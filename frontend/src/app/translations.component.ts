@@ -53,7 +53,6 @@ export class TranslationsComponent implements ControlValueAccessor {
         setTimeout(() => {
             this.accordionTranslations.expand('accordion-translations');
         }, 1);
-        console.log('addTranslation', fieldName);
     }
 
     removeTranslation(fieldName: string, index: number, event?: MouseEvent): void {

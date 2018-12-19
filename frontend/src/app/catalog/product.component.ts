@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {NgbActiveModal, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import {FormControl, FormBuilder, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
@@ -16,6 +16,7 @@ import {ContentTypesService} from './services/content_types.service';
 import {ProductsService} from './services/products.service';
 import {FilesService} from './services/files.service';
 import {ContentField, FieldIndexData} from './models/content_field.model';
+import {TranslationsComponent} from '../translations.component';
 
 @Component({
     selector: 'app-product-modal-content',
@@ -24,6 +25,7 @@ import {ContentField, FieldIndexData} from './models/content_field.model';
 export class ProductModalContentComponent extends ModalContentAbstractComponent<Product> implements OnInit {
 
     @Input() category: Category;
+    @ViewChild('appTranslations') appTranslations: TranslationsComponent;
     categories: Category[] = [];
     contentTypes: ContentType[] = [];
     currentContentType: ContentType = new ContentType(0, '', '', '', '', [], [], true);
@@ -80,8 +82,17 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
                 return Promise.reject('');
             })
             .then((data) => {
+                this.onAfterGetData();
                 this.updateForm();
+            }, () => {
+                this.onAfterGetData();
             });
+    }
+
+    onAfterGetData() {
+        if (!this.model.translations) {
+            this.model.translations = {};
+        }
     }
 
     getSystemFieldName(): string {
@@ -130,7 +141,7 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
         const newKeys = map(this.currentContentType.fields, function(field) {
             return field.name;
         });
-        newKeys.push('id', 'parentId', 'previousParentId', 'isActive');
+        newKeys.push('id', 'parentId', 'previousParentId', 'isActive', 'translations');
 
         Object.keys(this.model).forEach((key) => {
             if (key.indexOf('__') > -1) {
@@ -260,6 +271,10 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
             return !isNaN(tmp[1] as any);
         });
         return sordData;
+    }
+
+    addTranslation(fieldName: string): void {
+        this.appTranslations.addTranslation(fieldName);
     }
 
     save() {

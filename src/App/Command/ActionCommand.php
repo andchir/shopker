@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 class ActionCommand extends ContainerAwareCommand
 {
@@ -26,9 +27,13 @@ class ActionCommand extends ContainerAwareCommand
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return void
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $io = new SymfonyStyle($input, $output);
+        $time_start = microtime(true);
 
         $action = $input->getArgument('action');
         $option = $input->getArgument('option');
@@ -52,11 +57,15 @@ class ActionCommand extends ContainerAwareCommand
                     $count++;
                 }
 
-                $output->writeln('Updated filters for categories: ' . $count);
+                $io->success('Updated filters for categories: ' . $count);
 
                 break;
         }
 
+        $time_end = microtime(true);
+        $time = round($time_end - $time_start, 3);
+
+        $io->note("The operation has been processed in time {$time} sec.");
     }
 }
 

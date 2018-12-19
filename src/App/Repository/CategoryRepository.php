@@ -16,6 +16,7 @@ class CategoryRepository extends BaseRepository
     /**
      * @param $parentId
      * @return mixed
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function getChildCountByParentId($parentId)
     {
@@ -28,11 +29,12 @@ class CategoryRepository extends BaseRepository
 
     /**
      * @param $categoryUri
-     * @param string $locale
      * @param bool $pop
+     * @param string $locale
      * @return array
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
-    public function getBreadcrumbs($categoryUri, $locale = '', $pop = true)
+    public function getBreadcrumbs($categoryUri, $pop = true, $locale = '')
     {
         if (empty($categoryUri)) {
             return [];

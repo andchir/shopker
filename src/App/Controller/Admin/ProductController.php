@@ -267,8 +267,10 @@ class ProductController extends BaseProductController
      * @param Category $category
      * @param int $itemId
      * @return JsonResponse
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
      */
-    public function updateItemAction(Request $request, Category $category = null, $itemId)
+    public function updateItemAction(Request $request, Category $category, $itemId)
     {
         $data = $request->getContent()
             ? json_decode($request->getContent(), true)
@@ -287,6 +289,8 @@ class ProductController extends BaseProductController
      * @param Category $category
      * @param int $itemId
      * @return JsonResponse
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
      */
     public function createUpdate($data, Category $category = null, $itemId = null)
     {
@@ -342,6 +346,7 @@ class ProductController extends BaseProductController
         }
 
         $document['parentId'] = intval($parentId);
+        $document['translations'] = $data['translations'] ?? null;
         $document['isActive'] = isset($data['isActive'])
             ? $data['isActive']
             : true;
@@ -770,25 +775,35 @@ class ProductController extends BaseProductController
     /**
      * @param Category $parentCategory
      * @param string $databaseName
+     * @param bool $updateParents
+     * @param bool $mixFromChilds
      * @return bool
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
-    public function updateFiltersData(Category $parentCategory, $databaseName = '')
+    public function updateFiltersData(Category $parentCategory, $databaseName = '', $updateParents = false, $mixFromChilds = false)
     {
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $this->get('doctrine_mongodb')->getManager();
         $categoriesRepository = $this->getCategoriesRepository();
 
-        $breadcrumbs = $categoriesRepository->getBreadcrumbs($parentCategory->getUri(), false);
-        $breadcrumbs = array_reverse($breadcrumbs);
+        if ($updateParents) {
+            $categoriesData = $categoriesRepository->getBreadcrumbs($parentCategory->getUri(), false);
+            $categoriesData = array_reverse($categoriesData);
+        } else {
+            $categoriesData = [$parentCategory->getMenuData()];
+        }
 
-        foreach ($breadcrumbs as $category) {
+        if (empty($categoriesData)) {
+            return false;
+        }
+
+        foreach ($categoriesData as $category) {
             $categoryId = $category['id'];
 
             /** @var Category $cat */
             $cat = $categoriesRepository->find($categoryId);
-            $childCategories = $categoriesRepository->findBy([
-                'parentId' => $cat->getId()
-            ]);
 
             /** @var ContentType $contentType */
             $contentType = $cat->getContentType();
@@ -797,35 +812,42 @@ class ProductController extends BaseProductController
 
             $filterData = [];
 
-            /** @var Category $childCategory */
-            foreach ($childCategories as $childCategory) {
-                /** @var Filter $flt */
-                $flt = $childCategory->getFilterData();
-                if (empty($flt)) {
-                    continue;
-                }
-                $filterValues = $flt->getValues();
-                foreach ($contentTypeFields as $contentTypeField) {
-                    if (!$contentTypeField['isFilter']) {
+            if ($mixFromChilds) {
+                $childCategories = $categoriesRepository->findBy([
+                    'parentId' => $cat->getId(),
+                    'isActive' => true
+                ]);
+
+                /** @var Category $childCategory */
+                foreach ($childCategories as $childCategory) {
+                    /** @var Filter $flt */
+                    $flt = $childCategory->getFilterData();
+                    if (empty($flt)) {
                         continue;
                     }
-                    $fieldName = $contentTypeField['name'];
-                    if (!empty($filterValues[$fieldName])) {
-                        if (!isset($filterData[$fieldName])) {
-                            $filterData[$fieldName] = [];
+                    $filterValues = $flt->getValues();
+                    foreach ($contentTypeFields as $contentTypeField) {
+                        if (!$contentTypeField['isFilter']) {
+                            continue;
                         }
-                        $values = array_merge($filterData[$fieldName], $filterValues[$fieldName]);
-                        $values = array_unique($values);
-                        if ($contentTypeField['outputType'] == 'number') {
-                            sort($values, SORT_NUMERIC);
-                        } else {
-                            sort($values);
+                        $fieldName = $contentTypeField['name'];
+                        if (!empty($filterValues[$fieldName])) {
+                            if (!isset($filterData[$fieldName])) {
+                                $filterData[$fieldName] = [];
+                            }
+                            $values = array_merge($filterData[$fieldName], $filterValues[$fieldName]);
+                            $values = array_unique($values);
+                            if ($contentTypeField['outputType'] == 'number') {
+                                sort($values, SORT_NUMERIC);
+                            } else {
+                                sort($values);
+                            }
+                            $filterData[$fieldName] = $values;
                         }
-                        $filterData[$fieldName] = $values;
                     }
                 }
+                unset($childCategories, $childCategory, $values);
             }
-            unset($childCategories, $childCategory, $values);
 
             foreach ($contentTypeFields as $contentTypeField) {
                 if (!$contentTypeField['isFilter']) {
@@ -861,6 +883,12 @@ class ProductController extends BaseProductController
                 $filter = new Filter();
                 $filter->setCategory($cat);
                 $cat->setFilterData($filter);
+            } else {
+                if (empty($filterData)) {
+                    $dm->remove($filter);
+                    $dm->flush();
+                    continue;
+                }
             }
             $filter->setValues($filterData);
 

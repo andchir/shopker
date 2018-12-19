@@ -80,7 +80,7 @@ class CatalogController extends ProductController
         $currentPage = $currentCategory;
         $currentId = $currentCategory->getId();
 
-        $breadcrumbs = $categoriesRepository->getBreadcrumbs($categoryUri, $locale, false);
+        $breadcrumbs = $categoriesRepository->getBreadcrumbs($categoryUri, false, $locale);
         $categoriesMenu = $this->getCategoriesMenu($currentCategory, $breadcrumbs, $locale);
 
         $contentType = $currentCategory->getContentType();
@@ -177,7 +177,7 @@ class CatalogController extends ProductController
         $contentTypeFields = $contentType->getFields();
         $priceFieldName = $contentType->getPriceFieldName();
         $collection = $this->getCollection($collectionName);
-        $breadcrumbs = $categoriesRepository->getBreadcrumbs($categoryUri, $locale, false);
+        $breadcrumbs = $categoriesRepository->getBreadcrumbs($categoryUri, false, $locale);
 
         $currentPage = $collection->findOne([
             'name' => $pageAlias,

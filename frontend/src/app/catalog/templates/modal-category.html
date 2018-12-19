@@ -129,7 +129,12 @@
             </div>
         </div>
 
-        <app-translations [(ngModel)]="model.translations" [ngModelOptions]="{standalone: true}" #appTranslations></app-translations>
+        <ng-container *ngIf="model.translations">
+            <app-translations
+                    [(ngModel)]="model.translations"
+                    [ngModelOptions]="{standalone: true}"
+                    #appTranslations></app-translations>
+        </ng-container>
 
         <div class="alert alert-danger mt-3 mb-0" [hidden]="!errorMessage">
             <button type="button" class="close" (click)="errorMessage = ''">

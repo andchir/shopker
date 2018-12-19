@@ -1,4 +1,13 @@
-import {Component, OnInit, Input, OnChanges, SimpleChange, ChangeDetectorRef} from '@angular/core';
+import {
+    Component,
+    OnInit,
+    Input,
+    OnChanges,
+    SimpleChange,
+    ChangeDetectorRef,
+    Output,
+    EventEmitter
+} from '@angular/core';
 import {FormGroup, FormControl, Validators} from '@angular/forms';
 import {cloneDeep, map, zipObject, isArray, extend, defer} from 'lodash';
 import {isNumeric} from 'rxjs/util/isNumeric';
@@ -27,6 +36,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
     @Input() formErrors: {[key: string]: string};
     @Input() validationMessages: {[key: string]: {[key: string]: string}};
     @Input() files: { [key: string]: File } = {};
+    @Output() onAddTranslation = new EventEmitter<string>();
     fieldsMultivalues: {[key: string]: MultiValues} = {};
     submitted = false;
     calendarLocale = {
@@ -539,6 +549,13 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
 
         this.fields.splice(fieldIndexData.index + 1, 0, newField);
         this.buildControls();
+    }
+
+    addTranslation(fieldName: string, event: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.onAddTranslation.emit(fieldName);
     }
 
 }

@@ -45,6 +45,8 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
             this.getModelData().then(() => {
                 this.onAfterGetData();
             });
+        } else {
+            this.onAfterGetData();
         }
         this.onAfterInit();
     }

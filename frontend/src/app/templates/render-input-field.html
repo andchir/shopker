@@ -93,6 +93,11 @@
                         <!-- textarea -->
                         <div class="row" *ngSwitchCase="'textarea'">
                             <div class="col-md-5">
+                                <div class="pos-absolute-right show-on-hover">
+                                    <button type="button" class="btn btn-secondary btn-sm" (click)="addTranslation(field.name, $event)" ngbTooltip="{{'ADD_TRANSLATION' | translate}}">
+                                        <i class="icon-globe"></i>
+                                    </button>
+                                </div>
                                 <label for="field_{{field.name}}">
                                     {{field.title}}
                                     <span class="text-muted">({{field.name}})</span>
@@ -181,6 +186,11 @@
                         <!-- rich_text -->
                         <div class="row" *ngSwitchCase="'rich_text'">
                             <div class="col-12">
+                                <div class="pos-absolute-right show-on-hover">
+                                    <button type="button" class="btn btn-secondary btn-sm" (click)="addTranslation(field.name, $event)" ngbTooltip="{{'ADD_TRANSLATION' | translate}}">
+                                        <i class="icon-globe"></i>
+                                    </button>
+                                </div>
                                 <label for="field_{{field.name}}">
                                     {{field.title}}
                                     <span class="text-muted">({{field.name}})</span>
@@ -422,6 +432,11 @@
                         <div class="row" *ngSwitchDefault>
                             <div class="col-md-5">
                                 <label for="field_{{field.name}}">
+                                    <div class="pos-absolute-right show-on-hover">
+                                        <button type="button" class="btn btn-secondary btn-sm" (click)="addTranslation(field.name, $event)" ngbTooltip="{{'ADD_TRANSLATION' | translate}}">
+                                            <i class="icon-globe"></i>
+                                        </button>
+                                    </div>
                                     {{field.title}}
                                     <span class="text-muted">({{field.name}})</span>
                                     <span class="text-danger" *ngIf="field.required">*</span>

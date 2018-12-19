@@ -812,6 +812,7 @@ class ProductController extends BaseProductController
 
             $filterData = [];
 
+            // Mix from child categories
             if ($mixFromChilds) {
                 $childCategories = $categoriesRepository->findBy([
                     'parentId' => $cat->getId(),

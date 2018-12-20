@@ -17,6 +17,7 @@ import {ProductsService} from './services/products.service';
 import {FilesService} from './services/files.service';
 import {ContentField, FieldIndexData} from './models/content_field.model';
 import {TranslationsComponent} from '../translations.component';
+import {AppSettings} from '../services/app-settings.service';
 
 @Component({
     selector: 'app-product-modal-content',
@@ -25,7 +26,6 @@ import {TranslationsComponent} from '../translations.component';
 export class ProductModalContentComponent extends ModalContentAbstractComponent<Product> implements OnInit {
 
     @Input() category: Category;
-    @ViewChild('appTranslations') appTranslations: TranslationsComponent;
     categories: Category[] = [];
     contentTypes: ContentType[] = [];
     currentContentType: ContentType = new ContentType(0, '', '', '', '', [], [], true);
@@ -56,7 +56,8 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
         public translateService: TranslateService,
         private contentTypesService: ContentTypesService,
         private categoriesService: CategoriesService,
-        private filesService: FilesService
+        private filesService: FilesService,
+        private appSettings: AppSettings
     ) {
         super(fb, dataService, systemNameService, activeModal, tooltipConfig, translateService);
 
@@ -65,6 +66,11 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
     }
 
     ngOnInit(): void {
+        this.localeList = this.appSettings.settings.localeList;
+        if (this.localeList.length > 0) {
+            this.localeDefault = this.localeList[0];
+            this.localeCurrent = this.localeList[0];
+        }
         this.model.parentId = this.category.id;
         this.dataService.setRequestUrl('products/' + this.category.id);
 
@@ -90,6 +96,13 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
     }
 
     onAfterGetData() {
+        // Search fields allowed to translation
+        this.currentContentType.fields.forEach((field) => {
+            if (['text', 'textarea', 'rich_text'].indexOf(field.inputType) > -1) {
+                this.localeFieldsAllowed.push(field.name);
+            }
+        });
+
         if (!this.model.translations) {
             this.model.translations = {};
         }
@@ -271,10 +284,6 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
             return !isNaN(tmp[1] as any);
         });
         return sordData;
-    }
-
-    addTranslation(fieldName: string): void {
-        this.appTranslations.addTranslation(fieldName);
     }
 
     save() {

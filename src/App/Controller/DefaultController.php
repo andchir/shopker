@@ -217,7 +217,7 @@ class DefaultController extends CatalogController
                         $settings = array_filter($settings, function ($key) use ($settingsDefault) {
                             return in_array($key, array_keys($settingsDefault));
                         }, ARRAY_FILTER_USE_KEY);
-                        $settingsService->saveSettingsToYaml('settings', $settings);
+                        $settingsService->saveSettingsToYaml($settings, 'settings');
                         $this->systemCacheClear();
 
                         $adminEmail = $data['admin_email'];

@@ -28,10 +28,15 @@ class HomepageController extends Controller
         $userController->setContainer($this->container);
         $rolesHierarchy = $userController->getRolesHierarchy();
 
+        $localeList = $this->getParameter('app.locale_list');
+        $localeList = $localeList ? explode(',', $localeList) : [];
+        $localeList = array_map('trim', $localeList);
+
         $settings = [
             'filesDirUrl' => $this->getParameter('app.files_dir_url'),
             'baseDir' => realpath($this->getParameter('kernel.root_dir').'/../..') . DIRECTORY_SEPARATOR,
             'locale' => $this->getParameter('locale'),
+            'localeList' => $localeList,
             'systemSettings' => $settings,
             'rolesHierarchy' => $rolesHierarchy
         ];

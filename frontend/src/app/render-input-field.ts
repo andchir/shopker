@@ -36,6 +36,8 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
     @Input() formErrors: {[key: string]: string};
     @Input() validationMessages: {[key: string]: {[key: string]: string}};
     @Input() files: { [key: string]: File } = {};
+    @Input() localeFieldsAllowed: string[] = [];
+    @Input() isLocalizationActive: boolean;
     @Output() onAddTranslation = new EventEmitter<string>();
     fieldsMultivalues: {[key: string]: MultiValues} = {};
     submitted = false;

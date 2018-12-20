@@ -111,18 +111,19 @@ class SettingsService
     }
 
     /**
-     * @param string $yamlFileName
      * @param $data
+     * @param string $yamlFileName
      * @return bool|int
      */
-    public function saveSettingsToYaml($yamlFileName = 'settings', $data)
+    public function saveSettingsToYaml($data, $yamlFileName = 'settings')
     {
         $settingsFilePath = $this->getConfigYamlFilePath($yamlFileName);
         $yaml = Yaml::dump(['parameters' => $data]);
         if (!is_writable($settingsFilePath)) {
             return false;
         } else {
-            return file_put_contents($settingsFilePath, $yaml);
+            file_put_contents($settingsFilePath, $yaml);
+            return true;
         }
     }
 

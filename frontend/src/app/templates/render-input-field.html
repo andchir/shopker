@@ -93,11 +93,6 @@
                         <!-- textarea -->
                         <div class="row" *ngSwitchCase="'textarea'">
                             <div class="col-md-5">
-                                <div class="pos-absolute-right show-on-hover">
-                                    <button type="button" class="btn btn-secondary btn-sm" (click)="addTranslation(field.name, $event)" ngbTooltip="{{'ADD_TRANSLATION' | translate}}">
-                                        <i class="icon-globe"></i>
-                                    </button>
-                                </div>
                                 <label for="field_{{field.name}}">
                                     {{field.title}}
                                     <span class="text-muted">({{field.name}})</span>
@@ -105,7 +100,10 @@
                                 </label>
                             </div>
                             <div class="col-md-7">
-                                <textarea rows="6" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control"></textarea>
+                                <textarea rows="6" class="form-control" id="field_{{field.name}}" [name]="field.name"
+                                          [formControlName]="field.name"
+                                          [(ngModel)]="model[field.name]"
+                                          [ngClass]="{'border-success': isLocalizationActive}"></textarea>
                                 <div *ngIf="formErrors[field.name]" class="alert alert-danger">
                                     {{formErrors[field.name]}}
                                 </div>
@@ -186,52 +184,49 @@
                         <!-- rich_text -->
                         <div class="row" *ngSwitchCase="'rich_text'">
                             <div class="col-12">
-                                <div class="pos-absolute-right show-on-hover">
-                                    <button type="button" class="btn btn-secondary btn-sm" (click)="addTranslation(field.name, $event)" ngbTooltip="{{'ADD_TRANSLATION' | translate}}">
-                                        <i class="icon-globe"></i>
-                                    </button>
-                                </div>
                                 <label for="field_{{field.name}}">
                                     {{field.title}}
                                     <span class="text-muted">({{field.name}})</span>
                                     <span class="text-danger" *ngIf="field.required">*</span>
                                 </label>
-                                <p-editor [formControlName]="field.name"
-                                          [(ngModel)]="model[field.name]"
-                                          [formats]="field.inputProperties.formats"
-                                          [style]="{'height':'320px'}">
-                                    <p-header>
+                                <div class="border rounded" [ngClass]="{'border-success': isLocalizationActive}">
+                                    <p-editor [formControlName]="field.name"
+                                              [(ngModel)]="model[field.name]"
+                                              [formats]="field.inputProperties.formats"
+                                              [style]="{'height':'320px'}">
+                                        <p-header>
                                         <span class="ql-formats">
                                             <select class="ql-header" *ngIf="field.inputProperties.formats.indexOf('header') > -1"></select>
                                             <select class="ql-font" *ngIf="field.inputProperties.formats.indexOf('font') > -1"></select>
                                             <select class="ql-size" *ngIf="field.inputProperties.formats.indexOf('size') > -1"></select>
                                         </span>
-                                        <span class="ql-formats">
+                                            <span class="ql-formats">
                                             <button class="ql-bold" aria-label="Bold" *ngIf="field.inputProperties.formats.indexOf('bold') > -1"></button>
                                             <button class="ql-italic" aria-label="Italic" *ngIf="field.inputProperties.formats.indexOf('italic') > -1"></button>
                                             <button class="ql-underline" aria-label="Underline" *ngIf="field.inputProperties.formats.indexOf('underline') > -1"></button>
                                             <button class="ql-strike" aria-label="Strike" *ngIf="field.inputProperties.formats.indexOf('strike') > -1"></button>
                                         </span>
-                                        <span class="ql-formats">
+                                            <span class="ql-formats">
                                             <select class="ql-color" *ngIf="field.inputProperties.formats.indexOf('color') > -1"></select>
                                             <select class="ql-background" *ngIf="field.inputProperties.formats.indexOf('background') > -1"></select>
                                         </span>
-                                        <span class="ql-formats">
+                                            <span class="ql-formats">
                                             <button class="ql-list" value="ordered" aria-label="Ordered List" *ngIf="field.inputProperties.formats.indexOf('list') > -1"></button>
                                             <button class="ql-list" value="bullet" aria-label="Unordered List" *ngIf="field.inputProperties.formats.indexOf('list') > -1"></button>
                                             <select class="ql-align" *ngIf="field.inputProperties.formats.indexOf('align') > -1"></select>
                                         </span>
-                                        <span class="ql-formats">
+                                            <span class="ql-formats">
                                             <button class="ql-link" aria-label="Insert Link" *ngIf="field.inputProperties.formats.indexOf('link') > -1"></button>
                                             <button class="ql-image" aria-label="Insert Image" *ngIf="field.inputProperties.formats.indexOf('image') > -1"></button>
                                             <button class="ql-video" aria-label="Insert Video" *ngIf="field.inputProperties.formats.indexOf('video') > -1"></button>
                                             <button class="ql-code-block" aria-label="Insert Code Block" *ngIf="field.inputProperties.formats.indexOf('code-block') > -1"></button>
                                         </span>
-                                        <span class="ql-formats">
+                                            <span class="ql-formats">
                                             <button class="ql-clean" aria-label="Remove Styles" *ngIf="field.inputProperties.formats.indexOf('clean') > -1"></button>
                                         </span>
-                                    </p-header>
-                                </p-editor>
+                                        </p-header>
+                                    </p-editor>
+                                </div>
                                 <div *ngIf="formErrors[field.name]" class="alert alert-danger">
                                     {{formErrors[field.name]}}
                                 </div>
@@ -432,18 +427,16 @@
                         <div class="row" *ngSwitchDefault>
                             <div class="col-md-5">
                                 <label for="field_{{field.name}}">
-                                    <div class="pos-absolute-right show-on-hover">
-                                        <button type="button" class="btn btn-secondary btn-sm" (click)="addTranslation(field.name, $event)" ngbTooltip="{{'ADD_TRANSLATION' | translate}}">
-                                            <i class="icon-globe"></i>
-                                        </button>
-                                    </div>
                                     {{field.title}}
                                     <span class="text-muted">({{field.name}})</span>
                                     <span class="text-danger" *ngIf="field.required">*</span>
                                 </label>
                             </div>
                             <div class="col-md-7">
-                                <input type="text" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control">
+                                <input type="text" class="form-control" id="field_{{field.name}}" [name]="field.name"
+                                       [formControlName]="field.name"
+                                       [(ngModel)]="model[field.name]"
+                                       [ngClass]="{'border-success': isLocalizationActive}">
                                 <div *ngIf="formErrors[field.name]" class="alert alert-danger">
                                     {{formErrors[field.name]}}
                                 </div>

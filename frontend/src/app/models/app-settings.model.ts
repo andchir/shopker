@@ -8,6 +8,7 @@ export interface AppSettingsModel {
     userEmail: string;
     userRoles: string[];
     locale: string;
+    localeList: string[],
     rolesHierarchy: any[];
     systemSettings: SettingGroupPretty;
 }

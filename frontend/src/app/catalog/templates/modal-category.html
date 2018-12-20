@@ -30,17 +30,14 @@
 
         <div class="row form-group show-on-hover-parent" [class.form-group-message]="formErrors.title">
             <div class="col-md-5">
-                <div class="pos-absolute-right show-on-hover">
-                    <button type="button" class="btn btn-secondary btn-sm" (click)="addTranslation('title', $event)" ngbTooltip="{{'ADD_TRANSLATION' | translate}}">
-                        <i class="icon-globe"></i>
-                    </button>
-                </div>
                 <label for="fieldTitle">
                     {{'TITLE' | translate}}
                 </label>
             </div>
             <div class="col-md-7">
-                <input type="text" id="fieldTitle" class="form-control" formControlName="title" name="title" [(ngModel)]="model.title">
+                <input type="text" id="fieldTitle" class="form-control" formControlName="title" name="title"
+                       [(ngModel)]="model.title"
+                       [ngClass]="{'border-success': localeCurrent != localeDefault}">
                 <div *ngIf="formErrors.title" class="alert alert-danger">
                     {{formErrors.title}}
                 </div>
@@ -70,17 +67,14 @@
 
         <div class="row form-group show-on-hover-parent">
             <div class="col-md-5">
-                <div class="pos-absolute-right show-on-hover">
-                    <button type="button" class="btn btn-secondary btn-sm" (click)="addTranslation('description', $event)" ngbTooltip="{{'ADD_TRANSLATION' | translate}}">
-                        <i class="icon-globe"></i>
-                    </button>
-                </div>
                 <label for="fieldDescription">
                     {{'DESCRIPTION' | translate}}
                 </label>
             </div>
             <div class="col-md-7">
-                <textarea type="text" id="fieldDescription" rows="4" class="form-control" name="description" formControlName="description" [(ngModel)]="model.description"></textarea>
+                <textarea type="text" id="fieldDescription" rows="4" class="form-control" name="description" formControlName="description"
+                          [(ngModel)]="model.description"
+                          [ngClass]="{'border-success': localeCurrent != localeDefault}"></textarea>
             </div>
         </div>
 
@@ -129,13 +123,6 @@
             </div>
         </div>
 
-        <ng-container *ngIf="model.translations">
-            <app-translations
-                    [(ngModel)]="model.translations"
-                    [ngModelOptions]="{standalone: true}"
-                    #appTranslations></app-translations>
-        </ng-container>
-
         <div class="alert alert-danger mt-3 mb-0" [hidden]="!errorMessage">
             <button type="button" class="close" (click)="errorMessage = ''">
                 <span aria-hidden="true">&times;</span>
@@ -146,7 +133,20 @@
     </div>
 
     <div class="modal-footer d-block">
-        <button type="submit" class="btn btn-success btn-wide" [disabled]="submitted" (click)="save()">
+        <div class="float-right" *ngIf="localeList.length > 1">
+            <button type="button" class="btn btn-success mr-2" ngbTooltip="{{'SAVE' | translate}}" placement="left"
+                    [hidden]="localeCurrent == localeDefault"
+                    (click)="saveTranslations($event)">
+                <i class="icon-check"></i>
+            </button>
+            <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="localeCurrent" (ngModelChange)="onLocaleSwitch()" [ngModelOptions]="{standalone: true}">
+                <label ngbButtonLabel class="btn-secondary" *ngFor="let localeName of localeList">
+                    <input ngbButton type="radio" [value]="localeName">
+                    {{localeName}}
+                </label>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-success btn-wide" [disabled]="submitted || isSaveButtonDisabled" (click)="save()">
             <span>{{'SAVE' | translate}}</span>
         </button>
         <button type="button" class="btn btn-secondary btn-wide" (click)="close($event)">

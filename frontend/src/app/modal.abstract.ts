@@ -25,6 +25,13 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
     model: any;
     files: {[key: string]: File} = {};
 
+    isSaveButtonDisabled = false;
+    localeList: string[];
+    localeDefault = '';
+    localeCurrent = '';
+    localeFieldsAllowed: string[] = [];
+    localePreviousValues: {[fieldName: string]: string} = {};
+
     constructor(
         public fb: FormBuilder,
         public dataService: DataService<any>,
@@ -215,6 +222,53 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
         inputElement.files = null;
         inputElement.value = '';
         delete this.files[fieldName];
+    }
+
+    onLocaleSwitch(): void {
+        if (this.localeCurrent === this.localeDefault) {
+            this.localeFieldsAllowed.forEach((fieldName) => {
+                this.model[fieldName] = this.localePreviousValues[fieldName];
+            });
+            this.isSaveButtonDisabled = false;
+            return;
+        }
+        if (!this.model.translations) {
+            this.model.translations = {};
+        }
+        this.isSaveButtonDisabled = true;
+        this.localeFieldsAllowed.forEach((fieldName) => {
+            this.localePreviousValues[fieldName] = this.model[fieldName] || '';
+            if (this.model.translations[fieldName]) {
+                this.model[fieldName] = this.model.translations[fieldName][this.localeCurrent] || '';
+            } else {
+                this.model[fieldName] = '';
+            }
+        });
+    }
+
+    saveTranslations(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.localeFieldsAllowed.forEach((fieldName) => {
+            if (this.model[fieldName]) {
+                if (!this.model.translations[fieldName]) {
+                    this.model.translations[fieldName] = {};
+                }
+                this.model.translations[fieldName][this.localeCurrent] = this.model[fieldName];
+            } else {
+                if (this.model.translations[fieldName]) {
+                    if (this.model.translations[fieldName][this.localeCurrent]) {
+                        delete this.model.translations[fieldName][this.localeCurrent];
+                    }
+                    if (Object.keys(this.model.translations[fieldName]).length === 0) {
+                        delete this.model.translations[fieldName];
+                    }
+                }
+            }
+        });
+        this.localeCurrent = this.localeDefault;
+        this.onLocaleSwitch();
     }
 
     saveRequest() {

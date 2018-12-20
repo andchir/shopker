@@ -12,6 +12,7 @@ var appSettings = {
     userEmail: '{{ settings.userEmail }}',
     userRoles: {{ settings.userRoles | json_encode | raw }},
     locale: '{{ settings.locale }}',
-    rolesHierarchy: {{ settings.rolesHierarchy | json_encode() | raw }},
-    systemSettings: {{ settings.systemSettings | json_encode() | raw }}
+    localeList: {{ settings.localeList | json_encode | raw }},
+    rolesHierarchy: {{ settings.rolesHierarchy | json_encode | raw }},
+    systemSettings: {{ settings.systemSettings | json_encode | raw }}
 };

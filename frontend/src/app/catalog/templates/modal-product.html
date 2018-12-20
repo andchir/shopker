@@ -50,14 +50,8 @@
                 [(model)]="model"
                 [(form)]="form"
                 [(files)]="files"
-                (onAddTranslation)="addTranslation($event)"></app-input-field-renderer>
-
-        <ng-container *ngIf="model.translations">
-            <app-translations
-                    [(ngModel)]="model.translations"
-                    [ngModelOptions]="{standalone: true}"
-                    #appTranslations></app-translations>
-        </ng-container>
+                [localeFieldsAllowed]="localeFieldsAllowed"
+                [isLocalizationActive]="localeCurrent !== localeDefault"></app-input-field-renderer>
 
         <div class="alert alert-danger mt-3 mb-0" [hidden]="!errorMessage">
             <button type="button" class="close" (click)="errorMessage = ''">
@@ -69,7 +63,20 @@
     </div>
 
     <div class="modal-footer d-block">
-        <button type="button" class="btn btn-success btn-wide" [disabled]="submitted" (click)="save()">
+        <div class="float-right" *ngIf="localeList.length > 1">
+            <button type="button" class="btn btn-success mr-2" ngbTooltip="{{'SAVE' | translate}}" placement="left"
+                    [hidden]="localeCurrent == localeDefault"
+                    (click)="saveTranslations($event)">
+                <i class="icon-check"></i>
+            </button>
+            <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="localeCurrent" (ngModelChange)="onLocaleSwitch()" [ngModelOptions]="{standalone: true}">
+                <label ngbButtonLabel class="btn-secondary" *ngFor="let localeName of localeList">
+                    <input ngbButton type="radio" [value]="localeName">
+                    {{localeName}}
+                </label>
+            </div>
+        </div>
+        <button type="button" class="btn btn-success btn-wide" [disabled]="submitted || isSaveButtonDisabled" (click)="save()">
             <span>{{'SAVE' | translate}}</span>
         </button>
         <button type="button" class="btn btn-secondary btn-wide" (click)="activeModal.dismiss()">

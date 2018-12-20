@@ -1,5 +1,6 @@
 parameters:
     locale: en
+    app.locale_list: ru,en
     app.name: Shopkeeper
     mongodb_server: '127.0.0.1'
     mongodb_port: '27017'

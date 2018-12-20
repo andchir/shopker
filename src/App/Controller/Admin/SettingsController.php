@@ -75,8 +75,12 @@ class SettingsController extends Controller
                 $data = self::transformParametersInverse($data);
 
                 $settings = array_merge($settings, $data);
-
-                $this->saveSettingsToYaml('settings', $settings);
+                if (!$this->saveSettingsToYaml($settings, 'settings')) {
+                    return new JsonResponse([
+                        'success' => false,
+                        'msg' => 'File is not writable.'
+                    ], 200, [], true);
+                }
 
                 break;
             default:
@@ -171,6 +175,9 @@ class SettingsController extends Controller
     /**
      * @Route("/update_filters", name="update_filters", methods={"POST"})
      * @return JsonResponse
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function updateFiltersAction()
     {
@@ -328,17 +335,22 @@ class SettingsController extends Controller
     }
 
     /**
-     * @param string $yamlFileName
      * @param $data
+     * @param string $yamlFileName
      * @return bool|int
      */
-    public function saveSettingsToYaml($yamlFileName = 'settings', $data)
+    public function saveSettingsToYaml($data, $yamlFileName = 'settings')
     {
         $rootPath = realpath($this->getParameter('kernel.root_dir').'/../..');
         $settingsFilePath = $rootPath . DIRECTORY_SEPARATOR . "config/{$yamlFileName}.yaml";
         $yaml = Yaml::dump(['parameters' => $data]);
 
-        return file_put_contents($settingsFilePath, $yaml);
+        if (!is_writable($settingsFilePath)) {
+            return false;
+        }
+        file_put_contents($settingsFilePath, $yaml);
+
+        return true;
     }
 
     /**
@@ -358,10 +370,15 @@ class SettingsController extends Controller
         $userController->setContainer($this->container);
         $rolesHierarchy = $userController->getRolesHierarchy();
 
+        $localeList = $this->getParameter('app.locale_list');
+        $localeList = $localeList ? explode(',', $localeList) : [];
+        $localeList = array_map('trim', $localeList);
+
         $settings = [
             'filesDirUrl' => $this->getParameter('app.files_dir_url'),
             'baseDir' => realpath($this->getParameter('kernel.root_dir').'/../..') . DIRECTORY_SEPARATOR,
             'locale' => $this->getParameter('locale'),
+            'localeList' => $localeList,
             'userEmail' => $user->getEmail(),
             'userRoles' => $user->getRoles(),
             'systemSettings' => $settings,

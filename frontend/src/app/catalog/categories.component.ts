@@ -22,6 +22,7 @@ import {ContentTypesService} from './services/content_types.service';
 import {FormFieldInterface} from '../models/form-field.interface';
 import {EntityTranslation} from "../models/entity-translation";
 import {TranslationsComponent} from '../translations.component';
+import {AppSettings} from '../services/app-settings.service';
 
 /**
  * @class CategoriesModalComponent
@@ -34,15 +35,13 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
 
     @Input() currentCategory: Category;
     @Input() isRoot = false;
-    @ViewChild('appTranslations') appTranslations: TranslationsComponent;
     model: Category = new Category(null, false, 0, '', '', '', '', true);
     contentTypes: ContentType[] = [];
     loadingCategories = false;
     categories: TreeNode[] = [];
     currentCategoryNode: TreeNode;
     isCollapsed = false;
-    translations: {[fieldName: string]: EntityTranslation[]} = {};
-    translateTimer: any;
+    localeFieldsAllowed: string[] = ['title', 'description'];
 
     formFields: FormFieldInterface = {
         title: {
@@ -103,13 +102,19 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
         public activeModal: NgbActiveModal,
         public tooltipConfig: NgbTooltipConfig,
         public translateService: TranslateService,
-        private contentTypesService: ContentTypesService
+        private contentTypesService: ContentTypesService,
+        private appSettings: AppSettings
     ) {
         super(fb, dataService, systemNameService, activeModal, tooltipConfig, translateService);
     }
 
     /** On initialize */
     ngOnInit(): void {
+        this.localeList = this.appSettings.settings.localeList;
+        if (this.localeList.length > 0) {
+            this.localeDefault = this.localeList[0];
+            this.localeCurrent = this.localeList[0];
+        }
         if (this.itemId) {
             this.model.id = this.itemId;
         }
@@ -149,13 +154,6 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
     onCategorySelect(e: any): void {
         this.form.controls.parentId.setValue(e.node.id);
         this.model.parentId = e.node.id;
-    }
-
-    addTranslation(fieldName: string, event?: MouseEvent): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.appTranslations.addTranslation(fieldName);
     }
 
     save(): void {

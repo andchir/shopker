@@ -205,10 +205,12 @@ class UtilsService
 
         // Sorting options
         $queryOptions['sortOptions'] = [];
+        $queryOptions['sortOptionsAggregation'] = [];
         foreach ($queryOptions['sort_by'] as $ind => $sortByName) {
             $queryOptions['sortOptions'][$sortByName] = isset($queryOptions['sort_dir'][$ind])
                 ? $queryOptions['sort_dir'][$ind]
                 : $queryOptions['sort_dir'][0];
+            $queryOptions['sortOptionsAggregation'][$sortByName] = $queryOptions['sortOptions'][$sortByName] == 'asc' ? 1 : -1;
         }
 
         if(!is_numeric($queryOptions['limit'])){

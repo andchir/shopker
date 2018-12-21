@@ -23,6 +23,9 @@ class CatalogController extends ProductController
      * @param Request $request
      * @param string $uri
      * @return Response
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function catalogCategoryAction(Request $request, $uri)
     {
@@ -34,6 +37,9 @@ class CatalogController extends ProductController
      * @param Request $request
      * @param string $uri
      * @return Response
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function catalogPageAction(Request $request, $uri)
     {
@@ -45,12 +51,16 @@ class CatalogController extends ProductController
      * @param string $uri
      * @param string $routeName
      * @return Response
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function catalogAction(Request $request, $uri, $routeName)
     {
         if (empty($this->getParameter('mongodb_database'))) {
             return $this->redirectToRoute('setup');
         }
+        $localeDefault = $this->getParameter('locale');
         $locale = $request->getLocale();
         $categoriesRepository = $this->getCategoriesRepository();
         $filtersRepository = $this->get('doctrine_mongodb')
@@ -85,6 +95,7 @@ class CatalogController extends ProductController
 
         $contentType = $currentCategory->getContentType();
         $priceFieldName = $contentType->getPriceFieldName();
+        $headerFieldName = $contentType->getFieldByChunkName('header');
         $contentTypeFields = $contentType->getFields();
         $collection = $this->getCollection($contentType->getCollection());
         $queryString = $request->getQueryString();
@@ -111,16 +122,37 @@ class CatalogController extends ProductController
         ];
         $this->applyFilters($queryOptions['filter'], $filters, $criteria);
         $this->applyCategoryFilter($currentCategory, $contentTypeFields, $criteria);
-
+        if ($locale !== $localeDefault && $headerFieldName) {
+            $this->applyLocaleFilter($locale, $headerFieldName, $criteria);
+        }
         $total = $collection->find($criteria)->count();
 
         /* pages */
         $pagesOptions = UtilsService::getPagesOptions($queryOptions, $total, $pageSizeArr);
 
-        $items = $collection->find($criteria)
-            ->sort($queryOptions['sortOptions'])
-            ->skip($pagesOptions['skip'])
-            ->limit($queryOptions['limit']);
+//        $items = $collection->find($criteria)
+//            ->sort($queryOptions['sortOptions'])
+//            ->skip($pagesOptions['skip'])
+//            ->limit($queryOptions['limit']);
+
+        $aggregateFields = [];
+        foreach ($contentTypeFields as $contentTypeField) {
+            if ($locale !== $localeDefault && in_array($contentTypeField['inputType'], ['text', 'textarea', 'rich_text'])) {
+                $aggregateFields[$contentTypeField['name']] = "\$translations.{$contentTypeField['name']}.{$locale}";
+            } else {
+                $aggregateFields[$contentTypeField['name']] = 1;
+            }
+        }
+
+        $items = $collection->aggregate([
+            ['$match' => $criteria],
+            ['$project' => $aggregateFields],
+            ['$sort' => $queryOptions['sortOptionsAggregation']],
+            ['$skip' => $pagesOptions['skip']],
+            ['$limit' => $queryOptions['limit']]
+        ], [
+            'cursor' => []
+        ]);
 
         $categoriesSiblings = [];
         if (count($categoriesMenu) === 0 && $levelNum > 1) {
@@ -159,6 +191,9 @@ class CatalogController extends ProductController
      * @param string $uri
      * @param string $locale
      * @return Response
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function pageProduct(Category $category = null, $uri = '', $locale = '')
     {

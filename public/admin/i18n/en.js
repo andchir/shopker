@@ -130,6 +130,7 @@ var APP_LANG = {
     "YOU_SURE_YOU_WANT_DELETE_SELECTED": "Are you sure you want to delete all selected items?",
     "admin_email": "Admin email",
     "app": {
+        "locale_list": "List of languages (comma separated)",
         "admin_email": "Admin email",
         "nds_rate": "Tax rate",
         "tax_system": "Store taxation system",

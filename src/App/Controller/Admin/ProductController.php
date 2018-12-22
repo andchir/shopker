@@ -393,6 +393,10 @@ class ProductController extends BaseProductController
             $eventDispatcher->dispatch(Events::PRODUCT_CREATED, $event);
         }
 
+        if (!empty($document['translations'])) {
+            $this->updateTranslationsTextIndex($document, $collection);
+        }
+
         // If $fileFields is not empty it will be done after saving the files
         // Otherwise do it now
         if (empty($fileFields)) {

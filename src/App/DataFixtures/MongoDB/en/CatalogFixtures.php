@@ -888,6 +888,7 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface
 
         /** @var ContentType $contentType */
         $contentType = $category->getContentType();
+        /** @var \Doctrine\MongoDB\Collection $collection */
         $collection = $this->productController->getCollection($contentType->getCollection(), $settings['mongodb_database']);
 
         foreach ($data as $product) {
@@ -899,14 +900,12 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface
 
         // Add text index
         $indexInfo = $collection->getIndexInfo();
-        $textIndex = array_filter($indexInfo, function($val) {
-            return $val['name'] === 'title_text_description_text';
-        });
-        if (!count($textIndex)) {
-            $collection->ensureIndex(array_fill_keys(['title', 'description'], 'text'), [
-                'default_language' => 'english'
-            ]);
+        if (!empty($indexInfo)) {
+            $collection->deleteIndexes();
         }
+        $collection->ensureIndex(array_fill_keys(['title', 'description'], 'text'), [
+            'default_language' => 'english'
+        ]);
 
         $this->productController->updateFiltersData($category, $settings['mongodb_database']);
 

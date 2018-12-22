@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Repository\CategoryRepository;
+use Doctrine\MongoDB\Collection;
+use Doctrine\MongoDB\Database;
 use Doctrine\ODM\MongoDB\Cursor;
 use Doctrine\ODM\MongoDB\DocumentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -106,8 +108,65 @@ class ProductController extends BaseController
             $databaseName = $this->getParameter('mongodb_database');
         }
         $m = $this->container->get('doctrine_mongodb.odm.default_connection');
+        /** @var Database $db */
         $db = $m->selectDatabase($databaseName);
         return $db->createCollection($collectionName);
+    }
+
+    /**
+     * @param array $document
+     * @param Collection $collection
+     * @return bool
+     */
+    public function updateTranslationsTextIndex($document, Collection $collection)
+    {
+        if (empty($document['translations'])) {
+            return false;
+        }
+        $indexInfo = $collection->getIndexInfo();
+        $textIndexFields = [];
+        $textIndexFieldsNew = [];
+        $textIndexName = '';
+        $defaultLanguage = '';
+        foreach ($indexInfo as $indexData) {
+            if (isset($indexData['weights'])) {
+                $fields = array_keys($indexData['weights']);
+                if (!empty($indexData['default_language'])) {
+                    $defaultLanguage = $indexData['default_language'];
+                    $textIndexName = $indexData['name'];
+                }
+                foreach ($fields as $fieldName) {
+                    $textIndexFields[] = $fieldName;
+                    if (strpos($fieldName, 'translations.') === false) {
+                        if (!isset($document['translations'][$fieldName])) {
+                            continue;
+                        }
+                        foreach ($document['translations'][$fieldName] as $lang => $val) {
+                            $indName = "translations.{$fieldName}.{$lang}";
+                            if (!in_array($indName, $fields)) {
+                                $textIndexFieldsNew[] = $indName;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        unset($fields);
+
+        if (!empty($textIndexFieldsNew) && $textIndexName) {
+            $textIndexName = explode('_', $textIndexName);
+            $textIndexName = array_filter($textIndexName, function($key) {
+                return ($key + 1) % 2 !== 0;
+            }, ARRAY_FILTER_USE_KEY);
+
+            $fields = array_unique(array_merge($textIndexFields, $textIndexFieldsNew));
+            $collection->deleteIndex(array_fill_keys($textIndexName, 'text'));
+            $collection->ensureIndex(array_fill_keys($fields, 'text'), [
+                'default_language' => $defaultLanguage
+            ]);
+        }
+
+        return true;
     }
 
     /**

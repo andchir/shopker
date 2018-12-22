@@ -150,10 +150,17 @@ class AppRuntime
         if (!$collectionName) {
             return '';
         }
+        $request = $this->requestStack->getCurrentRequest();
+        $localeDefault = $this->container->getParameter('locale');
+        $locale = $request->getLocale();
+
         /** @var FilesystemCache $cache */
         $cache = $this->container->get('app.filecache');
-        if (!empty($cacheKey) && $cache->has("content.{$cacheKey}")) {
-            return $cache->get("content.{$cacheKey}");
+        if (!empty($cacheKey)) {
+            $cacheKey .= ".{$locale}";
+            if ($cache->has("content.{$cacheKey}")) {
+                return $cache->get("content.{$cacheKey}");
+            }
         }
 
         $templateName = sprintf('catalog/%s.html.twig', $chunkName);
@@ -164,7 +171,6 @@ class AppRuntime
 
         $total = $collection->find($criteria)->count();
 
-        $request = $this->requestStack->getCurrentRequest();
         $currentUri = $this->getCurrentURI();
         $queryString = $request->getQueryString();
         $options = [
@@ -174,11 +180,30 @@ class AppRuntime
         $queryOptions = UtilsService::getQueryOptions($currentUri, $queryString, [], [$limit], $options);
         $pagesOptions = UtilsService::getPagesOptions($queryOptions, $total, [], $options);
 
-        $items = $collection
-            ->find($criteria)
-            ->sort($orderBy)
-            ->skip($pagesOptions['skip'])
-            ->limit($limit);
+        $aggregateFields = [];
+        if ($locale !== $localeDefault) {
+            $contentType = $catalogController->getContentTypeRepository()->findOneBy([
+                'collection' => $collectionName
+            ]);
+            if ($contentType) {
+                $aggregateFields = $contentType->getAggregationFields($locale, $localeDefault, true);
+            }
+        }
+
+        $orderBy = array_map(function($orderByDir) {
+            return $orderByDir === 'asc' ? 1 : -1;
+        }, $orderBy);
+
+        $pipeline = $catalogController->createAggregatePipeline(
+            $criteria,
+            $aggregateFields,
+            $queryOptions['limit'],
+            $orderBy,
+            $pagesOptions['skip']
+        );
+        $items = $collection->aggregate($pipeline, [
+            'cursor' => []
+        ]);
 
         $output = $environment->render($templateName, [
             'items' => $items,

@@ -213,6 +213,8 @@ class CatalogController extends ProductController
             $aggregateFields,
             1
         );
+
+
         $currentPage = $collection->aggregate($pipeline, [
             'cursor' => []
         ])->toArray();

@@ -130,11 +130,6 @@ class CatalogController extends ProductController
         /* pages */
         $pagesOptions = UtilsService::getPagesOptions($queryOptions, $total, $pageSizeArr);
 
-//        $items = $collection->find($criteria)
-//            ->sort($queryOptions['sortOptions'])
-//            ->skip($pagesOptions['skip'])
-//            ->limit($queryOptions['limit']);
-
         $aggregateFields = [];
         foreach ($contentTypeFields as $contentTypeField) {
             if ($locale !== $localeDefault && in_array($contentTypeField['inputType'], ['text', 'textarea', 'rich_text'])) {

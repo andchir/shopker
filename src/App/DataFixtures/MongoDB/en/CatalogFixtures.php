@@ -595,7 +595,8 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface
                                                 'color' => '#000000',
                                                 'material' => 'Artificial leather',
                                                 'image' => '',
-                                                'tags' => ['New', 'Leader of sales']
+                                                'tags' => ['New', 'Leader of sales'],
+                                                'translations' => ['title' => ['ru' => 'Кроссовки Patrol Black']]
                                             ],
                                             [
                                                 'title' => 'Sneakers Patrol White',
@@ -607,7 +608,8 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface
                                                 'color' => '#984d06',
                                                 'material' => 'Artificial leather',
                                                 'image' => '',
-                                                'tags' => ['New']
+                                                'tags' => ['New'],
+                                                'translations' => ['title' => ['ru' => 'Кроссовки Patrol White']]
                                             ],
                                             [
                                                 'title' => 'Sneakers Patrol Brown',
@@ -618,7 +620,8 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface
                                                 'country' => 'China',
                                                 'color' => '#66583c',
                                                 'material' => 'Artificial leather',
-                                                'image' => ''
+                                                'image' => '',
+                                                'translations' => ['title' => ['ru' => 'Кроссовки Patrol Brown']]
                                             ],
                                             [
                                                 'title' => 'Sneakers Nike Air Max Infuriate Low',
@@ -629,7 +632,8 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface
                                                 'country' => 'Vietnam',
                                                 'color' => '#000000',
                                                 'material' => 'Artificial leather',
-                                                'image' => ''
+                                                'image' => '',
+                                                'translations' => ['title' => ['ru' => 'Кроссовки Nike Air Max Infuriate Low']]
                                             ],
                                             [
                                                 'title' => 'Sneakers Nike Nightgazer',
@@ -640,7 +644,8 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface
                                                 'country' => 'Vietnam',
                                                 'color' => '#000000',
                                                 'material' => 'Artificial leather',
-                                                'image' => ''
+                                                'image' => '',
+                                                'translations' => ['title' => ['ru' => 'Кроссовки Nike Nightgazer']]
                                             ],
                                             [
                                                 'title' => 'Sneakers Bris-Bosphorus',
@@ -652,7 +657,8 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface
                                                 'color' => '#000000',
                                                 'material' => 'Textile',
                                                 'image' => '',
-                                                'tags' => ['New', 'Action']
+                                                'tags' => ['New', 'Action'],
+                                                'translations' => ['title' => ['ru' => 'Кеды Брис-Босфор']]
                                             ],
                                             [
                                                 'title' => 'Sneakers Nike COURT ROYALE',
@@ -663,7 +669,8 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface
                                                 'country' => 'Indonesia',
                                                 'color' => '#ffffff',
                                                 'material' => 'Textile',
-                                                'image' => ''
+                                                'image' => '',
+                                                'translations' => ['title' => ['ru' => 'Кеды Nike COURT ROYALE']]
                                             ],
                                             [
                                                 'title' => 'Sneakers Nike T-Lite XI',
@@ -674,7 +681,8 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface
                                                 'country' => 'Indonesia',
                                                 'color' => '#ffffff',
                                                 'material' => 'Artificial leather',
-                                                'image' => ''
+                                                'image' => '',
+                                                'translations' => ['title' => ['ru' => 'Кроссовки Nike T-Lite XI']]
                                             ],
                                             [
                                                 'title' => 'Sneakers Nike Reax 8 TR',
@@ -686,7 +694,8 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface
                                                 'color' => '#ffffff',
                                                 'material' => 'Genuine leather',
                                                 'image' => '',
-                                                'tags' => ['New', 'Action']
+                                                'tags' => ['New', 'Action'],
+                                                'translations' => ['title' => ['ru' => 'Кроссовки Nike Reax 8 TR']]
                                             ],
                                             [
                                                 'title' => 'Sneakers Nike Court Royale Suede',
@@ -697,7 +706,8 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface
                                                 'country' => 'Indonesia',
                                                 'color' => '#ffffff',
                                                 'material' => 'Genuine leather',
-                                                'image' => ''
+                                                'image' => '',
+                                                'translations' => ['title' => ['ru' => '']]
                                             ],
                                             [
                                                 'title' => 'Sneakers Adidas Climawarm Atr M',
@@ -708,7 +718,8 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface
                                                 'country' => 'China',
                                                 'color' => '#0f77b0',
                                                 'material' => 'Artificial leather, Textile',
-                                                'image' => ''
+                                                'image' => '',
+                                                'translations' => ['title' => ['ru' => 'Кеды Nike Court Royale Suede']]
                                             ],
                                             [
                                                 'title' => 'Sneakers Adidas Neo 10K Casual',
@@ -720,7 +731,8 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface
                                                 'color' => '#0f77b0',
                                                 'material' => 'Artificial leather, Textile',
                                                 'image' => '',
-                                                'tags' => ['New', 'Leader of sales']
+                                                'tags' => ['New', 'Leader of sales'],
+                                                'translations' => ['title' => ['ru' => 'Кроссовки Adidas Neo 10K Casual']]
                                             ],
                                             [
                                                 'title' => 'Valenki Cotofey',
@@ -732,7 +744,8 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface
                                                 'color' => '#000000',
                                                 'material' => 'Felt',
                                                 'image' => '',
-                                                'tags' => ['New']
+                                                'tags' => ['New'],
+                                                'translations' => ['title' => ['ru' => 'Валенки Котофей']]
                                             ]
                                         ]
                                     ],

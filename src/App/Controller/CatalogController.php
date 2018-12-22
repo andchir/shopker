@@ -129,15 +129,7 @@ class CatalogController extends ProductController
 
         /* pages */
         $pagesOptions = UtilsService::getPagesOptions($queryOptions, $total, $pageSizeArr);
-
-        $aggregateFields = [];
-        foreach ($contentTypeFields as $contentTypeField) {
-            if ($locale !== $localeDefault && in_array($contentTypeField['inputType'], ['text', 'textarea', 'rich_text'])) {
-                $aggregateFields[$contentTypeField['name']] = "\$translations.{$contentTypeField['name']}.{$locale}";
-            } else {
-                $aggregateFields[$contentTypeField['name']] = 1;
-            }
-        }
+        $aggregateFields = $contentType->getAggregationFields($locale, $localeDefault);
 
         $items = $collection->aggregate([
             ['$match' => $criteria],
@@ -203,20 +195,32 @@ class CatalogController extends ProductController
             throw $this->createNotFoundException();
         }
 
+        $localeDefault = $this->getParameter('locale');
         $collectionName = $contentType->getCollection();
         $contentTypeFields = $contentType->getFields();
         $priceFieldName = $contentType->getPriceFieldName();
         $collection = $this->getCollection($collectionName);
         $breadcrumbs = $categoriesRepository->getBreadcrumbs($categoryUri, false, $locale);
 
-        $currentPage = $collection->findOne([
-            'name' => $pageAlias,
-            'parentId' => $category->getId(),
-            'isActive' => true
-        ]);
-        if (!$currentPage) {
+        $aggregateFields = $contentType->getAggregationFields($locale, $localeDefault);
+
+        $currentPage = $collection->aggregate([
+            [
+                '$match' => [
+                    'name' => $pageAlias,
+                    'parentId' => $category->getId(),
+                    'isActive' => true
+                ]
+            ],
+            ['$project' => $aggregateFields],
+            ['$limit' => 1]
+        ], [
+            'cursor' => []
+        ])->toArray();
+        if (empty($currentPage)) {
             throw $this->createNotFoundException();
         }
+        $currentPage = current($currentPage);
         $currentId = $currentPage['_id'];
         $currentPage['id'] = $currentId;
 

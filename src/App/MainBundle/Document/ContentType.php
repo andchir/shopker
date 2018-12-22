@@ -411,4 +411,23 @@ class ContentType
             ? $data['translations'][$fieldName][$locale]
             : $data[$fieldName] ?? '';
     }
+
+    /**
+     * @param string $locale
+     * @param string $localeDefault
+     * @return array
+     */
+    public function getAggregationFields($locale, $localeDefault)
+    {
+        $aggregateFields = [];
+        foreach ($this->getFields() as $contentTypeField) {
+            if ($locale !== $localeDefault && in_array($contentTypeField['inputType'], ['text', 'textarea', 'rich_text'])) {
+                $aggregateFields[$contentTypeField['name']] = "\$translations.{$contentTypeField['name']}.{$locale}";
+            } else {
+                $aggregateFields[$contentTypeField['name']] = 1;
+            }
+        }
+        $aggregateFields['parentId'] = 1;
+        return $aggregateFields;
+    }
 }

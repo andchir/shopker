@@ -289,10 +289,16 @@
                                 </label>
                             </div>
                             <div class="col-md-7">
-                                <label class="mr-3" *ngFor="let opt of field.options">
-                                    <input type="radio" [name]="field.name" [value]="opt.value" [formControlName]="field.name" [(ngModel)]="model[field.name]">
-                                    {{opt.title}}
-                                </label>
+                                <div>
+                                    <div class="custom-control custom-radio d-inline-block mr-4" *ngFor="let opt of field.options; index as index">
+                                        <input type="radio" id="radio_{{field.name}}{{index}}" class="custom-control-input"
+                                               [name]="field.name"
+                                               [value]="opt.value"
+                                               [formControlName]="field.name"
+                                               [(ngModel)]="model[field.name]">
+                                        <label class="custom-control-label" for="radio_{{field.name}}{{index}}">{{opt.title}}</label>
+                                    </div>
+                                </div>
                                 <div *ngIf="formErrors[field.name]" class="alert alert-danger">
                                     {{formErrors[field.name]}}
                                 </div>
@@ -309,10 +315,17 @@
                                 </label>
                             </div>
                             <div class="col-md-7">
-                                <label class="mr-3" *ngFor="let opt of field.options; let index=index">
-                                    <input type="checkbox" [name]="field.name + index" [value]="opt.value" (change)="selectValue($event, field.name, opt.value)" [checked]="fieldsMultivalues[field.name].checked[index]">
-                                    {{opt.title}}
-                                </label>
+                                <div>
+                                    <div class="custom-control custom-checkbox d-inline-block mr-4" *ngFor="let opt of field.options; index as index">
+                                        <input type="checkbox" class="custom-control-input"
+                                               id="chk_{{field.name}}{{index}}"
+                                               [name]="field.name + index"
+                                               [value]="opt.value"
+                                               (change)="selectValue($event, field.name, opt.value)"
+                                               [checked]="fieldsMultivalues[field.name].checked[index]">
+                                        <label class="custom-control-label" for="chk_{{field.name}}{{index}}">{{opt.title}}</label>
+                                    </div>
+                                </div>
                                 <div *ngIf="formErrors[field.name]" class="alert alert-danger">
                                     {{formErrors[field.name]}}
                                 </div>

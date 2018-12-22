@@ -415,19 +415,26 @@ class ContentType
     /**
      * @param string $locale
      * @param string $localeDefault
+     * @param bool $addFieldsOnly
      * @return array
      */
-    public function getAggregationFields($locale, $localeDefault)
+    public function getAggregationFields($locale, $localeDefault, $addFieldsOnly = false)
     {
         $aggregateFields = [];
+        if ($locale === $localeDefault && $addFieldsOnly) {
+            return [];
+        }
         foreach ($this->getFields() as $contentTypeField) {
-            if ($locale !== $localeDefault && in_array($contentTypeField['inputType'], ['text', 'textarea', 'rich_text'])) {
-                $aggregateFields[$contentTypeField['name']] = "\$translations.{$contentTypeField['name']}.{$locale}";
-            } else {
+            if ($locale !== $localeDefault
+                && in_array($contentTypeField['inputType'], ['text', 'textarea', 'rich_text'])) {
+                    $aggregateFields[$contentTypeField['name']] = "\$translations.{$contentTypeField['name']}.{$locale}";
+            } else if (!$addFieldsOnly) {
                 $aggregateFields[$contentTypeField['name']] = 1;
             }
         }
-        $aggregateFields['parentId'] = 1;
+        if (!$addFieldsOnly) {
+            $aggregateFields['parentId'] = 1;
+        }
         return $aggregateFields;
     }
 }

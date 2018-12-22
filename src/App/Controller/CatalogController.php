@@ -129,15 +129,16 @@ class CatalogController extends ProductController
 
         /* pages */
         $pagesOptions = UtilsService::getPagesOptions($queryOptions, $total, $pageSizeArr);
-        $aggregateFields = $contentType->getAggregationFields($locale, $localeDefault);
+        $aggregateFields = $contentType->getAggregationFields($locale, $localeDefault, true);
 
-        $items = $collection->aggregate([
-            ['$match' => $criteria],
-            ['$project' => $aggregateFields],
-            ['$sort' => $queryOptions['sortOptionsAggregation']],
-            ['$skip' => $pagesOptions['skip']],
-            ['$limit' => $queryOptions['limit']]
-        ], [
+        $pipeline = $this->createAggregatePipeline(
+            $criteria,
+            $aggregateFields,
+            $queryOptions['limit'],
+            $queryOptions['sortOptionsAggregation'],
+            $pagesOptions['skip']
+        );
+        $items = $collection->aggregate($pipeline, [
             'cursor' => []
         ]);
 
@@ -202,19 +203,17 @@ class CatalogController extends ProductController
         $collection = $this->getCollection($collectionName);
         $breadcrumbs = $categoriesRepository->getBreadcrumbs($categoryUri, false, $locale);
 
-        $aggregateFields = $contentType->getAggregationFields($locale, $localeDefault);
-
-        $currentPage = $collection->aggregate([
+        $aggregateFields = $contentType->getAggregationFields($locale, $localeDefault, true);
+        $pipeline = $this->createAggregatePipeline(
             [
-                '$match' => [
-                    'name' => $pageAlias,
-                    'parentId' => $category->getId(),
-                    'isActive' => true
-                ]
+                'name' => $pageAlias,
+                'parentId' => $category->getId(),
+                'isActive' => true
             ],
-            ['$project' => $aggregateFields],
-            ['$limit' => 1]
-        ], [
+            $aggregateFields,
+            1
+        );
+        $currentPage = $collection->aggregate($pipeline, [
             'cursor' => []
         ])->toArray();
         if (empty($currentPage)) {
@@ -532,6 +531,32 @@ class CatalogController extends ProductController
         else {
             return self::createTree($data, [$parentCategory->getMenuData([], $locale)]);
         }
+    }
+
+    /**
+     * @param $criteria
+     * @param $aggregateFields
+     * @param $limit
+     * @param $sort
+     * @param $skip
+     * @return array
+     */
+    public function createAggregatePipeline($criteria, $aggregateFields, $limit = 1, $sort = [], $skip = 0)
+    {
+        $pipeline = [['$match' => $criteria]];
+        if (!empty($aggregateFields)) {
+            $pipeline[] = ['$addFields' => $aggregateFields];
+        }
+        if (!empty($sort)) {
+            $pipeline[] = ['$sort' => $sort];
+        }
+        if (!empty($skip)) {
+            $pipeline[] = ['$skip' => $skip];
+        }
+        if (!empty($limit)) {
+            $pipeline[] = ['$limit' => $limit];
+        }
+        return $pipeline;
     }
 
     /**

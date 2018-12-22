@@ -21,6 +21,9 @@ class SearchController extends CatalogController
      */
     public function searchResultsAction(Request $request)
     {
+        $localeDefault = $this->getParameter('locale');
+        $locale = $request->getLocale();
+
         $searchWord = trim($request->get('query', ''));
         $searchCollections = $this->container->hasParameter('search_collections')
             ? $this->container->hasParameter('search_collections')
@@ -73,11 +76,20 @@ class SearchController extends CatalogController
         /* pages */
         $pagesOptions = UtilsService::getPagesOptions($queryOptions, $total, $pageSizeArr);
 
-        $items = $collection
-            ->find($criteria, ['score' => [ '$meta' => 'textScore' ]])
-            ->sort(['score' => [ '$meta' => 'textScore' ]])
-            ->skip($pagesOptions['skip'])
-            ->limit($queryOptions['limit']);
+        $aggregateFields = $contentType->getAggregationFields($locale, $localeDefault, true);
+        $aggregateFields['score'] = ['$meta' => 'textScore'];
+
+        $pipeline = $this->createAggregatePipeline(
+            $criteria,
+            $aggregateFields,
+            $queryOptions['limit'],
+            ['score' => [ '$meta' => 'textScore' ]],
+            $pagesOptions['skip']
+        );
+
+        $items = $collection->aggregate($pipeline, [
+            'cursor' => []
+        ]);
 
         return $this->render('page_search_results.html.twig', [
             'currency' => $currency,

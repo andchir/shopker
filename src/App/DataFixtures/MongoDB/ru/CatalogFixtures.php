@@ -822,7 +822,7 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface
                         'description' => '',
                         'form_name' => 'contacts',
                         'menuIndex' => 3,
-                        'translations' => ['title' => ['en' => 'Contacts'], 'form_name' => ['ru' => 'contacts']]
+                        'translations' => ['title' => ['en' => 'Contacts'], 'form_name' => ['en' => 'contacts']]
                     ]
                 ]
             ]

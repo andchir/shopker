@@ -111,6 +111,7 @@ class DefaultController extends CatalogController
         }
         $settingsDefault = [
             'locale' => $request->getLocale(),
+            'app.locale_list' => $request->getLocale() == 'ru' ? 'ru,en' : 'en,ru',
             'app.name' => $this->getParameter('app.name'),
             'mongodb_server' => $this->getParameter('mongodb_server'),
             'mongodb_port' => $this->getParameter('mongodb_port'),

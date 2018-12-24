@@ -104,6 +104,8 @@ export class SettingsComponent implements OnInit {
             .subscribe((res) => {
                 this.composerPackages = res as ComposerPackage[];
                 this.settings.SETTINGS_COMPOSER_PACKAGES.loading = false;
+            }, (err) => {
+                this.settings.SETTINGS_COMPOSER_PACKAGES.loading = false;
             });
     }
 

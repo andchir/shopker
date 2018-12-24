@@ -8,7 +8,7 @@
 
         <h1>{{ fieldByLocale(currentPage, getFieldNameByChunk(currentPage, fields, 'header')) }}</h1>
 
-        {{ fieldByLocale(currentPage, getFieldNameByChunk(currentPage, fields, 'description')) }}
+        {{ renderOutputTypeChunk(currentPage, fields, 'description') }}
 
         {% if currentPage.form_name is defined and currentPage.form_name is not empty -%}
             <div class="row">

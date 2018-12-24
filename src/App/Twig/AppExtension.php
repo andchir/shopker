@@ -421,11 +421,17 @@ class AppExtension extends AbstractExtension
      * @param \Twig_Environment $environment
      * @param int $parentId
      * @param string $chunkName
-     * @param null $data
+     * @param array|null $data
+     * @param array|null $activeCategoriesIds
      * @param bool $cacheEnabled
      * @return string
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \Throwable
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
-    public function categoriesTreeFunction(\Twig_Environment $environment, $parentId = 0, $chunkName = 'menu_tree', $data = null, $cacheEnabled = false)
+    public function categoriesTreeFunction(\Twig_Environment $environment, $parentId = 0, $chunkName = 'menu_tree', $data = null, $activeCategoriesIds = null, $cacheEnabled = false)
     {
         $request = $this->requestStack->getCurrentRequest();
         $currentUri = substr($request->getPathInfo(), 1);
@@ -435,34 +441,46 @@ class AppExtension extends AbstractExtension
         $cacheKey = "tree.{$chunkName}.{$locale}";
         /** @var FilesystemCache $cache */
         $cache = $this->container->get('app.filecache');
+        $output = '';
 
         if ($data === null) {
             if ($cacheEnabled && $cache->has($cacheKey)) {
-                return $environment->createTemplate($cache->get($cacheKey))->render([
-                    'currentUri' => $currentUri,
-                    'uriArr' => $uriArr
-                ]);
+                $output = $cache->get($cacheKey);
+            } else {
+                $catalogController = new CatalogController();
+                $catalogController->setContainer($this->container);
+                $categoriesTree = $catalogController->getCategoriesTree($parentId, $locale);
+                $data = $categoriesTree[0];
+                if ($activeCategoriesIds === null) {
+                    $activeCategoriesIds = $catalogController->getCategoriesActiveIds($data, $uriArr);
+                }
             }
-            $catalogController = new CatalogController();
-            $catalogController->setContainer($this->container);
-            $categoriesTree = $catalogController->getCategoriesTree($parentId, $locale);
-            $data = $categoriesTree[0];
         }
-        $templateName = $this->getTemplateName($environment, 'nav/', $chunkName);
-        if (empty($data['children'])) {
-            return '';
-        }
-        $data['currentUri'] = $currentUri;
-        $data['uriArr'] = $uriArr;
-        $output = $environment->render($templateName, $data);
 
-        if ($cacheEnabled) {
-            $cache->set($cacheKey, $output, 60*60*24);
+        if (!$output) {
+            $templateName = $this->getTemplateName($environment, 'nav/', $chunkName);
+            if (empty($data['children'])) {
+                return '';
+            }
+            $data['currentUri'] = $currentUri;
+            $data['uriArr'] = $uriArr;
+            $data['activeCategoriesIds'] = $activeCategoriesIds;
+            $output = $environment->render($templateName, $data);
+
+            if ($cacheEnabled) {
+                 $cache->set($cacheKey, $output, 60*60*24);
+            }
         }
-        return $environment->createTemplate($output)->render([
-            'currentUri' => $currentUri,
-            'uriArr' => $uriArr
-        ]);
+
+        if ($cacheEnabled && !empty($activeCategoriesIds)) {
+            $output = str_replace(
+                array_map(function($id) {return "active{$id}-"; }, $activeCategoriesIds),
+                'active',
+                $output
+            );
+        }
+
+        return $output;
     }
 
     /**

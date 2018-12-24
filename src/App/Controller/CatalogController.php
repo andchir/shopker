@@ -147,6 +147,10 @@ class CatalogController extends ProductController
             $categoriesSiblings = $this->getChildCategories($currentCategory->getParentId(), $breadcrumbs, false, '', $locale);
         }
 
+        $activeCategoriesIds = array_map(function($item) {
+            return $item['id'];
+        }, $breadcrumbs);
+
         $breadcrumbs = array_filter($breadcrumbs, function($entry) use ($uri) {
             return $entry['uri'] !== $uri;
         });
@@ -156,6 +160,7 @@ class CatalogController extends ProductController
 
         return $this->render($this->getTemplateName('category', $contentType->getName()), [
             'currentCategory' => $currentCategory,
+            'activeCategoriesIds' => $activeCategoriesIds,
             'currentPage' => $currentPage,
             'currentId' => $currentId,
             'currentUri' => $uri,
@@ -238,8 +243,14 @@ class CatalogController extends ProductController
         $settingsService = $this->get('app.settings');
         $currency = $settingsService->getCurrency();
 
+        $activeCategoriesIds = array_map(function($item) {
+            return $item['id'];
+        }, $breadcrumbs);
+        $activeCategoriesIds[] = 0 - $currentPage['id'];
+
         return $this->render($this->getTemplateName('content-page', $contentType->getName()), [
             'currentCategory' => $category,
+            'activeCategoriesIds' => $activeCategoriesIds,
             'currentPage' => $currentPage,
             'contentType' => $contentType,
             'currentId' => $currentId,
@@ -375,6 +386,8 @@ class CatalogController extends ProductController
      * @param string $currentUri
      * @param string $locale
      * @return array
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
      */
     public function getChildCategories($parent = 0, $breadcrumbs = [], $getChildContent = false, $currentUri = '', $locale = '')
     {
@@ -466,6 +479,8 @@ class CatalogController extends ProductController
      * @param int $parentId
      * @param string $locale
      * @return array
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
      */
     public function getCategoriesTree($parentId = 0, $locale = '')
     {
@@ -510,7 +525,7 @@ class CatalogController extends ProductController
         // Content pages (not categories)
         if (!empty($childContent)) {
             foreach ($childContent as $content) {
-                $content['id'] = -1;// This is not categories
+                $content['id'] = 0 - $content['id'];// This is not categories
                 $data[0][] = $content;
             }
             array_multisort(
@@ -533,6 +548,28 @@ class CatalogController extends ProductController
         else {
             return self::createTree($data, [$parentCategory->getMenuData([], $locale)]);
         }
+    }
+
+    /**
+     * @param array $treeData
+     * @param array $uriArr
+     * @param array $idsArr
+     * @return array
+     */
+    public function getCategoriesActiveIds($treeData, $uriArr, $idsArr = [])
+    {
+        if (empty($treeData['children'])) {
+            return $idsArr;
+        }
+        foreach ($treeData['children'] as $category) {
+            if (in_array($category['uri'], $uriArr)) {
+                $idsArr[] = $category['id'];
+            }
+            if (!empty($category['children'])) {
+                $idsArr = $this->getCategoriesActiveIds($category, $uriArr, $idsArr);
+            }
+        }
+        return $idsArr;
     }
 
     /**

@@ -56,7 +56,8 @@ class ExceptionListener
 
             $content = $this->twig->render('/errors/404.html.twig', [
                 'message' => $message,
-                'currentUri' => '404'
+                'currentUri' => '404',
+                'activeCategoriesIds' => []
             ]);
         }
 

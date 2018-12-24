@@ -1,12 +1,13 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 
-import { Observable ,  of } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import {Observable, of} from 'rxjs';
+import {catchError, map, tap} from 'rxjs/operators';
 
-import { DataService } from '../services/data-service.abstract';
-import { Setting, SettingsGroup } from './models/setting.model';
-import { Properties } from '../models/properties.iterface';
+import {DataService} from '../services/data-service.abstract';
+import {Setting, SettingsGroup} from './models/setting.model';
+import {Properties} from '../models/properties.iterface';
+import {ComposerPackage} from './models/composer-package.interface';
 
 @Injectable()
 export class SettingsService {
@@ -54,6 +55,13 @@ export class SettingsService {
         return this.http.put<Properties>(url, data, {headers: this.headers}).pipe(
             catchError(this.handleError<any>())
         );
+    }
+
+    getComposerPackagesList(): Observable<ComposerPackage[]> {
+        return this.http.get<ComposerPackage[]>(this.getRequestUrl() + '_composer_installed_packages')
+            .pipe(
+                catchError(this.handleError<ComposerPackage[]>())
+            );
     }
 
     handleError<T> (operation = 'operation', result?: T) {

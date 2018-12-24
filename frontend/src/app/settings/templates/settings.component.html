@@ -410,6 +410,42 @@
                     </ngb-panel>
                     <!-- /currencies -->
 
+                    <!-- composerPackages -->
+                    <ngb-panel id="accordion-settings-5" [title]="'SETTINGS_COMPOSER_PACKAGES' | translate">
+                        <ng-template ngbPanelContent>
+                            <div class="max-height400" [ngClass]="{'loading': settings.SETTINGS_COMPOSER_PACKAGES.loading}">
+                                <div class="text-muted">
+                                    {{'SETTINGS_COMPOSER_PACKAGES_DESCRIPTION' | translate}}
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-divided mb-0">
+                                        <colgroup>
+                                            <col width="60%">
+                                            <col width="40%">
+                                        </colgroup>
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    {{'NAME' | translate}}
+                                                </th>
+                                                <th>
+                                                    {{'VERSION' | translate}}
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let package of composerPackages">
+                                                <td>{{ package.name }}</td>
+                                                <td class="text-center">{{ package.version }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngb-panel>
+                    <!-- /composerPackages -->
+
                 </ngb-accordion>
 
             </div>

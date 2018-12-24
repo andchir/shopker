@@ -1,4 +1,5 @@
 {
+    "name": "andchir/shopkeeper4",
     "type": "project",
     "license": "proprietary",
     "require": {

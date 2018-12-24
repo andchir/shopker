@@ -4,8 +4,11 @@ namespace App\Controller\Admin;
 
 use App\MainBundle\Document\Category;
 use App\MainBundle\Document\User;
+use App\Service\ComposerService;
 use App\Service\SettingsService;
 use App\Service\UtilsService;
+use Composer\Json\JsonFile;
+use Composer\Repository\InstalledFilesystemRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -32,13 +35,11 @@ class SettingsController extends Controller
     /**
      * @Route("", methods={"GET"})
      * @param SerializerInterface $serializer
+     * @param SettingsService $settingsService
      * @return JsonResponse
      */
-    public function getList(SerializerInterface $serializer)
+    public function getListAction(SerializerInterface $serializer, SettingsService $settingsService)
     {
-        /** @var SettingsService $settingsService */
-        $settingsService = $this->get('app.settings');
-
         $output = [
             Setting::GROUP_MAIN => [],
             Setting::GROUP_ORDER_STATUSES => [],
@@ -211,8 +212,12 @@ class SettingsController extends Controller
      */
     public function updateInternationalizationAction()
     {
+        /** @var TranslatorInterface $translator */
+        $translator = $this->get('translator');
         $result = $this->updateInternationalization();
-        return $result['success'] ? $this->json($result) : $this->setError($result['msg']);
+        return $result['success']
+            ? $this->json($result)
+            : $this->setError($translator->trans($result['msg'], [], 'validators'));
     }
 
     /**
@@ -358,12 +363,11 @@ class SettingsController extends Controller
     /**
      * @Route("_script", name="admin_settings_script")
      * @param UtilsService $utilsService
+     * @param SettingsService $settingsService
      * @return Response
      */
-    public function settingsScriptAction(UtilsService $utilsService)
+    public function settingsScriptAction(UtilsService $utilsService, SettingsService $settingsService)
     {
-        /** @var SettingsService $settingsService */
-        $settingsService = $this->get('app.settings');
         $settings = $settingsService->getArray();
         /** @var User $user */
         $user = $this->getUser();
@@ -400,6 +404,17 @@ class SettingsController extends Controller
         $response->headers->set('Pragma', 'no-cache');
 
         return $response;
+    }
+
+    /**
+     * @Route("_composer_installed_packages", name="admin_composer_installed_packages")
+     * @param ComposerService $composerService
+     * @return JsonResponse
+     */
+    public function composerInstalledListAction(ComposerService $composerService)
+    {
+        $packages = $composerService->getPackagesList();
+        return $this->json($packages);
     }
 
     /**

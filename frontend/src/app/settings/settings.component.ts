@@ -7,8 +7,8 @@ import {MessageService} from 'primeng/api';
 import {Setting, SettingOption, SettingsGroup, SettingsData} from './models/setting.model';
 import {AppSettings} from '../services/app-settings.service';
 import {SettingsService} from './settings.service';
-import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {TranslateService} from '@ngx-translate/core';
+import {ComposerPackage} from './models/composer-package.interface';
 
 @Component({
     selector: 'app-settings',
@@ -21,6 +21,7 @@ export class SettingsComponent implements OnInit {
     baseUrl: string;
     loading = false;
     forms: {[key: string]: FormGroup} = {};
+    composerPackages: ComposerPackage[] = [];
     settings = {
         SETTINGS_MAIN: new SettingsData(false, true, [], null),
         SETTINGS_ORDER_STATUSES: new SettingsData(
@@ -48,7 +49,8 @@ export class SettingsComponent implements OnInit {
             {
                 value: {value: '', type: 'number'}
             }
-        )
+        ),
+        SETTINGS_COMPOSER_PACKAGES: new SettingsData(false, true, [], null),
     };
 
     constructor(
@@ -62,6 +64,7 @@ export class SettingsComponent implements OnInit {
 
     ngOnInit(): void {
         this.getSettings();
+        this.getComposerPackages();
     }
 
     getSettings(): void {
@@ -92,6 +95,15 @@ export class SettingsComponent implements OnInit {
                     this.settings.SETTINGS_CURRENCY.defaultValues = cloneDeep(res['SETTINGS_CURRENCY']);
                     this.settings.SETTINGS_CURRENCY.loading = false;
                 }
+            });
+    }
+
+    getComposerPackages(): void {
+        this.settings.SETTINGS_COMPOSER_PACKAGES.loading = true;
+        this.settingsService.getComposerPackagesList()
+            .subscribe((res) => {
+                this.composerPackages = res as ComposerPackage[];
+                this.settings.SETTINGS_COMPOSER_PACKAGES.loading = false;
             });
     }
 

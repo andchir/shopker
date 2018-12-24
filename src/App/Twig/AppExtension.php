@@ -424,14 +424,16 @@ class AppExtension extends AbstractExtension
      * @param array|null $data
      * @param array|null $activeCategoriesIds
      * @param bool $cacheEnabled
+     * @param string $activeClassName
      * @return string
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
      * @throws \Psr\SimpleCache\InvalidArgumentException
-     * @throws \Throwable
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function categoriesTreeFunction(\Twig_Environment $environment, $parentId = 0, $chunkName = 'menu_tree', $data = null, $activeCategoriesIds = null, $cacheEnabled = false)
+    public function categoriesTreeFunction(\Twig_Environment $environment, $parentId = 0, $chunkName = 'menu_tree', $data = null, $activeCategoriesIds = null, $cacheEnabled = false, $activeClassName = 'active')
     {
         $request = $this->requestStack->getCurrentRequest();
         $currentUri = substr($request->getPathInfo(), 1);
@@ -475,7 +477,7 @@ class AppExtension extends AbstractExtension
         if ($cacheEnabled && !empty($activeCategoriesIds)) {
             $output = str_replace(
                 array_map(function($id) {return "active{$id}-"; }, $activeCategoriesIds),
-                'active',
+                $activeClassName,
                 $output
             );
         }

@@ -154,7 +154,7 @@ class CatalogController extends ProductController
         $settingsService = $this->get('app.settings');
         $currency = $settingsService->getCurrency();
 
-        return $this->render($this->getTemplateName('catalog', $contentType->getName()), [
+        return $this->render($this->getTemplateName('category', $contentType->getName()), [
             'currentCategory' => $currentCategory,
             'currentPage' => $currentPage,
             'currentId' => $currentId,
@@ -238,7 +238,7 @@ class CatalogController extends ProductController
         $settingsService = $this->get('app.settings');
         $currency = $settingsService->getCurrency();
 
-        return $this->render($this->getTemplateName('product-page', $contentType->getName()), [
+        return $this->render($this->getTemplateName('content-page', $contentType->getName()), [
             'currentCategory' => $category,
             'currentPage' => $currentPage,
             'contentType' => $contentType,

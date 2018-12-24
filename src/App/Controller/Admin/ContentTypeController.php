@@ -71,6 +71,8 @@ class ContentTypeController extends StorageControllerAbstract
      * @param $data
      * @param string $itemId
      * @return JsonResponse
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
      */
     public function createUpdate($data, $itemId = null)
     {

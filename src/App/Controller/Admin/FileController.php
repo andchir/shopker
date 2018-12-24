@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class FileControllerAbstract
@@ -31,6 +32,8 @@ class FileController extends BaseController
         /** @var Filesystem $fs */
         $fs = $this->get('filesystem');
         $user = $this->getUser();
+        /** @var TranslatorInterface $translator */
+        $translator = $this->get('translator');
 
         $itemId = (int) $request->get('itemId');
         $ownerType = $request->get('ownerType');
@@ -46,10 +49,10 @@ class FileController extends BaseController
         }
 
         if (!$itemId) {
-            return $this->setError('Item not found.');
+            return $this->setError($translator->trans('Item not found.', [], 'validators'));
         }
         if (!$categoryId) {
-            return $this->setError('Category not found.');
+            return $this->setError($translator->trans('Category not found.', [], 'validators'));
         }
 
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
@@ -62,13 +65,13 @@ class FileController extends BaseController
         /** @var Category $category */
         $category = $categoryRepository->find($categoryId);
         if (!$category) {
-            return $this->setError('Category not found.');
+            return $this->setError($translator->trans('Category not found.', [], 'validators'));
         }
 
         /** @var ContentType $contentType */
         $contentType = $category->getContentType();
         if(!$contentType || $ownerType !== $contentType->getName()){
-            return $this->setError('Content type not found.');
+            return $this->setError($translator->trans('Content type not found.', [], 'validators'));
         }
         $contentTypeFields = $contentType->getFields();
 
@@ -80,7 +83,7 @@ class FileController extends BaseController
 
         $entity = $collection->findOne(['_id' => $itemId]);
         if(!$entity){
-            return $this->setError('Product not found.');
+            return $this->setError($translator->trans('Product not found.', [], 'validators'));
         }
 
         $error = '';

@@ -6,6 +6,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class StorageControllerAbstract
@@ -72,6 +73,7 @@ abstract class StorageControllerAbstract extends BaseController
      * @Route("/batch", methods={"POST"})
      * @param Request $request
      * @return JsonResponse
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function deleteBatch(Request $request)
     {
@@ -167,9 +169,12 @@ abstract class StorageControllerAbstract extends BaseController
             ? json_decode($request->getContent(), true)
             : [];
 
+        /** @var TranslatorInterface $translator */
+        $translator = $this->get('translator');
+
         $output = $this->validateData($data);
         if(!$output['success']){
-            return $this->setError($output['msg']);
+            return $this->setError($translator->trans($output['msg'], [], 'validators'));
         }
 
         return $this->createUpdate($data);
@@ -187,9 +192,12 @@ abstract class StorageControllerAbstract extends BaseController
             ? json_decode($request->getContent(), true)
             : [];
 
+        /** @var TranslatorInterface $translator */
+        $translator = $this->get('translator');
+
         $output = $this->validateData($data, $itemId);
         if(!$output['success']){
-            return $this->setError($output['msg']);
+            return $this->setError($translator->trans($output['msg'], [], 'validators'));
         }
 
         return $this->createUpdate($data, $itemId);
@@ -205,6 +213,7 @@ abstract class StorageControllerAbstract extends BaseController
      * @param Request $request
      * @param string $action
      * @return JsonResponse
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function batchAction(Request $request, $action = 'delete')
     {

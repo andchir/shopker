@@ -29,6 +29,8 @@ class OrderController extends StorageControllerAbstract
      * @param $data
      * @param string $itemId
      * @return JsonResponse
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
      */
     public function createUpdate($data, $itemId = null)
     {
@@ -136,6 +138,8 @@ class OrderController extends StorageControllerAbstract
      * @param $fieldName
      * @param $value
      * @return bool
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
      */
     public function updateItemProperty($itemId, $fieldName, $value)
     {
@@ -193,6 +197,8 @@ class OrderController extends StorageControllerAbstract
      * @param Request $request
      * @param $itemId
      * @return Response
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
      */
     public function printPageAction(Request $request, $itemId)
     {

@@ -17,6 +17,7 @@ use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use \Mimey\MimeTypes;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class ProductController
@@ -38,10 +39,12 @@ class ProductController extends BaseProductController
         if(!$category){
             return new JsonResponse([]);
         }
+        /** @var TranslatorInterface $translator */
+        $translator = $this->get('translator');
 
         $contentType = $category->getContentType();
         if(!$contentType){
-            return $this->setError('Content type not found.');
+            return $this->setError($translator->trans('Content type not found.', [], 'validators'));
         }
 
         $queryString = $request->getQueryString();
@@ -245,6 +248,8 @@ class ProductController extends BaseProductController
      * @param Request $request
      * @param Category $category
      * @return JsonResponse
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
      */
     public function createItemAction(Request $request, Category $category = null)
     {
@@ -252,9 +257,12 @@ class ProductController extends BaseProductController
             ? json_decode($request->getContent(), true)
             : [];
 
+        /** @var TranslatorInterface $translator */
+        $translator = $this->get('translator');
+
         $output = $this->validateData($data, $category);
         if(!$output['success']){
-            return $this->setError($output['msg']);
+            return $this->setError($translator->trans($output['msg'], [], 'validators'));
         }
 
         return $this->createUpdate($data, $category);
@@ -276,9 +284,12 @@ class ProductController extends BaseProductController
             ? json_decode($request->getContent(), true)
             : [];
 
+        /** @var TranslatorInterface $translator */
+        $translator = $this->get('translator');
+
         $output = $this->validateData($data, $category, $itemId);
         if(!$output['success']){
-            return $this->setError($output['msg']);
+            return $this->setError($translator->trans($output['msg'], [], 'validators'));
         }
 
         return $this->createUpdate($data, $category, $itemId);

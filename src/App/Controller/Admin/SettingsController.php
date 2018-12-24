@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
@@ -62,9 +63,10 @@ class SettingsController extends Controller
      * @param Request $request
      * @param $groupName
      * @param SerializerInterface $serializer
+     * @param TranslatorInterface $translator
      * @return JsonResponse
      */
-    public function updateGroup(Request $request, $groupName, SerializerInterface $serializer)
+    public function updateGroup(Request $request, $groupName, SerializerInterface $serializer, TranslatorInterface $translator)
     {
         $data = json_decode($request->getContent(), true);
 
@@ -78,7 +80,7 @@ class SettingsController extends Controller
                 if (!$this->saveSettingsToYaml($settings, 'settings')) {
                     return new JsonResponse([
                         'success' => false,
-                        'msg' => 'File is not writable.'
+                        'msg' => $translator->trans('File is not writable.', [], 'validators')
                     ], 200, [], true);
                 }
 

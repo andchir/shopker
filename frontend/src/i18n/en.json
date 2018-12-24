@@ -32,6 +32,7 @@
 	"COPY_CATEGORY": "Copy category",
 	"COUNT": "Quantity",
 	"CURRENCY": "Currency",
+	"CLONE": "Клонировать",
 	"DATE": "Date",
 	"DATE_TIME": "Date time",
 	"DEFAULT_VALUE": "Default value",

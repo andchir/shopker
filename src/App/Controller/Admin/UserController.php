@@ -34,7 +34,7 @@ class UserController extends StorageControllerAbstract
             return ['success' => false, 'msg' => 'Data is empty.'];
         }
         if (empty($data['role'])) {
-            return ['role' => false, 'msg' => 'Role should not be blank.'];
+            return ['success' => false, 'msg' => 'Role should not be blank.'];
         }
         return ['success' => true];
     }

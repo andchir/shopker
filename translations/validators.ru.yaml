@@ -17,3 +17,18 @@ install.mongodb_database_not_empty: База данных не пуста.
 install.settings_file_not_writable: Файл settings.yaml не доступен для записи.
 install.mongodb_database_clear_error: Ошибка при очистке базы данных.
 email.recipient_error: Не указан адрес получателя.
+System name already exists.: Системное имя уже используется.
+Data is empty.: Вы передете пустой набор данных.
+Title is empty.: Заголовок не может быть пустым.
+System name is empty.: Системное имя не может быть пустым.
+Collection name is empty.: Имя коллекции не может быть пустым.
+Please create fields for content type.: Пожалуйста, создайте поля для типа контента.
+You can not save content in system collections. Please choose a different collection name.: Данное имя коллекции зарезервировано. Пожалуйста, выберите другое имя.
+Item not found.: Запись в БД не найдена.
+Content type is required.: Пожалуйста, выберите тип контента.
+Category not found.: Категория не найдена.
+Content type not found.: Тип контента не найден.
+Product not found.: Контент не найден.
+Delivery is empty.: Пожалуйста, выберите метод доставки.
+Payment method is empty.: Пожалуйста, выберите метод оплаты.
+File is not writable.: Файл не доступен для записи.

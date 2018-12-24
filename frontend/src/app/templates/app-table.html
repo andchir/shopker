@@ -30,7 +30,7 @@
                             <button type="button" class="btn btn-secondary btn-sm ml-2" ngbTooltip="{{'EDIT' | translate}}" (click)="action('edit', item.id)">
                                 <i class="icon-pencil"></i>
                             </button>
-                            <button type="button" class="btn btn-secondary btn-sm ml-2" ngbTooltip="{{'COPY' | translate}}" (click)="action('copy', item.id)" *ngIf="isCloneAllowed">
+                            <button type="button" class="btn btn-secondary btn-sm ml-2" ngbTooltip="{{'CLONE' | translate}}" (click)="action('copy', item.id)" *ngIf="isCloneAllowed">
                                 <i class="icon-stack"></i>
                             </button>
                             <button type="button" class="btn btn-secondary btn-sm ml-2" ngbTooltip="{{'DELETE' | translate}}" (click)="action('delete', item.id)">

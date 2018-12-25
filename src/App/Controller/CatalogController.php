@@ -86,7 +86,7 @@ class CatalogController extends ProductController
         }
 
         $listTemplate = $request->cookies->get('shkListType', 'grid');
-        $pageSizeArr = $this->getParameter('app.catalog_page_size');
+        $catalogNavSettingsDefaults = $this->getCatalogNavSettingsDefaults();
         $currentPage = $currentCategory;
         $currentId = $currentCategory->getId();
 
@@ -99,7 +99,7 @@ class CatalogController extends ProductController
         $contentTypeFields = $contentType->getFields();
         $collection = $this->getCollection($contentType->getCollection());
         $queryString = $request->getQueryString();
-        $queryOptions = UtilsService::getQueryOptions($uri, $queryString, $contentTypeFields, $pageSizeArr);
+        $queryOptions = UtilsService::getQueryOptions($uri, $queryString, $contentTypeFields, $catalogNavSettingsDefaults);
 
         $options = [
             'currentCategoryUri' => $currentCategory->getUri(),
@@ -128,7 +128,7 @@ class CatalogController extends ProductController
         $total = $collection->find($criteria)->count();
 
         /* pages */
-        $pagesOptions = UtilsService::getPagesOptions($queryOptions, $total, $pageSizeArr);
+        $pagesOptions = UtilsService::getPagesOptions($queryOptions, $total, $catalogNavSettingsDefaults);
         $aggregateFields = $contentType->getAggregationFields($locale, $localeDefault, true);
 
         $pipeline = $this->createAggregatePipeline(
@@ -219,7 +219,6 @@ class CatalogController extends ProductController
             1
         );
 
-
         $currentPage = $collection->aggregate($pipeline, [
             'cursor' => []
         ])->toArray();
@@ -261,6 +260,23 @@ class CatalogController extends ProductController
             'fields' => $fields,
             'priceFieldName' => $priceFieldName
         ]);
+    }
+
+    /**
+     * Get catalog default settings
+     * @return array
+     */
+    public function getCatalogNavSettingsDefaults()
+    {
+        $catalogNavSettingsDefaults = [];
+        $catalogNavSettingsDefaults['pageSizeArr'] = $this->getParameter('app.catalog_page_size');
+        $catalogNavSettingsDefaults['orderBy'] = $this->getParameter('app.catalog_default_order_by');
+        if (!is_array($catalogNavSettingsDefaults['pageSizeArr'])) {
+            $catalogNavSettingsDefaults['pageSizeArr'] = explode(',', $catalogNavSettingsDefaults['pageSizeArr']);
+            $catalogNavSettingsDefaults['pageSizeArr'] = array_map('trim', $catalogNavSettingsDefaults['pageSizeArr']);
+            $catalogNavSettingsDefaults['pageSizeArr'] = array_map('intval', $catalogNavSettingsDefaults['pageSizeArr']);
+        }
+        return $catalogNavSettingsDefaults;
     }
 
     /**

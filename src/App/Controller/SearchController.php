@@ -41,9 +41,9 @@ class SearchController extends CatalogController
         $settingsService = $this->get('app.settings');
         $currency = $settingsService->getCurrency();
 
-        $pageSizeArr = $this->getParameter('app.catalog_page_size');
+        $catalogNavSettingsDefaults = $this->getCatalogNavSettingsDefaults();
         $queryString = $request->getQueryString();
-        $queryOptions = UtilsService::getQueryOptions('', $queryString, [], $pageSizeArr);
+        $queryOptions = UtilsService::getQueryOptions('', $queryString, [], $catalogNavSettingsDefaults);
         $queryOptions['sortOptions'] = ['parentId' => 'asc', 'title' => 'asc'];
 
         /** @var ContentType $contentType */
@@ -74,7 +74,7 @@ class SearchController extends CatalogController
         $total = $collection->find($criteria)->count();
 
         /* pages */
-        $pagesOptions = UtilsService::getPagesOptions($queryOptions, $total, $pageSizeArr);
+        $pagesOptions = UtilsService::getPagesOptions($queryOptions, $total, $catalogNavSettingsDefaults);
 
         $aggregateFields = $contentType->getAggregationFields($locale, $localeDefault, true);
         $aggregateFields['score'] = ['$meta' => 'textScore'];

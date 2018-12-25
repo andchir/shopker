@@ -112,14 +112,17 @@ class UtilsService
     /**
      * @param array $queryOptions
      * @param int $itemsTotal
-     * @param array $pageSizeArr
+     * @param array $catalogNavSettingsDefaults
      * @param array $options
      * @return array
+     * @internal param array $pageSizeArr
      */
-    public static function getPagesOptions($queryOptions, $itemsTotal, $pageSizeArr = [10], $options = [])
+    public static function getPagesOptions($queryOptions, $itemsTotal, $catalogNavSettingsDefaults = [], $options = [])
     {
         $pagesOptions = [
-            'pageSizeArr' => $pageSizeArr,
+            'pageSizeArr' => isset($catalogNavSettingsDefaults['pageSizeArr'])
+                ? $catalogNavSettingsDefaults['pageSizeArr']
+                : [12],
             'current' => $queryOptions['page'],
             'limit' => $queryOptions['limit'],
             'total' => ceil($itemsTotal / $queryOptions['limit']),
@@ -138,20 +141,25 @@ class UtilsService
      * @param string $currentUri
      * @param string $queryString
      * @param array $contentTypeFields
-     * @param array $pageSizeArr
+     * @param array $catalogNavSettingsDefaults
      * @param array $options
      * @return array
+     * @internal param array $pageSizeArr
      */
-    public static function getQueryOptions($currentUri, $queryString, $contentTypeFields = [], $pageSizeArr = [10], $options = [])
+    public static function getQueryOptions($currentUri, $queryString, $contentTypeFields = [], $catalogNavSettingsDefaults = [], $options = [])
     {
         $queryOptionsDefault = [
             'uri' => '',
             'page' => 1,
-            'limit' => $pageSizeArr[0],
+            'limit' => isset($catalogNavSettingsDefaults['pageSizeArr'])
+                ? $catalogNavSettingsDefaults['pageSizeArr'][0]
+                : [12],
             'limit_max' => 100,
             'sort_by' => '_id',
             'sort_dir' => 'desc',
-            'order_by' => 'id_desc',
+            'order_by' => isset($catalogNavSettingsDefaults['orderBy'])
+                ? $catalogNavSettingsDefaults['orderBy']
+                : 'id_desc',
             'full' => 1,
             'only_active' => 1,
             'filter' => [],

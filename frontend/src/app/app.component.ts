@@ -50,6 +50,7 @@ export class AppComponent {
     baseUrl: string;
     routeData: any[];
     menuItems: MenuItem[] = [...adminMenu];
+    appVersion: string;
 
     constructor(
         tooltipConfig: NgbTooltipConfig,
@@ -67,6 +68,7 @@ export class AppComponent {
         this.translate.addLangs(['en', 'ru']);
         this.translate.setDefaultLang('en');
         this.translate.use(this.appSettings.settings.locale);
+        this.appVersion = this.appSettings.settings.version;
 
         this.router.events.subscribe(event => {
             if (event instanceof NavigationEnd) {

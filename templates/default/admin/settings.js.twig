@@ -14,5 +14,6 @@ var appSettings = {
     locale: '{{ settings.locale }}',
     localeList: {{ settings.localeList | json_encode | raw }},
     rolesHierarchy: {{ settings.rolesHierarchy | json_encode | raw }},
-    systemSettings: {{ settings.systemSettings | json_encode | raw }}
+    systemSettings: {{ settings.systemSettings | json_encode | raw }},
+    version: '{{ app_version }}'
 };

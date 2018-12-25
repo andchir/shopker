@@ -11,4 +11,5 @@ export interface AppSettingsModel {
     localeList: string[],
     rolesHierarchy: any[];
     systemSettings: SettingGroupPretty;
+    version: string;
 }

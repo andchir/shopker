@@ -136,11 +136,17 @@ var APP_LANG = {
     "app": {
         "admin_email": "Admin email",
         "locale_list": "List of languages (comma separated)",
+        "max_temp_files_keep_minutes": "Time of temporary files storage, minutes",
+        "max_user_files_size": "Maximum user files size, MB",
+        "name": "Application name",
         "nds_rate": "Tax rate",
         "tax_system": "Store taxation system",
-        "template_theme": "Template theme"
+        "payment_status_after_number": "Order status number after payment",
+        "payment_status_number": "Order status number for payment",
+        "template_theme": "Template theme",
+        "catalog_page_size": "Number of items on the page by default",
+        "catalog_default_order_by": "Catalog sorting by default"
     },
-    "app_name": "Application name",
     "locale": "Locale",
     "mailer_auth_mode": "Mail authorization mode",
     "mailer_encryption": "Mail encryption",
@@ -149,8 +155,6 @@ var APP_LANG = {
     "mailer_port": "Mail port",
     "mailer_transport": "Mail transport",
     "mailer_user": "Mail user",
-    "max_temp_files_keep_minutes": "Time of temporary files storage, minutes",
-    "max_user_files_size": "Maximum user files size, MB",
     "mongodb_database": "MongoDB database",
     "mongodb_password": "MongoDB password",
     "mongodb_port": "MongoDB: Port",

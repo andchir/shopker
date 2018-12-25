@@ -143,7 +143,9 @@ var APP_LANG = {
         "payment_status_after_number": "Номер статуса заказа после оплаты",
         "payment_status_number": "Номер статуса заказа для оплаты",
         "tax_system": "Система налогообложения магазина (СНО)",
-        "template_theme": "Тема шаблонов"
+        "template_theme": "Тема шаблонов",
+        "catalog_page_size": "Число элементов на странице по умолчанию",
+        "catalog_default_order_by": "Сортировка элементов каталога по умолчанию"
     },
     "locale": "Локаль",
     "mailer_auth_mode": "Почта: метод авторизации",

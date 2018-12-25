@@ -413,35 +413,56 @@
                     <!-- composerPackages -->
                     <ngb-panel id="accordion-settings-5" [title]="'SETTINGS_COMPOSER_PACKAGES' | translate">
                         <ng-template ngbPanelContent>
-                            <div class="max-height400" [ngClass]="{'loading': settings.SETTINGS_COMPOSER_PACKAGES.loading}">
-                                <div class="text-muted">
+
+                            <div [ngClass]="{'loading': settings.SETTINGS_COMPOSER_PACKAGES.loading}">
+                                <div class="pb-3 text-muted">
                                     {{'SETTINGS_COMPOSER_PACKAGES_DESCRIPTION' | translate}}
                                 </div>
-                                <div class="table-responsive">
-                                    <table class="table table-divided mb-0">
-                                        <colgroup>
-                                            <col width="60%">
-                                            <col width="40%">
-                                        </colgroup>
-                                        <thead>
-                                            <tr>
-                                                <th>
-                                                    {{'NAME' | translate}}
-                                                </th>
-                                                <th>
-                                                    {{'VERSION' | translate}}
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let package of composerPackages">
-                                                <td>{{ package.name }}</td>
-                                                <td class="text-center">{{ package.version }}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+
+                                <div class="max-height400">
+                                    <div class="table-responsive">
+                                        <table class="table table-divided mb-0">
+                                            <colgroup>
+                                                <col width="60%">
+                                                <col width="40%">
+                                            </colgroup>
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        {{'NAME' | translate}}
+                                                    </th>
+                                                    <th>
+                                                        {{'VERSION' | translate}}
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let package of composerPackages">
+                                                    <td>{{ package.name }}</td>
+                                                    <td class="text-center">{{ package.version }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
+
+                                <!--<div class="card card-body p-2 mt-3">-->
+                                    <!--<div class="row no-gutters">-->
+                                        <!--<div class="col-5 pr-1">-->
+                                            <!--<input type="text" class="form-control form-control-sm" [(ngModel)]="composerPackageName">-->
+                                        <!--</div>-->
+                                        <!--<div class="col-4 pl-1">-->
+                                            <!--<input type="text" class="form-control form-control-sm" [(ngModel)]="composerPackageVersion">-->
+                                        <!--</div>-->
+                                        <!--<div class="col-3 pl-2">-->
+                                            <!--<button type="button" class="btn btn-success btn-sm btn-block" (click)="requirePackage($event)">-->
+                                                <!--{{'INSTALL' | translate}}-->
+                                            <!--</button>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</div>-->
                             </div>
+
                         </ng-template>
                     </ngb-panel>
                     <!-- /composerPackages -->

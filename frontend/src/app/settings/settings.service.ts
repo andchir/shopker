@@ -64,6 +64,13 @@ export class SettingsService {
             );
     }
 
+    composerRequirePackage(packageName: string, packageVersion: string): Observable<any> {
+        const url = this.getRequestUrl() + '_composer_require_package';
+        return this.http.post<any>(url, {packageName: packageName, packageVersion: packageVersion}, {headers: this.headers}).pipe(
+            catchError(this.handleError<any>())
+        );
+    }
+
     handleError<T> (operation = 'operation', result?: T) {
         return (err: any): Observable<T> => {
             if (err.error) {

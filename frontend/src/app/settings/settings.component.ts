@@ -22,6 +22,8 @@ export class SettingsComponent implements OnInit {
     loading = false;
     forms: {[key: string]: FormGroup} = {};
     composerPackages: ComposerPackage[] = [];
+    composerPackageName = '';
+    composerPackageVersion = '';
     settings = {
         SETTINGS_MAIN: new SettingsData(false, true, [], null),
         SETTINGS_ORDER_STATUSES: new SettingsData(
@@ -98,17 +100,6 @@ export class SettingsComponent implements OnInit {
             });
     }
 
-    getComposerPackages(): void {
-        this.settings.SETTINGS_COMPOSER_PACKAGES.loading = true;
-        this.settingsService.getComposerPackagesList()
-            .subscribe((res) => {
-                this.composerPackages = res as ComposerPackage[];
-                this.settings.SETTINGS_COMPOSER_PACKAGES.loading = false;
-            }, (err) => {
-                this.settings.SETTINGS_COMPOSER_PACKAGES.loading = false;
-            });
-    }
-
     addSetting(groupName: string): void {
         const newSetting = {
             name: '',
@@ -181,6 +172,43 @@ export class SettingsComponent implements OnInit {
                     });
                 }
                 this.loading = false;
+            });
+    }
+
+    getComposerPackages(): void {
+        this.settings.SETTINGS_COMPOSER_PACKAGES.loading = true;
+        this.settingsService.getComposerPackagesList()
+            .subscribe((res) => {
+                this.composerPackages = res as ComposerPackage[];
+                this.settings.SETTINGS_COMPOSER_PACKAGES.loading = false;
+            }, (err) => {
+                this.settings.SETTINGS_COMPOSER_PACKAGES.loading = false;
+            });
+    }
+
+    requirePackage(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        if (!this.composerPackageName) {
+            return;
+        }
+        this.settings.SETTINGS_COMPOSER_PACKAGES.loading = true;
+        this.settingsService.composerRequirePackage(this.composerPackageName, this.composerPackageVersion)
+            .subscribe((res) => {
+                this.composerPackageName = '';
+                this.composerPackageVersion = '';
+                this.settings.SETTINGS_COMPOSER_PACKAGES.loading = false;
+            }, (err) => {
+                if (err['error']) {
+                    this.messageService.add({
+                        key: 'message',
+                        severity: 'error',
+                        summary: this.getLangString('ERROR'),
+                        detail: err['error']
+                    });
+                }
+                this.settings.SETTINGS_COMPOSER_PACKAGES.loading = false;
             });
     }
 

@@ -407,7 +407,7 @@ class SettingsController extends Controller
     }
 
     /**
-     * @Route("_composer_installed_packages", name="admin_composer_installed_packages")
+     * @Route("_composer_installed_packages", name="admin_composer_installed_packages", methods={"GET"})
      * @param ComposerService $composerService
      * @return JsonResponse
      */
@@ -415,6 +415,27 @@ class SettingsController extends Controller
     {
         $packages = $composerService->getPackagesList();
         return $this->json($packages);
+    }
+
+    /**
+     * @Route("_composer_require_package", name="admin_composer_require_package", methods={"POST"})
+     * @param Request $request
+     * @param ComposerService $composerService
+     * @param TranslatorInterface $translator
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function composerRequirePackage(Request $request, ComposerService $composerService, TranslatorInterface $translator)
+    {
+        $data = json_decode($request->getContent(), true);
+        $packageName = $data['packageName'];
+        $packageVersion = $data['packageVersion'];
+
+        $result = $composerService->requirePackage($packageName, $packageVersion);
+        if (!$result['success']) {
+            return $this->setError($translator->trans($result['msg'], [], 'validators'));
+        }
+        return $this->json($result);
     }
 
     /**

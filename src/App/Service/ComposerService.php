@@ -2,18 +2,13 @@
 
 namespace App\Service;
 
-use App\MainBundle\Document\Setting;
+use Composer\Composer;
+use Composer\Factory;
+use Composer\Installer;
+use Composer\IO\NullIO;
 use Composer\Json\JsonFile;
 use Composer\Repository\InstalledFilesystemRepository;
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\BufferedOutput;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Yaml\Yaml;
-use Symfony\Component\Yaml\Exception\ParseException;
 
 class ComposerService
 {
@@ -58,6 +53,45 @@ class ComposerService
         });
 
         return $packages;
+    }
+
+    /**
+     * @param string $packageName
+     * @param string $version
+     * @return array
+     * @throws \Exception
+     */
+    public function requirePackage($packageName, $version)
+    {
+        $rootPath = realpath($this->container->getParameter('kernel.root_dir').'/../..');
+        $jsonFilePath = $rootPath . DIRECTORY_SEPARATOR . 'composer.json';
+        if (!is_writable($jsonFilePath)) {
+            return ['success' => false, 'msg' => 'File is not writable.'];
+        }
+
+        $composerJson = new JsonFile($jsonFilePath);
+        $composerJsonBackup = file_get_contents($composerJson->getPath());
+
+        $requireKey = 'require';
+        $decoded = $composerJson->read();
+        if (!in_array('', array_keys($decoded[$requireKey]))) {
+            $decoded[$requireKey][$packageName] = $version ?: '*';
+        }
+        file_put_contents($composerJson->getPath(), json_encode($decoded, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+
+        /** @var Composer $composer */
+        $composer = Factory::create(new NullIO(), $jsonFilePath);
+        $installer = Installer::create(new NullIO(), $composer);
+        $installer
+            ->setUpdate(true)
+            ->setPreferLowest(true);
+
+        $status = $installer->run();
+        if ($status !== 0) {
+            file_put_contents($jsonFilePath, $composerJsonBackup);
+        }
+
+        return ['success' => !empty($status)];
     }
 
 }

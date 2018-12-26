@@ -259,6 +259,8 @@ body .ui-datepicker .ui-datepicker-header .ui-datepicker-next:before { font-fami
 .fa.fa-circle-o-notch:before { content: "\e105"; font-style: normal; font-size: 1.5rem; color: rgba(0,0,0,0.5); }
 .pi.pi-times:before { content: "\e117"; }
 .ui-toast .ui-toast-icon:before { content: "\e006"; }
+.ui-toast-message-error .ui-toast-icon:before { content: "\e043"; }
+.ui-toast-message-success .ui-toast-icon:before { content: "\e042"; }
 
 /* spin */
 .fa.fa-spin { display: inline-block; animation-name: spin; animation-duration: 3000ms; animation-iteration-count: infinite; animation-timing-function: linear; }

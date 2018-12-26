@@ -34,11 +34,10 @@ class SettingsController extends Controller
 {
     /**
      * @Route("", methods={"GET"})
-     * @param SerializerInterface $serializer
      * @param SettingsService $settingsService
      * @return JsonResponse
      */
-    public function getListAction(SerializerInterface $serializer, SettingsService $settingsService)
+    public function getListAction(SettingsService $settingsService)
     {
         $output = [
             Setting::GROUP_MAIN => [],
@@ -54,9 +53,7 @@ class SettingsController extends Controller
         $output[Setting::GROUP_PAYMENT] = $settingsService->getSettingsGroup(Setting::GROUP_PAYMENT);
         $output[Setting::GROUP_CURRENCY] = $settingsService->getSettingsGroup(Setting::GROUP_CURRENCY);
 
-        $output = $serializer->serialize($output, 'json', ['groups' => ['list']]);
-
-        return new JsonResponse($output, 200, [], true);
+        return $this->json($output, 200, [], ['groups' => ['list']]);
     }
 
     /**
@@ -78,11 +75,9 @@ class SettingsController extends Controller
                 $data = self::transformParametersInverse($data);
 
                 $settings = array_merge($settings, $data);
+
                 if (!$this->saveSettingsToYaml($settings, 'settings')) {
-                    return new JsonResponse([
-                        'success' => false,
-                        'msg' => $translator->trans('File is not writable.', [], 'validators')
-                    ], 200, [], true);
+                    return $this->setError($translator->trans('File is not writable.', [], 'validators'));
                 }
 
                 break;
@@ -141,9 +136,7 @@ class SettingsController extends Controller
 
         // $this->systemCacheClearAction();
 
-        $output = $serializer->serialize($settings, 'json', ['groups' => ['list']]);
-
-        return new JsonResponse($output, 200, [], true);
+        return $this->json($settings, 200, [], ['groups' => ['list']]);
     }
 
     /**
@@ -156,7 +149,7 @@ class SettingsController extends Controller
         $cache = $this->get('app.filecache');
         $cache->clear();
 
-        return new JsonResponse([
+        return $this->json([
             'success' => true
         ]);
     }
@@ -170,7 +163,7 @@ class SettingsController extends Controller
     {
         $result = $this->systemCacheClear();
 
-        return new JsonResponse([
+        return $this->json([
             'success' => true
         ]);
     }
@@ -199,7 +192,7 @@ class SettingsController extends Controller
             $count++;
         }
 
-        return new JsonResponse([
+        return $this->json([
             'success' => true,
             'count' => $count
         ]);

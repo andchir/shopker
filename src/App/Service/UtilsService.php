@@ -155,7 +155,7 @@ class UtilsService
                 ? $catalogNavSettingsDefaults['pageSizeArr'][0]
                 : [12],
             'limit_max' => 100,
-            'sort_by' => '_id',
+            'sort_by' => 'id',
             'sort_dir' => 'desc',
             'order_by' => isset($catalogNavSettingsDefaults['orderBy'])
                 ? $catalogNavSettingsDefaults['orderBy']
@@ -165,6 +165,7 @@ class UtilsService
             'filter' => [],
             'filterStr' => ''
         ];
+
         parse_str($queryString, $queryOptions);
         if (isset($options['pageVar']) && isset($queryOptions[$options['pageVar']])) {
             $queryOptions['page'] = $queryOptions[$options['pageVar']];
@@ -174,14 +175,15 @@ class UtilsService
         }
 
         $queryOptions['uri'] = $currentUri;
-        if (!empty($queryOptions['order_by']) && strpos($queryOptions['order_by'], '_') !== false) {
-            $orderByArr = explode('_', $queryOptions['order_by']);
-            if (empty($queryOptions['sort_by'])) {
-                $queryOptions['sort_by'] = $orderByArr[0];
-            }
-            if (empty($queryOptions['sort_dir'])) {
-                $queryOptions['sort_dir'] = $orderByArr[1];
-            }
+
+        // Sorting
+        if (empty($queryOptions['order_by'])) {
+            $queryOptions['order_by'] = $queryOptionsDefault['order_by'];
+        }
+        if (empty($queryOptions['sort_by']) && strpos($queryOptions['order_by'], '_') !== false) {
+            $pos = strrpos($queryOptions['order_by'], '_');
+            $queryOptions['sort_by'] = substr($queryOptions['order_by'], 0, $pos);
+            $queryOptions['sort_dir'] = substr($queryOptions['order_by'], $pos + 1);
         }
 
         $queryOptions = array_merge($queryOptionsDefault, $queryOptions);
@@ -203,13 +205,6 @@ class UtilsService
         }
         $queryOptions['sort_dir'] = self::stringToArray($queryOptions['sort_dir']);
         $queryOptions['sort_dir'] = self::arrayFilter($queryOptions['sort_dir'], ['asc', 'desc']);
-
-        if(empty($queryOptions['sort_by'])){
-            $queryOptions['sort_by'] = [$queryOptionsDefault['sort_by']];
-        }
-        if(empty($queryOptions['sort_dir'])){
-            $queryOptions['sort_dir'] = [$queryOptionsDefault['sort_dir']];
-        }
 
         // Sorting options
         $queryOptions['sortOptions'] = [];

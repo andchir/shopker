@@ -33,6 +33,7 @@ var APP_LANG = {
     "COPY_CATEGORY": "Копировать категорию",
     "COUNT": "Кол-во",
     "CURRENCY": "Валюта",
+    "DATA_SAVED_SUCCESSFULLY": "Данные успешно сохранены.",
     "DATE": "Дата",
     "DATE_TIME": "Дата и время",
     "DEFAULT_VALUE": "Значение по умолчанию",
@@ -64,6 +65,7 @@ var APP_LANG = {
     "IMPERSONATION": "Воплотиться",
     "INPUT_OPTIONS": "Параметры ввода",
     "INPUT_TYPE": "Тип ввода",
+    "INSTALL": "Установить",
     "IS_REQUIRED": "обязательно для заполнения",
     "LANGUAGE": "Язык",
     "LOCALE": "Локаль",
@@ -71,6 +73,7 @@ var APP_LANG = {
     "MAIL_TEMPLATE": "Шаблон письма",
     "MAX_PRICE": "Макс. цена",
     "MENU_INDEX": "Позиция в меню",
+    "MESSAGE": "Сообщение",
     "MOVE_DOWN": "Переместить ниже",
     "MOVE_UP": "Переместить выше",
     "NAME": "Название",
@@ -135,6 +138,8 @@ var APP_LANG = {
     "admin_email": "Адрес эл. почты администратора",
     "app": {
         "admin_email": "Адрес эл. почты администратора",
+        "catalog_default_order_by": "Сортировка элементов каталога по умолчанию",
+        "catalog_page_size": "Число элементов на странице по умолчанию",
         "locale_list": "Список языков (через запятую)",
         "max_temp_files_keep_minutes": "Время хранения временных файлов, мин.",
         "max_user_files_size": "Максимальный размер файлов пользователей, МБ",
@@ -143,9 +148,7 @@ var APP_LANG = {
         "payment_status_after_number": "Номер статуса заказа после оплаты",
         "payment_status_number": "Номер статуса заказа для оплаты",
         "tax_system": "Система налогообложения магазина (СНО)",
-        "template_theme": "Тема шаблонов",
-        "catalog_page_size": "Число элементов на странице по умолчанию",
-        "catalog_default_order_by": "Сортировка элементов каталога по умолчанию"
+        "template_theme": "Тема шаблонов"
     },
     "locale": "Локаль",
     "mailer_auth_mode": "Почта: метод авторизации",

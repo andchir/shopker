@@ -119,11 +119,28 @@ export class SettingsComponent implements OnInit {
         this.settings[groupName].loading = true;
         this.settingsService.updateGroup(groupName, data)
             .subscribe((res: any) => {
+
+                this.messageService.add({
+                    key: 'message',
+                    severity: 'success',
+                    summary: this.getLangString('MESSAGE'),
+                    detail: this.getLangString('DATA_SAVED_SUCCESSFULLY')
+                });
                 this.settings[groupName].defaultValues = res;
                 this.settings[groupName].loading = false;
                 this.settings[groupName].changed = false;
-
                 this.pageReload();
+
+            }, (err) => {
+                if (err['error']) {
+                    this.messageService.add({
+                        key: 'message',
+                        severity: 'error',
+                        summary: this.getLangString('ERROR'),
+                        detail: err['error']
+                    });
+                }
+                this.settings[groupName].loading = false;
             });
     }
 

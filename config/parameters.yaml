@@ -14,10 +14,6 @@ parameters:
         - php5
         - pl
         - cgi
-    app.catalog_page_size:
-        - 12
-        - 24
-        - 60
     mongodb_server: 127.0.0.1
     mongodb_port: 27017
     mongodb_user: ''
@@ -30,6 +26,3 @@ parameters:
     mailer_password: ''
     mailer_encryption: 'ssl'
     mailer_auth_mode: 'login'
-    app.admin_email: ''
-    app.payment_status_number: 1
-    app.payment_status_after_number: 2

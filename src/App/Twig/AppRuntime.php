@@ -126,17 +126,21 @@ class AppRuntime
      * @param string $chunkName
      * @param $collectionName
      * @param array $criteria
-     * @param $orderBy
+     * @param array $orderBy
      * @param int $limit
      * @param int $groupSize
      * @param string $cacheKey
      * @param string $pageVar
      * @param string $limitVar
      * @return string
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public function contentListFunction(
         \Twig_Environment $environment,
-        $chunkName = 'content_list',
+        $chunkName,
         $collectionName,
         $criteria,
         $orderBy = ['_id' => 'asc'],
@@ -177,7 +181,7 @@ class AppRuntime
             'pageVar' => $pageVar,
             'limitVar' => $limitVar
         ];
-        $queryOptions = UtilsService::getQueryOptions($currentUri, $queryString, [], [$limit], $options);
+        $queryOptions = UtilsService::getQueryOptions($currentUri, $queryString, [], ['pageSizeArr' => [$limit]], $options);
         $pagesOptions = UtilsService::getPagesOptions($queryOptions, $total, [], $options);
 
         $aggregateFields = [];

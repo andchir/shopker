@@ -167,11 +167,16 @@ class UtilsService
         ];
 
         parse_str($queryString, $queryOptions);
-        if (isset($options['pageVar']) && isset($queryOptions[$options['pageVar']])) {
-            $queryOptions['page'] = $queryOptions[$options['pageVar']];
+
+        if (!empty($options['pageVar'])) {
+            $queryOptions['page'] = isset($queryOptions[$options['pageVar']])
+                ? $queryOptions[$options['pageVar']]
+                : $queryOptionsDefault['page'];
         }
-        if (isset($options['limitVar']) && isset($queryOptions[$options['limitVar']])) {
-            $queryOptions['limit'] = $queryOptions[$options['limitVar']];
+        if (!empty($options['limitVar'])) {
+            $queryOptions['limit'] = isset($queryOptions[$options['limitVar']])
+                ? $queryOptions[$options['limitVar']]
+                : $queryOptionsDefault['limit'];
         }
 
         $queryOptions['uri'] = $currentUri;

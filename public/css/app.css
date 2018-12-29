@@ -20,6 +20,11 @@ main h1 { font-family: 'Comfortaa', sans-serif; }
 button:disabled,
 input:disabled,
 textarea:disabled { cursor: not-allowed; }
+.font-normal,
+.font-normal:hover { font-style: normal; text-decoration: none; }
+pre { background-color: rgba(0,0,0,0.06); }
+code { display: inline-block; margin: 0.1rem; padding: 0.2rem 0.5rem; background-color: rgba(0,0,0,0.06); border-radius: 0.2rem; }
+pre code { display: block; background-color: transparent; }
 
 /* position */
 .pos-left-top { left: 0; top: 0; }

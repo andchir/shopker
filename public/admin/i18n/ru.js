@@ -140,6 +140,7 @@ var APP_LANG = {
         "admin_email": "Адрес эл. почты администратора",
         "catalog_default_order_by": "Сортировка элементов каталога по умолчанию",
         "catalog_page_size": "Число элементов на странице по умолчанию",
+        "display_errors": "Показывать ошибки",
         "locale_list": "Список языков (через запятую)",
         "max_temp_files_keep_minutes": "Время хранения временных файлов, мин.",
         "max_user_files_size": "Максимальный размер файлов пользователей, МБ",
@@ -147,6 +148,7 @@ var APP_LANG = {
         "nds_rate": "Ставка НДС",
         "payment_status_after_number": "Номер статуса заказа после оплаты",
         "payment_status_number": "Номер статуса заказа для оплаты",
+        "search_collections": "Коллекции для поиска",
         "tax_system": "Система налогообложения магазина (СНО)",
         "template_theme": "Тема шаблонов"
     },

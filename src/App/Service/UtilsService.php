@@ -372,7 +372,7 @@ class UtilsService
      */
     public static function stringToArray($string)
     {
-        $output = explode(',', $string);
+        $output = $string ? explode(',', $string) : [];
         return array_map('trim', $output);
     }
 

@@ -25,6 +25,9 @@ class ExceptionListener
         $exception = $event->getException();
         $request = $event->getRequest();
         $environment = $this->container->get('kernel')->getEnvironment();
+        $displayErrors = $this->container->hasParameter('app.display_errors')
+            ? !empty($this->container->getParameter('app.display_errors'))
+            : true;
         $message = '';
 
         if ($request->get('_route') == 'setup'
@@ -39,9 +42,9 @@ class ExceptionListener
         } else {
             $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR;
         }
-        //if ($environment === 'dev') {
+        if ($environment === 'dev' || $displayErrors) {
             $message = $exception->getMessage();
-        //}
+        }
 
         if($request->isXmlHttpRequest()) {
             $content = [

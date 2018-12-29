@@ -26,8 +26,11 @@ class SearchController extends CatalogController
 
         $searchWord = trim($request->get('query', ''));
         $searchCollections = $this->container->hasParameter('app.search_collections')
-            ? $this->container->hasParameter('app.search_collections')
-            : 'products';
+            ? $this->container->getParameter('app.search_collections')
+            : '';
+        if (empty($searchCollections)) {
+            $searchCollections = 'products';
+        }
         $searchCollections = UtilsService::stringToArray($searchCollections);
 
         if (empty($searchWord)) {

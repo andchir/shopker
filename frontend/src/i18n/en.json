@@ -140,6 +140,7 @@
 		"admin_email": "Admin email",
 		"catalog_default_order_by": "Catalog sorting by default",
 		"catalog_page_size": "Number of items on the page by default",
+		"display_errors": "Display errors",
 		"locale_list": "List of languages (comma separated)",
 		"max_temp_files_keep_minutes": "Time of temporary files storage, minutes",
 		"max_user_files_size": "Maximum user files size, MB",
@@ -147,6 +148,7 @@
 		"nds_rate": "Tax rate",
 		"payment_status_after_number": "Order status number after payment",
 		"payment_status_number": "Order status number for payment",
+		"search_collections": "Collections to search",
 		"tax_system": "Store taxation system",
 		"template_theme": "Template theme"
 	},

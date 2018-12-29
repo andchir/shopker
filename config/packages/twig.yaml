@@ -7,3 +7,4 @@ twig:
         app_name: '%app.name%'
         app_logo_image_url: '%app.logo_image_url%'
         app_version: '%app.version%'
+        activeCategoriesIds: []

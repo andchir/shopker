@@ -39,9 +39,9 @@ class ExceptionListener
         } else {
             $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR;
         }
-        if ($environment === 'dev') {
+        //if ($environment === 'dev') {
             $message = $exception->getMessage();
-        }
+        //}
 
         if($request->isXmlHttpRequest()) {
             $content = [

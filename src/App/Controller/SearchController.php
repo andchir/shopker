@@ -25,8 +25,8 @@ class SearchController extends CatalogController
         $locale = $request->getLocale();
 
         $searchWord = trim($request->get('query', ''));
-        $searchCollections = $this->container->hasParameter('search_collections')
-            ? $this->container->hasParameter('search_collections')
+        $searchCollections = $this->container->hasParameter('app.search_collections')
+            ? $this->container->hasParameter('app.search_collections')
             : 'products';
         $searchCollections = UtilsService::stringToArray($searchCollections);
 

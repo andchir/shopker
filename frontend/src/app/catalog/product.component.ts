@@ -102,8 +102,7 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
                 this.localeFieldsAllowed.push(field.name);
             }
         });
-
-        if (!this.model.translations) {
+        if (!this.model.translations || Array.isArray(this.model.translations)) {
             this.model.translations = {};
         }
     }

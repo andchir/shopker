@@ -192,6 +192,10 @@ class AppRuntime
             }
         }
 
+        if ($locale !== $localeDefault && !empty($parameters['headerFieldName'])) {
+            $catalogController->applyLocaleFilter($locale, $parameters['headerFieldName'], $criteria);
+        }
+
         $orderBy = array_map(function($orderByDir) {
             return $orderByDir === 'asc' ? 1 : -1;
         }, $orderBy);

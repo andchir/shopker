@@ -132,11 +132,8 @@ class AppRuntime
      * @param string $cacheKey
      * @param string $pageVar
      * @param string $limitVar
+     * @param array $parameters
      * @return string
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
     public function contentListFunction(
         \Twig_Environment $environment,
@@ -148,7 +145,8 @@ class AppRuntime
         $groupSize = 1,
         $cacheKey = '',
         $pageVar = 'page',
-        $limitVar = 'limit'
+        $limitVar = 'limit',
+        $parameters = []
     )
     {
         if (!$collectionName) {
@@ -209,14 +207,14 @@ class AppRuntime
             'cursor' => []
         ]);
 
-        $output = $environment->render($templateName, [
+        $output = $environment->render($templateName, array_merge($parameters, [
             'items' => $items,
             'total' => $total,
             'groupSize' => $groupSize,
-            'groupCount' => ceil($items->count(true) / $groupSize),
+            'groupCount' => $groupSize ? ceil($items->count(true) / $groupSize) : 1,
             'queryOptions' => $queryOptions,
             'pagesOptions' => $pagesOptions
-        ]);
+        ]));
         if (!empty($cacheKey)) {
             $cache->set("content.{$cacheKey}", $output, 60*60*24);
         }

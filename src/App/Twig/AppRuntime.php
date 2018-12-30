@@ -190,10 +190,12 @@ class AppRuntime
             if ($contentType) {
                 $aggregateFields = $contentType->getAggregationFields($locale, $localeDefault, true);
             }
-        }
-
-        if ($locale !== $localeDefault && !empty($parameters['headerFieldName'])) {
-            $catalogController->applyLocaleFilter($locale, $parameters['headerFieldName'], $criteria);
+            if (!empty($parameters['headerFieldName']) || $contentType) {
+                if (empty($parameters['headerFieldName'])) {
+                    $parameters['headerFieldName'] = $contentType->getFieldByChunkName('header');
+                }
+                $catalogController->applyLocaleFilter($locale, $parameters['headerFieldName'], $criteria);
+            }
         }
 
         $orderBy = array_map(function($orderByDir) {
@@ -222,6 +224,87 @@ class AppRuntime
         if (!empty($cacheKey)) {
             $cache->set("content.{$cacheKey}", $output, 60*60*24);
         }
+        return $output;
+    }
+
+    /**
+     * @param \Twig_Environment $environment
+     * @param string $chunkName
+     * @param string $collectionName
+     * @param int $contentId
+     * @param string $cacheKey
+     * @param array $parameters
+     * @return string
+     */
+    public function includeContentFunction(
+        \Twig_Environment $environment,
+        $chunkName,
+        $collectionName,
+        $contentId,
+        $cacheKey = '',
+        $parameters = []
+    )
+    {
+        if (!$collectionName) {
+            return '';
+        }
+        $request = $this->requestStack->getCurrentRequest();
+        $localeDefault = $this->container->getParameter('locale');
+        $locale = $request->getLocale();
+
+        /** @var FilesystemCache $cache */
+        $cache = $this->container->get('app.filecache');
+        if (!empty($cacheKey)) {
+            $cacheKey .= ".{$locale}";
+            if ($cache->has("content_inc.{$cacheKey}")) {
+                return $cache->get("content_inc.{$cacheKey}");
+            }
+        }
+
+        $templateName = $chunkName . '.html.twig';
+
+        $catalogController = new CatalogController();
+        $catalogController->setContainer($this->container);
+        $collection = $catalogController->getCollection($collectionName);
+        $criteria = ['_id' => $contentId];
+
+        $aggregateFields = [];
+        if ($locale !== $localeDefault) {
+            $contentType = $catalogController->getContentTypeRepository()->findOneBy([
+                'collection' => $collectionName
+            ]);
+            if ($contentType) {
+                $aggregateFields = $contentType->getAggregationFields($locale, $localeDefault, true);
+            }
+            if (!empty($parameters['headerFieldName']) || $contentType) {
+                if (empty($parameters['headerFieldName'])) {
+                    $parameters['headerFieldName'] = $contentType->getFieldByChunkName('header');
+                }
+                $catalogController->applyLocaleFilter($locale, $parameters['headerFieldName'], $criteria);
+            }
+        }
+
+        $pipeline = $catalogController->createAggregatePipeline(
+            $criteria,
+            $aggregateFields,
+            1
+        );
+        $document = $collection->aggregate($pipeline, [
+            'cursor' => []
+        ])->toArray();
+
+        if (empty($document)) {
+            return '';
+        }
+        $document = current($document);
+        $document['id'] = $document['_id'];
+
+        $output = $environment->render($templateName, array_merge($parameters, $document));
+
+        if (!empty($cacheKey)) {
+            $cache->set("content_inc.{$cacheKey}", $output, 60*60*24);
+        }
+
         return $output;
     }
 

@@ -4,6 +4,7 @@
     {% include 'header.html.twig' %}
 
     <main role="main" class="container">
+
         <h1>{{ 'Home page' | trans }}</h1>
 
         <div class="min-height400">
@@ -35,8 +36,7 @@
                 'products',
                 {"isActive": true, "tags": {"$elemMatch": {"$in": ["Новинка"]}}},
                 {"_id": "desc"},
-                20, 4, 'homepage_novelty', 'hn_page', 'hn_limit',
-                {"headerFieldName": "title"}
+                20, 4, 'homepage_novelty', 'hn_page', 'hn_limit'
             ) }}
 
             <div class="py-3">

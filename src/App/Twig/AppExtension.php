@@ -98,6 +98,10 @@ class AppExtension extends AbstractExtension
                 'is_safe' => ['html'],
                 'needs_environment' => true
             ]),
+            new TwigFunction('includeContent', [AppRuntime::class, 'includeContentFunction'], [
+                'is_safe' => ['html'],
+                'needs_environment' => true
+            ]),
             new TwigFunction('arraySearch', [AppRuntime::class, 'arraySearchFunction']),
             new TwigFunction('switch', [AppRuntime::class, 'switchFunction'], [
                 'is_safe' => ['html']

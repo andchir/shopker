@@ -119,12 +119,16 @@ class AppExtension extends AbstractExtension
      * @param string $systemName
      * @param array $itemData
      * @param string $categoriesField
+     * @param string $linkField
      * @return string
      */
-    public function catalogPathFunction($parentUri = '', $systemName = '', $itemData = [], $categoriesField = '')
+    public function catalogPathFunction($parentUri = '', $systemName = '', $itemData = [], $categoriesField = '', $linkField = 'href')
     {
         $baseUrl = $this->container->get('router')->getContext()->getBaseUrl();
         $path = $baseUrl;
+        if ($linkField && !empty($itemData[$linkField])) {
+            return $itemData[$linkField];
+        }
         if ($categoriesField && !empty($itemData[$categoriesField])) {
             $parentUri = '';
         }

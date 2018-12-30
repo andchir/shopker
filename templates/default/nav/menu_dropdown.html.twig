@@ -1,7 +1,7 @@
 <ul class="menu-dropdown navbar-nav mr-auto">
     {% for category in children %}
         <li class="nav-item{% if category.children|length > 0 %} parent{% endif %}">
-            <a href="{{ catalogPath(category.uri) }}" class="nav-link active{{ category.id }}-">
+            <a href="{{ catalogPath(category.uri, '', category) }}" class="nav-link active{{ category.id }}-">
                 {{ category.title }}
             </a>
             {{ categoriesTree(category.id, 'menu_dropdown_child', category, activeCategoriesIds) }}

@@ -481,6 +481,7 @@ class CatalogController extends ProductController
                 'name' => $item[$systemNameField] ?? '',
                 'description' => '',
                 'uri' => !empty($item[$systemNameField]) ? $parentUri . $item[$systemNameField] : '',
+                'href' => !empty($item['href']) ? $item['href'] : '',
                 'menuIndex' => $item['menuIndex'] ?? 0,
                 'translations' => $item['translations'] ?? [],
                 'children' => []

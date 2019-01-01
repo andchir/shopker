@@ -91,18 +91,19 @@
                         </div>
 
                         <!-- textarea -->
-                        <div class="row" *ngSwitchCase="'textarea'">
-                            <div class="col-md-5">
+                        <div *ngSwitchCase="'textarea'" [class.row]="field.inputProperties.rows < 7">
+                            <div [class.col-md-5]="field.inputProperties.rows < 7">
                                 <label for="field_{{field.name}}">
                                     {{field.title}}
                                     <span class="text-muted">({{field.name}})</span>
                                     <span class="text-danger" *ngIf="field.required">*</span>
                                 </label>
                             </div>
-                            <div class="col-md-7">
-                                <textarea rows="6" class="form-control" id="field_{{field.name}}" [name]="field.name"
+                            <div [class.col-md-7]="field.inputProperties.rows < 7">
+                                <textarea class="form-control" id="field_{{field.name}}" [name]="field.name"
                                           [formControlName]="field.name"
                                           [(ngModel)]="model[field.name]"
+                                          [rows]="field.inputProperties.rows"
                                           [ngClass]="{'border-success': isLocalizationActive}"></textarea>
                                 <div *ngIf="formErrors[field.name]" class="alert alert-danger">
                                     {{formErrors[field.name]}}

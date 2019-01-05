@@ -1,47 +1,44 @@
 <nav class="navbar-header navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <div class="d-inline-block d-lg-none p-2">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        </div>
-        <div class="collapse navbar-collapse" id="navbarContent">
-            {{ categoriesTree(0, 'menu_dropdown', null, activeCategoriesIds, true) }}
-            <div class="d-inline-block pt-2 pb-2 pl-2">
+    <div class="container d-block">
+        <div class="float-right pt-2 pr-3 pr-lg-0">
+
+            <div class="d-inline-block">
                 {% if is_granted('ROLE_USER') %}
                     {% if is_granted('ROLE_ADMIN') %}
                         <a class="btn btn-sm btn-outline-primary" data-toggle="tooltip" title="{{ 'Administration' | trans }}" href="{{ path('admin') }}">
                             <i class="icon-cog"></i>
                         </a>
                     {% endif %}
-                    <div class="d-inline-block btn-group ml-1">
-                        <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                            <i class="icon-head"></i>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="{{ path('profile_history_orders') }}">
-                                <i class="icon-list text-muted"></i>
-                                &nbsp;
-                                {{ 'History of orders' | trans }}
-                            </a>
-                            <a class="dropdown-item" href="{{ path('profile_contacts') }}">
-                                <i class="icon-head text-muted"></i>
-                                &nbsp;
-                                {{ 'Contact details' | trans }}
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
-                                <a class="dropdown-item text-muted" href="{{ path('homepage', {'_switch_user': '_exit'}) }}">
-                                    <i class="icon-esc"></i>
+                    <div class="d-inline-block pt-1 ml-1">
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                <i class="icon-head"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" href="{{ path('profile_history_orders') }}">
+                                    <i class="icon-list text-muted"></i>
                                     &nbsp;
-                                    {{ 'Exit impersonation' | trans }}
+                                    {{ 'History of orders' | trans }}
                                 </a>
-                            {% endif %}
-                            <a class="dropdown-item text-muted" href="{{ logout_path() }}">
-                                <i class="icon-power"></i>
-                                &nbsp;
-                                {{ 'Log out' | trans }}
-                            </a>
+                                <a class="dropdown-item" href="{{ path('profile_contacts') }}">
+                                    <i class="icon-head text-muted"></i>
+                                    &nbsp;
+                                    {{ 'Contact details' | trans }}
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+                                    <a class="dropdown-item text-muted" href="{{ path('homepage', {'_switch_user': '_exit'}) }}">
+                                        <i class="icon-esc"></i>
+                                        &nbsp;
+                                        {{ 'Exit impersonation' | trans }}
+                                    </a>
+                                {% endif %}
+                                <a class="dropdown-item text-muted" href="{{ logout_path() }}">
+                                    <i class="icon-power"></i>
+                                    &nbsp;
+                                    {{ 'Log out' | trans }}
+                                </a>
+                            </div>
                         </div>
                     </div>
                 {% else %}
@@ -51,31 +48,42 @@
                     </a>
                 {% endif %}
             </div>
+
+            <div class="d-inline-block pt-1 ml-1">
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-outline-secondary text-white dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="/img/flag_{{ app.request.locale }}.png">
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right border-secondary" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item rounded-0{% if app.request.locale == 'ru' %} active{% endif %}" href="{{ path('locale_switch', {locale: 'ru'}) }}">
+                            <img src="/img/flag_ru.png" alt="Русский">
+                            Русский
+                        </a>
+                        <a class="dropdown-item rounded-0{% if app.request.locale == 'en' %} active{% endif %}" href="{{ path('locale_switch', {locale: 'en'}) }}">
+                            <img src="/img/flag_en.png" alt="English">
+                            English
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="d-inline-block d-lg-none p-2">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse" id="navbarContent">
+            {{ categoriesTree(0, 'menu_dropdown', null, activeCategoriesIds, true) }}
         </div>
     </div>
 </nav>
 <header>
     <div class="inner">
         <div class="container">
+
             <div class="float-right ml-2">
                 {{ currencyList() }}
-
-                <div class="dropdown d-inline-block ml-1">
-                    <button class="btn btn-secondary dropdown-toggle btn-sm bg-white text-secondary" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img src="/img/flag_{{ app.request.locale }}.png" alt="Русский">
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-right border-secondary" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item{% if app.request.locale == 'ru' %} active{% endif %}" href="{{ path('locale_switch', {locale: 'ru'}) }}">
-                            <img src="/img/flag_ru.png" alt="Русский">
-                            Русский
-                        </a>
-                        <a class="dropdown-item{% if app.request.locale == 'en' %} active{% endif %}" href="{{ path('locale_switch', {locale: 'en'}) }}">
-                            <img src="/img/flag_en.png" alt="English">
-                            English
-                        </a>
-                    </div>
-                </div>
-
             </div>
 
             {% if app.request.attributes.get('_route') not in ['search'] %}

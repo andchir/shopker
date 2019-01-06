@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\MainBundle\Document\ContentType;
 use App\MainBundle\Document\Collection;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class ContentTypeController
@@ -141,13 +142,27 @@ class ContentTypeController extends StorageControllerAbstract
 
         return new JsonResponse($fieldType->toArray(true));
     }
-
+    
     /**
+     * @Route("/{itemId}", methods={"DELETE"})
      * @param int $itemId
+     * @param TranslatorInterface $translator
+     * @return JsonResponse
      */
-    public function deleteItem($itemId)
+    public function deleteItemAction($itemId, TranslatorInterface $translator)
     {
-        // return parent::deleteItem($itemId); // TODO: Change
+        $repository = $this->getRepository();
+        $item = $repository->find($itemId);
+        if(!$item){
+            return $this->setError($translator->trans('Item not found.', [], 'validators'));
+        }
+
+        $categories = $item->getCategories();
+        if (count($categories) > 0) {
+            return $this->setError($translator->trans('You must first remove the categories with this content type.', [], 'validators'));
+        }
+
+        return parent::deleteItemAction($itemId, $translator);
     }
 
     /**

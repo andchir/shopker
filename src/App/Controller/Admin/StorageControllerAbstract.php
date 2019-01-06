@@ -104,12 +104,13 @@ abstract class StorageControllerAbstract extends BaseController
     /**
      * @Route("/{itemId}", methods={"DELETE"})
      * @param int $itemId
+     * @param TranslatorInterface $translator
      * @return JsonResponse
      */
-    public function deleteItemAction($itemId)
+    public function deleteItemAction($itemId, TranslatorInterface $translator)
     {
         if(!$this->deleteItem($itemId)){
-            return $this->setError('Item not found.');
+            return $this->setError($translator->trans('Item not found.', [], 'validators'));
         }
         return new JsonResponse([]);
     }

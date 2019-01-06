@@ -31,6 +31,9 @@ class CategoryController extends StorageControllerAbstract
         if (!isset($options['limit'])) {
             $options['limit'] = 0;
         }
+        if (!isset($options['only_active'])) {
+            $options['only_active'] = 0;
+        }
         return $options;
     }
 

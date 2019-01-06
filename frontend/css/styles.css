@@ -209,9 +209,7 @@ input.form-control[readonly] { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); curso
 .popover-body { min-width: 150px; }
 
 /* calendar */
-.ui-calendar { width: 100%; }
-.ui-calendar .ui-inputtext { width: 100%; }
-.ui-calendar .ui-calendar-button { width: 3em; right: 0; margin: 0; }
+.ui-datepicker a:hover { text-decoration: none; }
 
 /* colorpicker */
 .ui-colorpicker-panel { background-color: #ddd; box-shadow: 1px 1px 10px rgba(0,0,0,0.5); }
@@ -243,8 +241,6 @@ input.form-control[readonly] { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); curso
 .ngb-accordion .card-header:hover button.btn-link { color: rgba(0,0,0,0.8); }
 
 /* icons */
-body .ui-datepicker .ui-datepicker-header .ui-datepicker-prev:before { font-family: 'icomoon'; content: "\e908"; }
-body .ui-datepicker .ui-datepicker-header .ui-datepicker-next:before { font-family: 'icomoon'; content: "\e907"; }
 .ui-chips-token .ui-chips-token-icon { margin-top: -0.6em !important; }
 .fa:before, .pi:before { font-family: 'icomoon'; }
 .fa.fa-angle-up:before { content: "\e906"; }
@@ -261,6 +257,12 @@ body .ui-datepicker .ui-datepicker-header .ui-datepicker-next:before { font-fami
 .ui-toast .ui-toast-icon:before { content: "\e006"; }
 .ui-toast-message-error .ui-toast-icon:before { content: "\e043"; }
 .ui-toast-message-success .ui-toast-icon:before { content: "\e042"; }
+.pi.pi-chevron-up:before { font-family: 'icomoon'; content: "\e906"; }
+.pi.pi-chevron-down:before { font-family: 'icomoon'; content: "\e909"; }
+body .ui-datepicker .ui-datepicker-header .ui-datepicker-prev span:before,
+.pi.pi-chevron-left:before { font-family: 'icomoon'; content: "\e908"; }
+body .ui-datepicker .ui-datepicker-header .ui-datepicker-next span:before,
+.pi.pi-chevron-right:before { font-family: 'icomoon'; content: "\e907"; }
 
 /* spin */
 .fa.fa-spin { display: inline-block; animation-name: spin; animation-duration: 3000ms; animation-iteration-count: infinite; animation-timing-function: linear; }

@@ -180,6 +180,33 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface
                 'listOrder' => 3
             ],
             [
+                'title' => 'Date of publication',
+                'name' => 'date_pub',
+                'description' => '',
+                'inputType' => 'date',
+                'inputProperties' => [
+                    'value' => '',
+                    'handler' => '',
+                    'format' => 'mm.dd.yy',
+                    'show_time' => '1',
+                    'hour_format' => '24',
+                    'locale' => 'ru'
+                ],
+                'outputType' => 'date',
+                'outputProperties' => [
+                    'className' => '',
+                    'chunkName' => '',
+                    'format' => 'mm.dd.yy'
+                ],
+                'group' => 'Основное',
+                'required' => false,
+                'showInTable' => false,
+                'showInList' => false,
+                'isFilter' => false,
+                'filterOrder' => 0,
+                'listOrder' => 3
+            ],
+            [
                 'title' => 'Brand',
                 'name' => 'brand',
                 'description' => '',

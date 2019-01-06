@@ -245,15 +245,17 @@
                             </div>
                             <div class="col-md-7">
 
-                                <p-calendar [formControlName]="field.name"
-                                            [(ngModel)]="model[field.name]"
-                                            [dateFormat]="field.inputProperties.format"
-                                            [showTime]="field.inputProperties.show_time"
-                                            [hourFormat]="field.inputProperties.hour_format"
-                                            [locale]="calendarLocale[field.inputProperties.locale]"
-                                            [showButtonBar]="true"
-                                            [showIcon]="true"
-                                            [icon]="'icon-date_range'"></p-calendar>
+                                <div class="ui-fluid">
+                                    <p-calendar [formControlName]="field.name"
+                                                [(ngModel)]="model[field.name]"
+                                                [dateFormat]="field.inputProperties.format"
+                                                [showTime]="field.inputProperties.show_time"
+                                                [hourFormat]="field.inputProperties.hour_format"
+                                                [locale]="calendarLocale[field.inputProperties.locale]"
+                                                [showButtonBar]="true"
+                                                [showIcon]="true"
+                                                [icon]="'icon-date_range'"></p-calendar>
+                                </div>
 
                                 <div *ngIf="formErrors[field.name]" class="alert alert-danger">
                                     {{formErrors[field.name]}}

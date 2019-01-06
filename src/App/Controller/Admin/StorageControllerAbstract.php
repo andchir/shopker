@@ -72,33 +72,32 @@ abstract class StorageControllerAbstract extends BaseController
     /**
      * @Route("/batch", methods={"POST"})
      * @param Request $request
+     * @param TranslatorInterface $translator
      * @return JsonResponse
-     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
-    public function deleteBatch(Request $request)
+    public function deleteBatchAction(Request $request, TranslatorInterface $translator)
     {
         $data = $request->getContent()
             ? json_decode($request->getContent(), true)
             : [];
 
         if(empty($data['ids'])){
-            return $this->setError('Bad data.');
+            return $this->setError($translator->trans('Bad data.', [], 'validators'));
         }
 
-        $repository = $this->getRepository();
-
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
-        $qb = $dm->createQueryBuilder($repository->getClassName())
-            ->field('_id')->in($data['ids']);
-
-        $items = $qb->getQuery()->execute();
-        foreach ($items as $item) {
-            $dm->remove($item);
+        $errors = [];
+        foreach ($data['ids'] as $itemId) {
+            $results = $this->deleteItem($itemId);
+            if (!$results['success']) {
+                $errors[] = $translator->trans($results['msg'], [], 'validators');
+                break;
+            }
         }
-        $dm->flush();
 
-        return new JsonResponse([]);
+        return new JsonResponse([
+            'success' => empty($errors),
+            'msg' => implode(' ', $errors)
+        ]);
     }
 
     /**
@@ -109,15 +108,16 @@ abstract class StorageControllerAbstract extends BaseController
      */
     public function deleteItemAction($itemId, TranslatorInterface $translator)
     {
-        if(!$this->deleteItem($itemId)){
-            return $this->setError($translator->trans('Item not found.', [], 'validators'));
+        $results = $this->deleteItem($itemId);
+        if(!$results['success']){
+            return $this->setError($translator->trans($results['msg'], [], 'validators'));
         }
         return new JsonResponse([]);
     }
 
     /**
      * @param $itemId
-     * @return bool
+     * @return array
      */
     public function deleteItem($itemId)
     {
@@ -125,7 +125,10 @@ abstract class StorageControllerAbstract extends BaseController
 
         $item = $repository->find($itemId);
         if(!$item){
-            return false;
+            return [
+                'success' => false,
+                'msg' => 'Item not found.'
+            ];
         }
 
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
@@ -133,13 +136,13 @@ abstract class StorageControllerAbstract extends BaseController
         $dm->remove($item);
         $dm->flush();
 
-        return true;
+        return ['success' => true];
     }
 
     /**
      * @param $itemId
      * @param bool $isActive
-     * @return bool
+     * @return array
      */
     public function blockItem($itemId, $isActive = false)
     {
@@ -147,7 +150,10 @@ abstract class StorageControllerAbstract extends BaseController
 
         $item = $repository->find($itemId);
         if(!$item){
-            return false;
+            return [
+                'success' => false,
+                'msg' => 'Item not found.'
+            ];
         }
 
         $item->setIsActive($isActive);
@@ -156,7 +162,7 @@ abstract class StorageControllerAbstract extends BaseController
         $dm = $this->get('doctrine_mongodb')->getManager();
         $dm->flush();
 
-        return true;
+        return ['success' => true];
     }
 
     /**
@@ -213,17 +219,17 @@ abstract class StorageControllerAbstract extends BaseController
      * )
      * @param Request $request
      * @param string $action
+     * @param TranslatorInterface $translator
      * @return JsonResponse
-     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
-    public function batchAction(Request $request, $action = 'delete')
+    public function batchAction(Request $request, $action = 'delete', TranslatorInterface $translator)
     {
         $data = $request->getContent()
             ? json_decode($request->getContent(), true)
             : [];
 
         if(empty($data['ids'])){
-            return $this->setError('Bad data.');
+            return $this->setError($translator->trans('Bad data.', [], 'validators'));
         }
 
         $repository = $this->getRepository();
@@ -235,19 +241,37 @@ abstract class StorageControllerAbstract extends BaseController
 
         $items = $qb->getQuery()->execute();
 
+        $errors = [];
+        $firstItemIsActive = null;
+        $index = 0;
         foreach ($items as $item) {
-
-            switch ($action) {
-                case 'delete':
-                    $this->deleteItem($item->getId());
-                    break;
-                case 'block':
-                    $this->blockItem($item->getId(), !$item->getIsActive());
-                    break;
+            if ($index === 0) {
+                $firstItemIsActive = $item->getIsActive();
             }
+            if ($action == 'delete') {
+                $results = $this->deleteItem($item->getId());
+                if (!$results['success']) {
+                    $errors[] = $translator->trans($results['msg'], [], 'validators');
+                    break;
+                }
+            }
+            else if ($action == 'block') {
+                $results = $this->blockItem($item->getId(), !$firstItemIsActive);
+                if (!$results['success']) {
+                    $errors[] = $translator->trans($results['msg'], [], 'validators');
+                    break;
+                }
+            }
+            $index++;
         }
 
-        return new JsonResponse([]);
+        if (!empty($errors)) {
+            return $this->setError(implode(' ', $errors));
+        } else {
+            return new JsonResponse([
+                'success' => true
+            ]);
+        }
     }
 
     /**

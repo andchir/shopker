@@ -142,27 +142,36 @@ class ContentTypeController extends StorageControllerAbstract
 
         return new JsonResponse($fieldType->toArray(true));
     }
-    
+
     /**
-     * @Route("/{itemId}", methods={"DELETE"})
-     * @param int $itemId
-     * @param TranslatorInterface $translator
-     * @return JsonResponse
+     * @param $itemId
+     * @return array
      */
-    public function deleteItemAction($itemId, TranslatorInterface $translator)
+    public function deleteItem($itemId)
     {
         $repository = $this->getRepository();
+
         $item = $repository->find($itemId);
         if(!$item){
-            return $this->setError($translator->trans('Item not found.', [], 'validators'));
+            return [
+                'success' => false,
+                'msg' => 'Item not found.'
+            ];
         }
 
-        $categories = $item->getCategories();
-        if (count($categories) > 0) {
-            return $this->setError($translator->trans('You must first remove the categories with this content type.', [], 'validators'));
+        if (count($item->getCategories()) > 0) {
+            return [
+                'success' => false,
+                'msg' => 'You must first remove the categories with this content type.'
+            ];
         }
 
-        return parent::deleteItemAction($itemId, $translator);
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $dm->remove($item);
+        $dm->flush();
+
+        return ['success' => true];
     }
 
     /**

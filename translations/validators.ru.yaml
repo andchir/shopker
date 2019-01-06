@@ -6,6 +6,7 @@ register.email.already exists: Пользователь с указанным а
 This email is already used.: Пользователь с указанным адресом эл. почты уже существует.
 Role should not be blank.: Пожалуйста, укажите роль пользователя.
 You can not block yourself.: Вы не можете заблокировать самого себя.
+You can not delete yourself.: Вы не можете удалить самого себя.
 Password should not be blank.: Пароль не должен быть пустым.
 Password must be at least {{ limit }} characters long: Пароль должен быть больше {{ limit }} символов
 Password cannot be longer than {{ limit }} characters: Пароль не может быть больше {{ limit }} символов

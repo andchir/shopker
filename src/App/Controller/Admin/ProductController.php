@@ -492,21 +492,19 @@ class ProductController extends BaseProductController
      * @ParamConverter("category", class="AppMainBundle:Category", options={"id" = "categoryId"})
      * @param Category $category
      * @param int $itemId
+     * @param TranslatorInterface $translator
      * @return JsonResponse
      */
-    public function deleteItemAction(Category $category = null, $itemId)
+    public function deleteItemAction(Category $category = null, $itemId, TranslatorInterface $translator)
     {
         if (!$category) {
-            return new JsonResponse([
-                'success' => false,
-                'msg' => 'Category not found.'
-            ]);
+            return $this->setError($translator->trans('Category not found.', [], 'validators'));
         }
         $itemId = intval($itemId);
 
         $contentType = $category->getContentType();
         if (!$contentType) {
-            return $this->setError('Content type not found.');
+            return $this->setError($translator->trans('Content type not found.', [], 'validators'));
         }
 
         $collectionName = $contentType->getCollection();
@@ -514,7 +512,7 @@ class ProductController extends BaseProductController
         $document = $collection->findOne(['_id' => $itemId]);
 
         if(!$document){
-            return $this->setError('Document not found.');
+            return $this->setError($translator->trans('Document not found.', [], 'validators'));
         }
 
         $result = $this->deleteItem($contentType, $document);

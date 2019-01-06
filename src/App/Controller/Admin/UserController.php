@@ -150,7 +150,7 @@ class UserController extends StorageControllerAbstract
 
     /**
      * @param $itemId
-     * @return bool
+     * @return array
      * @throws \Doctrine\ODM\MongoDB\LockException
      * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
      */
@@ -163,7 +163,10 @@ class UserController extends StorageControllerAbstract
         /** @var User $item */
         $item = $repository->find($itemId);
         if(!$item || $item->getId() === $currentUser->getId()){
-            return false;
+            return [
+                'success' => false,
+                'msg' => 'You can not delete yourself.'
+            ];
         }
 
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
@@ -171,13 +174,13 @@ class UserController extends StorageControllerAbstract
         $dm->remove($item);
         $dm->flush();
 
-        return true;
+        return ['success' => true];
     }
 
     /**
      * @param $itemId
      * @param bool $isActive
-     * @return bool
+     * @return array
      * @throws \Doctrine\ODM\MongoDB\LockException
      * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
      */
@@ -190,7 +193,10 @@ class UserController extends StorageControllerAbstract
         /** @var User $item */
         $item = $repository->find($itemId);
         if(!$item || $item->getId() === $currentUser->getId()){
-            return false;
+            return [
+                'success' => false,
+                'msg' => 'You can not block yourself.'
+            ];
         }
 
         $item->setIsActive($isActive);
@@ -199,7 +205,7 @@ class UserController extends StorageControllerAbstract
         $dm = $this->get('doctrine_mongodb')->getManager();
         $dm->flush();
 
-        return true;
+        return ['success' => true];
     }
 
     /**

@@ -353,7 +353,12 @@ export class CategoriesMenuComponent implements OnInit {
                     this.getCategories();
                     this.loading = false;
                 },
-                err => this.errorMessage = err
+                (err) => {
+                    if (err['error']) {
+                        this.errorMessage = err['error'];
+                    }
+                    this.loading = false;
+                }
             );
     }
 

@@ -180,16 +180,17 @@ class CategoryController extends StorageControllerAbstract
     /**
      * @Route("/{itemId}", methods={"DELETE"})
      * @param int $itemId
+     * @param TranslatorInterface $translator
      * @return JsonResponse
      */
-    public function deleteItem($itemId)
+    public function deleteItemAction($itemId, TranslatorInterface $translator)
     {
         $repository = $this->getRepository();
 
         /** @var Category $item */
         $item = $repository->find($itemId);
         if(!$item){
-            return $this->setError('Item not found.');
+            return $this->setError($translator->trans('Item not found.', [], 'validators'));
         }
 
         /** @var EventDispatcher $evenDispatcher */

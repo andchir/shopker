@@ -11,7 +11,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "preserveSymlinks": false,
+            "preserveSymlinks": true,
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -35,11 +35,7 @@
               "node_modules/quill/dist/quill.js"
             ],
             "lazyModules": [
-              "src/app/orders/orders.module.ts",
-              "src/app/catalog/catalog.module.ts",
-              "src/app/statistics/statistics.module.ts",
-              "src/app/users/users.module.ts",
-              "src/app/settings/settings.module.ts"
+
             ]
           },
           "configurations": {
@@ -49,10 +45,10 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": true,
-              "aot": true,
+              "aot": false,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": true,
+              "buildOptimizer": false,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",

@@ -16,7 +16,7 @@ import {FormFieldInterface} from '../models/form-field.interface';
 @Component({
     selector: 'app-modal-user',
     templateUrl: './templates/modal-user.html',
-    providers: [SettingsService, SystemNameService]
+    providers: []
 })
 export class ModalUserContentComponent extends ModalContentAbstractComponent<User> {
 

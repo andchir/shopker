@@ -43,10 +43,7 @@ import {FieldTypesService} from './services/field-types.service';
     providers: [
         ProductsService,
         FieldTypesService,
-        SystemNameService,
-        ContentTypesService,
         CollectionsService,
-        CategoriesService,
         FilesService
     ],
     entryComponents: [

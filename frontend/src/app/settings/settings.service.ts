@@ -9,7 +9,9 @@ import {Setting, SettingsGroup} from './models/setting.model';
 import {Properties} from '../models/properties.iterface';
 import {ComposerPackage} from './models/composer-package.interface';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class SettingsService {
 
     public headers = new HttpHeaders({'Content-Type': 'application/json'});

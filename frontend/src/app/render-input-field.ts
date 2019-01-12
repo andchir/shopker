@@ -25,7 +25,7 @@ import {CategoriesService} from './catalog/services/categories.service';
 @Component({
     selector: 'app-input-field-renderer',
     templateUrl: 'templates/render-input-field.html',
-    providers: [SystemNameService]
+    providers: []
 })
 export class InputFieldRenderComponent implements OnInit, OnChanges {
 
@@ -175,7 +175,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                     field.inputProperties,
                     propertiesDefault
                 );
-                field.inputProperties.formats = String(field.inputProperties.formats).split(',');
+                field.inputProperties['formats'] = String(field.inputProperties['formats']).split(',');
 
                 break;
             case 'file':

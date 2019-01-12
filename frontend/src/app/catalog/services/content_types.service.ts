@@ -7,7 +7,9 @@ import {catchError, map, tap} from 'rxjs/operators';
 import {DataService} from '../../services/data-service.abstract';
 import {ContentType} from '../models/content_type.model';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class ContentTypesService extends DataService<ContentType> {
 
     constructor(http: HttpClient) {

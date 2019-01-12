@@ -1,3 +1,5 @@
+// Dummy module
+
 import {Component, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {RouterModule} from '@angular/router';
@@ -9,9 +11,7 @@ import {SharedModule} from '../shared.module';
     template: `<div class="card">
     <div class="card-body">
         <h3>
-            <i class="icon-inbox"></i>
-            &nbsp;
-            {{'IMPORT_EXPORT' | translate}}
+            <i class="icon-inbox"></i>&nbsp;{{'IMPORT_EXPORT' | translate}}
         </h3>
         <hr>
         <div class="min-height400">
@@ -21,24 +21,30 @@ import {SharedModule} from '../shared.module';
                     https://modx-shopkeeper.ru/
                 </a>
             </p>
-        </div>
-    </div>
-    </div>`
+        </div></div></div>`
 })
 export class DefaultComponent {}
 
+@Component({selector: 'app-import', template: ``})
+class ImportComponent {}
+
+@Component({selector: 'app-export', template: ``})
+class ExportComponent {}
+
+@Component({selector: 'app-modal-import', template: ``})
+class ModalImportContentComponent {}
+
+@Component({selector: 'app-modal-export', template: ``})
+class ModalExportContentComponent {}
+
 @NgModule({
     imports: [RouterModule.forChild([
-        {
-            path: '',
-            component: DefaultComponent
-        }
+        {path: '', component: DefaultComponent}
     ])],
     exports: [RouterModule]
 })
 export class ImportExportRoutingModule {}
 
-// Dummy module
 @NgModule({
     imports: [
         CommonModule,
@@ -46,8 +52,17 @@ export class ImportExportRoutingModule {}
         ImportExportRoutingModule
     ],
     declarations: [
-        DefaultComponent
-    ]
+        DefaultComponent,
+        ImportComponent,
+        ExportComponent,
+
+        ModalImportContentComponent,
+        ModalExportContentComponent
+    ],
+    entryComponents: [
+        ModalImportContentComponent,
+        ModalExportContentComponent
+    ],
 })
 export class ImportExportModule {
 

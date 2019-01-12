@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AppSettingsModel } from '../models/app-settings.model';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class AppSettings {
     public location = window.location;
     public settings = window['appSettings'] as AppSettingsModel;

@@ -19,7 +19,7 @@ import {FormFieldInterface} from '../models/form-field.interface';
 @Component({
     selector: 'app-modal-order',
     templateUrl: 'templates/modal-order.html',
-    providers: [SettingsService, SystemNameService]
+    providers: []
 })
 export class ModalOrderContentComponent extends ModalContentAbstractComponent<Order> {
 

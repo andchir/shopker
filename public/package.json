@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "encore": "./node_modules/.bin/encore",
     "build:dev": "./node_modules/.bin/encore dev --watch",
-    "build:prod": "./node_modules/.bin/encore production"
+    "build": "./node_modules/.bin/encore production"
   },
   "author": "Andchir",
   "license": "MIT",

@@ -6,7 +6,8 @@
     "ng": "ng",
     "start": "ng serve --open --live-reload 0 --watch --port 4200 --output-path \"./dist_dev\"",
     "build:dev": "ng build --baseHref=\"/\" --deployUrl=\"/admin/bundle-dev/\" --outputPath=\"../public/admin/bundle-dev\" --watch=true",
-    "build:prod": "ng build --prod --baseHref=\"/\" --deployUrl=\"/admin/bundle/\" --outputPath=\"../public/admin/bundle\"",
+    "build": "ng build --prod --baseHref=\"/\" --deployUrl=\"/admin/bundle/\" --outputPath=\"../public/admin/bundle\"",
+    "postbuild": "terser \"../public/admin/bundle/runtime.js\" \"../public/admin/bundle/polyfills.js\" \"../public/admin/bundle/scripts.js\" \"../public/admin/bundle/main.js\" -c -m --verbose -o \"../public/admin/bundle/all.min.js\"",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
@@ -60,6 +61,7 @@
     "karma-jasmine": "^1.1.1",
     "karma-jasmine-html-reporter": "^0.2.2",
     "protractor": "^5.4.2",
+    "terser": "^3.14.1",
     "ts-node": "~2.0.0",
     "tslint": "^5.12.1",
     "typescript": "^3.2.2"

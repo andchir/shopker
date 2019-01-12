@@ -40,16 +40,16 @@
           },
           "configurations": {
             "production": {
-              "optimization": true,
+              "optimization": false,
               "outputHashing": "none",
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": true,
-              "aot": false,
+              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "commonChunk": false,
-              "buildOptimizer": false,
+              "buildOptimizer": true,
               "progress": true,
               "fileReplacements": [
                 {

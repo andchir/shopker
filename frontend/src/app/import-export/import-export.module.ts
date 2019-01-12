@@ -26,16 +26,16 @@ import {SharedModule} from '../shared.module';
 export class DefaultComponent {}
 
 @Component({selector: 'app-import', template: ``})
-class ImportComponent {}
+export class ImportComponent {}
 
 @Component({selector: 'app-export', template: ``})
-class ExportComponent {}
+export class ExportComponent {}
 
 @Component({selector: 'app-modal-import', template: ``})
-class ModalImportContentComponent {}
+export class ModalImportContentComponent {}
 
 @Component({selector: 'app-modal-export', template: ``})
-class ModalExportContentComponent {}
+export class ModalExportContentComponent {}
 
 @NgModule({
     imports: [RouterModule.forChild([

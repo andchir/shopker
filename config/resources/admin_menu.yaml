@@ -3,4 +3,5 @@ menu:
     - { title: 'CATALOG', route: '/catalog', icon: 'icon-layers' }
 #    - { title: 'STATISTICS', route: '/statistics', icon: 'icon-bar-graph-2' }
     - { title: 'USERS', route: '/users', icon: 'icon-head' }
+#    - { title: 'IMPORT_EXPORT', route: '/import_export', icon: 'icon-inbox' }
     - { title: 'SETTINGS', route: '/settings', icon: 'icon-cog' }

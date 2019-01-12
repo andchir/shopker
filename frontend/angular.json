@@ -48,7 +48,9 @@
               "aot": false,
               "extractLicenses": true,
               "vendorChunk": false,
+              "commonChunk": false,
               "buildOptimizer": false,
+              "progress": true,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",

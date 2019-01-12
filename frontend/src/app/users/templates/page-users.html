@@ -35,15 +35,17 @@
             <div class="clearfix"></div>
         </div>
 
-        <app-table [items]="items"
-                   [(selectedIds)]="selectedIds"
-                   [collectionSize]="collectionSize"
-                   [queryOptions]="queryOptions"
-                   [tableFields]="tableFields"
-                   [(loading)]="loading"
-                   [isCloneAllowed]="false"
-                   (actionRequest)="actionRequest($event)"
-                   (changeRequest)="changeRequest($event)" #table></app-table>
+        <div class="min-height400">
+            <app-table [items]="items"
+                       [(selectedIds)]="selectedIds"
+                       [collectionSize]="collectionSize"
+                       [queryOptions]="queryOptions"
+                       [tableFields]="tableFields"
+                       [(loading)]="loading"
+                       [isCloneAllowed]="false"
+                       (actionRequest)="actionRequest($event)"
+                       (changeRequest)="changeRequest($event)" #table></app-table>
+        </div>
 
     </div>
 </div>

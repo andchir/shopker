@@ -14,6 +14,7 @@ Encore
     ])
     .cleanupOutputBeforeBuild()
     .autoProvidejQuery()
-    .enableSourceMaps(!Encore.isProduction());
+    .enableSourceMaps(!Encore.isProduction())
+    .disableSingleRuntimeChunk();
 
 module.exports = Encore.getWebpackConfig();

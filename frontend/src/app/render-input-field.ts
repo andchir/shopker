@@ -240,8 +240,8 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
             case 'radio':
             case 'select':
 
-                valueArr = field.inputProperties.values_list
-                    ? String(field.inputProperties.values_list).split('||')
+                valueArr = field.inputProperties['values_list']
+                    ? String(field.inputProperties['values_list']).split('||')
                     : [];
                 valueArr.forEach((optStr, index) => {
                     const opts = optStr.split('==');
@@ -254,8 +254,8 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                 break;
             case 'checkbox':
 
-                valueArr = field.inputProperties.values_list
-                    ? String(field.inputProperties.values_list).split('||')
+                valueArr = field.inputProperties['values_list']
+                    ? String(field.inputProperties['values_list']).split('||')
                     : [];
 
                 if (!isArray(this.model[field.name])) {

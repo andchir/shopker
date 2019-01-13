@@ -251,23 +251,16 @@ class SettingsController extends Controller
         $rootPath = realpath($this->getParameter('kernel.root_dir').'/../..');
         $jsonDirPath = $rootPath . '/frontend/src/i18n';
         $jsPublicDirPath = $rootPath . '/public/admin/i18n';
-        $pluginsDirPath = $rootPath . '/vendor/shk4-plugins';
+        $vendorDirPath = $rootPath . '/vendor';
 
         $sourceFiles = array_diff(scandir($jsonDirPath), ['..', '.']);
         $sourceFiles = array_map(function($value) use ($jsonDirPath) {
             return $jsonDirPath . DIRECTORY_SEPARATOR . $value;
         }, $sourceFiles);
 
-        if (is_dir($pluginsDirPath)) {
-            $pluginsDirs = array_diff(scandir($pluginsDirPath), ['..', '.']);
-            $pluginsDirs = array_filter($pluginsDirs, function ($fileName) {
-                return mb_substr($fileName, 0, 1) !== '.';
-            });
-            foreach ($pluginsDirs as $pluginsDir) {
-                $dirPath = $pluginsDirPath . DIRECTORY_SEPARATOR . $pluginsDir . '/frontend/src/i18n';
-                if (!is_dir($dirPath)) {
-                    continue;
-                }
+        if (is_dir($vendorDirPath)) {
+            $pluginsDirs = $this->getVendorFrontendLangPathArr($vendorDirPath);
+            foreach ($pluginsDirs as $dirPath) {
                 $files = array_diff(scandir($dirPath), ['..', '.']);
                 $files = array_map(function($value) use ($dirPath) {
                     return $dirPath . DIRECTORY_SEPARATOR . $value;
@@ -310,6 +303,31 @@ class SettingsController extends Controller
             'success' => empty($error),
             'msg' => $error
         ];
+    }
+
+    /**
+     * @param string $parentDirPath
+     * @param array $outputPathArr
+     * @return array
+     */
+    public function getVendorFrontendLangPathArr($parentDirPath, $outputPathArr = [])
+    {
+        $innerDirs = array_diff(scandir($parentDirPath), ['..', '.']);
+        foreach ($innerDirs as $innerDir) {
+            if ($innerDir == 'frontend') {
+                $dirPath = $parentDirPath . DIRECTORY_SEPARATOR . $innerDir . '/src/i18n';
+                if (is_dir($dirPath)) {
+                    $outputPathArr[] = $dirPath;
+                }
+            } else if (is_dir($parentDirPath . DIRECTORY_SEPARATOR . $innerDir)
+                && mb_substr($innerDir, 0, 1) !== '.') {
+                    $outputPathArr = $this->getVendorFrontendLangPathArr(
+                        $parentDirPath . DIRECTORY_SEPARATOR . $innerDir,
+                        $outputPathArr
+                    );
+            }
+        }
+        return $outputPathArr;
     }
 
     /**

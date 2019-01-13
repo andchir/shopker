@@ -16,11 +16,11 @@
     <script type="text/javascript" src="{{ path('admin_settings_script') }}?time={{ date().timestamp }}"></script>
     <script type="text/javascript" src="/admin/i18n/{{ settings.locale }}.js?time={{ date().timestamp }}"></script>
     {% if app.environment == 'prod' %}
-        {#<script type="text/javascript" src="{{ asset('admin/bundle/all.min.js') }}"></script>#}
-        <script type="text/javascript" src="{{ asset('admin/bundle/runtime.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('admin/bundle/polyfills.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('admin/bundle/scripts.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('admin/bundle/main.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('admin/bundle/all.min.js') }}"></script>
+        {#<script type="text/javascript" src="{{ asset('admin/bundle/runtime.js') }}"></script>#}
+        {#<script type="text/javascript" src="{{ asset('admin/bundle/polyfills.js') }}"></script>#}
+        {#<script type="text/javascript" src="{{ asset('admin/bundle/scripts.js') }}"></script>#}
+        {#<script type="text/javascript" src="{{ asset('admin/bundle/main.js') }}"></script>#}
     {% else %}
         <script type="text/javascript" src="{{ asset('admin/bundle-dev/runtime.js') }}"></script>
         <script type="text/javascript" src="{{ asset('admin/bundle-dev/polyfills.js') }}"></script>

@@ -29,7 +29,7 @@ class ProductController extends BaseProductController
 
     /**
      * @Route("/{categoryId}", name="category_product_list", methods={"GET"})
-     * @ParamConverter("category", class="AppMainBundle:Category", options={"id" = "categoryId"})
+     * @ParamConverter("category", class="App\MainBundle\Document\Category", options={"id" = "categoryId"})
      * @param Request $request
      * @param Category $category
      * @return JsonResponse
@@ -244,7 +244,7 @@ class ProductController extends BaseProductController
 
     /**
      * @Route("/{categoryId}", methods={"POST"})
-     * @ParamConverter("category", class="AppMainBundle:Category", options={"id" = "categoryId"})
+     * @ParamConverter("category", class="App\MainBundle\Document\Category", options={"id" = "categoryId"})
      * @param Request $request
      * @param Category $category
      * @return JsonResponse
@@ -270,7 +270,7 @@ class ProductController extends BaseProductController
 
     /**
      * @Route("/{categoryId}/{itemId}", methods={"PUT"})
-     * @ParamConverter("category", class="AppMainBundle:Category", options={"id" = "categoryId"})
+     * @ParamConverter("category", class="App\MainBundle\Document\Category", options={"id" = "categoryId"})
      * @param Request $request
      * @param Category $category
      * @param int $itemId
@@ -434,7 +434,7 @@ class ProductController extends BaseProductController
      *     defaults={"action": "delete"},
      *     methods={"POST"}
      * )
-     * @ParamConverter("category", class="AppMainBundle:Category", options={"id" = "categoryId"})
+     * @ParamConverter("category", class="App\MainBundle\Document\Category", options={"id" = "categoryId"})
      * @param Request $request
      * @param Category|null $category
      * @param string $action
@@ -489,7 +489,7 @@ class ProductController extends BaseProductController
 
     /**
      * @Route("/{categoryId}/{itemId}", methods={"DELETE"})
-     * @ParamConverter("category", class="AppMainBundle:Category", options={"id" = "categoryId"})
+     * @ParamConverter("category", class="App\MainBundle\Document\Category", options={"id" = "categoryId"})
      * @param Category $category
      * @param int $itemId
      * @param TranslatorInterface $translator
@@ -575,7 +575,7 @@ class ProductController extends BaseProductController
 
     /**
      * @Route("/{categoryId}/{itemId}", name="category_product", methods={"GET"})
-     * @ParamConverter("category", class="AppMainBundle:Category", options={"id" = "categoryId"})
+     * @ParamConverter("category", class="App\MainBundle\Document\Category", options={"id" = "categoryId"})
      * @param Request $request
      * @param Category $category
      * @param int $itemId

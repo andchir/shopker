@@ -7,7 +7,7 @@
     "start": "ng serve --open --live-reload 0 --watch --port 4200 --output-path \"./dist_dev\"",
     "build:dev": "ng build --baseHref=\"/\" --deployUrl=\"/admin/bundle-dev/\" --outputPath=\"../public/admin/bundle-dev\" --watch=true",
     "build": "ng build --prod --baseHref=\"/\" --deployUrl=\"/admin/bundle/\" --outputPath=\"../public/admin/bundle\"",
-    "postbuild": "terser \"../public/admin/bundle/runtime.js\" \"../public/admin/bundle/polyfills.js\" \"../public/admin/bundle/scripts.js\" \"../public/admin/bundle/main.js\" -c -m --verbose -o \"../public/admin/bundle/all.min.js\"",
+    "postbuild": "nodejs terser-postbuild.js",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
@@ -43,6 +43,7 @@
     "zone.js": "^0.8.27"
   },
   "devDependencies": {
+    "@angular-builders/custom-webpack": "^7.2.0",
     "@angular-devkit/build-angular": "^0.10.7",
     "@angular/cli": "^7.2.1",
     "@angular/compiler-cli": "^7.2.0",

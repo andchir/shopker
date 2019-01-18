@@ -92,6 +92,13 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
             disabled: false,
             validators: [],
             messages: {}
+        },
+        clearCache: {
+            fieldLabel: 'CLEAR_FILE_CACHE',
+            value: false,
+            disabled: false,
+            validators: [],
+            messages: {}
         }
     };
 

@@ -1,0 +1,5 @@
+
+4.0.1
+- To send mail using the settings from the admin area.
+- Auto clear system cache when changing system settings.
+- Checkbox for clear file cache in category UI. Auto clear file cache when delete category.

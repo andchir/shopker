@@ -3,7 +3,7 @@
 namespace App\Service;
 
 use App\MainBundle\Document\Setting;
-use Symfony\Component\Console\Application;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\HttpFoundation\Request;
@@ -209,6 +209,35 @@ class SettingsService
         } else {
             return current($currencySettings)->getOption('value');
         }
+    }
+
+    /**
+     * Clear system cache
+     * @param null $environment
+     * @return string
+     * @throws \Exception
+     */
+    public function systemCacheClear($environment = null)
+    {
+        /** @var KernelInterface $kernel */
+        $kernel = $this->container->get('kernel');
+        if (!$environment) {
+            $environment = $kernel->getEnvironment();
+        }
+        $application = new Application($kernel);
+        $application->setAutoExit(false);
+
+        $input = new ArrayInput([
+            'command' => 'cache:clear',
+            '--env' => $environment,
+            '--quiet' => ''
+        ]);
+
+        $output = new BufferedOutput();
+        $application->run($input, $output);
+        $output->fetch();
+
+        return $output->fetch();
     }
 
     /**

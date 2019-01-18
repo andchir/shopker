@@ -15,14 +15,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Cache\Simple\FilesystemCache;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Yaml\Exception\ParseException;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\BufferedOutput;
 use App\MainBundle\Document\Setting;
 
 /**
@@ -60,11 +56,12 @@ class SettingsController extends Controller
      * @Route("/{groupName}", methods={"PUT"})
      * @param Request $request
      * @param $groupName
-     * @param SerializerInterface $serializer
+     * @param SettingsService $settingsService
      * @param TranslatorInterface $translator
      * @return JsonResponse
+     * @throws \Exception
      */
-    public function updateGroup(Request $request, $groupName, SerializerInterface $serializer, TranslatorInterface $translator)
+    public function updateGroupAction(Request $request, $groupName, SettingsService $settingsService, TranslatorInterface $translator)
     {
         $data = json_decode($request->getContent(), true);
 
@@ -79,6 +76,8 @@ class SettingsController extends Controller
                 if (!$this->saveSettingsToYaml($settings, 'settings')) {
                     return $this->setError($translator->trans('File is not writable.', [], 'validators'));
                 }
+
+                $settingsService->systemCacheClear();
 
                 break;
             default:
@@ -134,8 +133,6 @@ class SettingsController extends Controller
                 break;
         }
 
-        // $this->systemCacheClearAction();
-
         return $this->json($settings, 200, [], ['groups' => ['list']]);
     }
 
@@ -156,12 +153,13 @@ class SettingsController extends Controller
 
     /**
      * @Route("/clear_system_cache", name="clear_system_cache", methods={"POST"})
+     * @param SettingsService $settingsService
      * @return JsonResponse
      * @throws \Exception
      */
-    public function systemCacheClearAction()
+    public function systemCacheClearAction(SettingsService $settingsService)
     {
-        $result = $this->systemCacheClear();
+        $result = $settingsService->systemCacheClear();
 
         return $this->json([
             'success' => true
@@ -211,35 +209,6 @@ class SettingsController extends Controller
         return $result['success']
             ? $this->json($result)
             : $this->setError($translator->trans($result['msg'], [], 'validators'));
-    }
-
-    /**
-     * Clear system cache
-     * @param null $environment
-     * @return string
-     * @throws \Exception
-     */
-    public function systemCacheClear($environment = null)
-    {
-        /** @var KernelInterface $kernel */
-        $kernel = $this->container->get('kernel');
-        if (!$environment) {
-            $environment = $kernel->getEnvironment();
-        }
-        $application = new Application($kernel);
-        $application->setAutoExit(false);
-
-        $input = new ArrayInput([
-            'command' => 'cache:clear',
-            '--env' => $environment,
-            '--quiet' => ''
-        ]);
-
-        $output = new BufferedOutput();
-        $application->run($input, $output);
-        $output->fetch();
-
-        return $output->fetch();
     }
 
     /**

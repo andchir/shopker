@@ -8,9 +8,13 @@ export class Category {
         public description: string,
         public contentTypeName: string,
         public isActive: boolean,
+        public clearCache?: boolean,
         public menuIndex?: number,
         public translations?: {[fieldName: string]: {[lang: string]: string}}
     ) {
+        if (typeof this.clearCache === 'undefined') {
+            this.clearCache = false;
+        }
         if (typeof this.translations === 'undefined') {
             this.translations = {};
         }

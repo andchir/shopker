@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use Symfony\Component\Cache\Simple\FilesystemCache;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -68,6 +69,8 @@ class CategoryController extends StorageControllerAbstract
      * @param $data
      * @param string $itemId
      * @return JsonResponse
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
      */
     public function createUpdate($data, $itemId = null)
     {
@@ -121,6 +124,13 @@ class CategoryController extends StorageControllerAbstract
         $evenDispatcher = $this->get('event_dispatcher');
         $event = new CategoryUpdatedEvent($this->container, $item, $previousParentId);
         $item = $evenDispatcher->dispatch(CategoryUpdatedEvent::NAME, $event)->getCategory();
+
+        // Clear file cache
+        if (!empty($data['clearCache'])) {
+            /** @var FilesystemCache $cache */
+            $cache = $this->get('app.filecache');
+            $cache->clear();
+        }
 
         return new JsonResponse($item->toArray());
     }
@@ -182,6 +192,8 @@ class CategoryController extends StorageControllerAbstract
      * @param int $itemId
      * @param TranslatorInterface $translator
      * @return JsonResponse
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
      */
     public function deleteItemAction($itemId, TranslatorInterface $translator)
     {
@@ -213,6 +225,11 @@ class CategoryController extends StorageControllerAbstract
             $event = new CategoryUpdatedEvent($this->container, $child, $previousParentId);
             $evenDispatcher->dispatch(CategoryUpdatedEvent::NAME, $event);
         }
+
+        // Clear file cache
+        /** @var FilesystemCache $cache */
+        $cache = $this->get('app.filecache');
+        $cache->clear();
 
         return new JsonResponse([]);
     }

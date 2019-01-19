@@ -28,9 +28,7 @@ class TemplatesController extends StorageControllerAbstract
         $items = [];
         $queryString = $request->getQueryString();
         $options = $this->getQueryOptions($queryString);
-
-        $rootPath = realpath($this->getParameter('kernel.root_dir').'/../..');
-        $templatesDirPath = $rootPath . DIRECTORY_SEPARATOR . 'templates';
+        $templatesDirPath = $this->getTemplatesDirPath();
 
         $themesDirs = array_diff(scandir($templatesDirPath), ['..', '.']);
         $themesDirs = array_filter($themesDirs, function($value) use ($templatesDirPath) {
@@ -45,7 +43,8 @@ class TemplatesController extends StorageControllerAbstract
         foreach ($themesDirs as $themeDirName) {
             $dirPath = $templatesDirPath . DIRECTORY_SEPARATOR . $themeDirName;
             $filesArr = $this->getFiles($dirPath, 'twig');
-            $filesArr = array_map(function($fileData) use ($themeDirName, $templatesDirPath) {
+            $filesArr = array_map(function($fileData, $index) use ($themeDirName, $templatesDirPath) {
+                $fileData['id'] = $index;
                 $fileData['themeName'] = $themeDirName;
                 $fileData['path'] = str_replace(
                     $templatesDirPath . DIRECTORY_SEPARATOR,
@@ -53,7 +52,7 @@ class TemplatesController extends StorageControllerAbstract
                     $fileData['path']
                 );
                 return $fileData;
-            }, $filesArr);
+            }, $filesArr, array_keys($filesArr));
 
             // Sorting
             if (isset($options['sort_by'])) {
@@ -113,6 +112,33 @@ class TemplatesController extends StorageControllerAbstract
             }
         }
         return $filesArr;
+    }
+
+    /**
+     * @Route("/content", methods={"GET"})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getFileContentAction(Request $request)
+    {
+        $content = '';
+        $templatesDirPath = $this->getTemplatesDirPath();
+        $filePath = $request->get('path');
+
+        $filePath = $templatesDirPath . DIRECTORY_SEPARATOR . $filePath;
+        if (file_exists($filePath)) {
+            $content = file_get_contents($filePath);
+        }
+
+        return $this->json([
+            'content' => $content
+        ]);
+    }
+
+    public function getTemplatesDirPath()
+    {
+        $rootPath = realpath($this->getParameter('kernel.root_dir').'/../..');
+        return $rootPath . DIRECTORY_SEPARATOR . 'templates';
     }
 
     protected function getRepository()

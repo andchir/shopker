@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class TemplatesController
@@ -16,6 +17,22 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class TemplatesController extends StorageControllerAbstract
 {
+
+    /**
+     * @param array $data
+     * @param null $itemId
+     * @return array
+     */
+    protected function validateData($data, $itemId = null)
+    {
+        if (empty($data['name'])) {
+            return ['success' => false, 'msg' => 'Name can not be empty.'];
+        }
+        if (empty($data['path'])) {
+            return ['success' => false, 'msg' => 'Path can not be empty.'];
+        }
+        return ['success' => true];
+    }
 
     /**
      * @Route("", methods={"GET"})
@@ -135,6 +152,40 @@ class TemplatesController extends StorageControllerAbstract
         ]);
     }
 
+    /**
+     * @param array $data
+     * @return JsonResponse
+     */
+    protected function createUpdate($data)
+    {
+        $templatesDirPath = $this->getTemplatesDirPath();
+        $fileContent = $data['content'] ?? '';
+        $fileName = $data['name'];
+        $filePath = $templatesDirPath . DIRECTORY_SEPARATOR . trim($data['path'], DIRECTORY_SEPARATOR);
+        $filePath .= DIRECTORY_SEPARATOR . $fileName;
+
+        /** @var TranslatorInterface $translator */
+        $translator = $this->get('translator');
+
+        if (!in_array(UtilsService::getExtension($data['name']), ['twig', 'html', 'css', 'js'])) {
+            return $this->setError($translator->trans('Allowed file types: %extensions%.', [
+                '%extensions%' => 'twig, html, css, js'
+            ], 'validators'));
+        }
+        if (!is_dir(dirname($filePath))) {
+            return $this->setError($translator->trans('The specified file path does not exist.', [], 'validators'));
+        }
+        if (file_exists($filePath) && !is_writable($filePath)) {
+            return $this->setError($translator->trans('File is not writable.', [], 'validators'));
+        }
+
+        file_put_contents($filePath, $fileContent);
+
+        return $this->json([
+            'success' => true
+        ]);
+    }
+
     public function getTemplatesDirPath()
     {
         $rootPath = realpath($this->getParameter('kernel.root_dir').'/../..');
@@ -144,15 +195,5 @@ class TemplatesController extends StorageControllerAbstract
     protected function getRepository()
     {
         return null;
-    }
-
-    protected function createUpdate($data)
-    {
-        // TODO: Implement createUpdate() method.
-    }
-
-    protected function validateData($data, $itemId = null)
-    {
-        return true;
     }
 }

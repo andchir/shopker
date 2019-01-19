@@ -86,14 +86,17 @@ export class ModalTemplateEditComponent implements OnInit {
     save(): void {
         this.submitted = true;
         this.loading = true;
-        // this.saveRequest()
-        //     .subscribe((res) => {
-        //         this.closeModal();
-        //     }, (err) => {
-        //         this.errorMessage = err.error || 'Error.';
-        //         this.loading = false;
-        //         this.submitted = false;
-        //     });
+
+        this.model.content = ace.edit('editor').getValue();
+
+        this.dataService.saveContent(this.model)
+            .subscribe((res) => {
+                this.closeModal();
+            }, (err) => {
+                this.errorMessage = err.error || 'Error.';
+                this.loading = false;
+                this.submitted = false;
+            });
     }
 
 }

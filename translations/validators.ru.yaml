@@ -34,3 +34,7 @@ Delivery is empty.: Пожалуйста, выберите метод доста
 Payment method is empty.: Пожалуйста, выберите метод оплаты.
 File is not writable.: Файл не доступен для записи.
 You must first remove the categories with this content type.: Сначала Вы должны удалить категории с данным типом контента.
+Name can not be empty.: Имя не может быть пустым.
+Path can not be empty.: Путь не может быть пустым.
+The specified file path does not exist.: Указанный путь файла не существует.
+"Allowed file types: %extensions%.": "Разрешенные типы файлов: %extensions%."

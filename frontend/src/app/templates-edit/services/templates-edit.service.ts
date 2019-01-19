@@ -24,4 +24,17 @@ export class TemplatesEditService extends DataService<Template> {
         );
     }
 
+    saveContent(template: Template): Observable<any> {
+        return this.http.post<any>(this.getRequestUrl(), template, {headers: this.headers}).pipe(
+            catchError(this.handleError<any>())
+        );
+    }
+
+    // deleteItem(id: number): Observable<M> {
+    //     const url = this.getRequestUrl() + `/${id}`;
+    //     return this.http.delete<M>(url, {headers: this.headers}).pipe(
+    //         catchError(this.handleError<any>())
+    //     );
+    // }
+
 }

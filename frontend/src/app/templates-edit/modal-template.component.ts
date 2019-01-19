@@ -50,7 +50,7 @@ export class ModalTemplateEditComponent implements OnInit {
 
     getContent(): void {
         this.loading = true;
-        const templatePath = `${this.template.path}/${this.template.name}`;
+        const templatePath = Template.getPath(this.template);
         this.dataService.getItemContent(templatePath)
             .subscribe((res) => {
                 if (res['content']) {

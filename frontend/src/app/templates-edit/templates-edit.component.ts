@@ -69,4 +69,53 @@ export class TemplatesEditComponent extends PageTableAbstractComponent<Template>
         this.modalRef.componentInstance['isEditMode'] = isEditMode;
         this.modalRef.componentInstance['template'] = template;
     }
+
+    deleteSelected() {
+        if (this.selectedIds.length === 0) {
+            this.showAlert(this.getLangString('NOTHING_IS_SELECTED'));
+            return;
+        }
+        const pathArr = [];
+        this.selectedIds.forEach((id) => {
+            const templateIndex = findIndex(this.items, {id: id});
+            if (templateIndex > -1) {
+                const template = templateIndex > -1 ? this.items[templateIndex] : null;
+                pathArr.push(Template.getPath(template));
+            }
+        });
+        this.confirmAction(this.getLangString('YOU_SURE_YOU_WANT_DELETE_SELECTED'))
+            .then((result) => {
+                if (result === 'accept') {
+                    this.dataService.deleteFilesBatch(pathArr)
+                        .subscribe(res => {
+                                this.clearSelected();
+                                this.getList();
+                            },
+                            err => this.showAlert(err.error || this.getLangString('ERROR')));
+                }
+            });
+    }
+
+    deleteItem(itemId: number): void {
+        const templateIndex = findIndex(this.items, {id: itemId});
+        const template = templateIndex > -1 ? this.items[templateIndex] : null;
+        if (!template) {
+            return;
+        }
+        const templatePath = Template.getPath(template);
+        this.confirmAction(this.getLangString('YOU_SURE_YOU_WANT_DELETE'))
+            .then((result) => {
+                if (result === 'accept') {
+                    this.dataService.deleteTemplateItem(templatePath)
+                        .subscribe(() => {
+                            this.getList();
+                        }, (err) => {
+                            if (err['error']) {
+                                this.showAlert(err['error']);
+                            }
+                        });
+                }
+            });
+    }
+
 }

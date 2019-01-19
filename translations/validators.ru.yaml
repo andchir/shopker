@@ -32,6 +32,7 @@ Content type not found.: Тип контента не найден.
 Product not found.: Контент не найден.
 Delivery is empty.: Пожалуйста, выберите метод доставки.
 Payment method is empty.: Пожалуйста, выберите метод оплаты.
+File not found.: Файл не найден.
 File is not writable.: Файл не доступен для записи.
 You must first remove the categories with this content type.: Сначала Вы должны удалить категории с данным типом контента.
 Name can not be empty.: Имя не может быть пустым.

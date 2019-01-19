@@ -30,11 +30,20 @@ export class TemplatesEditService extends DataService<Template> {
         );
     }
 
-    // deleteItem(id: number): Observable<M> {
-    //     const url = this.getRequestUrl() + `/${id}`;
-    //     return this.http.delete<M>(url, {headers: this.headers}).pipe(
-    //         catchError(this.handleError<any>())
-    //     );
-    // }
+    deleteTemplateItem(path: string): Observable<any> {
+        const url = this.getRequestUrl();
+        let params = new HttpParams();
+        params = params.append('path', path);
+        return this.http.delete<any>(url, {params: params, headers: this.headers}).pipe(
+            catchError(this.handleError<any>())
+        );
+    }
+
+    deleteFilesBatch(pathArr: string[]): Observable<any> {
+        const url = `${this.getRequestUrl()}/delete/batch`;
+        return this.http.post<any>(url, {pathArr: pathArr}, {headers: this.headers}).pipe(
+            catchError(this.handleError<any>())
+        );
+    }
 
 }

@@ -193,6 +193,89 @@ class TemplatesController extends StorageControllerAbstract
         ]);
     }
 
+    /**
+     * @Route("", methods={"DELETE"})
+     * @param Request $request
+     * @param TranslatorInterface $translator
+     * @return JsonResponse
+     */
+    public function deleteFileAction(Request $request, TranslatorInterface $translator)
+    {
+        $filePath = $request->get('path');
+
+        $results = $this->deleteFile($filePath);
+        if (!$results['success']) {
+            return $this->setError($translator->trans($results['msg'], [], 'validators'));
+        }
+
+        return $this->json([
+            'success' => true
+        ]);
+    }
+
+    /**
+     * @Route("/delete/batch", methods={"POST"})
+     * @param Request $request
+     * @param TranslatorInterface $translator
+     * @return JsonResponse
+     */
+    public function deleteBatchAction(Request $request, TranslatorInterface $translator)
+    {
+        $data = $request->getContent()
+            ? json_decode($request->getContent(), true)
+            : [];
+
+        if(empty($data['pathArr'])){
+            return $this->setError($translator->trans('Bad data.', [], 'validators'));
+        }
+
+        $error = '';
+        foreach ($data['pathArr'] as $path) {
+            $results = $this->deleteFile($path);
+            if (!$results['success']) {
+                $error = $results['msg'];
+                break;
+            }
+        }
+
+        if ($error) {
+            return $this->setError($translator->trans($error, [], 'validators'));
+        } else {
+            return $this->json([
+                'success' => true
+            ]);
+        }
+    }
+
+    /**
+     * @param string $filePath
+     * @return array
+     */
+    public function deleteFile($filePath)
+    {
+        $templatesDirPath = $this->getTemplatesDirPath();
+        $filePath = $templatesDirPath . DIRECTORY_SEPARATOR . $filePath;
+
+        if (!file_exists($filePath)) {
+            return [
+                'success' => false,
+                'msg' => 'File not found.'
+            ];
+        }
+        if (file_exists($filePath) && !is_writable($filePath)) {
+            return [
+                'success' => false,
+                'msg' => 'File is not writable.'
+            ];
+        }
+
+        unlink($filePath);
+
+        return [
+            'success' => true
+        ];
+    }
+
     public function getTemplatesDirPath()
     {
         $rootPath = realpath($this->getParameter('kernel.root_dir').'/../..');

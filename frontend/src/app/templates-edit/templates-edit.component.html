@@ -1,0 +1,51 @@
+<div class="card">
+    <div class="card-body">
+
+        <h3>
+            <i class="icon-columns"></i>
+            {{title | translate}}
+        </h3>
+        <hr>
+
+        <div class="mb-3">
+            <div class="float-md-right">
+
+                <div ngbDropdown class="d-block d-md-inline-block" placement="bottom-right">
+                    <button class="btn btn-info d-block d-md-inline-block width-100 width-md-auto" ngbDropdownToggle>
+                        <span>{{'BATCH_ACTIONS' | translate}}</span>
+                    </button>
+                    <div ngbDropdownMenu>
+                        <button class="dropdown-item" (click)="blockSelected()">{{'DISABLE_ENABLE' | translate}}</button>
+                        <button class="dropdown-item" (click)="deleteSelected()">{{'DELETE' | translate}}</button>
+                    </div>
+                </div>
+
+                <button type="button" class="btn btn-success btn-wide d-block d-md-inline-block width-100 width-md-auto ml-md-2" (click)="modalOpen()">
+                    <i class="icon-plus"></i>
+                    &nbsp;
+                    <span>{{'ADD' | translate}}</span>
+                </button>
+
+            </div>
+            <div class="float-left">
+
+
+
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="min-height400">
+            <app-table [items]="items"
+                       [(selectedIds)]="selectedIds"
+                       [collectionSize]="collectionSize"
+                       [queryOptions]="queryOptions"
+                       [tableFields]="tableFields"
+                       [(loading)]="loading"
+                       [isCloneAllowed]="false"
+                       (actionRequest)="actionRequest($event)"
+                       (changeRequest)="changeRequest($event)" #table></app-table>
+        </div>
+
+    </div>
+</div>

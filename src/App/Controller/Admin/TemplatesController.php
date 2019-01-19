@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Service\SettingsService;
 use App\Service\UtilsService;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -180,6 +181,12 @@ class TemplatesController extends StorageControllerAbstract
         }
 
         file_put_contents($filePath, $fileContent);
+
+        if (!empty($data['clearCache'])) {
+            /** @var SettingsService $settingsService */
+            $settingsService = $this->get('app.settings');
+            $settingsService->systemCacheClear();
+        }
 
         return $this->json([
             'success' => true

@@ -4,6 +4,7 @@ export class Template {
         public name: string,
         public themeName: string,
         public content?: string,
-        public path?: string
+        public path?: string,
+        public clearCache?: boolean
     ) { }
 }

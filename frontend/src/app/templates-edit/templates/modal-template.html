@@ -1,6 +1,6 @@
 <div class="modal-header d-block">
     <div class="d-block float-right">
-        <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss()">
+        <button type="button" class="btn btn-secondary" [disabled]="submitted" (click)="activeModal.dismiss()">
             <span>{{'CLOSE' | translate}}</span>
         </button>
     </div>
@@ -25,6 +25,14 @@
                 </label>
                 <input type="text" class="form-control" name="path" [(ngModel)]="model.path">
             </div>
+            <div class="form-group">
+                <div class="card card-body p-2 pl-3">
+                    <div class="custom-control custom-checkbox m-0">
+                        <input type="checkbox" class="custom-control-input" id="fieldClearCache" name="clearCache" [(ngModel)]="model.clearCache">
+                        <label class="custom-control-label" for="fieldClearCache">{{'CLEAR_SYSTEM_CACHE' | translate}}</label>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -47,7 +55,7 @@
     <button type="button" class="btn btn-success btn-wide" [disabled]="submitted" (click)="save()">
         <span>{{'SAVE' | translate}}</span>
     </button>
-    <button type="button" class="btn btn-secondary btn-wide" (click)="activeModal.dismiss()">
+    <button type="button" class="btn btn-secondary btn-wide" [disabled]="submitted" (click)="activeModal.dismiss()">
         <span>{{'CANCEL' | translate}}</span>
     </button>
 </div>

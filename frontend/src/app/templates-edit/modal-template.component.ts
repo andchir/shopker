@@ -4,6 +4,10 @@ import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {TemplatesEditService} from './services/templates-edit.service';
 import {Template} from './models/template.model';
 
+declare var ace: any;
+import 'ace-builds';
+import 'ace-builds/webpack-resolver';
+
 @Component({
     selector: 'app-modal-template',
     templateUrl: './templates/modal-template.html',
@@ -15,7 +19,7 @@ export class ModalTemplateEditComponent implements OnInit {
     @Input() template: Template;
     @Input() isItemCopy: boolean;
     @Input() isEditMode: boolean;
-    @ViewChild('contentTextArea') contentTextArea: ElementRef;
+    @ViewChild('editor') editor: ElementRef;
 
     model = new Template(0, '', '');
     errorMessage = '';
@@ -30,8 +34,16 @@ export class ModalTemplateEditComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        ace.edit('editor', {
+            mode: 'ace/mode/twig',
+            theme: 'ace/theme/kuroir',
+            maxLines: 30,
+            minLines: 15,
+            fontSize: 18
+        });
         if (this.template && this.isEditMode) {
             this.model.name = this.template.name;
+            this.model.path = this.template.path;
             this.getContent();
         }
     }
@@ -43,7 +55,7 @@ export class ModalTemplateEditComponent implements OnInit {
             .subscribe((res) => {
                 if (res['content']) {
                     this.model.content = res['content'];
-                    this.contentTextArea.nativeElement.value = this.model.content;
+                    ace.edit('editor').setValue(this.model.content, -1);
                 }
                 this.loading = false;
             }, (err) => {
@@ -65,14 +77,6 @@ export class ModalTemplateEditComponent implements OnInit {
         this.activeModal.dismiss('canceled');
     }
 
-    saveRequest() {
-        if (this.isEditMode) {
-            return this.dataService.update(this.model);
-        } else {
-            return this.dataService.create(this.model);
-        }
-    }
-
     /** Submit form */
     onSubmit() {
         this.submitted = true;
@@ -82,14 +86,14 @@ export class ModalTemplateEditComponent implements OnInit {
     save(): void {
         this.submitted = true;
         this.loading = true;
-        this.saveRequest()
-            .subscribe((res) => {
-                this.closeModal();
-            }, (err) => {
-                this.errorMessage = err.error || 'Error.';
-                this.loading = false;
-                this.submitted = false;
-            });
+        // this.saveRequest()
+        //     .subscribe((res) => {
+        //         this.closeModal();
+        //     }, (err) => {
+        //         this.errorMessage = err.error || 'Error.';
+        //         this.loading = false;
+        //         this.submitted = false;
+        //     });
     }
 
 }

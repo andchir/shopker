@@ -19,7 +19,7 @@ import {ModalTemplateEditComponent} from './modal-template.component';
 export class TemplatesEditComponent extends PageTableAbstractComponent<Template> {
 
     title = 'TEMPLATES';
-    queryOptions: QueryOptions = new QueryOptions('name', 'asc', 1, 10, 0, 0);
+    queryOptions: QueryOptions = new QueryOptions('path', 'asc', 1, 10, 0, 0);
 
     tableFields = [
         {

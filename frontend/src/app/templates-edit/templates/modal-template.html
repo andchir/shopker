@@ -18,13 +18,21 @@
                 <input type="text" class="form-control" name="name" [ngModel]="model.name">
             </div>
         </div>
+        <div class="col-lg-6">
+            <div class="form-group">
+                <label class="label-filled">
+                    {{'PATH' | translate}}
+                </label>
+                <input type="text" class="form-control" name="path" [ngModel]="model.path">
+            </div>
+        </div>
     </div>
 
     <div class="form-group mb-0">
         <label class="label-filled">
             {{'CONTENT' | translate}}
         </label>
-        <textarea class="form-control" name="content" rows="20" #contentTextArea></textarea>
+        <div class="border" id="editor" #editor></div>
     </div>
 
     <div class="alert alert-danger mt-3 mb-0" [hidden]="!errorMessage">

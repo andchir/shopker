@@ -17,7 +17,7 @@ import {QueryOptions} from '../models/query-options';
 export class TemplatesEditComponent extends PageTableAbstractComponent<Template> {
 
     title = 'TEMPLATES';
-    queryOptions: QueryOptions = new QueryOptions('id', 'desc', 1, 10, 0, 0);
+    queryOptions: QueryOptions = new QueryOptions('name', 'asc', 1, 10, 0, 0);
 
     tableFields = [
         {
@@ -30,7 +30,14 @@ export class TemplatesEditComponent extends PageTableAbstractComponent<Template>
         {
             name: 'themeName',
             sortName: 'themeName',
-            title: 'THEME_NAME',
+            title: 'TEMPLATE_THEME_NAME',
+            outputType: 'text',
+            outputProperties: {}
+        },
+        {
+            name: 'path',
+            sortName: 'path',
+            title: 'PATH',
             outputType: 'text',
             outputProperties: {}
         }

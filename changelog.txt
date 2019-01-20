@@ -1,4 +1,7 @@
 
+4.0.2
+- Template editor added.
+
 4.0.1
 - To send mail using the settings from the admin area.
 - Auto clear system cache when changing system settings.

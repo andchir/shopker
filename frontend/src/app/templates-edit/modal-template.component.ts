@@ -4,7 +4,7 @@ import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {TemplatesEditService} from './services/templates-edit.service';
 import {Template} from './models/template.model';
 
-declare var ace: any;
+declare const ace: any;
 import 'ace-builds';
 import 'ace-builds/webpack-resolver';
 
@@ -28,7 +28,7 @@ export class ModalTemplateEditComponent implements OnInit {
 
     constructor(
         private dataService: TemplatesEditService,
-        private activeModal: NgbActiveModal
+        public activeModal: NgbActiveModal
     ) {
 
     }

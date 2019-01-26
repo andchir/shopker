@@ -460,7 +460,7 @@ class AppExtension extends AbstractExtension
                 $catalogController = new CatalogController();
                 $catalogController->setContainer($this->container);
                 $categoriesTree = $catalogController->getCategoriesTree($parentId, $locale);
-                $data = $categoriesTree[0];
+                $data = !empty($categoriesTree) ? $categoriesTree[0] : [];
                 if ($activeCategoriesIds === null) {
                     $activeCategoriesIds = $catalogController->getCategoriesActiveIds($data, $uriArr);
                 }

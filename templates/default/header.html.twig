@@ -1,6 +1,6 @@
 <nav class="navbar-header navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container d-block">
-        <div class="float-right pt-2 pr-3 pr-lg-0">
+        <div class="float-right mt-1 py-2 pr-3 pr-lg-0">
 
             <div class="d-inline-block">
                 {% if is_granted('ROLE_USER') %}
@@ -49,7 +49,7 @@
                 {% endif %}
             </div>
 
-            <div class="d-inline-block pt-1 ml-1">
+            <div class="d-inline-block ml-1">
                 <div class="dropdown">
                     <button class="btn btn-sm btn-outline-secondary text-white dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <img src="/img/flag_{{ app.request.locale }}.png">

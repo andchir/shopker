@@ -1,4 +1,7 @@
 
+4.0.3
+- Fixed incorrect default language value.
+
 4.0.2
 - Template editor added.
 

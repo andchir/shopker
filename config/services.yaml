@@ -28,9 +28,6 @@ services:
         resource: '../src/App/Controller'
         tags: ['controller.service_arguments']
 
-    App\EventSubscriber\LocaleSubscriber:
-        arguments: ['%kernel.default_locale%']
-
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
@@ -68,6 +65,9 @@ services:
         resource: '../src/App/EventSubscriber'
         tags: [event_subscriber]
         arguments: [ '@service_container' ]
+
+    App\EventSubscriber\LocaleSubscriber:
+        arguments: [ '%kernel.default_locale%' ]
 
     App\EventSubscriber\DoctrineEventSubscriber:
         tags:

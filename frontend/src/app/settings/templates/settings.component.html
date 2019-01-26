@@ -70,7 +70,7 @@
                                             <span>{{setting.name | translate}}</span>
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control form-control-sm" [(ngModel)]="setting.value" (ngModelChange)="onValueChanged('SETTINGS_MAIN')">
+                                            <input type="{{ getFieldTypeByName(setting.name) }}" class="form-control form-control-sm" [(ngModel)]="setting.value" (ngModelChange)="onValueChanged('SETTINGS_MAIN')">
                                         </td>
                                     </tr>
                                     <tr *ngIf="settings.SETTINGS_MAIN.changed">

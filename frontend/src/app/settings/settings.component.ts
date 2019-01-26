@@ -144,6 +144,12 @@ export class SettingsComponent implements OnInit {
             });
     }
 
+    getFieldTypeByName(fieldName): string {
+        return fieldName.toLowerCase().indexOf('password') > -1
+            ? 'password'
+            : 'text';
+    }
+
     getCurrentLocale(): string {
         const index = findIndex(this.settings['SETTINGS_MAIN'].values, {name: 'locale'});
         if (index > -1) {

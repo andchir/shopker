@@ -531,6 +531,21 @@ class User implements UserInterface, \Serializable
     }
 
     /**
+     * Get option value
+     *
+     * @param string $optionName
+     * @return string
+     */
+    public function getOptionValue($optionName)
+    {
+        $optIndex = array_search($optionName, array_column($this->options, 'name'));
+        if ($optIndex > -1) {
+            return $this->options[$optIndex]['value'];
+        }
+        return '';
+    }
+
+    /**
      * @return array
      */
     public function getOptionsStructured()

@@ -527,7 +527,7 @@ class User implements UserInterface, \Serializable
      */
     public function getOptions()
     {
-        return $this->options;
+        return $this->options ?: [];
     }
 
     /**
@@ -538,7 +538,7 @@ class User implements UserInterface, \Serializable
      */
     public function getOptionValue($optionName)
     {
-        $optIndex = array_search($optionName, array_column($this->options, 'name'));
+        $optIndex = array_search($optionName, array_column($this->getOptions(), 'name'));
         if ($optIndex > -1) {
             return $this->options[$optIndex]['value'];
         }

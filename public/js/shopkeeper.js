@@ -1,6 +1,6 @@
 /**
  * Shopkeeper
- * @version 4.0.0beta8
+ * @version 4.0.3
  * @author Andchir<andchir@gmail.com>
  */
 
@@ -442,10 +442,16 @@
             // Update price
             priceElArr.forEach(function(priceEl) {
                 if (!priceEl.dataset.originalPrice) {
-                    priceEl.dataset.originalPrice = self.parsePrice(priceEl.textContent);
+                    priceEl.dataset.originalPrice = priceEl.tagName.toLowerCase() === 'input'
+                        ? self.parsePrice(priceEl.value)
+                        : self.parsePrice(priceEl.textContent);
                 }
                 var originalPrice = parseFloat(priceEl.dataset.originalPrice);
-                priceEl.textContent = self.numFormat(self.getPriceByRate(originalPrice, currentRate));
+                if (priceEl.tagName.toLowerCase() === 'input') {
+                    priceEl.value = self.getPriceByRate(originalPrice, currentRate).toFixed(2).replace(',', '.');
+                } else {
+                    priceEl.textContent = self.numFormat(self.getPriceByRate(originalPrice, currentRate));
+                }
             });
             // Update currency
             currencyElArr.forEach(function(currencyEl) {

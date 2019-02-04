@@ -96,6 +96,12 @@ services:
         tags:
             - { name: twig.runtime }
 
+    App\Twig\AppContentList:
+        public: false
+        arguments: ['@service_container']
+        tags:
+            - {name: twig.runtime}
+
     app.filecache:
         public: true
         class: Symfony\Component\Cache\Simple\FilesystemCache

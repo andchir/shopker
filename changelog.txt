@@ -3,6 +3,7 @@
 - Fixed incorrect default language value.
 - Hide password in settings.
 - shopkeeper.js - updateProductsPrice() add support inputs for price.
+- Twig-functions contentList() and includeContent() in separate class.
 
 4.0.2
 - Template editor added.

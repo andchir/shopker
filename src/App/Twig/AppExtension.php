@@ -94,11 +94,11 @@ class AppExtension extends AbstractExtension
             new TwigFunction('imageUrl', [AppRuntime::class, 'fileUrlFunction']),
             new TwigFunction('fileUrl', [AppRuntime::class, 'fileUrlFunction']),
             new TwigFunction('pageUrl', [AppRuntime::class, 'pageUrlFunction']),
-            new TwigFunction('contentList', [AppRuntime::class, 'contentListFunction'], [
+            new TwigFunction('contentList', [AppContentList::class, 'contentListFunction'], [
                 'is_safe' => ['html'],
                 'needs_environment' => true
             ]),
-            new TwigFunction('includeContent', [AppRuntime::class, 'includeContentFunction'], [
+            new TwigFunction('includeContent', [AppContentList::class, 'includeContentFunction'], [
                 'is_safe' => ['html'],
                 'needs_environment' => true
             ]),

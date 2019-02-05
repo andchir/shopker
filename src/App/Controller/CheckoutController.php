@@ -141,12 +141,16 @@ class CheckoutController extends BaseController
                     $order->setUserId(0);
                 }
 
+                // Dispatch event before create
+                $event = new GenericEvent($order);
+                $order = $eventDispatcher->dispatch(Events::ORDER_BEFORE_CREATE, $event)->getSubject();
+
                 /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
                 $dm = $this->get('doctrine_mongodb')->getManager();
                 $dm->persist($order);
                 $dm->flush();
 
-                // Dispatch event
+                // Dispatch event after create
                 $event = new GenericEvent($order);
                 $eventDispatcher->dispatch(Events::ORDER_CREATED, $event);
 

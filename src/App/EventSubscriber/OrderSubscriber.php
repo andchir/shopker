@@ -13,14 +13,26 @@ class OrderSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            Events::ORDER_CREATED => 'onOrderCreated',
+            Events::ORDER_BEFORE_CREATE => 'onOrderBeforeCreate',
+            Events::ORDER_CREATED => 'onOrderCreated'
         ];
+    }
+
+    public function onOrderBeforeCreate(GenericEvent $event)
+    {
+        /** @var Order $order */
+        $order = $event->getSubject();
+
+        // Do something...
+
     }
 
     public function onOrderCreated(GenericEvent $event)
     {
         /** @var Order $order */
         $order = $event->getSubject();
+
+        // Do something...
 
     }
 }

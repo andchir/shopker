@@ -4,6 +4,7 @@
 - Hide password in settings.
 - shopkeeper.js - updateProductsPrice() add support inputs for price.
 - Twig-functions contentList() and includeContent() in separate class.
+- Added event "order.before_create".
 
 4.0.2
 - Template editor added.

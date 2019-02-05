@@ -18,6 +18,11 @@ final class Events
      * @Event("Symfony\Component\EventDispatcher\GenericEvent")
      * @var string
      */
+    const ORDER_BEFORE_CREATE = 'order.before_create';
+    /**
+     * @Event("Symfony\Component\EventDispatcher\GenericEvent")
+     * @var string
+     */
     const ORDER_CREATED = 'order.created';
     /**
      * @Event("Symfony\Component\EventDispatcher\GenericEvent")

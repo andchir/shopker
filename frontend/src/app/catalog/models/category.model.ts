@@ -1,3 +1,5 @@
+import {FileData} from './file-data.model';
+
 export class Category {
     constructor(
         public id: number,
@@ -10,7 +12,8 @@ export class Category {
         public isActive: boolean,
         public clearCache?: boolean,
         public menuIndex?: number,
-        public translations?: {[fieldName: string]: {[lang: string]: string}}
+        public translations?: {[fieldName: string]: {[lang: string]: string}},
+        public image?: FileData
     ) {
         if (typeof this.clearCache === 'undefined') {
             this.clearCache = false;

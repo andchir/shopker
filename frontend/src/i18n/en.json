@@ -64,6 +64,7 @@
 	"GENERATE": "Generate",
 	"GROUP": "Group",
 	"ID": "ID",
+	"IMAGE": "Image",
 	"IMAGE_NUMBER": "Number of the image",
 	"IMPERSONATION": "Impersonation",
 	"IMPORT_EXPORT": "Import / Export",

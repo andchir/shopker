@@ -72,6 +72,13 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
             validators: [],
             messages: {}
         },
+        image: {
+            fieldLabel: 'IMAGE',
+            value: 0,
+            disabled: false,
+            validators: [],
+            messages: {}
+        },
         contentTypeName: {
             fieldLabel: 'CONTENT_TYPE',
             value: '',

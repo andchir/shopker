@@ -80,11 +80,13 @@
 
         <div class="row form-group">
             <div class="col-md-5">
-                <label for="fieldImage">
+                <label>
                     {{'IMAGE' | translate}}
                 </label>
             </div>
             <div class="col-md-7">
+
+                <app-file-widget [hasPreviewImage]="true" [allowedExtensions]="'image/*'"></app-file-widget>
 
             </div>
         </div>

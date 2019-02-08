@@ -15,6 +15,8 @@
 	"CANCEL": "Отменить",
 	"CATALOG": "Каталог",
 	"CATEGORY": "Категория",
+	"CHOOSE_FILE": "Выбрать файл",
+	"CLEAR": "Очистить",
 	"CLEAR_CACHE": "Очистить кэш",
 	"CLEAR_FILE_CACHE": "Очистить файловый кэш",
 	"CLEAR_SYSTEM_CACHE": "Очистить системный кэш",

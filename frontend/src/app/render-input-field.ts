@@ -410,19 +410,8 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
         return new FileData(0, title, extension, size);
     }
 
-    getImageUrl(fileData: FileData|null): string {
-        if (!fileData) {
-            return '';
-        }
-        if (fileData.dataUrl) {
-            return fileData.dataUrl;
-        }
-        let output = '';
-        if (fileData.fileName) {
-            output += `${this.filesDirBaseUrl}/${fileData.dirPath}/`;
-            output += `${fileData.fileName}.${fileData.extension}`;
-        }
-        return output;
+    getImageUrl(fileData: FileData|null): string|ArrayBuffer {
+        return FileData.getImageUrl(this.filesDirBaseUrl, fileData);
     }
 
     getCategoriesTree(): void {

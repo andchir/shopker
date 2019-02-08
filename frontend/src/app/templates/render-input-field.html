@@ -125,14 +125,14 @@
                                     <input type="file" id="field_{{field.name}}" [name]="field.name" [accept]="field.inputProperties.allowed_extensions" style="display:none;" (change)="fileChange($event, field, imgPreview)" #fileInput>
                                     <input type="hidden" [formControlName]="field.name" [(ngModel)]="model[field.name]">
 
-                                    <div class="mx-auto relative" [ngClass]="{'show-on-hover-parent': field.inputProperties.has_preview_image && model[field.name]}" style="width:250px; min-height: 40px;">
+                                    <div class="mx-auto relative" [ngClass]="{'show-on-hover-parent': field.inputProperties.has_preview_image && model[field.name]}" style="width:265px; min-height: 40px;">
                                         <div [style.display]="field.inputProperties.has_preview_image && model[field.name] ? 'block' : 'none'">
-                                            <img [src]="getImageUrl(model[field.name])" alt="Preview" class="img-thumbnail" #imgPreview>
+                                            <img [src]="getImageUrl(model[field.name])" alt="Preview" class="img-thumbnail" style="width: 265px;" #imgPreview>
                                         </div>
                                         <div class="file-buttons show-on-hover-child-left">
                                             <button type="button" class="btn btn-secondary btn-wide mr-2" (click)="fileInput.click()">
                                                 <i class="icon-upload"></i>
-                                                Обзор
+                                                {{ 'CHOOSE_FILE' | translate }}
                                             </button>
                                             <button type="button" class="btn btn-secondary" *ngIf="model[field.name]" (click)="fileClear(field.name, imgPreview)" title="Clear">
                                                 <i class="icon-cross"></i>

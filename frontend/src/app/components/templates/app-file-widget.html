@@ -1,0 +1,38 @@
+<div class="card card-body p-2">
+    <div class="min-height110">
+        <div style="min-height: 35px;">
+            <div *ngIf="fieldTitle">
+                <label for="field_{{ fieldName }}">
+                    {{ fieldTitle }}
+                    <span class="text-muted" *ngIf="fieldName">({{ fieldName }})</span>
+                    <span class="text-danger" *ngIf="true">*</span>
+                </label>
+            </div>
+        </div>
+        <div class="text-center">
+            <input type="file" id="field_{{ fieldName }}" [name]="fieldName" [accept]="allowedExtensions" style="display:none;" (change)="fileChange($event, imgPreview)" #fileInput>
+            <div class="mx-auto relative" [ngClass]="{'show-on-hover-parent': hasPreviewImage && controlValue}" style="width: 265px; min-height: 40px;">
+                <div [style.display]="hasPreviewImage && controlValue ? 'block' : 'none'">
+                    <img [src]="getImageUrl()" alt="Preview" class="img-thumbnail" style="width: 265px;" #imgPreview>
+                </div>
+                <div class="file-buttons show-on-hover-child-left">
+                    <button type="button" class="btn btn-secondary btn-wide mr-2" (click)="fileInput.click()">
+                        <i class="icon-upload"></i>
+                        {{ 'CHOOSE_FILE' | translate }}
+                    </button>
+                    <button type="button" class="btn btn-secondary" *ngIf="controlValue && controlValue.title" [title]="'CLEAR' | translate" (click)="fileClear(imgPreview)">
+                        <i class="icon-cross"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="pt-3 pb-2 text-secondary" *ngIf="controlValue && controlValue.title">
+                <i class="icon-file"></i>
+                {{controlValue.title}}.{{controlValue.extension}}
+            </div>
+
+            <!--<div *ngIf="formErrors[field.name]" class="alert alert-danger">-->
+                <!--{{formErrors[field.name]}}-->
+            <!--</div>-->
+        </div>
+    </div>
+</div>

@@ -12,6 +12,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 class FileDocument
 {
+    const OWNER_CATEGORY = 'category';
     const OWNER_DOCUMENT = 'document';
     const OWNER_TEMPORARY = 'temporary';
     const OWNER_ORDER_TEMPORARY = 'order_temporary';

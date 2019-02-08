@@ -1,13 +1,19 @@
-import {ChangeDetectorRef, Component, Input, OnChanges, OnInit} from "@angular/core";
-import {ContentField} from "../catalog/models/content_field.model";
-import {ControlValueAccessor} from "@angular/forms";
+import {Component, forwardRef, Input, OnInit} from '@angular/core';
+import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 
 import {FileData} from '../catalog/models/file-data.model';
+import {AppSettings} from '../services/app-settings.service';
 
 @Component({
     selector: 'app-file-widget',
     templateUrl: 'templates/app-file-widget.html',
-    providers: []
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => FileWidgetComponent),
+            multi: true
+        }
+    ]
 })
 export class FileWidgetComponent implements OnInit, ControlValueAccessor {
 
@@ -18,6 +24,12 @@ export class FileWidgetComponent implements OnInit, ControlValueAccessor {
     @Input() files: { [key: string]: File } = {};
     @Input('controlValue') _controlValue: FileData|null = null;
     filesDirBaseUrl: string;
+
+    constructor(
+        private appSettings: AppSettings
+    ) {
+        this.filesDirBaseUrl = this.appSettings.settings.filesDirUrl;
+    }
 
     get controlValue() {
         return this._controlValue;

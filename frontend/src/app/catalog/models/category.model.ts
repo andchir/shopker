@@ -13,7 +13,7 @@ export class Category {
         public clearCache?: boolean,
         public menuIndex?: number,
         public translations?: {[fieldName: string]: {[lang: string]: string}},
-        public image?: FileData
+        public image?: FileData|null
     ) {
         if (typeof this.clearCache === 'undefined') {
             this.clearCache = false;

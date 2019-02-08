@@ -1,6 +1,6 @@
-import {Component, OnInit, Input, Output, ViewChild, EventEmitter} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter, forwardRef} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {FormBuilder, Validators} from '@angular/forms';
 
 import {Observable} from 'rxjs';
 import {TreeNode} from 'primeng/primeng';
@@ -20,9 +20,8 @@ import {SystemNameService} from '../services/system-name.service';
 import {CategoriesService} from './services/categories.service';
 import {ContentTypesService} from './services/content_types.service';
 import {FormFieldInterface} from '../models/form-field.interface';
-import {EntityTranslation} from "../models/entity-translation";
-import {TranslationsComponent} from '../translations.component';
 import {AppSettings} from '../services/app-settings.service';
+import {FilesService} from './services/files.service';
 
 /**
  * @class CategoriesModalComponent
@@ -42,6 +41,7 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
     currentCategoryNode: TreeNode;
     isCollapsed = false;
     localeFieldsAllowed: string[] = ['title', 'description'];
+    files: { [key: string]: File } = {};
 
     formFields: FormFieldInterface = {
         title: {
@@ -74,7 +74,7 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
         },
         image: {
             fieldLabel: 'IMAGE',
-            value: 0,
+            value: null,
             disabled: false,
             validators: [],
             messages: {}
@@ -116,6 +116,7 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
         public activeModal: NgbActiveModal,
         public tooltipConfig: NgbTooltipConfig,
         public translateService: TranslateService,
+        private filesService: FilesService,
         private contentTypesService: ContentTypesService,
         private appSettings: AppSettings
     ) {
@@ -170,6 +171,32 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
         this.model.parentId = e.node.id;
     }
 
+    saveFiles(itemId: number) {
+        if (Object.keys(this.files).length === 0) {
+            this.closeModal();
+            return;
+        }
+
+        const formData: FormData = new FormData();
+        for (const key in this.files) {
+            if (this.files.hasOwnProperty(key) && this.files[key] instanceof File) {
+                formData.append(key, this.files[key], this.files[key].name);
+            }
+        }
+        formData.append('itemId', String(itemId));
+        formData.append('ownerType', 'category');
+
+        this.filesService.postFormData(formData)
+            .subscribe(() => {
+                    this.closeModal();
+                },
+                err => {
+                    this.errorMessage = err.error || 'Error.';
+                    this.submitted = false;
+                    this.loading = false;
+                });
+    }
+
     save(): void {
         this.submitted = true;
         if (!this.form.valid) {
@@ -178,10 +205,14 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
             return;
         }
         this.loading = true;
-
         this.saveRequest()
-            .subscribe(() => this.closeModal(),
-                err => {
+            .subscribe((data) => {
+                if (Object.keys(this.files).length > 0) {
+                    this.saveFiles(data._id || data.id);
+                } else {
+                    this.closeModal();
+                }
+            }, (err) => {
                 this.errorMessage = err.error;
                 this.submitted = false;
                 this.loading = false;

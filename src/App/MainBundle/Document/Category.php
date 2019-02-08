@@ -75,9 +75,9 @@ class Category
     protected $isActive;
 
     /**
-     * @MongoDB\Field(type="string")
+     * @MongoDB\Field(type="hash")
      * @Groups({"details", "list"})
-     * @var string
+     * @var array
      */
     protected $image;
 
@@ -420,7 +420,7 @@ class Category
     /**
      * Set image
      *
-     * @param string $image
+     * @param array $image
      * @return $this
      */
     public function setImage($image)
@@ -432,7 +432,7 @@ class Category
     /**
      * Get image
      *
-     * @return string
+     * @return array
      */
     public function getImage()
     {

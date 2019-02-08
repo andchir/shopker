@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\MainBundle\Document\FileDocument;
 use Symfony\Component\Cache\Simple\FilesystemCache;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -104,9 +105,12 @@ class CategoryController extends StorageControllerAbstract
             return $this->setError('Content type not found.');
         }
 
+        $oldImageData = $item->getId() ? $item->getImage() : null;
+
         $item
             ->setTitle($data['title'])
             ->setName($data['name'])
+            ->setImage($data['image'] ?? null)
             ->setDescription($data['description'] ?? '')
             ->setIsActive($data['isActive'] ?? true)
             ->setParentId($data['parentId'] ?? 0)
@@ -117,13 +121,22 @@ class CategoryController extends StorageControllerAbstract
 
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $this->get('doctrine_mongodb')->getManager();
-        $dm->persist($item);
+        if (!$item->getId()) {
+            $dm->persist($item);
+        }
         $dm->flush();
 
         // Dispatch event
         $evenDispatcher = $this->get('event_dispatcher');
         $event = new CategoryUpdatedEvent($this->container, $item, $previousParentId);
         $item = $evenDispatcher->dispatch(CategoryUpdatedEvent::NAME, $event)->getCategory();
+
+        // Delete unused files
+        if (empty($item->getImage()) && !empty($oldImageData)) {
+            $fileController = new FileController();
+            $fileController->setContainer($this->container);
+            $fileController->deleteUnused(FileDocument::OWNER_CATEGORY, $item->getId());
+        }
 
         // Clear file cache
         if (!empty($data['clearCache'])) {
@@ -132,7 +145,7 @@ class CategoryController extends StorageControllerAbstract
             $cache->clear();
         }
 
-        return new JsonResponse($item->toArray());
+        return $this->json($item, 200, [], ['groups' => ['details']]);
     }
 
     /**

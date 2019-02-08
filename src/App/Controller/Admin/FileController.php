@@ -5,7 +5,10 @@ namespace App\Controller\Admin;
 use App\MainBundle\Document\Category;
 use App\MainBundle\Document\ContentType;
 use App\MainBundle\Document\FileDocument;
+use App\MainBundle\Document\User;
 use App\Service\UtilsService;
+use Doctrine\ODM\MongoDB\DocumentManager;
+use Symfony\Component\HttpFoundation\FileBag;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -29,49 +32,128 @@ class FileController extends BaseController
      */
     public function uploadFilesAction(Request $request)
     {
-        /** @var Filesystem $fs */
-        $fs = $this->get('filesystem');
-        $user = $this->getUser();
         /** @var TranslatorInterface $translator */
         $translator = $this->get('translator');
 
-        $itemId = (int) $request->get('itemId');
-        $ownerType = $request->get('ownerType');
         $categoryId = (int) $request->get('categoryId');
-        $fieldsSort = explode(',', $request->get('fieldsSort', ''));
+        $options = [];
+        $options['itemId'] = (int) $request->get('itemId');
+        $options['ownerType'] = $request->get('ownerType');
+        if ($options['ownerType'] == FileDocument::OWNER_CATEGORY) {
+            $categoryId = $options['itemId'];
+        }
+        $options['fieldsSort'] = explode(',', $request->get('fieldsSort', ''));
+        /** @var FileBag $files */
         $files = $request->files;
 
-        $now = new \DateTime();
-
-        $filesDirPath = $this->getParameter('app.files_dir_path');
-        if (!is_dir($filesDirPath)) {
-            $fs->mkdir($filesDirPath, 0777);
-        }
-
-        if (!$itemId) {
+        if (!$options['itemId']) {
             return $this->setError($translator->trans('Item not found.', [], 'validators'));
-        }
-        if (!$categoryId) {
-            return $this->setError($translator->trans('Category not found.', [], 'validators'));
         }
 
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $this->get('doctrine_mongodb')->getManager();
 
-        $categoryRepository = $this->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository('AppMainBundle:Category');
-
         /** @var Category $category */
-        $category = $categoryRepository->find($categoryId);
+        $category = $dm->getRepository('AppMainBundle:Category')->find($categoryId);
         if (!$category) {
             return $this->setError($translator->trans('Category not found.', [], 'validators'));
         }
 
+        if ($options['ownerType'] == 'category') {
+            list($usedFiles, $error) = $this->saveFileForCategory($category, $options, $files);
+        } else {
+            list($usedFiles, $error) = $this->saveFileForDocument($category, $options, $files);
+        }
+
+        if ($error) {
+            return $this->setError($translator->trans($error, [], 'validators'));
+        } else {
+
+            $fileIds = array_map(function($item) {
+                return $item['id'];
+            }, $usedFiles);
+            $this->deleteUnused($options['ownerType'], $options['itemId'], $fileIds);
+
+            return new JsonResponse($usedFiles);
+        }
+    }
+
+    /**
+     * @param Category $category
+     * @param array $options
+     * @param FileBag $files
+     * @return array
+     */
+    public function saveFileForCategory(Category $category, $options, $files)
+    {
+        $error = '';
+        $usedFiles = [];
+
+        /** @var User $user */
+        $user = $this->getUser();
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->get('doctrine_mongodb')->getManager();
+
+        /** @var UploadedFile $file */
+        $file = $files->get('image');
+
+        if (empty($file)) {
+            $error = 'File is empty.';
+            return [$usedFiles, $error];
+        }
+
+        if (!$this->fileUploadAllowed($file->getClientOriginalName(), ['jpg','jpeg','png','gif'])) {
+            $error = 'File type is not allowed.';
+            return [$usedFiles, $error];
+        }
+
+        $filesDirPath = $this->getParameter('app.files_dir_path');
+        if (!is_dir($filesDirPath)) {
+            mkdir($filesDirPath);
+        }
+
+        $fileDocument = new FileDocument();
+        $fileDocument
+            ->setUploadRootDir($filesDirPath)
+            ->setCreatedDate(new \DateTime())
+            ->setOwnerType($options['ownerType'])
+            ->setOwnerDocId($options['itemId'])
+            ->setUserId($user->getId())
+            ->setFile($file);
+
+        $dm->persist($fileDocument);
+        $dm->flush();
+
+        $usedFiles[] = $fileDocument->toArray();
+
+        // Update image data in category
+        $category->setImage($fileDocument->getRecordData());
+        $dm->flush();
+
+        return [$usedFiles, $error];
+    }
+
+    /**
+     * @param Category $category
+     * @param array $options
+     * @param FileBag $files
+     * @return array
+     */
+    public function saveFileForDocument(Category $category, $options, $files)
+    {
+        $error = '';
+        $usedFiles = [];
+
+        /** @var User $user */
+        $user = $this->getUser();
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->get('doctrine_mongodb')->getManager();
         /** @var ContentType $contentType */
         $contentType = $category->getContentType();
-        if(!$contentType || $ownerType !== $contentType->getName()){
-            return $this->setError($translator->trans('Content type not found.', [], 'validators'));
+        $fileDocumentRepository = $this->getRepository();
+        if(!$contentType || $options['ownerType'] !== $contentType->getName()){
+            $error = 'Content type not found.';
+            return [$usedFiles, $error];
         }
         $contentTypeFields = $contentType->getFields();
 
@@ -81,14 +163,18 @@ class FileController extends BaseController
 
         $collection = $productController->getCollection($contentType->getCollection());
 
-        $entity = $collection->findOne(['_id' => $itemId]);
+        $entity = $collection->findOne(['_id' => $options['itemId']]);
         if(!$entity){
-            return $this->setError($translator->trans('Product not found.', [], 'validators'));
+            $error = 'Product not found.';
+            return [$usedFiles, $error];
         }
 
-        $error = '';
-        $outputFiles = [];
-        $fileIds = [];
+        $now = new \DateTime();
+
+        $filesDirPath = $this->getParameter('app.files_dir_path');
+        if (!is_dir($filesDirPath)) {
+            mkdir($filesDirPath);
+        }
 
         foreach($entity as $fieldName => $value) {
             if (in_array($fieldName, ['_id', 'parentId', 'isActive'])) {
@@ -99,9 +185,6 @@ class FileController extends BaseController
             $fields = self::search($contentTypeFields, 'name', $baseFieldName);
             if (empty($fields)) {
                 continue;
-            }
-            if ($fields[0]['inputType'] === 'file' && !empty($value['fileId'])) {
-                $fileIds[] = $value['fileId'];
             }
 
             /** @var UploadedFile $file */
@@ -118,33 +201,44 @@ class FileController extends BaseController
                 $fileDocument
                     ->setUploadRootDir($filesDirPath)
                     ->setCreatedDate($now)
-                    ->setOwnerType($ownerType)
-                    ->setOwnerDocId($itemId)
+                    ->setOwnerType($options['ownerType'])
+                    ->setOwnerDocId($options['itemId'])
                     ->setUserId($user->getId())
                     ->setFile($file);
 
                 $dm->persist($fileDocument);
                 $dm->flush();
 
-                $fileIds[] = $fileDocument->getId();
-                $outputFiles[] = $fileDocument->toArray();
+                $usedFiles[] = $fileDocument->toArray();
                 $entity[$fieldName] = $fileDocument->getRecordData();
+
+            } else if ($fields[0]['inputType'] === 'file' && !empty($value['fileId'])) {
+
+                $fileDocument = null;
+                try {
+                    /** @var FileDocument $fileDocument */
+                    $fileDocument = $fileDocumentRepository->find($value['fileId']);
+                } catch (\Exception $e) {
+                    $error = $e->getMessage();
+                    break;
+                }
+                if ($fileDocument) {
+                    $usedFiles[] = $fileDocument->toArray();
+                }
             }
         }
 
         $dm->flush();
 
         if ($error) {
-            return $this->setError($error);
+            return [$usedFiles, $error];
         } else {
             $collection->update(['_id' => $entity['_id']], ['$set' => $entity]);
         }
 
-        $fileIds = array_unique($fileIds);
-        $this->deleteUnused($ownerType, $itemId, $fileIds);
-        $productController->sortAdditionalFields($contentType->getCollection(), $entity, $fieldsSort);
+        $productController->sortAdditionalFields($contentType->getCollection(), $entity, $options['fieldsSort']);
 
-        return new JsonResponse($outputFiles);
+        return [$usedFiles, $error];
     }
 
     /**
@@ -153,7 +247,7 @@ class FileController extends BaseController
      * @param array $usedIds
      * @return int
      */
-    public function deleteUnused($ownerType, $ownerDocId, $usedIds)
+    public function deleteUnused($ownerType, $ownerDocId, $usedIds = [])
     {
         $count = 0;
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
@@ -189,6 +283,30 @@ class FileController extends BaseController
         }
 
         return UtilsService::downloadFile($filePath, $fileDocument->getTitle());
+    }
+
+    /**
+     * @param string | array $value
+     * @param array $allowedExtensions
+     * @return bool
+     */
+    public function fileUploadAllowed($value, $allowedExtensions = [])
+    {
+        $filesExtBlacklist = $this->getParameter('app.files_ext_blacklist');
+        if (is_array($value)) {
+            $ext = !empty($value['extension']) ? strtolower($value['extension']) : null;
+        } else {
+            $ext = UtilsService::getExtension($value);
+        }
+        if (in_array($ext, $filesExtBlacklist)) {
+            return false;
+        }
+
+        if ($ext === null || !in_array($ext, $allowedExtensions)) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

@@ -192,7 +192,10 @@ class ProductController extends BaseProductController
         if (is_array($value)) {
             $ext = !empty($value['extension']) ? strtolower($value['extension']) : null;
         } else {
-            $ext = self::getExtension($value);
+            $ext = UtilsService::getExtension($value);
+        }
+        if (in_array($ext, $filesExtBlacklist)) {
+            return false;
         }
 
         // Validate by file extension
@@ -211,9 +214,6 @@ class ProductController extends BaseProductController
             if ($ext !== null && !in_array('.' . $ext, $allowedExtensions)) {
                 return false;
             }
-        }
-        if (in_array($ext, $filesExtBlacklist)) {
-            return false;
         }
 
         return true;
@@ -414,7 +414,7 @@ class ProductController extends BaseProductController
             $fileIds = array_unique($fileIds);
             $fileController = new FileController();
             $fileController->setContainer($this->container);
-            $fileController->deleteUnused('products', $itemId, $fileIds);
+            $fileController->deleteUnused($contentType->getName(), $itemId, $fileIds);
             $this->sortAdditionalFields($contentType->getCollection(), $document, $fieldsSort);
         }
 

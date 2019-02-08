@@ -86,7 +86,13 @@
             </div>
             <div class="col-md-7">
 
-                <app-file-widget [hasPreviewImage]="true" [allowedExtensions]="'image/*'"></app-file-widget>
+                <app-file-widget
+                        name="image"
+                        formControlName="image"
+                        [hasPreviewImage]="true"
+                        [allowedExtensions]="'image/*'"
+                        [(files)]="files"
+                        [(ngModel)]="model.image"></app-file-widget>
 
             </div>
         </div>

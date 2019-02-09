@@ -34,3 +34,9 @@ liip_imagine:
                     widen: 800
                 thumbnail: { size: [800, 800], mode: inset }
                 background: { size: [800, 800], position: center, color: '#ffffff' }
+
+        thumb_medium_relative:
+            quality: 90
+            filters:
+                relative_resize:
+                    heighten: 400

@@ -223,11 +223,15 @@ class AppRuntime
     }
 
     /**
-     * @param $itemData
+     * @param array|null $itemData
+     * @param string $defaultUrl
      * @return string
      */
-    public function fileUrlFunction($itemData)
+    public function fileUrlFunction($itemData, $defaultUrl = '')
     {
+        if (empty($itemData)) {
+            return $defaultUrl;
+        }
         return sprintf(
             '/uploads/%s/%s.%s',
             $itemData['dirPath'],

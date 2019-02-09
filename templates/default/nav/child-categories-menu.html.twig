@@ -3,7 +3,7 @@
     {% for category in categoriesMenu %}
         <div class="col-6 col-lg-4 mb-3">
             <div class="card">
-                <div class="card-body">
+                <div class="card-body min-height150 bg-cover-transparent" style="background-image: url('{{ imageUrl(category.image, '/img/market2.jpg') | imagine_filter('thumb_medium_relative') }}');">
                     <h4>
                         <a href="{{ catalogPath(category.uri) }}">
                             {{ category.title }}

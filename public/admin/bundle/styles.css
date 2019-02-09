@@ -16721,6 +16721,10 @@ body { background-color: #eee; }
 
 .no-events { pointer-events: none; }
 
+.bg-white-50 { background-color: rgba(255,255,255,0.5); }
+
+.bg-white-20 { background-color: rgba(255,255,255,0.2); }
+
 @media (min-width: 768px) {
     .width-md-auto { width: auto; }
 }

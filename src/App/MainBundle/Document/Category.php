@@ -388,6 +388,7 @@ class Category
             'name' => $this->getName(),
             'description' => $this->getDescription(),
             'uri' => $this->getUri(),
+            'image' => $this->getImage(),
             'isActive' => in_array($this->getUri(), $breadcrumbsUriArr),
             'menuIndex' => $this->getMenuIndex(),
             'translations' => $this->getTranslations(),

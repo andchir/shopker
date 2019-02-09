@@ -5,7 +5,7 @@
                 <label for="field_{{ fieldName }}">
                     {{ fieldTitle }}
                     <span class="text-muted" *ngIf="fieldName">({{ fieldName }})</span>
-                    <span class="text-danger" *ngIf="true">*</span>
+                    <span class="text-danger" *ngIf="required">*</span>
                 </label>
             </div>
         </div>
@@ -29,10 +29,6 @@
                 <i class="icon-file"></i>
                 {{controlValue.title}}.{{controlValue.extension}}
             </div>
-
-            <!--<div *ngIf="formErrors[field.name]" class="alert alert-danger">-->
-                <!--{{formErrors[field.name]}}-->
-            <!--</div>-->
         </div>
     </div>
 </div>

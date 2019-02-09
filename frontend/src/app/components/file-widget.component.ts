@@ -20,6 +20,7 @@ export class FileWidgetComponent implements OnInit, ControlValueAccessor {
     @Input() fieldName: string;
     @Input() fieldTitle: string;
     @Input() hasPreviewImage = false;
+    @Input() required = false;
     @Input() allowedExtensions = '';
     @Input() files: { [key: string]: File } = {};
     @ViewChild('imgPreview') imgPreview: ElementRef;

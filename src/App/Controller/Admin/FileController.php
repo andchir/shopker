@@ -46,7 +46,7 @@ class FileController extends BaseController
         /** @var FileBag $files */
         $files = $request->files;
 
-        if (!$options['itemId']) {
+        if (is_null($options['itemId'])) {
             return $this->setError($translator->trans('Item not found.', [], 'validators'));
         }
 

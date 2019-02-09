@@ -1,4 +1,4 @@
-import {Component, forwardRef, Input, OnInit} from '@angular/core';
+import {Component, ElementRef, forwardRef, Input, OnInit, ViewChild} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 
 import {FileData} from '../catalog/models/file-data.model';
@@ -22,6 +22,7 @@ export class FileWidgetComponent implements OnInit, ControlValueAccessor {
     @Input() hasPreviewImage = false;
     @Input() allowedExtensions = '';
     @Input() files: { [key: string]: File } = {};
+    @ViewChild('imgPreview') imgPreview: ElementRef;
     @Input('controlValue') _controlValue: FileData|null = null;
     filesDirBaseUrl: string;
 
@@ -48,30 +49,28 @@ export class FileWidgetComponent implements OnInit, ControlValueAccessor {
         }
     }
 
-    fileChange(event, imgPreview?: HTMLImageElement) {
-        const fileList: FileList = event.target.files;
-        let value: FileData;
-        if (fileList.length > 0) {
+    fileChange(event): void {
+        console.log('fileChange', event.target.files);
+        if (event.target.files.length > 0) {
+            this.onGetFile(event.target.files[0]);
+        }
+    }
 
-            value = FileData.getFileData(fileList[0]);
-            this.files[this.fieldName] = fileList[0];
-            this.writeValue(value);
-
-            if (this.hasPreviewImage && fileList[0].type.indexOf('image/') > -1) {
-
-                imgPreview.style.display = 'block';
-
-                const reader = new FileReader();
-                reader.onload = (e: ProgressEvent) => {
-                    const fr = e.target as FileReader;
-                    value.dataUrl = fr.result;
-                    this.controlValue = value;
-                };
-                reader.readAsDataURL(fileList[0]);
-
-            } else {
-                imgPreview.style.display = 'none';
-            }
+    onGetFile(file: File): void {
+        const value: FileData = FileData.getFileData(file);
+        this.files[this.fieldName] = file;
+        this.writeValue(value);
+        if (this.hasPreviewImage && file.type.indexOf('image/') > -1) {
+            this.imgPreview.nativeElement.style.display = 'block';
+            const reader = new FileReader();
+            reader.onload = (e: ProgressEvent) => {
+                const fr = e.target as FileReader;
+                value.dataUrl = fr.result;
+                this.controlValue = value;
+            };
+            reader.readAsDataURL(file);
+        } else {
+            this.imgPreview.nativeElement.style.display = 'none';
         }
     }
 
@@ -79,13 +78,28 @@ export class FileWidgetComponent implements OnInit, ControlValueAccessor {
         return FileData.getImageUrl(this.filesDirBaseUrl, this.controlValue);
     }
 
-    fileClear(imgPreviewEl?: HTMLImageElement) {
+    fileClear() {
         this.writeValue(null);
         delete this.files[this.fieldName];
-        if (imgPreviewEl) {
-            imgPreviewEl.src = '';
-            imgPreviewEl.style.display = 'none';
+        if (this.imgPreview && this.imgPreview.nativeElement) {
+            this.imgPreview.nativeElement.src = '';
+            this.imgPreview.nativeElement.style.display = 'none';
         }
+    }
+
+    dropHandler(event: DragEvent): void {
+        event.preventDefault();
+        let file;
+        if (event.dataTransfer.items) {
+            file = event.dataTransfer.items[0].getAsFile();
+        } else {
+            file = event.dataTransfer.files[0];
+        }
+        this.onGetFile(file);
+    }
+
+    dragOverHandler(event: DragEvent): void {
+        event.preventDefault();
     }
 
     writeValue(value: FileData|null) {

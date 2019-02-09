@@ -70,6 +70,18 @@ class DoctrineEventSubscriber implements EventSubscriber
                 }
             }
         }
+        else if ($document instanceof Category) {
+            /** @var Category $document */
+            $fileData = $document->getImage();
+            if (!empty($fileData) && !empty($fileData['fileId'])) {
+                /** @var FileDocument $fileDocument */
+                $fileDocument = $fileDocumentRepository->find($fileData['fileId']);
+                if ($fileDocument) {
+                    $dm->remove($fileDocument);
+                    $dm->flush();
+                }
+            }
+        }
     }
 
     /**

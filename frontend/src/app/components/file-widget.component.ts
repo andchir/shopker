@@ -51,7 +51,6 @@ export class FileWidgetComponent implements OnInit, ControlValueAccessor {
     }
 
     fileChange(event): void {
-        console.log('fileChange', event.target.files);
         if (event.target.files.length > 0) {
             this.onGetFile(event.target.files[0]);
         }

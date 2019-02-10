@@ -553,14 +553,19 @@ class FieldTypesFixtures extends Fixture
                 ],
                 'outputProperties' => [
                     [
-                        'name' => 'type',
-                        'title' => 'Тип поля',
-                        'default_value' => 'radio'
+                        'name' => 'className',
+                        'title' => 'CSS класс',
+                        'default_value' => ''
                     ],
                     [
                         'name' => 'chunkName',
                         'title' => 'Название чанка',
                         'default_value' => ''
+                    ],
+                    [
+                        'name' => 'type',
+                        'title' => 'Тип поля',
+                        'default_value' => 'radio'
                     ],
                     [
                         'name' => 'firstSelected',

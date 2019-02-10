@@ -553,14 +553,19 @@ class FieldTypesFixtures extends Fixture
                 ],
                 'outputProperties' => [
                     [
-                        'name' => 'type',
-                        'title' => 'Field type',
-                        'default_value' => 'radio'
+                        'name' => 'className',
+                        'title' => 'CSS class',
+                        'default_value' => ''
                     ],
                     [
                         'name' => 'chunkName',
                         'title' => 'Chunk name',
                         'default_value' => ''
+                    ],
+                    [
+                        'name' => 'type',
+                        'title' => 'Field type',
+                        'default_value' => 'radio'
                     ],
                     [
                         'name' => 'firstSelected',

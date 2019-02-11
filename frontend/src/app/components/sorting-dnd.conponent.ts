@@ -1,4 +1,6 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
+import {Subscription} from 'rxjs';
+import {DragulaService} from 'ng2-dragula';
 
 export interface SortData {
     id?: number;
@@ -10,14 +12,27 @@ export interface SortData {
     selector: 'app-sorting-dnd',
     templateUrl: 'templates/sorting-dnd.html'
 })
-export class SortingComponent {
+export class SortingComponent implements OnDestroy {
+    @Input() title: string;
     @Input() items: SortData[];
     @Output() itemsChange = new EventEmitter<any[]>();
-    @Input() title: string;
     @Output() save = new EventEmitter<any[]>();
     @Output() cancel = new EventEmitter();
+    BAG = "DRAGULA_EVENTS";
+    subs = new Subscription();
 
-    constructor() {
+    constructor(
+        private dragulaService: DragulaService
+    ) {
+        this.subs.add(dragulaService.drop(this.BAG)
+            .subscribe(() => {
+                this.onChange();
+            })
+        );
+    }
+
+    onChange(): void {
+        this.itemsChange.emit(this.items);
     }
 
     sortApply(event?: MouseEvent): void {
@@ -33,5 +48,9 @@ export class SortingComponent {
             event.preventDefault();
         }
         this.cancel.emit();
+    }
+
+    ngOnDestroy(): void {
+        this.subs.unsubscribe();
     }
 }

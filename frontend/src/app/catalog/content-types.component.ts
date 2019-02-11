@@ -17,7 +17,7 @@ import {ContentTypesService} from './services/content_types.service';
 import {SystemNameService} from '../services/system-name.service';
 import {CollectionsService} from './services/collections.service';
 import {FieldTypesService} from './services/field-types.service';
-import {SortData} from '../sorting-dnd.conponent';
+import {SortData} from '../components/sorting-dnd.conponent';
 
 @Component({
     selector: 'app-content-type-modal-content',
@@ -471,18 +471,24 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
         return output;
     }
 
-    sortingInit(sortingfieldName: string, filterFieldName: string, event?: MouseEvent): void {
+    sortingInit(sortingFieldName: string, filterFieldName: string, event?: MouseEvent): void {
         if (event) {
             event.preventDefault();
         }
-        this.sortingfieldName = sortingfieldName;
-        const filteredData = this.model.fields.filter((field) => {
-            return field[filterFieldName];
-        });
-        filteredData.sort(function(a, b) {
-            return a[sortingfieldName] - b[sortingfieldName]
-        });
-
+        this.sortingfieldName = sortingFieldName;
+        let filteredData;
+        if (filterFieldName) {
+            filteredData = this.model.fields.filter((field) => {
+                return field[filterFieldName];
+            });
+        } else {
+            filteredData = this.model.fields;
+        }
+        if (sortingFieldName) {
+            filteredData.sort(function(a, b) {
+                return a[sortingFieldName] - b[sortingFieldName]
+            });
+        }
         this.sortData = [];
         filteredData.forEach((data) => {
             this.sortData.push({
@@ -490,23 +496,31 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
                 title: data['title']
             });
         });
-
         this.blockFieldList.nativeElement.style.display = 'none';
     }
 
     sortingApply(): void {
-        this.sortData.forEach((field, index) => {
-            const ind = this.model.fields.findIndex((fld) => {
-                return fld.name === field.name;
+        if (this.sortingfieldName) {
+            this.sortData.forEach((field, index) => {
+                const ind = this.model.fields.findIndex((fld) => {
+                    return fld.name === field.name;
+                });
+                if (ind > -1) {
+                    this.model.fields[ind][this.sortingfieldName] = index;
+                }
             });
-            if (ind > -1) {
-                this.model.fields[ind][this.sortingfieldName] = index;
-            }
-        });
-        this.sortingCancel();
+        } else {
+            const sortedNames = this.sortData.map((item) => {
+                return item['name'];
+            });
+            this.model.fields.sort(function(a, b) {
+                return sortedNames.indexOf(a['name']) - sortedNames.indexOf(b['name']);
+            });
+        }
+        this.sortingReset();
     }
 
-    sortingCancel(): void {
+    sortingReset(): void {
         const index = findIndex(this.model.fields, {name: this.currentFieldName});
         if (index > -1) {
             this.action = 'edit_field';
@@ -514,26 +528,30 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
             this.action = 'add_field';
         }
         this.sortData.splice(0, this.sortData.length);
+        this.sortingfieldName = '';
         this.blockFieldList.nativeElement.style.display = 'block';
     }
 
     save() {
         this.submitted = true;
-
-        if (!this.form.valid) {
-            this.onValueChanged('form');
-            this.submitted = false;
-            return;
+        if (this.sortData.length > 0) {
+            this.sortingApply();
         }
-
-        this.loading = true;
-        this.saveRequest()
-            .subscribe(() => this.closeModal(),
-                err => {
-                    this.errorMessage = err.error || 'Error.';
-                    this.submitted = false;
-                    this.loading = false;
-                });
+        setTimeout(() => {
+            if (!this.form.valid) {
+                this.onValueChanged('form');
+                this.submitted = false;
+                return;
+            }
+            this.loading = true;
+            this.saveRequest()
+                .subscribe(() => this.closeModal(),
+                    err => {
+                        this.errorMessage = err.error || 'Error.';
+                        this.submitted = false;
+                        this.loading = false;
+                    });
+        }, 1);
     }
 }
 

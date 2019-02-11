@@ -13,7 +13,7 @@
         <div *ngIf="title">{{title}}</div>
         <div class="clearfix"></div>
     </div>
-    <div dragula="filters" [(dragulaModel)]="items">
+    <div dragula="filters" [(dragulaModel)]="items" dragula="DRAGULA_EVENTS">
         <div class="card card-body d-block p-2 bg-light cursor-ns-resize" *ngFor="let item of items">
             {{item.title}}
             <span class="text-muted">({{item.name}})</span>

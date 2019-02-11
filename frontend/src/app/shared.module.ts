@@ -12,7 +12,7 @@ import {ToastModule} from 'primeng/toast';
 
 import {TableComponent} from './table.component';
 import {TranslationsComponent} from './translations.component';
-import {SortingComponent} from './sorting-dnd.conponent';
+import {SortingComponent} from './components/sorting-dnd.conponent';
 import {InputFieldRenderComponent} from './render-input-field';
 import {OutputFieldComponent} from './render-output-field';
 import {SelectParentDropdownComponent} from './catalog/select-parent-dropdown.component';

@@ -267,8 +267,11 @@ class AppExtension extends AbstractExtension
         }
 
         $properties['fieldProperties'] = $fieldProperties;
-
-        return $environment->render($templateName, $properties);
+        try {
+            return $environment->render($templateName, $properties);
+        } catch (\Exception $e) {
+            return $this->twigAddError($e->getMessage());
+        }
     }
 
     /**
@@ -314,7 +317,11 @@ class AppExtension extends AbstractExtension
             return '';
         }
         $templateName = $this->getTemplateName($environment, 'chunks/filters/', $filtersData['outputType'], $chunkNamePrefix);
-        return $environment->render($templateName, ['filter' => $filtersData]);
+        try {
+            return $environment->render($templateName, ['filter' => $filtersData]);
+        } catch (\Exception $e) {
+            return $this->twigAddError($e->getMessage());
+        }
     }
 
     /**
@@ -336,7 +343,7 @@ class AppExtension extends AbstractExtension
             return '';
         }
         $fields = array_merge($fields);
-        $output = '';
+        $outputArr = [];
         $count = 0;
         foreach ($itemData as $key => $value) {
             if (in_array($key, ['id', '_id', 'parentId', 'isActive'])) {
@@ -354,7 +361,9 @@ class AppExtension extends AbstractExtension
                     'name' => $key,
                     'title' => $field['title'],
                     'description' => $field['description']
-                ]
+                ],
+                'groupByName' => '',
+                'className' => ''
             ];
             if (is_array($value)) {
                 $propertiesDefault['value'] = '';
@@ -362,7 +371,7 @@ class AppExtension extends AbstractExtension
             } else {
                 $propertiesDefault['value'] = $value;
             }
-            $properties = array_merge($field['properties'], $propertiesDefault, $data);
+            $properties = array_merge($propertiesDefault, $field['properties'], $data);
             $properties['systemName'] = !empty($itemData[$properties['systemNameField']])
                 ? $itemData[$properties['systemNameField']]
                 : '';
@@ -380,16 +389,29 @@ class AppExtension extends AbstractExtension
                     'empty'
                 );
             }
+            $output = '';
             if ($count > 0) {
                 $output .= PHP_EOL;
             }
-            $output .= $environment->render($templateName, $properties);
+            try {
+                $output .= $environment->render($templateName, $properties);
+            } catch (\Exception $e) {
+                $output .= $this->twigAddError($e->getMessage());
+            }
+            if (!isset($outputArr[$fieldBaseName])) {
+                $outputArr[$fieldBaseName] = '';
+            }
+            $outputArr[$fieldBaseName] .= $output;
             $count++;
             if ($limit && $count >= $limit) {
                 break;
             }
         }
-        return $output;
+        $sortedNames = array_column($fields, 'name');
+        uksort($outputArr, function($key) use ($sortedNames) {
+            return array_search($key, $sortedNames);
+        });
+        return implode('', array_values($outputArr));
     }
 
     /**
@@ -403,12 +425,16 @@ class AppExtension extends AbstractExtension
     {
         $fIndex = array_search($fieldName, array_column($fieldsData, 'name'));
         if ($fIndex === false) {
-            return $environment->render('chunks/fields/default.html.twig', [
-                'itemData' => $itemData,
-                'value' => isset($itemData[$fieldName])
-                    ? (is_array($itemData[$fieldName]) ? json_encode($itemData[$fieldName]) : '')
-                    : ''
-            ]);
+            try {
+                return $environment->render('chunks/fields/default.html.twig', [
+                    'itemData' => $itemData,
+                    'value' => isset($itemData[$fieldName])
+                        ? (is_array($itemData[$fieldName]) ? json_encode($itemData[$fieldName]) : '')
+                        : ''
+                ]);
+            } catch (\Exception $e) {
+                return $this->twigAddError($e->getMessage());
+            }
         }
         $outputType = $this->getFieldOptionFunction($fieldsData, $fieldName, 'type');
         $outputTypeProperties = $this->getFieldOptionFunction($fieldsData, $fieldName, 'properties');
@@ -437,9 +463,6 @@ class AppExtension extends AbstractExtension
      * @throws \Doctrine\ODM\MongoDB\LockException
      * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
      * @throws \Psr\SimpleCache\InvalidArgumentException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
     public function categoriesTreeFunction(\Twig_Environment $environment, $parentId = 0, $chunkName = 'menu_tree', $data = null, $activeCategoriesIds = null, $cacheEnabled = false, $activeClassName = 'active')
     {
@@ -475,8 +498,11 @@ class AppExtension extends AbstractExtension
             $data['currentUri'] = $currentUri;
             $data['uriArr'] = $uriArr;
             $data['activeCategoriesIds'] = $activeCategoriesIds;
-            $output = $environment->render($templateName, $data);
-
+            try {
+                $output = $environment->render($templateName, $data);
+            } catch (\Exception $e) {
+                $output .= $this->twigAddError($e->getMessage());
+            }
             if ($cacheEnabled) {
                  $cache->set($cacheKey, $output, 60*60*24);
             }
@@ -491,6 +517,18 @@ class AppExtension extends AbstractExtension
         }
 
         return $output;
+    }
+
+    /**
+     * @param $errorMessage
+     * @return string
+     */
+    public function twigAddError($errorMessage)
+    {
+        if (!empty($this->container->getParameter('app.display_errors'))) {
+            return sprintf('<div class="alert alert-danger py-1 px-2">%s</div>', $errorMessage);
+        }
+        return '';
     }
 
     /**

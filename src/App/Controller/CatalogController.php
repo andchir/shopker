@@ -103,7 +103,8 @@ class CatalogController extends ProductController
 
         $options = [
             'currentCategoryUri' => $currentCategory->getUri(),
-            'systemNameField' => $contentType->getSystemNameField()
+            'systemNameField' => $contentType->getSystemNameField(),
+            'needSortFields' => true
         ];
         $filtersData = [];
         /** @var Filter $filters */
@@ -232,7 +233,8 @@ class CatalogController extends ProductController
         // Get fields options
         $options = [
             'currentCategoryUri' => $category->getUri(),
-            'systemNameField' => $contentType->getSystemNameField()
+            'systemNameField' => $contentType->getSystemNameField(),
+            'needSortFields' => false
         ];
         list($filters, $fields) = $this->getFieldsData($contentTypeFields, $options);
 
@@ -335,12 +337,14 @@ class CatalogController extends ProductController
             return ($a['order'] < $b['order']) ? -1 : 1;
         });
 
-        usort($fields, function($a, $b) {
-            if ($a['order'] == $b['order']) {
-                return 0;
-            }
-            return ($a['order'] < $b['order']) ? -1 : 1;
-        });
+        if (!empty($options['needSortFields'])) {
+            usort($fields, function($a, $b) {
+                if ($a['order'] == $b['order']) {
+                    return 0;
+                }
+                return ($a['order'] < $b['order']) ? -1 : 1;
+            });
+        }
 
         return [$filters, $fields];
     }

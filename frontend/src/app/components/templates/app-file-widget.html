@@ -11,23 +11,23 @@
         </div>
         <div class="text-center">
             <input type="file" id="field_{{ fieldName }}" [name]="fieldName" [accept]="allowedExtensions" style="display:none;" (change)="fileChange($event)" #fileInput>
-            <div class="mx-auto relative" [ngClass]="{'show-on-hover-parent': hasPreviewImage && controlValue}" style="width: 265px; min-height: 40px;">
-                <div [style.display]="hasPreviewImage && controlValue ? 'block' : 'none'">
-                    <img [src]="getImageUrl()" alt="Preview" class="img-thumbnail" style="width: 265px;" #imgPreview>
+            <div class="mx-auto relative" [ngClass]="{'show-on-hover-parent': hasPreviewImage && fileName}" style="width: 265px; min-height: 40px;">
+                <div [style.display]="hasPreviewImage && fileName ? 'block' : 'none'">
+                    <img [src]="imageUrl" alt="Preview" class="img-thumbnail" style="width: 265px;" #imgPreview>
                 </div>
                 <div class="file-buttons show-on-hover-child-left">
                     <button type="button" class="btn btn-secondary btn-wide mr-2" (click)="fileInput.click()" (drop)="dropHandler($event)" (dragover)="dragOverHandler($event);">
                         <i class="icon-upload"></i>
                         {{ 'CHOOSE_FILE' | translate }}
                     </button>
-                    <button type="button" class="btn btn-secondary" *ngIf="controlValue && controlValue.title" [title]="'CLEAR' | translate" (click)="fileClear()">
+                    <button type="button" class="btn btn-secondary" *ngIf="fileName" [title]="'CLEAR' | translate" (click)="fileClear()">
                         <i class="icon-cross"></i>
                     </button>
                 </div>
             </div>
-            <div class="pt-3 pb-2 text-secondary" *ngIf="controlValue && controlValue.title">
+            <div class="pt-3 pb-2 text-secondary" *ngIf="fileName">
                 <i class="icon-file"></i>
-                {{controlValue.title}}.{{controlValue.extension}}
+                {{ fileName }}
             </div>
         </div>
     </div>

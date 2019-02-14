@@ -55,6 +55,7 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- /system_name -->
 
                         <!-- name -->
                         <div class="row" *ngSwitchCase="'name'">
@@ -72,6 +73,7 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- /name -->
 
                         <!-- number -->
                         <div class="row" *ngSwitchCase="'number'">
@@ -89,6 +91,7 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- /number -->
 
                         <!-- textarea -->
                         <div *ngSwitchCase="'textarea'" [class.row]="field.inputProperties.rows < 7">
@@ -110,6 +113,7 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- /textarea -->
 
                         <!-- file -->
                         <ng-container *ngSwitchCase="'file'">
@@ -119,10 +123,13 @@
                                     [fieldName]="field.name"
                                     [hasPreviewImage]="field.inputProperties.has_preview_image"
                                     [allowedExtensions]="field.inputProperties.allowed_extensions"
-                                    [required]="field.required"
                                     [(files)]="files"
                                     [(ngModel)]="model[field.name]"></app-file-widget>
+                            <div *ngIf="formErrors[field.name]" class="alert alert-danger mt-3">
+                                {{formErrors[field.name]}}
+                            </div>
                         </ng-container>
+                        <!-- /file -->
 
                         <!-- color -->
                         <div class="row" *ngSwitchCase="'color'">
@@ -154,6 +161,7 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- /color -->
 
                         <!-- rich_text -->
                         <div class="row" *ngSwitchCase="'rich_text'">
@@ -206,6 +214,7 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- /rich_text -->
 
                         <!-- date -->
                         <div class="row" *ngSwitchCase="'date'">
@@ -235,6 +244,7 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- /date -->
 
                         <!-- select -->
                         <div class="row" *ngSwitchCase="'select'">
@@ -254,6 +264,7 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- /select -->
 
                         <!-- radio -->
                         <div class="row" *ngSwitchCase="'radio'">
@@ -280,6 +291,7 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- /radio -->
 
                         <!-- checkbox -->
                         <div class="row" *ngSwitchCase="'checkbox'">
@@ -307,6 +319,7 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- /checkbox -->
 
                         <!-- tags -->
                         <div class="row" *ngSwitchCase="'tags'">
@@ -326,6 +339,7 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- /tags -->
 
                         <!-- categories -->
                         <div class="row" *ngSwitchCase="'categories'">
@@ -347,6 +361,7 @@
                                         (onNodeUnselect)="categorySelect(field.name)"></p-tree>
                             </div>
                         </div>
+                        <!-- /categories -->
 
                         <!-- parameters -->
                         <div class="row" *ngSwitchCase="'parameters'">
@@ -412,6 +427,7 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- /parameters -->
 
                         <div class="row" *ngSwitchDefault>
                             <div class="col-md-5">

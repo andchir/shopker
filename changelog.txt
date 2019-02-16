@@ -7,6 +7,7 @@
 - Twig-functions contentList() and includeContent() in separate class.
 - Added event "order.before_create".
 - Content type - sorting fields by drag-and-drop. Automatic saving sorting when saving Content type.
+- In Admin area added search field to Composer packages list.
 
 4.0.2
 - Template editor added.

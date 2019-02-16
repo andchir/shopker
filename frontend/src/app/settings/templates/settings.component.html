@@ -419,14 +419,24 @@
                                     {{'SETTINGS_COMPOSER_PACKAGES_DESCRIPTION' | translate}}
                                 </div>
 
-                                <div class="max-height400">
-                                    <div class="table-responsive">
-                                        <table class="table table-divided mb-0">
-                                            <colgroup>
-                                                <col width="60%">
-                                                <col width="40%">
-                                            </colgroup>
-                                            <thead>
+                                <div class="form-control-search mb-3" [ngClass]="{'form-control-search-clear': !!composerPackageNameFilter}">
+                                    <input type="text" class="form-control form-control-sm" placeholder="{{ 'SEARCH' | translate }}..." [(ngModel)]="composerPackageNameFilter">
+                                    <span (click)="composerPackageNameFilter = ''"></span>
+                                </div>
+
+                                <div class="alert alert-info py-1 px-3" *ngIf="(composerPackages | filter: {name: composerPackageNameFilter}).length === 0; else composerPackagesTable">
+                                    {{ 'NOTHING_FOUND' | translate }}.
+                                </div>
+
+                                <ng-template #composerPackagesTable>
+                                    <div class="max-height400">
+                                        <div class="table-responsive">
+                                            <table class="table table-divided mb-0">
+                                                <colgroup>
+                                                    <col width="60%">
+                                                    <col width="40%">
+                                                </colgroup>
+                                                <thead>
                                                 <tr>
                                                     <th>
                                                         {{'NAME' | translate}}
@@ -435,16 +445,17 @@
                                                         {{'VERSION' | translate}}
                                                     </th>
                                                 </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr *ngFor="let package of composerPackages">
+                                                </thead>
+                                                <tbody>
+                                                <tr *ngFor="let package of composerPackages | filter: {name: composerPackageNameFilter}">
                                                     <td>{{ package.name }}</td>
                                                     <td class="text-center">{{ package.version }}</td>
                                                 </tr>
-                                            </tbody>
-                                        </table>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
-                                </div>
+                                </ng-template>
 
                                 <!--<div class="card card-body p-2 mt-3">-->
                                     <!--<div class="row no-gutters">-->

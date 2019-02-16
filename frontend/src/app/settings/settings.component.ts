@@ -24,6 +24,7 @@ export class SettingsComponent implements OnInit {
     composerPackages: ComposerPackage[] = [];
     composerPackageName = '';
     composerPackageVersion = '';
+    composerPackageNameFilter = '';
     settings = {
         SETTINGS_MAIN: new SettingsData(false, true, [], null),
         SETTINGS_ORDER_STATUSES: new SettingsData(

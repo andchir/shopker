@@ -11,7 +11,7 @@ export class FilterArrayPipe implements PipeTransform {
             const filterKeys = Object.keys(filter);
             return value.filter(item =>
                 filterKeys.reduce((memo, keyName) =>
-                memo && item[keyName] === filter[keyName], true));
+                memo && item[keyName].indexOf(filter[keyName]) > -1, true));
         } else {
             return value;
         }

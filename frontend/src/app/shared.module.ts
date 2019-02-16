@@ -57,7 +57,7 @@ const components = [
         UserRoleNamePipe,
         UserRoleColorPipe,
         OrderByPipe,
-        FilterArrayPipe,
+        FilterArrayPipe
     ],
     providers: [
         NgbActiveModal,
@@ -76,8 +76,13 @@ const components = [
         TreeModule,
         ToastModule,
         TranslateModule,
+        DragulaModule,
+        FilterFieldByGroupPipe,
         DateFromObjectPipe,
-        DragulaModule
+        UserRoleNamePipe,
+        UserRoleColorPipe,
+        OrderByPipe,
+        FilterArrayPipe
     ]
 })
 export class SharedModule {

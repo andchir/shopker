@@ -31,7 +31,11 @@
         <div class="mb-1{% if className is not empty %} {{ className }}{% endif %}">
             <input type="checkbox" name="param__{{ fieldData.name }}[]" id="param__{{ fieldData.name }}_{{ loop.index }}" value="{{ item.value | default(item.name) }}"{% if loop.index == 1 and firstSelected %} checked="checked"{% endif %} data-image-number="{{ item.imageNum | default(0) }}" data-price="{{ item.price }}">
             <label for="param__{{ fieldData.name }}_{{ loop.index }}">
-                {{ item.name | default(item.value) }}
+                {{% if groupByName %}
+                    {{ item.value | default(item.name) }}
+                {% else %}
+                    {{ item.name | default(item.value) }}
+                {% endif %}
             </label>
         </div>
     {% endfor %}
@@ -57,11 +61,15 @@
         <div class="mb-3 row{% if className is not empty %} {{ className }}{% endif %}">
             <div class="col-md-4">
                 <label for="param__{{ fieldData.name }}_{{ loop.index }}">
-                    {{ item.name | default(item.value) }}
+                    {% if groupByName %}
+                        {{ item.value | default(item.name) }}
+                    {% else %}
+                        {{ item.name | default(item.value) }}
+                    {% endif %}
                 </label>
             </div>
             <div class="col-md-8">
-                <input type="text" class="form-control" name="param__{{ fieldData.name }}[]" id="param__{{ fieldData.name }}_{{ loop.index }}" value="{{ item.value }}" data-image-number="{{ item.imageNum | default(0) }}" data-price="{{ item.price }}">
+                <input type="text" class="form-control" name="param__{{ fieldData.name }}[]" id="param__{{ fieldData.name }}_{{ loop.index }}" value="{% if not groupByName %}{{ item.value }}{% endif %}" data-image-number="{{ item.imageNum | default(0) }}" data-price="{{ item.price }}">
             </div>
         </div>
     {% endfor %}

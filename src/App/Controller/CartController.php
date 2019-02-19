@@ -42,8 +42,7 @@ class CartController extends ProductController
 
         /** @var Category $category */
         $category = $categoriesRepository->findOneBy([
-            'id' => $categoryId,
-            'isActive' => true
+            'id' => $categoryId
         ]);
         if (!$category) {
             return new RedirectResponse($referer);

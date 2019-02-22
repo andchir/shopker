@@ -46,6 +46,7 @@ class CategoryRepository extends BaseRepository
         $categories = $this->createQueryBuilder()
             ->field('name')->in($categoryUriArr)
             ->field('name')->notEqual('root')
+            ->field('isActive')->equals(true)
             ->sort('title', 'asc')
             ->getQuery()
             ->execute()

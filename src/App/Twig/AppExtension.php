@@ -508,7 +508,7 @@ class AppExtension extends AbstractExtension
             }
         }
 
-        if ($cacheEnabled && !empty($activeCategoriesIds)) {
+        if (!empty($activeCategoriesIds)) {
             $output = str_replace(
                 array_map(function($id) {return "active{$id}-"; }, $activeCategoriesIds),
                 $activeClassName,

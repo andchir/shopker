@@ -295,8 +295,8 @@ class AppExtension extends AbstractExtension
             $output .= $this->renderOutputTypeFunction(
                 $environment,
                 $itemData[$field['name']],
-                $field['type'],
-                array_merge($field['properties'], ['chunkNamePrefix' => $chunkNamePrefix]),
+                $field['outputType'],
+                array_merge($field['outputProperties'], ['chunkNamePrefix' => $chunkNamePrefix]),
                 $itemData,
                 $field,
                 $data
@@ -337,7 +337,8 @@ class AppExtension extends AbstractExtension
     public function renderOutputTypeChunkFunction(\Twig_Environment $environment, $itemData, $fieldsData, $chunkName, $chunkNamePrefix = '', $data = [], $limit = 0)
     {
         $fields = array_filter($fieldsData, function($field) use ($chunkName) {
-            return $field['properties']['chunkName'] === $chunkName;
+            return isset($field['outputProperties']['chunkName'])
+                && $field['outputProperties']['chunkName'] === $chunkName;
         });
         if (empty($fields)) {
             return '';
@@ -371,7 +372,13 @@ class AppExtension extends AbstractExtension
             } else {
                 $propertiesDefault['value'] = $value;
             }
-            $properties = array_merge($propertiesDefault, $field['properties'], $data);
+            if (!isset($data['systemNameField'])) {
+                $data['systemNameField'] = '';
+            }
+            if (!isset($data['currentCategoryUri'])) {
+                $data['currentCategoryUri'] = '';
+            }
+            $properties = array_merge($propertiesDefault, $field['outputProperties'], $data);
             $properties['systemName'] = !empty($itemData[$properties['systemNameField']])
                 ? $itemData[$properties['systemNameField']]
                 : '';
@@ -436,8 +443,8 @@ class AppExtension extends AbstractExtension
                 return $this->twigAddError($e->getMessage());
             }
         }
-        $outputType = $this->getFieldOptionFunction($fieldsData, $fieldName, 'type');
-        $outputTypeProperties = $this->getFieldOptionFunction($fieldsData, $fieldName, 'properties');
+        $outputType = $this->getFieldOptionFunction($fieldsData, $fieldName, 'outputType');
+        $outputTypeProperties = $this->getFieldOptionFunction($fieldsData, $fieldName, 'outputProperties');
         if (empty($outputTypeProperties['chunkName'])) {
             return '';
         }

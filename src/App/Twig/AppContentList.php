@@ -3,9 +3,9 @@
 namespace App\Twig;
 
 use App\Controller\CatalogController;
+use App\MainBundle\Document\ContentType;
 use App\Service\UtilsService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Cache\Simple\FilesystemCache;
 
@@ -35,10 +35,6 @@ class AppContentList
      * @param string $limitVar
      * @param array $parameters
      * @return string
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
     public function contentListFunction(
         \Twig_Environment $environment,
@@ -87,11 +83,13 @@ class AppContentList
         $queryOptions = UtilsService::getQueryOptions($currentUri, $queryString, [], ['pageSizeArr' => [$limit]], $options);
         $pagesOptions = UtilsService::getPagesOptions($queryOptions, $total, [], $options);
 
+        /** @var ContentType $contentType */
+        $contentType = $catalogController->getContentTypeRepository()->findOneBy([
+            'collection' => $collectionName
+        ]);
+
         $aggregateFields = [];
         if ($locale !== $localeDefault) {
-            $contentType = $catalogController->getContentTypeRepository()->findOneBy([
-                'collection' => $collectionName
-            ]);
             if ($contentType) {
                 $aggregateFields = $contentType->getAggregationFields($locale, $localeDefault, true);
             }
@@ -121,6 +119,8 @@ class AppContentList
         $output = $environment->render($templateName, array_merge($parameters, [
             'items' => $items,
             'total' => $total,
+            'fields' => $contentType ? $contentType->getFields() : [],
+            'systemNameField' => $contentType ? $contentType->getSystemNameField() : '',
             'groupSize' => $groupSize,
             'groupCount' => $groupSize ? ceil($items->count(true) / $groupSize) : 1,
             'queryOptions' => $queryOptions,

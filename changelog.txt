@@ -1,4 +1,7 @@
 
+4.0.4
+- New template for slider on home page.
+
 4.0.3
 - Fixed incorrect default language value.
 - Hide password in settings.

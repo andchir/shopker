@@ -300,20 +300,10 @@ class CatalogController extends ProductController
                 if (!isset($field['outputProperties']['chunkName'])) {
                     $field['outputProperties']['chunkName'] = '';
                 }
-                $inputProperties = !empty($field['inputProperties']) ? $field['inputProperties'] : [];
-                if (isset($inputProperties['values_list'])) {
-                    $inputProperties['values_list'] = explode('||', $inputProperties['values_list']);
-                }
-                $fields[] = [
-                    'name' => $field['name'],
-                    'title' => $field['title'],
-                    'description' => $field['description'],
-                    'type' => $field['outputType'],
-                    'showInList' => $field['showInList'],
-                    'order' => !empty($field['listOrder']) ? $field['listOrder'] : 0,
-                    'properties' => array_merge($field['outputProperties'], $options),
-                    'inputProperties' => $inputProperties
-                ];
+                $fields[] = array_merge($field, [
+                    'listOrder' => $field['listOrder'] ?? 0,
+                    'outputProperties' => array_merge($field['outputProperties'], $options)
+                ]);
             }
             if (!empty($field['isFilter']) && !empty($filtersData[$field['name']])) {
                 $filters[] = [
@@ -340,10 +330,10 @@ class CatalogController extends ProductController
 
         if (!empty($options['needSortFields'])) {
             usort($fields, function($a, $b) {
-                if ($a['order'] == $b['order']) {
+                if ($a['listOrder'] == $b['listOrder']) {
                     return 0;
                 }
-                return ($a['order'] < $b['order']) ? -1 : 1;
+                return ($a['listOrder'] < $b['listOrder']) ? -1 : 1;
             });
         }
 

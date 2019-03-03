@@ -57,10 +57,15 @@ class DefaultController extends CatalogController
             $description = $rootCategory->getDescription();
         }
 
+        /** @var SettingsService $settingsService */
+        $settingsService = $this->get('app.settings');
+        $currency = $settingsService->getCurrency();
+
         return $this->render('homepage.html.twig', [
             'categoriesTopLevel' => $categoriesTopLevel,
             'currentUri' => 'home',
             'activeCategoriesIds' => [],
+            'currency' => $currency,
             'description' => $description,
             'countCategories' => $countCategories,
             'currentId' => 0,

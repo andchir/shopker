@@ -9,7 +9,7 @@
 
         <div class="min-height400">
 
-            <div class="card bg-light">
+            <div class="card bg-light mb-3">
                 <div class="card-body">
                     <h4 class="card-title">
                         {{ 'Catalog' | trans }}
@@ -31,13 +31,16 @@
                 </div>
             </div>
 
-            {{ contentList(
-                'content_list_novelty',
+            <div class="mb-3">
+                <h3>{{ 'New items' | trans }}</h3>
+                {{ contentList(
+                'content_list_slider',
                 'products',
                 {"isActive": true, "tags": {"$elemMatch": {"$in": ["Новинка"]}}},
                 {"_id": "desc"},
-                20, 4, 'homepage_novelty', 'hn_page', 'hn_limit'
-            ) }}
+                20, 4, 'homepage_novelty', 'hn_page', 'hn_limit', {currency: currency, sliderName: 'Novelty'}
+                ) }}
+            </div>
 
             <div class="py-3">
                 {{ description | raw }}

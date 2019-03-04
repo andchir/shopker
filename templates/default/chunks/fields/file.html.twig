@@ -1,10 +1,10 @@
 <div>
     <div class="mb-2">
         {{ 'You can upload file' | trans }}:
-        <b>{{ fieldProperties.properties.allowed_extensions }}</b>
+        <b>{{ fieldProperties.outputProperties.allowed_extensions }}</b>
     </div>
     <div class="card card-body d-inline-block">
-        <button type="button" class="btn btn-info px-5" name="{{ fieldData.name }}" data-accept="{{ fieldProperties.properties.allowed_extensions }}" id="buttonFileUpload-{{ fieldData.name }}">
+        <button type="button" class="btn btn-info px-5" name="{{ fieldData.name }}" data-accept="{{ fieldProperties.outputProperties.allowed_extensions }}" id="buttonFileUpload-{{ fieldData.name }}">
             <i class="icon-upload"></i>
             {{ 'Upload file' | trans }}
         </button>

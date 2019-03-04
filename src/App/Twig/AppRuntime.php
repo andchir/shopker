@@ -384,7 +384,7 @@ class AppRuntime
     public function getFieldNameByChunkFunction($itemData, $fieldsData, $chunkName)
     {
         $fields = array_filter($fieldsData, function($field) use ($chunkName) {
-            return $field['properties']['chunkName'] === $chunkName;
+            return $field['outputProperties']['chunkName'] === $chunkName;
         });
         if (empty($fields)) {
             return '';

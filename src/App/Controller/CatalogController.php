@@ -248,7 +248,9 @@ class CatalogController extends ProductController
         $activeCategoriesIds = array_map(function($item) {
             return $item['id'];
         }, $breadcrumbs);
-        $activeCategoriesIds[] = 0 - $currentPage['id'];
+        if ($category && $category->getId() === 0) {
+            $activeCategoriesIds[] = 0 - $currentPage['id'];
+        }
 
         return $this->render($this->getTemplateName('content-page', $contentType->getName()), [
             'currentCategory' => $category,

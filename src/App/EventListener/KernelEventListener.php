@@ -27,8 +27,8 @@ class KernelEventListener
         $categoryUpdateListener = new CategoryUpdateListener();
         $dispatcher->addListener(CategoryUpdatedEvent::NAME, [$categoryUpdateListener, 'onUpdated']);
 
-        //$userRegisteredListener = new UserRegisteredListener($this->container);
-        //$dispatcher->addListener(UserRegisteredEvent::NAME, [$userRegisteredListener, 'onCalled']);
+        $userRegisteredListener = new UserRegisteredListener($this->container);
+        $dispatcher->addListener(UserRegisteredEvent::NAME, [$userRegisteredListener, 'onCalled']);
     }
 
 }

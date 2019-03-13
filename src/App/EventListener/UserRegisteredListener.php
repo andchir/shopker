@@ -31,9 +31,9 @@ class UserRegisteredListener
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $this->container->get('doctrine_mongodb')->getManager();
 
-        $user->setIsActive(false);
+        // $user->setIsActive(false);
 
-        $dm->flush();
+        // $dm->flush();
     }
 
 }

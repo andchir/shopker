@@ -542,7 +542,7 @@ class User implements UserInterface, \Serializable
         if ($optIndex > -1) {
             return $this->options[$optIndex]['value'];
         }
-        return '';
+        return null;
     }
 
     /**

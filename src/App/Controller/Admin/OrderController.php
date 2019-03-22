@@ -3,12 +3,15 @@
 namespace App\Controller\Admin;
 
 use App\Controller\ProductController as BaseProductController;
+use App\Events;
 use App\MainBundle\Document\Order;
 use App\MainBundle\Document\OrderContent;
 use App\MainBundle\Document\Setting;
 use App\Service\SettingsService;
 use App\Service\UtilsService;
 use Doctrine\ORM\Query\Expr\Base;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -185,6 +188,11 @@ class OrderController extends StorageControllerAbstract
                     . $translator->trans('mail_subject.order_status_change'),
                 $order
             );
+
+            /** @var EventDispatcherInterface $eventDispatcher */
+            $eventDispatcher = $this->get('event_dispatcher');
+            $event = new GenericEvent($order);
+            $eventDispatcher->dispatch(Events::ORDER_STATUS_UPDATED, $event);
         }
 
         $dm->flush();

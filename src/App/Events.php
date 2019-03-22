@@ -29,4 +29,9 @@ final class Events
      * @var string
      */
     const ORDER_DELETED = 'order.deleted';
+    /**
+     * @Event("Symfony\Component\EventDispatcher\GenericEvent")
+     * @var string
+     */
+    const ORDER_STATUS_UPDATED = 'order.status_updated';
 }

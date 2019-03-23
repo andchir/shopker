@@ -36,7 +36,8 @@
             currencyOptions: [],
             priceFilterName: '',
             currencyTranslate: {
-                RUB: 'руб.'
+                RUB: 'руб.',
+                UAH: 'грн'
             }
         };
 

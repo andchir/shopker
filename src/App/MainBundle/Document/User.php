@@ -568,7 +568,9 @@ class User implements UserInterface, \Serializable
         }
         $optIndex = array_search($option['name'], array_column($this->options, 'name'));
         if ($optIndex > -1) {
-            $this->options[$optIndex]['title'] = $option['title'];
+            if (isset($option['title'])) {
+                $this->options[$optIndex]['title'] = $option['title'];
+            }
             if ($addValue && $this->options[$optIndex]['value']) {
                 $this->options[$optIndex]['value'] .= ',' . $option['value'];
             } else {

@@ -34,7 +34,10 @@
             baseUrl: '/',
             multiCurrency: false,
             currencyOptions: [],
-            priceFilterName: ''
+            priceFilterName: '',
+            currencyTranslate: {
+                RUB: 'руб.'
+            }
         };
 
         /**
@@ -455,7 +458,7 @@
             });
             // Update currency
             currencyElArr.forEach(function(currencyEl) {
-                currencyEl.textContent = currency;
+                currencyEl.textContent = mainOptions.currencyTranslate[currency] || currency;
             });
         };
 

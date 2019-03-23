@@ -131,7 +131,7 @@ class SettingsFixtures extends Fixture implements ContainerAwareInterface
             ],
             'SETTINGS_CURRENCY' => [
                 [
-                    'name' => 'руб.',
+                    'name' => 'RUB',
                     'description' => '',
                     'options' => [
                         'value' => ['value' => 1, 'type' => 'number']

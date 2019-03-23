@@ -246,7 +246,9 @@ abstract class StorageControllerAbstract extends BaseController
         $index = 0;
         foreach ($items as $item) {
             if ($index === 0) {
-                $firstItemIsActive = $item->getIsActive();
+                $firstItemIsActive = method_exists($item, 'getIsActive')
+                    ? $item->getIsActive()
+                    : true;
             }
             if ($action == 'delete') {
                 $results = $this->deleteItem($item->getId());

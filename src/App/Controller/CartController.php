@@ -37,7 +37,7 @@ class CartController extends ProductController
         $referer = $request->headers->get('referer');
 
         $itemId = intval($request->get('item_id'));
-        $count = intval($request->get('count'));
+        $count = max(1, intval($request->get('count')));
         $categoryId = intval($request->get('category_id'));
 
         /** @var Category $category */
@@ -302,7 +302,7 @@ class CartController extends ProductController
                     }
                     foreach ($products as $ind => &$product) {
                         if (isset($countArr[$index]) && is_numeric($countArr[$index])) {
-                            $product['count'] = intval($countArr[$index]);
+                            $product['count'] = max(1, intval($countArr[$index]));
                         }
                         $index++;
                     }

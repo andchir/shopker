@@ -1,7 +1,7 @@
 <ul>
     {% for category in children %}
-        <li class="nav-item{% if category.children|length > 0 %} parent{% endif %}">
-            <a href="{{ catalogPath(category.uri, '', category) }}" class="nav-link active{{ category.id }}-">
+        <li class="nav-item active{{ category.id }}-{% if category.children|length > 0 %} parent{% endif %}">
+            <a href="{{ catalogPath(category.uri, '', category) }}" class="nav-link">
                 {{ category.title }}
             </a>
             {{ categoriesTree(category.id, 'menu_dropdown_child', category, activeCategoriesIds) }}

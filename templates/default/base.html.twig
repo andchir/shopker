@@ -19,7 +19,9 @@
     {% endblock -%}
     <script src="{{ asset('js/dots-menu.js') }}"></script>
     <script>
-        var dotsMenu = new DotsMenu();
+        var dotsMenu = new DotsMenu({
+            dotsMenuButtonPosition: 'left'
+        });
     </script>
 
 </head>

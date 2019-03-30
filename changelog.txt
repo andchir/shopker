@@ -2,6 +2,7 @@
 4.0.4
 - New template for slider on home page.
 - Added event "order.status_updated".
+- Updated menu in default template.
 
 4.0.3
 - Fixed incorrect default language value.

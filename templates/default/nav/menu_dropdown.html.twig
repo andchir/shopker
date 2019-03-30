@@ -1,4 +1,4 @@
-<div class="dots-menu-container">
+<div class="dots-menu-container" style="overflow: hidden;">
     <ul class="dots-menu">
         {% for category in children %}
             <li class="nav-item active{{ category.id }}-{% if category.children|length > 0 %} parent{% endif %}">

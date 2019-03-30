@@ -170,8 +170,16 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle { top: 16px; right: -7px; left
 
 /* custom colors for dots-menu */
 .dots-menu-container { background-color: transparent; border-bottom: 0; }
-.dots-menu > .nav-item.active > .nav-link { background-color: #505b61; color: #fff; }
+.dots-menu > .nav-item > .nav-link { color: rgba(255,255,255,0.6); }
+.dots-menu > .nav-item:hover > .nav-link { background-color: #505b61; color: rgba(255,255,255,0.8); }
+.dots-menu > .nav-item.nav-item-parent > .nav-link { border-bottom: 7px solid #505b61; }
+.dots-menu > .nav-item.active > .nav-link { background-color: #505b61; border-bottom: 7px solid #007bff; color: rgba(255,255,255,0.9); }
 .dots-menu.dots-menu-drop > .nav-item > .nav-link { background-color: #505b61; }
 .dots-menu > .nav-item.nav-item-parent:hover > .nav-link:before { border-color: #343a40 transparent transparent transparent; }
 .dots-menu > .nav-item.nav-item-parent:hover > .nav-link:after { border-color: #505b61 transparent transparent transparent; }
+.dots-menu > .nav-item.nav-item-parent > .nav-link:before,
+.dots-menu > .nav-item.nav-item-parent > .nav-link:after { border-color: #343a40 transparent transparent transparent; }
+.dots-menu > .nav-item.nav-item-parent.active > .nav-link:after { border-color: #505b61 transparent transparent transparent; }
+.dots-menu > .nav-item.nav-item-parent.active > .nav-link:before { border-color: #007bff transparent transparent transparent; }
+
 

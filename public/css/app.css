@@ -181,5 +181,20 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle { top: 16px; right: -7px; left
 .dots-menu > .nav-item.nav-item-parent > .nav-link:after { border-color: #343a40 transparent transparent transparent; }
 .dots-menu > .nav-item.nav-item-parent.active > .nav-link:after { border-color: #505b61 transparent transparent transparent; }
 .dots-menu > .nav-item.nav-item-parent.active > .nav-link:before { border-color: #007bff transparent transparent transparent; }
-
+.dots-menu ul ul { top: -8px; }
+.dots-menu ul li { background-color: #343a40;  }
+.dots-menu ul li { border-color: #505b61; }
+.dots-menu ul li:first-child { border-top: 1px solid #505b61; }
+.dots-menu ul li:last-child { border-bottom: 1px solid #505b61; }
+.dots-menu ul li.active > .nav-link { color: #fff; }
+.dots-menu ul li .nav-link { background-color: transparent; color: rgba(255,255,255,0.6); }
+.dots-menu ul .nav-item.nav-item-parent > .nav-link:before {border-color: transparent transparent transparent #505b61; }
+.dots-menu ul li:hover > .nav-link { background-color: #505b61; color: rgba(255,255,255,0.9); }
+.dots-menu ul .nav-item.nav-item-parent:hover:before { border-color: transparent transparent transparent #505b61; }
+.dots-menu ul .nav-item.nav-item-parent:hover:after { border-color: transparent transparent transparent #343a40; }
+@media (max-width: 576px) {
+    .dots-menu ul li.active > .nav-link { background-color: #465157; color: #fff; }
+    .dots-menu ul .nav-item.nav-item-parent > .nav-link:before { background-color: #40484e; }
+    .dots-menu ul .nav-item.nav-item-parent > .nav-link:after { border-color: #5e6c72 transparent transparent transparent; }
+}
 

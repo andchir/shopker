@@ -174,13 +174,15 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle { top: 16px; right: -7px; left
 .dots-menu > .nav-item:hover > .nav-link { background-color: #505b61; color: rgba(255,255,255,0.8); }
 .dots-menu > .nav-item.nav-item-parent > .nav-link { border-bottom: 7px solid #505b61; }
 .dots-menu > .nav-item.active > .nav-link { background-color: #505b61; border-bottom: 7px solid #007bff; color: rgba(255,255,255,0.9); }
-.dots-menu.dots-menu-drop > .nav-item > .nav-link { background-color: #505b61; }
 .dots-menu > .nav-item.nav-item-parent:hover > .nav-link:before { border-color: #343a40 transparent transparent transparent; }
 .dots-menu > .nav-item.nav-item-parent:hover > .nav-link:after { border-color: #505b61 transparent transparent transparent; }
 .dots-menu > .nav-item.nav-item-parent > .nav-link:before,
 .dots-menu > .nav-item.nav-item-parent > .nav-link:after { border-color: #343a40 transparent transparent transparent; }
 .dots-menu > .nav-item.nav-item-parent.active > .nav-link:after { border-color: #505b61 transparent transparent transparent; }
 .dots-menu > .nav-item.nav-item-parent.active > .nav-link:before { border-color: #007bff transparent transparent transparent; }
+.dots-menu.dots-menu-drop > .nav-item > .nav-link { background-color: #505b61; }
+.dots-menu.dots-menu-drop:hover > .nav-item > .nav-link:before { bottom: -14px; }
+.dots-menu.dots-menu-drop:hover > .nav-item > .nav-link:after { bottom: -13px; }
 .dots-menu ul ul { top: -8px; }
 .dots-menu ul li { background-color: #343a40;  }
 .dots-menu ul li { border-color: #505b61; }

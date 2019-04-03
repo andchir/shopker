@@ -24,10 +24,13 @@ class DefaultController extends CatalogController
 {
     /**
      * @Route("/", name="homepage")
+     * @param Request $request
      * @return Response
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
      * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
-    public function homepageAction()
+    public function homepageAction(Request $request)
     {
         if (empty($this->getParameter('mongodb_database'))) {
             return $this->redirectToRoute('setup');
@@ -61,7 +64,7 @@ class DefaultController extends CatalogController
         $settingsService = $this->get('app.settings');
         $currency = $settingsService->getCurrency();
 
-        return $this->render('homepage.html.twig', [
+        $response = $this->render('homepage.html.twig', [
             'categoriesTopLevel' => $categoriesTopLevel,
             'currentUri' => 'home',
             'activeCategoriesIds' => [],
@@ -71,6 +74,11 @@ class DefaultController extends CatalogController
             'currentId' => 0,
             'countProducts' => $countProducts
         ]);
+        $response->setEtag(md5($response->getContent()));
+        $response->setPublic();
+        $response->isNotModified($request);
+
+        return $response;
     }
 
     /**

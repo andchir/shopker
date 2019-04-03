@@ -9,7 +9,7 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 
     {% block stylesheets -%}
-        <link href="{{ asset('css/dots-menu.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/default/dots-menu.css') }}" rel="stylesheet">
         <link href="{{ asset('app_build/app_styles.css') }}" rel="stylesheet">
 
         {#<link href="{{ asset('node_modules/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -17,12 +17,6 @@
         <link href="{{ asset('css/icomoon/style.css') }}" rel="stylesheet">
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">#}
     {% endblock -%}
-    <script src="{{ asset('js/dots-menu.js') }}"></script>
-    <script>
-        var dotsMenu = new DotsMenu({
-            dotsMenuButtonPosition: 'left'
-        });
-    </script>
 
 </head>
 <body>
@@ -31,6 +25,12 @@
 
 {% block javascripts %}
     <script src="{{ asset('app_build/app.js') }}"></script>
+    <script src="{{ asset('js/default/dots-menu.js') }}"></script>
+    <script>
+        var dotsMenu = new DotsMenu({
+            dotsMenuButtonPosition: 'left'
+        });
+    </script>
 
     {#<script src="{{ asset('node_modules/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ asset('node_modules/popper.js/dist/umd/popper.min.js') }}"></script>

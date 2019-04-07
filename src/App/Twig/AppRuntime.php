@@ -90,6 +90,24 @@ class AppRuntime
     }
 
     /**
+     * @param int $productId
+     * @param string $contentTypeName
+     * @return bool
+     */
+    public function isProductInCartFunction($productId, $contentTypeName)
+    {
+        $mongoCache = $this->container->get('mongodb_cache');
+        $shopCartData = $mongoCache->fetch(ShopCartService::getCartId());
+        if (empty($shopCartData)
+            || empty($shopCartData['data'])
+            || empty($shopCartData['data'][$contentTypeName])) {
+            return false;
+        }
+        $index = array_search($productId, array_column($shopCartData['data'][$contentTypeName], 'id'));
+        return $index !== false;
+    }
+
+    /**
      * @param \Twig_Environment $environment
      * @return string
      * @throws \Psr\SimpleCache\InvalidArgumentException

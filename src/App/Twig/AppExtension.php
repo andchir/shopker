@@ -87,6 +87,7 @@ class AppExtension extends AbstractExtension
                 'is_safe' => ['html'],
                 'needs_environment' => true
             ]),
+            new TwigFunction('isProductInCart', [AppRuntime::class, 'isProductInCartFunction']),
             new TwigFunction('currencyList', [AppRuntime::class, 'currencyListFunction'], [
                 'is_safe' => ['html'],
                 'needs_environment' => true

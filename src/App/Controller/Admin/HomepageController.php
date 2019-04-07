@@ -17,6 +17,8 @@ class HomepageController extends Controller
 {
     /**
      * @Route("/", name="admin")
+     * @param Request $request
+     * @return Response
      */
     public function indexAction(Request $request)
     {
@@ -40,6 +42,12 @@ class HomepageController extends Controller
             'systemSettings' => $settings,
             'rolesHierarchy' => $rolesHierarchy
         ];
-        return $this->render('admin/homepage.html.twig', ['settings' => $settings]);
+
+        $response = $this->render('admin/homepage.html.twig', ['settings' => $settings]);
+        $response->setEtag(md5($response->getContent()));
+        $response->setPublic();
+        $response->isNotModified($request);
+
+        return $response;
     }
 }

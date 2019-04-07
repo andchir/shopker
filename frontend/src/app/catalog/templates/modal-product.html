@@ -28,7 +28,7 @@
             </div>
         </div>
 
-        <div class="row form-group" [class.form-group-message]="formErrors.isActive">
+        <div class="row form-group">
             <div class="col-md-7 ml-md-auto">
                 <div class="card card-body p-2 pl-3">
 
@@ -36,6 +36,11 @@
                         <input type="checkbox" class="custom-control-input" id="fieldIsActive" value="1" name="isActive" formControlName="isActive" [(ngModel)]="model.isActive">
                         <span class="custom-control-indicator"></span>
                         <label class="custom-control-label" for="fieldIsActive">{{'ACTIVE' | translate}}</label>
+                    </div>
+
+                    <div class="custom-control custom-checkbox mt-2">
+                        <input type="checkbox" class="custom-control-input" id="fieldClearCache" value="1" name="clearCache" formControlName="clearCache" [(ngModel)]="model.clearCache">
+                        <label class="custom-control-label" for="fieldClearCache">{{'CLEAR_FILE_CACHE' | translate}}</label>
                     </div>
 
                 </div>

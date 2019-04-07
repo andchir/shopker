@@ -16,6 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Cache\Simple\FilesystemCache;
 use \Mimey\MimeTypes;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -420,6 +421,13 @@ class ProductController extends BaseProductController
 
         $this->onAfterUpdateItem($contentType, $document, $category->getId());
 
+        // Clear file cache
+        if (!empty($data['clearCache'])) {
+            /** @var FilesystemCache $cache */
+            $cache = $this->get('app.filecache');
+            $cache->clear();
+        }
+
         if (!empty($result['ok'])) {
             return new JsonResponse($document);
         } else {
@@ -547,6 +555,11 @@ class ProductController extends BaseProductController
         $event = new GenericEvent($itemData, ['contentType' => $contentType]);
         $eventDispatcher->dispatch(Events::PRODUCT_DELETED, $event);
 
+        // Clear file cache
+        /** @var FilesystemCache $cache */
+        $cache = $this->get('app.filecache');
+        $cache->clear();
+
         return $result;
     }
 
@@ -569,6 +582,11 @@ class ProductController extends BaseProductController
 
         $categoryId = isset($itemData['parentId']) ? $itemData['parentId'] : 0;
         $this->onAfterUpdateItem($contentType, $itemData, $categoryId);
+
+        // Clear file cache
+        /** @var FilesystemCache $cache */
+        $cache = $this->get('app.filecache');
+        $cache->clear();
 
         return $result;
     }

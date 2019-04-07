@@ -18,6 +18,7 @@ import {FilesService} from './services/files.service';
 import {ContentField, FieldIndexData} from './models/content_field.model';
 import {TranslationsComponent} from '../translations.component';
 import {AppSettings} from '../services/app-settings.service';
+import {FormFieldInterface} from '../models/form-field.interface';
 
 @Component({
     selector: 'app-product-modal-content',
@@ -32,7 +33,7 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
     model = {} as Product;
     timer: any;
 
-    formFields = {
+    formFields: FormFieldInterface = {
         parentId: {
             value: 0,
             validators: [Validators.required],
@@ -41,6 +42,11 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
             }
         },
         isActive: {
+            value: true,
+            validators: [],
+            messages: {}
+        },
+        clearCache: {
             value: true,
             validators: [],
             messages: {}
@@ -71,6 +77,7 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
             this.localeDefault = this.localeList[0];
             this.localeCurrent = this.localeList[0];
         }
+        this.model.clearCache = true;
         this.model.parentId = this.category.id;
         this.dataService.setRequestUrl('products/' + this.category.id);
 
@@ -153,7 +160,8 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
         const newKeys = map(this.currentContentType.fields, function(field) {
             return field.name;
         });
-        newKeys.push('id', 'parentId', 'previousParentId', 'isActive', 'translations');
+        newKeys.push('id', 'parentId', 'previousParentId', 'isActive', 'clearCache', 'translations');
+        data.clearCache = true;
 
         Object.keys(this.model).forEach((key) => {
             if (key.indexOf('__') > -1) {

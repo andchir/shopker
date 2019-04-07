@@ -95,14 +95,14 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
         },
         isActive: {
             fieldLabel: 'ACTIVE',
-            value: false,
+            value: true,
             disabled: false,
             validators: [],
             messages: {}
         },
         clearCache: {
             fieldLabel: 'CLEAR_FILE_CACHE',
-            value: false,
+            value: true,
             disabled: false,
             validators: [],
             messages: {}
@@ -152,6 +152,7 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
     }
 
     onAfterGetData() {
+        this.model.clearCache = true;
         if (!this.model.translations || Array.isArray(this.model.translations)) {
             this.model.translations = {};
         }

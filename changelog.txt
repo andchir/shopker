@@ -4,6 +4,7 @@
 - Added event "order.status_updated".
 - Updated menu in default template.
 - Field "back_url" for product form.
+- Checkbox for clear file cache in product UI. Auto clear file cache when delete product.
 
 4.0.3
 - Fixed incorrect default language value.

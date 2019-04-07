@@ -4,5 +4,6 @@ export interface Product {
     previousParentId?: number;
     title?: string;
     isActive?: boolean;
+    clearCache?: boolean,
     translations?: {[fieldName: string]: {[lang: string]: string}};
 }

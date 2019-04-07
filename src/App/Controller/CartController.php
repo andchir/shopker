@@ -39,13 +39,14 @@ class CartController extends ProductController
         $itemId = intval($request->get('item_id'));
         $count = max(1, intval($request->get('count')));
         $categoryId = intval($request->get('category_id'));
+        $back_url = $request->get('back_url', $referer);
 
         /** @var Category $category */
         $category = $categoriesRepository->findOneBy([
             'id' => $categoryId
         ]);
         if (!$category) {
-            return new RedirectResponse($referer);
+            return new RedirectResponse($back_url);
         }
 
         // Get currency
@@ -152,7 +153,7 @@ class CartController extends ProductController
         $shopCartService = $this->get('app.shop_cart');
         $shopCartService->saveContent($shopCartData);
 
-        return new RedirectResponse($referer);
+        return new RedirectResponse($back_url);
     }
 
     /**

@@ -94,17 +94,22 @@ class AppRuntime
      * @param string $contentTypeName
      * @return bool
      */
-    public function isProductInCartFunction($productId, $contentTypeName)
+    public function shopCartProductCountFunction($productId, $contentTypeName)
     {
         $mongoCache = $this->container->get('mongodb_cache');
         $shopCartData = $mongoCache->fetch(ShopCartService::getCartId());
+        $count = 0;
         if (empty($shopCartData)
             || empty($shopCartData['data'])
             || empty($shopCartData['data'][$contentTypeName])) {
-            return false;
+            return $count;
         }
-        $index = array_search($productId, array_column($shopCartData['data'][$contentTypeName], 'id'));
-        return $index !== false;
+        foreach ($shopCartData['data'][$contentTypeName] as $product) {
+            if ($product['id'] === $productId) {
+                $count += $product['count'];
+            }
+        }
+        return $count;
     }
 
     /**

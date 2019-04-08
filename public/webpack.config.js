@@ -9,6 +9,7 @@ Encore
         './node_modules/bootstrap/dist/css/bootstrap.min.css',
         './node_modules/nouislider/distribute/nouislider.min.css',
         './css/icomoon/style.css',
+        './css/dots-menu.css',
         './css/shopkeeper.css',
         './css/app.css'
     ])

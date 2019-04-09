@@ -17,10 +17,6 @@
 
 {% block body %}{% endblock %}
 
-{% block javascripts %}
-    <script src="{{ asset('app_build/app.js') }}"></script>
-{% endblock %}
-
 {% block footer %}
     <div class="footer border-top mt-3">
         <div class="container">
@@ -37,6 +33,10 @@
     {% if app.request.attributes.get('_route') not in ['shop_cart_edit'] %}
         {{ shopCart('shop_cart') }}
     {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('app_build/app.js') }}"></script>
 {% endblock %}
 
 </body>

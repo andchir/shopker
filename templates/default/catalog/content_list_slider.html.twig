@@ -16,7 +16,7 @@
                             <div class="card-body">
                                 {{ renderOutputTypeChunk(item, fields, 'header', '', {systemNameField: systemNameField}, 1) }}
                                 {{ renderOutputTypeChunk(item, fields, 'tag', '', [], 1) }}
-                                {{ renderOutputTypeChunk(item, fields, 'image', '', [], 1) }}
+                                {{ renderOutputTypeChunk(item, fields, 'image', '', {systemNameField: systemNameField}, 1) }}
                                 {{ renderOutputTypeChunk(item, fields, 'price', '', {currency: currency}, 1) }}
                             </div>
                         </div>

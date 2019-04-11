@@ -67,7 +67,14 @@
                                 <tbody>
                                     <tr *ngFor="let setting of settings.SETTINGS_MAIN.values">
                                         <td>
-                                            <span>{{setting.name | translate}}</span>
+                                            <div class="show-on-hover-parent">
+                                                <div class="show-on-hover-child position-relative">
+                                                    <div class="pos-absolute-right">
+                                                        <span class="badge badge-secondary">{{setting.name}}</span>
+                                                    </div>
+                                                </div>
+                                                <span>{{setting.name | translate}}</span>
+                                            </div>
                                         </td>
                                         <td>
                                             <input type="{{ getFieldTypeByName(setting.name) }}" class="form-control form-control-sm" [(ngModel)]="setting.value" (ngModelChange)="onValueChanged('SETTINGS_MAIN')">

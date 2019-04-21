@@ -5,8 +5,13 @@ import {TemplatesEditService} from './services/templates-edit.service';
 import {Template} from './models/template.model';
 
 declare const ace: any;
-import 'ace-builds';
-import 'ace-builds/webpack-resolver';
+import 'ace-builds/src-min-noconflict/ace';
+import 'ace-builds/src-min-noconflict/theme-kuroir';
+import 'ace-builds/src-min-noconflict/mode-twig';
+import 'ace-builds/src-min-noconflict/mode-javascript';
+import 'ace-builds/src-min-noconflict/mode-css';
+import 'ace-builds/src-min-noconflict/mode-html';
+// import 'ace-builds/webpack-resolver';
 
 @Component({
     selector: 'app-modal-template',

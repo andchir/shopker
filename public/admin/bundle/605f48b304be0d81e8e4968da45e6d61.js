@@ -1103,11 +1103,7 @@ var CssCompletions = function() {
             this.defineCompletions();
         }
 
-        var token = session.getTokenAt(pos.row, pos.column);
-
-        if (!token)
-            return [];
-        if (state==='ruleset'){
+        if (state==='ruleset' || session.$mode.$id == "ace/mode/scss") {
             var line = session.getLine(pos.row).substr(0, pos.column);
             if (/:[^;]+$/.test(line)) {
                 /([\w\-]+):[^:]*$/.test(line);
@@ -2502,190 +2498,288 @@ oop.inherits(Mode, TextMode);
 exports.Mode = Mode;
 });
 
-ace.define("ace/mode/twig_highlight_rules",["require","exports","module","ace/lib/oop","ace/lib/lang","ace/mode/html_highlight_rules","ace/mode/text_highlight_rules"], function(require, exports, module) {
+ace.define("ace/mode/velocity_highlight_rules",["require","exports","module","ace/lib/oop","ace/lib/lang","ace/mode/text_highlight_rules","ace/mode/html_highlight_rules"], function(require, exports, module) {
 "use strict";
 
 var oop = require("../lib/oop");
 var lang = require("../lib/lang");
-var HtmlHighlightRules = require("./html_highlight_rules").HtmlHighlightRules;
 var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
+var HtmlHighlightRules = require("./html_highlight_rules").HtmlHighlightRules;
 
-var TwigHighlightRules = function() {
+var VelocityHighlightRules = function() {
     HtmlHighlightRules.call(this);
 
-    var tags = "autoescape|block|do|embed|extends|filter|flush|for|from|if|import|include|macro|sandbox|set|spaceless|use|verbatim";
-    tags = tags + "|end" + tags.replace(/\|/g, "|end");
-    var filters = "abs|batch|capitalize|convert_encoding|date|date_modify|default|e|escape|first|format|join|json_encode|keys|last|length|lower|merge|nl2br|number_format|raw|replace|reverse|slice|sort|split|striptags|title|trim|upper|url_encode";
-    var functions = "attribute|constant|cycle|date|dump|parent|random|range|template_from_string";
-    var tests = "constant|divisibleby|sameas|defined|empty|even|iterable|odd";
-    var constants = "null|none|true|false";
-    var operators = "b-and|b-xor|b-or|in|is|and|or|not";
+    var builtinConstants = lang.arrayToMap(
+        ('true|false|null').split('|')
+    );
 
-    var keywordMapper = this.createKeywordMapper({
-        "keyword.control.twig": tags,
-        "support.function.twig": [filters, functions, tests].join("|"),
-        "keyword.operator.twig":  operators,
-        "constant.language.twig": constants
-    }, "identifier");
-    for (var rule in this.$rules) {
-        this.$rules[rule].unshift({
-            token : "variable.other.readwrite.local.twig",
-            regex : "\\{\\{-?",
-            push : "twig-start"
+    var builtinFunctions = lang.arrayToMap(
+        ("_DateTool|_DisplayTool|_EscapeTool|_FieldTool|_MathTool|_NumberTool|_SerializerTool|_SortTool|_StringTool|_XPathTool").split('|')
+    );
+
+    var builtinVariables = lang.arrayToMap(
+        ('$contentRoot|$foreach').split('|')
+    );
+
+    var keywords = lang.arrayToMap(
+        ("#set|#macro|#include|#parse|" +
+        "#if|#elseif|#else|#foreach|" +
+        "#break|#end|#stop"
+        ).split('|')
+    );
+
+    this.$rules.start.push(
+        {
+            token : "comment",
+            regex : "##.*$"
+        },{
+            token : "comment.block", // multi line comment
+            regex : "#\\*",
+            next : "vm_comment"
         }, {
-            token : "meta.tag.twig",
-            regex : "\\{%-?",
-            push : "twig-start"
+            token : "string.regexp",
+            regex : "[/](?:(?:\\[(?:\\\\]|[^\\]])+\\])|(?:\\\\/|[^\\]/]))*[/]\\w*\\s*(?=[).,;]|$)"
         }, {
-            token : "comment.block.twig",
-            regex : "\\{#-?",
-            push : "twig-comment"
+            token : "string", // single line
+            regex : '["](?:(?:\\\\.)|(?:[^"\\\\]))*?["]'
+        }, {
+            token : "string", // single line
+            regex : "['](?:(?:\\\\.)|(?:[^'\\\\]))*?[']"
+        }, {
+            token : "constant.numeric", // hex
+            regex : "0[xX][0-9a-fA-F]+\\b"
+        }, {
+            token : "constant.numeric", // float
+            regex : "[+-]?\\d+(?:(?:\\.\\d*)?(?:[eE][+-]?\\d+)?)?\\b"
+        }, {
+            token : "constant.language.boolean",
+            regex : "(?:true|false)\\b"
+        }, {
+            token : function(value) {
+                if (keywords.hasOwnProperty(value))
+                    return "keyword";
+                else if (builtinConstants.hasOwnProperty(value))
+                    return "constant.language";
+                else if (builtinVariables.hasOwnProperty(value))
+                    return "variable.language";
+                else if (builtinFunctions.hasOwnProperty(value) || builtinFunctions.hasOwnProperty(value.substring(1)))
+                    return "support.function";
+                else if (value == "debugger")
+                    return "invalid.deprecated";
+                else
+                    if(value.match(/^(\$[a-zA-Z_][a-zA-Z0-9_]*)$/))
+                        return "variable";
+                    return "identifier";
+            },
+            regex : "[a-zA-Z$#][a-zA-Z0-9_]*\\b"
+        }, {
+            token : "keyword.operator",
+            regex : "!|&|\\*|\\-|\\+|=|!=|<=|>=|<|>|&&|\\|\\|"
+        }, {
+            token : "lparen",
+            regex : "[[({]"
+        }, {
+            token : "rparen",
+            regex : "[\\])}]"
+        }, {
+            token : "text",
+            regex : "\\s+"
+        }
+    );
+
+    this.$rules["vm_comment"] = [
+        {
+            token : "comment", // closing comment
+            regex : "\\*#|-->",
+            next : "start"
+        }, {
+            defaultToken: "comment"
+        }
+    ];
+
+    this.$rules["vm_start"] = [
+        {
+            token: "variable",
+            regex: "}",
+            next: "pop"
+        }, {
+            token : "string.regexp",
+            regex : "[/](?:(?:\\[(?:\\\\]|[^\\]])+\\])|(?:\\\\/|[^\\]/]))*[/]\\w*\\s*(?=[).,;]|$)"
+        }, {
+            token : "string", // single line
+            regex : '["](?:(?:\\\\.)|(?:[^"\\\\]))*?["]'
+        }, {
+            token : "string", // single line
+            regex : "['](?:(?:\\\\.)|(?:[^'\\\\]))*?[']"
+        }, {
+            token : "constant.numeric", // hex
+            regex : "0[xX][0-9a-fA-F]+\\b"
+        }, {
+            token : "constant.numeric", // float
+            regex : "[+-]?\\d+(?:(?:\\.\\d*)?(?:[eE][+-]?\\d+)?)?\\b"
+        }, {
+            token : "constant.language.boolean",
+            regex : "(?:true|false)\\b"
+        }, {
+            token : function(value) {
+                if (keywords.hasOwnProperty(value))
+                    return "keyword";
+                else if (builtinConstants.hasOwnProperty(value))
+                    return "constant.language";
+                else if (builtinVariables.hasOwnProperty(value))
+                    return "variable.language";
+                else if (builtinFunctions.hasOwnProperty(value) || builtinFunctions.hasOwnProperty(value.substring(1)))
+                    return "support.function";
+                else if (value == "debugger")
+                    return "invalid.deprecated";
+                else
+                    if(value.match(/^(\$[a-zA-Z_$][a-zA-Z0-9_]*)$/))
+                        return "variable";
+                    return "identifier";
+            },
+            regex : "[a-zA-Z_$][a-zA-Z0-9_$]*\\b"
+        }, {
+            token : "keyword.operator",
+            regex : "!|&|\\*|\\-|\\+|=|!=|<=|>=|<|>|&&|\\|\\|"
+        }, {
+            token : "lparen",
+            regex : "[[({]"
+        }, {
+            token : "rparen",
+            regex : "[\\])}]"
+        }, {
+            token : "text",
+            regex : "\\s+"
+        }
+    ];
+
+    for (var i in this.$rules) {
+        this.$rules[i].unshift({
+            token: "variable",
+            regex: "\\${",
+            push: "vm_start"
         });
     }
-    this.$rules["twig-comment"] = [{
-        token : "comment.block.twig",
-        regex : ".*-?#\\}",
-        next : "pop"
-    }];
-
-    this.$rules["twig-start"] = [{
-        token : "variable.other.readwrite.local.twig",
-        regex : "-?\\}\\}",
-        next : "pop"
-    }, {
-        token : "meta.tag.twig",
-        regex : "-?%\\}",
-        next : "pop"
-    }, {
-        token : "string",
-        regex : "'",
-        next  : "twig-qstring"
-    }, {
-        token : "string",
-        regex : '"',
-        next  : "twig-qqstring"
-    }, {
-        token : "constant.numeric", // hex
-        regex : "0[xX][0-9a-fA-F]+\\b"
-    }, {
-        token : "constant.numeric", // float
-        regex : "[+-]?\\d+(?:(?:\\.\\d*)?(?:[eE][+-]?\\d+)?)?\\b"
-    }, {
-        token : "constant.language.boolean",
-        regex : "(?:true|false)\\b"
-    }, {
-        token : keywordMapper,
-        regex : "[a-zA-Z_$][a-zA-Z0-9_$]*\\b"
-    }, {
-        token : "keyword.operator.assignment",
-        regex : "=|~"
-    }, {
-        token : "keyword.operator.comparison",
-        regex : "==|!=|<|>|>=|<=|==="
-    }, {
-        token : "keyword.operator.arithmetic",
-        regex : "\\+|-|/|%|//|\\*|\\*\\*"
-    }, {
-        token : "keyword.operator.other",
-        regex : "\\.\\.|\\|"
-    }, {
-        token : "punctuation.operator",
-        regex : /\?|:|,|;|\./
-    }, {
-        token : "paren.lparen",
-        regex : /[\[\({]/
-    }, {
-        token : "paren.rparen",
-        regex : /[\])}]/
-    }, {
-        token : "text",
-        regex : "\\s+"
-    } ];
-
-    this.$rules["twig-qqstring"] = [{
-            token : "constant.language.escape",
-            regex : /\\[\\"$#ntr]|#{[^"}]*}/
-        }, {
-            token : "string",
-            regex : '"',
-            next  : "twig-start"
-        }, {
-            defaultToken : "string"
-        }
-    ];
-
-    this.$rules["twig-qstring"] = [{
-            token : "constant.language.escape",
-            regex : /\\[\\'ntr]}/
-        }, {
-            token : "string",
-            regex : "'",
-            next  : "twig-start"
-        }, {
-            defaultToken : "string"
-        }
-    ];
 
     this.normalizeRules();
 };
 
-oop.inherits(TwigHighlightRules, TextHighlightRules);
+oop.inherits(VelocityHighlightRules, TextHighlightRules);
 
-exports.TwigHighlightRules = TwigHighlightRules;
+exports.VelocityHighlightRules = VelocityHighlightRules;
 });
 
-ace.define("ace/mode/twig",["require","exports","module","ace/lib/oop","ace/mode/html","ace/mode/twig_highlight_rules","ace/mode/matching_brace_outdent"], function(require, exports, module) {
+ace.define("ace/mode/folding/velocity",["require","exports","module","ace/lib/oop","ace/mode/folding/fold_mode","ace/range"], function(require, exports, module) {
+"use strict";
+
+var oop = require("../../lib/oop");
+var BaseFoldMode = require("./fold_mode").FoldMode;
+var Range = require("../../range").Range;
+
+var FoldMode = exports.FoldMode = function() {};
+oop.inherits(FoldMode, BaseFoldMode);
+
+(function() {
+
+    this.getFoldWidgetRange = function(session, foldStyle, row) {
+        var range = this.indentationBlock(session, row);
+        if (range)
+            return range;
+
+        var re = /\S/;
+        var line = session.getLine(row);
+        var startLevel = line.search(re);
+        if (startLevel == -1 || line[startLevel] != "##")
+            return;
+
+        var startColumn = line.length;
+        var maxRow = session.getLength();
+        var startRow = row;
+        var endRow = row;
+
+        while (++row < maxRow) {
+            line = session.getLine(row);
+            var level = line.search(re);
+
+            if (level == -1)
+                continue;
+
+            if (line[level] != "##")
+                break;
+
+            endRow = row;
+        }
+
+        if (endRow > startRow) {
+            var endColumn = session.getLine(endRow).length;
+            return new Range(startRow, startColumn, endRow, endColumn);
+        }
+    };
+    this.getFoldWidget = function(session, foldStyle, row) {
+        var line = session.getLine(row);
+        var indent = line.search(/\S/);
+        var next = session.getLine(row + 1);
+        var prev = session.getLine(row - 1);
+        var prevIndent = prev.search(/\S/);
+        var nextIndent = next.search(/\S/);
+
+        if (indent == -1) {
+            session.foldWidgets[row - 1] = prevIndent!= -1 && prevIndent < nextIndent ? "start" : "";
+            return "";
+        }
+        if (prevIndent == -1) {
+            if (indent == nextIndent && line[indent] == "##" && next[indent] == "##") {
+                session.foldWidgets[row - 1] = "";
+                session.foldWidgets[row + 1] = "";
+                return "start";
+            }
+        } else if (prevIndent == indent && line[indent] == "##" && prev[indent] == "##") {
+            if (session.getLine(row - 2).search(/\S/) == -1) {
+                session.foldWidgets[row - 1] = "start";
+                session.foldWidgets[row + 1] = "";
+                return "";
+            }
+        }
+
+        if (prevIndent!= -1 && prevIndent < indent)
+            session.foldWidgets[row - 1] = "start";
+        else
+            session.foldWidgets[row - 1] = "";
+
+        if (indent < nextIndent)
+            return "start";
+        else
+            return "";
+    };
+
+}).call(FoldMode.prototype);
+
+});
+
+ace.define("ace/mode/velocity",["require","exports","module","ace/lib/oop","ace/mode/html","ace/mode/velocity_highlight_rules","ace/mode/folding/velocity"], function(require, exports, module) {
 "use strict";
 
 var oop = require("../lib/oop");
 var HtmlMode = require("./html").Mode;
-var TwigHighlightRules = require("./twig_highlight_rules").TwigHighlightRules;
-var MatchingBraceOutdent = require("./matching_brace_outdent").MatchingBraceOutdent;
+var VelocityHighlightRules = require("./velocity_highlight_rules").VelocityHighlightRules;
+var FoldMode = require("./folding/velocity").FoldMode;
 
 var Mode = function() {
     HtmlMode.call(this);
-    this.HighlightRules = TwigHighlightRules;
-    this.$outdent = new MatchingBraceOutdent();
+    this.HighlightRules = VelocityHighlightRules;
+    this.foldingRules = new FoldMode();
 };
 oop.inherits(Mode, HtmlMode);
 
 (function() {
-    this.blockComment = {start: "{#", end: "#}"};
-
-    this.getNextLineIndent = function(state, line, tab) {
-        var indent = this.$getIndent(line);
-
-        var tokenizedLine = this.getTokenizer().getLineTokens(line, state);
-        var tokens = tokenizedLine.tokens;
-        var endState = tokenizedLine.state;
-
-        if (tokens.length && tokens[tokens.length-1].type == "comment") {
-            return indent;
-        }
-
-        if (state == "start") {
-            var match = line.match(/^.*[\{\(\[]\s*$/);
-            if (match) {
-                indent += tab;
-            }
-        }
-
-        return indent;
-    };
-
-    this.checkOutdent = function(state, line, input) {
-        return this.$outdent.checkOutdent(line, input);
-    };
-
-    this.autoOutdent = function(state, doc, row) {
-        this.$outdent.autoOutdent(doc, row);
-    };
-    this.$id = "ace/mode/twig";
+    this.lineCommentStart = "##";
+    this.blockComment = {start: "#*", end: "*#"};
+    this.$id = "ace/mode/velocity";
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
 });                (function() {
-                    ace.require(["ace/mode/twig"], function(m) {
+                    ace.require(["ace/mode/velocity"], function(m) {
                         if (typeof module == "object" && typeof exports == "object" && module) {
                             module.exports = m;
                         }

@@ -265,6 +265,19 @@ class Payment
     }
 
     /**
+     * @param $key
+     * @param $value
+     * @return $this
+     */
+    public function setOptionValue($key, $value)
+    {
+        $options = $this->getOptions();
+        $options[$key] = $value;
+        $this->setOptions($options);
+        return $this;
+    }
+
+    /**
      * Set createdDate
      *
      * @param \DateTime $createdDate

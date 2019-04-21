@@ -21316,7 +21316,7 @@ exports.version = "1.4.3";
                     for (var key in a) if (a.hasOwnProperty(key))
                         window.ace[key] = a[key];
                     window.ace["default"] = window.ace;
-                    if (typeof module == "object" && typeof exports == "object" && module) {
+                    if ( true && module) {
                         module.exports = window.ace;
                     }
                 });

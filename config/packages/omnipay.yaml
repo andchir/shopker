@@ -5,8 +5,8 @@ omnipay:
     notify_url: '/omnipay_notify'
     cancel_url: '/omnipay_cancel'
     data_keys:
-        paymentId: ['orderNumber']
-        customerEmail: ['customerNumber']
+        paymentId: ['orderNumber', 'InvId']
+        customerEmail: ['customerNumber', 'Email']
     gateways:
         PayPal_Express:
             parameters:
@@ -76,3 +76,19 @@ omnipay:
             complete:
                 username: ~
                 password: ~
+        RoboKassa:
+            parameters:
+                purse: xxxxxx
+                secretKey: xxxxxx
+                secretKey2: xxxxxx
+            purchase:
+                purse: ~
+                secretKey: ~
+                amount: AMOUNT
+                currency: RUB
+                description: ~
+                testMode: true
+            complete:
+                purse: ~
+                secretKey: ~
+                secretKey2: ~

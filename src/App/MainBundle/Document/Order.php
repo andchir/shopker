@@ -821,33 +821,46 @@ class Order
     }
 
     /**
-     * @param int $tax
-     * @param string $unit
+     * @param array $options
+     * @param array $productOptions
+     * @param array $deliveryOptions
      * @return array
      */
-    public function getReceipt($tax = 3, $unit = '')
+    public function getReceipt($options, $productOptions = [], $deliveryOptions = [])
     {
+        $options = array_merge([
+            'unit' => '',
+            'priceName' => 'price',
+            'quantityName' => 'quantity',
+            'titleName' => 'name'
+        ], $options);
         $receipt = [];
         /** @var OrderContent $content */
         foreach ($this->getContent() as $content) {
-            $receipt[] = [
-                'quantity' => $content->getCount(),
-                'price' => [
-                    'amount' => number_format($content->getPriceTotal(), 2, '.', '')
-                ],
-                'tax' => $tax,
-                'text' => $content->getTitle() . ($unit ? ", {$unit}" : $unit)
-            ];
+            $item = [];
+            $item[$options['titleName']] = $content->getTitle() . ($options['unit'] ? ", {$options['unit']}" : $options['unit']);
+            $item[$options['quantityName']] = number_format($content->getCount(), 2, '.', '');
+            if (strpos($options['priceName'], '.') !== false) {
+                $optArr = explode('.', $options['priceName']);
+                $item[$optArr[0]] = [];
+                $item[$optArr[0]][$optArr[1]] = number_format($content->getPriceTotal(), 2, '.', '');
+            } else {
+                $item[$options['priceName']] = number_format($content->getPriceTotal(), 2, '.', '');
+            }
+            $receipt[] = array_merge($productOptions, $item);
         }
         if ($this->getDeliveryPrice() > 0) {
-            $receipt[] = [
-                'quantity' => 1,
-                'price' => [
-                    'amount' => number_format($this->getDeliveryPrice(), 2, '.', '')
-                ],
-                'tax' => 1,
-                'text' => $this->getDeliveryName()
-            ];
+            $item = [];
+            $item[$options['titleName']] = $this->getDeliveryName();
+            $item[$options['quantityName']] = 1;
+            if (strpos($options['priceName'], '.') !== false) {
+                $optArr = explode('.', $options['priceName']);
+                $item[$optArr[0]] = [];
+                $item[$optArr[0]][$optArr[1]] = number_format($this->getDeliveryPrice(), 2, '.', '');
+            } else {
+                $item[$options['priceName']] = number_format($this->getDeliveryPrice(), 2, '.', '');
+            }
+            $receipt[] = array_merge($deliveryOptions, $item);
         }
 
         return $receipt;

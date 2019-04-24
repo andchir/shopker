@@ -325,17 +325,7 @@ class AccountController extends Controller
                 if ($currentOrder->getPaymentValue()
                     && $paymentStatusNumber === $currentOrderStatusNumber
                     && !$currentOrder->getIsPaid()) {
-
-                        $receiptContent = $currentOrder->getReceipt($this->getParameter('app.nds_rate'));
-                        $receipt = [
-                            'customerContact' => $currentOrder->getPhone()
-                                ? preg_replace("/[^\d]/", '', $currentOrder->getPhone())
-                                : $currentOrder->getEmail(),
-                            'items' => $receiptContent
-                        ];
-                        if ($this->getParameter('app.tax_system')) {
-                            $receipt['taxSystem'] = $this->getParameter('app.tax_system');
-                        }
+                        $receipt = $this->createReceipt($currentOrder);
                         $isPaymentAllowed = true;
                 }
             }
@@ -347,11 +337,75 @@ class AccountController extends Controller
             'currentOrderId' => $orderId,
             'receipt' => $receipt,
             'receiptJSON' => json_encode($receipt, JSON_UNESCAPED_UNICODE),
+            'receiptOptionName' => $this->container->hasParameter('app.receipt_option_name')
+                ? $this->getParameter('app.receipt_option_name')
+                : 'receipt',
             'orderStatusSettings' => $orderStatusSettings,
             'paymentStatusNumber' => $paymentStatusNumber,
             'currentOrderStatusNumber' => $currentOrderStatusNumber,
             'isPaymentAllowed' => $isPaymentAllowed
         ]);
+    }
+
+    /**
+     * @param Order $order
+     * @return array
+     */
+    public function createReceipt(Order $order) {
+        $receipt = [];
+
+
+        switch ($order->getPaymentValue()) {
+            case 'RoboKassa':
+
+                if ($this->getParameter('app.tax_system')) {
+                    $receipt['sno'] = $this->getParameter('app.tax_system');
+                }
+                $receipt['items'] = $order->getReceipt(
+                    [],
+                    [
+                        'payment_method' => $this->container->hasParameter('app.payment_method')
+                            ? $this->getParameter('app.payment_method')
+                            : 'full_prepayment',
+                        'payment_object' => $this->container->hasParameter('app.payment_object')
+                            ? $this->getParameter('app.payment_object')
+                            : 'commodity',
+                        'tax' => $this->getParameter('app.nds_rate')
+                    ],
+                    [
+                        'payment_method' => $this->container->hasParameter('app.payment_method')
+                            ? $this->getParameter('app.payment_method')
+                            : 'full_prepayment',
+                        'payment_object' => 'service',
+                        'tax' => 'none'
+                    ]
+                );
+
+                break;
+            default:// YandexMoney
+
+                $receipt['customerContact'] = $order->getPhone()
+                    ? preg_replace("/[^\d]/", '', $order->getPhone())
+                    : $order->getEmail();
+                $receipt['items'] = $order->getReceipt(
+                    [
+                        'priceName' => 'price.amount',
+                        'titleName' => 'text'
+                    ],
+                    [
+                        'tax' => $this->getParameter('app.nds_rate')
+                    ],
+                    [
+                        'tax' => 1
+                    ]
+                );
+                if ($this->getParameter('app.tax_system')) {
+                    $receipt['taxSystem'] = $this->getParameter('app.tax_system');
+                }
+
+                break;
+        }
+        return $receipt;
     }
 
     /**

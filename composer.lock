@@ -74,21 +74,22 @@
         },
         {
             "name": "andchir/omnipay-bundle",
-            "version": "1.0.12",
+            "version": "1.0.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/andchir/omnipay-bundle.git",
-                "reference": "1fed26d681cbe8b002bf58ae5c2739cae1105234"
+                "reference": "cae7a1f334312f83640fd138334c56d54f83ba4c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/andchir/omnipay-bundle/zipball/1fed26d681cbe8b002bf58ae5c2739cae1105234",
-                "reference": "1fed26d681cbe8b002bf58ae5c2739cae1105234",
+                "url": "https://api.github.com/repos/andchir/omnipay-bundle/zipball/cae7a1f334312f83640fd138334c56d54f83ba4c",
+                "reference": "cae7a1f334312f83640fd138334c56d54f83ba4c",
                 "shasum": ""
             },
             "require": {
                 "andchir/omnipay3-yandexkassa": "1.0.5",
                 "andrewnovikof/omnipay-sberbank": "^3.1",
+                "hiqdev/omnipay-robokassa": "^3.1",
                 "league/omnipay": "^3",
                 "omnipay/paypal": "^3.0"
             },
@@ -108,7 +109,7 @@
                     "email": "andchir@gmail.com"
                 }
             ],
-            "description": "Omnipay bundle for Symfony 3.x",
+            "description": "Omnipay bundle for Symfony 4.x",
             "homepage": "http://modx-shopkeeper.ru/",
             "keywords": [
                 "bundle",
@@ -117,7 +118,7 @@
                 "shopkeeper",
                 "symfony"
             ],
-            "time": "2019-02-08T08:59:44+00:00"
+            "time": "2019-04-21T13:37:23+00:00"
         },
         {
             "name": "andchir/omnipay3-yandexkassa",
@@ -1560,16 +1561,16 @@
         },
         {
             "name": "doctrine/migrations",
-            "version": "v2.0.0",
+            "version": "v2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/migrations.git",
-                "reference": "0101f5bd7f4e5043bf8630db2930f8fd7da552b6"
+                "reference": "2d5c1141e91833ae706d5611cb74c56cdc7a7402"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/migrations/zipball/0101f5bd7f4e5043bf8630db2930f8fd7da552b6",
-                "reference": "0101f5bd7f4e5043bf8630db2930f8fd7da552b6",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/2d5c1141e91833ae706d5611cb74c56cdc7a7402",
+                "reference": "2d5c1141e91833ae706d5611cb74c56cdc7a7402",
                 "shasum": ""
             },
             "require": {
@@ -1638,7 +1639,7 @@
                 "migrations",
                 "php"
             ],
-            "time": "2019-01-03T18:59:09+00:00"
+            "time": "2019-04-23T14:41:17+00:00"
         },
         {
             "name": "doctrine/mongodb",
@@ -1960,16 +1961,16 @@
         },
         {
             "name": "doctrine/persistence",
-            "version": "v1.1.0",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/persistence.git",
-                "reference": "c0f1c17602afc18b4cbd8e1c8125f264c9cf7d38"
+                "reference": "3da7c9d125591ca83944f477e65ed3d7b4617c48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/persistence/zipball/c0f1c17602afc18b4cbd8e1c8125f264c9cf7d38",
-                "reference": "c0f1c17602afc18b4cbd8e1c8125f264c9cf7d38",
+                "url": "https://api.github.com/repos/doctrine/persistence/zipball/3da7c9d125591ca83944f477e65ed3d7b4617c48",
+                "reference": "3da7c9d125591ca83944f477e65ed3d7b4617c48",
                 "shasum": ""
             },
             "require": {
@@ -2038,7 +2039,7 @@
                 "orm",
                 "persistence"
             ],
-            "time": "2018-11-21T00:33:13+00:00"
+            "time": "2019-04-23T08:28:24+00:00"
         },
         {
             "name": "doctrine/reflection",
@@ -2517,6 +2518,75 @@
             "time": "2018-12-04T20:46:45+00:00"
         },
         {
+            "name": "hiqdev/omnipay-robokassa",
+            "version": "3.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hiqdev/omnipay-robokassa.git",
+                "reference": "57a52d2f0d5f0c73effef8fafe7bab66cb87a8a8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hiqdev/omnipay-robokassa/zipball/57a52d2f0d5f0c73effef8fafe7bab66cb87a8a8",
+                "reference": "57a52d2f0d5f0c73effef8fafe7bab66cb87a8a8",
+                "shasum": ""
+            },
+            "require": {
+                "omnipay/common": "^3.0"
+            },
+            "require-dev": {
+                "hiqdev/hidev-hiqdev": "<2.0",
+                "hiqdev/hidev-php": "<2.0",
+                "omnipay/tests": "^3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Omnipay\\RoboKassa\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andrii Vasyliev",
+                    "email": "sol@hiqdev.com",
+                    "homepage": "http://hipanel.com/",
+                    "role": "Project lead"
+                },
+                {
+                    "name": "Dmitry Naumenko",
+                    "email": "d.naumenko.a@gmail.com",
+                    "homepage": "http://silverfire.me/",
+                    "role": "Lead backend developer"
+                },
+                {
+                    "name": "Andrey Klochok",
+                    "email": "andreyklochok@gmail.com",
+                    "homepage": "http://hiqdev.com/",
+                    "role": "Lead frontend developer"
+                },
+                {
+                    "name": "Yuriy Myronchuk",
+                    "email": "bladeroot@gmail.com",
+                    "homepage": "http://hiqdev.com/",
+                    "role": "QA Lead"
+                }
+            ],
+            "description": "RoboKassa driver for Omnipay PHP payment library",
+            "homepage": "https://github.com/hiqdev/omnipay-robokassa",
+            "keywords": [
+                "merchant",
+                "omnipay",
+                "payment",
+                "php",
+                "robokassa"
+            ],
+            "time": "2019-01-11T13:38:16+00:00"
+        },
+        {
             "name": "imagine/imagine",
             "version": "v0.7.1",
             "source": {
@@ -2693,17 +2763,6 @@
         {
             "name": "league/omnipay",
             "version": "v3.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/thephpleague/omnipay.git",
-                "reference": "9e10d91cbf84744207e13d4483e79de39b133368"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/omnipay/zipball/9e10d91cbf84744207e13d4483e79de39b133368",
-                "reference": "9e10d91cbf84744207e13d4483e79de39b133368",
-                "shasum": ""
-            },
             "require": {
                 "omnipay/common": "^3",
                 "php": "^5.6|^7",

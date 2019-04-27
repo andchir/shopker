@@ -6,7 +6,7 @@ omnipay:
     cancel_url: '/omnipay_cancel'
     data_keys:
         paymentId: ['orderNumber', 'InvId']
-        customerEmail: ['customerNumber', 'Email']
+        customerEmail: ['customerNumber', 'Email', 'Shp_Client']
     gateways:
         PayPal_Express:
             parameters:
@@ -87,6 +87,9 @@ omnipay:
                 amount: AMOUNT
                 currency: RUB
                 description: ~
+                receipt: ~
+                InvId: PAYMENT_ID
+                client: CUSTOMER_EMAIL
                 testMode: true
             complete:
                 purse: ~

@@ -7,6 +7,7 @@
 - Checkbox for clear file cache in product UI. Auto clear file cache when delete product.
 - Added Etag for admin area and main page.
 - Twig-function shopCartProductCount().
+- Edit CSS and JS files in admin area.
 
 4.0.3
 - Fixed incorrect default language value.

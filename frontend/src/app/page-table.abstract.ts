@@ -30,7 +30,10 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
 
     ngOnInit(): void {
         this.getList();
+        this.afterInit();
     }
+
+    afterInit(): void {}
 
     modalOpen(itemId?: number, isItemCopy: boolean = false): void {
         this.modalRef = this.modalService.open(this.getModalContent(), {

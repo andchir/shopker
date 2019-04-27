@@ -3,15 +3,13 @@ import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {TemplatesEditService} from './services/templates-edit.service';
 import {Template} from './models/template.model';
+import {FileRegularInterface} from './models/file-regular.interface';
 
 declare const ace: any;
 import 'ace-builds/src-min-noconflict/ace';
 import 'ace-builds/src-min-noconflict/theme-kuroir';
-import 'ace-builds/src-min-noconflict/mode-twig';
-import 'ace-builds/src-min-noconflict/mode-javascript';
-import 'ace-builds/src-min-noconflict/mode-css';
-import 'ace-builds/src-min-noconflict/mode-html';
-// import 'ace-builds/webpack-resolver';
+import 'ace-builds/src-min-noconflict/ext-modelist';
+import 'ace-builds/webpack-resolver';
 
 @Component({
     selector: 'app-modal-template',
@@ -22,14 +20,16 @@ export class ModalTemplateEditComponent implements OnInit {
 
     @Input() modalTitle: string;
     @Input() template: Template;
+    @Input() file: FileRegularInterface;
     @Input() isItemCopy: boolean;
     @Input() isEditMode: boolean;
     @ViewChild('editor') editor: ElementRef;
 
-    model = new Template(0, '', '');
+    model: FileRegularInterface = {} as FileRegularInterface;
     errorMessage = '';
     submitted = false;
     loading = false;
+    isPathReadOnly = false;
 
     constructor(
         private dataService: TemplatesEditService,
@@ -39,24 +39,41 @@ export class ModalTemplateEditComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        if (this.template) {
+            this.model.name = this.template.name;
+            this.model.path = this.template.path;
+            this.model.extension = 'twig';
+        } else if (this.file) {
+            this.model.name = this.file.name;
+            this.model.path = this.file.path;
+            this.model.extension = this.file.extension;
+            this.isPathReadOnly = true;
+        }
+        const modelist = ace.require('ace/ext/modelist');
+        const editorMode = modelist.getModeForPath(this.model.path + '/' + this.model.name).mode;
         ace.edit('editor', {
-            mode: 'ace/mode/twig',
+            mode: editorMode,
             theme: 'ace/theme/kuroir',
             maxLines: 30,
             minLines: 15,
             fontSize: 18
         });
-        if (this.template && this.isEditMode) {
-            this.model.name = this.template.name;
-            this.model.path = this.template.path;
+        if (this.isEditMode) {
             this.getContent();
         }
     }
 
     getContent(): void {
         this.loading = true;
-        const templatePath = Template.getPath(this.template);
-        this.dataService.getItemContent(templatePath)
+        let filePath, fileType;
+        if (this.template) {
+            filePath = Template.getPath(this.template);
+            fileType = 'twig';
+        } else if (this.file) {
+            filePath = Template.getPath(this.file);
+            fileType = this.file.extension;
+        }
+        this.dataService.getItemContent(filePath, fileType)
             .subscribe((res) => {
                 if (res['content']) {
                     this.model.content = res['content'];

@@ -9,6 +9,7 @@ import {PageTableAbstractComponent} from '../page-table.abstract';
 import {Template} from './models/template.model';
 import {QueryOptions} from '../models/query-options';
 import {ModalTemplateEditComponent} from './modal-template.component';
+import {FileRegularInterface} from './models/file-regular.interface';
 
 @Component({
     selector: 'app-template-edit',
@@ -44,6 +45,7 @@ export class TemplatesEditComponent extends PageTableAbstractComponent<Template>
             outputProperties: {}
         }
     ];
+    files: FileRegularInterface[] = [];
 
     constructor(
         public dataService: TemplatesEditService,
@@ -52,6 +54,19 @@ export class TemplatesEditComponent extends PageTableAbstractComponent<Template>
         public translateService: TranslateService
     ) {
         super(dataService, activeModal, modalService, translateService);
+    }
+
+    afterInit(): void {
+        this.getEditableFiles();
+    }
+
+    getEditableFiles(): void {
+        this.dataService.getEditableFiles()
+            .subscribe((res) => {
+                if (res.items) {
+                    this.files = res.items;
+                }
+            });
     }
 
     getModalContent() {
@@ -116,6 +131,26 @@ export class TemplatesEditComponent extends PageTableAbstractComponent<Template>
                         });
                 }
             });
+    }
+
+    editFile(file: FileRegularInterface, event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.modalRef = this.modalService.open(ModalTemplateEditComponent, {
+            size: 'lg',
+            backdrop: 'static',
+            keyboard: false
+        });
+        this.modalRef.componentInstance.modalTitle = this.getLangString('EDITING') + ` ${file.name}`;
+        this.modalRef.componentInstance['isItemCopy'] = false;
+        this.modalRef.componentInstance['isEditMode'] = true;
+        this.modalRef.componentInstance['file'] = file;
+        this.modalRef.result.then((result) => {
+            this.getEditableFiles();
+        }, (reason) => {
+            // console.log( 'reason', reason );
+        });
     }
 
 }

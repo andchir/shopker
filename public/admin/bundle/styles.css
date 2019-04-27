@@ -16924,6 +16924,8 @@ body { background-color: #eee; }
 
 .bg-white-20 { background-color: rgba(255,255,255,0.2); }
 
+.bg-black-20 { background-color: rgba(0,0,0,0.2); }
+
 @media (min-width: 768px) {
     .width-md-auto { width: auto; }
 }
@@ -17117,8 +17119,8 @@ input.form-control[readonly] { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); curso
 
 .label-filled + .form-control,
 .label-filled + .btn,
-.label-filled + * .form-control,
-.label-filled + * .btn,
+.label-filled + * > .form-control,
+.label-filled + * > .btn,
 .label-filled + .input-group .form-control,
 .label-filled + .custom-select,
 .label-filled + .card { border-top-left-radius: 0; }

@@ -6,6 +6,8 @@ import {catchError} from 'rxjs/internal/operators';
 
 import {DataService} from '../../services/data-service.abstract';
 import {Template} from '../models/template.model';
+import {FileRegularInterface} from '../models/file-regular.interface';
+import {DataList} from '../../models/data-list.interface';
 
 @Injectable()
 export class TemplatesEditService extends DataService<Template> {
@@ -15,16 +17,17 @@ export class TemplatesEditService extends DataService<Template> {
         this.setRequestUrl('templates');
     }
 
-    getItemContent(path: string): Observable<string> {
+    getItemContent(path: string, fileType: string): Observable<string> {
         const url = this.getRequestUrl() + `/content`;
         let params = new HttpParams();
         params = params.append('path', path);
+        params = params.append('type', fileType);
         return this.http.get<string>(url, {params: params, headers: this.headers}).pipe(
             catchError(this.handleError<string>())
         );
     }
 
-    saveContent(template: Template): Observable<any> {
+    saveContent(template: FileRegularInterface): Observable<any> {
         return this.http.post<any>(this.getRequestUrl(), template, {headers: this.headers}).pipe(
             catchError(this.handleError<any>())
         );
@@ -44,6 +47,14 @@ export class TemplatesEditService extends DataService<Template> {
         return this.http.post<any>(url, {pathArr: pathArr}, {headers: this.headers}).pipe(
             catchError(this.handleError<any>())
         );
+    }
+
+    getEditableFiles(): Observable<DataList<FileRegularInterface>> {
+        const url = this.getRequestUrl() + `/get_editable_files`;
+        return this.http.get<DataList<FileRegularInterface>>(url, {headers: this.headers})
+            .pipe(
+                catchError(this.handleError<any>())
+            );
     }
 
 }

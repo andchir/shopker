@@ -1,7 +1,9 @@
+import {FileRegularInterface} from './file-regular.interface';
+
 export class Template {
 
-    static getPath(template: Template): string {
-        return `${template.path}/${template.name}`;
+    static getPath(file: Template|FileRegularInterface): string {
+        return `${file.path}/${file.name}`;
     }
 
     constructor(

@@ -54,10 +54,6 @@ class TemplatesController extends StorageControllerAbstract
         });
         $themesDirs = array_merge($themesDirs);
 
-        if (isset($options['sort_by']) && $options['sort_by'] == 'themeName') {
-
-        }
-
         foreach ($themesDirs as $themeDirName) {
             $dirPath = $templatesDirPath . DIRECTORY_SEPARATOR . $themeDirName;
             $filesArr = $this->getFiles($dirPath, 'twig');
@@ -110,6 +106,55 @@ class TemplatesController extends StorageControllerAbstract
     }
 
     /**
+     * @Route("/get_editable_files", methods={"GET"})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getFilesListAction(Request $request)
+    {
+        $items = [];
+
+        $rootPath = realpath($this->getParameter('kernel.root_dir').'/../..');
+        $publicDirPath = $rootPath . DIRECTORY_SEPARATOR . 'public';
+        $editable = [];
+        $editable['css'] = $this->getParameter('app.editable_css');
+        $editable['js'] = $this->getParameter('app.editable_js');
+
+        $fileTypes = ['css', 'js'];
+        foreach ($fileTypes as $fileType) {
+            $dirPath = $publicDirPath . DIRECTORY_SEPARATOR . $fileType;
+            $filesArr = $this->getFiles($dirPath, $fileType);
+            foreach ($filesArr as $fileData) {
+                $filePath = str_replace(
+                    $publicDirPath,
+                    '',
+                    $fileData['path'] . DIRECTORY_SEPARATOR . $fileData['name']
+                );
+                if (!is_null($editable[$fileType]) && !in_array($filePath, $editable[$fileType])) {
+                    continue;
+                }
+                array_push($items, [
+                    'name' => $fileData['name'],
+                    'extension' => $fileType,
+                    'size' => UtilsService::sizeFormat(filesize($fileData['path'] . DIRECTORY_SEPARATOR . $fileData['name'])),
+                    'path' => str_replace(
+                            $publicDirPath . DIRECTORY_SEPARATOR,
+                            '',
+                            $fileData['path']
+                        )
+                ]);
+            }
+        }
+
+        $total = count($items);
+
+        return $this->json([
+            'items' => $items,
+            'total' => $total
+        ]);
+    }
+
+    /**
      * @param string $dirPath
      * @param string $ext
      * @param array $filesArr
@@ -139,11 +184,31 @@ class TemplatesController extends StorageControllerAbstract
      */
     public function getFileContentAction(Request $request)
     {
-        $content = '';
-        $templatesDirPath = $this->getTemplatesDirPath();
-        $filePath = $request->get('path');
+        /** @var TranslatorInterface $translator */
+        $translator = $this->get('translator');
 
-        $filePath = $templatesDirPath . DIRECTORY_SEPARATOR . $filePath;
+        $content = '';
+
+        $rootPath = realpath($this->getParameter('kernel.root_dir').'/../..');
+        $publicDirPath = $rootPath . DIRECTORY_SEPARATOR . 'public';
+        $templatesDirPath = $this->getTemplatesDirPath();
+
+        $filePath = $request->get('path');
+        $fileType = $request->get('type', 'twig');
+
+        switch ($fileType) {
+            case 'css':
+            case 'js':
+                $filePath = $publicDirPath . DIRECTORY_SEPARATOR . $filePath;
+                if (strpos($filePath, $publicDirPath . DIRECTORY_SEPARATOR . $fileType) !== 0) {
+                    return $this->setError($translator->trans('The specified file path does not exist.', [], 'validators'));
+                }
+                break;
+            default:
+                $filePath = $templatesDirPath . DIRECTORY_SEPARATOR . $filePath;
+        }
+        $filePath = str_replace('..', '', $filePath);
+
         if (file_exists($filePath)) {
             $content = file_get_contents($filePath);
         }
@@ -159,18 +224,36 @@ class TemplatesController extends StorageControllerAbstract
      */
     protected function createUpdate($data)
     {
-        $templatesDirPath = $this->getTemplatesDirPath();
-        $fileContent = $data['content'] ?? '';
-        $fileName = $data['name'];
-        $filePath = $templatesDirPath . DIRECTORY_SEPARATOR . trim($data['path'], DIRECTORY_SEPARATOR);
-        $filePath .= DIRECTORY_SEPARATOR . $fileName;
-
         /** @var TranslatorInterface $translator */
         $translator = $this->get('translator');
 
-        if (!in_array(UtilsService::getExtension($data['name']), ['twig', 'html', 'css', 'js'])) {
+        $rootPath = realpath($this->getParameter('kernel.root_dir').'/../..');
+        $publicDirPath = $rootPath . DIRECTORY_SEPARATOR . 'public';
+        $templatesDirPath = $this->getTemplatesDirPath();
+
+        $fileContent = $data['content'] ?? '';
+        $fileName = $data['name'];
+        $extension = UtilsService::getExtension($fileName);
+        $filePath = trim($data['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $fileName;
+
+        switch ($extension) {
+            case 'css':
+            case 'js':
+                $filePath = $publicDirPath . DIRECTORY_SEPARATOR . $filePath;
+                if (strpos($filePath, $publicDirPath . DIRECTORY_SEPARATOR . $extension) !== 0) {
+                    return $this->setError($translator->trans('The specified file path does not exist.', [], 'validators'));
+                }
+                if (!file_exists($filePath)) {
+                    return $this->setError($translator->trans('File not found.', [], 'validators'));
+                }
+                break;
+            default:
+                $filePath = $templatesDirPath . DIRECTORY_SEPARATOR . $filePath;
+        }
+
+        if (!in_array(UtilsService::getExtension($data['name']), ['twig', 'css', 'js'])) {
             return $this->setError($translator->trans('Allowed file types: %extensions%.', [
-                '%extensions%' => 'twig, html, css, js'
+                '%extensions%' => 'twig, css, js'
             ], 'validators'));
         }
         if (!is_dir(dirname($filePath))) {

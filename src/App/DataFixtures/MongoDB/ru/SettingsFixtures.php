@@ -113,20 +113,6 @@ class SettingsFixtures extends Fixture implements ContainerAwareInterface
                     'options' => [
                         'value' => ['value' => '', 'type' => 'text']
                     ]
-                ],
-                [
-                    'name' => 'PayPal',
-                    'description' => '',
-                    'options' => [
-                        'value' => ['value' => 'PayPal_Express', 'type' => 'text']
-                    ]
-                ],
-                [
-                    'name' => 'Яндекс.Касса',
-                    'description' => '',
-                    'options' => [
-                        'value' => ['value' => 'YandexMoney', 'type' => 'text']
-                    ]
                 ]
             ],
             'SETTINGS_CURRENCY' => [

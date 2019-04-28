@@ -74,16 +74,16 @@
         },
         {
             "name": "andchir/omnipay-bundle",
-            "version": "1.0.13",
+            "version": "1.0.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/andchir/omnipay-bundle.git",
-                "reference": "cae7a1f334312f83640fd138334c56d54f83ba4c"
+                "reference": "98a58e02323942c4aa539de630808a5f0357cec2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/andchir/omnipay-bundle/zipball/cae7a1f334312f83640fd138334c56d54f83ba4c",
-                "reference": "cae7a1f334312f83640fd138334c56d54f83ba4c",
+                "url": "https://api.github.com/repos/andchir/omnipay-bundle/zipball/98a58e02323942c4aa539de630808a5f0357cec2",
+                "reference": "98a58e02323942c4aa539de630808a5f0357cec2",
                 "shasum": ""
             },
             "require": {
@@ -118,7 +118,7 @@
                 "shopkeeper",
                 "symfony"
             ],
-            "time": "2019-04-21T13:37:23+00:00"
+            "time": "2019-04-27T15:22:54+00:00"
         },
         {
             "name": "andchir/omnipay3-yandexkassa",
@@ -1561,16 +1561,16 @@
         },
         {
             "name": "doctrine/migrations",
-            "version": "v2.0.1",
+            "version": "v2.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/migrations.git",
-                "reference": "2d5c1141e91833ae706d5611cb74c56cdc7a7402"
+                "reference": "43280c14b696a7896a9c70a5e0e4a312ff003187"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/migrations/zipball/2d5c1141e91833ae706d5611cb74c56cdc7a7402",
-                "reference": "2d5c1141e91833ae706d5611cb74c56cdc7a7402",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/43280c14b696a7896a9c70a5e0e4a312ff003187",
+                "reference": "43280c14b696a7896a9c70a5e0e4a312ff003187",
                 "shasum": ""
             },
             "require": {
@@ -1639,7 +1639,7 @@
                 "migrations",
                 "php"
             ],
-            "time": "2019-04-23T14:41:17+00:00"
+            "time": "2019-04-25T22:14:55+00:00"
         },
         {
             "name": "doctrine/mongodb",
@@ -2763,6 +2763,17 @@
         {
             "name": "league/omnipay",
             "version": "v3.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/omnipay.git",
+                "reference": "9e10d91cbf84744207e13d4483e79de39b133368"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/omnipay/zipball/9e10d91cbf84744207e13d4483e79de39b133368",
+                "reference": "9e10d91cbf84744207e13d4483e79de39b133368",
+                "shasum": ""
+            },
             "require": {
                 "omnipay/common": "^3",
                 "php": "^5.6|^7",
@@ -7447,16 +7458,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v2.8.1",
+            "version": "v2.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "91cc2594d3143761ce0399c1caffd0b500ffe5b9"
+                "reference": "82a1c055c8ed4c4705023bfd0405f3c74db6e3ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/91cc2594d3143761ce0399c1caffd0b500ffe5b9",
-                "reference": "91cc2594d3143761ce0399c1caffd0b500ffe5b9",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/82a1c055c8ed4c4705023bfd0405f3c74db6e3ae",
+                "reference": "82a1c055c8ed4c4705023bfd0405f3c74db6e3ae",
                 "shasum": ""
             },
             "require": {
@@ -7472,7 +7483,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.8-dev"
+                    "dev-master": "2.9-dev"
                 }
             },
             "autoload": {
@@ -7510,7 +7521,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2019-04-16T17:14:24+00:00"
+            "time": "2019-04-28T06:57:38+00:00"
         },
         {
             "name": "webmozart/assert",

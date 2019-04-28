@@ -23,8 +23,8 @@ parameters:
     mongodb_password: ''
     mongodb_database: ''
     mailer_transport: smtp
-    mailer_host: ''
-    mailer_port: ''
+    mailer_host: 127.0.0.1
+    mailer_port: '465'
     mailer_user: ''
     mailer_password: ''
     mailer_encryption: 'ssl'

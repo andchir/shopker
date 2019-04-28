@@ -23,7 +23,7 @@
                     <button class="btn btn-primary d-block d-md-inline-block width-100 width-md-auto" ngbDropdownToggle>
                         <span>{{'STYLES' | translate}}</span>
                     </button>
-                    <div ngbDropdownMenu>
+                    <div class="max-height400" ngbDropdownMenu>
                         <button class="dropdown-item" *ngFor="let item of files | filter:{extension: 'css'}" (click)="editFile(item, $event)">
                             {{ item.name }} <span class="text-muted small">({{ item.size }})</span>
                         </button>
@@ -34,7 +34,7 @@
                     <button class="btn btn-primary d-block d-md-inline-block width-100 width-md-auto" ngbDropdownToggle>
                         <span>{{'SCRIPTS' | translate}}</span>
                     </button>
-                    <div ngbDropdownMenu>
+                    <div class="max-height400" ngbDropdownMenu>
                         <button class="dropdown-item" *ngFor="let item of files | filter:{extension: 'js'}" (click)="editFile(item, $event)">
                             {{ item.name }} <span class="text-muted small">({{ item.size }})</span>
                         </button>

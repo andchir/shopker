@@ -351,12 +351,14 @@ class UtilsService
             $classPath = $field['type'] == 'CaptchaType'
                 ? "{$formCaptchaTypeClassPath}{$field['type']}"
                 : "{$formTypeClassPath}{$field['type']}";
-            $options  = [
-                'label' => $field['label'],
-                'attr' => $field['attr']
-            ];
+            $options = array_filter($field, function($k) {
+                return !in_array($k, ['name', 'type']);
+            }, ARRAY_FILTER_USE_KEY);
             if (!in_array($field['type'], ['SubmitType', 'CaptchaType'])) {
                 $options['required'] = !empty($field['required']);
+            }
+            if (!empty($options['choices']) && is_array($options['choices'])) {
+                $options['choices'] = array_combine($options['choices'], $options['choices']);
             }
             $formBuilder->add(
                 $field['name'],

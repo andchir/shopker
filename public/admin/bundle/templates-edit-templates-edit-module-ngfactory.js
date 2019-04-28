@@ -15463,7 +15463,9 @@ var ModalTemplateEditComponent = /** @class */ /*@__PURE__*/ (function () {
             this.isPathReadOnly = true;
         }
         var modelist = ace.require('ace/ext/modelist');
-        var editorMode = modelist.getModeForPath(this.model.path + '/' + this.model.name).mode;
+        var editorMode = this.isEditMode
+            ? modelist.getModeForPath(this.model.path + '/' + this.model.name).mode
+            : 'ace/mode/twig';
         ace.edit('editor', {
             mode: editorMode,
             theme: 'ace/theme/kuroir',

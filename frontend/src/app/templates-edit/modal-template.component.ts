@@ -50,7 +50,9 @@ export class ModalTemplateEditComponent implements OnInit {
             this.isPathReadOnly = true;
         }
         const modelist = ace.require('ace/ext/modelist');
-        const editorMode = modelist.getModeForPath(this.model.path + '/' + this.model.name).mode;
+        const editorMode = this.isEditMode
+            ? modelist.getModeForPath(this.model.path + '/' + this.model.name).mode
+            : 'ace/mode/twig';
         ace.edit('editor', {
             mode: editorMode,
             theme: 'ace/theme/kuroir',

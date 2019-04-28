@@ -372,6 +372,9 @@ class AppRuntime
                 $emailSubject = !empty($formOptions['emailSubject'])
                     ? $translator->trans($formOptions['emailSubject'])
                     : '';
+                if (!empty($formData['subject'])) {
+                    $emailSubject .= ($emailSubject ? ' - ' : '') . $formData['subject'];
+                }
 
                 $formTextFields = array_filter($formOptions['fields'], function($field) {
                     return !in_array($field['type'], ['SubmitType', 'CaptchaType']);

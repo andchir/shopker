@@ -112,6 +112,9 @@ class CheckoutController extends BaseController
                     ->setCurrency($currency)
                     ->setCurrencyRate($currencyRate);
 
+                $publicUserData = array_keys($form->get('options')->all());
+                $this->filterOrderOptionsUserData($order, $publicUserData);
+
                 // Save user data
                 if ($user) {
                     $order->setUserId($user->getId());
@@ -122,13 +125,16 @@ class CheckoutController extends BaseController
                         $user->setPhone($order->getPhone());
                     }
 
-                    $optionsData = $form->get('options')->getData();
+                    $orderOptions = $order->getOptions();
                     $userOptions = $user->getOptions();
 
                     if (empty($userOptions)) {
                         $userOptions = [];
                     }
-                    foreach ($optionsData as $option) {
+                    foreach ($orderOptions as $option) {
+                        if (!$option['value']) {
+                            continue;
+                        }
                         $index = array_search($option['name'], array_column($userOptions, 'name'));
                         if ($index === false) {
                             $userOptions[] = $option;
@@ -177,8 +183,23 @@ class CheckoutController extends BaseController
     }
 
     /**
+     * @param Order $order
+     * @param $publicUserDataKeys
+     */
+    public function filterOrderOptionsUserData(Order &$order, $publicUserDataKeys)
+    {
+        $orderOptions = $order->getOptions();
+        $orderOptions = array_filter($orderOptions, function($value) use ($publicUserDataKeys) {
+            return in_array($value['name'], $publicUserDataKeys);
+        });
+        $order->setOptions($orderOptions);
+    }
+
+    /**
      * @param array $shopCartData
      * @return ArrayCollection
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
      */
     public function getOrderFilesCollection($shopCartData)
     {

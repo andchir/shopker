@@ -107,7 +107,9 @@ class ShopCartService
                     $receipt['sno'] = $this->container->getParameter('app.tax_system');
                 }
                 $receipt['items'] = $order->getReceipt(
-                    [],
+                    [
+                        'priceName' => 'sum'
+                    ],
                     [
                         'payment_method' => $this->container->hasParameter('app.payment_method')
                             ? $this->container->getParameter('app.payment_method')

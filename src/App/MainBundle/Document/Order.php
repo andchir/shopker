@@ -847,7 +847,7 @@ class Order
             } else {
                 $item[$options['priceName']] = number_format($content->getPriceTotal(), 2, '.', '');
             }
-            $receipt[] = array_merge($productOptions, $item);
+            $receipt[] = array_merge($item, $productOptions);
         }
         if ($this->getDeliveryPrice() > 0) {
             $item = [];
@@ -860,7 +860,7 @@ class Order
             } else {
                 $item[$options['priceName']] = number_format($this->getDeliveryPrice(), 2, '.', '');
             }
-            $receipt[] = array_merge($deliveryOptions, $item);
+            $receipt[] = array_merge($item, $deliveryOptions);
         }
 
         return $receipt;

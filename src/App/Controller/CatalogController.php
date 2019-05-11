@@ -513,7 +513,7 @@ class CatalogController extends ProductController
         $results = $query
             ->field('name')->notEqual('root')
             ->field('isActive')->equals(true)
-            ->sort('id', 'asc')
+            ->sort('menuIndex', 'asc')
             ->getQuery()
             ->execute();
 
@@ -521,10 +521,6 @@ class CatalogController extends ProductController
         /** @var Category $category */
         foreach ($results as $category) {
             $pId = $category->getParentId();
-            if (!in_array($category->getId(), $parentIdsArr)
-                && !in_array($pId, $parentIdsArr)) {
-                    continue;
-            }
             if (!in_array($category->getId(), $parentIdsArr)) {
                 $parentIdsArr[] = $category->getId();
             }

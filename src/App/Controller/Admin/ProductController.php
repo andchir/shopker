@@ -909,10 +909,13 @@ class ProductController extends BaseProductController
                     ])->toArray();
 
                     foreach ($uniqueValues as $data) {
-                        if (empty($data['_id'])) {
+                        if (empty($data['_id']) || empty($data['values'])) {
                             continue;
                         }
                         foreach ($data['_id'] as $nk => $name) {
+                            if (empty($name)) {
+                                continue;
+                            }
                             $index = array_search($name, array_column($filterData, 'name'));
                             if ($index === false) {
                                 $filterData[] = [
@@ -923,6 +926,9 @@ class ProductController extends BaseProductController
                                 $index = count($filterData) - 1;
                             }
                             foreach ($data['values'] as $vk => $values) {
+                                if (empty($values[$nk])) {
+                                    continue;
+                                }
                                 if (!in_array($values[$nk], $filterData[$index]['values'])) {
                                     $filterData[$index]['values'][] = $values[$nk];
                                 }

@@ -324,7 +324,7 @@ class CatalogController extends ProductController
                             : []
                     ];
                     $filterIndex++;
-                } else if ($filtersData) {
+                } else if (!empty($filtersData)) {
                     $fieldFilterData = array_filter($filtersData, function($item) use ($field) {
                         return $item['fieldName'] === $field['name'];
                     });

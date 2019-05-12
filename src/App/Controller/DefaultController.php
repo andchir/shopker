@@ -42,6 +42,7 @@ class DefaultController extends CatalogController
         // Get categorits count
         $countCategories = $categoriesRepository
             ->createQueryBuilder()
+            ->field('name')->notEqual('root')
             ->getQuery()
             ->execute()
             ->count();

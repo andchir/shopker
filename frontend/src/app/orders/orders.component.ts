@@ -132,11 +132,15 @@ export class ModalOrderContentComponent extends ModalContentAbstractComponent<Or
     }
 
     save(): void {
+        this.errorMessage = '';
         this.loading = true;
         this.dataService.update(this.getFormData())
             .subscribe((res) => {
                 this.closeModal();
-            }, () => {
+            }, (err) => {
+                if (err['error']) {
+                    this.errorMessage = err['error'];
+                }
                 this.loading = false;
             });
     }

@@ -24,16 +24,18 @@
                         <div class="row">
                             <div class="col-md-6">
 
-                                <div class="card bg-light mb-3" id="shkDeliveryAddress">
-                                    <div class="card-header">
+                                {% if checkoutFields is empty or 'options' in checkoutFields %}
+                                    <div class="card bg-light mb-3" id="shkDeliveryAddress">
+                                        <div class="card-header">
                                         <span>
                                             {{ 'Delivery address' | trans }}
                                         </span>
+                                        </div>
+                                        <div class="card-body">
+                                            {{ form_widget(form.options) }}
+                                        </div>
                                     </div>
-                                    <div class="card-body">
-                                        {{ form_widget(form.options) }}
-                                    </div>
-                                </div>
+                                {% endif %}
 
                             </div>
                             <div class="col-md-6">

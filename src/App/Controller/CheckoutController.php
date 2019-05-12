@@ -52,6 +52,11 @@ class CheckoutController extends BaseController
         /** @var SettingsService $settingsService */
         $settingsService = $this->get('app.settings');
         $settings = $settingsService->getAll();
+        $checkoutFields = $this->container->hasParameter('app.checkout_fields')
+            ? $this->getParameter('app.checkout_fields')
+            : '';
+        $checkoutFields = $checkoutFields ? explode(',', $checkoutFields) : [];
+        $checkoutFields = array_map('trim', $checkoutFields);
 
         // Get currency
         $currency = $settingsService->getCurrency();
@@ -73,7 +78,8 @@ class CheckoutController extends BaseController
                 ? $settings[Setting::GROUP_PAYMENT]
                 : [],
             'currency' => $currency,
-            'noDeliveryFirst' => true
+            'noDeliveryFirst' => true,
+            'checkoutFields' => $checkoutFields
         ]);
 
         $form->handleRequest($request);
@@ -83,11 +89,11 @@ class CheckoutController extends BaseController
             $currencyRate = $settingsService->getCurrencyRate($currency);
 
             /** @var Setting $delivery */
-            $delivery = $form->get('deliveryName')->getNormData();
+            $delivery = $form->has('deliveryName') ? $form->get('deliveryName')->getNormData() : '';
             $deliveryPrice = $delivery ? $delivery->getOption('price') : 0;
 
             /** @var Setting $payment */
-            $payment = $form->get('paymentName')->getNormData();
+            $payment = $form->has('paymentName') ? $form->get('paymentName')->getNormData() : '';
             $paymentName = $payment ? $payment->getOption('value') : '';
 
             /** @var ShopCartService $shopCartService */
@@ -112,7 +118,7 @@ class CheckoutController extends BaseController
                     ->setCurrency($currency)
                     ->setCurrencyRate($currencyRate);
 
-                $publicUserData = array_keys($form->get('options')->all());
+                $publicUserData = $form->has('options') ? array_keys($form->get('options')->all()) : [];
                 $this->filterOrderOptionsUserData($order, $publicUserData);
 
                 // Save user data
@@ -178,7 +184,8 @@ class CheckoutController extends BaseController
         }
 
         return $this->render('page_checkout.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'checkoutFields' => $checkoutFields
         ]);
     }
 

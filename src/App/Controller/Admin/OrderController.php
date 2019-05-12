@@ -104,12 +104,6 @@ class OrderController extends StorageControllerAbstract
         if(empty($data)){
             return ['success' => false, 'msg' => 'Data is empty.'];
         }
-        if(empty($data['deliveryName'])){
-            return ['success' => false, 'msg' => 'Delivery is empty.'];
-        }
-        if(empty($data['paymentName'])){
-            return ['success' => false, 'msg' => 'Payment method is empty.'];
-        }
         return ['success' => true];
     }
 

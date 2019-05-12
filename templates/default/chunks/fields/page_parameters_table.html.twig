@@ -1,0 +1,13 @@
+{% if data | length > 0 %}
+    <table class="table table-bordered">
+        <colgroup>
+            <col span="2" width="50%">
+        </colgroup>
+        {% for item in data %}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.value }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endif %}

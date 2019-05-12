@@ -4,7 +4,7 @@
             <a href="{{ catalogPath(category.uri, '', category) }}" class="nav-link">
                 {{ category.title }}
             </a>
-            {{ categoriesTree(category.id, 'menu_dropdown_child', category, activeCategoriesIds) }}
+            {{ categoriesTree(category.id, 'menu_dropdown_child', category) }}
         </li>
     {%  endfor %}
 </ul>

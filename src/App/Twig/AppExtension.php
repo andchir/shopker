@@ -472,7 +472,14 @@ class AppExtension extends AbstractExtension
      * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public function categoriesTreeFunction(\Twig_Environment $environment, $parentId = 0, $chunkName = 'menu_tree', $data = null, $activeCategoriesIds = null, $cacheEnabled = false, $activeClassName = 'active')
+    public function categoriesTreeFunction(
+        \Twig_Environment $environment,
+        $parentId = 0,
+        $chunkName = 'menu_tree',
+        $data = null,
+        $activeCategoriesIds = null,
+        $cacheEnabled = false,
+        $activeClassName = 'active')
     {
         $request = $this->requestStack->getCurrentRequest();
         $currentUri = substr($request->getPathInfo(), 1);
@@ -492,9 +499,6 @@ class AppExtension extends AbstractExtension
                 $catalogController->setContainer($this->container);
                 $categoriesTree = $catalogController->getCategoriesTree($parentId, $locale);
                 $data = !empty($categoriesTree) ? $categoriesTree[0] : [];
-                if ($activeCategoriesIds === null) {
-                    $activeCategoriesIds = $catalogController->getCategoriesActiveIds($data, $uriArr);
-                }
             }
         }
 

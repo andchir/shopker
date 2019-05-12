@@ -94,7 +94,7 @@ class CheckoutController extends BaseController
             $shopCartService = $this->get('app.shop_cart');
             $shopCartData = $shopCartService->getContent();
             if (empty($shopCartData)) {
-                $form->addError(new FormError('Your cart is empty.'));
+                $form->addError(new FormError($translator->trans('Your cart is empty.', [], 'validators')));
             }
             if ($form->isValid()) {
 

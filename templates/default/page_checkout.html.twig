@@ -14,6 +14,11 @@
                     </h1>
 
                     <div class="py-3">
+                        {% if not is_granted('ROLE_USER') %}
+                            <div class="float-right">
+                                <a href="{{ path('register') }}">{{ 'Sign up' | trans }}</a>
+                            </div>
+                        {% endif %}
                         <a class="btn btn-outline-info" href="{{ path('shop_cart_edit') }}">
                             <i class="icon-keyboard_arrow_left"></i>
                             {{ 'Edit an order' | trans }}
@@ -21,34 +26,36 @@
                     </div>
 
                     {{ form_start(form, {'noDeliveryFirst': true, 'attr': {'novalidate': 'novalidate'}}) }}
-                        <div class="row">
-                            <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-6">
 
-                                {% if checkoutFields is empty or 'options' in checkoutFields %}
-                                    <div class="card bg-light mb-3" id="shkDeliveryAddress">
-                                        <div class="card-header">
+                            {% if checkoutFields is empty or 'options' in checkoutFields %}
+                                <div class="card bg-light mb-3" id="shkDeliveryAddress">
+                                    <div class="card-header">
                                         <span>
                                             {{ 'Delivery address' | trans }}
                                         </span>
-                                        </div>
-                                        <div class="card-body">
-                                            {{ form_widget(form.options) }}
-                                        </div>
                                     </div>
-                                {% endif %}
+                                    <div class="card-body">
+                                        {{ form_widget(form.options) }}
+                                    </div>
+                                </div>
+                            {% endif %}
 
-                            </div>
-                            <div class="col-md-6">
-
-                                {{ form_widget(form) }}
-
-                            </div>
                         </div>
-                        <div class="form-group text-right">
-                            <button type="submit" class="btn btn-info btn-lg" name="button-submit">
-                                {{ 'Submit order' | trans }}
-                            </button>
+                        <div class="col-md-6{% if 'options' not in checkoutFields %} offset-md-3{% endif %}">
+
+                            {{ form_widget(form) }}
+
+                            <div class="form-group text-right">
+                                <button type="submit" class="btn btn-info btn-lg" name="button-submit">
+                                    {{ 'Submit order' | trans }}
+                                </button>
+                            </div>
+
                         </div>
+                    </div>
+
                     {{ form_end(form) }}
 
                 </div>

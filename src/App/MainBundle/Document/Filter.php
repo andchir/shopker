@@ -39,6 +39,13 @@ class Filter
     protected $values;
 
     /**
+     * @MongoDB\Field(type="hash")
+     * @Groups({"details", "list"})
+     * @var array
+     */
+    protected $valuesData;
+
+    /**
      * @MongoDB\ReferenceOne(targetDocument="Category", inversedBy="filterData")
      * @var Category
      */
@@ -118,6 +125,28 @@ class Filter
     public function getValues()
     {
         return $this->values;
+    }
+
+    /**
+     * Set valuesData
+     *
+     * @param array $valuesData
+     * @return $this
+     */
+    public function setValueData($valuesData)
+    {
+        $this->valuesData = $valuesData;
+        return $this;
+    }
+
+    /**
+     * Get valuesData
+     *
+     * @return array
+     */
+    public function getValuesData()
+    {
+        return $this->valuesData;
     }
 
     /**

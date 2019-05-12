@@ -65,7 +65,7 @@ class SearchController extends CatalogController
             'currentCategoryUri' => '',
             'systemNameField' => $contentType->getSystemNameField()
         ];
-        list($filters, $fieldsAll) = $this->getFieldsData($contentTypeFields, $options,'page', [], $queryOptions);
+        list($filters, $fieldsAll) = $this->getFieldsData($contentTypeFields, $options,'page', [], [], $queryOptions);
 
         $collection = $this->getCollection($searchCollections[0]);
 

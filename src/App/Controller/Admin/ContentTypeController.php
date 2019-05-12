@@ -100,7 +100,9 @@ class ContentTypeController extends StorageControllerAbstract
 
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $this->get('doctrine_mongodb')->getManager();
-        $dm->persist($contentType);
+        if (!$contentType->getId()) {
+            $dm->persist($contentType);
+        }
         $dm->flush();
 
         //Add new collection

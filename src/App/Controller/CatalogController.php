@@ -107,13 +107,11 @@ class CatalogController extends ProductController
             'systemNameField' => $contentType->getSystemNameField(),
             'needSortFields' => true
         ];
-        $filtersData = [];
         /** @var Filter $filters */
         $filters = $filtersRepository->findByCategory($currentCategory->getId());
-        if (!empty($filters)) {
-            $filtersData = $filters->getValues();
-        }
-        list($filters, $fieldsAll) = $this->getFieldsData($contentTypeFields, $options,'page', $filtersData, $queryOptions);
+        $filtersArr = !empty($filters) ? $filters->getValues() : [];
+        $filtersData = !empty($filters) ? $filters->getValuesData() : [];
+        list($filters, $fieldsAll) = $this->getFieldsData($contentTypeFields, $options,'page', $filtersArr, $filtersData, $queryOptions);
         $fields = array_filter($fieldsAll, function($v) {
             return $v['showInList'];
         });
@@ -287,12 +285,13 @@ class CatalogController extends ProductController
     /**
      * @param $contentTypeFields
      * @param array $options
-     * @param $type
+     * @param string $type
+     * @param array $filtersArr
      * @param array $filtersData
      * @param array $queryOptions
      * @return array
      */
-    public function getFieldsData($contentTypeFields, $options = [], $type = 'page', $filtersData = [], $queryOptions = [])
+    public function getFieldsData($contentTypeFields, $options = [], $type = 'page', $filtersArr = [], $filtersData = [], $queryOptions = [])
     {
         $filters = [];
         $fields = [];
@@ -307,12 +306,12 @@ class CatalogController extends ProductController
                     'outputProperties' => array_merge($field['outputProperties'], $options)
                 ]);
             }
-            if (!empty($field['isFilter']) && !empty($filtersData[$field['name']])) {
+            if (!empty($field['isFilter']) && !empty($filtersArr[$field['name']])) {
                 $filters[] = [
                     'name' => $field['name'],
                     'title' => $field['title'],
                     'outputType' => $field['outputType'],
-                    'values' => $filtersData[$field['name']],
+                    'values' => $filtersArr[$field['name']],
                     'order' => !empty($field['filterOrder']) ? $field['filterOrder'] : 0,
                     'selected' => isset($queryOptionsFilter[$field['name']])
                         ? is_array($queryOptionsFilter[$field['name']])

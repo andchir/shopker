@@ -841,6 +841,7 @@ class ProductController extends BaseProductController
             $contentTypeFields = $contentType->getFields();
             $collection = $this->getCollection($contentType->getCollection(), $databaseName);
 
+            $filterArr = [];
             $filterData = [];
 
             // Mix from child categories
@@ -864,17 +865,17 @@ class ProductController extends BaseProductController
                         }
                         $fieldName = $contentTypeField['name'];
                         if (!empty($filterValues[$fieldName])) {
-                            if (!isset($filterData[$fieldName])) {
-                                $filterData[$fieldName] = [];
+                            if (!isset($filterArr[$fieldName])) {
+                                $filterArr[$fieldName] = [];
                             }
-                            $values = array_merge($filterData[$fieldName], $filterValues[$fieldName]);
+                            $values = array_merge($filterArr[$fieldName], $filterValues[$fieldName]);
                             $values = array_unique($values);
                             if ($contentTypeField['outputType'] == 'number') {
                                 sort($values, SORT_NUMERIC);
                             } else {
                                 sort($values);
                             }
-                            $filterData[$fieldName] = $values;
+                            $filterArr[$fieldName] = $values;
                         }
                     }
                 }
@@ -887,42 +888,84 @@ class ProductController extends BaseProductController
                 }
                 $fieldName = $contentTypeField['name'];
 
-                // Get products fields unique data
                 $criteria = [
                     'isActive' => true
                 ];
-                $this->applyCategoryFilter($cat, $contentTypeFields, $criteria);
-                $uniqueValues = $collection->distinct($fieldName, $criteria)->toArray();
 
-                $uniqueValues = array_filter($uniqueValues, function($val) {
-                    return !empty($val);
-                });
+                // Get products fields unique data
+                if ($contentTypeField['inputType'] === 'parameters') {
 
-                if (!empty($uniqueValues)) {
-                    if (!isset($filterData[$fieldName])) {
-                        $filterData[$fieldName] = [];
+                    $this->applyCategoryFilter($cat, $contentTypeFields, $criteria);
+                    $uniqueValues = $collection->aggregate([
+                        ['$match' => $criteria],
+                        ['$group' => [
+                            '_id' => "\${$fieldName}.name",
+                            'values' => [
+                                '$addToSet' => "\${$fieldName}.value"
+                            ]
+                        ]]
+                    ], [
+                        'cursor' => []
+                    ])->toArray();
+
+                    foreach ($uniqueValues as $data) {
+                        if (empty($data['_id'])) {
+                            continue;
+                        }
+                        foreach ($data['_id'] as $nk => $name) {
+                            $index = array_search($name, array_column($filterData, 'name'));
+                            if ($index === false) {
+                                $filterData[] = [
+                                    'fieldName' => $fieldName,
+                                    'name' => $name,
+                                    'values' => []
+                                ];
+                                $index = count($filterData) - 1;
+                            }
+                            foreach ($data['values'] as $vk => $values) {
+                                if (!in_array($values[$nk], $filterData[$index]['values'])) {
+                                    $filterData[$index]['values'][] = $values[$nk];
+                                }
+                            }
+                        }
                     }
-                    $filterData[$fieldName] = array_unique(array_merge($filterData[$fieldName], $uniqueValues));
-                    sort($filterData[$fieldName]);
+
+                } else {
+                    $this->applyCategoryFilter($cat, $contentTypeFields, $criteria);
+                    $uniqueValues = $collection->distinct($fieldName, $criteria)->toArray();
+
+                    $uniqueValues = array_filter($uniqueValues, function($val) {
+                        return !empty($val);
+                    });
+
+                    if (!empty($uniqueValues)) {
+                        if (!isset($filterArr[$fieldName])) {
+                            $filterArr[$fieldName] = [];
+                        }
+                        $filterArr[$fieldName] = array_unique(array_merge($filterArr[$fieldName], $uniqueValues));
+                        sort($filterArr[$fieldName]);
+                    }
                 }
             }
 
             $filter = $cat->getFilterData();
             if (!$filter) {
-                if (empty($filterData)) {
+                if (empty($filterArr) && empty($filterData)) {
                     continue;
                 }
                 $filter = new Filter();
                 $filter->setCategory($cat);
                 $cat->setFilterData($filter);
             } else {
-                if (empty($filterData)) {
+                if (empty($filterArr) && empty($filterData)) {
                     $dm->remove($filter);
                     $dm->flush();
                     continue;
                 }
             }
-            $filter->setValues($filterData);
+            $filter
+                ->setValues($filterArr)
+                ->setValueData($filterData);
 
             $dm->flush();
         }

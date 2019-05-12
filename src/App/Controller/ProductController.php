@@ -36,10 +36,12 @@ class ProductController extends BaseController
                 $filter = [$filter];
             }
             $index = array_search($name, array_column($filtersData, 'name'));
+            $outputType = '';
             if ($index !== false) {
                 $flt = $filtersData[$index];
-                // Process coilor filter
-                if ($flt['outputType'] === 'color') {
+                $outputType = $flt['outputType'];
+                // Process color filter
+                if ($outputType === 'color') {
                     foreach ($filter as &$val) {
                         $val = '#' . $val;
                     }
@@ -47,6 +49,36 @@ class ProductController extends BaseController
             }
             if (isset($filter['from']) && isset($filter['to'])) {
                 $criteria[$name] = ['$gte' => floatval($filter['from']), '$lte' => floatval($filter['to'])];
+            } else if ($outputType === 'parameters') {
+                $fData = [];
+                foreach ($filter as $fValue) {
+                    $fValueArr = explode('__', $fValue);
+                    if (count($fValueArr) < 2) {
+                        continue;
+                    }
+                    $index = array_search($fValueArr[0], array_column($fData, 'name'));
+                    if ($index === false) {
+                        $fData[] = [
+                            'name' => $fValueArr[0],
+                            'values' => []
+                        ];
+                        $index = count($fData) - 1;
+                    }
+                    if (!in_array($fValueArr[1], $fData[$index]['values'])) {
+                        $fData[$index]['values'][] = $fValueArr[1];
+                    }
+                }
+                if (!empty($fData)) {
+                    $criteria[$name] = ['$all' => []];
+                    foreach ($fData as $k => $v) {
+                        $criteria[$name]['$all'][] = [
+                            '$elemMatch' => [
+                                'name' => $v['name'],
+                                'value' => ['$in' => $v['values']]
+                            ]
+                        ];
+                    }
+                }
             } else {
                 $criteria[$name] = ['$in' => $filter];
             }

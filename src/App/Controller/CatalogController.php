@@ -295,6 +295,7 @@ class CatalogController extends ProductController
     {
         $filters = [];
         $fields = [];
+        $filterIndex = 0;
         $queryOptionsFilter = !empty($queryOptions['filter']) ? $queryOptions['filter'] : [];
         foreach ($contentTypeFields as $field) {
             if ($type != 'list' || !empty($field['showInList'])) {
@@ -306,19 +307,48 @@ class CatalogController extends ProductController
                     'outputProperties' => array_merge($field['outputProperties'], $options)
                 ]);
             }
-            if (!empty($field['isFilter']) && !empty($filtersArr[$field['name']])) {
-                $filters[] = [
-                    'name' => $field['name'],
-                    'title' => $field['title'],
-                    'outputType' => $field['outputType'],
-                    'values' => $filtersArr[$field['name']],
-                    'order' => !empty($field['filterOrder']) ? $field['filterOrder'] : 0,
-                    'selected' => isset($queryOptionsFilter[$field['name']])
-                        ? is_array($queryOptionsFilter[$field['name']])
-                            ? $queryOptionsFilter[$field['name']]
-                            : [$queryOptionsFilter[$field['name']]]
-                        : []
-                ];
+            if (!empty($field['isFilter'])) {
+                if (!empty($filtersArr[$field['name']])) {
+                    $filters[] = [
+                        'name' => $field['name'],
+                        'title' => $field['title'],
+                        'outputType' => $field['outputType'],
+                        'values' => $filtersArr[$field['name']],
+                        'fieldValues' => $filtersArr[$field['name']],
+                        'index' => $filterIndex,
+                        'order' => !empty($field['filterOrder']) ? $field['filterOrder'] : 0,
+                        'selected' => isset($queryOptionsFilter[$field['name']])
+                            ? is_array($queryOptionsFilter[$field['name']])
+                                ? $queryOptionsFilter[$field['name']]
+                                : [$queryOptionsFilter[$field['name']]]
+                            : []
+                    ];
+                    $filterIndex++;
+                } else if ($filtersData) {
+                    $fieldFilterData = array_filter($filtersData, function($item) use ($field) {
+                        return $item['fieldName'] === $field['name'];
+                    });
+                    foreach ($fieldFilterData as $fData) {
+                        $fValues = array_map(function($value) use ($fData) {
+                            return $fData['name'] . '__' . $value;
+                        }, $fData['values']);
+                        $filters[] = [
+                            'name' => $field['name'],
+                            'title' => $fData['name'],
+                            'outputType' => $field['outputType'],
+                            'values' => $fData['values'],
+                            'fieldValues' => $fValues,
+                            'index' => $filterIndex,
+                            'order' => !empty($field['filterOrder']) ? $field['filterOrder'] : 0,
+                            'selected' => isset($queryOptionsFilter[$field['name']])
+                                ? is_array($queryOptionsFilter[$field['name']])
+                                    ? $queryOptionsFilter[$field['name']]
+                                    : [$queryOptionsFilter[$field['name']]]
+                                : []
+                        ];
+                        $filterIndex++;
+                    }
+                }
             }
         }
 

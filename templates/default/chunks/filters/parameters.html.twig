@@ -1,0 +1,16 @@
+<div class="max-height200">
+    {% for value in filter.values %}
+        <label class="p-2 mb-0">
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox"
+                       class="custom-control-input"
+                       name="filter[{{ filter.name }}][]"
+                       value="{{ filter.fieldValues[loop.index0] }}"
+                       id="filter_{{ filter.name }}{{ filter.index }}_{{ loop.index }}"{% if filter.fieldValues[loop.index0] in filter.selected %} checked="checked"{% endif %}>
+                <label class="custom-control-label" for="filter_{{ filter.name }}{{ filter.index }}_{{ loop.index }}">
+                    {{ value }}
+                </label>
+            </div>
+        </label>
+    {% endfor %}
+</div>

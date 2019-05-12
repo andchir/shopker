@@ -43,7 +43,7 @@ class ExceptionListener
             $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR;
         }
         if ($environment === 'dev' || $displayErrors) {
-            $message = $exception->getMessage();
+            $message = $exception->getMessage() . " - " . $exception->getFile() . " ({$exception->getLine()})";
         }
 
         if($request->isXmlHttpRequest()) {

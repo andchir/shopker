@@ -686,7 +686,7 @@ class Order
      */
     public function getOptions()
     {
-        return $this->options;
+        return $this->options ?: [];
     }
 
     /**

@@ -173,6 +173,8 @@ class OrderController extends StorageControllerAbstract
                 $order->setIsPaid(false);
             }
 
+            $dm->flush();
+
             /** @var UtilsService $utilsService */
             $utilsService = $this->get('app.utils');
             /** @var TranslatorInterface $translator */
@@ -188,8 +190,6 @@ class OrderController extends StorageControllerAbstract
             $event = new GenericEvent($order);
             $eventDispatcher->dispatch(Events::ORDER_STATUS_UPDATED, $event);
         }
-
-        $dm->flush();
 
         return true;
     }

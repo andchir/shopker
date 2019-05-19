@@ -44,6 +44,13 @@ class FileDocument
      * @Groups({"details", "list"})
      * @var string
      */
+    protected $originalFileName;
+
+    /**
+     * @MongoDB\Field(type="string")
+     * @Groups({"details", "list"})
+     * @var string
+     */
     protected $extension;
 
     /**
@@ -315,6 +322,28 @@ class FileDocument
     }
 
     /**
+     * Set originalFileName
+     *
+     * @param string $originalFileName
+     * @return $this
+     */
+    public function setOriginalFileName($originalFileName)
+    {
+        $this->originalFileName = $originalFileName;
+        return $this;
+    }
+
+    /**
+     * Get originalFileName
+     *
+     * @return string
+     */
+    public function getOriginalFileName()
+    {
+        return $this->originalFileName;
+    }
+
+    /**
      * Set createdDate
      *
      * @param \DateTime $createdDate
@@ -454,6 +483,9 @@ class FileDocument
                 $originalName = $this->getFile()->getClientOriginalName();
                 $title = mb_substr($originalName, 0, mb_strrpos($originalName, '.'));
                 $this->setTitle($title);
+            }
+            if (!$this->getOriginalFileName()) {
+                $this->setOriginalFileName($this->getFile()->getClientOriginalName());
             }
         }
         $filePath = $this->getUploadedPath();

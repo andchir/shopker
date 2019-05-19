@@ -57,12 +57,25 @@ class UserController extends StorageControllerAbstract
         $translator = $this->get('translator');
         /** @var UserPasswordEncoderInterface $encoder */
         $encoder = $this->get('security.password_encoder');
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->get('doctrine_mongodb')->getManager();
+
+        $repository = $this->getRepository();
 
         /** @var User $item */
         if($itemId){
+            /** @var User $item */
             $item = $this->getRepository()->find($itemId);
             if(!$item){
                 return $this->setError($translator->trans('Item not found.', [], 'validators'));
+            }
+            if ($data['email'] !== $item->getEmail()) {
+                $usersCount = $repository->getUsersCountBy('email', $data['email']);
+                if ($usersCount > 0) {
+                    return $this->setError($translator->trans('register.email.already exists', [], 'validators'));
+                } else {
+                    $item->setUsername($data['email']);
+                }
             }
         } else {
             $item = new User();
@@ -104,8 +117,6 @@ class UserController extends StorageControllerAbstract
             $item->setOptions($data['options']);
         }
 
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
         if (!$item->getId()) {
             $dm->persist($item);
         }

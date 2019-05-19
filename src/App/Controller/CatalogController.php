@@ -71,18 +71,17 @@ class CatalogController extends ProductController
         /** @var Category $currentCategory */
         if ($categoryUri) {
             $where = ['uri' => $categoryUri];
-            if ($routeName !== 'catalog_page') {
-                $where['isActive'] = true;
-            }
             $currentCategory = $categoriesRepository->findOneBy($where);
         } else {
             $currentCategory = $categoriesRepository->find(0);
         }
-
         if ($routeName === 'catalog_page') {
+            if (is_null($currentCategory)) {
+                throw $this->createNotFoundException();
+            }
             return $this->pageProduct($currentCategory, $uri, $locale);
         }
-        if (!$currentCategory) {
+        if (!$currentCategory || !$currentCategory->getIsActive()) {
             throw $this->createNotFoundException();
         }
 

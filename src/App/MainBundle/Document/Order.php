@@ -690,6 +690,41 @@ class Order
     }
 
     /**
+     * @param string $key
+     * @param mixed $value
+     * @param string $title
+     * @return $this
+     */
+    public function setOptionsValue($key, $value, $title = '')
+    {
+        $newOption = [
+            'name' => $key,
+            'value' => $value,
+            'title' => $title
+        ];
+        $options = $this->getOptions();
+        $index = array_search($key, array_column($options, 'name'));
+        if ($index !== false) {
+            $options[$index] = $newOption;
+        } else {
+            $options[] = $newOption;
+        }
+        $this->setOptions($options);
+        return $this;
+    }
+
+    /**
+     * @param $key
+     * @return array|mixed
+     */
+    public function getOptionsValue($key)
+    {
+        $options = $this->getOptions();
+        $index = array_search($key, array_column($options, 'name'));
+        return $index !== false ? $options[$index] : [];
+    }
+
+    /**
      * Get content
      *
      * @return ArrayCollection

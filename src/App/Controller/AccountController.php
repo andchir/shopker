@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Events;
 use App\MainBundle\Document\Order;
 use App\MainBundle\Document\Setting;
 use App\MainBundle\Document\User;
@@ -15,6 +16,8 @@ use App\Service\ShopCartService;
 use App\Service\UtilsService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -217,6 +220,50 @@ class AccountController extends Controller
             $request->getSession()
                 ->getFlashBag()
                 ->add('messages', 'Your password has been changed successfully. Now you can enter.');
+
+            return $this->redirectToRoute('login');
+        }
+
+        return new Response('');
+    }
+
+    /**
+     * @Route("/email_confirm/{email}/{code}", name="email_confirm")
+     * @param Request $request
+     * @param EventDispatcherInterface $eventDispatcher
+     * @param $email
+     * @param $code
+     * @return Response
+     */
+    public function emailConfirmAction(
+        Request $request,
+        EventDispatcherInterface $eventDispatcher,
+        $email,
+        $code
+    )
+    {
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $userRepository = $this->getUserRepository();
+        /** @var User $user */
+        $user = $userRepository->findOneBy([
+            'email' => $email,
+            'secretCode' => $code
+        ]);
+        if ($user) {
+
+            $user
+                ->setSecretCode(null)
+                ->setIsActive(true);
+            $dm->flush();
+
+            // Dispatch event
+            $event = new GenericEvent($user);
+            $eventDispatcher->dispatch(Events::USER_EMAIL_CONFIRMED, $event);
+
+            $request->getSession()
+                ->getFlashBag()
+                ->add('messages', 'Your email has been successfully verified. Now you can enter.');
 
             return $this->redirectToRoute('login');
         }

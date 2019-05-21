@@ -34,4 +34,9 @@ final class Events
      * @var string
      */
     const ORDER_STATUS_UPDATED = 'order.status_updated';
+    /**
+     * @Event("Symfony\Component\EventDispatcher\GenericEvent")
+     * @var string
+     */
+    const USER_EMAIL_CONFIRMED = 'user.email_confirmed';
 }

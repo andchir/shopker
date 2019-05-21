@@ -109,6 +109,7 @@ You are successfully registered. Now you can enter.: Вы успешно зар�
 An email with further instructions has been sent to your email address.: На ваш адрес электронной почты отправлено письмо с дальнейшими инструкциями.
 Your password has been changed successfully.: Ваш пароль успешно изменен.
 Your password has been changed successfully. Now you can enter.: Ваш пароль успешно изменен. Теперь Вы можете войти.
+Your email has been successfully verified. Now you can enter.: Ваш адрес эл. почты успешно подтвержден. Теперь Вы можете войти.
 reset_password.confirm.email_link: Для подтверждения изменения пароля, пожалуйста, перейдите по ссылке
 Profile: Профиль
 History of orders: История заказов
@@ -134,3 +135,5 @@ password_reset.mail_subject: Сброс пароля
 profile.contacts_data_saved_successfully: Данные успешно созранены.
 email.send_successful: Письмо успешно отправлено.
 email.recipient_error: Не указан адрес получателя.
+email_confirm.mail_subject: Подтверждение адреса эл. почты
+user_email.confirm.email_link: Для подтверждения адреса эл. почты, пожалуйста, перейдите по ссылке

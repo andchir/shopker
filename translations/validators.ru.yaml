@@ -1,4 +1,5 @@
-Bad credentials.: Логин или пароль указаны не верно.
+Bad credentials.: Не верный логин или пароль.
+Wrong login or password.: Не верный логин или пароль.
 User account is disabled.: Аккаунт пользователя отключен.
 The password fields must match.: Пароли не совпадают.
 Wrong value for your current password: Не верное значение текущего пароля

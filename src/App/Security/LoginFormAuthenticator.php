@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
@@ -104,6 +105,27 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     public function checkCredentials($credentials, UserInterface $user)
     {
         return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
+    }
+
+    /**
+     * @param Request $request
+     * @param AuthenticationException $exception
+     * @return RedirectResponse
+     */
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
+    {
+        $message = 'Wrong login or password.';
+        if ($exception instanceof CustomUserMessageAuthenticationException) {
+            $message = $exception->getMessage();
+        }
+        if ($request->hasSession()) {
+            $request->getSession()->set(
+                Security::AUTHENTICATION_ERROR,
+                new AuthenticationException($message)
+            );
+        }
+        $url = $this->getLoginUrl();
+        return new RedirectResponse($url);
     }
 
     /**

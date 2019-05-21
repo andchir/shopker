@@ -162,10 +162,6 @@ class CheckoutController extends BaseController
                 $dm->persist($order);
                 $dm->flush();
 
-                // Dispatch event after create
-                $event = new GenericEvent($order);
-                $eventDispatcher->dispatch(Events::ORDER_CREATED, $event);
-
                 // Delete temporary files
                 $this->deleteTemporaryFiles(FileDocument::OWNER_ORDER_TEMPORARY);
 
@@ -178,6 +174,10 @@ class CheckoutController extends BaseController
                 $request->getSession()
                     ->getFlashBag()
                     ->add('messages', 'Thanks for your order!');
+
+                // Dispatch event after create
+                $event = new GenericEvent($order);
+                $eventDispatcher->dispatch(Events::ORDER_CREATED, $event);
 
                 return $this->redirectToRoute('page_checkout_success');
             }

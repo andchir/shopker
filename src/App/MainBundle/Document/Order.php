@@ -695,7 +695,7 @@ class Order
      * @param string $title
      * @return $this
      */
-    public function setOptionsValue($key, $value, $title = '')
+    public function setOptionValue($key, $value, $title = '')
     {
         $newOption = [
             'name' => $key,
@@ -717,7 +717,7 @@ class Order
      * @param $key
      * @return array|mixed
      */
-    public function getOptionsValue($key)
+    public function getOptionValue($key)
     {
         $options = $this->getOptions();
         $index = array_search($key, array_column($options, 'name'));

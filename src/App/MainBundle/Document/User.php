@@ -531,18 +531,38 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * Get option value
-     *
-     * @param string $optionName
-     * @return string
+     * @param string $key
+     * @param mixed $value
+     * @param string $title
+     * @return $this
      */
-    public function getOptionValue($optionName)
+    public function setOptionValue($key, $value, $title = '')
     {
-        $optIndex = array_search($optionName, array_column($this->getOptions(), 'name'));
-        if ($optIndex > -1) {
-            return $this->options[$optIndex]['value'];
+        $newOption = [
+            'name' => $key,
+            'value' => $value,
+            'title' => $title
+        ];
+        $options = $this->getOptions();
+        $index = array_search($key, array_column($options, 'name'));
+        if ($index !== false) {
+            $options[$index] = $newOption;
+        } else {
+            $options[] = $newOption;
         }
-        return null;
+        $this->setOptions($options);
+        return $this;
+    }
+
+    /**
+     * @param $key
+     * @return array|mixed
+     */
+    public function getOptionValue($key)
+    {
+        $options = $this->getOptions();
+        $index = array_search($key, array_column($options, 'name'));
+        return $index !== false ? $options[$index] : [];
     }
 
     /**

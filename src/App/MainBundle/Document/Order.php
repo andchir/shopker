@@ -715,13 +715,13 @@ class Order
 
     /**
      * @param $key
-     * @return array|mixed
+     * @return string|null
      */
     public function getOptionValue($key)
     {
         $options = $this->getOptions();
         $index = array_search($key, array_column($options, 'name'));
-        return $index !== false ? $options[$index] : [];
+        return $index !== false ? $options[$index]['value'] : null;
     }
 
     /**

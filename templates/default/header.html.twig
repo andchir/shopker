@@ -5,7 +5,7 @@
             <div class="d-inline-block">
                 {% if is_granted('ROLE_USER') %}
                     {% if is_granted('ROLE_ADMIN') %}
-                        <a class="btn btn-sm btn-outline-primary" data-toggle="tooltip" title="{{ 'Administration' | trans }}" href="{{ path('admin') }}">
+                        <a class="btn btn-sm btn-outline-primary" data-toggle="tooltip" title="{{ 'Administration' | trans }}" href="{{ path('admin') }}" rel="nofollow">
                             <i class="icon-cog"></i>
                         </a>
                     {% endif %}
@@ -15,25 +15,25 @@
                                 <i class="icon-head"></i>
                             </button>
                             <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item" href="{{ path('profile_history_orders') }}">
+                                <a class="dropdown-item" href="{{ path('profile_history_orders') }}" rel="nofollow">
                                     <i class="icon-list text-muted"></i>
                                     &nbsp;
                                     {{ 'History of orders' | trans }}
                                 </a>
-                                <a class="dropdown-item" href="{{ path('profile_contacts') }}">
+                                <a class="dropdown-item" href="{{ path('profile_contacts') }}" rel="nofollow">
                                     <i class="icon-head text-muted"></i>
                                     &nbsp;
                                     {{ 'Contact details' | trans }}
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
-                                    <a class="dropdown-item text-muted" href="{{ path('homepage', {'_switch_user': '_exit'}) }}">
+                                    <a class="dropdown-item text-muted" href="{{ path('homepage', {'_switch_user': '_exit'}) }}" rel="nofollow">
                                         <i class="icon-esc"></i>
                                         &nbsp;
                                         {{ 'Exit impersonation' | trans }}
                                     </a>
                                 {% endif %}
-                                <a class="dropdown-item text-muted" href="{{ logout_path() }}">
+                                <a class="dropdown-item text-muted" href="{{ logout_path() }}" rel="nofollow">
                                     <i class="icon-power"></i>
                                     &nbsp;
                                     {{ 'Log out' | trans }}
@@ -42,7 +42,7 @@
                         </div>
                     </div>
                 {% else %}
-                    <a class="btn btn-sm btn-outline-primary ml-1" href="{{ path('login') }}">
+                    <a class="btn btn-sm btn-outline-primary ml-1" href="{{ path('login') }}" rel="nofollow">
                         {{ 'Log in' | trans }}
                         <i class="icon-unlock"></i>
                     </a>
@@ -55,11 +55,11 @@
                         <img src="/img/flag_{{ app.request.locale }}.png">
                     </button>
                     <div class="dropdown-menu dropdown-menu-right border-secondary" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item rounded-0{% if app.request.locale == 'ru' %} active{% endif %}" href="{{ path('locale_switch', {locale: 'ru'}) }}">
+                        <a class="dropdown-item rounded-0{% if app.request.locale == 'ru' %} active{% endif %}" href="{{ path('locale_switch', {locale: 'ru'}) }}" rel="nofollow">
                             <img src="/img/flag_ru.png" alt="Русский">
                             Русский
                         </a>
-                        <a class="dropdown-item rounded-0{% if app.request.locale == 'en' %} active{% endif %}" href="{{ path('locale_switch', {locale: 'en'}) }}">
+                        <a class="dropdown-item rounded-0{% if app.request.locale == 'en' %} active{% endif %}" href="{{ path('locale_switch', {locale: 'en'}) }}" rel="nofollow">
                             <img src="/img/flag_en.png" alt="English">
                             English
                         </a>

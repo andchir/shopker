@@ -12,6 +12,7 @@ import {NotFoundComponent} from './not-found.component';
 import {SharedModule} from './shared.module';
 import {AppSettings} from './services/app-settings.service';
 import {FileManagerComponent} from './components/file-manager.component';
+import {ModalFileContentComponent} from './components/modal-file.component';
 
 import localeEn from '@angular/common/locales/en';
 import localeRu from '@angular/common/locales/ru';
@@ -38,12 +39,14 @@ registerLocaleData(localeRu, 'ru-RU');
         NotFoundComponent,
         AlertModalContentComponent,
         ConfirmModalContentComponent,
-        FileManagerComponent
+        FileManagerComponent,
+        ModalFileContentComponent
     ],
     providers: [],
     entryComponents: [
         AlertModalContentComponent,
         ConfirmModalContentComponent,
+        ModalFileContentComponent
     ],
     exports: [
 

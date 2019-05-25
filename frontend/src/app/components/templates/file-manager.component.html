@@ -20,7 +20,7 @@
                 <div class="col-4 py-1 px-1" *ngFor="let file of files">
                     <div class="card card-body p-1"
                         [ngClass]="{'bg-black-20 text-white cursor-pointer': file.isDir, 'bg-black-10 cursor-default': !file.isDir}"
-                        (click)="openDir(file, $event)">
+                        (click)="openFileHandler(file, $event)">
                         <div class="text-center">
                             <i class="icon-folder" *ngIf="file.isDir"></i>
                             <i class="icon-file" *ngIf="!file.isDir"></i>

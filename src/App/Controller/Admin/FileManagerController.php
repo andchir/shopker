@@ -50,8 +50,10 @@ class FileManagerController extends BaseController
                 'size' => $fileInfo->isFile()
                     ? UtilsService::sizeFormat(filesize($fileInfo->getPathname()))
                     : 0,
-                'createdDate' => filemtime($fileInfo->getPathname()),
-                'isDir' => $fileInfo->isDir()
+                'createdDate' => '',
+                'modifiedDate' => date('F j, Y H:i:s', filemtime($fileInfo->getPathname())),
+                'isDir' => $fileInfo->isDir(),
+                'isEditable' => false
             ];
         }
 

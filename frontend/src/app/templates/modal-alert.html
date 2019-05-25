@@ -1,9 +1,7 @@
 <div class="modal-header d-block">
     <h4 class="modal-title">{{modalTitle}}</h4>
 </div>
-<div class="modal-body">
-    {{modalContent}}
-</div>
+<div class="modal-body" [innerHTML]="modalContent"></div>
 <div class="modal-footer d-block">
     <button type="button" class="btn btn-info btn-wide" (click)="activeModal.close()">
         Ok

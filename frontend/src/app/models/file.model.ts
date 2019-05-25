@@ -23,6 +23,8 @@ export class FileModel {
         public ownerType: string,
         public size: number,
         public createdDate: string,
-        public isDir?: boolean
+        public modifiedDate?: string,
+        public isDir?: boolean,
+        public isEditable?: boolean
     ) { }
 }

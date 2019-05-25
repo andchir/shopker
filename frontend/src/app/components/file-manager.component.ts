@@ -1,7 +1,9 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 
+import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {FileManagerService} from '../services/file-manager.service';
 import {FileModel} from '../models/file.model';
+import {ModalFileContentComponent} from './modal-file.component';
 
 @Component({
     selector: 'app-file-manager',
@@ -11,6 +13,7 @@ import {FileModel} from '../models/file.model';
 export class FileManagerComponent implements OnInit {
 
     @ViewChild('container') container;
+    modalRef: NgbModalRef;
     isActive = false;
     files: any[] = [];
     loading = false;
@@ -18,7 +21,8 @@ export class FileManagerComponent implements OnInit {
     errorMessage = '';
 
     constructor(
-        public dataService: FileManagerService
+        public dataService: FileManagerService,
+        public modalService: NgbModal
     ) {
 
     }
@@ -42,15 +46,32 @@ export class FileManagerComponent implements OnInit {
             });
     }
 
-    openDir(file: FileModel, event?: MouseEvent): void {
+    openFileHandler(file: FileModel, event?: MouseEvent): void {
         if (event) {
             event.preventDefault();
         }
-        if (!file.isDir) {
-            return;
+        if (file.isDir) {
+            this.currentPath = this.getFilePath(file);
+            this.getFilesList();
+        } else {
+            this.openModal(file);
         }
-        this.currentPath += this.currentPath ? `/${file.fileName}` : file.fileName;
-        this.getFilesList();
+    }
+
+    openModal(file: FileModel) {
+        if (this.modalRef) {
+            this.modalRef.close();
+        }
+        this.modalRef = this.modalService.open(ModalFileContentComponent);
+        this.modalRef.componentInstance.modalTitle = file.fileName;
+        this.modalRef.componentInstance.file = file;
+        this.modalRef.componentInstance.filePath = this.getFilePath(file);
+    }
+
+    getFilePath(file: FileModel): string {
+        return this.currentPath
+            ? `${this.currentPath}/${file.fileName}`
+            : file.fileName;
     }
 
     openDirPrevous(event?: MouseEvent): void {

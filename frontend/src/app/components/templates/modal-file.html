@@ -1,0 +1,26 @@
+<div class="modal-header d-block">
+    <h4 class="modal-title">{{modalTitle}}</h4>
+</div>
+<div class="modal-body">
+
+    <div class="text-overflow">
+        <b>Path</b>: <a href="/{{ filePath }}" target="_blank">/{{ filePath }}</a>
+    </div>
+    <div>
+        <b>File size</b>: {{ file.size }}
+    </div>
+    <div>
+        <b>Modified date</b>: {{ file.modifiedDate }}
+    </div>
+
+</div>
+<div class="modal-footer d-block">
+    <div class="float-right" *ngIf="file.isEditable">
+        <button type="button" class="btn btn-primary btn-wide">
+            {{ 'EDIT' | translate }}
+        </button>
+    </div>
+    <button type="button" class="btn btn-secondary btn-wide" (click)="activeModal.close()">
+        {{ 'CLOSE' | translate }}
+    </button>
+</div>

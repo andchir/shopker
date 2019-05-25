@@ -1,9 +1,0 @@
-
-.tooltip-left-blue .tooltip-inner {
-    background-color: #007bff;
-    font-size: 125%;
-    border-radius: 0;
-}
-.tooltip-left-blue .arrow::before {
-    border-right-color: #007bff;
-}

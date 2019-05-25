@@ -1,0 +1,20 @@
+<div class="panel-file-manager bg-light overflow-auto-y" #container>
+    <div class="panel-file-manager-b" [class.loading]="loading">
+        <div class="p-3">
+            <div class="row no-gutters">
+
+                <div class="col-4 py-1 px-1" *ngFor="let file of files">
+                    <div class="card card-body bg-black-10 text-center cursor-pointer">
+                        <div>
+                            <i class="icon-folder item-icon"></i>
+                        </div>
+                        <div class="text-overflow small" [title]="'Folder'">
+                            Folder
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

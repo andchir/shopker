@@ -1,4 +1,4 @@
-import {Component, Input, ViewEncapsulation} from '@angular/core';
+import {Component, ElementRef, Input, ViewChild, ViewEncapsulation} from '@angular/core';
 import {Router, NavigationEnd} from '@angular/router';
 import {Title} from '@angular/platform-browser';
 import {NgbActiveModal, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
@@ -6,6 +6,7 @@ import {TranslateService} from '@ngx-translate/core';
 
 import {AppSettings} from './services/app-settings.service';
 import {MenuItem} from './models/menu-item.interface';
+import {FileManagerComponent} from './components/file-manager.component';
 
 declare const adminMenu: MenuItem[];
 
@@ -47,10 +48,14 @@ export class AlertModalContentComponent {
 })
 export class AppComponent {
 
+    @ViewChild('navbarLeft') navbarLeft: ElementRef;
+    @ViewChild('navbarLeftOverlay') navbarLeftOverlay: ElementRef;
+    @ViewChild('fileManager') fileManager: FileManagerComponent;
     baseUrl: string;
     routeData: any[];
     menuItems: MenuItem[] = [...adminMenu];
     appVersion: string;
+    isFileManagerActive = false;
 
     constructor(
         tooltipConfig: NgbTooltipConfig,
@@ -106,6 +111,25 @@ export class AppComponent {
 
     setTitle(newTitle: string): void {
         this.titleService.setTitle(newTitle);
+    }
+
+    fileManagerToggle(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.isFileManagerActive = !this.isFileManagerActive;
+
+        if (this.isFileManagerActive) {
+            this.navbarLeft.nativeElement.classList.remove('active');
+            setTimeout(() => {
+                this.navbarLeftOverlay.nativeElement.classList.add('active');
+            }, 300);
+            this.fileManager.setActive();
+        } else {
+            this.navbarLeft.nativeElement.classList.add('active');
+            this.navbarLeftOverlay.nativeElement.classList.remove('active');
+            this.fileManager.setUnactive();
+        }
     }
 
 }

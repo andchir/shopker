@@ -61,6 +61,7 @@ var APP_LANG = {
     "FIELDS": "Поля",
     "FIELD_REQUIRED": "Поле \"{{name}}\" обязательно для заполнения.",
     "FIELD_TYPES": "Типы полей",
+    "FILE_MANAGER": "Файл-менеджер",
     "FORM_RESET": "Сбросить",
     "FULL_NAME": "Ф.И.О.",
     "GENERATE": "Генерировать",

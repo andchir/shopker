@@ -61,6 +61,7 @@ var APP_LANG = {
     "FIELDS": "Fields",
     "FIELD_REQUIRED": "The \"{{name}}\" field is required.",
     "FIELD_TYPES": "Field types",
+    "FILE_MANAGER": "File manager",
     "FORM_RESET": "Reset",
     "FULL_NAME": "Full name",
     "GENERATE": "Generate",

@@ -38,6 +38,7 @@ export class FileData {
         public size?: number,
         public fileName?: string,
         public dirPath?: string,
-        public dataUrl?: string|ArrayBuffer
+        public dataUrl?: string|ArrayBuffer,
+        public isDir?: boolean
     ) { }
 }

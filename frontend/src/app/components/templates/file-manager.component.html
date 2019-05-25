@@ -1,15 +1,32 @@
 <div class="panel-file-manager bg-light overflow-auto-y" #container>
     <div class="panel-file-manager-b" [class.loading]="loading">
         <div class="p-3">
+
+            <div class="alert alert-danger" *ngIf="errorMessage">{{errorMessage}}</div>
+
             <div class="row no-gutters">
 
-                <div class="col-4 py-1 px-1" *ngFor="let file of files">
-                    <div class="card card-body bg-black-10 text-center cursor-pointer">
-                        <div>
-                            <i class="icon-folder item-icon"></i>
+                <div class="col-4 py-1 px-1" *ngIf="currentPath">
+                    <div class="card card-body p-1 bg-black-20 text-primary cursor-pointer" (click)="openDirPrevous($event)">
+                        <div class="text-center">
+                            <i class="icon-corner-up-left"></i>
                         </div>
-                        <div class="text-overflow small" [title]="'Folder'">
-                            Folder
+                        <div class="text-center text-overflow small">
+                            {{ 'BACK' | translate }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-4 py-1 px-1" *ngFor="let file of files">
+                    <div class="card card-body p-1"
+                        [ngClass]="{'bg-black-20 text-white cursor-pointer': file.isDir, 'bg-black-10 cursor-default': !file.isDir}"
+                        (click)="openDir(file, $event)">
+                        <div class="text-center">
+                            <i class="icon-folder" *ngIf="file.isDir"></i>
+                            <i class="icon-file" *ngIf="!file.isDir"></i>
+                        </div>
+                        <div class="text-center text-overflow small" [title]="file.fileName">
+                            {{ file.fileName }}
                         </div>
                     </div>
                 </div>

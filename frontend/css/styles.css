@@ -37,6 +37,7 @@ body { background-color: #eee; }
 
 /* cursors */
 .cursor-pointer { cursor: pointer; }
+.cursor-default { cursor: default; }
 .cursor-ew-resize { cursor: ew-resize; }
 .cursor-ns-resize { cursor: ns-resize; }
 

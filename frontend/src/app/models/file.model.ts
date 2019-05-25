@@ -22,6 +22,7 @@ export class FileModel {
         public mimeType: string,
         public ownerType: string,
         public size: number,
-        public createdDate: string
+        public createdDate: string,
+        public isDir?: boolean
     ) { }
 }

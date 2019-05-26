@@ -7,7 +7,7 @@
         <div [class.loading]="loading">
 
             <div class="dropdown-header">
-                <button class="btn btn-sm btn-secondary mr-2" ngbTooltip="{{'OPEN_ROOT_CATEGORY' | translate}}" (click)="goToRootCategory()" *ngIf="currentCategory.id > 0">
+                <button type="button" class="btn btn-sm btn-secondary mr-2" ngbTooltip="{{'OPEN_ROOT_CATEGORY' | translate}}" (click)="goToRootCategory()" *ngIf="currentCategory.id > 0">
                     <i class="icon-home"></i>
                 </button>
                 <button type="button" class="btn btn-sm btn-secondary mr-2" ngbTooltip="{{'ADD_NEW_CATEGORY' | translate}}" (click)="openModalCategory()">

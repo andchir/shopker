@@ -16,6 +16,7 @@ import {ModalFileContentComponent} from './components/modal-file.component';
 
 import localeEn from '@angular/common/locales/en';
 import localeRu from '@angular/common/locales/ru';
+import {ModalConfirmTextComponent} from './components/modal-confirm-text.component';
 
 registerLocaleData(localeEn, 'en-EN');
 registerLocaleData(localeRu, 'ru-RU');
@@ -40,13 +41,15 @@ registerLocaleData(localeRu, 'ru-RU');
         AlertModalContentComponent,
         ConfirmModalContentComponent,
         FileManagerComponent,
-        ModalFileContentComponent
+        ModalFileContentComponent,
+        ModalConfirmTextComponent
     ],
     providers: [],
     entryComponents: [
         AlertModalContentComponent,
         ConfirmModalContentComponent,
-        ModalFileContentComponent
+        ModalFileContentComponent,
+        ModalConfirmTextComponent
     ],
     exports: [
 

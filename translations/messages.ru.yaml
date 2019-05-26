@@ -91,6 +91,7 @@ The file type is not allowed to be uploaded.: Тип файла не разре�
 File type is not allowed.: Тип файла не разрешен для загрузки.
 File is required.: Необходимо загрузить файл.
 You can not upload a file larger than %size% MB.: Вы не можете загрузить файл больше %size% МБ.
+A folder with the same name already exists.: Папка с таким именем уже существует.
 
 Sort by: Сортировать по
 catalog.sort_by_novelty: Новизне

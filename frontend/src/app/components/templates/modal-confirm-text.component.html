@@ -1,0 +1,21 @@
+<div class="modal-header d-block">
+    <h4 class="modal-title">{{ modalTitle | translate }}</h4>
+</div>
+<div class="modal-body">
+
+    <div class="form-group">
+        <label class="d-block" for="fieldTextValue">
+            {{ labelText | translate }}
+        </label>
+        <input type="text" class="form-control" id="fieldTextValue" [(ngModel)]="textValue">
+    </div>
+
+</div>
+<div class="modal-footer d-block">
+    <button type="button" class="btn btn-success btn-wide" (click)="saveHandler($event)">
+        {{ buttonText | translate }}
+    </button>
+    <button type="button" class="btn btn-secondary btn-wide" (click)="activeModal.close()">
+        {{ 'CLOSE' | translate }}
+    </button>
+</div>

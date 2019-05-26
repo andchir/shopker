@@ -1,6 +1,6 @@
 <div class="panel-file-manager bg-light" #container>
     <div class="panel-file-manager-top shadow" #toolsContainer>
-        <button type="button" class="btn btn-sm btn-secondary mr-2" ngbTooltip="{{'UPLOAD_FILE' | translate}}" placement="right" [container]="toolsContainer">
+        <button type="button" class="btn btn-sm btn-secondary mr-2" ngbTooltip="{{'UPLOAD_FILE' | translate}}" placement="right" [container]="toolsContainer" (click)="uploadFiles($event)">
             <i class="icon-file"></i>
         </button>
         <button type="button" class="btn btn-sm btn-secondary mr-2" ngbTooltip="{{'CREATE_FOLDER' | translate}}" [container]="toolsContainer" (click)="createFolder($event)">
@@ -22,6 +22,14 @@
                 </button>
                 {{errorMessage}}
             </div>
+
+            <nav aria-label="breadcrumb" *ngIf="currentPath">
+                <ol class="breadcrumb py-1 px-2">
+                    <li class="breadcrumb-item" aria-current="page">
+                        {{ currentPath }}
+                    </li>
+                </ol>
+            </nav>
 
             <div class="row no-gutters">
 

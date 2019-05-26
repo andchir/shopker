@@ -112,6 +112,7 @@
 	"REFRESH": "Refresh",
 	"REMOVE": "Remove",
 	"RENAME": "Rename",
+	"RENAME_FOLDER": "Rename folder",
 	"REQUIRED": "Required",
 	"ROLE": "Role",
 	"ROOT_FOLDER": "Root folder",
@@ -157,8 +158,8 @@
 	"YES": "Yes",
 	"YOU_SURE_YOU_WANT_DELETE": "Are you sure you want to remove this item?",
 	"YOU_SURE_YOU_WANT_DELETE_CATEGORY": "Are you sure you want to remove category",
-	"YOU_SURE_YOU_WANT_DELETE_SELECTED": "Are you sure you want to delete all selected items?",
 	"YOU_SURE_YOU_WANT_DELETE_FOLDER": "Are you sure you want to delete the folder?",
+	"YOU_SURE_YOU_WANT_DELETE_SELECTED": "Are you sure you want to delete all selected items?",
 	"admin_email": "Admin email",
 	"app": {
 		"admin_email": "Admin email",

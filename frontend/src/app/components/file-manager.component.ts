@@ -155,6 +155,19 @@ export class FileManagerComponent implements OnInit {
         });
     }
 
+    uploadFiles(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        if (this.modalRef) {
+            this.modalRef.close();
+        }
+        this.errorMessage = '';
+
+        console.log('uploadFiles', this.currentPath);
+
+    }
+
     confirmAction(message: string) {
         this.modalRef = this.modalService.open(ConfirmModalContentComponent);
         this.modalRef.componentInstance.modalTitle = this.getLangString('CONFIRM');

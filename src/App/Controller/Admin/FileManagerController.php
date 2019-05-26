@@ -24,15 +24,12 @@ class FileManagerController extends BaseController
      */
     public function listAction(Request $request)
     {
-        $publicDirPath = $this->getRootPath() . DIRECTORY_SEPARATOR . 'public';
         $files = [];
         $filesBlacklist = $this->getParameter('app.files_ext_blacklist');
-        $path = $request->get('path');
-        $path = str_replace('..', '', $path);
-        if ($path) {
-            $publicDirPath .= DIRECTORY_SEPARATOR . $path;
-        }
-        if (!is_dir($publicDirPath)) {
+        $path = $request->get('path', '');
+
+        $publicDirPath = $this->getFolderPath($path);
+        if ($publicDirPath === false) {
             return $this->json($files);
         }
 
@@ -82,17 +79,14 @@ class FileManagerController extends BaseController
         }
 
         $content['folderName'] = strip_tags($content['folderName']);
-        $publicDirPath = $this->getRootPath() . DIRECTORY_SEPARATOR . 'public';
-        if ($content['path']) {
-            $publicDirPath .= DIRECTORY_SEPARATOR . str_replace('..', '', $content['path']);
-        }
-        if (!is_dir($publicDirPath)) {
-            return $this->json(['success' => false]);
+        $path = !empty($content['path']) ? $content['path'] : '';
+
+        if ($publicDirPath = $this->getFolderPath($path)) {
+            mkdir($publicDirPath . DIRECTORY_SEPARATOR . $content['folderName']);
+            return $this->json(['success' => true]);
         }
 
-        mkdir($publicDirPath . DIRECTORY_SEPARATOR . $content['folderName']);
-
-        return $this->json(['success' => true]);
+        return $this->json(['success' => false]);
     }
 
     /**
@@ -107,15 +101,13 @@ class FileManagerController extends BaseController
         if (empty($content['path'])) {
             return $this->json(['success' => false]);
         }
-        $publicDirPath = $this->getRootPath() . DIRECTORY_SEPARATOR . 'public';
-        $publicDirPath .= DIRECTORY_SEPARATOR . str_replace('..', '', $content['path']);
-        if (!is_dir($publicDirPath)) {
-            return $this->json(['success' => false]);
+        if ($publicDirPath = $this->getFolderPath($content['path'])) {
+
+            $fs->remove($publicDirPath);
+
+            return $this->json(['success' => true]);
         }
-
-        $fs->remove($publicDirPath);
-
-        return $this->json(['success' => true]);
+        return $this->json(['success' => false]);
     }
 
     /**
@@ -130,20 +122,34 @@ class FileManagerController extends BaseController
         if (empty($content['path']) || empty($content['name'])) {
             return $this->json(['success' => false]);
         }
+        if ($publicDirPath = $this->getFolderPath($content['path'])) {
+
+            $newFolderPath = dirname($publicDirPath) . DIRECTORY_SEPARATOR . $content['name'];
+            if (is_dir($newFolderPath)) {
+                return $this->setError($translator->trans('A folder with the same name already exists.'));
+            }
+
+            rename($publicDirPath, dirname($publicDirPath) . DIRECTORY_SEPARATOR . $content['name']);
+
+            return $this->json(['success' => true]);
+        }
+        return $this->json(['success' => false]);
+    }
+
+    /**
+     * @param $folderName
+     * @return bool|string
+     */
+    public function getFolderPath($folderName)
+    {
         $publicDirPath = $this->getRootPath() . DIRECTORY_SEPARATOR . 'public';
-        $publicDirPath .= DIRECTORY_SEPARATOR . str_replace('..', '', $content['path']);
+        if ($folderName) {
+            $publicDirPath .= DIRECTORY_SEPARATOR . str_replace('..', '', $folderName);
+        }
         if (!is_dir($publicDirPath)) {
-            return $this->json(['success' => false]);
+            return false;
         }
-
-        $newFolderPath = dirname($publicDirPath) . DIRECTORY_SEPARATOR . $content['name'];
-        if (is_dir($newFolderPath)) {
-            return $this->setError($translator->trans('A folder with the same name already exists.'));
-        }
-
-        rename($publicDirPath, dirname($publicDirPath) . DIRECTORY_SEPARATOR . $content['name']);
-
-        return $this->json(['success' => true]);
+        return $publicDirPath;
     }
 
     /**

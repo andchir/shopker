@@ -48,7 +48,6 @@ export class AlertModalContentComponent {
 })
 export class AppComponent {
 
-    @ViewChild('navbarLeft') navbarLeft: ElementRef;
     @ViewChild('navbarLeftOverlay') navbarLeftOverlay: ElementRef;
     @ViewChild('fileManager') fileManager: FileManagerComponent;
     baseUrl: string;
@@ -120,13 +119,9 @@ export class AppComponent {
         this.isFileManagerActive = !this.isFileManagerActive;
 
         if (this.isFileManagerActive) {
-            this.navbarLeft.nativeElement.classList.remove('active');
-            setTimeout(() => {
-                this.navbarLeftOverlay.nativeElement.classList.add('active');
-            }, 300);
+            this.navbarLeftOverlay.nativeElement.classList.add('active');
             this.fileManager.setActive();
         } else {
-            this.navbarLeft.nativeElement.classList.add('active');
             this.navbarLeftOverlay.nativeElement.classList.remove('active');
             this.fileManager.setUnactive();
         }

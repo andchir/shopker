@@ -17,16 +17,47 @@
                     </div>
                 </div>
 
+                <div class="col-4 py-1 px-1">
+                    <div class="card card-body p-1 bg-black-20 text-primary cursor-pointer">
+                        <div class="text-center">
+                            <i class="icon-folder"></i>
+                        </div>
+                        <div class="text-center text-overflow small">
+                            {{ 'CREATE' | translate }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-4 py-1 px-1">
+                    <div class="card card-body p-1 bg-black-20 text-primary cursor-pointer">
+                        <div class="text-center">
+                            <i class="icon-file"></i>
+                        </div>
+                        <div class="text-center text-overflow small">
+                            {{ 'UPLOAD' | translate }}
+                        </div>
+                    </div>
+                </div>
+
                 <div class="col-4 py-1 px-1" *ngFor="let file of files">
                     <div class="card card-body p-1"
                         [ngClass]="{'bg-black-20 text-white cursor-pointer': file.isDir, 'bg-black-10 cursor-default': !file.isDir}"
                         (click)="openFileHandler(file, $event)">
                         <div class="text-center">
-                            <i class="icon-folder" *ngIf="file.isDir"></i>
-                            <i class="icon-file" *ngIf="!file.isDir"></i>
-                        </div>
-                        <div class="text-center text-overflow small" [title]="file.fileName">
-                            {{ file.fileName }}
+                            <ng-container *ngIf="getIsImageFile(file); else fileIcon">
+                                <div [title]="file.fileName">
+                                    <img [src]="getImageThumbnail(file)" alt="" class="max-width100 no-events" style="height: 42px;">
+                                </div>
+                            </ng-container>
+                            <ng-template #fileIcon>
+                                <div>
+                                    <i class="icon-folder" *ngIf="file.isDir"></i>
+                                    <i class="icon-file" *ngIf="!file.isDir"></i>
+                                </div>
+                                <div class="text-overflow small" [title]="file.fileName">
+                                    {{ file.fileName }}
+                                </div>
+                            </ng-template>
                         </div>
                     </div>
                 </div>

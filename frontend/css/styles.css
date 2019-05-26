@@ -4,6 +4,7 @@ body { background-color: #eee; }
 /* common */
 .w-auto { width: auto; }
 .width-100 { width: 100%; }
+.max-width100 { max-width: 100%; }
 .min-width150 { min-width: 150px; }
 .max-height400 { max-height: 400px; overflow: hidden; overflow-y: auto; }
 .big { font-size: 120%; }
@@ -24,7 +25,7 @@ body { background-color: #eee; }
 .pos-absolute-right2 { right: 0.6rem; top: 0.6rem; }
 .min-height110 { min-height: 110px; }
 .min-height400 { min-height: 400px; }
-.no-events { pointer-events: none; }
+.no-events { pointer-events: none; user-select: none; }
 .bg-white-50 { background-color: rgba(255,255,255,0.5); }
 .bg-white-20 { background-color: rgba(255,255,255,0.2); }
 .bg-black-10 { background-color: rgba(0,0,0,0.1); }

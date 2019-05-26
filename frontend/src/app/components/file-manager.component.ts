@@ -33,6 +33,7 @@ export class FileManagerComponent implements OnInit {
 
     getFilesList(): void {
         this.errorMessage = '';
+        this.files.splice(0, this.files.length);
         this.loading = true;
         this.dataService.getList({path: this.currentPath})
             .subscribe((res) => {
@@ -89,14 +90,21 @@ export class FileManagerComponent implements OnInit {
 
     setActive(): void {
         this.isActive = true;
-        setTimeout(() => {
-            this.container.nativeElement.classList.add('active');
-            this.getFilesList();
-        }, 300);
+        this.container.nativeElement.classList.add('active');
+        this.getFilesList();
     }
 
     setUnactive(): void {
         this.isActive = false;
         this.container.nativeElement.classList.remove('active');
+    }
+
+    getIsImageFile(file: FileModel): boolean {
+        return ['jpg', 'jpeg', 'png', 'webp', 'gif'].indexOf(file.extension) > -1;
+    }
+
+    getImageThumbnail(file: FileModel, filterSet = 'thumb_small'): string {
+        const src = this.getFilePath(file);
+        return `/media/cache/resolve/${filterSet}/${src}`;
     }
 }

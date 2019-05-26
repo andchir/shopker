@@ -44,7 +44,7 @@ class FileManagerController extends BaseController
                 'id' => 0,
                 'title' => $fileInfo->getFilename(),
                 'fileName' => $fileInfo->getFilename(),
-                'extension' => $fileInfo->getExtension(),
+                'extension' => strtolower($fileInfo->getExtension()),
                 'mimeType' => '',
                 'ownerType' => '',
                 'size' => $fileInfo->isFile()

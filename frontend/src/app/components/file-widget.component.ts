@@ -21,7 +21,10 @@ export class FileWidgetComponent implements ControlValueAccessor {
     @Input() fieldTitle: string;
     @Input() hasPreviewImage = false;
     @Input() allowedExtensions = '';
+    @Input() allowMultiple = false;
     @Input() files: { [key: string]: File } = {};
+    @Input() filesRaw: File[] = [];
+    @ViewChild('fileInput') fileInput: ElementRef;
     @ViewChild('imgPreview') imgPreview: ElementRef;
     @Input('controlValue') _controlValue: FileData|null = null;
     filesDirBaseUrl: string;
@@ -47,9 +50,27 @@ export class FileWidgetComponent implements ControlValueAccessor {
     }
 
     fileChange(event): void {
-        if (event.target.files.length > 0) {
-            this.onGetFile(event.target.files[0]);
+        const files = event.target.files;
+        if (files.length === 0) {
+            return;
         }
+        for (let i=0; i < files.length; i++) {
+            this.filesRaw.push(files[i]);
+        }
+        this.onGetFile(files[0]);
+    }
+
+    getFilesArr(dataTransfer: DataTransfer): File[] {
+        if (dataTransfer.items) {
+            for (let i=0; i <dataTransfer.items.length; i++) {
+                this.filesRaw.push(dataTransfer.items[i].getAsFile());
+            }
+        } else {
+            for (let i=0; i < dataTransfer.files.length; i++) {
+                this.filesRaw.push(dataTransfer.files[i]);
+            }
+        }
+        return this.filesRaw;
     }
 
     onGetFile(file: File): void {
@@ -74,9 +95,17 @@ export class FileWidgetComponent implements ControlValueAccessor {
         return FileData.getImageUrl(this.filesDirBaseUrl, data || this.controlValue);
     }
 
+    buttonHandler(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.fileInput.nativeElement.click();
+    }
+
     fileClear() {
         this.writeValue(null, true);
         delete this.files[this.fieldName];
+        this.filesRaw.splice(0, this.filesRaw.length);
         if (this.imgPreview && this.imgPreview.nativeElement) {
             this.imgPreview.nativeElement.src = '';
             this.imgPreview.nativeElement.style.display = 'none';
@@ -85,13 +114,9 @@ export class FileWidgetComponent implements ControlValueAccessor {
 
     dropHandler(event: DragEvent): void {
         event.preventDefault();
-        let file;
-        if (event.dataTransfer.items) {
-            file = event.dataTransfer.items[0].getAsFile();
-        } else {
-            file = event.dataTransfer.files[0];
-        }
-        this.onGetFile(file);
+        event.stopPropagation();
+        this.getFilesArr(event.dataTransfer);
+        this.onGetFile(this.filesRaw[0]);
     }
 
     dragOverHandler(event: DragEvent): void {
@@ -109,6 +134,9 @@ export class FileWidgetComponent implements ControlValueAccessor {
             this.fileName = `${data.title}.${data.extension}`;
             this.imageUrl = this.getImageUrl(data);
             this.controlValue = data;
+            if (this.allowMultiple && this.filesRaw.length > 1) {
+                this.fileName += ' + ' + (this.filesRaw.length - 1);
+            }
         }
     }
 

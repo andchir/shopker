@@ -5,7 +5,7 @@ import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {FileModel} from '../models/file.model';
 
 @Component({
-    selector: 'app-modal-upload-file',
+    selector: 'app-modal-file',
     templateUrl: 'templates/modal-file.html'
 })
 export class ModalFileContentComponent {

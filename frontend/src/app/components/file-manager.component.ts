@@ -6,7 +6,8 @@ import {TranslateService} from '@ngx-translate/core';
 import {FileManagerService} from '../services/file-manager.service';
 import {FileModel} from '../models/file.model';
 import {ModalFileContentComponent} from './modal-file.component';
-import {ModalConfirmTextComponent, ConfirmModalContentComponent} from './modal-confirm-text.component';;
+import {ModalConfirmTextComponent, ConfirmModalContentComponent} from './modal-confirm-text.component';
+import {ModalFileUploadContentComponent} from './modal-file-upload.component';
 
 @Component({
     selector: 'app-file-manager',
@@ -162,9 +163,10 @@ export class FileManagerComponent implements OnInit {
             this.modalRef.close();
         }
         this.errorMessage = '';
-
-        console.log('uploadFiles', this.currentPath);
-
+        this.modalRef = this.modalService.open(ModalFileUploadContentComponent);
+        this.modalRef.result.then((result) => {
+            console.log(result);
+        });
     }
 
     confirmAction(message: string) {

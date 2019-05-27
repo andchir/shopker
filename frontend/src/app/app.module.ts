@@ -21,6 +21,7 @@ import {
     ConfirmModalContentComponent,
     ModalConfirmTextComponent
 } from './components/modal-confirm-text.component';
+import {ModalFileUploadContentComponent} from './components/modal-file-upload.component';
 
 registerLocaleData(localeEn, 'en-EN');
 registerLocaleData(localeRu, 'ru-RU');
@@ -46,14 +47,16 @@ registerLocaleData(localeRu, 'ru-RU');
         ConfirmModalContentComponent,
         FileManagerComponent,
         ModalFileContentComponent,
-        ModalConfirmTextComponent
+        ModalConfirmTextComponent,
+        ModalFileUploadContentComponent
     ],
     providers: [],
     entryComponents: [
         AlertModalContentComponent,
         ConfirmModalContentComponent,
         ModalFileContentComponent,
-        ModalConfirmTextComponent
+        ModalConfirmTextComponent,
+        ModalFileUploadContentComponent
     ],
     exports: [
 

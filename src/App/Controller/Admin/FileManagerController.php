@@ -124,6 +124,7 @@ class FileManagerController extends BaseController
         }
         if ($publicDirPath = $this->getFolderPath($content['path'])) {
 
+            $content['name'] = str_replace(['/', '\\', '.'], '', $content['name']);
             $newFolderPath = dirname($publicDirPath) . DIRECTORY_SEPARATOR . $content['name'];
             if (is_dir($newFolderPath)) {
                 return $this->setError($translator->trans('A folder with the same name already exists.'));

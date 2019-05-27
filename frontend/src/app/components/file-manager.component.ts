@@ -164,8 +164,10 @@ export class FileManagerComponent implements OnInit {
         }
         this.errorMessage = '';
         this.modalRef = this.modalService.open(ModalFileUploadContentComponent);
-        this.modalRef.result.then((result) => {
-            console.log(result);
+        this.modalRef.result.then((result: File[]) => {
+            if (result && result.length > 0) {
+                console.log(result);
+            }
         });
     }
 

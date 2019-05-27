@@ -7,7 +7,7 @@ import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {AppRoutingModule} from './app-routing.module';
 import {TranslateCustomLoader} from './services/translateLoader';
 
-import {AppComponent, AlertModalContentComponent, ConfirmModalContentComponent} from './app.component';
+import {AppComponent} from './app.component';
 import {NotFoundComponent} from './not-found.component';
 import {SharedModule} from './shared.module';
 import {AppSettings} from './services/app-settings.service';
@@ -16,7 +16,11 @@ import {ModalFileContentComponent} from './components/modal-file.component';
 
 import localeEn from '@angular/common/locales/en';
 import localeRu from '@angular/common/locales/ru';
-import {ModalConfirmTextComponent} from './components/modal-confirm-text.component';
+import {
+    AlertModalContentComponent,
+    ConfirmModalContentComponent,
+    ModalConfirmTextComponent
+} from './components/modal-confirm-text.component';
 
 registerLocaleData(localeEn, 'en-EN');
 registerLocaleData(localeRu, 'ru-RU');

@@ -6,8 +6,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {FileManagerService} from '../services/file-manager.service';
 import {FileModel} from '../models/file.model';
 import {ModalFileContentComponent} from './modal-file.component';
-import {ModalConfirmTextComponent} from './modal-confirm-text.component';
-import {ConfirmModalContentComponent} from '../app.component';
+import {ModalConfirmTextComponent, ConfirmModalContentComponent} from './modal-confirm-text.component';;
 
 @Component({
     selector: 'app-file-manager',
@@ -71,7 +70,7 @@ export class FileManagerComponent implements OnInit {
         this.modalRef = this.modalService.open(ModalFileContentComponent);
         this.modalRef.componentInstance.modalTitle = file.fileName;
         this.modalRef.componentInstance.file = file;
-        this.modalRef.componentInstance.filePath = this.getFilePath(file);
+        this.modalRef.componentInstance.filePath = `/${this.getFilePath(file)}`;
     }
 
     createFolder(event?: MouseEvent): void {
@@ -111,7 +110,7 @@ export class FileManagerComponent implements OnInit {
                     this.loading = true;
                     this.dataService.deleteFolder(this.currentPath)
                         .subscribe((res) => {
-                            this.openDirPrevous();
+                            this.openDirPrevious();
                         }, (err) => {
                             this.loading = false;
                             if (err['error']) {
@@ -144,7 +143,7 @@ export class FileManagerComponent implements OnInit {
                 this.loading = true;
                 this.dataService.rename(this.currentPath, result)
                     .subscribe((res) => {
-                        this.openDirPrevous();
+                        this.openDirPrevious();
                     }, (err) => {
                         this.loading = false;
                         if (err['error']) {
@@ -186,10 +185,10 @@ export class FileManagerComponent implements OnInit {
     getFilePath(file: FileModel): string {
         return this.currentPath
             ? `${this.currentPath}/${file.fileName}`
-            : file.fileName;
+            : `${file.fileName}`;
     }
 
-    openDirPrevous(event?: MouseEvent): void {
+    openDirPrevious(event?: MouseEvent): void {
         if (event) {
             event.preventDefault();
         }

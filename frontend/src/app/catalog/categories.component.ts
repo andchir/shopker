@@ -11,10 +11,10 @@ import {TranslateService} from '@ngx-translate/core';
 import {NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig, NgbAccordion} from '@ng-bootstrap/ng-bootstrap';
 import {ContentType} from './models/content_type.model';
 import {Category} from './models/category.model';
-import {ConfirmModalContentComponent} from '../app.component';
 import {ListRecursiveComponent} from '../list-recursive.component';
 import {ModalContentAbstractComponent} from '../modal.abstract';
 import {QueryOptions} from '../models/query-options';
+import {ConfirmModalContentComponent} from '../components/modal-confirm-text.component';
 
 import {SystemNameService} from '../services/system-name.service';
 import {CategoriesService} from './services/categories.service';

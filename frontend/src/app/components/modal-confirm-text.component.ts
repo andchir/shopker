@@ -29,3 +29,32 @@ export class ModalConfirmTextComponent {
         this.activeModal.close(this.textValue);
     }
 }
+
+@Component({
+    selector: 'app-modal-confirm',
+    templateUrl: 'templates/modal-confirm.html'
+})
+export class ConfirmModalContentComponent {
+    @Input() modalTitle;
+    @Input() modalContent;
+
+    constructor(public activeModal: NgbActiveModal) {
+    }
+
+    accept() {
+        this.activeModal.close('accept');
+    }
+}
+
+@Component({
+    selector: 'app-modal-alert',
+    templateUrl: 'templates/modal-alert.html'
+})
+export class AlertModalContentComponent {
+    @Input() modalTitle;
+    @Input() modalContent;
+    @Input() messageType;
+
+    constructor(public activeModal: NgbActiveModal) {
+    }
+}

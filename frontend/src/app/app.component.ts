@@ -1,7 +1,7 @@
-import {Component, ElementRef, Input, ViewChild, ViewEncapsulation} from '@angular/core';
+import {Component, ElementRef, ViewChild, ViewEncapsulation} from '@angular/core';
 import {Router, NavigationEnd} from '@angular/router';
 import {Title} from '@angular/platform-browser';
-import {NgbActiveModal, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
+import {NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateService} from '@ngx-translate/core';
 
 import {AppSettings} from './services/app-settings.service';
@@ -9,35 +9,6 @@ import {MenuItem} from './models/menu-item.interface';
 import {FileManagerComponent} from './components/file-manager.component';
 
 declare const adminMenu: MenuItem[];
-
-@Component({
-    selector: 'app-modal-confirm',
-    templateUrl: 'templates/modal-confirm.html'
-})
-export class ConfirmModalContentComponent {
-    @Input() modalTitle;
-    @Input() modalContent;
-
-    constructor(public activeModal: NgbActiveModal) {
-    }
-
-    accept() {
-        this.activeModal.close('accept');
-    }
-}
-
-@Component({
-    selector: 'app-modal-alert',
-    templateUrl: 'templates/modal-alert.html'
-})
-export class AlertModalContentComponent {
-    @Input() modalTitle;
-    @Input() modalContent;
-    @Input() messageType;
-
-    constructor(public activeModal: NgbActiveModal) {
-    }
-}
 
 @Component({
     selector: 'app-root',

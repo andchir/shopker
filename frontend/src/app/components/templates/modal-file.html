@@ -1,16 +1,32 @@
 <div class="modal-header d-block">
     <h4 class="modal-title">{{modalTitle}}</h4>
 </div>
-<div class="modal-body">
+<div class="modal-body" #modalBody>
 
-    <div class="text-overflow">
-        <b>Path</b>: <a href="/{{ filePath }}" target="_blank">/{{ filePath }}</a>
+    <div class="float-right">
+        <button type="button" class="btn btn-secondary btn-sm"
+                [title]="'COPY_TO_CLIPBOARD' | translate"
+                (click)="copyToClipboard(filePath, $event)">
+                    <i class="icon-clipboard1"></i>
+        </button>
+    </div>
+    <div style="margin-right: 45px;">
+        <div class="text-overflow">
+            <b>{{ 'PATH' | translate }}</b>: <a href="{{ filePath }}" target="_blank">{{ filePath }}</a>
+        </div>
     </div>
     <div>
-        <b>File size</b>: {{ file.size }}
+        <b>{{ 'FILE_SIZE' | translate }}</b>: {{ file.size }}
     </div>
     <div>
-        <b>Modified date</b>: {{ file.modifiedDate }}
+        <b>{{ 'MODIFIED_DATE' | translate }}</b>: {{ file.modifiedDate }}
+    </div>
+
+    <div class="alert alert-success mt-3 mb-0" *ngIf="messageText">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="messageText = ''">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        {{ messageText | translate }}
     </div>
 
 </div>

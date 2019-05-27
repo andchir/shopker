@@ -9,6 +9,7 @@ import {EditorModule, CalendarModule, ChipsModule, ColorPickerModule, TreeModule
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {DragulaModule} from 'ng2-dragula';
 import {ToastModule} from 'primeng/toast';
+import {ClipboardModule} from 'ngx-clipboard';
 
 import {TableComponent} from './table.component';
 import {TranslationsComponent} from './translations.component';
@@ -48,7 +49,8 @@ const components = [
         ToastModule,
         NgbModule,
         TranslateModule,
-        DragulaModule.forRoot()
+        DragulaModule.forRoot(),
+        ClipboardModule
     ],
     declarations: [
         ...components,

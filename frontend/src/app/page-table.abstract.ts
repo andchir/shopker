@@ -3,8 +3,8 @@ import {NgbModal, NgbActiveModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap'
 import {TranslateService} from '@ngx-translate/core';
 
 import {QueryOptions} from './models/query-options';
-import {AlertModalContentComponent, ConfirmModalContentComponent} from './app.component';
 import {DataService} from './services/data-service.abstract';
+import {AlertModalContentComponent, ConfirmModalContentComponent} from './components/modal-confirm-text.component';
 
 export abstract class PageTableAbstractComponent<M> implements OnInit {
     errorMessage: string;

@@ -54,11 +54,48 @@ export class FileManagerService {
         );
     }
 
+    deleteFile(path: string, file: FileModel): Observable<any> {
+        const url = `${this.getRequestUrl()}/file_delete`;
+        return this.http.post<any>(url, {path: path, name: file.fileName}, {headers: this.headers}).pipe(
+            catchError(this.handleError<any>())
+        );
+    }
+
     rename(path: string, name: string, target = 'folder'): Observable<any> {
         const url = `${this.getRequestUrl()}/${target}`;
         return this.http.put<any>(url, {path: path, name: name}, {headers: this.headers}).pipe(
             catchError(this.handleError<any>())
         );
+    }
+
+    getFormData(item: any): FormData {
+        const formData: FormData = new FormData();
+        Object.keys(item).forEach((key) => {
+            if (item[key] instanceof File) {
+                formData.append(key, item[key], item[key].name);
+            } else if (typeof item[key] !== 'undefined') {
+                if (typeof item[key] === 'boolean') {
+                    formData.append(key, item[key] ? '1' : '0');
+                } else {
+                    formData.append(key, item[key] || '');
+                }
+            }
+        });
+        return formData;
+    }
+
+    postFormData(formData: FormData, path: string): Observable<any> {
+        const url = `${this.getRequestUrl()}/upload`;
+        const headers = new HttpHeaders({
+            'enctype': 'multipart/form-data',
+            'Accept': 'application/json'
+        });
+        formData.append('path', path);
+        return this.http
+            .post(url, formData, {headers: headers})
+            .pipe(
+                catchError(this.handleError<any>())
+            );
     }
 
     handleError<T> (operation = 'operation', result?: T) {

@@ -14,6 +14,7 @@ export class ModalFileContentComponent {
     @Input() file: FileModel;
     @Input() filePath: string;
     messageText: string;
+    deleteFile = false;
 
     constructor(
         public activeModal: NgbActiveModal,
@@ -27,6 +28,13 @@ export class ModalFileContentComponent {
         }
         this.clipboardService.copyFromContent(text);
         this.showMessage('FILE_PATH_COPIED');
+    }
+
+    deleteFileHandler(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.activeModal.close('delete');
     }
 
     showMessage(messageText, delay = 3000): void {

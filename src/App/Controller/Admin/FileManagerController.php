@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Service\UtilsService;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -111,6 +112,36 @@ class FileManagerController extends BaseController
     }
 
     /**
+     * @Route("/file_delete", methods={"POST"})
+     * @param Request $request
+     * @param TranslatorInterface $translator
+     * @return JsonResponse
+     */
+    public function deleteFileAction(Request $request, TranslatorInterface $translator)
+    {
+        $content = json_decode($request->getContent(), true);
+        if (empty($content['path']) || empty($content['name'])) {
+            return $this->json(['success' => false]);
+        }
+        if ($publicDirPath = $this->getFolderPath($content['path'])) {
+
+            $content['name'] = str_replace(['/', '\\'], '', $content['name']);
+            $filePath = $publicDirPath . DIRECTORY_SEPARATOR . $content['name'];
+            if (!file_exists($filePath)) {
+                return $this->setError($translator->trans('File not found.', [], 'validators'));
+            }
+            if (!is_writable($filePath)) {
+                return $this->setError($translator->trans('File is not writable.', [], 'validators'));
+            }
+
+            unlink($filePath);
+
+            return $this->json(['success' => true]);
+        }
+        return $this->json(['success' => false]);
+    }
+
+    /**
      * @Route("/folder", methods={"PUT"})
      * @param Request $request
      * @param TranslatorInterface $translator
@@ -135,6 +166,35 @@ class FileManagerController extends BaseController
             return $this->json(['success' => true]);
         }
         return $this->json(['success' => false]);
+    }
+
+    /**
+     * @Route("/upload", methods={"POST"})
+     * @param Request $request
+     * @param TranslatorInterface $translator
+     * @return JsonResponse
+     */
+    public function uploadFilesAction(Request $request, TranslatorInterface $translator)
+    {
+        $path = $request->get('path') ?: '';
+        $publicDirPath = $this->getFolderPath($path);
+        if ($publicDirPath === false) {
+            return $this->json(['success' => false]);
+        }
+
+        $filesBlacklist = $this->getParameter('app.files_ext_blacklist');
+
+        $files = $request->files;
+        /** @var UploadedFile $file */
+        foreach ($files as $file) {
+            $ext = strtolower($file->getClientOriginalExtension());
+            if (in_array($ext, $filesBlacklist)) {
+                continue;
+            }
+            $file->move($publicDirPath, $file->getClientOriginalName());
+        }
+
+        return $this->json(['success' => true]);
     }
 
     /**

@@ -1,5 +1,5 @@
 <div class="modal-header d-block">
-    <h4 class="modal-title">{{modalTitle}}</h4>
+    <h4 class="modal-title text-overflow">{{modalTitle}}</h4>
 </div>
 <div class="modal-body" #modalBody>
 
@@ -18,22 +18,39 @@
     <div>
         <b>{{ 'FILE_SIZE' | translate }}</b>: {{ file.size }}
     </div>
-    <div>
+    <div class="mb-3">
         <b>{{ 'MODIFIED_DATE' | translate }}</b>: {{ file.modifiedDate }}
     </div>
 
-    <div class="alert alert-success mt-3 mb-0" *ngIf="messageText">
+    <div class="alert alert-success" *ngIf="messageText">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="messageText = ''">
             <span aria-hidden="true">&times;</span>
         </button>
         {{ messageText | translate }}
     </div>
 
+    <div class="card" *ngIf="deleteFile">
+        <div class="card-body p-2">
+            <div class="text-center mb-1">
+                {{ 'YOU_SURE_YOU_WANT_DELETE_FILE' | translate }}
+            </div>
+            <div class="text-center">
+                <button type="button" class="btn btn-info btn-wide btn-sm mx-1" (click)="deleteFileHandler($event)">
+                    {{ 'YES' | translate }}
+                </button>
+                <button type="button" class="btn btn-secondary btn-sm mx-1" (click)="deleteFile = false">
+                    {{ 'CANCEL' | translate }}
+                </button>
+            </div>
+        </div>
+    </div>
+
 </div>
 <div class="modal-footer d-block">
-    <div class="float-right" *ngIf="file.isEditable">
-        <button type="button" class="btn btn-primary btn-wide">
-            {{ 'EDIT' | translate }}
+    <div class="float-right">
+        <button type="button" class="btn btn-secondary btn-sm" [title]="'DELETE' | translate" (click)="deleteFile = true">
+            <i class="icon-cross"></i>
+            {{ 'DELETE' | translate }}
         </button>
     </div>
     <button type="button" class="btn btn-secondary btn-wide" (click)="activeModal.close()">

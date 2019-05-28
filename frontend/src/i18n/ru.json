@@ -163,6 +163,7 @@
 	"YES": "Да",
 	"YOU_SURE_YOU_WANT_DELETE": "Вы уверены, что хотите удалить этот элемент?",
 	"YOU_SURE_YOU_WANT_DELETE_CATEGORY": "Вы уверены, что хотите удалить категорию",
+	"YOU_SURE_YOU_WANT_DELETE_FILE": "Вы уверены, что хотите удалить файл?",
 	"YOU_SURE_YOU_WANT_DELETE_FOLDER": "Вы уверены, что хотите удалить папку?",
 	"YOU_SURE_YOU_WANT_DELETE_SELECTED": "Вы уверены, что хотите удалить все выбранные элементы?",
 	"admin_email": "Адрес эл. почты администратора",

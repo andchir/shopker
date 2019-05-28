@@ -72,6 +72,23 @@ export class FileManagerComponent implements OnInit {
         this.modalRef.componentInstance.modalTitle = file.fileName;
         this.modalRef.componentInstance.file = file;
         this.modalRef.componentInstance.filePath = `/${this.getFilePath(file)}`;
+        this.modalRef.result.then((result: string) => {
+            switch (result) {
+                case 'delete':
+                    this.loading = true;
+                    this.dataService.deleteFile(this.currentPath, file)
+                        .subscribe((res) => {
+                            this.setActive();
+                        }, (err) => {
+                            this.loading = false;
+                            if (err['error']) {
+                                this.errorMessage = err['error'];
+                                this.setActive(false);
+                            }
+                        });
+                    break;
+            }
+        });
     }
 
     createFolder(event?: MouseEvent): void {
@@ -96,6 +113,7 @@ export class FileManagerComponent implements OnInit {
                         if (err['error']) {
                             this.errorMessage = err['error'];
                         }
+                        this.setActive();
                     });
             }
         });
@@ -166,7 +184,22 @@ export class FileManagerComponent implements OnInit {
         this.modalRef = this.modalService.open(ModalFileUploadContentComponent);
         this.modalRef.result.then((result: File[]) => {
             if (result && result.length > 0) {
-                console.log(result);
+
+                this.loading = true;
+                const data = {};
+                result.forEach((file, index) => {
+                    data[`file${index}`] = file;
+                });
+                this.dataService.postFormData(this.dataService.getFormData(data), this.currentPath)
+                    .subscribe((res) => {
+                        this.loading = false;
+                        this.setActive();
+                    }, (err) => {
+                        this.loading = false;
+                        if (err['error']) {
+                            this.errorMessage = err['error'];
+                        }
+                    });
             }
         });
     }
@@ -205,10 +238,12 @@ export class FileManagerComponent implements OnInit {
         this.getFilesList();
     }
 
-    setActive(): void {
+    setActive(updateFiles = true): void {
         this.isActive = true;
         this.container.nativeElement.classList.add('active');
-        this.getFilesList();
+        if (updateFiles) {
+            this.getFilesList();
+        }
     }
 
     setUnactive(): void {

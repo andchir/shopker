@@ -21,10 +21,21 @@
 
                 <div ngbDropdown class="d-block d-md-inline-block ml-md-2 mb-2 mb-md-0" placement="bottom-right">
                     <button class="btn btn-primary d-block d-md-inline-block width-100 width-md-auto" ngbDropdownToggle>
+                        <span>{{'CONFIG_FILES' | translate}}</span>
+                    </button>
+                    <div class="max-height400" ngbDropdownMenu>
+                        <button class="dropdown-item" *ngFor="let item of files | filter:{type: 'config'}" (click)="editFile(item, $event)">
+                            {{ item.name }} <span class="text-muted small">({{ item.size }})</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div ngbDropdown class="d-block d-md-inline-block ml-md-2 mb-2 mb-md-0" placement="bottom-right">
+                    <button class="btn btn-primary d-block d-md-inline-block width-100 width-md-auto" ngbDropdownToggle>
                         <span>{{'STYLES' | translate}}</span>
                     </button>
                     <div class="max-height400" ngbDropdownMenu>
-                        <button class="dropdown-item" *ngFor="let item of files | filter:{extension: 'css'}" (click)="editFile(item, $event)">
+                        <button class="dropdown-item" *ngFor="let item of files | filter:{type: 'css'}" (click)="editFile(item, $event)">
                             {{ item.name }} <span class="text-muted small">({{ item.size }})</span>
                         </button>
                     </div>
@@ -35,7 +46,7 @@
                         <span>{{'SCRIPTS' | translate}}</span>
                     </button>
                     <div class="max-height400" ngbDropdownMenu>
-                        <button class="dropdown-item" *ngFor="let item of files | filter:{extension: 'js'}" (click)="editFile(item, $event)">
+                        <button class="dropdown-item" *ngFor="let item of files | filter:{type: 'js'}" (click)="editFile(item, $event)">
                             {{ item.name }} <span class="text-muted small">({{ item.size }})</span>
                         </button>
                     </div>

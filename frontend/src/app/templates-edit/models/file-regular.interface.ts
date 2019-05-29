@@ -5,4 +5,5 @@ export interface FileRegularInterface {
     content?: string;
     size?: number|string;
     clearCache?: boolean;
+    type?: string;
 }

@@ -43,10 +43,12 @@ export class ModalTemplateEditComponent implements OnInit {
             this.model.name = this.template.name;
             this.model.path = this.template.path;
             this.model.extension = 'twig';
+            this.model.type = 'template';
         } else if (this.file) {
             this.model.name = this.file.name;
             this.model.path = this.file.path;
             this.model.extension = this.file.extension;
+            this.model.type = this.file.type;
             this.isPathReadOnly = true;
         }
         const modelist = ace.require('ace/ext/modelist');
@@ -73,7 +75,7 @@ export class ModalTemplateEditComponent implements OnInit {
             fileType = 'twig';
         } else if (this.file) {
             filePath = Template.getPath(this.file);
-            fileType = this.file.extension;
+            fileType = this.file.type;
         }
         this.dataService.getItemContent(filePath, fileType)
             .subscribe((res) => {

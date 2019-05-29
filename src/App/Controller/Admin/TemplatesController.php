@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Component\Yaml\Exception\ParseException;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class TemplatesController
@@ -28,9 +30,6 @@ class TemplatesController extends StorageControllerAbstract
     {
         if (empty($data['name'])) {
             return ['success' => false, 'msg' => 'Name can not be empty.'];
-        }
-        if (empty($data['path'])) {
-            return ['success' => false, 'msg' => 'Path can not be empty.'];
         }
         return ['success' => true];
     }
@@ -116,32 +115,38 @@ class TemplatesController extends StorageControllerAbstract
 
         $rootPath = realpath($this->getParameter('kernel.root_dir').'/../..');
         $publicDirPath = $rootPath . DIRECTORY_SEPARATOR . 'public';
+        $configDirPath = $rootPath . DIRECTORY_SEPARATOR . 'config';
         $editable = [];
         $editable['css'] = $this->getParameter('app.editable_css');
         $editable['js'] = $this->getParameter('app.editable_js');
+        $editable['config'] = $this->getParameter('app.editable_config');
 
-        $fileTypes = ['css', 'js'];
+        $fileTypes = ['css', 'js', 'config'];
         foreach ($fileTypes as $fileType) {
-            $dirPath = $publicDirPath . DIRECTORY_SEPARATOR . $fileType;
-            $filesArr = $this->getFiles($dirPath, $fileType);
+            if (is_null($editable[$fileType])) {
+                continue;
+            }
+            if ($fileType == 'config') {
+                $dirPath = $configDirPath;
+            } else {
+                $dirPath = $publicDirPath . DIRECTORY_SEPARATOR . $fileType;
+            }
+            $filesArr = $this->getFiles($dirPath);
             foreach ($filesArr as $fileData) {
                 $filePath = str_replace(
-                    $publicDirPath,
+                    $dirPath,
                     '',
                     $fileData['path'] . DIRECTORY_SEPARATOR . $fileData['name']
                 );
-                if (!is_null($editable[$fileType]) && !in_array($filePath, $editable[$fileType])) {
+                if (!in_array($filePath, $editable[$fileType])) {
                     continue;
                 }
                 array_push($items, [
                     'name' => $fileData['name'],
-                    'extension' => $fileType,
+                    'type' => $fileType,
+                    'extension' => UtilsService::getExtension($fileData['name']),
                     'size' => UtilsService::sizeFormat(filesize($fileData['path'] . DIRECTORY_SEPARATOR . $fileData['name'])),
-                    'path' => str_replace(
-                            $publicDirPath . DIRECTORY_SEPARATOR,
-                            '',
-                            $fileData['path']
-                        )
+                    'path' => str_replace($dirPath, '', $fileData['path'])
                 ]);
             }
         }
@@ -160,14 +165,14 @@ class TemplatesController extends StorageControllerAbstract
      * @param array $filesArr
      * @return array
      */
-    public function getFiles($dirPath, $ext, $filesArr = [])
+    public function getFiles($dirPath, $ext = '', $filesArr = [])
     {
         $files = array_diff(scandir($dirPath), ['..', '.']);
         foreach ($files as $fileName) {
             $path = $dirPath . DIRECTORY_SEPARATOR . $fileName;
             if (is_dir($path)) {
                 $filesArr = $this->getFiles($path, $ext, $filesArr);
-            } else if (UtilsService::getExtension($fileName) == $ext) {
+            } else if (!$ext || UtilsService::getExtension($fileName) == $ext) {
                 $filesArr[] = [
                     'name' => $fileName,
                     'path' => $dirPath
@@ -187,71 +192,41 @@ class TemplatesController extends StorageControllerAbstract
         /** @var TranslatorInterface $translator */
         $translator = $this->get('translator');
 
-        $content = '';
-
-        $rootPath = realpath($this->getParameter('kernel.root_dir').'/../..');
-        $publicDirPath = $rootPath . DIRECTORY_SEPARATOR . 'public';
-        $templatesDirPath = $this->getTemplatesDirPath();
-
-        $filePath = $request->get('path');
+        $filePath = str_replace('..', '', $request->get('path'));
         $fileType = $request->get('type', 'twig');
 
-        switch ($fileType) {
-            case 'css':
-            case 'js':
-                $filePath = $publicDirPath . DIRECTORY_SEPARATOR . $filePath;
-                if (strpos($filePath, $publicDirPath . DIRECTORY_SEPARATOR . $fileType) !== 0) {
-                    return $this->setError($translator->trans('The specified file path does not exist.', [], 'validators'));
-                }
-                break;
-            default:
-                $filePath = $templatesDirPath . DIRECTORY_SEPARATOR . $filePath;
-        }
-        $filePath = str_replace('..', '', $filePath);
+        $filePath = $this->getFilePathByType($fileType, $filePath);
 
-        if (file_exists($filePath)) {
-            $content = file_get_contents($filePath);
+        if (!$filePath || !file_exists($filePath)) {
+            return $this->setError($translator->trans('The specified file path does not exist.', [], 'validators'));
+        }
+        if (!is_readable($filePath)) {
+            return $this->setError($translator->trans('The file is not readable.', [], 'validators'));
         }
 
         return $this->json([
-            'content' => $content
+            'content' => file_get_contents($filePath)
         ]);
     }
 
     /**
      * @param array $data
      * @return JsonResponse
+     * @throws \Exception
      */
     protected function createUpdate($data)
     {
         /** @var TranslatorInterface $translator */
         $translator = $this->get('translator');
 
-        $rootPath = realpath($this->getParameter('kernel.root_dir').'/../..');
-        $publicDirPath = $rootPath . DIRECTORY_SEPARATOR . 'public';
-        $templatesDirPath = $this->getTemplatesDirPath();
-
         $fileContent = $data['content'] ?? '';
-        $fileName = $data['name'];
-        $extension = UtilsService::getExtension($fileName);
-        $filePath = trim($data['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $fileName;
+        $fileName = str_replace('..', '', $data['name']);
+        $filePath = trim(str_replace('..', '', $data['path']), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $fileName;
+        $fileType = $data['type'] ?? 'template';
 
-        switch ($extension) {
-            case 'css':
-            case 'js':
-                $filePath = $publicDirPath . DIRECTORY_SEPARATOR . $filePath;
-                if (strpos($filePath, $publicDirPath . DIRECTORY_SEPARATOR . $extension) !== 0) {
-                    return $this->setError($translator->trans('The specified file path does not exist.', [], 'validators'));
-                }
-                if (!file_exists($filePath)) {
-                    return $this->setError($translator->trans('File not found.', [], 'validators'));
-                }
-                break;
-            default:
-                $filePath = $templatesDirPath . DIRECTORY_SEPARATOR . $filePath;
-        }
+        $filePath = $this->getFilePathByType($fileType, $filePath);
 
-        if (!in_array(UtilsService::getExtension($data['name']), ['twig', 'css', 'js'])) {
+        if (!in_array(UtilsService::getExtension($data['name']), ['twig', 'css', 'js', 'yml', 'yaml'])) {
             return $this->setError($translator->trans('Allowed file types: %extensions%.', [
                 '%extensions%' => 'twig, css, js'
             ], 'validators'));
@@ -261,6 +236,14 @@ class TemplatesController extends StorageControllerAbstract
         }
         if (file_exists($filePath) && !is_writable($filePath)) {
             return $this->setError($translator->trans('File is not writable.', [], 'validators'));
+        }
+
+        if ($fileType === 'config') {
+            try {
+                Yaml::parse($fileContent);
+            } catch (ParseException $e) {
+                return $this->setError($translator->trans('Content not compliant with YAML format.', [], 'validators') . ' ' . $e->getMessage());
+            }
         }
 
         file_put_contents($filePath, $fileContent);
@@ -274,6 +257,33 @@ class TemplatesController extends StorageControllerAbstract
         return $this->json([
             'success' => true
         ]);
+    }
+
+    /**
+     * @param $fileType
+     * @param $filePath
+     * @return string
+     */
+    public function getFilePathByType($fileType, $filePath)
+    {
+        $rootPath = realpath($this->getParameter('kernel.root_dir').'/../..');
+        $publicDirPath = $rootPath . DIRECTORY_SEPARATOR . 'public';
+        $configDirPath = $rootPath . DIRECTORY_SEPARATOR . 'config';
+        $templatesDirPath = $this->getTemplatesDirPath();
+        $filePath = trim($filePath, DIRECTORY_SEPARATOR);
+
+        switch ($fileType) {
+            case 'css':
+            case 'js':
+                $filePath = implode(DIRECTORY_SEPARATOR, [$publicDirPath, $fileType, $filePath]);
+                break;
+            case 'config':
+                $filePath = implode(DIRECTORY_SEPARATOR, [$configDirPath, $filePath]);
+                break;
+            default:
+                $filePath = $templatesDirPath . DIRECTORY_SEPARATOR . $filePath;
+        }
+        return $filePath;
     }
 
     /**

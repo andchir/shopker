@@ -62,8 +62,12 @@ export class FileManagerComponent {
     }
 
     openModal(file: FileModel) {
-        this.modalService.dismissAll();
+        if (this.modalRef) {
+            this.modalRef.dismiss();
+            this.modalRef = null;
+        }
         const currentFile = cloneDeep(file);
+
         this.modalRef = this.modalService.open(ModalFileContentComponent, {backdrop: 'static', keyboard: false});
         this.modalRef.componentInstance.modalTitle = currentFile.fileName;
         this.modalRef.componentInstance.file = currentFile;
@@ -103,7 +107,10 @@ export class FileManagerComponent {
         if (event) {
             event.preventDefault();
         }
-        this.modalService.dismissAll();
+        if (this.modalRef) {
+            this.modalRef.dismiss();
+            this.modalRef = null;
+        }
         this.errorMessage = '';
         this.modalRef = this.modalService.open(ModalConfirmTextComponent, {backdrop: 'static', keyboard: false});
         this.modalRef.componentInstance.modalTitle = 'CREATE_FOLDER';
@@ -129,7 +136,10 @@ export class FileManagerComponent {
         if (event) {
             event.preventDefault();
         }
-        this.modalService.dismissAll();
+        if (this.modalRef) {
+            this.modalRef.dismiss();
+            this.modalRef = null;
+        }
         this.confirmAction(this.getLangString('YOU_SURE_YOU_WANT_DELETE_FOLDER'))
             .then((result) => {
                 if (result === 'accept') {
@@ -151,7 +161,10 @@ export class FileManagerComponent {
         if (event) {
             event.preventDefault();
         }
-        this.modalService.dismissAll();
+        if (this.modalRef) {
+            this.modalRef.dismiss();
+            this.modalRef = null;
+        }
         this.errorMessage = '';
 
         const tmp = this.currentPath.split('/');
@@ -182,7 +195,10 @@ export class FileManagerComponent {
         if (event) {
             event.preventDefault();
         }
-        this.modalService.dismissAll();
+        if (this.modalRef) {
+            this.modalRef.dismiss();
+            this.modalRef = null;
+        }
         this.errorMessage = '';
         this.modalRef = this.modalService.open(ModalFileUploadContentComponent, {backdrop: 'static', keyboard: false});
         this.modalRef.result.then((result: File[]) => {

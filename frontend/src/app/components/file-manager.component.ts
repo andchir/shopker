@@ -1,5 +1,6 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 
+import {cloneDeep} from 'lodash';
 import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateService} from '@ngx-translate/core';
 
@@ -14,7 +15,7 @@ import {ModalFileUploadContentComponent} from './modal-file-upload.component';
     templateUrl: 'templates/file-manager.component.html',
     providers: [FileManagerService]
 })
-export class FileManagerComponent implements OnInit {
+export class FileManagerComponent {
 
     @ViewChild('container') container;
     modalRef: NgbModalRef;
@@ -29,10 +30,6 @@ export class FileManagerComponent implements OnInit {
         public modalService: NgbModal,
         public translateService: TranslateService
     ) {
-
-    }
-
-    ngOnInit(): void {
 
     }
 
@@ -65,18 +62,17 @@ export class FileManagerComponent implements OnInit {
     }
 
     openModal(file: FileModel) {
-        if (this.modalRef) {
-            this.modalRef.close();
-        }
-        this.modalRef = this.modalService.open(ModalFileContentComponent);
-        this.modalRef.componentInstance.modalTitle = file.fileName;
-        this.modalRef.componentInstance.file = file;
-        this.modalRef.componentInstance.filePath = `/${this.getFilePath(file)}`;
+        this.modalService.dismissAll();
+        const currentFile = cloneDeep(file);
+        this.modalRef = this.modalService.open(ModalFileContentComponent, {backdrop: 'static', keyboard: false});
+        this.modalRef.componentInstance.modalTitle = currentFile.fileName;
+        this.modalRef.componentInstance.file = currentFile;
+        this.modalRef.componentInstance.filePath = `/${this.getFilePath(currentFile)}`;
         this.modalRef.result.then((result: string) => {
             switch (result) {
                 case 'delete':
                     this.loading = true;
-                    this.dataService.deleteFile(this.currentPath, file)
+                    this.dataService.deleteFile(this.currentPath, currentFile)
                         .subscribe((res) => {
                             this.setActive();
                         }, (err) => {
@@ -84,6 +80,18 @@ export class FileManagerComponent implements OnInit {
                             if (err['error']) {
                                 this.errorMessage = err['error'];
                                 this.setActive(false);
+                            }
+                        });
+                    break;
+                case 'rename':
+                    this.loading = true;
+                    this.dataService.rename(this.getFilePath(currentFile), currentFile.title, 'file')
+                        .subscribe((res) => {
+                            this.setActive();
+                        }, (err) => {
+                            this.loading = false;
+                            if (err['error']) {
+                                this.errorMessage = err['error'];
                             }
                         });
                     break;
@@ -95,11 +103,9 @@ export class FileManagerComponent implements OnInit {
         if (event) {
             event.preventDefault();
         }
-        if (this.modalRef) {
-            this.modalRef.close();
-        }
+        this.modalService.dismissAll();
         this.errorMessage = '';
-        this.modalRef = this.modalService.open(ModalConfirmTextComponent);
+        this.modalRef = this.modalService.open(ModalConfirmTextComponent, {backdrop: 'static', keyboard: false});
         this.modalRef.componentInstance.modalTitle = 'CREATE_FOLDER';
         this.modalRef.componentInstance.labelText = 'FOLDER_NAME';
         this.modalRef.result.then((result) => {
@@ -123,6 +129,7 @@ export class FileManagerComponent implements OnInit {
         if (event) {
             event.preventDefault();
         }
+        this.modalService.dismissAll();
         this.confirmAction(this.getLangString('YOU_SURE_YOU_WANT_DELETE_FOLDER'))
             .then((result) => {
                 if (result === 'accept') {
@@ -144,15 +151,13 @@ export class FileManagerComponent implements OnInit {
         if (event) {
             event.preventDefault();
         }
-        if (this.modalRef) {
-            this.modalRef.close();
-        }
+        this.modalService.dismissAll();
         this.errorMessage = '';
 
         const tmp = this.currentPath.split('/');
         const folderName = tmp.pop();
 
-        this.modalRef = this.modalService.open(ModalConfirmTextComponent);
+        this.modalRef = this.modalService.open(ModalConfirmTextComponent, {backdrop: 'static', keyboard: false});
         this.modalRef.componentInstance.modalTitle = 'RENAME_FOLDER';
         this.modalRef.componentInstance.labelText = 'FOLDER_NAME';
         this.modalRef.componentInstance.textValue = folderName;
@@ -177,11 +182,9 @@ export class FileManagerComponent implements OnInit {
         if (event) {
             event.preventDefault();
         }
-        if (this.modalRef) {
-            this.modalRef.close();
-        }
+        this.modalService.dismissAll();
         this.errorMessage = '';
-        this.modalRef = this.modalService.open(ModalFileUploadContentComponent);
+        this.modalRef = this.modalService.open(ModalFileUploadContentComponent, {backdrop: 'static', keyboard: false});
         this.modalRef.result.then((result: File[]) => {
             if (result && result.length > 0) {
 

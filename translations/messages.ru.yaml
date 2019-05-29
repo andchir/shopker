@@ -92,6 +92,7 @@ File type is not allowed.: Тип файла не разрешен для заг
 File is required.: Необходимо загрузить файл.
 You can not upload a file larger than %size% MB.: Вы не можете загрузить файл больше %size% МБ.
 A folder with the same name already exists.: Папка с таким именем уже существует.
+You cannot delete or rename the system folder.: Вы не можете удалить или переименовать системную папку.
 
 Sort by: Сортировать по
 catalog.sort_by_novelty: Новизне

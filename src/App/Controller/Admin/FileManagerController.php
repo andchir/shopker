@@ -36,13 +36,16 @@ class FileManagerController extends BaseController
 
         foreach (new \DirectoryIterator($publicDirPath) as $fileInfo) {
             if($fileInfo->isDot()
+                || $fileInfo->isLink()
                 || substr($fileInfo->getFilename(), 0, 1) === '.'
                 || in_array($fileInfo->getExtension(), $filesBlacklist)) {
                     continue;
             }
             $files[] = [
                 'id' => 0,
-                'title' => $fileInfo->getFilename(),
+                'title' => !$fileInfo->isDir()
+                    ? $fileInfo->getBasename('.' . $fileInfo->getExtension())
+                    : $fileInfo->getFilename(),
                 'fileName' => $fileInfo->getFilename(),
                 'extension' => strtolower($fileInfo->getExtension()),
                 'mimeType' => '',
@@ -94,13 +97,17 @@ class FileManagerController extends BaseController
      * @Route("/folder_delete", methods={"POST"})
      * @param Request $request
      * @param Filesystem $fs
+     * @param TranslatorInterface $translator
      * @return JsonResponse
      */
-    public function deleteFolderAction(Request $request, Filesystem $fs)
+    public function deleteFolderAction(Request $request, Filesystem $fs, TranslatorInterface $translator)
     {
         $content = json_decode($request->getContent(), true);
         if (empty($content['path'])) {
             return $this->json(['success' => false]);
+        }
+        if (in_array($content['path'], ['uploads','admin'])) {
+            return $this->setError($translator->trans('You cannot delete or rename the system folder.'));
         }
         if ($publicDirPath = $this->getFolderPath($content['path'])) {
 
@@ -120,7 +127,7 @@ class FileManagerController extends BaseController
     public function deleteFileAction(Request $request, TranslatorInterface $translator)
     {
         $content = json_decode($request->getContent(), true);
-        if (empty($content['path']) || empty($content['name'])) {
+        if (!isset($content['path']) || empty($content['name'])) {
             return $this->json(['success' => false]);
         }
         if ($publicDirPath = $this->getFolderPath($content['path'])) {
@@ -153,6 +160,9 @@ class FileManagerController extends BaseController
         if (empty($content['path']) || empty($content['name'])) {
             return $this->json(['success' => false]);
         }
+        if (in_array($content['path'], ['uploads','admin'])) {
+            return $this->setError($translator->trans('You cannot delete or rename the system folder.'));
+        }
         if ($publicDirPath = $this->getFolderPath($content['path'])) {
 
             $content['name'] = str_replace(['/', '\\', '.'], '', $content['name']);
@@ -166,6 +176,40 @@ class FileManagerController extends BaseController
             return $this->json(['success' => true]);
         }
         return $this->json(['success' => false]);
+    }
+
+    /**
+     * @Route("/file", methods={"PUT"})
+     * @param Request $request
+     * @param TranslatorInterface $translator
+     * @return JsonResponse
+     */
+    public function renameFileAction(Request $request, TranslatorInterface $translator)
+    {
+        $content = json_decode($request->getContent(), true);
+        if (!isset($content['path']) || empty($content['name'])) {
+            return $this->json(['success' => false]);
+        }
+        $dirName = dirname($content['path']);
+        $publicDirPath = $this->getFolderPath($dirName);
+        if ($publicDirPath === false) {
+            return $this->json(['success' => false]);
+        }
+
+        $filePath = $publicDirPath . DIRECTORY_SEPARATOR . basename($content['path']);
+        if (!file_exists($filePath)) {
+            return $this->setError($translator->trans('File not found.', [], 'validators'));
+        }
+        if (!is_writable($filePath)) {
+            return $this->setError($translator->trans('File is not writable.', [], 'validators'));
+        }
+
+        $content['name'] = str_replace(['/', '\\', '.'], '', $content['name']);
+        $newFileName = $content['name'] . '.' . UtilsService::getExtension($filePath);
+
+        rename($filePath, $publicDirPath . DIRECTORY_SEPARATOR . $newFileName);
+
+        return $this->json(['success' => true]);
     }
 
     /**

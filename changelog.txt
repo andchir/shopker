@@ -4,6 +4,8 @@
 - Create filters from parameters input type.
 - Ability to customize the fields in the checkout form.
 - Confirm user email.
+- File manager.
+- Ability to edit configuration YAML files.
 
 4.0.4
 - New template for slider on home page.

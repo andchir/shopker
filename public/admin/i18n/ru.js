@@ -27,6 +27,7 @@ var APP_LANG = {
     "COLLECTION": "Коллекция",
     "COLOR": "Цвет",
     "COMMENT": "Комментарий",
+    "CONFIG_FILES": "Конфиг. файлы",
     "CONFIRM": "Подтверждение",
     "CONFIRM_PASSWORD": "Подтвердите пароль",
     "CONSOLE": "Консоль",

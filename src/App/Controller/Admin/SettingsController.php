@@ -364,6 +364,8 @@ class SettingsController extends Controller
             'filesDirUrl' => $this->getParameter('app.files_dir_url'),
             'baseDir' => realpath($this->getParameter('kernel.root_dir').'/../..') . DIRECTORY_SEPARATOR,
             'locale' => $this->getParameter('locale'),
+            'templateTheme' => $this->getParameter('app.template_theme'),
+            'isFileManagerEnabled' => $this->getParameter('app.file_manager_enabled'),
             'localeList' => $localeList,
             'userEmail' => $user->getEmail(),
             'userRoles' => $user->getRoles(),

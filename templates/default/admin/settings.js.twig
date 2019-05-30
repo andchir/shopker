@@ -9,6 +9,8 @@ var appSettings = {
     webApiUrl: '{{ app.request.baseUrl }}',
     environment: '{{ app.environment }}',
     filesDirUrl: '{{ settings.filesDirUrl }}',
+    templateTheme: '{{ settings.templateTheme }}',
+    isFileManagerEnabled: {% if settings.isFileManagerEnabled %}true{% else %}false{% endif %},
     userEmail: '{{ settings.userEmail }}',
     userRoles: {{ settings.userRoles | json_encode | raw }},
     locale: '{{ settings.locale }}',

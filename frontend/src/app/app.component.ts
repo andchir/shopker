@@ -26,6 +26,7 @@ export class AppComponent {
     menuItems: MenuItem[] = [...adminMenu];
     appVersion: string;
     isFileManagerActive = false;
+    isFileManagerEnabled = false;
 
     constructor(
         tooltipConfig: NgbTooltipConfig,
@@ -35,6 +36,7 @@ export class AppComponent {
         private appSettings: AppSettings
     ) {
         this.baseUrl = this.appSettings.settings.webApiUrl + '/';
+        this.isFileManagerEnabled = this.appSettings.settings.isFileManagerEnabled;
 
         tooltipConfig.placement = 'bottom';
         tooltipConfig.container = 'body';

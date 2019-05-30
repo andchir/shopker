@@ -21,10 +21,14 @@ class FileManagerController extends BaseController
     /**
      * @Route("/", methods={"GET"})
      * @param Request $request
+     * @param TranslatorInterface $translator
      * @return JsonResponse
      */
-    public function listAction(Request $request)
+    public function listAction(Request $request, TranslatorInterface $translator)
     {
+        if (!$this->getParameter('app.file_manager_enabled')) {
+            return $this->setError($translator->trans('File manager is disabled.'));
+        }
         $files = [];
         $filesBlacklist = $this->getParameter('app.files_ext_blacklist');
         $path = $request->get('path', '');
@@ -73,10 +77,14 @@ class FileManagerController extends BaseController
     /**
      * @Route("/folder", methods={"POST"})
      * @param Request $request
+     * @param TranslatorInterface $translator
      * @return JsonResponse
      */
-    public function createFolderAction(Request $request)
+    public function createFolderAction(Request $request, TranslatorInterface $translator)
     {
+        if (!$this->getParameter('app.file_manager_enabled')) {
+            return $this->setError($translator->trans('File manager is disabled.'));
+        }
         $content = json_decode($request->getContent(), true);
         if (empty($content['folderName'])) {
             return $this->json(['success' => false]);
@@ -102,6 +110,9 @@ class FileManagerController extends BaseController
      */
     public function deleteFolderAction(Request $request, Filesystem $fs, TranslatorInterface $translator)
     {
+        if (!$this->getParameter('app.file_manager_enabled')) {
+            return $this->setError($translator->trans('File manager is disabled.'));
+        }
         $content = json_decode($request->getContent(), true);
         if (empty($content['path'])) {
             return $this->json(['success' => false]);
@@ -126,6 +137,9 @@ class FileManagerController extends BaseController
      */
     public function deleteFileAction(Request $request, TranslatorInterface $translator)
     {
+        if (!$this->getParameter('app.file_manager_enabled')) {
+            return $this->setError($translator->trans('File manager is disabled.'));
+        }
         $content = json_decode($request->getContent(), true);
         if (!isset($content['path']) || empty($content['name'])) {
             return $this->json(['success' => false]);
@@ -156,6 +170,9 @@ class FileManagerController extends BaseController
      */
     public function renameFolderAction(Request $request, TranslatorInterface $translator)
     {
+        if (!$this->getParameter('app.file_manager_enabled')) {
+            return $this->setError($translator->trans('File manager is disabled.'));
+        }
         $content = json_decode($request->getContent(), true);
         if (empty($content['path']) || empty($content['name'])) {
             return $this->json(['success' => false]);
@@ -186,6 +203,9 @@ class FileManagerController extends BaseController
      */
     public function renameFileAction(Request $request, TranslatorInterface $translator)
     {
+        if (!$this->getParameter('app.file_manager_enabled')) {
+            return $this->setError($translator->trans('File manager is disabled.'));
+        }
         $content = json_decode($request->getContent(), true);
         if (!isset($content['path']) || empty($content['name'])) {
             return $this->json(['success' => false]);
@@ -220,6 +240,9 @@ class FileManagerController extends BaseController
      */
     public function uploadFilesAction(Request $request, TranslatorInterface $translator)
     {
+        if (!$this->getParameter('app.file_manager_enabled')) {
+            return $this->setError($translator->trans('File manager is disabled.'));
+        }
         $path = $request->get('path') ?: '';
         $publicDirPath = $this->getFolderPath($path);
         if ($publicDirPath === false) {

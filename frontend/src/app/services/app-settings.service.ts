@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { AppSettingsModel } from '../models/app-settings.model';
+import {Injectable} from '@angular/core';
+import {AppSettingsModel} from '../models/app-settings.model';
 
 @Injectable({
     providedIn: 'root'

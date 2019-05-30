@@ -4,6 +4,7 @@ import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {TemplatesEditService} from './services/templates-edit.service';
 import {Template} from './models/template.model';
 import {FileRegularInterface} from './models/file-regular.interface';
+import {AppSettings} from '../services/app-settings.service';
 
 declare const ace: any;
 import 'ace-builds/src-min-noconflict/ace';
@@ -33,7 +34,8 @@ export class ModalTemplateEditComponent implements OnInit {
 
     constructor(
         private dataService: TemplatesEditService,
-        public activeModal: NgbActiveModal
+        public activeModal: NgbActiveModal,
+        private appSettings: AppSettings
     ) {
 
     }
@@ -64,6 +66,9 @@ export class ModalTemplateEditComponent implements OnInit {
         });
         if (this.isEditMode) {
             this.getContent();
+        } else {
+            this.model.path = this.appSettings.settings.templateTheme;
+            this.model.type = 'template';
         }
     }
 

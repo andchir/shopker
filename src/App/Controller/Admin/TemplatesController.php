@@ -112,10 +112,6 @@ class TemplatesController extends StorageControllerAbstract
     public function getFilesListAction(Request $request)
     {
         $items = [];
-
-        $rootPath = realpath($this->getParameter('kernel.root_dir').'/../..');
-        $publicDirPath = $rootPath . DIRECTORY_SEPARATOR . 'public';
-        $configDirPath = $rootPath . DIRECTORY_SEPARATOR . 'config';
         $editable = [];
         $editable['css'] = $this->getParameter('app.editable_css');
         $editable['js'] = $this->getParameter('app.editable_js');
@@ -126,28 +122,18 @@ class TemplatesController extends StorageControllerAbstract
             if (is_null($editable[$fileType])) {
                 continue;
             }
-            if ($fileType == 'config') {
-                $dirPath = $configDirPath;
-            } else {
-                $dirPath = $publicDirPath . DIRECTORY_SEPARATOR . $fileType;
-            }
-            $filesArr = $this->getFiles($dirPath);
-            foreach ($filesArr as $fileData) {
-                $filePath = str_replace(
-                    $dirPath,
-                    '',
-                    $fileData['path'] . DIRECTORY_SEPARATOR . $fileData['name']
-                );
-                if (!in_array($filePath, $editable[$fileType])) {
+            foreach($editable[$fileType] as $filePath) {
+                $fileFullPath = $this->getFilePathByType($fileType, $filePath);
+                if (!file_exists($fileFullPath)) {
                     continue;
                 }
-                array_push($items, [
-                    'name' => $fileData['name'],
+                $items[] = [
+                    'name' => basename($fileFullPath),
                     'type' => $fileType,
-                    'extension' => UtilsService::getExtension($fileData['name']),
-                    'size' => UtilsService::sizeFormat(filesize($fileData['path'] . DIRECTORY_SEPARATOR . $fileData['name'])),
-                    'path' => str_replace($dirPath, '', $fileData['path'])
-                ]);
+                    'extension' => UtilsService::getExtension($fileFullPath),
+                    'size' => UtilsService::sizeFormat(filesize($fileFullPath)),
+                    'path' => dirname(str_replace($this->getFilePathByType($fileType, ''), '', $fileFullPath))
+                ];
             }
         }
 
@@ -192,7 +178,7 @@ class TemplatesController extends StorageControllerAbstract
         /** @var TranslatorInterface $translator */
         $translator = $this->get('translator');
 
-        $filePath = str_replace('..', '', $request->get('path'));
+        $filePath = $request->get('path', '');
         $fileType = $request->get('type', 'twig');
 
         $filePath = $this->getFilePathByType($fileType, $filePath);
@@ -220,8 +206,8 @@ class TemplatesController extends StorageControllerAbstract
         $translator = $this->get('translator');
 
         $fileContent = $data['content'] ?? '';
-        $fileName = str_replace('..', '', $data['name']);
-        $filePath = trim(str_replace('..', '', $data['path']), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $fileName;
+        $fileName = str_replace('..', '', ($data['name'] ?? ''));
+        $filePath = trim(str_replace('..', '', ($data['path'] ?? '')), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $fileName;
         $fileType = $data['type'] ?? 'template';
 
         $filePath = $this->getFilePathByType($fileType, $filePath);
@@ -243,6 +229,9 @@ class TemplatesController extends StorageControllerAbstract
                 Yaml::parse($fileContent);
             } catch (ParseException $e) {
                 return $this->setError($translator->trans('Content not compliant with YAML format.', [], 'validators') . ' ' . $e->getMessage());
+            }
+            if (!file_exists($filePath)) {
+                return $this->setError($translator->trans('File not found.', [], 'validators'));
             }
         }
 
@@ -271,6 +260,7 @@ class TemplatesController extends StorageControllerAbstract
         $configDirPath = $rootPath . DIRECTORY_SEPARATOR . 'config';
         $templatesDirPath = $this->getTemplatesDirPath();
         $filePath = trim($filePath, DIRECTORY_SEPARATOR);
+        $filePath = str_replace(['..', './'], '', $filePath);
 
         switch ($fileType) {
             case 'css':

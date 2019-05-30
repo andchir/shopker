@@ -38,7 +38,7 @@
 
     <div class="left-overlay-menu" #navbarLeftOverlay>
         <ul>
-            <li class="nav-item">
+            <li class="nav-item" *ngIf="isFileManagerEnabled">
                 <a class="nav-link nav-link-circle" href="#"
                    [ngClass]="{'active': isFileManagerActive}"
                    [ngbTooltip]="'FILE_MANAGER' | translate"
@@ -52,6 +52,8 @@
         </ul>
     </div>
 
-    <app-file-manager #fileManager></app-file-manager>
+    <ng-container *ngIf="isFileManagerEnabled">
+        <app-file-manager #fileManager></app-file-manager>
+    </ng-container>
 
 </div>

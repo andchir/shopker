@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 
 import {findIndex} from 'lodash';
 import {TemplatesEditService} from './services/templates-edit.service';
@@ -19,6 +19,9 @@ import {FileRegularInterface} from './models/file-regular.interface';
 })
 export class TemplatesEditComponent extends PageTableAbstractComponent<Template> {
 
+    @ViewChild('dropdownConfig') dropdownConfig: ElementRef;
+    @ViewChild('dropdownStyles') dropdownStyles: ElementRef;
+    @ViewChild('dropdownScripts') dropdownScripts: ElementRef;
     title = 'TEMPLATES';
     queryOptions: QueryOptions = new QueryOptions('path', 'asc', 1, 10, 0, 0);
 
@@ -45,7 +48,7 @@ export class TemplatesEditComponent extends PageTableAbstractComponent<Template>
             outputProperties: {}
         }
     ];
-    files: FileRegularInterface[] = [];
+    files: {[key: string]: FileRegularInterface[]} = {config: [], css: [], js: []};
 
     constructor(
         public dataService: TemplatesEditService,
@@ -64,7 +67,15 @@ export class TemplatesEditComponent extends PageTableAbstractComponent<Template>
         this.dataService.getEditableFiles()
             .subscribe((res) => {
                 if (res.items) {
-                    this.files = res.items;
+                    this.files['css'] = res.items.filter((item) => {
+                        return item.type === 'css';
+                    });
+                    this.files['js'] = res.items.filter((item) => {
+                        return item.type === 'js';
+                    });
+                    this.files['config'] = res.items.filter((item) => {
+                        return item.type === 'config';
+                    });
                 }
             });
     }

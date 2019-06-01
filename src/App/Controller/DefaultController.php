@@ -145,6 +145,7 @@ class DefaultController extends CatalogController
             'app.template_theme' => 'default',
             'app.catalog_page_size' => '12,24,60',
             'app.catalog_default_order_by' => 'id_desc',
+            'app.checkout_fields' => 'options,email,fullName,phone,deliveryName,paymentName,comment',
             'app.admin_email' => '',
             'app.payment_status_number' => 1,
             'app.payment_status_after_number' => 2,

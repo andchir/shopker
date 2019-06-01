@@ -39,11 +39,15 @@ class FileManagerController extends BaseController
         }
 
         foreach (new \DirectoryIterator($publicDirPath) as $fileInfo) {
-            if($fileInfo->isDot()
-                || $fileInfo->isLink()
-                || substr($fileInfo->getFilename(), 0, 1) === '.'
-                || in_array($fileInfo->getExtension(), $filesBlacklist)) {
-                    continue;
+            try {
+                if($fileInfo->isDot()
+                    || $fileInfo->isLink()
+                    || substr($fileInfo->getFilename(), 0, 1) === '.'
+                    || in_array($fileInfo->getExtension(), $filesBlacklist)) {
+                        continue;
+                }
+            } catch (\Exception $e) {
+                continue;
             }
             $files[] = [
                 'id' => 0,

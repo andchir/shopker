@@ -182,7 +182,8 @@
 		"payment_status_number": "Order status number for payment",
 		"search_collections": "Collections to search",
 		"tax_system": "Store taxation system",
-		"template_theme": "Template theme"
+		"template_theme": "Template theme",
+		"checkout_fields": "Fields of the checkout form"
 	},
 	"locale": "Locale",
 	"mailer_auth_mode": "Mail authorization mode",

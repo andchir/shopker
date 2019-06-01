@@ -182,7 +182,8 @@
 		"payment_status_number": "Номер статуса заказа для оплаты",
 		"search_collections": "Коллекции для поиска",
 		"tax_system": "Система налогообложения магазина (СНО)",
-		"template_theme": "Тема шаблонов"
+		"template_theme": "Тема шаблонов",
+		"checkout_fields": "Поля формы оформления заказа"
 	},
 	"locale": "Локаль",
 	"mailer_auth_mode": "Почта: метод авторизации",

@@ -85,7 +85,8 @@ omnipay:
                 purse: ~
                 secretKey: ~
                 amount: AMOUNT
-                currency: RUB
+                currency: CURRENCY
+                currencyLabel: ~
                 description: ~
                 receipt: ~
                 InvId: PAYMENT_ID

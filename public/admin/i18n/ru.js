@@ -183,7 +183,10 @@ var APP_LANG = {
         "search_collections": "Коллекции для поиска",
         "tax_system": "Система налогообложения магазина (СНО)",
         "template_theme": "Тема шаблонов",
-        "checkout_fields": "Поля формы оформления заказа"
+        "checkout_fields": "Поля формы оформления заказа",
+        "payment_method": "Способ расчёта",
+        "payment_object": "Предмет расчёта",
+        "receipt_option_name": "Название параметра со списком товаров"
     },
     "locale": "Локаль",
     "mailer_auth_mode": "Почта: метод авторизации",

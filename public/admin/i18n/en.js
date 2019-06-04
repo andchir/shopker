@@ -183,7 +183,10 @@ var APP_LANG = {
         "search_collections": "Collections to search",
         "tax_system": "Store taxation system",
         "template_theme": "Template theme",
-        "checkout_fields": "Fields of the checkout form"
+        "checkout_fields": "Fields of the checkout form",
+        "payment_method": "Payment method",
+        "payment_object": "Subject of payment",
+        "receipt_option_name": "The name of the parameter with the list of goods"
     },
     "locale": "Locale",
     "mailer_auth_mode": "Mail authorization mode",

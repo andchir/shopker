@@ -151,8 +151,11 @@ class DefaultController extends CatalogController
             'app.payment_status_after_number' => 2,
             'app.max_user_files_size' => 20,
             'app.max_temp_files_keep_minutes' => 30,
-            'app.tax_system' => 3,
-            'app.nds_rate' => 3
+            'app.tax_system' => 'usn_income',
+            'app.nds_rate' => 'vat20',
+            'app.payment_method' => 'full_prepayment',
+            'app.payment_object' => 'commodity',
+            'app.receipt_option_name' => 'receipt'
         ];
 
         /** @var SettingsService $settingsService */

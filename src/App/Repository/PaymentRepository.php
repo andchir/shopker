@@ -2,12 +2,13 @@
 
 namespace App\Repository;
 
+use Andchir\OmnipayBundle\Repository\PaymentRepositoryInterface;
 use Doctrine\ODM\MongoDB\DocumentRepository;
 
 /**
  * PaymentRepository
  */
-class PaymentRepository extends DocumentRepository
+class PaymentRepository extends DocumentRepository implements PaymentRepositoryInterface
 {
 
     /**

@@ -2,13 +2,14 @@
 
 namespace App\Repository;
 
+use Andchir\OmnipayBundle\Repository\OrderRepositoryInterface;
 use Doctrine\ODM\MongoDB\DocumentRepository;
 use Doctrine\ORM\ORMInvalidArgumentException;
 
 /**
  * OrderRepository
  */
-class OrderRepository extends BaseRepository
+class OrderRepository extends BaseRepository implements OrderRepositoryInterface
 {
 
     /**

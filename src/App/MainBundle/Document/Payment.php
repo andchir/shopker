@@ -2,6 +2,7 @@
 
 namespace App\MainBundle\Document;
 
+use Andchir\OmnipayBundle\Document\PaymentInterface;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -9,13 +10,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @MongoDB\Document(collection="payment",repositoryClass="App\Repository\PaymentRepository")
  * @MongoDB\HasLifecycleCallbacks()
  */
-class Payment
+class Payment implements PaymentInterface
 {
-
-    const STATUS_CREATED = 'created';
-    const STATUS_CANCELED = 'canceled';
-    const STATUS_COMPLETED = 'completed';
-    const STATUS_ERROR = 'error';
 
     /**
      * @MongoDB\Id(type="int", strategy="INCREMENT")

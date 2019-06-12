@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html class="h-100">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{% block title %}{{ app_name }}{% endblock %}</title>
+    <base href="{{ app.request.baseUrl }}">
+
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+
+    {% block stylesheets -%}
+        <link href="{{ asset('app_build/app_styles.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+    {% endblock -%}
+
+</head>
+<body class="d-flex flex-column h-100">
+
+{% block body %}{% endblock %}
+
+{% block footer %}
+    <div class="footer border-top mt-auto">
+        <div class="container">
+            <div class="float-right p-2">
+                <a href="http://modx-shopkeeper.ru/" target="_blank">
+                    <img src="{{ asset('img/shk-logo-small-gray.png') }}" width="120" alt="Shopkeeper 4">
+                </a>
+            </div>
+            <div class="py-3 text-muted">
+                {{ app_name }} &copy; {{ 'now' | date('Y') }}
+            </div>
+        </div>
+    </div>
+    {% if app.request.attributes.get('_route') not in ['shop_cart_edit'] %}
+        {{ shopCart('shop_cart') }}
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('app_build/app.js') }}"></script>
+{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="container p-5">
+
+        <div class="row justify-content-md-center">
+            <div class="col col-md-6">
+
+                <div class="text-center">
+                    <img src="{{ app_logo_image_url }}" width="200" alt="{{ app_name }}">
+                </div>
+
+                <hr>
+
+                {% include 'flash_messages.html.twig' %}
+
+                {% if error %}
+                    <div class="alert alert-danger">
+                        {{ error | trans({}, 'validators') }}
+                    </div>
+                {% endif %}
+
+                <form action="{{ path('login') }}" method="post">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                    <div class="form-group">
+                        <label for="email">{{ 'Email' | trans }}</label>
+                        <input type="text" class="form-control" id="email" name="email" value="{{ last_username }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">{{ 'Password' | trans }}</label>
+                        <input type="password" class="form-control" id="password" name="password">
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox" id="remember_me" name="_remember_me" checked>
+                        <label for="remember_me">{{ 'Keep me logged in' | trans }}</label>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" name="login">
+                            {{ 'Log in' | trans }}
+                        </button>
+                        &nbsp;
+                        <a href="{{ path('password_reset') }}">
+                            {{ 'Forgot your password?' | trans }}
+                        </a>
+                    </div>
+                </form>
+
+                <hr>
+                <p>
+                    <a href="{{ path('homepage') }}">
+                        {{ 'Go to home page' | trans }}
+                    </a>
+                    &nbsp;&bull;&nbsp;
+                    <a href="{{ path('register') }}">
+                        {{ 'Sign up' | trans }}
+                    </a>
+                </p>
+
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block footer %}{% endblock %}

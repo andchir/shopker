@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% include 'header.html.twig' %}
+
+    <main role="main" class="flex-shrink-0">
+        <div class="container">
+
+            <div class="card bg-light mb-3">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        {{ 'Catalog' | trans }}
+                    </h4>
+                    <hr>
+                    <div class="card-text">
+                        <p>
+                            {{ 'Total Categories' | trans }}: <b>{{ countCategories }}</b>
+                        </p>
+                        <p>
+                            {{ 'Total products' | trans }}: <b>{{ countProducts }}</b>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="py-3">
+                {{ description | raw }}
+            </div>
+
+        </div>
+    </main>
+{% endblock %}

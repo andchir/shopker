@@ -1,0 +1,32 @@
+<header>
+    <div class="inner">
+        <div class="container">
+
+            <div class="float-right ml-2">
+
+                {% if is_granted('ROLE_USER') %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a class="btn btn-sm btn-outline-primary" data-toggle="tooltip" title="{{ 'Administration' | trans }}" href="{{ path('admin') }}" rel="nofollow">
+                            <i class="icon-cog"></i>
+                        </a>
+                    {% endif %}
+                    <div class="d-inline-block ml-1">
+                        <a class="btn btn-sm btn-outline-primary" data-toggle="tooltip" title="{{ 'Log out' | trans }}" href="{{ logout_path() }}" rel="nofollow">
+                            <i class="icon-power"></i>
+                        </a>
+                    </div>
+                {% else %}
+                    <a class="btn btn-sm btn-outline-primary ml-1" href="{{ path('login') }}" rel="nofollow">
+                        {{ 'Log in' | trans }}
+                        <i class="icon-unlock"></i>
+                    </a>
+                {% endif %}
+
+            </div>
+
+            <a class="header-brand" href="{{ path('homepage') }}">
+                {{ app_name }}
+            </a>
+        </div>
+    </div>
+</header>

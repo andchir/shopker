@@ -1,0 +1,31 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block body %}
+    <div class="p-3">
+        <app-root><div id="page-preloader" class="loading"></div></app-root>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {% if app.environment == 'prod' %}
+        <link href="{{ asset('admin/bundle/styles.css') }}" rel="stylesheet">
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ path('admin_settings_script') }}?time={{ date().timestamp }}"></script>
+    <script type="text/javascript" src="/admin/i18n/{{ settings.locale }}.js?time={{ date().timestamp }}"></script>
+    {% if app.environment == 'prod' %}
+        <script type="text/javascript" src="{{ asset('admin/bundle/runtime.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('admin/bundle/polyfills.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('admin/bundle/scripts.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('admin/bundle/main.js') }}"></script>
+    {% else %}
+        <script type="text/javascript" src="{{ asset('admin/bundle-dev/runtime.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('admin/bundle-dev/polyfills.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('admin/bundle-dev/styles.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('admin/bundle-dev/scripts.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('admin/bundle-dev/vendor.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('admin/bundle-dev/main.js') }}"></script>
+    {% endif %}
+{% endblock %}

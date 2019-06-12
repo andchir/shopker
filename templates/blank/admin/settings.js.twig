@@ -1,0 +1,21 @@
+var global = global || window;
+var process = process || {
+        env: { DEBUG: undefined },
+        version: []
+    };
+var adminMenu = {{ adminMenu | raw }};
+var appSettings = {
+    appName: '{{ app_name }}',
+    webApiUrl: '{{ app.request.baseUrl }}',
+    environment: '{{ app.environment }}',
+    filesDirUrl: '{{ settings.filesDirUrl }}',
+    templateTheme: '{{ settings.templateTheme }}',
+    isFileManagerEnabled: {% if settings.isFileManagerEnabled %}true{% else %}false{% endif %},
+    userEmail: '{{ settings.userEmail }}',
+    userRoles: {{ settings.userRoles | json_encode | raw }},
+    locale: '{{ settings.locale }}',
+    localeList: {{ settings.localeList | json_encode | raw }},
+    rolesHierarchy: {{ settings.rolesHierarchy | json_encode | raw }},
+    systemSettings: {{ settings.systemSettings | json_encode | raw }},
+    version: '{{ app_version }}'
+};

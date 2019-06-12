@@ -70,6 +70,14 @@ class SettingsController extends Controller
 
                 $settings = $this->getSettingsFromYaml('settings', false);
                 $data = self::transformParametersInverse($data);
+                $templatesDirPath = $this->getTemplatesDirPath();
+
+                if (isset($data['app.template_theme'])
+                    && !is_dir($templatesDirPath . DIRECTORY_SEPARATOR . $data['app.template_theme'])) {
+                        return $this->setError($translator->trans('Templates theme "%theme%" not found.', [
+                            '%theme%' => $data['app.template_theme']
+                        ]));
+                }
 
                 $settings = array_merge($settings, $data);
 
@@ -418,6 +426,12 @@ class SettingsController extends Controller
             return $this->setError($translator->trans($result['msg'], [], 'validators'));
         }
         return $this->json($result);
+    }
+
+    public function getTemplatesDirPath()
+    {
+        $rootPath = realpath($this->getParameter('kernel.root_dir').'/../..');
+        return $rootPath . DIRECTORY_SEPARATOR . 'templates';
     }
 
     /**

@@ -153,7 +153,7 @@ class UtilsService
             'page' => 1,
             'limit' => isset($catalogNavSettingsDefaults['pageSizeArr'])
                 ? $catalogNavSettingsDefaults['pageSizeArr'][0]
-                : [12],
+                : 12,
             'limit_max' => 100,
             'sort_by' => 'id',
             'sort_dir' => 'desc',

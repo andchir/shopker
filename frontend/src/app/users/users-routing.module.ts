@@ -6,6 +6,11 @@ import {UsersComponent} from './users.component';
 const routes: Routes = [
     {
         path: '',
+        redirectTo: '/users/',
+        pathMatch: 'full'
+    },
+    {
+        path: ':userEmail',
         component: UsersComponent
     }
 ];

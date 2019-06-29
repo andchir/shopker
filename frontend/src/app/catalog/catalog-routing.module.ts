@@ -13,8 +13,11 @@ const routes: Routes = [
         children: [
             {
                 path: '',
-                redirectTo: 'category/0',
-                pathMatch: 'full'
+                redirectTo: 'category/'
+            },
+            {
+                path: 'category',
+                redirectTo: 'category/'
             },
             {
                 path: 'category/:categoryId',

@@ -1,4 +1,5 @@
 import {Component, OnInit, Input, ViewChild, Injectable, ElementRef} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {NgbModal, NgbActiveModal, NgbModalRef, NgbPopover, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateService} from '@ngx-translate/core';
@@ -128,7 +129,7 @@ export class ModalUserContentComponent extends ModalContentAbstractComponent<Use
     templateUrl: './templates/page-users.html',
     providers: [ UsersService ]
 })
-export class UsersComponent extends PageTableAbstractComponent<User> {
+export class UsersComponent extends PageTableAbstractComponent<User> implements OnInit {
 
     title = 'USERS';
     queryOptions: QueryOptions = new QueryOptions('id', 'desc', 1, 10, 0, 0);
@@ -175,9 +176,33 @@ export class UsersComponent extends PageTableAbstractComponent<User> {
         public dataService: UsersService,
         public activeModal: NgbActiveModal,
         public modalService: NgbModal,
-        public translateService: TranslateService
+        public translateService: TranslateService,
+        private route: ActivatedRoute,
+        private router: Router
     ) {
         super(dataService, activeModal, modalService, translateService);
+    }
+
+    ngOnInit(): void {
+        this.afterInit();
+    }
+
+    afterInit(): void {
+        this.route.paramMap
+            .subscribe(
+                params => {
+                    this.queryOptions.search_word = params.get('userEmail');
+                    this.getList();
+                }
+            );
+    }
+
+    onSearchClear(): void {
+        if (this.route.snapshot.url && this.route.snapshot.url[0].path) {
+            this.router.navigate(['/users', '']);
+        } else {
+            this.getList();
+        }
     }
 
     setModalInputs(itemId?: number, isItemCopy: boolean = false): void {

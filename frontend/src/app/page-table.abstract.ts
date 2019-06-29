@@ -36,11 +36,18 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
     }
 
     afterInit(): void {}
+    onSearchClear(): void {
+        this.getList();
+    }
 
     onSearchWordUpdate(value?: string): void {
         if (typeof value !== 'undefined') {
             this.queryOptions.search_word = value;
-            this.getList();
+            if (!this.queryOptions.search_word) {
+                this.onSearchClear();
+            } else {
+                this.getList();
+            }
             return;
         }
         clearTimeout(this.searchTimer);

@@ -1,4 +1,7 @@
 
+4.0.6
+- In the administrator interface added search for users and orders by e-mail.
+
 4.0.5
 
 - Create filters from parameters input type.

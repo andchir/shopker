@@ -19,6 +19,7 @@ import {ContentTypesService} from './services/content_types.service';
     templateUrl: 'templates/catalog-category.html'
 })
 export class CatalogCategoryComponent extends PageTableAbstractComponent<Product> implements OnInit {
+
     static title = 'CATEGORY';
 
     queryOptions: QueryOptions = new QueryOptions('id', 'desc', 1, 10, 0, 0);

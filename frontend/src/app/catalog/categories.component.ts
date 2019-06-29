@@ -416,7 +416,7 @@ export class CategoriesMenuComponent implements OnInit {
 
     /** Go to root category */
     goToRootCategory(): void {
-        this.router.navigate(['/catalog/category/0']);
+        this.router.navigate(['/catalog/category', '']);
     }
 
     /**

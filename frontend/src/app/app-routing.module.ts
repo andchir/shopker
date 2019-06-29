@@ -10,7 +10,7 @@ export const routes: Routes = [
     {path: 'users', loadChildren: './users/users.module#UsersModule'},
     {path: 'settings', loadChildren: './settings/settings.module#SettingsModule'},
     {path: 'templates_edit', loadChildren: './templates-edit/templates-edit.module#TemplatesEditModule'},
-    {path: 'import_export', loadChildren: './import-export/import-export.module#ImportExportModule'},// plugin
+    {path: 'import_export', loadChildren: './import-export/import-export.module#ImportExportModule'},
     {path: '**', component: NotFoundComponent}
 ];
 

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use Doctrine\ODM\MongoDB\DocumentRepository;
+use Doctrine\ODM\MongoDB\Query\Builder;
 
 /**
  * BaseRepository
@@ -23,7 +24,8 @@ abstract class BaseRepository extends DocumentRepository
             'sort_by' => 'name',
             'sort_dir' => 'asc',
             'full' => 1,
-            'only_active' => 1
+            'only_active' => 1,
+            'search_word' => ''
         ];
         $opts = array_merge($defaults, $options);
 
@@ -53,6 +55,9 @@ abstract class BaseRepository extends DocumentRepository
         }
 
         $query = $this->createQueryBuilder();
+        if ($opts['search_word']) {
+            $this->addSearchQuery($query, $opts['search_word']);
+        }
 
         foreach ($opts['sort_by'] as $ind => $sortBy) {
             $query = $query->sort(
@@ -89,6 +94,15 @@ abstract class BaseRepository extends DocumentRepository
             'items' => $results,
             'total' => $total
         ];
+    }
+
+    /**
+     * @param Builder $query
+     * @param $searchWord
+     */
+    public function addSearchQuery(&$query, $searchWord)
+    {
+
     }
 
     /**

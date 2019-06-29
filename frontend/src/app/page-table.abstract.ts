@@ -7,6 +7,8 @@ import {DataService} from './services/data-service.abstract';
 import {AlertModalContentComponent, ConfirmModalContentComponent} from './components/modal-confirm-text.component';
 
 export abstract class PageTableAbstractComponent<M> implements OnInit {
+
+    @ViewChild('table') table;
     errorMessage: string;
     items: M[] = [];
     title = 'Page with data table';
@@ -15,7 +17,7 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
     selectedIds: number[] = [];
     collectionSize = 0;
     queryOptions = new QueryOptions('name', 'asc', 1, 10, 0, 0);
-    @ViewChild('table') table;
+    searchTimer: any;
 
     abstract getModalContent();
 

@@ -180,6 +180,18 @@ export class UsersComponent extends PageTableAbstractComponent<User> {
         super(dataService, activeModal, modalService, translateService);
     }
 
+    onSearchWordUpdate(value?: string): void {
+        if (typeof value !== 'undefined') {
+            this.queryOptions.search_word = value;
+            this.getList();
+            return;
+        }
+        clearTimeout(this.searchTimer);
+        this.searchTimer = setTimeout(() => {
+            this.getList();
+        }, 700);
+    }
+
     setModalInputs(itemId?: number, isItemCopy: boolean = false): void {
         const isEditMode = typeof itemId !== 'undefined' && !isItemCopy;
         this.modalRef.componentInstance.modalTitle = itemId ? `User #${itemId}` : this.getLangString('ADD');

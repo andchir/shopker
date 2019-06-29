@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\MainBundle\Document\User;
+use Doctrine\ODM\MongoDB\Query\Builder;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Doctrine\ODM\MongoDB\DocumentRepository;
 
@@ -62,5 +63,21 @@ class UserRepository extends BaseRepository implements UserLoaderInterface
         }, $admins);
 
         return array_merge($output);
+    }
+
+    /**
+     * @param Builder $query
+     * @param $searchWord
+     */
+    public function addSearchQuery(&$query, $searchWord)
+    {
+        if (!$searchWord) {
+            return;
+        }
+        $query->addOr(
+            $query->expr()
+                ->addOr($query->expr()->field('fullName')->equals(new \MongoRegex("/{$searchWord}/i")))
+                ->addOr($query->expr()->field('email')->equals(new \MongoRegex("/{$searchWord}/i")))
+        );
     }
 }

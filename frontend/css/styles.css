@@ -6,6 +6,7 @@ body { background-color: #eee; }
 .width-100 { width: 100%; }
 .max-width100 { max-width: 100%; }
 .min-width150 { min-width: 150px; }
+.min-width250 { min-width: 250px; }
 .max-height400 { max-height: 400px; overflow: hidden; overflow-y: auto; }
 .big { font-size: 120%; }
 .tooltip { pointer-events: none; }

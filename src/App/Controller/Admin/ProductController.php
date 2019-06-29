@@ -941,7 +941,7 @@ class ProductController extends BaseProductController
                     $uniqueValues = $collection->distinct($fieldName, $criteria)->toArray();
 
                     $uniqueValues = array_filter($uniqueValues, function($val) {
-                        return $val !== '';
+                        return $val !== '' && !is_null($val);
                     });
 
                     if (!empty($uniqueValues)) {

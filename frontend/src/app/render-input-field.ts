@@ -296,8 +296,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                 }
                 break;
             case 'number':
-                defaultValue = defaultValue ? parseInt(String(defaultValue), 10) : 0;
-                modelValue = modelValue ? parseInt(String(modelValue), 10) : 0;
+                defaultValue = defaultValue ? parseFloat(String(defaultValue)) : null;
                 break;
             case 'parameters':
                 if (typeof defaultValue !== 'object') {
@@ -312,7 +311,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                 defaultValue = defaultValue ? defaultValue.split('||') : [];
                 break;
         }
-        this.model[field.name] = modelValue || defaultValue;
+        this.model[field.name] = modelValue !== null ? modelValue : defaultValue;
     }
 
     selectValue(e, fieldName: string, value: string): void {

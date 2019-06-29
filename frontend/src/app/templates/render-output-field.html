@@ -17,6 +17,18 @@
         </span>
     </div>
 
+    <div *ngSwitchCase="'userEmail'">
+        <ng-container *ngIf="!object.userId; else emailLink">
+            {{ value }}
+        </ng-container>
+        <ng-template #emailLink>
+            <a href="#/users/{{ value }}">
+                <i class="icon-user"></i>
+                {{ value }}
+            </a>
+        </ng-template>
+    </div>
+
     <div class="text-center" *ngSwitchCase="'status'">
         <div ngbDropdown [placement]="'bottom'" #myDrop="ngbDropdown" (openChange)="optionUpdate('dropDownOpenChange', myDrop.isOpen())">
             <button class="btn btn-primary btn-xs shk-btn-status" ngbDropdownToggle [style.backgroundColor]="getStatusColor(value)">

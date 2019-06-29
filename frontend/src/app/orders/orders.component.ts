@@ -265,7 +265,7 @@ export class OrdersComponent extends PageTableAbstractComponent<Order> {
             name: 'email',
             sortName: 'email',
             title: 'EMAIL',
-            outputType: 'text',
+            outputType: 'userEmail',
             outputProperties: {}
         },
         {

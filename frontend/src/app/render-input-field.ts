@@ -283,7 +283,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
 
     setValue(field: ContentField): void {
         let defaultValue = null,
-            modelValue = this.model[field.name] || null;
+            modelValue = typeof this.model[field.name] !== 'undefined' ? this.model[field.name] : null;
         if (typeof field.inputProperties.value !== 'undefined') {
             defaultValue = field.inputProperties.value;
         }
@@ -296,7 +296,8 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                 }
                 break;
             case 'number':
-                defaultValue = parseInt(String(defaultValue), 10);
+                defaultValue = defaultValue ? parseInt(String(defaultValue), 10) : 0;
+                modelValue = modelValue ? parseInt(String(modelValue), 10) : 0;
                 break;
             case 'parameters':
                 if (typeof defaultValue !== 'object') {

@@ -1,10 +1,10 @@
 {
-  "app_build/app.js": "/app_build/app.js",
-  "app_build/app_styles.css": "/app_build/app_styles.css",
-  "app_build/fonts/Comfortaa-Light.ttf": "/app_build/fonts/Comfortaa-Light.30790de0.ttf",
-  "app_build/fonts/icomoon.woff?ukbiqr": "/app_build/fonts/icomoon.5fd577bc.woff",
-  "app_build/fonts/icomoon.ttf?ukbiqr": "/app_build/fonts/icomoon.69cfd26b.ttf",
-  "app_build/fonts/icomoon.eot?ukbiqr": "/app_build/fonts/icomoon.6cb4fc30.eot",
-  "app_build/images/icomoon.svg?ukbiqr": "/app_build/images/icomoon.ec847f21.svg",
-  "app_build/images/slider-handle.gif": "/app_build/images/slider-handle.879a34e1.gif"
+  "app_build/app.js": "./app.js",
+  "app_build/app_styles.css": "./app_styles.css",
+  "app_build/fonts/Comfortaa-Light.ttf": "./fonts/Comfortaa-Light.30790de0.ttf",
+  "app_build/fonts/icomoon.woff?ukbiqr": "./fonts/icomoon.5fd577bc.woff",
+  "app_build/fonts/icomoon.ttf?ukbiqr": "./fonts/icomoon.69cfd26b.ttf",
+  "app_build/fonts/icomoon.eot?ukbiqr": "./fonts/icomoon.6cb4fc30.eot",
+  "app_build/images/icomoon.svg?ukbiqr": "./images/icomoon.ec847f21.svg",
+  "app_build/images/slider-handle.gif": "./images/slider-handle.879a34e1.gif"
 }

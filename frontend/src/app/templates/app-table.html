@@ -50,7 +50,12 @@
             </tr>
             <tr [hidden]="items.length > 0" class="table-active">
                 <td [attr.colspan]="tableFields.length + 1" class="text-center p-4">
-                    {{'EMPTY' | translate}}
+                    <ng-container *ngIf="queryOptions.search_word; else emptyMessage">
+                        {{ 'NOTHING_FOUND' | translate  }}.
+                    </ng-container>
+                    <ng-template #emptyMessage>
+                        {{ 'EMPTY' | translate }}.
+                    </ng-template>
                 </td>
             </tr>
         </tbody>

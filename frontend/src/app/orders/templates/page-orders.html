@@ -8,6 +8,14 @@
         <hr>
 
         <div class="mb-3">
+            <div class="float-md-left">
+
+                <div class="form-control-search mb-2 mb-md-0" [ngClass]="{'form-control-search-clear': !!queryOptions.search_word}">
+                    <input type="text" class="form-control min-width250" placeholder="{{ 'SEARCH' | translate }}..." [(ngModel)]="queryOptions.search_word" (ngModelChange)="onSearchWordUpdate()">
+                    <span (click)="onSearchWordUpdate('')"></span>
+                </div>
+
+            </div>
             <div class="float-md-right">
 
                 <div ngbDropdown class="d-block d-md-inline-block mb-2 mb-md-0" placement="bottom-right">

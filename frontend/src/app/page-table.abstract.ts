@@ -37,6 +37,18 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
 
     afterInit(): void {}
 
+    onSearchWordUpdate(value?: string): void {
+        if (typeof value !== 'undefined') {
+            this.queryOptions.search_word = value;
+            this.getList();
+            return;
+        }
+        clearTimeout(this.searchTimer);
+        this.searchTimer = setTimeout(() => {
+            this.getList();
+        }, 700);
+    }
+
     modalOpen(itemId?: number, isItemCopy: boolean = false): void {
         this.modalRef = this.modalService.open(this.getModalContent(), {
             size: 'lg',

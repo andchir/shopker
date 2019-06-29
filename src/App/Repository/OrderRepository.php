@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use Andchir\OmnipayBundle\Repository\OrderRepositoryInterface;
 use Doctrine\ODM\MongoDB\DocumentRepository;
+use Doctrine\ODM\MongoDB\Query\Builder;
 use Doctrine\ORM\ORMInvalidArgumentException;
 
 /**
@@ -68,4 +69,15 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
             ->count();
     }
 
+    /**
+     * @param Builder $query
+     * @param $searchWord
+     */
+    public function addSearchQuery(&$query, $searchWord)
+    {
+        if (!$searchWord) {
+            return;
+        }
+        $query->field('email')->equals(new \MongoRegex("/^{$searchWord}/i"));
+    }
 }

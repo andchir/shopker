@@ -87,8 +87,11 @@ abstract class BaseRepository extends DocumentRepository
             ->getQuery()
             ->execute();
 
-        $total = $this->createQueryBuilder()
-            ->getQuery()->execute()->count();
+        $query = $this->createQueryBuilder();
+        if ($opts['search_word']) {
+            $this->addSearchQuery($query, $opts['search_word']);
+        }
+        $total = $query->getQuery()->execute()->count();
 
         return [
             'items' => $results,

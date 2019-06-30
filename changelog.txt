@@ -2,6 +2,7 @@
 4.0.6
 - In the administrator interface added search for users and orders by e-mail.
 - In the administrator interface, a link to the user is added to the list of orders if the order is made by a registered user.
+- Added blank template theme.
 
 4.0.5
 

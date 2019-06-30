@@ -1,116 +1,110 @@
-ace.define("ace/mode/puppet_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"], function (require, exports, module) {
+ace.define("ace/mode/terraform_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"], function (require, exports, module) {
 "use strict";
 
 var oop = require("../lib/oop");
 var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
-var PuppetHighlightRules = function () {
+var TerraformHighlightRules = function () {
+
+
     this.$rules = {
         "start": [
             {
-                token: ['keyword.type.puppet', 'constant.class.puppet', 'keyword.inherits.puppet', 'constant.class.puppet'],
-                regex: "^\\s*(class)(\\s+(?:[-_A-Za-z0-9\".]+::)*[-_A-Za-z0-9\".]+\\s*)(?:(inherits\\s*)(\\s+(?:[-_A-Za-z0-9\".]+::)*[-_A-Za-z0-9\".]+\\s*))?"
+                token: ['storage.function.terraform'],
+                regex: '\\b(output|resource|data|variable|module|export)\\b'
             },
             {
-                token: ['storage.function.puppet', 'name.function.puppet', 'punctuation.lpar'],
-                regex: "(^\\s*define)(\\s+[a-zA-Z0-9_:]+\\s*)(\\()",
-                push:
-                    [{
-                        token: 'punctuation.rpar.puppet',
-                        regex: "\\)",
-                        next: 'pop'
+                token: "variable.terraform",
+                regex: "\\$\\s",
+                push: [
+                    {
+                        token: "keyword.terraform",
+                        regex: "(-var-file|-var)"
                     },
-                        {include: "constants"},
-                        {include: "variable"},
-                        {include: "strings"},
-                        {include: "operators"},
-                        {defaultToken: 'string'}]
+                    {
+                        token: "variable.terraform",
+                        regex: "\\n|$",
+                        next: "pop"
+                    },
+
+                    {include: "strings"},
+                    {include: "variables"},
+                    {include: "operators"},
+
+                    {defaultToken: "text"}
+                ]
             },
             {
-                token: ["language.support.class", "keyword.operator"],
-                regex: "\\b([a-zA-Z_]+)(\\s+=>)"
-            },
-            {
-                token: ["exported.resource.puppet", "keyword.name.resource.puppet", "paren.lpar"],
-                regex: "(\\@\\@)?(\\s*[a-zA-Z_]*)(\\s*\\{)"
-            },
-            {
-                token: "qualified.variable.puppet",
-                regex: "(\\$([a-z][a-z0-9_]*)?(::[a-z][a-z0-9_]*)*::[a-z0-9_][a-zA-Z0-9_]*)"
+                token: "language.support.class",
+                regex: "\\b(timeouts|provider|connection|provisioner|lifecycleprovider|atlas)\\b"
             },
 
             {
-                token: "singleline.comment.puppet",
+                token: "singleline.comment.terraform",
                 regex: '#(.)*$'
             },
             {
-                token: "multiline.comment.begin.puppet",
-                regex: '^\\s*\\/\\*\\s*$',
+                token: "multiline.comment.begin.terraform",
+                regex: '^\\s*\\/\\*',
                 push: "blockComment"
             },
             {
-                token: "keyword.control.puppet",
-                regex: "\\b(case|if|unless|else|elsif|in|default:|and|or)\\s+(?!::)"
+                token: "storage.function.terraform",
+                regex: "^\\s*(locals|terraform)\\s*{"
             },
             {
-                token: "keyword.control.puppet",
-                regex: "\\b(import|default|inherits|include|require|contain|node|application|consumes|environment|site|function|produces)\\b"
-            },
-            {
-                token: "support.function.puppet",
-                regex: "\\b(lest|str2bool|escape|gsub|Timestamp|Timespan|with|alert|crit|debug|notice|sprintf|split|step|strftime|slice|shellquote|type|sha1|defined|scanf|reverse_each|regsubst|return|emerg|reduce|err|failed|fail|versioncmp|file|generate|then|info|realize|search|tag|tagged|template|epp|warning|hiera_include|each|assert_type|binary_file|create_resources|dig|digest|filter|lookup|find_file|fqdn_rand|hiera_array|hiera_hash|inline_epp|inline_template|map|match|md5|new|next)\\b"
-            },
-            {
-                token: "constant.types.puppet",
-                regex: "\\b(String|File|Package|Service|Class|Integer|Array|Catalogentry|Variant|Boolean|Undef|Number|Hash|Float|Numeric|NotUndef|Callable|Optional|Any|Regexp|Sensitive|Sensitive.new|Type|Resource|Default|Enum|Scalar|Collection|Data|Pattern|Tuple|Struct)\\b"
+                token: "paren.lparen",
+                regex: "[[({]"
             },
 
             {
-                token: "paren.lpar",
-                regex: "[[({]"
-            },
-            {
-                token: "paren.rpar",
+                token: "paren.rparen",
                 regex: "[\\])}]"
             },
-            {include: "variable"},
             {include: "constants"},
             {include: "strings"},
             {include: "operators"},
-            {
-                token: "regexp.begin.string.puppet",
-                regex: "\\s*(\\/(\\S)+)\\/"
-            }
+            {include: "variables"}
         ],
         blockComment: [{
-            regex: "^\\s*\\/\\*\\s*$",
-            token: "multiline.comment.begin.puppet",
+            regex: "^\\s*\\/\\*",
+            token: "multiline.comment.begin.terraform",
             push: "blockComment"
         }, {
-            regex: "^\\s*\\*\\/\\s*$",
-            token: "multiline.comment.end.puppet",
+            regex: "\\*\\/\\s*$",
+            token: "multiline.comment.end.terraform",
             next: "pop"
         }, {
             defaultToken: "comment"
         }],
         "constants": [
             {
-                token: "constant.language.puppet",
-                regex: "\\b(false|true|running|stopped|installed|purged|latest|file|directory|held|undef|present|absent|link|mounted|unmounted)\\b"
+                token: "constant.language.terraform",
+                regex: "\\b(true|false|yes|no|on|off|EOF)\\b"
+            },
+            {
+                token: "constant.numeric.terraform",
+                regex: "(\\b([0-9]+)([kKmMgG]b?)?\\b)|(\\b(0x[0-9A-Fa-f]+)([kKmMgG]b?)?\\b)"
             }
         ],
-        "variable": [
+        "variables": [
             {
-                token: "variable.puppet",
-                regex: "(\\$[a-z0-9_\{][a-zA-Z0-9_]*)"
+                token: ["variable.assignment.terraform", "keyword.operator"],
+                regex: "\\b([a-zA-Z_]+)(\\s*=)"
+            }
+        ],
+        "interpolated_variables": [
+            {
+                token: "variable.terraform",
+                regex: "\\b(var|self|count|path|local)\\b(?:\\.*[a-zA-Z_-]*)?"
             }
         ],
         "strings": [
             {
-                token: "punctuation.quote.puppet",
+                token: "punctuation.quote.terraform",
                 regex: "'",
                 push:
                     [{
-                        token: 'punctuation.quote.puppet',
+                        token: 'punctuation.quote.terraform',
                         regex: "'",
                         next: 'pop'
                     },
@@ -118,39 +112,73 @@ var PuppetHighlightRules = function () {
                         {defaultToken: 'string'}]
             },
             {
-                token: "punctuation.quote.puppet",
+                token: "punctuation.quote.terraform",
                 regex: '"',
                 push:
                     [{
-                        token: 'punctuation.quote.puppet',
+                        token: 'punctuation.quote.terraform',
                         regex: '"',
                         next: 'pop'
                     },
+                        {include: "interpolation"},
                         {include: "escaped_chars"},
-                        {include: "variable"},
                         {defaultToken: 'string'}]
             }
         ],
         "escaped_chars": [
             {
-                token: "constant.escaped_char.puppet",
+                token: "constant.escaped_char.terraform",
                 regex: "\\\\."
             }
         ],
         "operators": [
             {
                 token: "keyword.operator",
-                regex: "\\+\\.|\\-\\.|\\*\\.|\\/\\.|#|;;|\\+|\\-|\\*|\\*\\*\\/|\\/\\/|%|<<|>>|&|\\||\\^|~|<|>|<=|=>|==|!=|<>|<-|=|::|,"
+                regex: "\\?|:|==|!=|>|<|>=|<=|&&|\\|\\\||!|%|&|\\*|\\+|\\-|/|="
+            }
+        ],
+        "interpolation": [
+            {// TODO: double $
+                token: "punctuation.interpolated.begin.terraform",
+                regex: "\\$?\\$\\{",
+                push: [{
+                    token: "punctuation.interpolated.end.terraform",
+                    regex: "\\}",
+                    next: "pop"
+                },
+                    {include: "interpolated_variables"},
+                    {include: "operators"},
+                    {include: "constants"},
+                    {include: "strings"},
+                    {include: "functions"},
+                    {include: "parenthesis"},
+                    {defaultToken: "punctuation"}
+                ]
+            }
+        ],
+        "functions": [
+            {
+                token: "keyword.function.terraform",
+                regex: "\\b(abs|basename|base64decode|base64encode|base64gzip|base64sha256|base64sha512|bcrypt|ceil|chomp|chunklist|cidrhost|cidrnetmask|cidrsubnet|coalesce|coalescelist|compact|concat|contains|dirname|distinct|element|file|floor|flatten|format|formatlist|indent|index|join|jsonencode|keys|length|list|log|lookup|lower|map|matchkeys|max|merge|min|md5|pathexpand|pow|replace|rsadecrypt|sha1|sha256|sha512|signum|slice|sort|split|substr|timestamp|timeadd|title|transpose|trimspace|upper|urlencode|uuid|values|zipmap)\\b"
+            }
+        ],
+        "parenthesis": [
+            {
+                token: "paren.lparen",
+                regex: "\\["
+            },
+            {
+                token: "paren.rparen",
+                regex: "\\]"
             }
         ]
     };
     this.normalizeRules();
 };
 
+oop.inherits(TerraformHighlightRules, TextHighlightRules);
 
-oop.inherits(PuppetHighlightRules, TextHighlightRules);
-
-exports.PuppetHighlightRules = PuppetHighlightRules;
+exports.TerraformHighlightRules = TerraformHighlightRules;
 });
 
 ace.define("ace/mode/folding/cstyle",["require","exports","module","ace/lib/oop","ace/range","ace/mode/folding/fold_mode"], function(require, exports, module) {
@@ -333,19 +361,19 @@ var MatchingBraceOutdent = function() {};
 exports.MatchingBraceOutdent = MatchingBraceOutdent;
 });
 
-ace.define("ace/mode/puppet",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/puppet_highlight_rules","ace/mode/behaviour/cstyle","ace/mode/folding/cstyle","ace/mode/matching_brace_outdent"], function (require, exports, module) {
+ace.define("ace/mode/terraform",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/terraform_highlight_rules","ace/mode/behaviour/cstyle","ace/mode/folding/cstyle","ace/mode/matching_brace_outdent"], function (require, exports, module) {
 "use strict";
 
 var oop = require("../lib/oop");
 var TextMode = require("./text").Mode;
-var PuppetHighlightRules = require("./puppet_highlight_rules").PuppetHighlightRules;
+var TerraformHighlightRules = require("./terraform_highlight_rules").TerraformHighlightRules;
 var CstyleBehaviour = require("./behaviour/cstyle").CstyleBehaviour;
 var CStyleFoldMode = require("./folding/cstyle").FoldMode;
 var MatchingBraceOutdent = require("./matching_brace_outdent").MatchingBraceOutdent;
 
 var Mode = function () {
     TextMode.call(this);
-    this.HighlightRules = PuppetHighlightRules;
+    this.HighlightRules = TerraformHighlightRules;
     this.$outdent = new MatchingBraceOutdent();
     this.$behaviour = new CstyleBehaviour();
     this.foldingRules = new CStyleFoldMode();
@@ -355,12 +383,12 @@ oop.inherits(Mode, TextMode);
 
 
 (function () {
-    this.$id = "ace/mode/puppet";
+    this.$id = "ace/mode/terraform";
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
 });                (function() {
-                    ace.require(["ace/mode/puppet"], function(m) {
+                    ace.require(["ace/mode/terraform"], function(m) {
                         if (typeof module == "object" && typeof exports == "object" && module) {
                             module.exports = m;
                         }

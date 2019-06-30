@@ -104,6 +104,7 @@ input.form-control[readonly] { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); curso
 
 /* form-control-search */
 .form-control-search { position: relative; }
+.form-control-search input.form-control { padding-right: 30px; }
 .form-control-search span { position: absolute; right: 7px; top: 6px; pointer-events: none; color: rgba(0,0,0,0.3); font-size: 1.2rem; }
 .form-control-search span:before { font-family: 'icomoon'; font-style: normal; font-weight: 900; content: '\e036'; }
 .form-control-search-clear span:before { pointer-events: all; content: '\e117'; cursor: pointer; margin-right: 3px; color: #3079ed; }

@@ -23,6 +23,7 @@ parameters:
         - /packages/omnipay.yaml
         - /packages/liip_imagine.yaml
         - /resources/admin_menu.yaml
+        - /resources/forms/contacts.yaml
     app.file_manager_enabled: true
     mongodb_server: 127.0.0.1
     mongodb_port: 27017

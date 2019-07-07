@@ -1,19 +1,19 @@
 {% set skipped = false %}
 <div>
-    {% if pagesOptions.pageSizeArr | length > 1 %}
-        <div class="float-right">
-            <nav aria-label="Page navigation">
-                <ul class="pagination justify-content-end">
-                    {% for pageSize in pagesOptions.pageSizeArr %}
-                        <li class="page-item{% if pageSize == pagesOptions.limit %} active{% endif %}">
-                            <a class="page-link" href="{{ pageUrl(pagesOptions, pagesOptions.current, pageSize) }}{{ queryOptions.filterStr }}">{{ pageSize }}</a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </nav>
-        </div>
-    {% endif %}
     {% if pagesOptions.total > 1 %}
+        {% if pagesOptions.pageSizeArr | length > 1 %}
+            <div class="float-right">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-end">
+                        {% for pageSize in pagesOptions.pageSizeArr %}
+                            <li class="page-item{% if pageSize == pagesOptions.limit %} active{% endif %}">
+                                <a class="page-link" href="{{ pageUrl(pagesOptions, pagesOptions.current, pageSize) }}{{ queryOptions.filterStr }}">{{ pageSize }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </nav>
+            </div>
+        {% endif %}
         <nav class="d-inline-block">
             <ul class="pagination pagination-rounded">
                 {% if pagesOptions.current != pagesOptions.prev %}

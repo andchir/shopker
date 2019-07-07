@@ -6,7 +6,7 @@
                        class="custom-control-input"
                        name="filter[{{ filter.name }}][]"
                        value="{{ filter.fieldValues[loop.index0] }}"
-                       id="filter_{{ filter.name }}{{ filter.index }}_{{ loop.index }}"{% if filter.fieldValues[loop.index0] in filter.selected %} checked="checked"{% endif %}>
+                       id="filter_{{ filter.name }}{{ filter.index }}_{{ loop.index }}">
                 <label class="custom-control-label" for="filter_{{ filter.name }}{{ filter.index }}_{{ loop.index }}">
                     {{ value }}
                 </label>

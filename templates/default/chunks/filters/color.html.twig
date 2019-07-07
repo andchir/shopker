@@ -6,7 +6,7 @@
                        class="custom-control-input"
                        name="filter[{{ filter.name }}][]"
                        value="{{ value|replace({'#':''}) }}"
-                       id="filter_{{ filter.name }}{{ loop.index }}"{% if value|replace({'#':''}) in filter.selected %} checked="checked"{% endif %}>
+                       id="filter_{{ filter.name }}{{ loop.index }}">
                 <label class="d-block custom-control-label shk-color-checkbox" for="filter_{{ filter.name }}{{ loop.index }}" style="background-color: {{ value }};">
 
                 </label>

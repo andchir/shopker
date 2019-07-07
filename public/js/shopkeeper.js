@@ -1,6 +1,6 @@
 /**
  * Shopkeeper
- * @version 4.0.4
+ * @version 4.0.6
  * @author Andchir<andchir@gmail.com>
  */
 
@@ -55,7 +55,6 @@
             this.onReady(function() {
                 self.buttonsInit();
                 self.currencySelectInit();
-                self.filtersInit();
                 isInitialized = true;
             });
         };
@@ -112,7 +111,8 @@
             }
         };
 
-        this.filtersInit = function() {
+        this.filtersInit = function(checkSelected) {
+            checkSelected = checkSelected || false;
             this.slidersInit();
             if (isFiltersInitialized) {
                 return;
@@ -133,6 +133,10 @@
                 }
             });
 
+            if (checkSelected) {
+                this.markSelected();
+            }
+
             isFiltersInitialized = true;
         };
 
@@ -141,6 +145,109 @@
             onFilterChangeElements.forEach(function(element) {
                 element.style.display = 'block';
             });
+        };
+
+        /**
+         * Mark inputs of the filters
+         */
+        this.markSelected = function() {
+            var urlParams = this.getUrlParams(), fieldName, fieldEl, inputType, value;
+            var filtersContainerEl = document.getElementById('catalog-filters');
+            if (!urlParams.filter || !filtersContainerEl) {
+                return;
+            }
+            (Object.keys(urlParams.filter)).forEach(function(key) {
+                fieldName = 'filter[' + key + ']';
+                if (Array.isArray(urlParams.filter[key])) {
+                    fieldName += '[]';
+                    urlParams.filter[key].forEach(function(value) {
+                        fieldEl = filtersContainerEl.querySelector('[name="' + fieldName + '"][value="' + value + '"]');
+                        inputType = self.getInputType(fieldEl);
+                        if (inputType === 'checkbox') {
+                            fieldEl.checked = true;
+                        } else if (inputType === 'select') {
+                            fieldEl.value = value;
+                        }
+                    });
+                } else {
+                    value = urlParams.filter[key];
+                    fieldEl = filtersContainerEl.querySelector('[name="' + fieldName + '"][value="' + value + '"]');
+                    inputType = self.getInputType(fieldEl);
+                    if (inputType === 'checkbox') {
+                        fieldEl.checked = true;
+                    } else if (inputType === 'select') {
+                        fieldEl.value = value;
+                    }
+                }
+            });
+        };
+
+        /**
+         * Get form input type
+         * @param {String} element
+         * @return {String}
+         */
+        this.getInputType = function(element) {
+            if (!element) {
+                return '';
+            }
+            var tagName = element.tagName.toLowerCase();
+            if (tagName === 'select') {
+                return element.tagName.toLowerCase();
+            }
+            if (tagName === 'input') {
+                var type = element.getAttribute('type').toLowerCase();
+                return type;
+            }
+            return '';
+        };
+
+        /**
+         * Get parameters object from URL query string
+         */
+        this.getUrlParams = function(){
+            var queryString = document.location.search.length >= 3 ? document.location.search.substr(1) : '';
+            if (queryString.indexOf('?') > -1) queryString = queryString.substr(queryString.indexOf('?')+1);
+
+            var digitTest = /^\d+$/,
+                keyBreaker = /([^\[\]]+)|(\[\])/g,
+                plus = /\+/g,
+                paramTest = /([^?#]*)(#.*)?$/;
+
+            if(!queryString || !paramTest.test(queryString)) {
+                return {};
+            }
+
+            var data = {},
+                pairs = queryString.split('&'),
+                current, lastPart;
+
+            for (var i = 0; i < pairs.length; i++) {
+                current = data;
+                var pair = pairs[i].split('=');
+
+                if (pair.length !== 2) {
+                    pair = [pair[0], pair.slice(1).join("=")]
+                }
+                var key = decodeURIComponent(pair[0].replace(plus, " ")),
+                    value = decodeURIComponent(pair[1].replace(plus, " ")),
+                    parts = key.match(keyBreaker);
+
+                for (var j = 0; j < parts.length - 1; j++) {
+                    var part = parts[j];
+                    if (!current[part]) {
+                        current[part] = digitTest.test(parts[j + 1]) || parts[j + 1] === "[]" ? [] : {}
+                    }
+                    current = current[part];
+                }
+                lastPart = parts[parts.length - 1];
+                if (lastPart === "[]") {
+                    current.push(value)
+                } else {
+                    current[lastPart] = value;
+                }
+            }
+            return data;
         };
 
         this.slidersInit = function() {
@@ -321,10 +428,8 @@
                         }
                         break;
                     case 'select':
-
                         var value = inputEl.value,
                             optionElArr = inputEl.querySelectorAll('option');
-
                         optionElArr.forEach(function(optionEl) {
                             if (optionEl.value === value) {
                                 price += self.parsePrice(optionEl.dataset.price || '0');
@@ -346,22 +451,6 @@
          */
         this.parsePrice = function(priceStr) {
             return parseFloat(priceStr.replace(/[^\d\.]/g,''));
-        };
-
-        /**
-         * Get type of the input element
-         * @param inputEl
-         * @returns {string}
-         */
-        this.getInputType = function(inputEl) {
-            var tagName = inputEl.tagName.toLowerCase(),
-                inputType = tagName === 'input'
-                    ? inputEl.getAttribute('type').toLowerCase()
-                    : '';
-            if (tagName === 'select') {
-                inputType = 'select';
-            }
-            return inputType;
         };
 
         this.currencySelectInit = function() {
@@ -691,6 +780,17 @@
             } else {
                 request.send();
             }
+        };
+
+        /**
+         * Check is hex color
+         * @param sNum
+         * @returns {boolean}
+         */
+        this.isHexColor = function(sNum){
+            return (typeof sNum === 'string')
+                && (sNum.length === 6 || sNum.length === 3)
+                && !isNaN(parseInt(sNum, 16));
         };
 
         /**

@@ -257,9 +257,12 @@ class UtilsService
 
         if(!$fileName){
             $fileName = $pathInfo['filename'];
+            $fileName = str_replace('%', '', $fileName);
+            $fileName .= '.' . $pathInfo['extension'];
         }
-        $fileName = str_replace('%', '', $fileName);
-        $fileName .= '.' . $pathInfo['extension'];
+        if (strpos($fileName, '.' . $pathInfo['extension']) === false) {
+            $fileName .= '.' . $pathInfo['extension'];
+        }
         $fileName = preg_replace('~[\\\/]+~', '', $fileName);
 
         $response = new BinaryFileResponse($filePath);

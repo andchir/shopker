@@ -655,5 +655,4 @@ class CatalogController extends ProductController
             ->getManager()
             ->getRepository(ContentType::class);
     }
-
 }

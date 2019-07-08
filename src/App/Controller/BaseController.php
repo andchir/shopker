@@ -44,4 +44,12 @@ class BaseController extends Controller
         }
         return $tree;
     }
+
+    /**
+     * @return string
+     */
+    public function getRootPath()
+    {
+        return realpath($this->getParameter('kernel.root_dir').'/../..');
+    }
 }

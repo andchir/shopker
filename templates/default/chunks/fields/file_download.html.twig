@@ -1,0 +1,11 @@
+<div class="mb-3">
+    <a class="btn btn-success" href="{{ path('file_download', {ownerType: 'products', fieldName: fieldData.name, ownerDocId: itemData.id, fileName: data.fileName}) }}" target="_blank">
+        <i class="icon-download"></i>
+        {{ 'Download file' | trans }}
+    </a>
+    {% if data.downloads is defined and data.downloads is not empty %}
+        <div class="pt-1 text-muted">
+            {{ 'File downloaded %count% time.|File downloaded %count% times.' | transchoice(data.downloads) }}
+        </div>
+    {% endif %}
+</div>

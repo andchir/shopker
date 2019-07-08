@@ -81,6 +81,7 @@ Your email: Ваш адрес эл. почты
 E-mail text: Тест письма
 Captcha: Защитный код
 Upload file: Загрузить файл
+Download file: Скачать файл
 You can upload files: Вы можете загрузить файлы
 You can upload file: Вы можете загрузить файл
 Cancel: Отменить
@@ -96,6 +97,7 @@ A folder with the same name already exists.: Папка с таким имене
 You cannot delete or rename the system folder.: Вы не можете удалить или переименовать системную папку.
 File manager is disabled.: Файл-менеджер отключен.
 Templates theme "%theme%" not found.: Тема шаблонов "%theme%" не найдена.
+File downloaded %count% time.|File downloaded %count% times.: 'Файл скачали %count% раз.|Файл скачали %count% раза.|Файл скачали %count% раз.'
 
 Sort by: Сортировать по
 catalog.sort_by_novelty: Новизне

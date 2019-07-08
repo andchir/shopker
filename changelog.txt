@@ -4,6 +4,7 @@
 - In the administrator interface, a link to the user is added to the list of orders if the order is made by a registered user.
 - Added blank template theme.
 - Mark active filters in JavaScript.
+- Added a public method for downloading the file.
 
 4.0.5
 

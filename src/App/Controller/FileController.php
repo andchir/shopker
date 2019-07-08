@@ -7,6 +7,7 @@ use App\MainBundle\Document\ContentType;
 use App\MainBundle\Document\FileDocument;
 use App\MainBundle\Document\User;
 use App\Repository\CategoryRepository;
+use App\Repository\FileDocumentRepository;
 use App\Service\ShopCartService;
 use App\Service\UtilsService;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,7 +25,7 @@ use Symfony\Component\Translation\TranslatorInterface;
  * @package App\Controller
  * @Route("/files")
  */
-class FileController extends BaseController
+class FileController extends ProductController
 {
 
     /**
@@ -128,6 +129,58 @@ class FileController extends BaseController
     }
 
     /**
+     * @Route("/download/{ownerType}/{fieldName}/{ownerDocId}/{fileName}", methods={"GET"}, name="file_download")
+     * @param string $ownerType
+     * @param string $fieldName
+     * @param string $ownerDocId
+     * @param string $fileName
+     * @return Response
+     */
+    public function downloadFile($ownerType, $fieldName, $ownerDocId, $fileName)
+    {
+        $collection = $this->getCollection($ownerType);
+        $document = $collection->findOne(['_id' => (int) $ownerDocId]);
+
+        if (!$document || !isset($document[$fieldName])) {
+            throw $this->createNotFoundException();
+        }
+
+        $fileData = $document[$fieldName];
+
+        $fileDocument = $this->getRepository()->findOneBy([
+            'id' => $fileData['fileId'],
+            'ownerType' => $ownerType,
+            'ownerDocId' => (int) $ownerDocId,
+            'fileName' => $fileName
+        ]);
+
+        if (!$document || !$fileDocument) {
+            throw $this->createNotFoundException();
+        }
+
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $filesDirPath = $this->getParameter('app.files_dir_path');
+        $fileDocument->setUploadRootDir($filesDirPath);
+
+        $filePath = $fileDocument->getUploadedPath();
+        if (!file_exists($filePath)) {
+            throw $this->createNotFoundException();
+        }
+
+        $fileDocument->incrementDownloads();
+        $dm->flush();
+
+        $fileData['downloads'] = $fileDocument->getDownloads();
+        $collection->update(
+            ['_id' => (int) $ownerDocId],
+            ['$set' => [$fieldName => $fileData]]
+        );
+
+        return UtilsService::downloadFile($filePath, $fileDocument->getOriginalFileName());
+    }
+
+    /**
      * @return CategoryRepository
      */
     public function getCategoryRepository()
@@ -137,4 +190,13 @@ class FileController extends BaseController
             ->getRepository(Category::class);
     }
 
+    /**
+     * @return FileDocumentRepository
+     */
+    public function getRepository()
+    {
+        return $categoryRepository = $this->get('doctrine_mongodb')
+            ->getManager()
+            ->getRepository(FileDocument::class);
+    }
 }

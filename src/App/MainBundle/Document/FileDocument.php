@@ -72,6 +72,13 @@ class FileDocument
      * @Groups({"details", "list"})
      * @var int
      */
+    protected $downloads;
+
+    /**
+     * @MongoDB\Field(type="integer")
+     * @Groups({"details", "list"})
+     * @var int
+     */
     protected $userId;
 
     /**
@@ -231,6 +238,43 @@ class FileDocument
     public function getSize()
     {
         return $this->size;
+    }
+
+    /**
+     * Set downloads
+     *
+     * @param $downloads
+     * @return $this
+     */
+    public function setDownloads($downloads)
+    {
+        $this->downloads = $downloads;
+        return $this;
+    }
+
+    /**
+     * Get downloads
+     *
+     * @return integer
+     */
+    public function getDownloads()
+    {
+        return $this->downloads;
+    }
+
+    /**
+     * Downloads number increment
+     *
+     * @param int $number
+     * @return $this
+     */
+    public function incrementDownloads($number = 1)
+    {
+        if (!$this->downloads) {
+            $this->downloads = 0;
+        }
+        $this->downloads += $number;
+        return $this;
     }
 
     /**

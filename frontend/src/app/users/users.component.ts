@@ -164,6 +164,15 @@ export class UsersComponent extends PageTableAbstractComponent<User> implements 
             outputProperties: {}
         },
         {
+            name: 'createdDate',
+            sortName: 'createdDate',
+            title: 'DATE_TIME',
+            outputType: 'date',
+            outputProperties: {
+                format: 'dd/MM/y H:mm:s'
+            }
+        },
+        {
             name: 'isActive',
             sortName: 'isActive',
             title: 'STATUS',

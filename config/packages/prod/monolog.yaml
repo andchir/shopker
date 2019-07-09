@@ -1,13 +1,12 @@
 monolog:
     handlers:
         main:
-            type: rotating_file
-            action_level: notice
+            type: fingers_crossed
+            action_level: error
             handler: nested
             excluded_404s:
                 # regex: exclude all 404 errors from the logs
                 - ^/
-            max_files: 10
         nested:
             type: stream
             path: "%kernel.logs_dir%/%kernel.environment%.log"

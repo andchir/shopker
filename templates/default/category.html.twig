@@ -84,7 +84,9 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             if (shk) {
-                shk.filtersInit(true);
+                shk.onAfterInit(function() {
+                    shk.filtersInit(true);
+                });
             }
         });
     </script>

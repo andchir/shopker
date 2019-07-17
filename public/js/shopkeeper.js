@@ -1,6 +1,6 @@
 /**
  * Shopkeeper
- * @version 4.0.6
+ * @version 4.0.7
  * @author Andchir<andchir@gmail.com>
  */
 
@@ -28,7 +28,7 @@
 
     function Shopkeeper () {
 
-        var self = this, isInitialized = false, isFiltersInitialized = false;
+        var self = this, isInitialized = false, isFiltersInitialized = false, callbacks = [];
 
         var mainOptions = {
             baseUrl: '/',
@@ -56,6 +56,7 @@
                 self.buttonsInit();
                 self.currencySelectInit();
                 isInitialized = true;
+                self.onAfterInit();
             });
         };
 
@@ -68,6 +69,26 @@
                 cb();
             } else {
                 document.addEventListener('DOMContentLoaded', cb);
+            }
+        };
+
+        /**
+         * Call functions after initialization
+         * @param callback
+         */
+        this.onAfterInit = function(callback) {
+            if (isInitialized) {
+                if (typeof callback === 'function') {
+                    callback();
+                }
+                callbacks.forEach(function(callbackFunc) {
+                    if (typeof callbackFunc === 'function') {
+                        callbackFunc();
+                    }
+                });
+                callbacks = [];
+            } else {
+                callbacks.push(callback);
             }
         };
 
@@ -151,7 +172,7 @@
          * Mark inputs of the filters
          */
         this.markSelected = function() {
-            var urlParams = this.getUrlParams(), fieldName, fieldEl, inputType, value;
+            var urlParams = this.getUrlParams(), fieldName, fieldEl, inputType, valuesArr, value;
             var filtersContainerEl = document.getElementById('catalog-filters');
             if (!urlParams.filter || !filtersContainerEl) {
                 return;
@@ -160,25 +181,26 @@
                 fieldName = 'filter[' + key + ']';
                 if (Array.isArray(urlParams.filter[key])) {
                     fieldName += '[]';
-                    urlParams.filter[key].forEach(function(value) {
+                    valuesArr = urlParams.filter[key];
+                } else {
+                    valuesArr = [ urlParams.filter[key] ];
+                }
+                valuesArr.forEach(function(value) {
+                    if (typeof value.from !== 'undefined' && typeof value.to !== 'undefined') {
+                        self.updateSliderValue(key, value.from, value.to);
+                    } else {
                         fieldEl = filtersContainerEl.querySelector('[name="' + fieldName + '"][value="' + value + '"]');
+                        if (!fieldEl) {
+                            return;
+                        }
                         inputType = self.getInputType(fieldEl);
                         if (inputType === 'checkbox') {
                             fieldEl.checked = true;
                         } else if (inputType === 'select') {
                             fieldEl.value = value;
                         }
-                    });
-                } else {
-                    value = urlParams.filter[key];
-                    fieldEl = filtersContainerEl.querySelector('[name="' + fieldName + '"][value="' + value + '"]');
-                    inputType = self.getInputType(fieldEl);
-                    if (inputType === 'checkbox') {
-                        fieldEl.checked = true;
-                    } else if (inputType === 'select') {
-                        fieldEl.value = value;
                     }
-                }
+                });
             });
         };
 
@@ -321,6 +343,42 @@
                 });
                 sliderContainer.noUiSlider.on('change', function(values, handle) {
                     self.onFilterChange();
+                });
+            });
+        };
+
+        /**
+         * Update slider values
+         * @param fieldName
+         * @param valueFrom
+         * @param valueTo
+         */
+        this.updateSliderValue = function(fieldName, valueFrom, valueTo) {
+            if (typeof window.wNumb === 'undefined' || typeof window.noUiSlider === 'undefined') {
+                console.log('Libraries noUiSlider and wNumb not found.');
+                return;
+            }
+            var slidersContainers = document.querySelectorAll('div.shk-slider-range');
+            slidersContainers.forEach(function(sliderContainer) {
+                if (sliderContainer.dataset.name !== fieldName || !sliderContainer.noUiSlider) {
+                    return;
+                }
+                var inputs = sliderContainer.querySelectorAll('input'),
+                    currencyRate = self.getCurrentCurrencyRate(),
+                    wNumbFormat = wNumb({mark: '.', thousand: ' ', decimals: 0});
+
+                if (mainOptions.multiCurrency && fieldName === mainOptions.priceFilterName) {
+                    valueFrom = Math.floor(parseFloat(valueFrom) / currencyRate);
+                    valueTo = Math.ceil(parseFloat(valueTo) / currencyRate);
+                    inputs[0].value = wNumbFormat.from(valueFrom) * currencyRate;
+                    inputs[1].value = wNumbFormat.from(valueTo) * currencyRate;
+                } else {
+                    inputs[0].value = wNumbFormat.from(valueFrom);
+                    inputs[1].value = wNumbFormat.from(valueTo);
+                }
+
+                sliderContainer.noUiSlider.updateOptions({
+                    start: [valueFrom, valueTo]
                 });
             });
         };

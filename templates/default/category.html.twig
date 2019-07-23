@@ -83,7 +83,7 @@
     </main>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            if (shk) {
+            if (typeof shk !== 'undefined') {
                 shk.onAfterInit(function() {
                     shk.filtersInit(true);
                 });

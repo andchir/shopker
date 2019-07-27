@@ -248,9 +248,9 @@ input.form-control[readonly] { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); curso
 /* accordion */
 .ngb-accordion .card { margin-bottom: 0.325em; border: 1px solid rgba(0,0,0,.125) !important; border-radius: .25rem !important; }
 .ngb-accordion .card-header { padding: 0; border-bottom: 0; position: relative; background-image: linear-gradient(to bottom, #f7f7f7 0%, #e8e8e8 100%); text-shadow: 1px 1px 2px #fff, 1px 1px 1px #fff; }
-.ngb-accordion .card-header button:before { content: '\e909'; display: inline-block; font-family: 'icomoon'; position: absolute; right: 10px; top: 12px; color: rgba(0,0,0,0.5); }
+.ngb-accordion .card-header button:before { content: '\e906'; display: inline-block; font-family: 'icomoon'; position: absolute; right: 10px; top: 12px; color: rgba(0,0,0,0.5); }
 .ngb-accordion .card-header.active { border-bottom: 1px solid rgba(0,0,0,.125); background-color: #e8e8e8; background-image: linear-gradient(to bottom, #e8e8e8 0%, #d1d1d1 100%); }
-.ngb-accordion .card-header button.collapsed:before { content: '\e906'; }
+.ngb-accordion .card-header button.collapsed:before { content: '\e909'; }
 .ngb-accordion .card-header > a,
 .ngb-accordion .card-header button.btn-link { display: block; width: 100%; padding: 0.75rem 1.25rem; text-decoration: none; text-align: left; line-height: 1; color: rgba(0,0,0,0.7); }
 .ngb-accordion .card-header:hover { background-color: #e8e8e8; background-image: linear-gradient(to bottom, #e8e8e8 0%, #d1d1d1 100%); }

@@ -192,9 +192,14 @@
                                         <tr class="show-on-hover-parent">
                                             <td>{{content.id}}</td>
                                             <td>
-                                                <a href="{{baseUrl}}{{content.uri}}" target="_blank">
+                                                <ng-container *ngIf="!content.uri; else productLink">
                                                     {{ content.title }}
-                                                </a>
+                                                </ng-container>
+                                                <ng-template #productLink>
+                                                    <a href="{{baseUrl}}{{content.uri}}" target="_blank">
+                                                        {{ content.title }}
+                                                    </a>
+                                                </ng-template>
                                                 <div class="text-muted small">
                                                     {{ content.parametersString }}
                                                     <div *ngIf="content.filesString">

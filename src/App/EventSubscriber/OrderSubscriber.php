@@ -72,6 +72,7 @@ class OrderSubscriber implements EventSubscriberInterface
             $order
         );
 
+        // Sending a notification to the admin
         if ($isOrderNew || $order->getIsPaid()) {
             $utilsService->orderSendMail(
                 $emailSubject,

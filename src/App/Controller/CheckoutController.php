@@ -40,6 +40,10 @@ class CheckoutController extends BaseController
      * @param TranslatorInterface $translator
      * @param EventDispatcherInterface $eventDispatcher
      * @return RedirectResponse|Response
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function checkoutAction(Request $request,
         UtilsService $utilsService,
@@ -166,18 +170,14 @@ class CheckoutController extends BaseController
                 $this->deleteTemporaryFiles(FileDocument::OWNER_ORDER_TEMPORARY);
 
                 $shopCartService->clearContent();
-                $utilsService->orderSendMail(
-                    $this->getParameter('app.name') . ' - ' . $translator->trans('mail_subject.new_order'),
-                    $order
-                );
 
                 $request->getSession()
                     ->getFlashBag()
                     ->add('messages', 'Thanks for your order!');
 
-                // Dispatch event after create
-                $event = new GenericEvent($order);
+                // Dispatch events
                 $eventDispatcher->dispatch(Events::ORDER_CREATED, $event);
+                $eventDispatcher->dispatch(Events::ORDER_STATUS_UPDATED, $event);
 
                 return $this->redirectToRoute('page_checkout_success');
             }

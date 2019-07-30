@@ -175,16 +175,6 @@ class OrderController extends StorageControllerAbstract
 
             $dm->flush();
 
-            /** @var UtilsService $utilsService */
-            $utilsService = $this->get('app.utils');
-            /** @var TranslatorInterface $translator */
-            $translator = $this->get('translator');
-            $utilsService->orderSendMail(
-                $this->getParameter('app.name') . ' - '
-                    . $translator->trans('mail_subject.order_status_change'),
-                $order
-            );
-
             /** @var EventDispatcherInterface $eventDispatcher */
             $eventDispatcher = $this->get('event_dispatcher');
             $event = new GenericEvent($order);

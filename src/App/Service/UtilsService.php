@@ -43,7 +43,6 @@ class UtilsService
         /** @var \Swift_Mailer $mailer */
         $mailer = $this->container->get('mailer');
         $message = (new \Swift_Message($subject))
-        //$message = \Swift_Message::newInstance()
             ->setSubject($subject)
             ->setFrom(
                 $this->container->getParameter('mailer_user'),
@@ -67,44 +66,53 @@ class UtilsService
      * Send mail order status
      * @param $emailSubject
      * @param Order $order
+     * @param string $templateName
+     * @param string $emailTo
      * @return bool
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
-    public function orderSendMail($emailSubject, Order $order)
+    public function orderSendMail($emailSubject, Order $order, $templateName = '', $emailTo = '')
     {
-        if (!$order->getEmail()) {
-            return false;
+        if (!$templateName) {
+            /** @var SettingsService $settingsService */
+            $settingsService = $this->container->get('app.settings');
+            $orderStatusSettings = $settingsService->getSettingsGroup(Setting::GROUP_ORDER_STATUSES);
+
+            $orderStatus = $order->getStatus();
+            $statusSetting = array_filter($orderStatusSettings, function($setting) use ($orderStatus) {
+                /** @var Setting $setting */
+                return $setting->getName() == $orderStatus;
+            });
+
+            if (empty($statusSetting)) {
+                return false;
+            }
+
+            $statusSetting = current($statusSetting);
+
+            /** @var Setting $statusSetting */
+            $settingOptions = $statusSetting->getOptions();
+            $templateName = $settingOptions['template']['value'];
+            if (empty($templateName)) {
+                return false;
+            }
         }
-
-        /** @var SettingsService $settingsService */
-        $settingsService = $this->container->get('app.settings');
-        $orderStatusSettings = $settingsService->getSettingsGroup(Setting::GROUP_ORDER_STATUSES);
-
-        $orderStatus = $order->getStatus();
-        $statusSetting = array_filter($orderStatusSettings, function($setting) use ($orderStatus) {
-            /** @var Setting $setting */
-            return $setting->getName() == $orderStatus;
-        });
-
-        if (empty($statusSetting)) {
-            return false;
-        }
-
-        $statusSetting = current($statusSetting);
-
-        /** @var Setting $statusSetting */
-        $settingOptions = $statusSetting->getOptions();
-        $templateName = $settingOptions['template']['value'];
-        if (empty($templateName)) {
-            return false;
-        }
-
         $templatePath = "email/email_order_{$templateName}.html.twig";
-
-        $emailBody = $this->twig->render($templatePath, array(
-            'order' => $order
-        ));
-
-        $this->sendMail($emailSubject, $emailBody, $order->getEmail());
+        if (!$emailTo) {
+            $emailTo = $order->getEmail();
+        }
+        if (!$emailTo) {
+            return false;
+        }
+        try {
+            $emailBody = $this->twig->render($templatePath, array(
+                'order' => $order
+            ));
+        } catch (\Twig\Error\LoaderError $e) {
+            return false;
+        }
+        $this->sendMail($emailSubject, $emailBody, $emailTo);
 
         return true;
     }

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style type="text/css">
+        body { background-color: #fff; }
+        p { margin: 0 0 12px 0; }
+        td { vertical-align: top; }
+        table.table { width: 100%; border: 1px solid #BCBCBC; border-collapse: collapse; }
+        table.table th,
+        table.table td { padding: 10px; border: 1px solid #BCBCBC; }
+        .text-right { text-align: right; }
+    </style>
+</head>
+
+<body>
+
+<p><b>{{ app_name }}</b></p>
+
+<div style="padding:15px 0; margin:15px 0; border-top:3px solid #BCBCBC; border-bottom:3px solid #BCBCBC;">
+
+    <h2>
+        {{ 'Order' | trans }} #{{ order.id }}
+    </h2>
+
+    <p>
+        {{ 'Status' | trans }}: <b>{{ order.status }}</b>
+    </p>
+
+    <p>
+        {{ order.createdDate | date('d.m.Y H:i:s') }}
+    </p>
+
+    <h3>
+        {{ 'Contacts' | trans }}
+    </h3>
+
+    <table style="width: 100%;">
+        <tr>
+            <!-- Contacts -->
+            <td style="width: 50%;">
+
+                <table>
+                    <tr>
+                        <td>{{ 'Email' | trans }}:</td>
+                        <td><b>{{ order.email }}</b></td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'Full name' | trans }}:</td>
+                        <td><b>{{ order.fullName }}</b></td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'Phone' | trans }}:</td>
+                        <td><b>{{ order.phone }}</b></td>
+                    </tr>
+                    {% if order.deliveryName is not empty %}
+                        <tr>
+                            <td>{{ 'Delivery method' | trans }}:</td>
+                            <td><b>{{ order.deliveryName }}</b></td>
+                        </tr>
+                    {% endif %}
+                    {% if order.paymentName is not empty %}
+                        <tr>
+                            <td>{{ 'Payment method' | trans }}:</td>
+                            <td><b>{{ order.paymentName }}</b></td>
+                        </tr>
+                    {% endif %}
+                    {% if order.comment is not empty %}
+                        <tr>
+                            <td>{{ 'Comment' | trans }}:</td>
+                            <td><b>{{ order.comment }}</b></td>
+                        </tr>
+                    {% endif %}
+                </table>
+
+            </td>
+            <!-- /Contacts -->
+            <!-- Options -->
+            <td style="width: 50%;">
+
+                <table>
+                    {% for option in order.options %}
+                        {% if option.value is not empty %}
+                            <tr>
+                                <td>{{ option.title }}:</td>
+                                <td><b>{{ option.value }}</b></td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </table>
+
+            </td>
+            <!-- /Options -->
+        </tr>
+    </table>
+
+    <h3>
+        {{ 'Order list' | trans }}
+    </h3>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>{{ 'Product Name' | trans }}</th>
+            <th>{{ 'Price' | trans }}</th>
+            <th>{{ 'Quantity' | trans }}</th>
+            <th>{{ 'Price total' | trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for orderContent in order.content %}
+            <tr>
+                <td>
+                    {{ orderContent.id }}
+                </td>
+                <td>
+                    {{ orderContent.title }}
+                    {% if orderContent.parametersString is not empty %}
+                        <div>
+                            <small>{{ orderContent.parametersString }}</small>
+                        </div>
+                    {% endif %}
+                </td>
+                <td>
+                    {{ orderContent.price | price }}
+                    {{ order.currency }}
+                </td>
+                <td>
+                    {{ orderContent.count }}
+                </td>
+                <td>
+                    {{ orderContent.priceTotal | price }}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="2">
+                {{ 'Delivery' | trans }}
+            </td>
+            <td>
+                {{ order.deliveryPrice | price }}
+            </td>
+            <td colspan="2"></td>
+        </tr>
+        <tr>
+            <td colspan="4" class="text-right">
+                {{ 'Price total' | trans }}:
+            </td>
+            <td>
+                <b>
+                    {{ order.price | price }}
+                    {{ order.currency }}
+                </b>
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+
+</div>
+
+<a href="{{ url('homepage') }}" target="_blank">
+    {{ url('homepage') }}
+</a>
+
+<br /><br />
+
+</body>
+</html>

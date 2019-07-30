@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style type="text/css">
+        body { background-color: #fff; }
+        p { margin: 0 0 12px 0; }
+        td { vertical-align: top; }
+        table.table { width: 100%; border: 1px solid #BCBCBC; border-collapse: collapse; }
+        table.table th,
+        table.table td { padding: 10px; border: 1px solid #BCBCBC; }
+        .text-right { text-align: right; }
+    </style>
+</head>
+
+<body>
+
+<p><b>{{ app_name }}</b></p>
+
+<div style="padding:15px 0; margin:15px 0; border-top:3px solid #BCBCBC; border-bottom:3px solid #BCBCBC;">
+
+    <h2>
+        {{ 'Email from your website' | trans }}
+    </h2>
+
+    <table class="table">
+        {% for field in fields %}
+            <tr>
+                <td>{{ field.label | default(field.name) | trans }}:</td>
+                <td>
+                    {% if formData[field.name] is defined %}
+                        {{ formData[field.name] }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+</div>
+
+<a href="{{ url('homepage') }}" target="_blank">
+    {{ url('homepage') }}
+</a>
+
+<br /><br />
+
+</body>
+</html>

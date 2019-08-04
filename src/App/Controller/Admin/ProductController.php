@@ -535,9 +535,11 @@ class ProductController extends BaseProductController
     /**
      * @param ContentType $contentType
      * @param $itemData
+     * @param bool $clearCache
+     * @param bool $skipEvents
      * @return array|bool
      */
-    public function deleteItem(ContentType $contentType, $itemData)
+    public function deleteItem(ContentType $contentType, $itemData, $clearCache = true, $skipEvents = false)
     {
         $collection = $this->getCollection($contentType->getCollection());
         $result = $collection->remove([
@@ -547,18 +549,22 @@ class ProductController extends BaseProductController
             return $result;
         }
 
-        $categoryId = isset($itemData['parentId']) ? $itemData['parentId'] : 0;
-        $this->onAfterUpdateItem($contentType, [], $categoryId);
+        if ($skipEvents) {
+            $categoryId = isset($itemData['parentId']) ? $itemData['parentId'] : 0;
+            $this->onAfterUpdateItem($contentType, [], $categoryId);
 
-        // Dispatch event
-        $eventDispatcher = $this->get('event_dispatcher');
-        $event = new GenericEvent($itemData, ['contentType' => $contentType]);
-        $eventDispatcher->dispatch(Events::PRODUCT_DELETED, $event);
+            // Dispatch event
+            $eventDispatcher = $this->get('event_dispatcher');
+            $event = new GenericEvent($itemData, ['contentType' => $contentType]);
+            $eventDispatcher->dispatch(Events::PRODUCT_DELETED, $event);
+        }
 
-        // Clear file cache
-        /** @var FilesystemCache $cache */
-        $cache = $this->get('app.filecache');
-        $cache->clear();
+        if ($clearCache) {
+            // Clear file cache
+            /** @var FilesystemCache $cache */
+            $cache = $this->get('app.filecache');
+            $cache->clear();
+        }
 
         return $result;
     }

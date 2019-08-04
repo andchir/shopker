@@ -515,7 +515,7 @@ class AppExtension extends AbstractExtension
             } catch (\Exception $e) {
                 $output .= $this->twigAddError($e->getMessage());
             }
-            if ($cacheEnabled) {
+            if (!empty($output) && $cacheEnabled) {
                  $cache->set($cacheKey, $output, 60*60*24);
             }
         }

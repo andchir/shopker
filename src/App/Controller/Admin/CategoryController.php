@@ -222,10 +222,11 @@ class CategoryController extends StorageControllerAbstract
         $evenDispatcher = $this->get('event_dispatcher');
         $previousParentId = $item->getParentId();
         $children = $repository->getChildren($item, [$item]);
+        $children = array_reverse($children);
 
         /** @var Category $child */
         foreach ($children as $child) {
-            $this->deleteProductsByCategory($child);
+            $this->deleteProductsByCategory($child, false);
 
             /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
             $dm = $this->get('doctrine_mongodb')->getManager();
@@ -250,9 +251,10 @@ class CategoryController extends StorageControllerAbstract
     /**
      * Delete category nested products
      * @param Category $category
+     * @param bool $clearCache
      * @return bool
      */
-    public function deleteProductsByCategory(Category $category)
+    public function deleteProductsByCategory(Category $category, $clearCache = true)
     {
         $contentType = $category->getContentType();
         if ($contentType) {
@@ -268,7 +270,7 @@ class CategoryController extends StorageControllerAbstract
             ]);
 
             foreach ($documents as $document) {
-                $productController->deleteItem($contentType, $document);
+                $productController->deleteItem($contentType, $document, $clearCache, true);
             }
 
             return true;

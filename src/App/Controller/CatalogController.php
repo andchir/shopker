@@ -530,7 +530,7 @@ class CatalogController extends ProductController
         $categoriesRepository = $this->getCategoriesRepository();
         /** @var Category $parentCategory */
         $parentCategory = $categoriesRepository->find($parentId);
-        if (!$parentCategory) {
+        if ($parentId && !$parentCategory) {
             return [];
         }
 

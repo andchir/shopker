@@ -13,6 +13,11 @@ final class Events
      * @Event("Symfony\Component\EventDispatcher\GenericEvent")
      * @var string
      */
+    const PRODUCT_UPDATED = 'product.updated';
+    /**
+     * @Event("Symfony\Component\EventDispatcher\GenericEvent")
+     * @var string
+     */
     const PRODUCT_DELETED = 'product.deleted';
     /**
      * @Event("Symfony\Component\EventDispatcher\GenericEvent")

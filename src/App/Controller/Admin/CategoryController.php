@@ -226,7 +226,7 @@ class CategoryController extends StorageControllerAbstract
 
         /** @var Category $child */
         foreach ($children as $child) {
-            $this->deleteProductsByCategory($child, false, true);
+            $this->deleteProductsByCategory($child, false);
 
             /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
             $dm = $this->get('doctrine_mongodb')->getManager();
@@ -252,10 +252,9 @@ class CategoryController extends StorageControllerAbstract
      * Delete category nested products
      * @param Category $category
      * @param bool $clearCache
-     * @param bool $skipEvents
      * @return bool
      */
-    public function deleteProductsByCategory(Category $category, $clearCache = true, $skipEvents = false)
+    public function deleteProductsByCategory(Category $category, $clearCache = true)
     {
         $contentType = $category->getContentType();
         if ($contentType) {
@@ -265,6 +264,11 @@ class CategoryController extends StorageControllerAbstract
 
             $collectionName = $contentType->getCollection();
             $collection = $this->getCollection($collectionName);
+
+            $count = $collection->count([
+                'parentId' => $category->getId()
+            ]);
+            $skipEvents = $count > 500;// TODO: Add confirm in UI
 
             if ($skipEvents) {
                 $result = $collection->remove([

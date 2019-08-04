@@ -226,7 +226,7 @@ class CategoryController extends StorageControllerAbstract
 
         /** @var Category $child */
         foreach ($children as $child) {
-            $this->deleteProductsByCategory($child, false);
+            $this->deleteProductsByCategory($child, false, true);
 
             /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
             $dm = $this->get('doctrine_mongodb')->getManager();
@@ -252,9 +252,10 @@ class CategoryController extends StorageControllerAbstract
      * Delete category nested products
      * @param Category $category
      * @param bool $clearCache
+     * @param bool $skipEvents
      * @return bool
      */
-    public function deleteProductsByCategory(Category $category, $clearCache = true)
+    public function deleteProductsByCategory(Category $category, $clearCache = true, $skipEvents = false)
     {
         $contentType = $category->getContentType();
         if ($contentType) {
@@ -265,15 +266,21 @@ class CategoryController extends StorageControllerAbstract
             $collectionName = $contentType->getCollection();
             $collection = $this->getCollection($collectionName);
 
-            $documents = $collection->find([
-                'parentId' => $category->getId()
-            ]);
+            if ($skipEvents) {
+                $result = $collection->remove([
+                    'parentId' => $category->getId()
+                ]);
+                return !empty($result['ok']);
 
-            foreach ($documents as $document) {
-                $productController->deleteItem($contentType, $document, $clearCache, true);
+            } else {
+                $documents = $collection->find([
+                    'parentId' => $category->getId()
+                ]);
+                foreach ($documents as $document) {
+                    $productController->deleteItem($contentType, $document, $clearCache, $skipEvents);
+                }
+                return true;
             }
-
-            return true;
         }
         return false;
     }

@@ -24,6 +24,7 @@ class ExceptionListener
     {
         $exception = $event->getException();
         $request = $event->getRequest();
+        $rootPath = realpath($this->container->getParameter('kernel.root_dir').'/../..');
         $environment = $this->container->get('kernel')->getEnvironment();
         $displayErrors = $this->container->hasParameter('app.display_errors')
             ? !empty($this->container->getParameter('app.display_errors'))
@@ -43,7 +44,9 @@ class ExceptionListener
             $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR;
         }
         if ($environment === 'dev' || $displayErrors) {
-            $message = $exception->getMessage() . " - " . $exception->getFile() . " ({$exception->getLine()})";
+            $message = $exception->getMessage() . " - "
+                . str_replace($rootPath, '', $exception->getFile())
+                . " ({$exception->getLine()})";
         }
 
         if($request->isXmlHttpRequest()) {

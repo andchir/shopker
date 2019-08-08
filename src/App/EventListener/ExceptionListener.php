@@ -44,9 +44,11 @@ class ExceptionListener
             $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR;
         }
         if ($environment === 'dev' || $displayErrors) {
-            $message = $exception->getMessage() . " - "
-                . str_replace($rootPath, '', $exception->getFile())
-                . " ({$exception->getLine()})";
+            $filePath = str_replace($rootPath, '', $exception->getFile());
+            if (strpos($filePath, '/vendor/') !== false) {
+                $filePath = substr($filePath, strpos($filePath, '/vendor/'));
+            }
+            $message = $exception->getMessage() . " - {$filePath} ({$exception->getLine()})";
         }
 
         if($request->isXmlHttpRequest()) {

@@ -1,6 +1,7 @@
 
 4.0.7
 - Update Angular 7 to 8.
+- In the Catalog section, the dropdown menu has been replaced by a tree menu.
 
 4.0.6
 - In the administrator interface added search for users and orders by e-mail.

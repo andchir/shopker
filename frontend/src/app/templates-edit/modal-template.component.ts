@@ -24,7 +24,7 @@ export class ModalTemplateEditComponent implements OnInit {
     @Input() file: FileRegularInterface;
     @Input() isItemCopy: boolean;
     @Input() isEditMode: boolean;
-    @ViewChild('editor') editor: ElementRef;
+    @ViewChild('editor', { static: true }) editor: ElementRef;
 
     model: FileRegularInterface = {} as FileRegularInterface;
     errorMessage = '';

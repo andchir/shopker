@@ -8,7 +8,7 @@ import {AlertModalContentComponent, ConfirmModalContentComponent} from './compon
 
 export abstract class PageTableAbstractComponent<M> implements OnInit {
 
-    @ViewChild('table') table;
+    @ViewChild('table', { static: true }) table;
     errorMessage: string;
     items: M[] = [];
     title = 'Page with data table';

@@ -19,8 +19,8 @@ declare const adminMenu: MenuItem[];
 })
 export class AppComponent {
 
-    @ViewChild('navbarLeftOverlay') navbarLeftOverlay: ElementRef;
-    @ViewChild('fileManager') fileManager: FileManagerComponent;
+    @ViewChild('navbarLeftOverlay', { static: true }) navbarLeftOverlay: ElementRef;
+    @ViewChild('fileManager', { static: false }) fileManager: FileManagerComponent;
     baseUrl: string;
     routeData: any[];
     menuItems: MenuItem[] = [...adminMenu];

@@ -25,10 +25,10 @@ import {SortData} from '../components/sorting-dnd.conponent';
 })
 export class ContentTypeModalContentComponent extends ModalContentAbstractComponent<ContentType> implements OnInit {
 
-    @ViewChild('addCollectionBlock') elementAddCollectionBlock;
-    @ViewChild('addGroupBlock') elementAddGroupBlock;
-    @ViewChild('accordion') accordion;
-    @ViewChild('blockFieldList') blockFieldList;
+    @ViewChild('addCollectionBlock', { static: true }) elementAddCollectionBlock;
+    @ViewChild('addGroupBlock', { static: true }) elementAddGroupBlock;
+    @ViewChild('accordion', { static: true }) accordion;
+    @ViewChild('blockFieldList', { static: false }) blockFieldList;
     modalRef: NgbModalRef;
 
     model = new ContentType(0, '', '', '', 'products', [], ['General', 'Service'], true);

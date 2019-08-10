@@ -24,8 +24,8 @@ export class FileWidgetComponent implements ControlValueAccessor {
     @Input() allowMultiple = false;
     @Input() files: { [key: string]: File } = {};
     @Input() filesRaw: File[] = [];
-    @ViewChild('fileInput') fileInput: ElementRef;
-    @ViewChild('imgPreview') imgPreview: ElementRef;
+    @ViewChild('fileInput', { static: false }) fileInput: ElementRef;
+    @ViewChild('imgPreview', { static: true }) imgPreview: ElementRef;
     @Input('controlValue') _controlValue: FileData|null = null;
     filesDirBaseUrl: string;
     fileName = '';

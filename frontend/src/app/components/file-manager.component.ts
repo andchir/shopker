@@ -17,7 +17,7 @@ import {ModalFileUploadContentComponent} from './modal-file-upload.component';
 })
 export class FileManagerComponent {
 
-    @ViewChild('container') container;
+    @ViewChild('container', { static: true }) container;
     modalRef: NgbModalRef;
     isActive = false;
     files: any[] = [];

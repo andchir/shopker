@@ -19,9 +19,9 @@ import {FileRegularInterface} from './models/file-regular.interface';
 })
 export class TemplatesEditComponent extends PageTableAbstractComponent<Template> {
 
-    @ViewChild('dropdownConfig') dropdownConfig: ElementRef;
-    @ViewChild('dropdownStyles') dropdownStyles: ElementRef;
-    @ViewChild('dropdownScripts') dropdownScripts: ElementRef;
+    @ViewChild('dropdownConfig', { static: false }) dropdownConfig: ElementRef;
+    @ViewChild('dropdownStyles', { static: false }) dropdownStyles: ElementRef;
+    @ViewChild('dropdownScripts', { static: false }) dropdownScripts: ElementRef;
     title = 'TEMPLATES';
     queryOptions: QueryOptions = new QueryOptions('path', 'asc', 1, 10, 0, 0);
 

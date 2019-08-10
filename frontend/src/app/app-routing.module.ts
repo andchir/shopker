@@ -4,13 +4,13 @@ import {NotFoundComponent} from './not-found.component';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'orders', pathMatch: 'full'},
-    {path: 'orders', loadChildren: './orders/orders.module#OrdersModule'},
-    {path: 'catalog', loadChildren: './catalog/catalog.module#CatalogModule'},
-    {path: 'statistics', loadChildren: './statistics/statistics.module#StatisticsModule'},
-    {path: 'users', loadChildren: './users/users.module#UsersModule'},
-    {path: 'settings', loadChildren: './settings/settings.module#SettingsModule'},
-    {path: 'templates_edit', loadChildren: './templates-edit/templates-edit.module#TemplatesEditModule'},
-    {path: 'import_export', loadChildren: './import-export/import-export.module#ImportExportModule'},
+    {path: 'orders', loadChildren: () => import('./orders/orders.module').then(m => m.OrdersModule)},
+    {path: 'catalog', loadChildren: () => import('./catalog/catalog.module').then(m => m.CatalogModule)},
+    {path: 'statistics', loadChildren: () => import('./statistics/statistics.module').then(m => m.StatisticsModule)},
+    {path: 'users', loadChildren: () => import('./users/users.module').then(m => m.UsersModule)},
+    {path: 'settings', loadChildren: () => import('./settings/settings.module').then(m => m.SettingsModule)},
+    {path: 'templates_edit', loadChildren: () => import('./templates-edit/templates-edit.module').then(m => m.TemplatesEditModule)},
+    {path: 'import_export', loadChildren: () => import('./import-export/import-export.module').then(m => m.ImportExportModule)},
     {path: '**', component: NotFoundComponent}
 ];
 

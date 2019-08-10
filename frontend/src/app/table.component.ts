@@ -17,7 +17,7 @@ export class TableComponent implements OnInit {
     @Input() selectedIds: number[] = [];
     @Output() actionRequest = new EventEmitter();
     @Output() changeRequest = new EventEmitter();
-    @ViewChild('tableElement') tableElement;
+    @ViewChild('tableElement', { static: true }) tableElement;
 
     constructor(
         public router: Router

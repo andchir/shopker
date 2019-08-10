@@ -10,7 +10,7 @@ import {FileWidgetComponent} from './file-widget.component';
 export class ModalFileUploadContentComponent {
 
     messageText: string;
-    @ViewChild('filesWidget') filesWidget: FileWidgetComponent;
+    @ViewChild('filesWidget', { static: true }) filesWidget: FileWidgetComponent;
 
     constructor(
         public activeModal: NgbActiveModal

@@ -25,7 +25,7 @@ export class SelectParentDropdownComponent implements OnInit, ControlValueAccess
     previousCategoryNode: TreeNode;
     currentId: number = null;
 
-    @ViewChild('dropdownElement') dropdownElement;
+    @ViewChild('dropdownElement', { static: true }) dropdownElement;
     @Input() filterId: number = null;
     @Input()
     set disabled(value: boolean) {

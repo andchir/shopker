@@ -17,7 +17,7 @@ const customValueProvider = {
 })
 export class TranslationsComponent implements ControlValueAccessor {
 
-    @ViewChild('accordionTranslations') accordionTranslations: NgbAccordion;
+    @ViewChild('accordionTranslations', { static: true }) accordionTranslations: NgbAccordion;
     translations: {[fieldName: string]: EntityTranslation[]} = {};
     translateTimer: any;
     _value: {[fieldName: string]: {[lang: string]: string}}|null = {};

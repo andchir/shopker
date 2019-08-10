@@ -5,7 +5,7 @@ import {FormBuilder, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {TreeNode} from 'primeng/primeng';
 
-import {findIndex, clone} from 'lodash';
+import {findIndex, clone, cloneDeep} from 'lodash';
 import {TranslateService} from '@ngx-translate/core';
 
 import {NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig, NgbAccordion} from '@ng-bootstrap/ng-bootstrap';
@@ -22,6 +22,12 @@ import {ContentTypesService} from './services/content_types.service';
 import {FormFieldInterface} from '../models/form-field.interface';
 import {AppSettings} from '../services/app-settings.service';
 import {FilesService} from './services/files.service';
+
+interface CategoryNode extends TreeNode {
+    id: number;
+    parentId: number;
+    children?: CategoryNode[];
+}
 
 /**
  * @class CategoriesModalComponent
@@ -243,6 +249,8 @@ export class CategoriesMenuComponent implements OnInit {
     @Input() rootTitle = 'Категории';
     @Output() changeRequest = new EventEmitter<Category>();
     currentCategory: Category = new Category(null, false, 0, 'root', this.rootTitle, '', '', true);
+    currentCategoryNode: CategoryNode = {id: 0} as CategoryNode;
+    categoriesTree: CategoryNode[];
     categories: Category[] = [];
     errorMessage = '';
     modalRef: NgbModalRef;
@@ -265,11 +273,12 @@ export class CategoriesMenuComponent implements OnInit {
 
     /** On initialize component */
     ngOnInit(): void {
-        this.getCategoriesRequest()
+        this.getCategories();
+        this.categoriesService.getTree(false)
             .subscribe(
                 data => {
-                    this.categories = data.items;
-
+                    this.categoriesTree = data;
+                    this.currentCategoryNode = this.categoriesTree[0];
                     this.route.paramMap
                         .subscribe(
                             params => {
@@ -291,11 +300,12 @@ export class CategoriesMenuComponent implements OnInit {
         }
         const index = findIndex(this.categories, {id: this.categoryId});
         if (index > -1) {
-            this.currentCategory = clone(this.categories[index]);
+            this.currentCategory = cloneDeep(this.categories[index]);
             this.changeRequest.emit(this.currentCategory);
         } else {
             this.openRootCategory();
         }
+        this.updateCategoryNode();
     }
 
     /** Get categories */
@@ -408,9 +418,40 @@ export class CategoriesMenuComponent implements OnInit {
             );
     }
 
+    openCategory(event): void {
+        this.currentCategoryNode = event['node'];
+        this.categoryId = this.currentCategoryNode.id;
+        const index = findIndex(this.categories, {id: this.currentCategoryNode.id});
+        if (index === -1) {
+            return;
+        }
+        this.currentCategory = cloneDeep(this.categories[index]);
+        this.changeRequest.emit(this.currentCategory);
+    }
+
+    updateCategoryNode(parentId?: number, currentNode?: CategoryNode): void {
+        if (typeof parentId === 'undefined') {
+            parentId = this.categoryId;
+        }
+        if (typeof currentNode === 'undefined') {
+            currentNode = this.currentCategoryNode;
+        }
+        if (!currentNode) {
+            return;
+        }
+        if (currentNode.id === parentId) {
+            this.currentCategoryNode = currentNode;
+        } else if (currentNode.children) {
+            currentNode.children.forEach((node) => {
+                this.updateCategoryNode(parentId, node);
+            });
+        }
+    }
+
     /** Open root category */
     openRootCategory(): void {
         this.currentCategory = new Category(null, false, 0, 'root', this.rootTitle, '', '', true);
+        this.currentCategoryNode = this.categoriesTree[0];
         this.changeRequest.emit(this.currentCategory);
     }
 
@@ -430,6 +471,33 @@ export class CategoriesMenuComponent implements OnInit {
     /** Copy category */
     copyCategory(): void {
         this.openModalCategory(this.currentCategory.id, true);
+    }
+
+    expandAll(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.categoriesTree.forEach(node => {
+            this.expandRecursive(node, true);
+        });
+    }
+
+    collapseAll(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.categoriesTree.forEach(node => {
+            this.expandRecursive(node, false);
+        });
+    }
+
+    private expandRecursive(node: CategoryNode, isExpand: boolean): void {
+        node.expanded = isExpand;
+        if (node.children) {
+            node.children.forEach(childNode => {
+                this.expandRecursive(childNode, isExpand);
+            });
+        }
     }
 }
 

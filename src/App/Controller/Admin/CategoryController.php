@@ -150,18 +150,21 @@ class CategoryController extends StorageControllerAbstract
 
     /**
      * @Route("/tree", methods={"GET"})
+     * @param Request $request
      * @return JsonResponse
      */
-    public function getTree()
+    public function getTree(Request $request)
     {
-        $tree = $this->getCategoriesTree();
+        $expanded = (bool) $request->get('expanded', false);
+        $tree = $this->getCategoriesTree($expanded);
         return new JsonResponse($tree);
     }
 
     /**
+     * @param bool $expanded
      * @return array
      */
-    public function getCategoriesTree()
+    public function getCategoriesTree($expanded = true)
     {
         /** @var TranslatorInterface $translator */
         $translator = $this->get('translator');
@@ -189,7 +192,7 @@ class CategoryController extends StorageControllerAbstract
                 'id' => $category->getId(),
                 'label' => $category->getTitle(),
                 'parentId' => $category->getParentId(),
-                'expanded' => true
+                'expanded' => $expanded
             ];
             if (!isset($data[$row['parentId']])) {
                 $data[$row['parentId']] = [];

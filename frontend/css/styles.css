@@ -206,6 +206,7 @@ input.form-control[readonly] { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); curso
 .dropdown-item { cursor: pointer; }
 .dropdown-toggle-hover:hover + .dropdown-menu,
 .dropdown-toggle-hover + .dropdown-menu:hover { display: block; }
+.dropdown-footer { white-space: nowrap; }
 
 /* dropdown-menu-hover */
 .dropdown-menu-second { width: 100%; position: static; display: block; border: 0; box-shadow: none; }
@@ -277,11 +278,13 @@ input.form-control[readonly] { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); curso
 .ui-toast-message-error .ui-toast-icon:before { content: "\e043"; }
 .ui-toast-message-success .ui-toast-icon:before { content: "\e042"; }
 .pi.pi-chevron-up:before { font-family: 'icomoon'; content: "\e906"; }
-.pi.pi-chevron-down:before { font-family: 'icomoon'; content: "\e909"; }
+.pi.pi-chevron-down:before,
+.pi.pi-caret-down:before { font-family: 'icomoon'; content: "\e909"; }
+.pi.pi-chevron-right:before,
+.pi.pi-caret-right:before { font-family: 'icomoon'; content: "\e907"; }
 body .ui-datepicker .ui-datepicker-header .ui-datepicker-prev span:before,
 .pi.pi-chevron-left:before { font-family: 'icomoon'; content: "\e908"; }
 body .ui-datepicker .ui-datepicker-header .ui-datepicker-next span:before,
-.pi.pi-chevron-right:before { font-family: 'icomoon'; content: "\e907"; }
 
 /* spin */
 .fa.fa-spin { display: inline-block; animation-name: spin; animation-duration: 3000ms; animation-iteration-count: infinite; animation-timing-function: linear; }

@@ -24,13 +24,23 @@
                 </button>
             </div>
             <div class="dropdown-divider"></div>
-            <div class="dropdown-header" *ngIf="categories.length == 0">
-                No categories.
+
+            <p-tree [value]="categoriesTree"
+                    [emptyMessage]="'NO_CATEGORIES' | translate"
+                    [loading]="loading"
+                    [selectionMode]="'single'"
+                    [selection]="currentCategoryNode"
+                    (onNodeSelect)="openCategory($event)"></p-tree>
+
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-footer text-center px-4">
+                <button type="button" class="btn btn-sm btn-secondary mr-2" (click)="expandAll($event)">
+                    {{ 'EXPAND_ALL' | translate }}
+                </button>
+                <button type="button" class="btn btn-sm btn-secondary" (click)="collapseAll($event)">
+                    {{ 'COLLAPSE_ALL' | translate }}
+                </button>
             </div>
-
-            <app-categories-list [inputItems]="categories" [parentId]="0" [currentId]="currentCategory.id"></app-categories-list>
-
-            <div class="clearfix"></div>
         </div>
     </div>
 </div>

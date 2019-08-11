@@ -29,7 +29,7 @@ class BaseController extends Controller
      */
     public static function createTree(&$list, $parent){
         $tree = array();
-        foreach ($parent as $k=>$l){
+        foreach ($parent as $k => $l){
             if(isset($list[$l['id']])){
                 $l['children'] = self::createTree($list, $list[$l['id']]);
             }

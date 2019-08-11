@@ -10,7 +10,7 @@ import {TranslateService} from '@ngx-translate/core';
 
 import {NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig, NgbAccordion} from '@ng-bootstrap/ng-bootstrap';
 import {ContentType} from './models/content_type.model';
-import {Category} from './models/category.model';
+import {Category, CategoryNode} from './models/category.model';
 import {ListRecursiveComponent} from '../list-recursive.component';
 import {ModalContentAbstractComponent} from '../modal.abstract';
 import {QueryOptions} from '../models/query-options';
@@ -22,12 +22,6 @@ import {ContentTypesService} from './services/content_types.service';
 import {FormFieldInterface} from '../models/form-field.interface';
 import {AppSettings} from '../services/app-settings.service';
 import {FilesService} from './services/files.service';
-
-interface CategoryNode extends TreeNode {
-    id: number;
-    parentId: number;
-    children?: CategoryNode[];
-}
 
 /**
  * @class CategoriesModalComponent
@@ -250,7 +244,13 @@ export class CategoriesMenuComponent implements OnInit {
     @Output() changeRequest = new EventEmitter<Category>();
     currentCategory: Category = new Category(null, false, 0, 'root', this.rootTitle, '', '', true);
     currentCategoryNode: CategoryNode = {id: 0} as CategoryNode;
-    categoriesTree: CategoryNode[];
+    categoriesTree: CategoryNode[] = [{
+        id: 0,
+        parentId: 0,
+        label: '',
+        expanded: true,
+        children: null
+    }];
     categories: Category[] = [];
     errorMessage = '';
     modalRef: NgbModalRef;
@@ -273,24 +273,19 @@ export class CategoriesMenuComponent implements OnInit {
 
     /** On initialize component */
     ngOnInit(): void {
-        this.getCategories();
-        this.categoriesService.getTree(false)
-            .subscribe(
-                data => {
-                    this.categoriesTree = data;
-                    this.currentCategoryNode = this.categoriesTree[0];
-                    this.route.paramMap
-                        .subscribe(
-                            params => {
-                                this.categoryId = params.get('categoryId')
-                                    ? parseInt(params.get('categoryId'), 10)
-                                    : 0;
-                                this.selectCurrent();
-                            }
-                        );
-                },
-                error => this.errorMessage = error
-            );
+        this.loading = true;
+        this.getCategories().then((categories: Category[]) => {
+            this.loading = false;
+            this.route.paramMap
+                .subscribe(
+                    params => {
+                        this.categoryId = params.get('categoryId')
+                            ? parseInt(params.get('categoryId'), 10)
+                            : 0;
+                        this.selectCurrent();
+                    }
+                );
+        });
     }
 
     /** Select current category */
@@ -305,26 +300,28 @@ export class CategoriesMenuComponent implements OnInit {
         } else {
             this.openRootCategory();
         }
-        this.updateCategoryNode();
+        this.currentCategoryNode = Category.getCurrentNode(this.currentCategory.id, this.categoriesTree[0]);
     }
 
     /** Get categories */
-    getCategoriesRequest(): Observable<any> {
-        return this.categoriesService.getListPage(
-            new QueryOptions('menuIndex,title', 'asc', 1)
-        );
-    }
-
-    /** Get categories */
-    getCategories(): void {
-        this.getCategoriesRequest()
-            .subscribe(
-                data => {
-                    this.categories = data.items;
-                    this.selectCurrent();
-                },
-                error => this.errorMessage = <any>error
-            );
+    getCategories(): Promise<Category[]> {
+        return new Promise((resolve, reject) => {
+            this.categoriesService.getListPage(
+                new QueryOptions('menuIndex,title', 'asc', 1)
+            )
+                .subscribe(
+                    data => {
+                        this.categories = data.items;
+                        this.categoriesTree = [Category.createTree(data.items)];
+                        this.selectCurrent();
+                        resolve(data.items);
+                    },
+                    error => {
+                        this.errorMessage = error;
+                        reject();
+                    }
+                );
+        });
     }
 
     /**
@@ -346,32 +343,13 @@ export class CategoriesMenuComponent implements OnInit {
         this.modalRef.componentInstance.isEditMode = isEditMode;
         this.modalRef.result.then((result) => {
             this.currentCategory.id = null; // For update current category data
-            this.getCategories();
+            this.loading = true;
+            this.getCategories().then(() => {
+                this.loading = false;
+            });
         }, (reason) => {
 
         });
-    }
-
-    /**
-     * Update category data
-     * @param itemId
-     * @param data
-     */
-    updateCategoryData(itemId: number, data: any): void {
-        const index = findIndex(this.categories, {id: itemId});
-        if (index === -1) {
-            return;
-        }
-        const category = this.categories[index];
-        if (category.parentId === data.parentId) {
-            Object.keys(category).forEach(function (k, i) {
-                if (data[k]) {
-                    category[k] = data[k];
-                }
-            });
-        } else {
-            this.getCategories();
-        }
     }
 
     /**
@@ -405,9 +383,9 @@ export class CategoriesMenuComponent implements OnInit {
         this.categoriesService.deleteItem(itemId)
             .subscribe((data) => {
                     this.categoryId = 0;
-                    this.selectCurrent();
-                    this.getCategories();
-                    this.loading = false;
+                    this.getCategories().then(() => {
+                        this.loading = false;
+                    });
                 },
                 (err) => {
                     if (err['error']) {
@@ -419,40 +397,7 @@ export class CategoriesMenuComponent implements OnInit {
     }
 
     openCategory(event): void {
-        this.currentCategoryNode = event['node'];
-        this.categoryId = this.currentCategoryNode.id;
-        const index = findIndex(this.categories, {id: this.currentCategoryNode.id});
-        if (index === -1) {
-            return;
-        }
-        this.currentCategory = cloneDeep(this.categories[index]);
-        this.changeRequest.emit(this.currentCategory);
-    }
-
-    updateCategoryNode(parentId?: number, currentNode?: CategoryNode): void {
-        if (typeof parentId === 'undefined') {
-            parentId = this.categoryId;
-        }
-        if (typeof currentNode === 'undefined') {
-            currentNode = this.currentCategoryNode;
-        }
-        if (!currentNode) {
-            return;
-        }
-        if (currentNode.id === parentId) {
-            this.currentCategoryNode = currentNode;
-        } else if (currentNode.children) {
-            currentNode.children.forEach((node) => {
-                this.updateCategoryNode(parentId, node);
-            });
-        }
-    }
-
-    /** Open root category */
-    openRootCategory(): void {
-        this.currentCategory = new Category(null, false, 0, 'root', this.rootTitle, '', '', true);
-        this.currentCategoryNode = this.categoriesTree[0];
-        this.changeRequest.emit(this.currentCategory);
+        this.router.navigate(['/catalog/category', event['node']['id']]);
     }
 
     /** Go to root category */
@@ -460,12 +405,11 @@ export class CategoriesMenuComponent implements OnInit {
         this.router.navigate(['/catalog/category', '']);
     }
 
-    /**
-     * Select category
-     * @param category
-     */
-    selectCategory(category: Category): void {
-        this.router.navigate(['/catalog/category', category.id]);
+    /** Open root category */
+    openRootCategory(): void {
+        this.currentCategory = new Category(null, false, 0, 'root', this.rootTitle, '', '', true);
+        this.currentCategoryNode = this.categoriesTree[0];
+        this.changeRequest.emit(this.currentCategory);
     }
 
     /** Copy category */

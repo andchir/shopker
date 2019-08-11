@@ -17,10 +17,10 @@ export class CategoriesService extends DataService<Category> {
         this.setRequestUrl('categories');
     }
 
-    getTree(expanded = true) {
+    getTree(parentId = 0, expanded = true) {
         let params = new HttpParams();
         params = params.append('expanded', expanded ? '1' : '0');
-        return this.http.get<any>(this.getRequestUrl() + '/tree', {params: params})
+        return this.http.get<any>(this.getRequestUrl() + `/tree/${parentId}`, {params: params})
             .pipe(
                 catchError(this.handleError<any>())
             );

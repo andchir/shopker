@@ -25,22 +25,23 @@
             </div>
             <div class="dropdown-divider"></div>
 
-            <p-tree [value]="categoriesTree"
+            <p-tree [value]="categoriesTree[0].children"
                     [emptyMessage]="'NO_CATEGORIES' | translate"
-                    [loading]="loading"
                     [selectionMode]="'single'"
                     [selection]="currentCategoryNode"
                     (onNodeSelect)="openCategory($event)"></p-tree>
 
-            <div class="dropdown-divider"></div>
-            <div class="dropdown-footer text-center px-4">
-                <button type="button" class="btn btn-sm btn-secondary mr-2" (click)="expandAll($event)">
-                    {{ 'EXPAND_ALL' | translate }}
-                </button>
-                <button type="button" class="btn btn-sm btn-secondary" (click)="collapseAll($event)">
-                    {{ 'COLLAPSE_ALL' | translate }}
-                </button>
-            </div>
+            <ng-container *ngIf="categoriesTree[0].children && categoriesTree[0].children.length > 1">
+                <div class="dropdown-divider"></div>
+                <div class="dropdown-footer text-center px-4">
+                    <button type="button" class="btn btn-sm btn-secondary mr-2" (click)="expandAll($event)">
+                        {{ 'EXPAND_ALL' | translate }}
+                    </button>
+                    <button type="button" class="btn btn-sm btn-secondary" (click)="collapseAll($event)">
+                        {{ 'COLLAPSE_ALL' | translate }}
+                    </button>
+                </div>
+            </ng-container>
         </div>
     </div>
 </div>

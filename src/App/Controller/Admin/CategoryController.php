@@ -149,29 +149,40 @@ class CategoryController extends StorageControllerAbstract
     }
 
     /**
-     * @Route("/tree", methods={"GET"})
+     * @Route("/tree/{parentId}",
+     *     methods={"GET"},
+     *     requirements={"parentId": "\d+"},
+     *     defaults={"parentId": 0}
+     * )
      * @param Request $request
+     * @param int $parentId
      * @return JsonResponse
      */
-    public function getTree(Request $request)
+    public function getTree(Request $request, $parentId)
     {
         $expanded = (bool) $request->get('expanded', false);
-        $tree = $this->getCategoriesTree($expanded);
+        $tree = $this->getCategoriesTree($parentId, $expanded);
         return new JsonResponse($tree);
     }
 
     /**
+     * @param int $parentId
      * @param bool $expanded
      * @return array
      */
-    public function getCategoriesTree($expanded = true)
+    public function getCategoriesTree($parentId = 0, $expanded = true)
     {
         /** @var TranslatorInterface $translator */
         $translator = $this->get('translator');
         $categoriesRepository = $this->get('doctrine_mongodb')
             ->getManager()
             ->getRepository(Category::class);
-        $categories = $categoriesRepository->findBy([], [
+
+        $where = [];
+        if ($parentId) {
+            $where['parentId'] = $parentId;
+        }
+        $categories = $categoriesRepository->findBy($where, [
             'menuIndex' => 'asc',
             'title' => 'asc'
         ]);

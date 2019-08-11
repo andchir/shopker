@@ -25,15 +25,8 @@
             </div>
             <div class="dropdown-divider"></div>
 
-            <p-tree [value]="categoriesTree[0].children"
-                    [emptyMessage]="'NO_CATEGORIES' | translate"
-                    [selectionMode]="'single'"
-                    [selection]="currentCategoryNode"
-                    (onNodeSelect)="openCategory($event)"></p-tree>
-
-            <ng-container *ngIf="categoriesTree[0].children && categoriesTree[0].children.length > 1">
-                <div class="dropdown-divider"></div>
-                <div class="dropdown-footer text-center px-4">
+            <ng-container *ngIf="categoriesTree[0].children">
+                <div class="dropdown-footer px-4 pt-1">
                     <button type="button" class="btn btn-sm btn-secondary mr-2" (click)="expandAll($event)">
                         {{ 'EXPAND_ALL' | translate }}
                     </button>
@@ -42,6 +35,16 @@
                     </button>
                 </div>
             </ng-container>
+
+            <div class="px-1">
+                <p-tree [value]="categoriesTree[0].children"
+                        [emptyMessage]="'NO_CATEGORIES' | translate"
+                        [selectionMode]="'single'"
+                        [selection]="currentCategoryNode"
+                        [filter]="!!categoriesTree[0].children"
+                        (onNodeSelect)="openCategory($event)"></p-tree>
+            </div>
+
         </div>
     </div>
 </div>

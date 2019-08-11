@@ -244,6 +244,7 @@ input.form-control[readonly] { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); curso
 .ui-tree.ui-tree-loading { height: auto; min-height: 50px; }
 .ui-tree.ui-tree-loading .ui-tree-container { height: 50px; }
 .ui-tree .ui-tree-loading-content { margin-top: -0.6em; }
+body .ui-tree .ui-tree-filter-container .ui-tree-filter-icon { margin-top: -0.75em; }
 .dropdown-menu .ui-tree.ui-widget-content { border: 0; }
 
 /* accordion */
@@ -282,6 +283,7 @@ input.form-control[readonly] { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); curso
 .pi.pi-caret-down:before { font-family: 'icomoon'; content: "\e909"; }
 .pi.pi-chevron-right:before,
 .pi.pi-caret-right:before { font-family: 'icomoon'; content: "\e907"; }
+.pi.pi-search:before { font-family: 'icomoon'; content: "\e036"; }
 body .ui-datepicker .ui-datepicker-header .ui-datepicker-prev span:before,
 .pi.pi-chevron-left:before { font-family: 'icomoon'; content: "\e908"; }
 body .ui-datepicker .ui-datepicker-header .ui-datepicker-next span:before,

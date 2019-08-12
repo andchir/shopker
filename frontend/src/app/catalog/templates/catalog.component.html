@@ -1,3 +1,18 @@
+<div class="position-relative">
+    <div class="tabs-top">
+        <a class="btn btn-outline-primary d-block d-md-inline-block ml-md-2" href="" [routerLink]="['field_types']" routerLinkActive="active">
+            <i class="icon-toggle"></i>
+            &nbsp;
+            <span>{{'FIELD_TYPES' | translate}}</span>
+        </a>
+        <a class="btn btn-outline-primary d-block d-md-inline-block mb-2 mb-md-0" href="" [routerLink]="['content_types']" routerLinkActive="active">
+            <i class="icon-box"></i>
+            &nbsp;
+            <span>{{'CONTENT_TYPES' | translate}}</span>
+        </a>
+    </div>
+</div>
+
 <div class="card">
     <div class="card-body">
 
@@ -8,19 +23,6 @@
                 <span>{{'CATALOG' | translate}}</span>
             </h3>
         </div>
-        <div class="text-md-right">
-            <a class="btn btn-outline-primary d-block d-md-inline-block mb-2 mb-md-0" href="" [routerLink]="['content_types']" routerLinkActive="active">
-                <i class="icon-box"></i>
-                &nbsp;
-                <span>{{'CONTENT_TYPES' | translate}}</span>
-            </a>
-            <a class="btn btn-outline-primary d-block d-md-inline-block ml-md-2" href="" [routerLink]="['field_types']" routerLinkActive="active">
-                <i class="icon-toggle"></i>
-                &nbsp;
-                <span>{{'FIELD_TYPES' | translate}}</span>
-            </a>
-        </div>
-
         <div class="clearfix"></div>
         <hr>
 

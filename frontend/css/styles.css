@@ -323,4 +323,10 @@ body .ui-datepicker .ui-datepicker-header .ui-datepicker-next span:before,
 .panel-file-manager-b { position: absolute; left: 0; top: 50px; bottom: 0; width: 100%; }
 .panel-file-manager.active { left: 0; }
 
-
+/* tabs-top */
+.tabs-top { position: absolute; right: 46px; top: 0; z-index: 10; }
+.tabs-top .btn { position: relative; float: right; border-top-left-radius: 0; border-top-right-radius: 0; border-top: 0; border-bottom-right-radius: 18px; margin-right: -25px; padding-left: 28px; padding-right: 13px; }
+.tabs-top .btn:last-child { padding-left: 13px; border-bottom-left-radius: 18px }
+.tabs-top .btn:not(.active) { background-color: #fff; }
+.tabs-top .btn:active,
+.tabs-top .btn:focus { box-shadow: none !important; }

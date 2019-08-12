@@ -178,18 +178,14 @@ class CategoryController extends StorageControllerAbstract
             ->getManager()
             ->getRepository(Category::class);
 
-        $where = [];
-        if ($parentId) {
-            $where['parentId'] = $parentId;
-        }
-        $categories = $categoriesRepository->findBy($where, [
+        $categories = $categoriesRepository->findBy([], [
             'menuIndex' => 'asc',
             'title' => 'asc'
         ]);
 
         $data = [];
         $root = [
-            'id' => 0,
+            'id' => $parentId,
             'label' => $translator->trans('Root category'),
             'parentId' => 0,
             'expanded' => true

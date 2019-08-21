@@ -10,7 +10,7 @@ declare const ace: any;
 import 'ace-builds/src-min-noconflict/ace';
 import 'ace-builds/src-min-noconflict/theme-kuroir';
 import 'ace-builds/src-min-noconflict/ext-modelist';
-import 'ace-builds/webpack-resolver';
+import '../../ace-builds/webpack-resolver';
 
 @Component({
     selector: 'app-modal-template',

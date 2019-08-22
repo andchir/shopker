@@ -43,4 +43,4 @@ ace.config.setModuleUrl('ace/mode/css_worker', require('file-loader!../../node_m
 ace.config.setModuleUrl('ace/mode/html_worker', require('file-loader!../../node_modules/ace-builds/src-noconflict/worker-html.js'))
 ace.config.setModuleUrl('ace/mode/javascript_worker', require('file-loader!../../node_modules/ace-builds/src-noconflict/worker-javascript.js'))
 ace.config.setModuleUrl('ace/mode/json_worker', require('file-loader!../../node_modules/ace-builds/src-noconflict/worker-json.js'))
-ace.config.setModuleUrl('ace/mode/php_worker', require('file-loader!../../node_modules/ace-builds/src-noconflict/worker-php.js'))
+//ace.config.setModuleUrl('ace/mode/php_worker', require('file-loader!../../node_modules/ace-builds/src-noconflict/worker-php.js'))

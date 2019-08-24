@@ -9,6 +9,7 @@ import {TranslateCustomLoader} from './services/translateLoader';
 
 import {AppComponent} from './app.component';
 import {NotFoundComponent} from './not-found.component';
+import {ModuleLoaderComponent} from './moduleloader/moduleloader.component';
 import {SharedModule} from './shared.module';
 import {AppSettings} from './services/app-settings.service';
 import {FileManagerComponent} from './components/file-manager.component';
@@ -43,6 +44,7 @@ registerLocaleData(localeRu, 'ru-RU');
     declarations: [
         AppComponent,
         NotFoundComponent,
+        ModuleLoaderComponent,
         AlertModalContentComponent,
         ConfirmModalContentComponent,
         FileManagerComponent,

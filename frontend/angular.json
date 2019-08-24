@@ -12,6 +12,7 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "preserveSymlinks": true,
+            "es5BrowserSupport": true,
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -36,7 +37,7 @@
               "node_modules/chart.js/dist/Chart.js"
             ],
             "lazyModules": [
-
+              "src/app/import-export/import-export.module"
             ]
           },
           "configurations": {

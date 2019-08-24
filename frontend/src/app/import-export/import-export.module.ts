@@ -44,5 +44,8 @@ export class ImportExportRoutingModule {}
     ]
 })
 export class ImportExportModule {
-
+    cmps: Map<string, {}> = new Map();
+    constructor() {
+        this.cmps.set('default', DefaultComponent);
+    }
 }

@@ -1,11 +1,9 @@
 import {
-    Component, ComponentFactory, ComponentRef, NgModuleFactory, NgModuleFactoryLoader, NgModuleRef, OnInit,
-    ReflectiveInjector,
-    SystemJsNgModuleLoader, Type,
-    ViewChild,
-    ViewContainerRef
+    Component, ComponentFactory, ComponentRef, Injector, NgModuleFactory, NgModuleFactoryLoader, NgModuleRef,
+    OnDestroy, OnInit, Type, ViewChild, ViewContainerRef
 } from '@angular/core';
-import {ActivatedRoute, ParamMap} from '@angular/router';
+import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
+import {Subscription} from 'rxjs';
 
 @Component({
     selector: 'app-moduleloader',
@@ -13,38 +11,47 @@ import {ActivatedRoute, ParamMap} from '@angular/router';
     styleUrls: ['./moduleloader.component.css'],
     providers: []
 })
-export class ModuleLoaderComponent implements OnInit {
+export class ModuleLoaderComponent implements OnInit, OnDestroy {
 
     @ViewChild('vc', {read: ViewContainerRef, static: true}) _vcRef: ViewContainerRef;
     moduleName: string;
     subModuleName: string;
     modulePath = '';
     load = false;
+    subs = new Subscription();
 
-    private _injector: ReflectiveInjector;
+    private _injector: Injector;
     private _cmpRef: ComponentRef<any>;
 
-    static toCamelCase(str: string, separator = '-') {
-        return str.split(separator).map(function (word) {
-            return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-        }).join('');
-    }
-
     constructor(
+        private router: Router,
         private route: ActivatedRoute,
         private _loader: NgModuleFactoryLoader
     ) {
     }
 
     ngOnInit(): void {
-        this._injector = ReflectiveInjector.fromResolvedProviders([], this._vcRef.parentInjector);
+        this._injector = Injector.create({providers: [], parent: this._vcRef.parentInjector});
+        this.subs.add(this.router.events.subscribe(event => {
+            if (event instanceof NavigationEnd) {
+                const subModuleName = this.route.snapshot.paramMap.get('subModuleName');
+                if (subModuleName) {
+                    this.subModuleName =  subModuleName;
+                    this.loadDynamicModule();
+                }
+            }
+        }));
+
         this.moduleName = this.route.snapshot.paramMap.get('moduleName');
         this.subModuleName = this.route.snapshot.paramMap.get('subModuleName');
 
-        this.modulePath = `src/app/${this.moduleName}/${this.moduleName}.module`;
-        this.modulePath += `#${ModuleLoaderComponent.toCamelCase(this.moduleName)}Module`;
-
-        this.loadDynamicModule();
+        if (this.subModuleName) {
+            this.modulePath = `src/app/${this.moduleName}/${this.moduleName}.module`;
+            this.modulePath += `#${this.toCamelCase(this.moduleName)}Module`;
+            this.loadDynamicModule();
+        } else {
+            this.router.navigate([`/module/${this.moduleName}/home`]);
+        }
     }
 
     loadDynamicModule(): void {
@@ -55,8 +62,18 @@ export class ModuleLoaderComponent implements OnInit {
                 const _cmpFactory: ComponentFactory<any> = _ngModuleRef
                     .componentFactoryResolver
                     .resolveComponentFactory(_cmpType);
+                this._vcRef.clear();
                 this._cmpRef = this._vcRef.createComponent(_cmpFactory, 0, this._injector, []);
             });
     }
 
+    toCamelCase(str: string, separator = '-') {
+        return str.split(separator).map(function (word) {
+            return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+        }).join('');
+    }
+
+    ngOnDestroy(): void {
+        this.subs.unsubscribe();
+    }
 }

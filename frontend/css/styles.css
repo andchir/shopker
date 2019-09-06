@@ -284,9 +284,7 @@ body .ui-tree .ui-tree-filter-container .ui-tree-filter-icon { margin-top: -0.75
 .pi.pi-chevron-right:before,
 .pi.pi-caret-right:before { font-family: 'icomoon'; content: "\e907"; }
 .pi.pi-search:before { font-family: 'icomoon'; content: "\e036"; }
-body .ui-datepicker .ui-datepicker-header .ui-datepicker-prev span:before,
 .pi.pi-chevron-left:before { font-family: 'icomoon'; content: "\e908"; }
-body .ui-datepicker .ui-datepicker-header .ui-datepicker-next span:before,
 
 /* spin */
 .fa.fa-spin { display: inline-block; animation-name: spin; animation-duration: 3000ms; animation-iteration-count: infinite; animation-timing-function: linear; }

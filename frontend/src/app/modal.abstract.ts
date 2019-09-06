@@ -199,7 +199,9 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
         const data = {};
         Object.keys(this.model).forEach((key) => {
             if (this.files[key]) {
-                data[key] = FileModel.getFileData(this.files[key]);
+                data[key] = Array.isArray(this.model[key])
+                    ? [ FileModel.getFileData(this.files[key]) ]
+                    : FileModel.getFileData(this.files[key]);
             } else {
                 data[key] = this.model[key];
             }
@@ -207,10 +209,12 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
         return data;
     }
 
-    fileChange(event, fieldName: string) {
+    fileChange(event, fieldName: string, isArray = false) {
         const fileList: FileList = event.target.files;
         if (fileList.length > 0) {
-            this.model[fieldName] = FileModel.getFileData(fileList[0]);
+            this.model[fieldName] = isArray
+                ? [ FileModel.getFileData(fileList[0]) ]
+                : FileModel.getFileData(fileList[0]);
             this.files[fieldName] = fileList[0];
             this.form.controls[fieldName].setValue(this.files[fieldName].name);
         }
@@ -315,7 +319,7 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
                 });
     }
 
-    save(): void {
+    save(autoClose = false): void {
         this.submitted = true;
 
         if (!this.form.valid) {
@@ -330,7 +334,11 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
                 if (Object.keys(this.files).length > 0) {
                     this.saveFiles(res._id || res.id);
                 } else {
-                    this.closeModal();
+                    if (autoClose) {
+                        this.closeModal();
+                    }
+                    this.loading = false;
+                    this.submitted = false;
                 }
             }, (err) => {
                 this.errorMessage = err.error || 'Error.';

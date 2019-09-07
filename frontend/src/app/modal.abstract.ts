@@ -337,6 +337,9 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
                     if (autoClose) {
                         this.closeModal();
                     }
+                    if (res && res['id']) {
+                        this.model = res as M;
+                    }
                     this.loading = false;
                     this.submitted = false;
                 }

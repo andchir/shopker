@@ -321,6 +321,7 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
 
     save(autoClose = false): void {
         this.submitted = true;
+        this.errorMessage = '';
 
         if (!this.form.valid) {
             this.onValueChanged('form');

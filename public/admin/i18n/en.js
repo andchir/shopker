@@ -125,6 +125,7 @@ var APP_LANG = {
     "ROLE": "Role",
     "ROOT_FOLDER": "Root folder",
     "SAVE": "Save",
+    "SAVE_AND_CLOSE": "Сохранить и закрыть",
     "SAVE_FIELD": "Save field",
     "SCRIPTS": "Scripts",
     "SEARCH": "Search",

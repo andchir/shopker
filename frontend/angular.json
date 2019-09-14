@@ -37,7 +37,7 @@
               "node_modules/chart.js/dist/Chart.js"
             ],
             "lazyModules": [
-              "src/app/import-export/import-export.module"
+
             ]
           },
           "configurations": {

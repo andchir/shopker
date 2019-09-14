@@ -67,7 +67,7 @@
                             <label class="label-filled">{{'COLLECTION' | translate}}</label>
 
                             <div class="input-group">
-                                <select class="form-control form-control-sm" name="collection" formControlName="collection" [(ngModel)]="model.collection">
+                                <select class="custom-select custom-select-sm" name="collection" formControlName="collection" [(ngModel)]="model.collection">
                                     <option value="{{collection}}" *ngFor="let collection of collections">{{collection}}</option>
                                 </select>
                                 <div class="input-group-append">
@@ -184,7 +184,7 @@
                             <div class="col-md-7">
 
                                 <div class="input-group">
-                                    <select class="form-control form-control-sm" name="field_inputType" formControlName="inputType" [(ngModel)]="fieldModel.inputType" (ngModelChange)="selectFieldTypeProperties('input')" [ngbTooltip]="getFieldTypeProperty(fieldModel.inputType, 'description')" placement="left">
+                                    <select class="custom-select custom-select-sm" name="field_inputType" formControlName="inputType" [(ngModel)]="fieldModel.inputType" (ngModelChange)="selectFieldTypeProperties('input')" [ngbTooltip]="getFieldTypeProperty(fieldModel.inputType, 'description')" placement="left">
                                         <option value=""></option>
                                         <option value="{{fieldType.name}}" *ngFor="let fieldType of fieldTypes">{{fieldType.title}}</option>
                                     </select>
@@ -229,7 +229,7 @@
                             <div class="col-md-7">
 
                                 <div class="input-group">
-                                    <select class="form-control form-control-sm" name="field_outputType" formControlName="outputType" [(ngModel)]="fieldModel.outputType" (ngModelChange)="selectFieldTypeProperties('output')" [ngbTooltip]="getFieldTypeProperty(fieldModel.outputType, 'description')" placement="left">
+                                    <select class="custom-select custom-select-sm" name="field_outputType" formControlName="outputType" [(ngModel)]="fieldModel.outputType" (ngModelChange)="selectFieldTypeProperties('output')" [ngbTooltip]="getFieldTypeProperty(fieldModel.outputType, 'description')" placement="left">
                                         <option value=""></option>
                                         <option value="{{fieldType.name}}" *ngFor="let fieldType of fieldTypes">{{fieldType.title}}</option>
                                     </select>
@@ -273,7 +273,7 @@
 
                                 <div [class.form-group-message]="formErrors.fld_group">
                                     <div class="input-group input-group-sm">
-                                        <select class="form-control" name="field_group" formControlName="group" [(ngModel)]="fieldModel.group">
+                                        <select class="custom-select" name="field_group" formControlName="group" [(ngModel)]="fieldModel.group">
                                             <option value=""></option>
                                             <option [value]="groupName" *ngFor="let groupName of model.groups">{{groupName}}</option>
                                         </select>

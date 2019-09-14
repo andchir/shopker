@@ -5,7 +5,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 
 import {NgbModule, NgbActiveModal, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
-import {EditorModule, CalendarModule, ChipsModule, ColorPickerModule, TreeModule} from 'primeng/primeng';
+import {EditorModule, CalendarModule, ChipsModule, ColorPickerModule, TreeModule, ChartModule} from 'primeng/primeng';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {DragulaModule} from 'ng2-dragula';
 import {ToastModule} from 'primeng/toast';
@@ -46,6 +46,7 @@ const components = [
         ChipsModule,
         ColorPickerModule,
         TreeModule,
+        ChartModule,
         ToastModule,
         NgbModule,
         TranslateModule,
@@ -76,6 +77,7 @@ const components = [
         ChipsModule,
         ColorPickerModule,
         TreeModule,
+        ChartModule,
         ToastModule,
         TranslateModule,
         DragulaModule,

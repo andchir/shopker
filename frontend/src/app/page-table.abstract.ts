@@ -39,6 +39,7 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
     onSearchClear(): void {
         this.getList();
     }
+    onModalClose(result: any): void {}
 
     onSearchWordUpdate(value?: string): void {
         if (typeof value !== 'undefined') {
@@ -64,6 +65,7 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
         });
         this.setModalInputs(itemId, isItemCopy);
         this.modalRef.result.then((result) => {
+            this.onModalClose(result);
             this.getList();
         }, (reason) => {
             // console.log( 'reason', reason );

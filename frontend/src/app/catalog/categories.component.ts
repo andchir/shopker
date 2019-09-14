@@ -311,8 +311,10 @@ export class CategoriesMenuComponent implements OnInit {
             )
                 .subscribe(
                     data => {
-                        this.categories = data.items;
-                        this.categoriesTree = [Category.createTree(data.items)];
+                        if (data.items && data.items.length > 0) {
+                            this.categories = data.items;
+                            this.categoriesTree = [Category.createTree(data.items)];
+                        }
                         this.selectCurrent();
                         resolve(data.items);
                     },

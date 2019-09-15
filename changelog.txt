@@ -1,4 +1,7 @@
 
+4.0.8
+- New order statistics module.
+
 4.0.7
 - Update Angular 7 to 8.
 - In the Catalog section, the dropdown menu has been replaced by a tree menu.

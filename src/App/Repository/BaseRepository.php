@@ -130,4 +130,45 @@ abstract class BaseRepository extends DocumentRepository
         });
     }
 
+    /**
+     * @param $query
+     * @param array $where
+     */
+    public function applyQueryWhere(&$query, $where)
+    {
+        foreach ($where as $key => $value) {
+            if (!is_array($value)) {
+                $query->field($key)->equals($value);
+            } else {
+                foreach ($value as $k => $v) {
+                    switch ($k) {
+                        case '$exists':
+                            $query->field($key)->exists($v);
+                            break;
+                        case '$gte':
+                            if ($v instanceof \DateTime) {
+                                $v = new \MongoDate($v->getTimestamp());
+                            }
+                            $query->field($key)->gte($v);
+                            break;
+                        case '$lt':
+                            if ($v instanceof \DateTime) {
+                                $v = new \MongoDate($v->getTimestamp());
+                            }
+                            $query->field($key)->lt($v);
+                            break;
+                        case '$lte':
+                            if ($v instanceof \DateTime) {
+                                $v = new \MongoDate($v->getTimestamp());
+                            }
+                            $query->field($key)->lte($v);
+                            break;
+                        case '$regex':
+                            $query->field($key)->equals(new \MongoRegex("/{$v}/i"));
+                            break;
+                    }
+                }
+            }
+        }
+    }
 }

@@ -13,6 +13,11 @@ export class StatisticsService {
     });
     private requestUrl = 'statistics';
 
+    chartLineOptions = {
+        responsive: true,
+        maintainAspectRatio: false
+    };
+
     constructor(
         private http: HttpClient
     ) {
@@ -27,9 +32,22 @@ export class StatisticsService {
         return this.requestUrl;
     }
 
-    getStatisticsOrders(type: string): Observable<any> {
-        const url = this.getRequestUrl() + `/orders/${type}`;
-        return this.http.get<any>(url, {headers: this.headers}).pipe(
+    getParams(options: any): HttpParams {
+        let params = new HttpParams();
+        for (const name in options) {
+            if (!options.hasOwnProperty(name)
+                || typeof options[name] === 'undefined') {
+                continue;
+            }
+            params = params.append(name, options[name]);
+        }
+        return params;
+    }
+
+    getStatisticsOrders(type: string, options?: any): Observable<any> {
+        const params = this.getParams(options);
+        const url = this.getRequestUrl() + `/orders`;
+        return this.http.get<any>(url, {params: params, headers: this.headers}).pipe(
             catchError(this.handleError<any>())
         );
     }

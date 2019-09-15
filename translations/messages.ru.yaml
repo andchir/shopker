@@ -144,3 +144,4 @@ email.send_successful: Письмо успешно отправлено.
 email.recipient_error: Не указан адрес получателя.
 email_confirm.mail_subject: Подтверждение адреса эл. почты
 user_email.confirm.email_link: Для подтверждения адреса эл. почты, пожалуйста, перейдите по ссылке
+months_short: Янв,Фев,Мар,Апр,Май,Июнь,Июль,Авг,Сент,Окт,Нояб,Дек

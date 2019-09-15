@@ -4,11 +4,13 @@ namespace App\Controller\Admin;
 
 use App\MainBundle\Document\Order;
 use App\MainBundle\Document\Setting;
+use App\Repository\OrderRepository;
 use App\Service\SettingsService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class StatisticsController
@@ -19,15 +21,46 @@ class StatisticsController extends Controller
 {
 
     /**
-     * @Route("/orders/{type}", methods={"GET"})
-     * @param string $type
+     * @Route("/orders", methods={"GET"})
      * @return JsonResponse
      */
-    public function getStatisticsOrdersAction($type)
+    public function getStatisticsOrdersAction(Request $request)
     {
+        $type = 'year';
+        $date_timezone = date_default_timezone_get();
+        $where = [];
+        $dateFrom = $request->get('dateFrom');
+        $dateTo = $request->get('dateTo');
+        $datePattern = "/\d{4}-\d{2}-\d{2}/";
+        if ($dateFrom && preg_match($datePattern, $dateFrom)) {
+            $where['createdDate'] = [
+                '$gte' => new \DateTime($dateFrom, new \DateTimeZone($date_timezone))
+            ];
+        }
+        if ($dateTo && preg_match($datePattern, $dateTo)) {
+            if (!isset($where['createdDate'])) {
+                $where['createdDate'] = [];
+            }
+            $dateTime = new \DateTime($dateTo, new \DateTimeZone($date_timezone));
+            $dateTime->modify('+1 day');
+            $where['createdDate']['$lt'] = $dateTime;
+        }
+
+        if (isset($where['createdDate'])
+            && !empty($where['createdDate']['$gte'])
+            && !empty($where['createdDate']['$lt'])) {
+                $diffDays = $where['createdDate']['$gte']->diff($where['createdDate']['$lt'])->days;
+                if ($diffDays <= 60) {
+                    $type = 'month';
+                }
+        }
+
         switch ($type) {
             case 'year':
-                $output = $this->getStatisticsYear();
+                $output = $this->getStatisticsYear($where);
+                break;
+            case 'month':
+                $output = $this->getStatisticsMonth($where);
                 break;
             default:
                 $output = [
@@ -39,25 +72,22 @@ class StatisticsController extends Controller
     }
 
     /**
+     * @param array $where
      * @return array
      */
-    public function getStatisticsYear()
+    public function getStatisticsYear($where = [])
     {
         $output = [
             'labels' => [],
             'datasets' => []
         ];
 
-        /** @var SettingsService $settingsService */
-        $settingsService = $this->get('app.settings');
+        /** @var TranslatorInterface $translator */
+        $translator = $this->get('translator');
+        $monthsNames = explode(',', $translator->trans('months_short'));
+        $settingStatuses = $this->getSettingsStatuses();
 
-        /** @var Setting $settingDelivery */
-        $settingStatuses = $settingsService->getSettingsGroup(Setting::GROUP_ORDER_STATUSES);
-        $monthsNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
-        $builder = $dm->createAggregationBuilder(Order::class);
+        $builder = $this->createAggregationBuilder($where);
 
         $builder
             ->group()
@@ -69,6 +99,107 @@ class StatisticsController extends Controller
             )
             ->field('statuses')->push('$status');
 
+        $this->projectAggregateStatus($builder, $settingStatuses);
+        $builder->sort(['id.year' => 1, 'id.month' => 1]);
+
+        $result = $builder->execute()->toArray();
+
+        $output['labels'] = array_map(function($item) use ($monthsNames) {
+            return $monthsNames[$item['_id']['month'] - 1] . ' ' . $item['_id']['year'];
+        }, $result);
+
+        /** @var Setting $settingStatus */
+        foreach ($settingStatuses as $index => $settingStatus) {
+            $output['datasets'][] = [
+                'label' => $settingStatus->getName(),
+                'data' => array_map(function($data) use ($index) {
+                    return $data['status']['value_' . ($index + 1)];
+                }, $result),
+                'fill' => false,
+                'borderColor' => $settingStatus->getOption('color')
+            ];
+        }
+
+        return $output;
+    }
+
+    /**
+     * @param array $where
+     * @return array
+     */
+    public function getStatisticsMonth($where = [])
+    {
+        $output = [
+            'labels' => [],
+            'datasets' => []
+        ];
+
+        /** @var TranslatorInterface $translator */
+        $translator = $this->get('translator');
+        $monthsNames = explode(',', $translator->trans('months_short'));
+        $settingStatuses = $this->getSettingsStatuses();
+
+        $builder = $this->createAggregationBuilder($where);
+
+        $builder
+            ->group()
+            ->field('id')->expression(
+                [
+                    'month' => ['$month' => '$createdDate'],
+                    'dayOfMonth' => ['$dayOfMonth' => '$createdDate']
+                ]
+            )
+            ->field('statuses')->push('$status');
+
+        $this->projectAggregateStatus($builder, $settingStatuses);
+        $builder->sort(['id.month' => 1, 'id.dayOfMonth' => 1]);
+
+        $result = $builder->execute()->toArray();
+
+        $output['labels'] = array_map(function($item) use ($monthsNames) {
+            return $monthsNames[$item['_id']['month'] - 1] . ', ' . $item['_id']['dayOfMonth'];
+        }, $result);
+
+        /** @var Setting $settingStatus */
+        foreach ($settingStatuses as $index => $settingStatus) {
+            $output['datasets'][] = [
+                'label' => $settingStatus->getName(),
+                'data' => array_map(function($data) use ($index) {
+                    return $data['status']['value_' . ($index + 1)];
+                }, $result),
+                'fill' => false,
+                'borderColor' => $settingStatus->getOption('color')
+            ];
+        }
+
+        return $output;
+    }
+
+    /**
+     * @param array $where
+     * @return \Doctrine\ODM\MongoDB\Aggregation\Builder
+     */
+    public function createAggregationBuilder($where = [])
+    {
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        /** @var OrderRepository $repository */
+        $repository = $dm->getRepository(Order::class);
+        $builder = $dm->createAggregationBuilder(Order::class);
+
+        if (!empty($where)) {
+            $match = $builder->match();
+            $repository->applyQueryWhere($match, $where);
+        }
+        return $builder;
+    }
+
+    /**
+     * @param \Doctrine\ODM\MongoDB\Aggregation\Builder $builder
+     * @param Setting[] $settingStatuses
+     */
+    public function projectAggregateStatus(&$builder, $settingStatuses)
+    {
         $project = $builder->project();
 
         /** @var Setting $settingStatus */
@@ -86,29 +217,16 @@ class StatisticsController extends Controller
                         ]]
                     ]
                 );
-            $output['datasets'][] = [
-                'label' => $settingStatus->getName(),
-                'data' => [],
-                'fill' => false,
-                'borderColor' => $settingStatus->getOption('color')
-            ];
         }
-
-        $builder->sort(['id.year' => 1, 'id.month' => 1]);
-
-        $result = $builder->execute()->toArray();
-
-        $output['labels'] = array_map(function($item) use ($monthsNames) {
-            return $monthsNames[$item['_id']['month'] - 1] . ' ' . $item['_id']['year'];
-        }, $result);
-
-        foreach ($output['datasets'] as $index => &$dataset) {
-            $dataset['data'] = array_map(function($data) use ($index) {
-                return $data['status']['value_' . ($index + 1)];
-            }, $result);
-        }
-
-        return $output;
     }
 
+    /**
+     * @return Setting[]
+     */
+    public function getSettingsStatuses()
+    {
+        /** @var SettingsService $settingsService */
+        $settingsService = $this->get('app.settings');
+        return $settingsService->getSettingsGroup(Setting::GROUP_ORDER_STATUSES);
+    }
 }

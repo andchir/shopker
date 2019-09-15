@@ -8,17 +8,30 @@
 
         <hr>
 
-        <div class="float-left">
+        <div class="min-height400" [class.loading]="loading">
+            <div>
+                <div class="d-inline-block mr-2">
+                    <p-calendar [(ngModel)]="rangeDates"
+                                (onSelect)="getData()"
+                                [selectionMode]="'range'"
+                                [showIcon]="true"
+                                [monthNavigator]="true"
+                                [yearNavigator]="true"
+                                [yearRange]="yearRangeString"
+                                [icon]="'icon-date_range'"
+                                [dateFormat]="calendarLocale[locale].format"
+                                [locale]="calendarLocale[locale]"></p-calendar>
+                </div>
+                <button type="button" class="btn btn-secondary ml-md-2" ngbTooltip="{{'REFRESH' | translate}}" (click)="getData()">
+                    <i class="icon-reload"></i>
+                </button>
+            </div>
 
+            <hr>
 
-        </div>
-
-        <div class="clearfix"></div>
-
-        <div class="min-height400">
-
-            <p-chart type="line" [data]="data"></p-chart>
-
+            <div>
+                <p-chart type="line" [data]="data" [height]="'400px'" [responsive]="true">></p-chart>
+            </div>
         </div>
 
     </div>

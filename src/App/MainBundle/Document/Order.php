@@ -3,9 +3,9 @@
 namespace App\MainBundle\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\Common\Collections\ArrayCollection;
 use App\MainBundle\Document\OrderContent;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @MongoDB\Document(collection="order",repositoryClass="App\Repository\OrderRepository")

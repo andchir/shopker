@@ -157,6 +157,19 @@ class CartController extends ProductController
     }
 
     /**
+     * @Route("/ajax", name="shop_cart_ajax")
+     * @param Request $request
+     * @return Response
+     */
+    public function ajaxAction(Request $request)
+    {
+        $output = [];
+
+
+        return $this->json($output);
+    }
+
+    /**
      * @param Request $request
      * @param array $productDocument
      * @param array $contentTypeFields

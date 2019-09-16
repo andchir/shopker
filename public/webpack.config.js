@@ -11,6 +11,7 @@ Encore
         './css/icomoon/style.css',
         './css/dots-menu.css',
         './css/shopkeeper.css',
+        './css/shopping_cart.css',
         './css/app.css'
     ])
     .cleanupOutputBeforeBuild()

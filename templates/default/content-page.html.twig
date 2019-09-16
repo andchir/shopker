@@ -10,7 +10,7 @@
 
         {% include 'nav/child-categories-menu.html.twig' %}
 
-        <div class="min-height400">
+        <div class="min-height400 shk-item">
 
             {{ renderOutputTypeChunk(currentPage, fields, 'header', 'page_') }}
 
@@ -66,8 +66,17 @@
     </main>
 
     <script>
+        var shoppingCart;
         document.addEventListener('DOMContentLoaded', function() {
             shk.productParametersInit('#shk-form', '.shk-price');
+
+            // Shopping cart
+            shoppingCart = new ShoppingCart({
+                baseUrl: '',
+                connectorUrl: '{{ path('shop_cart_ajax') }}',
+                selector: '#shoppingCartSmallContainer',
+                productFormSelector: '.shk-item form'
+            });
 
             // Display image for parameter
             var $carousel = jQuery('#carouselImageGallery');
@@ -80,7 +89,6 @@
                     $carousel.carousel(imageNumber - 1);
                 });
             });
-
         });
     </script>
 

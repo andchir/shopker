@@ -173,4 +173,16 @@ class Filter
     {
         return $this->category;
     }
+
+    /**
+     * Set valuesData
+     *
+     * @param hash $valuesData
+     * @return $this
+     */
+    public function setValuesData($valuesData)
+    {
+        $this->valuesData = $valuesData;
+        return $this;
+    }
 }

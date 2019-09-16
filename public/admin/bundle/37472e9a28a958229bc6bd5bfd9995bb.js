@@ -1,1 +1,772 @@
-ace.define("ace/ext/menu_tools/overlay_page",["require","exports","module","ace/lib/dom"],function(e,t,a){"use strict";var o=e("../../lib/dom");var i="#ace_settingsmenu, #kbshortcutmenu {background-color: #F7F7F7;color: black;box-shadow: -5px 4px 5px rgba(126, 126, 126, 0.55);padding: 1em 0.5em 2em 1em;overflow: auto;position: absolute;margin: 0;bottom: 0;right: 0;top: 0;z-index: 9991;cursor: default;}.ace_dark #ace_settingsmenu, .ace_dark #kbshortcutmenu {box-shadow: -20px 10px 25px rgba(126, 126, 126, 0.25);background-color: rgba(255, 255, 255, 0.6);color: black;}.ace_optionsMenuEntry:hover {background-color: rgba(100, 100, 100, 0.1);transition: all 0.3s}.ace_closeButton {background: rgba(245, 146, 146, 0.5);border: 1px solid #F48A8A;border-radius: 50%;padding: 7px;position: absolute;right: -8px;top: -8px;z-index: 100000;}.ace_closeButton{background: rgba(245, 146, 146, 0.9);}.ace_optionsMenuKey {color: darkslateblue;font-weight: bold;}.ace_optionsMenuCommand {color: darkcyan;font-weight: normal;}.ace_optionsMenuEntry input, .ace_optionsMenuEntry button {vertical-align: middle;}.ace_optionsMenuEntry button[ace_selected_button=true] {background: #e7e7e7;box-shadow: 1px 0px 2px 0px #adadad inset;border-color: #adadad;}.ace_optionsMenuEntry button {background: white;border: 1px solid lightgray;margin: 0px;}.ace_optionsMenuEntry button:hover{background: #f0f0f0;}";o.importCssString(i);a.exports.overlayPage=function e(t,a,o){var i=document.createElement("div");function r(e){if(e.keyCode===27){n()}}function n(){if(!i)return;document.removeEventListener("keydown",r);i.parentNode.removeChild(i);t.focus();i=null;o&&o()}i.style.cssText="margin: 0; padding: 0; "+"position: fixed; top:0; bottom:0; left:0; right:0;"+"z-index: 9990; "+"background-color: rgba(0, 0, 0, 0.3);";i.addEventListener("click",function(){n()});document.addEventListener("keydown",r);a.addEventListener("click",function(e){e.stopPropagation()});i.appendChild(a);document.body.appendChild(i);t.blur();return{close:n}}});ace.define("ace/ext/modelist",["require","exports","module"],function(e,t,a){"use strict";var o=[];function i(e){var t=l.text;var a=e.split(/[\/\\]/).pop();for(var i=0;i<o.length;i++){if(o[i].supportsFile(a)){t=o[i];break}}return t}var r=function e(t,a,o){this.name=t;this.caption=a;this.mode="ace/mode/"+t;this.extensions=o;var i;if(/\^/.test(o)){i=o.replace(/\|(\^)?/g,function(e,t){return"$|"+(t?"^":"^.*\\.")})+"$"}else{i="^.*\\.("+o+")$"}this.extRe=new RegExp(i,"gi")};r.prototype.supportsFile=function(e){return e.match(this.extRe)};var n={ABAP:["abap"],ABC:["abc"],ActionScript:["as"],ADA:["ada|adb"],Apache_Conf:["^htaccess|^htgroups|^htpasswd|^conf|htaccess|htgroups|htpasswd"],AsciiDoc:["asciidoc|adoc"],ASL:["dsl|asl"],Assembly_x86:["asm|a"],AutoHotKey:["ahk"],Apex:["apex|cls|trigger|tgr"],AQL:["aql"],BatchFile:["bat|cmd"],C_Cpp:["cpp|c|cc|cxx|h|hh|hpp|ino"],C9Search:["c9search_results"],Crystal:["cr"],Cirru:["cirru|cr"],Clojure:["clj|cljs"],Cobol:["CBL|COB"],coffee:["coffee|cf|cson|^Cakefile"],ColdFusion:["cfm"],CSharp:["cs"],Csound_Document:["csd"],Csound_Orchestra:["orc"],Csound_Score:["sco"],CSS:["css"],Curly:["curly"],D:["d|di"],Dart:["dart"],Diff:["diff|patch"],Dockerfile:["^Dockerfile"],Dot:["dot"],Drools:["drl"],Edifact:["edi"],Eiffel:["e|ge"],EJS:["ejs"],Elixir:["ex|exs"],Elm:["elm"],Erlang:["erl|hrl"],Forth:["frt|fs|ldr|fth|4th"],Fortran:["f|f90"],FSharp:["fsi|fs|ml|mli|fsx|fsscript"],FSL:["fsl"],FTL:["ftl"],Gcode:["gcode"],Gherkin:["feature"],Gitignore:["^.gitignore"],Glsl:["glsl|frag|vert"],Gobstones:["gbs"],golang:["go"],GraphQLSchema:["gql"],Groovy:["groovy"],HAML:["haml"],Handlebars:["hbs|handlebars|tpl|mustache"],Haskell:["hs"],Haskell_Cabal:["cabal"],haXe:["hx"],Hjson:["hjson"],HTML:["html|htm|xhtml|vue|we|wpy"],HTML_Elixir:["eex|html.eex"],HTML_Ruby:["erb|rhtml|html.erb"],INI:["ini|conf|cfg|prefs"],Io:["io"],Jack:["jack"],Jade:["jade|pug"],Java:["java"],JavaScript:["js|jsm|jsx"],JSON:["json"],JSONiq:["jq"],JSP:["jsp"],JSSM:["jssm|jssm_state"],JSX:["jsx"],Julia:["jl"],Kotlin:["kt|kts"],LaTeX:["tex|latex|ltx|bib"],LESS:["less"],Liquid:["liquid"],Lisp:["lisp"],LiveScript:["ls"],LogiQL:["logic|lql"],LSL:["lsl"],Lua:["lua"],LuaPage:["lp"],Lucene:["lucene"],Makefile:["^Makefile|^GNUmakefile|^makefile|^OCamlMakefile|make"],Markdown:["md|markdown"],Mask:["mask"],MATLAB:["matlab"],Maze:["mz"],MEL:["mel"],MIXAL:["mixal"],MUSHCode:["mc|mush"],MySQL:["mysql"],Nginx:["nginx|conf"],Nix:["nix"],Nim:["nim"],NSIS:["nsi|nsh"],ObjectiveC:["m|mm"],OCaml:["ml|mli"],Pascal:["pas|p"],Perl:["pl|pm"],Perl6:["p6|pl6|pm6"],pgSQL:["pgsql"],PHP_Laravel_blade:["blade.php"],PHP:["php|inc|phtml|shtml|php3|php4|php5|phps|phpt|aw|ctp|module"],Puppet:["epp|pp"],Pig:["pig"],Powershell:["ps1"],Praat:["praat|praatscript|psc|proc"],Prolog:["plg|prolog"],Properties:["properties"],Protobuf:["proto"],Python:["py"],R:["r"],Razor:["cshtml|asp"],RDoc:["Rd"],Red:["red|reds"],RHTML:["Rhtml"],RST:["rst"],Ruby:["rb|ru|gemspec|rake|^Guardfile|^Rakefile|^Gemfile"],Rust:["rs"],SASS:["sass"],SCAD:["scad"],Scala:["scala|sbt"],Scheme:["scm|sm|rkt|oak|scheme"],SCSS:["scss"],SH:["sh|bash|^.bashrc"],SJS:["sjs"],Slim:["slim|skim"],Smarty:["smarty|tpl"],snippets:["snippets"],Soy_Template:["soy"],Space:["space"],SQL:["sql"],SQLServer:["sqlserver"],Stylus:["styl|stylus"],SVG:["svg"],Swift:["swift"],Tcl:["tcl"],Terraform:["tf","tfvars","terragrunt"],Tex:["tex"],Text:["txt"],Textile:["textile"],Toml:["toml"],TSX:["tsx"],Twig:["latte|twig|swig"],Typescript:["ts|typescript|str"],Vala:["vala"],VBScript:["vbs|vb"],Velocity:["vm"],Verilog:["v|vh|sv|svh"],VHDL:["vhd|vhdl"],Visualforce:["vfp|component|page"],Wollok:["wlk|wpgm|wtest"],XML:["xml|rdf|rss|wsdl|xslt|atom|mathml|mml|xul|xbl|xaml"],XQuery:["xq"],YAML:["yaml|yml"],Zeek:["zeek|bro"],Django:["html"]};var s={ObjectiveC:"Objective-C",CSharp:"C#",golang:"Go",C_Cpp:"C and C++",Csound_Document:"Csound Document",Csound_Orchestra:"Csound",Csound_Score:"Csound Score",coffee:"CoffeeScript",HTML_Ruby:"HTML (Ruby)",HTML_Elixir:"HTML (Elixir)",FTL:"FreeMarker",PHP_Laravel_blade:"PHP (Blade Template)",Perl6:"Perl 6",AutoHotKey:"AutoHotkey / AutoIt"};var l={};for(var c in n){var p=n[c];var u=(s[c]||c).replace(/_/g," ");var d=c.toLowerCase();var m=new r(d,u,p[0]);l[d]=m;o.push(m)}a.exports={getModeForPath:i,modes:o,modesByName:l}});ace.define("ace/ext/themelist",["require","exports","module"],function(e,t,a){"use strict";var o=[["Chrome"],["Clouds"],["Crimson Editor"],["Dawn"],["Dreamweaver"],["Eclipse"],["GitHub"],["IPlastic"],["Solarized Light"],["TextMate"],["Tomorrow"],["XCode"],["Kuroir"],["KatzenMilch"],["SQL Server","sqlserver","light"],["Ambiance","ambiance","dark"],["Chaos","chaos","dark"],["Clouds Midnight","clouds_midnight","dark"],["Dracula","","dark"],["Cobalt","cobalt","dark"],["Gruvbox","gruvbox","dark"],["Green on Black","gob","dark"],["idle Fingers","idle_fingers","dark"],["krTheme","kr_theme","dark"],["Merbivore","merbivore","dark"],["Merbivore Soft","merbivore_soft","dark"],["Mono Industrial","mono_industrial","dark"],["Monokai","monokai","dark"],["Pastel on dark","pastel_on_dark","dark"],["Solarized Dark","solarized_dark","dark"],["Terminal","terminal","dark"],["Tomorrow Night","tomorrow_night","dark"],["Tomorrow Night Blue","tomorrow_night_blue","dark"],["Tomorrow Night Bright","tomorrow_night_bright","dark"],["Tomorrow Night 80s","tomorrow_night_eighties","dark"],["Twilight","twilight","dark"],["Vibrant Ink","vibrant_ink","dark"]];t.themesByName={};t.themes=o.map(function(e){var a=e[1]||e[0].replace(/ /g,"_").toLowerCase();var o={caption:e[0],theme:"ace/theme/"+a,isDark:e[2]=="dark",name:a};t.themesByName[a]=o;return o})});ace.define("ace/ext/options",["require","exports","module","ace/ext/menu_tools/overlay_page","ace/lib/dom","ace/lib/oop","ace/config","ace/lib/event_emitter","ace/ext/modelist","ace/ext/themelist"],function(e,t,a){"use strict";var o=e("./menu_tools/overlay_page").overlayPage;var i=e("../lib/dom");var r=e("../lib/oop");var n=e("../config");var s=e("../lib/event_emitter").EventEmitter;var l=i.buildDom;var c=e("./modelist");var p=e("./themelist");var u={Bright:[],Dark:[]};p.themes.forEach(function(e){u[e.isDark?"Dark":"Bright"].push({caption:e.caption,value:e.theme})});var d=c.modes.map(function(e){return{caption:e.caption,value:e.mode}});var m={Main:{Mode:{path:"mode",type:"select",items:d},Theme:{path:"theme",type:"select",items:u},Keybinding:{type:"buttonBar",path:"keyboardHandler",items:[{caption:"Ace",value:null},{caption:"Vim",value:"ace/keyboard/vim"},{caption:"Emacs",value:"ace/keyboard/emacs"},{caption:"Sublime",value:"ace/keyboard/sublime"}]},"Font Size":{path:"fontSize",type:"number",defaultValue:12,defaults:[{caption:"12px",value:12},{caption:"24px",value:24}]},"Soft Wrap":{type:"buttonBar",path:"wrap",items:[{caption:"Off",value:"off"},{caption:"View",value:"free"},{caption:"margin",value:"printMargin"},{caption:"40",value:"40"}]},"Cursor Style":{path:"cursorStyle",items:[{caption:"Ace",value:"ace"},{caption:"Slim",value:"slim"},{caption:"Smooth",value:"smooth"},{caption:"Smooth And Slim",value:"smooth slim"},{caption:"Wide",value:"wide"}]},Folding:{path:"foldStyle",items:[{caption:"Manual",value:"manual"},{caption:"Mark begin",value:"markbegin"},{caption:"Mark begin and end",value:"markbeginend"}]},"Soft Tabs":[{path:"useSoftTabs"},{path:"tabSize",type:"number",values:[2,3,4,8,16]}],Overscroll:{type:"buttonBar",path:"scrollPastEnd",items:[{caption:"None",value:0},{caption:"Half",value:.5},{caption:"Full",value:1}]}},More:{"Atomic soft tabs":{path:"navigateWithinSoftTabs"},"Enable Behaviours":{path:"behavioursEnabled"},"Full Line Selection":{type:"checkbox",values:"text|line",path:"selectionStyle"},"Highlight Active Line":{path:"highlightActiveLine"},"Show Invisibles":{path:"showInvisibles"},"Show Indent Guides":{path:"displayIndentGuides"},"Persistent Scrollbar":[{path:"hScrollBarAlwaysVisible"},{path:"vScrollBarAlwaysVisible"}],"Animate scrolling":{path:"animatedScroll"},"Show Gutter":{path:"showGutter"},"Show Line Numbers":{path:"showLineNumbers"},"Relative Line Numbers":{path:"relativeLineNumbers"},"Fixed Gutter Width":{path:"fixedWidthGutter"},"Show Print Margin":[{path:"showPrintMargin"},{type:"number",path:"printMarginColumn"}],"Indented Soft Wrap":{path:"indentedSoftWrap"},"Highlight selected word":{path:"highlightSelectedWord"},"Fade Fold Widgets":{path:"fadeFoldWidgets"},"Use textarea for IME":{path:"useTextareaForIME"},"Merge Undo Deltas":{path:"mergeUndoDeltas",items:[{caption:"Always",value:"always"},{caption:"Never",value:"false"},{caption:"Timed",value:"true"}]},"Elastic Tabstops":{path:"useElasticTabstops"},"Incremental Search":{path:"useIncrementalSearch"},"Read-only":{path:"readOnly"},"Copy without selection":{path:"copyWithEmptySelection"},"Live Autocompletion":{path:"enableLiveAutocompletion"}}};var h=function e(t,a){this.editor=t;this.container=a||document.createElement("div");this.groups=[];this.options={}};(function(){r.implement(this,s);this.add=function(e){if(e.Main)r.mixin(m.Main,e.Main);if(e.More)r.mixin(m.More,e.More)};this.render=function(){this.container.innerHTML="";l(["table",{id:"controls"},this.renderOptionGroup(m.Main),["tr",null,["td",{colspan:2},["table",{id:"more-controls"},this.renderOptionGroup(m.More)]]],["tr",null,["td",{colspan:2},"version "+n.version]]],this.container)};this.renderOptionGroup=function(e){return Object.keys(e).map(function(t,a){var o=e[t];if(!o.position)o.position=a/1e4;if(!o.label)o.label=t;return o}).sort(function(e,t){return e.position-t.position}).map(function(e){return this.renderOption(e.label,e)},this)};this.renderOptionControl=function(e,t){var a=this;if(Array.isArray(t)){return t.map(function(t){return a.renderOptionControl(e,t)})}var o;var i=a.getOption(t);if(t.values&&t.type!="checkbox"){if(typeof t.values=="string")t.values=t.values.split("|");t.items=t.values.map(function(e){return{value:e,name:e}})}if(t.type=="buttonBar"){o=["div",t.items.map(function(e){return["button",{value:e.value,ace_selected_button:i==e.value,onclick:function o(){a.setOption(t,e.value);var i=this.parentNode.querySelectorAll("[ace_selected_button]");for(var r=0;r<i.length;r++){i[r].removeAttribute("ace_selected_button")}this.setAttribute("ace_selected_button",true)}},e.desc||e.caption||e.name]})]}else if(t.type=="number"){o=["input",{type:"number",value:i||t.defaultValue,style:"width:3em",oninput:function e(){a.setOption(t,parseInt(this.value))}}];if(t.defaults){o=[o,t.defaults.map(function(e){return["button",{onclick:function t(){var a=this.parentNode.firstChild;a.value=e.value;a.oninput()}},e.caption]})]}}else if(t.items){var r=function e(t){return t.map(function(e){return["option",{value:e.value||e.name},e.desc||e.caption||e.name]})};var n=Array.isArray(t.items)?r(t.items):Object.keys(t.items).map(function(e){return["optgroup",{label:e},r(t.items[e])]});o=["select",{id:e,value:i,onchange:function e(){a.setOption(t,this.value)}},n]}else{if(typeof t.values=="string")t.values=t.values.split("|");if(t.values)i=i==t.values[1];o=["input",{type:"checkbox",id:e,checked:i||null,onchange:function e(){var o=this.checked;if(t.values)o=t.values[o?1:0];a.setOption(t,o)}}];if(t.type=="checkedNumber"){o=[o,[]]}}return o};this.renderOption=function(e,t){if(t.path&&!t.onchange&&!this.editor.$options[t.path])return;this.options[t.path]=t;var a="-"+t.path;var o=this.renderOptionControl(a,t);return["tr",{class:"ace_optionsMenuEntry"},["td",["label",{for:a},e]],["td",o]]};this.setOption=function(e,t){if(typeof e=="string")e=this.options[e];if(t=="false")t=false;if(t=="true")t=true;if(t=="null")t=null;if(t=="undefined")t=undefined;if(typeof t=="string"&&parseFloat(t).toString()==t)t=parseFloat(t);if(e.onchange)e.onchange(t);else if(e.path)this.editor.setOption(e.path,t);this._signal("setOption",{name:e.path,value:t})};this.getOption=function(e){if(e.getValue)return e.getValue();return this.editor.getOption(e.path)}}).call(h.prototype);t.OptionPanel=h});ace.define("ace/ext/settings_menu",["require","exports","module","ace/ext/options","ace/ext/menu_tools/overlay_page","ace/editor"],function(e,t,a){"use strict";var o=e("./options").OptionPanel;var i=e("./menu_tools/overlay_page").overlayPage;function r(e){if(!document.getElementById("ace_settingsmenu")){var t=new o(e);t.render();t.container.id="ace_settingsmenu";i(e,t.container);t.container.querySelector("select,input,button,checkbox").focus()}}a.exports.init=function(){var t=e("../editor").Editor;t.prototype.showSettingsMenu=function(){r(this)}}});(function(){ace.require(["ace/ext/settings_menu"],function(e){if(typeof module=="object"&&typeof exports=="object"&&module){module.exports=e}})})();
+ace.define("ace/ext/menu_tools/overlay_page",["require","exports","module","ace/lib/dom"], function(require, exports, module) {
+'use strict';
+var dom = require("../../lib/dom");
+var cssText = "#ace_settingsmenu, #kbshortcutmenu {\
+background-color: #F7F7F7;\
+color: black;\
+box-shadow: -5px 4px 5px rgba(126, 126, 126, 0.55);\
+padding: 1em 0.5em 2em 1em;\
+overflow: auto;\
+position: absolute;\
+margin: 0;\
+bottom: 0;\
+right: 0;\
+top: 0;\
+z-index: 9991;\
+cursor: default;\
+}\
+.ace_dark #ace_settingsmenu, .ace_dark #kbshortcutmenu {\
+box-shadow: -20px 10px 25px rgba(126, 126, 126, 0.25);\
+background-color: rgba(255, 255, 255, 0.6);\
+color: black;\
+}\
+.ace_optionsMenuEntry:hover {\
+background-color: rgba(100, 100, 100, 0.1);\
+transition: all 0.3s\
+}\
+.ace_closeButton {\
+background: rgba(245, 146, 146, 0.5);\
+border: 1px solid #F48A8A;\
+border-radius: 50%;\
+padding: 7px;\
+position: absolute;\
+right: -8px;\
+top: -8px;\
+z-index: 100000;\
+}\
+.ace_closeButton{\
+background: rgba(245, 146, 146, 0.9);\
+}\
+.ace_optionsMenuKey {\
+color: darkslateblue;\
+font-weight: bold;\
+}\
+.ace_optionsMenuCommand {\
+color: darkcyan;\
+font-weight: normal;\
+}\
+.ace_optionsMenuEntry input, .ace_optionsMenuEntry button {\
+vertical-align: middle;\
+}\
+.ace_optionsMenuEntry button[ace_selected_button=true] {\
+background: #e7e7e7;\
+box-shadow: 1px 0px 2px 0px #adadad inset;\
+border-color: #adadad;\
+}\
+.ace_optionsMenuEntry button {\
+background: white;\
+border: 1px solid lightgray;\
+margin: 0px;\
+}\
+.ace_optionsMenuEntry button:hover{\
+background: #f0f0f0;\
+}";
+dom.importCssString(cssText);
+
+module.exports.overlayPage = function overlayPage(editor, contentElement, callback) {
+    var closer = document.createElement('div');
+
+    function documentEscListener(e) {
+        if (e.keyCode === 27) {
+            close();
+        }
+    }
+
+    function close() {
+        if (!closer) return;
+        document.removeEventListener('keydown', documentEscListener);
+        closer.parentNode.removeChild(closer);
+        editor.focus();
+        closer = null;
+        callback && callback();
+    }
+
+    closer.style.cssText = 'margin: 0; padding: 0; ' +
+        'position: fixed; top:0; bottom:0; left:0; right:0;' +
+        'z-index: 9990; ' +
+        'background-color: rgba(0, 0, 0, 0.3);';
+    closer.addEventListener('click', function() {
+        close();
+    });
+    document.addEventListener('keydown', documentEscListener);
+
+    contentElement.addEventListener('click', function (e) {
+        e.stopPropagation();
+    });
+
+    closer.appendChild(contentElement);
+    document.body.appendChild(closer);
+    editor.blur();
+    return {
+        close: close
+    };
+};
+
+});
+
+ace.define("ace/ext/modelist",["require","exports","module"], function(require, exports, module) {
+"use strict";
+
+var modes = [];
+function getModeForPath(path) {
+    var mode = modesByName.text;
+    var fileName = path.split(/[\/\\]/).pop();
+    for (var i = 0; i < modes.length; i++) {
+        if (modes[i].supportsFile(fileName)) {
+            mode = modes[i];
+            break;
+        }
+    }
+    return mode;
+}
+
+var Mode = function(name, caption, extensions) {
+    this.name = name;
+    this.caption = caption;
+    this.mode = "ace/mode/" + name;
+    this.extensions = extensions;
+    var re;
+    if (/\^/.test(extensions)) {
+        re = extensions.replace(/\|(\^)?/g, function(a, b){
+            return "$|" + (b ? "^" : "^.*\\.");
+        }) + "$";
+    } else {
+        re = "^.*\\.(" + extensions + ")$";
+    }
+
+    this.extRe = new RegExp(re, "gi");
+};
+
+Mode.prototype.supportsFile = function(filename) {
+    return filename.match(this.extRe);
+};
+var supportedModes = {
+    ABAP:        ["abap"],
+    ABC:         ["abc"],
+    ActionScript:["as"],
+    ADA:         ["ada|adb"],
+    Apache_Conf: ["^htaccess|^htgroups|^htpasswd|^conf|htaccess|htgroups|htpasswd"],
+    AsciiDoc:    ["asciidoc|adoc"],
+    ASL:         ["dsl|asl"],
+    Assembly_x86:["asm|a"],
+    AutoHotKey:  ["ahk"],
+    Apex:        ["apex|cls|trigger|tgr"],
+    AQL:         ["aql"],
+    BatchFile:   ["bat|cmd"],
+    C_Cpp:       ["cpp|c|cc|cxx|h|hh|hpp|ino"],
+    C9Search:    ["c9search_results"],
+    Crystal:     ["cr"],
+    Cirru:       ["cirru|cr"],
+    Clojure:     ["clj|cljs"],
+    Cobol:       ["CBL|COB"],
+    coffee:      ["coffee|cf|cson|^Cakefile"],
+    ColdFusion:  ["cfm"],
+    CSharp:      ["cs"],
+    Csound_Document: ["csd"],
+    Csound_Orchestra: ["orc"],
+    Csound_Score: ["sco"],
+    CSS:         ["css"],
+    Curly:       ["curly"],
+    D:           ["d|di"],
+    Dart:        ["dart"],
+    Diff:        ["diff|patch"],
+    Dockerfile:  ["^Dockerfile"],
+    Dot:         ["dot"],
+    Drools:      ["drl"],
+    Edifact:     ["edi"],
+    Eiffel:      ["e|ge"],
+    EJS:         ["ejs"],
+    Elixir:      ["ex|exs"],
+    Elm:         ["elm"],
+    Erlang:      ["erl|hrl"],
+    Forth:       ["frt|fs|ldr|fth|4th"],
+    Fortran:     ["f|f90"],
+    FSharp:      ["fsi|fs|ml|mli|fsx|fsscript"],
+    FSL:         ["fsl"],
+    FTL:         ["ftl"],
+    Gcode:       ["gcode"],
+    Gherkin:     ["feature"],
+    Gitignore:   ["^.gitignore"],
+    Glsl:        ["glsl|frag|vert"],
+    Gobstones:   ["gbs"],
+    golang:      ["go"],
+    GraphQLSchema: ["gql"],
+    Groovy:      ["groovy"],
+    HAML:        ["haml"],
+    Handlebars:  ["hbs|handlebars|tpl|mustache"],
+    Haskell:     ["hs"],
+    Haskell_Cabal: ["cabal"],
+    haXe:        ["hx"],
+    Hjson:       ["hjson"],
+    HTML:        ["html|htm|xhtml|vue|we|wpy"],
+    HTML_Elixir: ["eex|html.eex"],
+    HTML_Ruby:   ["erb|rhtml|html.erb"],
+    INI:         ["ini|conf|cfg|prefs"],
+    Io:          ["io"],
+    Jack:        ["jack"],
+    Jade:        ["jade|pug"],
+    Java:        ["java"],
+    JavaScript:  ["js|jsm|jsx"],
+    JSON:        ["json"],
+    JSONiq:      ["jq"],
+    JSP:         ["jsp"],
+    JSSM:        ["jssm|jssm_state"],
+    JSX:         ["jsx"],
+    Julia:       ["jl"],
+    Kotlin:      ["kt|kts"],
+    LaTeX:       ["tex|latex|ltx|bib"],
+    LESS:        ["less"],
+    Liquid:      ["liquid"],
+    Lisp:        ["lisp"],
+    LiveScript:  ["ls"],
+    LogiQL:      ["logic|lql"],
+    LSL:         ["lsl"],
+    Lua:         ["lua"],
+    LuaPage:     ["lp"],
+    Lucene:      ["lucene"],
+    Makefile:    ["^Makefile|^GNUmakefile|^makefile|^OCamlMakefile|make"],
+    Markdown:    ["md|markdown"],
+    Mask:        ["mask"],
+    MATLAB:      ["matlab"],
+    Maze:        ["mz"],
+    MEL:         ["mel"],
+    MIXAL:       ["mixal"],
+    MUSHCode:    ["mc|mush"],
+    MySQL:       ["mysql"],
+    Nginx:       ["nginx|conf"],
+    Nix:         ["nix"],
+    Nim:         ["nim"],
+    NSIS:        ["nsi|nsh"],
+    ObjectiveC:  ["m|mm"],
+    OCaml:       ["ml|mli"],
+    Pascal:      ["pas|p"],
+    Perl:        ["pl|pm"],
+    Perl6:       ["p6|pl6|pm6"],
+    pgSQL:       ["pgsql"],
+    PHP_Laravel_blade: ["blade.php"],
+    PHP:         ["php|inc|phtml|shtml|php3|php4|php5|phps|phpt|aw|ctp|module"],
+    Puppet:      ["epp|pp"],
+    Pig:         ["pig"],
+    Powershell:  ["ps1"],
+    Praat:       ["praat|praatscript|psc|proc"],
+    Prolog:      ["plg|prolog"],
+    Properties:  ["properties"],
+    Protobuf:    ["proto"],
+    Python:      ["py"],
+    R:           ["r"],
+    Razor:       ["cshtml|asp"],
+    RDoc:        ["Rd"],
+    Red:         ["red|reds"],
+    RHTML:       ["Rhtml"],
+    RST:         ["rst"],
+    Ruby:        ["rb|ru|gemspec|rake|^Guardfile|^Rakefile|^Gemfile"],
+    Rust:        ["rs"],
+    SASS:        ["sass"],
+    SCAD:        ["scad"],
+    Scala:       ["scala|sbt"],
+    Scheme:      ["scm|sm|rkt|oak|scheme"],
+    SCSS:        ["scss"],
+    SH:          ["sh|bash|^.bashrc"],
+    SJS:         ["sjs"],
+    Slim:        ["slim|skim"],
+    Smarty:      ["smarty|tpl"],
+    snippets:    ["snippets"],
+    Soy_Template:["soy"],
+    Space:       ["space"],
+    SQL:         ["sql"],
+    SQLServer:   ["sqlserver"],
+    Stylus:      ["styl|stylus"],
+    SVG:         ["svg"],
+    Swift:       ["swift"],
+    Tcl:         ["tcl"],
+    Terraform:   ["tf", "tfvars", "terragrunt"],
+    Tex:         ["tex"],
+    Text:        ["txt"],
+    Textile:     ["textile"],
+    Toml:        ["toml"],
+    TSX:         ["tsx"],
+    Twig:        ["latte|twig|swig"],
+    Typescript:  ["ts|typescript|str"],
+    Vala:        ["vala"],
+    VBScript:    ["vbs|vb"],
+    Velocity:    ["vm"],
+    Verilog:     ["v|vh|sv|svh"],
+    VHDL:        ["vhd|vhdl"],
+    Visualforce: ["vfp|component|page"],
+    Wollok:      ["wlk|wpgm|wtest"],
+    XML:         ["xml|rdf|rss|wsdl|xslt|atom|mathml|mml|xul|xbl|xaml"],
+    XQuery:      ["xq"],
+    YAML:        ["yaml|yml"],
+    Zeek:        ["zeek|bro"],
+    Django:      ["html"]
+};
+
+var nameOverrides = {
+    ObjectiveC: "Objective-C",
+    CSharp: "C#",
+    golang: "Go",
+    C_Cpp: "C and C++",
+    Csound_Document: "Csound Document",
+    Csound_Orchestra: "Csound",
+    Csound_Score: "Csound Score",
+    coffee: "CoffeeScript",
+    HTML_Ruby: "HTML (Ruby)",
+    HTML_Elixir: "HTML (Elixir)",
+    FTL: "FreeMarker",
+    PHP_Laravel_blade: "PHP (Blade Template)",
+    Perl6: "Perl 6",
+    AutoHotKey: "AutoHotkey / AutoIt"
+};
+var modesByName = {};
+for (var name in supportedModes) {
+    var data = supportedModes[name];
+    var displayName = (nameOverrides[name] || name).replace(/_/g, " ");
+    var filename = name.toLowerCase();
+    var mode = new Mode(filename, displayName, data[0]);
+    modesByName[filename] = mode;
+    modes.push(mode);
+}
+
+module.exports = {
+    getModeForPath: getModeForPath,
+    modes: modes,
+    modesByName: modesByName
+};
+
+});
+
+ace.define("ace/ext/themelist",["require","exports","module"], function(require, exports, module) {
+"use strict";
+
+var themeData = [
+    ["Chrome"         ],
+    ["Clouds"         ],
+    ["Crimson Editor" ],
+    ["Dawn"           ],
+    ["Dreamweaver"    ],
+    ["Eclipse"        ],
+    ["GitHub"         ],
+    ["IPlastic"       ],
+    ["Solarized Light"],
+    ["TextMate"       ],
+    ["Tomorrow"       ],
+    ["XCode"          ],
+    ["Kuroir"],
+    ["KatzenMilch"],
+    ["SQL Server"           ,"sqlserver"               , "light"],
+    ["Ambiance"             ,"ambiance"                ,  "dark"],
+    ["Chaos"                ,"chaos"                   ,  "dark"],
+    ["Clouds Midnight"      ,"clouds_midnight"         ,  "dark"],
+    ["Dracula"              ,""                        ,  "dark"],
+    ["Cobalt"               ,"cobalt"                  ,  "dark"],
+    ["Gruvbox"              ,"gruvbox"                 ,  "dark"],
+    ["Green on Black"       ,"gob"                     ,  "dark"],
+    ["idle Fingers"         ,"idle_fingers"            ,  "dark"],
+    ["krTheme"              ,"kr_theme"                ,  "dark"],
+    ["Merbivore"            ,"merbivore"               ,  "dark"],
+    ["Merbivore Soft"       ,"merbivore_soft"          ,  "dark"],
+    ["Mono Industrial"      ,"mono_industrial"         ,  "dark"],
+    ["Monokai"              ,"monokai"                 ,  "dark"],
+    ["Pastel on dark"       ,"pastel_on_dark"          ,  "dark"],
+    ["Solarized Dark"       ,"solarized_dark"          ,  "dark"],
+    ["Terminal"             ,"terminal"                ,  "dark"],
+    ["Tomorrow Night"       ,"tomorrow_night"          ,  "dark"],
+    ["Tomorrow Night Blue"  ,"tomorrow_night_blue"     ,  "dark"],
+    ["Tomorrow Night Bright","tomorrow_night_bright"   ,  "dark"],
+    ["Tomorrow Night 80s"   ,"tomorrow_night_eighties" ,  "dark"],
+    ["Twilight"             ,"twilight"                ,  "dark"],
+    ["Vibrant Ink"          ,"vibrant_ink"             ,  "dark"]
+];
+
+
+exports.themesByName = {};
+exports.themes = themeData.map(function(data) {
+    var name = data[1] || data[0].replace(/ /g, "_").toLowerCase();
+    var theme = {
+        caption: data[0],
+        theme: "ace/theme/" + name,
+        isDark: data[2] == "dark",
+        name: name
+    };
+    exports.themesByName[name] = theme;
+    return theme;
+});
+
+});
+
+ace.define("ace/ext/options",["require","exports","module","ace/ext/menu_tools/overlay_page","ace/lib/dom","ace/lib/oop","ace/config","ace/lib/event_emitter","ace/ext/modelist","ace/ext/themelist"], function(require, exports, module) {
+"use strict";
+var overlayPage = require('./menu_tools/overlay_page').overlayPage;
+
+ 
+var dom = require("../lib/dom");
+var oop = require("../lib/oop");
+var config = require("../config");
+var EventEmitter = require("../lib/event_emitter").EventEmitter;
+var buildDom = dom.buildDom;
+
+var modelist = require("./modelist");
+var themelist = require("./themelist");
+
+var themes = { Bright: [], Dark: [] };
+themelist.themes.forEach(function(x) {
+    themes[x.isDark ? "Dark" : "Bright"].push({ caption: x.caption, value: x.theme });
+});
+
+var modes = modelist.modes.map(function(x){ 
+    return { caption: x.caption, value: x.mode }; 
+});
+
+
+var optionGroups = {
+    Main: {
+        Mode: {
+            path: "mode",
+            type: "select",
+            items: modes
+        },
+        Theme: {
+            path: "theme",
+            type: "select",
+            items: themes
+        },
+        "Keybinding": {
+            type: "buttonBar",
+            path: "keyboardHandler",
+            items: [
+                { caption : "Ace", value : null },
+                { caption : "Vim", value : "ace/keyboard/vim" },
+                { caption : "Emacs", value : "ace/keyboard/emacs" },
+                { caption : "Sublime", value : "ace/keyboard/sublime" }
+            ]
+        },
+        "Font Size": {
+            path: "fontSize",
+            type: "number",
+            defaultValue: 12,
+            defaults: [
+                {caption: "12px", value: 12},
+                {caption: "24px", value: 24}
+            ]
+        },
+        "Soft Wrap": {
+            type: "buttonBar",
+            path: "wrap",
+            items: [
+               { caption : "Off",  value : "off" },
+               { caption : "View", value : "free" },
+               { caption : "margin", value : "printMargin" },
+               { caption : "40",   value : "40" }
+            ]
+        },
+        "Cursor Style": {
+            path: "cursorStyle",
+            items: [
+               { caption : "Ace",    value : "ace" },
+               { caption : "Slim",   value : "slim" },
+               { caption : "Smooth", value : "smooth" },
+               { caption : "Smooth And Slim", value : "smooth slim" },
+               { caption : "Wide",   value : "wide" }
+            ]
+        },
+        "Folding": {
+            path: "foldStyle",
+            items: [
+                { caption : "Manual", value : "manual" },
+                { caption : "Mark begin", value : "markbegin" },
+                { caption : "Mark begin and end", value : "markbeginend" }
+            ]
+        },
+        "Soft Tabs": [{
+            path: "useSoftTabs"
+        }, {
+            path: "tabSize",
+            type: "number",
+            values: [2, 3, 4, 8, 16]
+        }],
+        "Overscroll": {
+            type: "buttonBar",
+            path: "scrollPastEnd",
+            items: [
+               { caption : "None",  value : 0 },
+               { caption : "Half",   value : 0.5 },
+               { caption : "Full",   value : 1 }
+            ]
+        }
+    },
+    More: {
+        "Atomic soft tabs": {
+            path: "navigateWithinSoftTabs"
+        },
+        "Enable Behaviours": {
+            path: "behavioursEnabled"
+        },
+        "Full Line Selection": {
+            type: "checkbox",
+            values: "text|line",
+            path: "selectionStyle"
+        },
+        "Highlight Active Line": {
+            path: "highlightActiveLine"
+        },
+        "Show Invisibles": {
+            path: "showInvisibles"
+        },
+        "Show Indent Guides": {
+            path: "displayIndentGuides"
+        },
+        "Persistent Scrollbar": [{
+            path: "hScrollBarAlwaysVisible"
+        }, {
+            path: "vScrollBarAlwaysVisible"
+        }],
+        "Animate scrolling": {
+            path: "animatedScroll"
+        },
+        "Show Gutter": {
+            path: "showGutter"
+        },
+        "Show Line Numbers": {
+            path: "showLineNumbers"
+        },
+        "Relative Line Numbers": {
+            path: "relativeLineNumbers"
+        },
+        "Fixed Gutter Width": {
+            path: "fixedWidthGutter"
+        },
+        "Show Print Margin": [{
+            path: "showPrintMargin"
+        }, {
+            type: "number",
+            path: "printMarginColumn"
+        }],
+        "Indented Soft Wrap": {
+            path: "indentedSoftWrap"
+        },
+        "Highlight selected word": {
+            path: "highlightSelectedWord"
+        },
+        "Fade Fold Widgets": {
+            path: "fadeFoldWidgets"
+        },
+        "Use textarea for IME": {
+            path: "useTextareaForIME"
+        },
+        "Merge Undo Deltas": {
+            path: "mergeUndoDeltas",
+            items: [
+               { caption : "Always",  value : "always" },
+               { caption : "Never",   value : "false" },
+               { caption : "Timed",   value : "true" }
+            ]
+        },
+        "Elastic Tabstops": {
+            path: "useElasticTabstops"
+        },
+        "Incremental Search": {
+            path: "useIncrementalSearch"
+        },
+        "Read-only": {
+            path: "readOnly"
+        },
+        "Copy without selection": {
+            path: "copyWithEmptySelection"
+        },
+        "Live Autocompletion": {
+            path: "enableLiveAutocompletion"
+        }
+    }
+};
+
+
+var OptionPanel = function(editor, element) {
+    this.editor = editor;
+    this.container = element || document.createElement("div");
+    this.groups = [];
+    this.options = {};
+};
+
+(function() {
+    
+    oop.implement(this, EventEmitter);
+    
+    this.add = function(config) {
+        if (config.Main)
+            oop.mixin(optionGroups.Main, config.Main);
+        if (config.More)
+            oop.mixin(optionGroups.More, config.More);
+    };
+    
+    this.render = function() {
+        this.container.innerHTML = "";
+        buildDom(["table", {id: "controls"}, 
+            this.renderOptionGroup(optionGroups.Main),
+            ["tr", null, ["td", {colspan: 2},
+                ["table", {id: "more-controls"}, 
+                    this.renderOptionGroup(optionGroups.More)
+                ]
+            ]],
+            ["tr", null, ["td", {colspan: 2}, "version " + config.version]]
+        ], this.container);
+    };
+    
+    this.renderOptionGroup = function(group) {
+        return Object.keys(group).map(function(key, i) {
+            var item = group[key];
+            if (!item.position)
+                item.position = i / 10000;
+            if (!item.label)
+                item.label = key;
+            return item;
+        }).sort(function(a, b) {
+            return a.position - b.position;
+        }).map(function(item) {
+            return this.renderOption(item.label, item);
+        }, this);
+    };
+    
+    this.renderOptionControl = function(key, option) {
+        var self = this;
+        if (Array.isArray(option)) {
+            return option.map(function(x) {
+                return self.renderOptionControl(key, x);
+            });
+        }
+        var control;
+        
+        var value = self.getOption(option);
+        
+        if (option.values && option.type != "checkbox") {
+            if (typeof option.values == "string")
+                option.values = option.values.split("|");
+            option.items = option.values.map(function(v) {
+                return { value: v, name: v };
+            });
+        }
+        
+        if (option.type == "buttonBar") {
+            control = ["div", option.items.map(function(item) {
+                return ["button", { 
+                    value: item.value, 
+                    ace_selected_button: value == item.value, 
+                    onclick: function() {
+                        self.setOption(option, item.value);
+                        var nodes = this.parentNode.querySelectorAll("[ace_selected_button]");
+                        for (var i = 0; i < nodes.length; i++) {
+                            nodes[i].removeAttribute("ace_selected_button");
+                        }
+                        this.setAttribute("ace_selected_button", true);
+                    } 
+                }, item.desc || item.caption || item.name];
+            })];
+        } else if (option.type == "number") {
+            control = ["input", {type: "number", value: value || option.defaultValue, style:"width:3em", oninput: function() {
+                self.setOption(option, parseInt(this.value));
+            }}];
+            if (option.defaults) {
+                control = [control, option.defaults.map(function(item) {
+                    return ["button", {onclick: function() {
+                        var input = this.parentNode.firstChild;
+                        input.value = item.value;
+                        input.oninput();
+                    }}, item.caption];
+                })];
+            }
+        } else if (option.items) {
+            var buildItems = function(items) {
+                return items.map(function(item) {
+                    return ["option", { value: item.value || item.name }, item.desc || item.caption || item.name];
+                });
+            };
+            
+            var items = Array.isArray(option.items) 
+                ? buildItems(option.items)
+                : Object.keys(option.items).map(function(key) {
+                    return ["optgroup", {"label": key}, buildItems(option.items[key])];
+                });
+            control = ["select", { id: key, value: value, onchange: function() {
+                self.setOption(option, this.value);
+            } }, items];
+        } else {
+            if (typeof option.values == "string")
+                option.values = option.values.split("|");
+            if (option.values) value = value == option.values[1];
+            control = ["input", { type: "checkbox", id: key, checked: value || null, onchange: function() {
+                var value = this.checked;
+                if (option.values) value = option.values[value ? 1 : 0];
+                self.setOption(option, value);
+            }}];
+            if (option.type == "checkedNumber") {
+                control = [control, []];
+            }
+        }
+        return control;
+    };
+    
+    this.renderOption = function(key, option) {
+        if (option.path && !option.onchange && !this.editor.$options[option.path])
+            return;
+        this.options[option.path] = option;
+        var safeKey = "-" + option.path;
+        var control = this.renderOptionControl(safeKey, option);
+        return ["tr", {class: "ace_optionsMenuEntry"}, ["td",
+            ["label", {for: safeKey}, key]
+        ], ["td", control]];
+    };
+    
+    this.setOption = function(option, value) {
+        if (typeof option == "string")
+            option = this.options[option];
+        if (value == "false") value = false;
+        if (value == "true") value = true;
+        if (value == "null") value = null;
+        if (value == "undefined") value = undefined;
+        if (typeof value == "string" && parseFloat(value).toString() == value)
+            value = parseFloat(value);
+        if (option.onchange)
+            option.onchange(value);
+        else if (option.path)
+            this.editor.setOption(option.path, value);
+        this._signal("setOption", {name: option.path, value: value});
+    };
+    
+    this.getOption = function(option) {
+        if (option.getValue)
+            return option.getValue();
+        return this.editor.getOption(option.path);
+    };
+    
+}).call(OptionPanel.prototype);
+
+exports.OptionPanel = OptionPanel;
+
+});
+
+ace.define("ace/ext/settings_menu",["require","exports","module","ace/ext/options","ace/ext/menu_tools/overlay_page","ace/editor"], function(require, exports, module) {
+"use strict";
+var OptionPanel = require("./options").OptionPanel;
+var overlayPage = require('./menu_tools/overlay_page').overlayPage;
+function showSettingsMenu(editor) {
+    if (!document.getElementById('ace_settingsmenu')) {
+        var options = new OptionPanel(editor);
+        options.render();
+        options.container.id = "ace_settingsmenu";
+        overlayPage(editor, options.container);
+        options.container.querySelector("select,input,button,checkbox").focus();
+    }
+}
+module.exports.init = function() {
+    var Editor = require("../editor").Editor;
+    Editor.prototype.showSettingsMenu = function() {
+        showSettingsMenu(this);
+    };
+};
+});                (function() {
+                    ace.require(["ace/ext/settings_menu"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

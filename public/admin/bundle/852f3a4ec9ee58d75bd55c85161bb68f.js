@@ -1,1 +1,330 @@
-ace.define("ace/mode/yaml_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"],function(e,t,n){"use strict";var r=e("../lib/oop");var i=e("./text_highlight_rules").TextHighlightRules;var o=function e(){this.$rules={start:[{token:"comment",regex:"#.*$"},{token:"list.markup",regex:/^(?:-{3}|\.{3})\s*(?=#|$)/},{token:"list.markup",regex:/^\s*[\-?](?:$|\s)/},{token:"constant",regex:"!![\\w//]+"},{token:"constant.language",regex:"[&\\*][a-zA-Z0-9-_]+"},{token:["meta.tag","keyword"],regex:/^(\s*\w.*?)(:(?=\s|$))/},{token:["meta.tag","keyword"],regex:/(\w+?)(\s*:(?=\s|$))/},{token:"keyword.operator",regex:"<<\\w*:\\w*"},{token:"keyword.operator",regex:"-\\s*(?=[{])"},{token:"string",regex:'["](?:(?:\\\\.)|(?:[^"\\\\]))*?["]'},{token:"string",regex:/[|>][-+\d]*(?:$|\s+(?:$|#))/,onMatch:function e(t,n,r,i){i=i.replace(/ #.*/,"");var o=/^ *((:\s*)?-(\s*[^|>])?)?/.exec(i)[0].replace(/\S\s*$/,"").length;var a=parseInt(/\d+[\s+-]*$/.exec(i));if(a){o+=a-1;this.next="mlString"}else{this.next="mlStringPre"}if(!r.length){r.push(this.next);r.push(o)}else{r[0]=this.next;r[1]=o}return this.token},next:"mlString"},{token:"string",regex:"['](?:(?:\\\\.)|(?:[^'\\\\]))*?[']"},{token:"constant.numeric",regex:/(\b|[+\-\.])[\d_]+(?:(?:\.[\d_]*)?(?:[eE][+\-]?[\d_]+)?)(?=[^\d-\w]|$)/},{token:"constant.numeric",regex:/[+\-]?\.inf\b|NaN\b|0x[\dA-Fa-f_]+|0b[10_]+/},{token:"constant.language.boolean",regex:"\\b(?:true|false|TRUE|FALSE|True|False|yes|no)\\b"},{token:"paren.lparen",regex:"[[({]"},{token:"paren.rparen",regex:"[\\])}]"},{token:"text",regex:/[^\s,:\[\]\{\}]+/}],mlStringPre:[{token:"indent",regex:/^ *$/},{token:"indent",regex:/^ */,onMatch:function e(t,n,r){var i=r[1];if(i>=t.length){this.next="start";r.shift();r.shift()}else{r[1]=t.length-1;this.next=r[0]="mlString"}return this.token},next:"mlString"},{defaultToken:"string"}],mlString:[{token:"indent",regex:/^ *$/},{token:"indent",regex:/^ */,onMatch:function e(t,n,r){var i=r[1];if(i>=t.length){this.next="start";r.splice(0)}else{this.next="mlString"}return this.token},next:"mlString"},{token:"string",regex:".+"}]};this.normalizeRules()};r.inherits(o,i);t.YamlHighlightRules=o});ace.define("ace/mode/matching_brace_outdent",["require","exports","module","ace/range"],function(e,t,n){"use strict";var r=e("../range").Range;var i=function e(){};(function(){this.checkOutdent=function(e,t){if(!/^\s+$/.test(e))return false;return/^\s*\}/.test(t)};this.autoOutdent=function(e,t){var n=e.getLine(t);var i=n.match(/^(\s*\})/);if(!i)return 0;var o=i[1].length;var a=e.findMatchingBracket({row:t,column:o});if(!a||a.row==t)return 0;var s=this.$getIndent(e.getLine(a.row));e.replace(new r(t,0,t,o-1),s)};this.$getIndent=function(e){return e.match(/^\s*/)[0]}}).call(i.prototype);t.MatchingBraceOutdent=i});ace.define("ace/mode/folding/coffee",["require","exports","module","ace/lib/oop","ace/mode/folding/fold_mode","ace/range"],function(e,t,n){"use strict";var r=e("../../lib/oop");var i=e("./fold_mode").FoldMode;var o=e("../../range").Range;var a=t.FoldMode=function(){};r.inherits(a,i);(function(){this.getFoldWidgetRange=function(e,t,n){var r=this.indentationBlock(e,n);if(r)return r;var i=/\S/;var a=e.getLine(n);var s=a.search(i);if(s==-1||a[s]!="#")return;var g=a.length;var l=e.getLength();var c=n;var u=n;while(++n<l){a=e.getLine(n);var d=a.search(i);if(d==-1)continue;if(a[d]!="#")break;u=n}if(u>c){var h=e.getLine(u).length;return new o(c,g,u,h)}};this.getFoldWidget=function(e,t,n){var r=e.getLine(n);var i=r.search(/\S/);var o=e.getLine(n+1);var a=e.getLine(n-1);var s=a.search(/\S/);var g=o.search(/\S/);if(i==-1){e.foldWidgets[n-1]=s!=-1&&s<g?"start":"";return""}if(s==-1){if(i==g&&r[i]=="#"&&o[i]=="#"){e.foldWidgets[n-1]="";e.foldWidgets[n+1]="";return"start"}}else if(s==i&&r[i]=="#"&&a[i]=="#"){if(e.getLine(n-2).search(/\S/)==-1){e.foldWidgets[n-1]="start";e.foldWidgets[n+1]="";return""}}if(s!=-1&&s<i)e.foldWidgets[n-1]="start";else e.foldWidgets[n-1]="";if(i<g)return"start";else return""}}).call(a.prototype)});ace.define("ace/mode/yaml",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/yaml_highlight_rules","ace/mode/matching_brace_outdent","ace/mode/folding/coffee"],function(e,t,n){"use strict";var r=e("../lib/oop");var i=e("./text").Mode;var o=e("./yaml_highlight_rules").YamlHighlightRules;var a=e("./matching_brace_outdent").MatchingBraceOutdent;var s=e("./folding/coffee").FoldMode;var g=function e(){this.HighlightRules=o;this.$outdent=new a;this.foldingRules=new s;this.$behaviour=this.$defaultBehaviour};r.inherits(g,i);(function(){this.lineCommentStart=["#"];this.getNextLineIndent=function(e,t,n){var r=this.$getIndent(t);if(e=="start"){var i=t.match(/^.*[\{\(\[]\s*$/);if(i){r+=n}}return r};this.checkOutdent=function(e,t,n){return this.$outdent.checkOutdent(t,n)};this.autoOutdent=function(e,t,n){this.$outdent.autoOutdent(t,n)};this.$id="ace/mode/yaml"}).call(g.prototype);t.Mode=g});(function(){ace.require(["ace/mode/yaml"],function(e){if(typeof module=="object"&&typeof exports=="object"&&module){module.exports=e}})})();
+ace.define("ace/mode/yaml_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"], function(require, exports, module) {
+"use strict";
+
+var oop = require("../lib/oop");
+var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
+
+var YamlHighlightRules = function() {
+    this.$rules = {
+        "start" : [
+            {
+                token : "comment",
+                regex : "#.*$"
+            }, {
+                token : "list.markup",
+                regex : /^(?:-{3}|\.{3})\s*(?=#|$)/
+            },  {
+                token : "list.markup",
+                regex : /^\s*[\-?](?:$|\s)/
+            }, {
+                token: "constant",
+                regex: "!![\\w//]+"
+            }, {
+                token: "constant.language",
+                regex: "[&\\*][a-zA-Z0-9-_]+"
+            }, {
+                token: ["meta.tag", "keyword"],
+                regex: /^(\s*\w.*?)(:(?=\s|$))/
+            },{
+                token: ["meta.tag", "keyword"],
+                regex: /(\w+?)(\s*:(?=\s|$))/
+            }, {
+                token : "keyword.operator",
+                regex : "<<\\w*:\\w*"
+            }, {
+                token : "keyword.operator",
+                regex : "-\\s*(?=[{])"
+            }, {
+                token : "string", // single line
+                regex : '["](?:(?:\\\\.)|(?:[^"\\\\]))*?["]'
+            }, {
+                token : "string", // multi line string start
+                regex : /[|>][-+\d]*(?:$|\s+(?:$|#))/,
+                onMatch: function(val, state, stack, line) {
+                    line = line.replace(/ #.*/, "");
+                    var indent = /^ *((:\s*)?-(\s*[^|>])?)?/.exec(line)[0]
+                        .replace(/\S\s*$/, "").length;
+                    var indentationIndicator = parseInt(/\d+[\s+-]*$/.exec(line));
+                    
+                    if (indentationIndicator) {
+                        indent += indentationIndicator - 1;
+                        this.next = "mlString";
+                    } else {
+                        this.next = "mlStringPre";
+                    }
+                    if (!stack.length) {
+                        stack.push(this.next);
+                        stack.push(indent);
+                    } else {
+                        stack[0] = this.next;
+                        stack[1] = indent;
+                    }
+                    return this.token;
+                },
+                next : "mlString"
+            }, {
+                token : "string", // single quoted string
+                regex : "['](?:(?:\\\\.)|(?:[^'\\\\]))*?[']"
+            }, {
+                token : "constant.numeric", // float
+                regex : /(\b|[+\-\.])[\d_]+(?:(?:\.[\d_]*)?(?:[eE][+\-]?[\d_]+)?)(?=[^\d-\w]|$)/
+            }, {
+                token : "constant.numeric", // other number
+                regex : /[+\-]?\.inf\b|NaN\b|0x[\dA-Fa-f_]+|0b[10_]+/
+            }, {
+                token : "constant.language.boolean",
+                regex : "\\b(?:true|false|TRUE|FALSE|True|False|yes|no)\\b"
+            }, {
+                token : "paren.lparen",
+                regex : "[[({]"
+            }, {
+                token : "paren.rparen",
+                regex : "[\\])}]"
+            }, {
+                token : "text",
+                regex : /[^\s,:\[\]\{\}]+/
+            }
+        ],
+        "mlStringPre" : [
+            {
+                token : "indent",
+                regex : /^ *$/
+            }, {
+                token : "indent",
+                regex : /^ */,
+                onMatch: function(val, state, stack) {
+                    var curIndent = stack[1];
+
+                    if (curIndent >= val.length) {
+                        this.next = "start";
+                        stack.shift();
+                        stack.shift();
+                    }
+                    else {
+                        stack[1] = val.length - 1;
+                        this.next = stack[0] = "mlString";
+                    }
+                    return this.token;
+                },
+                next : "mlString"
+            }, {
+                defaultToken : "string"
+            }
+        ],
+        "mlString" : [
+            {
+                token : "indent",
+                regex : /^ *$/
+            }, {
+                token : "indent",
+                regex : /^ */,
+                onMatch: function(val, state, stack) {
+                    var curIndent = stack[1];
+
+                    if (curIndent >= val.length) {
+                        this.next = "start";
+                        stack.splice(0);
+                    }
+                    else {
+                        this.next = "mlString";
+                    }
+                    return this.token;
+                },
+                next : "mlString"
+            }, {
+                token : "string",
+                regex : '.+'
+            }
+        ]};
+    this.normalizeRules();
+
+};
+
+oop.inherits(YamlHighlightRules, TextHighlightRules);
+
+exports.YamlHighlightRules = YamlHighlightRules;
+});
+
+ace.define("ace/mode/matching_brace_outdent",["require","exports","module","ace/range"], function(require, exports, module) {
+"use strict";
+
+var Range = require("../range").Range;
+
+var MatchingBraceOutdent = function() {};
+
+(function() {
+
+    this.checkOutdent = function(line, input) {
+        if (! /^\s+$/.test(line))
+            return false;
+
+        return /^\s*\}/.test(input);
+    };
+
+    this.autoOutdent = function(doc, row) {
+        var line = doc.getLine(row);
+        var match = line.match(/^(\s*\})/);
+
+        if (!match) return 0;
+
+        var column = match[1].length;
+        var openBracePos = doc.findMatchingBracket({row: row, column: column});
+
+        if (!openBracePos || openBracePos.row == row) return 0;
+
+        var indent = this.$getIndent(doc.getLine(openBracePos.row));
+        doc.replace(new Range(row, 0, row, column-1), indent);
+    };
+
+    this.$getIndent = function(line) {
+        return line.match(/^\s*/)[0];
+    };
+
+}).call(MatchingBraceOutdent.prototype);
+
+exports.MatchingBraceOutdent = MatchingBraceOutdent;
+});
+
+ace.define("ace/mode/folding/coffee",["require","exports","module","ace/lib/oop","ace/mode/folding/fold_mode","ace/range"], function(require, exports, module) {
+"use strict";
+
+var oop = require("../../lib/oop");
+var BaseFoldMode = require("./fold_mode").FoldMode;
+var Range = require("../../range").Range;
+
+var FoldMode = exports.FoldMode = function() {};
+oop.inherits(FoldMode, BaseFoldMode);
+
+(function() {
+
+    this.getFoldWidgetRange = function(session, foldStyle, row) {
+        var range = this.indentationBlock(session, row);
+        if (range)
+            return range;
+
+        var re = /\S/;
+        var line = session.getLine(row);
+        var startLevel = line.search(re);
+        if (startLevel == -1 || line[startLevel] != "#")
+            return;
+
+        var startColumn = line.length;
+        var maxRow = session.getLength();
+        var startRow = row;
+        var endRow = row;
+
+        while (++row < maxRow) {
+            line = session.getLine(row);
+            var level = line.search(re);
+
+            if (level == -1)
+                continue;
+
+            if (line[level] != "#")
+                break;
+
+            endRow = row;
+        }
+
+        if (endRow > startRow) {
+            var endColumn = session.getLine(endRow).length;
+            return new Range(startRow, startColumn, endRow, endColumn);
+        }
+    };
+    this.getFoldWidget = function(session, foldStyle, row) {
+        var line = session.getLine(row);
+        var indent = line.search(/\S/);
+        var next = session.getLine(row + 1);
+        var prev = session.getLine(row - 1);
+        var prevIndent = prev.search(/\S/);
+        var nextIndent = next.search(/\S/);
+
+        if (indent == -1) {
+            session.foldWidgets[row - 1] = prevIndent!= -1 && prevIndent < nextIndent ? "start" : "";
+            return "";
+        }
+        if (prevIndent == -1) {
+            if (indent == nextIndent && line[indent] == "#" && next[indent] == "#") {
+                session.foldWidgets[row - 1] = "";
+                session.foldWidgets[row + 1] = "";
+                return "start";
+            }
+        } else if (prevIndent == indent && line[indent] == "#" && prev[indent] == "#") {
+            if (session.getLine(row - 2).search(/\S/) == -1) {
+                session.foldWidgets[row - 1] = "start";
+                session.foldWidgets[row + 1] = "";
+                return "";
+            }
+        }
+
+        if (prevIndent!= -1 && prevIndent < indent)
+            session.foldWidgets[row - 1] = "start";
+        else
+            session.foldWidgets[row - 1] = "";
+
+        if (indent < nextIndent)
+            return "start";
+        else
+            return "";
+    };
+
+}).call(FoldMode.prototype);
+
+});
+
+ace.define("ace/mode/yaml",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/yaml_highlight_rules","ace/mode/matching_brace_outdent","ace/mode/folding/coffee"], function(require, exports, module) {
+"use strict";
+
+var oop = require("../lib/oop");
+var TextMode = require("./text").Mode;
+var YamlHighlightRules = require("./yaml_highlight_rules").YamlHighlightRules;
+var MatchingBraceOutdent = require("./matching_brace_outdent").MatchingBraceOutdent;
+var FoldMode = require("./folding/coffee").FoldMode;
+
+var Mode = function() {
+    this.HighlightRules = YamlHighlightRules;
+    this.$outdent = new MatchingBraceOutdent();
+    this.foldingRules = new FoldMode();
+    this.$behaviour = this.$defaultBehaviour;
+};
+oop.inherits(Mode, TextMode);
+
+(function() {
+
+    this.lineCommentStart = ["#"];
+    
+    this.getNextLineIndent = function(state, line, tab) {
+        var indent = this.$getIndent(line);
+
+        if (state == "start") {
+            var match = line.match(/^.*[\{\(\[]\s*$/);
+            if (match) {
+                indent += tab;
+            }
+        }
+
+        return indent;
+    };
+
+    this.checkOutdent = function(state, line, input) {
+        return this.$outdent.checkOutdent(line, input);
+    };
+
+    this.autoOutdent = function(state, doc, row) {
+        this.$outdent.autoOutdent(doc, row);
+    };
+
+
+    this.$id = "ace/mode/yaml";
+}).call(Mode.prototype);
+
+exports.Mode = Mode;
+
+});                (function() {
+                    ace.require(["ace/mode/yaml"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

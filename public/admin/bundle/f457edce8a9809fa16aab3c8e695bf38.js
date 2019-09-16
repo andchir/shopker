@@ -1,1 +1,207 @@
-ace.define("ace/split",["require","exports","module","ace/lib/oop","ace/lib/lang","ace/lib/event_emitter","ace/editor","ace/virtual_renderer","ace/edit_session"],function(t,i,e){"use strict";var s=t("./lib/oop");var n=t("./lib/lang");var o=t("./lib/event_emitter").EventEmitter;var r=t("./editor").Editor;var h=t("./virtual_renderer").VirtualRenderer;var a=t("./edit_session").EditSession;var c=function t(i,e,s){this.BELOW=1;this.BESIDE=0;this.$container=i;this.$theme=e;this.$splits=0;this.$editorCSS="";this.$editors=[];this.$orientation=this.BESIDE;this.setSplits(s||1);this.$cEditor=this.$editors[0];this.on("focus",(function(t){this.$cEditor=t}).bind(this))};(function(){s.implement(this,o);this.$createEditor=function(){var t=document.createElement("div");t.className=this.$editorCSS;t.style.cssText="position: absolute; top:0px; bottom:0px";this.$container.appendChild(t);var i=new r(new h(t,this.$theme));i.on("focus",(function(){this._emit("focus",i)}).bind(this));this.$editors.push(i);i.setFontSize(this.$fontSize);return i};this.setSplits=function(t){var i;if(t<1){throw"The number of splits have to be > 0!"}if(t==this.$splits){return}else if(t>this.$splits){while(this.$splits<this.$editors.length&&this.$splits<t){i=this.$editors[this.$splits];this.$container.appendChild(i.container);i.setFontSize(this.$fontSize);this.$splits++}while(this.$splits<t){this.$createEditor();this.$splits++}}else{while(this.$splits>t){i=this.$editors[this.$splits-1];this.$container.removeChild(i.container);this.$splits--}}this.resize()};this.getSplits=function(){return this.$splits};this.getEditor=function(t){return this.$editors[t]};this.getCurrentEditor=function(){return this.$cEditor};this.focus=function(){this.$cEditor.focus()};this.blur=function(){this.$cEditor.blur()};this.setTheme=function(t){this.$editors.forEach(function(i){i.setTheme(t)})};this.setKeyboardHandler=function(t){this.$editors.forEach(function(i){i.setKeyboardHandler(t)})};this.forEach=function(t,i){this.$editors.forEach(t,i)};this.$fontSize="";this.setFontSize=function(t){this.$fontSize=t;this.forEach(function(i){i.setFontSize(t)})};this.$cloneSession=function(t){var i=new a(t.getDocument(),t.getMode());var e=t.getUndoManager();i.setUndoManager(e);i.setTabSize(t.getTabSize());i.setUseSoftTabs(t.getUseSoftTabs());i.setOverwrite(t.getOverwrite());i.setBreakpoints(t.getBreakpoints());i.setUseWrapMode(t.getUseWrapMode());i.setUseWorker(t.getUseWorker());i.setWrapLimitRange(t.$wrapLimitRange.min,t.$wrapLimitRange.max);i.$foldData=t.$cloneFoldData();return i};this.setSession=function(t,i){var e;if(i==null){e=this.$cEditor}else{e=this.$editors[i]}var s=this.$editors.some(function(i){return i.session===t});if(s){t=this.$cloneSession(t)}e.setSession(t);return t};this.getOrientation=function(){return this.$orientation};this.setOrientation=function(t){if(this.$orientation==t){return}this.$orientation=t;this.resize()};this.resize=function(){var t=this.$container.clientWidth;var i=this.$container.clientHeight;var e;if(this.$orientation==this.BESIDE){var s=t/this.$splits;for(var n=0;n<this.$splits;n++){e=this.$editors[n];e.container.style.width=s+"px";e.container.style.top="0px";e.container.style.left=n*s+"px";e.container.style.height=i+"px";e.resize()}}else{var o=i/this.$splits;for(var n=0;n<this.$splits;n++){e=this.$editors[n];e.container.style.width=t+"px";e.container.style.top=n*o+"px";e.container.style.left="0px";e.container.style.height=o+"px";e.resize()}}}}).call(c.prototype);i.Split=c});ace.define("ace/ext/split",["require","exports","module","ace/split"],function(t,i,e){"use strict";e.exports=t("../split")});(function(){ace.require(["ace/ext/split"],function(t){if(typeof module=="object"&&typeof exports=="object"&&module){module.exports=t}})})();
+ace.define("ace/split",["require","exports","module","ace/lib/oop","ace/lib/lang","ace/lib/event_emitter","ace/editor","ace/virtual_renderer","ace/edit_session"], function(require, exports, module) {
+"use strict";
+
+var oop = require("./lib/oop");
+var lang = require("./lib/lang");
+var EventEmitter = require("./lib/event_emitter").EventEmitter;
+
+var Editor = require("./editor").Editor;
+var Renderer = require("./virtual_renderer").VirtualRenderer;
+var EditSession = require("./edit_session").EditSession;
+
+
+var Split = function(container, theme, splits) {
+    this.BELOW = 1;
+    this.BESIDE = 0;
+
+    this.$container = container;
+    this.$theme = theme;
+    this.$splits = 0;
+    this.$editorCSS = "";
+    this.$editors = [];
+    this.$orientation = this.BESIDE;
+
+    this.setSplits(splits || 1);
+    this.$cEditor = this.$editors[0];
+
+
+    this.on("focus", function(editor) {
+        this.$cEditor = editor;
+    }.bind(this));
+};
+
+(function(){
+
+    oop.implement(this, EventEmitter);
+
+    this.$createEditor = function() {
+        var el = document.createElement("div");
+        el.className = this.$editorCSS;
+        el.style.cssText = "position: absolute; top:0px; bottom:0px";
+        this.$container.appendChild(el);
+        var editor = new Editor(new Renderer(el, this.$theme));
+
+        editor.on("focus", function() {
+            this._emit("focus", editor);
+        }.bind(this));
+
+        this.$editors.push(editor);
+        editor.setFontSize(this.$fontSize);
+        return editor;
+    };
+
+    this.setSplits = function(splits) {
+        var editor;
+        if (splits < 1) {
+            throw "The number of splits have to be > 0!";
+        }
+
+        if (splits == this.$splits) {
+            return;
+        } else if (splits > this.$splits) {
+            while (this.$splits < this.$editors.length && this.$splits < splits) {
+                editor = this.$editors[this.$splits];
+                this.$container.appendChild(editor.container);
+                editor.setFontSize(this.$fontSize);
+                this.$splits ++;
+            }
+            while (this.$splits < splits) {
+                this.$createEditor();
+                this.$splits ++;
+            }
+        } else {
+            while (this.$splits > splits) {
+                editor = this.$editors[this.$splits - 1];
+                this.$container.removeChild(editor.container);
+                this.$splits --;
+            }
+        }
+        this.resize();
+    };
+    this.getSplits = function() {
+        return this.$splits;
+    };
+    this.getEditor = function(idx) {
+        return this.$editors[idx];
+    };
+    this.getCurrentEditor = function() {
+        return this.$cEditor;
+    };
+    this.focus = function() {
+        this.$cEditor.focus();
+    };
+    this.blur = function() {
+        this.$cEditor.blur();
+    };
+    this.setTheme = function(theme) {
+        this.$editors.forEach(function(editor) {
+            editor.setTheme(theme);
+        });
+    };
+    this.setKeyboardHandler = function(keybinding) {
+        this.$editors.forEach(function(editor) {
+            editor.setKeyboardHandler(keybinding);
+        });
+    };
+    this.forEach = function(callback, scope) {
+        this.$editors.forEach(callback, scope);
+    };
+
+
+    this.$fontSize = "";
+    this.setFontSize = function(size) {
+        this.$fontSize = size;
+        this.forEach(function(editor) {
+           editor.setFontSize(size);
+        });
+    };
+
+    this.$cloneSession = function(session) {
+        var s = new EditSession(session.getDocument(), session.getMode());
+
+        var undoManager = session.getUndoManager();
+        s.setUndoManager(undoManager);
+        s.setTabSize(session.getTabSize());
+        s.setUseSoftTabs(session.getUseSoftTabs());
+        s.setOverwrite(session.getOverwrite());
+        s.setBreakpoints(session.getBreakpoints());
+        s.setUseWrapMode(session.getUseWrapMode());
+        s.setUseWorker(session.getUseWorker());
+        s.setWrapLimitRange(session.$wrapLimitRange.min,
+                            session.$wrapLimitRange.max);
+        s.$foldData = session.$cloneFoldData();
+
+        return s;
+    };
+    this.setSession = function(session, idx) {
+        var editor;
+        if (idx == null) {
+            editor = this.$cEditor;
+        } else {
+            editor = this.$editors[idx];
+        }
+        var isUsed = this.$editors.some(function(editor) {
+           return editor.session === session;
+        });
+
+        if (isUsed) {
+            session = this.$cloneSession(session);
+        }
+        editor.setSession(session);
+        return session;
+    };
+    this.getOrientation = function() {
+        return this.$orientation;
+    };
+    this.setOrientation = function(orientation) {
+        if (this.$orientation == orientation) {
+            return;
+        }
+        this.$orientation = orientation;
+        this.resize();
+    };
+    this.resize = function() {
+        var width = this.$container.clientWidth;
+        var height = this.$container.clientHeight;
+        var editor;
+
+        if (this.$orientation == this.BESIDE) {
+            var editorWidth = width / this.$splits;
+            for (var i = 0; i < this.$splits; i++) {
+                editor = this.$editors[i];
+                editor.container.style.width = editorWidth + "px";
+                editor.container.style.top = "0px";
+                editor.container.style.left = i * editorWidth + "px";
+                editor.container.style.height = height + "px";
+                editor.resize();
+            }
+        } else {
+            var editorHeight = height / this.$splits;
+            for (var i = 0; i < this.$splits; i++) {
+                editor = this.$editors[i];
+                editor.container.style.width = width + "px";
+                editor.container.style.top = i * editorHeight + "px";
+                editor.container.style.left = "0px";
+                editor.container.style.height = editorHeight + "px";
+                editor.resize();
+            }
+        }
+    };
+
+}).call(Split.prototype);
+
+exports.Split = Split;
+});
+
+ace.define("ace/ext/split",["require","exports","module","ace/split"], function(require, exports, module) {
+"use strict";
+module.exports = require("../split");
+
+});                (function() {
+                    ace.require(["ace/ext/split"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

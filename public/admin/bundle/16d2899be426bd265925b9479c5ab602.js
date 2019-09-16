@@ -1,1 +1,74 @@
-ace.define("ace/ext/spellcheck",["require","exports","module","ace/lib/event","ace/editor","ace/config"],function(e,t,n){"use strict";var i=e("../lib/event");t.contextMenuHandler=function(e){var t=e.target;var n=t.textInput.getElement();if(!t.selection.isEmpty())return;var o=t.getCursorPosition();var r=t.session.getWordRange(o.row,o.column);var s=t.session.getTextRange(r);t.session.tokenRe.lastIndex=0;if(!t.session.tokenRe.test(s))return;var c="\x01\x01";var l=s+" "+c;n.value=l;n.setSelectionRange(s.length,s.length+1);n.setSelectionRange(0,0);n.setSelectionRange(0,s.length);var a=false;i.addListener(n,"keydown",function e(){i.removeListener(n,"keydown",e);a=true});t.textInput.setInputHandler(function(e){console.log(e,l,n.selectionStart,n.selectionEnd);if(e==l)return"";if(e.lastIndexOf(l,0)===0)return e.slice(l.length);if(e.substr(n.selectionEnd)==l)return e.slice(0,-l.length);if(e.slice(-2)==c){var i=e.slice(0,-2);if(i.slice(-1)==" "){if(a)return i.substring(0,n.selectionEnd);i=i.slice(0,-1);t.session.replace(r,i);return""}}return e})};var o=e("../editor").Editor;e("../config").defineOptions(o.prototype,"editor",{spellcheck:{set:function e(n){var i=this.textInput.getElement();i.spellcheck=!!n;if(!n)this.removeListener("nativecontextmenu",t.contextMenuHandler);else this.on("nativecontextmenu",t.contextMenuHandler)},value:true}})});(function(){ace.require(["ace/ext/spellcheck"],function(e){if(typeof module=="object"&&typeof exports=="object"&&module){module.exports=e}})})();
+ace.define("ace/ext/spellcheck",["require","exports","module","ace/lib/event","ace/editor","ace/config"], function(require, exports, module) {
+"use strict";
+var event = require("../lib/event");
+
+exports.contextMenuHandler = function(e){
+    var host = e.target;
+    var text = host.textInput.getElement();
+    if (!host.selection.isEmpty())
+        return;
+    var c = host.getCursorPosition();
+    var r = host.session.getWordRange(c.row, c.column);
+    var w = host.session.getTextRange(r);
+
+    host.session.tokenRe.lastIndex = 0;
+    if (!host.session.tokenRe.test(w))
+        return;
+    var PLACEHOLDER = "\x01\x01";
+    var value = w + " " + PLACEHOLDER;
+    text.value = value;
+    text.setSelectionRange(w.length, w.length + 1);
+    text.setSelectionRange(0, 0);
+    text.setSelectionRange(0, w.length);
+
+    var afterKeydown = false;
+    event.addListener(text, "keydown", function onKeydown() {
+        event.removeListener(text, "keydown", onKeydown);
+        afterKeydown = true;
+    });
+
+    host.textInput.setInputHandler(function(newVal) {
+        console.log(newVal , value, text.selectionStart, text.selectionEnd);
+        if (newVal == value)
+            return '';
+        if (newVal.lastIndexOf(value, 0) === 0)
+            return newVal.slice(value.length);
+        if (newVal.substr(text.selectionEnd) == value)
+            return newVal.slice(0, -value.length);
+        if (newVal.slice(-2) == PLACEHOLDER) {
+            var val = newVal.slice(0, -2);
+            if (val.slice(-1) == " ") {
+                if (afterKeydown)
+                    return val.substring(0, text.selectionEnd);
+                val = val.slice(0, -1);
+                host.session.replace(r, val);
+                return "";
+            }
+        }
+
+        return newVal;
+    });
+};
+var Editor = require("../editor").Editor;
+require("../config").defineOptions(Editor.prototype, "editor", {
+    spellcheck: {
+        set: function(val) {
+            var text = this.textInput.getElement();
+            text.spellcheck = !!val;
+            if (!val)
+                this.removeListener("nativecontextmenu", exports.contextMenuHandler);
+            else
+                this.on("nativecontextmenu", exports.contextMenuHandler);
+        },
+        value: true
+    }
+});
+
+});                (function() {
+                    ace.require(["ace/ext/spellcheck"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

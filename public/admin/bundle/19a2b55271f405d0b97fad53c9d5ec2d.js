@@ -1,1 +1,64 @@
-ace.define("ace/ext/linking",["require","exports","module","ace/editor","ace/config"],function(e,i,o){var n=e("../editor").Editor;e("../config").defineOptions(n.prototype,"editor",{enableLinking:{set:function e(i){if(i){this.on("click",r);this.on("mousemove",t)}else{this.off("click",r);this.off("mousemove",t)}},value:false}});i.previousLinkingHover=false;function t(e){var o=e.editor;var n=e.getAccelKey();if(n){var o=e.editor;var t=e.getDocumentPosition();var r=o.session;var s=r.getTokenAt(t.row,t.column);if(i.previousLinkingHover&&i.previousLinkingHover!=s){o._emit("linkHoverOut")}o._emit("linkHover",{position:t,token:s});i.previousLinkingHover=s}else if(i.previousLinkingHover){o._emit("linkHoverOut");i.previousLinkingHover=false}}function r(e){var i=e.getAccelKey();var o=e.getButton();if(o==0&&i){var n=e.editor;var t=e.getDocumentPosition();var r=n.session;var s=r.getTokenAt(t.row,t.column);n._emit("linkClick",{position:t,token:s})}}});(function(){ace.require(["ace/ext/linking"],function(e){if(typeof module=="object"&&typeof exports=="object"&&module){module.exports=e}})})();
+ace.define("ace/ext/linking",["require","exports","module","ace/editor","ace/config"], function(require, exports, module) {
+
+var Editor = require("../editor").Editor;
+
+require("../config").defineOptions(Editor.prototype, "editor", {
+    enableLinking: {
+        set: function(val) {
+            if (val) {
+                this.on("click", onClick);
+                this.on("mousemove", onMouseMove);
+            } else {
+                this.off("click", onClick);
+                this.off("mousemove", onMouseMove);
+            }
+        },
+        value: false
+    }
+});
+
+exports.previousLinkingHover = false;
+
+function onMouseMove(e) {
+    var editor = e.editor;
+    var ctrl = e.getAccelKey();
+
+    if (ctrl) {
+        var editor = e.editor;
+        var docPos = e.getDocumentPosition();
+        var session = editor.session;
+        var token = session.getTokenAt(docPos.row, docPos.column);
+
+        if (exports.previousLinkingHover && exports.previousLinkingHover != token) {
+            editor._emit("linkHoverOut");
+        }
+        editor._emit("linkHover", {position: docPos, token: token});
+        exports.previousLinkingHover = token;
+    } else if (exports.previousLinkingHover) {
+        editor._emit("linkHoverOut");
+        exports.previousLinkingHover = false;
+    }
+}
+
+function onClick(e) {
+    var ctrl = e.getAccelKey();
+    var button = e.getButton();
+
+    if (button == 0 && ctrl) {
+        var editor = e.editor;
+        var docPos = e.getDocumentPosition();
+        var session = editor.session;
+        var token = session.getTokenAt(docPos.row, docPos.column);
+
+        editor._emit("linkClick", {position: docPos, token: token});
+    }
+}
+
+});                (function() {
+                    ace.require(["ace/ext/linking"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

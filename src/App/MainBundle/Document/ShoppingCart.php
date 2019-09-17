@@ -13,6 +13,8 @@ use App\MainBundle\Document\OrderContent;
  */
 class ShoppingCart {
 
+    const SESSION_KEY = 'shoppingcart_sessid';
+
     /**
      * @MongoDB\Id(type="int", strategy="INCREMENT")
      * @Groups({"details", "list"})
@@ -70,6 +72,34 @@ class ShoppingCart {
     protected $expiresOn;
 
     /**
+     * @MongoDB\Field(type="string")
+     * @Groups({"details", "list"})
+     * @var string
+     */
+    protected $deliveryName;
+
+    /**
+     * @MongoDB\Field(type="float")
+     * @Groups({"details", "list"})
+     * @var float
+     */
+    protected $deliveryPrice;
+
+    /**
+     * @MongoDB\Field(type="string")
+     * @Groups({"details", "list"})
+     * @var string
+     */
+    protected $paymentName;
+
+    /**
+     * @MongoDB\Field(type="string")
+     * @Groups({"details", "list"})
+     * @var string
+     */
+    protected $paymentValue;
+
+    /**
      * @MongoDB\Field(type="collection")
      * @MongoDB\EmbedMany(targetDocument="OrderContent")
      * @Groups({"details"})
@@ -80,6 +110,25 @@ class ShoppingCart {
     public function __construct()
     {
         $this->content = new ArrayCollection();
+    }
+
+    /**
+     * @MongoDB\PrePersist()
+     */
+    public function prePersist()
+    {
+        $this->createdOn = new \DateTime();
+        $this->editedOn = new \DateTime();
+        $this->updatePriceTotal();
+    }
+
+    /**
+     * @MongoDB\PreUpdate()
+     */
+    public function preUpdate()
+    {
+        $this->editedOn = new \DateTime();
+        $this->updatePriceTotal();
     }
 
     /**
@@ -274,5 +323,110 @@ class ShoppingCart {
     public function getContent()
     {
         return $this->content;
+    }
+
+    /**
+     * @return $this
+     */
+    public function updatePriceTotal()
+    {
+        $priceTotal = 0;
+        /** @var OrderContent $content */
+        foreach ($this->content as $content) {
+            $priceTotal += $content->getPriceTotal();
+        }
+        if ($this->deliveryPrice) {
+            $priceTotal += $this->deliveryPrice;
+        }
+        $this->price = $priceTotal;
+        return $this;
+    }
+
+    /**
+     * Set deliveryName
+     *
+     * @param string $deliveryName
+     * @return $this
+     */
+    public function setDeliveryName($deliveryName)
+    {
+        $this->deliveryName = $deliveryName;
+        return $this;
+    }
+
+    /**
+     * Get deliveryName
+     *
+     * @return string $deliveryName
+     */
+    public function getDeliveryName()
+    {
+        return $this->deliveryName;
+    }
+
+    /**
+     * Set deliveryPrice
+     *
+     * @param float $deliveryPrice
+     * @return $this
+     */
+    public function setDeliveryPrice($deliveryPrice)
+    {
+        $this->deliveryPrice = $deliveryPrice;
+        return $this;
+    }
+
+    /**
+     * Get deliveryPrice
+     *
+     * @return float $deliveryPrice
+     */
+    public function getDeliveryPrice()
+    {
+        return $this->deliveryPrice;
+    }
+
+    /**
+     * Set paymentName
+     *
+     * @param string $paymentName
+     * @return $this
+     */
+    public function setPaymentName($paymentName)
+    {
+        $this->paymentName = $paymentName;
+        return $this;
+    }
+
+    /**
+     * Get paymentName
+     *
+     * @return string $paymentName
+     */
+    public function getPaymentName()
+    {
+        return $this->paymentName;
+    }
+
+    /**
+     * Set paymentValue
+     *
+     * @param string $paymentValue
+     * @return $this
+     */
+    public function setPaymentValue($paymentValue)
+    {
+        $this->paymentValue = $paymentValue;
+        return $this;
+    }
+
+    /**
+     * Get paymentValue
+     *
+     * @return string $paymentValue
+     */
+    public function getPaymentValue()
+    {
+        return $this->paymentValue;
     }
 }

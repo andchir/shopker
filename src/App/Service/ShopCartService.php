@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\MainBundle\Document\Order;
+use App\MainBundle\Document\ShoppingCart;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -83,6 +84,22 @@ class ShopCartService
             }
         }
         return $priceTotal;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSessionId()
+    {
+        if (!empty($_COOKIE[ShoppingCart::SESSION_KEY])) {
+            return $_COOKIE[ShoppingCart::SESSION_KEY];
+        }
+        $sessionId = UtilsService::generatePassword(26);
+        $lifeTime = $this->container->hasParameter('app.shopping_cart_lifetime')
+            ? (int) $this->container->getParameter('app.shopping_cart_lifetime')
+            : 172800;// 48 hours
+        setcookie(ShoppingCart::SESSION_KEY, $sessionId, time() + $lifeTime, '/');
+        return $sessionId;
     }
 
     /**

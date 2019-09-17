@@ -44,4 +44,9 @@ final class Events
      * @var string
      */
     const USER_EMAIL_CONFIRMED = 'user.email_confirmed';
+    /**
+     * @Event("Symfony\Component\EventDispatcher\GenericEvent")
+     * @var string
+     */
+    const SHOPPING_CART_ADD_PRODUCT = 'shopping_cart.add_product';
 }

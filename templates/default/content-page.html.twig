@@ -17,6 +17,7 @@
             <form id="shk-form" action="{{ path('shop_cart_add') }}" method="post">
                 <input type="hidden" name="item_id" value="{{ currentPage.id }}">
                 <input type="hidden" name="category_id" value="{{ currentPage.parentId }}">
+                <input type="hidden" name="type" value="shop">
                 <div>
                     <div class="column-left">
 
@@ -73,9 +74,10 @@
             // Shopping cart
             shoppingCart = new ShoppingCart({
                 baseUrl: '',
-                connectorUrl: '{{ path('shop_cart_ajax') }}',
+                connectorUrl: '{{ path('shop_cart_action') }}',
                 selector: '#shoppingCartSmallContainer',
-                productFormSelector: '.shk-item form'
+                productFormSelector: '.shk-item form',
+                snippetPropertySetName: 'shop_cart'
             });
 
             // Display image for parameter

@@ -2,14 +2,19 @@
 
 namespace App\Controller;
 
+use App\Events;
 use App\MainBundle\Document\Category;
 use App\MainBundle\Document\ContentType;
 use App\MainBundle\Document\FileDocument;
+use App\MainBundle\Document\ShoppingCart;
 use App\MainBundle\Document\User;
 use App\Repository\CategoryRepository;
 use App\Service\SettingsService;
 use App\Service\ShopCartService;
+use App\Service\UtilsService;
 use Doctrine\ODM\MongoDB\Cursor;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -157,16 +162,67 @@ class CartController extends ProductController
     }
 
     /**
-     * @Route("/ajax", name="shop_cart_ajax")
+     * @Route("/action", name="shop_cart_action", methods={"GET", "POST"})
      * @param Request $request
      * @return Response
      */
-    public function ajaxAction(Request $request)
+    public function actionResponseAction(Request $request)
     {
         $output = [];
+        $action = $request->get('action');
+        $type = $request->get('type', 'shop');
 
+        switch ($action) {
+            case 'add_to_cart':
+
+                $output = $this->addToCartAction($request);
+
+                break;
+            case 'print':
+
+
+
+                break;
+            case 'remove':
+
+
+
+                break;
+            case 'update':
+
+
+
+                break;
+            case 'clean':
+
+
+
+                break;
+        }
 
         return $this->json($output);
+    }
+
+    /**
+     * @param Request $request
+     * @return array
+     */
+    public function addToCartAction(Request $request)
+    {
+        $output = [];
+        /** @var EventDispatcher $evenDispatcher */
+        $evenDispatcher = $this->get('event_dispatcher');
+        /** @var GenericEvent $event */
+        $event = $evenDispatcher->dispatch(Events::SHOPPING_CART_ADD_PRODUCT, new GenericEvent($request));
+
+        if (!$event->hasArgument('title')) {
+            return $output;
+        }
+
+        $type = $request->get('type', 'shop');
+        $shoppingCart = $this->getShoppingCart($type, $this->getUserId(), $this->getSessionId(), null, true);
+
+        return $output;
     }
 
     /**
@@ -371,6 +427,65 @@ class CartController extends ProductController
     }
 
     /**
+     * @param string $type
+     * @param null|int $userId
+     * @param null|string $sessionId
+     * @param null|int $id
+     * @param bool $create
+     * @return ShoppingCart|null
+     */
+    public function getShoppingCart($type, $userId = null, $sessionId = null, $id = null, $create = false)
+    {
+        /** @var SettingsService $settingsService */
+        $settingsService = $this->get('app.settings');
+        $currency = $settingsService->getCurrency();
+
+        if ($id) {
+            $shoppingCart = $this->getRepository()->find((int) $id);
+        } else if ($userId || $sessionId || $id) {
+            $shoppingCart = null;// TODO create query
+        } else {
+            return null;
+        }
+        if (!$shoppingCart && $create) {
+            /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+            $dm = $this->get('doctrine_mongodb')->getManager();
+
+            $shoppingCart = new ShoppingCart();
+            $shoppingCart
+                ->setSessionId($sessionId)
+                ->setOwnerId($userId)
+                ->setCurrency($currency)
+                ->setType($type);
+
+            $dm->persist($shoppingCart);
+            $dm->flush();
+        }
+        return $shoppingCart;
+    }
+
+    /**
+     * @return int
+     */
+    public function getUserId()
+    {
+        if ($this->isGranted('ROLE_USER')) {
+            return $this->getUser()->getId();
+        }
+        return 0;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSessionId()
+    {
+        /** @var ShopCartService $shopCartService */
+        $shopCartService = $this->get('app.shop_cart');
+        return $shopCartService->getSessionId();
+    }
+
+    /**
      * @Route("/clear", name="shop_cart_clear")
      * @param Request $request
      * @return Response
@@ -412,6 +527,16 @@ class CartController extends ProductController
             ));
         }
         $response->sendHeaders();
+    }
+
+    /**
+     * @return \App\Repository\ShoppingCartRepository
+     */
+    public function getRepository()
+    {
+        return $this->get('doctrine_mongodb')
+            ->getManager()
+            ->getRepository(ShoppingCart::class);
     }
 
     /**

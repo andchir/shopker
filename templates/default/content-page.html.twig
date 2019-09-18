@@ -14,7 +14,7 @@
 
             {{ renderOutputTypeChunk(currentPage, fields, 'header', 'page_') }}
 
-            <form id="shk-form" action="{{ path('shop_cart_add') }}" method="post">
+            <form id="shk-form" action="{{ path('shop_cart_action') }}" method="post">
                 <input type="hidden" name="item_id" value="{{ currentPage.id }}">
                 <input type="hidden" name="category_id" value="{{ currentPage.parentId }}">
                 <input type="hidden" name="type" value="shop">

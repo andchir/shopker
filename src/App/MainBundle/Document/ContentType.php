@@ -340,9 +340,10 @@ class ContentType
 
     /**
      * @param string $chunkName
+     * @param string $default
      * @return false|int|string
      */
-    public function getFieldByChunkName($chunkName)
+    public function getFieldByChunkName($chunkName, $default = '')
     {
         $contentTypeFields = $this->getFields();
         $index = array_search(
@@ -351,7 +352,7 @@ class ContentType
                 return $outputProperties['chunkName'] ?? '';
             }, array_column($contentTypeFields, 'outputProperties'))
         );
-        return $index !== false ? $contentTypeFields[$index]['name'] : '';
+        return $index !== false ? $contentTypeFields[$index]['name'] : $default;
     }
 
     /**

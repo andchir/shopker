@@ -107,6 +107,18 @@ class ShoppingCart {
      */
     protected $content;
 
+    /**
+     * @Groups({"details", "list"})
+     * @var float
+     */
+    protected $price;
+
+    /**
+     * @Groups({"details", "list"})
+     * @var int
+     */
+    protected $count;
+
     public function __construct()
     {
         $this->content = new ArrayCollection();
@@ -119,7 +131,7 @@ class ShoppingCart {
     {
         $this->createdOn = new \DateTime();
         $this->editedOn = new \DateTime();
-        $this->updatePriceTotal();
+        $this->updateTotal();
     }
 
     /**
@@ -128,7 +140,7 @@ class ShoppingCart {
     public function preUpdate()
     {
         $this->editedOn = new \DateTime();
-        $this->updatePriceTotal();
+        $this->updateTotal();
     }
 
     /**
@@ -326,19 +338,66 @@ class ShoppingCart {
     }
 
     /**
+     * Set price
+     *
+     * @param $price
+     * @param int $currencyRate
      * @return $this
      */
-    public function updatePriceTotal()
+    public function setPrice($price, $currencyRate = 1)
     {
+        $this->price = round($price / $currencyRate, 2);
+        return $this;
+    }
+
+    /**
+     * Get price
+     *
+     * @return float
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
+     * Set count
+     * @param float $count
+     * @return $this
+     */
+    public function setCount($count)
+    {
+        $this->count = $count;
+        return $this;
+    }
+
+    /**
+     * Get count
+     * @return float
+     */
+    public function getCount()
+    {
+        return $this->count;
+    }
+
+    /**
+     * @return $this
+     */
+    public function updateTotal()
+    {
+        $countTotal = 0;
         $priceTotal = 0;
         /** @var OrderContent $content */
         foreach ($this->content as $content) {
             $priceTotal += $content->getPriceTotal();
+            $countTotal += $content->getCount();
         }
         if ($this->deliveryPrice) {
             $priceTotal += $this->deliveryPrice;
         }
-        $this->price = $priceTotal;
+        $this
+            ->setPrice($priceTotal)
+            ->setCount($countTotal);
         return $this;
     }
 
@@ -428,5 +487,35 @@ class ShoppingCart {
     public function getPaymentValue()
     {
         return $this->paymentValue;
+    }
+
+    /**
+     * @param string $key
+     * @return array
+     */
+    public function getContentValues($key)
+    {
+        $shoppingCartContent = $this->getContent();
+        $outputArr = array_map(function($content) use ($key) {
+            return $content->getByKey($key, '');
+        }, $shoppingCartContent->toArray());
+        return array_unique(array_merge($outputArr));
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        $this->updateTotal();
+        $shoppingCartContent = $this->getContent();
+        return [
+            'price_total' => $this->getPrice(),
+            'items_total' => $this->getCount(),
+            'items_unique_total' => count($shoppingCartContent),
+            'delivery_price' => $this->getDeliveryPrice(),
+            'delivery_name' => $this->getDeliveryName(),
+            'ids' => $this->getContentValues('id')
+        ];
     }
 }

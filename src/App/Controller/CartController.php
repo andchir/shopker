@@ -6,6 +6,7 @@ use App\Events;
 use App\MainBundle\Document\Category;
 use App\MainBundle\Document\ContentType;
 use App\MainBundle\Document\FileDocument;
+use App\MainBundle\Document\OrderContent;
 use App\MainBundle\Document\ShoppingCart;
 use App\MainBundle\Document\User;
 use App\Repository\CategoryRepository;
@@ -31,137 +32,6 @@ class CartController extends ProductController
 {
 
     /**
-     * @Route("/add", name="shop_cart_add")
-     * @param Request $request
-     * @return Response
-     */
-    public function addAction(Request $request)
-    {
-        $mongoCache = $this->container->get('mongodb_cache');
-        $categoriesRepository = $this->getCategoriesRepository();
-        $referer = $request->headers->get('referer');
-
-        $itemId = intval($request->get('item_id'));
-        $count = max(1, intval($request->get('count')));
-        $categoryId = intval($request->get('category_id'));
-        $back_url = $request->get('back_url', $referer);
-
-        /** @var Category $category */
-        $category = $categoriesRepository->findOneBy([
-            'id' => $categoryId
-        ]);
-        if (!$category) {
-            return new RedirectResponse($back_url);
-        }
-
-        // Get currency
-        /** @var SettingsService $settingsService */
-        $settingsService = $this->get('app.settings');
-        $currency = $settingsService->getCurrency();
-
-        $contentType = $category->getContentType();
-        $contentTypeName = $contentType->getName();
-        $collectionName = $contentType->getCollection();
-        $collection = $this->getCollection($collectionName);
-        $systemNameField = $contentType->getSystemNameField();
-
-        $productDocument = $collection->findOne([
-            '_id' => $itemId,
-            'isActive' => true
-        ]);
-        if (!$productDocument) {
-            return new RedirectResponse($referer);
-        }
-
-        $contentTypeFields = $contentType->getFields();
-        $priceFieldName = $contentType->getPriceFieldName();
-        $priceValue = $priceFieldName && isset($productDocument[$priceFieldName])
-            ? $productDocument[$priceFieldName]
-            : 0;
-
-        $shopCartData = $mongoCache->fetch(ShopCartService::getCartId());
-        if (empty($shopCartData)) {
-            $shopCartData = [
-                'currency' => $currency,
-                'data' => []
-            ];
-        }
-
-        $parentUri = $category->getUri();
-        $systemName = '';
-        if ($systemNameField && isset($productDocument[$systemNameField])) {
-            $systemName = $productDocument[$systemNameField];
-        }
-
-        // Product parameters
-        $parameters = $this->getProductParameters($request, $productDocument, $contentTypeFields);
-
-        // Product files
-        $files = $this->getProductFiles($request, $productDocument, $contentTypeFields);
-
-        // Files required?
-        if (!count($files)) {
-            $fileRequiredFields = array_filter($contentTypeFields, function($field) {
-                return $field['outputType'] == 'file'
-                    && !empty($field['outputProperties']['required']);
-            });
-            if (count($fileRequiredFields) > 0) {
-                $c = 0;
-                foreach ($fileRequiredFields as $index => $field) {
-                    if (!empty($productDocument[$field['name']])) {
-                        $c++;
-                    }
-                }
-                if ($c > 0) {
-                    $request->getSession()
-                        ->getFlashBag()
-                        ->add('errors', 'File is required.');
-                    return new RedirectResponse($referer);
-                }
-            }
-        }
-
-        if (!isset($shopCartData['data'][$contentTypeName])) {
-            $shopCartData['data'][$contentTypeName] = [];
-        }
-
-        $productIndex = isset($shopCartData['data'][$contentTypeName])
-            && in_array($itemId, array_column($shopCartData['data'][$contentTypeName], 'id'))
-                ? array_search($itemId, array_column($shopCartData['data'][$contentTypeName], 'id'))
-                : -1;
-
-        $currentProduct = null;
-        if ($productIndex > -1) {
-            $currentProduct = &$shopCartData['data'][$contentTypeName][$productIndex];
-        }
-
-        if (!empty($currentProduct)
-            && $currentProduct['parameters'] == $parameters
-            && $currentProduct['files'] == $files) {
-                $currentProduct['count'] += $count;
-        } else {
-            array_unshift($shopCartData['data'][$contentTypeName], [
-                'id' => $productDocument['_id'],
-                'title' => $productDocument['title'],
-                'parentUri' => $parentUri,
-                'systemName' => $systemName,
-                'image' => '',
-                'count' => $count,
-                'price' => $priceValue,
-                'currency' => $currency,
-                'parameters' => $parameters,
-                'files' => $files
-            ]);
-        }
-
-        /** @var ShopCartService $shopCartService */
-        $shopCartService = $this->get('app.shop_cart');
-        $shopCartService->saveContent($shopCartData);
-
-        return new RedirectResponse($back_url);
-    }
-
-    /**
      * @Route("/action", name="shop_cart_action", methods={"GET", "POST"})
      * @param Request $request
      * @return Response
@@ -169,8 +39,13 @@ class CartController extends ProductController
     public function actionResponseAction(Request $request)
     {
         $output = [];
+        $referer = $request->headers->get('referer');
+        $back_url = $request->get('back_url', $referer);
         $action = $request->get('action');
         $type = $request->get('type', 'shop');
+        if ($request->get('item_id')) {
+            $action = 'add_to_cart';
+        }
 
         switch ($action) {
             case 'add_to_cart':
@@ -200,7 +75,25 @@ class CartController extends ProductController
                 break;
         }
 
-        return $this->json($output);
+        if ($request->isXmlHttpRequest()) {
+            if ($output['success']) {
+                /** @var ShopCartService $shopCartService */
+                $shopCartService = $this->get('app.shop_cart');
+                $shoppingCart = $shopCartService->getShoppingCart($type, $this->getUserId(), $this->getSessionId(), null, true);
+
+                $output = array_merge($output, $shoppingCart->toArray(), [
+                    'html' => ''
+                ]);
+            }
+            return $this->json($output);
+        } else {
+            if (!$output['success'] && isset($output['message'])) {
+                $request->getSession()
+                    ->getFlashBag()
+                    ->add('errors', $output['message']);
+            }
+            return new RedirectResponse($back_url);
+        }
     }
 
     /**
@@ -209,20 +102,141 @@ class CartController extends ProductController
      */
     public function addToCartAction(Request $request)
     {
-        $output = [];
-        /** @var EventDispatcher $evenDispatcher */
-        $evenDispatcher = $this->get('event_dispatcher');
-        /** @var GenericEvent $event */
-        $event = $evenDispatcher->dispatch(Events::SHOPPING_CART_ADD_PRODUCT, new GenericEvent($request));
-
-        if (!$event->hasArgument('title')) {
-            return $output;
-        }
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        /** @var ShopCartService $shopCartService */
+        $shopCartService = $this->get('app.shop_cart');
+        /** @var SettingsService $settingsService */
+        $settingsService = $this->get('app.settings');
+        $currency = $settingsService->getCurrency();
 
         $type = $request->get('type', 'shop');
-        $shoppingCart = $this->getShoppingCart($type, $this->getUserId(), $this->getSessionId(), null, true);
+        $count = max(1, (int) $request->get('count'));
+        $shoppingCart = $shopCartService->getShoppingCart($type, $this->getUserId(), $this->getSessionId(), null, true);
 
-        return $output;
+        /** @var Category $category */
+        list($category, $productDocument) = $this->getCategoryAndProduct($request);
+        if (!$category || !$productDocument) {
+            return ['success' => false, 'message' => 'Item not found.'];
+        }
+
+        /** @var ContentType $contentType */
+        $contentType = $category->getContentType();
+        $contentTypeFields = $contentType->getFields();
+        $priceFieldName = $contentType->getPriceFieldName();
+        $titleFieldName = $contentType->getFieldByChunkName('header', 'title');
+        $systemNameField = $contentType->getSystemNameField();
+
+        // Product parameters
+        $parameters = $this->getProductParameters($request, $productDocument, $contentTypeFields);
+
+        // Product files
+        $files = $this->getProductFiles($request, $productDocument, $contentTypeFields);
+
+        // Files required?
+        if (!count($files)) {
+            $fileRequiredFields = array_filter($contentTypeFields, function($field) {
+                return $field['outputType'] == 'file'
+                    && !empty($field['outputProperties']['required']);
+            });
+            if (count($fileRequiredFields) > 0) {
+                $c = 0;
+                foreach ($fileRequiredFields as $index => $field) {
+                    if (!empty($productDocument[$field['name']])) {
+                        $c++;
+                    }
+                }
+                if ($c > 0) {
+                    return ['success' => false, 'message' => 'File is required.'];
+                }
+            }
+        }
+
+        $cartContent = $shoppingCart->getContent();
+        $contentIndex = $this->getContentIndex($cartContent, $productDocument, $priceFieldName);
+        /** @var OrderContent $currentProduct */
+        $currentProduct = $contentIndex > -1 ? $cartContent->get($contentIndex) : null;
+
+        if (!empty($currentProduct)
+            && $currentProduct->getParameters() == $parameters
+            && $currentProduct->getFiles() == $files) {
+                $currentProduct->incrementCount($count);
+        } else {
+
+            $content = new OrderContent();
+            $content
+                ->setId($productDocument['_id'])
+                ->setTitle($productDocument[$titleFieldName] ?? '')
+                ->setPrice($productDocument[$priceFieldName] ?? '')
+                ->setCount($count)
+                ->setParameters($parameters)
+                ->setFiles($files)
+                ->setUri($category->getUri() . '/' . ($productDocument[$systemNameField] ?? ''))
+                ->setContentTypeName($category->getContentTypeName())
+                ->setCurrency($currency);
+
+            $shoppingCart->addContent($content);
+        }
+
+        $dm->flush();
+
+        return ['success' => true];
+    }
+
+    /**
+     * @param Request $request
+     * @return array
+     */
+    public function getCategoryAndProduct(Request $request)
+    {
+        $itemId = (int) $request->get('item_id');
+        $categoryId = (int) $request->get('category_id');
+        $categoriesRepository = $this->getCategoriesRepository();
+
+        /** @var Category $category */
+        $category = $categoriesRepository->findOneBy([
+            'id' => $categoryId
+        ]);
+        if (!$category) {
+            return [null, null];
+        }
+
+        $contentType = $category->getContentType();
+        $collectionName = $contentType->getCollection();
+        $collection = $this->getCollection($collectionName);
+
+        $productDocument = $collection->findOne([
+            '_id' => $itemId,
+            'isActive' => true
+        ]);
+        if (!$productDocument) {
+            return [null, null];
+        }
+
+        return [$category, $productDocument];
+    }
+
+    /**
+     * @param $shoppingCartContent
+     * @param array $productDocument
+     * @param string $priceFieldName
+     * @return int
+     */
+    public function getContentIndex($shoppingCartContent, $productDocument, $priceFieldName = 'price')
+    {
+        if (empty($shoppingCartContent)) {
+            return -1;
+        }
+        $index = -1;
+        /** @var OrderContent $content */
+        foreach ($shoppingCartContent as $ind => $content) {
+            if ($content->getId() == $productDocument['_id']
+                && $content->getPrice() == $productDocument[$priceFieldName]) {
+                $index = $ind;
+                break;
+            }
+        }
+        return $index;
     }
 
     /**
@@ -424,44 +438,6 @@ class CartController extends ProductController
         }
 
         return new RedirectResponse($referer);
-    }
-
-    /**
-     * @param string $type
-     * @param null|int $userId
-     * @param null|string $sessionId
-     * @param null|int $id
-     * @param bool $create
-     * @return ShoppingCart|null
-     */
-    public function getShoppingCart($type, $userId = null, $sessionId = null, $id = null, $create = false)
-    {
-        /** @var SettingsService $settingsService */
-        $settingsService = $this->get('app.settings');
-        $currency = $settingsService->getCurrency();
-
-        if ($id) {
-            $shoppingCart = $this->getRepository()->find((int) $id);
-        } else if ($userId || $sessionId || $id) {
-            $shoppingCart = null;// TODO create query
-        } else {
-            return null;
-        }
-        if (!$shoppingCart && $create) {
-            /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-            $dm = $this->get('doctrine_mongodb')->getManager();
-
-            $shoppingCart = new ShoppingCart();
-            $shoppingCart
-                ->setSessionId($sessionId)
-                ->setOwnerId($userId)
-                ->setCurrency($currency)
-                ->setType($type);
-
-            $dm->persist($shoppingCart);
-            $dm->flush();
-        }
-        return $shoppingCart;
     }
 
     /**

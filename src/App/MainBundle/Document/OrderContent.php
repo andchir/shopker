@@ -81,6 +81,20 @@ class OrderContent
     protected $files = [];
 
     /**
+     * @MongoDB\Field(type="hash")
+     * @Groups({"details", "list"})
+     * @var array
+     */
+    protected $options;
+
+    /**
+     * @MongoDB\Field(type="string")
+     * @Groups({"details", "list"})
+     * @var string
+     */
+    protected $currency;
+
+    /**
      * Get uniqId
      * @return int
      */
@@ -222,6 +236,16 @@ class OrderContent
     }
 
     /**
+     * @param int $value
+     * @return $this
+     */
+    public function incrementCount($value)
+    {
+        $this->count += (int) $value;
+        return $this;
+    }
+
+    /**
      * Get price
      * @return float
      */
@@ -284,6 +308,75 @@ class OrderContent
     public function addFile(FileDocument $fileDocument)
     {
         $this->files[] = $fileDocument->getRecordData();
+        return $this;
+    }
+
+    /**
+     * Set currency
+     *
+     * @param string $currency
+     * @return $this
+     */
+    public function setCurrency($currency)
+    {
+        $this->currency = $currency;
+        return $this;
+    }
+
+    /**
+     * Get currency
+     *
+     * @return string
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
+    }
+
+    /**
+     * Set options
+     *
+     * @param array $options
+     * @return $this
+     */
+    public function setOptions($options)
+    {
+        $this->options = $options;
+        return $this;
+    }
+
+    /**
+     * Get options
+     *
+     * @return array
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
+     * @param $key
+     * @param string $default
+     * @return mixed|string
+     */
+    public function getOptionValue($key, $default = '')
+    {
+        return isset($this->options[$key])
+            ? $this->options[$key]
+            : $default;
+    }
+
+    /**
+     * @param $key
+     * @param $value
+     * @return $this
+     */
+    public function setOptionValue($key, $value)
+    {
+        $options = $this->getOptions();
+        $options[$key] = $value;
+        $this->setOptions($options);
         return $this;
     }
 
@@ -380,6 +473,19 @@ class OrderContent
             array_push($outputArr, $str);
         }
         return implode(', ', $outputArr);
+    }
+
+    /**
+     * @param $key
+     * @param string $default
+     * @return mixed|string
+     */
+    public function getByKey($key, $default = '')
+    {
+        if (method_exists($this, 'get' . $key)) {
+            return call_user_func([$this, 'get' . $key]);
+        }
+        return $default;
     }
 
     /**

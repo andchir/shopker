@@ -504,6 +504,7 @@ class Order
     }
 
     /**
+     * @param bool $full
      * @return array
      */
     public function toArray($full = false)

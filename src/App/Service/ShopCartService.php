@@ -69,21 +69,48 @@ class ShopCartService
     }
 
     /**
-     * @param array|null $shopCartData
-     * @return float
+     * @param string $type
+     * @param null|int $userId
+     * @param null|string $sessionId
+     * @param null|int $id
+     * @param bool $create
+     * @return ShoppingCart|null
      */
-    public function getPriceTotal($shopCartData = null)
+    public function getShoppingCart($type, $userId = null, $sessionId = null, $id = null, $create = false)
     {
-        if ($shopCartData === null) {
-            $shopCartData = $this->getContent();
+        /** @var SettingsService $settingsService */
+        $settingsService = $this->container->get('app.settings');
+        $currency = $settingsService->getCurrency();
+        $lifeTime = $this->container->hasParameter('app.shopping_cart_lifetime')
+            ? (int) $this->container->getParameter('app.shopping_cart_lifetime')
+            : 172800;// 48 hours
+
+        if ($id) {
+            $shoppingCart = $this->getRepository()->find((int) $id);
+        } else if ($userId || $sessionId || $id) {
+            $shoppingCart = $this->getRepository()->findByUserOrSession($type, $userId, $sessionId);
+        } else {
+            return null;
         }
-        $priceTotal = 0;
-        foreach ($shopCartData['data'] as $cName => $products) {
-            foreach ($products as $product) {
-                $priceTotal += ($product['price'] * $product['count']);
+        if (!$shoppingCart && $create) {
+            /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+            $dm = $this->container->get('doctrine_mongodb')->getManager();
+
+            $shoppingCart = new ShoppingCart();
+            $shoppingCart
+                ->setSessionId($sessionId)
+                ->setOwnerId($userId)
+                ->setCurrency($currency)
+                ->setType($type);
+
+            if ($lifeTime) {
+                $shoppingCart->setExpiresOn((new \DateTime())->setTimestamp(time() + $lifeTime));
             }
+
+            $dm->persist($shoppingCart);
+            $dm->flush();
         }
-        return $priceTotal;
+        return $shoppingCart;
     }
 
     /**
@@ -167,5 +194,15 @@ class ShopCartService
                 break;
         }
         return $receipt;
+    }
+
+    /**
+     * @return \App\Repository\ShoppingCartRepository
+     */
+    public function getRepository()
+    {
+        return $this->container->get('doctrine_mongodb')
+            ->getManager()
+            ->getRepository(ShoppingCart::class);
     }
 }

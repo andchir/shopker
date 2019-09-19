@@ -505,6 +505,25 @@ class ShoppingCart {
     /**
      * @return array
      */
+    public function getContentArray()
+    {
+        $output = [];
+        $shoppingCartContent = $this->getContent();
+
+        /** @var OrderContent $content */
+        foreach ($shoppingCartContent as $content) {
+            $contentTypeName = $content->getContentTypeName();
+            if (!isset($output[$contentTypeName])) {
+                $output[$contentTypeName] = [];
+            }
+            $output[$contentTypeName][] = $content->toArray();
+        }
+        return $output;
+    }
+
+    /**
+     * @return array
+     */
     public function toArray()
     {
         $this->updateTotal();

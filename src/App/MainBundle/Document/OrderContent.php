@@ -503,7 +503,10 @@ class OrderContent
             'image' => $this->getImage(),
             'uri' => $this->getUri(),
             'contentTypeName' => $this->getContentTypeName(),
-            'parameters' => $this->getParameters()
+            'parameters' => $this->getParameters(),
+            'files' => $this->getFiles(),
+            'parametersString' => '',// TODO: add method to create parameters string
+            'filesString' => $this->getFilesString()
         ];
     }
 

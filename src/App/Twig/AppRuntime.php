@@ -31,60 +31,45 @@ class AppRuntime
     /**
      * @param \Twig_Environment $environment
      * @param string $chunkName
+     * @param string $type
      * @param string $emptyChunkName
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
-    public function shopCartFunction(\Twig_Environment $environment, $chunkName = 'shop_cart', $emptyChunkName = '')
+    public function shopCartFunction(\Twig_Environment $environment, $chunkName = 'shop_cart', $type = 'shop', $emptyChunkName = '')
     {
         if (empty($this->container->getParameter('mongodb_database'))) {
-                return '';
+            return '';
         }
-        $data = [
-            'currencySelected' => ShopCartService::getCurrencyCookie(),
-            'countTotal' => 0,
-            'priceTotal' => 0,
-            'items' => []
-        ];
 
-        $mongoCache = $this->container->get('mongodb_cache');
+        /** @var ShopCartService $shopCartService */
+        $shopCartService = $this->container->get('app.shop_cart');
+        $user = $this->getUser();
+        $shoppingCart = $shopCartService->getShoppingCart($type, $user ? $user->getId() : 0, $shopCartService->getSessionId());
+        $shoppingCartContent = $shoppingCart ? $shoppingCart->getContent() : null;
 
-        $shopCartData = $mongoCache->fetch(ShopCartService::getCartId());
-        if (empty($shopCartData)) {
+        if (empty($shoppingCartContent)) {
             if ($emptyChunkName) {
                 $templateName = $this->getTemplateName($environment, 'catalog/', $emptyChunkName);
-                return $environment->render($templateName, $data);
+                return $environment->render($templateName, [
+                    'countTotal' => 0,
+                    'priceTotal' => 0,
+                    'items' => []
+                ]);
             } else {
                 return '';
             }
         }
 
-        $data['currency'] = $shopCartData['currency'];
-
         $templateName = $this->getTemplateName($environment, 'catalog/', $chunkName);
+        $shoppingCart->updateTotal();
 
-        foreach ($shopCartData['data'] as $cName => $products) {
-            if (!isset($data['items'][$cName])) {
-                $data['items'][$cName] = [];
-            }
-            foreach ($products as $product) {
-                $product['priceTotal'] = $this->getCartContentPriceTotal($product);
-                $product['parametersString'] = $this->getCartContentParametersString($product);
-                $product['filesString'] = $this->getCartContentfilesString($product);
-                $data['items'][$cName][] = $product;
-                $data['countTotal'] += $product['count'];
-                $data['priceTotal'] += $product['price'] * $product['count'];
-                if (!empty($product['parameters'])) {
-                    foreach ($product['parameters'] as $parameters) {
-                        if (!empty($parameters['price'])) {
-                            $data['priceTotal'] += $parameters['price'] * $product['count'];
-                        }
-                    }
-                }
-            }
-        }
+        $data = [
+            'currencySelected' => ShopCartService::getCurrencyCookie(),
+            'currency' => $shoppingCart->getCurrency(),
+            'countTotal' => $shoppingCart->getCount(),
+            'priceTotal' => $shoppingCart->getPrice(),
+            'items' => $shoppingCart->getContentArray()
+        ];
 
         return $environment->render($templateName, $data);
     }
@@ -149,25 +134,6 @@ class AppRuntime
         $cache->set($cacheKey, $output, 60*60*24);
 
         return $output;
-    }
-
-
-
-    /**
-     * @param $productData
-     * @return float
-     */
-    public function getCartContentPriceTotal($productData)
-    {
-        $priceTotal = $productData['price'] * $productData['count'];
-        if (!empty($productData['parameters'])) {
-            foreach ($productData['parameters'] as $parameters) {
-                if (!empty($parameters['price'])) {
-                    $priceTotal += $parameters['price'] * $productData['count'];
-                }
-            }
-        }
-        return $priceTotal;
     }
 
     /**
@@ -476,6 +442,24 @@ class AppRuntime
             $currentUri = substr($currentUri, 0, strpos($currentUri, '?'));
         }
         return $currentUri;
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getUser()
+    {
+        if (!$this->container->has('security.token_storage')) {
+            throw new \LogicException('The SecurityBundle is not registered in your application. Try running "composer require symfony/security-bundle".');
+        }
+        if (null === $token = $this->container->get('security.token_storage')->getToken()) {
+            return null;
+        }
+        if (!\is_object($user = $token->getUser())) {
+            // e.g. anonymous authentication
+            return null;
+        }
+        return $user;
     }
 }
 

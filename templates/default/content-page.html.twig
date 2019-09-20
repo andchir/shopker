@@ -72,13 +72,13 @@
             shk.productParametersInit('#shk-form', '.shk-price');
 
             // Shopping cart
-            /*shoppingCart = new ShoppingCart({
-                baseUrl: '',
+            shoppingCart = new ShoppingCart({
+                baseUrl: '{{ app.request.baseUrl }}',
                 connectorUrl: '{{ path('shop_cart_action') }}',
                 selector: '#shoppingCartSmallContainer',
                 productFormSelector: '.shk-item form',
                 snippetPropertySetName: 'shop_cart'
-            });*/
+            });
 
             // Display image for parameter
             var $carousel = jQuery('#carouselImageGallery');

@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Cache\Simple\FilesystemCache;
 use Symfony\Component\Translation\TranslatorInterface;
+use Twig\Environment as TwigEnvironment;
 
 class AppRuntime
 {
@@ -29,13 +30,13 @@ class AppRuntime
     }
 
     /**
-     * @param \Twig_Environment $environment
+     * @param TwigEnvironment $environment
      * @param string $chunkName
      * @param string $type
      * @param string $emptyChunkName
      * @return string
      */
-    public function shopCartFunction(\Twig_Environment $environment, $chunkName = 'shop_cart', $type = 'shop', $emptyChunkName = '')
+    public function shopCartFunction(TwigEnvironment $environment, $chunkName = 'shop_cart', $type = 'shop', $emptyChunkName = '')
     {
         if (empty($this->container->getParameter('mongodb_database'))) {
             return '';
@@ -43,8 +44,7 @@ class AppRuntime
 
         /** @var ShopCartService $shopCartService */
         $shopCartService = $this->container->get('app.shop_cart');
-        $user = $this->getUser();
-        $shoppingCart = $shopCartService->getShoppingCart($type, $user ? $user->getId() : 0, $shopCartService->getSessionId());
+        $shoppingCart = $shopCartService->getShoppingCartByType($type);
         $shoppingCartContent = $shoppingCart ? $shoppingCart->getContent() : null;
 
         if (empty($shoppingCartContent)) {
@@ -60,6 +60,9 @@ class AppRuntime
             }
         }
 
+        /** @var TwigEnvironment */
+        $twig = $this->container->get('twig');
+
         $templateName = $this->getTemplateName($environment, 'catalog/', $chunkName);
         $shoppingCart->updateTotal();
 
@@ -68,7 +71,8 @@ class AppRuntime
             'currency' => $shoppingCart->getCurrency(),
             'countTotal' => $shoppingCart->getCount(),
             'priceTotal' => $shoppingCart->getPrice(),
-            'items' => $shoppingCart->getContentArray()
+            'type' => $shoppingCart->getType(),
+            'items' => $shoppingCart->getContentArray($twig)
         ];
 
         return $environment->render($templateName, $data);
@@ -77,28 +81,33 @@ class AppRuntime
     /**
      * @param int $productId
      * @param string $contentTypeName
+     * @param string $type
      * @return bool
      */
-    public function shopCartProductCountFunction($productId, $contentTypeName)
+    public function shopCartProductCountFunction($productId, $contentTypeName, $type = 'shop')
     {
-        $mongoCache = $this->container->get('mongodb_cache');
-        $shopCartData = $mongoCache->fetch(ShopCartService::getCartId());
-        $count = 0;
-        if (empty($shopCartData)
-            || empty($shopCartData['data'])
-            || empty($shopCartData['data'][$contentTypeName])) {
-            return $count;
+        /** @var ShopCartService $shopCartService */
+        $shopCartService = $this->container->get('app.shop_cart');
+        $shoppingCart = $shopCartService->getShoppingCartByType($type);
+        $shoppingCartContent = $shoppingCart ? $shoppingCart->getContent() : null;
+        if (!$shoppingCartContent) {
+            return 0;
         }
-        foreach ($shopCartData['data'][$contentTypeName] as $product) {
-            if ($product['id'] === $productId) {
-                $count += $product['count'];
+
+        $count = 0;
+        /** @var OrderContent $content */
+        foreach ($shoppingCartContent as $content) {
+            if ($content->getContentTypeName() !== $contentTypeName
+                || $productId !== $content->getId()) {
+                continue;
             }
+            $count += $content->getCount();
         }
         return $count;
     }
 
     /**
-     * @param \Twig_Environment $environment
+     * @param TwigEnvironment $environment
      * @return string
      * @throws \Psr\SimpleCache\InvalidArgumentException
      * @throws \Throwable
@@ -106,7 +115,7 @@ class AppRuntime
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function currencyListFunction(\Twig_Environment $environment)
+    public function currencyListFunction(TwigEnvironment $environment)
     {
         if (empty($this->container->getParameter('mongodb_database'))) {
                 return '';
@@ -137,28 +146,6 @@ class AppRuntime
     }
 
     /**
-     * @param array $productData
-     * @param string $fieldName
-     * @return string
-     */
-    public function getCartContentParametersString($productData, $fieldName = 'parameters')
-    {
-        $parameters = isset($productData[$fieldName]) && is_array($productData[$fieldName])
-            ? $productData[$fieldName]
-            : [];
-        if (empty($parameters)) {
-            return '';
-        }
-
-        /** @var \Twig_Environment */
-        $twig = $this->container->get('twig');
-
-        return $twig->render('catalog/shop_cart_parameter.html.twig', [
-            'parameters' => $parameters
-        ]);
-    }
-
-    /**
      * @param $productData
      * @return string
      */
@@ -171,7 +158,7 @@ class AppRuntime
     }
 
     /**
-     * @param \Twig_Environment $environment
+     * @param TwigEnvironment $environment
      * @param $path
      * @param $chunkName
      * @param string $chunkNamePrefix
@@ -180,7 +167,7 @@ class AppRuntime
      * @return string
      */
     public function getTemplateName(
-        \Twig_Environment $environment,
+        TwigEnvironment $environment,
         $path,
         $chunkName,
         $chunkNamePrefix = '',
@@ -262,7 +249,7 @@ class AppRuntime
     }
 
     /**
-     * @param \Twig_Environment $environment
+     * @param TwigEnvironment $environment
      * @param $itemData
      * @param $fieldsData
      * @param $fieldBaseName
@@ -273,7 +260,7 @@ class AppRuntime
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function renderOutputGalleryFunction(\Twig_Environment $environment, $itemData, $fieldsData, $fieldBaseName, $chunkName = 'gallery', $chunkNamePrefix = '')
+    public function renderOutputGalleryFunction(TwigEnvironment $environment, $itemData, $fieldsData, $fieldBaseName, $chunkName = 'gallery', $chunkNamePrefix = '')
     {
         $templateName = $this->getTemplateName($environment, 'chunks/fields/', $chunkName, $chunkNamePrefix);
 
@@ -289,7 +276,7 @@ class AppRuntime
     }
 
     /**
-     * @param \Twig_Environment $environment
+     * @param TwigEnvironment $environment
      * @param string $formName
      * @param string|null $layoutPath
      * @param string $varName
@@ -298,7 +285,7 @@ class AppRuntime
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function renderFormFunction(\Twig_Environment $environment, $formName = '', $layoutPath = null, $varName = 'form')
+    public function renderFormFunction(TwigEnvironment $environment, $formName = '', $layoutPath = null, $varName = 'form')
     {
         if (!$formName) {
             return '';
@@ -442,24 +429,6 @@ class AppRuntime
             $currentUri = substr($currentUri, 0, strpos($currentUri, '?'));
         }
         return $currentUri;
-    }
-
-    /**
-     * @return mixed
-     */
-    protected function getUser()
-    {
-        if (!$this->container->has('security.token_storage')) {
-            throw new \LogicException('The SecurityBundle is not registered in your application. Try running "composer require symfony/security-bundle".');
-        }
-        if (null === $token = $this->container->get('security.token_storage')->getToken()) {
-            return null;
-        }
-        if (!\is_object($user = $token->getUser())) {
-            // e.g. anonymous authentication
-            return null;
-        }
-        return $user;
     }
 }
 

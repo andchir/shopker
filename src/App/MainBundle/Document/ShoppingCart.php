@@ -6,6 +6,7 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\Common\Collections\ArrayCollection;
 use App\MainBundle\Document\OrderContent;
+use Twig\Environment as TwigEnvironment;
 
 /**
  * @MongoDB\Document(collection="shopping_cart",repositoryClass="App\Repository\ShoppingCartRepository")
@@ -318,13 +319,26 @@ class ShoppingCart {
     }
 
     /**
+     * @param ArrayCollection $collection
+     * @return $this
+     */
+    public function setContent(ArrayCollection $collection)
+    {
+        $this->content = $collection;
+        return $this;
+    }
+
+    /**
      * Remove content
      *
      * @param OrderContent $content
+     * @return $this
      */
     public function removeContent(\App\MainBundle\Document\OrderContent $content)
     {
         $this->content->removeElement($content);
+        $this->content = new ArrayCollection(array_merge($this->content->toArray()));// clear indexes
+        return $this;
     }
 
     /**
@@ -335,6 +349,34 @@ class ShoppingCart {
     public function getContent()
     {
         return $this->content;
+    }
+
+    /**
+     * Sort by content type
+     * @return array|ArrayCollection
+     */
+    public function getContentSorted()
+    {
+        $content = $this->content;
+        $tmp = [[], []];
+        $collection = new ArrayCollection();
+        /** @var OrderContent $cont */
+        foreach ($content as $cont) {
+            $index = array_search($cont->getContentTypeName(), $tmp[0]);
+            if ($index === false) {
+                $tmp[0][] = $cont->getContentTypeName();
+                $tmp[1][] = [];
+                $index = count($tmp[0]) - 1;
+            }
+            $tmp[1][$index][] = $cont;
+        }
+        unset($cont);
+        foreach ($tmp[1] as $group) {
+            foreach ($group as $cont) {
+                $collection->add($cont);
+            }
+        }
+        return $collection;
     }
 
     /**
@@ -503,20 +545,41 @@ class ShoppingCart {
     }
 
     /**
+     * @param TwigEnvironment $twig
+     * @param array $productData
+     * @param string $fieldName
+     * @return string
+     */
+    public function getCartContentParametersString($twig, $productData, $fieldName = 'parameters')
+    {
+        if (!($twig instanceof TwigEnvironment)) {
+            return '';
+        }
+        $parameters = isset($productData[$fieldName]) && is_array($productData[$fieldName])
+            ? $productData[$fieldName]
+            : [];
+        if (empty($parameters)) {
+            return '';
+        }
+        return $twig->render('catalog/shop_cart_parameter.html.twig', [
+            'parameters' => $parameters
+        ]);
+    }
+
+    /**
+     * @param TwigEnvironment|null $twig
      * @return array
      */
-    public function getContentArray()
+    public function getContentArray($twig = null)
     {
         $output = [];
-        $shoppingCartContent = $this->getContent();
+        $shoppingCartContent = $this->getContentSorted();
 
         /** @var OrderContent $content */
         foreach ($shoppingCartContent as $content) {
-            $contentTypeName = $content->getContentTypeName();
-            if (!isset($output[$contentTypeName])) {
-                $output[$contentTypeName] = [];
-            }
-            $output[$contentTypeName][] = $content->toArray();
+            $productData = $content->toArray();
+            $productData['parametersString'] = $this->getCartContentParametersString($twig, $productData);
+            $output[] = $productData;
         }
         return $output;
     }
@@ -529,11 +592,11 @@ class ShoppingCart {
         $this->updateTotal();
         $shoppingCartContent = $this->getContent();
         return [
-            'price_total' => $this->getPrice(),
-            'items_total' => $this->getCount(),
-            'items_unique_total' => count($shoppingCartContent),
-            'delivery_price' => $this->getDeliveryPrice(),
-            'delivery_name' => $this->getDeliveryName(),
+            'priceTotal' => $this->getPrice(),
+            'itemsTotal' => $this->getCount(),
+            'itemsUniqueTotal' => count($shoppingCartContent),
+            'deliveryPrice' => $this->getDeliveryPrice(),
+            'deliveryName' => $this->getDeliveryName(),
             'ids' => $this->getContentValues('id')
         ];
     }

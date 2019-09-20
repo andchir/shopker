@@ -13,6 +13,7 @@ use App\Repository\CategoryRepository;
 use App\Service\SettingsService;
 use App\Service\ShopCartService;
 use App\Service\UtilsService;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ODM\MongoDB\Cursor;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\GenericEvent;
@@ -38,13 +39,16 @@ class CartController extends ProductController
      */
     public function actionResponseAction(Request $request)
     {
-        $output = [];
+        $output = ['success' => true];
         $referer = $request->headers->get('referer');
         $back_url = $request->get('back_url', $referer);
         $action = $request->get('action');
         $type = $request->get('type', 'shop');
         if ($request->get('item_id')) {
             $action = 'add_to_cart';
+        }
+        if (!is_null($request->get('remove_by_index'))) {
+            $action = 'remove';
         }
 
         switch ($action) {
@@ -60,17 +64,20 @@ class CartController extends ProductController
                 break;
             case 'remove':
 
-
+                $output = $this->removeByIndex($request);
 
                 break;
             case 'update':
 
-
+                $output = $this->recalculateAction($request);
 
                 break;
             case 'clean':
 
-
+                /** @var ShopCartService $shopCartService */
+                $shopCartService = $this->get('app.shop_cart');
+                $type = $request->get('type', 'shop');
+                $shopCartService->clearContent($type);
 
                 break;
         }
@@ -79,11 +86,13 @@ class CartController extends ProductController
             if ($output['success']) {
                 /** @var ShopCartService $shopCartService */
                 $shopCartService = $this->get('app.shop_cart');
-                $shoppingCart = $shopCartService->getShoppingCart($type, $this->getUserId(), $this->getSessionId(), null, true);
-
-                $output = array_merge($output, $shoppingCart->toArray(), [
-                    'html' => ''
-                ]);
+                $shoppingCart = $shopCartService->getShoppingCartByType($type);
+                if ($shoppingCart) {
+                    $output = array_merge($shoppingCart->toArray());
+                    $output['html'] = '';
+                } else {
+                    $output['html'] = '';
+                }
             }
             return $this->json($output);
         } else {
@@ -97,6 +106,7 @@ class CartController extends ProductController
     }
 
     /**
+     * Add product to shopping cart
      * @param Request $request
      * @return array
      */
@@ -131,7 +141,7 @@ class CartController extends ProductController
         $parameters = $this->getProductParameters($request, $productDocument, $contentTypeFields);
 
         // Product files
-        $files = $this->getProductFiles($request, $productDocument, $contentTypeFields);
+        $files = $this->getProductFiles($request, $shoppingCart, $productDocument, $contentTypeFields);
 
         // Files required?
         if (!count($files)) {
@@ -171,13 +181,84 @@ class CartController extends ProductController
                 ->setCount($count)
                 ->setParameters($parameters)
                 ->setFiles($files)
-                ->setUri($category->getUri() . '/' . ($productDocument[$systemNameField] ?? ''))
+                ->setUri($category->getUri() . ($productDocument[$systemNameField] ?? ''))
                 ->setContentTypeName($category->getContentTypeName())
                 ->setCurrency($currency);
 
             $shoppingCart->addContent($content);
         }
 
+        $dm->flush();
+
+        return ['success' => true];
+    }
+
+    /**
+     * Recalculate products count
+     * @param Request $request
+     * @return array
+     */
+    public function recalculateAction(Request $request)
+    {
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        /** @var ShopCartService $shopCartService */
+        $shopCartService = $this->get('app.shop_cart');
+
+        $type = $request->get('type', 'shop');
+        $countArr = $request->get('count', []);
+        if (!is_array($countArr)) {
+            $countArr = [];
+        }
+        $shoppingCart = $shopCartService->getShoppingCart($type, $this->getUserId(), $this->getSessionId());
+        $shoppingCartContent = $shoppingCart ? $shoppingCart->getContentSorted() : [];
+
+        if (empty($shoppingCartContent)) {
+            return ['success' => true];
+        }
+
+        /** @var OrderContent $content */
+        foreach ($shoppingCartContent as $index => $content) {
+            $count = isset($countArr[$index]) && is_numeric($countArr[$index])
+                ? (int) $countArr[$index]
+                : 1;
+            $content->setCount($count);
+        }
+
+        $dm->flush();
+
+        return ['success' => true];
+    }
+
+    /**
+     * @param Request|null $request
+     * @param int|null $index
+     * @return array
+     */
+    public function removeByIndex($request = null, $index = null)
+    {
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        /** @var ShopCartService $shopCartService */
+        $shopCartService = $this->get('app.shop_cart');
+
+        if (is_null($index) && $request instanceof Request) {
+            $index = (int) $request->get('remove_by_index');
+        }
+        $type = $request->get('type', 'shop');
+
+        $shoppingCart = $shopCartService->getShoppingCartByType($type);
+        $shoppingCartContent = $shoppingCart ? $shoppingCart->getContentSorted() : [];
+
+        if (is_null($index) || !$shoppingCartContent->containsKey($index)) {
+            return ['success' => false];
+        }
+
+        if (count($shoppingCartContent) === 1) {
+            $dm->remove($shoppingCart);
+        } else {
+            $shoppingCart->removeContent($shoppingCartContent->get($index));
+        }
         $dm->flush();
 
         return ['success' => true];
@@ -315,16 +396,17 @@ class CartController extends ProductController
 
     /**
      * @param Request $request
+     * @param ShoppingCart $shoppingCart
      * @param array $productDocument
      * @param array $contentTypeFields
      * @return array
      */
-    public function getProductFiles(Request $request, $productDocument, $contentTypeFields)
+    public function getProductFiles(Request $request, ShoppingCart $shoppingCart, $productDocument, $contentTypeFields)
     {
         /** @var User $user */
         $user = $this->getUser();
         $userId = $user ? $user->getId() : 0;
-        $ownerId = ShopCartService::getCartId();
+        $ownerId = $shoppingCart->getId();
 
         $postData = $request->request->all();
         $files = [];
@@ -359,47 +441,10 @@ class CartController extends ProductController
 
     /**
      * @Route("/edit", name="shop_cart_edit")
-     * @param Request $request
      * @return Response
      */
-    public function editAction(Request $request)
+    public function editAction()
     {
-        $action = $request->get('action');
-
-        switch ($action) {
-            case 'update':
-
-                $countArr = $request->get('count');
-                $mongoCache = $this->container->get('mongodb_cache');
-
-                $shopCartData = $mongoCache->fetch(ShopCartService::getCartId());
-                if (empty($shopCartData)
-                    || empty($shopCartData['data'])
-                    || empty($countArr)) {
-                        return $this->redirectToRoute('shop_cart_edit');
-                }
-
-                $index = 0;
-                foreach ($shopCartData['data'] as $cName => &$products) {
-                    if (!isset($data['items'][$cName])) {
-                        $data['items'][$cName] = [];
-                    }
-                    foreach ($products as $ind => &$product) {
-                        if (isset($countArr[$index]) && is_numeric($countArr[$index])) {
-                            $product['count'] = max(1, intval($countArr[$index]));
-                        }
-                        $index++;
-                    }
-                }
-
-                /** @var ShopCartService $shopCartService */
-                $shopCartService = $this->get('app.shop_cart');
-                $shopCartService->saveContent($shopCartData);
-
-                return $this->redirectToRoute('shop_cart_edit');
-
-                break;
-        }
 
 
         return $this->render('page_shop_cart.html.twig', [
@@ -408,34 +453,17 @@ class CartController extends ProductController
     }
 
     /**
-     * @Route("/remove/{contentTypeName}/{index}", name="shop_cart_remove")
+     * @Route("/clear", name="shop_cart_clear")
      * @param Request $request
-     * @param string $contentTypeName
-     * @param int $index
      * @return Response
      */
-    public function removeItemAction(Request $request, $contentTypeName, $index)
+    public function clearAction(Request $request)
     {
-        $mongoCache = $this->container->get('mongodb_cache');
         $referer = $request->headers->get('referer');
         /** @var ShopCartService $shopCartService */
         $shopCartService = $this->get('app.shop_cart');
-
-        $shopCartData = $mongoCache->fetch(ShopCartService::getCartId());
-        if (!empty($shopCartData)
-            && isset($shopCartData['data'][$contentTypeName])
-            && isset($shopCartData['data'][$contentTypeName][$index])) {
-
-            array_splice($shopCartData['data'][$contentTypeName], $index, 1);
-            if (empty($shopCartData['data'][$contentTypeName])) {
-                unset($shopCartData['data'][$contentTypeName]);
-            }
-            if (!empty($shopCartData['data'])) {
-                $shopCartService->saveContent($shopCartData);
-            } else {
-                $shopCartService->clearContent();
-            }
-        }
+        $type = $request->get('type', 'shop');
+        $shopCartService->clearContent($type);
 
         return new RedirectResponse($referer);
     }
@@ -445,8 +473,8 @@ class CartController extends ProductController
      */
     public function getUserId()
     {
-        if ($this->isGranted('ROLE_USER')) {
-            return $this->getUser()->getId();
+        if ($user = $this->getUser()) {
+            return $user->getId();
         }
         return 0;
     }
@@ -459,21 +487,6 @@ class CartController extends ProductController
         /** @var ShopCartService $shopCartService */
         $shopCartService = $this->get('app.shop_cart');
         return $shopCartService->getSessionId();
-    }
-
-    /**
-     * @Route("/clear", name="shop_cart_clear")
-     * @param Request $request
-     * @return Response
-     */
-    public function clearAction(Request $request)
-    {
-        $mongoCache = $this->container->get('mongodb_cache');
-        $referer = $request->headers->get('referer');
-
-        $mongoCache->delete(ShopCartService::getCartId());
-
-        return new RedirectResponse($referer);
     }
 
     /**

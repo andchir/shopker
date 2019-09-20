@@ -1,42 +1,48 @@
-<form method="post">
+<form action="{{ path('shop_cart_action') }}" method="post">
+    <input type="hidden" name="type" value="{{ type }}">
+    <div class="float-right">
+        <button class="btn btn-outline-info btn-sm mb-2" type="submit" name="action" value="clean">
+            <i class="icon-cross"></i>
+            {{ 'Empty cart' | trans }}
+        </button>
+    </div>
+    <div class="clearfix"></div>
     <table class="table">
         <tbody>
-            {% for contentTypeName in items|keys %}
-                {% for item in items[contentTypeName] %}
-                    <tr>
-                        <td>{{ loop.index }}</td>
-                        <td>
-                            <div>
-                                <a href="{{ item.uri }}">
-                                    {{ item.title }}
-                                </a>
-                            </div>
-                            {{ item.parametersString | raw }}
-                            {% if item.filesString is not empty %}
-                                <div class="text-muted small">
-                                    <i class="icon-file"></i>
-                                    {{ 'File|Files' | transchoice(item.files | length) }}: {{ item.filesString }}
-                                </div>
-                            {% endif %}
-                        </td>
-                        <td>
-                            <span class="shk-price">{{ item.price | price }}</span>
-                            <span class="shk-currency">{{ currencySelected }}</span>
-                        </td>
-                        <td>
-                            <input type="number" class="form-control" min="1" step="1" name="count[]" value="{{ item.count }}" style="width: 80px;">
-                        </td>
-                        <td>
-                            <span class="shk-price">{{ item.priceTotal | price }}</span>
-                            <span class="shk-currency">{{ currencySelected }}</span>
-                        </td>
-                        <td class="text-right">
-                            <a class="btn btn-outline-info ml-1" href="{{ path('shop_cart_remove', {"contentTypeName": contentTypeName, "index": loop.index0}) }}" data-toggle="tooltip" data-placement="bottom" title="{{ 'Delete item' | trans }}">
-                                <i class="icon-cross"></i>
+            {% for item in items %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>
+                        <div>
+                            <a href="/{{ item.uri }}">
+                                {{ item.title }}
                             </a>
-                        </td>
-                    </tr>
-                {% endfor %}
+                        </div>
+                        {{ item.parametersString | raw }}
+                        {% if item.filesString is not empty %}
+                            <div class="text-muted small">
+                                <i class="icon-file"></i>
+                                {{ 'File|Files' | transchoice(item.files | length) }}: {{ item.filesString }}
+                            </div>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span class="shk-price">{{ item.price | price }}</span>
+                        <span class="shk-currency">{{ currencySelected }}</span>
+                    </td>
+                    <td>
+                        <input type="number" class="form-control" min="1" step="1" name="count[]" value="{{ item.count }}" style="width: 80px;">
+                    </td>
+                    <td>
+                        <span class="shk-price">{{ item.priceTotal | price }}</span>
+                        <span class="shk-currency">{{ currencySelected }}</span>
+                    </td>
+                    <td class="text-right">
+                        <button class="btn btn-outline-info ml-1" type="submit" name="remove_by_index" value="{{ loop.index0 }}" title="{{ 'Delete item' | trans }}">
+                            <i class="icon-cross"></i>
+                        </button>
+                    </td>
+                </tr>
             {% endfor %}
         </tbody>
         <tfoot>

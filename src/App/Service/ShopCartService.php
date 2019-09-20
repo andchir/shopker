@@ -21,51 +21,41 @@ class ShopCartService
     }
 
     /**
+     * @param string $type
      * @return array|null
      */
-    public function getContent()
+    public function getContent($type = 'shop')
     {
-        $mongoCache = $this->container->get('mongodb_cache');
-        return $mongoCache->fetch(self::getCartId());
+        $shoppingCart = $this->getShoppingCartByType($type);
+        return $shoppingCart ? $shoppingCart->getContentSorted() : [];
     }
 
     /**
      * Clear shopping cart data
+     * @param string $type
+     * @return bool
      */
-    public function clearContent()
+    public function clearContent($type = 'shop')
     {
-        $mongoCache = $this->container->get('mongodb_cache');
-        $mongoCache->delete(self::getCartId());
-    }
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->container->get('doctrine_mongodb')->getManager();
 
-    /**
-     * @param $shopCartData
-     */
-    public function saveContent($shopCartData)
-    {
-        $mongoCache = $this->container->get('mongodb_cache');
-        $mongoCache->save(self::getCartId(), $shopCartData, 60*60*24*7);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getCartId()
-    {
-        $request = Request::createFromGlobals();
-        $response = new Response();
-        $cookies = $request->cookies->all();
-        if (isset($cookies['cart_id'])) {
-            return $cookies['cart_id'];
+        $shoppingCart = $this->getShoppingCartByType($type);
+        if ($shoppingCart) {
+            $dm->remove($shoppingCart);
+            $dm->flush();
+            return true;
         }
-        $cartId = uniqid('shop_cart_' . mt_rand(), true);
-        $response->headers->setCookie(new Cookie(
-            'cart_id',
-            $cartId,
-            time() + (60 * 60 * 24 * 7)
-        ));
-        $response->sendHeaders();
-        return $cartId;
+        return false;
+    }
+
+    /**
+     * @param string $type
+     * @return ShoppingCart|null
+     */
+    public function getShoppingCartByType($type)
+    {
+        return $this->getShoppingCart($type, $this->getUserId(), $this->getSessionId());
     }
 
     /**
@@ -194,6 +184,35 @@ class ShopCartService
                 break;
         }
         return $receipt;
+    }
+
+    /**
+     * @return int
+     */
+    public function getUserId()
+    {
+        if ($user = $this->getUser()) {
+            return $user->getId();
+        }
+        return 0;
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getUser()
+    {
+        if (!$this->container->has('security.token_storage')) {
+            throw new \LogicException('The SecurityBundle is not registered in your application. Try running "composer require symfony/security-bundle".');
+        }
+        if (null === $token = $this->container->get('security.token_storage')->getToken()) {
+            return null;
+        }
+        if (!\is_object($user = $token->getUser())) {
+            // e.g. anonymous authentication
+            return null;
+        }
+        return $user;
     }
 
     /**

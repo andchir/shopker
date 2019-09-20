@@ -505,7 +505,7 @@ class OrderContent
             'contentTypeName' => $this->getContentTypeName(),
             'parameters' => $this->getParameters(),
             'files' => $this->getFiles(),
-            'parametersString' => '',// TODO: add method to create parameters string
+            'parametersString' => '',
             'filesString' => $this->getFilesString()
         ];
     }

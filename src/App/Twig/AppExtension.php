@@ -2,6 +2,7 @@
 
 namespace App\Twig;
 
+use Twig\Environment as TwigEnvironment;
 use App\Controller\CatalogController;
 use App\MainBundle\Document\Category;
 use App\MainBundle\Document\ContentType;
@@ -198,7 +199,7 @@ class AppExtension extends AbstractExtension
     }
 
     /**
-     * @param \Twig_Environment $environment
+     * @param TwigEnvironment $environment
      * @param $value
      * @param $type
      * @param array $properties
@@ -207,7 +208,7 @@ class AppExtension extends AbstractExtension
      * @param array $data
      * @return mixed
      */
-    public function renderOutputTypeFunction(\Twig_Environment $environment,
+    public function renderOutputTypeFunction(TwigEnvironment $environment,
         $value,
         $type,
         $properties = [],
@@ -276,14 +277,14 @@ class AppExtension extends AbstractExtension
     }
 
     /**
-     * @param \Twig_Environment $environment
+     * @param TwigEnvironment $environment
      * @param $itemData
      * @param $fieldsData
      * @param string $chunkNamePrefix
      * @param array $data
      * @return string
      */
-    public function renderOutputTypeArrayFunction(\Twig_Environment $environment, $itemData, $fieldsData, $chunkNamePrefix = '', $data = [])
+    public function renderOutputTypeArrayFunction(TwigEnvironment $environment, $itemData, $fieldsData, $chunkNamePrefix = '', $data = [])
     {
         if (empty($itemData)) {
             return '';
@@ -307,12 +308,12 @@ class AppExtension extends AbstractExtension
     }
 
     /**
-     * @param \Twig_Environment $environment
+     * @param TwigEnvironment $environment
      * @param $filtersData
      * @param string $chunkNamePrefix
      * @return string
      */
-    public function outputFilterFunction(\Twig_Environment $environment, $filtersData, $chunkNamePrefix = '')
+    public function outputFilterFunction(TwigEnvironment $environment, $filtersData, $chunkNamePrefix = '')
     {
         if (empty($filtersData)) {
             return '';
@@ -326,7 +327,7 @@ class AppExtension extends AbstractExtension
     }
 
     /**
-     * @param \Twig_Environment $environment
+     * @param TwigEnvironment $environment
      * @param $itemData
      * @param $fieldsData
      * @param $chunkName
@@ -335,7 +336,7 @@ class AppExtension extends AbstractExtension
      * @param int $limit
      * @return string
      */
-    public function renderOutputTypeChunkFunction(\Twig_Environment $environment, $itemData, $fieldsData, $chunkName, $chunkNamePrefix = '', $data = [], $limit = 0)
+    public function renderOutputTypeChunkFunction(TwigEnvironment $environment, $itemData, $fieldsData, $chunkName, $chunkNamePrefix = '', $data = [], $limit = 0)
     {
         $fields = array_filter($fieldsData, function($field) use ($chunkName) {
             return isset($field['outputProperties']['chunkName'])
@@ -423,13 +424,13 @@ class AppExtension extends AbstractExtension
     }
 
     /**
-     * @param \Twig_Environment $environment
+     * @param TwigEnvironment $environment
      * @param $itemData
      * @param $fieldsData
      * @param $fieldName
      * @return string
      */
-    public function renderOutputTypeFieldFunction(\Twig_Environment $environment, $itemData, $fieldsData, $fieldName)
+    public function renderOutputTypeFieldFunction(TwigEnvironment $environment, $itemData, $fieldsData, $fieldName)
     {
         $fIndex = array_search($fieldName, array_column($fieldsData, 'name'));
         if ($fIndex === false) {
@@ -460,7 +461,7 @@ class AppExtension extends AbstractExtension
     }
 
     /**
-     * @param \Twig_Environment $environment
+     * @param TwigEnvironment $environment
      * @param int $parentId
      * @param string $chunkName
      * @param array|null $data
@@ -473,7 +474,7 @@ class AppExtension extends AbstractExtension
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function categoriesTreeFunction(
-        \Twig_Environment $environment,
+        TwigEnvironment $environment,
         $parentId = 0,
         $chunkName = 'menu_tree',
         $data = null,
@@ -559,7 +560,7 @@ class AppExtension extends AbstractExtension
     }
 
     /**
-     * @param \Twig_Environment $environment
+     * @param TwigEnvironment $environment
      * @param $path
      * @param $chunkName
      * @param string $chunkNamePrefix
@@ -568,7 +569,7 @@ class AppExtension extends AbstractExtension
      * @return string
      */
     public function getTemplateName(
-        \Twig_Environment $environment,
+        TwigEnvironment $environment,
         $path, $chunkName,
         $chunkNamePrefix = '',
         $chunkNameSuffix = '',

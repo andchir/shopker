@@ -1,6 +1,6 @@
 /**
  * ShoppingCart
- * @version 1.0.0
+ * @version 1.0.1
  * @author Andchir<andchir@gmail.com>
  */
 
@@ -40,7 +40,8 @@
             selectorCountTotal: '.shopping-cart-count-total',
             selectorCountUniqueTotal: '.shopping-cart-count-unique-total',
             selectorDeclension: '.shopping-cart-declension',
-            productFormSelector: ''
+            productFormSelector: '',
+            templateName: ''
         };
 
         this.data = {
@@ -124,8 +125,12 @@
 
                 var formData = new FormData(formEl);
                 formData.append(actionName, actionValue);
-                formData.append('propertySetName', mainOptions.snippetPropertySetName);
-
+                if (mainOptions.snippetPropertySetName) {
+                    formData.append('propertySetName', mainOptions.snippetPropertySetName);
+                }
+                if (mainOptions.templateName) {
+                    formData.append('templateName', mainOptions.templateName);
+                }
                 self.dispatchEvent('formSubmitBefore', {element: formEl, formData: formData});
                 self.formDataSend(formData);
             });
@@ -150,8 +155,12 @@
 
                     var formData = new FormData(formEl);
                     formData.append('action', 'add_to_cart');
-                    formData.append('propertySetName', mainOptions.snippetPropertySetName);
-
+                    if (mainOptions.snippetPropertySetName) {
+                        formData.append('propertySetName', mainOptions.snippetPropertySetName);
+                    }
+                    if (mainOptions.templateName) {
+                        formData.append('templateName', mainOptions.templateName);
+                    }
                     self.dispatchEvent('formSubmitBefore', {element: formEl, formData: formData});
                     self.formDataSend(formData, formEl);
                 });

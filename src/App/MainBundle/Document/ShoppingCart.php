@@ -561,7 +561,7 @@ class ShoppingCart {
         if (empty($parameters)) {
             return '';
         }
-        return $twig->render('catalog/shop_cart_parameter.html.twig', [
+        return $twig->render('shop_cart/shop_cart_parameter.html.twig', [
             'parameters' => $parameters
         ]);
     }

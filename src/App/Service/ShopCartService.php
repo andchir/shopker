@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Twig\Environment as TwigEnvironment;
 
 class ShopCartService
 {
@@ -101,6 +102,23 @@ class ShopCartService
             $dm->flush();
         }
         return $shoppingCart;
+    }
+
+    /**
+     * @param ShoppingCart|null $shoppingCart
+     * @param string $templateName
+     * @param string $type
+     * @return string
+     */
+    public function renderShopCart($shoppingCart, $templateName, $type = 'shop')
+    {
+        /** @var TwigEnvironment $twig */
+        $twig = $this->container->get('twig');
+
+        $output = $twig->getRuntime(\App\Twig\AppRuntime::class)
+            ->shopCartFunction($twig, $templateName, $type, '', $shoppingCart);
+
+        return $output;
     }
 
     /**

@@ -39,11 +39,15 @@ class CartController extends ProductController
      */
     public function actionResponseAction(Request $request)
     {
+        /** @var ShopCartService $shopCartService */
+        $shopCartService = $this->get('app.shop_cart');
+
         $output = ['success' => true];
         $referer = $request->headers->get('referer');
         $back_url = $request->get('back_url', $referer);
         $action = $request->get('action');
         $type = $request->get('type', 'shop');
+        $templateName = $request->get('templateName');
         if ($request->get('item_id')) {
             $action = 'add_to_cart';
         }
@@ -74,9 +78,6 @@ class CartController extends ProductController
                 break;
             case 'clean':
 
-                /** @var ShopCartService $shopCartService */
-                $shopCartService = $this->get('app.shop_cart');
-                $type = $request->get('type', 'shop');
                 $shopCartService->clearContent($type);
 
                 break;
@@ -84,15 +85,11 @@ class CartController extends ProductController
 
         if ($request->isXmlHttpRequest()) {
             if ($output['success']) {
-                /** @var ShopCartService $shopCartService */
-                $shopCartService = $this->get('app.shop_cart');
                 $shoppingCart = $shopCartService->getShoppingCartByType($type);
                 if ($shoppingCart) {
-                    $output = array_merge($shoppingCart->toArray());
-                    $output['html'] = '';
-                } else {
-                    $output['html'] = '';
+                    $output = array_merge($output, $shoppingCart->toArray());
                 }
+                $output['html'] = $shopCartService->renderShopCart($shoppingCart, $templateName, $type);
             }
             return $this->json($output);
         } else {

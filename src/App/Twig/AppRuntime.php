@@ -4,6 +4,7 @@ namespace App\Twig;
 
 use App\MainBundle\Document\OrderContent;
 use App\MainBundle\Document\Setting;
+use App\MainBundle\Document\ShoppingCart;
 use App\Service\SettingsService;
 use App\Service\ShopCartService;
 use App\Service\UtilsService;
@@ -34,45 +35,44 @@ class AppRuntime
      * @param string $chunkName
      * @param string $type
      * @param string $emptyChunkName
+     * @param ShoppingCart|null $shoppingCart
      * @return string
      */
-    public function shopCartFunction(TwigEnvironment $environment, $chunkName = 'shop_cart', $type = 'shop', $emptyChunkName = '')
+    public function shopCartFunction(TwigEnvironment $environment, $chunkName = 'shop_cart', $type = 'shop', $emptyChunkName = '', $shoppingCart = null)
     {
         if (empty($this->container->getParameter('mongodb_database'))) {
             return '';
         }
 
-        /** @var ShopCartService $shopCartService */
-        $shopCartService = $this->container->get('app.shop_cart');
-        $shoppingCart = $shopCartService->getShoppingCartByType($type);
+        if (!$shoppingCart) {
+            /** @var ShopCartService $shopCartService */
+            $shopCartService = $this->container->get('app.shop_cart');
+            $shoppingCart = $shopCartService->getShoppingCartByType($type);
+        }
         $shoppingCartContent = $shoppingCart ? $shoppingCart->getContent() : null;
+        $templatesPath = 'shop_cart/';
 
-        if (empty($shoppingCartContent)) {
-            if ($emptyChunkName) {
-                $templateName = $this->getTemplateName($environment, 'catalog/', $emptyChunkName);
-                return $environment->render($templateName, [
-                    'countTotal' => 0,
-                    'priceTotal' => 0,
-                    'items' => []
-                ]);
-            } else {
-                return '';
-            }
+        if (empty($shoppingCartContent) && $emptyChunkName) {
+            $templateName = $this->getTemplateName($environment, $templatesPath, $emptyChunkName);
+            return $environment->render($templateName, [
+                'countTotal' => 0,
+                'priceTotal' => 0,
+                'items' => []
+            ]);
         }
 
-        /** @var TwigEnvironment */
-        $twig = $this->container->get('twig');
-
-        $templateName = $this->getTemplateName($environment, 'catalog/', $chunkName);
-        $shoppingCart->updateTotal();
-
+        $templateName = $this->getTemplateName($environment, $templatesPath, $chunkName);
+        if ($shoppingCart) {
+            $shoppingCart->updateTotal();
+        }
         $data = [
             'currencySelected' => ShopCartService::getCurrencyCookie(),
-            'currency' => $shoppingCart->getCurrency(),
-            'countTotal' => $shoppingCart->getCount(),
-            'priceTotal' => $shoppingCart->getPrice(),
-            'type' => $shoppingCart->getType(),
-            'items' => $shoppingCart->getContentArray($twig)
+            'currency' => $shoppingCart ? $shoppingCart->getCurrency() : '',
+            'countTotal' => $shoppingCart ? $shoppingCart->getCount() : 0,
+            'priceTotal' => $shoppingCart ? $shoppingCart->getPrice() : 0,
+            'type' => $shoppingCart ? $shoppingCart->getType() : '',
+            'items' => $shoppingCart ? $shoppingCart->getContentArray($environment) : [],
+            'templatePath' => $templatesPath . $chunkName
         ];
 
         return $environment->render($templateName, $data);

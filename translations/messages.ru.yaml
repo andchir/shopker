@@ -98,6 +98,7 @@ You cannot delete or rename the system folder.: Вы не можете удал�
 File manager is disabled.: Файл-менеджер отключен.
 Templates theme "%theme%" not found.: Тема шаблонов "%theme%" не найдена.
 File downloaded %count% time.|File downloaded %count% times.: 'Файл скачали %count% раз.|Файл скачали %count% раза.|Файл скачали %count% раз.'
+Template "%name%" not found.: Шаблон "%name%" не найден.
 
 Sort by: Сортировать по
 catalog.sort_by_novelty: Новизне

@@ -115,10 +115,10 @@ class CartController extends ProductController
         $shopCartService = $this->get('app.shop_cart');
         $locale = $request->getLocale();
         $localeDefault = $this->getParameter('locale');
-
         $type = $request->get('type', 'shop');
+
         $count = max(1, (int) $request->get('count'));
-        $shoppingCart = $shopCartService->getShoppingCart($type, $this->getUserId(), $this->getSessionId(), null, true);
+        $shoppingCart = $shopCartService->getShoppingCart($type, $this->getUserId(), $this->getSessionId($type), null, true);
 
         /** @var Category $category */
         list($category, $productDocument) = $this->getCategoryAndProduct($request);
@@ -207,7 +207,7 @@ class CartController extends ProductController
         if (!is_array($countArr)) {
             $countArr = [];
         }
-        $shoppingCart = $shopCartService->getShoppingCart($type, $this->getUserId(), $this->getSessionId());
+        $shoppingCart = $shopCartService->getShoppingCart($type, $this->getUserId(), $this->getSessionId($type));
         $shoppingCartContent = $shoppingCart ? $shoppingCart->getContentSorted() : [];
 
         if (empty($shoppingCartContent)) {
@@ -484,13 +484,14 @@ class CartController extends ProductController
     }
 
     /**
+     * @param string $type
      * @return string
      */
-    public function getSessionId()
+    public function getSessionId($type = 'shop')
     {
         /** @var ShopCartService $shopCartService */
         $shopCartService = $this->get('app.shop_cart');
-        return $shopCartService->getSessionId();
+        return $shopCartService->getSessionId($type);
     }
 
     /**

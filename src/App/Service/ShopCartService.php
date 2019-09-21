@@ -56,7 +56,7 @@ class ShopCartService
      */
     public function getShoppingCartByType($type)
     {
-        return $this->getShoppingCart($type, $this->getUserId(), $this->getSessionId());
+        return $this->getShoppingCart($type, $this->getUserId(), $this->getSessionId($type));
     }
 
     /**
@@ -72,9 +72,7 @@ class ShopCartService
         /** @var SettingsService $settingsService */
         $settingsService = $this->container->get('app.settings');
         $currency = $settingsService->getCurrency();
-        $lifeTime = $this->container->hasParameter('app.shopping_cart_lifetime')
-            ? (int) $this->container->getParameter('app.shopping_cart_lifetime')
-            : 172800;// 48 hours
+        $lifeTime = $this->getLifetime($type);
 
         if ($id) {
             $shoppingCart = $this->getRepository()->find((int) $id);
@@ -122,19 +120,35 @@ class ShopCartService
     }
 
     /**
+     * @param string $type
      * @return string
      */
-    public function getSessionId()
+    public function getSessionId($type = 'shop')
     {
         if (!empty($_COOKIE[ShoppingCart::SESSION_KEY])) {
             return $_COOKIE[ShoppingCart::SESSION_KEY];
         }
         $sessionId = UtilsService::generatePassword(26);
-        $lifeTime = $this->container->hasParameter('app.shopping_cart_lifetime')
-            ? (int) $this->container->getParameter('app.shopping_cart_lifetime')
-            : 172800;// 48 hours
+        $lifeTime = $this->getLifetime($type);
         setcookie(ShoppingCart::SESSION_KEY, $sessionId, time() + $lifeTime, '/');
         return $sessionId;
+    }
+
+    /**
+     * Get shopping cart life time
+     * @param string $type
+     * @return int
+     */
+    public function getLifetime($type = 'shop')
+    {
+        if ($this->container->hasParameter('app.shopping_cart_lifetime_' . $type)) {
+            $lifeTime = (int) $this->container->getParameter('app.shopping_cart_lifetime_' . $type);
+        } else {
+            $lifeTime = $this->container->hasParameter('app.shopping_cart_lifetime')
+                ? (int) $this->container->getParameter('app.shopping_cart_lifetime')
+                : 172800;// 48 hours
+        }
+        return $lifeTime;
     }
 
     /**

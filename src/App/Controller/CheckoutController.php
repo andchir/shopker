@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\MainBundle\Document\Category;
 use App\MainBundle\Document\FileDocument;
 use App\MainBundle\Document\Order;
+use App\MainBundle\Document\OrderContent;
 use App\MainBundle\Document\Setting;
 use App\MainBundle\Document\User;
 use App\Events;
@@ -102,8 +103,8 @@ class CheckoutController extends BaseController
 
             /** @var ShopCartService $shopCartService */
             $shopCartService = $this->get('app.shop_cart');
-            $shopCartData = $shopCartService->getContent();
-            if (empty($shopCartData)) {
+            $shopCartContent = $shopCartService->getContent();
+            if (empty($shopCartContent)) {
                 $form->addError(new FormError($translator->trans('Your cart is empty.', [], 'validators')));
             }
             if ($form->isValid()) {
@@ -112,12 +113,10 @@ class CheckoutController extends BaseController
                     ? $settings[Setting::GROUP_ORDER_STATUSES][0]->getName()
                     : '';
 
-                $filesCollection = $this->getOrderFilesCollection($shopCartData);
-
                 $order
                     ->setDeliveryPrice($deliveryPrice, $currencyRate)
                     ->setPaymentValue($paymentName)
-                    ->setContentFromCart($shopCartData, $filesCollection, $currencyRate)
+                    ->setContentFromCart($shopCartContent, $currencyRate)
                     ->setStatus($statusName)
                     ->setCurrency($currency)
                     ->setCurrencyRate($currencyRate);
@@ -203,25 +202,24 @@ class CheckoutController extends BaseController
     }
 
     /**
-     * @param array $shopCartData
+     * @param ArrayCollection $shopCartContent
      * @return ArrayCollection
      * @throws \Doctrine\ODM\MongoDB\LockException
      * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
      */
-    public function getOrderFilesCollection($shopCartData)
+    public function getOrderFilesCollection($shopCartContent)
     {
         $fileDocumentRepository = $this->getFileRepository();
         $collection = new ArrayCollection();
-        foreach ($shopCartData['data'] as $contentTypeName => $products) {
-            foreach ($products as $product) {
-                if (empty($product['files'])) {
-                    continue;
-                }
-                foreach ($product['files'] as $fileData) {
-                    $fileDocument = $fileDocumentRepository->find($fileData['fileId']);
-                    if ($fileDocument) {
-                        $collection->add($fileDocument);
-                    }
+        /** @var OrderContent $content */
+        foreach ($shopCartContent as $content) {
+            if (empty($files = $content->getFiles())) {
+                continue;
+            }
+            foreach ($files as $fileData) {
+                $fileDocument = $fileDocumentRepository->find($fileData['fileId']);
+                if ($fileDocument) {
+                    $collection->add($fileDocument);
                 }
             }
         }

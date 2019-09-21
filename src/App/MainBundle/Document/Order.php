@@ -537,49 +537,38 @@ class Order
     }
 
     /**
-     * @param $shopCartData
-     * @param $filesCollection
+     * @param $shopCartContent
      * @param int $currencyRate
      * @return $this
      */
-    public function setContentFromCart($shopCartData, $filesCollection, $currencyRate = 1)
+    public function setContentFromCart($shopCartContent, $currencyRate = 1)
     {
-        foreach ($shopCartData['data'] as $contentTypeName => $products) {
-            foreach ($products as $product) {
-                $uri = $product['parentUri'] . $product['systemName'];
-                $orderContent = new OrderContent();
-                $files = isset($product['files']) ? $product['files'] : [];
-                $orderContent
-                    ->setId($product['id'])
-                    ->setTitle($product['title'])
-                    ->setCount($product['count'])
-                    ->setPrice($product['price'], $currencyRate)
-                    ->setImage($product['image'])
-                    ->setUri($uri)
-                    ->setContentTypeName($contentTypeName)
-                    ->setParameters($product['parameters'], $currencyRate);
+        /** @var OrderContent $content */
+        foreach ($shopCartContent as $content) {
+            $orderContent = new OrderContent();
+            $orderContent->cloneFrom($content, $currencyRate);
+//            $files = isset($content['files']) ? $content['files'] : [];
 
-                if (!empty($files)) {
-                    foreach ($files as $fileData) {
-                        $fileDocuments = $filesCollection->filter(function($entry) use ($fileData) {
-                            return $entry->getId() === $fileData['fileId'];
-                        });
-                        if (!empty($fileDocuments)) {
-                            /** @var FileDocument $fileDocument */
-                            $fileDocument = $fileDocuments->current();
-                            $fileDocument
-                                ->setOrder($this)
-                                ->setOwnerType(FileDocument::OWNER_ORDER_PRODUCT)
-                                ->setOwnerId(0);
+//            if (!empty($files)) {
+//                foreach ($files as $fileData) {
+//                    $fileDocuments = $filesCollection->filter(function($entry) use ($fileData) {
+//                        return $entry->getId() === $fileData['fileId'];
+//                    });
+//                    if (!empty($fileDocuments)) {
+//                        /** @var FileDocument $fileDocument */
+//                        $fileDocument = $fileDocuments->current();
+//                        $fileDocument
+//                            ->setOrder($this)
+//                            ->setOwnerType(FileDocument::OWNER_ORDER_PRODUCT)
+//                            ->setOwnerId(0);
+//
+//                        $orderContent->addFile($fileDocument);//Add array data
+//                        $this->addFile($fileDocument);
+//                    }
+//                }
+//            }
 
-                            $orderContent->addFile($fileDocument);//Add array data
-                            $this->addFile($fileDocument);
-                        }
-                    }
-                }
-
-                $this->addContent($orderContent);
-            }
+            $this->addContent($orderContent);
         }
         return $this;
     }

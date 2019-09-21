@@ -529,4 +529,25 @@ class OrderContent
             //->setFiles($data['files']);
         return $this;
     }
+
+    /**
+     * @param OrderContent $object
+     * @param float|int $currencyRate
+     * @return $this
+     */
+    public function cloneFrom($object, $currencyRate = 1)
+    {
+        $this
+            ->setId($object->getId())
+            ->setTitle($object->getTitle())
+            ->setCount($object->getCount())
+            ->setPrice($object->getPrice(), $currencyRate)
+            ->setImage($object->getImage())
+            ->setUri($object->getUri())
+            ->setContentTypeName($object->getContentTypeName())
+            ->setParameters($object->getParameters(), $currencyRate)
+            ->setFiles($object->getFiles());
+
+        return $this;
+    }
 }

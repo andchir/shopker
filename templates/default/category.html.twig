@@ -40,25 +40,28 @@
                                 {% for item in items %}
                                     {% if listTemplate == 'grid' %}
                                         <div class="col-6 col-lg-4 shk-item">
-                                            <div class="card mb-3">
+                                            <div class="card mb-3 show-on-hover-parent card-border-on-hover">
                                                 <div class="card-body">
                                                     {{ renderOutputTypeArray(item, fields, '', {"currency": currency}) }}
-                                                    <div class="pt-3">
-                                                        <form id="shk-form" action="{{ path('shop_cart_action') }}" method="post">
-                                                            <input type="hidden" name="item_id" value="{{ item._id }}">
-                                                            <input type="hidden" name="category_id" value="{{ item.parentId }}">
-                                                            <input type="hidden" name="type" value="shop">
-                                                            <div class="row no-gutters">
-                                                                <div class="col-5">
-                                                                    <input type="number" class="form-control d-inline-block text-center" value="1" min="1" step="1" name="count">
+                                                    <div class="position-relative">
+                                                        <div class="card-footer-absolute show-on-hover">
+                                                            <form id="shk-form" action="{{ path('shop_cart_action') }}" method="post">
+                                                                <input type="hidden" name="item_id" value="{{ item._id }}">
+                                                                <input type="hidden" name="category_id" value="{{ item.parentId }}">
+                                                                <input type="hidden" name="type" value="shop">
+                                                                <div class="row no-gutters">
+                                                                    <div class="col-5">
+                                                                        <input type="number" class="form-control d-inline-block text-center" value="1" min="1" step="1" name="count">
+                                                                    </div>
+                                                                    <div class="col-7 pl-2">
+                                                                        <button type="submit" class="btn btn-primary btn-block" name="submit_button">
+                                                                            В корзину
+                                                                        </button>
+                                                                    </div>
                                                                 </div>
-                                                                <div class="col-7 pl-2">
-                                                                    <button type="submit" class="btn btn-primary btn-block" name="submit_button">
-                                                                        В корзину
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </form>
+                                                            </form>
+                                                            <div class="clearfix"></div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

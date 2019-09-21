@@ -113,9 +113,8 @@ class CartController extends ProductController
         $dm = $this->get('doctrine_mongodb')->getManager();
         /** @var ShopCartService $shopCartService */
         $shopCartService = $this->get('app.shop_cart');
-        /** @var SettingsService $settingsService */
-        $settingsService = $this->get('app.settings');
-        $currency = $settingsService->getCurrency();
+        $locale = $request->getLocale();
+        $localeDefault = $this->getParameter('locale');
 
         $type = $request->get('type', 'shop');
         $count = max(1, (int) $request->get('count'));
@@ -168,23 +167,20 @@ class CartController extends ProductController
         /** @var OrderContent $currentProduct */
         $currentProduct = $contentIndex > -1 ? $cartContent->get($contentIndex) : null;
 
-        if (!empty($currentProduct)
-            && $currentProduct->getParameters() == $parameters
-            && $currentProduct->getFiles() == $files) {
-                $currentProduct->incrementCount($count);
+        if ($currentProduct) {
+            $currentProduct->incrementCount($count);
         } else {
 
             $content = new OrderContent();
             $content
                 ->setId($productDocument['_id'])
-                ->setTitle($productDocument[$titleFieldName] ?? '')
+                ->setTitle(ShopCartService::getTranslatedField($productDocument, $titleFieldName, $locale, $localeDefault))
                 ->setPrice($productDocument[$priceFieldName] ?? '')
                 ->setCount($count)
                 ->setParameters($parameters)
                 ->setFiles($files)
                 ->setUri($category->getUri() . ($productDocument[$systemNameField] ?? ''))
-                ->setContentTypeName($category->getContentTypeName())
-                ->setCurrency($currency);
+                ->setContentTypeName($category->getContentTypeName());
 
             $shoppingCart->addContent($content);
         }

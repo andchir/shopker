@@ -242,4 +242,22 @@ class ShopCartService
             ->getManager()
             ->getRepository(ShoppingCart::class);
     }
+
+    /**
+     * @param mixed $document
+     * @param string $fieldName
+     * @param string $locale
+     * @param string $localeDefault
+     * @return string
+     */
+    public static function getTranslatedField($document, $fieldName, $locale, $localeDefault)
+    {
+        $translations = $document['translations'] ?? [];
+        if ($locale !== $localeDefault
+            && isset($translations[$fieldName])
+            && isset($translations[$fieldName][$locale])) {
+                return $translations[$fieldName][$locale];
+        }
+        return $document[$fieldName] ?? '';
+    }
 }

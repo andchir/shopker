@@ -120,11 +120,15 @@ header .header-brand { display: inline-block; padding: 0.1rem 0.2rem 0 0; font-s
 
 /* card */
 .card {  }
+.card-body { padding: 15px; }
 .card .card-header { padding-bottom: 0; font-family: 'Comfortaa', sans-serif; background-color: transparent; border-bottom: 0; }
 .card .card-header > * { display: inline-block; padding-bottom: 0.7rem; border-bottom: 1px solid rgba(0,0,0,0.125); }
 .bg-cover { background-repeat: no-repeat; background-size: cover; }
 .bg-cover-transparent { position: relative; background-size: 0 0; background-repeat: no-repeat; z-index: 1; }
 .bg-cover-transparent:before { content: ''; display: block; position: absolute; left: 0; top: 0; z-index: -1; width: 100%; height: 100%; background-image: inherit; background-repeat: no-repeat; background-size: cover; pointer-events: none; opacity: 0.2; }
+.card-border-on-hover:hover { border-width: 3px; border-top-left-radius: 0.35rem; border-top-right-radius: 0.35rem; }
+.card-border-on-hover:hover .card-body { padding: 13px; }
+.card-footer-absolute { position: absolute; left: 0; padding: 14px; margin: 0 -16px; background-color: #fff; z-index: 1; border: 3px solid rgba(0,0,0,.125); border-top: 0; border-bottom-left-radius: 0.4rem; border-bottom-right-radius: 0.4rem; }
 
 /* carousel */
 .carousel-indicators { bottom: -40px; }
@@ -159,7 +163,7 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle { top: 16px; right: -7px; left
 .noUi-value-horizontal { transform: translate(-50%, 80%); }
 
 /* shop_cart */
-.shop-cart-bottom { position: fixed; left: 0; bottom: 0; width: 100%; }
+.shop-cart-bottom { position: fixed; left: 0; bottom: 0; width: 100%; z-index: 10; }
 .shop-cart-bottom-b { width: 100%; padding: 10px; background-color: #17a2b8; box-shadow: 0 0 40px rgba(0,0,0,0.4); border-top: 1px solid #fff; color: #fff; z-index: 200; }
 
 /* show-on-hover */

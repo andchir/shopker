@@ -41,7 +41,8 @@
             selectorCountUniqueTotal: '.shopping-cart-count-unique-total',
             selectorDeclension: '.shopping-cart-declension',
             productFormSelector: '',
-            templateName: ''
+            templateName: '',
+            autoUpdateElements: false
         };
 
         this.data = {
@@ -246,7 +247,9 @@
                     return;
                 }
                 self.updateData(response);
-                self.updateElementsBySelectors(response);
+                if (mainOptions.autoUpdateElements) {
+                    self.updateElementsBySelectors(response);
+                }
                 self.containerUpdate(response.html);
                 self.showLoading(false);
                 self.dispatchEvent('load', self.extend(response, {container: container, element: formEl || null}));

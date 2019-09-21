@@ -39,15 +39,32 @@
 
                                 {% for item in items %}
                                     {% if listTemplate == 'grid' %}
-                                        <div class="col-6 col-lg-4">
+                                        <div class="col-6 col-lg-4 shk-item">
                                             <div class="card mb-3">
                                                 <div class="card-body">
                                                     {{ renderOutputTypeArray(item, fields, '', {"currency": currency}) }}
+                                                    <div class="pt-3">
+                                                        <form id="shk-form" action="{{ path('shop_cart_action') }}" method="post">
+                                                            <input type="hidden" name="item_id" value="{{ item._id }}">
+                                                            <input type="hidden" name="category_id" value="{{ item.parentId }}">
+                                                            <input type="hidden" name="type" value="shop">
+                                                            <div class="row no-gutters">
+                                                                <div class="col-5">
+                                                                    <input type="number" class="form-control d-inline-block text-center" value="1" min="1" step="1" name="count">
+                                                                </div>
+                                                                <div class="col-7 pl-2">
+                                                                    <button type="submit" class="btn btn-primary btn-block" name="submit_button">
+                                                                        В корзину
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     {% elseif listTemplate == 'list' %}
-                                        <div class="col-12">
+                                        <div class="col-12 shk-item">
                                             <div class="card mb-3">
                                                 <div class="card-body">
                                                     <div class="catalog-list-item">
@@ -82,12 +99,34 @@
 
     </main>
     <script>
+        var shoppingCart;
         document.addEventListener('DOMContentLoaded', function() {
-            if (typeof shk !== 'undefined') {
-                shk.onAfterInit(function() {
-                    shk.filtersInit(true);
+            shk.onAfterInit(function() {
+                shk.filtersInit(true);
+            });
+
+            shoppingCart = new ShoppingCart({
+                baseUrl: '{{ app.request.baseUrl }}',// Base URL
+                connectorUrl: '{{ path('shop_cart_action') }}',// URL for requests
+                selector: '#shoppingCartSmallContainer',// Shopping cart container selector
+                productFormSelector: '.shk-item form',// Product form selector
+                templateName: 'shop_cart'// Shopping cart template name
+            });
+            shoppingCart
+                .addEventListener('formSubmitBefore', function(e) {// Before submitting form data
+                    var buttonEl = e.detail.element.querySelector('button[type="submit"]');
+                    if (buttonEl) {
+                        buttonEl.setAttribute('disabled', '');// Disable button
+                    }
+                })
+                .addEventListener('load', function(e) {// After receiving a response from the shopping cart
+                    if (e.detail.element) {
+                        var buttonEl = e.detail.element.querySelector('button[type="submit"]');
+                        if (buttonEl) {
+                            buttonEl.removeAttribute('disabled');// Remove the button lock
+                        }
+                    }
                 });
-            }
         });
     </script>
 {% endblock %}

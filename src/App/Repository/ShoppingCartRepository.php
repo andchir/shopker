@@ -29,6 +29,7 @@ class ShoppingCartRepository extends DocumentRepository
         } else if ($sessionId) {
             $qb->field('sessionId')->equals($sessionId);
         }
+        $qb->addAnd($qb->expr()->field('type')->equals($type));
         return $qb->getQuery()->getSingleResult();
     }
 }

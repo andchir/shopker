@@ -134,11 +134,9 @@ class CartController extends ProductController
         $titleFieldName = $contentType->getFieldByChunkName('header', 'title');
         $systemNameField = $contentType->getSystemNameField();
 
-        // Product parameters
         $parameters = $this->getProductParameters($request, $productDocument, $contentTypeFields);
-
-        // Product files
         $files = $this->getProductFiles($request, $shoppingCart, $productDocument, $contentTypeFields);
+        $options = [];
 
         // Files required?
         if (!count($files)) {
@@ -160,7 +158,13 @@ class CartController extends ProductController
         }
 
         $cartContent = $shoppingCart->getContent();
-        $contentIndex = $this->getContentIndex($cartContent, $productDocument, $priceFieldName);
+        $contentIndex = $this->getContentIndex($cartContent, [
+            'id' => $productDocument['_id'],
+            'price' => $productDocument[$priceFieldName] ?? 0,
+            'parameters' => $parameters,
+            'options' => $options,
+            'contentTypeName' => $category->getContentTypeName()
+        ]);
         /** @var OrderContent $currentProduct */
         $currentProduct = $contentIndex > -1 ? $cartContent->get($contentIndex) : null;
 
@@ -296,11 +300,10 @@ class CartController extends ProductController
 
     /**
      * @param $shoppingCartContent
-     * @param array $productDocument
-     * @param string $priceFieldName
+     * @param array $itemData
      * @return int
      */
-    public function getContentIndex($shoppingCartContent, $productDocument, $priceFieldName = 'price')
+    public function getContentIndex($shoppingCartContent, $itemData)
     {
         if (empty($shoppingCartContent)) {
             return -1;
@@ -308,8 +311,11 @@ class CartController extends ProductController
         $index = -1;
         /** @var OrderContent $content */
         foreach ($shoppingCartContent as $ind => $content) {
-            if ($content->getId() == $productDocument['_id']
-                && $content->getPrice() == $productDocument[$priceFieldName]) {
+            if ($content->getId() == $itemData['id']
+                && $content->getPrice() == $itemData['price']
+                && $content->getParameters() == $itemData['parameters']
+                && $content->getOptions() == $itemData['options']
+                && $content->getContentTypeName() == $itemData['contentTypeName']) {
                 $index = $ind;
                 break;
             }
@@ -437,15 +443,20 @@ class CartController extends ProductController
     }
 
     /**
-     * @Route("/edit", name="shop_cart_edit")
+     * @Route(
+     *     "/{type}",
+     *     name="shop_cart_edit",
+     *     methods={"GET", "POST"},
+     *     requirements={"type"=".+"},
+     *     defaults={"type": "shop"}
+     * )
+     * @param string $type
      * @return Response
      */
-    public function editAction()
+    public function editAction($type)
     {
-
-
         return $this->render('page_shop_cart.html.twig', [
-
+            'shoppingCartContentType' => $type
         ]);
     }
 

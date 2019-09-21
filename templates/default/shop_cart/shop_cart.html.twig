@@ -1,5 +1,5 @@
-{% if items | length > 0 %}
-    <div class="shop-cart-bottom" id="shoppingCartSmallContainer">
+<div class="shop-cart-bottom" id="shoppingCartSmallContainer">
+    {% if items | length > 0 %}
         <div class="shop-cart-bottom-b">
             <form action="{{ path('shop_cart_action') }}" method="post">
                 <input type="hidden" name="type" value="{{ type }}">
@@ -30,7 +30,5 @@
                 </div>
             </form>
         </div>
-    </div>
-{% else %}
-    <div class="shop-cart-bottom" id="shoppingCartSmallContainer"></div>
-{% endif %}
+    {% endif %}
+</div>

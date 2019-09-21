@@ -592,11 +592,11 @@ class ShoppingCart {
         $this->updateTotal();
         $shoppingCartContent = $this->getContent();
         return [
-            'priceTotal' => $this->getPrice(),
-            'itemsTotal' => $this->getCount(),
-            'itemsUniqueTotal' => count($shoppingCartContent),
-            'deliveryPrice' => $this->getDeliveryPrice(),
-            'deliveryName' => $this->getDeliveryName(),
+            'price_total' => $this->getPrice(),
+            'items_total' => $this->getCount(),
+            'items_unique_total' => count($shoppingCartContent),
+            'delivery_price' => $this->getDeliveryPrice(),
+            'delivery_name' => $this->getDeliveryName(),
             'ids' => $this->getContentValues('id')
         ];
     }

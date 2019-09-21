@@ -93,6 +93,7 @@ header .header-brand { display: inline-block; padding: 0.1rem 0.2rem 0 0; font-s
 /* pagination */
 .pagination-rounded > li > a,
 .pagination-rounded > li > span { border-radius: 0.5rem !important; margin: 0 5px; }
+.page-item.active .page-link { z-index: auto; }
 
 .catalog-list-item { position: relative; }
 .catalog-list-item-inner { padding-left: 150px; min-height: 115px; }
@@ -158,8 +159,8 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle { top: 16px; right: -7px; left
 .noUi-value-horizontal { transform: translate(-50%, 80%); }
 
 /* shop_cart */
-.shop-cart-bottom { width: 100%; height: 60px; }
-.shop-cart-bottom-b { position: fixed; left: 0; bottom: 0; width: 100%; padding: 10px; background-color: #17a2b8; box-shadow: 0 0 40px rgba(0,0,0,0.4); border-top: 1px solid #fff; color: #fff; z-index: 200; }
+.shop-cart-bottom { position: fixed; left: 0; bottom: 0; width: 100%; }
+.shop-cart-bottom-b { width: 100%; padding: 10px; background-color: #17a2b8; box-shadow: 0 0 40px rgba(0,0,0,0.4); border-top: 1px solid #fff; color: #fff; z-index: 200; }
 
 /* show-on-hover */
 .show-on-hover-parent { position: relative; }

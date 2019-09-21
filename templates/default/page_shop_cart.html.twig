@@ -5,12 +5,19 @@
     <main role="main" class="container">
         <div class="min-height400">
 
-            <h1>
-                {{ 'Shopping cart' | trans }}
-            </h1>
-
-            {{ shopCart('shop_cart_edit', 'shop', 'shop_cart_edit_empty') }}
+            {{ shopCart('shop_cart_edit', shoppingCartContentType) }}
 
         </div>
     </main>
+    <script>
+        var shoppingCart;
+        document.addEventListener('DOMContentLoaded', function() {
+            shoppingCart = new ShoppingCart({
+                baseUrl: '{{ app.request.baseUrl }}',
+                connectorUrl: '{{ path('shop_cart_action') }}',
+                selector: '#shoppingCartContainer',
+                templateName: 'shop_cart_edit'
+            });
+        });
+    </script>
 {% endblock %}

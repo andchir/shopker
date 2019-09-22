@@ -244,6 +244,7 @@
             self.ajax(mainOptions.baseUrl + mainOptions.connectorUrl, formData, function(response) {
                 if (!response.success) {
                     self.showLoading(false);
+                    self.dispatchEvent('load', {response: response, container: container, element: formEl || null});
                     return;
                 }
                 self.updateData(response);
@@ -252,10 +253,10 @@
                 }
                 self.containerUpdate(response.html);
                 self.showLoading(false);
-                self.dispatchEvent('load', self.extend(response, {container: container, element: formEl || null}));
+                self.dispatchEvent('load', {response: response, container: container, element: formEl || null});
             }, function(response) {
                 self.showLoading(false);
-                self.dispatchEvent('load', self.extend(response, {container: container, element: formEl || null}));
+                self.dispatchEvent('load', {response: response, container: container, element: formEl || null});
             }, 'POST');
         };
 

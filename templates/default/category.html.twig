@@ -129,6 +129,12 @@
                             buttonEl.removeAttribute('disabled');// Remove the button lock
                         }
                     }
+                    if (e.detail
+                        && e.detail.response
+                        && !e.detail.response.success
+                        && e.detail.response.message) {
+                            alert(e.detail.response.message);
+                    }
                 });
         });
     </script>

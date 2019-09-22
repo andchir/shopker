@@ -3,7 +3,9 @@
 namespace App\Service;
 
 use App\MainBundle\Document\Order;
+use App\MainBundle\Document\OrderContent;
 use App\MainBundle\Document\ShoppingCart;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,26 +25,34 @@ class ShopCartService
 
     /**
      * @param string $type
-     * @return array|null
+     * @return ArrayCollection|null
      */
     public function getContent($type = 'shop')
     {
         $shoppingCart = $this->getShoppingCartByType($type);
-        return $shoppingCart ? $shoppingCart->getContentSorted() : [];
+        return $shoppingCart ? $shoppingCart->getContentSorted() : null;
     }
 
     /**
      * Clear shopping cart data
      * @param string $type
+     * @param bool $cleanFiles
      * @return bool
      */
-    public function clearContent($type = 'shop')
+    public function clearContent($type = 'shop', $cleanFiles = false)
     {
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->container->get('doctrine_mongodb')->getManager();
-
         $shoppingCart = $this->getShoppingCartByType($type);
         if ($shoppingCart) {
+            /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+            $dm = $this->container->get('doctrine_mongodb')->getManager();
+
+            if ($cleanFiles) {
+                $shoppingCartContent = $shoppingCart->getContent();
+                /** @var OrderContent $content */
+                foreach ($shoppingCartContent as $content) {
+                    $content->setFiles([]);
+                }
+            }
             $dm->remove($shoppingCart);
             $dm->flush();
             return true;
@@ -54,7 +64,7 @@ class ShopCartService
      * @param string $type
      * @return ShoppingCart|null
      */
-    public function getShoppingCartByType($type)
+    public function getShoppingCartByType($type = 'shop')
     {
         return $this->getShoppingCart($type, $this->getUserId(), $this->getSessionId($type));
     }

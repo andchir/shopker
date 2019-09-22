@@ -525,8 +525,8 @@ class OrderContent
             ->setImage($data['image'])
             ->setUri($data['uri'])
             ->setContentTypeName($data['contentTypeName'])
-            ->setParameters($data['parameters']);
-            //->setFiles($data['files']);
+            ->setParameters($data['parameters'])
+            ->setFiles($data['files']);
         return $this;
     }
 

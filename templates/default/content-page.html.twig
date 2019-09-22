@@ -29,16 +29,10 @@
                         {% include 'flash_messages.html.twig' %}
 
                         {{ renderOutputTypeChunk(currentPage, fields, 'tag', 'page_') }}
+                        {{ renderOutputTypeChunk(currentPage, fields, 'description') }}
+                        {{ renderOutputTypeChunk(currentPage, fields, 'parameters', 'page_') }}
+                        {{ renderOutputTypeChunk(currentPage, fields, 'file') }}
 
-                        <div class="my-3">
-                            {{ renderOutputTypeChunk(currentPage, fields, 'description') }}
-                        </div>
-                        <div class="my-3">
-                            {{ renderOutputTypeChunk(currentPage, fields, 'parameters', 'page_') }}
-                        </div>
-                        <div class="my-3">
-                            {{ renderOutputTypeChunk(currentPage, fields, 'file_download') }}
-                        </div>
                         {% if currentPage.price > 0 %}
                             <div class="my-3">
                                 {{ 'Price' | trans }}:
@@ -93,6 +87,15 @@
                 productFormSelector: '.shk-item form',// Product form selector
                 templateName: 'shop_cart'// Shopping cart template name
             });
+            shoppingCart
+                .addEventListener('load', function(e) {
+                    if (e.detail
+                        && e.detail.response
+                        && !e.detail.response.success
+                        && e.detail.response.message) {
+                            alert(e.detail.response.message);
+                    }
+                });
         });
     </script>
 

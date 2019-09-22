@@ -37,10 +37,15 @@ class FileController extends ProductController
      */
     public function uploadUserFile(Request $request, TranslatorInterface $translator, Filesystem $fs)
     {
+        $type = $request->get('type', 'shop');
         /** @var User $user */
         $user = $this->getUser();
+        /** @var ShopCartService $shopCartService */
+        $shopCartService = $this->get('app.shop_cart');
+        $shoppingCart = $shopCartService->getShoppingCart($type, $shopCartService->getUserId(), $shopCartService->getSessionId($type), null, true);
+
         $userId = $user ? $user->getId() : 0;
-        $ownerId = ShopCartService::getCartId();
+        $ownerId = $shoppingCart ? $shoppingCart->getId() : 0;
         $max_user_files_size = (int) $this->getParameter('app.max_user_files_size');
 
         $categoryId = (int) $request->get('categoryId');

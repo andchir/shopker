@@ -2,6 +2,7 @@
 4.0.8
 - New order statistics module.
 - Ajax shopping cart.
+- Shopping cart store in DB with life time option.
 
 4.0.7
 - Update Angular 7 to 8.

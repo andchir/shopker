@@ -25,6 +25,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * @Route("/shop_cart")
@@ -35,9 +36,10 @@ class CartController extends ProductController
     /**
      * @Route("/action", name="shop_cart_action", methods={"GET", "POST"})
      * @param Request $request
+     * @param TranslatorInterface $translator
      * @return Response
      */
-    public function actionResponseAction(Request $request)
+    public function actionResponseAction(Request $request, TranslatorInterface $translator)
     {
         /** @var ShopCartService $shopCartService */
         $shopCartService = $this->get('app.shop_cart');
@@ -91,12 +93,15 @@ class CartController extends ProductController
                 }
                 $output['html'] = $shopCartService->renderShopCart($shoppingCart, $templateName, $type);
             }
+            if (!empty($output['message'])) {
+                $output['message'] = $translator->trans($output['message']);
+            }
             return $this->json($output);
         } else {
             if (!$output['success'] && isset($output['message'])) {
                 $request->getSession()
                     ->getFlashBag()
-                    ->add('errors', $output['message']);
+                    ->add('errors', $translator->trans($output['message']));
             }
             return new RedirectResponse($back_url);
         }
@@ -428,7 +433,7 @@ class CartController extends ProductController
                 'id' => $fileId,
                 'ownerType' => FileDocument::OWNER_ORDER_TEMPORARY,
                 'userId' => $userId,
-                'ownerId' => $ownerId
+                'ownerId' => strval($ownerId)
             ]);
             if (!$fileDocument) {
                 continue;

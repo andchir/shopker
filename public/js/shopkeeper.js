@@ -620,8 +620,10 @@
          * @param {string} buttonUploadSelector
          * @param {string} buttonUploadCancelSelector
          * @param {string} fileNameSelector
+         * @param {string} type
          */
-        this.orderUploadFileInit = function(categoryId, buttonUploadSelector, buttonUploadCancelSelector, fileNameSelector) {
+        this.orderUploadFileInit = function(categoryId, buttonUploadSelector, buttonUploadCancelSelector, fileNameSelector, type) {
+            type = type || 'shop';
             var buttonUploadEl = document.querySelector(buttonUploadSelector),
                 buttonUploadCancelEl = document.querySelector(buttonUploadCancelSelector),
                 fileNameEl = document.querySelector(fileNameSelector),
@@ -667,6 +669,7 @@
                 var formData = new FormData();
                 formData.append(fileFieldName, fileList[0]);
                 formData.append('categoryId', categoryId);
+                formData.append('type', type);
 
                 self.ajax(mainOptions.baseUrl + 'files/user_upload', formData, function(data) {
                     if (data.filesIds && Array.isArray(data.filesIds)) {

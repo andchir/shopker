@@ -103,7 +103,8 @@ class CheckoutController extends BaseController
 
             /** @var ShopCartService $shopCartService */
             $shopCartService = $this->get('app.shop_cart');
-            $shopCartContent = $shopCartService->getContent();
+            $shoppingCart = $shopCartService->getShoppingCartByType();
+            $shopCartContent = $shoppingCart ? $shoppingCart->getContent() : [];
             if (empty($shopCartContent)) {
                 $form->addError(new FormError($translator->trans('Your cart is empty.', [], 'validators')));
             }
@@ -165,10 +166,11 @@ class CheckoutController extends BaseController
                 $dm->persist($order);
                 $dm->flush();
 
+                $this->updateFilesOwner($order);
+                $shopCartService->clearContent($shoppingCart->getType(), true);
+
                 // Delete temporary files
                 $this->deleteTemporaryFiles(FileDocument::OWNER_ORDER_TEMPORARY);
-
-                $shopCartService->clearContent();
 
                 $request->getSession()
                     ->getFlashBag()
@@ -199,6 +201,38 @@ class CheckoutController extends BaseController
             return in_array($value['name'], $publicUserDataKeys);
         });
         $order->setOptions($orderOptions);
+    }
+
+    /**
+     * @param Order|null $order
+     */
+    public function updateFilesOwner($order)
+    {
+        if (!$order || !$order->getId()) {
+            return;
+        }
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->get('doctrine_mongodb')->getManager();
+
+        $fileDocumentRepository = $this->getFileRepository();
+        $shopCartContent = $order->getContent();
+        /** @var OrderContent $content */
+        foreach ($shopCartContent as $content) {
+            if (empty($files = $content->getFiles())) {
+                continue;
+            }
+            foreach ($files as $fileData) {
+                /** @var FileDocument $fileDocument */
+                $fileDocument = $fileDocumentRepository->find($fileData['fileId']);
+                if ($fileDocument) {
+                    $fileDocument
+                        ->setOwnerType(FileDocument::OWNER_ORDER_PRODUCT)
+                        ->setOwnerId($order->getId())
+                        ->setOrder($order);
+                }
+            }
+        }
+        $dm->flush();
     }
 
     /**

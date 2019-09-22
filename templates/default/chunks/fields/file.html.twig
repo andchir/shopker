@@ -1,4 +1,4 @@
-<div>
+<div class="my-3">
     <div class="mb-2">
         {{ 'You can upload file' | trans }}:
         <b>{{ fieldProperties.outputProperties.allowed_extensions }}</b>
@@ -22,7 +22,8 @@
             {{ itemData.parentId }},
             '#buttonFileUpload-{{ fieldData.name }}',
             '#buttonFileUploadCancel-{{ fieldData.name }}',
-            '#fileNameContainer-{{ fieldData.name }}'
+            '#fileNameContainer-{{ fieldData.name }}',
+            'shop'
         );
     });
 </script>

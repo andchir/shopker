@@ -15,6 +15,7 @@ use Twig\Environment as TwigEnvironment;
 class ShoppingCart {
 
     const SESSION_KEY = 'shoppingcart_sessid';
+    const TYPE_MAIN = 'shop';
 
     /**
      * @MongoDB\Id(type="int", strategy="INCREMENT")
@@ -592,6 +593,7 @@ class ShoppingCart {
         $this->updateTotal();
         $shoppingCartContent = $this->getContent();
         return [
+            'type' => $this->getType(),
             'price_total' => $this->getPrice(),
             'items_total' => $this->getCount(),
             'items_unique_total' => count($shoppingCartContent),

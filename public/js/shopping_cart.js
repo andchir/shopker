@@ -35,6 +35,7 @@
             connectorUrl: 'assets/components/shopping_cart/connector.php',
             snippetPropertySetName: '',
             selector: '#shoppingCartContainer',
+            typeMain: 'shop',
             useNumberFormat: true,
             selectorPriceTotal: '.shopping-cart-price-total',
             selectorCountTotal: '.shopping-cart-count-total',
@@ -42,16 +43,19 @@
             selectorDeclension: '.shopping-cart-declension',
             productFormSelector: '',
             templateName: '',
-            autoUpdateElements: false
+            autoUpdateElements: false,
+            updateHtmlEmpty: true
         };
 
         this.data = {
-            price_total: 0,
-            items_total: 0,
-            items_unique_total: 0,
-            delivery_name: '',
-            delivery_price: 0,
-            ids: []
+            shop: {
+                price_total: 0,
+                items_total: 0,
+                items_unique_total: 0,
+                delivery_name: '',
+                delivery_price: 0,
+                ids: []
+            }
         };
 
         /**
@@ -185,12 +189,16 @@
          * @param {object} data
          */
         this.updateData = function(data) {
-            this.data.price_total = data.price_total || 0;
-            this.data.items_total = data.items_total || 0;
-            this.data.items_unique_total = data.items_unique_total || 0;
-            this.data.delivery_name = data.delivery_name || '';
-            this.data.delivery_price = data.delivery_price || 0;
-            this.data.ids = data.ids || [];
+            var type = data.type || mainOptions.typeMain;
+            if (!this.data[type]) {
+                this.data[type] = {};
+            }
+            this.data[type].price_total = data.price_total || 0;
+            this.data[type].items_total = data.items_total || 0;
+            this.data[type].items_unique_total = data.items_unique_total || 0;
+            this.data[type].delivery_name = data.delivery_name || '';
+            this.data[type].delivery_price = data.delivery_price || 0;
+            this.data[type].ids = data.ids || [];
         };
 
         /**
@@ -251,7 +259,9 @@
                 if (mainOptions.autoUpdateElements) {
                     self.updateElementsBySelectors(response);
                 }
-                self.containerUpdate(response.html);
+                if (response.html || mainOptions.updateHtmlEmpty) {
+                    self.containerUpdate(response.html);
+                }
                 self.showLoading(false);
                 self.dispatchEvent('load', {response: response, container: container, element: formEl || null});
             }, function(response) {

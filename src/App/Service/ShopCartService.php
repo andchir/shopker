@@ -27,7 +27,7 @@ class ShopCartService
      * @param string $type
      * @return ArrayCollection|null
      */
-    public function getContent($type = 'shop')
+    public function getContent($type = ShoppingCart::TYPE_MAIN)
     {
         $shoppingCart = $this->getShoppingCartByType($type);
         return $shoppingCart ? $shoppingCart->getContentSorted() : null;
@@ -39,7 +39,7 @@ class ShopCartService
      * @param bool $cleanFiles
      * @return bool
      */
-    public function clearContent($type = 'shop', $cleanFiles = false)
+    public function clearContent($type = ShoppingCart::TYPE_MAIN, $cleanFiles = false)
     {
         $shoppingCart = $this->getShoppingCartByType($type);
         if ($shoppingCart) {
@@ -64,7 +64,7 @@ class ShopCartService
      * @param string $type
      * @return ShoppingCart|null
      */
-    public function getShoppingCartByType($type = 'shop')
+    public function getShoppingCartByType($type = ShoppingCart::TYPE_MAIN)
     {
         return $this->getShoppingCart($type, $this->getUserId(), $this->getSessionId($type));
     }
@@ -118,7 +118,7 @@ class ShopCartService
      * @param string $type
      * @return string
      */
-    public function renderShopCart($shoppingCart, $templateName, $type = 'shop')
+    public function renderShopCart($shoppingCart, $templateName, $type = ShoppingCart::TYPE_MAIN)
     {
         /** @var TwigEnvironment $twig */
         $twig = $this->container->get('twig');
@@ -133,7 +133,7 @@ class ShopCartService
      * @param string $type
      * @return string
      */
-    public function getSessionId($type = 'shop')
+    public function getSessionId($type = ShoppingCart::TYPE_MAIN)
     {
         if (!empty($_COOKIE[ShoppingCart::SESSION_KEY])) {
             return $_COOKIE[ShoppingCart::SESSION_KEY];
@@ -149,7 +149,7 @@ class ShopCartService
      * @param string $type
      * @return int
      */
-    public function getLifetime($type = 'shop')
+    public function getLifetime($type = ShoppingCart::TYPE_MAIN)
     {
         if ($this->container->hasParameter('app.shopping_cart_lifetime_' . $type)) {
             $lifeTime = (int) $this->container->getParameter('app.shopping_cart_lifetime_' . $type);

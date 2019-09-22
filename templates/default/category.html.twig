@@ -6,6 +6,14 @@
     {% include 'header.html.twig' %}
     <main role="main" class="container">
 
+        <div class="float-lg-right mb-3 text-right">
+            {% set favoritesCount = shopCartProductCount('products', 'favorites') %}
+            <a href="{{ path('shop_cart_edit', {type: 'favorites'}) }}">
+                {{ 'Favorites' | trans }}
+                ({{ favoritesCount }})
+            </a>
+        </div>
+
         {% include 'nav/breadcrumbs.html.twig' %}
 
         <div class="min-height400">
@@ -39,21 +47,33 @@
 
                                 {% for item in items %}
                                     {% if listTemplate == 'grid' %}
-                                        <div class="col-6 col-lg-4 shk-item">
+                                        <div class="col-6 col-lg-4">
                                             <div class="card mb-3 show-on-hover-parent card-border-on-hover">
                                                 <div class="card-body">
-                                                    {{ renderOutputTypeArray(item, fields, '', {"currency": currency}) }}
-                                                    <div class="position-relative">
+                                                    <div class="position-relative js-shopping-cart-favorites">
+                                                        {{ renderOutputTypeArray(item, fields, '', {"currency": currency}) }}
+                                                        <div class="position-absolute pos-right-top show-on-hover">
+                                                            <form id="shk-form" action="{{ path('shop_cart_action') }}" method="post">
+                                                                <input type="hidden" name="item_id" value="{{ item._id }}">
+                                                                <input type="hidden" name="category_id" value="{{ item.parentId }}">
+                                                                <input type="hidden" name="type" value="favorites">
+                                                                <button class="btn btn-outline-secondary-white" type="submit" data-toggle="tooltip" name="action" value="add_to_cart" title="{{ 'To favorites' | trans }}">
+                                                                    <i class="icon-heart1"></i>
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                    <div class="position-relative js-shopping-cart-product">
                                                         <div class="card-footer-absolute show-on-hover">
                                                             <form id="shk-form" action="{{ path('shop_cart_action') }}" method="post">
                                                                 <input type="hidden" name="item_id" value="{{ item._id }}">
                                                                 <input type="hidden" name="category_id" value="{{ item.parentId }}">
                                                                 <input type="hidden" name="type" value="shop">
                                                                 <div class="row no-gutters">
-                                                                    <div class="col-5">
+                                                                    <div class="col-4">
                                                                         <input type="number" class="form-control d-inline-block text-center" value="1" min="1" step="1" name="count">
                                                                     </div>
-                                                                    <div class="col-7 pl-2">
+                                                                    <div class="col-8 pl-2">
                                                                         <button type="submit" class="btn btn-primary btn-block" name="submit_button">
                                                                             В корзину
                                                                         </button>
@@ -102,7 +122,7 @@
 
     </main>
     <script>
-        var shoppingCart;
+        var shoppingCart, favorites;
         document.addEventListener('DOMContentLoaded', function() {
             shk.onAfterInit(function() {
                 shk.filtersInit(true);
@@ -112,7 +132,7 @@
                 baseUrl: '{{ app.request.baseUrl }}',// Base URL
                 connectorUrl: '{{ path('shop_cart_action') }}',// URL for requests
                 selector: '#shoppingCartSmallContainer',// Shopping cart container selector
-                productFormSelector: '.shk-item form',// Product form selector
+                productFormSelector: '.js-shopping-cart-product form',// Product form selector
                 templateName: 'shop_cart'// Shopping cart template name
             });
             shoppingCart

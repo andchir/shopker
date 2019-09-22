@@ -1,11 +1,16 @@
 {% extends 'base.html.twig' %}
 
+{% set shoppingCartTemplateName = 'shop_cart_edit' %}
+{% if shoppingCartContentType == 'favorites' %}
+    {% set shoppingCartTemplateName = 'favorites_edit' %}
+{% endif %}
+
 {% block body %}
     {% include 'header.html.twig' %}
     <main role="main" class="container">
         <div class="min-height400">
 
-            {{ shopCart('shop_cart_edit', shoppingCartContentType) }}
+            {{ shopCart(shoppingCartTemplateName, shoppingCartContentType) }}
 
         </div>
     </main>
@@ -16,7 +21,7 @@
                 baseUrl: '{{ app.request.baseUrl }}',
                 connectorUrl: '{{ path('shop_cart_action') }}',
                 selector: '#shoppingCartContainer',
-                templateName: 'shop_cart_edit'
+                templateName: '{{ shoppingCartTemplateName }}'
             });
         });
     </script>

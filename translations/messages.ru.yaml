@@ -99,6 +99,9 @@ File manager is disabled.: Файл-менеджер отключен.
 Templates theme "%theme%" not found.: Тема шаблонов "%theme%" не найдена.
 File downloaded %count% time.|File downloaded %count% times.: 'Файл скачали %count% раз.|Файл скачали %count% раза.|Файл скачали %count% раз.'
 Template "%name%" not found.: Шаблон "%name%" не найден.
+Favorites: Избранное
+To favorites: В избранное
+Remove from favorites: Убрать из избранного
 
 Sort by: Сортировать по
 catalog.sort_by_novelty: Новизне

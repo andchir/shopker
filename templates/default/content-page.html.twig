@@ -1,32 +1,61 @@
 {% extends 'base.html.twig' %}
 
+{% set favoritesCount = shopCartProductCount('products', 'favorites') %}
+{% set favoritesItemCount = shopCartProductCount('products', 'favorites', currentPage.id) %}
+
 {% block title %}{{ currentPage.title | default('') }} - {{ app_name }}{% endblock %}
 
 {% block body %}
     {% include 'header.html.twig' %}
     <main role="main" class="container">
 
+        <div class="float-lg-right mb-3 text-right">
+            <a href="{{ path('shop_cart_edit', {type: 'favorites'}) }}">
+                {{ 'Favorites' | trans }}
+                ({{ favoritesCount }})
+            </a>
+        </div>
+
         {% include 'nav/breadcrumbs.html.twig' %}
 
         {% include 'nav/child-categories-menu.html.twig' %}
 
-        <div class="min-height400 shk-item">
+        <div class="min-height400">
 
             {{ renderOutputTypeChunk(currentPage, fields, 'header', 'page_') }}
 
-            <form id="shk-form" action="{{ path('shop_cart_action') }}" method="post">
-                <input type="hidden" name="item_id" value="{{ currentPage.id }}">
-                <input type="hidden" name="category_id" value="{{ currentPage.parentId }}">
-                <input type="hidden" name="type" value="shop">
-                <div>
-                    <div class="column-left">
-
-                        {{ renderOutputGallery(currentPage, fields, 'image') }}
-
+            <div>
+                <div class="column-left">
+                    <div class="position-relative js-shopping-cart-favorites">
+                        <div class="position-absolute pos-right-top10" style="z-index: 100;">
+                            <form id="shk-form" action="{{ path('shop_cart_action') }}" method="post">
+                                <input type="hidden" name="item_id" value="{{ currentPage.id }}">
+                                <input type="hidden" name="category_id" value="{{ currentPage.parentId }}">
+                                <input type="hidden" name="type" value="favorites">
+                                {% if favoritesItemCount == 0 %}
+                                    <button class="btn btn-outline-secondary-white" type="submit" data-toggle="tooltip" name="action" value="add_to_cart" title="{{ 'To favorites' | trans }}">
+                                        <i class="icon-heart1"></i>
+                                    </button>
+                                {% else %}
+                                    <button class="btn btn-info" type="submit" data-toggle="tooltip" name="action" value="remove_by_id" title="{{ 'Remove from favorites' | trans }}">
+                                        <i class="icon-heart1"></i>
+                                    </button>
+                                {% endif %}
+                            </form>
+                        </div>
                     </div>
-                    <div class="column-right">
 
-                        {% include 'flash_messages.html.twig' %}
+                    {{ renderOutputGallery(currentPage, fields, 'image') }}
+
+                </div>
+                <div class="column-right js-shopping-cart-product">
+
+                    {% include 'flash_messages.html.twig' %}
+
+                    <form id="shk-form" action="{{ path('shop_cart_action') }}" method="post">
+                        <input type="hidden" name="item_id" value="{{ currentPage.id }}">
+                        <input type="hidden" name="category_id" value="{{ currentPage.parentId }}">
+                        <input type="hidden" name="type" value="shop">
 
                         {{ renderOutputTypeChunk(currentPage, fields, 'tag', 'page_') }}
                         {{ renderOutputTypeChunk(currentPage, fields, 'description') }}
@@ -41,7 +70,7 @@
                             </div>
                         {% endif %}
                         <div class="my-3">
-                            {% if shopCartProductCount(currentPage.id, contentType.name) > 0 %}
+                            {% if shopCartProductCount(contentType.name, 'shop', currentPage.id) > 0 %}
                                 <a class="btn btn-info" href="{{ path('shop_cart_edit') }}">
                                     {{ 'Proceed to checkout' | trans }}
                                 </a>
@@ -52,16 +81,16 @@
                                 </button>
                             {% endif %}
                         </div>
-                    </div>
-                    <div class="clearfix"></div>
+                    </form>
                 </div>
-            </form>
+                <div class="clearfix"></div>
+            </div>
 
         </div>
     </main>
 
     <script>
-        var shoppingCart;
+        var shoppingCart, favorites;
         document.addEventListener('DOMContentLoaded', function() {
 
             // Display image for parameter
@@ -84,7 +113,7 @@
                 baseUrl: '{{ app.request.baseUrl }}',// Base URL
                 connectorUrl: '{{ path('shop_cart_action') }}',// URL for requests
                 selector: '#shoppingCartSmallContainer',// Shopping cart container selector
-                productFormSelector: '.shk-item form',// Product form selector
+                productFormSelector: '.js-shopping-cart-product form',// Product form selector
                 templateName: 'shop_cart'// Shopping cart template name
             });
             shoppingCart

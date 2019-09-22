@@ -79,12 +79,12 @@ class AppRuntime
     }
 
     /**
-     * @param int $productId
      * @param string $contentTypeName
      * @param string $type
+     * @param int $productId
      * @return bool
      */
-    public function shopCartProductCountFunction($productId, $contentTypeName, $type = 'shop')
+    public function shopCartProductCountFunction($contentTypeName, $type = 'shop', $productId = 0)
     {
         /** @var ShopCartService $shopCartService */
         $shopCartService = $this->container->get('app.shop_cart');
@@ -92,6 +92,9 @@ class AppRuntime
         $shoppingCartContent = $shoppingCart ? $shoppingCart->getContent() : null;
         if (!$shoppingCartContent) {
             return 0;
+        }
+        if (!$productId) {
+            return count($shoppingCartContent);
         }
 
         $count = 0;

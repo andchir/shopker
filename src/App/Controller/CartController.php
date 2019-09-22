@@ -48,9 +48,9 @@ class CartController extends ProductController
         $referer = $request->headers->get('referer');
         $back_url = $request->get('back_url', $referer);
         $action = $request->get('action');
-        $type = $request->get('type', 'shop');
+        $type = $request->get('type', ShoppingCart::TYPE_MAIN);
         $templateName = $request->get('templateName');
-        if ($request->get('item_id')) {
+        if (!$action && $request->get('item_id')) {
             $action = 'add_to_cart';
         }
         if (!is_null($request->get('remove_by_index'))) {
@@ -63,9 +63,9 @@ class CartController extends ProductController
                 $output = $this->addToCartAction($request);
 
                 break;
-            case 'print':
+            case 'remove_by_id':
 
-
+                $output = $this->removeById($request);
 
                 break;
             case 'remove':
@@ -120,7 +120,7 @@ class CartController extends ProductController
         $shopCartService = $this->get('app.shop_cart');
         $locale = $request->getLocale();
         $localeDefault = $this->getParameter('locale');
-        $type = $request->get('type', 'shop');
+        $type = $request->get('type', ShoppingCart::TYPE_MAIN);
 
         $count = max(1, (int) $request->get('count'));
         $shoppingCart = $shopCartService->getShoppingCart($type, $this->getUserId(), $this->getSessionId($type), null, true);
@@ -138,25 +138,28 @@ class CartController extends ProductController
         $titleFieldName = $contentType->getFieldByChunkName('header', 'title');
         $systemNameField = $contentType->getSystemNameField();
 
-        $parameters = $this->getProductParameters($request, $productDocument, $contentTypeFields);
-        $files = $this->getProductFiles($request, $shoppingCart, $productDocument, $contentTypeFields);
         $options = [];
+        $files = [];
+        $parameters = $this->getProductParameters($request, $productDocument, $contentTypeFields);
 
         // Files required?
-        if (!count($files)) {
-            $fileRequiredFields = array_filter($contentTypeFields, function($field) {
-                return $field['outputType'] == 'file'
-                    && !empty($field['outputProperties']['required']);
-            });
-            if (count($fileRequiredFields) > 0) {
-                $c = 0;
-                foreach ($fileRequiredFields as $index => $field) {
-                    if (!empty($productDocument[$field['name']])) {
-                        $c++;
+        if ($type === ShoppingCart::TYPE_MAIN) {
+            $files = $this->getProductFiles($request, $shoppingCart, $productDocument, $contentTypeFields);
+            if (!count($files)) {
+                $fileRequiredFields = array_filter($contentTypeFields, function($field) {
+                    return $field['outputType'] == 'file'
+                        && !empty($field['outputProperties']['required']);
+                });
+                if (count($fileRequiredFields) > 0) {
+                    $c = 0;
+                    foreach ($fileRequiredFields as $index => $field) {
+                        if (!empty($productDocument[$field['name']])) {
+                            $c++;
+                        }
                     }
-                }
-                if ($c > 0) {
-                    return ['success' => false, 'message' => 'File is required.'];
+                    if ($c > 0) {
+                        return ['success' => false, 'message' => 'File is required.'];
+                    }
                 }
             }
         }
@@ -207,7 +210,7 @@ class CartController extends ProductController
         /** @var ShopCartService $shopCartService */
         $shopCartService = $this->get('app.shop_cart');
 
-        $type = $request->get('type', 'shop');
+        $type = $request->get('type', ShoppingCart::TYPE_MAIN);
         $countArr = $request->get('count', []);
         if (!is_array($countArr)) {
             $countArr = [];
@@ -234,6 +237,47 @@ class CartController extends ProductController
 
     /**
      * @param Request|null $request
+     * @param int|null $itemId
+     * @return array
+     */
+    public function removeById($request = null, $itemId = null)
+    {
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        /** @var ShopCartService $shopCartService */
+        $shopCartService = $this->get('app.shop_cart');
+
+        if (is_null($itemId) && $request instanceof Request) {
+            $itemId = (int) $request->get('item_id', 0);
+        }
+        $type = $request instanceof Request
+            ? $request->get('type', ShoppingCart::TYPE_MAIN)
+            : ShoppingCart::TYPE_MAIN;
+
+        if (!$itemId) {
+            return ['success' => false];
+        }
+
+        $shoppingCart = $shopCartService->getShoppingCartByType($type);
+        $shoppingCartContent = $shoppingCart ? $shoppingCart->getContentSorted() : [];
+
+        $index = $this->getContentIndex($shoppingCartContent, ['id' => $itemId]);
+        if ($index === -1) {
+            return ['success' => false];
+        }
+
+        if (count($shoppingCartContent) === 1) {
+            $dm->remove($shoppingCart);
+        } else {
+            $shoppingCart->removeContent($shoppingCartContent->get($index));
+        }
+        $dm->flush();
+
+        return ['success' => true];
+    }
+
+    /**
+     * @param Request|null $request
      * @param int|null $index
      * @return array
      */
@@ -247,7 +291,9 @@ class CartController extends ProductController
         if (is_null($index) && $request instanceof Request) {
             $index = (int) $request->get('remove_by_index');
         }
-        $type = $request->get('type', 'shop');
+        $type = $request instanceof Request
+            ? $request->get('type', ShoppingCart::TYPE_MAIN)
+            : ShoppingCart::TYPE_MAIN;
 
         $shoppingCart = $shopCartService->getShoppingCartByType($type);
         $shoppingCartContent = $shoppingCart ? $shoppingCart->getContentSorted() : [];
@@ -312,14 +358,23 @@ class CartController extends ProductController
         $index = -1;
         /** @var OrderContent $content */
         foreach ($shoppingCartContent as $ind => $content) {
-            if ($content->getId() == $itemData['id']
-                && $content->getPrice() == $itemData['price']
-                && $content->getParameters() == $itemData['parameters']
-                && $content->getOptions() == $itemData['options']
-                && $content->getContentTypeName() == $itemData['contentTypeName']) {
-                $index = $ind;
-                break;
+            if (isset($itemData['id']) && $itemData['id'] != $content->getId()) {
+                continue;
             }
+            if (isset($itemData['price']) && $itemData['price'] != $content->getPrice()) {
+                continue;
+            }
+            if (isset($itemData['parameters']) && $itemData['parameters'] != $content->getParameters()) {
+                continue;
+            }
+            if (isset($itemData['options']) && $itemData['options'] != $content->getOptions()) {
+                continue;
+            }
+            if (isset($itemData['contentTypeName']) && $itemData['contentTypeName'] != $content->getContentTypeName()) {
+                continue;
+            }
+            $index = $ind;
+            break;
         }
         return $index;
     }
@@ -471,7 +526,7 @@ class CartController extends ProductController
         $referer = $request->headers->get('referer');
         /** @var ShopCartService $shopCartService */
         $shopCartService = $this->get('app.shop_cart');
-        $type = $request->get('type', 'shop');
+        $type = $request->get('type', ShoppingCart::TYPE_MAIN);
         $shopCartService->clearContent($type);
 
         return new RedirectResponse($referer);
@@ -492,7 +547,7 @@ class CartController extends ProductController
      * @param string $type
      * @return string
      */
-    public function getSessionId($type = 'shop')
+    public function getSessionId($type = ShoppingCart::TYPE_MAIN)
     {
         /** @var ShopCartService $shopCartService */
         $shopCartService = $this->get('app.shop_cart');

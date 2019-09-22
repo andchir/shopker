@@ -39,6 +39,8 @@ pre code { display: block; background-color: transparent; }
 
 /* buttons */
 .btn-wide { min-width: 130px; text-align: center; padding-left: 2rem; padding-right: 2rem; }
+.btn-outline-secondary-white { color: #6c757d; background-color: #fff; border-color: #6c757d; }
+.btn-outline-secondary-white:hover { color: #fff; background-color: #6c757d; border-color: #6c757d; }
 
 /* columns */
 .column-left { width: 350px; float: left; }

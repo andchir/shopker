@@ -85,6 +85,11 @@ services:
             - { name: kernel.event_listener, event: kernel.request }
         arguments: [ '@service_container' ]
 
+    App\EventListener\LoginListener:
+        tags:
+            - { name: 'kernel.event_listener', event: 'security.interactive_login' }
+        arguments: [ '@service_container' ]
+
     App\Twig\AppExtension:
         tags: ['twig.extension']
         arguments: ['@service_container']

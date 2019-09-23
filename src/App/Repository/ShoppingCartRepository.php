@@ -32,4 +32,18 @@ class ShoppingCartRepository extends DocumentRepository
         $qb->addAnd($qb->expr()->field('type')->equals($type));
         return $qb->getQuery()->getSingleResult();
     }
+
+    /**
+     * @param $date_timezone
+     * @return mixed
+     */
+    public function findExpired($date_timezone)
+    {
+        $dateTime = new \DateTime('now', new \DateTimeZone($date_timezone));
+        $qb = $this->createQueryBuilder();
+        $qb->field('expiresOn')->exists(true);
+        $qb->field('expiresOn')->lte(new \MongoDate($dateTime->getTimestamp()));
+        return $qb->getQuery()->execute();
+    }
+
 }

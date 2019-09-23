@@ -5,6 +5,7 @@ namespace App\Service;
 use App\MainBundle\Document\Order;
 use App\MainBundle\Document\OrderContent;
 use App\MainBundle\Document\ShoppingCart;
+use App\Repository\ShoppingCartRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,11 +42,12 @@ class ShopCartService
      */
     public function clearContent($type = ShoppingCart::TYPE_MAIN, $cleanFiles = false)
     {
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->container->get('doctrine_mongodb')->getManager();
+        $result = false;
+
         $shoppingCart = $this->getShoppingCartByType($type);
         if ($shoppingCart) {
-            /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-            $dm = $this->container->get('doctrine_mongodb')->getManager();
-
             if ($cleanFiles) {
                 $shoppingCartContent = $shoppingCart->getContent();
                 /** @var OrderContent $content */
@@ -55,9 +57,21 @@ class ShopCartService
             }
             $dm->remove($shoppingCart);
             $dm->flush();
-            return true;
+            $result = true;
         }
-        return false;
+
+        // Delete expired shopping carts
+        /** @var ShoppingCartRepository $repository */
+        $repository = $dm->getRepository(ShoppingCart::class);
+        $date_timezone = date_default_timezone_get();
+        $shoppingCartsExpired = $repository->findExpired($date_timezone);
+        /** @var ShoppingCart $shoppingCartExpired */
+        foreach ($shoppingCartsExpired as $shoppingCartExpired) {
+            $dm->remove($shoppingCartExpired);
+        }
+        $dm->flush();
+
+        return $result;
     }
 
     /**

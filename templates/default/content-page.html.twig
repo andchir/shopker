@@ -10,10 +10,7 @@
     <main role="main" class="container">
 
         <div class="float-lg-right mb-3 text-right">
-            <a href="{{ path('shop_cart_edit', {type: 'favorites'}) }}">
-                {{ 'Favorites' | trans }}
-                ({{ favoritesCount }})
-            </a>
+            {{ shopCart('favorites_link', 'favorites') }}
         </div>
 
         {% include 'nav/breadcrumbs.html.twig' %}

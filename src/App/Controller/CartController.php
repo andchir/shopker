@@ -90,6 +90,16 @@ class CartController extends ProductController
                 $shoppingCart = $shopCartService->getShoppingCartByType($type);
                 if ($shoppingCart) {
                     $output = array_merge($output, $shoppingCart->toArray());
+                } else {
+                    $output = array_merge($output, [
+                        'type' => $type,
+                        'price_total' => 0,
+                        'items_total' => 0,
+                        'items_unique_total' => 0,
+                        'delivery_price' => 0,
+                        'delivery_name' => '',
+                        'ids' => []
+                    ]);
                 }
                 if ($templateName) {
                     $output['html'] = $shopCartService->renderShopCart($shoppingCart, $templateName, $type);

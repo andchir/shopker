@@ -1,8 +1,9 @@
 
 4.0.8
-- New order statistics module.
+- New order statistics module in admin area.
 - Ajax shopping cart.
-- Shopping cart store in DB with life time option.
+- Shopping cart store in DB refactoring. Added option "app.shopping_cart_lifetime" in settings.
+- In the default template added the ability to add products to favorites.
 
 4.0.7
 - Update Angular 7 to 8.

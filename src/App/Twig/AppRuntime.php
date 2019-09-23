@@ -69,10 +69,12 @@ class AppRuntime
             'currencySelected' => ShopCartService::getCurrencyCookie(),
             'currency' => $shoppingCart ? $shoppingCart->getCurrency() : '',
             'countTotal' => $shoppingCart ? $shoppingCart->getCount() : 0,
+            'countUniqueTotal' => $shoppingCartContent ? count($shoppingCartContent) : 0,
             'priceTotal' => $shoppingCart ? $shoppingCart->getPrice() : 0,
             'type' => $shoppingCart ? $shoppingCart->getType() : '',
             'items' => $shoppingCart ? $shoppingCart->getContentArray($environment) : [],
-            'templatePath' => $templatesPath . $chunkName
+            'templatePath' => $templatesPath . $chunkName,
+            'itemsIds' => $shoppingCart ? $shoppingCart->getContentValues('id') : []
         ];
 
         return $environment->render($templateName, $data);

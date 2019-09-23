@@ -62,10 +62,6 @@
          */
         this.init = function() {
             options = options || {};
-            if (typeof options.data === 'object') {
-                this.updateData(options.data);
-                delete options.data;
-            }
             if (Object.keys(options).length > 0) {
                 this.extend(mainOptions, options);
             }
@@ -77,6 +73,10 @@
             }
             this.submitFormInit();
             this.productSubmitFormInit();
+            if (typeof options.data === 'object') {
+                this.updateData(options.data);
+                delete mainOptions.data;
+            }
             isInitialized = true;
         };
 
@@ -143,7 +143,7 @@
                 self.dispatchEvent('formSubmitBefore', {element: formEl, formData: formData});
                 self.formDataSend(formData);
             });
-            formEl.querySelectorAll('button[type="submit"]').forEach(function(buttonEl) {
+            formEl.querySelectorAll('[type="submit"]').forEach(function(buttonEl) {
                 buttonEl.addEventListener('click', function(event) {
                     actionName = buttonEl.getAttribute('name');
                     actionValue = buttonEl.value;
@@ -170,7 +170,9 @@
             if (!mainOptions.productFormSelector) {
                 return;
             }
-            var forms = document.querySelectorAll(mainOptions.productFormSelector);
+            var forms = document.querySelectorAll(mainOptions.productFormSelector),
+                actionName = '',
+                actionValue = '';
             if (!shoppingCartContentType && forms.length > 0) {
                 self.updateShoppingCartContentType(forms[0]);
             }
@@ -179,7 +181,8 @@
                     event.preventDefault();
 
                     var formData = new FormData(formEl);
-                    formData.append('action', 'add_to_cart');
+                    actionValue = actionValue || 'add_to_cart';
+                    formData.append('action', actionValue);
                     if (mainOptions.snippetPropertySetName) {
                         formData.append('propertySetName', mainOptions.snippetPropertySetName);
                     }
@@ -188,6 +191,12 @@
                     }
                     self.dispatchEvent('formSubmitBefore', {element: formEl, formData: formData});
                     self.formDataSend(formData, formEl);
+                });
+                formEl.querySelectorAll('[type="submit"]').forEach(function(buttonEl) {
+                    buttonEl.addEventListener('click', function(event) {
+                        actionName = buttonEl.getAttribute('name');
+                        actionValue = buttonEl.value;
+                    });
                 });
             });
         };
@@ -247,21 +256,21 @@
 
             elementsTotalPrice.forEach(function (el) {
                 el.textContent = mainOptions.useNumberFormat
-                    ? self.numFormat(self.data.price_total)
-                    : self.data.price_total;
+                    ? self.numFormat(self.data[shoppingCartContentType].price_total)
+                    : self.data[shoppingCartContentType].price_total;
             });
             elementsCountTotal.forEach(function (el) {
-                el.textContent = self.data.items_total;
+                el.textContent = self.data[shoppingCartContentType].items_total;
             });
             elementsCountUniqueTotal.forEach(function (el) {
-                el.textContent = self.data.items_unique_total;
+                el.textContent = self.data[shoppingCartContentType].items_unique_total;
             });
             elementsDeclension.forEach(function (el) {
                 var words = el.dataset.value ? el.dataset.value.split('|') : [];
                 if (words.length === 0) {
                     return;
                 }
-                el.textContent = self.wordDeclension(self.data.items_total, words);
+                el.textContent = self.wordDeclension(self.data[shoppingCartContentType].items_total, words);
             });
         };
 

@@ -1,0 +1,4 @@
+<a href="{{ path('shop_cart_edit', {type: 'favorites'}) }}" {% if countUniqueTotal == 0 %} class="text-muted"{% endif %}id="favoritesLinkContainer" data-shoppingcart-ids="{{ itemsIds | join(',') }}">
+    {{ 'Favorites' | trans }}
+    (<span id="favoritesCountUniqueTotal">{{ countUniqueTotal }}</span>)
+</a>

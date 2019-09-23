@@ -156,6 +156,18 @@
                             alert(e.detail.response.message);
                     }
                 });
+
+            // Favorites
+            favorites = new ShoppingCart({
+                baseUrl: '{{ app.request.baseUrl }}',
+                connectorUrl: '{{ path('shop_cart_action') }}',
+                productFormSelector: '.js-shopping-cart-favorites form'
+            });
+            favorites
+                .addEventListener('load', function(e) {
+                    console.log(e);
+                });
+
         });
     </script>
 {% endblock %}

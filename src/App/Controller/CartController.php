@@ -91,7 +91,9 @@ class CartController extends ProductController
                 if ($shoppingCart) {
                     $output = array_merge($output, $shoppingCart->toArray());
                 }
-                $output['html'] = $shopCartService->renderShopCart($shoppingCart, $templateName, $type);
+                if ($templateName) {
+                    $output['html'] = $shopCartService->renderShopCart($shoppingCart, $templateName, $type);
+                }
             }
             if (!empty($output['message'])) {
                 $output['message'] = $translator->trans($output['message']);

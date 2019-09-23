@@ -28,14 +28,14 @@
 
     function ShoppingCart(options) {
 
-        var self = this, isInitialized = false, container = null, callbacks = [];
+        var TYPE_MAIN = 'shop';
+        var self = this, isInitialized = false, container = null, shoppingCartContentType = '';
 
         var mainOptions = {
             baseUrl: '/',
             connectorUrl: 'assets/components/shopping_cart/connector.php',
             snippetPropertySetName: '',
-            selector: '#shoppingCartContainer',
-            typeMain: 'shop',
+            selector: '',
             useNumberFormat: true,
             selectorPriceTotal: '.shopping-cart-price-total',
             selectorCountTotal: '.shopping-cart-count-total',
@@ -43,8 +43,7 @@
             selectorDeclension: '.shopping-cart-declension',
             productFormSelector: '',
             templateName: '',
-            autoUpdateElements: false,
-            updateHtmlEmpty: true
+            autoUpdateElements: false
         };
 
         this.data = {
@@ -70,12 +69,11 @@
             if (Object.keys(options).length > 0) {
                 this.extend(mainOptions, options);
             }
-            container = document.querySelector(mainOptions.selector);
-            if (!container) {
-                if (console && console.log) {
+            if (mainOptions.selector) {
+                container = document.querySelector(mainOptions.selector);
+                if (!container && console && console.log) {
                     console.log('[ShoppingCart] Container selector not found.');
                 }
-                return;
             }
             this.submitFormInit();
             this.productSubmitFormInit();
@@ -90,10 +88,12 @@
          * @returns {ShoppingCart}
          */
         this.addEventListener = function(eventName, callbackFunc, options) {
+            eventName = this.capitalizeString(eventName);
+            eventName += '_' + shoppingCartContentType;
             if (options) {
-                window.addEventListener('ShopCart' + this.capitalizeString(eventName), callbackFunc, options);
+                window.addEventListener('ShopCart' + eventName, callbackFunc, options);
             } else {
-                window.addEventListener('ShopCart' + this.capitalizeString(eventName), callbackFunc);
+                window.addEventListener('ShopCart' + eventName, callbackFunc);
             }
             return this;
         };
@@ -104,7 +104,9 @@
          * @param eventData
          */
         this.dispatchEvent = function(eventName, eventData) {
-            window.dispatchEvent(new CustomEvent('ShopCart' + this.capitalizeString(eventName), {
+            eventName = this.capitalizeString(eventName);
+            eventName += '_' + shoppingCartContentType;
+            window.dispatchEvent(new CustomEvent('ShopCart' + eventName, {
                 detail: eventData || {}
             }));
         };
@@ -119,6 +121,9 @@
             var formEl = container.querySelector('form'),
                 actionName = '',
                 actionValue = '';
+            if (!shoppingCartContentType) {
+                self.updateShoppingCartContentType(formEl);
+            }
             if (!formEl) {
                 if (console && console.log) {
                     console.log('[ShoppingCart] Shopping Cart form element not found.');
@@ -127,7 +132,6 @@
             }
             formEl.addEventListener('submit', function(event) {
                 event.preventDefault();
-
                 var formData = new FormData(formEl);
                 formData.append(actionName, actionValue);
                 if (mainOptions.snippetPropertySetName) {
@@ -148,13 +152,29 @@
         };
 
         /**
+         * Update shopping cart type
+         * @param formEl
+         */
+        this.updateShoppingCartContentType = function(formEl) {
+            if (!formEl) {
+                return;
+            }
+            var typeInputEl = formEl.querySelector('input[name="type"]');
+            shoppingCartContentType = typeInputEl ? typeInputEl.value : TYPE_MAIN;
+        };
+
+        /**
          * Product add to shopping cart initialize
          */
         this.productSubmitFormInit = function() {
             if (!mainOptions.productFormSelector) {
                 return;
             }
-            document.querySelectorAll(mainOptions.productFormSelector).forEach(function(formEl) {
+            var forms = document.querySelectorAll(mainOptions.productFormSelector);
+            if (!shoppingCartContentType && forms.length > 0) {
+                self.updateShoppingCartContentType(forms[0]);
+            }
+            forms.forEach(function(formEl) {
                 formEl.addEventListener('submit', function(event) {
                     event.preventDefault();
 
@@ -177,6 +197,9 @@
          * @param html
          */
         this.containerUpdate = function(html) {
+            if (!mainOptions.selector) {
+                return;
+            }
             if (container) {
                 container.outerHTML = html;
             }
@@ -189,7 +212,7 @@
          * @param {object} data
          */
         this.updateData = function(data) {
-            var type = data.type || mainOptions.typeMain;
+            var type = data.type || shoppingCartContentType;
             if (!this.data[type]) {
                 this.data[type] = {};
             }
@@ -259,7 +282,7 @@
                 if (mainOptions.autoUpdateElements) {
                     self.updateElementsBySelectors(response);
                 }
-                if (response.html || mainOptions.updateHtmlEmpty) {
+                if (typeof response.html !== 'undefined') {
                     self.containerUpdate(response.html);
                 }
                 self.showLoading(false);

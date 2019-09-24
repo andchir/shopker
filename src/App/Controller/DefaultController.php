@@ -19,6 +19,8 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Doctrine\Common\DataFixtures\Loader as DataFixturesLoader;
+use Symfony\Component\Yaml\Exception\ParseException;
+use Symfony\Component\Yaml\Yaml;
 
 class DefaultController extends CatalogController
 {
@@ -124,7 +126,24 @@ class DefaultController extends CatalogController
         if (!empty($this->getParameter('mongodb_database'))) {
             return $this->redirectToRoute('homepage');
         }
-        $settingsDefault = [
+        /** @var SettingsService $settingsService */
+        $settingsService = $this->get('app.settings');
+
+        $rootPath = realpath($this->container->getParameter('kernel.root_dir').'/../..');
+        $parametersYamlPath = $rootPath . DIRECTORY_SEPARATOR . 'config/settings.yaml.dist';
+        $parameters = [];
+        if ($parametersYamlPath) {
+            try {
+                $parameters = Yaml::parse(file_get_contents($parametersYamlPath));
+                $parameters = $parameters['parameters'];
+            } catch (ParseException $e) {
+                $request->getSession()
+                    ->getFlashBag()
+                    ->add('errors', $e->getMessage());
+            }
+        }
+
+        $settingsDefault = array_merge($parameters, [
             'locale' => $request->getLocale(),
             'app.locale_list' => $request->getLocale() == 'ru' ? 'ru,en' : 'en,ru',
             'app.name' => $this->getParameter('app.name'),
@@ -139,27 +158,8 @@ class DefaultController extends CatalogController
             'mailer_user' => $this->getParameter('mailer_user'),
             'mailer_password' => $this->getParameter('mailer_password'),
             'mailer_encryption' => $this->getParameter('mailer_encryption'),
-            'mailer_auth_mode' => $this->getParameter('mailer_auth_mode'),
-            'app.display_errors' => 1,
-            'app.search_collections' => 'products',
-            'app.template_theme' => 'default',
-            'app.catalog_page_size' => '12,24,60',
-            'app.catalog_default_order_by' => 'id_desc',
-            'app.checkout_fields' => 'options,email,fullName,phone,deliveryName,paymentName,comment',
-            'app.admin_email' => '',
-            'app.payment_status_number' => 1,
-            'app.payment_status_after_number' => 2,
-            'app.max_user_files_size' => 20,
-            'app.max_temp_files_keep_minutes' => 30,
-            'app.tax_system' => 'usn_income',
-            'app.nds_rate' => 'vat20',
-            'app.payment_method' => 'full_prepayment',
-            'app.payment_object' => 'commodity',
-            'app.receipt_option_name' => 'receipt'
-        ];
-
-        /** @var SettingsService $settingsService */
-        $settingsService = $this->get('app.settings');
+            'mailer_auth_mode' => $this->getParameter('mailer_auth_mode')
+        ]);
 
         $form = $this->createForm(SetupType::class, array_merge($settingsDefault, [
             'app_name' => $settingsDefault['app.name']

@@ -102,12 +102,12 @@ class AppRuntime
         $count = 0;
         /** @var OrderContent $content */
         foreach ($shoppingCartContent as $content) {
-            if ($content->getContentTypeName() !== $contentTypeName
-                || $productId !== $content->getId()) {
-                continue;
+            if ($content->getContentTypeName() == $contentTypeName
+                && $content->getId() == (int) $productId) {
+                    $count += $content->getCount();
             }
-            $count += $content->getCount();
         }
+
         return $count;
     }
 

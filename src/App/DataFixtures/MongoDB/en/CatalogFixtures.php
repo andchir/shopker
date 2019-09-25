@@ -374,8 +374,8 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface
 
         $contentType = new ContentType();
         $contentType
-            ->setTitle('General')
-            ->setName('general')
+            ->setTitle('Products')
+            ->setName('products')
             ->setDescription('Products catalog')
             ->setCollection('products')
             ->setFields($fields)

@@ -26,6 +26,8 @@ Screenshots
 
 ![Shopkeeper 4 - screenshot #3](https://raw.github.com/andchir/shopkeeper4/master/docs/screenshots/003.png?raw=true "Shopkeeper 4 - screenshot #3")
 
-![Shopkeeper 4 - screenshot #4](https://raw.github.com/andchir/shopkeeper4/master/docs/screenshots/004.png?raw=true "Shopkeeper 4 - screenshot 4")
+![Shopkeeper 4 - screenshot #4](https://raw.github.com/andchir/shopkeeper4/master/docs/screenshots/004.png?raw=true "Shopkeeper 4 - screenshot #4")
 
-![Shopkeeper 4 - screenshot #5](https://raw.github.com/andchir/shopkeeper4/master/docs/screenshots/005.png?raw=true "Shopkeeper 4 - screenshot 5")
+![Shopkeeper 4 - screenshot #5](https://raw.github.com/andchir/shopkeeper4/master/docs/screenshots/005.png?raw=true "Shopkeeper 4 - screenshot #5")
+
+![Shopkeeper 4 - screenshot #6](https://raw.github.com/andchir/shopkeeper4/master/docs/screenshots/006.png?raw=true "Shopkeeper 4 - screenshot #6")

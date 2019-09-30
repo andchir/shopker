@@ -292,7 +292,7 @@ class AppExtension extends AbstractExtension
         $output = '';
         foreach ($fieldsData as $field) {
             if (!isset($itemData[$field['name']])) {
-                continue;
+                $itemData[$field['name']] = '';
             }
             $output .= $this->renderOutputTypeFunction(
                 $environment,

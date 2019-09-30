@@ -338,7 +338,10 @@ class AppExtension extends AbstractExtension
      */
     public function renderOutputTypeChunkFunction(TwigEnvironment $environment, $itemData, $fieldsData, $chunkName, $chunkNamePrefix = '', $data = [], $limit = 0)
     {
-        $fields = array_filter($fieldsData, function($field) use ($chunkName) {
+        $fields = array_filter($fieldsData, function($field) use ($chunkName, &$itemData) {
+            if (!isset($itemData[$field['name']])) {
+                $itemData[$field['name']] = '';
+            }
             return isset($field['outputProperties']['chunkName'])
                 && $field['outputProperties']['chunkName'] === $chunkName;
         });

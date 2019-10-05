@@ -117,6 +117,11 @@
         </div>
 
     </main>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
     <script>
         var shoppingCart, favorites;
 
@@ -130,7 +135,7 @@
                 var buttonEl = formEl.querySelector('button[type="submit"]'),
                     idFieldEl = formEl.querySelector('input[name="item_id"]'),
                     productId = idFieldEl ? parseInt(idFieldEl.value) : 0;
-                    ids = document.getElementById('favoritesLinkContainer').dataset.shoppingcartIds.split(',');
+                ids = document.getElementById('favoritesLinkContainer').dataset.shoppingcartIds.split(',');
                 var ids = ids.map(function(id) {
                     return parseInt(id);
                 });
@@ -179,7 +184,7 @@
                         && e.detail.response
                         && !e.detail.response.success
                         && e.detail.response.message) {
-                            alert(e.detail.response.message);
+                        alert(e.detail.response.message);
                     }
                 });
 

@@ -137,6 +137,22 @@ class SettingsFixtures extends Fixture implements ContainerAwareInterface
                         'value' => ['value' => 0.014, 'type' => 'number']
                     ]
                 ]
+            ],
+            'SETTINGS_LANGUAGES' => [
+                [
+                    'name' => 'English',
+                    'description' => '',
+                    'options' => [
+                        'value' => ['value' => 'en', 'type' => 'text']
+                    ]
+                ],
+                [
+                    'name' => 'Русский',
+                    'description' => '',
+                    'options' => [
+                        'value' => ['value' => 'ru', 'type' => 'text']
+                    ]
+                ]
             ]
         ];
 

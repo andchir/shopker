@@ -3,17 +3,12 @@
 namespace App\Twig;
 
 use Twig\Environment as TwigEnvironment;
-use App\Controller\CatalogController;
 use App\MainBundle\Document\Category;
 use App\MainBundle\Document\ContentType;
-use App\MainBundle\Document\Setting;
-use App\Service\SettingsService;
-use App\Service\UtilsService;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Cache\Simple\FilesystemCache;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class AppExtension extends AbstractExtension
@@ -79,7 +74,7 @@ class AppExtension extends AbstractExtension
                 'is_safe' => ['html'],
                 'needs_environment' => true
             ]),
-            new TwigFunction('categoriesTree', [$this, 'categoriesTreeFunction'], [
+            new TwigFunction('categoriesTree', [AppRuntime::class, 'categoriesTreeFunction'], [
                 'is_safe' => ['html'],
                 'needs_environment' => true
             ]),
@@ -90,6 +85,10 @@ class AppExtension extends AbstractExtension
             ]),
             new TwigFunction('shopCartProductCount', [AppRuntime::class, 'shopCartProductCountFunction']),
             new TwigFunction('currencyList', [AppRuntime::class, 'currencyListFunction'], [
+                'is_safe' => ['html'],
+                'needs_environment' => true
+            ]),
+            new TwigFunction('settingsList', [AppRuntime::class, 'settingsListFunction'], [
                 'is_safe' => ['html'],
                 'needs_environment' => true
             ]),
@@ -464,84 +463,14 @@ class AppExtension extends AbstractExtension
     }
 
     /**
-     * @param TwigEnvironment $environment
-     * @param int $parentId
-     * @param string $chunkName
-     * @param array|null $data
-     * @param array|null $activeCategoriesIds
-     * @param bool $cacheEnabled
-     * @param string $activeClassName
-     * @return string
-     * @throws \Doctrine\ODM\MongoDB\LockException
-     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
-    public function categoriesTreeFunction(
-        TwigEnvironment $environment,
-        $parentId = 0,
-        $chunkName = 'menu_tree',
-        $data = null,
-        $activeCategoriesIds = null,
-        $cacheEnabled = false,
-        $activeClassName = 'active')
-    {
-        $request = $this->requestStack->getCurrentRequest();
-        $currentUri = substr($request->getPathInfo(), 1);
-        $uriArr = UtilsService::getUriArray($currentUri);
-        $locale = $request->getLocale();
-
-        $cacheKey = "tree.{$chunkName}.{$locale}";
-        /** @var FilesystemCache $cache */
-        $cache = $this->container->get('app.filecache');
-        $output = '';
-
-        if ($data === null) {
-            if ($cacheEnabled && $cache->has($cacheKey)) {
-                $output = $cache->get($cacheKey);
-            } else {
-                $catalogController = new CatalogController();
-                $catalogController->setContainer($this->container);
-                $categoriesTree = $catalogController->getCategoriesTree($parentId, $locale);
-                $data = !empty($categoriesTree) ? $categoriesTree[0] : [];
-            }
-        }
-
-        if (!$output) {
-            $templateName = $this->getTemplateName($environment, 'nav/', $chunkName);
-            if (empty($data['children'])) {
-                return '';
-            }
-            $data['currentUri'] = $currentUri;
-            $data['uriArr'] = $uriArr;
-            $data['activeCategoriesIds'] = $activeCategoriesIds;
-            try {
-                $output = $environment->render($templateName, $data);
-            } catch (\Exception $e) {
-                $output .= $this->twigAddError($e->getMessage());
-            }
-            if (!empty($output) && $cacheEnabled) {
-                 $cache->set($cacheKey, $output, 60*60*24);
-            }
-        }
-
-        if (!empty($activeCategoriesIds)) {
-            $output = str_replace(
-                array_map(function($id) {return "active{$id}-"; }, $activeCategoriesIds),
-                $activeClassName,
-                $output
-            );
-        }
-
-        return $output;
-    }
-
-    /**
      * @param $errorMessage
      * @return string
      */
     public function twigAddError($errorMessage)
     {
         if (!empty($this->container->getParameter('app.display_errors'))) {
+            $rootPath = realpath($this->container->getParameter('kernel.root_dir').'/../..');
+            $errorMessage = str_replace($rootPath, '', $errorMessage);
             return sprintf('<div class="alert alert-danger py-1 px-2">%s</div>', $errorMessage);
         }
         return '';

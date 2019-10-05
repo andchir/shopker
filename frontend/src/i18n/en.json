@@ -137,6 +137,8 @@
 	"SETTINGS_CURRENCY_RATE_DESCRIPTION": "Exchange rate on the site.",
 	"SETTINGS_DELIVERY": "Delivery methods",
 	"SETTINGS_DELIVERY_DESCRIPTION": "A list of delivery methods for output in the order form on the outside of the site.",
+	"SETTINGS_LANGUAGES": "Site languages",
+	"SETTINGS_LANGUAGES_DESCRIPTION": "List of site languages and locales for output in the drop-down list on the outside of the site.",
 	"SETTINGS_MAIN": "Main Settings",
 	"SETTINGS_ORDER_STATUSES": "Orders statuses",
 	"SETTINGS_PAYMENT": "Payment methods",

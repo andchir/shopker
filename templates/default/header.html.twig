@@ -50,21 +50,7 @@
             </div>
 
             <div class="d-inline-block ml-1">
-                <div class="dropdown">
-                    <button class="btn btn-sm btn-outline-secondary text-white dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img src="/img/flag_{{ app.request.locale }}.png">
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-right border-secondary" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item rounded-0{% if app.request.locale == 'ru' %} active{% endif %}" href="{{ path('locale_switch', {locale: 'ru'}) }}" rel="nofollow">
-                            <img src="/img/flag_ru.png" alt="Русский">
-                            Русский
-                        </a>
-                        <a class="dropdown-item rounded-0{% if app.request.locale == 'en' %} active{% endif %}" href="{{ path('locale_switch', {locale: 'en'}) }}" rel="nofollow">
-                            <img src="/img/flag_en.png" alt="English">
-                            English
-                        </a>
-                    </div>
-                </div>
+                {{ settingsList('SETTINGS_LANGUAGES', 'languages_list', false, true) }}
             </div>
 
         </div>
@@ -78,7 +64,7 @@
         <div class="container">
 
             <div class="float-right ml-2">
-                {{ currencyList() }}
+                {{ settingsList('SETTINGS_CURRENCY', 'currency_list', true) }}
             </div>
 
             {% if app.request.attributes.get('_route') not in ['search'] %}

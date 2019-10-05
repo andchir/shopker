@@ -53,6 +53,12 @@ export class SettingsComponent implements OnInit {
                 value: {value: '', type: 'number'}
             }
         ),
+        SETTINGS_LANGUAGES: new SettingsData(
+            false, true, [],
+            {
+                value: {value: '', type: 'text'}
+            }
+        ),
         SETTINGS_COMPOSER_PACKAGES: new SettingsData(false, true, [], null),
     };
 
@@ -97,6 +103,11 @@ export class SettingsComponent implements OnInit {
                     this.settings.SETTINGS_CURRENCY.values = res['SETTINGS_CURRENCY'];
                     this.settings.SETTINGS_CURRENCY.defaultValues = cloneDeep(res['SETTINGS_CURRENCY']);
                     this.settings.SETTINGS_CURRENCY.loading = false;
+                }
+                if (res['SETTINGS_LANGUAGES']) {
+                    this.settings.SETTINGS_LANGUAGES.values = res['SETTINGS_LANGUAGES'];
+                    this.settings.SETTINGS_LANGUAGES.defaultValues = cloneDeep(res['SETTINGS_LANGUAGES']);
+                    this.settings.SETTINGS_LANGUAGES.loading = false;
                 }
             });
     }

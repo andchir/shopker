@@ -18,8 +18,30 @@ use App\MainBundle\Document\Category;
 
 class CatalogController extends ProductController
 {
+
     /**
-     * @Route("/{uri<^[a-z0-9\/\-_\.]+\/$>}", name="catalog_category", requirements={"uri": "^[a-z0-9\/\-_\.]+\/$"}, defaults={"uri": ""})
+     * @Route(
+     *     "/{_locale}/{uri<^[a-z0-9\/\-_\.]+\/$>}",
+     *     name="catalog_category_localized",
+     *     requirements={"_locale": "^[a-z]{2}$", "uri": "^[a-z0-9\/\-_\.]+\/$"},
+     *     defaults={"uri": ""}
+     * )
+     * @param Request $request
+     * @param string $uri
+     * @return Response
+     */
+    public function catalogCategoryLocalizedAction(Request $request, $uri)
+    {
+        return $this->catalogAction($request, $uri, 'catalog_category');
+    }
+
+    /**
+     * @Route(
+     *     "/{uri<^[a-z0-9\/\-_\.]+\/$>}",
+     *     name="catalog_category",
+     *     requirements={"uri": "^[a-z0-9\/\-_\.]+\/$"},
+     *     defaults={"uri": ""}
+     * )
      * @param Request $request
      * @param string $uri
      * @return Response
@@ -33,7 +55,12 @@ class CatalogController extends ProductController
     }
 
     /**
-     * @Route("/{uri<[a-z0-9\/\-_\.]+>}", name="catalog_page", requirements={"uri": "[a-z0-9\/\-_\.]+"}, defaults={"uri": ""})
+     * @Route(
+     *     "/{uri<[a-z0-9\/\-_\.]+>}",
+     *     name="catalog_page",
+     *     requirements={"uri": "[a-z0-9\/\-_\.]+"},
+     *     defaults={"uri": ""}
+     * )
      * @param Request $request
      * @param string $uri
      * @return Response

@@ -8,6 +8,7 @@ use App\MainBundle\Document\ShoppingCart;
 use App\Service\SettingsService;
 use App\Service\ShopCartService;
 use App\Service\UtilsService;
+use App\Controller\CatalogController;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\FormError;
@@ -151,6 +152,62 @@ class AppRuntime
     }
 
     /**
+     * @param TwigEnvironment $environment
+     * @param string $settingName
+     * @param string $templateName
+     * @param bool $cacheEnabled
+     * @param bool $cacheDataEnabled
+     * @param array $data
+     * @return string
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \Throwable
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function settingsListFunction(TwigEnvironment $environment, $settingName, $templateName, $cacheEnabled = false, $cacheDataEnabled = false, $data = [])
+    {
+        if (empty($this->container->getParameter('mongodb_database'))) {
+            return '';
+        }
+        $cacheKey = 'settings.list_' . $settingName;
+        $cacheDataKey = 'settings.list_data_' . $settingName;
+        /** @var SettingsService $settingsService */
+        $settingsService = $this->container->get('app.settings');
+        /** @var FilesystemCache $cache */
+        $cache = $this->container->get('app.filecache');
+
+        if ($cacheEnabled && $cache->has($cacheKey)) {
+            return $environment->createTemplate($cache->get($cacheKey))->render([]);
+        }
+        if ($cacheDataEnabled && $cache->has($cacheDataKey)) {
+            $settingsData = $cache->get($cacheDataKey);
+        } else {
+            $settingsData = $settingsService->getSettingsGroup($settingName);
+            if ($cacheDataEnabled) {
+                $cache->set($cacheDataKey, $settingsData, 60*60*24);
+            }
+        }
+        $properties = ['data' => $settingsData];
+        $templatePath = 'catalog/' . $templateName . '.html.twig';
+
+        if (count($properties['data']) <= 1) {
+            $output = '';
+        } else {
+            try {
+                $output = $environment->render($templatePath, array_merge($data, $properties));
+            } catch (\Exception $e) {
+                return $this->twigAddError($e->getMessage());
+            }
+        }
+        if ($cacheEnabled) {
+            $cache->set($cacheKey, $output, 60*60*24);
+        }
+
+        return $output;
+    }
+
+    /**
      * @param $productData
      * @return string
      */
@@ -282,6 +339,78 @@ class AppRuntime
 
     /**
      * @param TwigEnvironment $environment
+     * @param int $parentId
+     * @param string $chunkName
+     * @param array|null $data
+     * @param array|null $activeCategoriesIds
+     * @param bool $cacheEnabled
+     * @param string $activeClassName
+     * @return string
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
+    public function categoriesTreeFunction(
+        TwigEnvironment $environment,
+        $parentId = 0,
+        $chunkName = 'menu_tree',
+        $data = null,
+        $activeCategoriesIds = null,
+        $cacheEnabled = false,
+        $activeClassName = 'active')
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        $currentUri = substr($request->getPathInfo(), 1);
+        $uriArr = UtilsService::getUriArray($currentUri);
+        $locale = $request->getLocale();
+
+        $cacheKey = "tree.{$chunkName}.{$locale}";
+        /** @var FilesystemCache $cache */
+        $cache = $this->container->get('app.filecache');
+        $output = '';
+
+        if ($data === null) {
+            if ($cacheEnabled && $cache->has($cacheKey)) {
+                $output = $cache->get($cacheKey);
+            } else {
+                $catalogController = new CatalogController();
+                $catalogController->setContainer($this->container);
+                $categoriesTree = $catalogController->getCategoriesTree($parentId, $locale);
+                $data = !empty($categoriesTree) ? $categoriesTree[0] : [];
+            }
+        }
+
+        if (!$output) {
+            $templateName = $this->getTemplateName($environment, 'nav/', $chunkName);
+            if (empty($data['children'])) {
+                return '';
+            }
+            $data['currentUri'] = $currentUri;
+            $data['uriArr'] = $uriArr;
+            $data['activeCategoriesIds'] = $activeCategoriesIds;
+            try {
+                $output = $environment->render($templateName, $data);
+            } catch (\Exception $e) {
+                $output .= $this->twigAddError($e->getMessage());
+            }
+            if (!empty($output) && $cacheEnabled) {
+                $cache->set($cacheKey, $output, 60*60*24);
+            }
+        }
+
+        if (!empty($activeCategoriesIds)) {
+            $output = str_replace(
+                array_map(function($id) {return "active{$id}-"; }, $activeCategoriesIds),
+                $activeClassName,
+                $output
+            );
+        }
+
+        return $output;
+    }
+
+    /**
+     * @param TwigEnvironment $environment
      * @param string $formName
      * @param string|null $layoutPath
      * @param string $varName
@@ -392,6 +521,20 @@ class AppRuntime
         return isset($dataArr['translations'][$fieldName][$locale])
             ? $dataArr['translations'][$fieldName][$locale]
             : $dataArr[$fieldName] ?? '';
+    }
+
+    /**
+     * @param $errorMessage
+     * @return string
+     */
+    public function twigAddError($errorMessage)
+    {
+        if (!empty($this->container->getParameter('app.display_errors'))) {
+            $rootPath = realpath($this->container->getParameter('kernel.root_dir').'/../..');
+            $errorMessage = str_replace($rootPath, '', $errorMessage);
+            return sprintf('<div class="alert alert-danger py-1 px-2">%s</div>', $errorMessage);
+        }
+        return '';
     }
 
     /**

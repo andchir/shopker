@@ -137,6 +137,8 @@ var APP_LANG = {
     "SETTINGS_CURRENCY_RATE_DESCRIPTION": "Курс валют на сайте.",
     "SETTINGS_DELIVERY": "Методы доставки",
     "SETTINGS_DELIVERY_DESCRIPTION": "Список методов доставки для вывода в форме заказа во внешней части сайта.",
+    "SETTINGS_LANGUAGES": "Языки сайта",
+    "SETTINGS_LANGUAGES_DESCRIPTION": "Список языков сайта и локалей для вывода в выпадающем списке во внешней части сайта.",
     "SETTINGS_MAIN": "Основные настройки",
     "SETTINGS_ORDER_STATUSES": "Статусы заказов",
     "SETTINGS_PAYMENT": "Методы оплаты",

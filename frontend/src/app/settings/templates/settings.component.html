@@ -417,8 +417,84 @@
                     </ngb-panel>
                     <!-- /currencies -->
 
+                    <!-- languages -->
+                    <ngb-panel id="accordion-settings-5" [title]="'SETTINGS_LANGUAGES' | translate">
+                        <ng-template ngbPanelContent>
+                            <div [class.loading]="settings.SETTINGS_LANGUAGES.loading">
+                                <div class="text-muted">
+                                    {{'SETTINGS_LANGUAGES_DESCRIPTION' | translate}}
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-divided mb-0">
+                                        <colgroup>
+                                            <col width="45%">
+                                            <col width="45%">
+                                            <col width="10%">
+                                        </colgroup>
+                                        <thead>
+                                        <tr>
+                                            <th>
+                                                {{'LANGUAGE' | translate}}
+                                            </th>
+                                            <th>
+                                                {{'LOCALE' | translate}}
+                                            </th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr *ngFor="let setting of settings.SETTINGS_LANGUAGES.values; let index=index">
+                                            <td>
+                                                <input type="text" class="form-control form-control-sm" [(ngModel)]="setting.name" (ngModelChange)="onValueChanged('SETTINGS_LANGUAGES')">
+                                            </td>
+                                            <td class="text-center">
+                                                <input type="text" class="form-control form-control-sm" [(ngModel)]="setting.options.value.value" (ngModelChange)="onValueChanged('SETTINGS_LANGUAGES')">
+                                            </td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'DELETE' | translate}}" (click)="deleteSetting('SETTINGS_LANGUAGES', index)">
+                                                    <i class="icon-cross"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                        <tfoot>
+                                        <tr class="bg-faded">
+                                            <td colspan="4" class="text-center">
+
+                                                <div class="relative">
+                                                    <div class="pos-absolute-right" *ngIf="settings.SETTINGS_LANGUAGES.changed">
+
+                                                        <button type="button" class="btn btn-info btn-sm" (click)="saveSettings('SETTINGS_LANGUAGES')">
+                                                            <i class="icon-check"></i>
+                                                            &nbsp;
+                                                            <span>{{'SAVE' | translate}}</span>
+                                                        </button>
+                                                        &nbsp;
+                                                        <button type="button" class="btn btn-secondary btn-sm" (click)="resetSettingsForm('SETTINGS_LANGUAGES')" ngbTooltip="{{'FORM_RESET' | translate}}">
+                                                            <i class="icon-reload"></i>
+                                                        </button>
+
+                                                    </div>
+                                                </div>
+
+                                                <button type="button" class="btn btn-secondary btn-sm" (click)="addSetting('SETTINGS_LANGUAGES')">
+                                                    <i class="icon-plus"></i>
+                                                    &nbsp;
+                                                    <span>{{'ADD' | translate}}</span>
+                                                </button>
+
+                                            </td>
+                                        </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngb-panel>
+                    <!-- /languages -->
+
                     <!-- composerPackages -->
-                    <ngb-panel id="accordion-settings-5" [title]="'SETTINGS_COMPOSER_PACKAGES' | translate">
+                    <ngb-panel id="accordion-settings-6" [title]="'SETTINGS_COMPOSER_PACKAGES' | translate">
                         <ng-template ngbPanelContent>
 
                             <div [ngClass]="{'loading': settings.SETTINGS_COMPOSER_PACKAGES.loading}">

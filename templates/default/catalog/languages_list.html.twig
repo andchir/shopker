@@ -1,0 +1,15 @@
+{% if data is not empty %}
+<div class="dropdown">
+    <button class="btn btn-sm btn-outline-secondary text-white dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <img src="/img/flag_{{ app.request.locale }}.png">
+    </button>
+    <div class="dropdown-menu dropdown-menu-right border-secondary" aria-labelledby="dropdownMenuButton">
+        {% for setting in data %}
+            <a class="dropdown-item rounded-0{% if app.request.locale == setting.options.value.value %} active{% endif %}" href="{{ path('locale_switch', {locale: setting.options.value.value}) }}" rel="nofollow">
+                <img src="/img/flag_{{ setting.options.value.value }}.png">
+                {{ setting.name }}
+            </a>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}

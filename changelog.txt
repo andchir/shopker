@@ -1,4 +1,8 @@
 
+4.0.9
+- Settings for site languages.
+- New settingsList() twig function.
+
 4.0.8
 - New order statistics module in admin area.
 - Ajax shopping cart.

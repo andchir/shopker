@@ -40,7 +40,8 @@ class SettingsController extends Controller
             Setting::GROUP_ORDER_STATUSES => [],
             Setting::GROUP_DELIVERY => [],
             Setting::GROUP_PAYMENT => [],
-            Setting::GROUP_CURRENCY => []
+            Setting::GROUP_CURRENCY => [],
+            Setting::GROUP_LANGUAGES => []
         ];
 
         $output[Setting::GROUP_MAIN] = $this->getSettingsFromYaml('settings');
@@ -48,6 +49,7 @@ class SettingsController extends Controller
         $output[Setting::GROUP_DELIVERY] = $settingsService->getSettingsGroup(Setting::GROUP_DELIVERY);
         $output[Setting::GROUP_PAYMENT] = $settingsService->getSettingsGroup(Setting::GROUP_PAYMENT);
         $output[Setting::GROUP_CURRENCY] = $settingsService->getSettingsGroup(Setting::GROUP_CURRENCY);
+        $output[Setting::GROUP_LANGUAGES] = $settingsService->getSettingsGroup(Setting::GROUP_LANGUAGES);
 
         return $this->json($output, 200, [], ['groups' => ['list']]);
     }

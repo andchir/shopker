@@ -15,6 +15,7 @@ class Setting
     const GROUP_DELIVERY = 'SETTINGS_DELIVERY';
     const GROUP_PAYMENT = 'SETTINGS_PAYMENT';
     const GROUP_CURRENCY = 'SETTINGS_CURRENCY';
+    const GROUP_LANGUAGES = 'SETTINGS_LANGUAGES';
 
     /**
      * @MongoDB\Id(type="int", strategy="INCREMENT")

@@ -2,6 +2,8 @@
 4.0.9
 - Settings for site languages.
 - New settingsList() twig function.
+- Locale parameter in URL.
+- On the authorization page, a button "Show password" has been added.
 
 4.0.8
 - New order statistics module in admin area.

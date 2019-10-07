@@ -26,7 +26,7 @@
 
             <hr>
             <p>
-                <a href="{{ path('homepage') }}">
+                <a href="{{ path('homepage_localized', {'_locale': app.request.locale}) }}">
                     {{ 'Go to home page' | trans }}
                 </a>
                 &nbsp;&bull;&nbsp;

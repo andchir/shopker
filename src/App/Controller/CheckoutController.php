@@ -28,23 +28,21 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use App\Form\Type\OrderType;
 use Symfony\Component\Translation\TranslatorInterface;
 
-/**
- * @Route("/checkout")
- */
 class CheckoutController extends BaseController
 {
-
     /**
-     * @Route("", name="page_checkout")
+     * @Route(
+     *     "/{_locale}/checkout",
+     *     name="page_checkout_localized",
+     *     methods={"GET", "POST"},
+     *     requirements={"_locale": "^[a-z]{2}$"}
+     * )
+     * @Route("/checkout", name="page_checkout")
      * @param Request $request
      * @param UtilsService $utilsService
      * @param TranslatorInterface $translator
      * @param EventDispatcherInterface $eventDispatcher
      * @return RedirectResponse|Response
-     * @throws \Doctrine\ODM\MongoDB\LockException
-     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
      */
     public function checkoutAction(Request $request,
         UtilsService $utilsService,
@@ -180,13 +178,16 @@ class CheckoutController extends BaseController
                 $eventDispatcher->dispatch(Events::ORDER_CREATED, $event);
                 $eventDispatcher->dispatch(Events::ORDER_STATUS_UPDATED, $event);
 
-                return $this->redirectToRoute('page_checkout_success');
+                return $this->redirectToRoute('page_checkout_success_localized', [
+                    '_locale' => $request->getLocale()
+                ]);
             }
         }
 
         return $this->render('page_checkout.html.twig', [
             'form' => $form->createView(),
-            'checkoutFields' => $checkoutFields
+            'checkoutFields' => $checkoutFields,
+            'currentUri' => 'checkout'
         ]);
     }
 
@@ -298,14 +299,18 @@ class CheckoutController extends BaseController
     }
 
     /**
-     * @Route("/success", name="page_checkout_success")
+     * @Route(
+     *     "/{_locale}/checkout/success",
+     *     name="page_checkout_success_localized",
+     *     methods={"GET"},
+     *     requirements={"_locale": "^[a-z]{2}$"}
+     * )
+     * @Route("/checkout/success", name="page_checkout_success", methods={"GET"})
      * @param Request $request
      * @return Response
      */
     public function checkoutSuccessAction(Request $request)
     {
-
-
         return $this->render('page_checkout_success.html.twig', [
 
         ]);

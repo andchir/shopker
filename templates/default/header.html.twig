@@ -42,7 +42,7 @@
                         </div>
                     </div>
                 {% else %}
-                    <a class="btn btn-sm btn-outline-primary ml-1" href="{{ path('login') }}" rel="nofollow">
+                    <a class="btn btn-sm btn-outline-primary ml-1" href="{{ path('login_localized', {'_locale': app.request.locale}) }}" rel="nofollow">
                         {{ 'Log in' | trans }}
                         <i class="icon-unlock"></i>
                     </a>
@@ -84,7 +84,7 @@
                 </div>
             {% endif %}
 
-            <a class="header-brand" href="{{ path('homepage') }}">
+            <a class="header-brand" href="{{ path('homepage_localized', {'_locale': app.request.locale}) }}">
                 {{ app_name }}
             </a>
         </div>

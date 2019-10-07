@@ -39,6 +39,11 @@ class AccountController extends Controller
 {
 
     /**
+     * @Route(
+     *     "/{_locale}/login",
+     *     name="login_localized",
+     *     requirements={"_locale": "^[a-z]{2}$"}
+     * )
      * @Route("/login", name="login")
      * @param Request $request
      * @param AuthenticationUtils $authenticationUtils
@@ -56,6 +61,11 @@ class AccountController extends Controller
     }
 
     /**
+     * @Route(
+     *     "/{_locale}/register",
+     *     name="register_localized",
+     *     requirements={"_locale": "^[a-z]{2}$"}
+     * )
      * @Route("/register", name="register")
      * @param Request $request
      * @param UserPasswordEncoderInterface $encoder
@@ -107,7 +117,9 @@ class AccountController extends Controller
                 $event = new UserRegisteredEvent($user, $request);
                 $evenDispatcher->dispatch(UserRegisteredEvent::NAME, $event);
 
-                return $this->redirectToRoute('login');
+                return $this->redirectToRoute('login_localized', [
+                    '_locale' => $request->getLocale()
+                ]);
             }
         }
 
@@ -117,6 +129,11 @@ class AccountController extends Controller
     }
 
     /**
+     * @Route(
+     *     "/{_locale}/password_reset",
+     *     name="password_reset_localized",
+     *     requirements={"_locale": "^[a-z]{2}$"}
+     * )
      * @Route("/password_reset", name="password_reset")
      * @param Request $request
      * @param TranslatorInterface $translator
@@ -221,7 +238,9 @@ class AccountController extends Controller
                 ->getFlashBag()
                 ->add('messages', 'Your password has been changed successfully. Now you can enter.');
 
-            return $this->redirectToRoute('login');
+            return $this->redirectToRoute('login_localized', [
+                '_locale' => $request->getLocale()
+            ]);
         }
 
         return new Response('');
@@ -265,7 +284,9 @@ class AccountController extends Controller
                 ->getFlashBag()
                 ->add('messages', 'Your email has been successfully verified. Now you can enter.');
 
-            return $this->redirectToRoute('login');
+            return $this->redirectToRoute('login_localized', [
+                '_locale' => $request->getLocale()
+            ]);
         }
 
         return new Response('');
@@ -445,18 +466,4 @@ class AccountController extends Controller
             ->getManager()
             ->getRepository(Order::class);
     }
-
-    /**
-     * @Route("/login", name="app_login")
-     */
-    public function login(AuthenticationUtils $authenticationUtils): Response
-    {
-        // get the login error if there is one
-        $error = $authenticationUtils->getLastAuthenticationError();
-        // last username entered by the user
-        $lastUsername = $authenticationUtils->getLastUsername();
-
-        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
-    }
-
 }

@@ -15,7 +15,7 @@
                     </div>
                     {% if app.request.attributes.get('_route') not in ['page_checkout','shop_cart_edit'] %}
                         <div class="float-md-right mt-3 mt-md-0">
-                            <a class="btn btn-outline-light" href="{{ path('shop_cart_edit') }}">
+                            <a class="btn btn-outline-light" href="{{ path('shop_cart_edit_localized', {'_locale': app.request.locale}) }}">
                                 {{ 'Proceed to checkout' | trans }}
                             </a>
                             <button type="submit" class="btn btn-outline-light ml-1" data-toggle="tooltip" data-placement="top" title="{{ 'Empty cart' | trans }}" name="action" value="clean">

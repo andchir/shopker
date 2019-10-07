@@ -25,6 +25,11 @@ use Symfony\Component\Yaml\Yaml;
 class DefaultController extends CatalogController
 {
     /**
+     * @Route(
+     *     "/{_locale}/",
+     *     name="homepage_localized",
+     *     requirements={"_locale": "^[a-z]{2}$"}
+     * )
      * @Route("/", name="homepage")
      * @param Request $request
      * @return Response
@@ -69,7 +74,7 @@ class DefaultController extends CatalogController
 
         $response = $this->render('homepage.html.twig', [
             'categoriesTopLevel' => $categoriesTopLevel,
-            'currentUri' => 'home',
+            'currentUri' => '',
             'activeCategoriesIds' => [],
             'currency' => $currency,
             'description' => $description,

@@ -15,7 +15,7 @@
 
             <h2>{{ 'Registration' | trans }}</h2>
 
-            {{ form_start(form, {'action': path('register')}) }}
+            {{ form_start(form) }}
             {{ form_widget(form) }}
             <div class="form-group">
                 <button type="submit" class="btn btn-primary" name="button-submit">
@@ -26,11 +26,11 @@
 
             <hr>
             <p>
-                <a href="{{ path('homepage') }}">
+                <a href="{{ path('homepage_localized', {'_locale': app.request.locale}) }}">
                     {{ 'Go to home page' | trans }}
                 </a>
                 &nbsp;&bull;&nbsp;
-                <a href="{{ path('login') }}">
+                <a href="{{ path('login_localized', {'_locale': app.request.locale}) }}">
                     {{ 'Log in' | trans }}
                 </a>
             </p>
@@ -38,6 +38,10 @@
         </div>
     </div>
 </div>
+
+    <div class="rounded position-absolute pos-right-top10 p-1" style="background-color: rgba(0,0,0,0.2);">
+        {{ settingsList('SETTINGS_LANGUAGES', 'languages_list', false, true) }}
+    </div>
 
 {% endblock %}
 

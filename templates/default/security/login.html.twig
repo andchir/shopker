@@ -23,13 +23,23 @@
 
                 <form action="{{ path('login') }}" method="post">
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                    <input type="hidden" name="back_to" value="{{ app.request.get('locale_url_prefix') }}{{ app.request.get('current_uri') }}"/>
                     <div class="form-group">
                         <label for="email">{{ 'Email' | trans }}</label>
                         <input type="text" class="form-control" id="email" name="email" value="{{ last_username }}">
                     </div>
                     <div class="form-group">
                         <label for="password">{{ 'Password' | trans }}</label>
-                        <input type="password" class="form-control" id="password" name="password">
+                        <div class="input-group">
+                            <input class="form-control" type="password" id="password" name="password">
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-secondary bg-white text-secondary" id="button-show-password"
+                                        title="{{ 'Show password' | trans }}">
+                                    <i class="far icon-eye1"></i>
+                                    <i class="far icon-eye-off" style="display: none;"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <input type="checkbox" id="remember_me" name="_remember_me" checked>
@@ -40,7 +50,7 @@
                             {{ 'Log in' | trans }}
                         </button>
                         &nbsp;
-                        <a href="{{ path('password_reset') }}">
+                        <a href="{{ path('password_reset_localized', {'_locale': app.request.locale}) }}">
                             {{ 'Forgot your password?' | trans }}
                         </a>
                     </div>
@@ -48,11 +58,11 @@
 
                 <hr>
                 <p>
-                    <a href="{{ path('homepage') }}">
+                    <a href="{{ path('homepage_localized', {'_locale': app.request.locale}) }}">
                         {{ 'Go to home page' | trans }}
                     </a>
                     &nbsp;&bull;&nbsp;
-                    <a href="{{ path('register') }}">
+                    <a href="{{ path('register_localized', {'_locale': app.request.locale}) }}">
                         {{ 'Sign up' | trans }}
                     </a>
                 </p>
@@ -61,6 +71,30 @@
         </div>
 
     </div>
+
+    <div class="rounded position-absolute pos-right-top10 p-1" style="background-color: rgba(0,0,0,0.2);">
+        {{ settingsList('SETTINGS_LANGUAGES', 'languages_list', false, true) }}
+    </div>
+
+    <script>
+        var passwordField = document.getElementById('password'),
+            buttonShowPassword = document.getElementById('button-show-password'),
+            buttonIcons = buttonShowPassword.querySelectorAll('.far');
+        buttonShowPassword.addEventListener('click', function() {
+            passwordField = document.getElementById('password');
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                buttonShowPassword.title = '{{ 'Hide password' | trans }}';
+                buttonIcons[0].style.display = 'none';
+                buttonIcons[1].style.display = 'inline-block';
+            } else {
+                passwordField.type = 'password';
+                buttonShowPassword.title = '{{ 'Show password' | trans }}';
+                buttonIcons[0].style.display = 'inline-block';
+                buttonIcons[1].style.display = 'none';
+            }
+        });
+    </script>
 
 {% endblock %}
 

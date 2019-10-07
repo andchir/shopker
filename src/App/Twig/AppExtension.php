@@ -176,10 +176,15 @@ class AppExtension extends AbstractExtension
             }
         }
         if ($parentUri) {
-            $path .= '/' . $parentUri;
+            $path .= $parentUri;
         }
         $path .= $systemName;
-        return $path;
+
+        $request = $this->requestStack->getCurrentRequest();
+        $localeUrlPrefix = $request->attributes->has('locale_url_prefix')
+            ? $request->attributes->get('locale_url_prefix')
+            : '/';
+        return $localeUrlPrefix . $path;
     }
 
     /**

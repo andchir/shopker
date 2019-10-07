@@ -23,7 +23,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             shoppingCart = new ShoppingCart({
                 baseUrl: '{{ app.request.baseUrl }}',
-                connectorUrl: '{{ path('shop_cart_action') }}',
+                connectorUrl: '{{ path('shop_cart_action_localized', {'_locale': app.request.locale}) }}',
                 selector: '#shoppingCartContainer',
                 templateName: '{{ shoppingCartTemplateName }}'
             });

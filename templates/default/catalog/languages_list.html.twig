@@ -1,14 +1,21 @@
 {% if data is not empty %}
 <div class="dropdown">
-    <button class="btn btn-sm btn-outline-secondary text-white dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <img src="/img/flag_{{ app.request.locale }}.png">
     </button>
     <div class="dropdown-menu dropdown-menu-right border-secondary" aria-labelledby="dropdownMenuButton">
         {% for setting in data %}
-            <a class="dropdown-item rounded-0{% if app.request.locale == setting.options.value.value %} active{% endif %}" href="{{ path('locale_switch', {locale: setting.options.value.value}) }}" rel="nofollow">
-                <img src="/img/flag_{{ setting.options.value.value }}.png">
-                {{ setting.name }}
-            </a>
+            {% if loop.index0 == 0 %}
+                <a class="dropdown-item rounded-0{% if app.request.locale == setting.options.value.value %} active{% endif %}" href="/{{ app.request.get('current_uri') }}" rel="nofollow">
+                    <img src="/img/flag_{{ setting.options.value.value }}.png">
+                    {{ setting.name }}
+                </a>
+            {% else %}
+                <a class="dropdown-item rounded-0{% if app.request.locale == setting.options.value.value %} active{% endif %}" href="/{{ setting.options.value.value }}/{{ app.request.get('current_uri') }}">
+                    <img src="/img/flag_{{ setting.options.value.value }}.png">
+                    {{ setting.name }}
+                </a>
+            {% endif %}
         {% endfor %}
     </div>
 </div>

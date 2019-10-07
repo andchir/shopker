@@ -111,7 +111,7 @@
             // Shopping cart
             shoppingCart = new ShoppingCart({
                 baseUrl: '{{ app.request.baseUrl }}',// Base URL
-                connectorUrl: '{{ path('shop_cart_action') }}',// URL for requests
+                connectorUrl: '{{ path('shop_cart_action_localized', {'_locale': app.request.locale}) }}',// URL for requests
                 selector: '#shoppingCartSmallContainer',// Shopping cart container selector
                 productFormSelector: '.js-shopping-cart-product form',// Product form selector
                 templateName: 'shop_cart'// Shopping cart template name

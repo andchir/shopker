@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Service\SettingsService;
+use App\Service\UtilsService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -31,8 +32,7 @@ class HomepageController extends Controller
         $rolesHierarchy = $userController->getRolesHierarchy();
 
         $localeList = $this->getParameter('app.locale_list');
-        $localeList = $localeList ? explode(',', $localeList) : [];
-        $localeList = array_map('trim', $localeList);
+        $localeList = UtilsService::stringToArray($localeList);
 
         $settings = [
             'filesDirUrl' => $this->getParameter('app.files_dir_url'),

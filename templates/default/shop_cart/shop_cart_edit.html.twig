@@ -72,7 +72,7 @@
             </table>
         </form>
         <div class="float-right">
-            <a class="btn btn-outline-info" href="{{ path('page_checkout') }}">
+            <a class="btn btn-outline-info" href="{{ path('page_checkout_localized', {'_locale': app.request.locale}) }}">
                 {{ 'Continue' | trans }}
                 <i class="icon-keyboard_arrow_right"></i>
             </a>

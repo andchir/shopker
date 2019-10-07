@@ -27,14 +27,16 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
-/**
- * @Route("/shop_cart")
- */
 class CartController extends ProductController
 {
 
     /**
-     * @Route("/action", name="shop_cart_action", methods={"GET", "POST"})
+     * @Route(
+     *     "/{_locale}/shop_cart/action",
+     *     name="shop_cart_action_localized",
+     *     requirements={"_locale": "^[a-z]{2}$"}
+     * )
+     * @Route("/shop_cart/action", name="shop_cart_action", methods={"GET", "POST"})
      * @param Request $request
      * @param TranslatorInterface $translator
      * @return Response
@@ -512,7 +514,14 @@ class CartController extends ProductController
 
     /**
      * @Route(
-     *     "/{type}",
+     *     "/{_locale}/shop_cart/{type}",
+     *     name="shop_cart_edit_localized",
+     *     methods={"GET", "POST"},
+     *     requirements={"_locale": "^[a-z]{2}$", "type"=".+"},
+     *     defaults={"type": "shop"}
+     * )
+     * @Route(
+     *     "/shop_cart/{type}",
      *     name="shop_cart_edit",
      *     methods={"GET", "POST"},
      *     requirements={"type"=".+"},
@@ -524,12 +533,13 @@ class CartController extends ProductController
     public function editAction($type)
     {
         return $this->render('page_shop_cart.html.twig', [
-            'shoppingCartContentType' => $type
+            'shoppingCartContentType' => $type,
+            'currentUri' => 'shop_cart/' . $type
         ]);
     }
 
     /**
-     * @Route("/clear", name="shop_cart_clear")
+     * @Route("/shop_cart/clear", name="shop_cart_clear")
      * @param Request $request
      * @return Response
      */

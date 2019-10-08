@@ -31,7 +31,7 @@
             </div>
         </div>
     </div>
-    {% if app.request.attributes.get('_route') not in ['shop_cart_edit'] %}
+    {% if 'shop_cart_edit' not in app.request.attributes.get('_route') %}
         {{ shopCart('shop_cart', 'shop', 'shop_cart_empty') }}
     {% endif %}
 {% endblock %}

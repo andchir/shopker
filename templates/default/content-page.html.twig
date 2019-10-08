@@ -25,7 +25,7 @@
                 <div class="column-left">
                     <div class="position-relative js-shopping-cart-favorites">
                         <div class="position-absolute pos-right-top10" style="z-index: 100;">
-                            <form id="shk-form" action="{{ path('shop_cart_action') }}" method="post">
+                            <form id="shk-form" action="{{ path('shop_cart_action_localized', {'_locale': app.request.locale}) }}" method="post">
                                 <input type="hidden" name="item_id" value="{{ currentPage.id }}">
                                 <input type="hidden" name="category_id" value="{{ currentPage.parentId }}">
                                 <input type="hidden" name="type" value="favorites">
@@ -49,7 +49,7 @@
 
                     {% include 'flash_messages.html.twig' %}
 
-                    <form id="shk-form" action="{{ path('shop_cart_action') }}" method="post">
+                    <form id="shk-form" action="{{ path('shop_cart_action_localized', {'_locale': app.request.locale}) }}" method="post">
                         <input type="hidden" name="item_id" value="{{ currentPage.id }}">
                         <input type="hidden" name="category_id" value="{{ currentPage.parentId }}">
                         <input type="hidden" name="type" value="shop">
@@ -68,7 +68,7 @@
                         {% endif %}
                         <div class="my-3">
                             {% if shopCartProductCount(contentType.name, 'shop', currentPage.id) > 0 %}
-                                <a class="btn btn-info" href="{{ path('shop_cart_edit') }}">
+                                <a class="btn btn-info" href="{{ path('shop_cart_edit_localized', {'_locale': app.request.locale}) }}">
                                     {{ 'Proceed to checkout' | trans }}
                                 </a>
                             {% else %}

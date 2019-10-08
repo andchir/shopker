@@ -1,7 +1,7 @@
 <!-- breadcrumbs -->
 {% if breadcrumbs | length > 0 %}
     <div class="btn-group btn-breadcrumb mb-3">
-        <a href="{{ catalogPath('', '/') }}" class="btn btn-secondary">
+        <a href="{{ app.request.get('locale_url_prefix') }}" class="btn btn-secondary">
             <i class="icon-home"></i>
         </a>
         {% for crumb in breadcrumbs %}

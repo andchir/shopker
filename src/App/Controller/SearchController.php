@@ -15,6 +15,12 @@ class SearchController extends CatalogController
 {
 
     /**
+     * @Route(
+     *     "/{_locale}/search",
+     *     name="search_results_localized",
+     *     methods={"GET"},
+     *     requirements={"_locale": "^[a-z]{2}$"}
+     * )
      * @Route("/search", name="search_results", methods={"GET"})
      * @param Request $request
      * @return Response

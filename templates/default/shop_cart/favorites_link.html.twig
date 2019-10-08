@@ -1,4 +1,4 @@
-<a href="{{ path('shop_cart_edit', {type: 'favorites'}) }}" {% if countUniqueTotal == 0 %} class="text-muted"{% endif %}id="favoritesLinkContainer" data-shoppingcart-ids="{{ itemsIds | join(',') }}">
+<a href="{{ path('shop_cart_edit_localized', {'_locale': app.request.locale, type: 'favorites'}) }}" {% if countUniqueTotal == 0 %} class="text-muted"{% endif %}id="favoritesLinkContainer" data-shoppingcart-ids="{{ itemsIds | join(',') }}">
     {{ 'Favorites' | trans }}
     (<span id="favoritesCountUniqueTotal">{{ countUniqueTotal }}</span>)
 </a>

@@ -16,13 +16,13 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="list-group mb-3" id="list-tab" role="tablist">
-                        <a class="list-group-item list-group-item-action{% if app.request.attributes.get('_route') == 'profile_history_orders' %} active{% endif %}" href="{{ path('profile_history_orders') }}">
+                        <a class="list-group-item list-group-item-action{% if 'profile_history_orders' in app.request.attributes.get('_route') %} active{% endif %}" href="{{ path('profile_history_orders_localized', {'_locale': app.request.locale}) }}">
                             {{ 'History of orders' | trans }}
                         </a>
-                        <a class="list-group-item list-group-item-action{% if app.request.attributes.get('_route') == 'profile_contacts' %} active{% endif %}" href="{{ path('profile_contacts') }}">
+                        <a class="list-group-item list-group-item-action{% if 'profile_contacts' in app.request.attributes.get('_route') %} active{% endif %}" href="{{ path('profile_contacts_localized', {'_locale': app.request.locale}) }}">
                             {{ 'Contact details' | trans }}
                         </a>
-                        <a class="list-group-item list-group-item-action{% if app.request.attributes.get('_route') == 'profile_change_password' %} active{% endif %}" href="{{ path('profile_change_password') }}">
+                        <a class="list-group-item list-group-item-action{% if 'profile_change_password' in app.request.attributes.get('_route') %} active{% endif %}" href="{{ path('profile_change_password_localized', {'_locale': app.request.locale}) }}">
                             {{ 'Change password' | trans }}
                         </a>
                     </div>

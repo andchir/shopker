@@ -293,15 +293,28 @@ class AccountController extends Controller
     }
 
     /**
+     * @Route(
+     *     "/{_locale}/profile/",
+     *     name="profile_localized",
+     *     requirements={"_locale": "^[a-z]{2}$"}
+     * )
      * @Route("/profile/", name="profile")
+     * @param Request $request
      * @return RedirectResponse
      */
-    public function profileAction()
+    public function profileAction(Request $request)
     {
-        return $this->redirectToRoute('profile_history_orders');
+        return $this->redirectToRoute('profile_history_orders_localized', [
+            '_locale' => $request->getLocale()
+        ]);
     }
 
     /**
+     * @Route(
+     *     "/{_locale}/profile/change_password",
+     *     name="profile_change_password_localized",
+     *     requirements={"_locale": "^[a-z]{2}$"}
+     * )
      * @Route("/profile/change_password", name="profile_change_password")
      * @param Request $request
      * @param UserPasswordEncoderInterface $encoder
@@ -332,7 +345,7 @@ class AccountController extends Controller
                 ->getFlashBag()
                 ->add('messages', 'Your password has been changed successfully.');
 
-            return $this->redirectToRoute('profile_change_password');
+            return $this->redirectToRoute('profile_change_password_localized', ['_locale' => $request->getLocale()]);
         }
 
         return $this->render('profile/change_password.html.twig', [
@@ -341,6 +354,12 @@ class AccountController extends Controller
     }
 
     /**
+     * @Route(
+     *     "/{_locale}/profile/history_orders/{page}/{orderId}",
+     *     name="profile_history_orders_localized",
+     *     requirements={"_locale": "^[a-z]{2}$", "page", "orderId"},
+     *     defaults={"page": 1, "orderId": 0}
+     * )
      * @Route(
      *     "/profile/history_orders/{page}/{orderId}",
      *     name="profile_history_orders",
@@ -419,6 +438,11 @@ class AccountController extends Controller
     }
 
     /**
+     * @Route(
+     *     "/{_locale}/profile/profile_contacts",
+     *     name="profile_contacts_localized",
+     *     requirements={"_locale": "^[a-z]{2}$"}
+     * )
      * @Route("/profile/profile_contacts", name="profile_contacts")
      * @param Request $request
      * @return RedirectResponse|Response

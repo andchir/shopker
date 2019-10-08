@@ -9,6 +9,7 @@ use App\Service\SettingsService;
 use App\Service\UtilsService;
 use Composer\Json\JsonFile;
 use Composer\Repository\InstalledFilesystemRepository;
+use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -92,7 +93,7 @@ class SettingsController extends Controller
                 break;
             default:
 
-                /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+                /** @var DocumentManager $dm */
                 $dm = $this->get('doctrine_mongodb')->getManager();
 
                 $settings = $this->getRepository()->findBy([
@@ -114,7 +115,6 @@ class SettingsController extends Controller
                         if (isset($data[$index]['options']) && is_array($data[$index]['options'])) {
                             $setting->updateOptionsValues($data[$index]['options']);
                         }
-                        $dm->persist($setting);
                     }
                 }
 
@@ -140,6 +140,25 @@ class SettingsController extends Controller
 
                 $dm->flush();
 
+                // Update setting "app.locale_list"
+                if ($groupName == Setting::GROUP_LANGUAGES && count($settings) > 1) {
+                    $localeList = array_map(function($setting) {
+                        /** @var Setting $setting */
+                        return $setting->getOption('value');
+                    }, $settings);
+                    $localeListString = !empty($localeList) ? implode(',', array_unique($localeList)) : '';
+                    $settingsData = $this->getSettingsFromYaml('settings', false);
+                    $settingsData = array_merge($settingsData, [
+                        'app.locale_list' => $localeListString
+                    ]);
+                    if (!$this->saveSettingsToYaml($settingsData, 'settings')) {
+                        return $this->setError($translator->trans('File is not writable.', [], 'validators'));
+                    }
+                    if ($settingsService->fileCacheClear()) {
+                        $settingsService->systemCacheClear();
+                    }
+                }
+
                 break;
         }
 
@@ -148,16 +167,13 @@ class SettingsController extends Controller
 
     /**
      * @Route("/clear_cache", name="clear_cache", methods={"POST"})
+     * @param SettingsService $settingsService
      * @return JsonResponse
      */
-    public function clearCacheAction()
+    public function clearCacheAction(SettingsService $settingsService)
     {
-        /** @var FilesystemCache $cache */
-        $cache = $this->get('app.filecache');
-        $cache->clear();
-
         return $this->json([
-            'success' => true
+            'success' => $settingsService->fileCacheClear()
         ]);
     }
 

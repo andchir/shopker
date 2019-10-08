@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\MainBundle\Document\Setting;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Cache\Simple\FilesystemCache;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\HttpFoundation\Request;
@@ -238,6 +239,16 @@ class SettingsService
         $output->fetch();
 
         return $output->fetch();
+    }
+
+    /**
+     * @return bool
+     */
+    public function fileCacheClear()
+    {
+        /** @var FilesystemCache $cache */
+        $cache = $this->container->get('app.filecache');
+        return $cache->clear();
     }
 
     /**

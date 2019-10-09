@@ -2,6 +2,7 @@
 
 namespace App\Twig;
 
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment as TwigEnvironment;
 use App\MainBundle\Document\Category;
 use App\MainBundle\Document\ContentType;
@@ -17,6 +18,8 @@ class AppExtension extends AbstractExtension
     protected $container;
     /** @var  RequestStack */
     protected $requestStack;
+    /** @var UrlGeneratorInterface $generator */
+    protected $generator;
     /** @var array */
     protected $cache = [];
 
@@ -24,11 +27,13 @@ class AppExtension extends AbstractExtension
      * AppExtension constructor.
      * @param ContainerInterface $container
      * @param RequestStack $requestStack
+     * @param UrlGeneratorInterface $generator
      */
-    public function __construct(ContainerInterface $container, RequestStack $requestStack)
+    public function __construct(ContainerInterface $container, RequestStack $requestStack, UrlGeneratorInterface $generator)
     {
         $this->container = $container;
         $this->requestStack = $requestStack;
+        $this->generator = $generator;
     }
 
     /**
@@ -48,6 +53,7 @@ class AppExtension extends AbstractExtension
     {
         return [
             new TwigFunction('catalogPath', array($this, 'catalogPathFunction')),
+            new TwigFunction('pathLocalized', array($this, 'pathLocalizedFunction')),
             new TwigFunction('outputFilter', [$this, 'outputFilterFunction'], [
                 'is_safe' => ['html'],
                 'needs_environment' => true
@@ -185,6 +191,24 @@ class AppExtension extends AbstractExtension
             ? $request->attributes->get('locale_url_prefix')
             : '/';
         return $localeUrlPrefix . $path;
+    }
+
+    /**
+     * @param $routeName
+     * @param array $parameters
+     * @return string
+     */
+    public function pathLocalizedFunction($routeName, $parameters = [])
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        $localeDefault = $this->container->getParameter('locale');
+        $locale = $request->getLocale();
+        if ($localeDefault === $locale) {
+            return $this->generator->generate($routeName, $parameters);
+        }
+        $routeName .= '_localized';
+        $parameters['_locale'] = $locale;
+        return $this->generator->generate($routeName, $parameters);
     }
 
     /**

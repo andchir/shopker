@@ -49,7 +49,7 @@
                                                     <div class="position-relative js-shopping-cart-favorites">
                                                         {{ renderOutputTypeArray(item, fields, '', {"currency": currency}) }}
                                                         <div class="position-absolute pos-right-top show-on-hover">
-                                                            <form id="shk-form" action="{{ path('shop_cart_action_localized', {'_locale': app.request.locale}) }}" method="post">
+                                                            <form id="shk-form" action="{{ pathLocalized('shop_cart_action') }}" method="post">
                                                                 <input type="hidden" name="item_id" value="{{ item._id }}">
                                                                 <input type="hidden" name="category_id" value="{{ item.parentId }}">
                                                                 <input type="hidden" name="type" value="favorites">
@@ -61,7 +61,7 @@
                                                     </div>
                                                     <div class="position-relative js-shopping-cart-product">
                                                         <div class="card-footer-absolute show-on-hover">
-                                                            <form id="shk-form" action="{{ path('shop_cart_action_localized', {'_locale': app.request.locale}) }}" method="post">
+                                                            <form id="shk-form" action="{{ pathLocalized('shop_cart_action') }}" method="post">
                                                                 <input type="hidden" name="item_id" value="{{ item._id }}">
                                                                 <input type="hidden" name="category_id" value="{{ item.parentId }}">
                                                                 <input type="hidden" name="type" value="shop">
@@ -161,7 +161,7 @@
 
             shoppingCart = new ShoppingCart({
                 baseUrl: '{{ app.request.baseUrl }}',// Base URL
-                connectorUrl: '{{ path('shop_cart_action_localized', {'_locale': app.request.locale}) }}',// URL for requests
+                connectorUrl: '{{ pathLocalized('shop_cart_action') }}',// URL for requests
                 selector: '#shoppingCartSmallContainer',// Shopping cart container selector
                 productFormSelector: '.js-shopping-cart-product form',// Product form selector
                 templateName: 'shop_cart'// Shopping cart template name
@@ -191,7 +191,7 @@
             // Favorites
             favorites = new ShoppingCart({
                 baseUrl: '{{ app.request.baseUrl }}',
-                connectorUrl: '{{ path('shop_cart_action_localized', {'_locale': app.request.locale}) }}',
+                connectorUrl: '{{ pathLocalized('shop_cart_action') }}',
                 productFormSelector: '.js-shopping-cart-favorites form',
                 selectorCountUniqueTotal: '#favoritesCountUniqueTotal',
                 autoUpdateElements: true,

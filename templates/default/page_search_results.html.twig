@@ -11,7 +11,7 @@
             </h1>
 
             <div class="card card-body bg-light mb-3">
-                <form class="d-block m-0" action="{{ path('search_results_localized', {'_locale': app.request.locale}) }}" method="get" id="formSearch">
+                <form class="d-block m-0" action="{{ pathLocalized('search_results') }}" method="get" id="formSearch">
                     <div class="input-group input-group-lg">
                         <input type="text" class="form-control" placeholder="{{ 'Search' | trans }}..." name="query" value="{{ searchWord }}">
                         <div class="input-group-append">

@@ -15,12 +15,12 @@
                                 <i class="icon-head"></i>
                             </button>
                             <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item" href="{{ path('profile_history_orders_localized', {'_locale': app.request.locale}) }}" rel="nofollow">
+                                <a class="dropdown-item" href="{{ pathLocalized('profile_history_orders') }}" rel="nofollow">
                                     <i class="icon-list text-muted"></i>
                                     &nbsp;
                                     {{ 'History of orders' | trans }}
                                 </a>
-                                <a class="dropdown-item" href="{{ path('profile_contacts_localized', {'_locale': app.request.locale}) }}" rel="nofollow">
+                                <a class="dropdown-item" href="{{ pathLocalized('profile_contacts') }}" rel="nofollow">
                                     <i class="icon-head text-muted"></i>
                                     &nbsp;
                                     {{ 'Contact details' | trans }}
@@ -42,7 +42,7 @@
                         </div>
                     </div>
                 {% else %}
-                    <a class="btn btn-sm btn-outline-primary ml-1" href="{{ path('login_localized', {'_locale': app.request.locale}) }}" rel="nofollow">
+                    <a class="btn btn-sm btn-outline-primary ml-1" href="{{ pathLocalized('login') }}" rel="nofollow">
                         {{ 'Log in' | trans }}
                         <i class="icon-unlock"></i>
                     </a>
@@ -70,7 +70,7 @@
             {% if app.request.attributes.get('_route') not in ['search'] %}
                 <div class="float-right position-relative">
                     <div class="position-absolute pos-right-top">
-                        <form class="d-block" action="{{ path('search_results_localized', {'_locale': app.request.locale}) }}" method="get" id="formSearch">
+                        <form class="d-block" action="{{ pathLocalized('search_results') }}" method="get" id="formSearch">
                             <div class="input-group input-group-sm" style="width: 220px;">
                                 <input type="text" class="form-control" placeholder="{{ 'Search' | trans }}..." name="query">
                                 <div class="input-group-append">
@@ -84,7 +84,7 @@
                 </div>
             {% endif %}
 
-            <a class="header-brand" href="{{ path('homepage_localized', {'_locale': app.request.locale}) }}">
+            <a class="header-brand" href="{{ pathLocalized('homepage') }}">
                 {{ app_name }}
             </a>
         </div>

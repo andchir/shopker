@@ -50,7 +50,7 @@
                             {{ 'Log in' | trans }}
                         </button>
                         &nbsp;
-                        <a href="{{ path('password_reset_localized', {'_locale': app.request.locale}) }}">
+                        <a href="{{ pathLocalized('password_reset') }}">
                             {{ 'Forgot your password?' | trans }}
                         </a>
                     </div>
@@ -58,11 +58,11 @@
 
                 <hr>
                 <p>
-                    <a href="{{ path('homepage_localized', {'_locale': app.request.locale}) }}">
+                    <a href="{{ pathLocalized('homepage') }}">
                         {{ 'Go to home page' | trans }}
                     </a>
                     &nbsp;&bull;&nbsp;
-                    <a href="{{ path('register_localized', {'_locale': app.request.locale}) }}">
+                    <a href="{{ pathLocalized('register') }}">
                         {{ 'Sign up' | trans }}
                     </a>
                 </p>

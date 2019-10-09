@@ -1,8 +1,9 @@
 
 4.0.9
 - Settings for site languages.
-- New settingsList() twig function.
-- Locale parameter in URL.
+- New settingsList() Twig function.
+- New pathLocalized() Twig function.
+- Locale parameter in URL. Locale is no longer saved in session.
 - On the authorization page, a button "Show password" has been added.
 
 4.0.8

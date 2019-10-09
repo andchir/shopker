@@ -122,9 +122,7 @@ class UserController extends StorageControllerAbstract
         }
         $dm->flush();
 
-        return new JsonResponse([
-            'success' => true
-        ]);
+        return $this->json($item, 200, [], ['groups' => ['details']]);
     }
 
     /**

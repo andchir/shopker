@@ -68,7 +68,10 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
             this.onModalClose(result);
             this.getList();
         }, (reason) => {
-            // console.log( 'reason', reason );
+            this.onModalClose(reason);
+            if (reason && reason === 'updated') {
+                this.getList();
+            }
         });
     }
 

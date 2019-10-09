@@ -31,6 +31,7 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
     localeCurrent = '';
     localeFieldsAllowed: string[] = [];
     localePreviousValues: {[fieldName: string]: string} = {};
+    closeReason = 'canceled';
 
     constructor(
         public fb: FormBuilder,
@@ -190,9 +191,11 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
         this.activeModal.close({reason: reason, data: this.model});
     }
 
-    close(e: MouseEvent) {
-        e.preventDefault();
-        this.activeModal.dismiss('canceled');
+    close(event?: MouseEvent) {
+        if (event) {
+            event.preventDefault();
+        }
+        this.activeModal.dismiss(this.closeReason);
     }
 
     getFormData(): any {
@@ -340,6 +343,7 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
                     }
                     if (res && res['id']) {
                         this.model = res as M;
+                        this.onAfterGetData();
                     }
                     this.loading = false;
                     this.submitted = false;

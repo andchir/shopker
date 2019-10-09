@@ -96,6 +96,14 @@ export class ModalUserContentComponent extends ModalContentAbstractComponent<Use
     }
 
     onAfterGetData(): void {
+        if (this.model.id) {
+            if (!this.isEditMode) {
+                this.isEditMode = true;
+                this.closeReason = 'updated';
+                this.form.controls.password.clearValidators();
+                this.form.controls.confirmPassword.clearValidators();
+            }
+        }
         if (this.isEditMode
             && this.appSettings.isSuperAdmin
             && this.appSettings.settings.userEmail !== this.model.email) {

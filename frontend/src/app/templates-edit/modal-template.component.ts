@@ -31,6 +31,7 @@ export class ModalTemplateEditComponent implements OnInit {
     submitted = false;
     loading = false;
     isPathReadOnly = false;
+    closeReason = 'canceled';
 
     constructor(
         private dataService: TemplatesEditService,
@@ -83,17 +84,20 @@ export class ModalTemplateEditComponent implements OnInit {
             fileType = this.file.type;
         }
         this.dataService.getItemContent(filePath, fileType)
-            .subscribe((res) => {
-                if (res['content']) {
-                    this.model.content = res['content'];
-                    ace.edit('editor').setValue(this.model.content, -1);
+            .subscribe({
+                next: (res) => {
+                    if (res['content']) {
+                        this.model.content = res['content'];
+                        ace.edit('editor').setValue(this.model.content, -1);
+                    }
+                    this.loading = false;
+                },
+                error: (err) => {
+                    if (err['error']) {
+                        this.errorMessage = err['error'];
+                    }
+                    this.loading = false;
                 }
-                this.loading = false;
-            }, (err) => {
-                if (err['error']) {
-                    this.errorMessage = err['error'];
-                }
-                this.loading = false;
             });
     }
 
@@ -103,9 +107,11 @@ export class ModalTemplateEditComponent implements OnInit {
         this.activeModal.close({reason: reason, data: this.model});
     }
 
-    close(e: MouseEvent) {
-        e.preventDefault();
-        this.activeModal.dismiss('canceled');
+    close(event?: MouseEvent) {
+        if (event) {
+            event.preventDefault();
+        }
+        this.activeModal.dismiss(this.closeReason);
     }
 
     /** Submit form */
@@ -114,19 +120,29 @@ export class ModalTemplateEditComponent implements OnInit {
         this.closeModal();
     }
 
-    save(): void {
+    save(autoClose = false): void {
         this.submitted = true;
         this.loading = true;
 
         this.model.content = ace.edit('editor').getValue();
 
         this.dataService.saveContent(this.model)
-            .subscribe((res) => {
-                this.closeModal();
-            }, (err) => {
-                this.errorMessage = err.error || 'Error.';
-                this.loading = false;
-                this.submitted = false;
+            .subscribe({
+                next: (res) => {
+                    if (autoClose) {
+                        this.closeModal();
+                    } else if (res && res['id']) {
+                        this.model = res as FileRegularInterface;
+                    }
+                    this.closeReason = 'updated';
+                    this.loading = false;
+                    this.submitted = false;
+                },
+                error: (err) => {
+                    this.errorMessage = err.error || 'Error.';
+                    this.loading = false;
+                    this.submitted = false;
+                }
             });
     }
 

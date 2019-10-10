@@ -5,6 +5,7 @@
 - New pathLocalized() Twig function.
 - Locale parameter in URL. Locale is no longer saved in session.
 - On the authorization page, a button "Show password" has been added.
+- In admin area added buttons "Save and Close" and "Save".
 
 4.0.8
 - New order statistics module in admin area.

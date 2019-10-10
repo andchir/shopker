@@ -293,7 +293,7 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
         return sordData;
     }
 
-    save() {
+    save(autoClose = false) {
         this.submitted = true;
         this.errorMessage = null;
 
@@ -308,17 +308,28 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
         this.dataService.setRequestUrl('products/' + this.category.id);
 
         this.saveRequest()
-            .subscribe((data) => {
+            .subscribe({
+                next: (res) => {
                     if (Object.keys(this.files).length > 0) {
-                        this.saveFiles(data._id || data.id);
+                        this.saveFiles(res['id'] || res['_id']);
                     } else {
-                        this.closeModal();
+                        if (autoClose) {
+                            this.closeModal();
+                        } else if (res && (res['id'] || res['_id'])) {
+                            this.model = res as Product;
+                            this.model.id = res['id'] || res['_id'];
+                            this.isEditMode = true;
+                        }
+                        this.closeReason = 'updated';
+                        this.loading = false;
+                        this.submitted = false;
                     }
                 },
-                err => {
+                error: (err) => {
                     this.errorMessage = err.error || 'Error.';
                     this.submitted = false;
                     this.loading = false;
-                });
+                }
+            });
     }
 }

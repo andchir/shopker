@@ -334,24 +334,28 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
 
         this.loading = true;
         this.saveRequest()
-            .subscribe((res) => {
-                if (Object.keys(this.files).length > 0) {
-                    this.saveFiles(res._id || res.id);
-                } else {
-                    if (autoClose) {
-                        this.closeModal();
+            .subscribe({
+                next: (res) => {
+                    if (Object.keys(this.files).length > 0) {
+                        this.saveFiles(res._id || res.id);
+                    } else {
+                        if (autoClose) {
+                            this.closeModal();
+                        } else if (res && res['id']) {
+                            this.model = res as M;
+                            this.onAfterGetData();
+                            this.isEditMode = true;
+                        }
+                        this.closeReason = 'updated';
+                        this.loading = false;
+                        this.submitted = false;
                     }
-                    if (res && res['id']) {
-                        this.model = res as M;
-                        this.onAfterGetData();
-                    }
+                },
+                error: (err) => {
+                    this.errorMessage = err.error || 'Error.';
                     this.loading = false;
                     this.submitted = false;
                 }
-            }, (err) => {
-                this.errorMessage = err.error || 'Error.';
-                this.loading = false;
-                this.submitted = false;
             });
     }
 }

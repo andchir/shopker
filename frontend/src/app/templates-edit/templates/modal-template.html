@@ -1,6 +1,6 @@
 <div class="modal-header d-block">
     <div class="d-block float-right">
-        <button type="button" class="btn btn-secondary" [disabled]="submitted" (click)="activeModal.dismiss()">
+        <button type="button" class="btn btn-secondary" [disabled]="submitted" (click)="close($event)">
             <span>{{'CLOSE' | translate}}</span>
         </button>
     </div>
@@ -52,10 +52,18 @@
 
 </div>
 <div class="modal-footer d-block">
-    <button type="button" class="btn btn-success btn-wide" [disabled]="submitted" (click)="save()">
-        <span>{{'SAVE' | translate}}</span>
-    </button>
-    <button type="button" class="btn btn-secondary btn-wide" [disabled]="submitted" (click)="activeModal.dismiss()">
-        <span>{{'CANCEL' | translate}}</span>
+    <div class="btn-group mr-1">
+        <button type="button" class="btn btn-success btn-wide" [disabled]="submitted" (click)="save(true)">
+            <span>{{'SAVE_AND_CLOSE' | translate}}</span>
+        </button>
+        <div class="btn-group" ngbDropdown role="group" placement="top-right">
+            <button class="btn btn-success dropdown-toggle-split" ngbDropdownToggle [disabled]="submitted"></button>
+            <div class="dropdown-menu" ngbDropdownMenu>
+                <button ngbDropdownItem (click)="save()">{{'SAVE' | translate}}</button>
+            </div>
+        </div>
+    </div>
+    <button type="button" class="btn btn-secondary btn-wide" [disabled]="submitted" (click)="close($event)">
+        <span>{{'CLOSE' | translate}}</span>
     </button>
 </div>

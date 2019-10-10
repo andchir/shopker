@@ -14,9 +14,10 @@ use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Cache\Simple\FilesystemCache;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Translation\TranslatorInterface;
 use Twig\Environment as TwigEnvironment;
+use Psr\Cache\CacheItemInterface;
 
 class AppRuntime
 {
@@ -115,11 +116,6 @@ class AppRuntime
     /**
      * @param TwigEnvironment $environment
      * @return string
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     * @throws \Throwable
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
     public function currencyListFunction(TwigEnvironment $environment)
     {
@@ -129,11 +125,13 @@ class AppRuntime
         $cacheKey = 'currency.list';
         /** @var SettingsService $settingsService */
         $settingsService = $this->container->get('app.settings');
-        /** @var FilesystemCache $cache */
+        /** @var FilesystemAdapter $cache */
         $cache = $this->container->get('app.filecache');
+        /** @var CacheItemInterface $cacheItemHtml */
+        $cacheItemHtml = $cache->getItem($cacheKey);
 
-        if ($cache->has($cacheKey)) {
-            return $environment->createTemplate($cache->get($cacheKey))->render([]);
+        if ($cacheItemHtml->isHit()) {
+            return $environment->createTemplate($cacheItemHtml->get())->render([]);
         }
 
         $properties = [
@@ -146,7 +144,8 @@ class AppRuntime
         } else {
             $output = $environment->render($templateName, $properties);
         }
-        $cache->set($cacheKey, $output, 60*60*24);
+        $cacheItemHtml->set($output);
+        $cache->save($cacheItemHtml);
 
         return $output;
     }
@@ -159,11 +158,6 @@ class AppRuntime
      * @param bool $cacheDataEnabled
      * @param array $data
      * @return string
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     * @throws \Throwable
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
     public function settingsListFunction(TwigEnvironment $environment, $settingName, $templateName, $cacheEnabled = false, $cacheDataEnabled = false, $data = [])
     {
@@ -174,18 +168,23 @@ class AppRuntime
         $cacheDataKey = 'settings.list_data_' . $settingName;
         /** @var SettingsService $settingsService */
         $settingsService = $this->container->get('app.settings');
-        /** @var FilesystemCache $cache */
+        /** @var FilesystemAdapter $cache */
         $cache = $this->container->get('app.filecache');
+        /** @var CacheItemInterface $cacheItemHtml */
+        $cacheItemHtml = $cacheEnabled ? $cache->getItem($cacheKey) : null;
+        /** @var CacheItemInterface $cacheItemData */
+        $cacheItemData = $cacheDataEnabled ? $cache->getItem($cacheKey) : null;
 
-        if ($cacheEnabled && $cache->has($cacheKey)) {
-            return $environment->createTemplate($cache->get($cacheKey))->render([]);
+        if ($cacheItemHtml && $cacheItemHtml->isHit()) {
+            return $environment->createTemplate($cacheItemHtml->get())->render([]);
         }
-        if ($cacheDataEnabled && $cache->has($cacheDataKey)) {
-            $settingsData = $cache->get($cacheDataKey);
+        if ($cacheItemData && $cacheItemData->isHit()) {
+            $settingsData = $cacheItemData->get();
         } else {
             $settingsData = $settingsService->getSettingsGroup($settingName);
-            if ($cacheDataEnabled) {
-                $cache->set($cacheDataKey, $settingsData, 60*60*24);
+            if ($cacheItemData) {
+                $cacheItemData->set($settingsData);
+                $cache->save($cacheItemData);
             }
         }
         $properties = ['data' => $settingsData];
@@ -200,8 +199,9 @@ class AppRuntime
                 return $this->twigAddError($e->getMessage());
             }
         }
-        if ($cacheEnabled) {
-            $cache->set($cacheKey, $output, 60*60*24);
+        if ($cacheItemHtml) {
+            $cacheItemHtml->set($output);
+            $cache->save($cacheItemHtml);
         }
 
         return $output;
@@ -346,9 +346,6 @@ class AppRuntime
      * @param bool $cacheEnabled
      * @param string $activeClassName
      * @return string
-     * @throws \Doctrine\ODM\MongoDB\LockException
-     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function categoriesTreeFunction(
         TwigEnvironment $environment,
@@ -365,13 +362,15 @@ class AppRuntime
         $locale = $request->getLocale();
 
         $cacheKey = "tree.{$chunkName}.{$locale}";
-        /** @var FilesystemCache $cache */
+        /** @var FilesystemAdapter $cache */
         $cache = $this->container->get('app.filecache');
+        /** @var CacheItemInterface $cacheItemHtml */
+        $cacheItemHtml = $cacheEnabled ? $cache->getItem($cacheKey) : null;
         $output = '';
 
         if ($data === null) {
-            if ($cacheEnabled && $cache->has($cacheKey)) {
-                $output = $cache->get($cacheKey);
+            if ($cacheItemHtml && $cacheItemHtml->isHit()) {
+                $output = $cacheItemHtml->get();
             } else {
                 $catalogController = new CatalogController();
                 $catalogController->setContainer($this->container);
@@ -393,8 +392,9 @@ class AppRuntime
             } catch (\Exception $e) {
                 $output .= $this->twigAddError($e->getMessage());
             }
-            if (!empty($output) && $cacheEnabled) {
-                $cache->set($cacheKey, $output, 60*60*24);
+            if ($cacheItemHtml) {
+                $cacheItemHtml->set($output);
+                $cache->save($cacheItemHtml);
             }
         }
 
@@ -415,9 +415,6 @@ class AppRuntime
      * @param string|null $layoutPath
      * @param string $varName
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
     public function renderFormFunction(TwigEnvironment $environment, $formName = '', $layoutPath = null, $varName = 'form')
     {

@@ -3,7 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\MainBundle\Document\FileDocument;
-use Symfony\Component\Cache\Simple\FilesystemCache;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -140,7 +140,7 @@ class CategoryController extends StorageControllerAbstract
 
         // Clear file cache
         if (!empty($data['clearCache'])) {
-            /** @var FilesystemCache $cache */
+            /** @var FilesystemAdapter $cache */
             $cache = $this->get('app.filecache');
             $cache->clear();
         }

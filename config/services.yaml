@@ -109,7 +109,7 @@ services:
 
     app.filecache:
         public: true
-        class: Symfony\Component\Cache\Simple\FilesystemCache
+        class: Symfony\Component\Cache\Adapter\FilesystemAdapter
         arguments:
             - 'app'
             - 86400

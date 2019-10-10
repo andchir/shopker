@@ -16,7 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Cache\Simple\FilesystemCache;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use \Mimey\MimeTypes;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -423,7 +423,7 @@ class ProductController extends BaseProductController
 
         // Clear file cache
         if (!empty($data['clearCache'])) {
-            /** @var FilesystemCache $cache */
+            /** @var FilesystemAdapter $cache */
             $cache = $this->get('app.filecache');
             $cache->clear();
         }
@@ -561,7 +561,7 @@ class ProductController extends BaseProductController
 
         if ($clearCache) {
             // Clear file cache
-            /** @var FilesystemCache $cache */
+            /** @var FilesystemAdapter $cache */
             $cache = $this->get('app.filecache');
             $cache->clear();
         }
@@ -590,7 +590,7 @@ class ProductController extends BaseProductController
         $this->onAfterUpdateItem($contentType, $itemData, $categoryId);
 
         // Clear file cache
-        /** @var FilesystemCache $cache */
+        /** @var FilesystemAdapter $cache */
         $cache = $this->get('app.filecache');
         $cache->clear();
 

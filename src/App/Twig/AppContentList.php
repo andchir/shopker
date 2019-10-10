@@ -5,9 +5,10 @@ namespace App\Twig;
 use App\Controller\CatalogController;
 use App\MainBundle\Document\ContentType;
 use App\Service\UtilsService;
+use Psr\Cache\CacheItemInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Cache\Simple\FilesystemCache;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 class AppContentList
 {
@@ -57,13 +58,12 @@ class AppContentList
         $localeDefault = $this->container->getParameter('locale');
         $locale = $request->getLocale();
 
-        /** @var FilesystemCache $cache */
+        /** @var FilesystemAdapter $cache */
         $cache = $this->container->get('app.filecache');
-        if (!empty($cacheKey)) {
-            $cacheKey .= ".{$locale}";
-            if ($cache->has("content.{$cacheKey}")) {
-                return $cache->get("content.{$cacheKey}");
-            }
+        /** @var CacheItemInterface $cacheItemHtml */
+        $cacheItemHtml = !empty($cacheKey) ? $cache->getItem("content.{$cacheKey}.{$locale}") : null;
+        if ($cacheItemHtml && $cacheItemHtml->isHit()) {
+            return $cacheItemHtml->get();
         }
 
         $templateName = sprintf('catalog/%s.html.twig', $chunkName);
@@ -126,8 +126,9 @@ class AppContentList
             'queryOptions' => $queryOptions,
             'pagesOptions' => $pagesOptions
         ]));
-        if (!empty($cacheKey)) {
-            $cache->set("content.{$cacheKey}", $output, 60*60*24);
+        if ($cacheItemHtml) {
+            $cacheItemHtml->set($output);
+            $cache->save($cacheItemHtml);
         }
         return $output;
     }
@@ -140,10 +141,6 @@ class AppContentList
      * @param string $cacheKey
      * @param array $parameters
      * @return string
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
     public function includeContentFunction(
         \Twig_Environment $environment,
@@ -161,13 +158,12 @@ class AppContentList
         $localeDefault = $this->container->getParameter('locale');
         $locale = $request->getLocale();
 
-        /** @var FilesystemCache $cache */
+        /** @var FilesystemAdapter $cache */
         $cache = $this->container->get('app.filecache');
-        if (!empty($cacheKey)) {
-            $cacheKey .= ".{$locale}";
-            if ($cache->has("content_inc.{$cacheKey}")) {
-                return $cache->get("content_inc.{$cacheKey}");
-            }
+        /** @var CacheItemInterface $cacheItemHtml */
+        $cacheItemHtml = !empty($cacheKey) ? $cache->getItem("content_inc.{$cacheKey}.{$locale}") : null;
+        if ($cacheItemHtml && $cacheItemHtml->isHit()) {
+            return $cacheItemHtml->get();
         }
 
         $templateName = $chunkName . '.html.twig';
@@ -210,8 +206,9 @@ class AppContentList
 
         $output = $environment->render($templateName, array_merge($parameters, $document));
 
-        if (!empty($cacheKey)) {
-            $cache->set("content_inc.{$cacheKey}", $output, 60*60*24);
+        if ($cacheItemHtml) {
+            $cacheItemHtml->set($output);
+            $cache->save($cacheItemHtml);
         }
 
         return $output;

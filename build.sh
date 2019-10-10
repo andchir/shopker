@@ -16,7 +16,7 @@ rm -rfv "$DIR"/"$OUTPUT_DIRNAME"/*
 cp "$DIR"/composer.json "$DIR"/"$OUTPUT_DIRNAME"
 cp "$DIR"/LICENSE "$DIR"/"$OUTPUT_DIRNAME"
 cp "$DIR"/changelog.txt "$DIR"/"$OUTPUT_DIRNAME"
-cp "$DIR"/.env "$DIR"/"$OUTPUT_DIRNAME"
+cp "$DIR"/.env.dist "$DIR"/"$OUTPUT_DIRNAME"/.env
 cp -r "$DIR"/bin "$DIR"/"$OUTPUT_DIRNAME"
 cp -r "$DIR"/config "$DIR"/"$OUTPUT_DIRNAME"
 cp -r "$DIR"/src "$DIR"/"$OUTPUT_DIRNAME"

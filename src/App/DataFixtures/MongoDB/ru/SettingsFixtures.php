@@ -5,7 +5,7 @@ namespace App\DataFixtures\MongoDB\ru;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use App\MainBundle\Document\Setting;
-use Symfony\Component\Cache\Simple\FilesystemCache;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -25,7 +25,7 @@ class SettingsFixtures extends Fixture implements ContainerAwareInterface
     public function load(ObjectManager $manager)
     {
 
-        /** @var FilesystemCache $cache */
+        /** @var FilesystemAdapter $cache */
         $cache = $this->container->get('app.filecache');
         $cache->clear();
 

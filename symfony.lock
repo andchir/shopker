@@ -99,7 +99,7 @@
         "version": "v1.8.1"
     },
     "doctrine/mongodb": {
-        "version": "1.6.3"
+        "version": "1.6.4"
     },
     "doctrine/mongodb-odm": {
         "version": "1.2.5"

@@ -13,7 +13,7 @@ use App\Event\CategoryUpdatedEvent;
 
 use App\MainBundle\Document\Category;
 use App\MainBundle\Document\ContentType;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class ContentTypeController

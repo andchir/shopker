@@ -9,7 +9,7 @@
                         <span class="badge badge-pill badge-light big mx-2">
                             {{ countTotal }}
                         </span>
-                        {{ 'product with a total cost|products with a total cost' | transchoice(countTotal) }}
+                        {{ 'product with a total cost|products with a total cost' | trans({'%count%': countTotal}) }}
                         <span class="badge badge-light big mx-2 shk-price">{{ priceTotal | price }}</span>
                         <span class="shk-currency">{{ currencySelected }}</span>
                     </div>

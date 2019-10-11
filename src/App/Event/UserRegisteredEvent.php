@@ -3,8 +3,8 @@
 namespace App\Event;
 
 use App\MainBundle\Document\User;
-use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class UserRegisteredEvent extends Event
 {

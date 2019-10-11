@@ -58,10 +58,11 @@ class ProductController extends BaseProductController
         $data = [];
         $results = $collection->find([
             'parentId' => $category->getId()
-        ])
-            ->sort($queryOptions['sortOptions'])
-            ->skip($skip)
-            ->limit($queryOptions['limit']);
+        ], [
+            'sort' => $queryOptions['sortOptionsAggregation'],
+            'skip' => $skip,
+            'limit' => $queryOptions['limit']
+        ]);
 
         foreach ($results as $entry) {
             $row = [
@@ -77,7 +78,7 @@ class ProductController extends BaseProductController
             $data[] = $row;
         }
 
-        $total = $collection->count([
+        $total = $collection->countDocuments([
             'parentId' => $category->getId()
         ]);
 
@@ -319,6 +320,9 @@ class ProductController extends BaseProductController
         }
 
         $collection = $this->getCollection($contentType->getCollection());
+        if (!$collection) {
+            return $this->setError('Item not saved.');
+        }
         unset($data['fieldsSort']);
 
         if($itemId){
@@ -438,7 +442,7 @@ class ProductController extends BaseProductController
     /**
      * @Route(
      *     "/{categoryId}/{action}/batch",
-     *     requirements={"action"},
+     *     requirements={"action"=".+"},
      *     defaults={"action": "delete"},
      *     methods={"POST"}
      * )
@@ -705,15 +709,15 @@ class ProductController extends BaseProductController
     public function getNextId($collectionName, $databaseName = '')
     {
         $autoincrementCollection = $this->getCollection('doctrine_increment_ids', $databaseName);
-        $count = $autoincrementCollection->count(['_id' => $collectionName]);
+        $count = $autoincrementCollection->countDocuments(['_id' => $collectionName]);
         if(!$count){
             $record = [
                 '_id' => $collectionName,
                 'current_id' => 0
             ];
-            $autoincrementCollection->insert($record);
+            $autoincrementCollection->insertOne($record);
         }
-        $ret = $autoincrementCollection->findAndUpdate(
+        $ret = $autoincrementCollection->findOneAndUpdate(
             ['_id' => $collectionName],
             ['$inc' => ['current_id' => 1]],
             ['new' => true]
@@ -741,7 +745,7 @@ class ProductController extends BaseProductController
             $where['_id'] = ['$ne' => $itemId];
         }
 
-        return $collection->count($where);
+        return $collection->countDocuments($where);
     }
 
     /**
@@ -770,10 +774,10 @@ class ProductController extends BaseProductController
      */
     public function getUsedOtherTotal(ContentType $contentType, $fieldName, $fileId, $ids = []) {
         $collection = $this->getCollection($contentType->getCollection());
-        return $collection->find([
+        return $collection->countDocuments([
             '_id' => ['$nin' => $ids],
             $fieldName . '.fileId' =>  $fileId
-        ])->count();
+        ]);
     }
 
     /**

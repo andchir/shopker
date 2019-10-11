@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use Andchir\OmnipayBundle\Repository\PaymentRepositoryInterface;
-use Doctrine\ODM\MongoDB\DocumentRepository;
+use Doctrine\ODM\MongoDB\Repository\DocumentRepository;
 
 /**
  * PaymentRepository

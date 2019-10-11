@@ -59,9 +59,9 @@ class CollectionController extends BaseController
 
         $count = $contentTypeRepository->createQueryBuilder()
             ->field('collection')->equals($itemName)
+            ->count()
             ->getQuery()
-            ->execute()
-            ->count();
+            ->execute();
 
         if($count > 0){
             return $this->setError('This collection is not empty.');

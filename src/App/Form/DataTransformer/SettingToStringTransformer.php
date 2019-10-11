@@ -4,18 +4,17 @@ namespace App\Form\DataTransformer;
 
 use App\MainBundle\Document\Setting;
 use Doctrine\ODM\MongoDB\DocumentManager;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
 class SettingToStringTransformer implements DataTransformerInterface
 {
-    private $entityManager;
+    private $documentManager;
     private $groupName;
 
-    public function __construct(DocumentManager $entityManager, $groupName = null)
+    public function __construct(DocumentManager $documentManager, $groupName = null)
     {
-        $this->entityManager = $entityManager;
+        $this->documentManager = $documentManager;
         $this->groupName = $groupName;
     }
 
@@ -38,7 +37,7 @@ class SettingToStringTransformer implements DataTransformerInterface
         if (!$valueString) {
             return null;
         }
-        $setting = $this->entityManager
+        $setting = $this->documentManager
             ->getRepository(Setting::class)
             ->getSetting($valueString, $this->groupName);
 

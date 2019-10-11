@@ -23,16 +23,16 @@ doctrine_mongodb:
                     prefix: App\MainBundle\Document\
                     alias: AppMainBundle
 
-doctrine_cache:
-    aliases:
-        mongodb_cache: mongodb_cache
-    providers:
-        mongodb_cache:
-            mongodb:
-                connection_id: mongo.connection
-                collection_id: mongo.cache_collection
-                server: 'mongodb://%mongodb_user%:%mongodb_password%@%mongodb_server%:%mongodb_port%'
-                database_name: '%mongodb_database%'
-                collection_name: 'cache'
-            aliases:
-                - mongodb_cache
+#doctrine_cache:
+#    aliases:
+#        mongodb_cache: mongodb_cache
+#    providers:
+#        mongodb_cache:
+#            mongodb:
+#                connection_id: mongo.connection
+#                collection_id: mongo.cache_collection
+#                server: 'mongodb://%mongodb_user%:%mongodb_password%@%mongodb_server%:%mongodb_port%'
+#                database_name: '%mongodb_database%'
+#                collection_name: 'cache'
+#            aliases:
+#                - mongodb_cache

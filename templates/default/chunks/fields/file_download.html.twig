@@ -5,7 +5,7 @@
     </a>
     {% if data.downloads is defined and data.downloads is not empty %}
         <div class="pt-1 text-muted">
-            {{ 'File downloaded %count% time.|File downloaded %count% times.' | transchoice(data.downloads) }}
+            {{ 'File downloaded %count% time.|File downloaded %count% times.' | trans({'%count%': data.downloads}) }}
         </div>
     {% endif %}
 </div>

@@ -22,9 +22,9 @@ class CategoryRepository extends BaseRepository
     {
         return $this->createQueryBuilder()
             ->field('parentId')->equals($parentId)
+            ->count()
             ->getQuery()
-            ->execute()
-            ->count();
+            ->execute();
     }
 
     /**

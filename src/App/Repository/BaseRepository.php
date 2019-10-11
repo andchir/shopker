@@ -2,8 +2,8 @@
 
 namespace App\Repository;
 
-use Doctrine\ODM\MongoDB\DocumentRepository;
 use Doctrine\ODM\MongoDB\Query\Builder;
+use Doctrine\ODM\MongoDB\Repository\DocumentRepository;
 
 /**
  * BaseRepository
@@ -91,7 +91,7 @@ abstract class BaseRepository extends DocumentRepository
         if ($opts['search_word']) {
             $this->addSearchQuery($query, $opts['search_word']);
         }
-        $total = $query->getQuery()->execute()->count();
+        $total = $query->count()->getQuery()->execute();
 
         return [
             'items' => $results,

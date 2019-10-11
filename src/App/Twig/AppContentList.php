@@ -24,7 +24,7 @@ class AppContentList
     }
 
     /**
-     * @param \Twig_Environment $environment
+     * @param \Twig\Environment $environment
      * @param string $chunkName
      * @param $collectionName
      * @param array $criteria
@@ -38,7 +38,7 @@ class AppContentList
      * @return string
      */
     public function contentListFunction(
-        \Twig_Environment $environment,
+        \Twig\Environment $environment,
         $chunkName,
         $collectionName,
         $criteria,
@@ -72,7 +72,7 @@ class AppContentList
         $catalogController->setContainer($this->container);
         $collection = $catalogController->getCollection($collectionName);
 
-        $total = $collection->find($criteria)->count();
+        $total = $collection->countDocuments($criteria);
 
         $currentUri = $this->getCurrentURI();
         $queryString = $request->getQueryString();
@@ -114,7 +114,7 @@ class AppContentList
         );
         $items = $collection->aggregate($pipeline, [
             'cursor' => []
-        ]);
+        ])->toArray();
 
         $output = $environment->render($templateName, array_merge($parameters, [
             'items' => $items,
@@ -122,7 +122,7 @@ class AppContentList
             'fields' => $contentType ? $contentType->getFields() : [],
             'systemNameField' => $contentType ? $contentType->getSystemNameField() : '',
             'groupSize' => $groupSize,
-            'groupCount' => $groupSize ? ceil($items->count(true) / $groupSize) : 1,
+            'groupCount' => $groupSize ? ceil(count($items) / $groupSize) : 1,
             'queryOptions' => $queryOptions,
             'pagesOptions' => $pagesOptions
         ]));
@@ -134,7 +134,7 @@ class AppContentList
     }
 
     /**
-     * @param \Twig_Environment $environment
+     * @param \Twig\Environment $environment
      * @param string $chunkName
      * @param string $collectionName
      * @param int $contentId
@@ -143,7 +143,7 @@ class AppContentList
      * @return string
      */
     public function includeContentFunction(
-        \Twig_Environment $environment,
+        \Twig\Environment $environment,
         $chunkName,
         $collectionName,
         $contentId,

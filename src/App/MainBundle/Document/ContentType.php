@@ -68,7 +68,7 @@ class ContentType
     protected $isActive;
 
     /**
-     * @MongoDB\ReferenceMany(targetDocument="Category", mappedBy="contentType")
+     * @MongoDB\ReferenceMany(targetDocument="App\MainBundle\Document\Category", mappedBy="contentType")
      * @var array
      */
     protected $categories;

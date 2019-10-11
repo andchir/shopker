@@ -141,14 +141,14 @@ class Order
 
     /**
      * @MongoDB\Field(type="collection")
-     * @MongoDB\EmbedMany(targetDocument="OrderContent")
+     * @MongoDB\EmbedMany(targetDocument="App\MainBundle\Document\OrderContent")
      * @Groups({"details"})
      * @var array
      */
     protected $content;
 
     /**
-     * @MongoDB\ReferenceMany(targetDocument="FileDocument", mappedBy="order", orphanRemoval=true, cascade={"all"}, storeAs="id")
+     * @MongoDB\ReferenceMany(targetDocument="App\MainBundle\Document\FileDocument", mappedBy="order", orphanRemoval=true, cascade={"all"}, storeAs="id")
      * @Groups({"details"})
      * @var array
      */

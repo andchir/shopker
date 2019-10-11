@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use Andchir\OmnipayBundle\Repository\OrderRepositoryInterface;
-use Doctrine\ODM\MongoDB\DocumentRepository;
 use Doctrine\ODM\MongoDB\Query\Builder;
 use Doctrine\ORM\ORMInvalidArgumentException;
 
@@ -64,9 +63,9 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
         $query = $this->createQueryBuilder();
         return $total = $query
             ->field('userId')->equals($userId)
+            ->count()
             ->getQuery()
-            ->execute()
-            ->count();
+            ->execute();
     }
 
     /**

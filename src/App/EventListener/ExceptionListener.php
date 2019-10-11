@@ -14,7 +14,7 @@ class ExceptionListener
     protected $twig;
     protected $container;
 
-    public function __construct(\Twig_Environment $twig, ContainerInterface $container)
+    public function __construct(\Twig\Environment $twig, ContainerInterface $container)
     {
         $this->twig = $twig;
         $this->container = $container;

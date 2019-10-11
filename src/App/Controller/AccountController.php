@@ -357,18 +357,18 @@ class AccountController extends Controller
      * @Route(
      *     "/{_locale}/profile/history_orders/{page}/{orderId}",
      *     name="profile_history_orders_localized",
-     *     requirements={"_locale": "^[a-z]{2}$", "page", "orderId"},
-     *     defaults={"page": 1, "orderId": 0}
+     *     requirements={"_locale"="^[a-z]{2}$", "page"="\d+", "orderId"="\d+"},
+     *     defaults={"page": "1", "orderId": "0"}
      * )
      * @Route(
      *     "/profile/history_orders/{page}/{orderId}",
      *     name="profile_history_orders",
-     *     requirements={"page", "orderId"},
-     *     defaults={"page": 1, "orderId": 0}
+     *     requirements={"page"="\d+", "orderId"="\d+"},
+     *     defaults={"page": "1", "orderId": "0"}
      * )
      * @param Request $request
-     * @param $page
-     * @param $orderId
+     * @param string $page
+     * @param string $orderId
      * @return RedirectResponse|Response
      */
     public function historyOrdersAction(Request $request, $page, $orderId)

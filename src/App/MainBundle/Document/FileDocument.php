@@ -110,7 +110,7 @@ class FileDocument
     protected $createdDate;
 
     /**
-     * @MongoDB\ReferenceOne(targetDocument="Order", storeAs="id")
+     * @MongoDB\ReferenceOne(targetDocument="App\MainBundle\Document\Order", storeAs="id")
      * @var Order
      */
     protected $order;

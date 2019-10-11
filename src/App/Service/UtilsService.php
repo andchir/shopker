@@ -18,7 +18,7 @@ class UtilsService
     /** @var ContainerInterface */
     protected $container;
 
-    /** @var \Twig_Environment */
+    /** @var \Twig\Environment */
     protected $twig;
 
     /** @param ContainerInterface $container */

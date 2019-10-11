@@ -2,8 +2,8 @@
 
 namespace App\Repository;
 
-use App\MainBundle\Setting;
-use Doctrine\ODM\MongoDB\DocumentRepository;
+use App\MainBundle\Document\Setting;
+use Doctrine\ODM\MongoDB\Repository\DocumentRepository;
 
 /**
  * SettingRepository

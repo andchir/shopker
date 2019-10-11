@@ -89,14 +89,14 @@ class Category
     protected $menuIndex;
 
     /**
-     * @MongoDB\ReferenceOne(targetDocument="ContentType", inversedBy="category")
+     * @MongoDB\ReferenceOne(targetDocument="App\MainBundle\Document\ContentType", inversedBy="category")
      * @Groups({"details", "list"})
      * @var ContentType
      */
     protected $contentType;
 
     /**
-     * @MongoDB\ReferenceOne(targetDocument="Filter", inversedBy="category", orphanRemoval=true, cascade={"all"})
+     * @MongoDB\ReferenceOne(targetDocument="App\MainBundle\Document\Filter", inversedBy="category", orphanRemoval=true, cascade={"all"})
      * @Groups({"details", "list"})
      * @var Filter
      */

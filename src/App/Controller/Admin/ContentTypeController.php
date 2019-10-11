@@ -112,9 +112,9 @@ class ContentTypeController extends StorageControllerAbstract
 
         $count = $collectionRepository->createQueryBuilder()
             ->field('name')->equals($collectionName)
+            ->count()
             ->getQuery()
-            ->execute()
-            ->count();
+            ->execute();
 
         if(!$count){
             $collection = new Collection();

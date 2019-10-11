@@ -19,7 +19,7 @@ class SearchController extends CatalogController
      *     "/{_locale}/search",
      *     name="search_results_localized",
      *     methods={"GET"},
-     *     requirements={"_locale": "^[a-z]{2}$"}
+     *     requirements={"_locale"="^[a-z]{2}$"}
      * )
      * @Route("/search", name="search_results", methods={"GET"})
      * @param Request $request
@@ -80,7 +80,7 @@ class SearchController extends CatalogController
             '$text' => [ '$search' => $searchWord ]
         ];
 
-        $total = $collection->find($criteria)->count();
+        $total = $collection->countDocuments($criteria);
 
         /* pages */
         $pagesOptions = UtilsService::getPagesOptions($queryOptions, $total, $catalogNavSettingsDefaults);
@@ -98,7 +98,7 @@ class SearchController extends CatalogController
 
         $items = $collection->aggregate($pipeline, [
             'cursor' => []
-        ]);
+        ])->toArray();
 
         return $this->render('page_search_results.html.twig', [
             'currency' => $currency,

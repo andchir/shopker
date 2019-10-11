@@ -8,7 +8,7 @@ use App\Repository\CategoryRepository;
 use App\Service\SettingsService;
 use App\Service\UtilsService;
 use Doctrine\ODM\MongoDB\Cursor;
-use Doctrine\ODM\MongoDB\DocumentRepository;
+use Doctrine\ODM\MongoDB\Query\Builder as QueryBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -146,7 +146,7 @@ class CatalogController extends ProductController
         if ($locale !== $localeDefault && $headerFieldName) {
             $this->applyLocaleFilter($locale, $headerFieldName, $criteria);
         }
-        $total = $collection->find($criteria)->count();
+        $total = $collection->countDocuments($criteria);
 
         /* pages */
         $pagesOptions = UtilsService::getPagesOptions($queryOptions, $total, $catalogNavSettingsDefaults);
@@ -161,7 +161,7 @@ class CatalogController extends ProductController
         );
         $items = $collection->aggregate($pipeline, [
             'cursor' => []
-        ]);
+        ])->toArray();
 
         $categoriesSiblings = [];
         if (count($categoriesMenu) === 0 && $levelNum > 1) {
@@ -462,7 +462,7 @@ class CatalogController extends ProductController
         } else {
             $parentId = $parent;
             $categoriesRepository = $this->getCategoriesRepository();
-            $parentCategory = $categoriesRepository->find($parentId);
+            $parentCategory = $parentId ? $categoriesRepository->find($parentId) : null;
         }
         unset($parent);
 
@@ -472,6 +472,7 @@ class CatalogController extends ProductController
         }
 
         $categories = [];
+        /** @var QueryBuilder $query */
         $query = $this->get('doctrine_mongodb')
             ->getManager()
             ->createQueryBuilder(Category::class);

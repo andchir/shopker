@@ -8,7 +8,7 @@ security:
         # bcrypt or argon21 are recommended
         # argon21 is more secure, but requires PHP 7.2 or the Sodium extension
         App\MainBundle\Document\User:
-            algorithm: bcrypt
+            algorithm: auto
             cost: 12
 
     firewalls:

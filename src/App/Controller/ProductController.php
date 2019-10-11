@@ -3,17 +3,12 @@
 namespace App\Controller;
 
 use App\Repository\CategoryRepository;
-use Doctrine\MongoDB\Collection;
-use Doctrine\MongoDB\Database;
-use Doctrine\ODM\MongoDB\Cursor;
-use Doctrine\ODM\MongoDB\DocumentRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use \MongoDB\Collection;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\MainBundle\Document\Category;
-use App\MainBundle\Document\ContentType;
 
 class ProductController extends BaseController
 {
@@ -132,17 +127,17 @@ class ProductController extends BaseController
     /**
      * @param $collectionName
      * @param string $databaseName
-     * @return \Doctrine\MongoDB\Collection
+     * @return \MongoDB\Collection
      */
     public function getCollection($collectionName, $databaseName = '')
     {
         if (!$databaseName) {
             $databaseName = $this->getParameter('mongodb_database');
         }
-        $m = $this->container->get('doctrine_mongodb.odm.default_connection');
-        /** @var Database $db */
-        $db = $m->selectDatabase($databaseName);
-        return $db->createCollection($collectionName);
+        /** @var \MongoDB\Client $mongodbClient */
+        $mongodbClient = $this->container->get('doctrine_mongodb.odm.default_connection');
+
+        return $mongodbClient->selectCollection($databaseName, $collectionName);
     }
 
     /**
@@ -236,7 +231,7 @@ class ProductController extends BaseController
      */
     public function getTemplateName($mainTemplateName, $prefix)
     {
-        /** @var \Twig_Environment */
+        /** @var \Twig\Environment */
         $twig = $this->get('twig');
         $templateName = sprintf('%s_%s.html.twig', $prefix, $mainTemplateName);
         if ($twig->getLoader()->exists($templateName)) {

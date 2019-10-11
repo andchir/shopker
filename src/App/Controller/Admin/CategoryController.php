@@ -152,7 +152,7 @@ class CategoryController extends StorageControllerAbstract
      * @Route("/tree/{parentId}",
      *     methods={"GET"},
      *     requirements={"parentId": "\d+"},
-     *     defaults={"parentId": 0}
+     *     defaults={"parentId": "0"}
      * )
      * @param Request $request
      * @param int $parentId
@@ -251,7 +251,7 @@ class CategoryController extends StorageControllerAbstract
         }
 
         // Clear file cache
-        /** @var FilesystemCache $cache */
+        /** @var FilesystemAdapter $cache */
         $cache = $this->get('app.filecache');
         $cache->clear();
 
@@ -275,7 +275,7 @@ class CategoryController extends StorageControllerAbstract
             $collectionName = $contentType->getCollection();
             $collection = $this->getCollection($collectionName);
 
-            $count = $collection->count([
+            $count = $collection->countDocuments([
                 'parentId' => $category->getId()
             ]);
             $skipEvents = $count > 500;// TODO: Add confirm in UI
@@ -300,14 +300,19 @@ class CategoryController extends StorageControllerAbstract
     }
 
     /**
-     * @param string $collectionName
-     * @return \Doctrine\MongoDB\Collection
+     * @param $collectionName
+     * @param string $databaseName
+     * @return \MongoDB\Collection
      */
-    public function getCollection($collectionName)
+    public function getCollection($collectionName, $databaseName = '')
     {
-        $m = $this->container->get('doctrine_mongodb.odm.default_connection');
-        $db = $m->selectDatabase($this->getParameter('mongodb_database'));
-        return $db->createCollection($collectionName);
+        if (!$databaseName) {
+            $databaseName = $this->getParameter('mongodb_database');
+        }
+        /** @var \MongoDB\Client $mongodbClient */
+        $mongodbClient = $this->container->get('doctrine_mongodb.odm.default_connection');
+
+        return $mongodbClient->selectCollection($databaseName, $collectionName);
     }
 
     /**

@@ -50,15 +50,15 @@ class DefaultController extends CatalogController
         $countCategories = $categoriesRepository
             ->createQueryBuilder()
             ->field('name')->notEqual('root')
+            ->count()
             ->getQuery()
-            ->execute()
-            ->count();
+            ->execute();
 
         // Get products count
         $productsController = new Admin\ProductController();
         $productsController->setContainer($this->container);
         $collection = $productsController->getCollection('products');
-        $countProducts = $collection->count();
+        $countProducts = $collection->countDocuments();
 
         // Get page description
         $description = '';
@@ -116,7 +116,7 @@ class DefaultController extends CatalogController
     }
 
     /**
-     * @Route("/setup/{_locale}", name="setup", requirements={"_locale"}, defaults={"_locale": "en"})
+     * @Route("/setup/{_locale}", name="setup", requirements={"_locale"=".+"}, defaults={"_locale": "en"})
      * @param Request $request
      * @param TranslatorInterface $translator
      * @param UserPasswordEncoderInterface $encoder

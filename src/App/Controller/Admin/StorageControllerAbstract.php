@@ -213,7 +213,7 @@ abstract class StorageControllerAbstract extends BaseController
     /**
      * @Route(
      *     "/{action}/batch",
-     *     requirements={"action"},
+     *     requirements={"action"=".+"},
      *     defaults={"action": "delete"},
      *     methods={"POST"}
      * )
@@ -222,7 +222,7 @@ abstract class StorageControllerAbstract extends BaseController
      * @param TranslatorInterface $translator
      * @return JsonResponse
      */
-    public function batchAction(Request $request, $action = 'delete', TranslatorInterface $translator)
+    public function batchAction(Request $request, $action, TranslatorInterface $translator)
     {
         $data = $request->getContent()
             ? json_decode($request->getContent(), true)
@@ -297,8 +297,8 @@ abstract class StorageControllerAbstract extends BaseController
         }
 
         return $query->getQuery()
-            ->execute()
-            ->count();
+            ->count()
+            ->execute();
     }
 
 }

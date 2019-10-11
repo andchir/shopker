@@ -103,7 +103,7 @@ class ShoppingCart {
 
     /**
      * @MongoDB\Field(type="collection")
-     * @MongoDB\EmbedMany(targetDocument="OrderContent")
+     * @MongoDB\EmbedMany(targetDocument="App\MainBundle\Document\OrderContent")
      * @Groups({"details"})
      * @var array
      */
@@ -314,7 +314,7 @@ class ShoppingCart {
      *
      * @param OrderContent $content
      */
-    public function addContent(\App\MainBundle\Document\OrderContent $content)
+    public function addContent(OrderContent $content)
     {
         $this->content[] = $content;
     }
@@ -335,7 +335,7 @@ class ShoppingCart {
      * @param OrderContent $content
      * @return $this
      */
-    public function removeContent(\App\MainBundle\Document\OrderContent $content)
+    public function removeContent(OrderContent $content)
     {
         $this->content->removeElement($content);
         $this->content = new ArrayCollection(array_merge($this->content->toArray()));// clear indexes

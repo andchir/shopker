@@ -33,7 +33,7 @@ services:
 
     App\Form\DataTransformer\SettingToStringTransformer:
         public: true
-        arguments: ['@doctrine.odm.mongodb.document_manager']
+        arguments: ['@doctrine_mongodb.odm.document_manager']
 
     mongodb_paramconverter:
         class: Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter
@@ -41,24 +41,14 @@ services:
         tags:
             - { name: request.param_converter }
 
-    mongo.connection:
-        class: Doctrine\MongoDB\Connection
-        factory: ['@doctrine.odm.mongodb.document_manager', getConnection]
-        calls:
-            - [initialize, []]
-
-    mongo:
-        class: Mongo
-        factory: ['@mongo.connection', getMongo]
-
-    mongo.database:
-        class: MongoDB
-        factory: ['@mongo', selectDB]
-        arguments: ['%mongodb_database%']
-
-    mongo.cache_collection:
-        class: MongoCollection
-        arguments: ['@mongo.database', 'cache']
+#    mongo.database:
+#        class: \MongoDB\Client
+#        factory: ['@doctrine_mongodb.odm.default_connection', selectDatabase]
+#        arguments: ['%mongodb_database%']
+#
+#    mongo.cache_collection:
+#        class: \MongoDB\Collection
+#        arguments: ['@mongo.database', 'cache']
 
     event_subscribers:
         namespace: App\EventSubscriber\

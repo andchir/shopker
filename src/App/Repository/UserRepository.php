@@ -5,7 +5,7 @@ namespace App\Repository;
 use App\MainBundle\Document\User;
 use Doctrine\ODM\MongoDB\Query\Builder;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
-use Doctrine\ODM\MongoDB\DocumentRepository;
+use Doctrine\ODM\MongoDB\Repository\DocumentRepository;
 
 /**
  * UserRepository
@@ -37,9 +37,9 @@ class UserRepository extends BaseRepository implements UserLoaderInterface
     {
         return $this->createQueryBuilder()
             ->field($fieldName)->equals($value)
+            ->count()
             ->getQuery()
-            ->execute()
-            ->count();
+            ->execute();
     }
 
     /**

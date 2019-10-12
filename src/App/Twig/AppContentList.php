@@ -4,6 +4,7 @@ namespace App\Twig;
 
 use App\Controller\CatalogController;
 use App\MainBundle\Document\ContentType;
+use App\Service\CatalogService;
 use App\Service\UtilsService;
 use Psr\Cache\CacheItemInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -68,9 +69,9 @@ class AppContentList
 
         $templateName = sprintf('catalog/%s.html.twig', $chunkName);
 
-        $catalogController = new CatalogController();
-        $catalogController->setContainer($this->container);
-        $collection = $catalogController->getCollection($collectionName);
+        /** @var CatalogService $catalogService */
+        $catalogService = $this->container->get('app.catalog');
+        $collection = $catalogService->getCollection($collectionName);
 
         $total = $collection->countDocuments($criteria);
 
@@ -84,7 +85,7 @@ class AppContentList
         $pagesOptions = UtilsService::getPagesOptions($queryOptions, $total, [], $options);
 
         /** @var ContentType $contentType */
-        $contentType = $catalogController->getContentTypeRepository()->findOneBy([
+        $contentType = $catalogService->getContentTypeRepository()->findOneBy([
             'collection' => $collectionName
         ]);
 
@@ -97,7 +98,7 @@ class AppContentList
                 if (empty($parameters['headerFieldName'])) {
                     $parameters['headerFieldName'] = $contentType->getFieldByChunkName('header');
                 }
-                $catalogController->applyLocaleFilter($locale, $parameters['headerFieldName'], $criteria);
+                $catalogService->applyLocaleFilter($locale, $parameters['headerFieldName'], $criteria);
             }
         }
 
@@ -105,7 +106,7 @@ class AppContentList
             return $orderByDir === 'asc' ? 1 : -1;
         }, $orderBy);
 
-        $pipeline = $catalogController->createAggregatePipeline(
+        $pipeline = $catalogService->createAggregatePipeline(
             $criteria,
             $aggregateFields,
             $queryOptions['limit'],
@@ -168,14 +169,14 @@ class AppContentList
 
         $templateName = $chunkName . '.html.twig';
 
-        $catalogController = new CatalogController();
-        $catalogController->setContainer($this->container);
-        $collection = $catalogController->getCollection($collectionName);
+        /** @var CatalogService $catalogService */
+        $catalogService = $this->container->get('app.catalog');
+        $collection = $catalogService->getCollection($collectionName);
         $criteria = ['_id' => $contentId];
 
         $aggregateFields = [];
         if ($locale !== $localeDefault) {
-            $contentType = $catalogController->getContentTypeRepository()->findOneBy([
+            $contentType = $catalogService->getContentTypeRepository()->findOneBy([
                 'collection' => $collectionName
             ]);
             if ($contentType) {
@@ -185,11 +186,11 @@ class AppContentList
                 if (empty($parameters['headerFieldName'])) {
                     $parameters['headerFieldName'] = $contentType->getFieldByChunkName('header');
                 }
-                $catalogController->applyLocaleFilter($locale, $parameters['headerFieldName'], $criteria);
+                $catalogService->applyLocaleFilter($locale, $parameters['headerFieldName'], $criteria);
             }
         }
 
-        $pipeline = $catalogController->createAggregatePipeline(
+        $pipeline = $catalogService->createAggregatePipeline(
             $criteria,
             $aggregateFields,
             1

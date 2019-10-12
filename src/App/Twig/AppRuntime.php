@@ -5,10 +5,10 @@ namespace App\Twig;
 use App\MainBundle\Document\OrderContent;
 use App\MainBundle\Document\Setting;
 use App\MainBundle\Document\ShoppingCart;
+use App\Service\CatalogService;
 use App\Service\SettingsService;
 use App\Service\ShopCartService;
 use App\Service\UtilsService;
-use App\Controller\CatalogController;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\FormError;
@@ -372,9 +372,9 @@ class AppRuntime
             if ($cacheItemHtml && $cacheItemHtml->isHit()) {
                 $output = $cacheItemHtml->get();
             } else {
-                $catalogController = new CatalogController();
-                $catalogController->setContainer($this->container);
-                $categoriesTree = $catalogController->getCategoriesTree($parentId, $locale);
+                /** @var CatalogService $catalogService */
+                $catalogService = $this->container->get('app.catalog');
+                $categoriesTree = $catalogService->getCategoriesTree($parentId, $locale);
                 $data = !empty($categoriesTree) ? $categoriesTree[0] : [];
             }
         }

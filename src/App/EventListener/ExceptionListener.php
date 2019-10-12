@@ -2,7 +2,6 @@
 
 namespace App\EventListener;
 
-use App\Controller\CatalogController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpFoundation\Response;
@@ -57,10 +56,6 @@ class ExceptionListener
                 'statusCode' => $statusCode
             ];
         } else {
-
-            //$catalogController = new CatalogController();
-            //$catalogController->setContainer($this->container);
-            //$categoriesTopLevel = $catalogController->getCategoriesTree();
 
             $content = $this->twig->render('/errors/404.html.twig', [
                 'message' => $message,

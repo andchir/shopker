@@ -14,6 +14,7 @@ use App\Repository\UserRepository;
 use App\Service\SettingsService;
 use App\Service\ShopCartService;
 use App\Service\UtilsService;
+use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -70,16 +71,16 @@ class AccountController extends Controller
      * @param Request $request
      * @param UserPasswordEncoderInterface $encoder
      * @param TranslatorInterface $translator
+     * @param DocumentManager $dm
      * @return RedirectResponse|Response
      */
     public function registerAction(
         Request $request,
         UserPasswordEncoderInterface $encoder,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        DocumentManager $dm
     )
     {
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
         $form = $this->createForm(RegistrationType::class, new Registration());
 
         $form->handleRequest($request);
@@ -138,16 +139,16 @@ class AccountController extends Controller
      * @param Request $request
      * @param TranslatorInterface $translator
      * @param UtilsService $utilsService
+     * @param DocumentManager $dm
      * @return Response
      */
     public function passwordResetAction(
         Request $request,
         TranslatorInterface $translator,
-        UtilsService $utilsService
+        UtilsService $utilsService,
+        DocumentManager $dm
     )
     {
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
         $form = $this->createForm(ResetPasswordType::class, new ResetPassword());
         $form->handleRequest($request);
 
@@ -205,17 +206,17 @@ class AccountController extends Controller
      * @param UserPasswordEncoderInterface $encoder
      * @param $email
      * @param $code
+     * @param DocumentManager $dm
      * @return Response
      */
     public function passwordConfirmAction(
         Request $request,
         UserPasswordEncoderInterface $encoder,
         $email,
-        $code
+        $code,
+        DocumentManager $dm
     )
     {
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
         $userRepository = $this->getUserRepository();
         /** @var User $user */
         $user = $userRepository->findOneBy([
@@ -252,17 +253,17 @@ class AccountController extends Controller
      * @param EventDispatcherInterface $eventDispatcher
      * @param $email
      * @param $code
+     * @param DocumentManager $dm
      * @return Response
      */
     public function emailConfirmAction(
         Request $request,
         EventDispatcherInterface $eventDispatcher,
         $email,
-        $code
+        $code,
+        DocumentManager $dm
     )
     {
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
         $userRepository = $this->getUserRepository();
         /** @var User $user */
         $user = $userRepository->findOneBy([
@@ -318,14 +319,13 @@ class AccountController extends Controller
      * @Route("/profile/change_password", name="profile_change_password")
      * @param Request $request
      * @param UserPasswordEncoderInterface $encoder
+     * @param DocumentManager $dm
      * @return RedirectResponse|Response
      */
-    public function profileChangePasswordAction(Request $request, UserPasswordEncoderInterface $encoder)
+    public function profileChangePasswordAction(Request $request, UserPasswordEncoderInterface $encoder, DocumentManager $dm)
     {
         /** @var User $user */
         $user = $this->getUser();
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
 
         $form = $this->createForm(ChangePasswordType::class, new ChangePassword());
         $form->handleRequest($request);
@@ -369,16 +369,15 @@ class AccountController extends Controller
      * @param Request $request
      * @param string $page
      * @param string $orderId
+     * @param SettingsService $settingsService
      * @return RedirectResponse|Response
      */
-    public function historyOrdersAction(Request $request, $page, $orderId)
+    public function historyOrdersAction(Request $request, $page, $orderId, SettingsService $settingsService)
     {
         $pageLimit = 10;
 
         /** @var User $user */
         $user = $this->getUser();
-        /** @var SettingsService $settingsService */
-        $settingsService = $this->container->get('app.settings');
         /** @var ShopCartService $shopCartService */
         $shopCartService = $this->get('app.shop_cart');
         $orderStatusSettings = $settingsService->getSettingsGroup(Setting::GROUP_ORDER_STATUSES);

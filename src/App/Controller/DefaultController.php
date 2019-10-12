@@ -5,9 +5,11 @@ namespace App\Controller;
 use App\MainBundle\Document\Category;
 use App\MainBundle\Document\User;
 use App\Form\Type\SetupType;
+use App\Service\CatalogService;
 use App\Service\SettingsService;
 use Doctrine\Common\DataFixtures\Executor\MongoDBExecutor;
 use Doctrine\Common\DataFixtures\Purger\MongoDBPurger;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
@@ -22,7 +24,7 @@ use Doctrine\Common\DataFixtures\Loader as DataFixturesLoader;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
 
-class DefaultController extends CatalogController
+class DefaultController extends Controller
 {
     /**
      * @Route(
@@ -32,19 +34,17 @@ class DefaultController extends CatalogController
      * )
      * @Route("/", name="homepage")
      * @param Request $request
+     * @param CatalogService $catalogService
      * @return Response
-     * @throws \Doctrine\ODM\MongoDB\LockException
-     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
-     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
-    public function homepageAction(Request $request)
+    public function homepageAction(Request $request, CatalogService $catalogService)
     {
         if (empty($this->getParameter('mongodb_database'))) {
             return $this->redirectToRoute('setup');
         }
 
-        $categoriesRepository = $this->getCategoriesRepository();
-        $categoriesTopLevel = $this->getChildCategories(0, [], true);
+        $categoriesRepository = $catalogService->getCategoriesRepository();
+        $categoriesTopLevel = $catalogService->getChildCategories(0, [], true);
 
         // Get categorits count
         $countCategories = $categoriesRepository
@@ -104,10 +104,12 @@ class DefaultController extends CatalogController
 
     /**
      * @Route("/404", name="404")
+     * @param CatalogService $catalogService
+     * @return Response
      */
-    public function pageNotFoundAction()
+    public function pageNotFoundAction(CatalogService $catalogService)
     {
-        $categoriesTopLevel = $this->getChildCategories(0, [], true);
+        $categoriesTopLevel = $catalogService->getChildCategories(0, [], true);
 
         return $this->render('errors/404.html.twig', [
             'currentUri' => '404',

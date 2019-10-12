@@ -123,4 +123,27 @@ class CategoryRepository extends BaseRepository
         return $children;
     }
 
+    /**
+     * @param string $sortBy
+     * @param string $sortDir
+     * @param null $parentId
+     * @param array $parentsIdsArr
+     * @return array
+     */
+    public function findActiveAll($sortBy = 'menuIndex', $sortDir = 'asc', $parentId = null, $parentsIdsArr = [])
+    {
+        $query = $this->createQueryBuilder();
+        if (!is_null($parentId)) {
+            $query->field('parentId')->equals($parentId);
+        } else if (!empty($parentsIdsArr)) {
+            $query->field('parentId')->in($parentsIdsArr);
+        }
+        return $query
+            ->field('name')->notEqual('root')
+            ->field('isActive')->equals(true)
+            ->sort($sortBy, $sortDir)
+            ->getQuery()
+            ->execute();
+    }
+
 }

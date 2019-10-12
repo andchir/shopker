@@ -5,19 +5,31 @@ namespace App\Controller;
 use App\MainBundle\Document\ContentType;
 use App\MainBundle\Document\Filter;
 use App\Repository\CategoryRepository;
+use App\Repository\ContentTypeRepository;
+use App\Service\CatalogService;
 use App\Service\SettingsService;
 use App\Service\UtilsService;
-use Doctrine\ODM\MongoDB\Cursor;
-use Doctrine\ODM\MongoDB\Query\Builder as QueryBuilder;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use App\MainBundle\Document\Category;
 
 class CatalogController extends ProductController
 {
+
+    /** @var SettingsService */
+    private $settingsService;
+    /** @var DocumentManager */
+    private $dm;
+
+    public function __construct(SettingsService $settingsService, DocumentManager $dm)
+    {
+        $this->settingsService = $settingsService;
+        $this->dm = $dm;
+    }
+
     /**
      * @Route(
      *     "/{_locale}/{uri<^[a-z0-9\/\-_\.]+\/$>}",
@@ -33,14 +45,12 @@ class CatalogController extends ProductController
      * )
      * @param Request $request
      * @param string $uri
+     * @param CatalogService $catalogService
      * @return Response
-     * @throws \Doctrine\ODM\MongoDB\LockException
-     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
-     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
-    public function catalogCategoryAction(Request $request, $uri)
+    public function catalogCategoryAction(Request $request, $uri, CatalogService $catalogService)
     {
-        return $this->catalogAction($request, $uri, 'catalog_category');
+        return $this->catalogAction($request, $uri, 'catalog_category', $catalogService);
     }
 
     /**
@@ -58,26 +68,22 @@ class CatalogController extends ProductController
      * )
      * @param Request $request
      * @param string $uri
+     * @param CatalogService $catalogService
      * @return Response
-     * @throws \Doctrine\ODM\MongoDB\LockException
-     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
-     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
-    public function catalogPageAction(Request $request, $uri)
+    public function catalogPageAction(Request $request, $uri, CatalogService $catalogService)
     {
-        return $this->catalogAction($request, $uri, 'catalog_page');
+        return $this->catalogAction($request, $uri, 'catalog_page', $catalogService);
     }
 
     /**
      * @param Request $request
      * @param string $uri
      * @param string $routeName
+     * @param CatalogService $catalogService
      * @return Response
-     * @throws \Doctrine\ODM\MongoDB\LockException
-     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
-     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
-    public function catalogAction(Request $request, $uri, $routeName)
+    public function catalogAction(Request $request, $uri, $routeName, CatalogService $catalogService)
     {
         if (empty($this->getParameter('mongodb_database'))) {
             return $this->redirectToRoute('setup');
@@ -85,9 +91,7 @@ class CatalogController extends ProductController
         $localeDefault = $this->getParameter('locale');
         $locale = $request->getLocale();
         $categoriesRepository = $this->getCategoriesRepository();
-        $filtersRepository = $this->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository(Filter::class);
+        $filtersRepository = $this->dm->getRepository(Filter::class);
         list($pageAlias, $categoryUri, $levelNum) = Category::parseUri($uri);
 
         /** @var Category $currentCategory */
@@ -101,7 +105,7 @@ class CatalogController extends ProductController
             if (is_null($currentCategory)) {
                 throw $this->createNotFoundException();
             }
-            return $this->pageProduct($currentCategory, $uri, $locale);
+            return $this->pageProduct($currentCategory, $uri, $locale, $catalogService);
         }
         if (!$currentCategory || !$currentCategory->getIsActive()) {
             throw $this->createNotFoundException();
@@ -144,7 +148,7 @@ class CatalogController extends ProductController
         $this->applyFilters($queryOptions['filter'], $filters, $criteria);
         $this->applyCategoryFilter($currentCategory, $contentTypeFields, $criteria);
         if ($locale !== $localeDefault && $headerFieldName) {
-            $this->applyLocaleFilter($locale, $headerFieldName, $criteria);
+            $catalogService->applyLocaleFilter($locale, $headerFieldName, $criteria);
         }
         $total = $collection->countDocuments($criteria);
 
@@ -152,7 +156,7 @@ class CatalogController extends ProductController
         $pagesOptions = UtilsService::getPagesOptions($queryOptions, $total, $catalogNavSettingsDefaults);
         $aggregateFields = $contentType->getAggregationFields($locale, $localeDefault, true);
 
-        $pipeline = $this->createAggregatePipeline(
+        $pipeline = $catalogService->createAggregatePipeline(
             $criteria,
             $aggregateFields,
             $queryOptions['limit'],
@@ -165,7 +169,7 @@ class CatalogController extends ProductController
 
         $categoriesSiblings = [];
         if (count($categoriesMenu) === 0 && $levelNum > 1) {
-            $categoriesSiblings = $this->getChildCategories($currentCategory->getParentId(), $breadcrumbs, false, '', $locale);
+            $categoriesSiblings = $catalogService->getChildCategories($currentCategory->getParentId(), $breadcrumbs, false, '', $locale);
         }
 
         $activeCategoriesIds = array_map(function($item) {
@@ -175,9 +179,7 @@ class CatalogController extends ProductController
         $breadcrumbs = array_filter($breadcrumbs, function($entry) use ($uri) {
             return $entry['uri'] !== $uri;
         });
-        /** @var SettingsService $settingsService */
-        $settingsService = $this->get('app.settings');
-        $currency = $settingsService->getCurrency();
+        $currency = $this->settingsService->getCurrency();
 
         return $this->render($this->getTemplateName('category', $contentType->getName()), [
             'currentCategory' => $currentCategory,
@@ -204,12 +206,10 @@ class CatalogController extends ProductController
      * @param null|Category $category
      * @param string $uri
      * @param string $locale
+     * @param CatalogService $catalogService
      * @return Response
-     * @throws \Doctrine\ODM\MongoDB\LockException
-     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
-     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
-    public function pageProduct(Category $category = null, $uri = '', $locale = '')
+    public function pageProduct(Category $category = null, $uri = '', $locale = '', CatalogService $catalogService)
     {
         $categoriesRepository = $this->getCategoriesRepository();
         list($pageAlias, $categoryUri) = Category::parseUri($uri);
@@ -230,7 +230,7 @@ class CatalogController extends ProductController
         $breadcrumbs = $categoriesRepository->getBreadcrumbs($categoryUri, false, $locale);
 
         $aggregateFields = $contentType->getAggregationFields($locale, $localeDefault, true);
-        $pipeline = $this->createAggregatePipeline(
+        $pipeline = $catalogService->createAggregatePipeline(
             [
                 'name' => $pageAlias,
                 'parentId' => $category->getId(),
@@ -260,9 +260,7 @@ class CatalogController extends ProductController
 
         // Get categories menu
         $categoriesMenu = $this->getCategoriesMenu($category, $breadcrumbs, $locale);
-        /** @var SettingsService $settingsService */
-        $settingsService = $this->get('app.settings');
-        $currency = $settingsService->getCurrency();
+        $currency = $this->settingsService->getCurrency();
 
         $activeCategoriesIds = array_map(function($item) {
             return $item['id'];
@@ -421,15 +419,8 @@ class CatalogController extends ProductController
         }
 
         // Get child categories
-        $results = $this->get('doctrine_mongodb')
-            ->getManager()
-            ->createQueryBuilder(Category::class)
-            ->field('parentId')->in($topIdsArr)
-            ->field('isActive')->equals(true)
-            ->sort('title', 'asc')
-            ->getQuery()
-            ->execute()
-            ->toArray(false);
+        $results = $categoriesRepository
+            ->findActiveAll('title', 'asc', null, $topIdsArr);
 
         /** @var Category $category */
         foreach ($results as $category) {
@@ -440,175 +431,6 @@ class CatalogController extends ProductController
         }
 
         return $categories;
-    }
-
-    /**
-     * @param int|Category $parent
-     * @param array $breadcrumbs
-     * @param bool $getChildContent
-     * @param string $currentUri
-     * @param string $locale
-     * @return array
-     * @throws \Doctrine\ODM\MongoDB\LockException
-     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
-     */
-    public function getChildCategories($parent = 0, $breadcrumbs = [], $getChildContent = false, $currentUri = '', $locale = '')
-    {
-        $parentCategory = null;
-        /** @var Category $parentCategory */
-        if ($parent instanceof Category) {
-            $parentCategory = $parent;
-            $parentId = $parent->getId();
-        } else {
-            $parentId = $parent;
-            $categoriesRepository = $this->getCategoriesRepository();
-            $parentCategory = $parentId ? $categoriesRepository->find($parentId) : null;
-        }
-        unset($parent);
-
-        $breadcrumbsUriArr = array_column($breadcrumbs, 'uri');
-        if ($currentUri && !in_array($currentUri, $breadcrumbsUriArr)) {
-            array_push($breadcrumbsUriArr, $currentUri);
-        }
-
-        $categories = [];
-        /** @var QueryBuilder $query */
-        $query = $this->get('doctrine_mongodb')
-            ->getManager()
-            ->createQueryBuilder(Category::class);
-
-        $results = $query
-            ->field('parentId')->equals($parentId)
-            ->field('name')->notEqual('root')
-            ->field('isActive')->equals(true)
-            ->sort('title', 'asc')
-            ->getQuery()
-            ->execute();
-
-        /** @var Category $category */
-        foreach ($results as $category) {
-            $categories[] = $category->getMenuData($breadcrumbsUriArr, $locale);
-        }
-
-        // Get category content
-        if ($getChildContent && $parentCategory) {
-            $childContent = $this->getCategoryContent($parentCategory, $breadcrumbsUriArr, $locale);
-            $categories = array_merge($categories, $childContent);
-        }
-        array_multisort(
-            array_column($categories, 'menuIndex'),  SORT_ASC,
-            array_column($categories, 'title'), SORT_ASC,
-            $categories
-        );
-
-        return $categories;
-    }
-
-    /**
-     * @param Category $parentCategory
-     * @param array $breadcrumbsUriArr
-     * @param string $locale
-     * @return array
-     */
-    public function getCategoryContent(Category $parentCategory, $breadcrumbsUriArr = [], $locale = '')
-    {
-        $categories = [];
-        /** @var ContentType $contentType */
-        $contentType = $parentCategory->getContentType();
-        $collection = $this->getCollection($contentType->getCollection());
-        $parentUri = $parentCategory->getUri();
-        $items = $collection->find([
-            'parentId' => $parentCategory->getId(),
-            'isActive' => true
-        ]);
-        $systemNameField = $contentType->getSystemNameField();
-        foreach ($items as $item) {
-            $category = [
-                'id' => $item['_id'],
-                'title' => ContentType::getValueByLocale($item, $locale),
-                'name' => $item[$systemNameField] ?? '',
-                'description' => '',
-                'uri' => !empty($item[$systemNameField]) ? $parentUri . $item[$systemNameField] : '',
-                'href' => !empty($item['href']) ? $item['href'] : '',
-                'menuIndex' => $item['menuIndex'] ?? 0,
-                'translations' => $item['translations'] ?? [],
-                'children' => []
-            ];
-            $category['isActive'] = in_array($category['uri'], $breadcrumbsUriArr);
-            $categories[] = $category;
-        }
-        return $categories;
-    }
-
-    /**
-     * @param int $parentId
-     * @param string $locale
-     * @return array
-     * @throws \Doctrine\ODM\MongoDB\LockException
-     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
-     */
-    public function getCategoriesTree($parentId = 0, $locale = '')
-    {
-        $data = [];
-        $categoriesRepository = $this->getCategoriesRepository();
-        /** @var Category $parentCategory */
-        $parentCategory = $categoriesRepository->find($parentId);
-        if ($parentId && !$parentCategory) {
-            return [];
-        }
-
-        $query = $this->get('doctrine_mongodb')
-            ->getManager()
-            ->createQueryBuilder(Category::class);
-
-        $results = $query
-            ->field('name')->notEqual('root')
-            ->field('isActive')->equals(true)
-            ->sort('menuIndex', 'asc')
-            ->getQuery()
-            ->execute();
-
-        $parentIdsArr = [$parentId];
-        /** @var Category $category */
-        foreach ($results as $category) {
-            $pId = $category->getParentId();
-            if (!in_array($category->getId(), $parentIdsArr)) {
-                $parentIdsArr[] = $category->getId();
-            }
-            if (!isset($data[$pId])) {
-                $data[$pId] = [];
-            }
-            $data[$pId][] = $category->getMenuData([], $locale);
-        }
-
-        $childContent = $parentCategory ? $this->getCategoryContent($parentCategory, [], $locale) : [];
-
-        // Content pages (not categories)
-        if (!empty($childContent)) {
-            foreach ($childContent as $content) {
-                $content['id'] = 0 - $content['id'];// This is not categories
-                $data[0][] = $content;
-            }
-            array_multisort(
-                array_column($data[0], 'menuIndex'),  SORT_ASC,
-                array_column($data[0], 'title'), SORT_ASC,
-                $data[0]
-            );
-        }
-
-        if (empty($data)) {
-            return [];
-        }
-
-        if (!$parentId) {
-            return self::createTree($data, [[
-                'id' => 0,
-                'title' => 'Root'
-            ]]);
-        }
-        else {
-            return self::createTree($data, [$parentCategory->getMenuData([], $locale)]);
-        }
     }
 
     /**
@@ -634,48 +456,18 @@ class CatalogController extends ProductController
     }
 
     /**
-     * @param $criteria
-     * @param $aggregateFields
-     * @param $limit
-     * @param $sort
-     * @param $skip
-     * @return array
-     */
-    public function createAggregatePipeline($criteria, $aggregateFields, $limit = 1, $sort = [], $skip = 0)
-    {
-        $pipeline = [['$match' => $criteria]];
-        if (!empty($aggregateFields)) {
-            $pipeline[] = ['$addFields' => $aggregateFields];
-        }
-        if (!empty($sort)) {
-            $pipeline[] = ['$sort' => $sort];
-        }
-        if (!empty($skip)) {
-            $pipeline[] = ['$skip' => $skip];
-        }
-        if (!empty($limit)) {
-            $pipeline[] = ['$limit' => $limit];
-        }
-        return $pipeline;
-    }
-
-    /**
-     * @return CategoryRepository
+     * @return CategoryRepository|ObjectRepository
      */
     public function getCategoriesRepository()
     {
-        return $this->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository(Category::class);
+        return $this->dm->getRepository(Category::class);
     }
 
     /**
-     * @return \App\Repository\ContentTypeRepository
+     * @return ContentTypeRepository|ObjectRepository
      */
     public function getContentTypeRepository()
     {
-        return $this->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository(ContentType::class);
+        return $this->dm->getRepository(ContentType::class);
     }
 }

@@ -110,21 +110,6 @@ class ProductController extends BaseController
     }
 
     /**
-     * @param string $locale
-     * @param string $headerFieldName
-     * @param array $criteria
-     */
-    public function applyLocaleFilter($locale, $headerFieldName, &$criteria)
-    {;
-        $translationFieldName = "translations.{$headerFieldName}.{$locale}";
-        $andCriteria = [$translationFieldName => ['$exists' => true]];
-        if (!isset($criteria['$and'])) {
-            $criteria = ['$and' => [$criteria]];
-        }
-        $criteria['$and'][] = $andCriteria;
-    }
-
-    /**
      * @param $collectionName
      * @param string $databaseName
      * @return \MongoDB\Collection

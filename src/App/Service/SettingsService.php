@@ -172,22 +172,14 @@ class SettingsService
      */
     public function getCurrency()
     {
-        $currencyCookie = isset($_COOKIE['shkCurrency'])
-            ? $_COOKIE['shkCurrency']
-            : '';
+        if (!empty($_COOKIE['shkCurrency'])) {
+            return $_COOKIE['shkCurrency'];
+        }
         $currencySettings = $this->getSettingsGroup(Setting::GROUP_CURRENCY);
         if (empty($currencySettings)) {
             return '';
         }
-        $currentCurrencySettings = array_filter($currencySettings, function($setting) use ($currencyCookie) {
-            /** @var Setting $setting */
-            return $setting->getName() == $currencyCookie;
-        });
-        if (!empty($currentCurrencySettings)) {
-            return current($currentCurrencySettings)->getName();
-        } else {
-            return current($currencySettings)->getName();
-        }
+        return current($currencySettings)->getName();
     }
 
     /**

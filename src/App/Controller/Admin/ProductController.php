@@ -948,7 +948,7 @@ class ProductController extends BaseProductController
 
                 } else {
                     $this->applyCategoryFilter($cat, $contentTypeFields, $criteria);
-                    $uniqueValues = $collection->distinct($fieldName, $criteria)->toArray();
+                    $uniqueValues = $collection->distinct($fieldName, $criteria);
 
                     $uniqueValues = array_filter($uniqueValues, function($val) {
                         return $val !== '' && !is_null($val);

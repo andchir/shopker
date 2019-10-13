@@ -189,6 +189,22 @@ export class SettingsComponent implements OnInit {
         this.settings[groupName].changed = false;
     }
 
+    getActionSuccessMessage(actionName: string): string {
+        let message = '';
+        switch (actionName) {
+            case 'clear_cache':
+                message = this.getLangString('CACHE_CLEAR_SUCCESSFULLY');
+                break;
+            case 'clear_system_cache':
+                message = this.getLangString('CACHE_SYSTEM_CLEAR_SUCCESSFULLY');
+                break;
+            case 'update_filters':
+                message = this.getLangString('UPDATE_FILTERS_SUCCESSFULLY');
+                break;
+        }
+        return message;
+    }
+
     runActionPost(actionName: string): void {
         this.loading = true;
         this.settingsService.runActionPost(actionName)
@@ -196,6 +212,18 @@ export class SettingsComponent implements OnInit {
                 this.loading = false;
                 if (['update_internationalization'].indexOf(actionName) > -1) {
                     this.pageReload();
+                } else {
+                    if (res && res.success) {
+                        const message = this.getActionSuccessMessage(actionName);
+                        if (message) {
+                            this.messageService.add({
+                                key: 'message',
+                                severity: 'success',
+                                summary: this.getLangString('MESSAGE'),
+                                detail: message
+                            });
+                        }
+                    }
                 }
             }, (err) => {
                 if (err['error']) {

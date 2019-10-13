@@ -8,6 +8,8 @@ body { background-color: #eee; }
 .max-width100 { max-width: 100%; }
 .min-width150 { min-width: 150px; }
 .min-width250 { min-width: 250px; }
+.max-width150 { max-width: 150px; }
+.max-width250 { max-width: 250px; }
 .max-height400 { max-height: 400px; overflow: hidden; overflow-y: auto; }
 .big { font-size: 120%; }
 .tooltip { pointer-events: none; }
@@ -98,6 +100,10 @@ input.form-control[readonly] { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); curso
 .custom-checkbox-single .custom-control-label:before,
 .custom-checkbox-single .custom-control-label:after { top: 0; left: 0; cursor: pointer; }
 .custom-checkbox .custom-control-label { cursor: pointer; }
+.input-group-on-hover .input-group-append { display: none; }
+.input-group-on-hover:hover .input-group-append { display: flex; }
+.input-group-on-hover.input-group-sm > .form-control { border-top-right-radius: 0.2rem; border-bottom-right-radius: 0.2rem; }
+.input-group-on-hover.input-group-sm:hover > .form-control { border-top-right-radius: 0; border-bottom-right-radius: 0; }
 
 .form-group-message {  }
 .form-group-message .form-control { border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-color: #a94442; }

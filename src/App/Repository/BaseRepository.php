@@ -164,7 +164,7 @@ abstract class BaseRepository extends DocumentRepository
                             $query->field($key)->lte($v);
                             break;
                         case '$regex':
-                            $query->field($key)->equals(new \MongoRegex("/{$v}/i"));
+                            $query->field($key)->equals(new \MongoDB\BSON\Regex("{$v}", "i"));
                             break;
                     }
                 }

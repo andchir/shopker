@@ -126,7 +126,10 @@ export class SettingsComponent implements OnInit {
         this.settings[groupName].changed = true;
     }
 
-    saveSettings(groupName: string): void {
+    saveSettings(groupName: string, event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
         const data = this.settings[groupName].values;
         this.settings[groupName].loading = true;
         this.settingsService.updateGroup(groupName, data)
@@ -277,6 +280,16 @@ export class SettingsComponent implements OnInit {
 
     onValueChanged(groupName: string): void {
         this.settings[groupName].changed = true;
+    }
+
+    inputDisableToggle(inputEl: HTMLInputElement, elementToHide?: HTMLElement, event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        inputEl.readOnly = !inputEl.readOnly;
+        if (elementToHide) {
+            elementToHide.style.display = elementToHide.style.display !== 'none' ? 'none' : '';
+        }
     }
 
     pageReload(): void {

@@ -77,6 +77,6 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
         if (!$searchWord) {
             return;
         }
-        $query->field('email')->equals(new \MongoRegex("/^{$searchWord}/i"));
+        $query->field('email')->equals(new \MongoDB\BSON\Regex("^{$searchWord}", "i"));
     }
 }

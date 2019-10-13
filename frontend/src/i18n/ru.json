@@ -195,7 +195,9 @@
 		"receipt_option_name": "Название параметра со списком товаров",
 		"search_collections": "Коллекции для поиска",
 		"tax_system": "Система налогообложения магазина (СНО)",
-		"template_theme": "Тема шаблонов"
+		"template_theme": "Тема шаблонов",
+		"shopping_cart_lifetime": "Время хранения товаров в корзине, сек.",
+		"shopping_cart_lifetime_favorites": "Время хранения избранных товаров, сек."
 	},
 	"locale": "Локаль",
 	"mailer_auth_mode": "Почта: метод авторизации",

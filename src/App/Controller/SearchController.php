@@ -3,13 +3,12 @@
 namespace App\Controller;
 
 use App\MainBundle\Document\ContentType;
+use App\Service\CatalogService;
 use App\Service\SettingsService;
 use App\Service\UtilsService;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class SearchController extends CatalogController
 {
@@ -23,9 +22,11 @@ class SearchController extends CatalogController
      * )
      * @Route("/search", name="search_results", methods={"GET"})
      * @param Request $request
+     * @param CatalogService $catalogService
+     * @param SettingsService $settingsService
      * @return Response
      */
-    public function searchResultsAction(Request $request)
+    public function searchResultsAction(Request $request, CatalogService $catalogService, SettingsService $settingsService)
     {
         $localeDefault = $this->getParameter('locale');
         $locale = $request->getLocale();
@@ -45,9 +46,6 @@ class SearchController extends CatalogController
                 'searchWord' => $searchWord
             ]);
         }
-
-        /** @var SettingsService $settingsService */
-        $settingsService = $this->get('app.settings');
         $currency = $settingsService->getCurrency();
 
         $catalogNavSettingsDefaults = $this->getCatalogNavSettingsDefaults();
@@ -73,7 +71,7 @@ class SearchController extends CatalogController
         ];
         list($filters, $fieldsAll) = $this->getFieldsData($contentTypeFields, $options,'page', [], [], $queryOptions);
 
-        $collection = $this->getCollection($searchCollections[0]);
+        $collection = $catalogService->getCollection($searchCollections[0]);
 
         $criteria = [
             'isActive' => true,
@@ -88,7 +86,7 @@ class SearchController extends CatalogController
         $aggregateFields = $contentType->getAggregationFields($locale, $localeDefault, true);
         $aggregateFields['score'] = ['$meta' => 'textScore'];
 
-        $pipeline = $this->createAggregatePipeline(
+        $pipeline = $catalogService->createAggregatePipeline(
             $criteria,
             $aggregateFields,
             $queryOptions['limit'],

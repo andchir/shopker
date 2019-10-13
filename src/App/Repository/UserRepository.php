@@ -76,8 +76,8 @@ class UserRepository extends BaseRepository implements UserLoaderInterface
         }
         $query->addOr(
             $query->expr()
-                ->addOr($query->expr()->field('fullName')->equals(new \MongoRegex("/{$searchWord}/i")))
-                ->addOr($query->expr()->field('email')->equals(new \MongoRegex("/{$searchWord}/i")))
+                ->addOr($query->expr()->field('fullName')->equals(new \MongoDB\BSON\Regex("{$searchWord}", "i")))
+                ->addOr($query->expr()->field('email')->equals(new \MongoDB\BSON\Regex("{$searchWord}", "i")))
         );
     }
 }

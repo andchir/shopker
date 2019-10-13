@@ -195,7 +195,9 @@
 		"receipt_option_name": "The name of the parameter with the list of goods",
 		"search_collections": "Collections to search",
 		"tax_system": "Store taxation system",
-		"template_theme": "Template theme"
+		"template_theme": "Template theme",
+		"shopping_cart_lifetime": "Storage time of goods in the shopping cart, sec.",
+		"shopping_cart_lifetime_favorites": "Storage time of favorite goods, sec."
 	},
 	"locale": "Locale",
 	"mailer_auth_mode": "Mail authorization mode",

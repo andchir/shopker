@@ -179,7 +179,7 @@ class SettingsService
         if (empty($currencySettings)) {
             return '';
         }
-        return current($currencySettings)->getName();
+        return $currencySettings[0]->getName();
     }
 
     /**
@@ -198,9 +198,10 @@ class SettingsService
             return $setting->getName() == $currency;
         });
         if (!empty($currentCurrencySettings)) {
-            return current($currentCurrencySettings)->getOption('value');
+            $currentCurrencySettings = array_merge($currentCurrencySettings);
+            return $currentCurrencySettings[0]->getOption('value');
         } else {
-            return current($currencySettings)->getOption('value');
+            return $currencySettings[0]->getOption('value');
         }
     }
 
@@ -244,7 +245,7 @@ class SettingsService
     }
 
     /**
-     * @return \App\Repository\FieldTypeRepository
+     * @return \App\Repository\SettingRepository
      */
     public function getRepository()
     {

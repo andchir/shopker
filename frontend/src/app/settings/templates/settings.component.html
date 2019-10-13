@@ -51,12 +51,12 @@
                     <label class="label-filled">{{'SETTINGS_MAIN' | translate}}</label>
 
                     <div class="card mb-4">
-                        <div class="table-responsive">
+                        <div class="table-responsive-">
 
                             <table class="table table-divided mb-0">
                                 <colgroup>
-                                    <col width="60%">
-                                    <col width="40%">
+                                    <col width="50%">
+                                    <col width="50%">
                                 </colgroup>
                                 <thead>
                                     <tr>
@@ -77,22 +77,23 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <input type="{{ getFieldTypeByName(setting.name) }}" class="form-control form-control-sm" [(ngModel)]="setting.value" (ngModelChange)="onValueChanged('SETTINGS_MAIN')">
-                                        </td>
-                                    </tr>
-                                    <tr *ngIf="settings.SETTINGS_MAIN.changed">
-                                        <td colspan="2" class="text-right">
-
-                                            <button type="button" class="btn btn-info btn-sm" (click)="saveSettings('SETTINGS_MAIN')">
-                                                <i class="icon-check"></i>
-                                                &nbsp;
-                                                <span>{{'SAVE' | translate}}</span>
-                                            </button>
-                                            &nbsp;
-                                            <button type="button" class="btn btn-secondary btn-sm" (click)="resetSettingsForm('SETTINGS_MAIN')" ngbTooltip="{{'FORM_RESET' | translate}}">
-                                                <i class="icon-reload"></i>
-                                            </button>
-
+                                            <div class="input-group input-group-sm mb-3 input-group-on-hover">
+                                                <input type="text" class="form-control"
+                                                       [(ngModel)]="setting.value"
+                                                       readonly #inputField>
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-outline-success" type="button"
+                                                            ngbTooltip="{{'SAVE' | translate}}"
+                                                            (click)="saveSettings('SETTINGS_MAIN', $event)" style="display: none;" #button>
+                                                        <i class="icon-check"></i>
+                                                    </button>
+                                                    <button class="btn btn-outline-secondary" type="button"
+                                                            ngbTooltip="{{'EDIT' | translate}}"
+                                                            (click)="inputDisableToggle(inputField, button, $event)">
+                                                        <i class="icon-edit"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </td>
                                     </tr>
                                 </tbody>

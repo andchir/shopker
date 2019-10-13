@@ -41,44 +41,35 @@ services:
         tags:
             - { name: request.param_converter }
 
-#    mongo.database:
-#        class: \MongoDB\Client
-#        factory: ['@doctrine_mongodb.odm.default_connection', selectDatabase]
-#        arguments: ['%mongodb_database%']
-#
-#    mongo.cache_collection:
-#        class: \MongoDB\Collection
-#        arguments: ['@mongo.database', 'cache']
-
     event_subscribers:
         namespace: App\EventSubscriber\
         resource: '../src/App/EventSubscriber'
         tags: [event_subscriber]
-        arguments: [ '@service_container' ]
+        arguments: ['@service_container']
 
     App\EventSubscriber\LocaleSubscriber:
-        arguments: [ '%kernel.default_locale%', '%app.locale_list%' ]
+        arguments: ['%kernel.default_locale%', '%app.locale_list%']
 
     App\EventSubscriber\DoctrineEventSubscriber:
         tags:
             - { name: doctrine_mongodb.odm.event_subscriber, connection: default, lazy: true }
-        arguments: [ '@service_container' ]
+        arguments: ['@service_container']
 
     App\EventListener\ExceptionListener:
         public: true
         tags:
             - { name: kernel.event_listener, event: kernel.exception }
-        arguments: [ '@twig', '@service_container' ]
+        arguments: ['@twig', '@service_container']
 
     App\EventListener\KernelEventListener:
         tags:
             - { name: kernel.event_listener, event: kernel.request }
-        arguments: [ '@service_container' ]
+        arguments: ['@service_container']
 
     App\EventListener\LoginListener:
         tags:
             - { name: 'kernel.event_listener', event: 'security.interactive_login' }
-        arguments: [ '@service_container' ]
+        arguments: ['@service_container']
 
     App\Twig\AppExtension:
         tags: ['twig.extension']
@@ -108,19 +99,19 @@ services:
     app.shop_cart:
         class: App\Service\ShopCartService
         public: true
-        arguments: [ '@service_container' ]
+        arguments: ['@service_container']
 
     app.settings:
         class: App\Service\SettingsService
         public: true
-        arguments: [ '@service_container' ]
+        arguments: ['@service_container']
 
     app.utils:
         class: App\Service\UtilsService
         public: true
-        arguments: [ '@service_container' ]
+        arguments: ['@service_container']
 
     app.catalog:
         class: App\Service\CatalogService
         public: true
-        arguments: [ '@service_container', '@doctrine_mongodb.odm.default_document_manager' ]
+        arguments: ['@service_container', '@doctrine_mongodb.odm.default_document_manager']

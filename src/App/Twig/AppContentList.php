@@ -2,7 +2,6 @@
 
 namespace App\Twig;
 
-use App\Controller\CatalogController;
 use App\MainBundle\Document\ContentType;
 use App\Service\CatalogService;
 use App\Service\UtilsService;

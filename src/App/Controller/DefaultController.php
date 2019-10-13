@@ -9,7 +9,9 @@ use App\Service\CatalogService;
 use App\Service\SettingsService;
 use Doctrine\Common\DataFixtures\Executor\MongoDBExecutor;
 use Doctrine\Common\DataFixtures\Purger\MongoDBPurger;
+use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
@@ -122,12 +124,16 @@ class DefaultController extends Controller
      * @param Request $request
      * @param TranslatorInterface $translator
      * @param UserPasswordEncoderInterface $encoder
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @param CatalogService $catalogService
+     * @param DocumentManager $dm
+     * @return RedirectResponse|Response
      */
     public function setupAction(
         Request $request,
         TranslatorInterface $translator,
-        UserPasswordEncoderInterface $encoder
+        UserPasswordEncoderInterface $encoder,
+        CatalogService $catalogService,
+        DocumentManager $dm
     )
     {
         if (!empty($this->getParameter('mongodb_database'))) {
@@ -190,7 +196,6 @@ class DefaultController extends Controller
 
             if ($form->isValid() && !$data['form_reload']) {
 
-                $dbConnection = $this->get('doctrine_mongodb.odm.default_connection');
                 if (empty($data['mongodb_user']) && empty($data['mongodb_password'])) {
                     $data['mongodb_user'] = '';
                     $data['mongodb_password'] = '';
@@ -200,37 +205,44 @@ class DefaultController extends Controller
                 }
 
                 try {
-                    $mongoClient = new \MongoClient($serverUrl);
-                    $dbConnection->setMongo($mongoClient);
-                    $connectResult = $dbConnection->isConnected();
+                    $mongoClient = new \MongoDB\Client($serverUrl);
+                    $connectResult = $mongoClient->listDatabases();
                 } catch (\Exception $e) {
                     $connectResult = false;
                 }
 
-                if (!$connectResult) {
+                if ($connectResult === false) {
                     $form->addError(new FormError($translator->trans('install.mongodb_connection_fail', [], 'validators')));
                 } else {
 
-                    /** @var \MongoDB $dataBase */
-                    $dataBase = $dbConnection->getMongo()->selectDB($data['mongodb_database']);
-                    $collections = [];
+                    /** @var \MongoDB\Database $dataBase */
+                    $dataBase = $mongoClient->selectDatabase($data['mongodb_database']);
+                    $collections = null;
                     try {
-                        $collections = $dataBase->getCollectionNames();
+                        $collections = $dataBase->listCollections();
                     } catch (\Exception $e) {
                         $form->addError(new FormError($translator->trans('install.mongodb_database_not_permitted', [], 'validators')));
                     }
 
-                    if ($form->isValid() && !empty($collections)) {
+                    if ($form->isValid() && $collections && iterator_count($collections) > 0) {
+
                         if ($data['drop_database']) {
 
-                            // Drop database
-                            $result = $dataBase->drop();
-                            if (empty($result['ok'])) {
+                            // Drop collections
+                            $result = null;
+                            /** @var \MongoDB\Model\CollectionInfo $collection */
+                            foreach ($collections as $collection) {
+                                $dbCollection = $mongoClient->selectCollection($data['mongodb_database'], $collection->getName());
+                                if ($dbCollection) {
+                                    $result = $dbCollection->drop();
+                                }
+                            }
+                            if (!$result || !$result->ok) {
                                 $form->addError(new FormError($translator->trans('install.mongodb_database_clear_error', [],
                                     'validators')));
                             }
 
-                        }else if (in_array('user', $collections)) {
+                        } else if (iterator_count($collections) > 0) {
                             $form->addError(new FormError($translator->trans('install.mongodb_database_not_empty', [],
                                 'validators')));
                         }
@@ -260,6 +272,7 @@ class DefaultController extends Controller
                         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
                         $dm = $this->get('doctrine_mongodb')->getManager();
                         $dm->getConfiguration()->setDefaultDb($data['mongodb_database']);
+
                         $user = new User();
                         $encodedPassword = $encoder->encodePassword($user, $adminPassword);
 
@@ -276,9 +289,7 @@ class DefaultController extends Controller
                         $this->loadDataFixtures($data['locale'], $data['mongodb_database']);
 
                         // Create user auto_increment record
-                        $productsController = new Admin\ProductController();
-                        $productsController->setContainer($this->container);
-                        $productsController->getNextId('user', $data['mongodb_database']);
+                        $catalogService->getNextId('user', $data['mongodb_database']);
 
                         // Success message
                         $request->getSession()

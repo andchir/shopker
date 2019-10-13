@@ -116,7 +116,7 @@ class AccountController extends Controller
                 /** @var EventDispatcher $evenDispatcher */
                 $evenDispatcher = $this->get('event_dispatcher');
                 $event = new UserRegisteredEvent($user, $request);
-                $evenDispatcher->dispatch(UserRegisteredEvent::NAME, $event);
+                $evenDispatcher->dispatch($event, UserRegisteredEvent::NAME);
 
                 return $this->redirectToRoute('login_localized', [
                     '_locale' => $request->getLocale()
@@ -279,7 +279,7 @@ class AccountController extends Controller
 
             // Dispatch event
             $event = new GenericEvent($user);
-            $eventDispatcher->dispatch(Events::USER_EMAIL_CONFIRMED, $event);
+            $eventDispatcher->dispatch($event, Events::USER_EMAIL_CONFIRMED);
 
             $request->getSession()
                 ->getFlashBag()

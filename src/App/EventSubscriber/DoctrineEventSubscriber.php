@@ -7,6 +7,7 @@ use App\MainBundle\Document\Category;
 use App\MainBundle\Document\ContentType;
 use App\MainBundle\Document\FileDocument;
 use App\MainBundle\Document\OrderContent;
+use App\Service\CatalogService;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ODM\MongoDB\Event\LifecycleEventArgs;
 use Doctrine\ODM\MongoDB\Events;
@@ -108,14 +109,14 @@ class DoctrineEventSubscriber implements EventSubscriber
      */
     public function contentTypeUpdateFilters(ContentType $contentType)
     {
-        $productController = new ProductController();
-        $productController->setContainer($this->container);
+        /** @var CatalogService $catalogService */
+        $catalogService = $this->container->get('app.catalog');
 
         /** @var ContentType $document */
         $categories = $contentType->getCategories();
         /** @var Category $category */
         foreach ($categories as $category) {
-            $productController->updateFiltersData($category);
+            $catalogService->updateFiltersData($category);
         }
     }
 

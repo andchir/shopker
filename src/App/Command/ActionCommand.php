@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Controller\Admin\ProductController;
 use App\MainBundle\Document\Category;
+use App\Service\CatalogService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -42,8 +43,8 @@ class ActionCommand extends Command
 
                 $count = 0;
 
-                $productController = new ProductController();
-                $productController->setContainer($this->getContainer());
+                /** @var CatalogService $catalogService */
+                $catalogService = $this->getContainer()->get('app.catalog');
 
                 /** @var \App\Repository\CategoryRepository $categoryRepository */
                 $categoryRepository = $this->getContainer()->get('doctrine_mongodb')
@@ -52,7 +53,7 @@ class ActionCommand extends Command
 
                 $categories = $categoryRepository->findAll();
                 foreach ($categories as $category) {
-                    $productController->updateFiltersData($category);
+                    $catalogService->updateFiltersData($category);
                     $count++;
                 }
 

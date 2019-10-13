@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\MainBundle\Document\FileDocument;
+use App\Service\CatalogService;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -129,7 +130,7 @@ class CategoryController extends StorageControllerAbstract
         // Dispatch event
         $evenDispatcher = $this->get('event_dispatcher');
         $event = new CategoryUpdatedEvent($this->container, $item, $previousParentId);
-        $item = $evenDispatcher->dispatch(CategoryUpdatedEvent::NAME, $event)->getCategory();
+        $item = $evenDispatcher->dispatch($event, CategoryUpdatedEvent::NAME)->getCategory();
 
         // Delete unused files
         if (empty($item->getImage()) && !empty($oldImageData)) {
@@ -207,7 +208,7 @@ class CategoryController extends StorageControllerAbstract
             $data[$row['parentId']][] = $row;
         }
 
-        return self::createTree($data, [$root]);
+        return CatalogService::createTree($data, [$root]);
     }
 
     /**
@@ -247,7 +248,7 @@ class CategoryController extends StorageControllerAbstract
 
             //Dispatch event
             $event = new CategoryUpdatedEvent($this->container, $child, $previousParentId);
-            $evenDispatcher->dispatch(CategoryUpdatedEvent::NAME, $event);
+            $evenDispatcher->dispatch($event, CategoryUpdatedEvent::NAME);
         }
 
         // Clear file cache

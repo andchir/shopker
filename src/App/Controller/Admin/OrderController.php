@@ -178,7 +178,7 @@ class OrderController extends StorageControllerAbstract
             /** @var EventDispatcherInterface $eventDispatcher */
             $eventDispatcher = $this->get('event_dispatcher');
             $event = new GenericEvent($order);
-            $eventDispatcher->dispatch(Events::ORDER_STATUS_UPDATED, $event);
+            $eventDispatcher->dispatch($event, Events::ORDER_STATUS_UPDATED);
         }
 
         return true;

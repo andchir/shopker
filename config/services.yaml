@@ -31,6 +31,10 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
+#    App\DataFixtures\:
+#        resource: '../src/App/DataFixtures'
+#        tags: ['doctrine.fixture.odm.mongodb']
+
     App\Form\DataTransformer\SettingToStringTransformer:
         public: true
         arguments: ['@doctrine_mongodb.odm.document_manager']

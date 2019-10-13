@@ -2,13 +2,12 @@
 
 namespace App\DataFixtures\MongoDB\en;
 
-use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\MongoDBBundle\Fixture\Fixture;
+use Doctrine\Bundle\MongoDBBundle\Fixture\FixtureGroupInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use App\MainBundle\Document\FieldType;
-use App\MainBundle\Document\ContentType;
-use App\MainBundle\Document\Category;
 
-class FieldTypesFixtures extends Fixture
+class FieldTypesFixtures extends Fixture implements FixtureGroupInterface
 {
 
     public function load(ObjectManager $manager) {
@@ -596,5 +595,10 @@ class FieldTypesFixtures extends Fixture
         }
 
         $manager->flush();
+    }
+
+    public static function getGroups(): array
+    {
+        return ['en'];
     }
 }

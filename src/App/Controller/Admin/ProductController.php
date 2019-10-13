@@ -8,6 +8,7 @@ use App\MainBundle\Document\ContentType;
 use App\MainBundle\Document\FileDocument;
 use App\MainBundle\Document\Filter;
 use App\Events;
+use App\Service\CatalogService;
 use App\Service\UtilsService;
 use Doctrine\ORM\Query\Expr\Base;
 use Symfony\Component\Routing\Annotation\Route;
@@ -406,7 +407,7 @@ class ProductController extends BaseProductController
             // Dispatch event
             $eventDispatcher = $this->get('event_dispatcher');
             $event = new GenericEvent($document, ['contentType' => $contentType]);
-            $eventDispatcher->dispatch(Events::PRODUCT_CREATED, $event);
+            $eventDispatcher->dispatch($event, Events::PRODUCT_CREATED);
         }
 
         if (!empty($document['translations'])) {
@@ -560,7 +561,7 @@ class ProductController extends BaseProductController
             // Dispatch event
             $eventDispatcher = $this->get('event_dispatcher');
             $event = new GenericEvent($itemData, ['contentType' => $contentType]);
-            $eventDispatcher->dispatch(Events::PRODUCT_DELETED, $event);
+            $eventDispatcher->dispatch($event, Events::PRODUCT_DELETED);
         }
 
         if ($clearCache) {
@@ -755,12 +756,15 @@ class ProductController extends BaseProductController
      */
     public function onAfterUpdateItem(ContentType $contentType, $itemData, $categoryId = 0)
     {
+        /** @var CatalogService $catalogService */
+        $catalogService = $this->container->get('app.catalog');
+
         if ($categoryId) {
             $categoriesRepository = $this->getCategoriesRepository();
             /** @var Category $category */
             $category = $categoriesRepository->find($categoryId);
             if ($category) {
-                $this->updateFiltersData($category);
+                $catalogService->updateFiltersData($category);
             }
         }
     }
@@ -807,182 +811,6 @@ class ProductController extends BaseProductController
         if ($fileDocument) {
             $fileDocument->setUploadRootDir($filesDirPath);
             $dm->remove($fileDocument);
-            $dm->flush();
-        }
-
-        return true;
-    }
-
-    /**
-     * @param Category $parentCategory
-     * @param string $databaseName
-     * @param bool $updateParents
-     * @param bool $mixFromChilds
-     * @return bool
-     * @throws \Doctrine\ODM\MongoDB\LockException
-     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
-     * @throws \Doctrine\ODM\MongoDB\MongoDBException
-     */
-    public function updateFiltersData(Category $parentCategory, $databaseName = '', $updateParents = false, $mixFromChilds = false)
-    {
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
-        $categoriesRepository = $this->getCategoriesRepository();
-
-        if ($updateParents) {
-            $categoriesData = $categoriesRepository->getBreadcrumbs($parentCategory->getUri(), false);
-            $categoriesData = array_reverse($categoriesData);
-        } else {
-            $categoriesData = [$parentCategory->getMenuData()];
-        }
-
-        if (empty($categoriesData)) {
-            return false;
-        }
-
-        foreach ($categoriesData as $category) {
-            $categoryId = $category['id'];
-
-            /** @var Category $cat */
-            $cat = $categoriesRepository->find($categoryId);
-
-            /** @var ContentType $contentType */
-            $contentType = $cat->getContentType();
-            $contentTypeFields = $contentType->getFields();
-            $collection = $this->getCollection($contentType->getCollection(), $databaseName);
-
-            $filterArr = [];
-            $filterData = [];
-
-            // Mix from child categories
-            if ($mixFromChilds) {
-                $childCategories = $categoriesRepository->findBy([
-                    'parentId' => $cat->getId(),
-                    'isActive' => true
-                ]);
-
-                /** @var Category $childCategory */
-                foreach ($childCategories as $childCategory) {
-                    /** @var Filter $flt */
-                    $flt = $childCategory->getFilterData();
-                    if (empty($flt)) {
-                        continue;
-                    }
-                    $filterValues = $flt->getValues();
-                    foreach ($contentTypeFields as $contentTypeField) {
-                        if (!$contentTypeField['isFilter']) {
-                            continue;
-                        }
-                        $fieldName = $contentTypeField['name'];
-                        if (!empty($filterValues[$fieldName])) {
-                            if (!isset($filterArr[$fieldName])) {
-                                $filterArr[$fieldName] = [];
-                            }
-                            $values = array_merge($filterArr[$fieldName], $filterValues[$fieldName]);
-                            $values = array_unique($values);
-                            if ($contentTypeField['outputType'] == 'number') {
-                                sort($values, SORT_NUMERIC);
-                            } else {
-                                sort($values);
-                            }
-                            $filterArr[$fieldName] = $values;
-                        }
-                    }
-                }
-                unset($childCategories, $childCategory, $values);
-            }
-
-            foreach ($contentTypeFields as $contentTypeField) {
-                if (!$contentTypeField['isFilter']) {
-                    continue;
-                }
-                $fieldName = $contentTypeField['name'];
-
-                $criteria = [
-                    'isActive' => true
-                ];
-
-                // Get products fields unique data
-                if ($contentTypeField['inputType'] === 'parameters') {
-
-                    $this->applyCategoryFilter($cat, $contentTypeFields, $criteria);
-                    $uniqueValues = $collection->aggregate([
-                        ['$match' => $criteria],
-                        ['$group' => [
-                            '_id' => "\${$fieldName}.name",
-                            'values' => [
-                                '$addToSet' => "\${$fieldName}.value"
-                            ]
-                        ]]
-                    ], [
-                        'cursor' => []
-                    ])->toArray();
-
-                    foreach ($uniqueValues as $data) {
-                        if (empty($data['_id']) || empty($data['values'])) {
-                            continue;
-                        }
-                        foreach ($data['_id'] as $nk => $name) {
-                            if (empty($name)) {
-                                continue;
-                            }
-                            $index = array_search($name, array_column($filterData, 'name'));
-                            if ($index === false) {
-                                $filterData[] = [
-                                    'fieldName' => $fieldName,
-                                    'name' => $name,
-                                    'values' => []
-                                ];
-                                $index = count($filterData) - 1;
-                            }
-                            foreach ($data['values'] as $vk => $values) {
-                                if (empty($values[$nk])) {
-                                    continue;
-                                }
-                                if (!in_array($values[$nk], $filterData[$index]['values'])) {
-                                    $filterData[$index]['values'][] = $values[$nk];
-                                }
-                            }
-                        }
-                    }
-
-                } else {
-                    $this->applyCategoryFilter($cat, $contentTypeFields, $criteria);
-                    $uniqueValues = $collection->distinct($fieldName, $criteria);
-
-                    $uniqueValues = array_filter($uniqueValues, function($val) {
-                        return $val !== '' && !is_null($val);
-                    });
-
-                    if (!empty($uniqueValues)) {
-                        if (!isset($filterArr[$fieldName])) {
-                            $filterArr[$fieldName] = [];
-                        }
-                        $filterArr[$fieldName] = array_unique(array_merge($filterArr[$fieldName], $uniqueValues));
-                        sort($filterArr[$fieldName]);
-                    }
-                }
-            }
-
-            $filter = $cat->getFilterData();
-            if (!$filter) {
-                if (empty($filterArr) && empty($filterData)) {
-                    continue;
-                }
-                $filter = new Filter();
-                $filter->setCategory($cat);
-                $cat->setFilterData($filter);
-            } else {
-                if (empty($filterArr) && empty($filterData)) {
-                    $dm->remove($filter);
-                    $dm->flush();
-                    continue;
-                }
-            }
-            $filter
-                ->setValues($filterArr)
-                ->setValueData($filterData);
-
             $dm->flush();
         }
 

@@ -146,7 +146,7 @@ class CatalogController extends ProductController
             'isActive' => true
         ];
         $this->applyFilters($queryOptions['filter'], $filters, $criteria);
-        $this->applyCategoryFilter($currentCategory, $contentTypeFields, $criteria);
+        $catalogService->applyCategoryFilter($currentCategory, $contentTypeFields, $criteria);
         if ($locale !== $localeDefault && $headerFieldName) {
             $catalogService->applyLocaleFilter($locale, $headerFieldName, $criteria);
         }

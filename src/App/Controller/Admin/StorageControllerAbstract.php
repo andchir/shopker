@@ -2,6 +2,8 @@
 
 namespace App\Controller\Admin;
 
+use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\ODM\MongoDB\Query\Builder as QueryBuilder;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -285,9 +287,9 @@ abstract class StorageControllerAbstract extends BaseController
     public function checkNameExists($name, $itemId = null, $parentId = null){
         $repository = $this->getRepository();
 
-        $query = $repository
-            ->createQueryBuilder()
-            ->field('name')->equals($name);
+        /** @var QueryBuilder $query */
+        $query = $repository->createQueryBuilder();
+        $query->field('name')->equals($name);
 
         if ($parentId !== null && is_numeric($parentId)) {
             $query = $query->field('parentId')->equals($parentId);
@@ -296,8 +298,9 @@ abstract class StorageControllerAbstract extends BaseController
             $query = $query->field('id')->notEqual($itemId);
         }
 
-        return $query->getQuery()
+        return $query
             ->count()
+            ->getQuery()
             ->execute();
     }
 

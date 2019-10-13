@@ -2,47 +2,48 @@
 
 namespace App\DataFixtures\MongoDB\ru;
 
-use App\Controller\Admin\ProductController;
+use App\Service\CatalogService;
 use App\Service\SettingsService;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Doctrine\Bundle\FixturesBundle\Fixture;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Doctrine\Bundle\MongoDBBundle\Fixture\Fixture;
+use Doctrine\Bundle\MongoDBBundle\Fixture\FixtureGroupInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use App\MainBundle\Document\FieldType;
 use App\MainBundle\Document\ContentType;
 use App\MainBundle\Document\Category;
 use App\Event\CategoryUpdatedEvent;
 use App\EventListener\CategoryUpdateListener;
 
-class CatalogFixtures extends Fixture implements ContainerAwareInterface
+class CatalogFixtures extends Fixture implements FixtureGroupInterface
 {
 
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
-    private $dispatcher;
-    private $productController;
+    public const CONTENT_TYPE_CATALOG_REFERENCE = 'content_type_catalog';
+    public const CONTENT_TYPE_TEXT_REFERENCE = 'content_type_text';
 
-    public function setContainer(ContainerInterface $container = null)
+    private $container;
+    private $catalogService;
+    private $settingsService;
+    private $dispatcher;
+
+    public function __construct(
+        ContainerInterface $container,
+        CatalogService $catalogService,
+        SettingsService $settingsService,
+        EventDispatcherInterface $dispatcher
+    )
     {
         $this->container = $container;
+        $this->catalogService = $catalogService;
+        $this->settingsService = $settingsService;
+        $this->dispatcher = $dispatcher;
     }
 
     public function load(ObjectManager $manager)
     {
-        $this->dispatcher = $this->container->get('event_dispatcher');
+        $settings = $this->settingsService->getSettingsFromYaml('settings', false);
 
-        /** @var SettingsService $settingsService */
-        $settingsService = $this->container->get('app.settings');
-        $settings = $settingsService->getSettingsFromYaml('settings', false);
-
-        $this->productController = new ProductController();
-        $this->productController->setContainer($this->container);
-
-        $incrementIdsCollection = $this->productController->getCollection('doctrine_increment_ids', $settings['mongodb_database']);
-        $incrementIdsCollection->remove([]);
+        $incrementIdsCollection = $this->catalogService->getCollection('doctrine_increment_ids', $settings['mongodb_database']);
+        $incrementIdsCollection->drop();
 
         $categoryUpdateListener = new CategoryUpdateListener();
         $this->dispatcher->addListener(CategoryUpdatedEvent::NAME, [$categoryUpdateListener, 'onUpdated']);
@@ -50,14 +51,14 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface
         $this->loadContentTypes($manager);
 
         /** @var ContentType $contentType */
-        $contentType = $this->getReference('content_type_catalog');
-        $collection = $this->productController->getCollection($contentType->getCollection(), $settings['mongodb_database']);
-        $collection->remove([]);
+        $contentType = $this->getReference(self::CONTENT_TYPE_CATALOG_REFERENCE);
+        $collection = $this->catalogService->getCollection($contentType->getCollection(), $settings['mongodb_database']);
+        $collection->drop();
 
         /** @var ContentType $contentType */
-        $contentTypeText = $this->getReference('content_type_text');
-        $collectionText = $this->productController->getCollection($contentTypeText->getCollection(), $settings['mongodb_database']);
-        $collectionText->remove([]);
+        $contentTypeText = $this->getReference(self::CONTENT_TYPE_TEXT_REFERENCE);
+        $collectionText = $this->catalogService->getCollection($contentTypeText->getCollection(), $settings['mongodb_database']);
+        $collectionText->drop();
 
         $this->loadCatalog($manager);
     }
@@ -385,7 +386,7 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface
         $manager->persist($contentType);
         $manager->flush();
 
-        $this->addReference('content_type_catalog', $contentType);
+        $this->addReference(self::CONTENT_TYPE_CATALOG_REFERENCE, $contentType);
 
         /* Text content */
         $fields = [
@@ -507,7 +508,7 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface
         $manager->persist($contentType);
         $manager->flush();
 
-        $this->addReference('content_type_text', $contentType);
+        $this->addReference(self::CONTENT_TYPE_TEXT_REFERENCE, $contentType);
     }
 
     public function loadCatalog(ObjectManager $manager)
@@ -821,7 +822,7 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface
             ];
 
         /** @var ContentType $contentTypeText */
-        $contentTypeText = $this->getReference('content_type_text');
+        $contentTypeText = $this->getReference(self::CONTENT_TYPE_TEXT_REFERENCE);
         $this->loadCategories($manager, $contentTypeText, [
             [
                 'title' => 'Корневая категория',
@@ -856,7 +857,7 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface
         ]);
 
         /** @var ContentType $contentType */
-        $contentType = $this->getReference('content_type_catalog');
+        $contentType = $this->getReference(self::CONTENT_TYPE_CATALOG_REFERENCE);
         $this->loadCategories($manager, $contentType, $data);
     }
 
@@ -889,7 +890,7 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface
             $manager->flush();
 
             $event = new CategoryUpdatedEvent($this->container, $category);
-            $this->dispatcher->dispatch(CategoryUpdatedEvent::NAME, $event);
+            $this->dispatcher->dispatch($event, CategoryUpdatedEvent::NAME);
 
             if (!empty($item['content'])) {
                 $this->loadCategoryContent($manager, $category, $item['content']);
@@ -909,34 +910,36 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface
      */
     public function loadCategoryContent(ObjectManager $manager, Category $category, $data)
     {
-        /** @var SettingsService $settingsService */
-        $settingsService = $this->container->get('app.settings');
-        $settings = $settingsService->getSettingsFromYaml('settings', false);
+        $settings = $this->settingsService->getSettingsFromYaml('settings', false);
 
         /** @var ContentType $contentType */
         $contentType = $category->getContentType();
-        /** @var \Doctrine\MongoDB\Collection $collection */
-        $collection = $this->productController->getCollection($contentType->getCollection(), $settings['mongodb_database']);
+        /** @var \MongoDB\Collection $collection */
+        $collection = $this->catalogService->getCollection($contentType->getCollection(), $settings['mongodb_database']);
 
         foreach ($data as $product) {
             $product['parentId'] = $category->getId();
             $product['isActive'] = true;
-            $product['_id'] = $this->productController->getNextId($contentType->getCollection(), $settings['mongodb_database']);
-            $collection->insert($product);
+            $product['_id'] = $this->catalogService->getNextId($contentType->getCollection(), $settings['mongodb_database']);
+            $collection->insertOne($product);
         }
 
         // Add text index
-        $indexInfo = $collection->getIndexInfo();
-        if (!empty($indexInfo)) {
-            $collection->deleteIndexes();
+        $indexInfo = $collection->listIndexes();
+        if (iterator_count($indexInfo) > 0) {
+            $collection->dropIndexes();
         }
-        $collection->ensureIndex(array_fill_keys(['title', 'description'], 'text'), [
+        $collection->createIndex(array_fill_keys(['title', 'description'], 'text'), [
             'default_language' => 'russian'
         ]);
 
-        $this->productController->updateFiltersData($category, $settings['mongodb_database']);
+        $this->catalogService->updateFiltersData($category, $settings['mongodb_database']);
 
         return true;
     }
 
+    public static function getGroups(): array
+    {
+         return ['ru'];
+    }
 }

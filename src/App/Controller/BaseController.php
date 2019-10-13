@@ -30,22 +30,6 @@ class BaseController extends Controller
     }
 
     /**
-     * @param array $list
-     * @param array $parent
-     * @return array
-     */
-    public static function createTree(&$list, $parent){
-        $tree = array();
-        foreach ($parent as $k => $l){
-            if(isset($l['id']) && isset($list[$l['id']])){
-                $l['children'] = self::createTree($list, $list[$l['id']]);
-            }
-            $tree[] = $l;
-        }
-        return $tree;
-    }
-
-    /**
      * @return string
      */
     public function getRootPath()

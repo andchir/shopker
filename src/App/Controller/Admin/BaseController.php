@@ -21,21 +21,4 @@ class BaseController extends Controller
         $response = $response->setStatusCode($status);
         return $response;
     }
-
-    /**
-     * @param array $list
-     * @param array $parent
-     * @return array
-     */
-    public static function createTree(&$list, $parent){
-        $tree = array();
-        foreach ($parent as $k => $l){
-            if(isset($list[$l['id']])){
-                $l['children'] = self::createTree($list, $list[$l['id']]);
-            }
-            $tree[] = $l;
-        }
-        return $tree;
-    }
-
 }

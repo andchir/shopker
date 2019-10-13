@@ -26,7 +26,7 @@ class LocaleSubscriber implements EventSubscriberInterface
             return;
         }
         $request = $event->getRequest();
-        $requestUri = $request->getRequestUri();
+        $requestUri = $request->getRequestUri();;
         if ($locale = $request->attributes->get('_locale')) {
             if ($request->isMethod('GET')) {
                 $localeList = UtilsService::stringToArray($this->localeList);

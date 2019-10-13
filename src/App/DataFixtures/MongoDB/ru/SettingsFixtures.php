@@ -2,14 +2,15 @@
 
 namespace App\DataFixtures\MongoDB\ru;
 
-use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\MongoDBBundle\Fixture\Fixture;
+use Doctrine\Bundle\MongoDBBundle\Fixture\FixtureGroupInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use App\MainBundle\Document\Setting;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class SettingsFixtures extends Fixture implements ContainerAwareInterface
+class SettingsFixtures extends Fixture implements ContainerAwareInterface, FixtureGroupInterface
 {
 
     /**
@@ -170,5 +171,10 @@ class SettingsFixtures extends Fixture implements ContainerAwareInterface
         }
 
         $manager->flush();
+    }
+
+    public static function getGroups(): array
+    {
+        return ['ru'];
     }
 }

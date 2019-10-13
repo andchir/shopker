@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\MainBundle\Document\Category;
 use App\MainBundle\Document\User;
+use App\Service\CatalogService;
 use App\Service\ComposerService;
 use App\Service\SettingsService;
 use App\Service\UtilsService;
@@ -193,25 +194,19 @@ class SettingsController extends Controller
 
     /**
      * @Route("/update_filters", name="update_filters", methods={"POST"})
+     * @param CatalogService $catalogService
+     * @param DocumentManager $dm
      * @return JsonResponse
-     * @throws \Doctrine\ODM\MongoDB\LockException
-     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
-     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
-    public function updateFiltersAction()
+    public function updateFiltersAction(CatalogService $catalogService, DocumentManager $dm)
     {
-        $productController = new ProductController();
-        $productController->setContainer($this->container);
-
         /** @var \App\Repository\CategoryRepository $categoryRepository */
-        $categoryRepository = $this->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository(Category::class);
+        $categoryRepository = $dm->getRepository(Category::class);
 
         $count = 0;
         $categories = $categoryRepository->findAll();
         foreach ($categories as $category) {
-            $productController->updateFiltersData($category);
+            $catalogService->updateFiltersData($category);
             $count++;
         }
 

@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\MainBundle\Document\Category;
 use App\MainBundle\Document\ContentType;
+use App\MainBundle\Document\Filter;
 use App\Repository\CategoryRepository;
 use App\Repository\ContentTypeRepository;
 use Doctrine\Common\Persistence\ObjectRepository;
@@ -57,25 +58,24 @@ class CatalogService {
             $data[$pId][] = $category->getMenuData([], $locale);
         }
 
-        $childContent = $parentCategory ? $this->getCategoryContent($parentCategory, [], $locale) : [];
-
-        // Content pages (not categories)
-        if (!empty($childContent)) {
-            foreach ($childContent as $content) {
-                $content['id'] = 0 - $content['id'];// This is not categories
-                $data[0][] = $content;
+        if ($parentId === 0) {
+            $childContent = $parentCategory ? $this->getCategoryContent($parentCategory, [], $locale) : [];
+            // Content pages (not categories)
+            if (!empty($childContent)) {
+                foreach ($childContent as $content) {
+                    $content['id'] = 0 - max(1, $content['id']);// This is not categories
+                    $data[0][] = $content;
+                }
+                array_multisort(
+                    array_column($data[0], 'menuIndex'),  SORT_ASC,
+                    array_column($data[0], 'title'), SORT_ASC,
+                    $data[0]
+                );
             }
-            array_multisort(
-                array_column($data[0], 'menuIndex'),  SORT_ASC,
-                array_column($data[0], 'title'), SORT_ASC,
-                $data[0]
-            );
         }
-
         if (empty($data)) {
             return [];
         }
-
         if (!$parentId) {
             return self::createTree($data, [[
                 'id' => 0,
@@ -179,6 +179,209 @@ class CatalogService {
     }
 
     /**
+     * @param Category $currentCategory
+     * @param array $contentTypeFields
+     * @param array $criteria
+     */
+    public function applyCategoryFilter(Category $currentCategory, $contentTypeFields, &$criteria)
+    {
+        $categoriesField = array_filter($contentTypeFields, function($field){
+            return $field['inputType'] == 'categories';
+        });
+        $categoriesField = current($categoriesField);
+
+        if (!empty($categoriesField)) {
+
+            $orCriteria = [
+                '$or' => [
+                    ['parentId' => $currentCategory->getId()]
+                ]
+            ];
+            $orCriteria['$or'][] = ["{$categoriesField['name']}" => [
+                '$elemMatch' => ['$in' => [$currentCategory->getId()]]
+            ]];
+            $criteria = ['$and' => [$criteria, $orCriteria]];
+
+        } else {
+            $criteria['parentId'] = $currentCategory->getId();
+        }
+    }
+
+    /**
+     * @param Category $parentCategory
+     * @param string $databaseName
+     * @param bool $updateParents
+     * @param bool $mixFromChilds
+     * @return bool
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
+     */
+    public function updateFiltersData(Category $parentCategory, $databaseName = '', $updateParents = false, $mixFromChilds = false)
+    {
+        $categoriesRepository = $this->getCategoriesRepository();
+
+        if ($updateParents) {
+            $categoriesData = $categoriesRepository->getBreadcrumbs($parentCategory->getUri(), false);
+            $categoriesData = array_reverse($categoriesData);
+        } else {
+            $categoriesData = [$parentCategory->getMenuData()];
+        }
+
+        if (empty($categoriesData)) {
+            return false;
+        }
+
+        foreach ($categoriesData as $category) {
+            $categoryId = $category['id'];
+
+            /** @var Category $cat */
+            $cat = $categoriesRepository->find($categoryId);
+
+            /** @var ContentType $contentType */
+            $contentType = $cat->getContentType();
+            $contentTypeFields = $contentType->getFields();
+            $collection = $this->getCollection($contentType->getCollection(), $databaseName);
+
+            $filterArr = [];
+            $filterData = [];
+
+            // Mix from child categories
+            if ($mixFromChilds) {
+                $childCategories = $categoriesRepository->findBy([
+                    'parentId' => $cat->getId(),
+                    'isActive' => true
+                ]);
+
+                /** @var Category $childCategory */
+                foreach ($childCategories as $childCategory) {
+                    /** @var Filter $flt */
+                    $flt = $childCategory->getFilterData();
+                    if (empty($flt)) {
+                        continue;
+                    }
+                    $filterValues = $flt->getValues();
+                    foreach ($contentTypeFields as $contentTypeField) {
+                        if (!$contentTypeField['isFilter']) {
+                            continue;
+                        }
+                        $fieldName = $contentTypeField['name'];
+                        if (!empty($filterValues[$fieldName])) {
+                            if (!isset($filterArr[$fieldName])) {
+                                $filterArr[$fieldName] = [];
+                            }
+                            $values = array_merge($filterArr[$fieldName], $filterValues[$fieldName]);
+                            $values = array_unique($values);
+                            if ($contentTypeField['outputType'] == 'number') {
+                                sort($values, SORT_NUMERIC);
+                            } else {
+                                sort($values);
+                            }
+                            $filterArr[$fieldName] = $values;
+                        }
+                    }
+                }
+                unset($childCategories, $childCategory, $values);
+            }
+
+            foreach ($contentTypeFields as $contentTypeField) {
+                if (!$contentTypeField['isFilter']) {
+                    continue;
+                }
+                $fieldName = $contentTypeField['name'];
+
+                $criteria = [
+                    'isActive' => true
+                ];
+
+                // Get products fields unique data
+                if ($contentTypeField['inputType'] === 'parameters') {
+
+                    $this->applyCategoryFilter($cat, $contentTypeFields, $criteria);
+                    $uniqueValues = $collection->aggregate([
+                        ['$match' => $criteria],
+                        ['$group' => [
+                            '_id' => "\${$fieldName}.name",
+                            'values' => [
+                                '$addToSet' => "\${$fieldName}.value"
+                            ]
+                        ]]
+                    ], [
+                        'cursor' => []
+                    ])->toArray();
+
+                    foreach ($uniqueValues as $data) {
+                        if (empty($data['_id']) || empty($data['values'])) {
+                            continue;
+                        }
+                        foreach ($data['_id'] as $nk => $name) {
+                            if (empty($name)) {
+                                continue;
+                            }
+                            $index = array_search($name, array_column($filterData, 'name'));
+                            if ($index === false) {
+                                $filterData[] = [
+                                    'fieldName' => $fieldName,
+                                    'name' => $name,
+                                    'values' => []
+                                ];
+                                $index = count($filterData) - 1;
+                            }
+                            foreach ($data['values'] as $vk => $values) {
+                                if (empty($values[$nk])) {
+                                    continue;
+                                }
+                                if (!in_array($values[$nk], $filterData[$index]['values'])) {
+                                    $filterData[$index]['values'][] = $values[$nk];
+                                }
+                            }
+                        }
+                    }
+
+                } else {
+                    $this->applyCategoryFilter($cat, $contentTypeFields, $criteria);
+                    $uniqueValues = $collection->distinct($fieldName, $criteria);
+
+                    $uniqueValues = array_filter($uniqueValues, function($val) {
+                        return $val !== '' && !is_null($val);
+                    });
+
+                    if (!empty($uniqueValues)) {
+                        if (!isset($filterArr[$fieldName])) {
+                            $filterArr[$fieldName] = [];
+                        }
+                        $filterArr[$fieldName] = array_unique(array_merge($filterArr[$fieldName], $uniqueValues));
+                        sort($filterArr[$fieldName]);
+                    }
+                }
+            }
+
+            $filter = $cat->getFilterData();
+            if (!$filter) {
+                if (empty($filterArr) && empty($filterData)) {
+                    continue;
+                }
+                $filter = new Filter();
+                $filter->setCategory($cat);
+                $cat->setFilterData($filter);
+            } else {
+                if (empty($filterArr) && empty($filterData)) {
+                    $this->dm->remove($filter);
+                    $this->dm->flush();
+                    continue;
+                }
+            }
+            $filter
+                ->setValues($filterArr)
+                ->setValueData($filterData);
+
+            $this->dm->flush();
+        }
+
+        return true;
+    }
+
+    /**
      * @param $collectionName
      * @param string $databaseName
      * @return \MongoDB\Collection
@@ -218,6 +421,30 @@ class CatalogService {
             $pipeline[] = ['$limit' => $limit];
         }
         return $pipeline;
+    }
+
+    /**
+     * @param $collectionName
+     * @param string $databaseName
+     * @return mixed
+     */
+    public function getNextId($collectionName, $databaseName = '')
+    {
+        $autoincrementCollection = $this->getCollection('doctrine_increment_ids', $databaseName);
+        $count = $autoincrementCollection->countDocuments(['_id' => $collectionName]);
+        if(!$count){
+            $record = [
+                '_id' => $collectionName,
+                'current_id' => 1
+            ];
+            $autoincrementCollection->insertOne($record);
+        }
+        $ret = $autoincrementCollection->findOneAndUpdate(
+            ['_id' => $collectionName],
+            ['$inc' => ['current_id' => 1]],
+            ['new' => true]
+        );
+        return $ret['current_id'];
     }
 
     /**

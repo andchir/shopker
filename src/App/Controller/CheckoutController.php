@@ -157,7 +157,7 @@ class CheckoutController extends BaseController
 
                 // Dispatch event before create
                 $event = new GenericEvent($order);
-                $order = $eventDispatcher->dispatch(Events::ORDER_BEFORE_CREATE, $event)->getSubject();
+                $order = $eventDispatcher->dispatch($event, Events::ORDER_BEFORE_CREATE)->getSubject();
 
                 /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
                 $dm = $this->get('doctrine_mongodb')->getManager();
@@ -175,8 +175,8 @@ class CheckoutController extends BaseController
                     ->add('messages', 'Thanks for your order!');
 
                 // Dispatch events
-                $eventDispatcher->dispatch(Events::ORDER_CREATED, $event);
-                $eventDispatcher->dispatch(Events::ORDER_STATUS_UPDATED, $event);
+                $eventDispatcher->dispatch($event, Events::ORDER_CREATED);
+                $eventDispatcher->dispatch($event, Events::ORDER_STATUS_UPDATED);
 
                 return $this->redirectToRoute('page_checkout_success_localized', [
                     '_locale' => $request->getLocale()

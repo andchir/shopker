@@ -2,26 +2,20 @@
 
 namespace App\DataFixtures\MongoDB\en;
 
-use App\MainBundle\Document\User;
-use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\MongoDBBundle\Fixture\Fixture;
+use Doctrine\Bundle\MongoDBBundle\Fixture\FixtureGroupInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use App\MainBundle\Document\FieldType;
-use App\MainBundle\Document\ContentType;
-use App\MainBundle\Document\Category;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use App\MainBundle\Document\User;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class UserFixtures extends Fixture implements ContainerAwareInterface
+class UserFixtures extends Fixture implements FixtureGroupInterface
 {
 
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
+    private $encoder;
 
-    public function setContainer(ContainerInterface $container = null)
+    public function __construct(UserPasswordEncoderInterface $encoder)
     {
-        $this->container = $container;
+        $this->encoder = $encoder;
     }
 
     public function load(ObjectManager $manager)
@@ -38,8 +32,7 @@ class UserFixtures extends Fixture implements ContainerAwareInterface
             ->setUsername('admin')
             ->setEmail('admin@yourdomain.com');
 
-        $encoder = $this->container->get('security.password_encoder');
-        $password = $encoder->encodePassword($user, $plainPassword);
+        $password = $this->encoder->encodePassword($user, $plainPassword);
 
         $user
             ->setIsActive(true)
@@ -49,5 +42,10 @@ class UserFixtures extends Fixture implements ContainerAwareInterface
 
         $manager->persist($user);
         $manager->flush();
+    }
+
+    public static function getGroups(): array
+    {
+        return ['en'];
     }
 }

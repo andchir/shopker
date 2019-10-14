@@ -7,10 +7,13 @@ use App\MainBundle\Document\User;
 use App\Form\Type\SetupType;
 use App\Service\CatalogService;
 use App\Service\SettingsService;
+use Doctrine\Bundle\MongoDBBundle\ManagerRegistry;
 use Doctrine\Common\DataFixtures\Executor\MongoDBExecutor;
 use Doctrine\Common\DataFixtures\Purger\MongoDBPurger;
+use Doctrine\ODM\MongoDB\Configuration;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -205,7 +208,7 @@ class DefaultController extends Controller
                 }
 
                 try {
-                    $mongoClient = new \MongoDB\Client($serverUrl);
+                    $mongoClient = new \MongoDB\Client($serverUrl, [], ['typeMap' => ['root' => 'array', 'document' => 'array']]);
                     $connectResult = $mongoClient->listDatabases();
                 } catch (\Exception $e) {
                     $connectResult = false;
@@ -237,7 +240,7 @@ class DefaultController extends Controller
                                     $result = $dbCollection->drop();
                                 }
                             }
-                            if (!$result || !$result->ok) {
+                            if (!$result || empty($result['ok'])) {
                                 $form->addError(new FormError($translator->trans('install.mongodb_database_clear_error', [],
                                     'validators')));
                             }
@@ -269,9 +272,13 @@ class DefaultController extends Controller
                         unset($data['admin_email'], $data['admin_password'], $data['form_reload']);
 
                         // Add Super Admin
-                        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-                        $dm = $this->get('doctrine_mongodb')->getManager();
-                        $dm->getConfiguration()->setDefaultDb($data['mongodb_database']);
+                        /** @var \Doctrine\ODM\MongoDB\DocumentManager $documentManagerDefault */
+                        $documentManagerDefault = $this->get('doctrine_mongodb')->getManager();
+                        $documentManagerDefault->getConfiguration()->setDefaultDb($data['mongodb_database']);
+
+                        $config = $documentManagerDefault->getConfiguration();
+                        $config->setDefaultDb($data['mongodb_database']);
+                        $documentManager = DocumentManager::create($mongoClient, $config);
 
                         $user = new User();
                         $encodedPassword = $encoder->encodePassword($user, $adminPassword);
@@ -283,13 +290,14 @@ class DefaultController extends Controller
                             ->setPassword($encodedPassword)
                             ->setIsActive(true);
 
-                        $dm->persist($user);
-                        $dm->flush();
+                        $documentManager->persist($user);
+                        $documentManager->flush();
 
-                        $this->loadDataFixtures($data['locale'], $data['mongodb_database']);
+                        //$this->loadDataFixtures($data['locale'], $data['mongodb_database']);
 
-                        // Create user auto_increment record
-                        $catalogService->getNextId('user', $data['mongodb_database']);
+                        // Update user auto_increment record
+                        $autoincrementCollection = $mongoClient->selectCollection($data['mongodb_database'], 'doctrine_increment_ids');
+                        $catalogService->getNextId('user', $data['mongodb_database'], $autoincrementCollection);
 
                         // Success message
                         $request->getSession()
@@ -368,6 +376,10 @@ class DefaultController extends Controller
      */
     public function systemCacheClear($environment = null)
     {
+        /** @var FilesystemAdapter $cache */
+        $cache = $this->container->get('app.filecache');
+        $cache->clear();
+
         /** @var KernelInterface $kernel */
         $kernel = $this->container->get('kernel');
         if (!$environment) {

@@ -426,11 +426,14 @@ class CatalogService {
     /**
      * @param $collectionName
      * @param string $databaseName
+     * @param \MongoDB\Collection|null $autoincrementCollection
      * @return mixed
      */
-    public function getNextId($collectionName, $databaseName = '')
+    public function getNextId($collectionName, $databaseName = '', $autoincrementCollection = null)
     {
-        $autoincrementCollection = $this->getCollection('doctrine_increment_ids', $databaseName);
+        if (!$autoincrementCollection) {
+            $autoincrementCollection = $this->getCollection('doctrine_increment_ids', $databaseName);
+        }
         $count = $autoincrementCollection->countDocuments(['_id' => $collectionName]);
         if(!$count){
             $record = [

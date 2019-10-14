@@ -1,5 +1,5 @@
 
-4.0.9
+4.1.0
 - Settings for site languages.
 - New settingsList() Twig function.
 - New pathLocalized() Twig function.
@@ -7,6 +7,8 @@
 - On the authorization page, a button "Show password" has been added.
 - In admin area added buttons "Save and Close" and "Save".
 - Updated Symfony to version 4.3.5. Updated DoctrineMongoDBBundle to version 4.0.
+- Added class CatalogService.
+- Minor improvements in the administration interface.
 
 4.0.8
 - New order statistics module in admin area.

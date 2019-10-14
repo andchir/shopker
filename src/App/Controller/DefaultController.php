@@ -293,7 +293,7 @@ class DefaultController extends Controller
                         $documentManager->persist($user);
                         $documentManager->flush();
 
-                        //$this->loadDataFixtures($data['locale'], $data['mongodb_database']);
+                        $this->loadDataFixtures($documentManager, $data['locale']);
 
                         // Update user auto_increment record
                         $autoincrementCollection = $mongoClient->selectCollection($data['mongodb_database'], 'doctrine_increment_ids');
@@ -317,21 +317,17 @@ class DefaultController extends Controller
 
     /**
      * Load Data fixtures
+     * @param DocumentManager $dm
      * @param $locale
-     * @param $databaseName
      * @return bool
      */
-    public function loadDataFixtures($locale, $databaseName)
+    public function loadDataFixtures(DocumentManager $dm, $locale)
     {
         $rootPath = realpath($this->getParameter('kernel.root_dir').'/../..');
         $fixturesPath = $rootPath . '/src/App/DataFixtures/MongoDB/' . $locale;
         if (!is_dir($fixturesPath)) {
             return false;
         }
-
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
-        $dm->getConfiguration()->setDefaultDb($databaseName);
 
         $loaderClass = $this->container->getParameter('doctrine_mongodb.odm.fixture_loader');
         /** @var DataFixturesLoader $loader */

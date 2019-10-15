@@ -367,6 +367,7 @@ class CatalogService {
             } else {
                 if (empty($filterArr) && empty($filterData)) {
                     $this->dm->remove($filter);
+                    $cat->setFilterData(null);
                     $this->dm->flush();
                     continue;
                 }

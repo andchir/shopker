@@ -282,10 +282,14 @@ class CategoryController extends StorageControllerAbstract
             $skipEvents = $count > 500;// TODO: Add confirm in UI
 
             if ($skipEvents) {
-                $result = $collection->remove([
-                    'parentId' => $category->getId()
-                ]);
-                return !empty($result['ok']);
+                try {
+                    $result = $collection->deleteMany([
+                        'parentId' => $category->getId()
+                    ]);
+                } catch (\Exception $e) {
+                    $result = null;
+                }
+                return !empty($result);
 
             } else {
                 $documents = $collection->find([

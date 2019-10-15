@@ -55,6 +55,7 @@ class DefaultController extends Controller
         $countCategories = $categoriesRepository
             ->createQueryBuilder()
             ->field('name')->notEqual('root')
+            ->field('isActive')->equals(true)
             ->count()
             ->getQuery()
             ->execute();
@@ -63,7 +64,7 @@ class DefaultController extends Controller
         $productsController = new Admin\ProductController();
         $productsController->setContainer($this->container);
         $collection = $productsController->getCollection('products');
-        $countProducts = $collection->countDocuments();
+        $countProducts = $collection->countDocuments(['isActive' => true]);
 
         // Get page description
         $description = '';

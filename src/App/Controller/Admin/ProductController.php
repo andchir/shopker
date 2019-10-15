@@ -342,7 +342,7 @@ class ProductController extends BaseProductController
                         if (!$document) {
                             return $this->setError('Item not found.');
                         }
-                        $previousCollection->remove([
+                        $previousCollection->deleteOne([
                             '_id' => $itemId
                         ]);
                         $itemId = null;
@@ -396,13 +396,21 @@ class ProductController extends BaseProductController
 
         // Save document
         if($itemId){
-            $result = $collection->update(
-                ['_id' => $itemId],
-                ['$set' => $document]
-            );
+            try {
+                $result = $collection->updateOne(
+                    ['_id' => $itemId],
+                    ['$set' => $document]
+                );
+            } catch (\Exception $e) {
+                $result = null;
+            }
         }
         else {
-            $result = $collection->insert($document);
+            try {
+                $result = $collection->insertOne($document);
+            } catch (\Exception $e) {
+                $result = null;
+            }
 
             // Dispatch event
             $eventDispatcher = $this->get('event_dispatcher');
@@ -433,7 +441,7 @@ class ProductController extends BaseProductController
             $cache->clear();
         }
 
-        if (!empty($result['ok'])) {
+        if (!empty($result)) {
             return new JsonResponse($document);
         } else {
             return $this->setError('Item not saved.');
@@ -547,10 +555,14 @@ class ProductController extends BaseProductController
     public function deleteItem(ContentType $contentType, $itemData, $clearCache = true, $skipEvents = false)
     {
         $collection = $this->getCollection($contentType->getCollection());
-        $result = $collection->remove([
-            '_id' => $itemData['_id']
-        ]);
-        if (empty($result['ok'])) {
+        try {
+            $result = $collection->deleteOne([
+                '_id' => $itemData['_id']
+            ]);
+        } catch (\Exception $e) {
+            $result = false;
+        }
+        if (empty($result)) {
             return $result;
         }
 

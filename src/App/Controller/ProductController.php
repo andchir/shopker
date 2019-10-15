@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\CategoryRepository;
 use \MongoDB\Collection;
+use MongoDB\Model\IndexInfo;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -106,17 +107,24 @@ class ProductController extends BaseController
         if (empty($document['translations'])) {
             return false;
         }
-        $indexInfo = $collection->getIndexInfo();
+        $indexInfo = $collection->listIndexes();
         $textIndexFields = [];
         $textIndexFieldsNew = [];
         $textIndexName = '';
         $defaultLanguage = '';
+
+        /** @var IndexInfo $indexData */
         foreach ($indexInfo as $indexData) {
-            if (isset($indexData['weights'])) {
-                $fields = array_keys($indexData['weights']);
-                if (!empty($indexData['default_language'])) {
-                    $defaultLanguage = $indexData['default_language'];
-                    $textIndexName = $indexData['name'];
+            if (!$indexData->isText()) {
+                continue;
+            }
+            $weights = $indexData->offsetGet('weights');
+            if (!empty($weights)) {
+                $fields = array_keys($weights);
+                $defLanguage = $indexData->offsetGet('default_language');
+                if (!empty($defLanguage)) {
+                    $defaultLanguage = $defLanguage;
+                    $textIndexName = $indexData->getName();
                 }
                 foreach ($fields as $fieldName) {
                     $textIndexFields[] = $fieldName;
@@ -141,10 +149,9 @@ class ProductController extends BaseController
             $textIndexName = array_filter($textIndexName, function($key) {
                 return ($key + 1) % 2 !== 0;
             }, ARRAY_FILTER_USE_KEY);
-
             $fields = array_unique(array_merge($textIndexFields, $textIndexFieldsNew));
-            $collection->deleteIndex(array_fill_keys($textIndexName, 'text'));
-            $collection->ensureIndex(array_fill_keys($fields, 'text'), [
+            $collection->dropIndexes(array_fill_keys($textIndexName, 'text'));
+            $collection->createIndex(array_fill_keys($fields, 'text'), [
                 'default_language' => $defaultLanguage
             ]);
         }

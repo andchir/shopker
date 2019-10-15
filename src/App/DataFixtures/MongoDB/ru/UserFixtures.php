@@ -6,16 +6,22 @@ use Doctrine\Bundle\MongoDBBundle\Fixture\Fixture;
 use Doctrine\Bundle\MongoDBBundle\Fixture\FixtureGroupInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use App\MainBundle\Document\User;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class UserFixtures extends Fixture implements FixtureGroupInterface
+class UserFixtures extends Fixture implements ContainerAwareInterface, FixtureGroupInterface
 {
 
+    /** @var ContainerInterface */
+    private $container;
+    /** @var UserPasswordEncoderInterface */
     private $encoder;
 
-    public function __construct(UserPasswordEncoderInterface $encoder)
+    public function setContainer(ContainerInterface $container = null)
     {
-        $this->encoder = $encoder;
+        $this->container = $container;
+        $this->encoder = $this->container->get('security.password_encoder');
     }
 
     public function load(ObjectManager $manager)

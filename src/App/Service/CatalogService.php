@@ -385,15 +385,18 @@ class CatalogService {
     /**
      * @param $collectionName
      * @param string $databaseName
+     * @param \MongoDB\Client|null $mongodbClient
      * @return \MongoDB\Collection
      */
-    public function getCollection($collectionName, $databaseName = '')
+    public function getCollection($collectionName, $databaseName = '', $mongodbClient = null)
     {
         if (!$databaseName) {
             $databaseName = $this->container->getParameter('mongodb_database');
         }
-        /** @var \MongoDB\Client $mongodbClient */
-        $mongodbClient = $this->container->get('doctrine_mongodb.odm.default_connection');
+        if (!$mongodbClient) {
+            /** @var \MongoDB\Client $mongodbClient */
+            $mongodbClient = $this->container->get('doctrine_mongodb.odm.default_connection');
+        }
 
         return $mongodbClient->selectCollection($databaseName, $collectionName);
     }
@@ -428,12 +431,13 @@ class CatalogService {
      * @param $collectionName
      * @param string $databaseName
      * @param \MongoDB\Collection|null $autoincrementCollection
+     * @param \MongoDB\Client|null $mongodbClient
      * @return mixed
      */
-    public function getNextId($collectionName, $databaseName = '', $autoincrementCollection = null)
+    public function getNextId($collectionName, $databaseName = '', $autoincrementCollection = null, $mongodbClient = null)
     {
         if (!$autoincrementCollection) {
-            $autoincrementCollection = $this->getCollection('doctrine_increment_ids', $databaseName);
+            $autoincrementCollection = $this->getCollection('doctrine_increment_ids', $databaseName, $mongodbClient);
         }
         $count = $autoincrementCollection->countDocuments(['_id' => $collectionName]);
         if(!$count){

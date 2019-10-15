@@ -4,6 +4,7 @@ namespace App\DataFixtures\MongoDB\en;
 
 use App\Service\CatalogService;
 use App\Service\SettingsService;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Doctrine\Bundle\MongoDBBundle\Fixture\Fixture;
@@ -14,28 +15,27 @@ use App\MainBundle\Document\Category;
 use App\Event\CategoryUpdatedEvent;
 use App\EventListener\CategoryUpdateListener;
 
-class CatalogFixtures extends Fixture implements FixtureGroupInterface
+class CatalogFixtures extends Fixture implements ContainerAwareInterface, FixtureGroupInterface
 {
 
     public const CONTENT_TYPE_CATALOG_REFERENCE = 'content_type_catalog';
     public const CONTENT_TYPE_TEXT_REFERENCE = 'content_type_text';
 
+    /** @var ContainerInterface */
     private $container;
+    /** @var CatalogService  */
     private $catalogService;
+    /** @var SettingsService  */
     private $settingsService;
+    /** @var EventDispatcherInterface  */
     private $dispatcher;
 
-    public function __construct(
-        ContainerInterface $container,
-        CatalogService $catalogService,
-        SettingsService $settingsService,
-        EventDispatcherInterface $dispatcher
-    )
+    public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
-        $this->catalogService = $catalogService;
-        $this->settingsService = $settingsService;
-        $this->dispatcher = $dispatcher;
+        $this->catalogService = $container->get('app.catalog');
+        $this->settingsService = $container->get('app.settings');
+        $this->dispatcher = $this->container->get('event_dispatcher');
     }
 
     public function load(ObjectManager $manager)
@@ -922,7 +922,7 @@ class CatalogFixtures extends Fixture implements FixtureGroupInterface
         foreach ($data as $product) {
             $product['parentId'] = $category->getId();
             $product['isActive'] = true;
-            $product['_id'] = $this->catalogService->getNextId($contentType->getCollection(), $settings['mongodb_database']);
+            $product['_id'] = $this->catalogService->getNextId($contentType->getCollection(), $settings['mongodb_database'], null, $manager->getclient());
             $collection->insertOne($product);
         }
 

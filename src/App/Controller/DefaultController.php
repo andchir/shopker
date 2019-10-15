@@ -295,6 +295,7 @@ class DefaultController extends Controller
                         $documentManager->flush();
 
                         $this->loadDataFixtures($documentManager, $data['locale']);
+                        // $this->loadDataFixturesCommand($data['locale']);
 
                         // Update user auto_increment record
                         $autoincrementCollection = $mongoClient->selectCollection($data['mongodb_database'], 'doctrine_increment_ids');
@@ -356,7 +357,7 @@ class DefaultController extends Controller
         $application->setAutoExit(false);
         $input = new ArrayInput(array(
             'command' => 'doctrine:mongodb:fixtures:load',
-            '--fixtures' => realpath('./../src/DataFixtures/MongoDB/' . $locale),
+            '--group' => $locale,
             '--env' => $environment,
             '--quiet' => ''
         ));
@@ -369,14 +370,16 @@ class DefaultController extends Controller
     /**
      * Clear system cache
      * @param null $environment
+     * @param bool $clearFileCache
      * @return string
      */
-    public function systemCacheClear($environment = null)
+    public function systemCacheClear($environment = null, $clearFileCache = true)
     {
-        /** @var FilesystemAdapter $cache */
-        $cache = $this->container->get('app.filecache');
-        $cache->clear();
-
+        if ($clearFileCache) {
+            /** @var FilesystemAdapter $cache */
+            $cache = $this->container->get('app.filecache');
+            $cache->clear();
+        }
         /** @var KernelInterface $kernel */
         $kernel = $this->container->get('kernel');
         if (!$environment) {

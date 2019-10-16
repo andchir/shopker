@@ -78,7 +78,7 @@
                                         </td>
                                         <td>
                                             <div class="input-group input-group-sm mb-3 input-group-on-hover">
-                                                <input type="text" class="form-control"
+                                                <input type="{{ getFieldTypeByName(setting.name) }}" class="form-control"
                                                        [(ngModel)]="setting.value"
                                                        readonly #inputField>
                                                 <div class="input-group-append">

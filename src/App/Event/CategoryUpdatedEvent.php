@@ -2,22 +2,26 @@
 
 namespace App\Event;
 
+use Doctrine\ODM\MongoDB\DocumentManager;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Contracts\EventDispatcher\Event;
 use App\MainBundle\Document\Category;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class CategoryUpdatedEvent extends Event
 {
     const NAME = 'category.updated';
 
+    /** @var DocumentManager|ObjectManager */
+    protected $dm;
+    /** @var Category */
     protected $category;
-    protected $container;
+    /** @var int */
     protected $previousParentId;
 
-    public function __construct(ContainerInterface $container, Category $category = null, $previousParentId = 0)
+    public function __construct($dm, Category $category = null, $previousParentId = 0)
     {
         $this->category = $category;
-        $this->container = $container;
+        $this->dm = $dm;
         $this->previousParentId = $previousParentId;
     }
 
@@ -26,9 +30,9 @@ class CategoryUpdatedEvent extends Event
         return $this->category;
     }
 
-    public function getContainer()
+    public function getDocumentManager()
     {
-        return $this->container;
+        return $this->dm;
     }
 
     public function getPreviousParentId()

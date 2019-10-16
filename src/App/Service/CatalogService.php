@@ -9,6 +9,7 @@ use App\Repository\CategoryRepository;
 use App\Repository\ContentTypeRepository;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ODM\MongoDB\DocumentManager;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class CatalogService {
@@ -25,6 +26,14 @@ class CatalogService {
     public function __construct(ContainerInterface $container, DocumentManager $dm)
     {
         $this->container = $container;
+        $this->dm = $dm;
+    }
+
+    /**
+     * @param DocumentManager|ObjectManager $dm
+     */
+    public function setDocumentManager(DocumentManager $dm)
+    {
         $this->dm = $dm;
     }
 
@@ -211,13 +220,13 @@ class CatalogService {
      * @param Category $parentCategory
      * @param string $databaseName
      * @param bool $updateParents
-     * @param bool $mixFromChilds
+     * @param bool $mixFromChild
      * @return bool
      * @throws \Doctrine\ODM\MongoDB\LockException
      * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
      * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
-    public function updateFiltersData(Category $parentCategory, $databaseName = '', $updateParents = false, $mixFromChilds = false)
+    public function updateFiltersData(Category $parentCategory, $databaseName = '', $updateParents = false, $mixFromChild = false)
     {
         $categoriesRepository = $this->getCategoriesRepository();
 
@@ -247,7 +256,7 @@ class CatalogService {
             $filterData = [];
 
             // Mix from child categories
-            if ($mixFromChilds) {
+            if ($mixFromChild) {
                 $childCategories = $categoriesRepository->findBy([
                     'parentId' => $cat->getId(),
                     'isActive' => true
@@ -385,18 +394,15 @@ class CatalogService {
     /**
      * @param $collectionName
      * @param string $databaseName
-     * @param \MongoDB\Client|null $mongodbClient
      * @return \MongoDB\Collection
      */
-    public function getCollection($collectionName, $databaseName = '', $mongodbClient = null)
+    public function getCollection($collectionName, $databaseName = '')
     {
         if (!$databaseName) {
             $databaseName = $this->container->getParameter('mongodb_database');
         }
-        if (!$mongodbClient) {
-            /** @var \MongoDB\Client $mongodbClient */
-            $mongodbClient = $this->container->get('doctrine_mongodb.odm.default_connection');
-        }
+        /** @var \MongoDB\Client $mongodbClient */
+        $mongodbClient = $this->dm->getClient();
 
         return $mongodbClient->selectCollection($databaseName, $collectionName);
     }
@@ -431,13 +437,12 @@ class CatalogService {
      * @param $collectionName
      * @param string $databaseName
      * @param \MongoDB\Collection|null $autoincrementCollection
-     * @param \MongoDB\Client|null $mongodbClient
      * @return mixed
      */
-    public function getNextId($collectionName, $databaseName = '', $autoincrementCollection = null, $mongodbClient = null)
+    public function getNextId($collectionName, $databaseName = '', $autoincrementCollection = null)
     {
         if (!$autoincrementCollection) {
-            $autoincrementCollection = $this->getCollection('doctrine_increment_ids', $databaseName, $mongodbClient);
+            $autoincrementCollection = $this->getCollection('doctrine_increment_ids', $databaseName);
         }
         $count = $autoincrementCollection->countDocuments(['_id' => $collectionName]);
         if(!$count){

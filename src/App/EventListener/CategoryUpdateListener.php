@@ -3,6 +3,7 @@
 namespace App\EventListener;
 
 use App\MainBundle\Document\Category;
+use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use App\Event\CategoryUpdatedEvent;
 use App\Repository\CategoryRepository;
@@ -10,11 +11,12 @@ use App\Repository\CategoryRepository;
 class CategoryUpdateListener
 {
 
-    protected $container;
+    /** @var DocumentManager */
+    protected $dm;
 
-    public function setContainer(ContainerInterface $container)
+    public function setDocumentManager(DocumentManager $dm)
     {
-        $this->container = $container;
+        $this->dm = $dm;
     }
 
     /**
@@ -23,7 +25,7 @@ class CategoryUpdateListener
      */
     public function onUpdated(CategoryUpdatedEvent $event)
     {
-        $this->setContainer($event->getContainer());
+        $this->setDocumentManager($event->getDocumentManager());
 
         $category = $event->getCategory();
         $previousParentId = $event->getPreviousParentId();
@@ -63,9 +65,7 @@ class CategoryUpdateListener
     public function updateIsFolder($itemId)
     {
         /** @var CategoryRepository $repository */
-        $repository = $this->container->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository(Category::class);
+        $repository = $this->dm->getRepository(Category::class);
             
         /** @var Category $item */
         $item = $repository->find($itemId);
@@ -78,10 +78,8 @@ class CategoryUpdateListener
 
         $item->setIsFolder($isFolder);
 
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->container->get('doctrine_mongodb')->getManager();
-        $dm->persist($item);
-        $dm->flush();
+        $this->dm->persist($item);
+        $this->dm->flush();
 
         return $item;
     }
@@ -96,9 +94,7 @@ class CategoryUpdateListener
             return false;
         }
         /** @var CategoryRepository $repository */
-        $repository = $this->container->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository(Category::class);
+        $repository = $this->dm ->getRepository(Category::class);
 
         $parents = $repository->getParents($category);
         $names = [];
@@ -115,10 +111,8 @@ class CategoryUpdateListener
 
         $category->setUri($uri);
 
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->container->get('doctrine_mongodb')->getManager();
-        $dm->persist($category);
-        $dm->flush();
+        $this->dm->persist($category);
+        $this->dm->flush();
 
         return true;
     }

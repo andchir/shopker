@@ -129,7 +129,7 @@ class CategoryController extends StorageControllerAbstract
 
         // Dispatch event
         $evenDispatcher = $this->get('event_dispatcher');
-        $event = new CategoryUpdatedEvent($this->container, $item, $previousParentId);
+        $event = new CategoryUpdatedEvent($dm, $item, $previousParentId);
         $item = $evenDispatcher->dispatch($event, CategoryUpdatedEvent::NAME)->getCategory();
 
         // Delete unused files
@@ -229,6 +229,8 @@ class CategoryController extends StorageControllerAbstract
             return $this->setError($translator->trans('Item not found.', [], 'validators'));
         }
 
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->get('doctrine_mongodb')->getManager();
         /** @var EventDispatcher $evenDispatcher */
         $evenDispatcher = $this->get('event_dispatcher');
         $previousParentId = $item->getParentId();
@@ -239,15 +241,13 @@ class CategoryController extends StorageControllerAbstract
         foreach ($children as $child) {
             $this->deleteProductsByCategory($child, false);
 
-            /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-            $dm = $this->get('doctrine_mongodb')->getManager();
             $dm->remove($child);
             $dm->flush();
 
             $child->setId(null);
 
             //Dispatch event
-            $event = new CategoryUpdatedEvent($this->container, $child, $previousParentId);
+            $event = new CategoryUpdatedEvent($dm, $child, $previousParentId);
             $evenDispatcher->dispatch($event, CategoryUpdatedEvent::NAME);
         }
 

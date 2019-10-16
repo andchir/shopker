@@ -41,6 +41,7 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface, Fixtur
     public function load(ObjectManager $manager)
     {
         $settings = $this->settingsService->getSettingsFromYaml('settings', false);
+        $this->catalogService->setDocumentManager($manager);
 
         $incrementIdsCollection = $this->catalogService->getCollection('doctrine_increment_ids', $settings['mongodb_database']);
         $incrementIdsCollection->drop();
@@ -891,7 +892,7 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface, Fixtur
             $manager->persist($category);
             $manager->flush();
 
-            $event = new CategoryUpdatedEvent($this->container, $category);
+            $event = new CategoryUpdatedEvent($manager, $category);
             $this->dispatcher->dispatch($event, CategoryUpdatedEvent::NAME);
 
             if (!empty($item['content'])) {
@@ -922,7 +923,7 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface, Fixtur
         foreach ($data as $product) {
             $product['parentId'] = $category->getId();
             $product['isActive'] = true;
-            $product['_id'] = $this->catalogService->getNextId($contentType->getCollection(), $settings['mongodb_database'], null, $manager->getclient());
+            $product['_id'] = $this->catalogService->getNextId($contentType->getCollection(), $settings['mongodb_database'], null);
             $collection->insertOne($product);
         }
 

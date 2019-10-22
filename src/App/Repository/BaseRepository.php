@@ -60,7 +60,7 @@ abstract class BaseRepository extends DocumentRepository
         }
 
         foreach ($opts['sort_by'] as $ind => $sortBy) {
-            $query = $query->sort(
+            $query->sort(
                 $sortBy,
                 isset($opts['sort_dir'][$ind])
                     ? $opts['sort_dir'][$ind]
@@ -70,17 +70,16 @@ abstract class BaseRepository extends DocumentRepository
 
         if ($opts['limit']) {
             $skip = ($opts['page'] - 1) * $opts['limit'];
-            $query = $query
+            $query
                 ->limit($opts['limit'])
                 ->skip($skip);
         }
 
         if($opts['only_active']){
-            $query = $query
-                ->field('isActive')->equals(true);
+            $query->field('isActive')->equals(true);
         }
         if (!empty($filterIds)) {
-            $query = $query->field('id')->notIn($filterIds);
+            $query->field('id')->notIn($filterIds);
         }
 
         $results = $query

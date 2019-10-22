@@ -76,7 +76,7 @@
                                         {% for orderContent in order.content %}
                                         <tr>
                                             <td>
-                                                <a href="{{ orderContent.uri }}" target="_blank">
+                                                <a href="/{{ orderContent.uri }}" target="_blank">
                                                     {{ orderContent.title }}
                                                 </a>
                                                 {% if orderContent.parametersString is not empty %}

@@ -42,7 +42,7 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
 
         $query = $this->createQueryBuilder();
 
-        $query = $query
+        $query
             ->field('userId')->equals($userId)
             ->sort('createdDate', 'desc')
             ->skip($skip)

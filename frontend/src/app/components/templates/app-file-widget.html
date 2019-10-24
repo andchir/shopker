@@ -1,6 +1,6 @@
 <div class="card card-body p-2" (drop)="dropHandler($event)" (dragover)="dragOverHandler($event);">
-    <div class="min-height110">
-        <div style="min-height: 35px;">
+    <div [ngClass]="{'min-height110': largeFieldMode}">
+        <div [style.minHeight]="largeFieldMode ? '35px': 0">
             <div *ngIf="fieldTitle">
                 <label for="field_{{ fieldName }}">
                     {{ fieldTitle }}
@@ -30,7 +30,7 @@
                     </button>
                 </div>
             </div>
-            <div class="pt-3 pb-2 text-secondary" *ngIf="fileName">
+            <div class="text-secondary" [ngClass]="{'pt-3 pb-2': largeFieldMode}" *ngIf="fileName">
                 <i class="icon-file"></i>
                 {{ fileName }}
             </div>

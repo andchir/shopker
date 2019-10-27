@@ -14,7 +14,7 @@ export class CategoriesService extends DataService<Category> {
 
     constructor(http: HttpClient) {
         super(http);
-        this.setRequestUrl('categories');
+        this.setRequestUrl('/admin/categories');
     }
 
     getTree(parentId = 0, expanded = true) {

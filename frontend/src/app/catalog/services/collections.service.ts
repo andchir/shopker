@@ -8,7 +8,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 export class CollectionsService {
 
     public headers = new HttpHeaders({'Content-Type': 'application/json'});
-    private requestUrl = 'collections';
+    private requestUrl = '/admin/collections';
 
     constructor(
         public http: HttpClient

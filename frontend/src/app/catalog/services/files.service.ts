@@ -12,6 +12,6 @@ export class FilesService extends DataService<FileModel> {
 
     constructor(http: HttpClient) {
         super(http);
-        this.setRequestUrl('files');
+        this.setRequestUrl('/admin/files');
     }
 }

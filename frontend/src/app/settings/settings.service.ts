@@ -20,7 +20,7 @@ export class SettingsService {
     constructor(
         private http: HttpClient
     ) {
-        this.requestUrl = 'settings';
+        this.requestUrl = '/admin/settings';
     }
 
     setRequestUrl(url) {

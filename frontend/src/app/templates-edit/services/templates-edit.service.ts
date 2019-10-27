@@ -14,7 +14,7 @@ export class TemplatesEditService extends DataService<Template> {
 
     constructor(http: HttpClient) {
         super(http);
-        this.setRequestUrl('templates');
+        this.setRequestUrl('/admin/templates');
     }
 
     getItemContent(path: string, fileType: string): Observable<string> {

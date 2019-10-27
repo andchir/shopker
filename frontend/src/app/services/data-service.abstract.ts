@@ -27,7 +27,7 @@ export abstract class DataService<M extends SimpleEntity> {
     constructor(
         public http: HttpClient
     ) {
-        this.requestUrl = 'app/data_list';
+        this.requestUrl = '/admin/app/data_list';
     }
 
     setRequestUrl(url) {
@@ -70,12 +70,14 @@ export abstract class DataService<M extends SimpleEntity> {
 
     getListPage(options ?: QueryOptions): Observable<DataList<M>> {
         let params = new HttpParams();
-        for (const name in options) {
-            if (!options.hasOwnProperty(name)
-                || typeof options[name] === 'undefined') {
+        if (options) {
+            for (const name in options) {
+                if (!options.hasOwnProperty(name)
+                    || typeof options[name] === 'undefined') {
                     continue;
+                }
+                params = params.append(name, options[name]);
             }
-            params = params.append(name, options[name]);
         }
         return this.http.get<DataList<M>>(this.getRequestUrl(), {params: params, headers: this.headers})
             .pipe(

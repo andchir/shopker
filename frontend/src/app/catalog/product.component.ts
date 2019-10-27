@@ -79,7 +79,7 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
         }
         this.model.clearCache = true;
         this.model.parentId = this.category.id;
-        this.dataService.setRequestUrl('products/' + this.category.id);
+        this.dataService.setRequestUrl('/admin/products/' + this.category.id);
 
         this.buildForm();
         this.getCategories();
@@ -305,7 +305,7 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
         }
 
         this.loading = true;
-        this.dataService.setRequestUrl('products/' + this.category.id);
+        this.dataService.setRequestUrl('/admin/products/' + this.category.id);
 
         this.saveRequest()
             .subscribe({

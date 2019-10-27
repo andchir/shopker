@@ -23,6 +23,7 @@ export class AppComponent {
     @ViewChild('fileManager', { static: false }) fileManager: FileManagerComponent;
     baseUrl: string;
     routeData: any[];
+    currentRoute = '';
     menuItems: MenuItem[] = [...adminMenu];
     appVersion: string;
     isFileManagerActive = false;
@@ -50,6 +51,7 @@ export class AppComponent {
         this.router.events.subscribe(event => {
             if (event instanceof NavigationEnd) {
                 this.routeData = this.getRouteData(this.router.routerState, this.router.routerState.root);
+                this.currentRoute = event.urlAfterRedirects;
                 this.updateTitle();
             }
         });

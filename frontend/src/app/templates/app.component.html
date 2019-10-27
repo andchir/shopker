@@ -1,5 +1,7 @@
 <div class="pl-5">
 
+    <router-outlet></router-outlet>
+
     <div class="navbar-vertical-left bg-primary active">
         <ul>
             <li class="nav-item" *ngFor="let menuItem of menuItems">
@@ -9,7 +11,7 @@
                     [ngbTooltip]="menuItem.title | translate"
                     placement="right"
                     tooltipClass="tooltip-left-blue">
-                        <i class="item-icon" [ngClass]="menuItem.icon"></i>
+                    <i class="item-icon" [ngClass]="menuItem.icon"></i>
                 </a>
             </li>
         </ul>
@@ -17,7 +19,7 @@
         <ul class="navbar-vertical-left-bottom">
 
             <li class="nav-item">
-                <a class="nav-link" href="{{baseUrl}}" target="_blank" [ngbTooltip]="'PREVIEW_SITE' | translate" placement="right" tooltipClass="tooltip-left-blue">
+                <a class="nav-link" [href]="baseUrl" target="_blank" [ngbTooltip]="'PREVIEW_SITE' | translate" placement="right" tooltipClass="tooltip-left-blue">
                     <i class="icon-home item-icon"></i>
                 </a>
             </li>
@@ -33,8 +35,6 @@
             </li>
         </ul>
     </div>
-
-    <router-outlet></router-outlet>
 
     <div class="left-overlay-menu" #navbarLeftOverlay>
         <ul>

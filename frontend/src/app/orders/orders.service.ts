@@ -12,7 +12,7 @@ export class OrdersService extends DataService<Order> {
 
     constructor(http: HttpClient) {
         super(http);
-        this.setRequestUrl('orders');
+        this.setRequestUrl('/admin/orders');
     }
 
 }

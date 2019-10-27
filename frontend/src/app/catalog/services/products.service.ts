@@ -9,6 +9,6 @@ export class ProductsService extends DataService<Product> {
 
     constructor(http: HttpClient) {
         super(http);
-        this.setRequestUrl('products');
+        this.setRequestUrl('/admin/products');
     }
 }

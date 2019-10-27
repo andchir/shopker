@@ -11,7 +11,7 @@ export class StatisticsService {
         'Content-Type': 'application/json',
         'X-Requested-With': 'XMLHttpRequest'
     });
-    private requestUrl = 'statistics';
+    private requestUrl = '/admin/statistics';
 
     chartLineOptions = {
         responsive: true,

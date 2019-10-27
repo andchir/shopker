@@ -15,14 +15,15 @@ import {AppSettings} from './services/app-settings.service';
 import {FileManagerComponent} from './components/file-manager.component';
 import {ModalFileContentComponent} from './components/modal-file.component';
 
-import localeEn from '@angular/common/locales/en';
-import localeRu from '@angular/common/locales/ru';
 import {
     AlertModalContentComponent,
     ConfirmModalContentComponent,
     ModalConfirmTextComponent
 } from './components/modal-confirm-text.component';
 import {ModalFileUploadContentComponent} from './components/modal-file-upload.component';
+
+import localeEn from '@angular/common/locales/en';
+import localeRu from '@angular/common/locales/ru';
 
 registerLocaleData(localeEn, 'en-EN');
 registerLocaleData(localeRu, 'ru-RU');

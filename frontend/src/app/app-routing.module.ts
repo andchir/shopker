@@ -12,7 +12,6 @@ export const routes: Routes = [
     {path: 'settings', loadChildren: () => import('./settings/settings.module').then(m => m.SettingsModule)},
     {path: 'templates_edit', loadChildren: () => import('./templates-edit/templates-edit.module').then(m => m.TemplatesEditModule)},
     {path: 'module/:moduleName', component: ModuleLoaderComponent},
-    {path: 'module/:moduleName/:subModuleName', component: ModuleLoaderComponent},
     {path: '**', component: NotFoundComponent}
 ];
 

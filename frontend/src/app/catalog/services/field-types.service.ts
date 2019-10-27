@@ -9,6 +9,6 @@ export class FieldTypesService extends DataService<FieldType> {
 
     constructor(http: HttpClient) {
         super(http);
-        this.setRequestUrl('field_types');
+        this.setRequestUrl('/admin/field_types');
     }
 }

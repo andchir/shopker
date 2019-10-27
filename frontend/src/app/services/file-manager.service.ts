@@ -18,7 +18,7 @@ export class FileManagerService {
     constructor(
         public http: HttpClient
     ) {
-        this.requestUrl = 'file_manager';
+        this.requestUrl = '/admin/file_manager';
     }
 
     getRequestUrl() {

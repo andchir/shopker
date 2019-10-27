@@ -12,7 +12,7 @@ export class UsersService extends DataService<User> {
 
     constructor(http: HttpClient) {
         super(http);
-        this.setRequestUrl('users');
+        this.setRequestUrl('/admin/users');
     }
 
     getRolesList(): Observable<any[]> {

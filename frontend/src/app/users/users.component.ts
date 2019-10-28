@@ -139,7 +139,7 @@ export class ModalUserContentComponent extends ModalContentAbstractComponent<Use
 })
 export class UsersComponent extends PageTableAbstractComponent<User> implements OnInit {
 
-    title = 'USERS';
+    static title = 'USERS';
     queryOptions: QueryOptions = new QueryOptions('id', 'desc', 1, 10, 0, 0);
 
     tableFields = [

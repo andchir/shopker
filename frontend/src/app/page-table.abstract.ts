@@ -8,10 +8,10 @@ import {AlertModalContentComponent, ConfirmModalContentComponent} from './compon
 
 export abstract class PageTableAbstractComponent<M> implements OnInit {
 
+    static title = '';
     @ViewChild('table', { static: true }) table;
     errorMessage: string;
     items: M[] = [];
-    title = 'Page with data table';
     modalRef: NgbModalRef;
     loading = false;
     selectedIds: number[] = [];

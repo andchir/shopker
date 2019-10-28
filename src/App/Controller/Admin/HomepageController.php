@@ -20,31 +20,25 @@ class HomepageController extends Controller
     /**
      * @Route("/", name="admin")
      * @param Request $request
+     * @param KernelInterface $kernel
      * @return Response
      */
-    public function indexAction(Request $request)
+    public function indexAction(Request $request, KernelInterface $kernel)
     {
-        /** @var SettingsService $settingsService */
-        $settingsService = $this->get('app.settings');
-        $settings = $settingsService->getArray();
+        $environment = $kernel->getEnvironment();
+        $rootPath = realpath($this->getParameter('kernel.root_dir').'/../..');
+        $indexPagePath = $rootPath . '/public/admin/bundle';
+        if ($environment == 'dev') {
+            $indexPagePath .= '-dev';
+        }
+        $indexPagePath .= '/index.html';
 
-        $userController = new UserController();
-        $userController->setContainer($this->container);
-        $rolesHierarchy = $userController->getRolesHierarchy();
+        $content = $this->getIndexPageContent($indexPagePath, $request->getLocale());
+        if (!$content) {
+            throw $this->createNotFoundException();
+        }
 
-        $localeList = $this->getParameter('app.locale_list');
-        $localeList = UtilsService::stringToArray($localeList);
-
-        $settings = [
-            'filesDirUrl' => $this->getParameter('app.files_dir_url'),
-            'baseDir' => realpath($this->getParameter('kernel.root_dir').'/../..') . DIRECTORY_SEPARATOR,
-            'locale' => $this->getParameter('locale'),
-            'localeList' => $localeList,
-            'systemSettings' => $settings,
-            'rolesHierarchy' => $rolesHierarchy
-        ];
-
-        $response = $this->render('admin/homepage.html.twig', ['settings' => $settings]);
+        $response = new Response($content);
         $response->setEtag(md5($response->getContent()));
         $response->setPublic();
         $response->isNotModified($request);
@@ -66,15 +60,17 @@ class HomepageController extends Controller
     {
         $environment = $kernel->getEnvironment();
         $rootPath = realpath($this->getParameter('kernel.root_dir').'/../..');
-        $moduleTemplatePath = $rootPath . '/public/admin/bundle-' . $moduleName;
+        $indexPagePath = $rootPath . '/public/admin/bundle-' . $moduleName;
         if ($environment == 'dev') {
-            $moduleTemplatePath .= '-dev';
+            $indexPagePath .= '-dev';
         }
-        $moduleTemplatePath .= '/index.html';
-        if (!file_exists($moduleTemplatePath)) {
+        $indexPagePath .= '/index.html';
+
+        $content = $this->getIndexPageContent($indexPagePath, $request->getLocale());
+        if (!$content) {
             throw $this->createNotFoundException();
         }
-        $content = file_get_contents($moduleTemplatePath);
+
         $response = new Response($content);
         $response->setEtag(md5($response->getContent()));
         $response->setPublic();
@@ -82,4 +78,24 @@ class HomepageController extends Controller
 
         return $response;
     }
+
+    /**
+     * @param $indexPagePath
+     * @param $locale
+     * @return string
+     */
+    public function getIndexPageContent($indexPagePath, $locale)
+    {
+        if (!file_exists($indexPagePath)) {
+            return '';
+        }
+        $content = file_get_contents($indexPagePath);
+        $content = str_replace([
+            '{{locale}}', '{{timestamp}}', '{{app_name}}'
+        ], [
+            $locale, time(), $this->getParameter('app.name')
+        ], $content);
+        return $content;
+    }
+
 }

@@ -3,59 +3,7 @@
 
         <router-outlet></router-outlet>
 
-        <div class="navbar-vertical-left bg-primary active">
-            <ul>
-                <li class="nav-item" *ngFor="let menuItem of menuItems">
-                    <a class="nav-link"
-                        [routerLink]="[menuItem.route]"
-                        routerLinkActive="active"
-                        [ngbTooltip]="menuItem.title | translate"
-                        placement="right"
-                        tooltipClass="tooltip-left-blue">
-                        <i class="item-icon" [ngClass]="menuItem.icon"></i>
-                    </a>
-                </li>
-            </ul>
-
-            <ul class="navbar-vertical-left-bottom">
-
-                <li class="nav-item">
-                    <a class="nav-link" [href]="baseUrl" target="_blank" [ngbTooltip]="'PREVIEW_SITE' | translate" placement="right" tooltipClass="tooltip-left-blue">
-                        <i class="icon-home item-icon"></i>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{baseUrl}}logout" [ngbTooltip]="'LOGOUT' | translate" placement="right" tooltipClass="tooltip-left-blue">
-                        <i class="icon-power item-icon"></i>
-                    </a>
-                </li>
-                <li>
-                    <div class="py-1 text-center small bg-black-20 text-black-50">
-                        <span class="small">{{ appVersion }}</span>
-                    </div>
-                </li>
-            </ul>
-        </div>
-
-        <div class="left-overlay-menu" #navbarLeftOverlay>
-            <ul>
-                <li class="nav-item" *ngIf="isFileManagerEnabled">
-                    <a class="nav-link nav-link-circle" href="#"
-                       [ngClass]="{'active': isFileManagerActive}"
-                       [ngbTooltip]="'FILE_MANAGER' | translate"
-                       placement="right"
-                       tooltipClass="tooltip-left-blue tooltip-offset-left"
-                       (click)="fileManagerToggle($event)">
-                            <i class="icon-keyboard_arrow_left" style="margin-left:-5px;" *ngIf="isFileManagerActive"></i>
-                            <i class="icon-folder item-icon"></i>
-                    </a>
-                </li>
-            </ul>
-        </div>
-
-        <ng-container *ngIf="isFileManagerEnabled">
-            <app-file-manager #fileManager></app-file-manager>
-        </ng-container>
+        <app-navbar></app-navbar>
 
     </div>
 </div>

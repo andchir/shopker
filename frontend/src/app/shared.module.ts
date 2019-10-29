@@ -1,12 +1,12 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {BrowserModule} from '@angular/platform-browser';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
+import {RouterModule} from '@angular/router';
 
 import {NgbModule, NgbActiveModal, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import {EditorModule, CalendarModule, ChipsModule, ColorPickerModule, TreeModule, ChartModule} from 'primeng/primeng';
-import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import {TranslateModule} from '@ngx-translate/core';
 import {DragulaModule} from 'ng2-dragula';
 import {ToastModule} from 'primeng/toast';
 import {ClipboardModule} from 'ngx-clipboard';
@@ -18,6 +18,10 @@ import {InputFieldRenderComponent} from './render-input-field';
 import {OutputFieldComponent} from './render-output-field';
 import {SelectParentDropdownComponent} from './catalog/select-parent-dropdown.component';
 import {FileWidgetComponent} from './components/file-widget.component';
+import {NavbarMainComponent} from './components/navbar-main.component';
+import {NotFoundComponent} from './not-found.component';
+import {ModuleLoaderComponent} from './moduleloader/moduleloader.component';
+import {FileManagerComponent} from './components/file-manager.component';
 
 import {FilterFieldByGroupPipe} from './pipes/filter-field-by-group.pipe';
 import {DateFromObjectPipe} from './pipes/date-from-object.pipe';
@@ -27,12 +31,16 @@ import {FilterArrayPipe} from './pipes/filter-array-pipe';
 
 const components = [
     TableComponent,
+    NotFoundComponent,
+    ModuleLoaderComponent,
     TranslationsComponent,
     SortingComponent,
-    FileWidgetComponent,
     InputFieldRenderComponent,
     OutputFieldComponent,
-    SelectParentDropdownComponent
+    SelectParentDropdownComponent,
+    FileWidgetComponent,
+    FileManagerComponent,
+    NavbarMainComponent
 ];
 
 @NgModule({
@@ -41,6 +49,8 @@ const components = [
         FormsModule,
         ReactiveFormsModule,
         HttpClientModule,
+        RouterModule,
+
         EditorModule,
         CalendarModule,
         ChipsModule,

@@ -21,6 +21,11 @@ export class ModalFileUploadContentComponent {
         if (event) {
             event.preventDefault();
         }
+        this.messageText = '';
+        if (this.filesWidget.filesRaw.length === 0) {
+            this.messageText = 'PLEASE_SELECT_FILE';
+            return;
+        }
         this.activeModal.close(this.filesWidget.filesRaw);
     }
 

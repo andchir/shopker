@@ -4,15 +4,11 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
-import {AppRoutingModule} from './app-routing.module';
 import {TranslateCustomLoader} from './services/translateLoader';
 
+import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {NotFoundComponent} from './not-found.component';
-import {ModuleLoaderComponent} from './moduleloader/moduleloader.component';
 import {SharedModule} from './shared.module';
-import {AppSettings} from './services/app-settings.service';
-import {FileManagerComponent} from './components/file-manager.component';
 import {ModalFileContentComponent} from './components/modal-file.component';
 
 import {
@@ -34,21 +30,18 @@ registerLocaleData(localeRu, 'ru-RU');
         BrowserModule,
         BrowserAnimationsModule,
         SharedModule,
+        AppRoutingModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
                 useClass: TranslateCustomLoader
             }
-        }),
-        AppRoutingModule,
+        })
     ],
     declarations: [
         AppComponent,
-        NotFoundComponent,
-        ModuleLoaderComponent,
         AlertModalContentComponent,
         ConfirmModalContentComponent,
-        FileManagerComponent,
         ModalFileContentComponent,
         ModalConfirmTextComponent,
         ModalFileUploadContentComponent
@@ -62,7 +55,7 @@ registerLocaleData(localeRu, 'ru-RU');
         ModalFileUploadContentComponent
     ],
     exports: [
-
+        SharedModule
     ],
     bootstrap: [AppComponent]
 })

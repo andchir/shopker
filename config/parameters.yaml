@@ -1,7 +1,7 @@
 parameters:
     locale: 'en'
     app.name: Shopkeeper
-    app.version: '4.1.0'
+    app.version: '4.1.1'
     app.web_dir_path: '%kernel.root_dir%/../../public'
     app.files_dir_path: '%app.web_dir_path%/uploads'
     app.locale_list: ''

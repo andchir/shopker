@@ -2,12 +2,13 @@
     <ul>
         <li class="nav-item" *ngFor="let menuItem of menuItems">
             <a class="nav-link"
-                [routerLink]="[menuItem.route]"
-                routerLinkActive="active"
+                [ngClass]="{'active': menuItem.isActive}"
+                href="#{{menuItem.route}}"
                 [ngbTooltip]="menuItem.title | translate"
                 placement="right"
-                tooltipClass="tooltip-left-blue">
-                <i class="item-icon" [ngClass]="menuItem.icon"></i>
+                tooltipClass="tooltip-left-blue"
+                (click)="navigateRoute(menuItem, $event)">
+                    <i class="item-icon" [ngClass]="menuItem.icon"></i>
             </a>
         </li>
     </ul>

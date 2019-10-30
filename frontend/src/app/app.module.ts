@@ -55,7 +55,7 @@ registerLocaleData(localeRu, 'ru-RU');
         ModalFileUploadContentComponent
     ],
     exports: [
-        SharedModule
+
     ],
     bootstrap: [AppComponent]
 })

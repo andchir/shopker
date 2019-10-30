@@ -1,5 +1,7 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, OnDestroy, ViewChild} from '@angular/core';
 
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 import {cloneDeep} from 'lodash';
 import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateService} from '@ngx-translate/core';
@@ -15,7 +17,7 @@ import {ModalFileUploadContentComponent} from './modal-file-upload.component';
     templateUrl: 'templates/file-manager.component.html',
     providers: [FileManagerService]
 })
-export class FileManagerComponent {
+export class FileManagerComponent implements OnDestroy {
 
     @ViewChild('container', { static: true }) container;
     modalRef: NgbModalRef;
@@ -24,6 +26,7 @@ export class FileManagerComponent {
     loading = false;
     currentPath = '';
     errorMessage = '';
+    closed$ = new Subject<void>();
 
     constructor(
         public dataService: FileManagerService,
@@ -38,13 +41,17 @@ export class FileManagerComponent {
         this.files.splice(0, this.files.length);
         this.loading = true;
         this.dataService.getList({path: this.currentPath})
-            .subscribe((res) => {
-                this.loading = false;
-                this.files = res;
-            }, (err) => {
-                this.loading = false;
-                if (err['error']) {
-                    this.errorMessage = err['error'];
+            .pipe(takeUntil(this.closed$))
+            .subscribe({
+                next: (res) => {
+                    this.loading = false;
+                    this.files = res;
+                },
+                error: (err) => {
+                    this.loading = false;
+                    if (err['error']) {
+                        this.errorMessage = err['error'];
+                    }
                 }
             });
     }
@@ -77,6 +84,7 @@ export class FileManagerComponent {
                 case 'delete':
                     this.loading = true;
                     this.dataService.deleteFile(this.currentPath, currentFile)
+                        .pipe(takeUntil(this.closed$))
                         .subscribe((res) => {
                             this.setActive();
                         }, (err) => {
@@ -90,6 +98,7 @@ export class FileManagerComponent {
                 case 'rename':
                     this.loading = true;
                     this.dataService.rename(this.getFilePath(currentFile), currentFile.title, 'file')
+                        .pipe(takeUntil(this.closed$))
                         .subscribe((res) => {
                             this.setActive();
                         }, (err) => {
@@ -119,6 +128,7 @@ export class FileManagerComponent {
             if (result) {
                 this.loading = true;
                 this.dataService.createFolder(this.currentPath, result)
+                    .pipe(takeUntil(this.closed$))
                     .subscribe((res) => {
                         this.getFilesList();
                     }, (err) => {
@@ -179,6 +189,7 @@ export class FileManagerComponent {
             if (result && result !== folderName) {
                 this.loading = true;
                 this.dataService.rename(this.currentPath, result)
+                    .pipe(takeUntil(this.closed$))
                     .subscribe((res) => {
                         this.openDirPrevious();
                     }, (err) => {
@@ -210,6 +221,7 @@ export class FileManagerComponent {
                     data[`file${index}`] = file;
                 });
                 this.dataService.postFormData(this.dataService.getFormData(data), this.currentPath)
+                    .pipe(takeUntil(this.closed$))
                     .subscribe((res) => {
                         this.loading = false;
                         this.setActive();
@@ -266,6 +278,7 @@ export class FileManagerComponent {
     }
 
     setUnactive(): void {
+        this.closed$.next();
         this.isActive = false;
         this.container.nativeElement.classList.remove('active');
     }
@@ -277,5 +290,10 @@ export class FileManagerComponent {
     getImageThumbnail(file: FileModel, filterSet = 'thumb_small'): string {
         const src = this.getFilePath(file);
         return `/media/cache/resolve/${filterSet}/${src}`;
+    }
+
+    ngOnDestroy(): void {
+        this.closed$.next();
+        this.closed$.complete();
     }
 }

@@ -1,5 +1,8 @@
-import {Input, OnInit} from '@angular/core';
+import {Input, OnDestroy, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 import {NgbAccordion, NgbActiveModal, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import {cloneDeep} from 'lodash';
 import {TranslateService} from '@ngx-translate/core';
@@ -9,7 +12,7 @@ import {DataService} from './services/data-service.abstract';
 import {FileModel} from './models/file.model';
 import {FormFieldInterface, FormFieldOptionsInterface} from './models/form-field.interface';
 
-export abstract class ModalContentAbstractComponent<M> implements OnInit {
+export abstract class ModalContentAbstractComponent<M> implements OnInit, OnDestroy {
     @Input() modalTitle: string;
     @Input() itemId: number | null;
     @Input() isItemCopy: boolean;
@@ -32,6 +35,7 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
     localeFieldsAllowed: string[] = [];
     localePreviousValues: {[fieldName: string]: string} = {};
     closeReason = 'canceled';
+    destroyed$ = new Subject<void>();
 
     constructor(
         public fb: FormBuilder,
@@ -76,18 +80,22 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
         this.loading = true;
         return new Promise((resolve, reject) => {
             this.dataService.getItem(this.itemId)
-                .subscribe(data => {
-                    if (this.isItemCopy) {
-                        data.id = null;
-                        data[this.getSystemFieldName()] = '';
+                .pipe(takeUntil(this.destroyed$))
+                .subscribe({
+                    next: (data) => {
+                        if (this.isItemCopy) {
+                            data.id = null;
+                            data[this.getSystemFieldName()] = '';
+                        }
+                        this.model = data as M;
+                        this.loading = false;
+                        resolve(data as M);
+                    },
+                    error: (err) => {
+                        this.errorMessage = err.error || this.getLangString('ERROR');
+                        this.loading = false;
+                        reject(err);
                     }
-                    this.model = data as M;
-                    this.loading = false;
-                    resolve(data as M);
-                }, (err) => {
-                    this.errorMessage = err.error || 'Error.';
-                    this.loading = false;
-                    reject(err);
                 });
         });
     }
@@ -97,7 +105,10 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
         const controls = this.buildControls(this.formFields, 'model');
         this.form = this.fb.group(controls);
         this.form.valueChanges
-            .subscribe((value: any) => this.onValueChanged('form', '', value));
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe({
+                next: (value: any) => this.onValueChanged('form', '', value)
+            });
     }
 
     /** Build controls */
@@ -129,6 +140,7 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
         }
         if (fieldOptions.validators.indexOf(Validators.required) > -1) {
             this.translateService.get(fieldOptions.fieldLabel)
+                .pipe(takeUntil(this.destroyed$))
                 .subscribe((fieldLabel: string) => {
                     this.translateService.get('FIELD_REQUIRED', {name: fieldLabel})
                         .subscribe((res: string) => {
@@ -159,7 +171,7 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
                     if (this.validationMessages[keyPrefix + fieldName][key]) {
                         this.formErrors[keyPrefix + fieldName] += this.validationMessages[keyPrefix + fieldName][key] + ' ';
                     } else {
-                        this.formErrors[keyPrefix + fieldName] += 'Error. ';
+                        this.formErrors[keyPrefix + fieldName] += this.getLangString('ERROR') + ' ';
                     }
                 }
             }
@@ -312,14 +324,17 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
         this.appendFormData(formData);
 
         this.dataService.postFormData(formData)
-            .subscribe(() => {
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe({
+                next: () => {
                     this.closeModal();
                 },
-                err => {
-                    this.errorMessage = err.error || 'Error.';
+                error: (err) => {
+                    this.errorMessage = err.error || this.getLangString('ERROR');
                     this.submitted = false;
-                    this.loading = false;
-                });
+                    this.loading = false
+                }
+            });
     }
 
     save(autoClose = false): void {
@@ -334,6 +349,7 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
 
         this.loading = true;
         this.saveRequest()
+            .pipe(takeUntil(this.destroyed$))
             .subscribe({
                 next: (res) => {
                     if (Object.keys(this.files).length > 0) {
@@ -352,10 +368,15 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit {
                     }
                 },
                 error: (err) => {
-                    this.errorMessage = err.error || 'Error.';
+                    this.errorMessage = err.error || this.getLangString('ERROR');
                     this.loading = false;
                     this.submitted = false;
                 }
             });
+    }
+
+    ngOnDestroy(): void {
+        this.destroyed$.next();
+        this.destroyed$.complete();
     }
 }

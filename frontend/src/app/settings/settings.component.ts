@@ -1,6 +1,8 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
 
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 import {cloneDeep, findIndex, cloneDeepWith, extend} from 'lodash';
 import {MessageService} from 'primeng/api';
 
@@ -61,6 +63,7 @@ export class SettingsComponent implements OnInit {
         ),
         SETTINGS_COMPOSER_PACKAGES: new SettingsData(false, true, [], null),
     };
+    destroyed$ = new Subject<void>();
 
     constructor(
         private messageService: MessageService,
@@ -78,6 +81,7 @@ export class SettingsComponent implements OnInit {
 
     getSettings(): void {
         this.settingsService.getList()
+            .pipe(takeUntil(this.destroyed$))
             .subscribe((res) => {
                 if (res['SETTINGS_MAIN']) {
                     this.settings.SETTINGS_MAIN.values = res['SETTINGS_MAIN'];
@@ -133,29 +137,31 @@ export class SettingsComponent implements OnInit {
         const data = this.settings[groupName].values;
         this.settings[groupName].loading = true;
         this.settingsService.updateGroup(groupName, data)
-            .subscribe((res: any) => {
-
-                this.messageService.add({
-                    key: 'message',
-                    severity: 'success',
-                    summary: this.getLangString('MESSAGE'),
-                    detail: this.getLangString('DATA_SAVED_SUCCESSFULLY')
-                });
-                this.settings[groupName].defaultValues = res;
-                this.settings[groupName].loading = false;
-                this.settings[groupName].changed = false;
-                this.pageReload();
-
-            }, (err) => {
-                if (err['error']) {
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe({
+                next: (res: any) => {
                     this.messageService.add({
                         key: 'message',
-                        severity: 'error',
-                        summary: this.getLangString('ERROR'),
-                        detail: err['error']
+                        severity: 'success',
+                        summary: this.getLangString('MESSAGE'),
+                        detail: this.getLangString('DATA_SAVED_SUCCESSFULLY')
                     });
+                    this.settings[groupName].defaultValues = res;
+                    this.settings[groupName].loading = false;
+                    this.settings[groupName].changed = false;
+                    this.pageReload();
+                },
+                error: (err) => {
+                    if (err['error']) {
+                        this.messageService.add({
+                            key: 'message',
+                            severity: 'error',
+                            summary: this.getLangString('ERROR'),
+                            detail: err['error']
+                        });
+                    }
+                    this.settings[groupName].loading = false;
                 }
-                this.settings[groupName].loading = false;
             });
     }
 
@@ -211,44 +217,52 @@ export class SettingsComponent implements OnInit {
     runActionPost(actionName: string): void {
         this.loading = true;
         this.settingsService.runActionPost(actionName)
-            .subscribe((res) => {
-                this.loading = false;
-                if (['update_internationalization'].indexOf(actionName) > -1) {
-                    this.pageReload();
-                } else {
-                    if (res && res.success) {
-                        const message = this.getActionSuccessMessage(actionName);
-                        if (message) {
-                            this.messageService.add({
-                                key: 'message',
-                                severity: 'success',
-                                summary: this.getLangString('MESSAGE'),
-                                detail: message
-                            });
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe({
+                next: (res) => {
+                    this.loading = false;
+                    if (['update_internationalization'].indexOf(actionName) > -1) {
+                        this.pageReload();
+                    } else {
+                        if (res && res.success) {
+                            const message = this.getActionSuccessMessage(actionName);
+                            if (message) {
+                                this.messageService.add({
+                                    key: 'message',
+                                    severity: 'success',
+                                    summary: this.getLangString('MESSAGE'),
+                                    detail: message
+                                });
+                            }
                         }
                     }
+                },
+                error: (err) => {
+                    if (err.error) {
+                        this.messageService.add({
+                            key: 'message',
+                            severity: 'error',
+                            summary: this.getLangString('ERROR'),
+                            detail: err.error
+                        });
+                    }
+                    this.loading = false;
                 }
-            }, (err) => {
-                if (err['error']) {
-                    this.messageService.add({
-                        key: 'message',
-                        severity: 'error',
-                        summary: this.getLangString('ERROR'),
-                        detail: err['error']
-                    });
-                }
-                this.loading = false;
             });
     }
 
     getComposerPackages(): void {
         this.settings.SETTINGS_COMPOSER_PACKAGES.loading = true;
         this.settingsService.getComposerPackagesList()
-            .subscribe((res) => {
-                this.composerPackages = res as ComposerPackage[];
-                this.settings.SETTINGS_COMPOSER_PACKAGES.loading = false;
-            }, (err) => {
-                this.settings.SETTINGS_COMPOSER_PACKAGES.loading = false;
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe({
+                next: (res) => {
+                    this.composerPackages = res as ComposerPackage[];
+                    this.settings.SETTINGS_COMPOSER_PACKAGES.loading = false;
+                },
+                error: (err) => {
+                    this.settings.SETTINGS_COMPOSER_PACKAGES.loading = false;
+                }
             });
     }
 
@@ -261,20 +275,24 @@ export class SettingsComponent implements OnInit {
         }
         this.settings.SETTINGS_COMPOSER_PACKAGES.loading = true;
         this.settingsService.composerRequirePackage(this.composerPackageName, this.composerPackageVersion)
-            .subscribe((res) => {
-                this.composerPackageName = '';
-                this.composerPackageVersion = '';
-                this.settings.SETTINGS_COMPOSER_PACKAGES.loading = false;
-            }, (err) => {
-                if (err['error']) {
-                    this.messageService.add({
-                        key: 'message',
-                        severity: 'error',
-                        summary: this.getLangString('ERROR'),
-                        detail: err['error']
-                    });
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe({
+                next: (res) => {
+                    this.composerPackageName = '';
+                    this.composerPackageVersion = '';
+                    this.settings.SETTINGS_COMPOSER_PACKAGES.loading = false;
+                },
+                error: (err) => {
+                    if (err.error) {
+                        this.messageService.add({
+                            key: 'message',
+                            severity: 'error',
+                            summary: this.getLangString('ERROR'),
+                            detail: err.error
+                        });
+                    }
+                    this.settings.SETTINGS_COMPOSER_PACKAGES.loading = false;
                 }
-                this.settings.SETTINGS_COMPOSER_PACKAGES.loading = false;
             });
     }
 

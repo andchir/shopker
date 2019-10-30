@@ -1,4 +1,7 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {TemplatesEditService} from './services/templates-edit.service';
@@ -17,7 +20,7 @@ import '../../ace-builds/webpack-resolver';
     templateUrl: './templates/modal-template.html',
     providers: [TemplatesEditService]
 })
-export class ModalTemplateEditComponent implements OnInit {
+export class ModalTemplateEditComponent implements OnInit, OnDestroy {
 
     @Input() modalTitle: string;
     @Input() template: Template;
@@ -32,6 +35,7 @@ export class ModalTemplateEditComponent implements OnInit {
     loading = false;
     isPathReadOnly = false;
     closeReason = 'canceled';
+    destroyed$ = new Subject<void>();
 
     constructor(
         private dataService: TemplatesEditService,
@@ -84,6 +88,7 @@ export class ModalTemplateEditComponent implements OnInit {
             fileType = this.file.type;
         }
         this.dataService.getItemContent(filePath, fileType)
+            .pipe(takeUntil(this.destroyed$))
             .subscribe({
                 next: (res) => {
                     if (res['content']) {
@@ -127,6 +132,7 @@ export class ModalTemplateEditComponent implements OnInit {
         this.model.content = ace.edit('editor').getValue();
 
         this.dataService.saveContent(this.model)
+            .pipe(takeUntil(this.destroyed$))
             .subscribe({
                 next: (res) => {
                     if (autoClose) {
@@ -146,4 +152,8 @@ export class ModalTemplateEditComponent implements OnInit {
             });
     }
 
+    ngOnDestroy(): void {
+        this.destroyed$.next();
+        this.destroyed$.complete();
+    }
 }

@@ -1,12 +1,15 @@
-import {OnInit, ViewChild} from '@angular/core';
+import {OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {NgbModal, NgbActiveModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateService} from '@ngx-translate/core';
+
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 import {QueryOptions} from './models/query-options';
 import {DataService} from './services/data-service.abstract';
 import {AlertModalContentComponent, ConfirmModalContentComponent} from './components/modal-confirm-text.component';
 
-export abstract class PageTableAbstractComponent<M> implements OnInit {
+export abstract class PageTableAbstractComponent<M> implements OnInit, OnDestroy {
 
     static title = '';
     @ViewChild('table', { static: true }) table;
@@ -16,8 +19,9 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
     loading = false;
     selectedIds: number[] = [];
     collectionSize = 0;
-    queryOptions = new QueryOptions('name', 'asc', 1, 10, 0, 0);
     searchTimer: any;
+    queryOptions = new QueryOptions('name', 'asc', 1, 10, 0, 0);
+    destroyed$ = new Subject<void>();
 
     abstract getModalContent();
 
@@ -191,21 +195,26 @@ export abstract class PageTableAbstractComponent<M> implements OnInit {
     getList(): void {
         this.loading = true;
         this.dataService.getListPage(this.queryOptions)
-            .subscribe(
-                data => {
-                    this.items = data.items;
-                    this.collectionSize = data.total;
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe({
+                next: (res) => {
+                    this.items = res.items;
+                    this.collectionSize = res.total;
                     this.loading = false;
                 },
-                err => {
+                error: (err) => {
                     this.items = [];
                     this.collectionSize = 0;
-                    if (err['error']) {
-                        this.showAlert(err['error']);
+                    if (err.error) {
+                        this.showAlert(err.error);
                     }
                     this.loading = false;
                 }
-            );
+            });
     }
 
+    ngOnDestroy(): void {
+        this.destroyed$.next();
+        this.destroyed$.complete();
+    }
 }

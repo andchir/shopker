@@ -4,7 +4,6 @@ import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {NgbAccordion, NgbActiveModal, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
-import {cloneDeep} from 'lodash';
 import {TranslateService} from '@ngx-translate/core';
 
 import {SystemNameService} from './services/system-name.service';
@@ -12,6 +11,9 @@ import {DataService} from './services/data-service.abstract';
 import {FileModel} from './models/file.model';
 import {FormFieldInterface, FormFieldOptionsInterface} from './models/form-field.interface';
 
+/**
+ * @deprecated since version 4.1.1. Use AppModalContentAbstractComponent instead.
+ */
 export abstract class ModalContentAbstractComponent<M> implements OnInit, OnDestroy {
     @Input() modalTitle: string;
     @Input() itemId: number | null;

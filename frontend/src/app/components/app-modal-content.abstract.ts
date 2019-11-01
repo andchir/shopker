@@ -1,8 +1,10 @@
-import {OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
 
-import {Subject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import {TranslateService} from '@ngx-translate/core';
 
 import {SimpleEntity} from '../models/simple-entity.interface';
 import {FormFieldsErrors, FormFieldsOptions} from '../models/form-fields-options.interface';
@@ -10,7 +12,12 @@ import {DataService} from '../services/data-service.abstract';
 
 export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> implements OnInit, OnDestroy {
 
+    @Input() modalTitle: string;
+    @Input() itemId: number | null;
+    @Input() isItemCopy: boolean;
+    @Input() isEditMode: boolean;
     @ViewChild('formEl', {static: false}) formEl;
+
     private _formFieldsErrors: FormFieldsErrors = {};
     form: FormGroup;
     submitted = false;
@@ -22,7 +29,7 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
     arrayFields: {[key: string]: any} = {};
     destroyed$ = new Subject<void>();
 
-    set formFieldsErrors(formFieldsErrors: FormFieldsErrors) {
+    set formErrors(formFieldsErrors: FormFieldsErrors) {
         for (const key in formFieldsErrors) {
             if (formFieldsErrors.hasOwnProperty(key)) {
                 const control = this.getControl(null, key);
@@ -34,28 +41,78 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
         this._formFieldsErrors = formFieldsErrors;
     }
 
-    get formFieldsErrors() {
+    get formErrors() {
         return this._formFieldsErrors;
     }
 
     constructor(
         public fb: FormBuilder,
+        public activeModal: NgbActiveModal,
+        public translateService: TranslateService,
         public dataService: DataService<T>
     ) {}
 
     ngOnInit(): void {
+        this.onBeforeInit();
         this.buildForm();
+        if (this.isEditMode || this.isItemCopy) {
+            this.getModelData().then(() => {
+                this.onAfterGetData();
+            });
+        } else {
+            this.onAfterGetData();
+        }
+        this.onAfterInit();
     }
+
+    onBeforeInit(): void {}
+    onAfterInit(): void {}
 
     onAfterGetData(): void {
         this.buildControls(this.formFields);
+    }
+
+    getSystemFieldName(): string {
+        return '';
+    }
+
+    getLangString(value: string): string {
+        const translations = this.translateService.store.translations[this.translateService.currentLang];
+        return translations[value] || value;
+    }
+
+    getModelData(): Promise<T> {
+        this.loading = true;
+        return new Promise((resolve, reject) => {
+            this.dataService.getItem(this.itemId)
+                .pipe(takeUntil(this.destroyed$))
+                .subscribe({
+                    next: (data: T) => {
+                        if (this.isItemCopy) {
+                            data.id = null;
+                            const systemFieldName = this.getSystemFieldName();
+                            if (systemFieldName) {
+                                data[systemFieldName] = '';
+                            }
+                        }
+                        Object.assign(this.model, data);
+                        this.loading = false;
+                        resolve(data as T);
+                    },
+                    error: (err) => {
+                        this.errorMessage = err.error || this.getLangString('ERROR');
+                        this.loading = false;
+                        reject(err);
+                    }
+                });
+        });
     }
 
     buildForm(): void {
         this.form = this.fb.group(this.buildControls(this.formFields));
         this.form.valueChanges
             .pipe(takeUntil(this.destroyed$))
-            .subscribe(() => this.onValueChanged('form'));
+            .subscribe(() => this.onValueChanged());
     }
 
     buildControls(options: FormFieldsOptions[], modelName = 'model'): { [k: string]: FormControl; } {
@@ -100,12 +157,12 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
         return controls;
     }
 
-    onValueChanged(formName?: string): void {
+    onValueChanged(formName = 'form'): void {
         if (!this[formName]) {
             return;
         }
         if (this[formName].valid) {
-            // this.alertsClear();
+            this.errorMessage = '';
         }
     }
 
@@ -135,6 +192,98 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
             return this.form.get(fieldName);
         }
         return this.form.get(opt.name);
+    }
+
+    focusFormError(): void {
+        setTimeout(() => {
+            if (this.formEl.nativeElement.querySelector('.form-control.is-invalid')) {
+                this.formEl.nativeElement.querySelector('.form-control.is-invalid').focus();
+            }
+        }, 1);
+    }
+
+    formGroupMarkTouched(formGroup: FormGroup): void {
+        Object.keys(formGroup.controls).forEach(key => {
+            formGroup.controls[key].markAsTouched();
+            if (formGroup.controls[key] instanceof FormArray) {
+                Array.from((this.form.controls[key] as FormArray).controls).forEach((group: FormGroup) => {
+                    this.formGroupMarkTouched(group);
+                });
+            }
+        });
+    }
+
+    close(reason = 'close', event?: MouseEvent) {
+        if (event) {
+            event.preventDefault();
+        }
+        this.activeModal.dismiss(reason);
+    }
+
+    getSaveRequest(data): Observable<T> {
+        // if (Object.keys(this.files).length > 0) {
+        //     return this.dataService.postFormData(this.dataService.createFormData(data));
+        // } else
+        if (data.id) {
+            return this.dataService.update(data);
+        } else {
+            return this.dataService.create(data);
+        }
+    }
+
+    getFormData(): T {
+        const data = this.form.value;
+        data.id = this.model.id || 0;
+        for (const key in this.files) {
+            if (this.files.hasOwnProperty(key)) {
+                data[key] = this.files[key];
+            }
+        }
+        return data as T;
+    }
+
+    save(autoClose = false, event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.onSubmit(autoClose);
+    }
+
+    onSubmit(autoClose = false): void {
+        this.formGroupMarkTouched(this.form);
+        if (!this.form.valid) {
+            this.errorMessage = this.getLangString('PLEASE_FIX_FORM_ERRORS');
+            this.focusFormError();
+            return;
+        }
+        this.errorMessage = '';
+        this.loading = true;
+        this.submitted = true;
+
+        const data = this.getFormData();
+
+        this.getSaveRequest(data)
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe({
+                next: (res) => {
+                    if (autoClose) {
+                        this.close('submit');
+                    }
+                    this.loading = false;
+                    this.submitted = false;
+                },
+                error: (err) => {
+                    if (err.error) {
+                        this.errorMessage = err.error;
+                    }
+                    if (err.errors) {
+                        this.formErrors = err.errors;
+                        this.errorMessage = this.getLangString('PLEASE_FIX_FORM_ERRORS');
+                    }
+                    this.loading = false;
+                    this.submitted = false;
+                }
+            });
     }
 
     ngOnDestroy(): void {

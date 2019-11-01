@@ -120,6 +120,7 @@ var APP_LANG = {
     "PRICE_TOTAL": "Total",
     "PRINT": "Print",
     "PLEASE_SELECT_FILE": "Please select a file.",
+    "PLEASE_FIX_FORM_ERRORS": "Please fix form errors.",
     "QUANTITY": "Quantity",
     "REFRESH": "Refresh",
     "REMOVE": "Remove",

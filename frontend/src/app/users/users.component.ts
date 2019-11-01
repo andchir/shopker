@@ -1,7 +1,10 @@
-import {Component, OnInit, Input, ViewChild, Injectable, ElementRef} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import {NgbModal, NgbActiveModal, NgbModalRef, NgbPopover, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
+import {FormBuilder, Validators} from '@angular/forms';
+
+import {Observable, Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateService} from '@ngx-translate/core';
 
 import {UserOption, User} from './models/user.model';
@@ -13,8 +16,81 @@ import {ModalContentAbstractComponent} from '../modal.abstract';
 import {AppSettings} from '../services/app-settings.service';
 import {QueryOptions} from '../models/query-options';
 import {FormFieldInterface} from '../models/form-field.interface';
+import {AppModalContentAbstractComponent} from '../components/app-modal-content.abstract';
 
 @Component({
+    selector: 'app-modal-user',
+    templateUrl: './templates/modal-user.html',
+    providers: []
+})
+export class ModalUserContentComponent extends AppModalContentAbstractComponent<User> {
+
+    userRoles: {[key: string]: string}[] = [];
+    baseUrl: string;
+    allowImpersonation = false;
+
+    model = new User(0, '', '', [], true, []);
+    formFields = [
+        {
+            name: 'email',
+            validators: [Validators.required]
+        },
+        {
+            name: 'fullName',
+            validators: [Validators.required]
+        },
+        {
+            name: 'phone',
+            validators: []
+        },
+        {
+            name: 'role',
+            validators: [Validators.required]
+        },
+        {
+            name: 'isActive',
+            validators: []
+        },
+        {
+            name: 'password',
+            validators: []
+        },
+        {
+            name: 'confirmPassword',
+            validators: []
+        }
+    ];
+
+    constructor(
+        public fb: FormBuilder,
+        public activeModal: NgbActiveModal,
+        public translateService: TranslateService,
+        public dataService: UsersService
+    ) {
+        super(fb, activeModal, translateService, dataService);
+    }
+
+    onBeforeInit(): void {
+        if (!this.isEditMode) {
+            // this.formFields.password.validators.push(Validators.required);
+            // this.formFields.confirmPassword.validators.push(Validators.required);
+        }
+        this.baseUrl = AppSettings.getBaseUrl();
+        this.getUserRoles();
+    }
+
+    getUserRoles(): void {
+        this.dataService.getRolesList()
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe((res) => {
+                if (res['roles']) {
+                    this.userRoles = res['roles'];
+                }
+            });
+    }
+}
+
+/*@Component({
     selector: 'app-modal-user',
     templateUrl: './templates/modal-user.html',
     providers: []
@@ -130,7 +206,7 @@ export class ModalUserContentComponent extends ModalContentAbstractComponent<Use
     addressFieldsDelete(index: number): void {
         this.model.options.splice(index, 1);
     }
-}
+}*/
 
 @Component({
     selector: 'app-shk-users',

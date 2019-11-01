@@ -120,6 +120,7 @@ var APP_LANG = {
     "PRICE_TOTAL": "Итого",
     "PRINT": "Печать",
     "PLEASE_SELECT_FILE": "Пожалуйста, выберите файл.",
+    "PLEASE_FIX_FORM_ERRORS": "Пожалуйста, исправьте ошибки заполнения формы.",
     "QUANTITY": "Кол-во",
     "REFRESH": "Обновить",
     "REMOVE": "Удалить",

@@ -226,13 +226,6 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
         });
     }
 
-    close(event?: MouseEvent) {
-        if (event) {
-            event.preventDefault();
-        }
-        this.activeModal.dismiss(this.closeReason);
-    }
-
     getSaveRequest(data): Observable<T> {
         // if (Object.keys(this.files).length > 0) {
         //     return this.dataService.postFormData(this.dataService.createFormData(data));
@@ -269,6 +262,20 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
         this.arrayFields[fieldName].push(this.fb.group(groupControls));
     }
 
+    closeModal(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.close(this.closeReason);
+    }
+
+    close(reason, event?: MouseEvent) {
+        if (event) {
+            event.preventDefault();
+        }
+        this.activeModal.dismiss(reason);
+    }
+
     save(autoClose = false, event?: MouseEvent): void {
         if (event) {
             event.preventDefault();
@@ -278,7 +285,7 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
 
     saveFiles(itemId: number) {
         if (Object.keys(this.files).length === 0) {
-            this.close();
+            this.close('submit');
             return;
         }
 
@@ -294,7 +301,7 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
             .pipe(takeUntil(this.destroyed$))
             .subscribe({
                 next: () => {
-                    this.close();
+                    this.close('submit');
                 },
                 error: (err) => {
                     this.errorMessage = err.error || this.getLangString('ERROR');
@@ -324,7 +331,7 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
                     if (Object.keys(this.files).length > 0) {
                         this.saveFiles(res._id || res.id);
                     } else if (autoClose) {
-                        this.close();
+                        this.close('submit');
                     }
                     this.closeReason = 'updated';
                     this.loading = false;

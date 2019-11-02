@@ -142,7 +142,6 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit, OnDest
         }
         if (fieldOptions.validators.indexOf(Validators.required) > -1) {
             this.translateService.get(fieldOptions.fieldLabel)
-                .pipe(takeUntil(this.destroyed$))
                 .subscribe((fieldLabel: string) => {
                     this.translateService.get('FIELD_REQUIRED', {name: fieldLabel})
                         .subscribe((res: string) => {

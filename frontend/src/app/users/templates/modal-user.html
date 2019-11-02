@@ -1,6 +1,6 @@
 <div class="modal-header d-block">
     <div class="d-block float-right">
-        <button type="button" class="btn btn-secondary" [disabled]="submitted" (click)="close('cancel', $event)">
+        <button type="button" class="btn btn-secondary" [disabled]="submitted" (click)="close($event)">
             <span>{{'CLOSE' | translate}}</span>
         </button>
     </div>
@@ -13,11 +13,11 @@
 
         <div class="row">
             <div class="col-lg-6">
-                <div class="form-group">
+                <div class="form-group form-group-message">
                     <label class="label-filled">
                         {{'EMAIL' | translate}}
                     </label>
-                    <input type="text" class="form-control" name="title" autocomplete="off"
+                    <input type="text" class="form-control" autocomplete="off"
                             formControlName="email"
                             [ngClass]="{'is-invalid': form.controls.email.touched && !form.controls.email.valid}">
                     <div *ngIf="formErrors.email" class="alert alert-danger">
@@ -26,11 +26,11 @@
                 </div>
             </div>
             <div class="col-lg-6">
-                <div class="form-group" [class.form-group-message]="formErrors.fullName">
+                <div class="form-group form-group-message">
                     <label class="label-filled">
                         {{'FULL_NAME' | translate}}
                     </label>
-                    <input type="text" class="form-control" name="title" autocomplete="off"
+                    <input type="text" class="form-control" autocomplete="off"
                             formControlName="fullName"
                             [ngClass]="{'is-invalid': form.controls.fullName.touched && !form.controls.fullName.valid}">
                     <div *ngIf="formErrors.fullName" class="alert alert-danger">
@@ -42,46 +42,57 @@
 
         <div class="row">
             <div class="col-lg-6">
-                <div class="form-group" [class.form-group-message]="formErrors.phone">
+                <div class="form-group form-group-message">
                     <label class="label-filled">
                         {{'PHONE' | translate}}
                     </label>
-                    <input type="text" class="form-control" name="phone" formControlName="phone" autocomplete="off">
+                    <input type="text" class="form-control" formControlName="phone" autocomplete="off">
                     <div *ngIf="formErrors.phone" class="alert alert-danger">
                         {{formErrors.phone}}
                     </div>
                 </div>
             </div>
             <div class="col-lg-6">
-                <div class="form-group" [class.form-group-message]="formErrors.role">
+                <div class="form-group form-group-message">
                     <label class="label-filled">
                         {{'ROLE' | translate}}
                     </label>
-                    <select class="form-control" name="role" formControlName="role">
-                        <option [value]="role.name" *ngFor="let role of userRoles">{{role.title}}</option>
+                    <select class="custom-select"
+                            formControlName="role"
+                            [ngClass]="{'is-invalid': form.controls.role.touched && !form.controls.role.valid}">
+                        <ng-container *ngFor="let role of userRoles$ | async">
+                            <option [value]="role.name">{{role.title}}</option>
+                        </ng-container>
                     </select>
+                    <div *ngIf="formErrors.password" class="alert alert-danger">
+                        {{formErrors.password}}
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="row">
             <div class="col-lg-6">
-                <div class="form-group" [class.form-group-message]="formErrors.password">
+                <div class="form-group form-group-message">
                     <label class="label-filled">
                         {{'PASSWORD' | translate}}
                     </label>
-                    <input type="password" class="form-control" name="password" formControlName="password" autocomplete="off">
+                    <input type="password" class="form-control" autocomplete="off"
+                           formControlName="password"
+                           [ngClass]="{'is-invalid': form.controls.password.touched && !form.controls.password.valid}">
                     <div *ngIf="formErrors.password" class="alert alert-danger">
                         {{formErrors.password}}
                     </div>
                 </div>
             </div>
             <div class="col-lg-6">
-                <div class="form-group" [class.form-group-message]="formErrors.confirmPassword">
+                <div class="form-group form-group-message">
                     <label class="label-filled">
                         {{'CONFIRM_PASSWORD' | translate}}
                     </label>
-                    <input type="password" class="form-control" name="confirmPassword" formControlName="confirmPassword" autocomplete="off">
+                    <input type="password" class="form-control" autocomplete="off"
+                           formControlName="confirmPassword"
+                           [ngClass]="{'is-invalid': form.controls.confirmPassword.touched && !form.controls.confirmPassword.valid}">
                     <div *ngIf="formErrors.confirmPassword" class="alert alert-danger">
                         {{formErrors.confirmPassword}}
                     </div>
@@ -94,7 +105,7 @@
                 <div class="form-group">
                     <div class="card card-body p-2 pl-3">
                         <div class="custom-control custom-checkbox m-0">
-                            <input type="checkbox" class="custom-control-input" id="fieldIsActive" value="1" name="isActive" formControlName="isActive">
+                            <input type="checkbox" class="custom-control-input" id="fieldIsActive" value="1" formControlName="isActive">
                             <label class="custom-control-label" for="fieldIsActive">{{'ACTIVE' | translate}}</label>
                         </div>
                     </div>
@@ -106,51 +117,59 @@
             <ngb-panel id="accordion-user-options" [title]="'OPTIONS' | translate">
                 <ng-template ngbPanelContent>
 
-                    <table class="table table-bordered mb-0">
-                        <colgroup>
-                            <col width="27%">
-                            <col width="27%">
-                            <col width="39%">
-                            <col width="7%">
-                        </colgroup>
-                        <thead>
+                    <div formArrayName="options">
+                        <table class="table table-bordered mb-0">
+                            <colgroup>
+                                <col width="27%">
+                                <col width="27%">
+                                <col width="39%">
+                                <col width="7%">
+                            </colgroup>
+                            <thead>
                             <tr>
                                 <th>{{ 'SYSTEM_NAME' | translate }}</th>
                                 <th>{{ 'NAME' | translate }}</th>
                                 <th>{{ 'VALUE' | translate }}</th>
                                 <th></th>
                             </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let option of model.options; let index=index">
+                            </thead>
+                            <tbody *ngIf="arrayFields.options">
+                            <tr [formGroupName]="i + ''" *ngFor="let option of arrayFields.options.controls; let i=index">
                                 <td>
-                                    <input type="text" class="form-control form-control-sm">
+                                    <input type="text" class="form-control form-control-sm"
+                                           formControlName="name"
+                                           [ngClass]="{'is-invalid': option.controls.name.touched && !option.controls.name.valid}">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control form-control-sm">
+                                    <input type="text" class="form-control form-control-sm"
+                                           formControlName="title"
+                                           [ngClass]="{'is-invalid': option.controls.title.touched && !option.controls.title.valid}">
                                 </td>
                                 <td class="text-center">
-                                    <input type="text" class="form-control form-control-sm">
+                                    <input type="text" class="form-control form-control-sm"
+                                           formControlName="value"
+                                           [ngClass]="{'is-invalid': option.controls.value.touched && !option.controls.value.valid}">
                                 </td>
                                 <td class="text-center">
-                                    <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'DELETE' | translate}}" (click)="addressFieldsDelete(index)">
+                                    <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'DELETE' | translate}}" (click)="arrayFieldDelete('options', i, $event)">
                                         <i class="icon-cross"></i>
                                     </button>
                                 </td>
                             </tr>
-                        </tbody>
-                        <tfoot>
+                            </tbody>
+                            <tfoot>
                             <tr class="bg-faded">
                                 <td colspan="4" class="text-center">
-                                    <button type="button" class="btn btn-secondary btn-sm" (click)="addressFieldsAdd()">
+                                    <button type="button" class="btn btn-secondary btn-sm" (click)="arrayFieldAdd('options', $event)">
                                         <i class="icon-plus"></i>
                                         &nbsp;
                                         <span>{{'ADD' | translate}}</span>
                                     </button>
                                 </td>
                             </tr>
-                        </tfoot>
-                    </table>
+                            </tfoot>
+                        </table>
+                    </div>
 
                 </ng-template>
             </ngb-panel>
@@ -175,13 +194,13 @@
                 <span>{{'SAVE_AND_CLOSE' | translate}}</span>
             </button>
             <div class="btn-group" ngbDropdown role="group" placement="top-right">
-                <button class="btn btn-success dropdown-toggle-split" ngbDropdownToggle [disabled]="submitted"></button>
+                <button type="button" class="btn btn-success dropdown-toggle-split" ngbDropdownToggle [disabled]="submitted"></button>
                 <div class="dropdown-menu" ngbDropdownMenu>
-                    <button ngbDropdownItem (click)="save(false, $event)">{{'SAVE' | translate}}</button>
+                    <button type="button" ngbDropdownItem (click)="save(false, $event)">{{'SAVE' | translate}}</button>
                 </div>
             </div>
         </div>
-        <button type="button" class="btn btn-secondary btn-wide" (click)="close('cancel', $event)">
+        <button type="button" class="btn btn-secondary btn-wide" (click)="close($event)">
             <span>{{'CLOSE' | translate}}</span>
         </button>
     </div>

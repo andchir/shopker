@@ -23,6 +23,7 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
     submitted = false;
     loading = false;
     errorMessage: string;
+    closeReason = 'canceled';
     files: {[key: string]: File} = {};
     model: T;
     formFields: FormFieldsOptions[] = [];
@@ -164,6 +165,18 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
         if (this[formName].valid) {
             this.errorMessage = '';
         }
+        const data = this[formName].value;
+        Object.keys(data).forEach((fieldName) => {
+            this.formErrors[fieldName] = '';
+            const control = this.getControl(null, fieldName);
+            if (control && !control.valid && control.errors) {
+                let message = '';
+                Object.keys(control.errors).forEach((errorKey) => {
+                    message += (message ? ' ' : '') + this.getLangString('INVALID_' + errorKey.toUpperCase());
+                });
+                this.formErrors[fieldName] = message;
+            }
+        });
     }
 
     getFormFieldByName(fieldName: string) {
@@ -184,7 +197,7 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
         });
     }
 
-    getControl(opt?: FormFieldsOptions, fieldName?: string): AbstractControl {
+    getControl(opt?: FormFieldsOptions|null, fieldName?: string): AbstractControl {
         if (!this.form) {
             return null;
         }
@@ -213,11 +226,11 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
         });
     }
 
-    close(reason = 'close', event?: MouseEvent) {
+    close(event?: MouseEvent) {
         if (event) {
             event.preventDefault();
         }
-        this.activeModal.dismiss(reason);
+        this.activeModal.dismiss(this.closeReason);
     }
 
     getSaveRequest(data): Observable<T> {
@@ -234,12 +247,26 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
     getFormData(): T {
         const data = this.form.value;
         data.id = this.model.id || 0;
-        for (const key in this.files) {
-            if (this.files.hasOwnProperty(key)) {
-                data[key] = this.files[key];
-            }
-        }
         return data as T;
+    }
+
+    arrayFieldDelete(fieldName: string, index: number, event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.arrayFields[fieldName].removeAt(index);
+    }
+
+    arrayFieldAdd(fieldName: string, event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        const formField = this.getFormFieldByName(fieldName);
+        if (!formField) {
+            return;
+        }
+        const groupControls = this.buildControls(formField.children);
+        this.arrayFields[fieldName].push(this.fb.group(groupControls));
     }
 
     save(autoClose = false, event?: MouseEvent): void {
@@ -247,6 +274,34 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
             event.preventDefault();
         }
         this.onSubmit(autoClose);
+    }
+
+    saveFiles(itemId: number) {
+        if (Object.keys(this.files).length === 0) {
+            this.close();
+            return;
+        }
+
+        const formData: FormData = new FormData();
+        for (const key in this.files) {
+            if (this.files.hasOwnProperty(key) && this.files[key] instanceof File) {
+                formData.append(key, this.files[key], this.files[key].name);
+            }
+        }
+        formData.append('itemId', String(itemId));
+
+        this.dataService.postFormData(formData)
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe({
+                next: () => {
+                    this.close();
+                },
+                error: (err) => {
+                    this.errorMessage = err.error || this.getLangString('ERROR');
+                    this.submitted = false;
+                    this.loading = false
+                }
+            });
     }
 
     onSubmit(autoClose = false): void {
@@ -266,9 +321,12 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
             .pipe(takeUntil(this.destroyed$))
             .subscribe({
                 next: (res) => {
-                    if (autoClose) {
-                        this.close('submit');
+                    if (Object.keys(this.files).length > 0) {
+                        this.saveFiles(res._id || res.id);
+                    } else if (autoClose) {
+                        this.close();
                     }
+                    this.closeReason = 'updated';
                     this.loading = false;
                     this.submitted = false;
                 },
@@ -284,6 +342,15 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
                     this.submitted = false;
                 }
             });
+    }
+
+    emailValidator(control: FormControl): { [s: string]: boolean } {
+        const EMAIL_REGEXP = /\S+@\S+\.\S+/;
+        if (!control.value) {
+            return {required: true};
+        } else if (!EMAIL_REGEXP.test(control.value)) {
+            return {email: true};
+        }
     }
 
     ngOnDestroy(): void {

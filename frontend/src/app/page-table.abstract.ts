@@ -73,7 +73,7 @@ export abstract class PageTableAbstractComponent<M> implements OnInit, OnDestroy
             this.getList();
         }, (reason) => {
             this.onModalClose(reason);
-            if (reason && reason === 'updated') {
+            if (reason && ['submit', 'updated'].indexOf(reason) > -1) {
                 this.getList();
             }
         });

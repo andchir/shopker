@@ -81,8 +81,7 @@ class UserController extends StorageControllerAbstract
             $item = new User();
         }
 
-        if ($currentUser
-            && $currentUser->getId() == $item->getId()
+        if ($currentUser->getId() == $item->getId()
             && $currentUser->getIsActive() && empty($data['isActive'])) {
                 return $this->setError($translator->trans('You can not block yourself.', [], 'validators'));
         }
@@ -91,8 +90,11 @@ class UserController extends StorageControllerAbstract
             ->setEmail($data['email'])
             ->setFullName($data['fullName'])
             ->setPhone($data['phone'])
-            ->setIsActive(!empty($data['isActive']))
-            ->setRoles([$data['role']]);
+            ->setIsActive(!empty($data['isActive']));
+
+        if (isset($data['role']) && $currentUser->getId() !== $item->getId()) {
+            $item->setRoles([$data['role']]);
+        }
 
         // Set / update password
         if (!empty($data['password'])) {

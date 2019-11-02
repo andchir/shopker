@@ -74,6 +74,8 @@ var APP_LANG = {
     "FILE_MANAGER": "File manager",
     "FILE_PATH_COPIED": "File path successfully copied to clipboard.",
     "FILE_SIZE": "File size",
+    "INVALID_REQUIRED": "Required.",
+    "INVALID_EMAIL": "Invalid email address.",
     "FOLDER_NAME": "Folder name",
     "FORM_RESET": "Reset",
     "FULL_NAME": "Full name",

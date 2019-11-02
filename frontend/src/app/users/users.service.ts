@@ -15,7 +15,7 @@ export class UsersService extends DataService<User> {
         this.setRequestUrl('/admin/users');
     }
 
-    getRolesList(): Observable<any[]> {
+    getRolesList(): Observable<{roles: any[]}> {
         const url = this.getRequestUrl() + '/roles';
         return this.http.get<any[]>(url, {headers: this.headers})
             .pipe(

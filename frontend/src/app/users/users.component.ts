@@ -3,7 +3,8 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, Validators} from '@angular/forms';
 
 import {Observable, Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {takeUntil, map} from 'rxjs/operators';
+import {findIndex} from 'lodash';
 import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateService} from '@ngx-translate/core';
 
@@ -17,6 +18,7 @@ import {AppSettings} from '../services/app-settings.service';
 import {QueryOptions} from '../models/query-options';
 import {FormFieldInterface} from '../models/form-field.interface';
 import {AppModalContentAbstractComponent} from '../components/app-modal-content.abstract';
+import {FormFieldsOptions} from '../models/form-fields-options.interface';
 
 @Component({
     selector: 'app-modal-user',
@@ -25,15 +27,15 @@ import {AppModalContentAbstractComponent} from '../components/app-modal-content.
 })
 export class ModalUserContentComponent extends AppModalContentAbstractComponent<User> {
 
-    userRoles: {[key: string]: string}[] = [];
+    userRoles$: Observable<{[key: string]: string}[]>;
     baseUrl: string;
     allowImpersonation = false;
 
     model = new User(0, '', '', [], true, []);
-    formFields = [
+    formFields: FormFieldsOptions[] = [
         {
             name: 'email',
-            validators: [Validators.required]
+            validators: [Validators.required, this.emailValidator]
         },
         {
             name: 'fullName',
@@ -58,6 +60,24 @@ export class ModalUserContentComponent extends AppModalContentAbstractComponent<
         {
             name: 'confirmPassword',
             validators: []
+        },
+        {
+            name: 'options',
+            validators: [],
+            children: [
+                {
+                    name: 'name',
+                    validators: [Validators.required]
+                },
+                {
+                    name: 'title',
+                    validators: [Validators.required]
+                },
+                {
+                    name: 'value',
+                    validators: [Validators.required]
+                }
+            ]
         }
     ];
 
@@ -72,141 +92,24 @@ export class ModalUserContentComponent extends AppModalContentAbstractComponent<
 
     onBeforeInit(): void {
         if (!this.isEditMode) {
-            // this.formFields.password.validators.push(Validators.required);
-            // this.formFields.confirmPassword.validators.push(Validators.required);
-        }
-        this.baseUrl = AppSettings.getBaseUrl();
-        this.getUserRoles();
-    }
-
-    getUserRoles(): void {
-        this.dataService.getRolesList()
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe((res) => {
-                if (res['roles']) {
-                    this.userRoles = res['roles'];
-                }
-            });
-    }
-}
-
-/*@Component({
-    selector: 'app-modal-user',
-    templateUrl: './templates/modal-user.html',
-    providers: []
-})
-export class ModalUserContentComponent extends ModalContentAbstractComponent<User> {
-
-    model = new User(0, '', '', [], true, []);
-    modalTitle = 'User';
-    userRoles: {[key: string]: string}[] = [];
-    baseUrl: string;
-    allowImpersonation = false;
-
-    formFields: FormFieldInterface = {
-        fullName: {
-            fieldLabel: 'FULL_NAME',
-            value: '',
-            validators: [Validators.required],
-            messages: {}
-        },
-        email: {
-            fieldLabel: 'EMAIL',
-            value: '',
-            validators: [Validators.required],
-            messages: {}
-        },
-        phone: {
-            fieldLabel: 'PHONE',
-            value: '',
-            validators: [],
-            messages: {}
-        },
-        password: {
-            fieldLabel: 'PASSWORD',
-            value: '',
-            validators: [],
-            messages: {}
-        },
-        confirmPassword: {
-            fieldLabel: 'CONFIRM_PASSWORD',
-            value: '',
-            validators: [],
-            messages: {}
-        },
-        role: {
-            fieldLabel: 'ROLE',
-            value: '',
-            validators: [Validators.required],
-            messages: {}
-        },
-        isActive: {
-            fieldLabel: 'ACTIVE',
-            value: '',
-            validators: [],
-            messages: {}
-        }
-    };
-
-    constructor(
-        public fb: FormBuilder,
-        public dataService: UsersService,
-        public systemNameService: SystemNameService,
-        public activeModal: NgbActiveModal,
-        public tooltipConfig: NgbTooltipConfig,
-        public translateService: TranslateService,
-        private modalService: NgbModal,
-        private settingsService: SettingsService,
-        private appSettings: AppSettings
-    ) {
-        super(fb, dataService, systemNameService, activeModal, tooltipConfig, translateService);
-    }
-
-    onBeforeInit(): void {
-        if (!this.isEditMode) {
-            this.formFields.password.validators.push(Validators.required);
-            this.formFields.confirmPassword.validators.push(Validators.required);
-        }
-        this.baseUrl = AppSettings.getBaseUrl();
-        this.getUserRoles();
-    }
-
-    onAfterGetData(): void {
-        if (this.model.id) {
-            if (!this.isEditMode) {
-                this.isEditMode = true;
-                this.closeReason = 'updated';
-                this.form.controls.password.clearValidators();
-                this.form.controls.confirmPassword.clearValidators();
+            const passwordIndex = findIndex<FormFieldsOptions>(this.formFields, {name: 'password'});
+            if (passwordIndex > -1) {
+                this.formFields[passwordIndex].validators.push(Validators.required);
+                this.formFields[passwordIndex + 1].validators.push(Validators.required);
             }
         }
-        if (this.isEditMode
-            && this.appSettings.isSuperAdmin
-            && this.appSettings.settings.userEmail !== this.model.email) {
-                this.allowImpersonation = true;
-        }
+        this.baseUrl = AppSettings.getBaseUrl();
+        this.getUserRoles();
     }
 
     getUserRoles(): void {
-        this.dataService.getRolesList()
-            .subscribe((res) => {
-                if (res['roles']) {
-                    this.userRoles = res['roles'];
-                }
-            });
+        this.userRoles$ = this.dataService.getRolesList()
+            .pipe(
+                takeUntil(this.destroyed$),
+                map(res => res['roles'])
+            );
     }
-
-    addressFieldsAdd(): void {
-        if (!this.model.options) {
-            this.model.options = [];
-        }
-        this.model.options.push(new UserOption('', '', ''));
-    }
-
-    addressFieldsDelete(index: number): void {
-        this.model.options.splice(index, 1);
-    }
-}*/
+}
 
 @Component({
     selector: 'app-shk-users',

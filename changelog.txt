@@ -2,6 +2,7 @@
 4.1.1
 - Admin area. The main menu is placed in a separate component - NavbarMainComponent.
 - The ability to create components as separate modules (frontend and backend) that can use other components of the administrator interface has been made.
+- New abstract component for modals - AppModalContentAbstractComponent.
 
 4.1.0
 - Updated Symfony to version 4.3.5. Updated DoctrineMongoDBBundle to version 4.0.

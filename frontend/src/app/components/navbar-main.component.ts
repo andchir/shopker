@@ -69,7 +69,8 @@ export class NavbarMainComponent implements OnInit {
         if (event) {
             event.preventDefault();
         }
-        this.isFileManagerActive = !this.isFileManagerActive;
+        this.fileManager.isActive = !this.fileManager.isActive;
+        this.isFileManagerActive = this.fileManager.isActive;
 
         if (this.isFileManagerActive) {
             this.navbarLeftOverlay.nativeElement.classList.add('active');

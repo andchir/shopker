@@ -222,13 +222,16 @@ export class FileManagerComponent implements OnDestroy {
                 });
                 this.dataService.postFormData(this.dataService.getFormData(data), this.currentPath)
                     .pipe(takeUntil(this.closed$))
-                    .subscribe((res) => {
-                        this.loading = false;
-                        this.setActive();
-                    }, (err) => {
-                        this.loading = false;
-                        if (err['error']) {
-                            this.errorMessage = err['error'];
+                    .subscribe({
+                        next: (res) => {
+                            this.loading = false;
+                            this.setActive();
+                        },
+                        error: (err) => {
+                            this.loading = false;
+                            if (err['error']) {
+                                this.errorMessage = err['error'];
+                            }
                         }
                     });
             }
@@ -281,6 +284,18 @@ export class FileManagerComponent implements OnDestroy {
         this.closed$.next();
         this.isActive = false;
         this.container.nativeElement.classList.remove('active');
+    }
+
+    activeToggle(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.isActive = !this.isActive;
+        if (this.isActive) {
+            this.setActive();
+        } else {
+            this.setUnactive();
+        }
     }
 
     getIsImageFile(file: FileModel): boolean {

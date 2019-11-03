@@ -26,22 +26,29 @@
             <!-- ContentType form -->
             <div class="col-lg-4" [formGroup]="form">
 
-                <div class="form-group" [class.form-group-message]="formErrors.title">
+                <div class="form-group form-group-message">
                     <label class="label-filled">
                         {{'TITLE' | translate}}
                     </label>
-                    <input type="text" class="form-control" name="title" formControlName="title" [(ngModel)]="model.title">
+                    <input type="text" class="form-control" name="title"
+                           formControlName="title"
+                           [(ngModel)]="model.title"
+                           [class.is-invalid]="formErrors.title">
                     <div *ngIf="formErrors.title" class="alert alert-danger">
                         {{formErrors.title}}
                     </div>
                 </div>
 
-                <div class="form-group" [class.form-group-message]="formErrors.name">
+                <div class="form-group form-group-message">
                     <label for="fieldName" class="label-filled">
                         {{'SYSTEM_NAME' | translate}}
                     </label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" name="name" formControlName="name" id="fieldName" [(ngModel)]="model.name">
+                    <div class="input-group" [class.is-invalid]="formErrors.name">
+                        <input type="text" class="form-control" name="name"
+                               formControlName="name"
+                               id="fieldName"
+                               [(ngModel)]="model.name"
+                               [class.is-invalid]="formErrors.name">
                         <div class="input-group-append">
                             <button type="button" class="btn btn-secondary" ngbTooltip="{{'GENERATE' | translate}}" (click)="generateName(model)">
                                 <i class="icon-reload"></i>
@@ -60,14 +67,18 @@
                     <textarea type="text" class="form-control" rows="3" name="description" formControlName="description" [(ngModel)]="model.description"></textarea>
                 </div>
 
-                <div class="form-group row" [class.form-group-message]="formErrors.collection">
+                <div class="form-group row form-group-message">
                     <div class="col-12">
 
                         <div class="form-group mb-0">
                             <label class="label-filled">{{'COLLECTION' | translate}}</label>
 
-                            <div class="input-group">
-                                <select class="custom-select custom-select-sm" name="collection" formControlName="collection" [(ngModel)]="model.collection">
+                            <div class="input-group" [class.is-invalid]="formErrors.collection">
+                                <select class="custom-select custom-select-sm"
+                                        name="collection"
+                                        formControlName="collection"
+                                        [(ngModel)]="model.collection"
+                                        [class.is-invalid]="formErrors.collection">
                                     <option value="{{collection}}" *ngFor="let collection of collections">{{collection}}</option>
                                 </select>
                                 <div class="input-group-append">
@@ -82,8 +93,11 @@
                                 </div>
                             </div>
 
-                            <div class="card p-1 mt-2" #addCollectionBlock style="display: none;" [class.form-group-message]="formErrors.newCollection">
-                                <input type="text" class="form-control form-control-sm" formControlName="newCollection" #addCollectionField>
+                            <div class="card p-1 mt-2 form-group-message" #addCollectionBlock style="display: none;">
+                                <input type="text" class="form-control form-control-sm"
+                                       formControlName="newCollection"
+                                       #addCollectionField
+                                       [class.is-invalid]="formErrors.newCollection">
                                 <div *ngIf="formErrors.newCollection" class="alert alert-danger mb-1">
                                     {{formErrors.newCollection}}
                                 </div>
@@ -135,26 +149,34 @@
                 <div class="card">
                     <div class="card-body">
 
-                        <div class="form-group row" [class.form-group-message]="formErrors.fld_title">
+                        <div class="form-group row form-group-message">
                             <div class="col-md-5">
                                 <label>{{'TITLE' | translate}}</label>
                             </div>
                             <div class="col-md-7">
-                                <input type="text" class="form-control form-control-sm" name="field_title" formControlName="title" [(ngModel)]="fieldModel.title">
+                                <input type="text" class="form-control form-control-sm"
+                                       name="field_title"
+                                       formControlName="title"
+                                       [(ngModel)]="fieldModel.title"
+                                       [class.is-invalid]="formErrors.fld_title">
                                 <div *ngIf="formErrors.fld_title" class="alert alert-danger">
                                     {{formErrors.fld_title}}
                                 </div>
                             </div>
                         </div>
 
-                        <div class="form-group row" [class.form-group-message]="formErrors.fld_name">
+                        <div class="form-group row form-group-message">
                             <div class="col-md-5">
                                 <label>{{'SYSTEM_NAME' | translate}}</label>
                             </div>
                             <div class="col-md-7">
 
-                                <div class="input-group">
-                                    <input type="text" class="form-control form-control-sm" name="field_name" formControlName="name" [(ngModel)]="fieldModel.name">
+                                <div class="input-group" [class.is-invalid]="formErrors.fld_name">
+                                    <input type="text" class="form-control form-control-sm"
+                                           name="field_name"
+                                           formControlName="name"
+                                           [(ngModel)]="fieldModel.name"
+                                           [class.is-invalid]="formErrors.fld_name">
                                     <div class="input-group-append">
                                         <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'GENERATE' | translate}}" (click)="generateName(fieldModel)">
                                             <i class="icon-reload"></i>
@@ -177,14 +199,21 @@
                             </div>
                         </div>
 
-                        <div class="form-group row" [class.form-group-message]="formErrors.fld_inputType">
+                        <div class="form-group row form-group-message">
                             <div class="col-md-5">
                                 <label>{{'INPUT_TYPE' | translate}}</label>
                             </div>
                             <div class="col-md-7">
 
-                                <div class="input-group">
-                                    <select class="custom-select custom-select-sm" name="field_inputType" formControlName="inputType" [(ngModel)]="fieldModel.inputType" (ngModelChange)="selectFieldTypeProperties('input')" [ngbTooltip]="getFieldTypeProperty(fieldModel.inputType, 'description')" placement="left">
+                                <div class="input-group" [class.is-invalid]="formErrors.fld_inputType">
+                                    <select class="custom-select custom-select-sm"
+                                            name="field_inputType"
+                                            formControlName="inputType"
+                                            [(ngModel)]="fieldModel.inputType"
+                                            (ngModelChange)="selectFieldTypeProperties('input')"
+                                            [ngbTooltip]="getFieldTypeProperty(fieldModel.inputType, 'description')"
+                                            placement="left"
+                                            [class.is-invalid]="formErrors.fld_inputType">
                                         <option value=""></option>
                                         <option value="{{fieldType.name}}" *ngFor="let fieldType of fieldTypes">{{fieldType.title}}</option>
                                     </select>
@@ -222,14 +251,21 @@
                             </div>
                         </div>
 
-                        <div class="form-group row" [class.form-group-message]="formErrors.fld_outputType">
+                        <div class="form-group row form-group-message">
                             <div class="col-md-5">
                                 <label>{{'OUTPUT_TYPE' | translate}}</label>
                             </div>
                             <div class="col-md-7">
 
-                                <div class="input-group">
-                                    <select class="custom-select custom-select-sm" name="field_outputType" formControlName="outputType" [(ngModel)]="fieldModel.outputType" (ngModelChange)="selectFieldTypeProperties('output')" [ngbTooltip]="getFieldTypeProperty(fieldModel.outputType, 'description')" placement="left">
+                                <div class="input-group" [class.is-invalid]="formErrors.fld_outputType">
+                                    <select class="custom-select custom-select-sm"
+                                            name="field_outputType"
+                                            formControlName="outputType"
+                                            [(ngModel)]="fieldModel.outputType"
+                                            (ngModelChange)="selectFieldTypeProperties('output')"
+                                            [ngbTooltip]="getFieldTypeProperty(fieldModel.outputType, 'description')"
+                                            placement="left"
+                                            [class.is-invalid]="formErrors.fld_outputType">
                                         <option value=""></option>
                                         <option value="{{fieldType.name}}" *ngFor="let fieldType of fieldTypes">{{fieldType.title}}</option>
                                     </select>
@@ -271,9 +307,12 @@
                             </div>
                             <div class="col-md-7">
 
-                                <div [class.form-group-message]="formErrors.fld_group">
-                                    <div class="input-group input-group-sm">
-                                        <select class="custom-select" name="field_group" formControlName="group" [(ngModel)]="fieldModel.group">
+                                <div class="form-group-message">
+                                    <div class="input-group input-group-sm" [class.is-invalid]="formErrors.fld_group">
+                                        <select class="custom-select" name="field_group"
+                                                formControlName="group"
+                                                [(ngModel)]="fieldModel.group"
+                                                [class.is-invalid]="formErrors.fld_group">
                                             <option value=""></option>
                                             <option [value]="groupName" *ngFor="let groupName of model.groups">{{groupName}}</option>
                                         </select>
@@ -292,8 +331,10 @@
                                         {{formErrors.fld_group}}
                                     </div>
 
-                                    <div class="card p-1 mt-2" #addGroupBlock style="display: none;" [class.form-group-message]="formErrors.fld_newGroup">
-                                        <input type="text" class="form-control form-control-sm" #addGroupField formControlName="newGroup">
+                                    <div class="card p-1 mt-2 form-group-message" #addGroupBlock style="display: none;">
+                                        <input type="text" class="form-control form-control-sm" #addGroupField
+                                               formControlName="newGroup"
+                                               [class.is-invalid]="formErrors.fld_newGroup">
                                         <div *ngIf="formErrors.fld_newGroup" class="alert alert-danger mb-1">
                                             {{formErrors.fld_newGroup}}
                                         </div>

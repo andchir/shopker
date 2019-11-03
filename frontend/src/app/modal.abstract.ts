@@ -136,19 +136,29 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit, OnDest
     }
 
     translateValidationMessages(keyPrefix: string, fieldKey: string, fieldOptions: FormFieldOptionsInterface): void {
-        this.validationMessages[keyPrefix + fieldKey] = {};
+        const messages: {[key: string]: string } = {};
         if (!fieldOptions.fieldLabel) {
             return;
         }
+        Object.keys(fieldOptions.messages).forEach((messageKey) => {
+            if (messageKey === 'required') {
+                return;
+            }
+            this.translateService.get(String(fieldOptions.messages[messageKey]))
+                .subscribe((res: string) => {
+                    messages[messageKey] = res;
+                });
+        });
         if (fieldOptions.validators.indexOf(Validators.required) > -1) {
             this.translateService.get(fieldOptions.fieldLabel)
                 .subscribe((fieldLabel: string) => {
                     this.translateService.get('FIELD_REQUIRED', {name: fieldLabel})
                         .subscribe((res: string) => {
-                            this.validationMessages[keyPrefix + fieldKey].required = res;
+                            messages.required = res;
                         });
                 });
         }
+        this.validationMessages[keyPrefix + fieldKey] = messages;
     }
 
     getControl(name: string): AbstractControl {
@@ -374,6 +384,15 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit, OnDest
                     this.submitted = false;
                 }
             });
+    }
+
+    emailValidator(control: FormControl): { [s: string]: boolean } {
+        const EMAIL_REGEXP = /\S+@\S+\.\S+/;
+        if (!control.value) {
+            return {required: true};
+        } else if (!EMAIL_REGEXP.test(control.value)) {
+            return {email: true};
+        }
     }
 
     ngOnDestroy(): void {

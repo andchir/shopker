@@ -11,7 +11,7 @@
 
     <div class="modal-body">
 
-        <div class="row form-group" [class.form-group-message]="formErrors.parentId" *ngIf="!isRoot">
+        <div class="row form-group form-group-message" *ngIf="!isRoot">
             <div class="col-md-5">
                 <label for="fieldContentType">{{'PARENT_FOLDER' | translate}}</label>
             </div>
@@ -20,7 +20,8 @@
                         name="parentId"
                         formControlName="parentId"
                         [filterId]="model.id"
-                        [(ngModel)]="model.parentId"></app-select-parent-dropdown>
+                        [(ngModel)]="model.parentId"
+                        [class.is-invalid]="formErrors.parentId"></app-select-parent-dropdown>
 
                 <div *ngIf="formErrors.parentId" class="alert alert-danger">
                     {{formErrors.parentId}}
@@ -28,7 +29,7 @@
             </div>
         </div>
 
-        <div class="row form-group show-on-hover-parent" [class.form-group-message]="formErrors.title">
+        <div class="row form-group show-on-hover-parent form-group-message">
             <div class="col-md-5">
                 <label for="fieldTitle">
                     {{'TITLE' | translate}}
@@ -37,6 +38,7 @@
             <div class="col-md-7">
                 <input type="text" id="fieldTitle" class="form-control" formControlName="title" name="title"
                        [(ngModel)]="model.title"
+                       [class.is-invalid]="formErrors.title"
                        [ngClass]="{'border-success': localeCurrent != localeDefault}">
                 <div *ngIf="formErrors.title" class="alert alert-danger">
                     {{formErrors.title}}
@@ -44,15 +46,19 @@
             </div>
         </div>
 
-        <div class="row form-group" [class.form-group-message]="formErrors.name">
+        <div class="row form-group form-group-message">
             <div class="col-md-5">
                 <label for="fieldName">
                     {{'SYSTEM_NAME' | translate}}
                 </label>
             </div>
             <div class="col-md-7">
-                <div class="input-group">
-                    <input type="text" class="form-control" name="name" formControlName="name" id="fieldName" [(ngModel)]="model.name">
+                <div class="input-group" [class.is-invalid]="formErrors.name">
+                    <input type="text" class="form-control" name="name"
+                           formControlName="name"
+                           id="fieldName"
+                           [(ngModel)]="model.name"
+                           [class.is-invalid]="formErrors.name">
                     <div class="input-group-append">
                         <button type="button" class="btn btn-secondary" ngbTooltip="{{'GENERATE' | translate}}" (click)="generateName(model)" [disabled]="getControl('name').disabled">
                             <i class="icon-reload"></i>
@@ -96,14 +102,17 @@
             </div>
         </div>
 
-        <div class="row form-group" [class.form-group-message]="formErrors.contentTypeName">
+        <div class="row form-group form-group-message">
             <div class="col-md-5">
                 <label for="fieldContentType">
                     {{'CONTENT_TYPE' | translate}}
                 </label>
             </div>
             <div class="col-md-7">
-                <select id="fieldContentType" class="form-control" name="contentTypeName" formControlName="contentTypeName" [(ngModel)]="model.contentTypeName">
+                <select id="fieldContentType" class="form-control" name="contentTypeName"
+                        formControlName="contentTypeName"
+                        [(ngModel)]="model.contentTypeName"
+                        [class.is-invalid]="formErrors.contentTypeName">
                     <option value="1" *ngFor="let contentType of contentTypes" [value]="contentType.name">{{contentType.title}}</option>
                 </select>
                 <div *ngIf="formErrors.contentTypeName" class="alert alert-danger">
@@ -112,14 +121,17 @@
             </div>
         </div>
 
-        <div class="row form-group" [class.form-group-message]="formErrors.menuIndex" *ngIf="!isRoot">
+        <div class="row form-group form-group-message" *ngIf="!isRoot">
             <div class="col-md-5">
                 <label for="fieldMenuIndex">
                     {{'MENU_INDEX' | translate}}
                 </label>
             </div>
             <div class="col-md-7">
-                <input type="number" id="fieldMenuIndex" class="form-control" name="menuIndex" formControlName="menuIndex" [(ngModel)]="model.menuIndex">
+                <input type="number" id="fieldMenuIndex" class="form-control" name="menuIndex"
+                       formControlName="menuIndex"
+                       [(ngModel)]="model.menuIndex"
+                       [class.is-invalid]="formErrors.menuIndex">
                 <div *ngIf="formErrors.menuIndex" class="alert alert-danger">
                     {{formErrors.menuIndex}}
                 </div>

@@ -265,7 +265,9 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
         this.formErrors[fieldName] = '';
         const value = control.value;
 
-        if ( this.collections.indexOf(value) > -1) {
+        console.log(this.validationMessages);
+
+        if (this.collections.indexOf(value) > -1) {
             this.formErrors[fieldName] += this.validationMessages[fieldName].exists;
             return false;
         }

@@ -37,7 +37,7 @@ export class ModalOrderContentComponent extends ModalContentAbstractComponent<Or
         email: {
             fieldLabel: 'EMAIL',
             value: '',
-            validators: [Validators.required],
+            validators: [Validators.required, this.emailValidator],
             messages: {}
         },
         phone: {
@@ -133,15 +133,27 @@ export class ModalOrderContentComponent extends ModalContentAbstractComponent<Or
 
     save(): void {
         this.errorMessage = '';
+        this.submitted = true;
+        if (!this.form.valid) {
+            this.onValueChanged('form');
+            this.submitted = false;
+            return;
+        }
         this.loading = true;
         this.dataService.update(this.getFormData())
-            .subscribe((res) => {
-                this.closeModal();
-            }, (err) => {
-                if (err['error']) {
-                    this.errorMessage = err['error'];
+            .subscribe({
+                next: (res) => {
+                    this.closeModal();
+                    this.loading = false;
+                    this.submitted = false;
+                },
+                error: (err) => {
+                    if (err['error']) {
+                        this.errorMessage = err['error'];
+                    }
+                    this.loading = false;
+                    this.submitted = false;
                 }
-                this.loading = false;
             });
     }
 

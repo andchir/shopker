@@ -5,8 +5,7 @@
         <ng-template ngbTabContent>
             <div class="pt-3">
 
-                <div class="form-group"
-                     [class.form-group-message]="formErrors[field.name]"
+                <div class="form-group form-group-message"
                      [formGroup]="form"
                      *ngFor="let field of fields | filterFieldByGroup: groupName">
 
@@ -42,8 +41,12 @@
                                 </label>
                             </div>
                             <div class="col-md-7">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]">
+                                <div class="input-group" [class.is-invalid]="formErrors[field.name]">
+                                    <input type="text" class="form-control" id="field_{{field.name}}"
+                                           [name]="field.name"
+                                           [formControlName]="field.name"
+                                           [(ngModel)]="model[field.name]"
+                                           [class.is-invalid]="formErrors[field.name]">
                                     <div class="input-group-append">
                                         <button type="button" class="btn btn-secondary" ngbTooltip="{{'GENERATE' | translate}}" (click)="generateName(field)">
                                             <i class="icon-reload"></i>
@@ -67,7 +70,11 @@
                                 </label>
                             </div>
                             <div class="col-md-7">
-                                <input type="text" class="form-control" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]">
+                                <input type="text" class="form-control" id="field_{{field.name}}"
+                                       [name]="field.name"
+                                       [formControlName]="field.name"
+                                       [(ngModel)]="model[field.name]"
+                                       [class.is-invalid]="formErrors[field.name]">
                                 <div *ngIf="formErrors[field.name]" class="alert alert-danger">
                                     {{formErrors[field.name]}}
                                 </div>
@@ -85,7 +92,14 @@
                                 </label>
                             </div>
                             <div class="col-md-7">
-                                <input type="number" class="form-control" id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" [min]="field.inputProperties.min" [max]="field.inputProperties.max" [step]="field.inputProperties.step">
+                                <input type="number" class="form-control" id="field_{{field.name}}"
+                                       [name]="field.name"
+                                       [formControlName]="field.name"
+                                       [class.is-invalid]="formErrors[field.name]"
+                                       [(ngModel)]="model[field.name]"
+                                       [min]="field.inputProperties.min"
+                                       [max]="field.inputProperties.max"
+                                       [step]="field.inputProperties.step">
                                 <div *ngIf="formErrors[field.name]" class="alert alert-danger">
                                     {{formErrors[field.name]}}
                                 </div>
@@ -107,6 +121,7 @@
                                           [formControlName]="field.name"
                                           [(ngModel)]="model[field.name]"
                                           [rows]="field.inputProperties.rows"
+                                          [class.is-invalid]="formErrors[field.name]"
                                           [ngClass]="{'border-success': isLocalizationActive}"></textarea>
                                 <div *ngIf="formErrors[field.name]" class="alert alert-danger">
                                     {{formErrors[field.name]}}
@@ -256,7 +271,10 @@
                                 </label>
                             </div>
                             <div class="col-md-7">
-                                <select id="field_{{field.name}}" [name]="field.name" [formControlName]="field.name" [(ngModel)]="model[field.name]" class="form-control">
+                                <select id="field_{{field.name}}" class="form-control" [name]="field.name"
+                                        [formControlName]="field.name"
+                                        [(ngModel)]="model[field.name]"
+                                        [class.is-invalid]="formErrors[field.name]">
                                     <option *ngFor="let opt of field.options" [value]="opt.value">{{opt.title}}</option>
                                 </select>
                                 <div *ngIf="formErrors[field.name]" class="alert alert-danger">
@@ -441,6 +459,7 @@
                                 <input type="text" class="form-control" id="field_{{field.name}}" [name]="field.name"
                                        [formControlName]="field.name"
                                        [(ngModel)]="model[field.name]"
+                                       [class.is-invalid]="formErrors[field.name]"
                                        [ngClass]="{'border-success': isLocalizationActive}">
                                 <div *ngIf="formErrors[field.name]" class="alert alert-danger">
                                     {{formErrors[field.name]}}

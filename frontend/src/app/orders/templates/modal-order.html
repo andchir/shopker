@@ -28,19 +28,26 @@
 
         <div class="row">
             <div class="col-lg-6" [formGroup]="form">
-                <div class="form-group" [class.form-group-message]="formErrors.id">
+                <div class="form-group form-group-message">
                     <label class="label-filled">
                         {{'ID' | translate}}
                     </label>
-                    <input type="text" class="form-control" name="id" formControlName="id" [(ngModel)]="model.id" readonly>
+                    <input type="text" class="form-control" name="id"
+                           formControlName="id"
+                           [(ngModel)]="model.id"
+                           [class.is-invalid]="formErrors.id"
+                           readonly>
                 </div>
             </div>
             <div class="col-lg-6" [formGroup]="form">
-                <div class="form-group" [class.form-group-message]="formErrors.email">
+                <div class="form-group form-group-message">
                     <label class="label-filled">
                         {{'EMAIL' | translate}}
                     </label>
-                    <input type="text" class="form-control" name="title" formControlName="email" [(ngModel)]="model.email">
+                    <input type="text" class="form-control" name="title"
+                           formControlName="email"
+                           [(ngModel)]="model.email"
+                           [class.is-invalid]="formErrors.email">
                     <div *ngIf="formErrors.email" class="alert alert-danger">
                         {{formErrors.email}}
                     </div>
@@ -51,21 +58,27 @@
         <div class="row">
             <div class="col-lg-6" [formGroup]="form">
 
-                <div class="form-group" [class.form-group-message]="formErrors.fullName">
+                <div class="form-group form-group-message">
                     <label class="label-filled">
                         {{'FULL_NAME' | translate}}
                     </label>
-                    <input type="text" class="form-control" name="title" formControlName="fullName" [(ngModel)]="model.fullName">
+                    <input type="text" class="form-control" name="title"
+                           formControlName="fullName"
+                           [(ngModel)]="model.fullName"
+                           [class.is-invalid]="formErrors.fullName">
                     <div *ngIf="formErrors.fullName" class="alert alert-danger">
                         {{formErrors.fullName}}
                     </div>
                 </div>
 
-                <div class="form-group" [class.form-group-message]="formErrors.phone">
+                <div class="form-group form-group-message">
                     <label class="label-filled">
                         {{'PHONE' | translate}}
                     </label>
-                    <input type="text" class="form-control" name="phone" formControlName="phone" [(ngModel)]="model.phone">
+                    <input type="text" class="form-control" name="phone"
+                           formControlName="phone"
+                           [(ngModel)]="model.phone"
+                           [class.is-invalid]="formErrors.phone">
                     <div *ngIf="formErrors.phone" class="alert alert-danger">
                         {{formErrors.phone}}
                     </div>
@@ -73,22 +86,30 @@
 
             </div>
             <div class="col-lg-6" [formGroup]="form">
-                <div class="form-group" [class.form-group-message]="formErrors.comment">
+                <div class="form-group form-group-message">
                     <label class="label-filled">
                         {{'COMMENT' | translate}}
                     </label>
-                    <textarea class="form-control" name="comment" formControlName="comment" rows="5" [(ngModel)]="model.comment"></textarea>
+                    <textarea class="form-control" name="comment"
+                              formControlName="comment"
+                              rows="5"
+                              [(ngModel)]="model.comment"
+                              [class.is-invalid]="formErrors.comment"></textarea>
                 </div>
             </div>
         </div>
 
         <div class="row">
             <div class="col-lg-6" [formGroup]="form">
-                <div class="form-group" [class.form-group-message]="formErrors.deliveryName">
+                <div class="form-group form-group-message">
                     <label class="label-filled">
                         {{'DELIVERY_METHOD' | translate}}
                     </label>
-                    <select class="form-control" name="deliveryName" formControlName="deliveryName" [(ngModel)]="model.deliveryName" (ngModelChange)="onDeliveryUpdate()">
+                    <select class="form-control" name="deliveryName"
+                            formControlName="deliveryName"
+                            [(ngModel)]="model.deliveryName"
+                            [class.is-invalid]="formErrors.deliveryName"
+                            (ngModelChange)="onDeliveryUpdate()">
                         <ng-container *ngIf="settings">
                             <option [value]="setting.name" *ngFor="let setting of settings.SETTINGS_DELIVERY">{{setting.name}}</option>
                         </ng-container>
@@ -96,11 +117,14 @@
                 </div>
             </div>
             <div class="col-lg-6" [formGroup]="form">
-                <div class="form-group" [class.form-group-message]="formErrors.paymentName">
+                <div class="form-group form-group-message">
                     <label class="label-filled">
                         {{'PAYMENT_METHOD' | translate}}
                     </label>
-                    <select class="form-control" name="paymentName" formControlName="paymentName" [(ngModel)]="model.paymentName">
+                    <select class="form-control" name="paymentName"
+                            formControlName="paymentName"
+                            [(ngModel)]="model.paymentName"
+                            [class.is-invalid]="formErrors.paymentName">
                         <ng-container *ngIf="settings">
                             <option [value]="setting.name" *ngFor="let setting of settings.SETTINGS_PAYMENT">{{setting.name}}</option>
                         </ng-container>

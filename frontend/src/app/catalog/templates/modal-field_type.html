@@ -13,18 +13,26 @@
         <div class="row">
             <div class="col-md-6">
 
-                <div class="form-group form-group-message" [class.form-group-message]="formErrors.title">
+                <div class="form-group form-group-message form-group-message">
                     <label for="fieldTitle" class="label-filled">{{'TITLE' | translate}}</label>
-                    <input type="text" class="form-control" name="title" formControlName="title" id="fieldTitle" [(ngModel)]="model.title">
+                    <input type="text" class="form-control" name="title"
+                           formControlName="title"
+                           id="fieldTitle"
+                           [(ngModel)]="model.title"
+                           [class.is-invalid]="formErrors.title">
                     <div *ngIf="formErrors.title" class="alert alert-danger">
                         {{formErrors.title}}
                     </div>
                 </div>
 
-                <div class="form-group" [class.form-group-message]="formErrors.name">
+                <div class="form-group form-group-message">
                     <label for="fieldName" class="label-filled">{{'SYSTEM_NAME' | translate}}</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" name="name" formControlName="name" id="fieldName" [(ngModel)]="model.name">
+                    <div class="input-group" [class.is-invalid]="formErrors.name">
+                        <input type="text" class="form-control" name="name"
+                               formControlName="name"
+                               id="fieldName"
+                               [(ngModel)]="model.name"
+                               [class.is-invalid]="formErrors.name">
                         <div class="input-group-append">
                             <button type="button" class="btn btn-secondary" ngbTooltip="{{'GENERATE' | translate}}" (click)="generateName(model)">
                                 <i class="icon-reload"></i>

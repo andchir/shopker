@@ -259,13 +259,11 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
     addCollection() {
         const fieldName = 'newCollection';
         const control = this.form.get(fieldName);
-        if (!control.valid) {
+        if (!control.valid || !control.value) {
             return false;
         }
         this.formErrors[fieldName] = '';
         const value = control.value;
-
-        console.log(this.validationMessages);
 
         if (this.collections.indexOf(value) > -1) {
             this.formErrors[fieldName] += this.validationMessages[fieldName].exists;
@@ -290,7 +288,7 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
 
         let popoverContent: any;
         popover.placement = 'top';
-        popover.popoverTitle = 'Confirm';
+        popover.popoverTitle = this.getLangString('CONFIRM');
 
         const confirm = function() {
             this.loading = true;

@@ -8,12 +8,12 @@
 </div>
 
 <ng-template #confirmPopover let-confirm="confirm" let-p="p" let-msg="message">
-    <p class="text-center">Delete this item?</p>
+    <p class="text-center">{{ 'YOU_SURE_YOU_WANT_DELETE' | translate }}</p>
     <div class="alert alert-danger p-2" *ngIf="msg">{{msg}}</div>
     <div class="text-center">
-        <button type="button" class="btn btn-success btn-sm" (click)="confirm()">Yes</button>
+        <button type="button" class="btn btn-success btn-sm" (click)="confirm()">{{ 'YES' | translate }}</button>
         &nbsp;
-        <button type="button" class="btn btn-secondary btn-sm" (click)="p.close()">No</button>
+        <button type="button" class="btn btn-secondary btn-sm" (click)="p.close()">{{ 'NO' | translate }}</button>
     </div>
 </ng-template>
 

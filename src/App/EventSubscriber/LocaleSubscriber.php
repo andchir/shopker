@@ -4,7 +4,7 @@ namespace App\EventSubscriber;
 
 use App\Service\UtilsService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -19,12 +19,8 @@ class LocaleSubscriber implements EventSubscriberInterface
         $this->localeList = is_string($localeList) ? $localeList : '';
     }
 
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(RequestEvent $event)
     {
-        $request = $event->getRequest();
-        if (!$request->hasPreviousSession()) {
-            return;
-        }
         $request = $event->getRequest();
         $requestUri = $request->getRequestUri();;
         if ($locale = $request->attributes->get('_locale')) {

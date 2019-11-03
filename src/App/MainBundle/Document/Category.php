@@ -195,10 +195,14 @@ class Category
     /**
      * Get uri
      *
+     * @param string $locale
      * @return string
      */
-    public function getUri()
+    public function getUri($locale = '')
     {
+        if ($locale) {
+            return $locale . '/' . $this->uri;
+        }
         return $this->uri;
     }
 

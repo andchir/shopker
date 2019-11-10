@@ -304,7 +304,7 @@ class SettingsController extends Controller
         $innerDirs = array_diff(scandir($parentDirPath), ['..', '.']);
         foreach ($innerDirs as $innerDir) {
             if ($innerDir == 'frontend') {
-                $dirPath = $parentDirPath . DIRECTORY_SEPARATOR . $innerDir . '/src/i18n';
+                $dirPath = $parentDirPath . DIRECTORY_SEPARATOR . $innerDir . DIRECTORY_SEPARATOR . 'i18n';
                 if (is_dir($dirPath)) {
                     $outputPathArr[] = $dirPath;
                 }

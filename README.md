@@ -1,9 +1,6 @@
-Shopkeeper 4
-============
+# [Shopkeeper4](https://modx-shopkeeper.ru) &nbsp; [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Get%20free%20engine%20for%20your%20online%20store&url=https://modx-shopkeeper.ru&via=shopkeeper4&hashtags=symfony,mongodb,angular,bootstrap)
 
-![Shopkeeper 4 logo](https://raw.github.com/andchir/shopkeeper4/master/public/img/shk-logo-big-blue.png?raw=true "Shopkeeper 4 logo")
-
-The engine for creating an online store using Symfony 4.x, Angular 6+, MongoDB 3+.
+The engine for creating an online store using Symfony 4.x, Angular 8+, MongoDB 4+.
 
 [Read Wiki](https://github.com/andchir/shopkeeper4/wiki)
 

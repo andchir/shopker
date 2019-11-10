@@ -60,7 +60,8 @@ class HomepageController extends Controller
     {
         $environment = $kernel->getEnvironment();
         $rootPath = realpath($this->getParameter('kernel.root_dir').'/../..');
-        $indexPagePath = $rootPath . '/public/admin/bundle-' . $moduleName;
+        $moduleName = str_replace(['_', '-'], '', $moduleName);
+        $indexPagePath = $rootPath . '/public/bundles/' . $moduleName . '/admin/bundle';
         if ($environment == 'dev') {
             $indexPagePath .= '-dev';
         }

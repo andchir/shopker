@@ -1,4 +1,8 @@
 
+4.1.2
+- Updated path of the admin bundle JS files.
+- Move ModalFileContentComponent and ModalFileUploadContentComponent to SharedModule.
+
 4.1.1
 - Admin area. The main menu is placed in a separate component - NavbarMainComponent.
 - The ability to create components as separate modules (frontend and backend) that can use other components of the administrator interface has been made.

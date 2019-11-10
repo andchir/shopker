@@ -9,14 +9,12 @@ import {TranslateCustomLoader} from './services/translateLoader';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {SharedModule} from './shared.module';
-import {ModalFileContentComponent} from './components/modal-file.component';
 
 import {
     AlertModalContentComponent,
     ConfirmModalContentComponent,
     ModalConfirmTextComponent
 } from './components/modal-confirm-text.component';
-import {ModalFileUploadContentComponent} from './components/modal-file-upload.component';
 
 import localeEn from '@angular/common/locales/en';
 import localeRu from '@angular/common/locales/ru';
@@ -42,17 +40,13 @@ registerLocaleData(localeRu, 'ru-RU');
         AppComponent,
         AlertModalContentComponent,
         ConfirmModalContentComponent,
-        ModalFileContentComponent,
         ModalConfirmTextComponent,
-        ModalFileUploadContentComponent
     ],
     providers: [],
     entryComponents: [
         AlertModalContentComponent,
         ConfirmModalContentComponent,
-        ModalFileContentComponent,
         ModalConfirmTextComponent,
-        ModalFileUploadContentComponent
     ],
     exports: [
 

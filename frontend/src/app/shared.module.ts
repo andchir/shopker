@@ -22,6 +22,8 @@ import {NavbarMainComponent} from './components/navbar-main.component';
 import {NotFoundComponent} from './not-found.component';
 import {ModuleLoaderComponent} from './moduleloader/moduleloader.component';
 import {FileManagerComponent} from './components/file-manager.component';
+import {ModalFileContentComponent} from './components/modal-file.component';
+import {ModalFileUploadContentComponent} from './components/modal-file-upload.component';
 
 import {FilterFieldByGroupPipe} from './pipes/filter-field-by-group.pipe';
 import {DateFromObjectPipe} from './pipes/date-from-object.pipe';
@@ -70,7 +72,10 @@ const components = [
         UserRoleNamePipe,
         UserRoleColorPipe,
         OrderByPipe,
-        FilterArrayPipe
+        FilterArrayPipe,
+
+        ModalFileContentComponent,
+        ModalFileUploadContentComponent
     ],
     providers: [
         NgbActiveModal,
@@ -97,6 +102,10 @@ const components = [
         UserRoleColorPipe,
         OrderByPipe,
         FilterArrayPipe
+    ],
+    entryComponents: [
+        ModalFileContentComponent,
+        ModalFileUploadContentComponent
     ]
 })
 export class SharedModule {

@@ -2,6 +2,8 @@
 
 The engine for creating an online store using Symfony 4.x, Angular 8+, MongoDB 4+.
 
+![Shopkeeper](https://raw.githubusercontent.com/andchir/shopkeeper4/master/public/img/shk-logo-small-blue.png?raw=true)
+
 - Official site [http://modx-shopkeeper.ru/](http://modx-shopkeeper.ru/)
 - Download latest version [http://modx-shopkeeper.ru/assets/files/shk4/shk4-latest.zip](http://modx-shopkeeper.ru/assets/files/shk4/shk4-latest.zip)
 - Documentation: [https://github.com/andchir/shopkeeper4/wiki](https://github.com/andchir/shopkeeper4/wiki)

@@ -228,7 +228,7 @@ class FileManagerController extends BaseController
             return $this->setError($translator->trans('File is not writable.', [], 'validators'));
         }
 
-        $content['name'] = str_replace(['/', '\\', '.'], '', $content['name']);
+        $content['name'] = str_replace(['/', '\\'], '', $content['name']);
         $newFileName = $content['name'] . '.' . UtilsService::getExtension($filePath);
 
         rename($filePath, $publicDirPath . DIRECTORY_SEPARATOR . $newFileName);

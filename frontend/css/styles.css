@@ -337,9 +337,9 @@ body .ui-tree .ui-tree-filter-container .ui-tree-filter-icon { margin-top: -0.75
 .panel-file-manager { position: fixed; left: -308px; top: 0; width: 308px; height: 100%; overflow: hidden; background-color: #fff; box-shadow: 0 0 20px rgba(0,0,0,0.2); z-index: 1110; transition: left 500ms; }
 .panel-file-manager-b { position: absolute; left: 0; top: 50px; bottom: 0; width: 300px; }
 .panel-file-manager.active { left: 0; }
-.btn-panel-file-manager-toggle { position: absolute; right: 0; top: 0; width: 8px; height: 100%; padding: 0; border: 0; border-radius: 0; text-align: center; background: none #007bff; }
+.btn-panel-file-manager-toggle { position: absolute; right: 0; top: 0; width: 10px; height: 100%; padding: 0; border: 0; border-radius: 0; text-align: center; background: none #007bff; }
 .btn-panel-file-manager-toggle:hover { background-color: #2890ff; }
-.btn-panel-file-manager-toggle > i { display: block; margin-left: -4px; }
+.btn-panel-file-manager-toggle > i { display: block; margin-left: -3px; }
 
 /* tabs-top */
 .tabs-top { position: absolute; right: 46px; top: 0; z-index: 10; }

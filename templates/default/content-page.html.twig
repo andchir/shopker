@@ -19,6 +19,7 @@
 
         <div class="min-height400">
 
+            {{ renderOutputTypeChunk(currentPage, fields, 'tag', 'page_') }}
             {{ renderOutputTypeChunk(currentPage, fields, 'header', 'page_') }}
 
             <div>
@@ -54,7 +55,6 @@
                         <input type="hidden" name="category_id" value="{{ currentPage.parentId }}">
                         <input type="hidden" name="type" value="shop">
 
-                        {{ renderOutputTypeChunk(currentPage, fields, 'tag', 'page_') }}
                         {{ renderOutputTypeChunk(currentPage, fields, 'description') }}
                         {{ renderOutputTypeChunk(currentPage, fields, 'parameters', 'page_') }}
                         {{ renderOutputTypeChunk(currentPage, fields, 'file') }}

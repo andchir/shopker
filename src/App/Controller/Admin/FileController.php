@@ -233,7 +233,7 @@ class FileController extends BaseController
         if ($error) {
             return [$usedFiles, $error];
         } else {
-            $collection->update(['_id' => $entity['_id']], ['$set' => $entity]);
+            $collection->updateOne(['_id' => $entity['_id']], ['$set' => $entity]);
         }
 
         $productController->sortAdditionalFields($contentType->getCollection(), $entity, $options['fieldsSort']);

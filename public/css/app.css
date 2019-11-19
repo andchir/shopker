@@ -17,6 +17,7 @@
 .min-height150 { min-height: 150px; }
 .max-height200 { max-height: 200px; overflow: hidden; overflow-y: auto; }
 .image-wrapper img { max-width: 100%; }
+.clearfix { display: block; clear: both; }
 main h1 { font-family: 'Comfortaa', sans-serif; }
 button:disabled,
 input:disabled,
@@ -134,13 +135,15 @@ header .header-brand { display: inline-block; padding: 0.1rem 0.2rem 0 0; font-s
 
 /* carousel */
 .carousel-indicators { bottom: -40px; }
-.carousel-indicators.carousel-indicators-inverted li { background-color: #ddd; }
+.carousel-indicators.carousel-indicators-inverted li { background-color: #bfbfbf; }
 .carousel-indicators.carousel-indicators-inverted li.active { background-color: #6c757d; }
 .carousel-control-icon { font-size: 70px; color: #6c757d; }
 .carousel-control-icon:hover { color: #777; }
 .carousel-control-icon:focus,
 .carousel-control-icon:active { color: #6c757d; }
-.carousel-control-next, .carousel-control-prev { width: 10%; }
+.carousel-control-next, .carousel-control-prev { font-size: 50px; width: 35px; }
+.carousel-control-prev { margin-left: -31px; }
+.carousel-control-next { margin-right: -31px; }
 
 /* color-checkbox */
 .shk-color-checkbox {  }

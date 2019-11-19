@@ -177,7 +177,7 @@ class FileController extends ProductController
         $dm->flush();
 
         $fileData['downloads'] = $fileDocument->getDownloads();
-        $collection->update(
+        $collection->updateOne(
             ['_id' => (int) $ownerDocId],
             ['$set' => [$fieldName => $fileData]]
         );

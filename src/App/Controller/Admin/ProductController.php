@@ -538,7 +538,7 @@ class ProductController extends BaseProductController
 
         $result = $this->deleteItem($contentType, $document);
 
-        if (!empty($result['ok'])) {
+        if ($result) {
             return new JsonResponse([]);
         } else {
             return $this->setError('Error.');
@@ -594,15 +594,18 @@ class ProductController extends BaseProductController
     public function blockItem(ContentType $contentType, $itemData)
     {
         $collection = $this->getCollection($contentType->getCollection());
-        $result = $collection->update(
-            [
-                '_id' => $itemData['_id']
-            ],
-            [
-                '$set' => ['isActive' => !$itemData['isActive']]
-            ]
-        );
-
+        try {
+            $result = $collection->updateOne(
+                [
+                    '_id' => $itemData['_id']
+                ],
+                [
+                    '$set' => ['isActive' => !$itemData['isActive']]
+                ]
+            );
+        } catch (\Exception $e) {
+            $result = false;
+        }
         $categoryId = isset($itemData['parentId']) ? $itemData['parentId'] : 0;
         $this->onAfterUpdateItem($contentType, $itemData, $categoryId);
 
@@ -706,12 +709,15 @@ class ProductController extends BaseProductController
         }
 
         $unsetQuery = !empty($unset) ? ['$unset' => $unset] : [];
-        $result = $collection->update(
-            ['_id' => $itemId],
-            array_merge(['$set' => $document], $unsetQuery)
-        );
-
-        return !empty($result['ok']);
+        try {
+            $result = $collection->updateOne(
+                ['_id' => $itemId],
+                array_merge(['$set' => $document], $unsetQuery)
+            );
+        } catch (\Exception $e) {
+            $result = false;
+        }
+        return $result;
     }
 
     /**

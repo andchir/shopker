@@ -144,6 +144,10 @@ header .header-brand { display: inline-block; padding: 0.1rem 0.2rem 0 0; font-s
 .carousel-control-next, .carousel-control-prev { font-size: 50px; width: 35px; }
 .carousel-control-prev { margin-left: -31px; }
 .carousel-control-next { margin-right: -31px; }
+@media (max-width: 767.98px) {
+    .carousel-control-prev,
+    .carousel-control-next { margin: 0 !important; }
+}
 
 /* color-checkbox */
 .shk-color-checkbox {  }

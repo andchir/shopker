@@ -89,6 +89,9 @@
 
 <script>
     var baseUrl = window.location.protocol + '//' + window.location.hostname;
+    if (window.location.port) {
+        baseUrl += ':' + window.location.port;
+    }
     if (window.location.pathname.indexOf('app_dev.php') > -1) {
         baseUrl += '/app_dev.php';
     }

@@ -124,8 +124,10 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
                 new AuthenticationException($message)
             );
         }
-        $url = $this->getLoginUrl();
-        return new RedirectResponse($url);
+        if ($request->get('back_to')) {
+            return new RedirectResponse($request->get('back_to'));
+        }
+        return new RedirectResponse($this->getLoginUrl());
     }
 
     /**

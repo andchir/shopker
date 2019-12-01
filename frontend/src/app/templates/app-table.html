@@ -9,10 +9,13 @@
                     </div>
                 </th>
                 <th *ngFor="let tableField of tableFields; let index=index">
-                    <button type="button" class="btn btn-block btn-link" (click)="selectSortBy(tableField.sortName)">
+                    <button type="button" class="btn btn-block btn-link" (click)="selectSortBy(tableField.sortName)" *ngIf="tableField.sortName; else noSortable">
                         {{tableField.title | translate}}
                         <i [class.icon-arrow-down]="queryOptions.sort_dir == 'asc'" [class.icon-arrow-up]="queryOptions.sort_dir == 'desc'" [style.visibility]="tableField.sortName == queryOptions.sort_by ? 'visible' : 'hidden'"></i>
                     </button>
+                    <ng-template #noSortable>
+                        <div class="px-3 py-2">{{tableField.title | translate}}</div>
+                    </ng-template>
                 </th>
             </tr>
         </thead>

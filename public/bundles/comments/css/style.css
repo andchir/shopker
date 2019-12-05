@@ -1,0 +1,32 @@
+@font-face {
+  font-family: 'icomoon-comments';
+  src:
+    url('fonts/icomoon-comments.ttf?5mn4j') format('truetype'),
+    url('fonts/icomoon-comments.woff?5mn4j') format('woff'),
+    url('fonts/icomoon-comments.svg?5mn4j#icomoon-comments') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon-comments' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-star-o:before {
+  content: "\e900";
+}
+.icon-star:before {
+  content: "\e901";
+}

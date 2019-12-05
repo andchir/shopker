@@ -215,5 +215,17 @@ var APP_LANG = {
     "mongodb_password": "MongoDB: Пароль",
     "mongodb_port": "MongoDB: Порт",
     "mongodb_server": "MongoDB: Сервер",
-    "mongodb_user": "MongoDB: Пользоватеь"
+    "mongodb_user": "MongoDB: Пользоватеь",
+    "COMMENTS": "Отзывы",
+    "THREAD_ID": "ID родителя",
+    "VOTE": "Оценка",
+    "CREATED_TIME": "Время создания",
+    "PUBLISHED_TIME": "Время публикации",
+    "PENDING": "Ожидает проверки",
+    "PUBLISHED": "Опубликован",
+    "DELETED": "Удален",
+    "REPLY": "Ответ",
+    "PUBLISH": "Опубликовать",
+    "HIDE": "Скрыть",
+    "AUTHOR": "Автор"
 };

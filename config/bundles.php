@@ -19,5 +19,6 @@ return [
     App\MainBundle\AppMainBundle::class => ['all' => true],
     Liip\ImagineBundle\LiipImagineBundle::class => ['all' => true],
     Gregwar\CaptchaBundle\GregwarCaptchaBundle::class => ['all' => true],
-    Andchir\OmnipayBundle\OmnipayBundle::class => ['all' => true]
+    Andchir\OmnipayBundle\OmnipayBundle::class => ['all' => true],
+    Andchir\CommentsBundle\CommentsBundle::class => ['all' => true],
 ];

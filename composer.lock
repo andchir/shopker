@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cde1b445530385b5cd7f37fd5bbfdc9a",
+    "content-hash": "db2e77f1dad10fb794b8d87dd68d819e",
     "packages": [
         {
             "name": "alcaeus/mongo-php-adapter",
@@ -164,6 +164,53 @@
             ],
             "description": "Payment gateway module for Omnipay: Yandex kassa(checkout) forked from official for version compatible with Laravel 5.6",
             "time": "2018-10-07T22:19:46+00:00"
+        },
+        {
+            "name": "andchir/shopkeeper4-comments",
+            "version": "v1.0.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/andchir/shopkeeper4-comments.git",
+                "reference": "8748d765b7c7242ee77738002fb332f2b424974f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/andchir/shopkeeper4-comments/zipball/8748d765b7c7242ee77738002fb332f2b424974f",
+                "reference": "8748d765b7c7242ee77738002fb332f2b424974f",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/persistence": "*",
+                "symfony/form": "*",
+                "symfony/translation": "*"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "Andchir\\CommentsBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "andchir",
+                    "email": "andchir@gmail.com"
+                }
+            ],
+            "description": "Reviews and ratings for Symfony4",
+            "homepage": "http://modx-shopkeeper.ru/",
+            "keywords": [
+                "comments",
+                "raiting",
+                "reviews",
+                "shopkeeper4",
+                "symfony-bundle",
+                "symfony4"
+            ],
+            "time": "2019-12-05T09:16:16+00:00"
         },
         {
             "name": "andrewnovikof/omnipay-sberbank",

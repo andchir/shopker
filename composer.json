@@ -9,6 +9,7 @@
         "ext-json": "*",
         "alcaeus/mongo-php-adapter": "^1.1",
         "andchir/omnipay-bundle": "^1.0",
+        "andchir/shopkeeper4-comments": "^1.0",
         "composer/composer": "^1.8",
         "doctrine/cache": "^1.8",
         "doctrine/doctrine-cache-bundle": "^1.3",

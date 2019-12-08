@@ -1,5 +1,10 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets -%}
+    {{ parent() }}
+    <link href="{{ asset('bundles/comments/css/comments.css') }}" rel="stylesheet">
+{% endblock -%}
+
 {% set favoritesCount = shopCartProductCount('products', 'favorites') %}
 {% set favoritesItemCount = shopCartProductCount('products', 'favorites', currentPage.id) %}
 
@@ -48,37 +53,44 @@
                 </div>
                 <div class="column-right js-shopping-cart-product">
 
-                    {% include 'flash_messages.html.twig' %}
+                    <div class="float-left w-100">
 
-                    <form id="shk-form" action="{{ pathLocalized('shop_cart_action') }}" method="post">
-                        <input type="hidden" name="item_id" value="{{ currentPage.id }}">
-                        <input type="hidden" name="category_id" value="{{ currentPage.parentId }}">
-                        <input type="hidden" name="type" value="shop">
+                        {% include 'flash_messages.html.twig' %}
 
-                        {{ renderOutputTypeChunk(currentPage, fields, 'description') }}
-                        {{ renderOutputTypeChunk(currentPage, fields, 'parameters', 'page_') }}
-                        {{ renderOutputTypeChunk(currentPage, fields, 'file') }}
+                        <form id="shk-form" action="{{ pathLocalized('shop_cart_action') }}" method="post">
+                            <input type="hidden" name="item_id" value="{{ currentPage.id }}">
+                            <input type="hidden" name="category_id" value="{{ currentPage.parentId }}">
+                            <input type="hidden" name="type" value="shop">
 
-                        {% if currentPage.price > 0 %}
-                            <div class="my-3">
-                                {{ 'Price' | trans }}:
-                                <span class="big font-weight-bold shk-price">{{ currentPage.price | price }}</span>
-                                <span class="shk-currency">{{ currency }}</span>
-                            </div>
-                        {% endif %}
-                        <div class="my-3">
-                            {% if shopCartProductCount(contentType.name, 'shop', currentPage.id) > 0 %}
-                                <a class="btn btn-info" href="{{ pathLocalized('shop_cart_edit') }}">
-                                    {{ 'Proceed to checkout' | trans }}
-                                </a>
-                            {% else %}
-                                <input type="number" class="form-control d-inline-block text-center mr-2" value="1" min="1" step="1" name="count" style="width: 100px;">
-                                <button type="submit" class="btn btn-primary" name="submit_button">
-                                    {{ 'Add to cart' | trans }}
-                                </button>
+                            {{ renderOutputTypeChunk(currentPage, fields, 'description') }}
+                            {{ renderOutputTypeChunk(currentPage, fields, 'parameters', 'page_') }}
+                            {{ renderOutputTypeChunk(currentPage, fields, 'file') }}
+
+                            {% if currentPage.price > 0 %}
+                                <div class="my-3">
+                                    {{ 'Price' | trans }}:
+                                    <span class="big font-weight-bold shk-price">{{ currentPage.price | price }}</span>
+                                    <span class="shk-currency">{{ currency }}</span>
+                                </div>
                             {% endif %}
-                        </div>
-                    </form>
+                            <div class="my-3">
+                                {% if shopCartProductCount(contentType.name, 'shop', currentPage.id) > 0 %}
+                                    <a class="btn btn-info" href="{{ pathLocalized('shop_cart_edit') }}">
+                                        {{ 'Proceed to checkout' | trans }}
+                                    </a>
+                                {% else %}
+                                    <input type="number" class="form-control d-inline-block text-center mr-2" value="1" min="1" step="1" name="count" style="width: 100px;">
+                                    <button type="submit" class="btn btn-primary" name="submit_button">
+                                        {{ 'Add to cart' | trans }}
+                                    </button>
+                                {% endif %}
+                            </div>
+                        </form>
+
+                        {% include '@Comments/Default/async.html.twig' with {'threadId': currentCategory.contentTypeName ~ '_' ~ currentId} only %}
+
+                    </div>
+
                 </div>
                 <div class="clearfix"></div>
             </div>

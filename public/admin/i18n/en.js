@@ -215,5 +215,16 @@ var APP_LANG = {
     "mongodb_password": "MongoDB password",
     "mongodb_port": "MongoDB: Port",
     "mongodb_server": "MongoDB server",
-    "mongodb_user": "MongoDB user"
+    "mongodb_user": "MongoDB user",
+    "COMMENTS": "Reviews",
+    "THREAD_ID": "Parent ID",
+    "VOTE": "Rating",
+    "CREATED_TIME": "Creation time",
+    "PUBLISHED_TIME": "Post time",
+    "PENDING": "Pending",
+    "PUBLISHED": "Published",
+    "DELETED": "Deleted",
+    "REPLY": "Reply",
+    "PUBLISH": "Publish",
+    "HIDE": "Hide"
 };

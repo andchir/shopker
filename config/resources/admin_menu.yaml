@@ -2,6 +2,7 @@ menu:
     - { title: 'ORDERS', route: '/orders', icon: 'icon-bag' }
     - { title: 'CATALOG', route: '/catalog', icon: 'icon-layers' }
     - { title: 'STATISTICS', route: '/statistics', icon: 'icon-bar-graph-2' }
+    - { title: 'COMMENTS', route: '/module/comments', icon: 'icon-message-circle' }
     - { title: 'USERS', route: '/users', icon: 'icon-head' }
     - { title: 'TEMPLATES', route: '/templates_edit', icon: 'icon-columns' }
     - { title: 'SETTINGS', route: '/settings', icon: 'icon-cog' }

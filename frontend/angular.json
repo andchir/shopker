@@ -142,6 +142,130 @@
           }
         }
       }
+    },
+    "comments": {
+      "projectType": "application",
+      "schematics": {},
+      "root": "projects/comments",
+      "sourceRoot": "projects/comments/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/comments",
+            "index": "projects/comments/src/index.html",
+            "main": "projects/comments/src/main.ts",
+            "polyfills": "projects/comments/src/polyfills.ts",
+            "tsConfig": "projects/comments/tsconfig.app.json",
+            "aot": false,
+            "assets": [
+              "projects/comments/src/favicon.ico",
+              "projects/comments/src/assets"
+            ],
+            "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.css",
+              "node_modules/primeng/resources/primeng.css",
+              "node_modules/primeng/resources/themes/nova-light/theme.css",
+              "node_modules/dragula/dist/dragula.css",
+              "css/icomoon/style.css",
+              "css/styles.css",
+              "projects/comments/src/styles.css"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/comments/src/environments/environment.ts",
+                  "with": "projects/comments/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "comments:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "comments:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "comments:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/comments/src/test.ts",
+            "polyfills": "projects/comments/src/polyfills.ts",
+            "tsConfig": "projects/comments/tsconfig.spec.json",
+            "karmaConfig": "projects/comments/karma.conf.js",
+            "assets": [
+              "projects/comments/src/favicon.ico",
+              "projects/comments/src/assets"
+            ],
+            "styles": [
+              "projects/comments/src/styles.css"
+            ],
+            "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/comments/tsconfig.app.json",
+              "projects/comments/tsconfig.spec.json",
+              "projects/comments/e2e/tsconfig.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        },
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "projects/comments/e2e/protractor.conf.js",
+            "devServerTarget": "comments:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "comments:serve:production"
+            }
+          }
+        }
+      }
     }
   },
   "defaultProject": "shk-app",

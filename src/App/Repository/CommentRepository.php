@@ -2,11 +2,38 @@
 
 namespace App\Repository;
 
-use Andchir\CommentsBundle\Repository\CommentAdminRepositoryAbstract;
+use Andchir\CommentsBundle\Repository\CommentRepositoryInterface;
 use Doctrine\ODM\MongoDB\Query\Builder;
 
-class CommentRepository extends CommentAdminRepositoryAbstract
+class CommentRepository extends BaseRepository implements CommentRepositoryInterface
 {
+    /**
+     * @param string $threadId
+     * @param string $status
+     * @return array
+     */
+    public function findByStatus($threadId, $status)
+    {
+        return $this->findBy([
+            'threadId' => $threadId,
+            'status' => $status
+        ], [
+            'publishedTime' => 'desc'
+        ]);
+    }
+
+    /**
+     * @param string $threadId
+     * @return array
+     */
+    public function findAllByThread($threadId)
+    {
+        return $this->findBy([
+            'threadId' => $threadId
+        ], [
+            'publishedTime' => 'desc'
+        ]);
+    }
 
     /**
      * @param Builder $query
@@ -23,5 +50,4 @@ class CommentRepository extends CommentAdminRepositoryAbstract
                 ->addOr($query->expr()->field('reply')->equals(new \MongoDB\BSON\Regex("{$searchWord}", "i")))
         );
     }
-
 }

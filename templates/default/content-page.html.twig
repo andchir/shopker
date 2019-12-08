@@ -1,14 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block stylesheets -%}
-    {{ parent() }}
-    <link href="{{ asset('bundles/comments/css/comments.css') }}" rel="stylesheet">
-{% endblock -%}
-
 {% set favoritesCount = shopCartProductCount('products', 'favorites') %}
 {% set favoritesItemCount = shopCartProductCount('products', 'favorites', currentPage.id) %}
 
 {% block title %}{{ currentPage.title | default('') }} - {{ app_name }}{% endblock %}
+
+{% block stylesheets -%}
+    {{ parent() }}
+    <link href="{{ asset('bundles/comments/css/comments.css') }}" rel="stylesheet">
+{% endblock -%}
 
 {% block body %}
     {% include 'header.html.twig' %}
@@ -52,7 +52,6 @@
 
                 </div>
                 <div class="column-right js-shopping-cart-product">
-
                     <div class="float-left w-100">
 
                         {% include 'flash_messages.html.twig' %}
@@ -90,7 +89,6 @@
                         {% include '@Comments/Default/async.html.twig' with {'threadId': currentCategory.contentTypeName ~ '_' ~ currentId} only %}
 
                     </div>
-
                 </div>
                 <div class="clearfix"></div>
             </div>

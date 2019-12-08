@@ -9,7 +9,17 @@
         "version": "v1.0.5"
     },
     "andchir/shopkeeper4-comments": {
-        "version": "v1.0.9"
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/andchir/shopkeeper4-recipes-contrib",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "29e8ac1cf8324407919d5279cca3bb24ca48720e"
+        },
+        "files": [
+            "config/packages/comments.yaml",
+            "config/routes/comments.yaml"
+        ]
     },
     "andrewnovikof/omnipay-sberbank": {
         "version": "3.2.0"
@@ -196,6 +206,9 @@
     },
     "omnipay/paypal": {
         "version": "v3.0.2"
+    },
+    "php": {
+        "version": "7.3"
     },
     "php-http/discovery": {
         "version": "1.4.0"

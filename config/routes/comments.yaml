@@ -1,3 +1,3 @@
-shopkeeper4_comments:
-    resource: ../../vendor/andchir/shopkeeper4-comments/
+comments:
+    resource: '@CommentsBundle'
     type: annotation

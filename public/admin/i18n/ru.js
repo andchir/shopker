@@ -226,5 +226,6 @@ var APP_LANG = {
     "DELETED": "Удален",
     "REPLY": "Ответ",
     "PUBLISH": "Опубликовать",
-    "HIDE": "Скрыть"
+    "HIDE": "Скрыть",
+    "AUTHOR": "Автор"
 };

@@ -39,6 +39,7 @@ cp -r "$DIR"/public/app_build "$DIR"/"$OUTPUT_DIRNAME"/public
 cp -r "$DIR"/public/css "$DIR"/"$OUTPUT_DIRNAME"/public
 cp -r "$DIR"/public/img "$DIR"/"$OUTPUT_DIRNAME"/public
 cp -r "$DIR"/public/js "$DIR"/"$OUTPUT_DIRNAME"/public
+cp -r "$DIR"/public/bundles "$DIR"/"$OUTPUT_DIRNAME"/public/bundles
 mkdir "$DIR"/"$OUTPUT_DIRNAME"/public/uploads
 
 cp -r "$DIR"/public/admin "$DIR"/"$OUTPUT_DIRNAME"/public/admin

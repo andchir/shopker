@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cde1b445530385b5cd7f37fd5bbfdc9a",
+    "content-hash": "e8acd06c55705e469d0b773f5bff9caf",
     "packages": [
         {
             "name": "alcaeus/mongo-php-adapter",
@@ -158,12 +158,64 @@
                     "email": "baltaev.artur+opensource@gmail.com"
                 },
                 {
-                    "name": "Andchir",
+                    "name": "andchir",
                     "email": "andchir@gmail.com"
                 }
             ],
             "description": "Payment gateway module for Omnipay: Yandex kassa(checkout) forked from official for version compatible with Laravel 5.6",
             "time": "2018-10-07T22:19:46+00:00"
+        },
+        {
+            "name": "andchir/shopkeeper4-comments",
+            "version": "v1.0.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/andchir/shopkeeper4-comments.git",
+                "reference": "ffd5e179494a7446d87937826687b63b55edc00d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/andchir/shopkeeper4-comments/zipball/ffd5e179494a7446d87937826687b63b55edc00d",
+                "reference": "ffd5e179494a7446d87937826687b63b55edc00d",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/persistence": "*",
+                "symfony/form": "*",
+                "symfony/translation": "*"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "symfony": {
+                    "require": "4.3.*"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Andchir\\CommentsBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "andchir",
+                    "email": "andchir@gmail.com"
+                }
+            ],
+            "description": "Reviews and ratings for Symfony4",
+            "homepage": "http://modx-shopkeeper.ru/",
+            "keywords": [
+                "comments",
+                "raiting",
+                "reviews",
+                "shopkeeper4",
+                "symfony-bundle",
+                "symfony4"
+            ],
+            "time": "2019-12-06T11:15:36+00:00"
         },
         {
             "name": "andrewnovikof/omnipay-sberbank",
@@ -4531,16 +4583,16 @@
         },
         {
             "name": "symfony/cache",
-            "version": "v4.3.6",
+            "version": "v4.3.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/cache.git",
-                "reference": "30a51b2401ee15bfc7ea98bd7af0f9d80e26e649"
+                "reference": "2a7bcc592adcaab9efc165bbced5a91fe905fad4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/cache/zipball/30a51b2401ee15bfc7ea98bd7af0f9d80e26e649",
-                "reference": "30a51b2401ee15bfc7ea98bd7af0f9d80e26e649",
+                "url": "https://api.github.com/repos/symfony/cache/zipball/2a7bcc592adcaab9efc165bbced5a91fe905fad4",
+                "reference": "2a7bcc592adcaab9efc165bbced5a91fe905fad4",
                 "shasum": ""
             },
             "require": {
@@ -4605,7 +4657,7 @@
                 "caching",
                 "psr6"
             ],
-            "time": "2019-10-30T12:58:49+00:00"
+            "time": "2019-12-01T10:50:31+00:00"
         },
         {
             "name": "symfony/cache-contracts",
@@ -7927,28 +7979,28 @@
         },
         {
             "name": "symfony/var-exporter",
-            "version": "v4.3.6",
+            "version": "v4.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-exporter.git",
-                "reference": "d5b4e2d334c1d80e42876c7d489896cfd37562f2"
+                "reference": "e566070effe60b8d16b99e958cdbd92aa2e470cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-exporter/zipball/d5b4e2d334c1d80e42876c7d489896cfd37562f2",
-                "reference": "d5b4e2d334c1d80e42876c7d489896cfd37562f2",
+                "url": "https://api.github.com/repos/symfony/var-exporter/zipball/e566070effe60b8d16b99e958cdbd92aa2e470cb",
+                "reference": "e566070effe60b8d16b99e958cdbd92aa2e470cb",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.1.3"
             },
             "require-dev": {
-                "symfony/var-dumper": "^4.1.1"
+                "symfony/var-dumper": "^4.1.1|^5.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.3-dev"
+                    "dev-master": "4.4-dev"
                 }
             },
             "autoload": {
@@ -7983,7 +8035,7 @@
                 "instantiate",
                 "serialize"
             ],
-            "time": "2019-08-22T07:33:08+00:00"
+            "time": "2019-12-01T08:39:58+00:00"
         },
         {
             "name": "symfony/web-link",

@@ -1,18 +1,30 @@
-{% set min = min(filter.values) %}
-{% set max = max(filter.values) %}
-<div class="mb-5 pt-4 pb-2 px-2">
-    <div class="shk-slider-range" data-name="{{ filter.name }}">
-        <input class="form-control"
-               name="filter[{{ filter.name }}][from]"
-               type="range"
-               min="{{ min }}"
-               max="{{ max }}"
-               value="{{ min }}">
-        <input class="form-control"
-               name="filter[{{ filter.name }}][to]"
-               type="range"
-               min="{{ min }}"
-               max="{{ max }}"
-               value="{{ max }}">
+{% if filter.values | length > 1 %}
+    {% set min = min(filter.values) %}
+    {% set max = max(filter.values) %}
+    <div class="filter-block">
+        <h4>
+            {{ filter.title }}
+        </h4>
+        <div class="my-2">
+            <div class="mb-5 pt-4 pb-2 px-2">
+                <div class="shk-slider-range" data-name="{{ filter.name }}">
+                    <input class="form-control"
+                           name="filter[{{ filter.name }}][from]"
+                           type="range"
+                           min="{{ min }}"
+                           max="{{ max }}"
+                           step="0.1"
+                           value="{{ min }}">
+                    <input class="form-control"
+                           name="filter[{{ filter.name }}][to]"
+                           type="range"
+                           min="{{ min }}"
+                           max="{{ max }}"
+                           step="0.1"
+                           value="{{ max }}">
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+    <hr>
+{% endif %}

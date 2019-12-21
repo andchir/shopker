@@ -1,17 +1,25 @@
-<div class="max-height200">
-    {% for value in filter.values %}
-        <div class="p-2 float-left">
-            <div class="custom-control custom-checkbox">
-                <input type="checkbox"
-                       class="custom-control-input"
-                       name="filter[{{ filter.name }}][]"
-                       value="{{ value|replace({'#':''}) }}"
-                       id="filter_{{ filter.name }}{{ loop.index }}">
-                <label class="d-block custom-control-label shk-color-checkbox" for="filter_{{ filter.name }}{{ loop.index }}" style="background-color: {{ value }};">
+<div class="filter-block">
+    <h4>
+        {{ filter.title }}
+    </h4>
+    <div class="my-2">
+        <div class="max-height200">
+            {% for value in filter.values %}
+                <div class="p-2 float-left">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox"
+                               class="custom-control-input"
+                               name="filter[{{ filter.name }}][]"
+                               value="{{ value|replace({'#':''}) }}"
+                               id="filter_{{ filter.name }}{{ loop.index }}">
+                        <label class="d-block custom-control-label shk-color-checkbox" for="filter_{{ filter.name }}{{ loop.index }}" style="background-color: {{ value }};">
 
-                </label>
-            </div>
+                        </label>
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="clearfix"></div>
         </div>
-    {% endfor %}
-    <div class="clearfix"></div>
+    </div>
 </div>
+<hr>

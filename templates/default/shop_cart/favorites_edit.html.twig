@@ -5,7 +5,7 @@
     {% if items | length > 0 %}
         <form action="{{ path('shop_cart_action') }}" method="post">
             <input type="hidden" name="type" value="{{ type }}">
-            <table class="table">
+            <table class="table border-bottom">
                 <tbody>
                 {% for item in items %}
                     <tr>

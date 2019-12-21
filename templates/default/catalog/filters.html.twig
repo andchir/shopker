@@ -19,15 +19,7 @@
         <div class="catalog-filters-wrapper">
             <div class="catalog-filters-inner">
                 {% for filter in filters %}
-                    <div class="filter-block">
-                        <h4>
-                            {{ filter.title }}
-                        </h4>
-                        <div class="my-2">
-                            {{ outputFilter( filter ) }}
-                        </div>
-                    </div>
-                    <hr>
+                    {{ outputFilter( filter ) }}
                 {% endfor %}
             </div>
         </div>

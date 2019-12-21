@@ -1,16 +1,24 @@
-<div class="max-height200">
-    {% for value in filter.values %}
-        <label class="p-2 mb-0">
-            <div class="custom-control custom-checkbox">
-                <input type="checkbox"
-                       class="custom-control-input"
-                       name="filter[{{ filter.name }}][]"
-                       value="{{ value }}"
-                       id="filter_{{ filter.name }}{{ loop.index }}">
-                <label class="custom-control-label" for="filter_{{ filter.name }}{{ loop.index }}">
-                    {{ value }}
+<div class="filter-block">
+    <h4>
+        {{ filter.title }}
+    </h4>
+    <div class="my-2">
+        <div class="max-height200">
+            {% for value in filter.values %}
+                <label class="p-2 mb-0">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox"
+                               class="custom-control-input"
+                               name="filter[{{ filter.name }}][]"
+                               value="{{ value }}"
+                               id="filter_{{ filter.name }}{{ loop.index }}">
+                        <label class="custom-control-label" for="filter_{{ filter.name }}{{ loop.index }}">
+                            {{ value }}
+                        </label>
+                    </div>
                 </label>
-            </div>
-        </label>
-    {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
 </div>
+<hr>

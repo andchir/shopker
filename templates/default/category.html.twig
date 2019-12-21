@@ -2,6 +2,11 @@
 
 {% block title %}{{ currentPage.title | default('') }} - {{ app_name }}{% endblock %}
 
+{% block stylesheets -%}
+    {{ parent() }}
+    <link href="{{ asset('bundles/comments/css/comments.css') }}" rel="stylesheet">
+{% endblock -%}
+
 {% block body %}
     {% include 'header.html.twig' %}
     <main role="main" class="container">
@@ -49,7 +54,7 @@
                                                     <div class="position-relative js-shopping-cart-favorites">
                                                         {{ renderOutputTypeArray(item, fields, '', {"currency": currency}) }}
                                                         <div class="position-absolute pos-right-top show-on-hover">
-                                                            <form id="shk-form" action="{{ pathLocalized('shop_cart_action') }}" method="post">
+                                                            <form action="{{ pathLocalized('shop_cart_action') }}" method="post">
                                                                 <input type="hidden" name="item_id" value="{{ item._id }}">
                                                                 <input type="hidden" name="category_id" value="{{ item.parentId }}">
                                                                 <input type="hidden" name="type" value="favorites">
@@ -61,7 +66,7 @@
                                                     </div>
                                                     <div class="position-relative js-shopping-cart-product">
                                                         <div class="card-footer-absolute show-on-hover">
-                                                            <form id="shk-form" action="{{ pathLocalized('shop_cart_action') }}" method="post">
+                                                            <form action="{{ pathLocalized('shop_cart_action') }}" method="post">
                                                                 <input type="hidden" name="item_id" value="{{ item._id }}">
                                                                 <input type="hidden" name="category_id" value="{{ item.parentId }}">
                                                                 <input type="hidden" name="type" value="shop">

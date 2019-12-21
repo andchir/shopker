@@ -394,6 +394,10 @@ class ProductController extends BaseProductController
             $document[$key] = $value;
         }
 
+        // Dispatch event
+        $eventDispatcher = $this->get('event_dispatcher');
+        $event = new GenericEvent($document, ['contentType' => $contentType]);
+
         // Save document
         if($itemId){
             try {
@@ -404,6 +408,7 @@ class ProductController extends BaseProductController
             } catch (\Exception $e) {
                 $result = null;
             }
+            $eventDispatcher->dispatch($event, Events::PRODUCT_UPDATED);
         }
         else {
             try {
@@ -411,11 +416,9 @@ class ProductController extends BaseProductController
             } catch (\Exception $e) {
                 $result = null;
             }
-
-            // Dispatch event
-            $eventDispatcher = $this->get('event_dispatcher');
-            $event = new GenericEvent($document, ['contentType' => $contentType]);
+            
             $eventDispatcher->dispatch($event, Events::PRODUCT_CREATED);
+            $eventDispatcher->dispatch($event, Events::PRODUCT_UPDATED);
         }
 
         if (!empty($document['translations'])) {
@@ -431,8 +434,6 @@ class ProductController extends BaseProductController
             $fileController->deleteUnused($contentType->getName(), $itemId, $fileIds);
             $this->sortAdditionalFields($contentType->getCollection(), $document, $fieldsSort);
         }
-
-        $this->onAfterUpdateItem($contentType, $document, $category->getId());
 
         // Clear file cache
         if (!empty($data['clearCache'])) {
@@ -566,14 +567,12 @@ class ProductController extends BaseProductController
             return $result;
         }
 
-        if ($skipEvents) {
-            $categoryId = isset($itemData['parentId']) ? $itemData['parentId'] : 0;
-            $this->onAfterUpdateItem($contentType, [], $categoryId);
-
+        if (!$skipEvents) {
             // Dispatch event
             $eventDispatcher = $this->get('event_dispatcher');
             $event = new GenericEvent($itemData, ['contentType' => $contentType]);
             $eventDispatcher->dispatch($event, Events::PRODUCT_DELETED);
+            $eventDispatcher->dispatch($event, Events::PRODUCT_UPDATED);
         }
 
         if ($clearCache) {
@@ -606,8 +605,11 @@ class ProductController extends BaseProductController
         } catch (\Exception $e) {
             $result = false;
         }
-        $categoryId = isset($itemData['parentId']) ? $itemData['parentId'] : 0;
-        $this->onAfterUpdateItem($contentType, $itemData, $categoryId);
+
+        // Dispatch event
+        $eventDispatcher = $this->get('event_dispatcher');
+        $event = new GenericEvent($itemData, ['contentType' => $contentType]);
+        $eventDispatcher->dispatch($event, Events::PRODUCT_UPDATED);
 
         // Clear file cache
         /** @var FilesystemAdapter $cache */
@@ -765,26 +767,6 @@ class ProductController extends BaseProductController
         }
 
         return $collection->countDocuments($where);
-    }
-
-    /**
-     * @param ContentType $contentType
-     * @param array $itemData
-     * @param int $categoryId
-     */
-    public function onAfterUpdateItem(ContentType $contentType, $itemData, $categoryId = 0)
-    {
-        /** @var CatalogService $catalogService */
-        $catalogService = $this->container->get('app.catalog');
-
-        if ($categoryId) {
-            $categoriesRepository = $this->getCategoriesRepository();
-            /** @var Category $category */
-            $category = $categoriesRepository->find($categoryId);
-            if ($category) {
-                $catalogService->updateFiltersData($category);
-            }
-        }
     }
 
     /**

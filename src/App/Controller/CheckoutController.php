@@ -225,11 +225,7 @@ class CheckoutController extends BaseController
                 $contentType = $contentTypeRepository->findOneBy(['name' => $content->getContentTypeName()]);
             }
             $stockFieldName = $contentType->getFieldByChunkName('stock');
-            if (!$stockFieldName/* || $content->getByKey($stockFieldName) === ''*/) {
-                continue;
-            }
-            $collection = $this->catalogService->getCollection($contentType->getCollection());
-            if (!$collection) {
+            if (!$stockFieldName || !($collection = $this->catalogService->getCollection($contentType->getCollection()))) {
                 continue;
             }
             $productDocument = $collection->findOne([

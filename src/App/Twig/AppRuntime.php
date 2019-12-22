@@ -2,6 +2,7 @@
 
 namespace App\Twig;
 
+use App\MainBundle\Document\Order;
 use App\MainBundle\Document\OrderContent;
 use App\MainBundle\Document\Setting;
 use App\MainBundle\Document\ShoppingCart;
@@ -111,6 +112,24 @@ class AppRuntime
         }
 
         return $count;
+    }
+
+    /**
+     * @param string $contentTypeName
+     * @param int $productId
+     * @return bool
+     */
+    public function isPaidProductFunction($contentTypeName, $productId)
+    {
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->container->get('doctrine_mongodb')->getManager();
+        $categoryRepository = $dm->getRepository(Order::class);
+        $user = $this->getUser();
+        if (!$user) {
+            return false;
+        }
+        $countPaid = $categoryRepository->getPaidByProduct($user->getId(), $contentTypeName, $productId);
+        return $countPaid > 0;
     }
 
     /**
@@ -574,6 +593,17 @@ class AppRuntime
             $currentUri = substr($currentUri, 0, strpos($currentUri, '?'));
         }
         return $currentUri;
+    }
+    
+    public function getUser()
+    {
+        if (null === $token = $this->container->get('security.token_storage')->getToken()) {
+            return null;
+        }
+        if (!is_object($user = $token->getUser())) {
+            return null;
+        }
+        return $user;
     }
 }
 

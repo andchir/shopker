@@ -61,7 +61,7 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
             throw new ORMInvalidArgumentException('User ID is not set.');
         }
         $query = $this->createQueryBuilder();
-        return $total = $query
+        return $query
             ->field('userId')->equals($userId)
             ->count()
             ->getQuery()
@@ -78,5 +78,27 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
             return;
         }
         $query->field('email')->equals(new \MongoDB\BSON\Regex("^{$searchWord}", "i"));
+    }
+
+    /**
+     * @param $userId
+     * @param $contentTypeName
+     * @param $productId
+     * @return int
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
+     */
+    public function getPaidByProduct($userId, $contentTypeName, $productId)
+    {
+        $query = $this->createQueryBuilder();
+        return $query
+            ->field('userId')->equals($userId)
+            ->field('isPaid')->equals(true)
+            ->field('content')->elemMatch([
+                'contentTypeName' => $contentTypeName,
+                'id' => $productId
+            ])
+            ->count()
+            ->getQuery()
+            ->execute();
     }
 }

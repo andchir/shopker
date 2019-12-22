@@ -59,9 +59,11 @@ body { background-color: #eee; }
 
 .btn-secondary { color: #212121; background-color: #fff; border-color: #dbdbdb; background-image: linear-gradient(to bottom, #fff 0%, #e5e5e5 100%); background-repeat: repeat-x; }
 .btn-secondary:hover { color: #212121; border-color: #d1d1d1; }
+.btn-secondary:focus,
+.btn-secondary.focus { color: #212121; }
 .btn-secondary.disabled, .btn-secondary:disabled { color: #212121; background-color: #fff; border-color: #dbdbdb; }
 .btn-secondary:focus:not(:active):not(.active):not(.btn-secondary):not(.btn-light),
-.btn-secondary.focus:not(:active):not(.active):not(.btn-secondary):not(.btn-light) { border-color: #dbdbdb; box-shadow: inset 0 0 0 1px #fff; }
+.btn-secondary.focus:not(:active):not(.active):not(.btn-secondary):not(.btn-light) { color: #212121; border-color: #dbdbdb; box-shadow: inset 0 0 0 1px #fff; }
 .btn-secondary:not(:disabled):not(.disabled):active,
 .btn-secondary:not(:disabled):not(.disabled).active,
 .show > .btn-secondary.dropdown-toggle { color: #212121; background-image: linear-gradient(to bottom, #fff 0%, #e5e5e5 100%); background-repeat: repeat-x; box-shadow: none; }
@@ -339,7 +341,7 @@ body .ui-tree .ui-tree-filter-container .ui-tree-filter-icon { margin-top: -0.75
 .panel-file-manager.active { left: 0; }
 .btn-panel-file-manager-toggle { position: absolute; right: 0; top: 0; width: 10px; height: 100%; padding: 0; border: 0; border-radius: 0; text-align: center; background: none #007bff; }
 .btn-panel-file-manager-toggle:hover { background-color: #2890ff; }
-.btn-panel-file-manager-toggle > i { display: block; margin-left: -3px; }
+.btn-panel-file-manager-toggle > i { display: block; margin-left: -15px; background-color: inherit; padding: 15px 8px 15px 4px; border-top-left-radius: 6px; border-bottom-left-radius: 6px; }
 
 /* tabs-top */
 .tabs-top { position: absolute; right: 46px; top: 0; z-index: 10; }

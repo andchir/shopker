@@ -44,3 +44,4 @@ The specified file path does not exist.: Указанный путь файла 
 "Allowed file types: %extensions%.": "Разрешенные типы файлов: %extensions%."
 File type is not allowed.: Не корректный тип файла.
 Your cart is empty.: Ваша корзина пуста.
+'These products are not available in the quantity you need in stock: %list%.': 'Товары отсутствуют в необходимом количестве на складе: %list%.'

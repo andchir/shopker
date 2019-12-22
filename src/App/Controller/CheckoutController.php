@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\MainBundle\Document\Category;
+use App\MainBundle\Document\ContentType;
 use App\MainBundle\Document\FileDocument;
 use App\MainBundle\Document\Order;
 use App\MainBundle\Document\OrderContent;
@@ -10,11 +11,12 @@ use App\MainBundle\Document\Setting;
 use App\MainBundle\Document\User;
 use App\Events;
 use App\Repository\CategoryRepository;
+use App\Service\CatalogService;
 use App\Service\SettingsService;
 use App\Service\ShopCartService;
 use App\Service\UtilsService;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ODM\MongoDB\Cursor;
+use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
@@ -30,6 +32,17 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class CheckoutController extends BaseController
 {
+    protected $catalogService;
+    protected $shopCartService;
+    protected $dm;
+    
+    public function __construct(ShopCartService $shopCartService, DocumentManager $dm, CatalogService $catalogService)
+    {
+        $this->shopCartService = $shopCartService;
+        $this->dm = $dm;
+        $this->catalogService = $catalogService;
+    }
+
     /**
      * @Route(
      *     "/{_locale}/checkout",
@@ -43,6 +56,7 @@ class CheckoutController extends BaseController
      * @param TranslatorInterface $translator
      * @param EventDispatcherInterface $eventDispatcher
      * @return RedirectResponse|Response
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function checkoutAction(Request $request,
         UtilsService $utilsService,
@@ -98,13 +112,17 @@ class CheckoutController extends BaseController
             /** @var Setting $payment */
             $payment = $form->has('paymentName') ? $form->get('paymentName')->getNormData() : '';
             $paymentName = $payment ? $payment->getOption('value') : '';
-
-            /** @var ShopCartService $shopCartService */
-            $shopCartService = $this->get('app.shop_cart');
-            $shoppingCart = $shopCartService->getShoppingCartByType();
+            
+            $shoppingCart = $this->shopCartService->getShoppingCartByType();
             $shopCartContent = $shoppingCart ? $shoppingCart->getContent() : [];
             if (empty($shopCartContent)) {
                 $form->addError(new FormError($translator->trans('Your cart is empty.', [], 'validators')));
+            }
+            $notAvailable = $this->getNotAvailableInStock();
+            if (!empty($notAvailable)) {
+                $form->addError(new FormError($translator->trans('These products are not available in the quantity you need in stock: %list%.', [
+                    '%list%' => implode(', ', $notAvailable)
+                ], 'validators')));
             }
             if ($form->isValid()) {
 
@@ -158,14 +176,12 @@ class CheckoutController extends BaseController
                 // Dispatch event before create
                 $event = new GenericEvent($order);
                 $order = $eventDispatcher->dispatch($event, Events::ORDER_BEFORE_CREATE)->getSubject();
-
-                /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-                $dm = $this->get('doctrine_mongodb')->getManager();
-                $dm->persist($order);
-                $dm->flush();
+                
+                $this->dm->persist($order);
+                $this->dm->flush();
 
                 $this->updateFilesOwner($order);
-                $shopCartService->clearContent($shoppingCart->getType(), true);
+                $this->shopCartService->clearContent($shoppingCart->getType(), true);
 
                 // Delete temporary files
                 $this->deleteTemporaryFiles(FileDocument::OWNER_ORDER_TEMPORARY);
@@ -192,6 +208,50 @@ class CheckoutController extends BaseController
     }
 
     /**
+     * @return array
+     */
+    public function getNotAvailableInStock()
+    {
+        $notAvailable = [];
+        $shoppingCart = $this->shopCartService->getShoppingCartByType();
+        $shopCartContent = $shoppingCart ? $shoppingCart->getContent() : [];
+        /** @var ContentType $contentType */
+        $contentType = null;
+        $contentTypeRepository = $this->dm->getRepository(ContentType::class);
+        
+        /** @var OrderContent $content */
+        foreach ($shopCartContent as $content) {
+            if (!$contentType || $contentType->getName() !== $content->getContentTypeName()) {
+                $contentType = $contentTypeRepository->findOneBy(['name' => $content->getContentTypeName()]);
+            }
+            $stockFieldName = $contentType->getFieldByChunkName('stock');
+            if (!$stockFieldName/* || $content->getByKey($stockFieldName) === ''*/) {
+                continue;
+            }
+            $collection = $this->catalogService->getCollection($contentType->getCollection());
+            if (!$collection) {
+                continue;
+            }
+            $productDocument = $collection->findOne([
+                '_id' => $content->getId(),
+                'isActive' => true
+            ]);
+            if (!$productDocument) {
+                $notAvailable[] = $content->getTitle();
+                continue;
+            }
+            $stockValue = $productDocument[$stockFieldName] ?? '';
+            if ($stockValue === '') {
+                continue;
+            }
+            if ($content->getCount() > $stockValue) {
+                $notAvailable[] = $content->getTitle();
+            }
+        }
+        return $notAvailable;
+    }
+
+    /**
      * @param Order $order
      * @param $publicUserDataKeys
      */
@@ -212,9 +272,6 @@ class CheckoutController extends BaseController
         if (!$order || !$order->getId()) {
             return;
         }
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
-
         $fileDocumentRepository = $this->getFileRepository();
         $shopCartContent = $order->getContent();
         /** @var OrderContent $content */
@@ -233,7 +290,7 @@ class CheckoutController extends BaseController
                 }
             }
         }
-        $dm->flush();
+        $this->dm->flush();
     }
 
     /**
@@ -271,19 +328,16 @@ class CheckoutController extends BaseController
         if (!$ownerType) {
             $ownerType = FileDocument::OWNER_TEMPORARY;
         }
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
-
         $fileDocumentRepository = $this->getFileRepository();
 
         $max_temp_files_keep_minutes = (int) $this->getParameter('app.max_temp_files_keep_minutes');
         $fileDocuments = $fileDocumentRepository->findTemporaryByTime($ownerType, $max_temp_files_keep_minutes * 60);
         /** @var FileDocument $fileDocument */
         foreach ($fileDocuments as $fileDocument) {
-            $dm->remove($fileDocument);// File will delete by event
+            $this->dm->remove($fileDocument);// File will delete by event
         }
 
-        $dm->flush();
+        $this->dm->flush();
 
         return true;
     }

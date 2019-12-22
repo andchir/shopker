@@ -1,0 +1,7 @@
+{% if value is not empty %}
+<div class="mb-3">
+    <span class="star-rating-value{{ value | round }}"></span>
+    <br>
+    {{ 'Product rating: %rating% of 5' | trans({'%rating%': value}) }}
+</div>
+{% endif %}

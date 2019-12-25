@@ -9,17 +9,7 @@
         "version": "v1.0.5"
     },
     "andchir/shopkeeper4-comments": {
-        "version": "1.0",
-        "recipe": {
-            "repo": "github.com/andchir/shopkeeper4-recipes-contrib",
-            "branch": "master",
-            "version": "1.0",
-            "ref": "29e8ac1cf8324407919d5279cca3bb24ca48720e"
-        },
-        "files": [
-            "config/packages/comments.yaml",
-            "config/routes/comments.yaml"
-        ]
+        "version": "v1.0.9"
     },
     "andrewnovikof/omnipay-sberbank": {
         "version": "3.2.0"

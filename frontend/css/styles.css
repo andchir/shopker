@@ -160,10 +160,10 @@ input.form-control[readonly] { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); curso
 .navbar-vertical-left-bottom { position: absolute; left: 0; bottom: 0; width: 100%; }
 
 /* modals */
-.modal .modal-dialog { box-shadow: 0 0 20px rgba(0,0,0,0.5); border: 5px solid rgba(255,255,255,.5); border-radius: 6px; }
+.modal .modal-dialog { box-shadow: 0 0 20px rgba(0,0,0,0.5); border-radius: 10px; }
 .modal-header { border-bottom: 0; }
 .modal-footer { border-top: 0; }
-.modal-content { border: 0; border-radius: 0; }
+.modal-content { border: 0; }
 
 /* show-on-hover */
 .show-on-hover-parent { position: relative; }

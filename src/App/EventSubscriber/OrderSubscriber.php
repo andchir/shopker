@@ -4,6 +4,7 @@ namespace App\EventSubscriber;
 
 use App\MainBundle\Document\Order;
 use App\Events;
+use App\Service\SettingsService;
 use App\Service\UtilsService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -81,6 +82,32 @@ class OrderSubscriber implements EventSubscriberInterface
                 $this->container->getParameter('app.admin_email')
             );
         }
+
+        // Update products stock value
+        $this->updateProductsStock($order);
+    }
+
+    public function updateProductsStock(Order $order)
+    {
+        /** @var SettingsService $settingsService */
+        $settingsService = $this->container->get('app.settings');
+
+        $statusNumberNew = (int) $this->getParameter('app.payment_status_number');
+        $statusNumberCanceled = (int) $this->getParameter('app.order_status_canceled_number');
+        $currentOrderStatusNumber = $settingsService->getOrderStatusNumber(
+            $order->getStatus()
+        );
+        if (!in_array($currentOrderStatusNumber, [$statusNumberNew, $statusNumberCanceled])) {
+            return;
+        }
+
+        $isReduce = true;// Reduce stock
+        if ($currentOrderStatusNumber === $statusNumberCanceled) {
+            $isReduce = false;
+        }
+
+        // TODO: finish implementation
+
     }
 }
 

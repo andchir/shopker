@@ -35,7 +35,7 @@ class CheckoutController extends BaseController
     protected $catalogService;
     protected $shopCartService;
     protected $dm;
-    
+
     public function __construct(ShopCartService $shopCartService, DocumentManager $dm, CatalogService $catalogService)
     {
         $this->shopCartService = $shopCartService;
@@ -112,7 +112,7 @@ class CheckoutController extends BaseController
             /** @var Setting $payment */
             $payment = $form->has('paymentName') ? $form->get('paymentName')->getNormData() : '';
             $paymentName = $payment ? $payment->getOption('value') : '';
-            
+
             $shoppingCart = $this->shopCartService->getShoppingCartByType();
             $shopCartContent = $shoppingCart ? $shoppingCart->getContent() : [];
             if (empty($shopCartContent)) {
@@ -176,7 +176,7 @@ class CheckoutController extends BaseController
                 // Dispatch event before create
                 $event = new GenericEvent($order);
                 $order = $eventDispatcher->dispatch($event, Events::ORDER_BEFORE_CREATE)->getSubject();
-                
+
                 $this->dm->persist($order);
                 $this->dm->flush();
 
@@ -218,7 +218,7 @@ class CheckoutController extends BaseController
         /** @var ContentType $contentType */
         $contentType = null;
         $contentTypeRepository = $this->dm->getRepository(ContentType::class);
-        
+
         /** @var OrderContent $content */
         foreach ($shopCartContent as $content) {
             if (!$contentType || $contentType->getName() !== $content->getContentTypeName()) {
@@ -236,15 +236,15 @@ class CheckoutController extends BaseController
                 $notAvailable[] = $content->getTitle();
                 continue;
             }
-            $stockValue = $productDocument[$stockFieldName] ?? '';
-            if ($stockValue === '') {
+            $stockValue = $productDocument[$stockFieldName] ?? null;
+            if (is_null($stockValue)) {
                 continue;
             }
             if ($content->getCount() > $stockValue) {
                 $notAvailable[] = $content->getTitle();
             }
         }
-        return $notAvailable;
+        return array_unique($notAvailable);
     }
 
     /**

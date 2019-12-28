@@ -1,9 +1,14 @@
-<div class="modal-header d-block">
-    <div class="d-block float-right">
-        <button type="button" class="btn btn-secondary" [disabled]="submitted" (click)="closeModal($event)">
+<div class="position-relative">
+    <div class="tabs-top">
+        <button type="button" class="btn btn-outline-primary d-block d-md-inline-block ml-md-2"
+                [disabled]="submitted"
+                (click)="close($event)">
+            <i class="icon-cross mr-1"></i>
             <span>{{'CLOSE' | translate}}</span>
         </button>
     </div>
+</div>
+<div class="modal-header d-block">
     <h4 class="modal-title">{{modalTitle}}</h4>
 </div>
 
@@ -200,7 +205,7 @@
                 </div>
             </div>
         </div>
-        <button type="button" class="btn btn-secondary btn-wide" (click)="closeModal($event)">
+        <button type="button" class="btn btn-secondary btn-wide" (click)="close($event)">
             <span>{{'CLOSE' | translate}}</span>
         </button>
     </div>

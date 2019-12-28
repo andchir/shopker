@@ -65,13 +65,21 @@ export abstract class PageTableAbstractComponent<M> implements OnInit, OnDestroy
         this.modalRef = this.modalService.open(this.getModalContent(), {
             size: 'lg',
             backdrop: 'static',
-            keyboard: false
+            keyboard: false,
+            backdropClass: 'modal-backdrop-left45',
+            windowClass: 'modal-left45'
         });
         this.setModalInputs(itemId, isItemCopy);
         this.modalRef.result.then((result) => {
+            if (this.destroyed$.isStopped) {
+                return;
+            }
             this.onModalClose(result);
             this.getList();
         }, (reason) => {
+            if (this.destroyed$.isStopped) {
+                return;
+            }
             this.onModalClose(reason);
             if (reason && ['submit', 'updated'].indexOf(reason) > -1) {
                 this.getList();

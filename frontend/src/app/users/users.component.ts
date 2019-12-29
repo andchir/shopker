@@ -198,9 +198,10 @@ export class UsersComponent extends PageTableAbstractComponent<User> implements 
         }
     }
 
-    setModalInputs(itemId?: number, isItemCopy: boolean = false): void {
+    setModalInputs(itemId?: number, isItemCopy: boolean = false, modalId = ''): void {
         const isEditMode = typeof itemId !== 'undefined' && !isItemCopy;
         this.modalRef.componentInstance.modalTitle = itemId ? `User #${itemId}` : this.getLangString('ADD');
+        this.modalRef.componentInstance.modalId = modalId;
         this.modalRef.componentInstance.itemId = itemId || 0;
         this.modalRef.componentInstance.isItemCopy = isItemCopy || false;
         this.modalRef.componentInstance.isEditMode = isEditMode;

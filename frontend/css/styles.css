@@ -172,7 +172,7 @@ input.form-control[readonly] { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); curso
 .modal-footer { border-top: 0; }
 .modal-content { border: 0; }
 .modal-left45,
-.modal-backdrop-left45 { margin-left: 45px; padding-right: 30px; }
+.modal-backdrop-left45 { left: auto; right: 0; width: calc(100% - 45px); }
 
 /* modal-minimized */
 .modal-minimized { position: static; margin: 0 0 0 7px; padding: 0; overflow: visible !important; width: auto; display: inline-block !important; }
@@ -181,7 +181,10 @@ input.form-control[readonly] { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); curso
 .modal-minimized .modal-header { padding: 7px; }
 .modal-minimized .modal-dialog { display: inline-block; margin: 0; width: 180px; box-shadow: 0 0 10px rgba(0,0,0,0.3); }
 .modal-minimized .modal-body { display: none !important; }
-.modal-minimized .modal-footer { display: none !important;; }
+.modal-minimized .modal-footer { display: none !important; }
+.modal-on-minimized { display: none; }
+.modal-minimized .modal-on-minimized { display: block; }
+.modal-minimized .modal-on-maximized { display: none; }
 
 /* show-on-hover */
 .show-on-hover-parent { position: relative; }

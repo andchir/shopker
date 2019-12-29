@@ -9,19 +9,18 @@ import {TranslateService} from '@ngx-translate/core';
 import {SimpleEntity} from '../models/simple-entity.interface';
 import {FormFieldsErrors, FormFieldsOptions} from '../models/form-fields-options.interface';
 import {DataService} from '../services/data-service.abstract';
-import {UsersService} from "../users/users.service";
 
 export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> implements OnInit, OnDestroy {
 
     @Input() modalTitle: string;
     @Input() itemId: number | null;
+    @Input() modalId = '';
     @Input() isItemCopy: boolean;
     @Input() isEditMode: boolean;
     @ViewChild('formEl', {static: false}) formEl;
 
     private _formFieldsErrors: FormFieldsErrors = {};
     form: FormGroup;
-    isMinimized = false;
     submitted = false;
     loading = false;
     errorMessage: string;
@@ -57,6 +56,9 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
     ) {}
 
     ngOnInit(): void {
+        if (this.elRef) {
+            this.getRootElement().setAttribute('id', this.modalId);
+        }
         this.onBeforeInit();
         this.buildForm();
         if (this.isEditMode || this.isItemCopy) {
@@ -283,8 +285,7 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
         if (event) {
             event.preventDefault();
         }
-        this.isMinimized = true;
-        const modalEl = this.elRef.nativeElement.parentNode.parentNode.parentNode;
+        const modalEl = this.getRootElement();
         const backdropEl = modalEl.previousElementSibling;
 
         modalEl.classList.remove('d-block');
@@ -296,8 +297,7 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
         if (event) {
             event.preventDefault();
         }
-        this.isMinimized = false;
-        const modalEl = this.elRef.nativeElement.parentNode.parentNode.parentNode;
+        const modalEl = this.getRootElement();
         const backdropEl = modalEl.previousElementSibling;
 
         modalEl.classList.add('d-block');
@@ -387,6 +387,10 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
         } else if (!EMAIL_REGEXP.test(control.value)) {
             return {email: true};
         }
+    }
+
+    getRootElement(): HTMLElement {
+        return this.elRef.nativeElement.parentNode.parentNode.parentNode;
     }
 
     ngOnDestroy(): void {

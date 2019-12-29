@@ -1,12 +1,12 @@
-<div class="position-relative" *ngIf="!isMinimized">
+<div class="position-relative modal-on-maximized">
     <div class="tabs-top">
-        <button type="button" class="btn btn-outline-primary d-block d-md-inline-block ml-md-2"
+        <button type="button" class="btn btn-outline-primary btn-sm d-block"
                 [disabled]="submitted"
                 (click)="close($event)">
             <i class="icon-cross mr-1"></i>
             <span>{{'CLOSE' | translate}}</span>
         </button>
-        <button type="button" class="btn btn-outline-primary d-block d-md-inline-block ml-md-2"
+        <button type="button" class="btn btn-outline-primary btn-sm d-block"
                 [disabled]="submitted"
                 (click)="minimize($event)">
             <i class="icon-minimize mr-1"></i>
@@ -15,7 +15,7 @@
     </div>
 </div>
 <div class="modal-header d-block">
-    <div class="position-relative" *ngIf="isMinimized">
+    <div class="position-relative modal-on-minimized">
         <div class="pos-absolute-right">
             <button type="button" class="btn btn-no-border btn-sm-sm" [title]="'EXPAND' | translate" (click)="maximize($event)">
                 <i class="icon-maximize"></i>

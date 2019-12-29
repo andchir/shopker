@@ -61,7 +61,31 @@ export abstract class PageTableAbstractComponent<M> implements OnInit, OnDestroy
         }, 700);
     }
 
+    getModalElementId(...args): string {
+        return args.join('-');
+    }
+
+    setModalInputs(itemId?: number, isItemCopy: boolean = false, modalId = ''): void {
+        const isEditMode = typeof itemId !== 'undefined' && !isItemCopy;
+        this.modalRef.componentInstance.modalTitle = isEditMode
+            ? this.getLangString('EDITING')
+            : this.getLangString('ADD');
+        this.modalRef.componentInstance.modalId = modalId;
+        this.modalRef.componentInstance.itemId = itemId || 0;
+        this.modalRef.componentInstance.isItemCopy = isItemCopy || false;
+        this.modalRef.componentInstance.isEditMode = isEditMode;
+    }
+
     modalOpen(itemId?: number, isItemCopy: boolean = false): void {
+        const modalId = this.getModalElementId('modal', 'user', itemId || 0);
+        if (window.document.getElementById(modalId)) {
+            const modalEl = window.document.getElementById(modalId);
+            const backdropEl = modalEl.previousElementSibling;
+            modalEl.classList.add('d-block');
+            modalEl.classList.remove('modal-minimized');
+            backdropEl.classList.remove('d-none');
+            return;
+        }
         this.modalRef = this.modalService.open(this.getModalContent(), {
             size: 'lg',
             backdrop: 'static',
@@ -70,7 +94,7 @@ export abstract class PageTableAbstractComponent<M> implements OnInit, OnDestroy
             windowClass: 'modal-left45',
             container: '#modals-container'
         });
-        this.setModalInputs(itemId, isItemCopy);
+        this.setModalInputs(itemId, isItemCopy, modalId);
         this.modalRef.result.then((result) => {
             if (this.destroyed$.isStopped) {
                 return;
@@ -86,16 +110,6 @@ export abstract class PageTableAbstractComponent<M> implements OnInit, OnDestroy
                 this.getList();
             }
         });
-    }
-
-    setModalInputs(itemId?: number, isItemCopy: boolean = false): void {
-        const isEditMode = typeof itemId !== 'undefined' && !isItemCopy;
-        this.modalRef.componentInstance.modalTitle = isEditMode
-            ? this.getLangString('EDITING')
-            : this.getLangString('ADD');
-        this.modalRef.componentInstance.itemId = itemId || 0;
-        this.modalRef.componentInstance.isItemCopy = isItemCopy || false;
-        this.modalRef.componentInstance.isEditMode = isEditMode;
     }
 
     deleteItemConfirm(itemId: number): void {

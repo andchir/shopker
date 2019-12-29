@@ -147,47 +147,47 @@
                                 <col width="7%">
                             </colgroup>
                             <thead>
-                            <tr>
-                                <th>{{ 'SYSTEM_NAME' | translate }}</th>
-                                <th>{{ 'NAME' | translate }}</th>
-                                <th>{{ 'VALUE' | translate }}</th>
-                                <th></th>
-                            </tr>
+                                <tr>
+                                    <th>{{ 'SYSTEM_NAME' | translate }}</th>
+                                    <th>{{ 'NAME' | translate }}</th>
+                                    <th>{{ 'VALUE' | translate }}</th>
+                                    <th></th>
+                                </tr>
                             </thead>
                             <tbody *ngIf="arrayFields.options">
-                            <tr [formGroupName]="i + ''" *ngFor="let option of arrayFields.options.controls; let i=index">
-                                <td>
-                                    <input type="text" class="form-control form-control-sm"
-                                           formControlName="name"
-                                           [ngClass]="{'is-invalid': option.controls.name.touched && !option.controls.name.valid}">
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control form-control-sm"
-                                           formControlName="title"
-                                           [ngClass]="{'is-invalid': option.controls.title.touched && !option.controls.title.valid}">
-                                </td>
-                                <td class="text-center">
-                                    <input type="text" class="form-control form-control-sm"
-                                           formControlName="value"
-                                           [ngClass]="{'is-invalid': option.controls.value.touched && !option.controls.value.valid}">
-                                </td>
-                                <td class="text-center">
-                                    <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'DELETE' | translate}}" (click)="arrayFieldDelete('options', i, $event)">
-                                        <i class="icon-cross"></i>
-                                    </button>
-                                </td>
-                            </tr>
+                                <tr [formGroupName]="i + ''" *ngFor="let option of arrayFields.options.controls; let i=index">
+                                    <td>
+                                        <input type="text" class="form-control form-control-sm"
+                                               formControlName="name"
+                                               [ngClass]="{'is-invalid': option.controls.name.touched && !option.controls.name.valid}">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control form-control-sm"
+                                               formControlName="title"
+                                               [ngClass]="{'is-invalid': option.controls.title.touched && !option.controls.title.valid}">
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="text" class="form-control form-control-sm"
+                                               formControlName="value"
+                                               [ngClass]="{'is-invalid': option.controls.value.touched && !option.controls.value.valid}">
+                                    </td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'DELETE' | translate}}" (click)="arrayFieldDelete('options', i, $event)">
+                                            <i class="icon-cross"></i>
+                                        </button>
+                                    </td>
+                                </tr>
                             </tbody>
                             <tfoot>
-                            <tr class="bg-faded">
-                                <td colspan="4" class="text-center">
-                                    <button type="button" class="btn btn-secondary btn-sm" (click)="arrayFieldAdd('options', $event)">
-                                        <i class="icon-plus"></i>
-                                        &nbsp;
-                                        <span>{{'ADD' | translate}}</span>
-                                    </button>
-                                </td>
-                            </tr>
+                                <tr class="bg-faded">
+                                    <td colspan="4" class="text-center">
+                                        <button type="button" class="btn btn-secondary btn-sm" (click)="arrayFieldAdd('options', $event)">
+                                            <i class="icon-plus"></i>
+                                            &nbsp;
+                                            <span>{{'ADD' | translate}}</span>
+                                        </button>
+                                    </td>
+                                </tr>
                             </tfoot>
                         </table>
                     </div>

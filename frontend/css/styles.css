@@ -166,20 +166,20 @@ input.form-control[readonly] { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); curso
 
 /* modals */
 #modals-container,
-.modals-container { position: fixed; top: 0; right: 0; padding: 7px; z-index: 11; }
-.modal .modal-dialog { box-shadow: 0 0 20px rgba(0,0,0,0.5); border-radius: 10px; }
+.modals-container { width: calc(100% - 45px); position: fixed; bottom: 0; left: 45px; padding: 0 7px; z-index: 11; }
+.modal .modal-content { box-shadow: 0 0 20px rgba(0,0,0,0.5); border-radius: 6px; }
 .modal-header { border-bottom: 0; }
 .modal-footer { border-top: 0; }
-.modal-content { border: 0; }
 .modal-left45,
 .modal-backdrop-left45 { left: auto; right: 0; width: calc(100% - 45px); }
 
 /* modal-minimized */
-.modal-minimized { position: static; margin: 0 0 0 7px; padding: 0; overflow: visible !important; width: auto; display: inline-block !important; }
+.modal-minimized { position: static; margin: 0 0 7px 7px; padding: 0; overflow: visible !important; width: auto; display: inline-block !important; }
 .modal-minimized .modal-header,
 .modal-minimized .modal-header h4 { font-size: 14px; text-align: left; }
 .modal-minimized .modal-header { padding: 7px; }
-.modal-minimized .modal-dialog { display: inline-block; margin: 0; width: 180px; box-shadow: 0 0 10px rgba(0,0,0,0.3); }
+.modal-minimized .modal-dialog { margin: 0; }
+.modal-minimized .modal-content { display: inline-block; margin: 0; width: 180px; box-shadow: 0 0 10px rgba(0,0,0,0.2); }
 .modal-minimized .modal-body { display: none !important; }
 .modal-minimized .modal-footer { display: none !important; }
 .modal-on-minimized { display: none; }

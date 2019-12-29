@@ -1,90 +1,115 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input, ElementRef} from '@angular/core';
 import {NgbModal, NgbActiveModal, NgbModalRef, NgbPopover, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import {FormBuilder, Validators} from '@angular/forms';
+
 import {cloneDeep, findIndex} from 'lodash';
 import {TranslateService} from '@ngx-translate/core';
 
-import {SystemNameService} from '../services/system-name.service';
 import {Order, OrderContent} from './models/order.model';
 import {PageTableAbstractComponent} from '../page-table.abstract';
 import {OrdersService} from './orders.service';
-import {ModalContentAbstractComponent} from '../modal.abstract';
+import {AppModalContentAbstractComponent} from '../components/app-modal-content.abstract';
 import {SettingsService} from '../settings/settings.service';
 import {Setting, SettingPretty, SettingsGroup} from '../settings/models/setting.model';
 import {AppSettings} from '../services/app-settings.service';
 import {QueryOptions} from '../models/query-options';
 import {UserOption} from '../users/models/user.model';
-import {FormFieldInterface} from '../models/form-field.interface';
+import {FormFieldsOptions} from '../models/form-fields-options.interface';
 
 @Component({
     selector: 'app-modal-order',
     templateUrl: 'templates/modal-order.html',
     providers: []
 })
-export class ModalOrderContentComponent extends ModalContentAbstractComponent<Order> {
+export class ModalOrderContentComponent extends AppModalContentAbstractComponent<Order> {
 
     model = new Order(0, 0, '', '', '');
     modalTitle = 'Order';
     settings: {[groupName: string]: SettingPretty[]};
     baseUrl: string;
-    formFields: FormFieldInterface = {
-        id: {
-            fieldLabel: 'ID',
-            value: '',
-            validators: [Validators.required],
-            messages: {}
+    formFields: FormFieldsOptions[] = [
+        {
+            name: 'id',
+            validators: [Validators.required]
         },
-        email: {
-            fieldLabel: 'EMAIL',
-            value: '',
-            validators: [Validators.required, this.emailValidator],
-            messages: {}
+        {
+            name: 'email',
+            validators: [Validators.required, this.emailValidator]
         },
-        phone: {
-            fieldLabel: 'PHONE',
-            value: '',
+        {
+            name: 'phone',
+            validators: []
+        },
+        {
+            name: 'fullName',
+            validators: [Validators.required]
+        },
+        {
+            name: 'comment',
+            validators: []
+        },
+        {
+            name: 'deliveryName',
+            validators: []
+        },
+        {
+            name: 'paymentName',
+            validators: []
+        },
+        {
+            name: 'options',
             validators: [],
-            messages: {}
+            children: [
+                {
+                    name: 'name',
+                    validators: [Validators.required]
+                },
+                {
+                    name: 'title',
+                    validators: [Validators.required]
+                },
+                {
+                    name: 'value',
+                    validators: []
+                }
+            ]
         },
-        fullName: {
-            fieldLabel: 'FULL_NAME',
-            value: '',
-            validators: [Validators.required],
-            messages: {}
-        },
-        comment: {
-            fieldLabel: 'COMMENT',
-            value: '',
+        {
+            name: 'content',
             validators: [],
-            messages: {}
-        },
-        deliveryName: {
-            fieldLabel: 'DELIVERY_METHOD',
-            value: '',
-            validators: [],
-            messages: {}
-        },
-        paymentName: {
-            fieldLabel: 'PAYMENT_METHOD',
-            value: '',
-            validators: [],
-            messages: {}
+            children: [
+                {
+                    name: 'uniqId',
+                    validators: []
+                },
+                {
+                    name: 'id',
+                    validators: []
+                },
+                {
+                    name: 'price',
+                    validators: []
+                },
+                {
+                    name: 'count',
+                    validators: []
+                }
+            ]
         }
-    };
+    ];
+
     contentEdit = new OrderContent(0, '', 0, 0);
 
     constructor(
         public fb: FormBuilder,
-        public dataService: OrdersService,
-        public systemNameService: SystemNameService,
         public activeModal: NgbActiveModal,
-        public tooltipConfig: NgbTooltipConfig,
         public translateService: TranslateService,
-        private modalService: NgbModal,
+        public dataService: OrdersService,
+        public elRef: ElementRef,
         private settingsService: SettingsService,
         private appSettings: AppSettings
     ) {
-        super(fb, dataService, systemNameService, activeModal, tooltipConfig, translateService);
+        super(fb, activeModal, translateService, dataService, elRef);
     }
 
     onBeforeInit(): void {
@@ -92,73 +117,18 @@ export class ModalOrderContentComponent extends ModalContentAbstractComponent<Or
         this.settings = this.appSettings.settings.systemSettings;
     }
 
-    getModelData(): Promise<Order> {
-        this.loading = true;
-        return new Promise((resolve, reject) => {
-            this.dataService.getItem(this.itemId)
-                .subscribe(data => {
-                    if (this.isItemCopy) {
-                        data.id = null;
-                        data[this.getSystemFieldName()] = '';
-                    }
-                    this.model = new Order(
-                        data['id'],
-                        data['userId'],
-                        data['status'],
-                        data['email'],
-                        data['phone'],
-                        data['fullName'],
-                        data['createdDate'],
-                        data['deliveryName'],
-                        data['deliveryPrice'],
-                        data['paymentName'],
-                        data['paymentValue'],
-                        data['comment'],
-                        data['contentCount'],
-                        data['price'],
-                        data['currency'],
-                        data['options'],
-                        data['currencyRate'] || 1
-                    );
-                    this.model.content = data['content'];
-                    this.loading = false;
-                    resolve(data as Order);
-                }, (err) => {
-                    this.errorMessage = err.error || 'Error.';
-                    this.loading = false;
-                    reject(err);
-                });
-        });
-    }
-
-    save(): void {
-        this.errorMessage = '';
-        this.submitted = true;
-        if (!this.form.valid) {
-            this.onValueChanged('form');
-            this.submitted = false;
-            return;
-        }
-        this.loading = true;
-        this.dataService.update(this.getFormData())
-            .subscribe({
-                next: (res) => {
-                    this.closeModal();
-                    this.loading = false;
-                    this.submitted = false;
-                },
-                error: (err) => {
-                    if (err['error']) {
-                        this.errorMessage = err['error'];
-                    }
-                    this.loading = false;
-                    this.submitted = false;
-                }
-            });
-    }
-
     editContentToggle(content: OrderContent): void {
         if (this.getIsContentEdit(content)) {
+            const index = findIndex<OrderContent>(this.model.content, {
+                uniqId: this.contentEdit.uniqId,
+                contentTypeName: this.contentEdit.contentTypeName
+            });
+            if (index > -1) {
+                this.arrayFields.content.at(index).patchValue({
+                    price: this.model.content[index].price,
+                    count: this.model.content[index].count
+                });
+            }
             this.contentEdit = new OrderContent(0, '', 0, 0);
             this.priceTotalUpdate();
         } else {
@@ -193,6 +163,7 @@ export class ModalOrderContentComponent extends ModalContentAbstractComponent<Or
         });
         if (index > -1) {
             this.model.content.splice(index, 1);
+            this.arrayFields.content.removeAt(index);
             this.priceTotalUpdate();
         }
     }
@@ -219,17 +190,6 @@ export class ModalOrderContentComponent extends ModalContentAbstractComponent<Or
             priceTotal += content.priceTotal;
         });
         this.model.price = priceTotal;
-    }
-
-    optionsAdd(): void {
-        if (!this.model.options) {
-            this.model.options = [];
-        }
-        this.model.options.push(new UserOption('', '', ''));
-    }
-
-    optionsDelete(index: number): void {
-        this.model.options.splice(index, 1);
     }
 }
 
@@ -300,11 +260,16 @@ export class OrdersComponent extends PageTableAbstractComponent<Order> {
         super(dataService, activeModal, modalService, translateService);
     }
 
-    setModalInputs(itemId?: number, isItemCopy: boolean = false): void {
-        this.modalRef.componentInstance.modalTitle = `Order #${itemId}`;
+    setModalInputs(itemId?: number, isItemCopy: boolean = false, modalId = ''): void {
+        this.modalRef.componentInstance.modalTitle = `${this.getLangString('ORDER')} #${itemId}`;
+        this.modalRef.componentInstance.modalId = modalId;
         this.modalRef.componentInstance.itemId = itemId || 0;
         this.modalRef.componentInstance.isItemCopy = isItemCopy || false;
         this.modalRef.componentInstance.isEditMode = true;
+    }
+
+    getModalElementId(itemId?: number): string {
+        return ['modal', 'order', itemId || 0].join('-');
     }
 
     getModalContent() {

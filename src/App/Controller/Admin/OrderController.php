@@ -62,7 +62,7 @@ class OrderController extends StorageControllerAbstract
             $paymentValue = $settingPayment->getOption('value');
         }
 
-        $content = isset($data['_content']) ? $data['_content'] : [];
+        $content = isset($data['content']) ? $data['content'] : [];
 
         $item
             ->setEmail($data['email'])

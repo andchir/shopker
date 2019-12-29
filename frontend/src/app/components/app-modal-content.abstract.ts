@@ -285,6 +285,7 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
         if (event) {
             event.preventDefault();
         }
+        window.document.body.classList.remove('modal-open');
         const modalEl = this.getRootElement();
         const backdropEl = modalEl.previousElementSibling;
 
@@ -297,6 +298,7 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
         if (event) {
             event.preventDefault();
         }
+        window.document.body.classList.add('modal-open');
         const modalEl = this.getRootElement();
         const backdropEl = modalEl.previousElementSibling;
 

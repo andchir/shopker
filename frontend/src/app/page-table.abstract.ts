@@ -61,8 +61,8 @@ export abstract class PageTableAbstractComponent<M> implements OnInit, OnDestroy
         }, 700);
     }
 
-    getModalElementId(...args): string {
-        return args.join('-');
+    getModalElementId(itemId?: number): string {
+        return ['modal', itemId || 0].join('-');
     }
 
     setModalInputs(itemId?: number, isItemCopy: boolean = false, modalId = ''): void {
@@ -77,7 +77,8 @@ export abstract class PageTableAbstractComponent<M> implements OnInit, OnDestroy
     }
 
     modalOpen(itemId?: number, isItemCopy: boolean = false): void {
-        const modalId = this.getModalElementId('modal', 'user', itemId || 0);
+        const modalId = this.getModalElementId(itemId);
+        window.document.body.classList.add('modal-open');
         if (window.document.getElementById(modalId)) {
             const modalEl = window.document.getElementById(modalId);
             const backdropEl = modalEl.previousElementSibling;

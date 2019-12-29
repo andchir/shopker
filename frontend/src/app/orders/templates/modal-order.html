@@ -1,20 +1,36 @@
-<div class="position-relative">
+<div class="position-relative modal-on-maximized">
     <div class="tabs-top">
-        <button type="button" class="btn btn-outline-primary d-block d-md-inline-block ml-md-2"
+        <button type="button" class="btn btn-outline-primary btn-sm d-block"
                 [disabled]="submitted"
                 (click)="close($event)">
             <i class="icon-cross mr-1"></i>
             <span>{{'CLOSE' | translate}}</span>
         </button>
+        <button type="button" class="btn btn-outline-primary btn-sm d-block"
+                [disabled]="submitted"
+                (click)="minimize($event)">
+            <i class="icon-minimize mr-1"></i>
+            <span>{{'MINIMIZE' | translate}}</span>
+        </button>
     </div>
 </div>
 <div class="modal-header d-block">
+    <div class="position-relative modal-on-minimized">
+        <div class="pos-absolute-right">
+            <button type="button" class="btn btn-no-border btn-sm-sm" [title]="'EXPAND' | translate" (click)="maximize($event)">
+                <i class="icon-maximize"></i>
+            </button>
+            <button type="button" class="btn btn-no-border btn-sm-sm ml-1" [title]="'CLOSE' | translate" (click)="close($event)">
+                <i class="icon-cross"></i>
+            </button>
+        </div>
+    </div>
     <h4 class="modal-title">{{modalTitle}}</h4>
 </div>
 
-<form [class.loading]="loading">
+<form [formGroup]="form" method="post" (ngSubmit)="onSubmit()" [ngClass]="{'no-events': submitted}" #formEl>
 
-    <div class="modal-body py-0">
+    <div class="modal-body py-0" [class.loading]="loading">
 
         <div class="card bg-light mb-3">
             <div class="card-body p-2">
@@ -32,7 +48,7 @@
         </div>
 
         <div class="row">
-            <div class="col-lg-6" [formGroup]="form">
+            <div class="col-lg-6">
                 <div class="form-group form-group-message">
                     <label class="label-filled">
                         {{'ID' | translate}}
@@ -44,7 +60,7 @@
                            readonly>
                 </div>
             </div>
-            <div class="col-lg-6" [formGroup]="form">
+            <div class="col-lg-6">
                 <div class="form-group form-group-message">
                     <label class="label-filled">
                         {{'EMAIL' | translate}}
@@ -61,7 +77,7 @@
         </div>
 
         <div class="row">
-            <div class="col-lg-6" [formGroup]="form">
+            <div class="col-lg-6">
 
                 <div class="form-group form-group-message">
                     <label class="label-filled">
@@ -90,7 +106,7 @@
                 </div>
 
             </div>
-            <div class="col-lg-6" [formGroup]="form">
+            <div class="col-lg-6">
                 <div class="form-group form-group-message">
                     <label class="label-filled">
                         {{'COMMENT' | translate}}
@@ -105,12 +121,12 @@
         </div>
 
         <div class="row">
-            <div class="col-lg-6" [formGroup]="form">
+            <div class="col-lg-6">
                 <div class="form-group form-group-message">
                     <label class="label-filled">
                         {{'DELIVERY_METHOD' | translate}}
                     </label>
-                    <select class="form-control" name="deliveryName"
+                    <select class="custom-select" name="deliveryName"
                             formControlName="deliveryName"
                             [(ngModel)]="model.deliveryName"
                             [class.is-invalid]="formErrors.deliveryName"
@@ -121,12 +137,12 @@
                     </select>
                 </div>
             </div>
-            <div class="col-lg-6" [formGroup]="form">
+            <div class="col-lg-6">
                 <div class="form-group form-group-message">
                     <label class="label-filled">
                         {{'PAYMENT_METHOD' | translate}}
                     </label>
-                    <select class="form-control" name="paymentName"
+                    <select class="custom-select" name="paymentName"
                             formControlName="paymentName"
                             [(ngModel)]="model.paymentName"
                             [class.is-invalid]="formErrors.paymentName">
@@ -145,51 +161,59 @@
                 <ngb-panel id="accordion-order-options" [title]="'OPTIONS' | translate">
                     <ng-template ngbPanelContent>
 
-                        <table class="table table-bordered mb-0">
-                            <colgroup>
-                                <col width="27%">
-                                <col width="27%">
-                                <col width="39%">
-                                <col width="7%">
-                            </colgroup>
-                            <thead>
-                                <tr>
-                                    <th>{{ 'SYSTEM_NAME' | translate }}</th>
-                                    <th>{{ 'NAME' | translate }}</th>
-                                    <th>{{ 'VALUE' | translate }}</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let option of model.options; let index=index">
-                                    <td>
-                                        <input type="text" class="form-control form-control-sm" [(ngModel)]="option.name" [ngModelOptions]="{standalone: true}">
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control form-control-sm" [(ngModel)]="option.title" [ngModelOptions]="{standalone: true}">
-                                    </td>
-                                    <td class="text-center">
-                                        <input type="text" class="form-control form-control-sm" [(ngModel)]="option.value" [ngModelOptions]="{standalone: true}">
-                                    </td>
-                                    <td class="text-center">
-                                        <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'DELETE' | translate}}" (click)="optionsDelete(index)">
-                                            <i class="icon-cross"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                            <tfoot>
-                                <tr class="bg-faded">
-                                    <td colspan="4" class="text-center">
-                                        <button type="button" class="btn btn-secondary btn-sm" (click)="optionsAdd()">
-                                            <i class="icon-plus"></i>
-                                            &nbsp;
-                                            <span>{{'ADD' | translate}}</span>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tfoot>
-                        </table>
+                        <div formArrayName="options">
+                            <table class="table table-bordered mb-0">
+                                <colgroup>
+                                    <col width="27%">
+                                    <col width="27%">
+                                    <col width="39%">
+                                    <col width="7%">
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th>{{ 'SYSTEM_NAME' | translate }}</th>
+                                        <th>{{ 'NAME' | translate }}</th>
+                                        <th>{{ 'VALUE' | translate }}</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngIf="arrayFields.options">
+                                    <tr [formGroupName]="i + ''" *ngFor="let option of arrayFields.options.controls; let i=index">
+                                        <td>
+                                            <input type="text" class="form-control form-control-sm"
+                                                   formControlName="name"
+                                                   [ngClass]="{'is-invalid': option.controls.name.touched && !option.controls.name.valid}">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control form-control-sm"
+                                                   formControlName="title"
+                                                   [ngClass]="{'is-invalid': option.controls.title.touched && !option.controls.title.valid}">
+                                        </td>
+                                        <td class="text-center">
+                                            <input type="text" class="form-control form-control-sm"
+                                                   formControlName="value"
+                                                   [ngClass]="{'is-invalid': option.controls.value.touched && !option.controls.value.valid}">
+                                        </td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'DELETE' | translate}}" (click)="arrayFieldDelete('options', i, $event)">
+                                                <i class="icon-cross"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr class="bg-faded">
+                                        <td colspan="4" class="text-center">
+                                            <button type="button" class="btn btn-secondary btn-sm" (click)="arrayFieldAdd('options', $event)">
+                                                <i class="icon-plus"></i>
+                                                &nbsp;
+                                                <span>{{'ADD' | translate}}</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
 
                     </ng-template>
                 </ngb-panel>
@@ -308,7 +332,7 @@
                 </ngb-panel>
             </ngb-accordion>
 
-            <div class="alert alert-danger mt-3 mb-0" [hidden]="!errorMessage">
+            <div class="alert alert-danger mt-3 mb-0" *ngIf="errorMessage">
                 <button type="button" class="close" (click)="errorMessage = ''">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -319,9 +343,17 @@
 
     </div>
     <div class="modal-footer d-block">
-        <button type="button" class="btn btn-success btn-wide" [disabled]="submitted && form.valid" (click)="save()">
-            <span>{{'SAVE' | translate}}</span>
-        </button>
+        <div class="btn-group mr-1">
+            <button type="button" class="btn btn-success btn-wide" [disabled]="submitted" (click)="save(true, $event)">
+                <span>{{'SAVE_AND_CLOSE' | translate}}</span>
+            </button>
+            <div class="btn-group" ngbDropdown role="group" placement="top-right">
+                <button type="button" class="btn btn-success dropdown-toggle-split" ngbDropdownToggle [disabled]="submitted"></button>
+                <div class="dropdown-menu" ngbDropdownMenu>
+                    <button type="button" ngbDropdownItem (click)="save(false, $event)">{{'SAVE' | translate}}</button>
+                </div>
+            </div>
+        </div>
         <button type="button" class="btn btn-secondary btn-wide" (click)="close($event)">
             <span>{{'CANCEL' | translate}}</span>
         </button>

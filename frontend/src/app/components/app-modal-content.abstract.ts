@@ -34,7 +34,7 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
     set formErrors(formFieldsErrors: FormFieldsErrors) {
         for (const key in formFieldsErrors) {
             if (formFieldsErrors.hasOwnProperty(key)) {
-                const control = this.getControl(null, key);
+                const control = this.getControl(this.form, null, key);
                 if (control) {
                     control.setErrors({incorrect: true});
                 }
@@ -75,7 +75,7 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
     onAfterInit(): void {}
 
     onAfterGetData(): void {
-        this.buildControls(this.formFields);
+        this.buildControls(this.form, this.formFields);
     }
 
     getSystemFieldName(): string {
@@ -115,22 +115,30 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
     }
 
     buildForm(): void {
-        this.form = this.fb.group(this.buildControls(this.formFields));
+        this.form = this.fb.group(this.buildControls(null, this.formFields));
         this.form.valueChanges
             .pipe(takeUntil(this.destroyed$))
             .subscribe(() => this.onValueChanged());
     }
 
-    buildControls(options: FormFieldsOptions[], modelName = 'model'): { [k: string]: FormControl; } {
+    buildControls(formGroup: FormGroup, options: FormFieldsOptions[], modelName = 'model'): { [k: string]: FormControl; } {
         const controls = {};
-        if (!this[modelName].options) {
-            this[modelName].options = {};
+        if (typeof formGroup === 'undefined') {
+            formGroup = this.form || null;
         }
         options.forEach((opt) => {
-            const control = this.getControl(opt);
-            const value = opt.name.indexOf('options_') === 0
-                ? this[modelName].options[opt.name.substr(8)] || ''
-                : this[modelName][opt.name] || '';
+            const control = this.getControl(formGroup, opt);
+            let value = null;
+            if (modelName && this[modelName]) {
+                if (!this[modelName].options) {
+                    this[modelName].options = {};
+                }
+                value = opt.name.indexOf('options_') === 0
+                    ? this[modelName].options[opt.name.substr(8)] || null
+                    : this[modelName][opt.name] || null;
+            } else {
+                value = null;
+            }
             if (control) {
                 if (opt.disabled) {
                     control.disable();
@@ -141,7 +149,7 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
                     arrayControl.clear();
                     valueArr.forEach((val, ind) => {
                         const formFields = this.getFormFieldByName(opt.name);
-                        const groupControls = this.buildControls(formFields.children);
+                        const groupControls = this.buildControls(null, formFields.children, null);
                         arrayControl.push(this.fb.group(groupControls));
                     });
                     arrayControl.patchValue(valueArr);
@@ -173,7 +181,7 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
         const data = this[formName].value;
         Object.keys(data).forEach((fieldName) => {
             this.formErrors[fieldName] = '';
-            const control = this.getControl(null, fieldName);
+            const control = this.getControl(this.form, null, fieldName);
             if (control && !control.valid && control.errors) {
                 let message = '';
                 Object.keys(control.errors).forEach((errorKey) => {
@@ -202,14 +210,14 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
         });
     }
 
-    getControl(opt?: FormFieldsOptions|null, fieldName?: string): AbstractControl {
-        if (!this.form) {
+    getControl(formGroup: FormGroup, opt?: FormFieldsOptions|null, fieldName?: string): AbstractControl {
+        if (!formGroup) {
             return null;
         }
         if (fieldName) {
-            return this.form.get(fieldName);
+            return formGroup.get(fieldName);
         }
-        return this.form.get(opt.name);
+        return formGroup.get(opt.name);
     }
 
     focusFormError(): void {
@@ -263,7 +271,7 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
         if (!formField) {
             return;
         }
-        const groupControls = this.buildControls(formField.children);
+        const groupControls = this.buildControls(null, formField.children, null);
         this.arrayFields[fieldName].push(this.fb.group(groupControls));
     }
 

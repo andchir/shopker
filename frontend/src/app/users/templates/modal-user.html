@@ -25,7 +25,7 @@
             </button>
         </div>
     </div>
-    <h4 class="modal-title">{{modalTitle}}</h4>
+    <h4 class="modal-title text-overflow mr-5">{{modalTitle}}</h4>
 </div>
 
 <form [formGroup]="form" method="post" (ngSubmit)="onSubmit()" [ngClass]="{'no-events': submitted}" #formEl>
@@ -172,7 +172,9 @@
                                                [ngClass]="{'is-invalid': option.controls.value.touched && !option.controls.value.valid}">
                                     </td>
                                     <td class="text-center">
-                                        <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'DELETE' | translate}}" (click)="arrayFieldDelete('options', i, $event)">
+                                        <button type="button" class="btn btn-secondary btn-sm"
+                                                ngbTooltip="{{'DELETE' | translate}}"
+                                                (click)="arrayFieldDelete('options', i, $event)">
                                             <i class="icon-cross"></i>
                                         </button>
                                     </td>
@@ -181,7 +183,8 @@
                             <tfoot>
                                 <tr class="bg-faded">
                                     <td colspan="4" class="text-center">
-                                        <button type="button" class="btn btn-secondary btn-sm" (click)="arrayFieldAdd('options', $event)">
+                                        <button type="button" class="btn btn-secondary btn-sm"
+                                                (click)="arrayFieldAdd('options', $event)">
                                             <i class="icon-plus"></i>
                                             &nbsp;
                                             <span>{{'ADD' | translate}}</span>

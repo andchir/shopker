@@ -1,20 +1,37 @@
-<div class="position-relative">
+<div class="position-relative modal-on-maximized">
     <div class="tabs-top">
-        <button type="button" class="btn btn-outline-primary d-block d-md-inline-block ml-md-2"
+        <button type="button" class="btn btn-outline-primary btn-sm d-block"
                 [disabled]="submitted"
                 (click)="close($event)">
             <i class="icon-cross mr-1"></i>
             <span>{{'CLOSE' | translate}}</span>
         </button>
+        <button type="button" class="btn btn-outline-primary btn-sm d-block"
+                [disabled]="submitted"
+                (click)="minimize($event)">
+            <i class="icon-minimize mr-1"></i>
+            <span>{{'MINIMIZE' | translate}}</span>
+        </button>
     </div>
 </div>
 <div class="modal-header d-block">
-    <h4 class="modal-title">{{modalTitle}}</h4>
+    <div class="position-relative modal-on-minimized">
+        <div class="pos-absolute-right">
+            <button type="button" class="btn btn-no-border btn-sm-sm" [title]="'EXPAND' | translate" (click)="maximize($event)">
+                <i class="icon-maximize"></i>
+            </button>
+            <button type="button" class="btn btn-no-border btn-sm-sm ml-1" [title]="'CLOSE' | translate" (click)="close($event)">
+                <i class="icon-cross"></i>
+            </button>
+        </div>
+    </div>
+    <h4 class="modal-title text-overflow mr-5">{{modalTitle}}</h4>
 </div>
 
-<div class="modal-body py-0" [class.loading]="loading">
+<form [formGroup]="form" method="post" (ngSubmit)="onSubmit()" [ngClass]="{'no-events': submitted}" #formEl>
 
-    <form #formElement="ngForm" [formGroup]="form">
+    <div class="modal-body py-0" [class.loading]="loading">
+
         <div class="row">
             <div class="col-md-6">
 
@@ -23,8 +40,7 @@
                     <input type="text" class="form-control" name="title"
                            formControlName="title"
                            id="fieldTitle"
-                           [(ngModel)]="model.title"
-                           [class.is-invalid]="formErrors.title">
+                           [ngClass]="{'is-invalid': form.controls.title.touched && !form.controls.title.valid}">
                     <div *ngIf="formErrors.title" class="alert alert-danger">
                         {{formErrors.title}}
                     </div>
@@ -32,12 +48,11 @@
 
                 <div class="form-group form-group-message">
                     <label for="fieldName" class="label-filled">{{'SYSTEM_NAME' | translate}}</label>
-                    <div class="input-group" [class.is-invalid]="formErrors.name">
+                    <div class="input-group" [ngClass]="{'is-invalid': form.controls.name.touched && !form.controls.name.valid}">
                         <input type="text" class="form-control" name="name"
                                formControlName="name"
                                id="fieldName"
-                               [(ngModel)]="model.name"
-                               [class.is-invalid]="formErrors.name">
+                               [ngClass]="{'is-invalid': form.controls.name.touched && !form.controls.name.valid}">
                         <div class="input-group-append">
                             <button type="button" class="btn btn-secondary" ngbTooltip="{{'GENERATE' | translate}}" (click)="generateName(model)">
                                 <i class="icon-reload"></i>
@@ -55,7 +70,7 @@
                         <div class="card card-body p-2 pl-3">
 
                             <div class="custom-control custom-checkbox m-0">
-                                <input type="checkbox" class="custom-control-input" id="fieldIsActive" value="1" name="isActive" formControlName="isActive" [(ngModel)]="model.isActive">
+                                <input type="checkbox" class="custom-control-input" id="fieldIsActive" value="1" name="isActive" formControlName="isActive">
                                 <label class="custom-control-label" for="fieldIsActive">{{'ACTIVE' | translate}}</label>
                             </div>
 
@@ -68,135 +83,166 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="fieldDescription" class="label-filled">{{'DESCRIPTION' | translate}}</label>
-                    <textarea class="form-control" rows="5" name="description" formControlName="description" id="fieldDescription" [(ngModel)]="model.description"></textarea>
+                    <textarea class="form-control" rows="5" name="description" formControlName="description" id="fieldDescription"></textarea>
                 </div>
             </div>
         </div>
-    </form>
 
-    <ngb-accordion [closeOthers]="false" activeIds="accordion-input-options" class="ngb-accordion" #accordion="ngbAccordion">
+        <ngb-accordion [closeOthers]="false" activeIds="accordion-input-options" class="ngb-accordion" #accordion="ngbAccordion">
 
-        <!-- Input -->
-        <ngb-panel id="accordion-input-options" [title]="'INPUT_OPTIONS' | translate">
-            <ng-template ngbPanelContent>
+            <!-- Input -->
+            <ngb-panel id="accordion-input-options" [title]="'INPUT_OPTIONS' | translate">
+                <ng-template ngbPanelContent>
 
-                <table class="table table-bordered table-divided mb-0">
-                    <thead>
-                        <tr>
-                            <th>
-                                {{'SYSTEM_NAME' | translate}}
-                            </th>
-                            <th>
-                                {{'TITLE' | translate}}
-                            </th>
-                            <th>
-                                {{'DEFAULT_VALUE' | translate}}
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of model.inputProperties; let index=index">
-                            <td>
-                                <input type="text" class="form-control" [(ngModel)]="item.name" name="name">
-                            </td>
-                            <td class="text-center">
-                                <input type="text" class="form-control" [(ngModel)]="item.title" name="title">
-                            </td>
-                            <td class="text-center">
-                                <input type="text" class="form-control" [(ngModel)]="item.default_value" name="default_value">
-                            </td>
-                            <td class="text-center">
-                                <button type="button" class="btn btn-secondary" (click)="deleteRow(index, 'inputProperties')" ngbTooltip="{{'DELETE' | translate}}">
-                                    <i class="icon-cross"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr class="bg-faded">
-                            <td colspan="4" class="text-center">
-                                <button type="button" class="btn btn-secondary" (click)="addRow('inputProperties')">
-                                    <i class="icon-plus"></i>
-                                    &nbsp;
-                                    {{'ADD' | translate}}
-                                </button>
-                            </td>
-                        </tr>
-                    </tfoot>
-                </table>
+                    <div formArrayName="inputProperties">
+                        <table class="table table-bordered table-divided mb-0">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        {{'SYSTEM_NAME' | translate}}
+                                    </th>
+                                    <th>
+                                        {{'TITLE' | translate}}
+                                    </th>
+                                    <th>
+                                        {{'DEFAULT_VALUE' | translate}}
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody *ngIf="arrayFields.inputProperties">
+                                <tr [formGroupName]="i + ''" *ngFor="let option of arrayFields.inputProperties.controls; let i=index">
+                                    <td>
+                                        <input type="text" class="form-control"
+                                               formControlName="name"
+                                               [ngClass]="{'is-invalid': option.controls.name.touched && !option.controls.name.valid}">
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="text" class="form-control"
+                                               formControlName="title"
+                                               [ngClass]="{'is-invalid': option.controls.title.touched && !option.controls.title.valid}">
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="text" class="form-control"
+                                               formControlName="default_value"
+                                               [ngClass]="{'is-invalid': option.controls.default_value.touched && !option.controls.default_value.valid}">
+                                    </td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-secondary btn-sm"
+                                                ngbTooltip="{{'DELETE' | translate}}"
+                                                (click)="arrayFieldDelete('inputProperties', i, $event)">
+                                            <i class="icon-cross"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr class="bg-faded">
+                                    <td colspan="4" class="text-center">
+                                        <button type="button" class="btn btn-secondary btn-sm"
+                                                (click)="arrayFieldAdd('inputProperties', $event)">
+                                            <i class="icon-plus"></i>
+                                            &nbsp;
+                                            <span>{{'ADD' | translate}}</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
 
-            </ng-template>
-        </ngb-panel>
-        <!-- /Input -->
-        <!-- Output -->
-        <ngb-panel id="accordion-output-options" [title]="'OUTPUT_OPTIONS' | translate">
-            <ng-template ngbPanelContent>
+                </ng-template>
+            </ngb-panel>
+            <!-- /Input -->
+            <!-- Output -->
+            <ngb-panel id="accordion-output-options" [title]="'OUTPUT_OPTIONS' | translate">
+                <ng-template ngbPanelContent>
 
-                <table class="table table-bordered table-divided mb-0">
-                    <thead>
-                        <tr>
-                            <th>
-                                {{'SYSTEM_NAME' | translate}}
-                            </th>
-                            <th>
-                                {{'TITLE' | translate}}
-                            </th>
-                            <th>
-                                {{'DEFAULT_VALUE' | translate}}
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of model.outputProperties; let index=index">
-                            <td>
-                                <input type="text" class="form-control" [(ngModel)]="item.name" name="name">
-                            </td>
-                            <td class="text-center">
-                                <input type="text" class="form-control" [(ngModel)]="item.title" name="title">
-                            </td>
-                            <td class="text-center">
-                                <input type="text" class="form-control" [(ngModel)]="item.default_value" name="default_value">
-                            </td>
-                            <td class="text-center">
-                                <button type="button" class="btn btn-secondary" (click)="deleteRow(index, 'outputProperties')" ngbTooltip="{{'DELETE' | translate}}">
-                                    <i class="icon-cross"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr class="bg-faded">
-                            <td colspan="4" class="text-center">
-                                <button type="button" class="btn btn-secondary" (click)="addRow('outputProperties')">
-                                    <i class="icon-plus"></i>
-                                    &nbsp;
-                                    {{'ADD' | translate}}
-                                </button>
-                            </td>
-                        </tr>
-                    </tfoot>
-                </table>
+                    <div formArrayName="outputProperties">
+                        <table class="table table-bordered table-divided mb-0">
+                            <thead>
+                            <tr>
+                                <th>
+                                    {{'SYSTEM_NAME' | translate}}
+                                </th>
+                                <th>
+                                    {{'TITLE' | translate}}
+                                </th>
+                                <th>
+                                    {{'DEFAULT_VALUE' | translate}}
+                                </th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody *ngIf="arrayFields.outputProperties">
+                                <tr [formGroupName]="i + ''" *ngFor="let option of arrayFields.outputProperties.controls; let i=index">
+                                    <td>
+                                        <input type="text" class="form-control"
+                                               formControlName="name"
+                                               [ngClass]="{'is-invalid': option.controls.name.touched && !option.controls.name.valid}">
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="text" class="form-control"
+                                               formControlName="title"
+                                               [ngClass]="{'is-invalid': option.controls.title.touched && !option.controls.title.valid}">
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="text" class="form-control"
+                                               formControlName="default_value"
+                                               [ngClass]="{'is-invalid': option.controls.default_value.touched && !option.controls.default_value.valid}">
+                                    </td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-secondary btn-sm"
+                                                ngbTooltip="{{'DELETE' | translate}}"
+                                                (click)="arrayFieldDelete('outputProperties', i, $event)">
+                                            <i class="icon-cross"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr class="bg-faded">
+                                <td colspan="4" class="text-center">
+                                    <button type="button" class="btn btn-secondary btn-sm"
+                                            (click)="arrayFieldAdd('outputProperties', $event)">
+                                        <i class="icon-plus"></i>
+                                        &nbsp;
+                                        <span>{{'ADD' | translate}}</span>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
 
-            </ng-template>
-        </ngb-panel>
-        <!-- /Output -->
-    </ngb-accordion>
+                </ng-template>
+            </ngb-panel>
+            <!-- /Output -->
+        </ngb-accordion>
 
-    <div class="alert alert-danger mt-3 mb-0" [hidden]="!errorMessage">
-        <button type="button" class="close" (click)="errorMessage = ''">
-            <span aria-hidden="true">&times;</span>
+        <div class="alert alert-danger mt-3 mb-0" *ngIf="errorMessage">
+            <button type="button" class="close" (click)="errorMessage = ''">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {{errorMessage}}
+        </div>
+
+    </div>
+    <div class="modal-footer display-block">
+        <div class="btn-group mr-1">
+            <button type="button" class="btn btn-success btn-wide" [disabled]="submitted" (click)="save(true, $event)">
+                <span>{{'SAVE_AND_CLOSE' | translate}}</span>
+            </button>
+            <div class="btn-group" ngbDropdown role="group" placement="top-right">
+                <button type="button" class="btn btn-success dropdown-toggle-split" ngbDropdownToggle [disabled]="submitted"></button>
+                <div class="dropdown-menu" ngbDropdownMenu>
+                    <button type="button" ngbDropdownItem (click)="save(false, $event)">{{'SAVE' | translate}}</button>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn btn-secondary btn-wide" (click)="close($event)">
+            <span>{{'CLOSE' | translate}}</span>
         </button>
-        {{errorMessage}}
     </div>
 
-</div>
-<div class="modal-footer d-block">
-    <button type="button" class="btn btn-success btn-wide" [disabled]="submitted" (click)="save()">
-        <span>{{'SAVE' | translate}}</span>
-    </button>
-    <button type="button" class="btn btn-secondary btn-wide" (click)="close($event)">
-        <span>{{'CANCEL' | translate}}</span>
-    </button>
-</div>
+</form>

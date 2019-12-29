@@ -1,97 +1,95 @@
-import {Component, Injectable} from '@angular/core';
+import {Component, ElementRef, Injectable} from '@angular/core';
 import {NgbModal, NgbActiveModal, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import {FormBuilder, Validators} from '@angular/forms';
+
 import {TranslateService} from '@ngx-translate/core';
 
 import {FieldType} from './models/field-type.model';
-import {FieldTypeProperty} from './models/field-type-property.model';
 import {PageTableAbstractComponent} from '../page-table.abstract';
-import {ModalContentAbstractComponent} from '../modal.abstract';
 import {QueryOptions} from '../models/query-options';
-
-import {SystemNameService} from '../services/system-name.service';
 import {FieldTypesService} from './services/field-types.service';
+import {AppModalContentAbstractComponent} from '../components/app-modal-content.abstract';
+import {FormFieldsOptions} from '../models/form-fields-options.interface';
+import {SystemNameService} from '../services/system-name.service';
 
 @Component({
     selector: 'app-field-type-modal-content',
     templateUrl: 'templates/modal-field_type.html'
 })
-export class FieldTypeModalContentComponent extends ModalContentAbstractComponent<FieldType> {
+export class FieldTypeModalContentComponent extends AppModalContentAbstractComponent<FieldType> {
 
-    model: FieldType = new FieldType(0, '', '', '', true, [], []);
+    model = new FieldType(0, '', '', '', true, [], []);
 
-    formFields = {
-        title: {
-            fieldLabel: 'TITLE',
-            value: '',
-            validators: [Validators.required],
-            messages: {}
+    formFields: FormFieldsOptions[] = [
+        {
+            name: 'title',
+            validators: [Validators.required]
         },
-        name: {
-            fieldLabel: 'SYSTEM_NAME',
-            value: '',
-            validators: [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')],
-            messages: {
-                pattern: 'The name must contain only Latin letters and numbers.'
-            }
+        {
+            name: 'name',
+            validators: [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')]
         },
-        description: {
-            fieldLabel: 'DESCRIPTION',
-            value: '',
+        {
+            name: 'description',
+            validators: []
+        },
+        {
+            name: 'isActive',
+            validators: []
+        },
+        {
+            name: 'inputProperties',
             validators: [],
-            messages: {}
+            children: [
+                {
+                    name: 'name',
+                    validators: [Validators.required]
+                },
+                {
+                    name: 'title',
+                    validators: [Validators.required]
+                },
+                {
+                    name: 'default_value',
+                    validators: [Validators.required]
+                }
+            ]
         },
-        isActive: {
-            fieldLabel: 'ACTIVE',
-            value: true,
+        {
+            name: 'outputProperties',
             validators: [],
-            messages: {}
+            children: [
+                {
+                    name: 'name',
+                    validators: [Validators.required]
+                },
+                {
+                    name: 'title',
+                    validators: [Validators.required]
+                },
+                {
+                    name: 'default_value',
+                    validators: [Validators.required]
+                }
+            ]
         }
-    };
+    ];
 
     constructor(
         public fb: FormBuilder,
-        public dataService: FieldTypesService,
-        public systemNameService: SystemNameService,
         public activeModal: NgbActiveModal,
-        public tooltipConfig: NgbTooltipConfig,
-        public translateService: TranslateService
+        public translateService: TranslateService,
+        public dataService: FieldTypesService,
+        public elRef: ElementRef,
+        private systemNameService: SystemNameService
     ) {
-        super(fb, dataService, systemNameService, activeModal, tooltipConfig, translateService);
+        super(fb, activeModal, translateService, dataService, elRef);
     }
 
-    addRow(type: string) {
-        if (!this.model[type]) {
-            this.model[type] = [];
-        }
-        this.model[type].push(new FieldTypeProperty('', '', ''));
-    }
-
-    deleteRow(index: number, type: string) {
-        if (this.model[type].length < index + 1) {
-            return;
-        }
-        this.model[type].splice(index, 1);
-    }
-
-    save() {
-        this.submitted = true;
-
-        if (!this.form.valid) {
-            this.onValueChanged('form');
-            this.submitted = false;
-            return;
-        }
-
-        this.loading = true;
-
-        this.saveRequest()
-            .subscribe(() => this.closeModal(),
-                err => {
-                    this.errorMessage = err.error || 'Error.';
-                    this.submitted = false;
-                    this.loading = false;
-                });
+    generateName(model): void {
+        const title = this.getControl(this.form, null, 'title').value || '';
+        model.name = this.systemNameService.generateName(title);
+        this.getControl(this.form, null, 'name').setValue(model.name);
     }
 
 }
@@ -145,8 +143,22 @@ export class FieldTypesComponent extends PageTableAbstractComponent<FieldType> {
         super(dataService, activeModal, modalService, translateService);
     }
 
+    setModalInputs(itemId?: number, isItemCopy: boolean = false, modalId = ''): void {
+        const isEditMode = typeof itemId !== 'undefined' && !isItemCopy;
+        this.modalRef.componentInstance.modalTitle = itemId
+            ? `${this.getLangString('FIELD_TYPE')} #${itemId}`
+            : this.getLangString('ADD_FIELD_TYPE');
+        this.modalRef.componentInstance.modalId = modalId;
+        this.modalRef.componentInstance.itemId = itemId || 0;
+        this.modalRef.componentInstance.isItemCopy = isItemCopy || false;
+        this.modalRef.componentInstance.isEditMode = isEditMode;
+    }
+
+    getModalElementId(itemId?: number): string {
+        return ['modal', 'field_type', itemId || 0].join('-');
+    }
+
     getModalContent() {
         return FieldTypeModalContentComponent;
     }
-
 }

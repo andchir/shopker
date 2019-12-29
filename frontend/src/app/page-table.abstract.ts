@@ -67,7 +67,8 @@ export abstract class PageTableAbstractComponent<M> implements OnInit, OnDestroy
             backdrop: 'static',
             keyboard: false,
             backdropClass: 'modal-backdrop-left45',
-            windowClass: 'modal-left45'
+            windowClass: 'modal-left45',
+            container: '#modals-container'
         });
         this.setModalInputs(itemId, isItemCopy);
         this.modalRef.result.then((result) => {

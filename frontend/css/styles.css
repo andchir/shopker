@@ -14,6 +14,7 @@ body { background-color: #eee; }
 .big { font-size: 120%; }
 .tooltip { pointer-events: none; }
 .no-wrap { white-space: nowrap; }
+.display-block { display: block; }
 .width80 { width: 80px; }
 .mwidth-80 { max-width: 80px; }
 .width-350 { width: 350px; }
@@ -75,6 +76,10 @@ body { background-color: #eee; }
 .btn-info { color: #fff; background-color: #00bcd4; border-color: transparent; background-image: linear-gradient(to bottom, #00bcd4 0%, #00a5bb 100%); background-repeat: repeat-x; }
 .btn-info:hover { border-color: #006b78; }
 .btn-info.disabled, .btn-info:disabled { color: #fff; background-color: #00bcd4; border-color: transparent; }
+
+.btn-no-border { padding: 0 3px; background: none; box-shadow: none !important; }
+.btn-no-border:hover { background-color: #eee; }
+.btn-sm-sm { font-size: 0.7rem; }
 
 /* shadow */
 .shadow { box-shadow: 0 0 20px rgba(0,0,0,0.3); }
@@ -160,12 +165,23 @@ input.form-control[readonly] { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); curso
 .navbar-vertical-left-bottom { position: absolute; left: 0; bottom: 0; width: 100%; }
 
 /* modals */
+#modals-container,
+.modals-container { position: fixed; top: 0; right: 0; padding: 7px; z-index: 11; }
 .modal .modal-dialog { box-shadow: 0 0 20px rgba(0,0,0,0.5); border-radius: 10px; }
 .modal-header { border-bottom: 0; }
 .modal-footer { border-top: 0; }
 .modal-content { border: 0; }
 .modal-left45,
 .modal-backdrop-left45 { margin-left: 45px; padding-right: 30px; }
+
+/* modal-minimized */
+.modal-minimized { position: static; margin: 0 0 0 7px; padding: 0; overflow: visible !important; width: auto; display: inline-block !important; }
+.modal-minimized .modal-header,
+.modal-minimized .modal-header h4 { font-size: 14px; text-align: left; }
+.modal-minimized .modal-header { padding: 7px; }
+.modal-minimized .modal-dialog { display: inline-block; margin: 0; width: 180px; box-shadow: 0 0 10px rgba(0,0,0,0.3); }
+.modal-minimized .modal-body { display: none !important; }
+.modal-minimized .modal-footer { display: none !important;; }
 
 /* show-on-hover */
 .show-on-hover-parent { position: relative; }

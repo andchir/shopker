@@ -1,4 +1,4 @@
-import {Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
 
 import {Observable, Subject} from 'rxjs';
@@ -9,6 +9,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {SimpleEntity} from '../models/simple-entity.interface';
 import {FormFieldsErrors, FormFieldsOptions} from '../models/form-fields-options.interface';
 import {DataService} from '../services/data-service.abstract';
+import {UsersService} from "../users/users.service";
 
 export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> implements OnInit, OnDestroy {
 
@@ -20,6 +21,7 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
 
     private _formFieldsErrors: FormFieldsErrors = {};
     form: FormGroup;
+    isMinimized = false;
     submitted = false;
     loading = false;
     errorMessage: string;
@@ -50,7 +52,8 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
         public fb: FormBuilder,
         public activeModal: NgbActiveModal,
         public translateService: TranslateService,
-        public dataService: DataService<T>
+        public dataService: DataService<T>,
+        public elRef: ElementRef
     ) {}
 
     ngOnInit(): void {
@@ -274,6 +277,32 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
             event.preventDefault();
         }
         this.activeModal.dismiss(reason);
+    }
+
+    minimize(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.isMinimized = true;
+        const modalEl = this.elRef.nativeElement.parentNode.parentNode.parentNode;
+        const backdropEl = modalEl.previousElementSibling;
+
+        modalEl.classList.remove('d-block');
+        modalEl.classList.add('modal-minimized');
+        backdropEl.classList.add('d-none');
+    }
+
+    maximize(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.isMinimized = false;
+        const modalEl = this.elRef.nativeElement.parentNode.parentNode.parentNode;
+        const backdropEl = modalEl.previousElementSibling;
+
+        modalEl.classList.add('d-block');
+        modalEl.classList.remove('modal-minimized');
+        backdropEl.classList.remove('d-none');
     }
 
     save(autoClose = false, event?: MouseEvent): void {

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, Validators} from '@angular/forms';
 
@@ -11,12 +11,8 @@ import {TranslateService} from '@ngx-translate/core';
 import {UserOption, User} from './models/user.model';
 import {PageTableAbstractComponent} from '../page-table.abstract';
 import {UsersService} from './users.service';
-import {SettingsService} from '../settings/settings.service';
-import {SystemNameService} from '../services/system-name.service';
-import {ModalContentAbstractComponent} from '../modal.abstract';
 import {AppSettings} from '../services/app-settings.service';
 import {QueryOptions} from '../models/query-options';
-import {FormFieldInterface} from '../models/form-field.interface';
 import {AppModalContentAbstractComponent} from '../components/app-modal-content.abstract';
 import {FormFieldsOptions} from '../models/form-fields-options.interface';
 
@@ -85,9 +81,10 @@ export class ModalUserContentComponent extends AppModalContentAbstractComponent<
         public fb: FormBuilder,
         public activeModal: NgbActiveModal,
         public translateService: TranslateService,
-        public dataService: UsersService
+        public dataService: UsersService,
+        public elRef: ElementRef
     ) {
-        super(fb, activeModal, translateService, dataService);
+        super(fb, activeModal, translateService, dataService, elRef);
     }
 
     onBeforeInit(): void {

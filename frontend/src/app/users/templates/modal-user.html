@@ -1,4 +1,4 @@
-<div class="position-relative">
+<div class="position-relative" *ngIf="!isMinimized">
     <div class="tabs-top">
         <button type="button" class="btn btn-outline-primary d-block d-md-inline-block ml-md-2"
                 [disabled]="submitted"
@@ -6,9 +6,25 @@
             <i class="icon-cross mr-1"></i>
             <span>{{'CLOSE' | translate}}</span>
         </button>
+        <button type="button" class="btn btn-outline-primary d-block d-md-inline-block ml-md-2"
+                [disabled]="submitted"
+                (click)="minimize($event)">
+            <i class="icon-minimize mr-1"></i>
+            <span>{{'MINIMIZE' | translate}}</span>
+        </button>
     </div>
 </div>
 <div class="modal-header d-block">
+    <div class="position-relative" *ngIf="isMinimized">
+        <div class="pos-absolute-right">
+            <button type="button" class="btn btn-no-border btn-sm-sm" [title]="'EXPAND' | translate" (click)="maximize($event)">
+                <i class="icon-maximize"></i>
+            </button>
+            <button type="button" class="btn btn-no-border btn-sm-sm ml-1" [title]="'CLOSE' | translate" (click)="close($event)">
+                <i class="icon-cross"></i>
+            </button>
+        </div>
+    </div>
     <h4 class="modal-title">{{modalTitle}}</h4>
 </div>
 
@@ -188,7 +204,7 @@
         </div>
 
     </div>
-    <div class="modal-footer d-block">
+    <div class="modal-footer display-block">
         <div class="float-right" *ngIf="allowImpersonation">
             <a class="btn btn-primary" href="{{baseUrl}}?_switch_user={{model.email}}">
                 <span>{{'IMPERSONATION' | translate}}</span>

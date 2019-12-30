@@ -1,20 +1,36 @@
-<div class="position-relative">
+<div class="position-relative modal-on-maximized">
     <div class="tabs-top">
-        <button type="button" class="btn btn-outline-primary d-block d-md-inline-block ml-md-2"
+        <button type="button" class="btn btn-outline-primary btn-sm d-block"
                 [disabled]="submitted"
                 (click)="close($event)">
             <i class="icon-cross mr-1"></i>
             <span>{{'CLOSE' | translate}}</span>
         </button>
+        <button type="button" class="btn btn-outline-primary btn-sm d-block"
+                [disabled]="submitted"
+                (click)="minimize($event)">
+            <i class="icon-minimize mr-1"></i>
+            <span>{{'MINIMIZE' | translate}}</span>
+        </button>
     </div>
 </div>
 <div class="modal-header d-block">
-    <h4 class="modal-title">{{modalTitle}}</h4>
+    <div class="position-relative modal-on-minimized">
+        <div class="pos-absolute-right">
+            <button type="button" class="btn btn-no-border btn-sm-sm" [title]="'EXPAND' | translate" (click)="maximize($event)">
+                <i class="icon-maximize"></i>
+            </button>
+            <button type="button" class="btn btn-no-border btn-sm-sm ml-1" [title]="'CLOSE' | translate" (click)="close($event)">
+                <i class="icon-cross"></i>
+            </button>
+        </div>
+    </div>
+    <h4 class="modal-title text-overflow mr-5">{{modalTitle}}</h4>
 </div>
 
-<form [formGroup]="form" [class.loading]="loading">
+<form [formGroup]="form" method="post" (ngSubmit)="onSubmit()" [ngClass]="{'no-events': submitted}" #formEl>
 
-    <div class="modal-body">
+    <div class="modal-body" [class.loading]="loading">
 
         <div class="row form-group form-group-message" *ngIf="!isRoot">
             <div class="col-md-5">
@@ -25,7 +41,6 @@
                         name="parentId"
                         formControlName="parentId"
                         [filterId]="model.id"
-                        [(ngModel)]="model.parentId"
                         [class.is-invalid]="formErrors.parentId"></app-select-parent-dropdown>
 
                 <div *ngIf="formErrors.parentId" class="alert alert-danger">
@@ -42,7 +57,6 @@
             </div>
             <div class="col-md-7">
                 <input type="text" id="fieldTitle" class="form-control" formControlName="title" name="title"
-                       [(ngModel)]="model.title"
                        [class.is-invalid]="formErrors.title"
                        [ngClass]="{'border-success': localeCurrent != localeDefault}">
                 <div *ngIf="formErrors.title" class="alert alert-danger">
@@ -62,7 +76,6 @@
                     <input type="text" class="form-control" name="name"
                            formControlName="name"
                            id="fieldName"
-                           [(ngModel)]="model.name"
                            [class.is-invalid]="formErrors.name">
                     <div class="input-group-append">
                         <button type="button" class="btn btn-secondary" ngbTooltip="{{'GENERATE' | translate}}" (click)="generateName(model)" [disabled]="getControl('name').disabled">
@@ -84,7 +97,6 @@
             </div>
             <div class="col-md-7">
                 <textarea type="text" id="fieldDescription" rows="4" class="form-control" name="description" formControlName="description"
-                          [(ngModel)]="model.description"
                           [ngClass]="{'border-success': localeCurrent != localeDefault}"></textarea>
             </div>
         </div>
@@ -97,12 +109,12 @@
             </div>
             <div class="col-md-7">
 
-                <app-file-widget
-                        formControlName="image"
-                        [hasPreviewImage]="true"
-                        [allowedExtensions]="'image/*'"
-                        [(files)]="files"
-                        [(ngModel)]="model.image"></app-file-widget>
+<!--                <app-file-widget-->
+<!--                        formControlName="image"-->
+<!--                        [hasPreviewImage]="true"-->
+<!--                        [allowedExtensions]="'image/*'"-->
+<!--                        [(files)]="files"-->
+<!--                        [(ngModel)]="model.image"></app-file-widget>-->
 
             </div>
         </div>
@@ -116,7 +128,6 @@
             <div class="col-md-7">
                 <select id="fieldContentType" class="form-control" name="contentTypeName"
                         formControlName="contentTypeName"
-                        [(ngModel)]="model.contentTypeName"
                         [class.is-invalid]="formErrors.contentTypeName">
                     <option value="1" *ngFor="let contentType of contentTypes" [value]="contentType.name">{{contentType.title}}</option>
                 </select>
@@ -135,7 +146,6 @@
             <div class="col-md-7">
                 <input type="number" id="fieldMenuIndex" class="form-control" name="menuIndex"
                        formControlName="menuIndex"
-                       [(ngModel)]="model.menuIndex"
                        [class.is-invalid]="formErrors.menuIndex">
                 <div *ngIf="formErrors.menuIndex" class="alert alert-danger">
                     {{formErrors.menuIndex}}
@@ -149,12 +159,12 @@
                 <div class="card card-body p-2 pl-3">
 
                     <div class="custom-control custom-checkbox mb-2">
-                        <input type="checkbox" class="custom-control-input" id="fieldIsActive" value="1" name="isActive" formControlName="isActive" [(ngModel)]="model.isActive">
+                        <input type="checkbox" class="custom-control-input" id="fieldIsActive" value="1" name="isActive" formControlName="isActive">
                         <label class="custom-control-label" for="fieldIsActive">{{'ACTIVE' | translate}}</label>
                     </div>
 
                     <div class="custom-control custom-checkbox m-0">
-                        <input type="checkbox" class="custom-control-input" id="fieldClearCache" value="1" name="clearCache" formControlName="clearCache" [(ngModel)]="model.clearCache">
+                        <input type="checkbox" class="custom-control-input" id="fieldClearCache" value="1" name="clearCache" formControlName="clearCache">
                         <label class="custom-control-label" for="fieldClearCache">{{'CLEAR_FILE_CACHE' | translate}}</label>
                     </div>
 
@@ -163,12 +173,12 @@
             </div>
         </div>
 
-        <div class="alert alert-danger mt-3 mb-0" [hidden]="!errorMessage">
-            <button type="button" class="close" (click)="errorMessage = ''">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            {{errorMessage}}
-        </div>
+<!--        <div class="alert alert-danger mt-3 mb-0" *ngIf="errorMessage">-->
+<!--            <button type="button" class="close" (click)="errorMessage = ''">-->
+<!--                <span aria-hidden="true">&times;</span>-->
+<!--            </button>-->
+<!--            {{errorMessage}}-->
+<!--        </div>-->
 
     </div>
 

@@ -29,6 +29,9 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
     model: T;
     formFields: FormFieldsOptions[] = [];
     arrayFields: {[key: string]: any} = {};
+    localeList: string[];
+    localeDefault = '';
+    localeCurrent = '';
     destroyed$ = new Subject<void>();
 
     set formErrors(formFieldsErrors: FormFieldsErrors) {

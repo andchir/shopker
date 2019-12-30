@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, Output, EventEmitter, forwardRef} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter, forwardRef, ElementRef} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {FormBuilder, Validators} from '@angular/forms';
 
@@ -13,6 +13,7 @@ import {ContentType} from './models/content_type.model';
 import {Category, CategoryNode} from './models/category.model';
 import {ListRecursiveComponent} from '../list-recursive.component';
 import {ModalContentAbstractComponent} from '../modal.abstract';
+import {AppModalContentAbstractComponent} from '../components/app-modal-content.abstract';
 import {QueryOptions} from '../models/query-options';
 import {ConfirmModalContentComponent} from '../components/modal-confirm-text.component';
 
@@ -22,6 +23,8 @@ import {ContentTypesService} from './services/content_types.service';
 import {FormFieldInterface} from '../models/form-field.interface';
 import {AppSettings} from '../services/app-settings.service';
 import {FilesService} from './services/files.service';
+import {FormFieldsOptions} from "../models/form-fields-options.interface";
+import {UsersService} from "../users/users.service";
 
 /**
  * @class CategoriesModalComponent
@@ -30,7 +33,7 @@ import {FilesService} from './services/files.service';
     selector: 'app-category-modal-content',
     templateUrl: 'templates/modal-category.html'
 })
-export class CategoriesModalComponent extends ModalContentAbstractComponent<Category> implements OnInit {
+export class CategoriesModalComponent extends AppModalContentAbstractComponent<Category> implements OnInit {
 
     @Input() currentCategory: Category;
     @Input() isRoot = false;
@@ -43,120 +46,106 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
     localeFieldsAllowed: string[] = ['title', 'description'];
     files: { [key: string]: File } = {};
 
-    formFields: FormFieldInterface = {
-        title: {
-            fieldLabel: 'TITLE',
-            value: '',
-            disabled: false,
-            validators: [Validators.required],
-            messages: {}
+    formFields: FormFieldsOptions[] = [
+        {
+            name: 'title',
+            validators: [Validators.required]
         },
-        name: {
-            fieldLabel: 'SYSTEM_NAME',
-            value: '',
-            disabled: false,
-            validators: [Validators.required],
-            messages: {}
+        {
+            name: 'name',
+            validators: [Validators.required]
         },
-        description: {
-            fieldLabel: 'DESCRIPTION',
-            value: '',
-            disabled: false,
-            validators: [],
-            messages: {}
+        {
+            name: 'description',
+            validators: [Validators.required]
         },
-        parentId: {
-            fieldLabel: 'PARENT_FOLDER',
-            value: 0,
-            disabled: false,
-            validators: [],
-            messages: {}
+        {
+            name: 'parentId',
+            validators: []
         },
-        image: {
-            fieldLabel: 'IMAGE',
-            value: null,
-            disabled: false,
-            validators: [],
-            messages: {}
+        {
+            name: 'image',
+            validators: []
         },
-        contentTypeName: {
-            fieldLabel: 'CONTENT_TYPE',
-            value: '',
-            disabled: false,
-            validators: [Validators.required],
-            messages: {}
+        {
+            name: 'contentTypeName',
+            validators: []
         },
-        menuIndex: {
-            fieldLabel: 'MENU_INDEX',
-            value: 0,
-            disabled: false,
-            validators: [],
-            messages: {}
+        {
+            name: 'menuIndex',
+            validators: []
         },
-        isActive: {
-            fieldLabel: 'ACTIVE',
-            value: true,
-            disabled: false,
-            validators: [],
-            messages: {}
+        {
+            name: 'isActive',
+            validators: []
         },
-        clearCache: {
-            fieldLabel: 'CLEAR_FILE_CACHE',
-            value: true,
-            disabled: false,
-            validators: [],
-            messages: {}
+        {
+            name: 'clearCache',
+            validators: []
         }
-    };
+    ];
+
+    // constructor(
+    //     public fb: FormBuilder,
+    //     public dataService: CategoriesService,
+    //     public systemNameService: SystemNameService,
+    //     public activeModal: NgbActiveModal,
+    //     public tooltipConfig: NgbTooltipConfig,
+    //     public translateService: TranslateService,
+    //     private filesService: FilesService,
+    //     private contentTypesService: ContentTypesService,
+    //     private appSettings: AppSettings
+    // ) {
+    //     super(fb, dataService, systemNameService, activeModal, tooltipConfig, translateService);
+    // }
 
     constructor(
         public fb: FormBuilder,
-        public dataService: CategoriesService,
-        public systemNameService: SystemNameService,
         public activeModal: NgbActiveModal,
-        public tooltipConfig: NgbTooltipConfig,
         public translateService: TranslateService,
+        public dataService: CategoriesService,
+        public elRef: ElementRef,
         private filesService: FilesService,
         private contentTypesService: ContentTypesService,
         private appSettings: AppSettings
     ) {
-        super(fb, dataService, systemNameService, activeModal, tooltipConfig, translateService);
+        super(fb, activeModal, translateService, dataService, elRef);
     }
 
     /** On initialize */
-    ngOnInit(): void {
-        this.localeList = this.appSettings.settings.localeList;
-        if (this.localeList.length > 0) {
-            this.localeDefault = this.localeList[0];
-            this.localeCurrent = this.localeList[0];
-        }
-        if (this.itemId) {
-            this.model.id = this.itemId;
-        }
-        if (this.isEditMode) {
-            this.model.parentId = this.currentCategory.parentId;
-        } else {
-            this.model.parentId = this.currentCategory.id;
-        }
-        this.model.contentTypeName = this.currentCategory.contentTypeName;
-        if (this.isRoot) {
-            this.model.id = 0;
-            this.model.title = this.getLangString('ROOT_FOLDER');
-            this.model.name = 'root';
-            this.formFields.title.disabled = true;
-            this.formFields.name.disabled = true;
-            this.formFields.isActive.disabled = true;
-        }
-        ModalContentAbstractComponent.prototype.ngOnInit.call(this);
-        this.getContentTypes();
-    }
+    // ngOnInit(): void {
+    //     this.localeList = this.appSettings.settings.localeList;
+    //     if (this.localeList.length > 0) {
+    //         this.localeDefault = this.localeList[0];
+    //         this.localeCurrent = this.localeList[0];
+    //     }
+    //     if (this.itemId) {
+    //         this.model.id = this.itemId;
+    //     }
+    //     if (this.isEditMode) {
+    //         this.model.parentId = this.currentCategory.parentId;
+    //     } else {
+    //         this.model.parentId = this.currentCategory.id;
+    //     }
+    //     this.model.contentTypeName = this.currentCategory.contentTypeName;
+    //     if (this.isRoot) {
+    //         this.model.id = 0;
+    //         this.model.title = this.getLangString('ROOT_FOLDER');
+    //         this.model.name = 'root';
+    //         // this.formFields.title.disabled = true;
+    //         // this.formFields.name.disabled = true;
+    //         // this.formFields.isActive.disabled = true;
+    //     }
+    //     // ModalContentAbstractComponent.prototype.ngOnInit.call(this);
+    //     this.getContentTypes();
+    // }
 
-    onAfterGetData() {
-        this.model.clearCache = true;
-        if (!this.model.translations || Array.isArray(this.model.translations)) {
-            this.model.translations = {};
-        }
-    }
+    // onAfterGetData() {
+    //     this.model.clearCache = true;
+    //     if (!this.model.translations || Array.isArray(this.model.translations)) {
+    //         this.model.translations = {};
+    //     }
+    // }
 
     getContentTypes() {
         this.contentTypesService.getListPage()
@@ -198,27 +187,27 @@ export class CategoriesModalComponent extends ModalContentAbstractComponent<Cate
                 });
     }
 
-    save(): void {
-        this.submitted = true;
-        if (!this.form.valid) {
-            this.onValueChanged('form');
-            this.submitted = false;
-            return;
-        }
-        this.loading = true;
-        this.saveRequest()
-            .subscribe((data) => {
-                if (Object.keys(this.files).length > 0) {
-                    this.saveFiles(data._id || data.id);
-                } else {
-                    this.closeModal();
-                }
-            }, (err) => {
-                this.errorMessage = err.error;
-                this.submitted = false;
-                this.loading = false;
-            });
-    }
+    // save(): void {
+    //     this.submitted = true;
+    //     if (!this.form.valid) {
+    //         this.onValueChanged('form');
+    //         this.submitted = false;
+    //         return;
+    //     }
+    //     this.loading = true;
+    //     this.saveRequest()
+    //         .subscribe((data) => {
+    //             if (Object.keys(this.files).length > 0) {
+    //                 this.saveFiles(data._id || data.id);
+    //             } else {
+    //                 this.closeModal();
+    //             }
+    //         }, (err) => {
+    //             this.errorMessage = err.error;
+    //             this.submitted = false;
+    //             this.loading = false;
+    //         });
+    // }
 }
 
 /**
@@ -332,12 +321,23 @@ export class CategoriesMenuComponent implements OnInit {
      * @param isItemCopy
      */
     openModalCategory(itemId?: number, isItemCopy: boolean = false): void {
+        const modalId = this.getModalElementId(itemId);
+        window.document.body.classList.add('modal-open');
+        if (window.document.getElementById(modalId)) {
+            const modalEl = window.document.getElementById(modalId);
+            const backdropEl = modalEl.previousElementSibling;
+            modalEl.classList.add('d-block');
+            modalEl.classList.remove('modal-minimized');
+            backdropEl.classList.remove('d-none');
+            return;
+        }
         const isRoot = itemId === 0 || itemId === null;
         const isEditMode = typeof itemId !== 'undefined' && !isItemCopy;
         this.modalRef = this.modalService.open(CategoriesModalComponent, {size: 'lg'});
         this.modalRef.componentInstance.modalTitle = isEditMode
             ? this.getLangString('EDIT_CATEGORY')
             : this.getLangString('ADD_NEW_CATEGORY');
+        this.modalRef.componentInstance.modalId = modalId;
         this.modalRef.componentInstance.itemId = itemId || 0;
         this.modalRef.componentInstance.isItemCopy = isItemCopy || false;
         this.modalRef.componentInstance.currentCategory = this.currentCategory;
@@ -352,6 +352,10 @@ export class CategoriesMenuComponent implements OnInit {
         }, (reason) => {
 
         });
+    }
+
+    getModalElementId(itemId?: number): string {
+        return ['modal', 'category', itemId || 0].join('-');
     }
 
     /**

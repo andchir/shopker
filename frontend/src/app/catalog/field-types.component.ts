@@ -86,12 +86,14 @@ export class FieldTypeModalContentComponent extends AppModalContentAbstractCompo
         super(fb, activeModal, translateService, dataService, elRef);
     }
 
-    generateName(model): void {
+    generateName(model, event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
         const title = this.getControl(this.form, null, 'title').value || '';
         model.name = this.systemNameService.generateName(title);
         this.getControl(this.form, null, 'name').setValue(model.name);
     }
-
 }
 
 @Component({

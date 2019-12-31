@@ -85,20 +85,6 @@ export class CategoriesModalComponent extends AppModalContentAbstractComponent<C
         }
     ];
 
-    // constructor(
-    //     public fb: FormBuilder,
-    //     public dataService: CategoriesService,
-    //     public systemNameService: SystemNameService,
-    //     public activeModal: NgbActiveModal,
-    //     public tooltipConfig: NgbTooltipConfig,
-    //     public translateService: TranslateService,
-    //     private filesService: FilesService,
-    //     private contentTypesService: ContentTypesService,
-    //     private appSettings: AppSettings
-    // ) {
-    //     super(fb, dataService, systemNameService, activeModal, tooltipConfig, translateService);
-    // }
-
     constructor(
         public fb: FormBuilder,
         public activeModal: NgbActiveModal,
@@ -107,45 +93,45 @@ export class CategoriesModalComponent extends AppModalContentAbstractComponent<C
         public elRef: ElementRef,
         private filesService: FilesService,
         private contentTypesService: ContentTypesService,
-        private appSettings: AppSettings
+        private appSettings: AppSettings,
+        private systemNameService: SystemNameService
     ) {
         super(fb, activeModal, translateService, dataService, elRef);
     }
 
     /** On initialize */
-    // ngOnInit(): void {
-    //     this.localeList = this.appSettings.settings.localeList;
-    //     if (this.localeList.length > 0) {
-    //         this.localeDefault = this.localeList[0];
-    //         this.localeCurrent = this.localeList[0];
-    //     }
-    //     if (this.itemId) {
-    //         this.model.id = this.itemId;
-    //     }
-    //     if (this.isEditMode) {
-    //         this.model.parentId = this.currentCategory.parentId;
-    //     } else {
-    //         this.model.parentId = this.currentCategory.id;
-    //     }
-    //     this.model.contentTypeName = this.currentCategory.contentTypeName;
-    //     if (this.isRoot) {
-    //         this.model.id = 0;
-    //         this.model.title = this.getLangString('ROOT_FOLDER');
-    //         this.model.name = 'root';
-    //         // this.formFields.title.disabled = true;
-    //         // this.formFields.name.disabled = true;
-    //         // this.formFields.isActive.disabled = true;
-    //     }
-    //     // ModalContentAbstractComponent.prototype.ngOnInit.call(this);
-    //     this.getContentTypes();
-    // }
+    ngOnInit(): void {
+        this.localeList = this.appSettings.settings.localeList;
+        if (this.localeList.length > 0) {
+            this.localeDefault = this.localeList[0];
+            this.localeCurrent = this.localeList[0];
+        }
+        if (this.itemId) {
+            this.model.id = this.itemId;
+        }
+        if (this.isEditMode) {
+            this.model.parentId = this.currentCategory.parentId;
+        } else {
+            this.model.parentId = this.currentCategory.id;
+        }
+        this.model.contentTypeName = this.currentCategory.contentTypeName;
+        if (this.isRoot) {
+            this.model.id = 0;
+            this.model.title = this.getLangString('ROOT_FOLDER');
+            this.model.name = 'root';
+        }
+        this.getContentTypes();
 
-    // onAfterGetData() {
-    //     this.model.clearCache = true;
-    //     if (!this.model.translations || Array.isArray(this.model.translations)) {
-    //         this.model.translations = {};
-    //     }
-    // }
+        super.ngOnInit();
+    }
+
+    onAfterGetData() {
+        this.model.clearCache = true;
+        if (!this.model.translations || Array.isArray(this.model.translations)) {
+            this.model.translations = {};
+        }
+        super.onAfterGetData();
+    }
 
     getContentTypes() {
         this.contentTypesService.getListPage()
@@ -208,6 +194,15 @@ export class CategoriesModalComponent extends AppModalContentAbstractComponent<C
     //             this.loading = false;
     //         });
     // }
+
+    generateName(model, event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        const title = this.getControl(this.form, null, 'title').value || '';
+        model.name = this.systemNameService.generateName(title);
+        this.getControl(this.form, null, 'name').setValue(model.name);
+    }
 }
 
 /**
@@ -333,9 +328,16 @@ export class CategoriesMenuComponent implements OnInit {
         }
         const isRoot = itemId === 0 || itemId === null;
         const isEditMode = typeof itemId !== 'undefined' && !isItemCopy;
-        this.modalRef = this.modalService.open(CategoriesModalComponent, {size: 'lg'});
+        this.modalRef = this.modalService.open(CategoriesModalComponent, {
+            size: 'lg',
+            backdrop: 'static',
+            keyboard: false,
+            backdropClass: 'modal-backdrop-left45',
+            windowClass: 'modal-left45',
+            container: '#modals-container'
+        });
         this.modalRef.componentInstance.modalTitle = isEditMode
-            ? this.getLangString('EDIT_CATEGORY')
+            ? this.getLangString('CATEGORY') + (itemId ? ` #${itemId}` : '')
             : this.getLangString('ADD_NEW_CATEGORY');
         this.modalRef.componentInstance.modalId = modalId;
         this.modalRef.componentInstance.itemId = itemId || 0;
@@ -350,7 +352,7 @@ export class CategoriesMenuComponent implements OnInit {
                 this.loading = false;
             });
         }, (reason) => {
-
+            this.loading = false;
         });
     }
 

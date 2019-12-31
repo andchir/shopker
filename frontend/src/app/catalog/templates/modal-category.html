@@ -30,7 +30,7 @@
 
 <form [formGroup]="form" method="post" (ngSubmit)="onSubmit()" [ngClass]="{'no-events': submitted}" #formEl>
 
-    <div class="modal-body" [class.loading]="loading">
+    <div class="modal-body py-0" [class.loading]="loading">
 
         <div class="row form-group form-group-message" *ngIf="!isRoot">
             <div class="col-md-5">
@@ -38,7 +38,6 @@
             </div>
             <div class="col-md-7">
                 <app-select-parent-dropdown
-                        name="parentId"
                         formControlName="parentId"
                         [filterId]="model.id"
                         [class.is-invalid]="formErrors.parentId"></app-select-parent-dropdown>
@@ -56,9 +55,9 @@
                 </label>
             </div>
             <div class="col-md-7">
-                <input type="text" id="fieldTitle" class="form-control" formControlName="title" name="title"
-                       [class.is-invalid]="formErrors.title"
-                       [ngClass]="{'border-success': localeCurrent != localeDefault}">
+                <input type="text" class="form-control" id="fieldTitle"
+                       formControlName="title"
+                       [ngClass]="{'is-invalid': form.controls.title.touched && !form.controls.title.valid}">
                 <div *ngIf="formErrors.title" class="alert alert-danger">
                     {{formErrors.title}}
                 </div>
@@ -72,13 +71,14 @@
                 </label>
             </div>
             <div class="col-md-7">
-                <div class="input-group" [class.is-invalid]="formErrors.name">
-                    <input type="text" class="form-control" name="name"
+                <div class="input-group" [ngClass]="{'is-invalid': form.controls.name.touched && !form.controls.name.valid}">
+                    <input type="text" class="form-control" id="fieldName"
                            formControlName="name"
-                           id="fieldName"
-                           [class.is-invalid]="formErrors.name">
+                           [ngClass]="{'is-invalid': form.controls.name.touched && !form.controls.name.valid}">
                     <div class="input-group-append">
-                        <button type="button" class="btn btn-secondary" ngbTooltip="{{'GENERATE' | translate}}" (click)="generateName(model)" [disabled]="getControl('name').disabled">
+                        <button type="button" class="btn btn-secondary" ngbTooltip="{{'GENERATE' | translate}}"
+                                (click)="generateName(model)"
+                                [disabled]="form.controls.name.disabled">
                             <i class="icon-reload"></i>
                         </button>
                     </div>
@@ -109,12 +109,11 @@
             </div>
             <div class="col-md-7">
 
-<!--                <app-file-widget-->
-<!--                        formControlName="image"-->
-<!--                        [hasPreviewImage]="true"-->
-<!--                        [allowedExtensions]="'image/*'"-->
-<!--                        [(files)]="files"-->
-<!--                        [(ngModel)]="model.image"></app-file-widget>-->
+                <app-file-widget
+                        formControlName="image"
+                        [hasPreviewImage]="true"
+                        [allowedExtensions]="'image/*'"
+                        [(files)]="files"></app-file-widget>
 
             </div>
         </div>
@@ -126,7 +125,7 @@
                 </label>
             </div>
             <div class="col-md-7">
-                <select id="fieldContentType" class="form-control" name="contentTypeName"
+                <select id="fieldContentType" class="custom-select" name="contentTypeName"
                         formControlName="contentTypeName"
                         [class.is-invalid]="formErrors.contentTypeName">
                     <option value="1" *ngFor="let contentType of contentTypes" [value]="contentType.name">{{contentType.title}}</option>
@@ -173,12 +172,12 @@
             </div>
         </div>
 
-<!--        <div class="alert alert-danger mt-3 mb-0" *ngIf="errorMessage">-->
-<!--            <button type="button" class="close" (click)="errorMessage = ''">-->
-<!--                <span aria-hidden="true">&times;</span>-->
-<!--            </button>-->
-<!--            {{errorMessage}}-->
-<!--        </div>-->
+        <div class="alert alert-danger mt-3 mb-0" *ngIf="errorMessage">
+            <button type="button" class="close" (click)="errorMessage = ''">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {{errorMessage}}
+        </div>
 
     </div>
 
@@ -196,9 +195,23 @@
                 </label>
             </div>
         </div>
-        <button type="submit" class="btn btn-success btn-wide" [disabled]="submitted || isSaveButtonDisabled" (click)="save()">
-            <span>{{'SAVE' | translate}}</span>
-        </button>
+        <div class="btn-group mr-1">
+            <button type="button" class="btn btn-success btn-wide"
+                    [disabled]="submitted || isSaveButtonDisabled"
+                    (click)="save(true, $event)">
+                <span>{{'SAVE_AND_CLOSE' | translate}}</span>
+            </button>
+            <div class="btn-group" ngbDropdown role="group" placement="top-right">
+                <button type="button" class="btn btn-success dropdown-toggle-split" ngbDropdownToggle [disabled]="submitted || isSaveButtonDisabled"></button>
+                <div class="dropdown-menu" ngbDropdownMenu>
+                    <button type="button" ngbDropdownItem
+                            [disabled]="submitted || isSaveButtonDisabled"
+                            (click)="save(false, $event)">
+                        {{'SAVE' | translate}}
+                    </button>
+                </div>
+            </div>
+        </div>
         <button type="button" class="btn btn-secondary btn-wide" (click)="close($event)">
             <span>{{'CANCEL' | translate}}</span>
         </button>

@@ -29,9 +29,12 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
     model: T;
     formFields: FormFieldsOptions[] = [];
     arrayFields: {[key: string]: any} = {};
+    isSaveButtonDisabled = false;
     localeList: string[];
     localeDefault = '';
     localeCurrent = '';
+    localeFieldsAllowed: string[] = [];
+    localePreviousValues: {[fieldName: string]: string} = {};
     destroyed$ = new Subject<void>();
 
     set formErrors(formFieldsErrors: FormFieldsErrors) {
@@ -391,6 +394,34 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
                     this.submitted = false;
                 }
             });
+    }
+
+    onLocaleSwitch(): void {
+        if (this.localeCurrent === this.localeDefault) {
+            this.localeFieldsAllowed.forEach((fieldName) => {
+                this.model[fieldName] = this.localePreviousValues[fieldName];
+            });
+            this.isSaveButtonDisabled = false;
+            return;
+        }
+        if (!this.model.translations) {
+            this.model.translations = {};
+        }
+        this.isSaveButtonDisabled = true;
+        this.localeFieldsAllowed.forEach((fieldName) => {
+            this.localePreviousValues[fieldName] = this.model[fieldName] || '';
+            if (this.model.translations[fieldName]) {
+                this.model[fieldName] = this.model.translations[fieldName][this.localeCurrent] || '';
+            } else {
+                this.model[fieldName] = '';
+            }
+        });
+    }
+
+    saveTranslations(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
     }
 
     emailValidator(control: FormControl): { [s: string]: boolean } {

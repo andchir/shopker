@@ -1,8 +1,18 @@
-import {Component, OnInit, Input, Output, EventEmitter, forwardRef, ElementRef} from '@angular/core';
+import {
+    Component,
+    OnInit,
+    AfterViewInit,
+    Input,
+    Output,
+    EventEmitter,
+    forwardRef,
+    ElementRef,
+    ViewChild, OnDestroy
+} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {FormBuilder, Validators} from '@angular/forms';
 
-import {Observable} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {TreeNode} from 'primeng/primeng';
 
 import {findIndex, clone, cloneDeep} from 'lodash';
@@ -12,7 +22,6 @@ import {NgbModal, NgbActiveModal, NgbModalRef, NgbTooltipConfig, NgbAccordion} f
 import {ContentType} from './models/content_type.model';
 import {Category, CategoryNode} from './models/category.model';
 import {ListRecursiveComponent} from '../list-recursive.component';
-import {ModalContentAbstractComponent} from '../modal.abstract';
 import {AppModalContentAbstractComponent} from '../components/app-modal-content.abstract';
 import {QueryOptions} from '../models/query-options';
 import {ConfirmModalContentComponent} from '../components/modal-confirm-text.component';
@@ -20,11 +29,9 @@ import {ConfirmModalContentComponent} from '../components/modal-confirm-text.com
 import {SystemNameService} from '../services/system-name.service';
 import {CategoriesService} from './services/categories.service';
 import {ContentTypesService} from './services/content_types.service';
-import {FormFieldInterface} from '../models/form-field.interface';
 import {AppSettings} from '../services/app-settings.service';
 import {FilesService} from './services/files.service';
-import {FormFieldsOptions} from "../models/form-fields-options.interface";
-import {UsersService} from "../users/users.service";
+import {FormFieldsOptions} from '../models/form-fields-options.interface';
 
 /**
  * @class CategoriesModalComponent
@@ -33,7 +40,7 @@ import {UsersService} from "../users/users.service";
     selector: 'app-category-modal-content',
     templateUrl: 'templates/modal-category.html'
 })
-export class CategoriesModalComponent extends AppModalContentAbstractComponent<Category> implements OnInit {
+export class CategoriesModalComponent extends AppModalContentAbstractComponent<Category> implements OnInit, AfterViewInit {
 
     @Input() currentCategory: Category;
     @Input() isRoot = false;
@@ -57,7 +64,7 @@ export class CategoriesModalComponent extends AppModalContentAbstractComponent<C
         },
         {
             name: 'description',
-            validators: [Validators.required]
+            validators: []
         },
         {
             name: 'parentId',
@@ -123,6 +130,12 @@ export class CategoriesModalComponent extends AppModalContentAbstractComponent<C
         this.getContentTypes();
 
         super.ngOnInit();
+    }
+
+    ngAfterViewInit(): void {
+        if (this.elRef.nativeElement.querySelector('#fieldTitle')) {
+            this.elRef.nativeElement.querySelector('#fieldTitle').focus();
+        }
     }
 
     onAfterGetData() {
@@ -223,7 +236,8 @@ export class CategoriesListComponent extends ListRecursiveComponent {
     selector: 'app-categories-menu',
     templateUrl: 'templates/categories-menu.html'
 })
-export class CategoriesMenuComponent implements OnInit {
+export class CategoriesMenuComponent implements OnInit, OnDestroy {
+    @ViewChild('categoriesDropdown', { static: true }) categoriesDropdown;
     @Input() rootTitle = 'Категории';
     @Output() changeRequest = new EventEmitter<Category>();
     currentCategory: Category = new Category(null, false, 0, 'root', this.rootTitle, '', '', true);
@@ -240,6 +254,7 @@ export class CategoriesMenuComponent implements OnInit {
     modalRef: NgbModalRef;
     categoryId = 0;
     loading = false;
+    destroyed$ = new Subject<void>();
 
     constructor(
         public router: Router,
@@ -316,6 +331,13 @@ export class CategoriesMenuComponent implements OnInit {
      * @param isItemCopy
      */
     openModalCategory(itemId?: number, isItemCopy: boolean = false): void {
+
+        // Hide drop-down menu
+        this.categoriesDropdown.nativeElement.previousSibling.classList.remove('dropdown-toggle-hover');
+        setTimeout(() => {
+            this.categoriesDropdown.nativeElement.previousSibling.classList.add('dropdown-toggle-hover');
+        }, 1);
+
         const modalId = this.getModalElementId(itemId);
         window.document.body.classList.add('modal-open');
         if (window.document.getElementById(modalId)) {
@@ -346,12 +368,25 @@ export class CategoriesMenuComponent implements OnInit {
         this.modalRef.componentInstance.isRoot = isRoot;
         this.modalRef.componentInstance.isEditMode = isEditMode;
         this.modalRef.result.then((result) => {
+            if (this.destroyed$.isStopped) {
+                return;
+            }
             this.currentCategory.id = null; // For update current category data
             this.loading = true;
             this.getCategories().then(() => {
                 this.loading = false;
             });
         }, (reason) => {
+            if (this.destroyed$.isStopped) {
+                return;
+            }
+            if (reason && ['submit', 'updated'].indexOf(reason) > -1) {
+                this.currentCategory.id = null;
+                this.loading = true;
+                this.getCategories().then(() => {
+                    this.loading = false;
+                });
+            }
             this.loading = false;
         });
     }
@@ -450,6 +485,11 @@ export class CategoriesMenuComponent implements OnInit {
                 this.expandRecursive(childNode, isExpand);
             });
         }
+    }
+
+    ngOnDestroy(): void {
+        this.destroyed$.next();
+        this.destroyed$.complete();
     }
 }
 

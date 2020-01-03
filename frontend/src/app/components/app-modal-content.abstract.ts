@@ -292,7 +292,11 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
         if (event) {
             event.preventDefault();
         }
-        this.activeModal.dismiss(reason);
+        if (reason === 'submit') {
+            this.activeModal.close(reason);
+        } else {
+            this.activeModal.dismiss(reason);
+        }
     }
 
     minimize(event?: MouseEvent): void {

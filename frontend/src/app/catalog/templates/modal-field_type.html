@@ -2,7 +2,7 @@
     <div class="tabs-top">
         <button type="button" class="btn btn-outline-primary btn-sm d-block"
                 [disabled]="submitted"
-                (click)="close($event)">
+                (click)="closeModal($event)">
             <i class="icon-cross mr-1"></i>
             <span>{{'CLOSE' | translate}}</span>
         </button>
@@ -20,7 +20,7 @@
             <button type="button" class="btn btn-no-border btn-sm-sm" [title]="'EXPAND' | translate" (click)="maximize($event)">
                 <i class="icon-maximize"></i>
             </button>
-            <button type="button" class="btn btn-no-border btn-sm-sm ml-1" [title]="'CLOSE' | translate" (click)="close($event)">
+            <button type="button" class="btn btn-no-border btn-sm-sm ml-1" [title]="'CLOSE' | translate" (click)="closeModal($event)">
                 <i class="icon-cross"></i>
             </button>
         </div>
@@ -240,7 +240,7 @@
                 </div>
             </div>
         </div>
-        <button type="button" class="btn btn-secondary btn-wide" (click)="close($event)">
+        <button type="button" class="btn btn-secondary btn-wide" (click)="closeModal($event)">
             <span>{{'CLOSE' | translate}}</span>
         </button>
     </div>

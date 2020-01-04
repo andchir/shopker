@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {NgbModal, NgbActiveModal, NgbModalRef, NgbPopover, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import {find, map, findIndex, cloneDeep, extend} from 'lodash';
@@ -165,22 +165,23 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
         public activeModal: NgbActiveModal,
         public tooltipConfig: NgbTooltipConfig,
         public translateService: TranslateService,
+        public elRef: ElementRef,
         private fieldTypesService: FieldTypesService,
         private collectionsService: CollectionsService,
         private modalService: NgbModal
     ) {
-        super(fb, dataService, systemNameService, activeModal, tooltipConfig, translateService);
+        super(fb, dataService, systemNameService, activeModal, tooltipConfig, translateService, elRef);
     }
 
     /** On initialize */
     ngOnInit(): void {
-        ModalContentAbstractComponent.prototype.ngOnInit.call(this);
+        super.ngOnInit();
         this.getFieldTypes();
         this.getCollectionsList();
     }
 
     buildForm(): void {
-        ModalContentAbstractComponent.prototype.buildForm.call(this);
+        super.buildForm();
 
         const controls = this.buildControls(this.fieldsFormOptions, 'fieldModel', 'fld_');
         this.fieldForm = this.fb.group(controls);

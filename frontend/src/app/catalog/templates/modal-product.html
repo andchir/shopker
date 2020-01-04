@@ -1,15 +1,31 @@
-<div class="position-relative">
+<div class="position-relative modal-on-maximized">
     <div class="tabs-top">
-        <button type="button" class="btn btn-outline-primary d-block d-md-inline-block ml-md-2"
+        <button type="button" class="btn btn-outline-primary btn-sm d-block"
                 [disabled]="submitted"
-                (click)="close($event)">
+                (click)="closeModal($event)">
             <i class="icon-cross mr-1"></i>
             <span>{{'CLOSE' | translate}}</span>
+        </button>
+        <button type="button" class="btn btn-outline-primary btn-sm d-block"
+                [disabled]="submitted"
+                (click)="minimize($event)">
+            <i class="icon-minimize mr-1"></i>
+            <span>{{'MINIMIZE' | translate}}</span>
         </button>
     </div>
 </div>
 <div class="modal-header d-block">
-    <h4 class="modal-title">{{modalTitle}}</h4>
+    <div class="position-relative modal-on-minimized">
+        <div class="pos-absolute-right">
+            <button type="button" class="btn btn-no-border btn-sm-sm" [title]="'EXPAND' | translate" (click)="maximize($event)">
+                <i class="icon-maximize"></i>
+            </button>
+            <button type="button" class="btn btn-no-border btn-sm-sm ml-1" [title]="'CLOSE' | translate" (click)="closeModal($event)">
+                <i class="icon-cross"></i>
+            </button>
+        </div>
+    </div>
+    <h4 class="modal-title text-overflow mr-5">{{modalTitle}}</h4>
 </div>
 
 <form [formGroup]="form" [class.loading]="loading">
@@ -97,7 +113,7 @@
                 </div>
             </div>
         </div>
-        <button type="button" class="btn btn-secondary btn-wide" (click)="close($event)">
+        <button type="button" class="btn btn-secondary btn-wide" (click)="closeModal($event)">
             <span>{{'CLOSE' | translate}}</span>
         </button>
     </div>

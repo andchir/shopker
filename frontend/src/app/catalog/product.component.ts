@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {NgbActiveModal, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import {FormControl, FormBuilder, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
@@ -22,7 +22,8 @@ import {FormFieldInterface} from '../models/form-field.interface';
 
 @Component({
     selector: 'app-product-modal-content',
-    templateUrl: 'templates/modal-product.html'
+    templateUrl: 'templates/modal-product.html',
+    providers: [ProductsService]
 })
 export class ProductModalContentComponent extends ModalContentAbstractComponent<Product> implements OnInit {
 
@@ -60,18 +61,22 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
         public activeModal: NgbActiveModal,
         public tooltipConfig: NgbTooltipConfig,
         public translateService: TranslateService,
+        public elRef: ElementRef,
         private contentTypesService: ContentTypesService,
         private categoriesService: CategoriesService,
         private filesService: FilesService,
         private appSettings: AppSettings
     ) {
-        super(fb, dataService, systemNameService, activeModal, tooltipConfig, translateService);
+        super(fb, dataService, systemNameService, activeModal, tooltipConfig, translateService, elRef);
 
         this.model.id = 0;
         this.model.parentId = 0;
     }
 
     ngOnInit(): void {
+        if (this.elRef) {
+            this.getRootElement().setAttribute('id', this.modalId);
+        }
         this.localeList = this.appSettings.settings.localeList;
         if (this.localeList.length > 0) {
             this.localeDefault = this.localeList[0];

@@ -1,4 +1,4 @@
-import {Input, OnDestroy, OnInit} from '@angular/core';
+import {ElementRef, Input, OnDestroy, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
 import {Subject} from 'rxjs';
@@ -15,8 +15,10 @@ import {FormFieldInterface, FormFieldOptionsInterface} from './models/form-field
  * @deprecated since version 4.1.1. Use AppModalContentAbstractComponent instead.
  */
 export abstract class ModalContentAbstractComponent<M> implements OnInit, OnDestroy {
+
     @Input() modalTitle: string;
     @Input() itemId: number | null;
+    @Input() modalId = '';
     @Input() isItemCopy: boolean;
     @Input() isEditMode: boolean;
 
@@ -45,7 +47,8 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit, OnDest
         public systemNameService: SystemNameService,
         public activeModal: NgbActiveModal,
         public tooltipConfig: NgbTooltipConfig,
-        public translateService: TranslateService
+        public translateService: TranslateService,
+        public elRef: ElementRef
     ) {
         tooltipConfig.placement = 'bottom';
         tooltipConfig.container = 'body';
@@ -53,6 +56,9 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit, OnDest
     }
 
     ngOnInit(): void {
+        if (this.elRef) {
+            this.getRootElement().setAttribute('id', this.modalId);
+        }
         this.onBeforeInit();
         this.buildForm();
         if (this.isEditMode || this.isItemCopy) {
@@ -209,7 +215,10 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit, OnDest
     }
 
     /** Close modal */
-    closeModal() {
+    closeModal(event?: MouseEvent) {
+        if (event) {
+            event.preventDefault();
+        }
         const reason = this.itemId ? 'edit' : 'create';
         this.activeModal.close({reason: reason, data: this.model});
     }
@@ -219,6 +228,32 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit, OnDest
             event.preventDefault();
         }
         this.activeModal.dismiss(this.closeReason);
+    }
+
+    minimize(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        window.document.body.classList.remove('modal-open');
+        const modalEl = this.getRootElement();
+        const backdropEl = modalEl.previousElementSibling;
+
+        modalEl.classList.remove('d-block');
+        modalEl.classList.add('modal-minimized');
+        backdropEl.classList.add('d-none');
+    }
+
+    maximize(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        window.document.body.classList.add('modal-open');
+        const modalEl = this.getRootElement();
+        const backdropEl = modalEl.previousElementSibling;
+
+        modalEl.classList.add('d-block');
+        modalEl.classList.remove('modal-minimized');
+        backdropEl.classList.remove('d-none');
     }
 
     getFormData(): any {
@@ -393,6 +428,10 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit, OnDest
         } else if (!EMAIL_REGEXP.test(control.value)) {
             return {email: true};
         }
+    }
+
+    getRootElement(): HTMLElement {
+        return this.elRef.nativeElement.parentNode.parentNode.parentNode;
     }
 
     ngOnDestroy(): void {

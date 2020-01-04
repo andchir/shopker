@@ -16,7 +16,8 @@ import {ContentTypesService} from './services/content_types.service';
 
 @Component({
     selector: 'app-catalog-category',
-    templateUrl: 'templates/catalog-category.html'
+    templateUrl: 'templates/catalog-category.html',
+    providers: [ProductsService]
 })
 export class CatalogCategoryComponent extends PageTableAbstractComponent<Product> implements OnInit {
 
@@ -112,9 +113,19 @@ export class CatalogCategoryComponent extends PageTableAbstractComponent<Product
         this.getList();
     }
 
-    setModalInputs(itemId?: number, isItemCopy: boolean = false): void {
-        PageTableAbstractComponent.prototype.setModalInputs.call(this, itemId, isItemCopy);
-        this.modalRef.componentInstance.category = this.currentCategory;
+    setModalInputs(itemId?: number, isItemCopy: boolean = false, modalId = ''): void {
+        const isEditMode = typeof itemId !== 'undefined' && !isItemCopy;
+        this.modalRef.componentInstance.modalTitle = isEditMode
+            ? `${this.getLangString('PAGE')} #${itemId}`
+            : this.getLangString('ADD');
+        this.modalRef.componentInstance.modalId = modalId;
+        this.modalRef.componentInstance.itemId = itemId || 0;
+        this.modalRef.componentInstance.isItemCopy = isItemCopy || false;
+        this.modalRef.componentInstance.isEditMode = isEditMode;
+        this.modalRef.componentInstance.category = Object.assign({}, this.currentCategory);
     }
 
+    getModalElementId(itemId?: number): string {
+        return ['modal', 'product', itemId || 0].join('-');
+    }
 }

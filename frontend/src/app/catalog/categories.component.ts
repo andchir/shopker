@@ -13,6 +13,7 @@ import {Router, ActivatedRoute} from '@angular/router';
 import {FormBuilder, Validators} from '@angular/forms';
 
 import {Observable, Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 import {TreeNode} from 'primeng/primeng';
 
 import {findIndex, clone, cloneDeep} from 'lodash';
@@ -254,6 +255,7 @@ export class CategoriesMenuComponent implements OnInit, OnDestroy {
         this.getCategories().then((categories: Category[]) => {
             this.loading = false;
             this.route.paramMap
+                .pipe(takeUntil(this.destroyed$))
                 .subscribe(
                     params => {
                         this.categoryId = params.get('categoryId')
@@ -292,7 +294,6 @@ export class CategoriesMenuComponent implements OnInit, OnDestroy {
                             this.categories = data.items;
                             this.categoriesTree = [Category.createTree(data.items)];
                         }
-                        this.selectCurrent();
                         resolve(data.items);
                     },
                     error => {

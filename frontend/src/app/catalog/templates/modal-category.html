@@ -57,7 +57,7 @@
             <div class="col-md-7">
                 <input type="text" class="form-control" id="fieldTitle"
                        formControlName="title"
-                       [ngClass]="{'is-invalid': form.controls.title.touched && !form.controls.title.valid}">
+                       [ngClass]="{'is-invalid': form.controls.title.touched && !form.controls.title.valid, 'border-success': localeCurrent != localeDefault}">
                 <div *ngIf="formErrors.title" class="alert alert-danger">
                     {{formErrors.title}}
                 </div>
@@ -188,7 +188,10 @@
                     (click)="saveTranslations($event)">
                 <i class="icon-check"></i>
             </button>
-            <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="localeCurrent" (ngModelChange)="onLocaleSwitch()" [ngModelOptions]="{standalone: true}">
+            <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic"
+                 [(ngModel)]="localeCurrent"
+                 (ngModelChange)="onLocaleSwitch()"
+                 [ngModelOptions]="{standalone: true}">
                 <label ngbButtonLabel class="btn-secondary" *ngFor="let localeName of localeList">
                     <input ngbButton type="radio" [value]="localeName">
                     {{localeName}}

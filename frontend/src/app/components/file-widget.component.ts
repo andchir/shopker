@@ -17,7 +17,7 @@ export const EPANDED_TEXTAREA_VALUE_ACCESSOR : any = {
 })
 export class FileWidgetComponent implements ControlValueAccessor {
 
-    @Input() fieldName: string = 'image';
+    @Input() fieldName = 'image';
     @Input() fieldTitle: string;
     @Input() hasPreviewImage = false;
     @Input() allowedExtensions = '';
@@ -55,7 +55,7 @@ export class FileWidgetComponent implements ControlValueAccessor {
         if (files.length === 0) {
             return;
         }
-        for (let i=0; i < files.length; i++) {
+        for (let i = 0; i < files.length; i++) {
             this.filesRaw.push(files[i]);
         }
         this.onGetFile(files[0]);
@@ -63,11 +63,11 @@ export class FileWidgetComponent implements ControlValueAccessor {
 
     getFilesArr(dataTransfer: DataTransfer): File[] {
         if (dataTransfer.items) {
-            for (let i=0; i <dataTransfer.items.length; i++) {
+            for (let i = 0; i < dataTransfer.items.length; i++) {
                 this.filesRaw.push(dataTransfer.items[i].getAsFile());
             }
         } else {
-            for (let i=0; i < dataTransfer.files.length; i++) {
+            for (let i = 0; i < dataTransfer.files.length; i++) {
                 this.filesRaw.push(dataTransfer.files[i]);
             }
         }

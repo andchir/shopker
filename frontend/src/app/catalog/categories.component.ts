@@ -186,28 +186,6 @@ export class CategoriesModalComponent extends AppModalContentAbstractComponent<C
                 });
     }
 
-    // save(): void {
-    //     this.submitted = true;
-    //     if (!this.form.valid) {
-    //         this.onValueChanged('form');
-    //         this.submitted = false;
-    //         return;
-    //     }
-    //     this.loading = true;
-    //     this.saveRequest()
-    //         .subscribe((data) => {
-    //             if (Object.keys(this.files).length > 0) {
-    //                 this.saveFiles(data._id || data.id);
-    //             } else {
-    //                 this.closeModal();
-    //             }
-    //         }, (err) => {
-    //             this.errorMessage = err.error;
-    //             this.submitted = false;
-    //             this.loading = false;
-    //         });
-    // }
-
     generateName(model, event?: MouseEvent): void {
         if (event) {
             event.preventDefault();

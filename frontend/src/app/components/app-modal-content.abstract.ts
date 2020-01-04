@@ -259,6 +259,9 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
     getFormData(): T {
         const data = this.form.value;
         data.id = this.model.id || 0;
+        if (typeof this.model.translations !== 'undefined') {
+            data.translations = this.model.translations || null;
+        }
         return data as T;
     }
 
@@ -404,6 +407,7 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
         if (this.localeCurrent === this.localeDefault) {
             this.localeFieldsAllowed.forEach((fieldName) => {
                 this.model[fieldName] = this.localePreviousValues[fieldName];
+                this.getControl(this.form, null, fieldName).setValue(this.localePreviousValues[fieldName]);
             });
             this.isSaveButtonDisabled = false;
             return;
@@ -413,11 +417,13 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
         }
         this.isSaveButtonDisabled = true;
         this.localeFieldsAllowed.forEach((fieldName) => {
-            this.localePreviousValues[fieldName] = this.model[fieldName] || '';
+            this.localePreviousValues[fieldName] = this.getControl(this.form, null, fieldName).value;
             if (this.model.translations[fieldName]) {
                 this.model[fieldName] = this.model.translations[fieldName][this.localeCurrent] || '';
+                this.getControl(this.form, null, fieldName).setValue(this.model[fieldName]);
             } else {
                 this.model[fieldName] = '';
+                this.getControl(this.form, null, fieldName).setValue('');
             }
         });
     }
@@ -426,6 +432,25 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
         if (event) {
             event.preventDefault();
         }
+        this.localeFieldsAllowed.forEach((fieldName) => {
+            if (this.getControl(this.form, null, fieldName) && this.getControl(this.form, null, fieldName).value) {
+                if (!this.model.translations[fieldName]) {
+                    this.model.translations[fieldName] = {};
+                }
+                this.model.translations[fieldName][this.localeCurrent] = this.getControl(this.form, null, fieldName).value;
+            } else {
+                if (this.model.translations[fieldName]) {
+                    if (this.model.translations[fieldName][this.localeCurrent]) {
+                        delete this.model.translations[fieldName][this.localeCurrent];
+                    }
+                    if (Object.keys(this.model.translations[fieldName]).length === 0) {
+                        delete this.model.translations[fieldName];
+                    }
+                }
+            }
+        });
+        this.localeCurrent = this.localeDefault;
+        this.onLocaleSwitch();
     }
 
     emailValidator(control: FormControl): { [s: string]: boolean } {

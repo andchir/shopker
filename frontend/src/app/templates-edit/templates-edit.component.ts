@@ -84,13 +84,14 @@ export class TemplatesEditComponent extends PageTableAbstractComponent<Template>
         return ModalTemplateEditComponent;
     }
 
-    setModalInputs(itemId?: number, isItemCopy: boolean = false): void {
+    setModalInputs(itemId?: number, isItemCopy: boolean = false, modalId = ''): void {
         const templateIndex = findIndex(this.items, {id: itemId});
         const template = templateIndex > -1 ? this.items[templateIndex] : null;
         const isEditMode = template && template.id > -1;
         this.modalRef.componentInstance.modalTitle = isEditMode
-            ? this.getLangString('EDITING')
-            : this.getLangString('ADD');
+            ? this.getLangString('TEMPLATE')
+            : this.getLangString('ADD_TEMPLATE');
+        this.modalRef.componentInstance.modalId = modalId;
         this.modalRef.componentInstance['isItemCopy'] = isItemCopy || false;
         this.modalRef.componentInstance['isEditMode'] = isEditMode;
         this.modalRef.componentInstance['template'] = template;
@@ -148,20 +149,40 @@ export class TemplatesEditComponent extends PageTableAbstractComponent<Template>
         if (event) {
             event.preventDefault();
         }
+        const modalId = ['modal', 'file', file.type, file.name].join('-');
+        window.document.body.classList.add('modal-open');
+        if (window.document.getElementById(modalId)) {
+            const modalEl = window.document.getElementById(modalId);
+            const backdropEl = modalEl.previousElementSibling;
+            modalEl.classList.add('d-block');
+            modalEl.classList.remove('modal-minimized');
+            backdropEl.classList.remove('d-none');
+            return;
+        }
         this.modalRef = this.modalService.open(ModalTemplateEditComponent, {
             size: 'lg',
             backdrop: 'static',
-            keyboard: false
+            keyboard: false,
+            backdropClass: 'modal-backdrop-left45',
+            windowClass: 'modal-left45',
+            container: '#modals-container'
         });
         this.modalRef.componentInstance.modalTitle = this.getLangString('EDITING') + ` ${file.name}`;
-        this.modalRef.componentInstance['isItemCopy'] = false;
-        this.modalRef.componentInstance['isEditMode'] = true;
-        this.modalRef.componentInstance['file'] = file;
+        this.modalRef.componentInstance.isItemCopy = false;
+        this.modalRef.componentInstance.isEditMode = true;
+        this.modalRef.componentInstance.file = file;
+        this.modalRef.componentInstance.modalId = modalId;
         this.modalRef.result.then((result) => {
+            if (this.destroyed$.isStopped) {
+                return;
+            }
             this.getEditableFiles();
         }, (reason) => {
             // console.log( 'reason', reason );
         });
     }
 
+    getModalElementId(itemId?: number|string): string {
+        return ['modal', 'template', itemId || 0].join('-');
+    }
 }

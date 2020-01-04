@@ -291,7 +291,7 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
         this.close(this.closeReason);
     }
 
-    close(reason, event?: MouseEvent) {
+    close(reason: string, event?: MouseEvent) {
         if (event) {
             event.preventDefault();
         }

@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
@@ -20,13 +20,14 @@ import '../../ace-builds/webpack-resolver';
     templateUrl: './templates/modal-template.html',
     providers: [TemplatesEditService]
 })
-export class ModalTemplateEditComponent implements OnInit, OnDestroy {
+export class ModalTemplateEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
     @Input() modalTitle: string;
     @Input() template: Template;
     @Input() file: FileRegularInterface;
     @Input() isItemCopy: boolean;
     @Input() isEditMode: boolean;
+    @Input() modalId = '';
     @ViewChild('editor', { static: true }) editor: ElementRef;
 
     model: FileRegularInterface = {} as FileRegularInterface;
@@ -39,18 +40,23 @@ export class ModalTemplateEditComponent implements OnInit, OnDestroy {
 
     constructor(
         private dataService: TemplatesEditService,
-        public activeModal: NgbActiveModal,
-        private appSettings: AppSettings
+        private activeModal: NgbActiveModal,
+        private appSettings: AppSettings,
+        private elRef: ElementRef
     ) {
 
     }
 
     ngOnInit(): void {
+        if (this.elRef) {
+            this.getRootElement().setAttribute('id', this.modalId);
+        }
         if (this.template) {
             this.model.name = this.template.name;
             this.model.path = this.template.path;
             this.model.extension = 'twig';
             this.model.type = 'template';
+            this.modalTitle += ` ${this.model.name}`;
         } else if (this.file) {
             this.model.name = this.file.name;
             this.model.path = this.file.path;
@@ -58,23 +64,27 @@ export class ModalTemplateEditComponent implements OnInit, OnDestroy {
             this.model.type = this.file.type;
             this.isPathReadOnly = true;
         }
-        const modelist = ace.require('ace/ext/modelist');
-        const editorMode = this.isEditMode
-            ? modelist.getModeForPath(this.model.path + '/' + this.model.name).mode
-            : 'ace/mode/twig';
-        ace.edit('editor', {
-            mode: editorMode,
-            theme: 'ace/theme/kuroir',
-            maxLines: 30,
-            minLines: 15,
-            fontSize: 18
-        });
         if (this.isEditMode) {
             this.getContent();
         } else {
             this.model.path = this.appSettings.settings.templateTheme;
             this.model.type = 'template';
         }
+    }
+
+    ngAfterViewInit(): void {
+        const modelist = ace.require('ace/ext/modelist');
+        const editorMode = this.isEditMode
+            ? modelist.getModeForPath(this.model.path + '/' + this.model.name).mode
+            : 'ace/mode/twig';
+
+        ace.edit(`editor-${this.modalId}`, {
+            mode: editorMode,
+            theme: 'ace/theme/kuroir',
+            maxLines: 30,
+            minLines: 15,
+            fontSize: 18
+        });
     }
 
     getContent(): void {
@@ -93,7 +103,7 @@ export class ModalTemplateEditComponent implements OnInit, OnDestroy {
                 next: (res) => {
                     if (res['content']) {
                         this.model.content = res['content'];
-                        ace.edit('editor').setValue(this.model.content, -1);
+                        ace.edit(`editor-${this.modalId}`).setValue(this.model.content, -1);
                     }
                     this.loading = false;
                 },
@@ -106,17 +116,25 @@ export class ModalTemplateEditComponent implements OnInit, OnDestroy {
             });
     }
 
-    /** Close modal */
-    closeModal() {
-        const reason = this.isEditMode ? 'edit' : 'create';
-        this.activeModal.close({reason: reason, data: this.model});
+    closeModal(event?: MouseEvent) {
+        if (event) {
+            event.preventDefault();
+        }
+        this.close(this.closeReason);
     }
 
-    close(event?: MouseEvent) {
+    close(reason: string, event?: MouseEvent) {
         if (event) {
             event.preventDefault();
         }
         this.activeModal.dismiss(this.closeReason);
+
+        if (['submit', 'updated'].indexOf(this.closeReason) > -1) {
+            const reasonStr = this.isEditMode ? 'edit' : 'create';
+            this.activeModal.close({reason: reasonStr, data: this.model});
+        } else {
+            this.activeModal.dismiss(reason);
+        }
     }
 
     /** Submit form */
@@ -125,22 +143,25 @@ export class ModalTemplateEditComponent implements OnInit, OnDestroy {
         this.closeModal();
     }
 
-    save(autoClose = false): void {
+    save(autoClose = false, event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
         this.submitted = true;
         this.loading = true;
 
-        this.model.content = ace.edit('editor').getValue();
+        this.model.content = ace.edit(`editor-${this.modalId}`).getValue();
 
         this.dataService.saveContent(this.model)
             .pipe(takeUntil(this.destroyed$))
             .subscribe({
                 next: (res) => {
+                    this.closeReason = 'updated';
                     if (autoClose) {
                         this.closeModal();
                     } else if (res && res['id']) {
                         this.model = res as FileRegularInterface;
                     }
-                    this.closeReason = 'updated';
                     this.loading = false;
                     this.submitted = false;
                 },
@@ -150,6 +171,36 @@ export class ModalTemplateEditComponent implements OnInit, OnDestroy {
                     this.submitted = false;
                 }
             });
+    }
+
+    minimize(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        window.document.body.classList.remove('modal-open');
+        const modalEl = this.getRootElement();
+        const backdropEl = modalEl.previousElementSibling;
+
+        modalEl.classList.remove('d-block');
+        modalEl.classList.add('modal-minimized');
+        backdropEl.classList.add('d-none');
+    }
+
+    maximize(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        window.document.body.classList.add('modal-open');
+        const modalEl = this.getRootElement();
+        const backdropEl = modalEl.previousElementSibling;
+
+        modalEl.classList.add('d-block');
+        modalEl.classList.remove('modal-minimized');
+        backdropEl.classList.remove('d-none');
+    }
+
+    getRootElement(): HTMLElement {
+        return this.elRef.nativeElement.parentNode.parentNode.parentNode;
     }
 
     ngOnDestroy(): void {

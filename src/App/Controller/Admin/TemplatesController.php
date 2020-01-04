@@ -57,7 +57,7 @@ class TemplatesController extends StorageControllerAbstract
             $dirPath = $templatesDirPath . DIRECTORY_SEPARATOR . $themeDirName;
             $filesArr = $this->getFiles($dirPath, 'twig');
             $filesArr = array_map(function($fileData, $index) use ($themeDirName, $templatesDirPath) {
-                $fileData['id'] = $index;
+                $fileData['id'] = $index + 1;
                 $fileData['themeName'] = $themeDirName;
                 $fileData['path'] = str_replace(
                     $templatesDirPath . DIRECTORY_SEPARATOR,

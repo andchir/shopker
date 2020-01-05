@@ -9,6 +9,7 @@ var APP_LANG = {
     "ADD_NEW_CATEGORY": "Add new category",
     "ADD_TRANSLATION": "Add translation",
     "ADD_USER": "Add user",
+    "ADD_CONTENT_TYPE": "Add content type",
     "ADD_FIELD_TYPE": "Add field type",
     "ADD_TEMPLATE": "Add template",
     "APPLY": "Apply",

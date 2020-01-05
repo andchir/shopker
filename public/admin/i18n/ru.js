@@ -9,6 +9,7 @@ var APP_LANG = {
     "ADD_NEW_CATEGORY": "Добавить новую категорию",
     "ADD_TRANSLATION": "Добавить перевод",
     "ADD_USER": "Добавить пользователя",
+    "ADD_CONTENT_TYPE": "Добавить тип контента",
     "ADD_FIELD_TYPE": "Добавить тип поля",
     "ADD_TEMPLATE": "Добавить шаблон",
     "APPLY": "Применить",

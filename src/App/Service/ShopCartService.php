@@ -7,6 +7,7 @@ use App\MainBundle\Document\OrderContent;
 use App\MainBundle\Document\ShoppingCart;
 use App\Repository\ShoppingCartRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,11 +18,13 @@ class ShopCartService
 {
     /** @var ContainerInterface */
     protected $container;
-
-    /** @param ContainerInterface $container */
-    public function __construct(ContainerInterface $container)
+    /** @var DocumentManager */
+    protected $dm;
+    
+    public function __construct(ContainerInterface $container, DocumentManager $dm)
     {
         $this->container = $container;
+        $this->dm = $dm;
     }
 
     /**
@@ -42,8 +45,6 @@ class ShopCartService
      */
     public function clearContent($type = ShoppingCart::TYPE_MAIN, $cleanFiles = false)
     {
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->container->get('doctrine_mongodb')->getManager();
         $result = false;
 
         $shoppingCart = $this->getShoppingCartByType($type);
@@ -55,23 +56,34 @@ class ShopCartService
                     $content->setFiles([]);
                 }
             }
-            $dm->remove($shoppingCart);
-            $dm->flush();
+            $this->dm->remove($shoppingCart);
+            $this->dm->flush();
             $result = true;
         }
 
-        // Delete expired shopping carts
+        // Remove expired shopping carts
+        $this->removeExpired();
+
+        return $result;
+    }
+
+    /**
+     * @return bool
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
+     */
+    public function removeExpired()
+    {
         /** @var ShoppingCartRepository $repository */
-        $repository = $dm->getRepository(ShoppingCart::class);
+        $repository = $this->dm->getRepository(ShoppingCart::class);
         $date_timezone = date_default_timezone_get();
         $shoppingCartsExpired = $repository->findExpired($date_timezone);
         /** @var ShoppingCart $shoppingCartExpired */
         foreach ($shoppingCartsExpired as $shoppingCartExpired) {
-            $dm->remove($shoppingCartExpired);
+            $this->dm->remove($shoppingCartExpired);
         }
-        $dm->flush();
-
-        return $result;
+        $this->dm->flush();
+        
+        return count($shoppingCartsExpired->toArray()) > 0;
     }
 
     /**
@@ -106,9 +118,6 @@ class ShopCartService
             return null;
         }
         if (!$shoppingCart && $create) {
-            /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-            $dm = $this->container->get('doctrine_mongodb')->getManager();
-
             $shoppingCart = new ShoppingCart();
             $shoppingCart
                 ->setSessionId($sessionId)
@@ -120,8 +129,8 @@ class ShopCartService
                 $shoppingCart->setExpiresOn((new \DateTime())->setTimestamp(time() + $lifeTime));
             }
 
-            $dm->persist($shoppingCart);
-            $dm->flush();
+            $this->dm->persist($shoppingCart);
+            $this->dm->flush();
         }
         return $shoppingCart;
     }

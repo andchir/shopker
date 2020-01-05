@@ -616,4 +616,19 @@ export class ContentTypesComponent extends PageTableAbstractComponent<ContentTyp
         return ContentTypeModalContentComponent;
     }
 
+    getModalElementId(itemId?: number): string {
+
+        // if (this.isEditMode) {
+        //     this.modalTitle = ` ${this.getLangString('CONTENT_TYPE')} #${this.itemId}`;
+        // }
+
+        return ['modal', 'content_type', itemId || 0].join('-');
+    }
+
+    setModalInputs(itemId?: number, isItemCopy: boolean = false, modalId = ''): void {
+        super.setModalInputs(itemId, isItemCopy, modalId);
+        this.modalRef.componentInstance.modalTitle = itemId && !isItemCopy
+            ? `${this.getLangString('CONTENT_TYPE')} #${itemId}`
+            : this.getLangString('ADD_CONTENT_TYPE');
+    }
 }

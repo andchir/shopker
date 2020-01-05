@@ -51,7 +51,7 @@ export class FieldTypeModalContentComponent extends AppModalContentAbstractCompo
                 },
                 {
                     name: 'default_value',
-                    validators: [Validators.required]
+                    validators: []
                 }
             ]
         },
@@ -69,7 +69,7 @@ export class FieldTypeModalContentComponent extends AppModalContentAbstractCompo
                 },
                 {
                     name: 'default_value',
-                    validators: [Validators.required]
+                    validators: []
                 }
             ]
         }
@@ -146,14 +146,10 @@ export class FieldTypesComponent extends PageTableAbstractComponent<FieldType> {
     }
 
     setModalInputs(itemId?: number, isItemCopy: boolean = false, modalId = ''): void {
-        const isEditMode = typeof itemId !== 'undefined' && !isItemCopy;
-        this.modalRef.componentInstance.modalTitle = itemId
+        super.setModalInputs(itemId, isItemCopy, modalId);
+        this.modalRef.componentInstance.modalTitle = itemId && !isItemCopy
             ? `${this.getLangString('FIELD_TYPE')} #${itemId}`
             : this.getLangString('ADD_FIELD_TYPE');
-        this.modalRef.componentInstance.modalId = modalId;
-        this.modalRef.componentInstance.itemId = itemId || 0;
-        this.modalRef.componentInstance.isItemCopy = isItemCopy || false;
-        this.modalRef.componentInstance.isEditMode = isEditMode;
     }
 
     getModalElementId(itemId?: number): string {

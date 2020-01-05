@@ -1,4 +1,4 @@
-import {Component, OnDestroy, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, Output, ViewChild} from '@angular/core';
 
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
@@ -19,14 +19,25 @@ import {ModalFileUploadContentComponent} from './modal-file-upload.component';
 })
 export class FileManagerComponent implements OnDestroy {
 
-    @ViewChild('container', { static: true }) container;
     modalRef: NgbModalRef;
-    isActive = false;
+    // isActive = false;
     files: any[] = [];
     loading = false;
     currentPath = '';
     errorMessage = '';
     closed$ = new Subject<void>();
+    private _isActive = false;
+
+    @ViewChild('container', { static: true }) container;
+    @Output() isActiveChange = new EventEmitter<boolean>();
+    @Input() set isActive(value: boolean) {
+        this._isActive = value;
+        this.onAfterActiveToggle();
+    }
+
+    get isActive(): boolean {
+        return this._isActive;
+    }
 
     constructor(
         public dataService: FileManagerService,
@@ -86,12 +97,16 @@ export class FileManagerComponent implements OnDestroy {
                     this.dataService.deleteFile(this.currentPath, currentFile)
                         .pipe(takeUntil(this.closed$))
                         .subscribe((res) => {
-                            this.setActive();
+                            if (!this.isActive) {
+                                this.activeToggle();
+                            }
                         }, (err) => {
                             this.loading = false;
                             if (err['error']) {
                                 this.errorMessage = err['error'];
-                                this.setActive(false);
+                                if (!this.isActive) {
+                                    this.activeToggle();
+                                }
                             }
                         });
                     break;
@@ -100,7 +115,9 @@ export class FileManagerComponent implements OnDestroy {
                     this.dataService.rename(this.getFilePath(currentFile), currentFile.title, 'file')
                         .pipe(takeUntil(this.closed$))
                         .subscribe((res) => {
-                            this.setActive();
+                            if (!this.isActive) {
+                                this.activeToggle();
+                            }
                         }, (err) => {
                             this.loading = false;
                             if (err['error']) {
@@ -130,13 +147,17 @@ export class FileManagerComponent implements OnDestroy {
                 this.dataService.createFolder(this.currentPath, result)
                     .pipe(takeUntil(this.closed$))
                     .subscribe((res) => {
-                        this.getFilesList();
+                        if (!this.isActive) {
+                            this.activeToggle();
+                        }
                     }, (err) => {
                         this.loading = false;
                         if (err['error']) {
                             this.errorMessage = err['error'];
                         }
-                        this.setActive();
+                        if (!this.isActive) {
+                            this.activeToggle();
+                        }
                     });
             }
         });
@@ -225,7 +246,9 @@ export class FileManagerComponent implements OnDestroy {
                     .subscribe({
                         next: (res) => {
                             this.loading = false;
-                            this.setActive();
+                            if (!this.isActive) {
+                                this.activeToggle();
+                            }
                         },
                         error: (err) => {
                             this.loading = false;
@@ -272,30 +295,21 @@ export class FileManagerComponent implements OnDestroy {
         this.getFilesList();
     }
 
-    setActive(updateFiles = true): void {
-        this.isActive = true;
-        this.container.nativeElement.classList.add('active');
-        if (updateFiles) {
+    onAfterActiveToggle(): void {
+        if (this.isActive) {
             this.getFilesList();
+            this.container.nativeElement.classList.add('active');
+        } else {
+            this.closed$.next();
+            this.container.nativeElement.classList.remove('active');
         }
-    }
-
-    setUnactive(): void {
-        this.closed$.next();
-        this.isActive = false;
-        this.container.nativeElement.classList.remove('active');
     }
 
     activeToggle(event?: MouseEvent): void {
         if (event) {
             event.preventDefault();
         }
-        this.isActive = !this.isActive;
-        if (this.isActive) {
-            this.setActive();
-        } else {
-            this.setUnactive();
-        }
+        this.isActiveChange.emit(!this._isActive);
     }
 
     getIsImageFile(file: FileModel): boolean {

@@ -16,8 +16,6 @@ declare const window: Window;
 })
 export class NavbarMainComponent implements OnInit {
 
-    @ViewChild('navbarLeftOverlay', { static: false }) navbarLeftOverlay: ElementRef;
-    @ViewChild('fileManager', { static: false }) fileManager: FileManagerComponent;
     @Input() hrefMode = false;
     @Input() baseRoute = '';
 
@@ -69,15 +67,6 @@ export class NavbarMainComponent implements OnInit {
         if (event) {
             event.preventDefault();
         }
-        this.fileManager.isActive = !this.fileManager.isActive;
-        this.isFileManagerActive = this.fileManager.isActive;
-
-        if (this.isFileManagerActive) {
-            this.navbarLeftOverlay.nativeElement.classList.add('active');
-            this.fileManager.setActive();
-        } else {
-            this.navbarLeftOverlay.nativeElement.classList.remove('active');
-            this.fileManager.setUnactive();
-        }
+        this.isFileManagerActive = !this.isFileManagerActive;
     }
 }

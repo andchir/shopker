@@ -20,7 +20,7 @@ class FileDocumentRepository extends DocumentRepository
     {
         return $this->createQueryBuilder()
             ->field('ownerType')->equals($ownerType)
-            ->field('createdDate')->lt(new \MongoDate(time() - $seconds))
+            ->field('createdDate')->lt((new \DateTime())->setTimestamp(time() - $seconds))
             ->getQuery()
             ->execute();
     }

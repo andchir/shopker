@@ -42,7 +42,7 @@ class ShoppingCartRepository extends DocumentRepository
         $dateTime = new \DateTime('now', new \DateTimeZone($date_timezone));
         $qb = $this->createQueryBuilder();
         $qb->field('expiresOn')->exists(true);
-        $qb->field('expiresOn')->lte(new \MongoDate($dateTime->getTimestamp()));
+        $qb->field('expiresOn')->lte($dateTime);
         return $qb->getQuery()->execute();
     }
 

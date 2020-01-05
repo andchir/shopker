@@ -24,7 +24,7 @@ class PaymentRepository extends DocumentRepository implements PaymentRepositoryI
         }
         return $this->createQueryBuilder()
             ->field('id')->equals($paymentId)
-            ->field('createdDate')->gt((new \MongoDate(time() - $seconds))->toDateTime()->setTimezone(new \DateTimeZone($date_timezone)))
+            ->field('createdDate')->gt((new \DateTime())->setTimestamp(time() - $seconds)->setTimezone(new \DateTimeZone($date_timezone)))
             ->getQuery()
             ->execute();
     }
@@ -42,7 +42,7 @@ class PaymentRepository extends DocumentRepository implements PaymentRepositoryI
         }
         return $this->createQueryBuilder()
             ->field('email')->equals($email)
-            ->field('createdDate')->gt((new \MongoDate(time() - $seconds))->toDateTime()->setTimezone(new \DateTimeZone($date_timezone)))
+            ->field('createdDate')->gt((new \DateTime())->setTimestamp(time() - $seconds)->setTimezone(new \DateTimeZone($date_timezone)))
             ->getQuery()
             ->execute();
     }

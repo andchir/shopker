@@ -145,21 +145,12 @@ abstract class BaseRepository extends DocumentRepository
                             $query->field($key)->exists($v);
                             break;
                         case '$gte':
-                            if ($v instanceof \DateTime) {
-                                $v = new \MongoDate($v->getTimestamp());
-                            }
                             $query->field($key)->gte($v);
                             break;
                         case '$lt':
-                            if ($v instanceof \DateTime) {
-                                $v = new \MongoDate($v->getTimestamp());
-                            }
                             $query->field($key)->lt($v);
                             break;
                         case '$lte':
-                            if ($v instanceof \DateTime) {
-                                $v = new \MongoDate($v->getTimestamp());
-                            }
                             $query->field($key)->lte($v);
                             break;
                         case '$regex':

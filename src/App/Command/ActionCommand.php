@@ -5,6 +5,7 @@ namespace App\Command;
 use App\Controller\Admin\ProductController;
 use App\MainBundle\Document\Category;
 use App\Service\CatalogService;
+use App\Service\DataBaseUtilService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -60,6 +61,17 @@ class ActionCommand extends Command
                 $io->success('Updated filters for categories: ' . $count);
 
                 break;
+            case 'db_export':
+                
+                /** @var DataBaseUtilService $dataBaseUtilService */
+                $dataBaseUtilService = $this->getContainer()->get('app.database_util');
+                
+                
+                
+                break;
+            default:
+                
+                $io->error('Action not found.');
         }
 
         $time_end = microtime(true);

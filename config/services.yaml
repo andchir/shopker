@@ -119,3 +119,9 @@ services:
         class: App\Service\CatalogService
         public: true
         arguments: ['@service_container', '@doctrine_mongodb.odm.default_document_manager']
+        
+    app.database_util:
+        class: App\Service\DataBaseUtilService
+        public: true
+        arguments: ['@parameter_bag', '@doctrine_mongodb.odm.default_document_manager']
+        

@@ -240,5 +240,7 @@ var APP_LANG = {
     "REPLY": "Reply",
     "PUBLISH": "Publish",
     "HIDE": "Hide",
-    "AUTHOR": "Author"
+    "AUTHOR": "Author",
+    "ADD_COMMENT": "Добавить комментарий",
+    "EDIT_COMMENT": "Редактировать комментарий"
 };

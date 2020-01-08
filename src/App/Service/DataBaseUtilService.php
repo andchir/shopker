@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use Doctrine\ODM\MongoDB\DocumentManager;
+use MongoDB\Client;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class DataBaseUtilService
@@ -23,40 +24,51 @@ class DataBaseUtilService
     }
 
     /**
-     * @param string $dataBaseName
-     * @param string $dataBasePassword
      * @param string $zipFilePath
+     * @param string $mongoExportToolPath
      * @return bool
-     * @throws \MongoException
+     * @throws \Exception
      */
-    public function databaseExport($dataBaseName, $dataBasePassword, $zipFilePath)
+    public function databaseExport($zipFilePath, $mongoExportToolPath = 'mongoexport')
     {
-        $targetDirPath = dirname($zipFilePath);
+        $dataBasePassword = $this->params->get('mongodb_password');
+        $dataBaseName = $this->params->get('mongodb_database');
+        $targetDirPath = dirname($zipFilePath) . DIRECTORY_SEPARATOR . pathinfo($zipFilePath, PATHINFO_FILENAME);
+
+        if (strpos(exec($mongoExportToolPath . " 2>&1"), 'mongoexport --help') === false) {
+            throw new \Exception('mongoexport tool not found.');
+        }
+        if (!is_dir($targetDirPath)) {
+            mkdir($targetDirPath);
+        }
 
         self::cleanDirectory($targetDirPath);
 
-        /** @var \MongoDB $dataBase */
+        /** @var \MongoDB\Database $dataBase */
         $dataBase = $this->getClient()->selectDatabase($dataBaseName);
 
-        $collectionNames = $dataBase->getCollectionNames();
-        foreach ($collectionNames as $collectionName) {
-            $outputFilePath = $targetDirPath . DIRECTORY_SEPARATOR . "{$collectionName}.json";
+        $collections = $dataBase->listCollections();
 
-            $cmd = "mongoexport --db \"{$dataBaseName}\"";
-            $cmd .= ' \\' . PHP_EOL . "--collection \"{$collectionName}\" --type \"json\"";
-            $cmd .= ' \\' . PHP_EOL . "--out \"{$outputFilePath}\"";
+        foreach ($collections as $collection) {
+            $outputFilePath = $targetDirPath . DIRECTORY_SEPARATOR . "{$collection->getName()}.json";
+
+            $cmd = "{$mongoExportToolPath} --db {$dataBaseName}";
+            $cmd .= ' \\' . PHP_EOL . "--collection {$collection->getName()} --type json";
             $cmd .= ' \\' . PHP_EOL . "--jsonArray --pretty";
-            $cmd .= ' \\' . PHP_EOL . "--authenticationDatabase \"admin\"";
-            $cmd .= ' \\' . PHP_EOL . "--username \"{$dataBaseName}\"";
-            $cmd .= ' \\' . PHP_EOL . "--password \"{$dataBasePassword}\"";
-            exec($cmd);
-
-            if (file_exists($outputFilePath)) {
-                @chmod($outputFilePath, 0777);
+            if ($dataBasePassword) {
+                $cmd .= ' \\' . PHP_EOL . "--authenticationDatabase admin";
+                $cmd .= ' \\' . PHP_EOL . "--username \"{$dataBaseName}\"";
+                $cmd .= ' \\' . PHP_EOL . "--password \"{$dataBasePassword}\"";
             }
+            // $cmd .= ' \\' . PHP_EOL . "--out {$outputFilePath}";
+            $cmd .= " --quiet > {$outputFilePath}";
+
+            exec($cmd . ' 2>&1');
         }
 
-        self::zipFolder($targetDirPath, $zipFilePath);
+        if (!self::zipFolder($targetDirPath, $zipFilePath)) {
+            throw new \Exception('Data is empty.');
+        }
 
         // Delete temporary files
         $dir = new \DirectoryIterator($targetDirPath);
@@ -69,36 +81,72 @@ class DataBaseUtilService
                 }
             }
         }
+        rmdir($targetDirPath);
 
         return true;
     }
 
     /**
-     * @param string $dataBaseName
-     * @param string $dataBasePassword
      * @param string $collectionName
-     * @param array $arrayContent
      * @param string $filePath
      * @param string $mode
+     * @param string $mongoImportToolPath
      * @return bool
+     * @throws \Exception
      */
-    public function databaseImport($dataBaseName, $dataBasePassword, $collectionName, $arrayContent = [], $filePath = '', $mode = 'insert')
+    public function databaseImport($collectionName, $filePath, $mode = 'insert', $mongoImportToolPath = 'mongoimport')
     {
-        $cmd = "mongoimport --db \"{$dataBaseName}\"";
+        $dataBasePassword = $this->params->get('mongodb_password');
+        $dataBaseName = $this->params->get('mongodb_database');
+
+        if (strpos(exec($mongoImportToolPath . " 2>&1"), 'mongoimport --help') === false) {
+            throw new \Exception('mongoimport tool not found.');
+        }
+
+        $cmd = "{$mongoImportToolPath} --db \"{$dataBaseName}\"";
         $cmd .= ' \\' . PHP_EOL . "--collection \"{$collectionName}\" --type json";
         $cmd .= ' \\' . PHP_EOL . "--file \"{$filePath}\"";
         $cmd .= ' \\' . PHP_EOL . "--jsonArray";
         $cmd .= ' \\' . PHP_EOL . "--mode {$mode}";
-        $cmd .= ' \\' . PHP_EOL . "--authenticationDatabase \"admin\"";
-        $cmd .= ' \\' . PHP_EOL . "--username \"{$dataBaseName}\"";
-        $cmd .= ' \\' . PHP_EOL . "--password \"{$dataBasePassword}\"";
-        exec($cmd);
+        if ($dataBasePassword) {
+            $cmd .= ' \\' . PHP_EOL . "--authenticationDatabase \"admin\"";
+            $cmd .= ' \\' . PHP_EOL . "--username \"{$dataBaseName}\"";
+            $cmd .= ' \\' . PHP_EOL . "--password \"{$dataBasePassword}\"";
+        }
+        exec($cmd . ' 2>&1');
 
         return true;
     }
 
     /**
-     * @return \MongoDB\Client
+     * @param string $dirPath
+     * @param string $mode
+     * @param string $mongoImportToolPath
+     * @return bool
+     * @throws \Exception
+     */
+    public function databaseImportFromDir($dirPath, $mode = 'insert', $mongoImportToolPath = 'mongoimport')
+    {
+        $count = 0;
+
+        $dir = new \DirectoryIterator($dirPath);
+        foreach ($dir as $fileinfo) {
+            if (!$fileinfo->isDot() && $fileinfo->isFile()) {
+                $this->databaseImport(
+                    pathinfo($fileinfo->getPathname(), PATHINFO_FILENAME),
+                    $fileinfo->getPathname(),
+                    $mode,
+                    $mongoImportToolPath
+                );
+                $count++;
+            }
+        }
+
+        return $count;
+    }
+
+    /**
+     * @return Client
      */
     public function getClient()
     {
@@ -134,13 +182,15 @@ class DataBaseUtilService
             return false;
         }
 
-        $zip = new \ZipArchive();
-        $zip->open($zipFilePath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
-
         $files = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($dirPath),
             \RecursiveIteratorIterator::LEAVES_ONLY
         );
+        if (count(iterator_to_array($files)) === 2) {
+            return false;
+        }
+        $zip = new \ZipArchive();
+        $zip->open($zipFilePath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
 
         foreach ($files as $name => $file)
         {
@@ -151,7 +201,6 @@ class DataBaseUtilService
                 $zip->addFile($filePath, $relativePath);
             }
         }
-        $zip->close();
-        return true;
+        return $zip->close();
     }
 }

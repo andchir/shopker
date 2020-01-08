@@ -3,6 +3,7 @@
 - Added functionality for accounting for product balances in stock.
 - Modal windows style update.
 - Ability to minimize modal windows.
+- Added commands "db_export" and "db_import" in "app:action".
 
 4.1.3
 - Added package shopkeeper4-comments - Reviews and ratings.

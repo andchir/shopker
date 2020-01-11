@@ -11,6 +11,7 @@
         "alcaeus/mongo-php-adapter": "^1.1",
         "andchir/omnipay-bundle": "^1.0",
         "andchir/shopkeeper4-comments": "^1.0",
+        "behat/transliterator": "^1.2",
         "composer/composer": "^1.8",
         "doctrine/cache": "^1.8",
         "doctrine/doctrine-cache-bundle": "^1.3",
@@ -19,6 +20,7 @@
         "gregwar/captcha-bundle": "^2.0",
         "liip/imagine-bundle": "^2.1",
         "mongodb/mongodb": "^1.4",
+        "phpoffice/phpspreadsheet": "^1.10",
         "ralouphie/mimey": "^2.0",
         "sensio/framework-extra-bundle": "^5.2",
         "symfony/asset": "*",
@@ -55,12 +57,14 @@
         },
         "sort-packages": true,
         "platform": {
-            "ext-mongo": "1.6.16"
+            "ext-mongo": "1.6.16",
+            "php": "7.3.0"
         }
     },
     "autoload": {
         "psr-4": {
-            "App\\": "src/App/"
+            "App\\": "src/App/",
+            "Andchir\\ImportExportBundle\\": "vendor/andchir/import-export-bundle/"
         }
     },
     "autoload-dev": {

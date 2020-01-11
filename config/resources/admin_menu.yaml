@@ -3,6 +3,7 @@ menu:
     - { title: 'CATALOG', route: '/catalog', icon: 'icon-layers' }
     - { title: 'STATISTICS', route: '/statistics', icon: 'icon-bar-graph-2' }
     - { title: 'COMMENTS', route: '/module/comments', icon: 'icon-message-circle' }
+    - { title: 'IMPORT_EXPORT', route: '/module/import-export', icon: 'icon-inbox' }
     - { title: 'USERS', route: '/users', icon: 'icon-head' }
     - { title: 'TEMPLATES', route: '/templates_edit', icon: 'icon-columns' }
     - { title: 'SETTINGS', route: '/settings', icon: 'icon-cog' }

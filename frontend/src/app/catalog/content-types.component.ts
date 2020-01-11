@@ -533,7 +533,10 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
         this.blockFieldList.nativeElement.style.display = 'block';
     }
 
-    save() {
+    save(autoClose = false, event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
         this.submitted = true;
         if (this.sortData.length > 0) {
             this.sortingApply();
@@ -546,12 +549,25 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
             }
             this.loading = true;
             this.saveRequest()
-                .subscribe(() => this.closeModal(),
-                    err => {
+                .subscribe({
+                    next: (res) => {
+                        if (autoClose) {
+                            this.closeModal();
+                        } else if (res && res['id']) {
+                            this.model.id = res['id'];
+                            this.onAfterGetData();
+                            this.isEditMode = true;
+                        }
+                        this.closeReason = 'updated';
+                        this.loading = false;
+                        this.submitted = false;
+                    },
+                    error: err => {
                         this.errorMessage = err.error || 'Error.';
                         this.submitted = false;
                         this.loading = false;
-                    });
+                    }
+                });
         }, 1);
     }
 }

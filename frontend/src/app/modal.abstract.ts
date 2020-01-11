@@ -383,7 +383,10 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit, OnDest
             });
     }
 
-    save(autoClose = false): void {
+    save(autoClose = false, event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
         this.submitted = true;
         this.errorMessage = '';
 

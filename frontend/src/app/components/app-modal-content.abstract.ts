@@ -385,6 +385,9 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
                     } else if (autoClose) {
                         this.close('submit');
                     }
+                    if (res && res['id']) {
+                        this.model.id = res['id'];
+                    }
                     this.closeReason = 'updated';
                     this.loading = false;
                     this.submitted = false;

@@ -4,6 +4,7 @@
 - Modal windows style update.
 - Ability to minimize modal windows.
 - Added commands "db_export" and "db_import" in "app:action".
+- Added new user role - "Administrator - Read Only" (has access to the administrator’s interface, but cannot create/edit or delete content).
 
 4.1.3
 - Added package shopkeeper4-comments - Reviews and ratings.

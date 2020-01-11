@@ -88,7 +88,8 @@ export class FileManagerService {
         const url = `${this.getRequestUrl()}/upload`;
         const headers = new HttpHeaders({
             'enctype': 'multipart/form-data',
-            'Accept': 'application/json'
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
         });
         formData.append('path', path);
         return this.http

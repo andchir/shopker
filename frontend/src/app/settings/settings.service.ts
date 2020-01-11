@@ -14,7 +14,10 @@ import {ComposerPackage} from './models/composer-package.interface';
 })
 export class SettingsService {
 
-    public headers = new HttpHeaders({'Content-Type': 'application/json'});
+    headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
+    });
     private requestUrl = '';
 
     constructor(

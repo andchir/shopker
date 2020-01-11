@@ -124,7 +124,8 @@ export abstract class DataService<M extends SimpleEntity> {
     postFormData(formData: FormData): Observable<FileModel[]> {
         const headers = new HttpHeaders({
             'enctype': 'multipart/form-data',
-            'Accept': 'application/json'
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
         });
         return this.http.post<FileModel[]>(`${this.getRequestUrl()}/upload`, formData, {headers: headers}).pipe(
             catchError(this.handleError<FileModel[]>())

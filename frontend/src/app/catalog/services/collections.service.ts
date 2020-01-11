@@ -7,7 +7,10 @@ import { catchError, map, tap } from 'rxjs/operators';
 @Injectable()
 export class CollectionsService {
 
-    public headers = new HttpHeaders({'Content-Type': 'application/json'});
+    headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
+    });
     private requestUrl = '/admin/collections';
 
     constructor(

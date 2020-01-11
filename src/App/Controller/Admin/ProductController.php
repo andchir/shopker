@@ -13,7 +13,7 @@ use App\Service\UtilsService;
 use Doctrine\ORM\Query\Expr\Base;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -247,6 +247,7 @@ class ProductController extends BaseProductController
 
     /**
      * @Route("/{categoryId}", methods={"POST"})
+     * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @ParamConverter("category", class="App\MainBundle\Document\Category", options={"id" = "categoryId"})
      * @param Request $request
      * @param Category $category
@@ -273,6 +274,7 @@ class ProductController extends BaseProductController
 
     /**
      * @Route("/{categoryId}/{itemId}", methods={"PUT"})
+     * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @ParamConverter("category", class="App\MainBundle\Document\Category", options={"id" = "categoryId"})
      * @param Request $request
      * @param Category $category
@@ -456,6 +458,7 @@ class ProductController extends BaseProductController
      *     defaults={"action": "delete"},
      *     methods={"POST"}
      * )
+     * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @ParamConverter("category", class="App\MainBundle\Document\Category", options={"id" = "categoryId"})
      * @param Request $request
      * @param Category|null $category
@@ -511,6 +514,7 @@ class ProductController extends BaseProductController
 
     /**
      * @Route("/{categoryId}/{itemId}", methods={"DELETE"})
+     * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @ParamConverter("category", class="App\MainBundle\Document\Category", options={"id" = "categoryId"})
      * @param Category $category
      * @param int $itemId
@@ -836,5 +840,4 @@ class ProductController extends BaseProductController
             ->getManager()
             ->getRepository(FileDocument::class);
     }
-
 }

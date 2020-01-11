@@ -105,6 +105,7 @@ To favorites: В избранное
 Remove from favorites: Убрать из избранного
 Show password: Показать пароль
 Hide password: Скрыть пароль
+Your user has read-only permission.: Ваш пользователь имеет разрешение только на чтение.
 
 Sort by: Сортировать по
 catalog.sort_by_novelty: Новизне
@@ -131,8 +132,9 @@ Delivery address: Адрес доставки
 Pay now: Оплатить
 Paid: Оплачен
 ROLE_USER: Пользователь
-ROLE_ADMIN: Администратор
+ROLE_ADMIN: Администратор - Только чтение
 ROLE_SUPER_ADMIN: Супер-Администратор
+ROLE_ADMIN_WRITE: Администратор
 user_options.state: Регион
 user_options.zip: Индекс
 user_options.city: Город

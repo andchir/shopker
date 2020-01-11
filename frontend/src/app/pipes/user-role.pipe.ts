@@ -25,8 +25,9 @@ export class UserRoleColorPipe implements PipeTransform {
     transform(value: string): string {
         const colors = {
             ROLE_USER: 'badge-primary',
-            ROLE_ADMIN: 'badge-warning',
-            ROLE_SUPER_ADMIN: 'badge-warning'
+            ROLE_ADMIN_WRITE: 'badge-warning',
+            ROLE_SUPER_ADMIN: 'badge-warning',
+            ROLE_ADMIN: 'badge-success'
         };
         let output = 'badge-primary';
         if (colors.hasOwnProperty(value)) {

@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * Class StorageControllerAbstract
@@ -73,6 +74,7 @@ abstract class StorageControllerAbstract extends BaseController
 
     /**
      * @Route("/batch", methods={"POST"})
+     * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param Request $request
      * @param TranslatorInterface $translator
      * @return JsonResponse
@@ -104,6 +106,7 @@ abstract class StorageControllerAbstract extends BaseController
 
     /**
      * @Route("/{itemId}", methods={"DELETE"})
+     * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param int $itemId
      * @param TranslatorInterface $translator
      * @return JsonResponse
@@ -169,6 +172,7 @@ abstract class StorageControllerAbstract extends BaseController
 
     /**
      * @Route("", methods={"POST"})
+     * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param Request $request
      * @return JsonResponse
      */
@@ -191,6 +195,7 @@ abstract class StorageControllerAbstract extends BaseController
 
     /**
      * @Route("/{itemId}", methods={"PUT"})
+     * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param Request $request
      * @param int $itemId
      * @return JsonResponse
@@ -219,6 +224,7 @@ abstract class StorageControllerAbstract extends BaseController
      *     defaults={"action": "delete"},
      *     methods={"POST"}
      * )
+     * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param Request $request
      * @param string $action
      * @param TranslatorInterface $translator

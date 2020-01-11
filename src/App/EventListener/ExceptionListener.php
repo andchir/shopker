@@ -3,7 +3,7 @@
 namespace App\EventListener;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -19,7 +19,7 @@ class ExceptionListener
         $this->container = $container;
     }
 
-    public function onKernelException(GetResponseForExceptionEvent $event)
+    public function onKernelException(ExceptionEvent $event)
     {
         $exception = $event->getException();
         $request = $event->getRequest();
@@ -42,7 +42,9 @@ class ExceptionListener
         } else {
             $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR;
         }
-        if ($environment === 'dev' || $displayErrors) {
+        if (strpos($exception->getFile(), '/IsGrantedListener') !== false) {
+            $message = $this->container->get('translator')->trans($exception->getMessage(), [], 'validators');
+        } else if ($environment === 'dev' || $displayErrors) {
             $filePath = str_replace($rootPath, '', $exception->getFile());
             if (strpos($filePath, '/vendor/') !== false) {
                 $filePath = substr($filePath, strpos($filePath, '/vendor/'));
@@ -56,14 +58,13 @@ class ExceptionListener
                 'statusCode' => $statusCode
             ];
         } else {
-
             $content = $this->twig->render('/errors/404.html.twig', [
-                'message' => $message,
+                'message' => $message ?: 'Not found.',
                 'currentUri' => '404',
                 'activeCategoriesIds' => []
             ]);
         }
-
+        
         if (is_array($content)) {
             $response = new JsonResponse($content);
         } else {

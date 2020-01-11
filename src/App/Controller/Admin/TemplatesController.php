@@ -12,6 +12,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * Class TemplatesController
@@ -278,6 +279,7 @@ class TemplatesController extends StorageControllerAbstract
 
     /**
      * @Route("", methods={"DELETE"})
+     * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param Request $request
      * @param TranslatorInterface $translator
      * @return JsonResponse
@@ -298,6 +300,7 @@ class TemplatesController extends StorageControllerAbstract
 
     /**
      * @Route("/delete/batch", methods={"POST"})
+     * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param Request $request
      * @param TranslatorInterface $translator
      * @return JsonResponse

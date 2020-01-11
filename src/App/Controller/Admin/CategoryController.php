@@ -6,11 +6,11 @@ use App\MainBundle\Document\FileDocument;
 use App\Service\CatalogService;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Event\CategoryUpdatedEvent;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use App\MainBundle\Document\Category;
 use App\MainBundle\Document\ContentType;
@@ -213,6 +213,7 @@ class CategoryController extends StorageControllerAbstract
 
     /**
      * @Route("/{itemId}", methods={"DELETE"})
+     * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param int $itemId
      * @param TranslatorInterface $translator
      * @return JsonResponse

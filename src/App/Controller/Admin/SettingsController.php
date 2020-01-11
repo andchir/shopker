@@ -21,6 +21,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Yaml\Exception\ParseException;
 use App\MainBundle\Document\Setting;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * Class SettingsController
@@ -57,6 +58,7 @@ class SettingsController extends Controller
 
     /**
      * @Route("/{groupName}", methods={"PUT"})
+     * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param Request $request
      * @param $groupName
      * @param SettingsService $settingsService
@@ -167,6 +169,7 @@ class SettingsController extends Controller
 
     /**
      * @Route("/clear_cache", name="clear_cache", methods={"POST"})
+     * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param SettingsService $settingsService
      * @return JsonResponse
      */
@@ -179,6 +182,7 @@ class SettingsController extends Controller
 
     /**
      * @Route("/clear_system_cache", name="clear_system_cache", methods={"POST"})
+     * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param SettingsService $settingsService
      * @return JsonResponse
      * @throws \Exception
@@ -194,6 +198,7 @@ class SettingsController extends Controller
 
     /**
      * @Route("/update_filters", name="update_filters", methods={"POST"})
+     * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param CatalogService $catalogService
      * @param DocumentManager $dm
      * @return JsonResponse
@@ -218,6 +223,7 @@ class SettingsController extends Controller
 
     /**
      * @Route("/update_internationalization", name="update_internationalization", methods={"POST"})
+     * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @return JsonResponse
      * @throws \Exception
      */
@@ -421,6 +427,7 @@ class SettingsController extends Controller
 
     /**
      * @Route("_composer_require_package", name="admin_composer_require_package", methods={"POST"})
+     * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param Request $request
      * @param ComposerService $composerService
      * @param TranslatorInterface $translator
@@ -496,5 +503,4 @@ class SettingsController extends Controller
             ->getManager()
             ->getRepository(Setting::class);
     }
-
 }

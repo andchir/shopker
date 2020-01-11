@@ -4,9 +4,9 @@ namespace App\Controller\Admin;
 
 use App\MainBundle\Document\Collection;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * Class CollectionController
@@ -37,6 +37,7 @@ class CollectionController extends BaseController
 
     /**
      * @Route("/{itemName}", name="collection_delete", methods={"DELETE"})
+     * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param Request $request
      * @param string $itemName
      * @return JsonResponse

@@ -7,15 +7,14 @@ use App\MainBundle\Document\ContentType;
 use App\MainBundle\Document\FileDocument;
 use App\MainBundle\Document\User;
 use App\Service\UtilsService;
-use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Component\HttpFoundation\FileBag;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * Class FileControllerAbstract
@@ -27,6 +26,7 @@ class FileController extends BaseController
 
     /**
      * @Route("/upload", methods={"POST"})
+     * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param Request $request
      * @return JsonResponse
      */

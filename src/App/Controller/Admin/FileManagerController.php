@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * Class FileManagerController
@@ -80,6 +81,7 @@ class FileManagerController extends BaseController
 
     /**
      * @Route("/folder", methods={"POST"})
+     * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param Request $request
      * @param TranslatorInterface $translator
      * @return JsonResponse
@@ -107,6 +109,7 @@ class FileManagerController extends BaseController
 
     /**
      * @Route("/folder_delete", methods={"POST"})
+     * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param Request $request
      * @param Filesystem $fs
      * @param TranslatorInterface $translator
@@ -135,6 +138,7 @@ class FileManagerController extends BaseController
 
     /**
      * @Route("/file_delete", methods={"POST"})
+     * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param Request $request
      * @param TranslatorInterface $translator
      * @return JsonResponse
@@ -168,6 +172,7 @@ class FileManagerController extends BaseController
 
     /**
      * @Route("/folder", methods={"PUT"})
+     * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param Request $request
      * @param TranslatorInterface $translator
      * @return JsonResponse
@@ -201,6 +206,7 @@ class FileManagerController extends BaseController
 
     /**
      * @Route("/file", methods={"PUT"})
+     * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param Request $request
      * @param TranslatorInterface $translator
      * @return JsonResponse
@@ -238,6 +244,7 @@ class FileManagerController extends BaseController
 
     /**
      * @Route("/upload", methods={"POST"})
+     * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param Request $request
      * @param TranslatorInterface $translator
      * @return JsonResponse

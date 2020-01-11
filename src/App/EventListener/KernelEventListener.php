@@ -4,8 +4,8 @@ namespace App\EventListener;
 
 use App\Event\CategoryUpdatedEvent;
 use App\Event\UserRegisteredEvent;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 class KernelEventListener
 {
@@ -17,9 +17,9 @@ class KernelEventListener
     }
 
     /**
-     * @param GetResponseEvent $event
+     * @param RequestEvent $event
      */
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(RequestEvent $event)
     {
         $dispatcher = $this->container->get('event_dispatcher');
 

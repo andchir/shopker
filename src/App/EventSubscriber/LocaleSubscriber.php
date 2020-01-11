@@ -22,7 +22,7 @@ class LocaleSubscriber implements EventSubscriberInterface
     public function onKernelRequest(RequestEvent $event)
     {
         $request = $event->getRequest();
-        $requestUri = $request->getRequestUri();;
+        $requestUri = $request->getRequestUri();
         if ($locale = $request->attributes->get('_locale')) {
             if ($request->isMethod('GET')) {
                 $localeList = UtilsService::stringToArray($this->localeList);

@@ -3,7 +3,7 @@
 - Added functionality for accounting for product balances in stock.
 - Modal windows style update.
 - Ability to minimize modal windows.
-- Added commands "db_export" and "db_import" in "app:action".
+- Added commands "db_export" and "db_import" in "app:action" (DB backup).
 - Added new user role - "Administrator - Read Only" (has access to the administrator’s interface, but cannot create/edit or delete content).
 
 4.1.3

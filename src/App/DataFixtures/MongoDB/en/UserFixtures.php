@@ -36,7 +36,7 @@ class UserFixtures extends Fixture implements ContainerAwareInterface, FixtureGr
         $user = new User();
         $user
             ->setUsername('admin')
-            ->setEmail('admin@yourdomain.com');
+            ->setEmail('admin');
 
         $password = $this->encoder->encodePassword($user, $plainPassword);
 

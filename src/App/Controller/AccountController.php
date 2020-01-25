@@ -54,8 +54,10 @@ class AccountController extends Controller
     {
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
-
+        
         return $this->render('security/login.html.twig', [
+            'target_path' => $request->get('go_to', ''),
+            'failure_path' => $request->get('back_to', ''),
             'last_username' => $lastUsername,
             'error' => $error ? $error->getMessage() : null
         ]);

@@ -26,7 +26,7 @@ security:
                 check_path: login
                 csrf_token_generator: security.csrf.token_manager
                 default_target_path: homepage
-                always_use_default_target_path: true
+                target_path_parameter: go_to
                 failure_path_parameter: back_to
 
             logout:

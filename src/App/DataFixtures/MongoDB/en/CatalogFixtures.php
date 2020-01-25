@@ -360,6 +360,34 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface, Fixtur
                 'listOrder' => 6
             ],
             [
+                'title' => 'Rating',
+                'name' => 'rating',
+                'description' => '',
+                'inputType' => 'number',
+                'inputProperties' => [
+                    'value' => '',
+                    'handler' => '',
+                    'allow_decimals' => 0,
+                    'decimal_precision' => 2,
+                    'decimal_separator' => '.',
+                    'min' => 0,
+                    'max' => 5,
+                    'step' => 1
+                ],
+                'outputType' => 'number',
+                'outputProperties' => [
+                    'className' => '',
+                    'chunkName' => 'rating'
+                ],
+                'group' => 'Options',
+                'required' => false,
+                'showInTable' => false,
+                'showInList' => true,
+                'isFilter' => false,
+                'filterOrder' => 0,
+                'listOrder' => 7
+            ],
+            [
                 'title' => 'Parameters',
                 'name' => 'parameters',
                 'description' => '',

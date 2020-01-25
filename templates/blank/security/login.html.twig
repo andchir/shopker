@@ -23,6 +23,14 @@
 
                 <form action="{{ path('login') }}" method="post">
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                    {% if target_path is not empty -%}
+                        <input type="hidden" name="go_to" value="{{ target_path }}">
+                    {% endif %}
+                    {% if failure_path is not empty -%}
+                        <input type="hidden" name="back_to" value="{{ failure_path }}">
+                    {% else %}
+                        <input type="hidden" name="back_to" value="{{ app.request.get('locale_url_prefix') }}{{ app.request.get('current_uri') }}">
+                    {% endif %}
                     <div class="form-group">
                         <label for="email">{{ 'Email' | trans }}</label>
                         <input type="text" class="form-control" id="email" name="email" value="{{ last_username }}">

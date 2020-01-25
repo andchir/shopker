@@ -1,0 +1,3 @@
+plugin_digital_goods:
+    resource: '@DigitalGoodsBundle'
+    type: annotation

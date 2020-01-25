@@ -7,6 +7,7 @@
 - Added new user role - "Administrator - Read Only" (has access to the administrator’s interface, but cannot create/edit or delete content).
 - Added ImportExportBundle.
 - Added DigitalGoodsBundle.
+- Fixed redirect after authorization using "go_to" parameter in URL.
 
 4.1.3
 - Added package shopkeeper4-comments - Reviews and ratings.

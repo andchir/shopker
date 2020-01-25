@@ -20,5 +20,6 @@ return [
     Liip\ImagineBundle\LiipImagineBundle::class => ['all' => true],
     Gregwar\CaptchaBundle\GregwarCaptchaBundle::class => ['all' => true],
     Andchir\OmnipayBundle\OmnipayBundle::class => ['all' => true],
-    Andchir\CommentsBundle\CommentsBundle::class => ['all' => true]
+    Andchir\CommentsBundle\CommentsBundle::class => ['all' => true],
+    Andchir\ImportExportBundle\ImportExportBundle::class => ['all' => true]
 ];

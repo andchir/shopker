@@ -22,3 +22,9 @@ doctrine_mongodb:
                     dir: 'Document'
                     prefix: App\MainBundle\Document\
                     alias: AppMainBundle
+                ImportExportBundle:
+                    is_bundle: true
+                    type: annotation
+                    dir: 'Document'
+                    prefix: Andchir\ImportExportBundle\Document\
+                    alias: ImportExportBundle

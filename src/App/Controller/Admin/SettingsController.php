@@ -22,6 +22,7 @@ use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Yaml\Exception\ParseException;
 use App\MainBundle\Document\Setting;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Twig\Environment as TwigEnvironment;
 
 /**
  * Class SettingsController
@@ -63,10 +64,16 @@ class SettingsController extends Controller
      * @param $groupName
      * @param SettingsService $settingsService
      * @param TranslatorInterface $translator
+     * @param TwigEnvironment $twig
      * @return JsonResponse
      * @throws \Exception
      */
-    public function updateGroupAction(Request $request, $groupName, SettingsService $settingsService, TranslatorInterface $translator)
+    public function updateGroupAction(
+        Request $request, $groupName,
+        SettingsService $settingsService,
+        TranslatorInterface $translator,
+        TwigEnvironment $twig
+    )
     {
         $data = json_decode($request->getContent(), true);
 
@@ -75,7 +82,7 @@ class SettingsController extends Controller
 
                 $settings = $this->getSettingsFromYaml('settings', false);
                 $data = self::transformParametersInverse($data);
-                $templatesDirPath = $this->getTemplatesDirPath();
+                $templatesDirPath = dirname(dirname($twig->getLoader()->getSourceContext('base.html.twig')->getPath()));;
 
                 if (isset($data['app.template_theme'])
                     && !is_dir($templatesDirPath . DIRECTORY_SEPARATOR . $data['app.template_theme'])) {

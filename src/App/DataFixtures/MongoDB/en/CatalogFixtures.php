@@ -332,6 +332,34 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface, Fixtur
                 'filterOrder' => 5
             ],
             [
+                'title' => 'Quantity in stock',
+                'name' => 'stock',
+                'description' => '',
+                'inputType' => 'number',
+                'inputProperties' => [
+                    'value' => '',
+                    'handler' => '',
+                    'allow_decimals' => 0,
+                    'decimal_precision' => 2,
+                    'decimal_separator' => '.',
+                    'min' => 0,
+                    'max' => null,
+                    'step' => 1
+                ],
+                'outputType' => 'number',
+                'outputProperties' => [
+                    'className' => '',
+                    'chunkName' => 'stock'
+                ],
+                'group' => 'Options',
+                'required' => false,
+                'showInTable' => false,
+                'showInList' => false,
+                'isFilter' => false,
+                'filterOrder' => 0,
+                'listOrder' => 6
+            ],
+            [
                 'title' => 'Parameters',
                 'name' => 'parameters',
                 'description' => '',

@@ -1,6 +1,6 @@
 parameters:
     locale: 'en'
-    app.name: Shopkeeper
+    app.name: Shopker
     app.version: '4.1.4'
     app.web_dir_path: '%kernel.root_dir%/../../public'
     app.files_dir_path: '%app.web_dir_path%/uploads'

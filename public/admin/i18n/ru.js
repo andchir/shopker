@@ -13,6 +13,7 @@ var APP_LANG = {
     "ADD_FIELD_TYPE": "Добавить тип поля",
     "ADD_TEMPLATE": "Добавить шаблон",
     "APPLY": "Применить",
+    "ALL": "Все",
     "BACK": "Вернуться",
     "BATCH_ACTIONS": "Групповые действия",
     "BUY": "Купить",

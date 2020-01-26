@@ -50,11 +50,17 @@ export class TemplatesEditService extends DataService<Template> {
     }
 
     getEditableFiles(): Observable<DataList<FileRegularInterface>> {
-        const url = this.getRequestUrl() + `/get_editable_files`;
+        const url = `${this.getRequestUrl()}/get_editable_files`;
         return this.http.get<DataList<FileRegularInterface>>(url, {headers: this.headers})
             .pipe(
                 catchError(this.handleError<any>())
             );
     }
-
+    
+    getThemesList(): Observable<any> {
+        const url = `${this.getRequestUrl()}/themes`;
+        return this.http.get<any>(url, {headers: this.headers}).pipe(
+            catchError(this.handleError<any>())
+        );
+    }
 }

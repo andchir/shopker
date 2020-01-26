@@ -24,6 +24,7 @@ export class TemplatesEditComponent extends PageTableAbstractComponent<Template>
     @ViewChild('dropdownStyles', { static: false }) dropdownStyles: ElementRef;
     @ViewChild('dropdownScripts', { static: false }) dropdownScripts: ElementRef;
     queryOptions: QueryOptions = new QueryOptions('path', 'asc', 1, 10, 0, 0);
+    themes: {name: string}[] = [];
 
     tableFields = [
         {
@@ -60,6 +61,7 @@ export class TemplatesEditComponent extends PageTableAbstractComponent<Template>
     }
 
     afterInit(): void {
+        this.getThemesList();
         this.getEditableFiles();
     }
 
@@ -78,6 +80,20 @@ export class TemplatesEditComponent extends PageTableAbstractComponent<Template>
                     });
                 }
             });
+    }
+
+    getThemesList(): void {
+        this.dataService.getThemesList()
+            .subscribe({
+                next: (res) => {
+                    this.themes = res;
+                }
+            });
+    }
+    
+    onThemeChange(): void {
+        this.queryOptions.page = 1;
+        this.getList();
     }
 
     getModalContent() {

@@ -8,6 +8,14 @@
         <hr>
 
         <div class="mb-3">
+            <div class="float-md-left">
+
+                <select class="custom-select mb-2 mb-md-0" [(ngModel)]="queryOptions.category" (ngModelChange)="onThemeChange()">
+                    <option [value]="''">{{ 'ALL' | translate }}</option>
+                    <option *ngFor="let theme of themes" [value]="theme.name">{{ theme.name }}</option>
+                </select>
+                
+            </div>
             <div class="float-md-right">
 
                 <div ngbDropdown class="d-block d-md-inline-block mb-2 mb-md-0" placement="bottom-right">
@@ -32,23 +40,20 @@
 
                 <div ngbDropdown class="d-block d-md-inline-block ml-md-2 mb-2 mb-md-0" placement="bottom-right" *ngIf="files['css'].length">
                     <button class="btn btn-primary d-block d-md-inline-block width-100 width-md-auto" ngbDropdownToggle>
-                        <span>{{'STYLES' | translate}}</span>
+                        <span>CSS / JS</span>
                     </button>
                     <div class="max-height400" ngbDropdownMenu>
                         <button class="dropdown-item" *ngFor="let item of files['css']" (click)="editFile(item, $event)">
                             {{ item.name }} <span class="text-muted small">({{ item.size }})</span>
                         </button>
-                    </div>
-                </div>
-
-                <div ngbDropdown class="d-block d-md-inline-block ml-md-2 mb-2 mb-md-0" placement="bottom-right" *ngIf="files['js'].length">
-                    <button class="btn btn-primary d-block d-md-inline-block width-100 width-md-auto" ngbDropdownToggle>
-                        <span>{{'SCRIPTS' | translate}}</span>
-                    </button>
-                    <div class="max-height400" ngbDropdownMenu>
-                        <button class="dropdown-item" *ngFor="let item of files['js']" (click)="editFile(item, $event)">
-                            {{ item.name }} <span class="text-muted small">({{ item.size }})</span>
-                        </button>
+                        <ng-container *ngIf="files['css'].length && files['js'].length">
+                            <div class="dropdown-divider"></div>
+                        </ng-container>
+                        <ng-container *ngIf="files['js'].length">
+                            <button class="dropdown-item" *ngFor="let item of files['js']" (click)="editFile(item, $event)">
+                                {{ item.name }} <span class="text-muted small">({{ item.size }})</span>
+                            </button>
+                        </ng-container>
                     </div>
                 </div>
 
@@ -56,11 +61,6 @@
                     <i class="icon-plus mr-2"></i>
                     <span>{{'ADD' | translate}}</span>
                 </button>
-
-            </div>
-            <div class="float-left">
-
-
 
             </div>
             <div class="clearfix"></div>

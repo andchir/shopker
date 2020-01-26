@@ -13,6 +13,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Twig\Environment as TwigEnvironment;
 
 /**
  * Class TemplatesController
@@ -21,6 +22,17 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
  */
 class TemplatesController extends StorageControllerAbstract
 {
+    /** @var TwigEnvironment */
+    protected $twig;
+
+    /**
+     * TemplatesController constructor.
+     * @param $twig
+     */
+    public function __construct(TwigEnvironment $twig)
+    {
+        $this->twig = $twig;
+    }
 
     /**
      * @param array $data
@@ -48,11 +60,11 @@ class TemplatesController extends StorageControllerAbstract
         $options = $this->getQueryOptions($queryString);
         $templatesDirPath = $this->getTemplatesDirPath();
 
-        $themesDirs = array_diff(scandir($templatesDirPath), ['..', '.']);
-        $themesDirs = array_filter($themesDirs, function($value) use ($templatesDirPath) {
-            return is_dir($templatesDirPath . DIRECTORY_SEPARATOR . $value);
-        });
-        $themesDirs = array_merge($themesDirs);
+        $category = $request->get('category');
+        $themesDirs = $this->getThemesList();
+        if ($category && in_array($category, $themesDirs)) {
+            $themesDirs = [$category];
+        }
 
         foreach ($themesDirs as $themeDirName) {
             $dirPath = $templatesDirPath . DIRECTORY_SEPARATOR . $themeDirName;
@@ -103,6 +115,23 @@ class TemplatesController extends StorageControllerAbstract
             'items' => $items,
             'total' => $total
         ]);
+    }
+
+    /**
+     * @Route("/themes", name="templates_get_themes", methods={"GET"})
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \Twig\Error\LoaderError
+     */
+    public function getThemesListAction(Request $request)
+    {
+        $themesDirs = $this->getThemesList();
+        
+        $themesDirs = array_map(function($name) {
+            return ['name' => $name];
+        }, $themesDirs);
+        
+        return $this->json($themesDirs);
     }
 
     /**
@@ -362,10 +391,31 @@ class TemplatesController extends StorageControllerAbstract
         ];
     }
 
+    /**
+     * @return array
+     * @throws \Twig\Error\LoaderError
+     */
+    public function getThemesList()
+    {
+        $templatesDirPath = $this->getTemplatesDirPath();
+
+        $themesDirs = array_diff(scandir($templatesDirPath), ['..', '.']);
+        $themesDirs = array_filter($themesDirs, function($value) use ($templatesDirPath) {
+            return is_dir($templatesDirPath . DIRECTORY_SEPARATOR . $value)
+                && substr($value, 0, 1) !== '.';
+        });
+        $themesDirs = array_merge($themesDirs);
+        
+        return $themesDirs;
+    }
+
+    /**
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     */
     public function getTemplatesDirPath()
     {
-        $rootPath = realpath($this->getParameter('kernel.root_dir').'/../..');
-        return $rootPath . DIRECTORY_SEPARATOR . 'templates';
+        return dirname(dirname($this->twig->getLoader()->getSourceContext('base.html.twig')->getPath()));;
     }
 
     protected function getRepository()

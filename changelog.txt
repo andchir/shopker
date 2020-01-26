@@ -8,6 +8,7 @@
 - Added ImportExportBundle.
 - Added DigitalGoodsBundle.
 - Fixed redirect after authorization using "go_to" parameter in URL.
+- Templates in admin area - filter by theme name.
 
 4.1.3
 - Added package shopkeeper4-comments - Reviews and ratings.

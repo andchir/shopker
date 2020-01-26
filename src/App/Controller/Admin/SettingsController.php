@@ -31,6 +31,18 @@ use Twig\Environment as TwigEnvironment;
  */
 class SettingsController extends Controller
 {
+    /** @var TwigEnvironment */
+    protected $twig;
+
+    /**
+     * TemplatesController constructor.
+     * @param $twig
+     */
+    public function __construct(TwigEnvironment $twig)
+    {
+        $this->twig = $twig;
+    }
+    
     /**
      * @Route("", methods={"GET"})
      * @param SettingsService $settingsService
@@ -82,7 +94,7 @@ class SettingsController extends Controller
 
                 $settings = $this->getSettingsFromYaml('settings', false);
                 $data = self::transformParametersInverse($data);
-                $templatesDirPath = dirname(dirname($twig->getLoader()->getSourceContext('base.html.twig')->getPath()));;
+                $templatesDirPath = $this->getTemplatesDirPath();
 
                 if (isset($data['app.template_theme'])
                     && !is_dir($templatesDirPath . DIRECTORY_SEPARATOR . $data['app.template_theme'])) {
@@ -454,10 +466,13 @@ class SettingsController extends Controller
         return $this->json($result);
     }
 
+    /**
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     */
     public function getTemplatesDirPath()
     {
-        $rootPath = realpath($this->getParameter('kernel.root_dir').'/../..');
-        return $rootPath . DIRECTORY_SEPARATOR . 'templates';
+        return dirname(dirname($this->twig->getLoader()->getSourceContext('base.html.twig')->getPath()));;
     }
 
     /**

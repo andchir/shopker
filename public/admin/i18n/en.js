@@ -13,6 +13,7 @@ var APP_LANG = {
     "ADD_FIELD_TYPE": "Add field type",
     "ADD_TEMPLATE": "Add template",
     "APPLY": "Apply",
+    "ALL": "All",
     "BACK": "Back",
     "BATCH_ACTIONS": "Batch Actions",
     "BUY": "Buy",

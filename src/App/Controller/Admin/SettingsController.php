@@ -42,7 +42,7 @@ class SettingsController extends Controller
     {
         $this->twig = $twig;
     }
-    
+
     /**
      * @Route("", methods={"GET"})
      * @param SettingsService $settingsService
@@ -264,7 +264,8 @@ class SettingsController extends Controller
     {
         $rootPath = realpath($this->getParameter('kernel.root_dir').'/../..');
         $jsonDirPath = $rootPath . '/frontend/src/i18n';
-        $jsPublicDirPath = $rootPath . '/public/admin/i18n';
+        $publicDirPath = realpath($this->getParameter('app.web_dir_path'));
+        $jsPublicDirPath = $publicDirPath . '/admin/i18n';
         $vendorDirPath = $rootPath . '/vendor';
 
         $sourceFiles = array_diff(scandir($jsonDirPath), ['..', '.']);

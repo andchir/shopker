@@ -26,8 +26,8 @@ class HomepageController extends Controller
     public function indexAction(Request $request, KernelInterface $kernel)
     {
         $environment = $kernel->getEnvironment();
-        $rootPath = realpath($this->getParameter('kernel.root_dir').'/../..');
-        $indexPagePath = $rootPath . '/public/admin/bundle';
+        $publicDirPath = realpath($this->getParameter('app.web_dir_path'));
+        $indexPagePath = $publicDirPath . '/admin/bundle';
         if ($environment == 'dev') {
             $indexPagePath .= '-dev';
         }
@@ -35,7 +35,7 @@ class HomepageController extends Controller
 
         $content = $this->getIndexPageContent($indexPagePath, $request->getLocale());
         if (!$content) {
-            throw $this->createNotFoundException();
+            throw $this->createNotFoundException('index.html page not found.');
         }
 
         $response = new Response($content);
@@ -59,9 +59,9 @@ class HomepageController extends Controller
     public function moduleAction(Request $request, $moduleName, KernelInterface $kernel)
     {
         $environment = $kernel->getEnvironment();
-        $rootPath = realpath($this->getParameter('kernel.root_dir').'/../..');
+        $publicDirPath = realpath($this->getParameter('app.web_dir_path'));
         $moduleName = str_replace(['_', '-'], '', $moduleName);
-        $indexPagePath = $rootPath . '/public/bundles/' . $moduleName . '/admin/bundle';
+        $indexPagePath = $publicDirPath . '/bundles/' . $moduleName . '/admin/bundle';
         if ($environment == 'dev') {
             $indexPagePath .= '-dev';
         }

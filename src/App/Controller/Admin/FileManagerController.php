@@ -281,7 +281,7 @@ class FileManagerController extends BaseController
      */
     public function getFolderPath($folderName)
     {
-        $publicDirPath = $this->getRootPath() . DIRECTORY_SEPARATOR . 'public';
+        $publicDirPath = realpath($this->getParameter('app.web_dir_path'));
         if ($folderName) {
             $publicDirPath .= DIRECTORY_SEPARATOR . str_replace('..', '', $folderName);
         }

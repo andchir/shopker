@@ -126,11 +126,11 @@ class TemplatesController extends StorageControllerAbstract
     public function getThemesListAction(Request $request)
     {
         $themesDirs = $this->getThemesList();
-        
+
         $themesDirs = array_map(function($name) {
             return ['name' => $name];
         }, $themesDirs);
-        
+
         return $this->json($themesDirs);
     }
 
@@ -286,7 +286,7 @@ class TemplatesController extends StorageControllerAbstract
     public function getFilePathByType($fileType, $filePath)
     {
         $rootPath = realpath($this->getParameter('kernel.root_dir').'/../..');
-        $publicDirPath = $rootPath . DIRECTORY_SEPARATOR . 'public';
+        $publicDirPath = realpath($this->getParameter('app.web_dir_path'));
         $configDirPath = $rootPath . DIRECTORY_SEPARATOR . 'config';
         $templatesDirPath = $this->getTemplatesDirPath();
         $filePath = trim($filePath, DIRECTORY_SEPARATOR);
@@ -405,7 +405,7 @@ class TemplatesController extends StorageControllerAbstract
                 && substr($value, 0, 1) !== '.';
         });
         $themesDirs = array_merge($themesDirs);
-        
+
         return $themesDirs;
     }
 

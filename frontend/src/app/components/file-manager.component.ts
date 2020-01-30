@@ -55,14 +55,14 @@ export class FileManagerComponent implements OnDestroy {
             .pipe(takeUntil(this.closed$))
             .subscribe({
                 next: (res) => {
-                    this.loading = false;
                     this.files = res;
+                    this.loading = false;
                 },
                 error: (err) => {
-                    this.loading = false;
                     if (err['error']) {
                         this.errorMessage = err['error'];
                     }
+                    this.loading = false;
                 }
             });
     }
@@ -100,14 +100,15 @@ export class FileManagerComponent implements OnDestroy {
                             if (!this.isActive) {
                                 this.activeToggle();
                             }
+                            this.getFilesList();
                         }, (err) => {
-                            this.loading = false;
                             if (err['error']) {
                                 this.errorMessage = err['error'];
                                 if (!this.isActive) {
                                     this.activeToggle();
                                 }
                             }
+                            this.loading = false;
                         });
                     break;
                 case 'rename':
@@ -118,11 +119,12 @@ export class FileManagerComponent implements OnDestroy {
                             if (!this.isActive) {
                                 this.activeToggle();
                             }
+                            this.getFilesList();
                         }, (err) => {
-                            this.loading = false;
                             if (err['error']) {
                                 this.errorMessage = err['error'];
                             }
+                            this.loading = false;
                         });
                     break;
             }
@@ -146,17 +148,21 @@ export class FileManagerComponent implements OnDestroy {
                 this.loading = true;
                 this.dataService.createFolder(this.currentPath, result)
                     .pipe(takeUntil(this.closed$))
-                    .subscribe((res) => {
-                        if (!this.isActive) {
-                            this.activeToggle();
-                        }
-                    }, (err) => {
-                        this.loading = false;
-                        if (err['error']) {
-                            this.errorMessage = err['error'];
-                        }
-                        if (!this.isActive) {
-                            this.activeToggle();
+                    .subscribe({
+                        next: () => {
+                            if (!this.isActive) {
+                                this.activeToggle();
+                            }
+                            this.getFilesList();
+                        },
+                        error: (err) => {
+                            if (err['error']) {
+                                this.errorMessage = err['error'];
+                            }
+                            if (!this.isActive) {
+                                this.activeToggle();
+                            }
+                            this.loading = false;
                         }
                     });
             }
@@ -179,10 +185,10 @@ export class FileManagerComponent implements OnDestroy {
                         .subscribe((res) => {
                             this.openDirPrevious();
                         }, (err) => {
-                            this.loading = false;
                             if (err['error']) {
                                 this.errorMessage = err['error'];
                             }
+                            this.loading = false;
                         });
                 }
             });
@@ -214,10 +220,10 @@ export class FileManagerComponent implements OnDestroy {
                     .subscribe((res) => {
                         this.openDirPrevious();
                     }, (err) => {
-                        this.loading = false;
                         if (err['error']) {
                             this.errorMessage = err['error'];
                         }
+                        this.loading = false;
                     });
             }
         });
@@ -235,7 +241,6 @@ export class FileManagerComponent implements OnDestroy {
         this.modalRef = this.modalService.open(ModalFileUploadContentComponent, {backdrop: 'static', keyboard: false});
         this.modalRef.result.then((result: File[]) => {
             if (result && result.length > 0) {
-
                 this.loading = true;
                 const data = {};
                 result.forEach((file, index) => {
@@ -245,16 +250,16 @@ export class FileManagerComponent implements OnDestroy {
                     .pipe(takeUntil(this.closed$))
                     .subscribe({
                         next: (res) => {
-                            this.loading = false;
                             if (!this.isActive) {
                                 this.activeToggle();
                             }
+                            this.getFilesList();
                         },
                         error: (err) => {
-                            this.loading = false;
                             if (err['error']) {
                                 this.errorMessage = err['error'];
                             }
+                            this.loading = false;
                         }
                     });
             }

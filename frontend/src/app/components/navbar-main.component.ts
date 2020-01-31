@@ -3,7 +3,6 @@ import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 
 import {filter} from 'rxjs/operators';
 
-import {FileManagerComponent} from './file-manager.component';
 import {AppSettings} from '../services/app-settings.service';
 import {MenuItem} from '../models/menu-item.interface';
 

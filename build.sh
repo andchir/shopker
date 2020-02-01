@@ -2,7 +2,7 @@
 
 DIR="$(pwd)"
 OUTPUT_DIRNAME="build"
-OUTPUT_FILENAME="shk4-latest.zip"
+OUTPUT_FILENAME="shopker-latest.zip"
 
 [ -d "$DIR"/"$OUTPUT_DIRNAME" ] || mkdir "$DIR"/"$OUTPUT_DIRNAME"
 

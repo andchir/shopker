@@ -114,7 +114,7 @@ export class CategoriesModalComponent extends AppModalContentAbstractComponent<C
             this.localeDefault = this.localeList[0];
             this.localeCurrent = this.localeList[0];
         }
-        if (this.itemId) {
+        if (typeof this.itemId !== 'undefined') {
             this.model.id = this.itemId;
         }
         if (this.isEditMode) {

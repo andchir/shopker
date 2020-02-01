@@ -249,7 +249,7 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
         // if (Object.keys(this.files).length > 0) {
         //     return this.dataService.postFormData(this.dataService.createFormData(data));
         // } else
-        if (data.id) {
+        if (data.id || data.name === 'root') {
             return this.dataService.update(data);
         } else {
             return this.dataService.create(data);

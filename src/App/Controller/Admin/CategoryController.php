@@ -59,7 +59,7 @@ class CategoryController extends StorageControllerAbstract
         if (empty($data['contentTypeName'])) {
             return ['success' => false, 'msg' => 'Content type is required.'];
         }
-        if ($this->checkNameExists($data['name'], $itemId, intval($data['parentId']))) {
+        if ($this->checkNameExists($data['name'], $itemId, $data['parentId'])) {
             return ['success' => false, 'msg' => 'System name already exists.'];
         }
 
@@ -81,7 +81,7 @@ class CategoryController extends StorageControllerAbstract
             $item = new Category();
         } else {
             /** @var Category $item */
-            $item = $this->getRepository()->find($itemId);
+            $item = $this->getRepository()->find((int) $itemId);
             if(!$item && $data['name'] == 'root'){
                 $item = new Category();
                 $item

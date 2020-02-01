@@ -227,10 +227,11 @@ class TemplatesController extends StorageControllerAbstract
 
     /**
      * @param array $data
+     * @param null|int|string $itemId
      * @return JsonResponse
      * @throws \Exception
      */
-    protected function createUpdate($data)
+    protected function createUpdate($data, $itemId = null)
     {
         /** @var TranslatorInterface $translator */
         $translator = $this->get('translator');

@@ -19,7 +19,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 abstract class StorageControllerAbstract extends BaseController
 {
     abstract protected function getRepository();
-    abstract protected function createUpdate($data);
+    abstract protected function createUpdate($data, $itemId = null);
     abstract protected function validateData($data, $itemId = null);
 
     /**
@@ -209,12 +209,12 @@ abstract class StorageControllerAbstract extends BaseController
         /** @var TranslatorInterface $translator */
         $translator = $this->get('translator');
 
-        $output = $this->validateData($data, $itemId);
+        $output = $this->validateData($data, (int) $itemId);
         if(!$output['success']){
             return $this->setError($translator->trans($output['msg'], [], 'validators'));
         }
 
-        return $this->createUpdate($data, $itemId);
+        return $this->createUpdate($data, (int) $itemId);
     }
 
     /**
@@ -303,7 +303,7 @@ abstract class StorageControllerAbstract extends BaseController
         if($itemId !== null && is_numeric($itemId)){
             $query = $query->field('id')->notEqual($itemId);
         }
-
+        
         return $query
             ->count()
             ->getQuery()

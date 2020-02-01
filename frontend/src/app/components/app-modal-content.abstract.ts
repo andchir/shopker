@@ -35,6 +35,7 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
     localeCurrent = '';
     localeFieldsAllowed: string[] = [];
     localePreviousValues: {[fieldName: string]: string} = {};
+    uniqueId = '';
     destroyed$ = new Subject<void>();
 
     set formErrors(formFieldsErrors: FormFieldsErrors) {
@@ -62,6 +63,7 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
     ) {}
 
     ngOnInit(): void {
+        this.uniqueId = this.createUniqueId();
         if (this.elRef) {
             this.getRootElement().setAttribute('id', this.modalId);
         }
@@ -467,6 +469,10 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
 
     getRootElement(): HTMLElement {
         return this.elRef.nativeElement.parentNode.parentNode.parentNode;
+    }
+
+    createUniqueId(): string {
+        return Math.random().toString(36).substr(2, 9);
     }
 
     ngOnDestroy(): void {

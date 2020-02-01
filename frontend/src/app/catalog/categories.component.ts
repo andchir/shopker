@@ -109,6 +109,7 @@ export class CategoriesModalComponent extends AppModalContentAbstractComponent<C
 
     /** On initialize */
     ngOnInit(): void {
+        this.uniqueId = this.createUniqueId();
         this.localeList = this.appSettings.settings.localeList;
         if (this.localeList.length > 0) {
             this.localeDefault = this.localeList[0];

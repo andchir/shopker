@@ -145,8 +145,8 @@
                         <div class="card card-body p-2 pl-3">
 
                             <div class="custom-control custom-checkbox m-0">
-                                <input type="checkbox" class="custom-control-input" id="fieldIsActive" value="1" name="isActive" formControlName="isActive" [(ngModel)]="model.isActive">
-                                <label class="custom-control-label" for="fieldIsActive">{{'ACTIVE' | translate}}</label>
+                                <input type="checkbox" class="custom-control-input" id="fieldIsActive{{ uniqueId }}" value="1" name="isActive" formControlName="isActive" [(ngModel)]="model.isActive">
+                                <label class="custom-control-label" for="fieldIsActive{{ uniqueId }}">{{'ACTIVE' | translate}}</label>
                             </div>
 
                         </div>
@@ -378,8 +378,8 @@
                             <div class="col-md-7 offset-md-5">
 
                                 <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="fieldRequired" value="1" name="required" formControlName="required" [(ngModel)]="fieldModel.required">
-                                    <label class="custom-control-label" for="fieldRequired">{{'REQUIRED' | translate}}</label>
+                                    <input type="checkbox" class="custom-control-input" id="fieldRequired{{ uniqueId }}" value="1" name="required" formControlName="required" [(ngModel)]="fieldModel.required">
+                                    <label class="custom-control-label" for="fieldRequired{{ uniqueId }}">{{'REQUIRED' | translate}}</label>
                                 </div>
 
                             </div>
@@ -389,8 +389,8 @@
                             <div class="col-md-7 offset-md-5">
 
                                 <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="fieldShowInTable" value="1" name="showInTable" formControlName="showInTable" [(ngModel)]="fieldModel.showInTable">
-                                    <label class="custom-control-label" for="fieldShowInTable">{{'SHOW_IN_TABLE' | translate}}</label>
+                                    <input type="checkbox" class="custom-control-input" id="fieldShowInTable{{ uniqueId }}" value="1" name="showInTable" formControlName="showInTable" [(ngModel)]="fieldModel.showInTable">
+                                    <label class="custom-control-label" for="fieldShowInTable{{ uniqueId }}">{{'SHOW_IN_TABLE' | translate}}</label>
                                 </div>
 
                             </div>
@@ -400,8 +400,8 @@
                             <div class="col-md-7 offset-md-5">
 
                                 <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="fieldShowInList" value="1" name="showInList" formControlName="showInList" [(ngModel)]="fieldModel.showInList">
-                                    <label class="custom-control-label" for="fieldShowInList">{{'SHOW_IN_LIST' | translate}}</label>
+                                    <input type="checkbox" class="custom-control-input" id="fieldShowInList{{ uniqueId }}" value="1" name="showInList" formControlName="showInList" [(ngModel)]="fieldModel.showInList">
+                                    <label class="custom-control-label" for="fieldShowInList{{ uniqueId }}">{{'SHOW_IN_LIST' | translate}}</label>
                                 </div>
 
                             </div>
@@ -411,8 +411,8 @@
                             <div class="col-md-7 offset-md-5">
 
                                 <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="fieldIsFilter" value="1" name="isFilter" formControlName="isFilter" [(ngModel)]="fieldModel.isFilter">
-                                    <label class="custom-control-label" for="fieldIsFilter">{{'SHOW_IN_FILTER' | translate}}</label>
+                                    <input type="checkbox" class="custom-control-input" id="fieldIsFilter{{ uniqueId }}" value="1" name="isFilter" formControlName="isFilter" [(ngModel)]="fieldModel.isFilter">
+                                    <label class="custom-control-label" for="fieldIsFilter{{ uniqueId }}">{{'SHOW_IN_FILTER' | translate}}</label>
                                 </div>
 
                             </div>

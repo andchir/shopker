@@ -36,6 +36,7 @@ export class ModalTemplateEditComponent implements OnInit, AfterViewInit, OnDest
     loading = false;
     isPathReadOnly = false;
     closeReason = 'canceled';
+    uniqueId = '';
     destroyed$ = new Subject<void>();
 
     constructor(
@@ -48,6 +49,7 @@ export class ModalTemplateEditComponent implements OnInit, AfterViewInit, OnDest
     }
 
     ngOnInit(): void {
+        this.uniqueId = Math.random().toString(36).substr(2, 9);
         if (this.elRef) {
             this.getRootElement().setAttribute('id', this.modalId);
         }

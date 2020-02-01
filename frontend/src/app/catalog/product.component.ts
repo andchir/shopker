@@ -74,6 +74,7 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
     }
 
     ngOnInit(): void {
+        this.uniqueId = this.createUniqueId();
         if (this.elRef) {
             this.getRootElement().setAttribute('id', this.modalId);
         }

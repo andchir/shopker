@@ -49,8 +49,8 @@
             <div class="form-group">
                 <div class="card card-body p-2 pl-3">
                     <div class="custom-control custom-checkbox m-0">
-                        <input type="checkbox" class="custom-control-input" id="fieldClearCache" name="clearCache" [(ngModel)]="model.clearCache">
-                        <label class="custom-control-label" for="fieldClearCache">{{'CLEAR_SYSTEM_CACHE' | translate}}</label>
+                        <input type="checkbox" class="custom-control-input" id="fieldClearCache{{ uniqueId }}" name="clearCache" [(ngModel)]="model.clearCache">
+                        <label class="custom-control-label" for="fieldClearCache{{ uniqueId }}">{{'CLEAR_SYSTEM_CACHE' | translate}}</label>
                     </div>
                 </div>
             </div>

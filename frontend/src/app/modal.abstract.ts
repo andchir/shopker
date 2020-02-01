@@ -39,6 +39,7 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit, OnDest
     localeFieldsAllowed: string[] = [];
     localePreviousValues: {[fieldName: string]: string} = {};
     closeReason = 'canceled';
+    uniqueId = '';
     destroyed$ = new Subject<void>();
 
     constructor(
@@ -56,6 +57,7 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit, OnDest
     }
 
     ngOnInit(): void {
+        this.uniqueId = this.createUniqueId();
         if (this.elRef) {
             this.getRootElement().setAttribute('id', this.modalId);
         }
@@ -435,6 +437,10 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit, OnDest
 
     getRootElement(): HTMLElement {
         return this.elRef.nativeElement.parentNode.parentNode.parentNode;
+    }
+    
+    createUniqueId(): string {
+        return Math.random().toString(36).substr(2, 9);
     }
 
     ngOnDestroy(): void {

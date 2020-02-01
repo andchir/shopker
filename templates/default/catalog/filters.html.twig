@@ -18,9 +18,7 @@
         </div>
         <div class="catalog-filters-wrapper">
             <div class="catalog-filters-inner">
-                {% for filter in filters %}
-                    {{ outputFilter( filter ) }}
-                {% endfor %}
+                {{ outputFilters( filters, '', 'filters' ~ currentPage.id ) }}
             </div>
         </div>
         <div class="my-2"{% if queryOptions.filter | length == 0 %} style="display: none;"{% endif %}>

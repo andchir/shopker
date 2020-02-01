@@ -58,14 +58,16 @@ class AppContentList
         $localeDefault = $this->container->getParameter('locale');
         $locale = $request->getLocale();
 
-        /** @var FilesystemAdapter $cache */
-        $cache = $this->container->get('app.filecache');
-        /** @var CacheItemInterface $cacheItemHtml */
-        $cacheItemHtml = !empty($cacheKey) ? $cache->getItem("content.{$cacheKey}.{$locale}") : null;
-        if ($cacheItemHtml && $cacheItemHtml->isHit()) {
-            return $cacheItemHtml->get();
+        $cacheItemHtml = null;
+        if (!empty($cacheKey)) {
+            /** @var FilesystemAdapter $cache */
+            $cache = $this->container->get('app.filecache');
+            /** @var CacheItemInterface $cacheItemHtml */
+            $cacheItemHtml = $cache->getItem("content.{$cacheKey}.{$locale}");
+            if ($cacheItemHtml && $cacheItemHtml->isHit()) {
+                return $cacheItemHtml->get();
+            }
         }
-
         $templateName = sprintf('catalog/%s.html.twig', $chunkName);
 
         /** @var CatalogService $catalogService */

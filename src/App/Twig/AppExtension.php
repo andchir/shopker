@@ -2,6 +2,8 @@
 
 namespace App\Twig;
 
+use Psr\Cache\CacheItemInterface;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment as TwigEnvironment;
 use App\MainBundle\Document\Category;
@@ -55,6 +57,10 @@ class AppExtension extends AbstractExtension
             new TwigFunction('catalogPath', array($this, 'catalogPathFunction')),
             new TwigFunction('pathLocalized', array($this, 'pathLocalizedFunction')),
             new TwigFunction('outputFilter', [$this, 'outputFilterFunction'], [
+                'is_safe' => ['html'],
+                'needs_environment' => true
+            ]),
+            new TwigFunction('outputFilters', [$this, 'outputFiltersFunction'], [
                 'is_safe' => ['html'],
                 'needs_environment' => true
             ]),
@@ -338,21 +344,58 @@ class AppExtension extends AbstractExtension
 
     /**
      * @param TwigEnvironment $environment
-     * @param $filtersData
+     * @param array $filterData
      * @param string $chunkNamePrefix
      * @return string
      */
-    public function outputFilterFunction(TwigEnvironment $environment, $filtersData, $chunkNamePrefix = '')
+    public function outputFilterFunction(TwigEnvironment $environment, $filterData, $chunkNamePrefix = '')
     {
-        if (empty($filtersData)) {
+        if (empty($filterData)) {
             return '';
         }
-        $templateName = $this->getTemplateName($environment, 'chunks/filters/', $filtersData['outputType'], $chunkNamePrefix);
+        $templateName = $this->getTemplateName($environment, 'chunks/filters/', $filterData['outputType'], $chunkNamePrefix);
         try {
-            return $environment->render($templateName, ['filter' => $filtersData]);
+            return $environment->render($templateName, ['filter' => $filterData]);
         } catch (\Exception $e) {
             return $this->twigAddError($e->getMessage());
         }
+    }
+
+    /**
+     * @param TwigEnvironment $environment
+     * @param array $filtersData
+     * @param string $chunkNamePrefix
+     * @param string $cacheKey
+     * @return string
+     */
+    public function outputFiltersFunction(TwigEnvironment $environment, $filtersData, $chunkNamePrefix = '', $cacheKey = '')
+    {
+        if (empty($filtersData) || !is_array($filtersData)) {
+            return '';
+        }
+        $request = $this->requestStack->getCurrentRequest();
+        $locale = $request->getLocale();
+
+        $cacheItemHtml = null;
+        if (!empty($cacheKey)) {
+            /** @var FilesystemAdapter $cache */
+            $cache = $this->container->get('app.filecache');
+            /** @var CacheItemInterface $cacheItemHtml */
+            $cacheItemHtml = $cache->getItem("content.{$cacheKey}.{$locale}");
+            if ($cacheItemHtml && $cacheItemHtml->isHit()) {
+                return $cacheItemHtml->get();
+            }
+        }
+        
+        $output = '';
+        foreach ($filtersData as  $filterData) {
+            $output .= $this->outputFilterFunction($environment, $filterData, $chunkNamePrefix) . PHP_EOL;
+        }
+        if ($cacheItemHtml) {
+            $cacheItemHtml->set($output);
+            $cache->save($cacheItemHtml);
+        }
+        return $output;
     }
 
     /**

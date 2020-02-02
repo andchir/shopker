@@ -28,12 +28,16 @@
 
     function Shopkeeper (initOptions) {
 
-        var self = this, isInitialized = false, isFiltersInitialized = false, callbacks = [];
+        var self = this,
+            isInitialized = false,
+            isFiltersInitialized = false,
+            callbacks = [];
 
         var mainOptions = {
             baseUrl: '/',
             multiCurrency: false,
             currencyOptions: [],
+            priceElSelector: '.shk-price',
             priceFilterName: '',
             currencyTranslate: {
                 RUB: 'руб.',
@@ -421,16 +425,13 @@
         /**
          * Initialize product parameters
          * @param formSelector
-         * @param priceElSelector
          */
-        this.productParametersInit = function(formSelector, priceElSelector) {
+        this.productParametersInit = function(formSelector) {
             var formEl = document.querySelector(formSelector),
-                priceEl = formEl.querySelector(priceElSelector);
+                priceEl = formEl.querySelector(mainOptions.priceElSelector);
             if (!formEl || !priceEl) {
                 return;
             }
-            priceEl.dataset.price = this.parsePrice(priceEl.textContent);
-
             var parametersInputs = formEl.querySelectorAll('input, select');
 
             parametersInputs.forEach(function(inputEl) {
@@ -443,33 +444,45 @@
                     case 'checkbox':
                     case 'radio':
                         inputEl.addEventListener('click', function(){
-                            self.productParametersApply(formSelector, priceElSelector);
+                            self.productParametersApply(formSelector);
                         });
                         break;
                     case 'select':
                         inputEl.addEventListener('change', function(){
-                            self.productParametersApply(formSelector, priceElSelector);
+                            self.productParametersApply(formSelector);
                         });
                         break;
                 }
             });
 
-            this.productParametersApply(formSelector, priceElSelector);
+            var selectElement = document.getElementById('shk-currency');
+            if (selectElement) {
+                selectElement.addEventListener('change', function(e) {
+                    self.productParametersApply(formSelector);
+                }, false);
+            }
+
+            this.productParametersApply(formSelector);
         };
 
         /**
          * Apply product parameters
          * @param formSelector
-         * @param priceElSelector
          */
-        this.productParametersApply = function(formSelector, priceElSelector) {
+        this.productParametersApply = function(formSelector) {
             var formEl = document.querySelector(formSelector),
-                priceEl = document.querySelector(priceElSelector);
+                priceEl = document.querySelector(mainOptions.priceElSelector);
             if (!formEl || !priceEl) {
                 return;
             }
 
-            var price = this.parsePrice(priceEl.dataset.price || priceEl.textContent),
+            if (!priceEl.dataset.originalPrice) {
+                priceEl.dataset.originalPrice = priceEl.tagName.toLowerCase() === 'input'
+                    ? self.parsePrice(priceEl.value)
+                    : self.parsePrice(priceEl.textContent);
+            }
+
+            var price = this.parsePrice(priceEl.dataset.originalPrice),
                 parametersInputs = formEl.querySelectorAll('input, select');
 
             parametersInputs.forEach(function(inputEl) {
@@ -497,7 +510,7 @@
                 }
             });
             
-            priceEl.textContent = this.numFormat(price);
+            priceEl.dataset.tempPrice = price;
             this.updateProductsPrice(null, formEl);
         };
 
@@ -518,8 +531,8 @@
             selectElement.value = this.getCurrentCurrency();
             selectElement.addEventListener('change', function(e) {
                 self.setCookie('shkCurrency', this.value, 7);
-                self.updateProductsPrice(this.value);
                 self.slidersInit();
+                self.updateProductsPrice(this.value);
             }, false);
 
             if (mainOptions.currencyOptions.length === 0) {
@@ -596,12 +609,13 @@
                         ? self.parsePrice(priceEl.value)
                         : self.parsePrice(priceEl.textContent);
                 }
-                var originalPrice = parseFloat(priceEl.dataset.originalPrice);
+                var originalPrice = parseFloat(priceEl.dataset.tempPrice || priceEl.dataset.originalPrice);
                 if (priceEl.tagName.toLowerCase() === 'input') {
                     priceEl.value = self.getPriceByRate(originalPrice, currentRate).toFixed(2).replace(',', '.');
                 } else {
                     priceEl.textContent = self.numFormat(self.getPriceByRate(originalPrice, currentRate));
                 }
+                delete priceEl.dataset.tempPrice;
             });
             // Update currency
             currencyElArr.forEach(function(currencyEl) {

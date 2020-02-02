@@ -26,7 +26,7 @@
 
     'use strict';
 
-    function Shopkeeper () {
+    function Shopkeeper (initOptions) {
 
         var self = this, isInitialized = false, isFiltersInitialized = false, callbacks = [];
 
@@ -900,7 +900,7 @@
             return /[^\d]/.test(number.toString());
         };
 
-        this.init();
+        this.init(initOptions);
     }
 
     return Shopkeeper;

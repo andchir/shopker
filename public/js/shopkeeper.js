@@ -496,8 +496,7 @@
                         break;
                 }
             });
-
-            delete priceEl.dataset.originalPrice;
+            
             priceEl.textContent = this.numFormat(price);
             this.updateProductsPrice(null, formEl);
         };

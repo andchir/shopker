@@ -11,6 +11,7 @@ import {FileModel} from '../models/file.model';
 import {ModalFileContentComponent} from './modal-file.component';
 import {ModalConfirmTextComponent, ConfirmModalContentComponent} from './modal-confirm-text.component';
 import {ModalFileUploadContentComponent} from './modal-file-upload.component';
+import {FileData} from '@app/catalog/models/file-data.model';
 
 @Component({
     selector: 'app-file-manager',
@@ -65,6 +66,14 @@ export class FileManagerComponent implements OnDestroy {
                     this.loading = false;
                 }
             });
+    }
+
+    dragStartHandler(file: FileModel, event: DragEvent): void {
+        if (file.isDir) {
+            return;
+        }
+        const path = this.currentPath ? `/${this.currentPath}` : '';
+        event.dataTransfer.setData('text/plain', `${path}/${file.fileName}`);
     }
 
     openFileHandler(file: FileModel, event?: MouseEvent): void {
@@ -317,8 +326,8 @@ export class FileManagerComponent implements OnDestroy {
         this.isActiveChange.emit(!this._isActive);
     }
 
-    getIsImageFile(file: FileModel): boolean {
-        return ['jpg', 'jpeg', 'png', 'webp', 'gif'].indexOf(file.extension) > -1;
+    getIsImageFile(fileExtension: string): boolean {
+        return FileData.getIsImageFile(fileExtension);
     }
 
     getImageThumbnail(file: FileModel, filterSet = 'thumb_small'): string {

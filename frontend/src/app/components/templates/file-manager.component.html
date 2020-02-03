@@ -46,10 +46,12 @@
 
                 <div class="col-4 py-1 px-1" *ngFor="let file of files">
                     <div class="card card-body p-1 cursor-pointer"
-                        [ngClass]="{'bg-black-20': file.isDir, 'bg-black-10': !file.isDir}"
-                        (click)="openFileHandler(file, $event)">
+                         draggable="true"
+                         [ngClass]="{'bg-black-20': file.isDir, 'bg-black-10': !file.isDir}" 
+                         (dragstart)="dragStartHandler(file, $event)"
+                         (click)="openFileHandler(file, $event)">
                         <div class="text-center">
-                            <ng-container *ngIf="getIsImageFile(file); else fileIcon">
+                            <ng-container *ngIf="getIsImageFile(file.extension); else fileIcon">
                                 <div [title]="file.fileName">
                                     <img [src]="getImageThumbnail(file)" alt="" class="max-width100 no-events" style="height: 42px;">
                                 </div>

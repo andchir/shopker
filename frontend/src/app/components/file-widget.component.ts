@@ -21,6 +21,7 @@ export class FileWidgetComponent implements ControlValueAccessor {
     @Input() fieldTitle: string;
     @Input() hasPreviewImage = false;
     @Input() allowedExtensions = '';
+    @Input() required = false;
     @Input() allowMultiple = false;
     @Input() largeFieldMode = true;
     @Input() files: { [key: string]: File } = {};
@@ -61,7 +62,12 @@ export class FileWidgetComponent implements ControlValueAccessor {
         this.onGetFile(files[0]);
     }
 
-    getFilesArr(dataTransfer: DataTransfer): File[] {
+    getDroppedData(dataTransfer: DataTransfer): File[] {
+        const dataString = dataTransfer.getData('text/plain');
+        if (dataString) {
+            this.onGetData(dataString);
+            return;
+        }
         if (dataTransfer.items) {
             for (let i = 0; i < dataTransfer.items.length; i++) {
                 this.filesRaw.push(dataTransfer.items[i].getAsFile());
@@ -76,6 +82,9 @@ export class FileWidgetComponent implements ControlValueAccessor {
 
     onGetFile(file: File): void {
         const value: FileData = FileData.getFileData(file);
+        if (!value) {
+            return;
+        }
         this.files[this.fieldName] = file;
         if (this.hasPreviewImage && file.type.indexOf('image/') > -1) {
             this.imgPreview.nativeElement.style.display = 'block';
@@ -89,6 +98,25 @@ export class FileWidgetComponent implements ControlValueAccessor {
         } else {
             this.imgPreview.nativeElement.style.display = 'none';
             this.writeValue(value);
+        }
+    }
+
+    onGetData(dataString: string): void {
+        const tmpArr = dataString.split(/[\\\/]/);
+        const fileName = tmpArr.pop();
+        const fileExtension = FileData.getExtension(dataString);
+        const fileTitle = fileName.replace(`.${fileExtension}`, '');
+
+        const data = new FileData(0, fileTitle, fileExtension, 0, fileTitle, tmpArr.join('/'));
+        
+        if (FileData.getIsImageFile(data.extension)) {
+            this.imgPreview.nativeElement.style.display = 'block';
+            this.hasPreviewImage = true;
+            this.writeValue(data);
+        } else {
+            this.imgPreview.nativeElement.style.display = 'none';
+            this.hasPreviewImage = false;
+            this.writeValue(data);
         }
     }
 
@@ -116,8 +144,11 @@ export class FileWidgetComponent implements ControlValueAccessor {
     dropHandler(event: DragEvent): void {
         event.preventDefault();
         event.stopPropagation();
-        this.getFilesArr(event.dataTransfer);
-        this.onGetFile(this.filesRaw[0]);
+        
+        this.getDroppedData(event.dataTransfer);
+        if (this.filesRaw.length > 0) {
+            this.onGetFile(this.filesRaw[0]);
+        }
     }
 
     dragOverHandler(event: DragEvent): void {
@@ -150,5 +181,4 @@ export class FileWidgetComponent implements ControlValueAccessor {
     registerOnTouched(fn: any): void {
         this._onTouched = fn;
     }
-
 }

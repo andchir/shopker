@@ -289,8 +289,9 @@ class AppRuntime
         if (empty($itemData)) {
             return $defaultUrl;
         }
+        $format = !empty($itemData['fileId']) ? '/uploads/%s/%s.%s' : '%s/%s.%s';
         return sprintf(
-            '/uploads/%s/%s.%s',
+            $format,
             $itemData['dirPath'],
             $itemData['fileName'],
             $itemData['extension']
@@ -594,7 +595,7 @@ class AppRuntime
         }
         return $currentUri;
     }
-    
+
     public function getUser()
     {
         if (null === $token = $this->container->get('security.token_storage')->getToken()) {

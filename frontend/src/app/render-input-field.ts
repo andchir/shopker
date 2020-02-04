@@ -546,11 +546,29 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
         this.buildControls();
     }
 
+    /**
+     * Drop image from File Manager
+     * @param event
+     */
+    onInitTextEditor(event: any): void {
+        const quillEditorRef = event.editor;
+        event.editor.container.ondrop = (e: DragEvent) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const value = e.dataTransfer.getData('text/plain');
+            const ext = value.split('.').pop();
+            if (['jpg', 'jpeg', 'png', 'gif'].indexOf(ext.toLowerCase()) === -1) {
+                return;
+            }
+            const range = quillEditorRef.getSelection();
+            quillEditorRef.insertEmbed(range.index, 'image', value);
+        };
+    }
+
     addTranslation(fieldName: string, event: MouseEvent): void {
         if (event) {
             event.preventDefault();
         }
         this.onAddTranslation.emit(fieldName);
     }
-
 }

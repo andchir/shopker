@@ -10,7 +10,7 @@
 - Fixed redirect after authorization using "go_to" parameter in URL.
 - Templates in admin area - filter by theme name.
 - New Twig function "outputFilters" (with caching).
-- Drag and drop files from File Manager.
+- Drag and drop files from File Manager. The image can be transferred to the upload widget or to a text editor.
 
 4.1.3
 - Added package shopkeeper4-comments - Reviews and ratings.

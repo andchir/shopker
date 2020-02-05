@@ -370,6 +370,7 @@ class ProductController extends BaseProductController
             ? $data['isActive']
             : true;
 
+        $additFieldsUnused = [];
         $fileFields = [];
         $fileIds = [];
         $contentTypeFields = $contentType->getFields();
@@ -386,6 +387,12 @@ class ProductController extends BaseProductController
 
             $field = $contentTypeFields[$fIndex];
             if ($field['inputType'] == 'file') {
+                // Delete empty additional fields
+                if (!$value && strpos($key, '__') !== false) {
+                    $additFieldsUnused[] = $key;
+                    unset($document[$key]);
+                    continue;
+                }
                 if (isset($value['fileId']) && $value['fileId'] === 0) {
                     $fileFields[] = $key;
                 } else if (!empty($value['fileId'])) {
@@ -403,9 +410,13 @@ class ProductController extends BaseProductController
         // Save document
         if($itemId){
             try {
+                $update = ['$set' => $document];
+                if (!empty($additFieldsUnused)) {
+                    $update['$unset'] = array_fill_keys($additFieldsUnused, '');
+                }
                 $result = $collection->updateOne(
                     ['_id' => $itemId],
-                    ['$set' => $document]
+                    $update
                 );
             } catch (\Exception $e) {
                 $result = null;
@@ -418,7 +429,7 @@ class ProductController extends BaseProductController
             } catch (\Exception $e) {
                 $result = null;
             }
-            
+
             $eventDispatcher->dispatch($event, Events::PRODUCT_CREATED);
             $eventDispatcher->dispatch($event, Events::PRODUCT_UPDATED);
         }
@@ -429,11 +440,13 @@ class ProductController extends BaseProductController
 
         // If $fileFields is not empty it will be done after saving the files
         // Otherwise do it now
-        if (empty($fileFields)) {
+        if (empty($fileFields) && !empty($fileIds)) {
             $fileIds = array_unique($fileIds);
             $fileController = new FileController();
             $fileController->setContainer($this->container);
             $fileController->deleteUnused($contentType->getName(), $itemId, $fileIds);
+        }
+        if (!empty($fieldsSort)) {
             $this->sortAdditionalFields($contentType->getCollection(), $document, $fieldsSort);
         }
 

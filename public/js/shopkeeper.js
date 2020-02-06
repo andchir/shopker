@@ -424,11 +424,13 @@
 
         /**
          * Initialize product parameters
-         * @param formSelector
+         * @param {string} formSelector
+         * @param {string} priceElSelector
          */
-        this.productParametersInit = function(formSelector) {
+        this.productParametersInit = function(formSelector, priceElSelector) {
+            priceElSelector = priceElSelector || mainOptions.priceElSelector;
             var formEl = document.querySelector(formSelector),
-                priceEl = formEl.querySelector(mainOptions.priceElSelector);
+                priceEl = formEl.querySelector(priceElSelector);
             if (!formEl || !priceEl) {
                 return;
             }
@@ -444,12 +446,12 @@
                     case 'checkbox':
                     case 'radio':
                         inputEl.addEventListener('click', function(){
-                            self.productParametersApply(formSelector);
+                            self.productParametersApply(formSelector, priceElSelector);
                         });
                         break;
                     case 'select':
                         inputEl.addEventListener('change', function(){
-                            self.productParametersApply(formSelector);
+                            self.productParametersApply(formSelector, priceElSelector);
                         });
                         break;
                 }
@@ -458,20 +460,22 @@
             var selectElement = document.getElementById('shk-currency');
             if (selectElement) {
                 selectElement.addEventListener('change', function(e) {
-                    self.productParametersApply(formSelector);
+                    self.productParametersApply(formSelector, priceElSelector);
                 }, false);
             }
 
-            this.productParametersApply(formSelector);
+            this.productParametersApply(formSelector, priceElSelector);
         };
 
         /**
          * Apply product parameters
-         * @param formSelector
+         * @param {string} formSelector
+         * @param {string} priceElSelector
          */
-        this.productParametersApply = function(formSelector) {
+        this.productParametersApply = function(formSelector, priceElSelector) {
+            priceElSelector = priceElSelector || mainOptions.priceElSelector;
             var formEl = document.querySelector(formSelector),
-                priceEl = document.querySelector(mainOptions.priceElSelector);
+                priceEl = formEl.querySelector(priceElSelector);
             if (!formEl || !priceEl) {
                 return;
             }
@@ -509,7 +513,7 @@
                         break;
                 }
             });
-            
+
             priceEl.dataset.tempPrice = price;
             this.updateProductsPrice(null, formEl);
         };

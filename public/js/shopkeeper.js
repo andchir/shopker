@@ -515,6 +515,7 @@
             });
 
             priceEl.dataset.tempPrice = price;
+            priceEl.textContent = self.numFormat(price);
             this.updateProductsPrice(null, formEl);
         };
 

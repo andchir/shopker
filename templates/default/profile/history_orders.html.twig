@@ -125,6 +125,16 @@
                                     </tbody>
                                 </table>
 
+                                {% if order.comment is not empty %}
+                                    <div class="card mb-3">
+                                        <div class="card-body">
+                                            <b>{{ 'Comment' | trans }}:</b>
+                                            <br>
+                                            {{ order.comment | nl2br }}
+                                        </div>
+                                    </div>
+                                {% endif %}
+
                                 {% if order.paymentName is not empty %}
                                     <div class="mb-3">
                                         <span>{{ 'Payment method' | trans }}:</span>

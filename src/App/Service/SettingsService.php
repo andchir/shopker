@@ -172,14 +172,17 @@ class SettingsService
      */
     public function getCurrency()
     {
-        if (!empty($_COOKIE['shkCurrency'])) {
-            return $_COOKIE['shkCurrency'];
-        }
+        $cookieCurrency = !empty($_COOKIE['shkCurrency']) ? $_COOKIE['shkCurrency'] : '';
         $currencySettings = $this->getSettingsGroup(Setting::GROUP_CURRENCY);
         if (empty($currencySettings)) {
             return '';
         }
-        return $currencySettings[0]->getName();
+        $currencyArr = array_map(function($currencySetting) {
+            return $currencySetting->getName();
+        }, $currencySettings);
+        return !empty($cookieCurrency) && in_array($cookieCurrency, $currencyArr)
+            ? $cookieCurrency
+            : $currencyArr[0];
     }
 
     /**

@@ -18,7 +18,7 @@ omnipay:
                 password: ~
                 signature: ~
                 amount: AMOUNT
-                currency: RUB
+                currency: CURRENCY
                 testMode: true
                 returnUrl: NOTIFY_URL
                 cancelUrl: CANCEL_URL
@@ -27,7 +27,7 @@ omnipay:
                 password: ~
                 signature: ~
                 amount: AMOUNT
-                currency: RUB
+                currency: CURRENCY
                 testMode: true
                 returnUrl: NOTIFY_URL
                 cancelUrl: CANCEL_URL

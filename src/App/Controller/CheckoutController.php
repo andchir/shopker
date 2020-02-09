@@ -72,6 +72,7 @@ class CheckoutController extends BaseController
         $checkoutFields = $this->container->hasParameter('app.checkout_fields')
             ? $this->getParameter('app.checkout_fields')
             : '';
+        $paymentStatusAfterNumber = (int) $this->getParameter('app.payment_status_after_number');
         $checkoutFields = $checkoutFields ? explode(',', $checkoutFields) : [];
         $checkoutFields = array_map('trim', $checkoutFields);
 
@@ -140,7 +141,13 @@ class CheckoutController extends BaseController
 
                 $publicUserData = $form->has('options') ? array_keys($form->get('options')->all()) : [];
                 $this->filterOrderOptionsUserData($order, $publicUserData);
-
+                
+                // If the price is zero, then the order has already been paid.
+                $order->updatePriceTotal();
+                if ((float) $order->getPrice() === (float) 0 && $statusSetting = $settingsService->getOrderStatusByNumber($paymentStatusAfterNumber)) {
+                    $order->setStatus($statusSetting->getName());
+                }
+                
                 // Save user data
                 if ($user) {
                     $order->setUserId($user->getId());

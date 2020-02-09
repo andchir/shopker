@@ -82,7 +82,8 @@ export class ModalUserContentComponent extends AppModalContentAbstractComponent<
         public activeModal: NgbActiveModal,
         public translateService: TranslateService,
         public dataService: UsersService,
-        public elRef: ElementRef
+        public elRef: ElementRef,
+        private appSettings: AppSettings
     ) {
         super(fb, activeModal, translateService, dataService, elRef);
     }
@@ -97,6 +98,15 @@ export class ModalUserContentComponent extends AppModalContentAbstractComponent<
         }
         this.baseUrl = AppSettings.getBaseUrl();
         this.getUserRoles();
+    }
+
+    onAfterGetData(): void {
+        this.buildControls(this.form, this.formFields);
+        if (this.isEditMode
+            && this.appSettings.isSuperAdmin
+            && this.appSettings.settings.userEmail !== this.model.email) {
+                this.allowImpersonation = true;
+        }
     }
 
     getUserRoles(): void {

@@ -156,13 +156,14 @@ class SettingsService
 
     /**
      * @param $statusNumber
-     * @return Setting|null
+     * @param bool $getNameString
+     * @return Setting|string|null
      */
-    public function getOrderStatusByNumber($statusNumber)
+    public function getOrderStatusByNumber($statusNumber, $getNameString = false)
     {
         $orderStatusSettings = $this->getSettingsGroup(Setting::GROUP_ORDER_STATUSES);
         return isset($orderStatusSettings[$statusNumber-1])
-            ? $orderStatusSettings[$statusNumber-1]
+            ? ($getNameString ? $orderStatusSettings[$statusNumber-1]->getName() : $orderStatusSettings[$statusNumber-1])
             : null;
     }
 

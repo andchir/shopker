@@ -105,6 +105,7 @@ class CheckoutController extends BaseController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $currencyRate = $settingsService->getCurrencyRate($currency);
+            $paidStatusName = $settingsService->getOrderStatusByNumber($paymentStatusAfterNumber, true);
 
             /** @var Setting $delivery */
             $delivery = $form->has('deliveryName') ? $form->get('deliveryName')->getNormData() : '';
@@ -135,7 +136,6 @@ class CheckoutController extends BaseController
                     ->setDeliveryPrice($deliveryPrice, $currencyRate)
                     ->setPaymentValue($paymentName)
                     ->setContentFromCart($shopCartContent, $currencyRate)
-                    ->setStatus($statusName)
                     ->setCurrency($currency)
                     ->setCurrencyRate($currencyRate);
 
@@ -144,9 +144,11 @@ class CheckoutController extends BaseController
                 
                 // If the price is zero, then the order has already been paid.
                 $order->updatePriceTotal();
-                if ((float) $order->getPrice() === (float) 0 && $statusSetting = $settingsService->getOrderStatusByNumber($paymentStatusAfterNumber)) {
-                    $order->setStatus($statusSetting->getName());
+                if ((float) $order->getPrice() === (float) 0 && $paidStatusName) {
+                    $statusName = $paidStatusName;
                 }
+                
+                $order->setStatus($statusName, $paidStatusName);
                 
                 // Save user data
                 if ($user) {

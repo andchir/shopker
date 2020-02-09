@@ -250,11 +250,15 @@ class Order
      * Set status
      *
      * @param string $status
+     * @param string $paidStatusName
      * @return $this
      */
-    public function setStatus($status)
+    public function setStatus($status, $paidStatusName = '')
     {
         $this->status = $status;
+        if ($status === $paidStatusName) {
+            $this->setIsPaid(true);
+        }
         return $this;
     }
 

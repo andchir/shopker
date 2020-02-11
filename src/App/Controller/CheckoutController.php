@@ -139,8 +139,9 @@ class CheckoutController extends BaseController
                     ->setCurrency($currency)
                     ->setCurrencyRate($currencyRate);
 
+                // Filter options by public data keys
                 $publicUserData = $form->has('options') ? array_keys($form->get('options')->all()) : [];
-                $this->filterOrderOptionsUserData($order, $publicUserData);
+                $order->filterOptionsByPublic($publicUserData);
                 
                 // If the price is zero, then the order has already been paid.
                 $order->updatePriceTotal();

@@ -2,6 +2,7 @@
 
 namespace App\EventSubscriber;
 
+use App\Form\Type\OrderType;
 use App\MainBundle\Document\ContentType;
 use App\MainBundle\Document\Order;
 use App\Events;
@@ -14,6 +15,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class OrderSubscriber implements EventSubscriberInterface
@@ -29,6 +32,8 @@ class OrderSubscriber implements EventSubscriberInterface
     protected $translator;
     /** @var ParameterBagInterface */
     protected $params;
+    /** @var FormFactoryInterface */
+    protected $formFactory;
     /** @var DocumentManager */
     protected $dm;
 
@@ -39,6 +44,7 @@ class OrderSubscriber implements EventSubscriberInterface
         UtilsService $utilsService,
         TranslatorInterface $translator,
         ParameterBagInterface $params,
+        FormFactoryInterface $formFactory,
         DocumentManager $dm
     ) {
         $this->catalogService = $catalogService;
@@ -46,6 +52,7 @@ class OrderSubscriber implements EventSubscriberInterface
         $this->utilsService = $utilsService;
         $this->translator = $translator;
         $this->params = $params;
+        $this->formFactory = $formFactory;
         $this->dm = $dm;
     }
 
@@ -90,6 +97,11 @@ class OrderSubscriber implements EventSubscriberInterface
         $emailSubject = $isOrderNew
             ? $this->params->get('app.name') . ' - ' . $this->translator->trans('mail_subject.new_order')
             : $this->params->get('app.name') . ' - ' . $this->translator->trans('mail_subject.order_status_change');
+
+        // Filter options by public data keys
+        $form = $this->createForm(OrderType::class);
+        $publicUserData = $form->has('options') ? array_keys($form->get('options')->all()) : [];
+        $order->filterOptionsByPublic($publicUserData);
 
         $this->utilsService->orderSendMail(
             $emailSubject,
@@ -166,6 +178,17 @@ class OrderSubscriber implements EventSubscriberInterface
                 ]
             );
         }
+    }
+
+    /**
+     * @param string $type
+     * @param null $data
+     * @param array $options
+     * @return FormInterface
+     */
+    protected function createForm($type, $data = null, $options = [])
+    {
+        return $this->formFactory->create($type, $data, $options);
     }
 }
 

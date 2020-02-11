@@ -813,6 +813,18 @@ class Order
     }
 
     /**
+     * @param $publicDataKeys
+     */
+    public function filterOptionsByPublic($publicDataKeys)
+    {
+        $orderOptions = $this->getOptions();
+        $orderOptions = array_filter($orderOptions, function($value) use ($publicDataKeys) {
+            return in_array($value['name'], $publicDataKeys);
+        });
+        $this->setOptions($orderOptions);
+    }
+
+    /**
      * @param array $options
      * @param array $productOptions
      * @param array $deliveryOptions

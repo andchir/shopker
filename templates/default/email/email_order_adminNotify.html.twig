@@ -68,7 +68,7 @@
                     {% if order.comment is not empty %}
                         <tr>
                             <td>{{ 'Comment' | trans }}:</td>
-                            <td><b>{{ order.comment }}</b></td>
+                            <td>{{ order.comment | nl2br }}</td>
                         </tr>
                     {% endif %}
                 </table>

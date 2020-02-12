@@ -561,7 +561,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                 return;
             }
             const range = quillEditorRef.getSelection();
-            quillEditorRef.insertEmbed(range.index, 'image', value);
+            quillEditorRef.insertEmbed(range.index, 'image', value, 'user');
         };
     }
 

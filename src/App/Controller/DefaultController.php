@@ -205,12 +205,17 @@ class DefaultController extends Controller
                     $data['mongodb_password'] = '';
                     $serverUrl = "mongodb://{$data['mongodb_server']}:{$data['mongodb_port']}";
                 } else {
-                    $serverUrl = "mongodb://{$data['mongodb_user']}:{$data['mongodb_password']}@{$data['mongodb_server']}:{$data['mongodb_port']}";
+                    $serverUrl = "mongodb://{$data['mongodb_user']}:{$data['mongodb_password']}@{$data['mongodb_server']}";
+                    if ($data['mongodb_port']) {
+                        $serverUrl .= ':' . $data['mongodb_port'];
+                    }
                 }
+                $serverUrl .= '/' . $data['mongodb_database'];
 
                 try {
                     $mongoClient = new \MongoDB\Client($serverUrl, [], ['typeMap' => ['root' => 'array', 'document' => 'array']]);
-                    $connectResult = $mongoClient->listDatabases();
+                    // $connectResult = $mongoClient->listDatabases();
+                    $connectResult = true;
                 } catch (\Exception $e) {
                     $connectResult = false;
                 }

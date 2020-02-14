@@ -41,12 +41,13 @@
                 </div>
             {% endif %}
 
-            <div class="mb-3">
+            <div class="mb-5">
                 <h3>{{ 'New items' | trans }}</h3>
+
                 {{ contentList(
                 'content_list_slider',
                 'products',
-                {"isActive": true, "tags": {"$elemMatch": {"$in": ["Новинка"]}}},
+                {"isActive": true, "tags": {"$elemMatch": {"$in": ["New" | trans]}}},
                 {"_id": "desc"},
                 20, 4, 'homepage_novelty', 'hn_page', 'hn_limit', {currency: currency, sliderName: 'Novelty'}
                 ) }}

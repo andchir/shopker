@@ -173,8 +173,11 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle { top: 16px; right: -7px; left
 .noUi-value-horizontal { transform: translate(-50%, 80%); }
 
 /* shop_cart */
-.shop-cart-bottom { position: fixed; left: 0; bottom: 0; width: 100%; z-index: 10; }
-.shop-cart-bottom-b { width: 100%; padding: 10px; background-color: #17a2b8; box-shadow: 0 0 40px rgba(0,0,0,0.4); border-top: 1px solid #fff; color: #fff; z-index: 200; }
+.shop-cart-bottom {  }
+.shop-cart-bottom-container { height: 60px; }
+.shop-cart-bottom-b { position: fixed; left: 0; bottom: 0; width: 100%; padding: 10px; background-color: #17a2b8; box-shadow: 0 0 40px rgba(0,0,0,0.4); border-top: 1px solid #fff; color: #fff; z-index: 200; }
+.shop-cart-bottom.shopping-cart-loading:before { position: fixed; height: 60px; top: auto; bottom: 0; z-index: 201; }
+.shop-cart-bottom.shopping-cart-loading:after { position: fixed; top: auto; bottom: 8px; z-index: 202; }
 
 /* show-on-hover */
 .show-on-hover-parent { position: relative; }

@@ -2,6 +2,7 @@
 - Filter order options, remove private data.
 - Fixed inserting a picture into a text editor from the file manager.
 - Updated shopping cart styles at the bottom of the page.
+- Updating the names of payment system parameters Robokassa according to new documentation.
 
 4.1.4
 - Added functionality for accounting for product balances in stock.

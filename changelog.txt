@@ -4,6 +4,7 @@
 - Updated shopping cart styles at the bottom of the page.
 - Updating the names of payment system parameters Robokassa according to new documentation.
 - Ability to connect to the database using URI.
+- Fixed opening a drop-down menu when clicking on mobile devices.
 
 4.1.4
 - Added functionality for accounting for product balances in stock.

@@ -219,3 +219,6 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle { top: 16px; right: -7px; left
     .dots-menu ul .nav-item.nav-item-parent > .nav-link:after { border-color: #5e6c72 transparent transparent transparent; }
 }
 
+.dots-menu .nav-item.drop-right ul .nav-item.nav-item-parent > .nav-link:before { border-color: transparent #505b61 transparent transparent; }
+.dots-menu .nav-item.drop-right ul .nav-item.nav-item-parent:hover:after { border-color: transparent #343a40 transparent transparent; }
+.dots-menu .nav-item.drop-right ul .nav-item.nav-item-parent:hover:before { border-color: transparent #505b61 transparent transparent; }

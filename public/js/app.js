@@ -13,7 +13,8 @@ global.noUiSlider = noUiSlider;
 global.DotsMenu = DotsMenu;
 global.shk = new Shopkeeper();
 global.dotsMenu = new DotsMenu({
-    dotsMenuButtonPosition: 'left'
+    dotsMenuButtonPosition: 'left',
+    rightSpace: 165
 });
 global.ShoppingCart = ShoppingCart;
 

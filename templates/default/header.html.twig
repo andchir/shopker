@@ -1,60 +1,60 @@
 <nav class="navbar-header navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container d-block">
-        <div class="float-right mt-1 pt-2 pr-3 pr-lg-0">
+        <div class="position-relative">
+            <div class="navbar-header-right">
 
-            <div class="d-inline-block">
-                {% if is_granted('ROLE_USER') %}
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <a class="btn btn-sm btn-outline-primary" data-toggle="tooltip" title="{{ 'Administration' | trans }}" href="{{ path('admin') }}" rel="nofollow">
-                            <i class="icon-cog"></i>
-                        </a>
-                    {% endif %}
-                    <div class="d-inline-block ml-1">
-                        <div class="dropdown">
-                            <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                                <i class="icon-head"></i>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item" href="{{ pathLocalized('profile_history_orders') }}" rel="nofollow">
-                                    <i class="icon-list text-muted"></i>
-                                    &nbsp;
-                                    {{ 'History of orders' | trans }}
-                                </a>
-                                <a class="dropdown-item" href="{{ pathLocalized('profile_contacts') }}" rel="nofollow">
-                                    <i class="icon-head text-muted"></i>
-                                    &nbsp;
-                                    {{ 'Contact details' | trans }}
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
-                                    <a class="dropdown-item text-muted" href="{{ path('homepage', {'_switch_user': '_exit'}) }}" rel="nofollow">
-                                        <i class="icon-esc"></i>
+                <div class="d-inline-block">
+                    {% if is_granted('ROLE_USER') %}
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <a class="btn btn-sm btn-outline-primary" data-toggle="tooltip" title="{{ 'Administration' | trans }}" href="{{ path('admin') }}" rel="nofollow">
+                                <i class="icon-cog"></i>
+                            </a>
+                        {% endif %}
+                        <div class="d-inline-block ml-1">
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                    <i class="icon-head"></i>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" href="{{ pathLocalized('profile_history_orders') }}" rel="nofollow">
+                                        <i class="icon-list text-muted"></i>
                                         &nbsp;
-                                        {{ 'Exit impersonation' | trans }}
+                                        {{ 'History of orders' | trans }}
                                     </a>
-                                {% endif %}
-                                <a class="dropdown-item text-muted" href="{{ logout_path() }}" rel="nofollow">
-                                    <i class="icon-power"></i>
-                                    &nbsp;
-                                    {{ 'Log out' | trans }}
-                                </a>
+                                    <a class="dropdown-item" href="{{ pathLocalized('profile_contacts') }}" rel="nofollow">
+                                        <i class="icon-head text-muted"></i>
+                                        &nbsp;
+                                        {{ 'Contact details' | trans }}
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+                                        <a class="dropdown-item text-muted" href="{{ path('homepage', {'_switch_user': '_exit'}) }}" rel="nofollow">
+                                            <i class="icon-esc"></i>
+                                            &nbsp;
+                                            {{ 'Exit impersonation' | trans }}
+                                        </a>
+                                    {% endif %}
+                                    <a class="dropdown-item text-muted" href="{{ logout_path() }}" rel="nofollow">
+                                        <i class="icon-power"></i>
+                                        &nbsp;
+                                        {{ 'Log out' | trans }}
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                {% else %}
-                    <a class="btn btn-sm btn-outline-primary ml-1" href="{{ pathLocalized('login') }}" rel="nofollow">
-                        {{ 'Log in' | trans }}
-                        <i class="icon-unlock"></i>
-                    </a>
-                {% endif %}
-            </div>
+                    {% else %}
+                        <a class="btn btn-sm btn-outline-primary ml-1" href="{{ pathLocalized('login') }}" rel="nofollow">
+                            {{ 'Log in' | trans }}
+                            <i class="icon-unlock"></i>
+                        </a>
+                    {% endif %}
+                </div>
 
-            <div class="d-inline-block ml-1">
-                {{ settingsList('SETTINGS_LANGUAGES', 'languages_list', false, true) }}
-            </div>
+                <div class="d-inline-block ml-1">
+                    {{ settingsList('SETTINGS_LANGUAGES', 'languages_list', false, true) }}
+                </div>
 
-        </div>
-        <div style="margin-right: 175px;">
+            </div>
             {{ categoriesTree(0, 'menu_dropdown', null, activeCategoriesIds, true) }}
         </div>
     </div>

@@ -60,6 +60,7 @@ header .header-brand { display: inline-block; padding: 0.1rem 0.2rem 0 0; font-s
     .navbar-header > .container { padding-left: 15px; padding-right: 15px; }
 }
 .navbar-header { padding: 0; }
+.navbar-header-right { position: absolute; right: 0; top: 9px; z-index: 10; }
 
 /* menu-dropdown */
 .menu-dropdown.navbar-nav li { position: relative; }
@@ -79,6 +80,7 @@ header .header-brand { display: inline-block; padding: 0.1rem 0.2rem 0 0; font-s
     .menu-dropdown.navbar-nav > li > a.nav-link { padding: 0.6rem; }
     .menu-dropdown.navbar-nav li.parent > ul { display: none; }
     .menu-dropdown.navbar-nav li.parent:before { display: none; }
+    .navbar-header-right { right: 15px; }
 }
 
 /* Bredcrumbs */

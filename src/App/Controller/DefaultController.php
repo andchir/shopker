@@ -200,7 +200,9 @@ class DefaultController extends Controller
 
             if ($form->isValid() && !$data['form_reload']) {
 
-                if (empty($data['mongodb_user']) && empty($data['mongodb_password'])) {
+                if (!empty($data['mongodb_uri'])) {
+                    $serverUrl = $data['mongodb_uri'];
+                } else if (empty($data['mongodb_user']) && empty($data['mongodb_password'])) {
                     $data['mongodb_user'] = '';
                     $data['mongodb_password'] = '';
                     $serverUrl = "mongodb://{$data['mongodb_server']}:{$data['mongodb_port']}";
@@ -210,7 +212,6 @@ class DefaultController extends Controller
                         $serverUrl .= ':' . $data['mongodb_port'];
                     }
                 }
-                $serverUrl .= '/' . $data['mongodb_database'];
 
                 try {
                     $mongoClient = new \MongoDB\Client($serverUrl, [], ['typeMap' => ['root' => 'array', 'document' => 'array']]);
@@ -230,7 +231,7 @@ class DefaultController extends Controller
                     try {
                         $collections = $dataBase->listCollections();
                     } catch (\Exception $e) {
-                        $form->addError(new FormError($translator->trans('install.mongodb_database_not_permitted', [], 'validators')));
+                        $form->addError(new FormError($translator->trans('install.mongodb_connection_fail', [], 'validators')));
                     }
 
                     if ($form->isValid() && $collections && iterator_count($collections) > 0) {

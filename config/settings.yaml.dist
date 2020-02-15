@@ -7,6 +7,7 @@ parameters:
     mongodb_user: root
     mongodb_password: ''
     mongodb_database: ''
+    mongodb_uri: ''
     mailer_transport: smtp
     mailer_host: 127.0.0.1
     mailer_port: 25

@@ -230,6 +230,7 @@ var APP_LANG = {
     "mongodb_port": "MongoDB: Порт",
     "mongodb_server": "MongoDB: Сервер",
     "mongodb_user": "MongoDB: Пользоватеь",
+    "mongodb_uri": "MongoDB: URI подключения",
     "IMPORT": "Импорт",
     "EXPORT": "Экспорт",
     "ALIAS_ADDITIONAL_FIELD": "Дополнительное поле для псевдонима",

@@ -229,5 +229,6 @@
 	"mongodb_password": "MongoDB: Пароль",
 	"mongodb_port": "MongoDB: Порт",
 	"mongodb_server": "MongoDB: Сервер",
-	"mongodb_user": "MongoDB: Пользоватеь"
+	"mongodb_user": "MongoDB: Пользоватеь",
+    "mongodb_uri": "MongoDB: URI подключения"
 }

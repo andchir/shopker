@@ -34,11 +34,11 @@ class SetupType extends AbstractType
             ])
             ->add('mongodb_server', TextType::class, [
                 'label' => 'Server',
-                'constraints' => new NotBlank()
+                'required' => false
             ])
             ->add('mongodb_port', TextType::class, [
                 'label' => 'Port',
-                'constraints' => new NotBlank()
+                'required' => false
             ])
             ->add('mongodb_user', TextType::class, [
                 'label' => 'User name',
@@ -47,6 +47,11 @@ class SetupType extends AbstractType
             ->add('mongodb_password', PasswordType::class, [
                 'label' => 'Password',
                 'required' => false
+            ])
+            ->add('mongodb_uri', TextType::class, [
+                'label' => 'Database connection URI (Optional)',
+                'required' => false,
+                'help' => 'mongodb://[username:password@]host1[:port1][,...hostN[:portN]][/[database][?options]]'
             ])
             ->add('mongodb_database', TextType::class, [
                 'label' => 'Database name',

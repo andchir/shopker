@@ -230,6 +230,7 @@ var APP_LANG = {
     "mongodb_port": "MongoDB: Port",
     "mongodb_server": "MongoDB server",
     "mongodb_user": "MongoDB user",
+    "mongodb_uri": "MongoDB: Connection URI",
     "IMPORT": "Import",
     "EXPORT": "Export",
     "ALIAS_ADDITIONAL_FIELD": "Additional field for alias",

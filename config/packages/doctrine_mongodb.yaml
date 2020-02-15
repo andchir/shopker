@@ -5,6 +5,7 @@ doctrine_mongodb:
         default:
             server: 'mongodb://%mongodb_user%:%mongodb_password%@%mongodb_server%:%mongodb_port%'
             #server: 'mongodb://%mongodb_server%:%mongodb_port%'
+            #server: '%mongodb_uri%'
             options: {}
     default_database: '%mongodb_database%'
     document_managers:

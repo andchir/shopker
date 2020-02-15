@@ -8,6 +8,7 @@ Server: Сервер
 Port: Порт
 User name: Имя пользователя
 Database name: Имя базы данных
+Database connection URI (Optional): URI для подключения (не обязательно)
 Clear the database: Очистить базу данных
 Russian: Русский
 

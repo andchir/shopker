@@ -31,6 +31,7 @@ parameters:
     mongodb_user: ''
     mongodb_password: ''
     mongodb_database: ''
+    mongodb_uri: 'mongodb://127.0.0.1:27017'
     mailer_transport: smtp
     mailer_host: 127.0.0.1
     mailer_port: '465'

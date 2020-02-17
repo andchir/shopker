@@ -15,11 +15,11 @@
     "bootstrap": "^4.4.1",
     "jquery": "^3.4.1",
     "nouislider": "^12.1.0",
-    "popper.js": "^1.16.0",
+    "popper.js": "^1.16.1",
     "wnumb": "^1.2.0"
   },
   "devDependencies": {
     "@symfony/webpack-encore": "^0.27.0",
-    "serialize-javascript": ">=2.1.1"
+    "serialize-javascript": "^3.0.0"
   }
 }

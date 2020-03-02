@@ -101,17 +101,6 @@ class SettingsService
     }
 
     /**
-     * Delete system cache files
-     * @return bool
-     */
-    public function systemCacheFilesDelete()
-    {
-        $rootPath = dirname($this->container->get('kernel')->getRootDir());
-        $cacheDirPath = $rootPath . '/var/cache';
-        return self::delDir($cacheDirPath);
-    }
-
-    /**
      * @param $data
      * @param string $yamlFileName
      * @return bool|int
@@ -211,12 +200,16 @@ class SettingsService
 
     /**
      * Clear system cache
+     * @param bool $deleteCacheDir
      * @param null $environment
      * @return string
      * @throws \Exception
      */
-    public function systemCacheClear($environment = null)
+    public function systemCacheClear($deleteCacheDir = true, $environment = null)
     {
+        if ($deleteCacheDir) {
+            return $this->systemCacheFilesDelete();
+        }
         /** @var KernelInterface $kernel */
         $kernel = $this->container->get('kernel');
         if (!$environment) {
@@ -228,14 +221,44 @@ class SettingsService
         $input = new ArrayInput([
             'command' => 'cache:clear',
             '--env' => $environment,
-            '--quiet' => ''
+            '--quiet' => '1',
+            '--no-warmup' => '1'
         ]);
 
         $output = new BufferedOutput();
         $application->run($input, $output);
         $output->fetch();
 
-        return $output->fetch();
+        return $output->fetch() ?: true;
+    }
+
+    /**
+     * Delete system cache files
+     * @return bool
+     */
+    public function systemCacheFilesDelete()
+    {
+        /** @var KernelInterface $kernel */
+        $kernel = $this->container->get('kernel');
+        $cacheDirPath = $kernel->getCacheDir();
+        if (!is_dir($cacheDirPath)) {
+            return true;
+        }
+        $uniqid = uniqid();
+
+        try {
+            rename($cacheDirPath, $cacheDirPath . '_' . $uniqid);
+            self::delDir($cacheDirPath . '_' . $uniqid);
+            $result = true;
+        } catch (\Exception $e) {
+            $result = false;
+        }
+
+        if ($result) {
+            $kernel->reboot($cacheDirPath);
+        }
+
+        return $result;
     }
 
     /**

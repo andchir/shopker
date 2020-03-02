@@ -29,8 +29,25 @@ use Doctrine\Common\DataFixtures\Loader as DataFixturesLoader;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
 
+/**
+ * Class DefaultController
+ * @package App\Controller
+ */
 class DefaultController extends Controller
 {
+
+    /** @var SettingsService */
+    protected $settingsService;
+
+    /**
+     * DefaultController constructor.
+     * @param SettingsService $settingsService
+     */
+    public function __construct(SettingsService $settingsService)
+    {
+        $this->settingsService = $settingsService;
+    }
+
     /**
      * @Route(
      *     "/{_locale}/",
@@ -375,35 +392,16 @@ class DefaultController extends Controller
 
     /**
      * Clear system cache
-     * @param null $environment
      * @param bool $clearFileCache
-     * @return string
+     * @return string|bool
+     * @throws \Exception
      */
-    public function systemCacheClear($environment = null, $clearFileCache = true)
+    public function systemCacheClear($clearFileCache = true)
     {
         if ($clearFileCache) {
-            /** @var FilesystemAdapter $cache */
-            $cache = $this->container->get('app.filecache');
-            $cache->clear();
+            $this->settingsService->fileCacheClear();
         }
-        /** @var KernelInterface $kernel */
-        $kernel = $this->container->get('kernel');
-        if (!$environment) {
-            $environment = $kernel->getEnvironment();
-        }
-        $application = new Application($kernel);
-        $application->setAutoExit(false);
-
-        $input = new ArrayInput([
-            'command' => 'cache:clear',
-            '--env' => $environment,
-            '--quiet' => ''
-        ]);
-
-        $output = new BufferedOutput();
-        $application->run($input, $output);
-
-        return $output->fetch();
+        return $this->settingsService->systemCacheClear();
     }
 
 }

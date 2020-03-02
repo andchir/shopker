@@ -208,10 +208,10 @@ class SettingsController extends Controller
      */
     public function systemCacheClearAction(SettingsService $settingsService)
     {
-        $result = $settingsService->systemCacheClear();
+        $result = $settingsService->systemCacheFilesDelete();
 
         return $this->json([
-            'success' => true
+            'success' => $result
         ]);
     }
 

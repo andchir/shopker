@@ -401,7 +401,7 @@ class DefaultController extends Controller
         if ($clearFileCache) {
             $this->settingsService->fileCacheClear();
         }
-        return $this->settingsService->systemCacheClear();
+        return $this->settingsService->systemCacheClear(false);
     }
 
 }

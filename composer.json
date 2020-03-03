@@ -17,6 +17,7 @@
         "doctrine/doctrine-fixtures-bundle": "^3.2",
         "doctrine/mongodb-odm-bundle": "^4.0",
         "gregwar/captcha-bundle": "^2.0",
+        "laminas/laminas-code": "^3.4",
         "liip/imagine-bundle": "^2.1",
         "mongodb/mongodb": "^1.4",
         "phpoffice/phpspreadsheet": "^1.10",
@@ -41,8 +42,7 @@
         "symfony/twig-bundle": "*",
         "symfony/validator": "*",
         "symfony/web-link": "*",
-        "symfony/yaml": "*",
-        "zendframework/zend-code": "^3.4"
+        "symfony/yaml": "*"
     },
     "require-dev": {
         "symfony/debug-pack": "*",

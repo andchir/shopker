@@ -205,7 +205,7 @@ class SettingsService
      * @return string
      * @throws \Exception
      */
-    public function systemCacheClear($deleteCacheDir = true, $environment = null)
+    public function systemCacheClear($deleteCacheDir = false, $environment = null)
     {
         if ($deleteCacheDir) {
             return $this->systemCacheFilesDelete();
@@ -223,6 +223,7 @@ class SettingsService
             '--env' => $environment,
             '--quiet' => '1',
             '--no-warmup' => '1'
+            // '--no-optional-warmers' => '1'
         ]);
 
         $output = new BufferedOutput();
@@ -241,14 +242,17 @@ class SettingsService
         /** @var KernelInterface $kernel */
         $kernel = $this->container->get('kernel');
         $cacheDirPath = $kernel->getCacheDir();
+        $warmupDir = $cacheDirPath . '_';
         if (!is_dir($cacheDirPath)) {
             return true;
         }
-        $uniqid = uniqid();
+
+        if (is_dir($warmupDir)) {
+            self::delDir($warmupDir);
+        }
 
         try {
-            rename($cacheDirPath, $cacheDirPath . '_' . $uniqid);
-            self::delDir($cacheDirPath . '_' . $uniqid);
+            rename($cacheDirPath, $warmupDir);
             $result = true;
         } catch (\Exception $e) {
             $result = false;

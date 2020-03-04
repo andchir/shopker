@@ -15,7 +15,8 @@ use App\Service\SettingsService;
 use App\Service\ShopCartService;
 use App\Service\UtilsService;
 use Doctrine\ODM\MongoDB\DocumentManager;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
@@ -34,10 +35,20 @@ use App\Form\Type\RegistrationType;
 use App\Form\Model\Registration;
 use App\Form\Model\ResetPassword;
 use App\Form\Type\ResetPasswordType;
-use App\Form\Type\UserType;
 
-class AccountController extends Controller
+class AccountController extends AbstractController
 {
+
+    /** @var ParameterBagInterface */
+    protected $params;
+    /** @var DocumentManager */
+    private $dm;
+
+    public function __construct(ParameterBagInterface $params, DocumentManager $dm)
+    {
+        $this->params = $params;
+        $this->dm = $dm;
+    }
 
     /**
      * @Route(
@@ -54,7 +65,7 @@ class AccountController extends Controller
     {
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
-        
+
         return $this->render('security/login.html.twig', [
             'target_path' => $request->get('go_to', ''),
             'failure_path' => $request->get('back_to', ''),
@@ -73,14 +84,15 @@ class AccountController extends Controller
      * @param Request $request
      * @param UserPasswordEncoderInterface $encoder
      * @param TranslatorInterface $translator
-     * @param DocumentManager $dm
+     * @param EventDispatcher $evenDispatcher
      * @return RedirectResponse|Response
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function registerAction(
         Request $request,
         UserPasswordEncoderInterface $encoder,
         TranslatorInterface $translator,
-        DocumentManager $dm
+        EventDispatcher $evenDispatcher
     )
     {
         $form = $this->createForm(RegistrationType::class, new Registration());
@@ -108,15 +120,13 @@ class AccountController extends Controller
                     ->setRoles(['ROLE_USER'])
                     ->setPassword($encodedPassword);
 
-                $dm->persist($user);
-                $dm->flush();
+                $this->dm->persist($user);
+                $this->dm->flush();
 
                 $request->getSession()
                     ->getFlashBag()
                     ->add('messages', 'You are successfully registered. Now you can enter.');
 
-                /** @var EventDispatcher $evenDispatcher */
-                $evenDispatcher = $this->get('event_dispatcher');
                 $event = new UserRegisteredEvent($user, $request);
                 $evenDispatcher->dispatch($event, UserRegisteredEvent::NAME);
 
@@ -141,14 +151,13 @@ class AccountController extends Controller
      * @param Request $request
      * @param TranslatorInterface $translator
      * @param UtilsService $utilsService
-     * @param DocumentManager $dm
      * @return Response
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function passwordResetAction(
         Request $request,
         TranslatorInterface $translator,
-        UtilsService $utilsService,
-        DocumentManager $dm
+        UtilsService $utilsService
     )
     {
         $form = $this->createForm(ResetPasswordType::class, new ResetPassword());
@@ -173,7 +182,7 @@ class AccountController extends Controller
                     ->setNewPassword($newPassword)
                     ->setSecretCode($confirmCode);
 
-                $dm->flush();
+                $this->dm->flush();
 
                 $siteURL = ($request->server->get('HTTPS') ? 'https' : 'http')
                     . "://{$request->server->get('HTTP_HOST')}/";
@@ -186,7 +195,7 @@ class AccountController extends Controller
                 ));
 
                 $utilsService->sendMail(
-                    $this->getParameter('app.name') . ' - ' . $translator->trans('password_reset.mail_subject'),
+                    $this->params->get('app.name') . ' - ' . $translator->trans('password_reset.mail_subject'),
                     $emailBody,
                     $email
                 );
@@ -208,15 +217,14 @@ class AccountController extends Controller
      * @param UserPasswordEncoderInterface $encoder
      * @param $email
      * @param $code
-     * @param DocumentManager $dm
      * @return Response
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function passwordConfirmAction(
         Request $request,
         UserPasswordEncoderInterface $encoder,
         $email,
-        $code,
-        DocumentManager $dm
+        $code
     )
     {
         $userRepository = $this->getUserRepository();
@@ -234,7 +242,7 @@ class AccountController extends Controller
                     ->setPassword($encodedPassword)
                     ->setNewPassword(null)
                     ->setSecretCode(null);
-                $dm->flush();
+                $this->dm->flush();
             }
 
             $request->getSession()
@@ -255,15 +263,14 @@ class AccountController extends Controller
      * @param EventDispatcherInterface $eventDispatcher
      * @param $email
      * @param $code
-     * @param DocumentManager $dm
      * @return Response
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function emailConfirmAction(
         Request $request,
         EventDispatcherInterface $eventDispatcher,
         $email,
-        $code,
-        DocumentManager $dm
+        $code
     )
     {
         $userRepository = $this->getUserRepository();
@@ -277,7 +284,7 @@ class AccountController extends Controller
             $user
                 ->setSecretCode(null)
                 ->setIsActive(true);
-            $dm->flush();
+            $this->dm->flush();
 
             // Dispatch event
             $event = new GenericEvent($user);
@@ -321,10 +328,10 @@ class AccountController extends Controller
      * @Route("/profile/change_password", name="profile_change_password")
      * @param Request $request
      * @param UserPasswordEncoderInterface $encoder
-     * @param DocumentManager $dm
      * @return RedirectResponse|Response
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
-    public function profileChangePasswordAction(Request $request, UserPasswordEncoderInterface $encoder, DocumentManager $dm)
+    public function profileChangePasswordAction(Request $request, UserPasswordEncoderInterface $encoder)
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -341,7 +348,7 @@ class AccountController extends Controller
                 ->setPassword($encodedPassword)
                 ->setNewPassword(null)
                 ->setSecretCode(null);
-            $dm->flush();
+            $this->dm->flush();
 
             $request->getSession()
                 ->getFlashBag()
@@ -374,20 +381,18 @@ class AccountController extends Controller
      * @param SettingsService $settingsService
      * @return RedirectResponse|Response
      */
-    public function historyOrdersAction(Request $request, $page, $orderId, SettingsService $settingsService)
+    public function historyOrdersAction(Request $request, $page, $orderId, SettingsService $settingsService, ShopCartService $shopCartService )
     {
         $pageLimit = 10;
 
         /** @var User $user */
         $user = $this->getUser();
-        /** @var ShopCartService $shopCartService */
-        $shopCartService = $this->get('app.shop_cart');
         $orderStatusSettings = $settingsService->getSettingsGroup(Setting::GROUP_ORDER_STATUSES);
         $orderId = intval($orderId);
 
         $orderRepository = $this->getOrderRepository();
         $total = $orderRepository->getCountByUserId($user->getId());
-        $paymentStatusNumber = (int) $this->getParameter('app.payment_status_number');
+        $paymentStatusNumber = (int) $this->params->get('app.payment_status_number');
 
         $pagesOptions = UtilsService::getPagesOptions([
             'page' => $page,
@@ -428,8 +433,8 @@ class AccountController extends Controller
             'currentOrderId' => $orderId,
             'receipt' => $receipt,
             'receiptJSON' => json_encode($receipt, JSON_UNESCAPED_UNICODE),
-            'receiptOptionName' => $this->container->hasParameter('app.receipt_option_name')
-                ? $this->getParameter('app.receipt_option_name')
+            'receiptOptionName' => $this->params->has('app.receipt_option_name')
+                ? $this->params->get('app.receipt_option_name')
                 : 'receipt',
             'orderStatusSettings' => $orderStatusSettings,
             'paymentStatusNumber' => $paymentStatusNumber,
@@ -447,20 +452,19 @@ class AccountController extends Controller
      * @Route("/profile/profile_contacts", name="profile_contacts")
      * @param Request $request
      * @return RedirectResponse|Response
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function contactsAction(Request $request)
     {
         /** @var User $user */
         $user = $this->getUser();
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
 
         $form = $this->createForm(UserProfileType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $dm->flush();
+            $this->dm->flush();
 
             $request->getSession()
                 ->getFlashBag()
@@ -477,9 +481,7 @@ class AccountController extends Controller
      */
     public function getUserRepository()
     {
-        return $this->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository(User::class);
+        return $this->dm->getRepository(User::class);
     }
 
     /**
@@ -487,8 +489,6 @@ class AccountController extends Controller
      */
     public function getOrderRepository()
     {
-        return $this->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository(Order::class);
+        return $this->dm->getRepository(Order::class);
     }
 }

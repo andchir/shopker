@@ -3,6 +3,7 @@ twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
     form_themes: ['bootstrap_4_layout.html.twig']
+    exception_controller: ~
     globals:
         app_name: '%app.name%'
         app_logo_image_url: '%app.logo_image_url%'

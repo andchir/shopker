@@ -21,7 +21,7 @@ class ExceptionListener
 
     public function onKernelException(ExceptionEvent $event)
     {
-        $exception = $event->getException();
+        $exception = $event->getThrowable();
         $request = $event->getRequest();
         $rootPath = realpath($this->container->getParameter('kernel.root_dir').'/../..');
         $environment = $this->container->get('kernel')->getEnvironment();
@@ -64,7 +64,7 @@ class ExceptionListener
                 'activeCategoriesIds' => []
             ]);
         }
-        
+
         if (is_array($content)) {
             $response = new JsonResponse($content);
         } else {

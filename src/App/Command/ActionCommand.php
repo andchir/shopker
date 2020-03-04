@@ -36,11 +36,12 @@ class ActionCommand extends Command
         DataBaseUtilService $databaseUtilService
     )
     {
+        parent::__construct();
+
         $this->params = $params;
         $this->dm = $dm;
         $this->catalogService = $catalogService;
         $this->databaseUtilService = $databaseUtilService;
-        parent::__construct();
     }
 
     protected function configure()

@@ -74,16 +74,16 @@
         },
         {
             "name": "andchir/omnipay-bundle",
-            "version": "1.0.15",
+            "version": "1.0.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/andchir/omnipay-bundle.git",
-                "reference": "8647a9c3782a25dc1ccfb39925ae3c6a61b325b7"
+                "reference": "507580cd7eb30398242d3e789723ba6b4cc9434d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/andchir/omnipay-bundle/zipball/8647a9c3782a25dc1ccfb39925ae3c6a61b325b7",
-                "reference": "8647a9c3782a25dc1ccfb39925ae3c6a61b325b7",
+                "url": "https://api.github.com/repos/andchir/omnipay-bundle/zipball/507580cd7eb30398242d3e789723ba6b4cc9434d",
+                "reference": "507580cd7eb30398242d3e789723ba6b4cc9434d",
                 "shasum": ""
             },
             "require": {
@@ -118,7 +118,7 @@
                 "shopkeeper",
                 "symfony"
             ],
-            "time": "2019-06-08T17:29:02+00:00"
+            "time": "2020-03-04T09:00:45+00:00"
         },
         {
             "name": "andchir/omnipay3-yandexkassa",
@@ -9239,16 +9239,16 @@
         },
         {
             "name": "symfony/maker-bundle",
-            "version": "v1.14.4",
+            "version": "v1.14.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/maker-bundle.git",
-                "reference": "b06ebe524357945a4e7ffee42ade880bdf9e1500"
+                "reference": "bc4df88792fbaaeb275167101dc714218475db5f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/b06ebe524357945a4e7ffee42ade880bdf9e1500",
-                "reference": "b06ebe524357945a4e7ffee42ade880bdf9e1500",
+                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/bc4df88792fbaaeb275167101dc714218475db5f",
+                "reference": "bc4df88792fbaaeb275167101dc714218475db5f",
                 "shasum": ""
             },
             "require": {
@@ -9303,7 +9303,7 @@
                 "scaffold",
                 "scaffolding"
             ],
-            "time": "2020-03-02T15:21:16+00:00"
+            "time": "2020-03-04T13:57:29+00:00"
         },
         {
             "name": "symfony/phpunit-bridge",

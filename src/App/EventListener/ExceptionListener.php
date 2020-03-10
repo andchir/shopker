@@ -58,11 +58,15 @@ class ExceptionListener
                 'statusCode' => $statusCode
             ];
         } else {
-            $content = $this->twig->render('/errors/404.html.twig', [
-                'message' => $message ?: 'Not found.',
-                'currentUri' => '404',
-                'activeCategoriesIds' => []
-            ]);
+            if ($this->twig->getLoader()->exists('/errors/404.html.twig')) {
+                $content = $this->twig->render('/errors/404.html.twig', [
+                    'message' => $message ?: 'Not found.',
+                    'currentUri' => '404',
+                    'activeCategoriesIds' => []
+                ]);
+            } else {
+                return;
+            }
         }
 
         if (is_array($content)) {

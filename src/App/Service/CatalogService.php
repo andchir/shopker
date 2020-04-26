@@ -466,7 +466,7 @@ class CatalogService {
      * @param array $criteria
      */
     public function applyLocaleFilter($locale, $headerFieldName, &$criteria)
-    {;
+    {
         $translationFieldName = "translations.{$headerFieldName}.{$locale}";
         $andCriteria = [$translationFieldName => ['$exists' => true]];
         if (!isset($criteria['$and'])) {

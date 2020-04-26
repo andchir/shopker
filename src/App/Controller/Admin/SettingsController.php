@@ -8,15 +8,15 @@ use App\Service\CatalogService;
 use App\Service\ComposerService;
 use App\Service\SettingsService;
 use App\Service\UtilsService;
-use Composer\Json\JsonFile;
-use Composer\Repository\InstalledFilesystemRepository;
 use Doctrine\ODM\MongoDB\DocumentManager;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Yaml\Exception\ParseException;
@@ -29,17 +29,25 @@ use Twig\Environment as TwigEnvironment;
  * @package App\SettingsController
  * @Route("/admin/settings")
  */
-class SettingsController extends Controller
+class SettingsController extends AbstractController
 {
+    /** @var ParameterBagInterface */
+    protected $params;
+    /** @var DocumentManager */
+    protected $dm;
     /** @var TwigEnvironment */
     protected $twig;
 
     /**
      * TemplatesController constructor.
-     * @param $twig
+     * @param ParameterBagInterface $params
+     * @param DocumentManager $dm
+     * @param TwigEnvironment $twig
      */
-    public function __construct(TwigEnvironment $twig)
+    public function __construct(ParameterBagInterface $params, DocumentManager $dm, TwigEnvironment $twig)
     {
+        $this->params = $params;
+        $this->dm = $dm;
         $this->twig = $twig;
     }
 
@@ -114,9 +122,6 @@ class SettingsController extends Controller
                 break;
             default:
 
-                /** @var DocumentManager $dm */
-                $dm = $this->get('doctrine_mongodb')->getManager();
-
                 $settings = $this->getRepository()->findBy([
                     'groupName' => $groupName
                 ], ['id' => 'asc']);
@@ -125,7 +130,7 @@ class SettingsController extends Controller
                 /** @var Setting $setting */
                 foreach ($settings as $index => $setting) {
                     if (!isset($data[$index])) {
-                        $dm->remove($setting);
+                        $this->dm->remove($setting);
                     } else {
                         if (isset($data[$index]['name'])) {
                             $setting->setName($data[$index]['name']);
@@ -154,12 +159,12 @@ class SettingsController extends Controller
                         if (isset($newSetting['options']) && is_array($newSetting['options'])) {
                             $setting->setOptions($newSetting['options']);
                         }
-                        $dm->persist($setting);
+                        $this->dm->persist($setting);
                         $settings[] = $setting;
                     }
                 }
 
-                $dm->flush();
+                $this->dm->flush();
 
                 // Update setting "app.locale_list"
                 if ($groupName == Setting::GROUP_LANGUAGES && count($settings) > 1) {
@@ -219,13 +224,15 @@ class SettingsController extends Controller
      * @Route("/update_filters", name="update_filters", methods={"POST"})
      * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param CatalogService $catalogService
-     * @param DocumentManager $dm
      * @return JsonResponse
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
-    public function updateFiltersAction(CatalogService $catalogService, DocumentManager $dm)
+    public function updateFiltersAction(CatalogService $catalogService)
     {
         /** @var \App\Repository\CategoryRepository $categoryRepository */
-        $categoryRepository = $dm->getRepository(Category::class);
+        $categoryRepository = $this->dm->getRepository(Category::class);
 
         $count = 0;
         $categories = $categoryRepository->findAll();
@@ -243,13 +250,11 @@ class SettingsController extends Controller
     /**
      * @Route("/update_internationalization", name="update_internationalization", methods={"POST"})
      * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
+     * @param TranslatorInterface $translator
      * @return JsonResponse
-     * @throws \Exception
      */
-    public function updateInternationalizationAction()
+    public function updateInternationalizationAction(TranslatorInterface $translator)
     {
-        /** @var TranslatorInterface $translator */
-        $translator = $this->get('translator');
         $result = $this->updateInternationalization();
         return $result['success']
             ? $this->json($result)
@@ -262,9 +267,9 @@ class SettingsController extends Controller
      */
     public function updateInternationalization()
     {
-        $rootPath = realpath($this->getParameter('kernel.root_dir').'/../..');
+        $rootPath = realpath($this->params->get('kernel.root_dir').'/../..');
         $jsonDirPath = $rootPath . '/frontend/src/i18n';
-        $publicDirPath = realpath($this->getParameter('app.web_dir_path'));
+        $publicDirPath = realpath($this->params->get('app.web_dir_path'));
         $jsPublicDirPath = $publicDirPath . '/admin/i18n';
         $vendorDirPath = $rootPath . '/vendor';
 
@@ -351,7 +356,7 @@ class SettingsController extends Controller
      */
     public function getSettingsFromYaml($yamlFileName = 'settings', $transform = true)
     {
-        $rootPath = realpath($this->getParameter('kernel.root_dir').'/../..');
+        $rootPath = realpath($this->params->get('kernel.root_dir').'/../..');
         $settingsFilePath = $rootPath . DIRECTORY_SEPARATOR . "config/{$yamlFileName}.yaml";
         if (file_exists($settingsFilePath)) {
             try {
@@ -374,7 +379,7 @@ class SettingsController extends Controller
      */
     public function saveSettingsToYaml($data, $yamlFileName = 'settings')
     {
-        $rootPath = realpath($this->getParameter('kernel.root_dir').'/../..');
+        $rootPath = realpath($this->params->get('kernel.root_dir').'/../..');
         $settingsFilePath = $rootPath . DIRECTORY_SEPARATOR . "config/{$yamlFileName}.yaml";
         $yaml = Yaml::dump(['parameters' => $data]);
 
@@ -390,28 +395,36 @@ class SettingsController extends Controller
      * @Route("_script", name="admin_settings_script")
      * @param UtilsService $utilsService
      * @param SettingsService $settingsService
+     * @param TranslatorInterface $translator
+     * @param ValidatorInterface $validator
+     * @param UserPasswordEncoderInterface $encoder
      * @return Response
      */
-    public function settingsScriptAction(UtilsService $utilsService, SettingsService $settingsService)
+    public function settingsScriptAction(
+        UtilsService $utilsService,
+        SettingsService $settingsService,
+        TranslatorInterface $translator,
+        ValidatorInterface $validator,
+        UserPasswordEncoderInterface $encoder
+    )
     {
         $settings = $settingsService->getArray();
         /** @var User $user */
         $user = $this->getUser();
 
-        $userController = new UserController();
-        $userController->setContainer($this->container);
+        $userController = new UserController($this->params, $this->dm, $translator, $validator, $encoder);
         $rolesHierarchy = $userController->getRolesHierarchy();
 
-        $localeList = $this->getParameter('app.locale_list');
+        $localeList = $this->params->get('app.locale_list');
         $localeList = $localeList ? explode(',', $localeList) : [];
         $localeList = array_map('trim', $localeList);
 
         $settings = [
-            'filesDirUrl' => $this->getParameter('app.files_dir_url'),
-            'baseDir' => realpath($this->getParameter('kernel.root_dir').'/../..') . DIRECTORY_SEPARATOR,
-            'locale' => $this->getParameter('locale'),
-            'templateTheme' => $this->getParameter('app.template_theme'),
-            'isFileManagerEnabled' => $this->getParameter('app.file_manager_enabled'),
+            'filesDirUrl' => $this->params->get('app.files_dir_url'),
+            'baseDir' => realpath($this->params->get('kernel.root_dir').'/../..') . DIRECTORY_SEPARATOR,
+            'locale' => $this->params->get('locale'),
+            'templateTheme' => $this->params->get('app.template_theme'),
+            'isFileManagerEnabled' => $this->params->get('app.file_manager_enabled'),
             'localeList' => $localeList,
             'userEmail' => $user->getEmail(),
             'userRoles' => $user->getRoles(),
@@ -522,8 +535,6 @@ class SettingsController extends Controller
      */
     public function getRepository()
     {
-        return $this->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository(Setting::class);
+        return $this->dm->getRepository(Setting::class);
     }
 }

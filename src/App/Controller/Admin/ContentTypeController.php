@@ -97,18 +97,14 @@ class ContentTypeController extends StorageControllerAbstract
             ->setFields($data['fields'])
             ->setGroups(isset($data['groups']) ? $data['groups'] : [])
             ->setIsActive(isset($data['isActive']) ? $data['isActive'] : true);
-
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
+        
         if (!$contentType->getId()) {
-            $dm->persist($contentType);
+            $this->dm->persist($contentType);
         }
-        $dm->flush();
+        $this->dm->flush();
 
         //Add new collection
-        $collectionRepository = $this->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository('AppMainBundle:Collection');
+        $collectionRepository = $this->dm->getRepository('AppMainBundle:Collection');
 
         $count = $collectionRepository->createQueryBuilder()
             ->field('name')->equals($collectionName)
@@ -119,8 +115,8 @@ class ContentTypeController extends StorageControllerAbstract
         if(!$count){
             $collection = new Collection();
             $collection->setName($collectionName);
-            $dm->persist($collection);
-            $dm->flush();
+            $this->dm->persist($collection);
+            $this->dm->flush();
         }
 
         return new JsonResponse($contentType->toArray());
@@ -167,11 +163,9 @@ class ContentTypeController extends StorageControllerAbstract
                 'msg' => 'You must first remove the categories with this content type.'
             ];
         }
-
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
-        $dm->remove($item);
-        $dm->flush();
+        
+        $this->dm->remove($item);
+        $this->dm->flush();
 
         return ['success' => true];
     }
@@ -181,8 +175,6 @@ class ContentTypeController extends StorageControllerAbstract
      */
     public function getRepository()
     {
-        return $this->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository(ContentType::class);
+        return $this->dm->getRepository(ContentType::class);
     }
 }

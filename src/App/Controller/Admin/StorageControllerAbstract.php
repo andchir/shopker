@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ODM\MongoDB\Query\Builder as QueryBuilder;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -76,24 +77,24 @@ abstract class StorageControllerAbstract extends BaseController
      * @Route("/batch", methods={"POST"})
      * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param Request $request
-     * @param TranslatorInterface $translator
      * @return JsonResponse
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
-    public function deleteBatchAction(Request $request, TranslatorInterface $translator)
+    public function deleteBatchAction(Request $request)
     {
         $data = $request->getContent()
             ? json_decode($request->getContent(), true)
             : [];
 
         if(empty($data['ids'])){
-            return $this->setError($translator->trans('Bad data.', [], 'validators'));
+            return $this->setError($this->translator->trans('Bad data.', [], 'validators'));
         }
 
         $errors = [];
         foreach ($data['ids'] as $itemId) {
             $results = $this->deleteItem($itemId);
             if (!$results['success']) {
-                $errors[] = $translator->trans($results['msg'], [], 'validators');
+                $errors[] = $this->translator->trans($results['msg'], [], 'validators');
                 break;
             }
         }
@@ -108,14 +109,15 @@ abstract class StorageControllerAbstract extends BaseController
      * @Route("/{itemId}", methods={"DELETE"})
      * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param int $itemId
-     * @param TranslatorInterface $translator
+     * @param EventDispatcher $evenDispatcher
      * @return JsonResponse
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
-    public function deleteItemAction($itemId, TranslatorInterface $translator)
+    public function deleteItemAction($itemId, EventDispatcher $evenDispatcher)
     {
         $results = $this->deleteItem($itemId);
         if(!$results['success']){
-            return $this->setError($translator->trans($results['msg'], [], 'validators'));
+            return $this->setError($this->translator->trans($results['msg'], [], 'validators'));
         }
         return new JsonResponse([]);
     }
@@ -123,6 +125,7 @@ abstract class StorageControllerAbstract extends BaseController
     /**
      * @param $itemId
      * @return array
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function deleteItem($itemId)
     {
@@ -135,11 +138,9 @@ abstract class StorageControllerAbstract extends BaseController
                 'msg' => 'Item not found.'
             ];
         }
-
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
-        $dm->remove($item);
-        $dm->flush();
+        
+        $this->dm->remove($item);
+        $this->dm->flush();
 
         return ['success' => true];
     }
@@ -148,6 +149,7 @@ abstract class StorageControllerAbstract extends BaseController
      * @param $itemId
      * @param bool $isActive
      * @return array
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function blockItem($itemId, $isActive = false)
     {
@@ -162,10 +164,8 @@ abstract class StorageControllerAbstract extends BaseController
         }
 
         $item->setIsActive($isActive);
-
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
-        $dm->flush();
+        
+        $this->dm->flush();
 
         return ['success' => true];
     }
@@ -182,12 +182,9 @@ abstract class StorageControllerAbstract extends BaseController
             ? json_decode($request->getContent(), true)
             : [];
 
-        /** @var TranslatorInterface $translator */
-        $translator = $this->get('translator');
-
         $output = $this->validateData($data);
         if(!$output['success']){
-            return $this->setError($translator->trans($output['msg'], [], 'validators'));
+            return $this->setError($this->translator->trans($output['msg'], [], 'validators'));
         }
 
         return $this->createUpdate($data);
@@ -206,12 +203,9 @@ abstract class StorageControllerAbstract extends BaseController
             ? json_decode($request->getContent(), true)
             : [];
 
-        /** @var TranslatorInterface $translator */
-        $translator = $this->get('translator');
-
         $output = $this->validateData($data, (int) $itemId);
         if(!$output['success']){
-            return $this->setError($translator->trans($output['msg'], [], 'validators'));
+            return $this->setError($this->translator->trans($output['msg'], [], 'validators'));
         }
 
         return $this->createUpdate($data, (int) $itemId);
@@ -227,24 +221,22 @@ abstract class StorageControllerAbstract extends BaseController
      * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param Request $request
      * @param string $action
-     * @param TranslatorInterface $translator
      * @return JsonResponse
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
-    public function batchAction(Request $request, $action, TranslatorInterface $translator)
+    public function batchAction(Request $request, $action)
     {
         $data = $request->getContent()
             ? json_decode($request->getContent(), true)
             : [];
 
         if(empty($data['ids'])){
-            return $this->setError($translator->trans('Bad data.', [], 'validators'));
+            return $this->setError($this->translator->trans('Bad data.', [], 'validators'));
         }
 
         $repository = $this->getRepository();
-
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
-        $qb = $dm->createQueryBuilder($repository->getClassName())
+        
+        $qb = $this->dm->createQueryBuilder($repository->getClassName())
             ->field('_id')->in($data['ids']);
 
         $items = $qb->getQuery()->execute();
@@ -261,14 +253,14 @@ abstract class StorageControllerAbstract extends BaseController
             if ($action == 'delete') {
                 $results = $this->deleteItem($item->getId());
                 if (!$results['success']) {
-                    $errors[] = $translator->trans($results['msg'], [], 'validators');
+                    $errors[] = $this->translator->trans($results['msg'], [], 'validators');
                     break;
                 }
             }
             else if ($action == 'block') {
                 $results = $this->blockItem($item->getId(), !$firstItemIsActive);
                 if (!$results['success']) {
-                    $errors[] = $translator->trans($results['msg'], [], 'validators');
+                    $errors[] = $this->translator->trans($results['msg'], [], 'validators');
                     break;
                 }
             }
@@ -289,6 +281,7 @@ abstract class StorageControllerAbstract extends BaseController
      * @param null $itemId
      * @param null $parentId
      * @return mixed
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function checkNameExists($name, $itemId = null, $parentId = null){
         $repository = $this->getRepository();
@@ -309,5 +302,4 @@ abstract class StorageControllerAbstract extends BaseController
             ->getQuery()
             ->execute();
     }
-
 }

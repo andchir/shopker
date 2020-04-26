@@ -11,21 +11,22 @@ use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class CatalogService {
-
-    /** @var ContainerInterface */
-    protected $container;
+    
+    /** @var ParameterBagInterface */
+    protected $params;
     /** @var DocumentManager */
     private $dm;
 
     /**
-     * @param ContainerInterface $container
+     * @param ParameterBagInterface $params
      * @param DocumentManager $dm
      */
-    public function __construct(ContainerInterface $container, DocumentManager $dm)
+    public function __construct(ParameterBagInterface $params, DocumentManager $dm)
     {
-        $this->container = $container;
+        $this->params = $params;
         $this->dm = $dm;
     }
 
@@ -399,7 +400,7 @@ class CatalogService {
     public function getCollection($collectionName, $databaseName = '')
     {
         if (!$databaseName) {
-            $databaseName = $this->container->getParameter('mongodb_database');
+            $databaseName = $this->params->get('mongodb_database');
         }
         /** @var \MongoDB\Client $mongodbClient */
         $mongodbClient = $this->dm->getClient();

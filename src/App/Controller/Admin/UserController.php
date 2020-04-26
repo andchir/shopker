@@ -3,7 +3,9 @@
 namespace App\Controller\Admin;
 
 use App\MainBundle\Document\User;
+use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ORM\Query\Expr\Base;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -23,6 +25,24 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class UserController extends StorageControllerAbstract
 {
 
+    /** @var ValidatorInterface */
+    protected $validator;
+    /** @var UserPasswordEncoderInterface */
+    protected $encoder;
+
+    public function __construct(
+        ParameterBagInterface $params,
+        DocumentManager $dm,
+        TranslatorInterface $translator,
+        ValidatorInterface $validator,
+        UserPasswordEncoderInterface $encoder
+    )
+    {
+        parent::__construct($params, $dm, $translator);
+        $this->validator = $validator;
+        $this->encoder = $encoder;
+    }
+    
     /**
      * @param $data
      * @param int $itemId
@@ -46,20 +66,12 @@ class UserController extends StorageControllerAbstract
      * @return JsonResponse
      * @throws \Doctrine\ODM\MongoDB\LockException
      * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function createUpdate($data, $itemId = null)
     {
         /** @var User $currentUser */
         $currentUser = $this->getUser();
-        /** @var ValidatorInterface $validator */
-        $validator = $this->get('validator');
-        /** @var TranslatorInterface $translator */
-        $translator = $this->get('translator');
-        /** @var UserPasswordEncoderInterface $encoder */
-        $encoder = $this->get('security.password_encoder');
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
-
         $repository = $this->getRepository();
 
         /** @var User $item */
@@ -67,12 +79,12 @@ class UserController extends StorageControllerAbstract
             /** @var User $item */
             $item = $this->getRepository()->find($itemId);
             if(!$item){
-                return $this->setError($translator->trans('Item not found.', [], 'validators'));
+                return $this->setError($this->translator->trans('Item not found.', [], 'validators'));
             }
             if ($data['email'] !== $item->getEmail()) {
                 $usersCount = $repository->getUsersCountBy('email', $data['email']);
                 if ($usersCount > 0) {
-                    return $this->setError($translator->trans('register.email.already exists', [], 'validators'));
+                    return $this->setError($this->translator->trans('register.email.already exists', [], 'validators'));
                 } else {
                     $item->setUsername($data['email']);
                 }
@@ -83,7 +95,7 @@ class UserController extends StorageControllerAbstract
 
         if ($currentUser->getId() == $item->getId()
             && $currentUser->getIsActive() && empty($data['isActive'])) {
-                return $this->setError($translator->trans('You can not block yourself.', [], 'validators'));
+                return $this->setError($this->translator->trans('You can not block yourself.', [], 'validators'));
         }
 
         $item
@@ -99,20 +111,20 @@ class UserController extends StorageControllerAbstract
         // Set / update password
         if (!empty($data['password'])) {
             if (empty($data['confirmPassword']) || $data['password'] != $data['confirmPassword']) {
-                return $this->setError($translator->trans('The password fields must match.', [], 'validators'));
+                return $this->setError($this->translator->trans('The password fields must match.', [], 'validators'));
             }
             $item
                 ->setPlainPassword($data['password'])
-                ->setPassword($encoder->encodePassword($item, $data['password']));
-            $errors = $validator->validate($item);
+                ->setPassword($this->encoder->encodePassword($item, $data['password']));
+            $errors = $this->validator->validate($item);
             if (count($errors)) {
-                return $this->setError($translator->trans($errors[0]->getMessage(), [], 'validators'));
+                return $this->setError($this->translator->trans($errors[0]->getMessage(), [], 'validators'));
             }
         }
 
-        $errors = $validator->validate($item);
+        $errors = $this->validator->validate($item);
         if (count($errors)) {
-            return $this->setError($translator->trans($errors[0]->getMessage(), [], 'validators'));
+            return $this->setError($this->translator->trans($errors[0]->getMessage(), [], 'validators'));
         }
 
         if (isset($data['options']) && is_array($data['options'])) {
@@ -120,9 +132,9 @@ class UserController extends StorageControllerAbstract
         }
 
         if (!$item->getId()) {
-            $dm->persist($item);
+            $this->dm->persist($item);
         }
-        $dm->flush();
+        $this->dm->flush();
 
         return $this->json($item, 200, [], ['groups' => ['details']]);
     }
@@ -179,11 +191,9 @@ class UserController extends StorageControllerAbstract
                 'msg' => 'You can not delete yourself.'
             ];
         }
-
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
-        $dm->remove($item);
-        $dm->flush();
+        
+        $this->dm->remove($item);
+        $this->dm->flush();
 
         return ['success' => true];
     }
@@ -211,10 +221,8 @@ class UserController extends StorageControllerAbstract
         }
 
         $item->setIsActive($isActive);
-
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
-        $dm->flush();
+        
+        $this->dm->flush();
 
         return ['success' => true];
     }
@@ -235,10 +243,8 @@ class UserController extends StorageControllerAbstract
      */
     public function getRolesHierarchy()
     {
-        /** @var TranslatorInterface $translator */
-        $translator = $this->get('translator');
         $output = [];
-        $rolesHierarchy = $this->getParameter('security.role_hierarchy.roles');
+        $rolesHierarchy = $this->params->get('security.role_hierarchy.roles');
         $roles = array_keys($rolesHierarchy);
 
         if (!in_array('ROLE_USER', $roles)) {
@@ -248,7 +254,7 @@ class UserController extends StorageControllerAbstract
         foreach ($roles as $role) {
             array_push($output, [
                 'name' => $role,
-                'title' => $translator->trans($role)
+                'title' => $this->translator->trans($role)
             ]);
         }
 
@@ -260,8 +266,6 @@ class UserController extends StorageControllerAbstract
      */
     public function getRepository()
     {
-        return $this->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository(User::class);
+        return $this->dm->getRepository(User::class);
     }
 }

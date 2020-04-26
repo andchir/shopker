@@ -7,13 +7,11 @@ use App\MainBundle\Document\User;
 use App\Form\Type\SetupType;
 use App\Service\CatalogService;
 use App\Service\SettingsService;
-use Doctrine\Bundle\MongoDBBundle\ManagerRegistry;
 use Doctrine\Common\DataFixtures\Executor\MongoDBExecutor;
 use Doctrine\Common\DataFixtures\Purger\MongoDBPurger;
-use Doctrine\ODM\MongoDB\Configuration;
 use Doctrine\ODM\MongoDB\DocumentManager;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -33,19 +31,27 @@ use Symfony\Component\Yaml\Yaml;
  * Class DefaultController
  * @package App\Controller
  */
-class DefaultController extends Controller
+class DefaultController extends AbstractController
 {
 
+    /** @var ParameterBagInterface */
+    protected $params;
     /** @var SettingsService */
     protected $settingsService;
+    /** @var CatalogService */
+    protected $catalogService;
 
     /**
      * DefaultController constructor.
+     * @param ParameterBagInterface $params
      * @param SettingsService $settingsService
+     * @param CatalogService $catalogService
      */
-    public function __construct(SettingsService $settingsService)
+    public function __construct(ParameterBagInterface $params, SettingsService $settingsService, CatalogService $catalogService)
     {
+        $this->params = $params;
         $this->settingsService = $settingsService;
+        $this->catalogService = $catalogService;
     }
 
     /**
@@ -58,10 +64,11 @@ class DefaultController extends Controller
      * @param Request $request
      * @param CatalogService $catalogService
      * @return Response
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function homepageAction(Request $request, CatalogService $catalogService)
     {
-        if (empty($this->getParameter('mongodb_database'))) {
+        if (empty($this->params->get('mongodb_database'))) {
             return $this->redirectToRoute('setup');
         }
 
@@ -78,9 +85,7 @@ class DefaultController extends Controller
             ->execute();
 
         // Get products count
-        $productsController = new Admin\ProductController();
-        $productsController->setContainer($this->container);
-        $collection = $productsController->getCollection('products');
+        $collection = $catalogService->getCollection('products');
         $countProducts = $collection->countDocuments(['isActive' => true]);
 
         // Get page description
@@ -90,10 +95,8 @@ class DefaultController extends Controller
         if ($rootCategory) {
             $description = $rootCategory->getDescription();
         }
-
-        /** @var SettingsService $settingsService */
-        $settingsService = $this->get('app.settings');
-        $currency = $settingsService->getCurrency();
+        
+        $currency = $this->settingsService->getCurrency();
 
         $response = $this->render('homepage.html.twig', [
             'categoriesTopLevel' => $categoriesTopLevel,
@@ -148,6 +151,7 @@ class DefaultController extends Controller
      * @param CatalogService $catalogService
      * @param DocumentManager $dm
      * @return RedirectResponse|Response
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function setupAction(
         Request $request,
@@ -157,13 +161,10 @@ class DefaultController extends Controller
         DocumentManager $dm
     )
     {
-        if (!empty($this->getParameter('mongodb_database'))) {
+        if (!empty($this->params->get('mongodb_database'))) {
             return $this->redirectToRoute('homepage');
         }
-        /** @var SettingsService $settingsService */
-        $settingsService = $this->get('app.settings');
-
-        $rootPath = realpath($this->container->getParameter('kernel.root_dir').'/../..');
+        $rootPath = realpath($this->container->params->get('kernel.root_dir').'/../..');
         $parametersYamlPath = $rootPath . DIRECTORY_SEPARATOR . 'config/settings.yaml.dist';
         $parameters = [];
         if ($parametersYamlPath) {
@@ -180,19 +181,19 @@ class DefaultController extends Controller
         $settingsDefault = array_merge($parameters, [
             'locale' => $request->getLocale(),
             'app.locale_list' => $request->getLocale() == 'ru' ? 'ru,en' : 'en,ru',
-            'app.name' => $this->getParameter('app.name'),
-            'mongodb_server' => $this->getParameter('mongodb_server'),
-            'mongodb_port' => $this->getParameter('mongodb_port'),
+            'app.name' => $this->params->get('app.name'),
+            'mongodb_server' => $this->params->get('mongodb_server'),
+            'mongodb_port' => $this->params->get('mongodb_port'),
             'mongodb_user' => '',
             'mongodb_password' => '',
             'mongodb_database' => '',
-            'mailer_transport' => $this->getParameter('mailer_transport'),
-            'mailer_host' => $this->getParameter('mailer_host'),
-            'mailer_port' => $this->getParameter('mailer_port'),
-            'mailer_user' => $this->getParameter('mailer_user'),
-            'mailer_password' => $this->getParameter('mailer_password'),
-            'mailer_encryption' => $this->getParameter('mailer_encryption'),
-            'mailer_auth_mode' => $this->getParameter('mailer_auth_mode')
+            'mailer_transport' => $this->params->get('mailer_transport'),
+            'mailer_host' => $this->params->get('mailer_host'),
+            'mailer_port' => $this->params->get('mailer_port'),
+            'mailer_user' => $this->params->get('mailer_user'),
+            'mailer_password' => $this->params->get('mailer_password'),
+            'mailer_encryption' => $this->params->get('mailer_encryption'),
+            'mailer_auth_mode' => $this->params->get('mailer_auth_mode')
         ]);
 
         $form = $this->createForm(SetupType::class, array_merge($settingsDefault, [
@@ -275,7 +276,7 @@ class DefaultController extends Controller
                         }
                     }
 
-                    if (!is_writable($settingsService->getConfigYamlFilePath('settings'))) {
+                    if (!is_writable($this->settingsService->getConfigYamlFilePath('settings'))) {
                         $form->addError(new FormError($translator->trans('install.settings_file_not_writable', [], 'validators')));
                     }
 
@@ -287,7 +288,7 @@ class DefaultController extends Controller
                         $settings = array_filter($settings, function ($key) use ($settingsDefault) {
                             return in_array($key, array_keys($settingsDefault));
                         }, ARRAY_FILTER_USE_KEY);
-                        $settingsService->saveSettingsToYaml($settings, 'settings');
+                        $this->settingsService->saveSettingsToYaml($settings, 'settings');
                         $this->systemCacheClear();
 
                         $adminEmail = $data['admin_email'];
@@ -348,13 +349,13 @@ class DefaultController extends Controller
      */
     public function loadDataFixtures(DocumentManager $dm, $locale)
     {
-        $rootPath = realpath($this->getParameter('kernel.root_dir').'/../..');
+        $rootPath = realpath($this->params->get('kernel.root_dir').'/../..');
         $fixturesPath = $rootPath . '/src/App/DataFixtures/MongoDB/' . $locale;
         if (!is_dir($fixturesPath)) {
             return false;
         }
 
-        $loaderClass = $this->container->getParameter('doctrine_mongodb.odm.fixture_loader');
+        $loaderClass = $this->container->params->get('doctrine_mongodb.odm.fixture_loader');
         /** @var DataFixturesLoader $loader */
         $loader = new $loaderClass($this->container);
         $loader->loadFromDirectory($fixturesPath);
@@ -370,6 +371,7 @@ class DefaultController extends Controller
      * Load Data fixtures
      * @param $locale
      * @return string
+     * @throws \Exception
      */
     public function loadDataFixturesCommand($locale)
     {

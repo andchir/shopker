@@ -14,7 +14,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use App\MainBundle\Document\Category;
 use App\MainBundle\Document\ContentType;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class ContentTypeController
@@ -95,9 +94,7 @@ class CategoryController extends StorageControllerAbstract
         }
 
         /** @var ContentType $contentType */
-        $contentType = $this->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository(ContentType::class)
+        $contentType = $this->dm->getRepository(ContentType::class)
             ->findOneBy([
                 'name' => $data['contentTypeName']
             ]);
@@ -119,17 +116,15 @@ class CategoryController extends StorageControllerAbstract
             ->setContentTypeName($data['contentTypeName'])
             ->setContentType($contentType)
             ->setTranslations($data['translations'] ?? []);
-
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
+        
         if (!$item->getId()) {
-            $dm->persist($item);
+            $this->dm->persist($item);
         }
-        $dm->flush();
+        $this->dm->flush();
 
         // Dispatch event
         $evenDispatcher = $this->get('event_dispatcher');
-        $event = new CategoryUpdatedEvent($dm, $item, $previousParentId);
+        $event = new CategoryUpdatedEvent($this->dm, $item, $previousParentId);
         $item = $evenDispatcher->dispatch($event, CategoryUpdatedEvent::NAME)->getCategory();
 
         // Delete unused files
@@ -173,11 +168,7 @@ class CategoryController extends StorageControllerAbstract
      */
     public function getCategoriesTree($parentId = 0, $expanded = true)
     {
-        /** @var TranslatorInterface $translator */
-        $translator = $this->get('translator');
-        $categoriesRepository = $this->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository(Category::class);
+        $categoriesRepository = $this->dm->getRepository(Category::class);
 
         $categories = $categoriesRepository->findBy([], [
             'menuIndex' => 'asc',
@@ -187,7 +178,7 @@ class CategoryController extends StorageControllerAbstract
         $data = [];
         $root = [
             'id' => $parentId,
-            'label' => $translator->trans('Root category'),
+            'label' => $this->translator->trans('Root category'),
             'parentId' => 0,
             'expanded' => true
         ];
@@ -215,25 +206,22 @@ class CategoryController extends StorageControllerAbstract
      * @Route("/{itemId}", methods={"DELETE"})
      * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param int $itemId
-     * @param TranslatorInterface $translator
+     * @param EventDispatcher $evenDispatcher
      * @return JsonResponse
      * @throws \Doctrine\ODM\MongoDB\LockException
      * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
-    public function deleteItemAction($itemId, TranslatorInterface $translator)
+    public function deleteItemAction($itemId, EventDispatcher $evenDispatcher)
     {
         $repository = $this->getRepository();
 
         /** @var Category $item */
         $item = $repository->find($itemId);
         if(!$item){
-            return $this->setError($translator->trans('Item not found.', [], 'validators'));
+            return $this->setError($this->translator->trans('Item not found.', [], 'validators'));
         }
-
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
-        /** @var EventDispatcher $evenDispatcher */
-        $evenDispatcher = $this->get('event_dispatcher');
+        
         $previousParentId = $item->getParentId();
         $children = $repository->getChildren($item, [$item]);
         $children = array_reverse($children);
@@ -242,13 +230,13 @@ class CategoryController extends StorageControllerAbstract
         foreach ($children as $child) {
             $this->deleteProductsByCategory($child, false);
 
-            $dm->remove($child);
-            $dm->flush();
+            $this->dm->remove($child);
+            $this->dm->flush();
 
             $child->setId(null);
 
             //Dispatch event
-            $event = new CategoryUpdatedEvent($dm, $child, $previousParentId);
+            $event = new CategoryUpdatedEvent($this->dm, $child, $previousParentId);
             $evenDispatcher->dispatch($event, CategoryUpdatedEvent::NAME);
         }
 
@@ -313,7 +301,7 @@ class CategoryController extends StorageControllerAbstract
     public function getCollection($collectionName, $databaseName = '')
     {
         if (!$databaseName) {
-            $databaseName = $this->getParameter('mongodb_database');
+            $databaseName = $this->params->get('mongodb_database');
         }
         /** @var \MongoDB\Client $mongodbClient */
         $mongodbClient = $this->container->get('doctrine_mongodb.odm.default_connection');
@@ -326,9 +314,7 @@ class CategoryController extends StorageControllerAbstract
      */
     public function getRepository()
     {
-        return $this->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository(Category::class);
+        return $this->dm->getRepository(Category::class);
     }
 
 }

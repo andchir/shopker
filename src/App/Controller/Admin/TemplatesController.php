@@ -205,19 +205,16 @@ class TemplatesController extends StorageControllerAbstract
      */
     public function getFileContentAction(Request $request)
     {
-        /** @var TranslatorInterface $translator */
-        $translator = $this->get('translator');
-
         $filePath = $request->get('path', '');
         $fileType = $request->get('type', 'twig');
 
         $filePath = $this->getFilePathByType($fileType, $filePath);
 
         if (!$filePath || !file_exists($filePath)) {
-            return $this->setError($translator->trans('The specified file path does not exist.', [], 'validators'));
+            return $this->setError($this->translator->trans('The specified file path does not exist.', [], 'validators'));
         }
         if (!is_readable($filePath)) {
-            return $this->setError($translator->trans('The file is not readable.', [], 'validators'));
+            return $this->setError($this->translator->trans('The file is not readable.', [], 'validators'));
         }
 
         return $this->json([
@@ -233,9 +230,6 @@ class TemplatesController extends StorageControllerAbstract
      */
     protected function createUpdate($data, $itemId = null)
     {
-        /** @var TranslatorInterface $translator */
-        $translator = $this->get('translator');
-
         $fileContent = $data['content'] ?? '';
         $fileName = str_replace('..', '', ($data['name'] ?? ''));
         $filePath = trim(str_replace('..', '', ($data['path'] ?? '')), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $fileName;
@@ -244,25 +238,25 @@ class TemplatesController extends StorageControllerAbstract
         $filePath = $this->getFilePathByType($fileType, $filePath);
 
         if (!in_array(UtilsService::getExtension($data['name']), ['twig', 'css', 'js', 'yml', 'yaml'])) {
-            return $this->setError($translator->trans('Allowed file types: %extensions%.', [
+            return $this->setError($this->translator->trans('Allowed file types: %extensions%.', [
                 '%extensions%' => 'twig, css, js'
             ], 'validators'));
         }
         if (!is_dir(dirname($filePath))) {
-            return $this->setError($translator->trans('The specified file path does not exist.', [], 'validators'));
+            return $this->setError($this->translator->trans('The specified file path does not exist.', [], 'validators'));
         }
         if (file_exists($filePath) && !is_writable($filePath)) {
-            return $this->setError($translator->trans('File is not writable.', [], 'validators'));
+            return $this->setError($this->translator->trans('File is not writable.', [], 'validators'));
         }
 
         if ($fileType === 'config') {
             try {
                 Yaml::parse($fileContent);
             } catch (ParseException $e) {
-                return $this->setError($translator->trans('Content not compliant with YAML format.', [], 'validators') . ' ' . $e->getMessage());
+                return $this->setError($this->translator->trans('Content not compliant with YAML format.', [], 'validators') . ' ' . $e->getMessage());
             }
             if (!file_exists($filePath)) {
-                return $this->setError($translator->trans('File not found.', [], 'validators'));
+                return $this->setError($this->translator->trans('File not found.', [], 'validators'));
             }
         }
 
@@ -311,16 +305,15 @@ class TemplatesController extends StorageControllerAbstract
      * @Route("", methods={"DELETE"})
      * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param Request $request
-     * @param TranslatorInterface $translator
      * @return JsonResponse
      */
-    public function deleteFileAction(Request $request, TranslatorInterface $translator)
+    public function deleteFileAction(Request $request)
     {
         $filePath = $request->get('path');
 
         $results = $this->deleteFile($filePath);
         if (!$results['success']) {
-            return $this->setError($translator->trans($results['msg'], [], 'validators'));
+            return $this->setError($this->translator->trans($results['msg'], [], 'validators'));
         }
 
         return $this->json([
@@ -332,17 +325,16 @@ class TemplatesController extends StorageControllerAbstract
      * @Route("/delete/batch", methods={"POST"})
      * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param Request $request
-     * @param TranslatorInterface $translator
      * @return JsonResponse
      */
-    public function deleteBatchAction(Request $request, TranslatorInterface $translator)
+    public function deleteBatchAction(Request $request)
     {
         $data = $request->getContent()
             ? json_decode($request->getContent(), true)
             : [];
 
         if(empty($data['pathArr'])){
-            return $this->setError($translator->trans('Bad data.', [], 'validators'));
+            return $this->setError($this->translator->trans('Bad data.', [], 'validators'));
         }
 
         $error = '';
@@ -355,7 +347,7 @@ class TemplatesController extends StorageControllerAbstract
         }
 
         if ($error) {
-            return $this->setError($translator->trans($error, [], 'validators'));
+            return $this->setError($this->translator->trans($error, [], 'validators'));
         } else {
             return $this->json([
                 'success' => true

@@ -45,8 +45,6 @@ class OrderController extends StorageControllerAbstract
         $deliveryPrice = !empty($data['deliveryPrice']) ? floatval($data['deliveryPrice']) : 0;
         /** @var SettingsService $settingsService */
         $settingsService = $this->get('app.settings');
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
         /** @var Setting $settingDelivery */
         $settingDelivery = $settingsService->getSetting($data['deliveryName'], Setting::GROUP_DELIVERY);
         if ($settingDelivery) {
@@ -79,7 +77,7 @@ class OrderController extends StorageControllerAbstract
         foreach ($item->getContent() as $orderContent) {
             $index = array_search($orderContent->getUniqId(), array_column($content, 'uniqId'));
             if ($index === false) {
-                $dm->remove($orderContent);
+                $this->dm->remove($orderContent);
             } else {
                 $orderContent
                     ->setPrice($content[$index]['price'])
@@ -87,7 +85,7 @@ class OrderController extends StorageControllerAbstract
             }
         }
 
-        $dm->flush();
+        $this->dm->flush();
 
         return new JsonResponse([
             'success' => true
@@ -141,8 +139,6 @@ class OrderController extends StorageControllerAbstract
      */
     public function updateItemProperty($itemId, $fieldName, $value)
     {
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
         $repository = $this->getRepository();
         /** @var Order $order */
         $order = $repository->find($itemId);
@@ -174,7 +170,7 @@ class OrderController extends StorageControllerAbstract
                 $order->setIsPaid(false);
             }
 
-            $dm->flush();
+            $this->dm->flush();
 
             /** @var EventDispatcherInterface $eventDispatcher */
             $eventDispatcher = $this->get('event_dispatcher');
@@ -211,8 +207,6 @@ class OrderController extends StorageControllerAbstract
      */
     public function getRepository()
     {
-        return $this->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository(Order::class);
+        return $this->dm->getRepository(Order::class);
     }
 }

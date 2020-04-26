@@ -2,15 +2,16 @@
 
 namespace App\Controller\Admin;
 
-use App\Controller\ProductController as BaseProductController;
 use App\MainBundle\Document\Category;
 use App\MainBundle\Document\ContentType;
 use App\MainBundle\Document\FileDocument;
-use App\MainBundle\Document\Filter;
 use App\Events;
 use App\Service\CatalogService;
 use App\Service\UtilsService;
-use Doctrine\ORM\Query\Expr\Base;
+use Doctrine\ODM\MongoDB\DocumentManager;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -26,9 +27,30 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  * @package App\Controller
  * @Route("/admin/products")
  */
-class ProductController extends BaseProductController
+class ProductController extends BaseController
 {
-
+    /** @var EventDispatcherInterface */
+    protected $eventDispatcher;
+    /** @var FilesystemAdapter */
+    protected $cacheAdapter;
+    /** @var CatalogService */
+    protected $catalogService;
+    
+    public function __construct(
+        ParameterBagInterface $params,
+        DocumentManager $dm,
+        TranslatorInterface $translator,
+        EventDispatcherInterface $eventDispatcher,
+        FilesystemAdapter $cacheAdapter,
+        CatalogService $catalogService
+    )
+    {
+        parent::__construct($params, $dm, $translator);
+        $this->eventDispatcher = $eventDispatcher;
+        $this->cacheAdapter = $cacheAdapter;
+        $this->catalogService = $catalogService;
+    }
+    
     /**
      * @Route("/{categoryId}", name="category_product_list", methods={"GET"})
      * @ParamConverter("category", class="App\MainBundle\Document\Category", options={"id" = "categoryId"})
@@ -41,18 +63,15 @@ class ProductController extends BaseProductController
         if(!$category){
             return new JsonResponse([]);
         }
-        /** @var TranslatorInterface $translator */
-        $translator = $this->get('translator');
-
         $contentType = $category->getContentType();
         if(!$contentType){
-            return $this->setError($translator->trans('Content type not found.', [], 'validators'));
+            return $this->setError($this->translator->trans('Content type not found.', [], 'validators'));
         }
 
         $queryString = $request->getQueryString();
         $queryOptions = UtilsService::getQueryOptions('', $queryString, $contentType->getFields());
         $contentTypeFields = $contentType->getFields();
-        $collection = $this->getCollection($contentType->getCollection());
+        $collection = $this->catalogService->getCollection($contentType->getCollection());
 
         $skip = ($queryOptions['page'] - 1) * $queryOptions['limit'];
 
@@ -118,15 +137,7 @@ class ProductController extends BaseProductController
         $error = '';
 
         foreach ($contentTypeFields as $field){
-            if($error = $this->validateField(
-                    $data[$field['name']],
-                    $field,
-                    [],
-                    $collectionName,
-                    $category->getId(),
-                    $itemId
-                )
-            ){
+            if($error = $this->validateField($data[$field['name']], $field, [], $collectionName, $category->getId(), $itemId)){
                 break;
             }
         }
@@ -191,7 +202,7 @@ class ProductController extends BaseProductController
      */
     public function fileUploadAllowed($value, $properties, $allowedExtensions = '')
     {
-        $filesExtBlacklist = $this->getParameter('app.files_ext_blacklist');
+        $filesExtBlacklist = $this->params->get('app.files_ext_blacklist');
         if (is_array($value)) {
             $ext = !empty($value['extension']) ? strtolower($value['extension']) : null;
         } else {
@@ -261,12 +272,9 @@ class ProductController extends BaseProductController
             ? json_decode($request->getContent(), true)
             : [];
 
-        /** @var TranslatorInterface $translator */
-        $translator = $this->get('translator');
-
         $output = $this->validateData($data, $category);
         if(!$output['success']){
-            return $this->setError($translator->trans($output['msg'], [], 'validators'));
+            return $this->setError($this->translator->trans($output['msg'], [], 'validators'));
         }
 
         return $this->createUpdate($data, $category);
@@ -289,12 +297,9 @@ class ProductController extends BaseProductController
             ? json_decode($request->getContent(), true)
             : [];
 
-        /** @var TranslatorInterface $translator */
-        $translator = $this->get('translator');
-
         $output = $this->validateData($data, $category, $itemId);
         if(!$output['success']){
-            return $this->setError($translator->trans($output['msg'], [], 'validators'));
+            return $this->setError($this->translator->trans($output['msg'], [], 'validators'));
         }
 
         return $this->createUpdate($data, $category, $itemId);
@@ -322,7 +327,7 @@ class ProductController extends BaseProductController
             return $this->setError('Content type not found.');
         }
 
-        $collection = $this->getCollection($contentType->getCollection());
+        $collection = $this->catalogService->getCollection($contentType->getCollection());
         if (!$collection) {
             return $this->setError('Item not saved.');
         }
@@ -339,7 +344,7 @@ class ProductController extends BaseProductController
                 if ($previousCategory) {
                     $previousContentType = $previousCategory->getContentType();
                     if ($previousContentType->getCollection() !== $contentType->getCollection()) {
-                        $previousCollection = $this->getCollection($previousContentType->getCollection());
+                        $previousCollection = $this->catalogService->getCollection($previousContentType->getCollection());
                         $document = $previousCollection->findOne(['_id' => $itemId]);
                         if (!$document) {
                             return $this->setError('Item not found.');
@@ -404,7 +409,6 @@ class ProductController extends BaseProductController
         }
 
         // Dispatch event
-        $eventDispatcher = $this->get('event_dispatcher');
         $event = new GenericEvent($document, ['contentType' => $contentType]);
 
         // Save document
@@ -421,7 +425,7 @@ class ProductController extends BaseProductController
             } catch (\Exception $e) {
                 $result = null;
             }
-            $eventDispatcher->dispatch($event, Events::PRODUCT_UPDATED);
+            $this->eventDispatcher->dispatch($event, Events::PRODUCT_UPDATED);
         }
         else {
             try {
@@ -430,19 +434,19 @@ class ProductController extends BaseProductController
                 $result = null;
             }
 
-            $eventDispatcher->dispatch($event, Events::PRODUCT_CREATED);
-            $eventDispatcher->dispatch($event, Events::PRODUCT_UPDATED);
+            $this->eventDispatcher->dispatch($event, Events::PRODUCT_CREATED);
+            $this->eventDispatcher->dispatch($event, Events::PRODUCT_UPDATED);
         }
 
         if (!empty($document['translations'])) {
-            $this->updateTranslationsTextIndex($document, $collection);
+            //$this->updateTranslationsTextIndex($document, $collection);
         }
 
         // If $fileFields is not empty it will be done after saving the files
         // Otherwise do it now
         if (empty($fileFields) && !empty($fileIds)) {
             $fileIds = array_unique($fileIds);
-            $fileController = new FileController();
+            $fileController = new FileController($this->params, $this->dm, $this->translator);
             $fileController->setContainer($this->container);
             $fileController->deleteUnused($contentType->getName(), $itemId, $fileIds);
         }
@@ -452,9 +456,7 @@ class ProductController extends BaseProductController
 
         // Clear file cache
         if (!empty($data['clearCache'])) {
-            /** @var FilesystemAdapter $cache */
-            $cache = $this->get('app.filecache');
-            $cache->clear();
+            $this->cacheAdapter->clear();
         }
 
         if (!empty($result)) {
@@ -497,7 +499,7 @@ class ProductController extends BaseProductController
             return $this->setError('Content type not found.');
         }
 
-        $collection = $this->getCollection($contentType->getCollection());
+        $collection = $this->catalogService->getCollection($contentType->getCollection());
         $documents = $collection->find([
             '_id' => ['$in' => $data['ids']]
         ]);
@@ -531,27 +533,26 @@ class ProductController extends BaseProductController
      * @ParamConverter("category", class="App\MainBundle\Document\Category", options={"id" = "categoryId"})
      * @param Category $category
      * @param int $itemId
-     * @param TranslatorInterface $translator
      * @return JsonResponse
      */
-    public function deleteItemAction(Category $category = null, $itemId, TranslatorInterface $translator)
+    public function deleteItemAction(Category $category = null, $itemId)
     {
         if (!$category) {
-            return $this->setError($translator->trans('Category not found.', [], 'validators'));
+            return $this->setError($this->translator->trans('Category not found.', [], 'validators'));
         }
         $itemId = intval($itemId);
 
         $contentType = $category->getContentType();
         if (!$contentType) {
-            return $this->setError($translator->trans('Content type not found.', [], 'validators'));
+            return $this->setError($this->translator->trans('Content type not found.', [], 'validators'));
         }
 
         $collectionName = $contentType->getCollection();
-        $collection = $this->getCollection($collectionName);
+        $collection = $this->catalogService->getCollection($collectionName);
         $document = $collection->findOne(['_id' => $itemId]);
 
         if(!$document){
-            return $this->setError($translator->trans('Document not found.', [], 'validators'));
+            return $this->setError($this->translator->trans('Document not found.', [], 'validators'));
         }
 
         $result = $this->deleteItem($contentType, $document);
@@ -572,7 +573,7 @@ class ProductController extends BaseProductController
      */
     public function deleteItem(ContentType $contentType, $itemData, $clearCache = true, $skipEvents = false)
     {
-        $collection = $this->getCollection($contentType->getCollection());
+        $collection = $this->catalogService->getCollection($contentType->getCollection());
         try {
             $result = $collection->deleteOne([
                 '_id' => $itemData['_id']
@@ -586,17 +587,13 @@ class ProductController extends BaseProductController
 
         if (!$skipEvents) {
             // Dispatch event
-            $eventDispatcher = $this->get('event_dispatcher');
             $event = new GenericEvent($itemData, ['contentType' => $contentType]);
-            $eventDispatcher->dispatch($event, Events::PRODUCT_DELETED);
-            $eventDispatcher->dispatch($event, Events::PRODUCT_UPDATED);
+            $this->eventDispatcher->dispatch($event, Events::PRODUCT_DELETED);
+            $this->eventDispatcher->dispatch($event, Events::PRODUCT_UPDATED);
         }
 
         if ($clearCache) {
-            // Clear file cache
-            /** @var FilesystemAdapter $cache */
-            $cache = $this->get('app.filecache');
-            $cache->clear();
+            $this->cacheAdapter->clear();
         }
 
         return $result;
@@ -609,7 +606,7 @@ class ProductController extends BaseProductController
      */
     public function blockItem(ContentType $contentType, $itemData)
     {
-        $collection = $this->getCollection($contentType->getCollection());
+        $collection = $this->catalogService->getCollection($contentType->getCollection());
         try {
             $result = $collection->updateOne(
                 [
@@ -624,14 +621,11 @@ class ProductController extends BaseProductController
         }
 
         // Dispatch event
-        $eventDispatcher = $this->get('event_dispatcher');
         $event = new GenericEvent($itemData, ['contentType' => $contentType]);
-        $eventDispatcher->dispatch($event, Events::PRODUCT_UPDATED);
+        $this->eventDispatcher->dispatch($event, Events::PRODUCT_UPDATED);
 
         // Clear file cache
-        /** @var FilesystemAdapter $cache */
-        $cache = $this->get('app.filecache');
-        $cache->clear();
+        $this->cacheAdapter->clear();
 
         return $result;
     }
@@ -657,7 +651,7 @@ class ProductController extends BaseProductController
             return $this->setError('Content type not found.');
         }
 
-        $collection = $this->getCollection($contentType->getCollection());
+        $collection = $this->catalogService->getCollection($contentType->getCollection());
 
         $entity = $collection->findOne(['_id' => $itemId]);
         if(!$entity){
@@ -676,7 +670,7 @@ class ProductController extends BaseProductController
      */
     public function sortAdditionalFields($collectionName, $document, $fieldsSort)
     {
-        $collection = $this->getCollection($collectionName);
+        $collection = $this->catalogService->getCollection($collectionName);
         $docKeys = array_keys($document);
         $itemId = isset($document['_id']) ? $document['_id'] : 0;
         if (!$itemId) {
@@ -746,7 +740,7 @@ class ProductController extends BaseProductController
      */
     public function getNextId($collectionName, $databaseName = '')
     {
-        $autoincrementCollection = $this->getCollection('doctrine_increment_ids', $databaseName);
+        $autoincrementCollection = $this->catalogService->getCollection('doctrine_increment_ids', $databaseName);
         $count = $autoincrementCollection->countDocuments(['_id' => $collectionName]);
         if(!$count){
             $record = [
@@ -773,7 +767,7 @@ class ProductController extends BaseProductController
      */
     public function checkNameExists($fieldName, $name, $collectionName, $categoryId, $itemId = null)
     {
-        $collection = $this->getCollection($collectionName);
+        $collection = $this->catalogService->getCollection($collectionName);
         $itemId = intval($itemId);
         $where = [
             $fieldName => $name,
@@ -794,7 +788,7 @@ class ProductController extends BaseProductController
      * @return int
      */
     public function getUsedOtherTotal(ContentType $contentType, $fieldName, $fileId, $ids = []) {
-        $collection = $this->getCollection($contentType->getCollection());
+        $collection = $this->catalogService->getCollection($contentType->getCollection());
         return $collection->countDocuments([
             '_id' => ['$nin' => $ids],
             $fieldName . '.fileId' =>  $fileId
@@ -809,8 +803,6 @@ class ProductController extends BaseProductController
      */
     public function deleteFile($itemId, $ownerType, $ownerId = 0)
     {
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
         $fileDocumentRepository = $this->getFileDocumentRepository();
 
         $where = [
@@ -823,12 +815,12 @@ class ProductController extends BaseProductController
 
         $fileDocument = $fileDocumentRepository->findOneBy($where);
 
-        $filesDirPath = $this->getParameter('app.files_dir_path');
+        $filesDirPath = $this->params->get('app.files_dir_path');
 
         if ($fileDocument) {
             $fileDocument->setUploadRootDir($filesDirPath);
-            $dm->remove($fileDocument);
-            $dm->flush();
+            $this->dm->remove($fileDocument);
+            $this->dm->flush();
         }
 
         return true;
@@ -839,9 +831,7 @@ class ProductController extends BaseProductController
      */
     public function getCategoriesRepository()
     {
-        return $this->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository(Category::class);
+        return $this->dm->getRepository(Category::class);
     }
 
     /**
@@ -849,8 +839,6 @@ class ProductController extends BaseProductController
      */
     public function getFileDocumentRepository()
     {
-        return $this->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository(FileDocument::class);
+        return $this->dm->getRepository(FileDocument::class);
     }
 }

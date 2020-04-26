@@ -2,14 +2,30 @@
 
 namespace App\Controller\Admin;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ODM\MongoDB\DocumentManager;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
-class BaseController extends Controller
+class BaseController extends AbstractController
 {
 
+    /** @var ParameterBagInterface */
+    protected $params;
+    /** @var DocumentManager */
+    protected $dm;
+    /** @var TranslatorInterface */
+    protected $translator;
+
+    public function __construct(ParameterBagInterface $params, DocumentManager $dm, TranslatorInterface $translator)
+    {
+        $this->params = $params;
+        $this->dm = $dm;
+        $this->translator = $translator;
+    }
+    
     /**
      * @param $message
      * @param int $status

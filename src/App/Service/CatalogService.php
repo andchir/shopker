@@ -7,7 +7,7 @@ use App\MainBundle\Document\ContentType;
 use App\MainBundle\Document\Filter;
 use App\Repository\CategoryRepository;
 use App\Repository\ContentTypeRepository;
-use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\Persistence\ObjectRepository;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -42,6 +42,8 @@ class CatalogService {
      * @param int $parentId
      * @param string $locale
      * @return array
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
      */
     public function getCategoriesTree($parentId = 0, $locale = '')
     {
@@ -140,6 +142,8 @@ class CatalogService {
      * @param string $currentUri
      * @param string $locale
      * @return array
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
      */
     public function getChildCategories(
         $parent = 0,

@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\MainBundle\Document\FileDocument;
 use App\Service\CatalogService;
+use Doctrine\Persistence\ObjectRepository;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -43,6 +44,7 @@ class CategoryController extends StorageControllerAbstract
      * @param $data
      * @param int $itemId
      * @return array
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function validateData($data, $itemId = null)
     {
@@ -72,6 +74,7 @@ class CategoryController extends StorageControllerAbstract
      * @return JsonResponse
      * @throws \Doctrine\ODM\MongoDB\LockException
      * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function createUpdate($data, $itemId = null)
     {
@@ -310,7 +313,7 @@ class CategoryController extends StorageControllerAbstract
     }
 
     /**
-     * @return \App\Repository\CategoryRepository
+     * @return \App\Repository\CategoryRepository|ObjectRepository
      */
     public function getRepository()
     {

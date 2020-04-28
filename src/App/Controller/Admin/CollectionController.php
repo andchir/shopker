@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\MainBundle\Document\Collection;
+use Doctrine\Persistence\ObjectRepository;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -41,6 +42,7 @@ class CollectionController extends BaseController
      * @param Request $request
      * @param string $itemName
      * @return JsonResponse
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function deleteItemByName(Request $request, $itemName)
     {
@@ -54,9 +56,7 @@ class CollectionController extends BaseController
             return $this->setError('Item not found.');
         }
 
-        $contentTypeRepository = $this->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository('AppMainBundle:ContentType');
+        $contentTypeRepository = $this->dm->getRepository('AppMainBundle:ContentType');
 
         $count = $contentTypeRepository->createQueryBuilder()
             ->field('collection')->equals($itemName)
@@ -67,11 +67,9 @@ class CollectionController extends BaseController
         if($count > 0){
             return $this->setError('This collection is not empty.');
         }
-
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
-        $dm->remove($collection);
-        $dm->flush();
+        
+        $this->dm->remove($collection);
+        $this->dm->flush();
 
         return new JsonResponse([]);
     }
@@ -81,6 +79,9 @@ class CollectionController extends BaseController
      * @param $data
      * @param string $itemId
      * @return JsonResponse
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function createUpdate($data, $itemId = null)
     {
@@ -94,22 +95,18 @@ class CollectionController extends BaseController
             }
         }
         $collection->setName($data['name']);
-
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
-        $dm->persist($collection);
-        $dm->flush();
+        
+        $this->dm->persist($collection);
+        $this->dm->flush();
 
         return new JsonResponse($collection->toArray());
     }
 
     /**
-     * @return \App\Repository\CollectionRepository
+     * @return \App\Repository\CollectionRepository|ObjectRepository
      */
     public function getRepository()
     {
-        return $this->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository(Collection::class);
+        return $this->dm->getRepository(Collection::class);
     }
 }

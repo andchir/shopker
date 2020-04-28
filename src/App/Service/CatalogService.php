@@ -10,7 +10,7 @@ use App\Repository\ContentTypeRepository;
 use Doctrine\Persistence\ObjectRepository;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Mimey\MimeTypes;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class CatalogService {
@@ -397,6 +397,185 @@ class CatalogService {
     }
 
     /**
+     * @param $value
+     * @param $field
+     * @param array $properties
+     * @param string|null $collectionName
+     * @param string|null $categoryId
+     * @param int|null $itemId
+     * @return string
+     */
+    public function validateField($value, $field, $properties = [], $collectionName = null, $categoryId = null, $itemId = null)
+    {
+        $inputProperties = isset($field['inputProperties'])
+            ? $field['inputProperties']
+            : [];
+        if (!empty($field['required']) && empty($value)) {
+            return "Field \"{$field['title']}\" is required.";
+        }
+        $error = '';
+
+        // Validation by input properties
+        switch ($field['inputType']){
+            case 'system_name':
+
+                if(
+                    !empty($value)
+                    && $this->checkNameExists($field['name'], $value, $collectionName, $categoryId, $itemId)
+                ){
+                    $error = 'System name already exists.';
+                }
+
+                break;
+            case 'file':
+
+                if (!empty($value) && !empty($inputProperties['allowed_extensions'])) {
+
+                    if (!$this->fileUploadAllowed($value, $properties, $inputProperties['allowed_extensions'])) {
+                        $error = 'File type is not allowed.';
+                    }
+
+                }
+
+                break;
+        }
+        return $error;
+    }
+
+    /**
+     * @param string $fieldName
+     * @param string $name
+     * @param string $collectionName
+     * @param int $categoryId
+     * @param int $itemId
+     * @return mixed
+     */
+    public function checkNameExists($fieldName, $name, $collectionName, $categoryId, $itemId = null)
+    {
+        $collection = $this->getCollection($collectionName);
+        $itemId = intval($itemId);
+        $where = [
+            $fieldName => $name,
+            'parentId' => $categoryId
+        ];
+        if($itemId){
+            $where['_id'] = ['$ne' => $itemId];
+        }
+        return $collection->countDocuments($where);
+    }
+
+    /**
+     * @param string | array $value
+     * @param array $properties
+     * @param string $allowedExtensions
+     * @return bool
+     */
+    public function fileUploadAllowed($value, $properties, $allowedExtensions = '')
+    {
+        $filesExtBlacklist = $this->params->get('app.files_ext_blacklist');
+        if (is_array($value)) {
+            $ext = !empty($value['extension']) ? strtolower($value['extension']) : null;
+        } else {
+            $ext = UtilsService::getExtension($value);
+        }
+        if (in_array($ext, $filesExtBlacklist)) {
+            return false;
+        }
+
+        // Validate by file extension
+        if (strpos($allowedExtensions, '/') !== false) {
+
+            if (empty($properties['mimeType'])) {
+                $mimes = new MimeTypes;
+                $properties['mimeType'] = $mimes->getMimeType($ext);
+            }
+            if (!self::isMimeTypeAllowed(explode(',', $allowedExtensions), $properties['mimeType'])) {
+                return false;
+            }
+
+        } else {
+            $allowedExtensions = explode(',', $allowedExtensions);
+            if ($ext !== null && !in_array('.' . $ext, $allowedExtensions)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Sorting additional fields
+     * @param string $collectionName
+     * @param array $document
+     * @param array $fieldsSort
+     * @return bool
+     */
+    public function sortAdditionalFields($collectionName, $document, $fieldsSort)
+    {
+        $collection = $this->getCollection($collectionName);
+        $docKeys = array_keys($document);
+        $itemId = isset($document['_id']) ? $document['_id'] : 0;
+        if (!$itemId) {
+            return false;
+        }
+
+        $additFields = [];
+        foreach ($document as $key => $value) {
+            if (in_array($key, ['id', '_id', 'parentId', 'isActive'])) {
+                continue;
+            }
+            if (strpos($key, '__') !== false) {
+                $tmp = explode('__', $key);
+                if (!empty($tmp[1]) && is_numeric($tmp[1])) {
+                    if (!empty($value)) {
+                        $additFields[$key] = $value;
+                    }
+                    unset($document[$key]);
+                    continue;
+                }
+            }
+            $document[$key] = $value;
+        }
+        if (empty($additFields)) {
+            return false;
+        }
+
+        // Sort additional fields
+        uksort($additFields, function($a, $b) use ($fieldsSort) {
+            return (array_search($a, $fieldsSort) < array_search($b, $fieldsSort)) ? -1 : 1;
+        });
+
+        // Merge fields
+        $docKeysData = [];
+        foreach ($additFields as $k => $v) {
+            $fieldBaseName = ContentType::getCleanFieldName($k);
+            if (!isset($docKeysData[$fieldBaseName])) {
+                $docKeysData[$fieldBaseName] = 0;
+            }
+            $docKeysData[$fieldBaseName]++;
+            $document[$fieldBaseName . '__' . $docKeysData[$fieldBaseName]] = $v;
+        }
+
+        // Collect unused additional fields
+        $unset = [];
+        $unusedKeys = array_diff($docKeys, array_keys($document));
+        foreach ($unusedKeys as $k) {
+            $unset[$k] = 1;
+        }
+
+        $unsetQuery = !empty($unset) ? ['$unset' => $unset] : [];
+        try {
+            $result = $collection->updateOne(
+                ['_id' => $itemId],
+                array_merge(['$set' => $document], $unsetQuery)
+            );
+        } catch (\Exception $e) {
+            $result = false;
+        }
+        return $result;
+    }
+
+    /**
      * @param $collectionName
      * @param string $databaseName
      * @return \MongoDB\Collection
@@ -494,6 +673,29 @@ class CatalogService {
     public function getContentTypeRepository()
     {
         return $this->dm->getRepository(ContentType::class);
+    }
+
+    /**
+     * @param array $allowedMimeTypes
+     * @param string $mimeType
+     * @return bool
+     */
+    public static function isMimeTypeAllowed($allowedMimeTypes, $mimeType)
+    {
+        $output = false;
+        foreach ($allowedMimeTypes as $allowedMimeType) {
+            if (strpos($allowedMimeType, '/*') !== false) {
+                $allowedMimeType = str_replace('/*', '/', $allowedMimeType);
+                if (strpos($mimeType, $allowedMimeType) === 0) {
+                    $output = true;
+                    break;
+                }
+            } else if ($allowedMimeType === $mimeType) {
+                $output = true;
+                break;
+            }
+        }
+        return $output;
     }
 
     /**

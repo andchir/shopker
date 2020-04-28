@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use Doctrine\Persistence\ObjectRepository;
 use Symfony\Component\Routing\Annotation\Route;
 use App\MainBundle\Document\FieldType;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,6 +19,7 @@ class FieldTypeController extends StorageControllerAbstract
      * @param $data
      * @param int $itemId
      * @return array
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function validateData($data, $itemId = null)
     {
@@ -33,7 +35,6 @@ class FieldTypeController extends StorageControllerAbstract
         if ($this->checkNameExists($data['name'], $itemId)) {
             return ['success' => false, 'msg' => 'System name already exists.'];
         }
-
         return ['success' => true];
     }
 
@@ -43,6 +44,7 @@ class FieldTypeController extends StorageControllerAbstract
      * @return JsonResponse
      * @throws \Doctrine\ODM\MongoDB\LockException
      * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function createUpdate($data, $itemId = null){
 
@@ -69,25 +71,20 @@ class FieldTypeController extends StorageControllerAbstract
             ->setIsActive($data['isActive'])
             ->setInputProperties($data['inputProperties'])
             ->setOutputProperties($data['outputProperties']);
-
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
+        
         if (!$item->getId()) {
-            $dm->persist($item);
+            $this->dm->persist($item);
         }
-        $dm->flush();
+        $this->dm->flush();
 
         return new JsonResponse($item->toArray());
     }
 
     /**
-     * @return \App\Repository\FieldTypeRepository
+     * @return \App\Repository\FieldTypeRepository|ObjectRepository
      */
     public function getRepository()
     {
-        return $this->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository(FieldType::class);
+        return $this->dm->getRepository(FieldType::class);
     }
-
 }

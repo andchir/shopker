@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use Doctrine\Persistence\ObjectRepository;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -38,6 +39,7 @@ class ContentTypeController extends StorageControllerAbstract
      * @param $data
      * @param int $itemId
      * @return array
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function validateData($data, $itemId = null)
     {
@@ -74,6 +76,7 @@ class ContentTypeController extends StorageControllerAbstract
      * @return JsonResponse
      * @throws \Doctrine\ODM\MongoDB\LockException
      * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function createUpdate($data, $itemId = null)
     {
@@ -148,15 +151,20 @@ class ContentTypeController extends StorageControllerAbstract
     public function deleteItem($itemId)
     {
         $repository = $this->getRepository();
-
-        $item = $repository->find($itemId);
+        try {
+            $item = $repository->find($itemId);
+        } catch (\Exception $e) {
+            return [
+                'success' => false,
+                'msg' => $e->getMessage()
+            ];
+        }
         if(!$item){
             return [
                 'success' => false,
                 'msg' => 'Item not found.'
             ];
         }
-
         if (count($item->getCategories()) > 0) {
             return [
                 'success' => false,
@@ -165,13 +173,19 @@ class ContentTypeController extends StorageControllerAbstract
         }
         
         $this->dm->remove($item);
-        $this->dm->flush();
-
+        try {
+            $this->dm->flush();
+        } catch (\Exception $e) {
+            return [
+                'success' => false,
+                'msg' => $e->getMessage()
+            ];
+        }
         return ['success' => true];
     }
 
     /**
-     * @return \App\Repository\ContentTypeRepository
+     * @return \App\Repository\ContentTypeRepository|ObjectRepository
      */
     public function getRepository()
     {

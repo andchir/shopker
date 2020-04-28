@@ -6,15 +6,19 @@ use App\MainBundle\Document\Category;
 use App\MainBundle\Document\ContentType;
 use App\MainBundle\Document\FileDocument;
 use App\MainBundle\Document\User;
+use App\Service\CatalogService;
 use App\Service\UtilsService;
+use Doctrine\ODM\MongoDB\DocumentManager;
+use Doctrine\Persistence\ObjectRepository;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\FileBag;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class FileControllerAbstract
@@ -24,17 +28,29 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 class FileController extends BaseController
 {
 
+    /** @var CatalogService */
+    protected $catalogService;
+
+    public function __construct(
+        ParameterBagInterface $params,
+        DocumentManager $dm,
+        TranslatorInterface $translator,
+        CatalogService $catalogService
+    )
+    {
+        parent::__construct($params, $dm, $translator);
+        $this->catalogService = $catalogService;
+    }
+    
     /**
      * @Route("/upload", methods={"POST"})
      * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param Request $request
      * @return JsonResponse
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function uploadFilesAction(Request $request)
     {
-        /** @var TranslatorInterface $translator */
-        $translator = $this->get('translator');
-
         $categoryId = (int) $request->get('categoryId');
         $options = [];
         $options['itemId'] = (int) $request->get('itemId');
@@ -47,16 +63,13 @@ class FileController extends BaseController
         $files = $request->files;
 
         if (is_null($options['itemId'])) {
-            return $this->setError($translator->trans('Item not found.', [], 'validators'));
+            return $this->setError($this->translator->trans('Item not found.', [], 'validators'));
         }
 
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
-
         /** @var Category $category */
-        $category = $dm->getRepository('AppMainBundle:Category')->find($categoryId);
+        $category = $this->dm->getRepository('AppMainBundle:Category')->find($categoryId);
         if (!$category) {
-            return $this->setError($translator->trans('Category not found.', [], 'validators'));
+            return $this->setError($this->translator->trans('Category not found.', [], 'validators'));
         }
 
         if ($options['ownerType'] == 'category') {
@@ -66,7 +79,7 @@ class FileController extends BaseController
         }
 
         if ($error) {
-            return $this->setError($translator->trans($error, [], 'validators'));
+            return $this->setError($this->translator->trans($error, [], 'validators'));
         } else {
 
             $fileIds = array_map(function($item) {
@@ -83,6 +96,7 @@ class FileController extends BaseController
      * @param array $options
      * @param FileBag $files
      * @return array
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function saveFileForCategory(Category $category, $options, $files)
     {
@@ -91,8 +105,6 @@ class FileController extends BaseController
 
         /** @var User $user */
         $user = $this->getUser();
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
 
         /** @var UploadedFile $file */
         $file = $files->get('image');
@@ -107,7 +119,7 @@ class FileController extends BaseController
             return [$usedFiles, $error];
         }
 
-        $filesDirPath = $this->getParameter('app.files_dir_path');
+        $filesDirPath = $this->params->get('app.files_dir_path');
         if (!is_dir($filesDirPath)) {
             mkdir($filesDirPath);
         }
@@ -121,14 +133,14 @@ class FileController extends BaseController
             ->setUserId($user->getId())
             ->setFile($file);
 
-        $dm->persist($fileDocument);
-        $dm->flush();
+        $this->dm->persist($fileDocument);
+        $this->dm->flush();
 
         $usedFiles[] = $fileDocument->toArray();
 
         // Update image data in category
         $category->setImage($fileDocument->getRecordData());
-        $dm->flush();
+        $this->dm->flush();
 
         return [$usedFiles, $error];
     }
@@ -138,6 +150,7 @@ class FileController extends BaseController
      * @param array $options
      * @param FileBag $files
      * @return array
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function saveFileForDocument(Category $category, $options, $files)
     {
@@ -146,8 +159,6 @@ class FileController extends BaseController
 
         /** @var User $user */
         $user = $this->getUser();
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
         /** @var ContentType $contentType */
         $contentType = $category->getContentType();
         $fileDocumentRepository = $this->getRepository();
@@ -158,10 +169,8 @@ class FileController extends BaseController
         $contentTypeFields = $contentType->getFields();
 
         // Get owner entity
-        $productController = new ProductController();
-        $productController->setContainer($this->container);
 
-        $collection = $productController->getCollection($contentType->getCollection());
+        $collection = $this->catalogService->getCollection($contentType->getCollection());
 
         $entity = $collection->findOne(['_id' => $options['itemId']]);
         if(!$entity){
@@ -171,7 +180,7 @@ class FileController extends BaseController
 
         $now = new \DateTime();
 
-        $filesDirPath = $this->getParameter('app.files_dir_path');
+        $filesDirPath = $this->params->get('app.files_dir_path');
         if (!is_dir($filesDirPath)) {
             mkdir($filesDirPath);
         }
@@ -191,7 +200,7 @@ class FileController extends BaseController
             $file = $files->get($fieldName);
 
             if (!empty($file)) {
-                if($error = $productController->validateField($file->getClientOriginalName(), $fields[0], [
+                if($error = $this->catalogService->validateField($file->getClientOriginalName(), $fields[0], [
                     'mimeType' => $file->getMimeType()
                 ])){
                     break;
@@ -206,8 +215,8 @@ class FileController extends BaseController
                     ->setUserId($user->getId())
                     ->setFile($file);
 
-                $dm->persist($fileDocument);
-                $dm->flush();
+                $this->dm->persist($fileDocument);
+                $this->dm->flush();
 
                 $usedFiles[] = $fileDocument->toArray();
                 $entity[$fieldName] = $fileDocument->getRecordData();
@@ -228,7 +237,7 @@ class FileController extends BaseController
             }
         }
 
-        $dm->flush();
+        $this->dm->flush();
 
         if ($error) {
             return [$usedFiles, $error];
@@ -236,7 +245,7 @@ class FileController extends BaseController
             $collection->updateOne(['_id' => $entity['_id']], ['$set' => $entity]);
         }
 
-        $productController->sortAdditionalFields($contentType->getCollection(), $entity, $options['fieldsSort']);
+        $this->catalogService->sortAdditionalFields($contentType->getCollection(), $entity, $options['fieldsSort']);
 
         return [$usedFiles, $error];
     }
@@ -246,20 +255,19 @@ class FileController extends BaseController
      * @param int $ownerDocId
      * @param array $usedIds
      * @return int
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function deleteUnused($ownerType, $ownerDocId, $usedIds = [])
     {
         $count = 0;
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
         $fileDocumentRepository = $this->getRepository();
 
         $fileDocumentsUnused = $fileDocumentRepository->findUnused($ownerType, $ownerDocId, $usedIds);
         /** @var FileDocument $fileDocument */
         foreach ($fileDocumentsUnused as $fileDocument) {
-            $dm->remove($fileDocument);
+            $this->dm->remove($fileDocument);
         }
-        $dm->flush();
+        $this->dm->flush();
 
         return $count;
     }
@@ -274,7 +282,7 @@ class FileController extends BaseController
         if (!$fileDocument) {
             throw $this->createNotFoundException();
         }
-        $filesDirPath = $this->getParameter('app.files_dir_path');
+        $filesDirPath = $this->params->get('app.files_dir_path');
         $fileDocument->setUploadRootDir($filesDirPath);
         $filePath = $fileDocument->getUploadedPath();
 
@@ -292,7 +300,7 @@ class FileController extends BaseController
      */
     public function fileUploadAllowed($value, $allowedExtensions = [])
     {
-        $filesExtBlacklist = $this->getParameter('app.files_ext_blacklist');
+        $filesExtBlacklist = $this->params->get('app.files_ext_blacklist');
         if (is_array($value)) {
             $ext = !empty($value['extension']) ? strtolower($value['extension']) : null;
         } else {
@@ -310,13 +318,11 @@ class FileController extends BaseController
     }
 
     /**
-     * @return \App\Repository\FileDocumentRepository
+     * @return \App\Repository\FileDocumentRepository|ObjectRepository
      */
     public function getRepository()
     {
-        return $this->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository(FileDocument::class);
+        return $this->dm->getRepository(FileDocument::class);
     }
 
     /**

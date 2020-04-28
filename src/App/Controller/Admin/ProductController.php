@@ -138,7 +138,7 @@ class ProductController extends BaseController
         $error = '';
 
         foreach ($contentTypeFields as $field){
-            if($error = $this->validateField($data[$field['name']], $field, [], $collectionName, $category->getId(), $itemId)){
+            if($error = $this->catalogService->validateField($data[$field['name']], $field, [], $collectionName, $category->getId(), $itemId)){
                 break;
             }
         }
@@ -147,114 +147,6 @@ class ProductController extends BaseController
             'success' => empty($error),
             'msg' => $error
         ];
-    }
-
-    /**
-     * @param $value
-     * @param $field
-     * @param array $properties
-     * @param string|null $collectionName
-     * @param string|null $categoryId
-     * @param int|null $itemId
-     * @return string
-     */
-    public function validateField($value, $field, $properties = [], $collectionName = null, $categoryId = null, $itemId = null)
-    {
-        $inputProperties = isset($field['inputProperties'])
-            ? $field['inputProperties']
-            : [];
-        if (!empty($field['required']) && empty($value)) {
-            return "Field \"{$field['title']}\" is required.";
-        }
-        $error = '';
-
-        // Validation by input properties
-        switch ($field['inputType']){
-            case 'system_name':
-
-                if(
-                    !empty($value)
-                    && $this->checkNameExists($field['name'], $value, $collectionName, $categoryId, $itemId)
-                ){
-                    $error = 'System name already exists.';
-                }
-
-                break;
-            case 'file':
-
-                if (!empty($value) && !empty($inputProperties['allowed_extensions'])) {
-
-                    if (!$this->fileUploadAllowed($value, $properties, $inputProperties['allowed_extensions'])) {
-                        $error = 'File type is not allowed.';
-                    }
-
-                }
-
-                break;
-        }
-        return $error;
-    }
-
-    /**
-     * @param string | array $value
-     * @param array $properties
-     * @param string $allowedExtensions
-     * @return bool
-     */
-    public function fileUploadAllowed($value, $properties, $allowedExtensions = '')
-    {
-        $filesExtBlacklist = $this->params->get('app.files_ext_blacklist');
-        if (is_array($value)) {
-            $ext = !empty($value['extension']) ? strtolower($value['extension']) : null;
-        } else {
-            $ext = UtilsService::getExtension($value);
-        }
-        if (in_array($ext, $filesExtBlacklist)) {
-            return false;
-        }
-
-        // Validate by file extension
-        if (strpos($allowedExtensions, '/') !== false) {
-
-            if (empty($properties['mimeType'])) {
-                $mimes = new MimeTypes;
-                $properties['mimeType'] = $mimes->getMimeType($ext);
-            }
-            if (!self::isMimeTypeAllowed(explode(',', $allowedExtensions), $properties['mimeType'])) {
-                return false;
-            }
-
-        } else {
-            $allowedExtensions = explode(',', $allowedExtensions);
-            if ($ext !== null && !in_array('.' . $ext, $allowedExtensions)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * @param array $allowedMimeTypes
-     * @param string $mimeType
-     * @return bool
-     */
-    public static function isMimeTypeAllowed($allowedMimeTypes, $mimeType)
-    {
-        $output = false;
-        foreach ($allowedMimeTypes as $allowedMimeType) {
-            if (strpos($allowedMimeType, '/*') !== false) {
-                $allowedMimeType = str_replace('/*', '/', $allowedMimeType);
-                if (strpos($mimeType, $allowedMimeType) === 0) {
-                    $output = true;
-                    break;
-                }
-            } else if ($allowedMimeType === $mimeType) {
-                $output = true;
-                break;
-            }
-        }
-        return $output;
     }
 
     /**
@@ -313,6 +205,7 @@ class ProductController extends BaseController
      * @return JsonResponse
      * @throws \Doctrine\ODM\MongoDB\LockException
      * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function createUpdate($data, Category $category = null, $itemId = null)
     {
@@ -354,7 +247,7 @@ class ProductController extends BaseController
                             '_id' => $itemId
                         ]);
                         $itemId = null;
-                        $document['_id'] = $this->getNextId($contentType->getCollection());
+                        $document['_id'] = $this->catalogService->getNextId($contentType->getCollection());
                     }
                 }
             }
@@ -366,7 +259,7 @@ class ProductController extends BaseController
             }
         } else {
             $document = [
-                '_id' => $this->getNextId($contentType->getCollection())
+                '_id' => $this->catalogService->getNextId($contentType->getCollection())
             ];
         }
 
@@ -447,12 +340,12 @@ class ProductController extends BaseController
         // Otherwise do it now
         if (empty($fileFields) && !empty($fileIds)) {
             $fileIds = array_unique($fileIds);
-            $fileController = new FileController($this->params, $this->dm, $this->translator);
+            $fileController = new FileController($this->params, $this->dm, $this->translator, $this->catalogService);
             $fileController->setContainer($this->container);
             $fileController->deleteUnused($contentType->getName(), $itemId, $fileIds);
         }
         if (!empty($fieldsSort)) {
-            $this->sortAdditionalFields($contentType->getCollection(), $document, $fieldsSort);
+            $this->catalogService->sortAdditionalFields($contentType->getCollection(), $document, $fieldsSort);
         }
 
         // Clear file cache
@@ -536,7 +429,7 @@ class ProductController extends BaseController
      * @param int $itemId
      * @return JsonResponse
      */
-    public function deleteItemAction(Category $category = null, $itemId)
+    public function deleteItemAction($category, $itemId)
     {
         if (!$category) {
             return $this->setError($this->translator->trans('Category not found.', [], 'validators'));
@@ -639,12 +532,11 @@ class ProductController extends BaseController
      * @param int $itemId
      * @return JsonResponse
      */
-    public function getOneByCategory(Request $request, Category $category = null, $itemId)
+    public function getOneByCategory(Request $request, Category $category, $itemId)
     {
         if(!$category){
             return $this->setError('Category not found.');
         }
-
         $itemId = intval($itemId);
 
         $contentType = $category->getContentType();
@@ -660,125 +552,6 @@ class ProductController extends BaseController
         }
 
         return new JsonResponse(array_merge($entity, ['id' => $entity['_id']]));
-    }
-
-    /**
-     * Sorting additional fields
-     * @param string $collectionName
-     * @param array $document
-     * @param array $fieldsSort
-     * @return bool
-     */
-    public function sortAdditionalFields($collectionName, $document, $fieldsSort)
-    {
-        $collection = $this->catalogService->getCollection($collectionName);
-        $docKeys = array_keys($document);
-        $itemId = isset($document['_id']) ? $document['_id'] : 0;
-        if (!$itemId) {
-            return false;
-        }
-
-        $additFields = [];
-        foreach ($document as $key => $value) {
-            if (in_array($key, ['id', '_id', 'parentId', 'isActive'])) {
-                continue;
-            }
-            if (strpos($key, '__') !== false) {
-                $tmp = explode('__', $key);
-                if (!empty($tmp[1]) && is_numeric($tmp[1])) {
-                    if (!empty($value)) {
-                        $additFields[$key] = $value;
-                    }
-                    unset($document[$key]);
-                    continue;
-                }
-            }
-            $document[$key] = $value;
-        }
-        if (empty($additFields)) {
-            return false;
-        }
-
-        // Sort additional fields
-        uksort($additFields, function($a, $b) use ($fieldsSort) {
-            return (array_search($a, $fieldsSort) < array_search($b, $fieldsSort)) ? -1 : 1;
-        });
-
-        // Merge fields
-        $docKeysData = [];
-        foreach ($additFields as $k => $v) {
-            $fieldBaseName = ContentType::getCleanFieldName($k);
-            if (!isset($docKeysData[$fieldBaseName])) {
-                $docKeysData[$fieldBaseName] = 0;
-            }
-            $docKeysData[$fieldBaseName]++;
-            $document[$fieldBaseName . '__' . $docKeysData[$fieldBaseName]] = $v;
-        }
-
-        // Collect unused additional fields
-        $unset = [];
-        $unusedKeys = array_diff($docKeys, array_keys($document));
-        foreach ($unusedKeys as $k) {
-            $unset[$k] = 1;
-        }
-
-        $unsetQuery = !empty($unset) ? ['$unset' => $unset] : [];
-        try {
-            $result = $collection->updateOne(
-                ['_id' => $itemId],
-                array_merge(['$set' => $document], $unsetQuery)
-            );
-        } catch (\Exception $e) {
-            $result = false;
-        }
-        return $result;
-    }
-
-    /**
-     * @param $collectionName
-     * @param string $databaseName
-     * @return mixed
-     */
-    public function getNextId($collectionName, $databaseName = '')
-    {
-        $autoincrementCollection = $this->catalogService->getCollection('doctrine_increment_ids', $databaseName);
-        $count = $autoincrementCollection->countDocuments(['_id' => $collectionName]);
-        if(!$count){
-            $record = [
-                '_id' => $collectionName,
-                'current_id' => 0
-            ];
-            $autoincrementCollection->insertOne($record);
-        }
-        $ret = $autoincrementCollection->findOneAndUpdate(
-            ['_id' => $collectionName],
-            ['$inc' => ['current_id' => 1]],
-            ['new' => true]
-        );
-        return $ret['current_id'];
-    }
-
-    /**
-     * @param string $fieldName
-     * @param string $name
-     * @param string $collectionName
-     * @param int $categoryId
-     * @param int $itemId
-     * @return mixed
-     */
-    public function checkNameExists($fieldName, $name, $collectionName, $categoryId, $itemId = null)
-    {
-        $collection = $this->catalogService->getCollection($collectionName);
-        $itemId = intval($itemId);
-        $where = [
-            $fieldName => $name,
-            'parentId' => $categoryId
-        ];
-        if($itemId){
-            $where['_id'] = ['$ne' => $itemId];
-        }
-
-        return $collection->countDocuments($where);
     }
 
     /**

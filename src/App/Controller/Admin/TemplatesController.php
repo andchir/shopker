@@ -50,10 +50,10 @@ class TemplatesController extends StorageControllerAbstract
     /**
      * @Route("", methods={"GET"})
      * @param Request $request
-     * @param SerializerInterface $serializer
      * @return JsonResponse
+     * @throws \Twig\Error\LoaderError
      */
-    public function getList(Request $request, SerializerInterface $serializer)
+    public function getList(Request $request)
     {
         $items = [];
         $queryString = $request->getQueryString();

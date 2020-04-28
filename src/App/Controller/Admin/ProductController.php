@@ -9,6 +9,7 @@ use App\Events;
 use App\Service\CatalogService;
 use App\Service\UtilsService;
 use Doctrine\ODM\MongoDB\DocumentManager;
+use Doctrine\Persistence\ObjectRepository;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -798,8 +799,9 @@ class ProductController extends BaseController
     /**
      * @param $itemId
      * @param $ownerType
-     * @param $ownerId
+     * @param int $ownerId
      * @return bool
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function deleteFile($itemId, $ownerType, $ownerId = 0)
     {
@@ -827,7 +829,7 @@ class ProductController extends BaseController
     }
 
     /**
-     * @return \App\Repository\CategoryRepository
+     * @return \App\Repository\CategoryRepository|ObjectRepository
      */
     public function getCategoriesRepository()
     {
@@ -835,7 +837,7 @@ class ProductController extends BaseController
     }
 
     /**
-     * @return \App\Repository\FileDocumentRepository
+     * @return \App\Repository\FileDocumentRepository|ObjectRepository
      */
     public function getFileDocumentRepository()
     {

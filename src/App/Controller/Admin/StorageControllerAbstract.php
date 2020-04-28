@@ -2,14 +2,12 @@
 
 namespace App\Controller\Admin;
 
-use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ODM\MongoDB\Query\Builder as QueryBuilder;
-use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
@@ -26,10 +24,9 @@ abstract class StorageControllerAbstract extends BaseController
     /**
      * @Route("", methods={"GET"})
      * @param Request $request
-     * @param SerializerInterface $serializer
      * @return JsonResponse
      */
-    public function getList(Request $request, SerializerInterface $serializer)
+    public function getList(Request $request)
     {
         $queryString = $request->getQueryString();
         $options = $this->getQueryOptions($queryString);
@@ -109,11 +106,11 @@ abstract class StorageControllerAbstract extends BaseController
      * @Route("/{itemId}", methods={"DELETE"})
      * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param int $itemId
-     * @param EventDispatcher $evenDispatcher
+     * @param EventDispatcherInterface $evenDispatcher
      * @return JsonResponse
      * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
-    public function deleteItemAction($itemId, EventDispatcher $evenDispatcher)
+    public function deleteItemAction($itemId, EventDispatcherInterface $evenDispatcher)
     {
         $results = $this->deleteItem($itemId);
         if(!$results['success']){

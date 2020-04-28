@@ -4,15 +4,17 @@ namespace App\Controller\Admin;
 
 use App\MainBundle\Document\FileDocument;
 use App\Service\CatalogService;
+use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\Persistence\ObjectRepository;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Event\CategoryUpdatedEvent;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-
 use App\MainBundle\Document\Category;
 use App\MainBundle\Document\ContentType;
 
@@ -24,6 +26,28 @@ use App\MainBundle\Document\ContentType;
 class CategoryController extends StorageControllerAbstract
 {
 
+    /** @var EventDispatcherInterface */
+    protected $eventDispatcher;
+    /** @var FilesystemAdapter */
+    protected $cacheAdapter;
+    /** @var CatalogService */
+    protected $catalogService;
+
+    public function __construct(
+        ParameterBagInterface $params,
+        DocumentManager $dm,
+        TranslatorInterface $translator,
+        EventDispatcherInterface $eventDispatcher,
+        FilesystemAdapter $cacheAdapter,
+        CatalogService $catalogService
+    )
+    {
+        parent::__construct($params, $dm, $translator);
+        $this->eventDispatcher = $eventDispatcher;
+        $this->cacheAdapter = $cacheAdapter;
+        $this->catalogService = $catalogService;
+    }
+    
     /**
      * @param $queryString
      * @return mixed
@@ -126,22 +150,19 @@ class CategoryController extends StorageControllerAbstract
         $this->dm->flush();
 
         // Dispatch event
-        $evenDispatcher = $this->get('event_dispatcher');
         $event = new CategoryUpdatedEvent($this->dm, $item, $previousParentId);
-        $item = $evenDispatcher->dispatch($event, CategoryUpdatedEvent::NAME)->getCategory();
+        $item = $this->eventDispatcher->dispatch($event, CategoryUpdatedEvent::NAME)->getCategory();
 
         // Delete unused files
         if (empty($item->getImage()) && !empty($oldImageData)) {
-            $fileController = new FileController();
+            $fileController = new FileController($this->params, $this->dm, $this->translator);
             $fileController->setContainer($this->container);
             $fileController->deleteUnused(FileDocument::OWNER_CATEGORY, $item->getId());
         }
 
         // Clear file cache
         if (!empty($data['clearCache'])) {
-            /** @var FilesystemAdapter $cache */
-            $cache = $this->get('app.filecache');
-            $cache->clear();
+            $this->cacheAdapter->clear();
         }
 
         return $this->json($item, 200, [], ['groups' => ['details']]);
@@ -209,13 +230,13 @@ class CategoryController extends StorageControllerAbstract
      * @Route("/{itemId}", methods={"DELETE"})
      * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param int $itemId
-     * @param EventDispatcher $evenDispatcher
+     * @param EventDispatcherInterface $evenDispatcher
      * @return JsonResponse
      * @throws \Doctrine\ODM\MongoDB\LockException
      * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
      * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
-    public function deleteItemAction($itemId, EventDispatcher $evenDispatcher)
+    public function deleteItemAction($itemId, EventDispatcherInterface $evenDispatcher)
     {
         $repository = $this->getRepository();
 
@@ -244,9 +265,7 @@ class CategoryController extends StorageControllerAbstract
         }
 
         // Clear file cache
-        /** @var FilesystemAdapter $cache */
-        $cache = $this->get('app.filecache');
-        $cache->clear();
+        $this->cacheAdapter->clear();
 
         return new JsonResponse([]);
     }
@@ -260,56 +279,44 @@ class CategoryController extends StorageControllerAbstract
     public function deleteProductsByCategory(Category $category, $clearCache = true)
     {
         $contentType = $category->getContentType();
-        if ($contentType) {
+        if (!$contentType) {
+            return false;
+        }
+        $collectionName = $contentType->getCollection();
+        $collection = $this->catalogService->getCollection($collectionName);
 
-            $productController = new ProductController();
-            $productController->setContainer($this->container);
+        $count = $collection->countDocuments([
+            'parentId' => $category->getId()
+        ]);
+        $skipEvents = $count > 500;// TODO: Add confirm in UI
 
-            $collectionName = $contentType->getCollection();
-            $collection = $this->getCollection($collectionName);
-
-            $count = $collection->countDocuments([
-                'parentId' => $category->getId()
-            ]);
-            $skipEvents = $count > 500;// TODO: Add confirm in UI
-
-            if ($skipEvents) {
-                try {
-                    $result = $collection->deleteMany([
-                        'parentId' => $category->getId()
-                    ]);
-                } catch (\Exception $e) {
-                    $result = null;
-                }
-                return !empty($result);
-
-            } else {
-                $documents = $collection->find([
+        if ($skipEvents) {
+            try {
+                $result = $collection->deleteMany([
                     'parentId' => $category->getId()
                 ]);
-                foreach ($documents as $document) {
-                    $productController->deleteItem($contentType, $document, $clearCache, $skipEvents);
-                }
-                return true;
+            } catch (\Exception $e) {
+                $result = null;
             }
-        }
-        return false;
-    }
+            return !empty($result);
 
-    /**
-     * @param $collectionName
-     * @param string $databaseName
-     * @return \MongoDB\Collection
-     */
-    public function getCollection($collectionName, $databaseName = '')
-    {
-        if (!$databaseName) {
-            $databaseName = $this->params->get('mongodb_database');
+        } else {
+            $productController = new ProductController(
+                $this->params,
+                $this->dm,
+                $this->translator,
+                $this->eventDispatcher,
+                $this->cacheAdapter,
+                $this->catalogService
+            );
+            $documents = $collection->find([
+                'parentId' => $category->getId()
+            ]);
+            foreach ($documents as $document) {
+                $productController->deleteItem($contentType, $document, $clearCache, $skipEvents);
+            }
+            return true;
         }
-        /** @var \MongoDB\Client $mongodbClient */
-        $mongodbClient = $this->container->get('doctrine_mongodb.odm.default_connection');
-
-        return $mongodbClient->selectCollection($databaseName, $collectionName);
     }
 
     /**
@@ -319,5 +326,4 @@ class CategoryController extends StorageControllerAbstract
     {
         return $this->dm->getRepository(Category::class);
     }
-
 }

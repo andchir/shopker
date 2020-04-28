@@ -142,10 +142,9 @@ class UserController extends StorageControllerAbstract
     /**
      * @Route("", methods={"GET"})
      * @param Request $request
-     * @param SerializerInterface $serializer
      * @return JsonResponse
      */
-    public function getList(Request $request, SerializerInterface $serializer)
+    public function getList(Request $request)
     {
         /** @var User $user */
         $user = $this->getUser();

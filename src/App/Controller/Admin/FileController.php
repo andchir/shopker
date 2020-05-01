@@ -169,9 +169,7 @@ class FileController extends BaseController
         $contentTypeFields = $contentType->getFields();
 
         // Get owner entity
-
         $collection = $this->catalogService->getCollection($contentType->getCollection());
-
         $entity = $collection->findOne(['_id' => $options['itemId']]);
         if(!$entity){
             $error = 'Product not found.';

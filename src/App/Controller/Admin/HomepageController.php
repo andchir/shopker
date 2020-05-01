@@ -2,12 +2,11 @@
 
 namespace App\Controller\Admin;
 
-use App\Service\SettingsService;
-use App\Service\UtilsService;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -15,8 +14,17 @@ use Symfony\Component\HttpFoundation\Request;
  * @package App\Controller
  * @Route("/admin")
  */
-class HomepageController extends Controller
+class HomepageController extends AbstractController
 {
+
+    /** @var ParameterBagInterface */
+    protected $params;
+
+    public function __construct(ParameterBagInterface $params)
+    {
+        $this->params = $params;
+    }
+    
     /**
      * @Route("/", name="admin")
      * @param Request $request
@@ -26,7 +34,7 @@ class HomepageController extends Controller
     public function indexAction(Request $request, KernelInterface $kernel)
     {
         $environment = $kernel->getEnvironment();
-        $publicDirPath = realpath($this->getParameter('app.web_dir_path'));
+        $publicDirPath = realpath($this->params->get('app.web_dir_path'));
         $indexPagePath = $publicDirPath . '/admin/bundle';
         if ($environment == 'dev') {
             $indexPagePath .= '-dev';
@@ -59,7 +67,7 @@ class HomepageController extends Controller
     public function moduleAction(Request $request, $moduleName, KernelInterface $kernel)
     {
         $environment = $kernel->getEnvironment();
-        $publicDirPath = realpath($this->getParameter('app.web_dir_path'));
+        $publicDirPath = realpath($this->params->get('app.web_dir_path'));
         $moduleName = str_replace(['_', '-'], '', $moduleName);
         $indexPagePath = $publicDirPath . '/bundles/' . $moduleName . '/admin/bundle';
         if ($environment == 'dev') {
@@ -94,9 +102,8 @@ class HomepageController extends Controller
         $content = str_replace([
             '{{locale}}', '{{timestamp}}', '{{app_name}}'
         ], [
-            $locale, time(), $this->getParameter('app.name')
+            $locale, time(), $this->params->get('app.name')
         ], $content);
         return $content;
     }
-
 }

@@ -22,16 +22,15 @@ class FileManagerController extends BaseController
     /**
      * @Route("/", methods={"GET"})
      * @param Request $request
-     * @param TranslatorInterface $translator
      * @return JsonResponse
      */
-    public function listAction(Request $request, TranslatorInterface $translator)
+    public function listAction(Request $request)
     {
-        if (!$this->getParameter('app.file_manager_enabled')) {
-            return $this->setError($translator->trans('File manager is disabled.'));
+        if (!$this->params->get('app.file_manager_enabled')) {
+            return $this->setError($this->translator->trans('File manager is disabled.'));
         }
         $files = [];
-        $filesBlacklist = $this->getParameter('app.files_ext_blacklist');
+        $filesBlacklist = $this->params->get('app.files_ext_blacklist');
         $path = $request->get('path', '');
 
         $publicDirPath = $this->getFolderPath($path);
@@ -83,13 +82,12 @@ class FileManagerController extends BaseController
      * @Route("/folder", methods={"POST"})
      * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param Request $request
-     * @param TranslatorInterface $translator
      * @return JsonResponse
      */
-    public function createFolderAction(Request $request, TranslatorInterface $translator)
+    public function createFolderAction(Request $request)
     {
-        if (!$this->getParameter('app.file_manager_enabled')) {
-            return $this->setError($translator->trans('File manager is disabled.'));
+        if (!$this->params->get('app.file_manager_enabled')) {
+            return $this->setError($this->translator->trans('File manager is disabled.'));
         }
         $content = json_decode($request->getContent(), true);
         if (empty($content['folderName'])) {
@@ -112,20 +110,19 @@ class FileManagerController extends BaseController
      * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param Request $request
      * @param Filesystem $fs
-     * @param TranslatorInterface $translator
      * @return JsonResponse
      */
-    public function deleteFolderAction(Request $request, Filesystem $fs, TranslatorInterface $translator)
+    public function deleteFolderAction(Request $request, Filesystem $fs)
     {
-        if (!$this->getParameter('app.file_manager_enabled')) {
-            return $this->setError($translator->trans('File manager is disabled.'));
+        if (!$this->params->get('app.file_manager_enabled')) {
+            return $this->setError($this->translator->trans('File manager is disabled.'));
         }
         $content = json_decode($request->getContent(), true);
         if (empty($content['path'])) {
             return $this->json(['success' => false]);
         }
         if (in_array($content['path'], ['uploads','admin'])) {
-            return $this->setError($translator->trans('You cannot delete or rename the system folder.'));
+            return $this->setError($this->translator->trans('You cannot delete or rename the system folder.'));
         }
         if ($publicDirPath = $this->getFolderPath($content['path'])) {
 
@@ -140,13 +137,12 @@ class FileManagerController extends BaseController
      * @Route("/file_delete", methods={"POST"})
      * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param Request $request
-     * @param TranslatorInterface $translator
      * @return JsonResponse
      */
-    public function deleteFileAction(Request $request, TranslatorInterface $translator)
+    public function deleteFileAction(Request $request)
     {
-        if (!$this->getParameter('app.file_manager_enabled')) {
-            return $this->setError($translator->trans('File manager is disabled.'));
+        if (!$this->params->get('app.file_manager_enabled')) {
+            return $this->setError($this->translator->trans('File manager is disabled.'));
         }
         $content = json_decode($request->getContent(), true);
         if (!isset($content['path']) || empty($content['name'])) {
@@ -157,10 +153,10 @@ class FileManagerController extends BaseController
             $content['name'] = str_replace(['/', '\\'], '', $content['name']);
             $filePath = $publicDirPath . DIRECTORY_SEPARATOR . $content['name'];
             if (!file_exists($filePath)) {
-                return $this->setError($translator->trans('File not found.', [], 'validators'));
+                return $this->setError($this->translator->trans('File not found.', [], 'validators'));
             }
             if (!is_writable($filePath)) {
-                return $this->setError($translator->trans('File is not writable.', [], 'validators'));
+                return $this->setError($this->translator->trans('File is not writable.', [], 'validators'));
             }
 
             unlink($filePath);
@@ -174,27 +170,26 @@ class FileManagerController extends BaseController
      * @Route("/folder", methods={"PUT"})
      * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param Request $request
-     * @param TranslatorInterface $translator
      * @return JsonResponse
      */
-    public function renameFolderAction(Request $request, TranslatorInterface $translator)
+    public function renameFolderAction(Request $request)
     {
-        if (!$this->getParameter('app.file_manager_enabled')) {
-            return $this->setError($translator->trans('File manager is disabled.'));
+        if (!$this->params->get('app.file_manager_enabled')) {
+            return $this->setError($this->translator->trans('File manager is disabled.'));
         }
         $content = json_decode($request->getContent(), true);
         if (empty($content['path']) || empty($content['name'])) {
             return $this->json(['success' => false]);
         }
         if (in_array($content['path'], ['uploads','admin'])) {
-            return $this->setError($translator->trans('You cannot delete or rename the system folder.'));
+            return $this->setError($this->translator->trans('You cannot delete or rename the system folder.'));
         }
         if ($publicDirPath = $this->getFolderPath($content['path'])) {
 
             $content['name'] = str_replace(['/', '\\', '.'], '', $content['name']);
             $newFolderPath = dirname($publicDirPath) . DIRECTORY_SEPARATOR . $content['name'];
             if (is_dir($newFolderPath)) {
-                return $this->setError($translator->trans('A folder with the same name already exists.'));
+                return $this->setError($this->translator->trans('A folder with the same name already exists.'));
             }
 
             rename($publicDirPath, dirname($publicDirPath) . DIRECTORY_SEPARATOR . $content['name']);
@@ -208,13 +203,12 @@ class FileManagerController extends BaseController
      * @Route("/file", methods={"PUT"})
      * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param Request $request
-     * @param TranslatorInterface $translator
      * @return JsonResponse
      */
-    public function renameFileAction(Request $request, TranslatorInterface $translator)
+    public function renameFileAction(Request $request)
     {
-        if (!$this->getParameter('app.file_manager_enabled')) {
-            return $this->setError($translator->trans('File manager is disabled.'));
+        if (!$this->params->get('app.file_manager_enabled')) {
+            return $this->setError($this->translator->trans('File manager is disabled.'));
         }
         $content = json_decode($request->getContent(), true);
         if (!isset($content['path']) || empty($content['name'])) {
@@ -228,14 +222,17 @@ class FileManagerController extends BaseController
 
         $filePath = $publicDirPath . DIRECTORY_SEPARATOR . basename($content['path']);
         if (!file_exists($filePath)) {
-            return $this->setError($translator->trans('File not found.', [], 'validators'));
+            return $this->setError($this->translator->trans('File not found.', [], 'validators'));
         }
         if (!is_writable($filePath)) {
-            return $this->setError($translator->trans('File is not writable.', [], 'validators'));
+            return $this->setError($this->translator->trans('File is not writable.', [], 'validators'));
         }
 
         $content['name'] = str_replace(['/', '\\'], '', $content['name']);
         $newFileName = $content['name'] . '.' . UtilsService::getExtension($filePath);
+        if (file_exists($publicDirPath . DIRECTORY_SEPARATOR . $newFileName)) {
+            return $this->setError($this->translator->trans('A file with the same name already exists.', [], 'validators'));
+        }
 
         rename($filePath, $publicDirPath . DIRECTORY_SEPARATOR . $newFileName);
 
@@ -246,13 +243,12 @@ class FileManagerController extends BaseController
      * @Route("/upload", methods={"POST"})
      * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param Request $request
-     * @param TranslatorInterface $translator
      * @return JsonResponse
      */
-    public function uploadFilesAction(Request $request, TranslatorInterface $translator)
+    public function uploadFilesAction(Request $request)
     {
-        if (!$this->getParameter('app.file_manager_enabled')) {
-            return $this->setError($translator->trans('File manager is disabled.'));
+        if (!$this->params->get('app.file_manager_enabled')) {
+            return $this->setError($this->translator->trans('File manager is disabled.'));
         }
         $path = $request->get('path') ?: '';
         $publicDirPath = $this->getFolderPath($path);
@@ -260,7 +256,7 @@ class FileManagerController extends BaseController
             return $this->json(['success' => false]);
         }
 
-        $filesBlacklist = $this->getParameter('app.files_ext_blacklist');
+        $filesBlacklist = $this->params->get('app.files_ext_blacklist');
 
         $files = $request->files;
         /** @var UploadedFile $file */
@@ -281,7 +277,7 @@ class FileManagerController extends BaseController
      */
     public function getFolderPath($folderName)
     {
-        $publicDirPath = realpath($this->getParameter('app.web_dir_path'));
+        $publicDirPath = realpath($this->params->get('app.web_dir_path'));
         if ($folderName) {
             $publicDirPath .= DIRECTORY_SEPARATOR . str_replace('..', '', $folderName);
         }
@@ -296,7 +292,7 @@ class FileManagerController extends BaseController
      */
     public function getRootPath()
     {
-        return realpath($this->getParameter('kernel.root_dir').'/../..');
+        return realpath($this->params->get('kernel.root_dir').'/../..');
     }
 
 }

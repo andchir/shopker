@@ -158,6 +158,7 @@ class ProductController extends BaseController
      * @return JsonResponse
      * @throws \Doctrine\ODM\MongoDB\LockException
      * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function createItemAction(Request $request, Category $category = null)
     {
@@ -183,6 +184,7 @@ class ProductController extends BaseController
      * @return JsonResponse
      * @throws \Doctrine\ODM\MongoDB\LockException
      * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function updateItemAction(Request $request, Category $category, $itemId)
     {

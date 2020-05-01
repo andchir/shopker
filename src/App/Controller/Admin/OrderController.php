@@ -2,14 +2,15 @@
 
 namespace App\Controller\Admin;
 
-use App\Controller\ProductController as BaseProductController;
 use App\Events;
 use App\MainBundle\Document\Order;
 use App\MainBundle\Document\OrderContent;
 use App\MainBundle\Document\Setting;
 use App\Service\SettingsService;
-use App\Service\UtilsService;
+use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ORM\Query\Expr\Base;
+use Doctrine\Persistence\ObjectRepository;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\Routing\Annotation\Route;
@@ -27,6 +28,25 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
  */
 class OrderController extends StorageControllerAbstract
 {
+
+    /** @var EventDispatcherInterface */
+    protected $eventDispatcher;
+    /** @var SettingsService */
+    protected $settingsService;
+
+    public function __construct(
+        ParameterBagInterface $params,
+        DocumentManager $dm,
+        TranslatorInterface $translator,
+        EventDispatcherInterface $eventDispatcher,
+        SettingsService $settingsService
+    )
+    {
+        parent::__construct($params, $dm, $translator);
+        $this->eventDispatcher = $eventDispatcher;
+        $this->settingsService = $settingsService;
+    }
+    
     /**
      * Create or update item
      * @param $data
@@ -34,6 +54,7 @@ class OrderController extends StorageControllerAbstract
      * @return JsonResponse
      * @throws \Doctrine\ODM\MongoDB\LockException
      * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function createUpdate($data, $itemId = null)
     {
@@ -43,10 +64,8 @@ class OrderController extends StorageControllerAbstract
             return $this->setError('Item not found.');
         }
         $deliveryPrice = !empty($data['deliveryPrice']) ? floatval($data['deliveryPrice']) : 0;
-        /** @var SettingsService $settingsService */
-        $settingsService = $this->get('app.settings');
         /** @var Setting $settingDelivery */
-        $settingDelivery = $settingsService->getSetting($data['deliveryName'], Setting::GROUP_DELIVERY);
+        $settingDelivery = $this->settingsService->getSetting($data['deliveryName'], Setting::GROUP_DELIVERY);
         if ($settingDelivery) {
             $deliveryPrice = $settingDelivery->getOption('price');
             if (!is_null($item->getCurrencyRate())) {
@@ -54,7 +73,7 @@ class OrderController extends StorageControllerAbstract
             }
         }
         $paymentValue = '';
-        $settingPayment = $settingsService->getSetting($data['paymentName'], Setting::GROUP_PAYMENT);
+        $settingPayment = $this->settingsService->getSetting($data['paymentName'], Setting::GROUP_PAYMENT);
         if ($settingPayment) {
             /** @var Setting $settingPayment */
             $paymentValue = $settingPayment->getOption('value');
@@ -112,6 +131,9 @@ class OrderController extends StorageControllerAbstract
      * @param $fieldName
      * @param $itemId
      * @return JsonResponse
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function updateItemPropertyAction(Request $request, $fieldName, $itemId)
     {
@@ -136,6 +158,7 @@ class OrderController extends StorageControllerAbstract
      * @return bool
      * @throws \Doctrine\ODM\MongoDB\LockException
      * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function updateItemProperty($itemId, $fieldName, $value)
     {
@@ -155,12 +178,9 @@ class OrderController extends StorageControllerAbstract
         // Send email for change order status
         if ($fieldName == 'status') {
 
-            /** @var SettingsService $settingsService */
-            $settingsService = $this->container->get('app.settings');
-
-            $paymentStatusNumber = (int) $this->getParameter('app.payment_status_number');
-            $paymentStatusAfterNumber = (int) $this->getParameter('app.payment_status_after_number');
-            $currentOrderStatusNumber = $settingsService->getOrderStatusNumber(
+            $paymentStatusNumber = (int) $this->params->get('app.payment_status_number');
+            $paymentStatusAfterNumber = (int) $this->params->get('app.payment_status_after_number');
+            $currentOrderStatusNumber = $this->settingsService->getOrderStatusNumber(
                 $order->getStatus()
             );
             if ($currentOrderStatusNumber === $paymentStatusAfterNumber) {
@@ -171,11 +191,9 @@ class OrderController extends StorageControllerAbstract
             }
 
             $this->dm->flush();
-
-            /** @var EventDispatcherInterface $eventDispatcher */
-            $eventDispatcher = $this->get('event_dispatcher');
+            
             $event = new GenericEvent($order);
-            $eventDispatcher->dispatch($event, Events::ORDER_STATUS_UPDATED);
+            $this->eventDispatcher->dispatch($event, Events::ORDER_STATUS_UPDATED);
         }
 
         return true;
@@ -203,7 +221,7 @@ class OrderController extends StorageControllerAbstract
     }
 
     /**
-     * @return \App\Repository\ContentTypeRepository
+     * @return \App\Repository\ContentTypeRepository|ObjectRepository
      */
     public function getRepository()
     {

@@ -161,7 +161,6 @@ abstract class StorageControllerAbstract extends BaseController
         }
 
         $item->setIsActive($isActive);
-        
         $this->dm->flush();
 
         return ['success' => true];

@@ -299,6 +299,22 @@ class SettingsService
     }
 
     /**
+     * @param array $parameters
+     * @return array
+     */
+    public static function transformParametersInverse($parameters)
+    {
+        if (!is_array($parameters) || !isset($parameters[0])) {
+            return $parameters;
+        }
+        $output = [];
+        foreach ($parameters as $parameter) {
+            $output[$parameter['name']] = $parameter['value'];
+        }
+        return $output;
+    }
+
+    /**
      * @param $array
      * @param $f
      * @return null

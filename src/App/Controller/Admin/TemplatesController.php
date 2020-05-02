@@ -4,6 +4,8 @@ namespace App\Controller\Admin;
 
 use App\Service\SettingsService;
 use App\Service\UtilsService;
+use Doctrine\ODM\MongoDB\DocumentManager;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -25,12 +27,14 @@ class TemplatesController extends StorageControllerAbstract
     /** @var TwigEnvironment */
     protected $twig;
 
-    /**
-     * TemplatesController constructor.
-     * @param $twig
-     */
-    public function __construct(TwigEnvironment $twig)
+    public function __construct(
+        ParameterBagInterface $params,
+        DocumentManager $dm,
+        TranslatorInterface $translator,
+        TwigEnvironment $twig
+    )
     {
+        parent::__construct($params, $dm, $translator);
         $this->twig = $twig;
     }
 
@@ -143,9 +147,9 @@ class TemplatesController extends StorageControllerAbstract
     {
         $items = [];
         $editable = [];
-        $editable['css'] = $this->getParameter('app.editable_css');
-        $editable['js'] = $this->getParameter('app.editable_js');
-        $editable['config'] = $this->getParameter('app.editable_config');
+        $editable['css'] = $this->params->get('app.editable_css');
+        $editable['js'] = $this->params->get('app.editable_js');
+        $editable['config'] = $this->params->get('app.editable_config');
 
         $fileTypes = ['css', 'js', 'config'];
         foreach ($fileTypes as $fileType) {
@@ -277,11 +281,12 @@ class TemplatesController extends StorageControllerAbstract
      * @param $fileType
      * @param $filePath
      * @return string
+     * @throws \Twig\Error\LoaderError
      */
     public function getFilePathByType($fileType, $filePath)
     {
-        $rootPath = realpath($this->getParameter('kernel.root_dir').'/../..');
-        $publicDirPath = realpath($this->getParameter('app.web_dir_path'));
+        $rootPath = realpath($this->params->get('kernel.root_dir').'/../..');
+        $publicDirPath = realpath($this->params->get('app.web_dir_path'));
         $configDirPath = $rootPath . DIRECTORY_SEPARATOR . 'config';
         $templatesDirPath = $this->getTemplatesDirPath();
         $filePath = trim($filePath, DIRECTORY_SEPARATOR);
@@ -358,6 +363,7 @@ class TemplatesController extends StorageControllerAbstract
     /**
      * @param string $filePath
      * @return array
+     * @throws \Twig\Error\LoaderError
      */
     public function deleteFile($filePath)
     {

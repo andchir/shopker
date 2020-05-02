@@ -9,6 +9,7 @@ use App\Service\ComposerService;
 use App\Service\SettingsService;
 use App\Service\UtilsService;
 use Doctrine\ODM\MongoDB\DocumentManager;
+use Doctrine\Persistence\ObjectRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -101,7 +102,7 @@ class SettingsController extends AbstractController
             case Setting::GROUP_MAIN:
 
                 $settings = $this->getSettingsFromYaml('settings', false);
-                $data = self::transformParametersInverse($data);
+                $data = SettingsService::transformParametersInverse($data);
                 $templatesDirPath = $this->getTemplatesDirPath();
 
                 if (isset($data['app.template_theme'])
@@ -255,15 +256,20 @@ class SettingsController extends AbstractController
      */
     public function updateInternationalizationAction(TranslatorInterface $translator)
     {
-        $result = $this->updateInternationalization();
-        return $result['success']
-            ? $this->json($result)
-            : $this->setError($translator->trans($result['msg'], [], 'validators'));
+        try {
+            $this->updateInternationalization();
+        } catch (\Exception $e) {
+            return $this->setError($translator->trans($e->getMessage(), [], 'validators'));
+        }
+        return $this->json([
+            'success' => true
+        ]);
     }
 
     /**
      * Update Internationalization files
-     * @return array
+     * @return bool
+     * @throws \Exception
      */
     public function updateInternationalization()
     {
@@ -306,12 +312,10 @@ class SettingsController extends AbstractController
         unset($content);
 
         // Update JS files
-        $error = '';
         foreach ($lang as $k => $value) {
             $targetFilePath = $jsPublicDirPath . "/{$k}.js";
             if (!is_writable($targetFilePath)) {
-                $error = 'File is not writable.';
-                continue;
+                throw new \Exception('File is not writable.');
             }
             $content  = 'var APP_LANG = ';
             $content .= json_encode($value, JSON_FORCE_OBJECT | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
@@ -319,10 +323,7 @@ class SettingsController extends AbstractController
             file_put_contents($targetFilePath, $content);
         }
 
-        return [
-            'success' => empty($error),
-            'msg' => $error
-        ];
+        return true;
     }
 
     /**
@@ -364,7 +365,7 @@ class SettingsController extends AbstractController
                 if (!$transform) {
                     return $settings['parameters'];
                 }
-                return self::transformParameters($settings['parameters']);
+                return SettingsService::transformParameters($settings['parameters']);
             } catch (ParseException $e) {
                 return [];
             }
@@ -490,35 +491,6 @@ class SettingsController extends AbstractController
     }
 
     /**
-     * @param array $parameters
-     * @return array
-     */
-    public static function transformParameters($parameters)
-    {
-        $output = [];
-        foreach ($parameters as $key => $value) {
-            $output[] = ['name' => $key, 'value' => $value];
-        }
-        return $output;
-    }
-
-    /**
-     * @param array $parameters
-     * @return array
-     */
-    public static function transformParametersInverse($parameters)
-    {
-        if (!is_array($parameters) || !isset($parameters[0])) {
-            return $parameters;
-        }
-        $output = [];
-        foreach ($parameters as $parameter) {
-            $output[$parameter['name']] = $parameter['value'];
-        }
-        return $output;
-    }
-
-    /**
      * @param $message
      * @param int $status
      * @return JsonResponse
@@ -531,7 +503,7 @@ class SettingsController extends AbstractController
     }
 
     /**
-     * @return \App\Repository\FieldTypeRepository
+     * @return \App\Repository\FieldTypeRepository|ObjectRepository
      */
     public function getRepository()
     {

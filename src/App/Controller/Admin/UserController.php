@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\MainBundle\Document\User;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ORM\Query\Expr\Base;
+use Doctrine\Persistence\ObjectRepository;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -175,6 +176,7 @@ class UserController extends StorageControllerAbstract
      * @return array
      * @throws \Doctrine\ODM\MongoDB\LockException
      * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function deleteItem($itemId)
     {
@@ -203,6 +205,7 @@ class UserController extends StorageControllerAbstract
      * @return array
      * @throws \Doctrine\ODM\MongoDB\LockException
      * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function blockItem($itemId, $isActive = false)
     {
@@ -261,7 +264,7 @@ class UserController extends StorageControllerAbstract
     }
 
     /**
-     * @return \App\Repository\UserRepository
+     * @return \App\Repository\UserRepository|ObjectRepository
      */
     public function getRepository()
     {

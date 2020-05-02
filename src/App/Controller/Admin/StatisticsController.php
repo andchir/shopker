@@ -6,7 +6,8 @@ use App\MainBundle\Document\Order;
 use App\MainBundle\Document\Setting;
 use App\Repository\OrderRepository;
 use App\Service\SettingsService;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Doctrine\ODM\MongoDB\DocumentManager;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,12 +18,28 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  * @package App\Controller
  * @Route("/admin/statistics")
  */
-class StatisticsController extends Controller
+class StatisticsController extends BaseController
 {
+    
+    /** @var SettingsService */
+    protected $settingsService;
 
+    public function __construct(
+        ParameterBagInterface $params,
+        DocumentManager $dm,
+        TranslatorInterface $translator,
+        SettingsService $settingsService
+    )
+    {
+        parent::__construct($params, $dm, $translator);
+        $this->settingsService = $settingsService;
+    }
+    
     /**
      * @Route("/orders", methods={"GET"})
+     * @param Request $request
      * @return JsonResponse
+     * @throws \Exception
      */
     public function getStatisticsOrdersAction(Request $request)
     {
@@ -81,10 +98,8 @@ class StatisticsController extends Controller
             'labels' => [],
             'datasets' => []
         ];
-
-        /** @var TranslatorInterface $translator */
-        $translator = $this->get('translator');
-        $monthsNames = explode(',', $translator->trans('months_short'));
+        
+        $monthsNames = explode(',', $this->translator->trans('months_short'));
         $settingStatuses = $this->getSettingsStatuses();
 
         $builder = $this->createAggregationBuilder($where);
@@ -133,10 +148,8 @@ class StatisticsController extends Controller
             'labels' => [],
             'datasets' => []
         ];
-
-        /** @var TranslatorInterface $translator */
-        $translator = $this->get('translator');
-        $monthsNames = explode(',', $translator->trans('months_short'));
+        
+        $monthsNames = explode(',', $this->translator->trans('months_short'));
         $settingStatuses = $this->getSettingsStatuses();
 
         $builder = $this->createAggregationBuilder($where);
@@ -181,11 +194,9 @@ class StatisticsController extends Controller
      */
     public function createAggregationBuilder($where = [])
     {
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
         /** @var OrderRepository $repository */
-        $repository = $dm->getRepository(Order::class);
-        $builder = $dm->createAggregationBuilder(Order::class);
+        $repository = $this->dm->getRepository(Order::class);
+        $builder = $this->dm->createAggregationBuilder(Order::class);
 
         if (!empty($where)) {
             $match = $builder->match();
@@ -225,8 +236,6 @@ class StatisticsController extends Controller
      */
     public function getSettingsStatuses()
     {
-        /** @var SettingsService $settingsService */
-        $settingsService = $this->get('app.settings');
-        return $settingsService->getSettingsGroup(Setting::GROUP_ORDER_STATUSES);
+        return $this->settingsService->getSettingsGroup(Setting::GROUP_ORDER_STATUSES);
     }
 }

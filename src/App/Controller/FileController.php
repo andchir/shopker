@@ -8,8 +8,11 @@ use App\MainBundle\Document\FileDocument;
 use App\MainBundle\Document\User;
 use App\Repository\CategoryRepository;
 use App\Repository\FileDocumentRepository;
+use App\Service\CatalogService;
+use App\Service\SettingsService;
 use App\Service\ShopCartService;
 use App\Service\UtilsService;
+use Doctrine\Persistence\ObjectRepository;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -17,7 +20,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Controller\Admin\ProductController as AdminProductController;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -25,36 +27,35 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  * @package App\Controller
  * @Route("/files")
  */
-class FileController extends ProductController
+class FileController extends BaseController
 {
 
     /**
      * @Route("/user_upload", methods={"POST"}, name="files_user_upload")
      * @param Request $request
-     * @param TranslatorInterface $translator
      * @param Filesystem $fs
+     * @param ShopCartService $shopCartService
+     * @param CatalogService $catalogService
      * @return JsonResponse
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
-    public function uploadUserFile(Request $request, TranslatorInterface $translator, Filesystem $fs)
+    public function uploadUserFile(Request $request, Filesystem $fs, ShopCartService $shopCartService, CatalogService $catalogService)
     {
         $type = $request->get('type', 'shop');
         /** @var User $user */
         $user = $this->getUser();
-        /** @var ShopCartService $shopCartService */
-        $shopCartService = $this->get('app.shop_cart');
         $shoppingCart = $shopCartService->getShoppingCart($type, $shopCartService->getUserId(), $shopCartService->getSessionId($type), null, true);
 
         $userId = $user ? $user->getId() : 0;
         $ownerId = $shoppingCart ? $shoppingCart->getId() : 0;
-        $max_user_files_size = (int) $this->getParameter('app.max_user_files_size');
+        $max_user_files_size = (int) $this->params->get('app.max_user_files_size');
 
         $categoryId = (int) $request->get('categoryId');
         if (!$categoryId) {
             return new JsonResponse([]);
         }
-
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
 
         /** @var Category $category */
         $category = $this->getCategoryRepository()->find($categoryId);
@@ -66,11 +67,8 @@ class FileController extends ProductController
         $contentType = $category->getContentType();
         $contentTypeFields = $contentType->getFields();
 
-        $productController = new AdminProductController();
-        $productController->setContainer($this->container);
-
         // Upload directory
-        $filesDirPath = $this->getParameter('app.files_dir_path');
+        $filesDirPath = $this->params->get('app.files_dir_path');
         if (!is_dir($filesDirPath)) {
             $fs->mkdir($filesDirPath, 0777);
         }
@@ -85,7 +83,7 @@ class FileController extends ProductController
             $fieldName = $key;
             $fileSize = $file->getSize();
             if ($fileSize > $max_user_files_size * 1024 * 1024) {
-                $error = $translator->trans('You can not upload a file larger than %size% MB.', ['%size%' => $max_user_files_size]);
+                $error = $this->translator->trans('You can not upload a file larger than %size% MB.', ['%size%' => $max_user_files_size]);
                 break;
             }
 
@@ -101,8 +99,8 @@ class FileController extends ProductController
                 : [];
 
             if (!empty($outputProperties['allowed_extensions'])) {
-                if (!$productController->fileUploadAllowed($file->getClientOriginalName(), $currentField, $outputProperties['allowed_extensions'])) {
-                    $error = $translator->trans('The file type is not allowed to be uploaded.');
+                if (!$catalogService->fileUploadAllowed($file->getClientOriginalName(), $currentField, $outputProperties['allowed_extensions'])) {
+                    $error = $this->translator->trans('The file type is not allowed to be uploaded.');
                 }
             }
             if (!empty($error)) {
@@ -118,8 +116,8 @@ class FileController extends ProductController
                 ->setUserId($userId)
                 ->setFile($file);
 
-            $dm->persist($fileDocument);
-            $dm->flush();
+            $this->dm->persist($fileDocument);
+            $this->dm->flush();
 
             $filesIds[] = $fileDocument->getId();
         }
@@ -135,15 +133,17 @@ class FileController extends ProductController
 
     /**
      * @Route("/download/{ownerType}/{fieldName}/{ownerDocId}/{fileName}", methods={"GET"}, name="file_download")
+     * @param CatalogService $catalogService
      * @param string $ownerType
      * @param string $fieldName
      * @param string $ownerDocId
      * @param string $fileName
      * @return Response
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
-    public function downloadFile($ownerType, $fieldName, $ownerDocId, $fileName)
+    public function downloadFile(CatalogService $catalogService, $ownerType, $fieldName, $ownerDocId, $fileName)
     {
-        $collection = $this->getCollection($ownerType);
+        $collection = $catalogService->getCollection($ownerType);
         $document = $collection->findOne(['_id' => (int) $ownerDocId]);
 
         if (!$document || !isset($document[$fieldName])) {
@@ -162,10 +162,8 @@ class FileController extends ProductController
         if (!$document || !$fileDocument) {
             throw $this->createNotFoundException();
         }
-
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
-        $filesDirPath = $this->getParameter('app.files_dir_path');
+        
+        $filesDirPath = $this->params->get('app.files_dir_path');
         $fileDocument->setUploadRootDir($filesDirPath);
 
         $filePath = $fileDocument->getUploadedPath();
@@ -174,7 +172,7 @@ class FileController extends ProductController
         }
 
         $fileDocument->incrementDownloads();
-        $dm->flush();
+        $this->dm->flush();
 
         $fileData['downloads'] = $fileDocument->getDownloads();
         $collection->updateOne(
@@ -186,22 +184,18 @@ class FileController extends ProductController
     }
 
     /**
-     * @return CategoryRepository
+     * @return CategoryRepository|ObjectRepository
      */
     public function getCategoryRepository()
     {
-        return $categoryRepository = $this->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository(Category::class);
+        return $categoryRepository = $this->dm->getRepository(Category::class);
     }
 
     /**
-     * @return FileDocumentRepository
+     * @return FileDocumentRepository|ObjectRepository
      */
     public function getRepository()
     {
-        return $categoryRepository = $this->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository(FileDocument::class);
+        return $categoryRepository = $this->dm->getRepository(FileDocument::class);
     }
 }

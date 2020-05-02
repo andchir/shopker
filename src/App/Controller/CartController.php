@@ -2,34 +2,47 @@
 
 namespace App\Controller;
 
-use App\Events;
+
 use App\MainBundle\Document\Category;
 use App\MainBundle\Document\ContentType;
 use App\MainBundle\Document\FileDocument;
 use App\MainBundle\Document\OrderContent;
 use App\MainBundle\Document\ShoppingCart;
 use App\MainBundle\Document\User;
-use App\Repository\CategoryRepository;
-use App\Service\SettingsService;
+use App\Service\CatalogService;
 use App\Service\ShopCartService;
-use App\Service\UtilsService;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ODM\MongoDB\Cursor;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\GenericEvent;
+use Doctrine\ODM\MongoDB\DocumentManager;
+use Doctrine\Persistence\ObjectRepository;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Cookie;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class CartController extends ProductController
+class CartController extends BaseController
 {
+    /** @var CatalogService */
+    private $catalogService;
+    /** @var ShopCartService */
+    protected $shopCartService;
 
+    public function __construct(
+        ParameterBagInterface $params,
+        DocumentManager $dm,
+        TranslatorInterface $translator,
+        CatalogService $catalogService,
+        ShopCartService $shopCartService
+    )
+    {
+        parent::__construct($params, $dm, $translator);
+        $this->catalogService = $catalogService;
+        $this->shopCartService = $shopCartService;
+    }
+    
     /**
      * @Route(
      *     "/{_locale}/shop_cart/action",
@@ -38,14 +51,10 @@ class CartController extends ProductController
      * )
      * @Route("/shop_cart/action", name="shop_cart_action", methods={"GET", "POST"})
      * @param Request $request
-     * @param TranslatorInterface $translator
      * @return Response
      */
-    public function actionResponseAction(Request $request, TranslatorInterface $translator)
+    public function actionResponseAction(Request $request)
     {
-        /** @var ShopCartService $shopCartService */
-        $shopCartService = $this->get('app.shop_cart');
-
         $output = ['success' => true];
         $referer = $request->headers->get('referer');
         $back_url = $request->get('back_url', $referer);
@@ -82,14 +91,14 @@ class CartController extends ProductController
                 break;
             case 'clean':
 
-                $shopCartService->clearContent($type);
+                $this->shopCartService->clearContent($type);
 
                 break;
         }
 
         if ($request->isXmlHttpRequest()) {
             if ($output['success']) {
-                $shoppingCart = $shopCartService->getShoppingCartByType($type);
+                $shoppingCart = $this->shopCartService->getShoppingCartByType($type);
                 if ($shoppingCart) {
                     $output = array_merge($output, $shoppingCart->toArray());
                 } else {
@@ -104,18 +113,16 @@ class CartController extends ProductController
                     ]);
                 }
                 if ($templateName) {
-                    $output['html'] = $shopCartService->renderShopCart($shoppingCart, $templateName, $type);
+                    $output['html'] = $this->shopCartService->renderShopCart($shoppingCart, $templateName, $type);
                 }
             }
             if (!empty($output['message'])) {
-                $output['message'] = $translator->trans($output['message']);
+                $output['message'] = $this->translator->trans($output['message']);
             }
             return $this->json($output);
         } else {
             if (!$output['success'] && isset($output['message'])) {
-                $request->getSession()
-                    ->getFlashBag()
-                    ->add('errors', $translator->trans($output['message']));
+                $this->addFlash('errors', $this->translator->trans($output['message']));
             }
             return new RedirectResponse($back_url);
         }
@@ -125,19 +132,16 @@ class CartController extends ProductController
      * Add product to shopping cart
      * @param Request $request
      * @return array
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function addToCartAction(Request $request)
     {
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
-        /** @var ShopCartService $shopCartService */
-        $shopCartService = $this->get('app.shop_cart');
         $locale = $request->getLocale();
-        $localeDefault = $this->getParameter('locale');
+        $localeDefault = $this->params->get('locale');
         $type = $request->get('type', ShoppingCart::TYPE_MAIN);
 
         $count = max(1, (int) $request->get('count'));
-        $shoppingCart = $shopCartService->getShoppingCart($type, $this->getUserId(), $this->getSessionId($type), null, true);
+        $shoppingCart = $this->shopCartService->getShoppingCart($type, $this->getUserId(), $this->getSessionId($type), null, true);
 
         /** @var Category $category */
         list($category, $productDocument) = $this->getCategoryAndProduct($request);
@@ -207,7 +211,7 @@ class CartController extends ProductController
             $shoppingCart->addContent($content);
         }
 
-        $dm->flush();
+        $this->dm->flush();
 
         return ['success' => true];
     }
@@ -216,20 +220,16 @@ class CartController extends ProductController
      * Recalculate products count
      * @param Request $request
      * @return array
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function recalculateAction(Request $request)
     {
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
-        /** @var ShopCartService $shopCartService */
-        $shopCartService = $this->get('app.shop_cart');
-
         $type = $request->get('type', ShoppingCart::TYPE_MAIN);
         $countArr = $request->get('count', []);
         if (!is_array($countArr)) {
             $countArr = [];
         }
-        $shoppingCart = $shopCartService->getShoppingCart($type, $this->getUserId(), $this->getSessionId($type));
+        $shoppingCart = $this->shopCartService->getShoppingCart($type, $this->getUserId(), $this->getSessionId($type));
         $shoppingCartContent = $shoppingCart ? $shoppingCart->getContentSorted() : [];
 
         if (empty($shoppingCartContent)) {
@@ -244,7 +244,7 @@ class CartController extends ProductController
             $content->setCount($count);
         }
 
-        $dm->flush();
+        $this->dm->flush();
 
         return ['success' => true];
     }
@@ -253,14 +253,10 @@ class CartController extends ProductController
      * @param Request|null $request
      * @param int|null $itemId
      * @return array
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function removeById($request = null, $itemId = null)
     {
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
-        /** @var ShopCartService $shopCartService */
-        $shopCartService = $this->get('app.shop_cart');
-
         if (is_null($itemId) && $request instanceof Request) {
             $itemId = (int) $request->get('item_id', 0);
         }
@@ -272,7 +268,7 @@ class CartController extends ProductController
             return ['success' => false];
         }
 
-        $shoppingCart = $shopCartService->getShoppingCartByType($type);
+        $shoppingCart = $this->shopCartService->getShoppingCartByType($type);
         $shoppingCartContent = $shoppingCart ? $shoppingCart->getContentSorted() : [];
 
         $index = $this->getContentIndex($shoppingCartContent, ['id' => $itemId]);
@@ -281,11 +277,11 @@ class CartController extends ProductController
         }
 
         if (count($shoppingCartContent) === 1) {
-            $dm->remove($shoppingCart);
+            $this->dm->remove($shoppingCart);
         } else {
             $shoppingCart->removeContent($shoppingCartContent->get($index));
         }
-        $dm->flush();
+        $this->dm->flush();
 
         return ['success' => true];
     }
@@ -294,14 +290,10 @@ class CartController extends ProductController
      * @param Request|null $request
      * @param int|null $index
      * @return array
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function removeByIndex($request = null, $index = null)
     {
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = $this->get('doctrine_mongodb')->getManager();
-        /** @var ShopCartService $shopCartService */
-        $shopCartService = $this->get('app.shop_cart');
-
         if (is_null($index) && $request instanceof Request) {
             $index = (int) $request->get('remove_by_index');
         }
@@ -309,7 +301,7 @@ class CartController extends ProductController
             ? $request->get('type', ShoppingCart::TYPE_MAIN)
             : ShoppingCart::TYPE_MAIN;
 
-        $shoppingCart = $shopCartService->getShoppingCartByType($type);
+        $shoppingCart = $this->shopCartService->getShoppingCartByType($type);
         $shoppingCartContent = $shoppingCart ? $shoppingCart->getContentSorted() : [];
 
         if (is_null($index) || !$shoppingCartContent->containsKey($index)) {
@@ -317,11 +309,11 @@ class CartController extends ProductController
         }
 
         if (count($shoppingCartContent) === 1) {
-            $dm->remove($shoppingCart);
+            $this->dm->remove($shoppingCart);
         } else {
             $shoppingCart->removeContent($shoppingCartContent->get($index));
         }
-        $dm->flush();
+        $this->dm->flush();
 
         return ['success' => true];
     }
@@ -334,10 +326,9 @@ class CartController extends ProductController
     {
         $itemId = (int) $request->get('item_id');
         $categoryId = (int) $request->get('category_id');
-        $categoriesRepository = $this->getCategoriesRepository();
 
         /** @var Category $category */
-        $category = $categoriesRepository->findOneBy([
+        $category = $this->dm->getRepository(Category::class)->findOneBy([
             'id' => $categoryId
         ]);
         if (!$category) {
@@ -346,7 +337,7 @@ class CartController extends ProductController
 
         $contentType = $category->getContentType();
         $collectionName = $contentType->getCollection();
-        $collection = $this->getCollection($collectionName);
+        $collection = $this->catalogService->getCollection($collectionName);
 
         $productDocument = $collection->findOne([
             '_id' => $itemId,
@@ -546,10 +537,8 @@ class CartController extends ProductController
     public function clearAction(Request $request)
     {
         $referer = $request->headers->get('referer');
-        /** @var ShopCartService $shopCartService */
-        $shopCartService = $this->get('app.shop_cart');
         $type = $request->get('type', ShoppingCart::TYPE_MAIN);
-        $shopCartService->clearContent($type);
+        $this->shopCartService->clearContent($type);
 
         return new RedirectResponse($referer);
     }
@@ -571,9 +560,7 @@ class CartController extends ProductController
      */
     public function getSessionId($type = ShoppingCart::TYPE_MAIN)
     {
-        /** @var ShopCartService $shopCartService */
-        $shopCartService = $this->get('app.shop_cart');
-        return $shopCartService->getSessionId($type);
+        return $this->shopCartService->getSessionId($type);
     }
 
     /**
@@ -606,22 +593,18 @@ class CartController extends ProductController
     }
 
     /**
-     * @return \App\Repository\ShoppingCartRepository
+     * @return \App\Repository\ShoppingCartRepository|ObjectRepository
      */
     public function getRepository()
     {
-        return $this->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository(ShoppingCart::class);
+        return $this->dm->getRepository(ShoppingCart::class);
     }
 
     /**
-     * @return \App\Repository\FileDocumentRepository
+     * @return \App\Repository\FileDocumentRepository|ObjectRepository
      */
     public function getFileRepository()
     {
-        return $this->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository(FileDocument::class);
+        return $this->dm->getRepository(FileDocument::class);
     }
 }

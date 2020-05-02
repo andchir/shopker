@@ -9,25 +9,34 @@ use App\Repository\ContentTypeRepository;
 use App\Service\CatalogService;
 use App\Service\SettingsService;
 use App\Service\UtilsService;
-use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ODM\MongoDB\DocumentManager;
+use Doctrine\Persistence\ObjectRepository;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\MainBundle\Document\Category;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
-class CatalogController extends ProductController
+class CatalogController extends BaseController
 {
 
     /** @var SettingsService */
-    private $settingsService;
-    /** @var DocumentManager */
-    private $dm;
+    protected $settingsService;
+    /** @var CatalogService */
+    protected $catalogService;
 
-    public function __construct(SettingsService $settingsService, DocumentManager $dm)
+    public function __construct(
+        ParameterBagInterface $params,
+        DocumentManager $dm,
+        TranslatorInterface $translator,
+        SettingsService $settingsService,
+        CatalogService $catalogService
+    )
     {
+        parent::__construct($params, $dm, $translator);
         $this->settingsService = $settingsService;
-        $this->dm = $dm;
+        $this->catalogService = $catalogService;
     }
 
     /**
@@ -45,12 +54,14 @@ class CatalogController extends ProductController
      * )
      * @param Request $request
      * @param string $uri
-     * @param CatalogService $catalogService
      * @return Response
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
-    public function catalogCategoryAction(Request $request, $uri, CatalogService $catalogService)
+    public function catalogCategoryAction(Request $request, $uri)
     {
-        return $this->catalogAction($request, $uri, 'catalog_category', $catalogService);
+        return $this->catalogAction($request, $uri, 'catalog_category');
     }
 
     /**
@@ -68,27 +79,31 @@ class CatalogController extends ProductController
      * )
      * @param Request $request
      * @param string $uri
-     * @param CatalogService $catalogService
      * @return Response
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
-    public function catalogPageAction(Request $request, $uri, CatalogService $catalogService)
+    public function catalogPageAction(Request $request, $uri)
     {
-        return $this->catalogAction($request, $uri, 'catalog_page', $catalogService);
+        return $this->catalogAction($request, $uri, 'catalog_page');
     }
 
     /**
      * @param Request $request
      * @param string $uri
      * @param string $routeName
-     * @param CatalogService $catalogService
      * @return Response
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
-    public function catalogAction(Request $request, $uri, $routeName, CatalogService $catalogService)
+    public function catalogAction(Request $request, $uri, $routeName)
     {
-        if (empty($this->getParameter('mongodb_database'))) {
+        if (empty($this->params->get('mongodb_database'))) {
             return $this->redirectToRoute('setup');
         }
-        $localeDefault = $this->getParameter('locale');
+        $localeDefault = $this->params->get('locale');
         $locale = $request->getLocale();
         $categoriesRepository = $this->getCategoriesRepository();
         $filtersRepository = $this->dm->getRepository(Filter::class);
@@ -105,7 +120,7 @@ class CatalogController extends ProductController
             if (is_null($currentCategory)) {
                 throw $this->createNotFoundException();
             }
-            return $this->pageProduct($currentCategory, $uri, $locale, $catalogService);
+            return $this->pageProduct($currentCategory, $uri, $locale);
         }
         if (!$currentCategory || !$currentCategory->getIsActive()) {
             throw $this->createNotFoundException();
@@ -123,7 +138,7 @@ class CatalogController extends ProductController
         $priceFieldName = $contentType->getPriceFieldName();
         $headerFieldName = $contentType->getFieldByChunkName('header');
         $contentTypeFields = $contentType->getFields();
-        $collection = $this->getCollection($contentType->getCollection());
+        $collection = $this->catalogService->getCollection($contentType->getCollection());
         $queryString = $request->getQueryString();
         $queryOptions = UtilsService::getQueryOptions($uri, $queryString, $contentTypeFields, $catalogNavSettingsDefaults);
 
@@ -146,9 +161,9 @@ class CatalogController extends ProductController
             'isActive' => true
         ];
         $this->applyFilters($queryOptions['filter'], $filters, $criteria);
-        $catalogService->applyCategoryFilter($currentCategory, $contentTypeFields, $criteria);
+        $this->catalogService->applyCategoryFilter($currentCategory, $contentTypeFields, $criteria);
         if ($locale !== $localeDefault && $headerFieldName) {
-            $catalogService->applyLocaleFilter($locale, $headerFieldName, $criteria);
+            $this->catalogService->applyLocaleFilter($locale, $headerFieldName, $criteria);
         }
         $total = $collection->countDocuments($criteria);
 
@@ -156,7 +171,7 @@ class CatalogController extends ProductController
         $pagesOptions = UtilsService::getPagesOptions($queryOptions, $total, $catalogNavSettingsDefaults);
         $aggregateFields = $contentType->getAggregationFields($locale, $localeDefault, true);
 
-        $pipeline = $catalogService->createAggregatePipeline(
+        $pipeline = $this->catalogService->createAggregatePipeline(
             $criteria,
             $aggregateFields,
             $queryOptions['limit'],
@@ -169,7 +184,7 @@ class CatalogController extends ProductController
 
         $categoriesSiblings = [];
         if (count($categoriesMenu) === 0 && $levelNum > 1) {
-            $categoriesSiblings = $catalogService->getChildCategories($currentCategory->getParentId(), $breadcrumbs, false, '', $locale);
+            $categoriesSiblings = $this->catalogService->getChildCategories($currentCategory->getParentId(), $breadcrumbs, false, '', $locale);
         }
 
         $activeCategoriesIds = array_map(function($item) {
@@ -206,10 +221,12 @@ class CatalogController extends ProductController
      * @param null|Category $category
      * @param string $uri
      * @param string $locale
-     * @param CatalogService $catalogService
      * @return Response
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
-    public function pageProduct(Category $category = null, $uri = '', $locale = '', CatalogService $catalogService)
+    public function pageProduct(Category $category = null, $uri = '', $locale = '')
     {
         $categoriesRepository = $this->getCategoriesRepository();
         list($pageAlias, $categoryUri) = Category::parseUri($uri);
@@ -222,15 +239,15 @@ class CatalogController extends ProductController
             throw $this->createNotFoundException();
         }
 
-        $localeDefault = $this->getParameter('locale');
+        $localeDefault = $this->params->get('locale');
         $collectionName = $contentType->getCollection();
         $contentTypeFields = $contentType->getFields();
         $priceFieldName = $contentType->getPriceFieldName();
-        $collection = $this->getCollection($collectionName);
+        $collection = $this->catalogService->getCollection($collectionName);
         $breadcrumbs = $categoriesRepository->getBreadcrumbs($categoryUri, false, $locale);
 
         $aggregateFields = $contentType->getAggregationFields($locale, $localeDefault, true);
-        $pipeline = $catalogService->createAggregatePipeline(
+        $pipeline = $this->catalogService->createAggregatePipeline(
             [
                 'name' => $pageAlias,
                 'parentId' => $category->getId(),
@@ -291,8 +308,8 @@ class CatalogController extends ProductController
     public function getCatalogNavSettingsDefaults()
     {
         $catalogNavSettingsDefaults = [];
-        $catalogNavSettingsDefaults['pageSizeArr'] = $this->getParameter('app.catalog_page_size');
-        $catalogNavSettingsDefaults['orderBy'] = $this->getParameter('app.catalog_default_order_by');
+        $catalogNavSettingsDefaults['pageSizeArr'] = $this->params->get('app.catalog_page_size');
+        $catalogNavSettingsDefaults['orderBy'] = $this->params->get('app.catalog_default_order_by');
         if (!is_array($catalogNavSettingsDefaults['pageSizeArr'])) {
             $catalogNavSettingsDefaults['pageSizeArr'] = explode(',', $catalogNavSettingsDefaults['pageSizeArr']);
             $catalogNavSettingsDefaults['pageSizeArr'] = array_map('trim', $catalogNavSettingsDefaults['pageSizeArr']);
@@ -412,6 +429,7 @@ class CatalogController extends ProductController
             'parentId' => $currentId,
             'isActive' => true
         ], ['title' => 'asc']);
+        
         /** @var Category $category */
         foreach ($results as $category) {
             $categories[] = $category->getMenuData($breadcrumbsUriArr, $locale);
@@ -434,6 +452,73 @@ class CatalogController extends ProductController
     }
 
     /**
+     * @param $filters
+     * @param $filtersData
+     * @param $criteria
+     */
+    public function applyFilters($filters, $filtersData, &$criteria)
+    {
+        if (empty($filters)) {
+            return;
+        }
+        foreach ($filters as $name => $filter) {
+            if (empty($filter)) {
+                continue;
+            }
+            if (!is_array($filter)) {
+                $filter = [$filter];
+            }
+            $index = array_search($name, array_column($filtersData, 'name'));
+            $outputType = '';
+            if ($index !== false) {
+                $flt = $filtersData[$index];
+                $outputType = $flt['outputType'];
+                // Process color filter
+                if ($outputType === 'color') {
+                    foreach ($filter as &$val) {
+                        $val = '#' . $val;
+                    }
+                }
+            }
+            if (isset($filter['from']) && isset($filter['to'])) {
+                $criteria[$name] = ['$gte' => floatval($filter['from']), '$lte' => floatval($filter['to'])];
+            } else if ($outputType === 'parameters') {
+                $fData = [];
+                foreach ($filter as $fValue) {
+                    $fValueArr = explode('__', $fValue);
+                    if (count($fValueArr) < 2) {
+                        continue;
+                    }
+                    $index = array_search($fValueArr[0], array_column($fData, 'name'));
+                    if ($index === false) {
+                        $fData[] = [
+                            'name' => $fValueArr[0],
+                            'values' => []
+                        ];
+                        $index = count($fData) - 1;
+                    }
+                    if (!in_array($fValueArr[1], $fData[$index]['values'])) {
+                        $fData[$index]['values'][] = $fValueArr[1];
+                    }
+                }
+                if (!empty($fData)) {
+                    $criteria[$name] = ['$all' => []];
+                    foreach ($fData as $k => $v) {
+                        $criteria[$name]['$all'][] = [
+                            '$elemMatch' => [
+                                'name' => $v['name'],
+                                'value' => ['$in' => $v['values']]
+                            ]
+                        ];
+                    }
+                }
+            } else {
+                $criteria[$name] = ['$in' => $filter];
+            }
+        }
+    }
+
+    /**
      * @param array $treeData
      * @param array $uriArr
      * @param array $idsArr
@@ -453,6 +538,22 @@ class CatalogController extends ProductController
             }
         }
         return $idsArr;
+    }
+    
+    /**
+     * @param $mainTemplateName
+     * @param $prefix
+     * @return string
+     */
+    public function getTemplateName($mainTemplateName, $prefix)
+    {
+        /** @var \Twig\Environment */
+        $twig = $this->get('twig');
+        $templateName = sprintf('%s_%s.html.twig', $prefix, $mainTemplateName);
+        if ($twig->getLoader()->exists($templateName)) {
+            return $templateName;
+        }
+        return sprintf('%s.html.twig', $mainTemplateName);
     }
 
     /**

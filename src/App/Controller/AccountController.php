@@ -123,9 +123,7 @@ class AccountController extends AbstractController
                 $this->dm->persist($user);
                 $this->dm->flush();
 
-                $request->getSession()
-                    ->getFlashBag()
-                    ->add('messages', 'You are successfully registered. Now you can enter.');
+                $this->addFlash('messages', 'You are successfully registered. Now you can enter.');
 
                 $event = new UserRegisteredEvent($user, $request);
                 $evenDispatcher->dispatch($event, UserRegisteredEvent::NAME);
@@ -200,9 +198,7 @@ class AccountController extends AbstractController
                     $email
                 );
 
-                $request->getSession()
-                    ->getFlashBag()
-                    ->add('messages', 'An email with further instructions has been sent to your email address.');
+                $this->addFlash('messages', 'An email with further instructions has been sent to your email address.');
             }
         }
 
@@ -245,9 +241,7 @@ class AccountController extends AbstractController
                 $this->dm->flush();
             }
 
-            $request->getSession()
-                ->getFlashBag()
-                ->add('messages', 'Your password has been changed successfully. Now you can enter.');
+            $this->addFlash('messages', 'Your password has been changed successfully. Now you can enter.');
 
             return $this->redirectToRoute('login_localized', [
                 '_locale' => $request->getLocale()
@@ -266,12 +260,7 @@ class AccountController extends AbstractController
      * @return Response
      * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
-    public function emailConfirmAction(
-        Request $request,
-        EventDispatcherInterface $eventDispatcher,
-        $email,
-        $code
-    )
+    public function emailConfirmAction(Request $request, EventDispatcherInterface $eventDispatcher, $email, $code)
     {
         $userRepository = $this->getUserRepository();
         /** @var User $user */
@@ -290,9 +279,7 @@ class AccountController extends AbstractController
             $event = new GenericEvent($user);
             $eventDispatcher->dispatch($event, Events::USER_EMAIL_CONFIRMED);
 
-            $request->getSession()
-                ->getFlashBag()
-                ->add('messages', 'Your email has been successfully verified. Now you can enter.');
+            $this->addFlash('messages', 'Your email has been successfully verified. Now you can enter.');
 
             return $this->redirectToRoute('login_localized', [
                 '_locale' => $request->getLocale()
@@ -350,9 +337,7 @@ class AccountController extends AbstractController
                 ->setSecretCode(null);
             $this->dm->flush();
 
-            $request->getSession()
-                ->getFlashBag()
-                ->add('messages', 'Your password has been changed successfully.');
+            $this->addFlash('messages', 'Your password has been changed successfully.');
 
             return $this->redirectToRoute('profile_change_password_localized', ['_locale' => $request->getLocale()]);
         }
@@ -466,9 +451,7 @@ class AccountController extends AbstractController
 
             $this->dm->flush();
 
-            $request->getSession()
-                ->getFlashBag()
-                ->add('messages', 'profile.contacts_data_saved_successfully');
+            $this->addFlash('messages', 'profile.contacts_data_saved_successfully');
         }
 
         return $this->render('profile/contacts.html.twig', [

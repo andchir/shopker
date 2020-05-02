@@ -172,9 +172,7 @@ class DefaultController extends AbstractController
                 $parameters = Yaml::parse(file_get_contents($parametersYamlPath));
                 $parameters = $parameters['parameters'];
             } catch (ParseException $e) {
-                $request->getSession()
-                    ->getFlashBag()
-                    ->add('errors', $e->getMessage());
+                $this->addFlash('errors', $e->getMessage());
             }
         }
 
@@ -326,9 +324,7 @@ class DefaultController extends AbstractController
                         $catalogService->getNextId('user', $data['mongodb_database'], $autoincrementCollection);
 
                         // Success message
-                        $request->getSession()
-                            ->getFlashBag()
-                            ->add('messages', 'app_install.message.success');
+                        $this->addFlash('messages', 'app_install.message.success');
 
                         return $this->redirectToRoute('login');
                     }

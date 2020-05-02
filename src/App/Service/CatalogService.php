@@ -11,6 +11,8 @@ use Doctrine\Persistence\ObjectRepository;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\Common\Persistence\ObjectManager;
 use Mimey\MimeTypes;
+use MongoDB\Collection;
+use MongoDB\Model\IndexInfo;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class CatalogService {
@@ -657,6 +659,68 @@ class CatalogService {
             $criteria = ['$and' => [$criteria]];
         }
         $criteria['$and'][] = $andCriteria;
+    }
+
+    /**
+     * @param array $document
+     * @param Collection $collection
+     * @return bool
+     */
+    public function updateTranslationsTextIndex($document, Collection $collection)
+    {
+        if (empty($document['translations'])) {
+            return false;
+        }
+        $indexInfo = $collection->listIndexes();
+        $textIndexFields = [];
+        $textIndexFieldsNew = [];
+        $textIndexName = '';
+        $defaultLanguage = '';
+
+        /** @var IndexInfo $indexData */
+        foreach ($indexInfo as $indexData) {
+            if (!$indexData->isText()) {
+                continue;
+            }
+            $weights = $indexData->offsetGet('weights');
+            if (!empty($weights)) {
+                $fields = array_keys($weights);
+                $defLanguage = $indexData->offsetGet('default_language');
+                if (!empty($defLanguage)) {
+                    $defaultLanguage = $defLanguage;
+                    $textIndexName = $indexData->getName();
+                }
+                foreach ($fields as $fieldName) {
+                    $textIndexFields[] = $fieldName;
+                    if (strpos($fieldName, 'translations.') === false) {
+                        if (!isset($document['translations'][$fieldName])) {
+                            continue;
+                        }
+                        foreach ($document['translations'][$fieldName] as $lang => $val) {
+                            $indName = "translations.{$fieldName}.{$lang}";
+                            if (!in_array($indName, $fields)) {
+                                $textIndexFieldsNew[] = $indName;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        unset($fields);
+
+        if (!empty($textIndexFieldsNew) && $textIndexName) {
+            $textIndexName = explode('_', $textIndexName);
+            $textIndexName = array_filter($textIndexName, function($key) {
+                return ($key + 1) % 2 !== 0;
+            }, ARRAY_FILTER_USE_KEY);
+            $fields = array_unique(array_merge($textIndexFields, $textIndexFieldsNew));
+            $collection->dropIndexes(array_fill_keys($textIndexName, 'text'));
+            $collection->createIndex(array_fill_keys($fields, 'text'), [
+                'default_language' => $defaultLanguage
+            ]);
+        }
+
+        return true;
     }
 
     /**

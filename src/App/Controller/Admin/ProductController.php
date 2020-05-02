@@ -7,6 +7,7 @@ use App\MainBundle\Document\ContentType;
 use App\MainBundle\Document\FileDocument;
 use App\Events;
 use App\Service\CatalogService;
+use App\Service\SettingsService;
 use App\Service\UtilsService;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\Persistence\ObjectRepository;
@@ -36,6 +37,8 @@ class ProductController extends BaseController
     protected $cacheAdapter;
     /** @var CatalogService */
     protected $catalogService;
+    /** @var SettingsService */
+    protected $settingsService;
     
     public function __construct(
         ParameterBagInterface $params,
@@ -43,13 +46,15 @@ class ProductController extends BaseController
         TranslatorInterface $translator,
         EventDispatcherInterface $eventDispatcher,
         FilesystemAdapter $cacheAdapter,
-        CatalogService $catalogService
+        CatalogService $catalogService,
+        SettingsService $settingsService
     )
     {
         parent::__construct($params, $dm, $translator);
         $this->eventDispatcher = $eventDispatcher;
         $this->cacheAdapter = $cacheAdapter;
         $this->catalogService = $catalogService;
+        $this->settingsService = $settingsService;
     }
     
     /**
@@ -342,8 +347,7 @@ class ProductController extends BaseController
         // Otherwise do it now
         if (empty($fileFields) && !empty($fileIds)) {
             $fileIds = array_unique($fileIds);
-            $fileController = new FileController($this->params, $this->dm, $this->translator, $this->catalogService);
-            $fileController->setContainer($this->container);
+            $fileController = new FileController($this->params, $this->dm, $this->translator, $this->catalogService, $this->settingsService);
             $fileController->deleteUnused($contentType->getName(), $itemId, $fileIds);
         }
         if (!empty($fieldsSort)) {

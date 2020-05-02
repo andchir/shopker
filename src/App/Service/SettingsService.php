@@ -199,6 +199,30 @@ class SettingsService
     }
 
     /**
+     * @param string | array $value
+     * @param array $allowedExtensions
+     * @return bool
+     */
+    public function fileUploadAllowed($value, $allowedExtensions = [])
+    {
+        $filesExtBlacklist = $this->container->getParameter('app.files_ext_blacklist');
+        if (is_array($value)) {
+            $ext = !empty($value['extension']) ? strtolower($value['extension']) : null;
+        } else {
+            $ext = UtilsService::getExtension($value);
+        }
+        if (in_array($ext, $filesExtBlacklist)) {
+            return false;
+        }
+
+        if ($ext === null || !in_array($ext, $allowedExtensions)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Clear system cache
      * @param bool $deleteCacheDir
      * @param null $environment

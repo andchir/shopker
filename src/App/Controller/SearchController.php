@@ -3,8 +3,6 @@
 namespace App\Controller;
 
 use App\MainBundle\Document\ContentType;
-use App\Service\CatalogService;
-use App\Service\SettingsService;
 use App\Service\UtilsService;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,18 +20,16 @@ class SearchController extends CatalogController
      * )
      * @Route("/search", name="search_results", methods={"GET"})
      * @param Request $request
-     * @param CatalogService $catalogService
-     * @param SettingsService $settingsService
      * @return Response
      */
-    public function searchResultsAction(Request $request, CatalogService $catalogService, SettingsService $settingsService)
+    public function searchResultsAction(Request $request)
     {
-        $localeDefault = $this->getParameter('locale');
+        $localeDefault = $this->params->get('locale');
         $locale = $request->getLocale();
 
         $searchWord = trim($request->get('query', ''));
-        $searchCollections = $this->container->hasParameter('app.search_collections')
-            ? $this->container->getParameter('app.search_collections')
+        $searchCollections = $this->params->has('app.search_collections')
+            ? $this->params->get('app.search_collections')
             : '';
         if (empty($searchCollections)) {
             $searchCollections = 'products';
@@ -46,7 +42,7 @@ class SearchController extends CatalogController
                 'searchWord' => $searchWord
             ]);
         }
-        $currency = $settingsService->getCurrency();
+        $currency = $this->settingsService->getCurrency();
 
         $catalogNavSettingsDefaults = $this->getCatalogNavSettingsDefaults();
         $queryString = $request->getQueryString();
@@ -71,7 +67,7 @@ class SearchController extends CatalogController
         ];
         list($filters, $fieldsAll) = $this->getFieldsData($contentTypeFields, $options,'page', [], [], $queryOptions);
 
-        $collection = $catalogService->getCollection($searchCollections[0]);
+        $collection = $this->catalogService->getCollection($searchCollections[0]);
 
         $criteria = [
             'isActive' => true,
@@ -86,7 +82,7 @@ class SearchController extends CatalogController
         $aggregateFields = $contentType->getAggregationFields($locale, $localeDefault, true);
         $aggregateFields['score'] = ['$meta' => 'textScore'];
 
-        $pipeline = $catalogService->createAggregatePipeline(
+        $pipeline = $this->catalogService->createAggregatePipeline(
             $criteria,
             $aggregateFields,
             $queryOptions['limit'],

@@ -7,6 +7,7 @@ use App\MainBundle\Document\ContentType;
 use App\MainBundle\Document\FileDocument;
 use App\MainBundle\Document\User;
 use App\Service\CatalogService;
+use App\Service\SettingsService;
 use App\Service\UtilsService;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\Persistence\ObjectRepository;
@@ -30,16 +31,20 @@ class FileController extends BaseController
 
     /** @var CatalogService */
     protected $catalogService;
+    /** @var SettingsService */
+    protected $settingsService;
 
     public function __construct(
         ParameterBagInterface $params,
         DocumentManager $dm,
         TranslatorInterface $translator,
-        CatalogService $catalogService
+        CatalogService $catalogService,
+        SettingsService $settingsService
     )
     {
         parent::__construct($params, $dm, $translator);
         $this->catalogService = $catalogService;
+        $this->settingsService = $settingsService;
     }
     
     /**
@@ -114,7 +119,7 @@ class FileController extends BaseController
             return [$usedFiles, $error];
         }
 
-        if (!$this->fileUploadAllowed($file->getClientOriginalName(), ['jpg','jpeg','png','gif'])) {
+        if (!$this->settingsService->fileUploadAllowed($file->getClientOriginalName(), ['jpg','jpeg','png','gif'])) {
             $error = 'File type is not allowed.';
             return [$usedFiles, $error];
         }
@@ -289,30 +294,6 @@ class FileController extends BaseController
         }
 
         return UtilsService::downloadFile($filePath, $fileDocument->getTitle());
-    }
-
-    /**
-     * @param string | array $value
-     * @param array $allowedExtensions
-     * @return bool
-     */
-    public function fileUploadAllowed($value, $allowedExtensions = [])
-    {
-        $filesExtBlacklist = $this->params->get('app.files_ext_blacklist');
-        if (is_array($value)) {
-            $ext = !empty($value['extension']) ? strtolower($value['extension']) : null;
-        } else {
-            $ext = UtilsService::getExtension($value);
-        }
-        if (in_array($ext, $filesExtBlacklist)) {
-            return false;
-        }
-
-        if ($ext === null || !in_array($ext, $allowedExtensions)) {
-            return false;
-        }
-
-        return true;
     }
 
     /**

@@ -17,6 +17,8 @@ use App\Service\ShopCartService;
 use App\Service\UtilsService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ODM\MongoDB\DocumentManager;
+use Doctrine\Persistence\ObjectRepository;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
@@ -34,12 +36,16 @@ class CheckoutController extends BaseController
 {
     protected $catalogService;
     protected $shopCartService;
-    protected $dm;
 
-    public function __construct(ShopCartService $shopCartService, DocumentManager $dm, CatalogService $catalogService)
+    public function __construct(
+        ParameterBagInterface $params,
+        DocumentManager $dm,
+        TranslatorInterface $translator,
+        ShopCartService $shopCartService,
+        CatalogService $catalogService)
     {
+        parent::__construct($params, $dm, $translator);
         $this->shopCartService = $shopCartService;
-        $this->dm = $dm;
         $this->catalogService = $catalogService;
     }
 
@@ -52,27 +58,22 @@ class CheckoutController extends BaseController
      * )
      * @Route("/checkout", name="page_checkout")
      * @param Request $request
-     * @param UtilsService $utilsService
-     * @param TranslatorInterface $translator
      * @param EventDispatcherInterface $eventDispatcher
+     * @param SettingsService $settingsService
      * @return RedirectResponse|Response
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
      * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
-    public function checkoutAction(Request $request,
-        UtilsService $utilsService,
-        TranslatorInterface $translator,
-        EventDispatcherInterface $eventDispatcher
-    )
+    public function checkoutAction(Request $request, EventDispatcherInterface $eventDispatcher, SettingsService $settingsService)
     {
         /** @var User $user */
         $user = $this->getUser();
-        /** @var SettingsService $settingsService */
-        $settingsService = $this->get('app.settings');
         $settings = $settingsService->getAll();
-        $checkoutFields = $this->container->hasParameter('app.checkout_fields')
-            ? $this->getParameter('app.checkout_fields')
+        $checkoutFields = $this->params->has('app.checkout_fields')
+            ? $this->params->get('app.checkout_fields')
             : '';
-        $paymentStatusAfterNumber = (int) $this->getParameter('app.payment_status_after_number');
+        $paymentStatusAfterNumber = (int) $this->params->get('app.payment_status_after_number');
         $checkoutFields = $checkoutFields ? explode(',', $checkoutFields) : [];
         $checkoutFields = array_map('trim', $checkoutFields);
 
@@ -118,11 +119,11 @@ class CheckoutController extends BaseController
             $shoppingCart = $this->shopCartService->getShoppingCartByType();
             $shopCartContent = $shoppingCart ? $shoppingCart->getContent() : [];
             if (empty($shopCartContent)) {
-                $form->addError(new FormError($translator->trans('Your cart is empty.', [], 'validators')));
+                $form->addError(new FormError($this->translator->trans('Your cart is empty.', [], 'validators')));
             }
             $notAvailable = $this->getNotAvailableInStock();
             if (!empty($notAvailable)) {
-                $form->addError(new FormError($translator->trans('These products are not available in the quantity you need in stock: %list%.', [
+                $form->addError(new FormError($this->translator->trans('These products are not available in the quantity you need in stock: %list%.', [
                     '%list%' => implode(', ', $notAvailable)
                 ], 'validators')));
             }
@@ -196,9 +197,7 @@ class CheckoutController extends BaseController
                 // Delete temporary files
                 $this->deleteTemporaryFiles(FileDocument::OWNER_ORDER_TEMPORARY);
 
-                $request->getSession()
-                    ->getFlashBag()
-                    ->add('messages', 'Thanks for your order!');
+                $this->addFlash('messages', 'Thanks for your order!');
 
                 // Dispatch events
                 $eventDispatcher->dispatch($event, Events::ORDER_CREATED);
@@ -272,6 +271,9 @@ class CheckoutController extends BaseController
 
     /**
      * @param Order|null $order
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function updateFilesOwner($order)
     {
@@ -328,6 +330,7 @@ class CheckoutController extends BaseController
      * Delete temporary files
      * @param string|null $ownerType
      * @return bool
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function deleteTemporaryFiles($ownerType = null)
     {
@@ -336,7 +339,7 @@ class CheckoutController extends BaseController
         }
         $fileDocumentRepository = $this->getFileRepository();
 
-        $max_temp_files_keep_minutes = (int) $this->getParameter('app.max_temp_files_keep_minutes');
+        $max_temp_files_keep_minutes = (int) $this->params->get('app.max_temp_files_keep_minutes');
         $fileDocuments = $fileDocumentRepository->findTemporaryByTime($ownerType, $max_temp_files_keep_minutes * 60);
         /** @var FileDocument $fileDocument */
         foreach ($fileDocuments as $fileDocument) {
@@ -349,13 +352,11 @@ class CheckoutController extends BaseController
     }
 
     /**
-     * @return \App\Repository\FileDocumentRepository
+     * @return \App\Repository\FileDocumentRepository|ObjectRepository
      */
     public function getFileRepository()
     {
-        return $this->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository(FileDocument::class);
+        return $this->dm->getRepository(FileDocument::class);
     }
 
     /**

@@ -14,5 +14,5 @@ logout:
     path: /logout
 
 controllers:
-    resource: ../../src/App/Controller/
+    resource: ../src/App/Controller/
     type: annotation

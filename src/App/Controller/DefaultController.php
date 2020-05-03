@@ -10,7 +10,9 @@ use App\Service\SettingsService;
 use Doctrine\Common\DataFixtures\Executor\MongoDBExecutor;
 use Doctrine\Common\DataFixtures\Purger\MongoDBPurger;
 use Doctrine\ODM\MongoDB\DocumentManager;
+use Symfony\Bridge\Doctrine\DataFixtures\ContainerAwareLoader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
@@ -23,7 +25,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Doctrine\Common\DataFixtures\Loader as DataFixturesLoader;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
 
@@ -64,6 +65,8 @@ class DefaultController extends AbstractController
      * @param Request $request
      * @param CatalogService $catalogService
      * @return Response
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
      * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function homepageAction(Request $request, CatalogService $catalogService)
@@ -132,6 +135,8 @@ class DefaultController extends AbstractController
      * @Route("/404", name="404")
      * @param CatalogService $catalogService
      * @return Response
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
      */
     public function pageNotFoundAction(CatalogService $catalogService)
     {
@@ -150,15 +155,18 @@ class DefaultController extends AbstractController
      * @param UserPasswordEncoderInterface $encoder
      * @param CatalogService $catalogService
      * @param DocumentManager $dm
+     * @param ContainerInterface $container
      * @return RedirectResponse|Response
      * @throws \Doctrine\ODM\MongoDB\MongoDBException
+     * @throws \Exception
      */
     public function setupAction(
         Request $request,
         TranslatorInterface $translator,
         UserPasswordEncoderInterface $encoder,
         CatalogService $catalogService,
-        DocumentManager $dm
+        DocumentManager $dm,
+        ContainerInterface $container
     )
     {
         if (!empty($this->params->get('mongodb_database'))) {
@@ -222,11 +230,13 @@ class DefaultController extends AbstractController
                     $data['mongodb_user'] = '';
                     $data['mongodb_password'] = '';
                     $serverUrl = "mongodb://{$data['mongodb_server']}:{$data['mongodb_port']}";
+                    $data['mongodb_uri'] = $serverUrl;
                 } else {
                     $serverUrl = "mongodb://{$data['mongodb_user']}:{$data['mongodb_password']}@{$data['mongodb_server']}";
                     if ($data['mongodb_port']) {
                         $serverUrl .= ':' . $data['mongodb_port'];
                     }
+                    $data['mongodb_uri'] = $serverUrl;
                 }
 
                 try {
@@ -295,11 +305,9 @@ class DefaultController extends AbstractController
                         unset($data['admin_email'], $data['admin_password'], $data['form_reload']);
 
                         // Add Super Admin
-                        /** @var \Doctrine\ODM\MongoDB\DocumentManager $documentManagerDefault */
-                        $documentManagerDefault = $this->get('doctrine_mongodb')->getManager();
-                        $documentManagerDefault->getConfiguration()->setDefaultDb($data['mongodb_database']);
+                        $dm->getConfiguration()->setDefaultDb($data['mongodb_database']);
 
-                        $config = $documentManagerDefault->getConfiguration();
+                        $config = $dm->getConfiguration();
                         $config->setDefaultDb($data['mongodb_database']);
                         $documentManager = DocumentManager::create($mongoClient, $config);
 
@@ -316,7 +324,7 @@ class DefaultController extends AbstractController
                         $documentManager->persist($user);
                         $documentManager->flush();
 
-                        $this->loadDataFixtures($documentManager, $data['locale']);
+                        $this->loadDataFixtures($documentManager, $container, $data['locale']);
                         // $this->loadDataFixturesCommand($data['locale']);
 
                         // Update user auto_increment record
@@ -340,10 +348,11 @@ class DefaultController extends AbstractController
     /**
      * Load Data fixtures
      * @param DocumentManager $dm
+     * @param ContainerInterface $container
      * @param $locale
      * @return bool
      */
-    public function loadDataFixtures(DocumentManager $dm, $locale)
+    public function loadDataFixtures(DocumentManager $dm, ContainerInterface $container, $locale)
     {
         $rootPath = $this->params->get('kernel.project_dir');
         $fixturesPath = $rootPath . '/src/App/DataFixtures/MongoDB/' . $locale;
@@ -352,8 +361,8 @@ class DefaultController extends AbstractController
         }
 
         $loaderClass = $this->params->get('doctrine_mongodb.odm.fixture_loader');
-        /** @var DataFixturesLoader $loader */
-        $loader = new $loaderClass($this->container);
+        /** @var ContainerAwareLoader $loader */
+        $loader = new $loaderClass($container);
         $loader->loadFromDirectory($fixturesPath);
 
         $purger = new MongoDBPurger($dm);

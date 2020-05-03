@@ -28,7 +28,7 @@ parameters:
     app.file_manager_enabled: true
     mongodb_server: 127.0.0.1
     mongodb_port: 27017
-    mongodb_user: ''
+    mongodb_user: 'mongo'
     mongodb_password: ''
     mongodb_database: ''
     mongodb_uri: 'mongodb://127.0.0.1:27017'

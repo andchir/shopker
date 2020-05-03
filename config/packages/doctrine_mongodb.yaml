@@ -3,9 +3,7 @@ doctrine_mongodb:
     auto_generate_hydrator_classes: '%kernel.debug%'
     connections:
         default:
-            #server: 'mongodb://%mongodb_user%:%mongodb_password%@%mongodb_server%:%mongodb_port%'
-            server: 'mongodb://%mongodb_server%:%mongodb_port%'
-            #server: '%mongodb_uri%'
+            server: '%mongodb_uri%'
             options: {}
     default_database: '%mongodb_database%'
     document_managers:

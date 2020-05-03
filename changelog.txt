@@ -1,6 +1,7 @@
 4.2
 - Symfony updated to version 5.0.8.
 - Removed deprecated code.
+- Update setup - always create parameter "mongodb_uri".
 
 4.1.6
 - The problem with clearing the cache from the admin interface has been fixed.

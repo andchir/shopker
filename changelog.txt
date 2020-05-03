@@ -1,4 +1,4 @@
-4.2
+4.2.0
 - Symfony updated to version 5.0.8.
 - Removed deprecated code.
 - Update setup - always create parameter "mongodb_uri".

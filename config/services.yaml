@@ -98,7 +98,7 @@ services:
         arguments:
             - 'app'
             - 86400
-            - '%kernel.project_dir%/../../var/cache/filecache'
+            - '%kernel.project_dir%/var/cache/filecache'
 
     Symfony\Component\Cache\Adapter\FilesystemAdapter: '@app.filecache'
 

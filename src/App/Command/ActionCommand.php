@@ -96,7 +96,7 @@ class ActionCommand extends Command
             case 'db_export':
 
                 $mongoToolPath = $option ?: 'mongoexport';// Path for DevilBox: "docker exec devilbox_mongo_1 mongoexport"
-                $rootPath = realpath($this->params->get('kernel.project_dir').'/../..');
+                $rootPath = $this->params->get('kernel.project_dir');
                 $zipFileName = 'export_' . date('Y-m-d') . '.zip';
                 $zipFilePath = $rootPath . '/public/uploads/' . $zipFileName;
                 $result = null;

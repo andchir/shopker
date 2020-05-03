@@ -164,7 +164,7 @@ class DefaultController extends AbstractController
         if (!empty($this->params->get('mongodb_database'))) {
             return $this->redirectToRoute('homepage');
         }
-        $rootPath = realpath($this->container->params->get('kernel.project_dir').'/../..');
+        $rootPath = $this->params->get('kernel.project_dir');
         $parametersYamlPath = $rootPath . DIRECTORY_SEPARATOR . 'config/settings.yaml.dist';
         $parameters = [];
         if ($parametersYamlPath) {
@@ -345,13 +345,13 @@ class DefaultController extends AbstractController
      */
     public function loadDataFixtures(DocumentManager $dm, $locale)
     {
-        $rootPath = realpath($this->params->get('kernel.project_dir').'/../..');
+        $rootPath = $this->params->get('kernel.project_dir');
         $fixturesPath = $rootPath . '/src/App/DataFixtures/MongoDB/' . $locale;
         if (!is_dir($fixturesPath)) {
             return false;
         }
 
-        $loaderClass = $this->container->params->get('doctrine_mongodb.odm.fixture_loader');
+        $loaderClass = $this->params->get('doctrine_mongodb.odm.fixture_loader');
         /** @var DataFixturesLoader $loader */
         $loader = new $loaderClass($this->container);
         $loader->loadFromDirectory($fixturesPath);

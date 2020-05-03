@@ -331,7 +331,7 @@ class UtilsService
      */
     public function parseYaml($yamlFileName, $path = '')
     {
-        $rootPath = realpath($this->container->getParameter('kernel.project_dir').'/../..');
+        $rootPath = $this->container->getParameter('kernel.project_dir');
         $ymlFilePath = $rootPath . DIRECTORY_SEPARATOR . "config/resources/{$path}{$yamlFileName}.yaml";
         $output = [];
         if (file_exists($ymlFilePath)) {

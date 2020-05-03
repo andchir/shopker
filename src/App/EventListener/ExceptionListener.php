@@ -23,7 +23,7 @@ class ExceptionListener
     {
         $exception = $event->getThrowable();
         $request = $event->getRequest();
-        $rootPath = realpath($this->container->getParameter('kernel.project_dir').'/../..');
+        $rootPath = $this->container->getParameter('kernel.project_dir');
         $environment = $this->container->get('kernel')->getEnvironment();
         $displayErrors = $this->container->hasParameter('app.display_errors')
             ? !empty($this->container->getParameter('app.display_errors'))

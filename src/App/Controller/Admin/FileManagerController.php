@@ -292,7 +292,7 @@ class FileManagerController extends BaseController
      */
     public function getRootPath()
     {
-        return realpath($this->params->get('kernel.project_dir').'/../..');
+        return $this->params->get('kernel.project_dir');
     }
 
 }

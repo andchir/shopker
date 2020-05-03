@@ -273,7 +273,7 @@ class SettingsController extends AbstractController
      */
     public function updateInternationalization()
     {
-        $rootPath = realpath($this->params->get('kernel.root_dir').'/../..');
+        $rootPath = realpath($this->params->get('kernel.project_dir').'/../..');
         $jsonDirPath = $rootPath . '/frontend/src/i18n';
         $publicDirPath = realpath($this->params->get('app.web_dir_path'));
         $jsPublicDirPath = $publicDirPath . '/admin/i18n';
@@ -357,7 +357,7 @@ class SettingsController extends AbstractController
      */
     public function getSettingsFromYaml($yamlFileName = 'settings', $transform = true)
     {
-        $rootPath = realpath($this->params->get('kernel.root_dir').'/../..');
+        $rootPath = realpath($this->params->get('kernel.project_dir').'/../..');
         $settingsFilePath = $rootPath . DIRECTORY_SEPARATOR . "config/{$yamlFileName}.yaml";
         if (file_exists($settingsFilePath)) {
             try {
@@ -380,7 +380,7 @@ class SettingsController extends AbstractController
      */
     public function saveSettingsToYaml($data, $yamlFileName = 'settings')
     {
-        $rootPath = realpath($this->params->get('kernel.root_dir').'/../..');
+        $rootPath = realpath($this->params->get('kernel.project_dir').'/../..');
         $settingsFilePath = $rootPath . DIRECTORY_SEPARATOR . "config/{$yamlFileName}.yaml";
         $yaml = Yaml::dump(['parameters' => $data]);
 
@@ -422,7 +422,7 @@ class SettingsController extends AbstractController
 
         $settings = [
             'filesDirUrl' => $this->params->get('app.files_dir_url'),
-            'baseDir' => realpath($this->params->get('kernel.root_dir').'/../..') . DIRECTORY_SEPARATOR,
+            'baseDir' => realpath($this->params->get('kernel.project_dir').'/../..') . DIRECTORY_SEPARATOR,
             'locale' => $this->params->get('locale'),
             'templateTheme' => $this->params->get('app.template_theme'),
             'isFileManagerEnabled' => $this->params->get('app.file_manager_enabled'),

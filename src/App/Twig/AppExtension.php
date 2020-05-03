@@ -542,7 +542,7 @@ class AppExtension extends AbstractExtension
     public function twigAddError($errorMessage)
     {
         if (!empty($this->container->getParameter('app.display_errors'))) {
-            $rootPath = realpath($this->container->getParameter('kernel.root_dir').'/../..');
+            $rootPath = realpath($this->container->getParameter('kernel.project_dir').'/../..');
             $errorMessage = str_replace($rootPath, '', $errorMessage);
             return sprintf('<div class="alert alert-danger py-1 px-2">%s</div>', $errorMessage);
         }

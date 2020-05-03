@@ -285,7 +285,7 @@ class TemplatesController extends StorageControllerAbstract
      */
     public function getFilePathByType($fileType, $filePath)
     {
-        $rootPath = realpath($this->params->get('kernel.root_dir').'/../..');
+        $rootPath = realpath($this->params->get('kernel.project_dir').'/../..');
         $publicDirPath = realpath($this->params->get('app.web_dir_path'));
         $configDirPath = $rootPath . DIRECTORY_SEPARATOR . 'config';
         $templatesDirPath = $this->getTemplatesDirPath();

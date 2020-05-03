@@ -42,6 +42,6 @@ class BaseController extends AbstractController
      */
     public function getRootPath()
     {
-        return realpath($this->getParameter('kernel.root_dir').'/../..');
+        return realpath($this->getParameter('kernel.project_dir').'/../..');
     }
 }

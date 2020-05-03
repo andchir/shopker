@@ -32,7 +32,7 @@ class SettingsService
      */
     public function getSettingsFromYaml($yamlFileName = 'settings', $transform = true)
     {
-        $rootPath = realpath($this->container->getParameter('kernel.root_dir').'/../..');
+        $rootPath = realpath($this->container->getParameter('kernel.project_dir').'/../..');
         $settingsFilePath = $rootPath . DIRECTORY_SEPARATOR . "config/{$yamlFileName}.yaml";
         if (file_exists($settingsFilePath)) {
             try {
@@ -124,7 +124,7 @@ class SettingsService
      */
     public function getConfigYamlFilePath($yamlFileName)
     {
-        $rootPath = realpath($this->container->getParameter('kernel.root_dir').'/../..');
+        $rootPath = realpath($this->container->getParameter('kernel.project_dir').'/../..');
         return $rootPath . DIRECTORY_SEPARATOR . "config/{$yamlFileName}.yaml";
     }
 

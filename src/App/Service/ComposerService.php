@@ -28,7 +28,7 @@ class ComposerService
      */
     public function getPackagesList($type = 'library')
     {
-        $rootPath = realpath($this->container->getParameter('kernel.root_dir').'/../..');
+        $rootPath = realpath($this->container->getParameter('kernel.project_dir').'/../..');
         $vendorDir = $rootPath . DIRECTORY_SEPARATOR . 'vendor';
         $repoJsonFile = new JsonFile($vendorDir . '/composer/installed.json');
         if (!$repoJsonFile->exists()) {
@@ -63,7 +63,7 @@ class ComposerService
      */
     public function requirePackage($packageName, $version)
     {
-        $rootPath = realpath($this->container->getParameter('kernel.root_dir').'/../..');
+        $rootPath = realpath($this->container->getParameter('kernel.project_dir').'/../..');
         $jsonFilePath = $rootPath . DIRECTORY_SEPARATOR . 'composer.json';
         if (!is_writable($jsonFilePath)) {
             return ['success' => false, 'msg' => 'File is not writable.'];

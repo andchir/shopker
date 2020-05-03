@@ -1,3 +1,7 @@
+4.2
+- Symfony updated to version 5.0.8.
+- Removed deprecated code.
+
 4.1.6
 - The problem with clearing the cache from the admin interface has been fixed.
 - Symfony updated to version 4.4.5.

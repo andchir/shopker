@@ -2,7 +2,6 @@
 
 return [
     Symfony\Bundle\FrameworkBundle\FrameworkBundle::class => ['all' => true],
-    //Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle::class => ['all' => true],
     Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle::class => ['all' => true],
     Doctrine\Bundle\DoctrineBundle\DoctrineBundle::class => ['all' => true],
     Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle::class => ['all' => true],
@@ -21,5 +20,5 @@ return [
     Andchir\OmnipayBundle\OmnipayBundle::class => ['all' => true],
     Andchir\CommentsBundle\CommentsBundle::class => ['all' => true],
     Andchir\ImportExportBundle\ImportExportBundle::class => ['all' => true],
-    Andchir\DigitalGoodsBundle\DigitalGoodsBundle::class => ['all' => true]
+    Andchir\DigitalGoodsBundle\DigitalGoodsBundle::class => ['all' => true],
 ];

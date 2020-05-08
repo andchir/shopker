@@ -192,7 +192,7 @@ class AppRuntime
         /** @var CacheItemInterface $cacheItemHtml */
         $cacheItemHtml = $cacheEnabled ? $cache->getItem($cacheKey) : null;
         /** @var CacheItemInterface $cacheItemData */
-        $cacheItemData = $cacheDataEnabled ? $cache->getItem($cacheKey) : null;
+        $cacheItemData = $cacheDataEnabled ? $cache->getItem($cacheDataKey) : null;
 
         if ($cacheItemHtml && $cacheItemHtml->isHit()) {
             return $environment->createTemplate($cacheItemHtml->get())->render([]);

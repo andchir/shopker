@@ -52,7 +52,6 @@
                                             <div class="card mb-3 show-on-hover-parent card-border-on-hover">
                                                 <div class="card-body">
                                                     <div class="position-relative js-shopping-cart-favorites">
-                                                        {{ renderOutputTypeArray(item, fields, '', {"currency": currency}) }}
                                                         <div class="position-absolute pos-right-top show-on-hover">
                                                             <form action="{{ pathLocalized('shop_cart_action') }}" method="post">
                                                                 <input type="hidden" name="item_id" value="{{ item._id }}">
@@ -64,25 +63,28 @@
                                                             </form>
                                                         </div>
                                                     </div>
-                                                    <div class="position-relative js-shopping-cart-product">
-                                                        <div class="card-footer-absolute show-on-hover">
-                                                            <form action="{{ pathLocalized('shop_cart_action') }}" method="post">
-                                                                <input type="hidden" name="item_id" value="{{ item._id }}">
-                                                                <input type="hidden" name="category_id" value="{{ item.parentId }}">
-                                                                <input type="hidden" name="type" value="shop">
-                                                                <div class="row no-gutters">
-                                                                    <div class="col-4">
-                                                                        <input type="number" class="form-control d-inline-block text-center" value="1" min="1" step="1" name="count">
+                                                    <div class="js-shopping-cart-product">
+                                                        <form action="{{ pathLocalized('shop_cart_action') }}" method="post">
+                                                            {{ renderOutputTypeArray(item, fields, '', {"currency": currency}) }}
+                                                            <div class="position-relative">
+                                                                <div class="card-footer-absolute show-on-hover">
+                                                                    <input type="hidden" name="item_id" value="{{ item._id }}">
+                                                                    <input type="hidden" name="category_id" value="{{ item.parentId }}">
+                                                                    <input type="hidden" name="type" value="shop">
+                                                                    <div class="row no-gutters">
+                                                                        <div class="col-4">
+                                                                            <input type="number" class="form-control d-inline-block text-center" value="1" min="1" step="1" name="count">
+                                                                        </div>
+                                                                        <div class="col-8 pl-2">
+                                                                            <button type="submit" class="btn btn-primary btn-block" name="submit_button">
+                                                                                {{ 'Add to cart' | trans }}
+                                                                            </button>
+                                                                        </div>
                                                                     </div>
-                                                                    <div class="col-8 pl-2">
-                                                                        <button type="submit" class="btn btn-primary btn-block" name="submit_button">
-                                                                            {{ 'Add to cart' | trans }}
-                                                                        </button>
-                                                                    </div>
+                                                                    <div class="clearfix"></div>
                                                                 </div>
-                                                            </form>
-                                                            <div class="clearfix"></div>
-                                                        </div>
+                                                            </div>
+                                                        </form>
                                                     </div>
                                                 </div>
                                             </div>

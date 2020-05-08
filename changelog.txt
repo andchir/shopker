@@ -2,6 +2,7 @@
 - Symfony updated to version 5.0.8.
 - Removed deprecated code.
 - Update setup - always create parameter "mongodb_uri".
+- In the default template in the list of products made the ability to display the parameters of the products, which can be sent to the shopping cart.
 
 4.1.6
 - The problem with clearing the cache from the admin interface has been fixed.

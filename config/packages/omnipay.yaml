@@ -56,7 +56,6 @@ omnipay:
                 orderSumAmount: AMOUNT
                 orderSumCurrencyPaycash: ~
                 orderSumBankPaycash: ~
-                shopid: ~
                 invoiceId: ~
                 customerNumber: CUSTOMER_EMAIL
                 password: ~

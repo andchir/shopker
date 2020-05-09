@@ -3,7 +3,17 @@
         "version": "1.1.5"
     },
     "andchir/omnipay-bundle": {
-        "version": "1.0.9"
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "b70bdce6cb4c9a3933dcc082c270042e630b5507"
+        },
+        "files": [
+            "config/packages/omnipay.yaml",
+            "config/routes/omnipay.yaml"
+        ]
     },
     "andchir/omnipay3-yandexkassa": {
         "version": "v1.0.5"
@@ -18,7 +28,7 @@
         "version": "v1.3.0"
     },
     "clue/stream-filter": {
-        "version": "v1.4.0"
+        "version": "v1.4.1"
     },
     "composer/ca-bundle": {
         "version": "1.1.3"
@@ -132,13 +142,13 @@
         "version": "v2.0.5"
     },
     "guzzlehttp/guzzle": {
-        "version": "6.3.3"
+        "version": "6.5.3"
     },
     "guzzlehttp/promises": {
         "version": "v1.3.1"
     },
     "guzzlehttp/psr7": {
-        "version": "1.4.2"
+        "version": "1.6.1"
     },
     "hiqdev/omnipay-robokassa": {
         "version": "3.1.0"
@@ -162,7 +172,7 @@
         "version": "1.0.1"
     },
     "league/omnipay": {
-        "version": "v3.0.1"
+        "version": "v3.0.2"
     },
     "liip/imagine-bundle": {
         "version": "1.8",
@@ -180,7 +190,7 @@
         "version": "1.2.0"
     },
     "moneyphp/money": {
-        "version": "v3.1.3"
+        "version": "v3.3.1"
     },
     "mongodb/mongodb": {
         "version": "1.4.2"
@@ -198,7 +208,7 @@
         "version": "2.2.2"
     },
     "omnipay/common": {
-        "version": "v3.0.2"
+        "version": "v3.0.3"
     },
     "omnipay/paypal": {
         "version": "v3.0.2"
@@ -207,16 +217,16 @@
         "version": "7.3.0"
     },
     "php-http/discovery": {
-        "version": "1.4.0"
+        "version": "1.7.4"
     },
     "php-http/guzzle6-adapter": {
-        "version": "v1.1.1"
+        "version": "v2.0.1"
     },
     "php-http/httplug": {
-        "version": "v1.1.0"
+        "version": "2.1.0"
     },
     "php-http/message": {
-        "version": "1.7.0"
+        "version": "1.8.0"
     },
     "php-http/message-factory": {
         "version": "v1.0.2"
@@ -261,7 +271,7 @@
         "version": "1.0.1"
     },
     "ralouphie/getallheaders": {
-        "version": "2.0.5"
+        "version": "3.0.3"
     },
     "ralouphie/mimey": {
         "version": "2.0.0"

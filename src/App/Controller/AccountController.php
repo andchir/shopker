@@ -17,7 +17,6 @@ use App\Service\UtilsService;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\Form\FormError;
@@ -84,7 +83,7 @@ class AccountController extends AbstractController
      * @param Request $request
      * @param UserPasswordEncoderInterface $encoder
      * @param TranslatorInterface $translator
-     * @param EventDispatcher $evenDispatcher
+     * @param EventDispatcherInterface $evenDispatcher
      * @return RedirectResponse|Response
      * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
@@ -92,7 +91,7 @@ class AccountController extends AbstractController
         Request $request,
         UserPasswordEncoderInterface $encoder,
         TranslatorInterface $translator,
-        EventDispatcher $evenDispatcher
+        EventDispatcherInterface $evenDispatcher
     )
     {
         $form = $this->createForm(RegistrationType::class, new Registration());

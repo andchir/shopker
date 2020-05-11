@@ -409,6 +409,7 @@ export class CategoriesMenuComponent implements OnInit, OnDestroy {
             .subscribe((data) => {
                     this.categoryId = 0;
                     this.getCategories().then(() => {
+                        this.goToRootCategory();
                         this.loading = false;
                     });
                 },

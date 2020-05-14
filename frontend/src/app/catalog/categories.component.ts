@@ -354,6 +354,7 @@ export class CategoriesMenuComponent implements OnInit, OnDestroy {
             this.currentCategory.id = null; // For update current category data
             this.loading = true;
             this.getCategories().then(() => {
+                this.selectCurrent();
                 this.loading = false;
             });
         }, (reason) => {
@@ -364,6 +365,7 @@ export class CategoriesMenuComponent implements OnInit, OnDestroy {
                 this.currentCategory.id = null;
                 this.loading = true;
                 this.getCategories().then(() => {
+                    this.selectCurrent();
                     this.loading = false;
                 });
             }
@@ -407,6 +409,7 @@ export class CategoriesMenuComponent implements OnInit, OnDestroy {
             .subscribe((data) => {
                     this.categoryId = 0;
                     this.getCategories().then(() => {
+                        this.goToRootCategory();
                         this.loading = false;
                     });
                 },

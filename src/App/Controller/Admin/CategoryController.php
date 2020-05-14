@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\MainBundle\Document\FileDocument;
 use App\Service\CatalogService;
+use App\Service\SettingsService;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\Persistence\ObjectRepository;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
@@ -32,6 +33,8 @@ class CategoryController extends StorageControllerAbstract
     protected $cacheAdapter;
     /** @var CatalogService */
     protected $catalogService;
+    /** @var SettingsService */
+    protected $settingsService;
 
     public function __construct(
         ParameterBagInterface $params,
@@ -39,13 +42,15 @@ class CategoryController extends StorageControllerAbstract
         TranslatorInterface $translator,
         EventDispatcherInterface $eventDispatcher,
         FilesystemAdapter $cacheAdapter,
-        CatalogService $catalogService
+        CatalogService $catalogService,
+        SettingsService $settingsService
     )
     {
         parent::__construct($params, $dm, $translator);
         $this->eventDispatcher = $eventDispatcher;
         $this->cacheAdapter = $cacheAdapter;
         $this->catalogService = $catalogService;
+        $this->settingsService = $settingsService;
     }
     
     /**
@@ -155,7 +160,13 @@ class CategoryController extends StorageControllerAbstract
 
         // Delete unused files
         if (empty($item->getImage()) && !empty($oldImageData)) {
-            $fileController = new FileController($this->params, $this->dm, $this->translator);
+            $fileController = new FileController(
+                $this->params,
+                $this->dm,
+                $this->translator,
+                $this->catalogService,
+                $this->settingsService
+            );
             $fileController->setContainer($this->container);
             $fileController->deleteUnused(FileDocument::OWNER_CATEGORY, $item->getId());
         }
@@ -307,7 +318,8 @@ class CategoryController extends StorageControllerAbstract
                 $this->translator,
                 $this->eventDispatcher,
                 $this->cacheAdapter,
-                $this->catalogService
+                $this->catalogService,
+                $this->settingsService
             );
             $documents = $collection->find([
                 'parentId' => $category->getId()

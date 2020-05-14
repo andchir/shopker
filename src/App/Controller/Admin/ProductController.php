@@ -347,7 +347,13 @@ class ProductController extends BaseController
         // Otherwise do it now
         if (empty($fileFields) && !empty($fileIds)) {
             $fileIds = array_unique($fileIds);
-            $fileController = new FileController($this->params, $this->dm, $this->translator, $this->catalogService, $this->settingsService);
+            $fileController = new FileController(
+                $this->params,
+                $this->dm,
+                $this->translator,
+                $this->catalogService,
+                $this->settingsService
+            );
             $fileController->deleteUnused($contentType->getName(), $itemId, $fileIds);
         }
         if (!empty($fieldsSort)) {

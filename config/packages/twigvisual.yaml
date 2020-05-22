@@ -1,0 +1,531 @@
+twig_visual:
+    default_copy:
+        - admin/base
+        - admin/order_print
+        - admin/settings.js.twig
+        - errors/base
+        - errors/404
+        - security/base
+        - security/login
+        - security/password_reset
+        - security/register
+        - base
+        - flash_messages
+        - catalog/languages_list
+        - catalog/currency_list
+        - catalog/filters
+        - nav/breadcrumbs
+        - nav/pagination
+        - nav/pagination_simple
+        - nav/default
+    templates:
+        - homepage
+        - text-content_category
+        - text-content_content-page
+        - category
+        - content-page
+        - page_shop_cart
+        - page_checkout
+        - page_checkout_success
+        - page_search_result
+        - profile/profile
+        - profile/history_orders
+        - profile/contacts
+        - profile/change_password
+    cache_location:
+        - var/cache/filecache
+    templates_extension: html.twig
+    file_upload_dir_path: '%app.web_dir_path%/uploads'
+    ui:
+        field:
+            title: Content field
+            configuration:
+                saveBackupCopy: true
+            components:
+                root:
+                    title: Root element
+                    type: elementSelect
+                    required: true
+                    template: '<root>{% if {{ fieldName }} is defined %}{{ {{ fieldName }} }}{% endif %}</root>'
+
+                fieldName:
+                    title: Content field
+                    type: pageField
+                    join: key
+                    separator: '.'
+
+                key:
+                    title: Value key
+                    type: text
+
+        includeCreate:
+            title: Make included
+            configuration:
+                saveBackupCopy: true
+            components:
+                root:
+                    title: Root element
+                    type: elementSelect
+                    required: true
+
+                includeName:
+                    title: Item name
+                    type: text
+                    required: true
+
+        include:
+            title: Replace with included
+            configuration:
+                updateIncludeSource: false
+                saveBackupCopy: true
+            components:
+                root:
+                    title: Root element
+                    type: elementSelect
+                    required: true
+
+                includeName:
+                    title: Include name
+                    type: include
+                    required: true
+
+        menu:
+            title: Main menu
+            configuration:
+                saveBackupCopy: true
+            components:
+                root:
+                    title: Root element
+                    type: elementSelect
+                    required: true
+                    output: "{{ categoriesTree(0, 'menu_dropdown{{ nameSuffix }}', null, activeCategoriesIds, false) }}"
+                    template: '<root/>'
+                    templatePath: nav/menu_dropdown
+                    caching: true
+
+                itemFirst:
+                    title: First level menu item
+                    type: elementSelect
+                    isChildItem: true
+                    required: true
+                    output: '<itemFirst/>'
+                    template: |
+                        {% for category in children %}
+                        <itemFirst class="{%% if category.id in activeCategoriesIds %%}{{ activeClassName }}{%% endif %%}">
+                            <a href="{{ catalogPath(category.uri, '', category) }}">{{ category.title }}</a>
+                        </itemFirst>
+                        {%  endfor %}
+
+                containerSecond:
+                    title: Second level container
+                    type: elementSelect
+                    output: "{{ categoriesTree(category.id, 'menu_dropdown_child{{ nameSuffix }}', category, activeCategoriesIds, false) }}"
+                    template: '<containerSecond/>'
+                    templatePath: nav/menu_dropdown_child
+
+                itemSecond:
+                    title: Second level menu item
+                    type: elementSelect
+                    isChildItem: true
+                    output: '<itemSecond/>'
+                    template: |
+                        {% for category in children %}
+                        <itemSecond class="{%% if category.id in activeCategoriesIds %%}{{ activeClassName }}{%% endif %%}">
+                            <a href="{{ catalogPath(category.uri, '', category) }}">{{ category.title }}</a>
+                        </itemSecond>
+                        {%  endfor %}
+
+                containerThird:
+                    title: Third level container
+                    type: elementSelect
+                    output: "{{ categoriesTree(category.id, 'menu_dropdown_child', category, activeCategoriesIds, false) }}"
+                    template: '<containerThird/>'
+                    templatePath: nav/menu_dropdown_child_child
+
+                itemThird:
+                    title: Third level menu item
+                    type: elementSelect
+                    isChildItem: true
+                    output: '<itemThird/>'
+                    template: |
+                        {% for category in children %}
+                        <itemThird class="{%% if category.id in activeCategoriesIds %%}{{ activeClassName }}{%% endif %%}">
+                            <a href="{{ catalogPath(category.uri, '', category) }}">{{ category.title }}</a>
+                        </itemThird>
+                        {%  endfor %}
+
+                activeClassName: {title: CSS activity class, type: text, value: active}
+
+                nameSuffix: {title: Name suffix, type: text}
+
+                deleteLeftSiblings: {title: Delete previous child, type: checkbox}
+
+                deleteRightSiblings: {title: Delete next child, type: checkbox}
+
+        childMenu:
+            title: Subcategory menu
+            configuration:
+                saveBackupCopy: true
+            components:
+                root:
+                    title: Root element
+                    type: elementSelect
+                    required: true
+                    output: "{% include 'generic/child-categories-menu.html.twig' %}"
+                    template: '{%% if categoriesMenu | length > 0 %%}<root/>{%% endif %%}'
+                    templatePath: generic/child-categories-menu
+                    caching: true
+
+                itemFirst:
+                    title: First level menu item
+                    type: elementSelect
+                    isChildItem: true
+                    required: true
+                    output: '<itemFirst/>'
+                    template: |
+                        {% for category in categoriesMenu %}
+                        <itemFirst>
+                            <a href="{{ catalogPath(category.uri) }}">{{ category.title }}</a>
+                        </itemFirst>
+                        {%  endfor %}
+
+                nameSuffix: {title: Name suffix, type: text}
+
+                deleteLeftSiblings: {title: Delete previous child, type: checkbox}
+
+                deleteRightSiblings: {title: Delete next child, type: checkbox}
+
+        breadcrumbs:
+            title: Bread crumbs
+            configuration:
+                saveBackupCopy: true
+            components:
+                root:
+                    title: Root element
+                    type: elementSelect
+                    output: "{% include 'generic/breadcrumbs.html.twig' %}"
+                    template: '<root/>'
+                    templatePath: generic/breadcrumbs
+                    caching: true
+
+                childItem:
+                    title: Item
+                    type: elementSelect
+                    isChildItem: true
+                    output: '<childItem/>'
+                    template: |
+                        {% for crumb in breadcrumbs %}
+                        <childItem>
+                            <a href="{{ catalogPath(crumb.uri) }}">{{ crumb.title }}</a>
+                        </childItem>
+                        {% endfor %}
+
+                nameSuffix: {title: Name suffix, type: text}
+
+                deleteLeftSiblings: {title: Delete previous child, type: checkbox}
+
+                deleteRightSiblings: {title: Delete next child, type: checkbox}
+
+        catalogProducts:
+            title: Catalog products
+            configuration:
+                saveBackupCopy: true
+            components:
+                root:
+                    title: Root element
+                    type: elementSelect
+
+                childItem:
+                    title: Product block
+                    type: elementSelect
+                    isChildItem: true
+                    template: |
+                        {% for item in items %}
+                        <childItem/>
+                        {% endfor %}
+
+                childItemTitle:
+                    title: Product name
+                    type: elementSelect
+                    template: '<childItemTitle href="{{ catalogPath(currentUri, item.name) }}">{{ item.title }}</childItemTitle>'
+
+                childItemPrice:
+                    title: Price of the product
+                    type: elementSelect
+                    template: |
+                        <childItemPrice>
+                            <span class="shk-price">{{ item.price }}</span>
+                            <span class="shk-currency">{{ currency }}</span>
+                        </childItemPrice>
+                        
+                childItemImage:
+                    title: Photo of the product
+                    type: elementSelect
+                    template: |
+                        <childItemImage>
+                            <img src="{{ imageUrl(item.image, '/img/nofoto.png') | imagine_filter('thumb_small') }}" alt="{{ item.title }}"/>
+                        </childItemImage>
+                        
+                childItemAddToCartButton:
+                    title: Add to cart button
+                    type: elementSelect
+                    output: '<childItemAddToCartButton/>'
+                    template: |
+                        <form id="shk-form" action="{{ pathLocalized('shop_cart_action') }}" method="post">
+                            <input type="hidden" name="item_id" value="{{ item._id }}">
+                            <input type="hidden" name="category_id" value="{{ item.parentId }}">
+                            <input type="hidden" name="type" value="shop">
+                            <childItemAddToCartButton type="submit"/>
+                        </form>
+
+                deleteLeftSiblings: {title: Delete previous child, type: checkbox}
+
+                deleteRightSiblings: {title: Delete next child, type: checkbox}
+
+        pagination:
+            title: Page navigation for products
+            configuration:
+                saveBackupCopy: true
+            components:
+                root:
+                    title: Root element
+                    type: elementSelect
+                    output: '<root/>'
+                    template: |
+                        {% if pagesOptions.total > 1 %}
+                        <root/>
+                        {% endif %}
+
+                childItem:
+                    title: Item
+                    type: elementSelect
+                    isChildItem: true
+                    output: '<childItem/>'
+                    template: |
+                        {% for i in 1..pagesOptions.total %}
+                        <childItem class="{% if i == pagesOptions.current %} {{ activeClassName }}{% endif %}">
+                            <a href="{{ pageUrl(pagesOptions, i) }}{{ queryOptions.filterStr }}">{{ i }}</a>
+                        </childItem>
+                        {% endfor %}
+
+                activeClassName: {title: CSS activity class, type: text, value: active}
+
+                deleteLeftSiblings: {title: Delete previous child, type: checkbox}
+
+                deleteRightSiblings: {title: Delete next child, type: checkbox}
+
+        productPrice:
+            title: Price of the product
+            configuration:
+                saveBackupCopy: true
+            components:
+                root:
+                    title: Root element
+                    type: elementSelect
+                    template: |
+                        <root>
+                            <span class="shk-price">{{ currentPage.price }}</span>
+                            <span class="shk-currency">{{ currency }}</span>
+                        </root>
+
+        photogallery:
+            title: Photo gallery
+            components:
+                root:
+                    title: Root element
+                    type: elementSelect
+
+        shoppingCart:
+            title: Shopping cart
+            configuration:
+                saveBackupCopy: true
+            components:
+                root:
+                    title: Root element
+                    type: elementSelect
+                    required: true
+                    output: "{{ shopCart('shop_cart{{ nameSuffix }}', 'shop') }}"
+                    template: '<root/>'
+                    templatePath: shop_cart/shop_cart
+                    caching: true
+
+                totalCount:
+                    title: Total amount
+                    type: elementSelect
+                    template: '<totalCount>{{ countTotal }}</totalCount>'
+
+                totalPrice:
+                    title: Total price
+                    type: elementSelect
+                    output: '<totalPrice/>'
+                    template: |
+                        <totalPrice class="shk-price">
+                            <span class="big shk-price">{{ priceTotal | price }}</span>
+                            <span class="shk-currency">{{ currencySelected }}</span>
+                        </totalPrice>
+
+                linkCartEdit:
+                    title: Link to the full basket
+                    type: elementSelect
+                    template: |
+                        <linkCartEdit href="{{ pathLocalized('shop_cart_edit') }}"/>
+
+                linkCheckout:
+                    title: Link to checkout
+                    type: elementSelect
+                    template: |
+                        <linkCheckout href="{{ pathLocalized('page_checkout') }}"/>
+
+                childItem:
+                    title: Product item
+                    type: elementSelect
+                    isChildItem: true
+                    output: '<childItem/>'
+                    template: |
+                        {% for item in items %}
+                        <childItem/>
+                        {% endfor %}
+
+                childItemTitle:
+                    title: Product name
+                    type: elementSelect
+                    template: |
+                        <childItemTitle>
+                            <a href="/{{ item.uri }}">{{ item.title }}</a>
+                        </childItemTitle>
+
+                nameSuffix: {title: Name suffix, type: text}
+
+                deleteLeftSiblings: {title: Delete previous child, type: checkbox}
+
+                deleteRightSiblings: {title: Delete next child, type: checkbox}
+
+        addToCart:
+            title: Add to cart
+            configuration:
+                saveBackupCopy: true
+            components:
+                root:
+                    title: Root element
+                    type: elementSelect
+                    output: '<root/>'
+                    template: |
+                        <form id="shk-form" action="{{ pathLocalized('shop_cart_action') }}" method="post">
+                            <input type="hidden" name="item_id" value="{{ currentPage.id }}">
+                            <input type="hidden" name="category_id" value="{{ currentPage.parentId }}">
+                            <input type="hidden" name="type" value="shop">
+                            <root/>
+                        </form>
+                    caching: true
+
+                buttonAddToCart:
+                    title: Button
+                    type: elementSelect
+                    template: '<buttonAddToCart type="submit"/>'
+
+                inputCount:
+                    title: Quantity field
+                    type: elementSelect
+                    template: '<inputCount type="number" value="1" min="1" step="1" name="count"/>'
+
+        productsList:
+            title: Product list
+            components:
+                root:
+                    title: Root element
+                    type: elementSelect
+
+        comments:
+            title: Reviews
+            components:
+                root:
+                    title: Root element
+                    type: elementSelect
+
+        editMargin:
+            title: Edit margin
+            configuration:
+                saveBackupCopy: true
+            components:
+                root:
+                    title: Root element
+                    type: elementSelect
+                    required: true
+                marginTop:
+                    title: Indent on the top
+                    type: text
+                    styleName: 'margin-top'
+                marginRight:
+                    title: Indent on the right
+                    type: text
+                    styleName: 'margin-right'
+                marginBottom:
+                    title: Indent from the bottom
+                    type: text
+                    styleName: 'margin-bottom'
+                marginLeft:
+                    title: Indent on the left
+                    type: text
+                    styleName: 'margin-left'
+
+        editPadding:
+            title: Edit padding
+            configuration:
+                saveBackupCopy: true
+            components:
+                root:
+                    title: Root element
+                    type: elementSelect
+                    required: true
+                paddingTop:
+                    title: Indent on the top
+                    type: text
+                    styleName: 'padding-top'
+                paddingRight:
+                    title: Indent on the right
+                    type: text
+                    styleName: 'padding-right'
+                paddingBottom:
+                    title: Indent from the bottom
+                    type: text
+                    styleName: 'padding-bottom'
+                paddingLeft:
+                    title: Indent on the left
+                    type: text
+                    styleName: 'padding-left'
+
+        wrapTag:
+            title: Create block
+            configuration:
+                saveBackupCopy: true
+            components:
+                root:
+                    title: Root element
+                    type: elementSelect
+                    required: true
+                    output: '<root/>'
+                    template: '<div><root/></div>'
+
+        languagesList:
+            title: List of languages
+            configuration:
+                saveBackupCopy: true
+            components:
+                root:
+                    title: Root element
+                    type: elementSelect
+                    required: true
+                    template: "<root>{{ settingsList('SETTINGS_LANGUAGES', 'languages_list', false, true) }}</root>"
+                    caching: true
+
+        currenciesList:
+            title: List of currencies
+            configuration:
+                saveBackupCopy: true
+            components:
+                root:
+                    title: Root element
+                    type: elementSelect
+                    required: true
+                    template: "<root>{{ settingsList('SETTINGS_CURRENCY', 'currency_list', true) }}</root>"
+                    caching: true

@@ -21,4 +21,5 @@ return [
     Andchir\CommentsBundle\CommentsBundle::class => ['all' => true],
     Andchir\ImportExportBundle\ImportExportBundle::class => ['all' => true],
     Andchir\DigitalGoodsBundle\DigitalGoodsBundle::class => ['all' => true],
+    Andchir\TwigVisualBundle\TwigVisualBundle::class => ['all' => true],
 ];

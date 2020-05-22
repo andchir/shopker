@@ -1,0 +1,3 @@
+comments:
+    resource: '@TwigVisualBundle'
+    type: annotation

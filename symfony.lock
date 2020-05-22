@@ -21,9 +21,6 @@
     "andchir/shopkeeper4-comments": {
         "version": "v1.0.9"
     },
-    "andrewnovikof/omnipay-sberbank": {
-        "version": "3.2.0"
-    },
     "behat/transliterator": {
         "version": "v1.3.0"
     },
@@ -156,6 +153,9 @@
     "imagine/imagine": {
         "version": "v0.7.1"
     },
+    "ivopetkov/html5-dom-document-php": {
+        "version": "v2.2.4"
+    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },
@@ -182,6 +182,9 @@
             "version": "1.8",
             "ref": "523b4b0cfb88dc8637cb56e427e6be7718bdce32"
         }
+    },
+    "machy8/xhtml-formatter": {
+        "version": "v1.0.0"
     },
     "markbaker/complex": {
         "version": "1.4.7"

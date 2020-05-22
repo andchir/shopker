@@ -1,4 +1,4 @@
-import {OnDestroy, OnInit, ViewChild} from '@angular/core';
+import { OnDestroy, OnInit, ViewChild, Directive } from '@angular/core';
 import {NgbModal, NgbActiveModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateService} from '@ngx-translate/core';
 

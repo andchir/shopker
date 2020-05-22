@@ -1,4 +1,4 @@
-import {ElementRef, Input, OnDestroy, OnInit} from '@angular/core';
+import { ElementRef, Input, OnDestroy, OnInit, Directive } from '@angular/core';
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
 import {Subject} from 'rxjs';

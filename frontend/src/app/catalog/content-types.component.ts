@@ -28,7 +28,7 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
     @ViewChild('addCollectionBlock', { static: true }) elementAddCollectionBlock;
     @ViewChild('addGroupBlock', { static: true }) elementAddGroupBlock;
     @ViewChild('accordion', { static: true }) accordion;
-    @ViewChild('blockFieldList', { static: false }) blockFieldList;
+    @ViewChild('blockFieldList') blockFieldList;
     modalRef: NgbModalRef;
 
     model = new ContentType(0, '', '', '', 'products', [], ['General', 'Service'], true);

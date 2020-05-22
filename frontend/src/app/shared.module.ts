@@ -5,10 +5,15 @@ import {HttpClientModule} from '@angular/common/http';
 import {RouterModule} from '@angular/router';
 
 import {NgbModule, NgbActiveModal, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
-import {EditorModule, CalendarModule, ChipsModule, ColorPickerModule, TreeModule, ChartModule} from 'primeng/primeng';
+import {EditorModule} from 'primeng/editor';
+import {ToastModule} from 'primeng/toast';
+import {CalendarModule} from 'primeng/calendar';
+import {ChipsModule} from 'primeng/chips';
+import {ColorPickerModule} from 'primeng/colorpicker';
+import {TreeModule} from 'primeng/tree';
+import {ChartModule} from 'primeng/chart';
 import {TranslateModule} from '@ngx-translate/core';
 import {DragulaModule} from 'ng2-dragula';
-import {ToastModule} from 'primeng/toast';
 import {ClipboardModule} from 'ngx-clipboard';
 
 import {TableComponent} from './table.component';

@@ -1,26 +1,25 @@
+// This is a "Solution Style" tsconfig.json file, and is used by editors and TypeScript’slanguage server to improve development experience.
+// It is not intended to be used to perform a compilation.
 {
-  "compileOnSave": false,
-  "compilerOptions": {
-    "baseUrl": "./",
-    "downlevelIteration": true,
-    "outDir": "./dist/out-tsc",
-    "sourceMap": true,
-    "declaration": false,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "target": "es2015",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
-    "lib": [
-      "es2017",
-      "dom"
-    ]
-  },
-  "angularCompilerOptions": {
-    "enableIvy": false,
-    "allowEmptyCodegenFiles": true
-  }
+  "files": [],
+  "references": [
+    {
+      "path": "./src/tsconfig.app.json"
+    },
+    {
+      "path": "./src/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/comments/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/comments/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/import-export/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/import-export/tsconfig.spec.json"
+    }
+  ]
 }

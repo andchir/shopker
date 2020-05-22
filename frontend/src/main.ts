@@ -1,8 +1,8 @@
 import {CompilerOptions, enableProdMode} from '@angular/core';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
-import {getTranslationProviders} from './app/i18n-providers';
+import {getTranslationProviders} from '@app/i18n-providers';
 
-import {AppModule} from './app/app.module';
+import {AppModule} from '@app/app.module';
 import {environment} from './environments/environment';
 
 if (environment.production) {
@@ -11,5 +11,6 @@ if (environment.production) {
 
 getTranslationProviders().then(providers => {
     const options = { providers } as CompilerOptions;
-    platformBrowserDynamic().bootstrapModule(AppModule, options);
+    platformBrowserDynamic().bootstrapModule(AppModule, options)
+        .catch(err => console.error(err));
 });

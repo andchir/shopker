@@ -12,7 +12,6 @@
                     "builder": "@angular-devkit/build-angular:browser",
                     "options": {
                         "preserveSymlinks": true,
-                        "es5BrowserSupport": true,
                         "outputPath": "dist",
                         "index": "src/index.html",
                         "main": "src/main.ts",
@@ -36,8 +35,7 @@
                             "node_modules/quill/dist/quill.js",
                             "node_modules/chart.js/dist/Chart.js"
                         ],
-                        "lazyModules": [
-                        ]
+                        "lazyModules": []
                     },
                     "configurations": {
                         "production": {
@@ -63,7 +61,11 @@
                                     "type": "initial",
                                     "maximumWarning": "2mb",
                                     "maximumError": "5mb"
-                                }
+                                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
                             ]
                         }
                     }
@@ -281,7 +283,7 @@
                         "main": "projects/import-export/src/main.ts",
                         "polyfills": "projects/import-export/src/polyfills.ts",
                         "tsConfig": "projects/import-export/tsconfig.app.json",
-                        "aot": false,
+                        "aot": true,
                         "assets": [
                             "projects/import-export/src/favicon.ico",
                             "projects/import-export/src/assets"
@@ -310,7 +312,6 @@
                             "sourceMap": false,
                             "extractCss": true,
                             "namedChunks": false,
-                            "aot": true,
                             "extractLicenses": true,
                             "vendorChunk": false,
                             "buildOptimizer": true,
@@ -395,7 +396,7 @@
     "schematics": {
         "@schematics/angular:component": {
             "prefix": "app",
-            "styleext": "css"
+            "style": "css"
         },
         "@schematics/angular:directive": {
             "prefix": "app"

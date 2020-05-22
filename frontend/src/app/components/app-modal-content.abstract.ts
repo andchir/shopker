@@ -1,4 +1,4 @@
-import {ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import { ElementRef, Input, OnDestroy, OnInit, ViewChild, Directive } from '@angular/core';
 import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
 
 import {Observable, Subject} from 'rxjs';
@@ -10,6 +10,7 @@ import {SimpleEntity} from '../models/simple-entity.interface';
 import {FormFieldsErrors, FormFieldsOptions} from '../models/form-fields-options.interface';
 import {DataService} from '../services/data-service.abstract';
 
+@Directive()
 export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> implements OnInit, OnDestroy {
 
     @Input() modalTitle: string;
@@ -17,7 +18,7 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
     @Input() modalId = '';
     @Input() isItemCopy: boolean;
     @Input() isEditMode: boolean;
-    @ViewChild('formEl', {static: false}) formEl;
+    @ViewChild('formEl') formEl;
 
     private _formFieldsErrors: FormFieldsErrors = {};
     form: FormGroup;

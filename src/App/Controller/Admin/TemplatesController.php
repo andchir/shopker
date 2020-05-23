@@ -106,6 +106,15 @@ class TemplatesController extends StorageControllerAbstract
 
             $items = array_merge($items, $filesArr);
         }
+        
+        // Search by name
+        if (!empty($options['search_word'])) {
+            $items = array_filter($items, function ($item) use ($options) {
+                return strpos($item['name'], $options['search_word']) !== false
+                    || strpos($item['path'], $options['search_word']) !== false;
+            });
+            $items = array_merge($items);
+        }
 
         $total = count($items);
 

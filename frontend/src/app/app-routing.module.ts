@@ -11,7 +11,7 @@ export const routes: Routes = [
     {path: 'users', loadChildren: () => import('./users/users.module').then(m => m.UsersModule)},
     {path: 'settings', loadChildren: () => import('./settings/settings.module').then(m => m.SettingsModule)},
     {path: 'templates_edit', loadChildren: () => import('./templates-edit/templates-edit.module').then(m => m.TemplatesEditModule)},
-    // {path: 'import-export', loadChildren: () => import('./import-export/import-export.module').then(m => m.ImportExportModule)},
+    {path: 'import-export', loadChildren: () => import('./import-export/import-export.module').then(m => m.ImportExportModule)},
     {path: 'module/:moduleName', component: ModuleLoaderComponent},
     {path: '**', component: NotFoundComponent}
 ];

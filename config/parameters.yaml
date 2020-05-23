@@ -23,6 +23,7 @@ parameters:
     app.editable_config:
         - /packages/omnipay.yaml
         - /packages/liip_imagine.yaml
+        - /packages/twigvisual.yaml
         - /resources/admin_menu.yaml
         - /resources/forms/contacts.yaml
     app.file_manager_enabled: true

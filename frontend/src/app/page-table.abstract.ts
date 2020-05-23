@@ -40,14 +40,17 @@ export abstract class PageTableAbstractComponent<M> implements OnInit, OnDestroy
     }
 
     afterInit(): void {}
+    
     onSearchClear(): void {
         this.getList();
     }
+    
     onModalClose(result: any): void {}
 
     onSearchWordUpdate(value?: string): void {
         if (typeof value !== 'undefined') {
             this.queryOptions.search_word = value;
+            this.queryOptions.page = 1;
             if (!this.queryOptions.search_word) {
                 this.onSearchClear();
             } else {
@@ -57,6 +60,7 @@ export abstract class PageTableAbstractComponent<M> implements OnInit, OnDestroy
         }
         clearTimeout(this.searchTimer);
         this.searchTimer = setTimeout(() => {
+            this.queryOptions.page = 1;
             this.getList();
         }, 700);
     }

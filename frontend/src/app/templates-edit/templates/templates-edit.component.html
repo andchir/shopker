@@ -7,18 +7,23 @@
         </h3>
         <hr>
 
-        <div class="mb-3">
+        <div class="mb-2">
             <div class="float-md-left">
 
-                <select class="custom-select mb-2 mb-md-0" [(ngModel)]="queryOptions.category" (ngModelChange)="onThemeChange()">
+                <select class="custom-select align-middle w-auto mb-2 mr-2" [(ngModel)]="queryOptions.category" (ngModelChange)="onThemeChange()">
                     <option [value]="''">{{ 'ALL' | translate }}</option>
                     <option *ngFor="let theme of themes" [value]="theme.name">{{ theme.name }}</option>
                 </select>
+
+                <div class="form-control-search d-inline-block align-middle mb-2" [ngClass]="{'form-control-search-clear': !!queryOptions.search_word}">
+                    <input type="text" class="form-control min-width250" placeholder="{{ 'SEARCH' | translate }}..." [(ngModel)]="queryOptions.search_word" (ngModelChange)="onSearchWordUpdate()">
+                    <span (click)="onSearchWordUpdate('')"></span>
+                </div>
                 
             </div>
             <div class="float-md-right">
 
-                <div ngbDropdown class="d-block d-md-inline-block mb-2 mb-md-0" placement="bottom-right">
+                <div ngbDropdown class="d-block d-md-inline-block align-middle mb-2" placement="bottom-right">
                     <button class="btn btn-info d-block d-md-inline-block width-100 width-md-auto" ngbDropdownToggle>
                         <span>{{'BATCH_ACTIONS' | translate}}</span>
                     </button>
@@ -27,7 +32,7 @@
                     </div>
                 </div>
 
-                <div ngbDropdown class="d-block d-md-inline-block ml-md-2 mb-2 mb-md-0" placement="bottom-right" *ngIf="files['config'].length">
+                <div ngbDropdown class="d-block d-md-inline-block align-middle ml-md-2 mb-2" placement="bottom-right" *ngIf="files['config'].length">
                     <button class="btn btn-primary d-block d-md-inline-block width-100 width-md-auto" ngbDropdownToggle>
                         <span>{{'CONFIG_FILES' | translate}}</span>
                     </button>
@@ -38,7 +43,7 @@
                     </div>
                 </div>
 
-                <div ngbDropdown class="d-block d-md-inline-block ml-md-2 mb-2 mb-md-0" placement="bottom-right" *ngIf="files['css'].length">
+                <div ngbDropdown class="d-block d-md-inline-block align-middle ml-md-2 mb-2" placement="bottom-right" *ngIf="files['css'].length">
                     <button class="btn btn-primary d-block d-md-inline-block width-100 width-md-auto" ngbDropdownToggle>
                         <span>CSS / JS</span>
                     </button>
@@ -57,7 +62,7 @@
                     </div>
                 </div>
 
-                <button type="button" class="btn btn-success btn-wide d-block d-md-inline-block width-100 width-md-auto ml-md-2 mb-2 mb-md-0" (click)="modalOpen()">
+                <button type="button" class="btn btn-success btn-wide d-block d-md-inline-block width-100 width-md-auto ml-md-2 mb-2" (click)="modalOpen()">
                     <i class="icon-plus mr-2"></i>
                     <span>{{'ADD' | translate}}</span>
                 </button>

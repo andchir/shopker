@@ -33,7 +33,7 @@
 
         var mainOptions = {
             baseUrl: '/',
-            connectorUrl: 'assets/components/shopping_cart/connector.php',
+            connectorUrl: '/shop_cart/action',
             snippetPropertySetName: '',
             selector: '',
             useNumberFormat: true,

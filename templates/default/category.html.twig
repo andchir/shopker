@@ -161,11 +161,11 @@
             });
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            shk.onAfterInit(function() {
-                shk.filtersInit(true);
-            });
+        shk.onAfterInit(function() {
+            shk.filtersInit(true);
+        });
 
+        document.addEventListener('DOMContentLoaded', function() {
             shoppingCart = new ShoppingCart({
                 baseUrl: '{{ app.request.baseUrl }}',// Base URL
                 connectorUrl: '{{ pathLocalized('shop_cart_action') }}',// URL for requests
@@ -175,6 +175,9 @@
             });
             shoppingCart
                 .addEventListener('formSubmitBefore', function(e) {// Before submitting form data
+                    if (!e.detail.element) {
+                        return;
+                    }
                     var buttonEl = e.detail.element.querySelector('button[type="submit"]');
                     if (buttonEl) {
                         buttonEl.setAttribute('disabled', '');// Disable button

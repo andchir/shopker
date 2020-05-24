@@ -152,6 +152,34 @@
         };
 
         /**
+         * Call any shopping cart action (add_to_cart, add_from_array, remove_by_index, remove_by_id, update, clean)
+         * @param actionName
+         * @param options
+         * @param type
+         */
+        this.callAction = function(actionName, options, type) {
+            
+            type = type || TYPE_MAIN;
+            var formData = new FormData();
+            formData.append('action', actionName);
+            formData.append('type', type);
+            if (mainOptions.snippetPropertySetName) {
+                formData.append('propertySetName', mainOptions.snippetPropertySetName);
+            }
+            if (mainOptions.templateName) {
+                formData.append('templateName', mainOptions.templateName);
+            }
+            if (options) {
+                Object.keys(options).forEach(function(key) {
+                    formData.append(key, Array.isArray(options[key]) ? options[key].join(',') : options[key]);
+                });
+            }
+
+            self.dispatchEvent('formSubmitBefore', {element: null, formData: formData});
+            self.formDataSend(formData);
+        };
+
+        /**
          * Update shopping cart type
          * @param formEl
          */

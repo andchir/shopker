@@ -13,6 +13,7 @@ use App\Service\CatalogService;
 use App\Service\ShopCartService;
 use Doctrine\ODM\MongoDB\Cursor;
 use Doctrine\ODM\MongoDB\DocumentManager;
+use Doctrine\ODM\MongoDB\MongoDBException;
 use Doctrine\Persistence\ObjectRepository;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -42,7 +43,7 @@ class CartController extends BaseController
         $this->catalogService = $catalogService;
         $this->shopCartService = $shopCartService;
     }
-    
+
     /**
      * @Route(
      *     "/{_locale}/shop_cart/action",
@@ -52,6 +53,7 @@ class CartController extends BaseController
      * @Route("/shop_cart/action", name="shop_cart_action", methods={"GET", "POST"})
      * @param Request $request
      * @return Response
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function actionResponseAction(Request $request)
     {
@@ -73,6 +75,11 @@ class CartController extends BaseController
 
                 $output = $this->addToCartAction($request);
 
+                break;
+            case 'add_from_array':
+
+                $output = $this->addToCartFromArrayAction($request);
+                
                 break;
             case 'remove_by_id':
 
@@ -141,6 +148,7 @@ class CartController extends BaseController
         $type = $request->get('type', ShoppingCart::TYPE_MAIN);
 
         $count = max(1, (int) $request->get('count'));
+        /** @var ShoppingCart $shoppingCart */
         $shoppingCart = $this->shopCartService->getShoppingCart($type, $this->getUserId(), $this->getSessionId($type), null, true);
 
         /** @var Category $category */
@@ -152,9 +160,6 @@ class CartController extends BaseController
         /** @var ContentType $contentType */
         $contentType = $category->getContentType();
         $contentTypeFields = $contentType->getFields();
-        $priceFieldName = $contentType->getPriceFieldName();
-        $titleFieldName = $contentType->getFieldByChunkName('header', 'title');
-        $systemNameField = $contentType->getSystemNameField();
 
         $options = [];
         $files = [];
@@ -182,6 +187,85 @@ class CartController extends BaseController
             }
         }
 
+        try {
+            $this->addCartContent($shoppingCart, $category, $productDocument, $count, $locale, $localeDefault, $parameters, $options, $files);
+        } catch (MongoDBException $e) {
+            return ['success' => false, 'message' => $e->getMessage()];
+        }
+
+        return ['success' => true];
+    }
+
+    /**
+     * Add products to shopping cart by ID array
+     * @param Request $request
+     * @return array
+     */
+    public function addToCartFromArrayAction(Request $request)
+    {
+        $locale = $request->getLocale();
+        $localeDefault = $this->params->get('locale');
+        $type = $request->get('type', ShoppingCart::TYPE_MAIN);
+        $itemIdString = $request->get('item_id');
+        $countString = $request->get('count');
+        $categoryId = (int) $request->get('category_id');
+        
+        $shoppingCart = $this->shopCartService->getShoppingCart($type, $this->getUserId(), $this->getSessionId($type), null, true);
+
+        /** @var Category $category */
+        $category = $this->dm->getRepository(Category::class)->find($categoryId);
+        if (!$category) {
+            return ['success' => false, 'message' => 'Category not found.'];
+        }
+
+        $itemIdArr = explode(',', $itemIdString);
+        $itemCountArr = explode(',', $countString);
+        
+        foreach ($itemIdArr as $index => $itemId) {
+            $productDocument = $this->getProduct($category, $itemId);
+            if (!$productDocument) {
+                continue;
+            }
+            $count = !empty($itemCountArr[$index]) && is_numeric($itemCountArr[$index]) ? (int) $itemCountArr[$index] : 1;
+            try {
+                $this->addCartContent($shoppingCart, $category, $productDocument, $count, $locale, $localeDefault);
+            } catch (MongoDBException $e) {
+                
+            }
+        }
+        return ['success' => true];
+    }
+
+    /**
+     * @param ShoppingCart $shoppingCart
+     * @param Category $category
+     * @param object $productDocument
+     * @param int $count
+     * @param string $locale
+     * @param string $localeDefault
+     * @param array $parameters
+     * @param array $options
+     * @param array $files
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
+     */
+    public function addCartContent(
+        ShoppingCart $shoppingCart,
+        Category $category,
+        $productDocument,
+        $count = 1,
+        $locale = '',
+        $localeDefault = '',
+        $parameters = [],
+        $options = [],
+        $files = []
+    )
+    {
+        /** @var ContentType $contentType */
+        $contentType = $category->getContentType();
+        $priceFieldName = $contentType->getPriceFieldName();
+        $titleFieldName = $contentType->getFieldByChunkName('header', 'title');
+        $systemNameField = $contentType->getSystemNameField();
+        
         $cartContent = $shoppingCart->getContent();
         $contentIndex = $this->getContentIndex($cartContent, [
             'id' => $productDocument['_id'],
@@ -212,8 +296,6 @@ class CartController extends BaseController
         }
 
         $this->dm->flush();
-
-        return ['success' => true];
     }
 
     /**
@@ -328,26 +410,31 @@ class CartController extends BaseController
         $categoryId = (int) $request->get('category_id');
 
         /** @var Category $category */
-        $category = $this->dm->getRepository(Category::class)->findOneBy([
-            'id' => $categoryId
-        ]);
+        $category = $this->dm->getRepository(Category::class)->find($categoryId);
         if (!$category) {
             return [null, null];
         }
 
+        $productDocument = $this->getProduct($category, $itemId);
+
+        return [$category, $productDocument];
+    }
+
+    /**
+     * @param Category $category
+     * @param int|string $itemId
+     * @return array|object|null
+     */
+    public function getProduct(Category $category, $itemId)
+    {
         $contentType = $category->getContentType();
         $collectionName = $contentType->getCollection();
         $collection = $this->catalogService->getCollection($collectionName);
-
-        $productDocument = $collection->findOne([
-            '_id' => $itemId,
+        
+        return $collection->findOne([
+            '_id' => (int) $itemId,
             'isActive' => true
         ]);
-        if (!$productDocument) {
-            return [null, null];
-        }
-
-        return [$category, $productDocument];
     }
 
     /**

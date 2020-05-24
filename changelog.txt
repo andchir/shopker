@@ -5,6 +5,7 @@
 - Update setup - always create parameter "mongodb_uri".
 - In the default template in the list of products made the ability to display the parameters of the products, which can be sent to the shopping cart.
 - In the admin area added search template by name.
+- Add products to shopping cart by ID array (JavaScript API).
 
 4.1.6
 - The problem with clearing the cache from the admin interface has been fixed.

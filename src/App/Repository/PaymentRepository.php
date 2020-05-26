@@ -13,9 +13,10 @@ class PaymentRepository extends DocumentRepository implements PaymentRepositoryI
 
     /**
      * @param $paymentId
-     * @param int $seconds
+     * @param float|int $seconds
      * @param null $date_timezone
-     * @return mixed
+     * @return \Doctrine\ODM\MongoDB\Query\Query
+     * @throws \Exception
      */
     public function findLastById($paymentId, $seconds = 30 * 60, $date_timezone = null)
     {
@@ -25,15 +26,15 @@ class PaymentRepository extends DocumentRepository implements PaymentRepositoryI
         return $this->createQueryBuilder()
             ->field('id')->equals($paymentId)
             ->field('createdDate')->gt((new \DateTime())->setTimestamp(time() - $seconds)->setTimezone(new \DateTimeZone($date_timezone)))
-            ->getQuery()
-            ->execute();
+            ->getQuery();
     }
 
     /**
      * @param $email
-     * @param int $seconds
+     * @param float|int $seconds
      * @param null $date_timezone
      * @return mixed
+     * @throws \Exception
      */
     public function findLastByEmail($email, $seconds = 30 * 60, $date_timezone = null)
     {
@@ -43,8 +44,7 @@ class PaymentRepository extends DocumentRepository implements PaymentRepositoryI
         return $this->createQueryBuilder()
             ->field('email')->equals($email)
             ->field('createdDate')->gt((new \DateTime())->setTimestamp(time() - $seconds)->setTimezone(new \DateTimeZone($date_timezone)))
-            ->getQuery()
-            ->execute();
+            ->getQuery();
     }
 
 }

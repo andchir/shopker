@@ -17,10 +17,10 @@ class UserRepository extends BaseRepository implements UserLoaderInterface
      * @param string $email
      * @return array|null|object
      */
-    public function loadUserByUsername($email)
+    public function loadUserByUsername(string $email)
     {
         $email = mb_strtolower($email);
-        $qb = $this->createQueryBuilder(User::class);
+        $qb = $this->createQueryBuilder();
         return $qb
             ->addOr($qb->expr()->field('username')->equals($email))
             ->addOr($qb->expr()->field('email')->equals($email))

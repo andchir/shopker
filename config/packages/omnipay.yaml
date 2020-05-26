@@ -88,7 +88,7 @@ omnipay:
                 currencyLabel: ~
                 description: ~
                 receipt: ~
-                InvId: PAYMENT_ID
+                transactionId: PAYMENT_ID
                 client: CUSTOMER_EMAIL
                 testMode: true
             complete:

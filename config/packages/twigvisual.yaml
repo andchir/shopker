@@ -101,7 +101,7 @@ twig_visual:
                     output: "{{ categoriesTree(0, 'menu_dropdown{{ nameSuffix }}', null, activeCategoriesIds, false) }}"
                     template: '<root/>'
                     templatePath: nav/menu_dropdown
-                    caching: true
+                    saveBackupCopy: true
 
                 itemFirst:
                     title: First level menu item
@@ -174,7 +174,7 @@ twig_visual:
                     output: "{% include 'generic/child-categories-menu.html.twig' %}"
                     template: '{%% if categoriesMenu | length > 0 %%}<root/>{%% endif %%}'
                     templatePath: generic/child-categories-menu
-                    caching: true
+                    saveBackupCopy: true
 
                 itemFirst:
                     title: First level menu item
@@ -206,7 +206,7 @@ twig_visual:
                     output: "{% include 'generic/breadcrumbs.html.twig' %}"
                     template: '<root/>'
                     templatePath: generic/breadcrumbs
-                    caching: true
+                    saveBackupCopy: true
 
                 childItem:
                     title: Item
@@ -347,7 +347,7 @@ twig_visual:
                     output: "{{ shopCart('shop_cart{{ nameSuffix }}', 'shop') }}"
                     template: '<root/>'
                     templatePath: shop_cart/shop_cart
-                    caching: true
+                    saveBackupCopy: true
 
                 totalCount:
                     title: Total amount
@@ -416,7 +416,7 @@ twig_visual:
                             <input type="hidden" name="type" value="shop">
                             <root/>
                         </form>
-                    caching: true
+                    saveBackupCopy: true
 
                 buttonAddToCart:
                     title: Button
@@ -517,7 +517,6 @@ twig_visual:
                     type: elementSelect
                     required: true
                     output: "<div>{{ settingsList('SETTINGS_LANGUAGES', 'languages_list', false, true) }}</div>"
-                    caching: true
 
                 insertMode:
                     type: radio
@@ -537,7 +536,6 @@ twig_visual:
                     type: elementSelect
                     required: true
                     output: "<div>{{ settingsList('SETTINGS_CURRENCY', 'currency_list', true) }}</div>"
-                    caching: true
 
                 insertMode:
                     type: radio

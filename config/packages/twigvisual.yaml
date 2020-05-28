@@ -510,22 +510,38 @@ twig_visual:
             title: List of languages
             configuration:
                 saveBackupCopy: true
+                isInsertMode: true
             components:
                 root:
                     title: Root element
                     type: elementSelect
                     required: true
-                    template: "<root>{{ settingsList('SETTINGS_LANGUAGES', 'languages_list', false, true) }}</root>"
+                    output: "<div>{{ settingsList('SETTINGS_LANGUAGES', 'languages_list', false, true) }}</div>"
                     caching: true
+
+                insertMode:
+                    type: radio
+                    options:
+                        - {title: 'Insert', value: 'inside'}
+                        - {title: 'Insert before', value: 'before'}
+                        - {title: 'Insert after', value: 'after'}
 
         currenciesList:
             title: List of currencies
             configuration:
                 saveBackupCopy: true
+                isInsertMode: true
             components:
                 root:
                     title: Root element
                     type: elementSelect
                     required: true
-                    template: "<root>{{ settingsList('SETTINGS_CURRENCY', 'currency_list', true) }}</root>"
+                    output: "<div>{{ settingsList('SETTINGS_CURRENCY', 'currency_list', true) }}</div>"
                     caching: true
+
+                insertMode:
+                    type: radio
+                    options:
+                        - {title: 'Insert', value: 'inside'}
+                        - {title: 'Insert before', value: 'before'}
+                        - {title: 'Insert after', value: 'after'}

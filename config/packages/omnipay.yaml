@@ -5,7 +5,7 @@ omnipay:
     notify_url: '/omnipay_notify'
     cancel_url: '/omnipay_cancel'
     data_keys:
-        paymentId: ['orderNumber', 'transactionId']
+        paymentId: ['orderNumber', 'Shp_TransactionId']
         customerEmail: ['customerNumber', 'Email', 'Shp_Client']
     gateways:
         PayPal_Express:

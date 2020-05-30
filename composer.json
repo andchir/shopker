@@ -52,8 +52,9 @@
         "symfony/css-selector": "5.0.*",
         "symfony/debug-bundle": "5.0.*",
         "symfony/maker-bundle": "^1.11",
-        "symfony/phpunit-bridge": "5.0.*",
+        "symfony/phpunit-bridge": "^5.0",
         "symfony/stopwatch": "5.0.*",
+        "symfony/test-pack": "^1.0",
         "symfony/web-profiler-bundle": "5.0.*"
     },
     "config": {
@@ -71,12 +72,13 @@
             "App\\": "src/App/",
             "Andchir\\ImportExportBundle\\": "vendor/andchir/import-export-bundle/",
             "Andchir\\DigitalGoodsBundle\\": "vendor/andchir/digital-goods-bundle/",
-            "Andchir\\TwigVisualBundle\\": "vendor/andchir/twig-visual/"
+            "Andchir\\TwigVisualBundle\\": "vendor/andchir/twig-visual/src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "App\\Tests\\": "tests/"
+            "App\\Tests\\": "tests/",
+            "Andchir\\TwigVisualBundle\\Tests\\": "vendor/andchir/twig-visual/tests/"
         }
     },
     "replace": {

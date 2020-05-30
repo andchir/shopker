@@ -47,6 +47,9 @@
         <testsuite name="Project Test Suite">
             <directory>tests</directory>
         </testsuite>
+        <testsuite name="TwigVisual Test suite">
+            <directory>vendor/andchir/twig-visual/tests</directory>
+        </testsuite>
     </testsuites>
 
     <filter>

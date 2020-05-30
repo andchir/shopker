@@ -5,12 +5,13 @@
 
 ###> symfony/phpunit-bridge ###
 .phpunit
-/phpunit.xml
 ###< symfony/phpunit-bridge ###
 /frontend/node_modules/
 /public/node_modules/
 /.idea
 /.env
+/.phpunit.result.cache
+/phpunit.xml
 
 /public/media/cache/
 /public/admin/bundle-dev/
@@ -21,3 +22,4 @@
 ###< liip/imagine-bundle ###
 /docs/wiki/
 /frontend/projects/
+

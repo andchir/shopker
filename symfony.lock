@@ -21,6 +21,9 @@
     "andchir/shopkeeper4-comments": {
         "version": "v1.0.9"
     },
+    "andchir/twig-visual": {
+        "version": "v1.0.1"
+    },
     "behat/transliterator": {
         "version": "v1.3.0"
     },
@@ -189,6 +192,9 @@
     "machy8/xhtml-formatter": {
         "version": "v1.0.0"
     },
+    "maennchen/zipstream-php": {
+        "version": "2.1.0"
+    },
     "markbaker/complex": {
         "version": "1.4.7"
     },
@@ -203,6 +209,9 @@
     },
     "monolog/monolog": {
         "version": "1.23.0"
+    },
+    "myclabs/php-enum": {
+        "version": "1.7.6"
     },
     "nikic/php-parser": {
         "version": "v4.1.0"
@@ -452,6 +461,9 @@
     },
     "symfony/polyfill-php73": {
         "version": "v1.12.0"
+    },
+    "symfony/polyfill-php80": {
+        "version": "v1.17.0"
     },
     "symfony/process": {
         "version": "v4.1.6"

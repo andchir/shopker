@@ -1,5 +1,5 @@
 4.2.0
-- Symfony updated to version 5.0.8.
+- Symfony updated to version 5.0.9.
 - Angular updated to version 9.1.4.
 - Removed deprecated code.
 - Update setup - always create parameter "mongodb_uri".
@@ -7,6 +7,7 @@
 - In the admin area added search template by name.
 - Add products to shopping cart by ID array (JavaScript API).
 - If a picture is attached to the parameter, then when this parameter is selected, this picture will be sent to the shopping cart.
+- Added TwigVisual - Create Twig template in visual mode.
 
 4.1.6
 - The problem with clearing the cache from the admin interface has been fixed.

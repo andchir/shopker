@@ -36,6 +36,7 @@ twig_visual:
         - var/cache/filecache
     templates_extension: html.twig
     file_upload_dir_path: '%app.web_dir_path%/uploads'
+    editor_user_role: 'ROLE_ADMIN_WRITE'
     ui:
         field:
             title: Content field

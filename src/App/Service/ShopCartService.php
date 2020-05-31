@@ -42,6 +42,7 @@ class ShopCartService
      * @param string $type
      * @param bool $cleanFiles
      * @return bool
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function clearContent($type = ShoppingCart::TYPE_MAIN, $cleanFiles = false)
     {
@@ -140,6 +141,7 @@ class ShopCartService
      * @param string $templateName
      * @param string $type
      * @return string
+     * @throws \Twig\Error\RuntimeError
      */
     public function renderShopCart($shoppingCart, $templateName, $type = ShoppingCart::TYPE_MAIN)
     {
@@ -252,6 +254,34 @@ class ShopCartService
     }
 
     /**
+     * @param $productDocument
+     * @param $parameters
+     * @param $imageFieldName
+     * @return string
+     */
+    public function getImageUrl($productDocument, $parameters, $imageFieldName)
+    {
+        if (!$imageFieldName) {
+            return '';
+        }
+        $imageNum = 1;
+        if (!empty($parameters) && is_array($parameters)) {
+            foreach ($parameters as $parameter) {
+                if (!empty($parameter['imageNum']) && is_numeric($parameter['imageNum'])) {
+                    $imageNum = (int) $parameter['imageNum'];
+                    break;
+                }
+            }
+        }
+        if ($imageNum > 1 && !empty($productDocument[$imageFieldName . '__' . ($imageNum - 1)])) {
+            $imageData = $productDocument[$imageFieldName . '__' . ($imageNum - 1)];
+        } else {
+            $imageData = $productDocument[$imageFieldName] ?? [];
+        }
+        return self::getImageUrlFromArray($imageData);
+    }
+
+    /**
      * @return int
      */
     public function getUserId()
@@ -306,5 +336,24 @@ class ShopCartService
                 return $translations[$fieldName][$locale];
         }
         return $document[$fieldName] ?? '';
+    }
+
+    /**
+     * Get image URL string from data array
+     * @param $itemData
+     * @return string
+     */
+    public static function getImageUrlFromArray($itemData)
+    {
+        if (!isset($itemData['dirPath']) || !isset($itemData['fileName']) || !isset($itemData['extension'])) {
+            return '';
+        }
+        $format = !empty($itemData['fileId']) ? '/uploads/%s/%s.%s' : '%s/%s.%s';
+        return sprintf(
+            $format,
+            $itemData['dirPath'],
+            $itemData['fileName'],
+            $itemData['extension']
+        );
     }
 }

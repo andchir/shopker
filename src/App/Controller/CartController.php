@@ -131,7 +131,7 @@ class CartController extends BaseController
             if (!$output['success'] && isset($output['message'])) {
                 $this->addFlash('errors', $this->translator->trans($output['message']));
             }
-            return new RedirectResponse($back_url);
+            return new RedirectResponse($back_url ?: '/');
         }
     }
 
@@ -264,6 +264,7 @@ class CartController extends BaseController
         $contentType = $category->getContentType();
         $priceFieldName = $contentType->getPriceFieldName();
         $titleFieldName = $contentType->getFieldByChunkName('header', 'title');
+        $imageFieldName = $contentType->getFieldByChunkName('image', 'image');
         $systemNameField = $contentType->getSystemNameField();
         
         $cartContent = $shoppingCart->getContent();
@@ -276,6 +277,8 @@ class CartController extends BaseController
         ]);
         /** @var OrderContent $currentProduct */
         $currentProduct = $contentIndex > -1 ? $cartContent->get($contentIndex) : null;
+        
+        $imageUrl = $this->shopCartService->getImageUrl($productDocument, $parameters, $imageFieldName);
 
         if ($currentProduct) {
             $currentProduct->incrementCount($count);
@@ -289,6 +292,7 @@ class CartController extends BaseController
                 ->setCount($count)
                 ->setParameters($parameters)
                 ->setFiles($files)
+                ->setImage($imageUrl)
                 ->setUri($category->getUri() . ($productDocument[$systemNameField] ?? ''))
                 ->setContentTypeName($category->getContentTypeName());
 

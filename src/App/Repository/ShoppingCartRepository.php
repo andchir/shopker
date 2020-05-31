@@ -36,13 +36,16 @@ class ShoppingCartRepository extends DocumentRepository
     /**
      * @param $date_timezone
      * @return mixed
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function findExpired($date_timezone)
     {
         $dateTime = new \DateTime('now', new \DateTimeZone($date_timezone));
         $qb = $this->createQueryBuilder();
-        $qb->field('expiresOn')->exists(true);
-        $qb->field('expiresOn')->lte($dateTime);
+        $qb
+            //->field('expiresOn')->exists(true)
+            ->field('expiresOn')->lte($dateTime);
+        $result = $qb->getQuery()->execute();
         return $qb->getQuery()->execute();
     }
 

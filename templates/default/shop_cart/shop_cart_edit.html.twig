@@ -18,6 +18,9 @@
                     <tr>
                         <td>{{ loop.index }}</td>
                         <td>
+                            <img src="{{ item.image | default('/img/nofoto.png') | imagine_filter('thumb_small') }}" width="100" alt="">
+                        </td>
+                        <td>
                             <div>
                                 <a href="/{{ item.uri }}">
                                     {{ item.title }}
@@ -31,7 +34,7 @@
                                 </div>
                             {% endif %}
                         </td>
-                        <td>
+                        <td class="d-none d-lg-table-cell">
                             <span class="shk-price">{{ item.price | price }}</span>
                             <span class="shk-currency">{{ currencySelected }}</span>
                         </td>
@@ -52,7 +55,7 @@
                 </tbody>
                 <tfoot>
                 <tr>
-                    <th colspan="4">
+                    <th colspan="5">
                         <div class="float-left">
                             <button type="submit" class="btn btn-sm btn-info" name="action" value="update">
                                 <i class="icon-reload"></i>

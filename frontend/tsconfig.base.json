@@ -21,7 +21,7 @@
     },
     "files": [],
     "angularCompilerOptions": {
-        "enableIvy": false,
+        "enableIvy": true,
         "allowEmptyCodegenFiles": true
     }
 }

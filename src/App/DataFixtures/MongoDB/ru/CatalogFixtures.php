@@ -400,7 +400,8 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface, Fixtur
                 'outputProperties' => [
                     'type' => 'radio',
                     'chunkName' => 'parameters',
-                    'firstSelected' => '1'
+                    'firstSelected' => '1',
+                    'groupByName' => '1'
                 ],
                 'group' => 'Параметры',
                 'required' => false,

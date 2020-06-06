@@ -24,6 +24,9 @@
     "andchir/twig-visual": {
         "version": "v1.0.1"
     },
+    "andrewnovikof/omnipay-sberbank": {
+        "version": "3.2.2"
+    },
     "behat/transliterator": {
         "version": "v1.3.0"
     },

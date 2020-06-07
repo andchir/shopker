@@ -6,8 +6,8 @@
 {% set groupIndex = 0 %}
 
 {% if not groupByName %}
-    <div class="text-muted mb-2">
-        {{ fieldData.title }}:
+    <div class="text-muted">
+        <label for="param__{{ fieldData.name }}__{{ groupIndex }}">{{ fieldData.title }}:</label>
     </div>
 {% endif %}
 
@@ -37,6 +37,14 @@
 {% elseif type == 'checkbox' %}
 
     {% for item in data %}
+        {% if groupByName and labelText != data[loop.index0].name %}
+            {% set labelText = data[loop.index0].name %}
+            {% set groupIndex = groupIndex + 1 %}
+            {% if firstSelected %}{% set selectedNumber = loop.index %}{% endif %}
+            <div class="text-muted mb-2">
+                {{ labelText }}:
+            </div>
+        {% endif %}
         <div class="mb-1{% if className is not empty %} {{ className }}{% endif %}">
             <input type="checkbox" name="param__{{ fieldData.name }}[]" id="param__{{ fieldData.name }}_{{ loop.index }}" value="{{ item.value | default(item.name) }}"{% if loop.index == 1 and firstSelected %} checked="checked"{% endif %} data-image-number="{{ item.imageNum | default(0) }}" data-price="{{ item.price }}">
             <label for="param__{{ fieldData.name }}_{{ loop.index }}">
@@ -51,17 +59,31 @@
 
 {% elseif type == 'select' %}
 
-    <div class="mb-1{% if className is not empty %} {{ className }}{% endif %}">
-        <label for="param__{{ fieldData.name }}">
-            {{ fieldData.title }}
-        </label>
-        <select class="form-control" name="param__{{ fieldData.name }}" id="param__{{ fieldData.name }}">
-            {% for item in data %}
+    <div{% if className is not empty %} class="{{ className }}"{% endif %}>
+        {% if not groupByName %}
+        <div class="mb-3"><select class="form-control" name="param__{{ fieldData.name }}__{{ groupIndex }}" id="param__{{ fieldData.name }}__{{ groupIndex }}">
+                {% endif %}
+                {% for item in data %}
+                {% if groupByName and labelText != data[loop.index0].name %}
+                {% set labelText = data[loop.index0].name %}
+                {% set groupIndex = groupIndex + 1 %}
+                {% if firstSelected %}{% set selectedNumber = loop.index %}{% endif %}
+                {% if groupIndex > 1 %}</select></div>{% endif %}
+        <div class="text-muted">
+            <label for="param__{{ fieldData.name }}__{{ groupIndex }}">{{ labelText }}:</label>
+        </div>
+        <div class="mb-3"><select class="form-control" name="param__{{ fieldData.name }}__{{ groupIndex }}" id="param__{{ fieldData.name }}__{{ groupIndex }}">
+                {% endif %}
                 <option value="{{ item.value | default(item.name) }}" data-image-number="{{ item.imageNum | default(0) }}" data-price="{{ item.price }}">
-                    {{ item.name | default(item.value) }}
+                    {% if groupByName %}
+                        {{ item.value | default(item.name) }}
+                    {% else %}
+                        {{ item.name | default(item.value) }}
+                    {% endif %}
                 </option>
-            {% endfor %}
-        </select>
+                {% endfor %}
+            </select>
+        </div>
     </div>
 
 {% elseif type == 'text' %}

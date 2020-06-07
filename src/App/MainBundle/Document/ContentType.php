@@ -307,7 +307,7 @@ class ContentType
     public static function getCleanFieldName($fieldName) {
         if (strpos($fieldName, '__') !== false) {
             $tmp = explode('__', $fieldName);
-            if (!empty($tmp[1]) && is_numeric($tmp[1])) {
+            if (isset($tmp[1]) && is_numeric($tmp[1])) {
                 $fieldName = $tmp[0];
             }
         }

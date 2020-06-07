@@ -1,21 +1,30 @@
 {% if firstSelected is not defined %}
     {% set firstSelected = true %}
 {% endif %}
+{% set selectedNumber = firstSelected ? 1 : 0 %}
+{% set labelText = '' %}
+{% set groupIndex = 0 %}
 
-<div class="text-muted mb-2">
-    {% if groupByName %}
-        {{ data[0].name }}:
-    {% else %}
+{% if not groupByName %}
+    <div class="text-muted mb-2">
         {{ fieldData.title }}:
-    {% endif %}
-</div>
+    </div>
+{% endif %}
 
 {% if type == 'radio' %}
 
     {% for item in data %}
+        {% if groupByName and labelText != data[loop.index0].name %}
+            {% set labelText = data[loop.index0].name %}
+            {% set groupIndex = groupIndex + 1 %}
+            {% if firstSelected %}{% set selectedNumber = loop.index %}{% endif %}
+            <div class="text-muted mb-2">
+                {{ labelText }}:
+            </div>
+        {% endif %}
         <div class="mb-1{% if className is not empty %} {{ className }}{% endif %}">
-            <input type="radio" name="param__{{ fieldData.name }}" id="param{{ itemData._id }}__{{ fieldData.name }}_{{ loop.index }}" value="{{ item.value | default(item.name) }}"{% if loop.index == 1 and firstSelected %} checked="checked"{% endif %} data-image-number="{{ item.imageNum | default(0) }}" data-price="{{ item.price }}">
-            <label for="param{{ itemData._id }}__{{ fieldData.name }}_{{ loop.index }}">
+            <input type="radio" name="param__{{ fieldData.name }}__{{ groupIndex }}" id="param__{{ fieldData.name }}_{{ loop.index }}" value="{{ item.value | default(item.name) }}"{% if loop.index == selectedNumber %} checked="checked"{% endif %} data-image-number="{{ item.imageNum | default(0) }}" data-price="{{ item.price }}">
+            <label for="param__{{ fieldData.name }}_{{ loop.index }}">
                 {% if groupByName %}
                     {{ item.value | default(item.name) }}
                 {% else %}
@@ -29,8 +38,8 @@
 
     {% for item in data %}
         <div class="mb-1{% if className is not empty %} {{ className }}{% endif %}">
-            <input type="checkbox" name="param__{{ fieldData.name }}[]" id="param{{ itemData._id }}__{{ fieldData.name }}_{{ loop.index }}" value="{{ item.value | default(item.name) }}"{% if loop.index == 1 and firstSelected %} checked="checked"{% endif %} data-image-number="{{ item.imageNum | default(0) }}" data-price="{{ item.price }}">
-            <label for="param{{ itemData._id }}__{{ fieldData.name }}_{{ loop.index }}">
+            <input type="checkbox" name="param__{{ fieldData.name }}[]" id="param__{{ fieldData.name }}_{{ loop.index }}" value="{{ item.value | default(item.name) }}"{% if loop.index == 1 and firstSelected %} checked="checked"{% endif %} data-image-number="{{ item.imageNum | default(0) }}" data-price="{{ item.price }}">
+            <label for="param__{{ fieldData.name }}_{{ loop.index }}">
                 {% if groupByName %}
                     {{ item.value | default(item.name) }}
                 {% else %}
@@ -46,7 +55,7 @@
         <label for="param__{{ fieldData.name }}">
             {{ fieldData.title }}
         </label>
-        <select class="form-control" name="param__{{ fieldData.name }}" id="param{{ itemData._id }}__{{ fieldData.name }}">
+        <select class="form-control" name="param__{{ fieldData.name }}" id="param__{{ fieldData.name }}">
             {% for item in data %}
                 <option value="{{ item.value | default(item.name) }}" data-image-number="{{ item.imageNum | default(0) }}" data-price="{{ item.price }}">
                     {{ item.name | default(item.value) }}
@@ -69,7 +78,7 @@
                 </label>
             </div>
             <div class="col-md-8">
-                <input type="text" class="form-control" name="param__{{ fieldData.name }}[]" id="param{{ itemData._id }}__{{ fieldData.name }}_{{ loop.index }}" value="{% if not groupByName %}{{ item.value }}{% endif %}" data-image-number="{{ item.imageNum | default(0) }}" data-price="{{ item.price }}">
+                <input type="text" class="form-control" name="param__{{ fieldData.name }}[]" id="param__{{ fieldData.name }}_{{ loop.index }}" value="{% if not groupByName %}{{ item.value }}{% endif %}" data-image-number="{{ item.imageNum | default(0) }}" data-price="{{ item.price }}">
             </div>
         </div>
     {% endfor %}

@@ -493,9 +493,10 @@ class CartController extends BaseController
             $fieldBaseName = ContentType::getCleanFieldName($paramName);
 
             $index = array_search($fieldBaseName, array_column($contentTypeFields, 'name'));
+            
             if ($index === false
-                || !isset($productDocument[$paramName])
-                || !is_array($productDocument[$paramName])) {
+                || !isset($productDocument[$fieldBaseName])
+                || !is_array($productDocument[$fieldBaseName])) {
                 continue;
             }
             $contentTypeField = $contentTypeFields[$index];
@@ -517,12 +518,12 @@ class CartController extends BaseController
                         $value = [$value];
                     }
                     foreach($value as $val) {
-                        $paramIndex = array_search($val, array_column($productDocument[$paramName], 'value'));
+                        $paramIndex = array_search($val, array_column($productDocument[$fieldBaseName], 'value'));
                         if ($paramIndex === false) {
-                            $paramIndex = array_search($val, array_column($productDocument[$paramName], 'name'));
+                            $paramIndex = array_search($val, array_column($productDocument[$fieldBaseName], 'name'));
                         }
                         if ($paramIndex !== false) {
-                            $parameters[] = $productDocument[$paramName][$paramIndex];
+                            $parameters[] = $productDocument[$fieldBaseName][$paramIndex];
                         }
                     }
                     break;
@@ -537,8 +538,8 @@ class CartController extends BaseController
                         if (is_array($val)) {
                             $val = implode(', ', $val);
                         }
-                        if (isset($productDocument[$paramName][$index])) {
-                            $parameters[] = array_merge($productDocument[$paramName][$index], [
+                        if (isset($productDocument[$fieldBaseName][$index])) {
+                            $parameters[] = array_merge($productDocument[$fieldBaseName][$index], [
                                 'value' => strip_tags($val)
                             ]);
                         }

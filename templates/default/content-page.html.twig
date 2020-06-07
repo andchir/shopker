@@ -107,7 +107,7 @@
 
             // Display image for parameter
             var $carousel = jQuery('#carouselImageGallery');
-            jQuery('#shk-form input[name="param__parameters"]').each(function() {
+            jQuery('#shk-form input[type="radio"]').each(function() {
                 jQuery(this).on('click', function() {
                     var imageNumber = jQuery(this).data('image-number') || 0;
                     if (!imageNumber) {

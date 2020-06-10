@@ -26,16 +26,20 @@ class TemplatesController extends StorageControllerAbstract
 {
     /** @var TwigEnvironment */
     protected $twig;
+    /** @var SettingsService */
+    protected $settingsService;
 
     public function __construct(
         ParameterBagInterface $params,
         DocumentManager $dm,
         TranslatorInterface $translator,
-        TwigEnvironment $twig
+        TwigEnvironment $twig,
+        SettingsService $settingsService
     )
     {
         parent::__construct($params, $dm, $translator);
         $this->twig = $twig;
+        $this->settingsService = $settingsService;
     }
 
     /**
@@ -276,9 +280,7 @@ class TemplatesController extends StorageControllerAbstract
         file_put_contents($filePath, $fileContent);
 
         if (!empty($data['clearCache'])) {
-            /** @var SettingsService $settingsService */
-            $settingsService = $this->get('app.settings');
-            $settingsService->systemCacheClear();
+            $this->settingsService->systemCacheClear();
         }
 
         return $this->json([

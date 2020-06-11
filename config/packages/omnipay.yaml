@@ -60,6 +60,7 @@ omnipay:
                 customerNumber: CUSTOMER_EMAIL
                 password: ~
         Sberbank:
+            prefersAuthorize: true
             parameters:
                 username: xxxxxx
                 password: xxxxxx
@@ -75,6 +76,7 @@ omnipay:
             complete:
                 username: ~
                 password: ~
+                orderId: ~
         RoboKassa:
             parameters:
                 purse: xxxxxx

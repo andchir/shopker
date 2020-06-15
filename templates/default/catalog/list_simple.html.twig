@@ -1,0 +1,9 @@
+{% if items | length > 0 %}
+    <ul>
+        {% for item in items %}
+            <li>
+                <a href="{{ catalogPath('', item.name, item) }}">{{ item.title }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}

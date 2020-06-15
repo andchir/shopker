@@ -1,9 +1,9 @@
 <div class="pt-3">
-    <div id="carouselContent{{ sliderName }}" class="carousel slide" data-ride="carousel" data-interval="8000">
+    <div id="carouselContent{{ sliderName | default('') }}" class="carousel slide" data-ride="carousel" data-interval="8000">
         {% if items | length > 4 %}
             <ol class="carousel-indicators carousel-indicators-inverted">
                 {% for i in 1..groupCount %}
-                    <li data-target="#carouselContent{{ sliderName }}" data-slide-to="{{ loop.index0 }}"{% if loop.index0 == 0 %} class="active"{% endif %}></li>
+                    <li data-target="#carouselContent{{ sliderName | default('') }}" data-slide-to="{{ loop.index0 }}"{% if loop.index0 == 0 %} class="active"{% endif %}></li>
                 {% endfor %}
             </ol>
         {% endif %}
@@ -17,7 +17,7 @@
                                 {{ renderOutputTypeChunk(item, fields, 'header', '', {systemNameField: systemNameField}, 1) }}
                                 {{ renderOutputTypeChunk(item, fields, 'tag', '', [], 1) }}
                                 {{ renderOutputTypeChunk(item, fields, 'image', '', {systemNameField: systemNameField}, 1) }}
-                                {{ renderOutputTypeChunk(item, fields, 'price', '', {currency: currency}, 1) }}
+                                {{ renderOutputTypeChunk(item, fields, 'price', '', {currency: currency | default('')}, 1) }}
                             </div>
                         </div>
                     </div>
@@ -32,10 +32,10 @@
             </div>
         </div>
         {% if items | length > 4 %}
-            <a class="carousel-control-prev carousel-control-icon" href="#carouselContent{{ sliderName }}" role="button" data-slide="prev">
+            <a class="carousel-control-prev carousel-control-icon" href="#carouselContent{{ sliderName | default('') }}" role="button" data-slide="prev">
                 <i class="icon-keyboard_arrow_left"></i>
             </a>
-            <a class="carousel-control-next carousel-control-icon" href="#carouselContent{{ sliderName }}" role="button" data-slide="next">
+            <a class="carousel-control-next carousel-control-icon" href="#carouselContent{{ sliderName | default('') }}" role="button" data-slide="next">
                 <i class="icon-keyboard_arrow_right"></i>
             </a>
         {% endif %}

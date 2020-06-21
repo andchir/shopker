@@ -384,16 +384,15 @@ class CatalogService {
                 if (empty($filterArr) && empty($filterData)) {
                     $this->dm->remove($filter);
                     $cat->setFilterData(null);
-                    $this->dm->flush();
                     continue;
                 }
             }
             $filter
                 ->setValues($filterArr)
                 ->setValueData($filterData);
-
-            $this->dm->flush();
         }
+
+        $this->dm->flush();
 
         return true;
     }

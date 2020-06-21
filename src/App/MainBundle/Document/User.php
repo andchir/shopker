@@ -109,9 +109,9 @@ class User implements UserInterface, \Serializable
     private $salt;
 
     /**
-     * @MongoDB\Field(type="boolean")
+     * @MongoDB\Field(type="bool")
      * @Groups({"details", "list"})
-     * @var boolean
+     * @var bool
      */
     protected $isActive;
 
@@ -299,7 +299,7 @@ class User implements UserInterface, \Serializable
     /**
      * Set isActive
      *
-     * @param boolean $isActive
+     * @param bool $isActive
      * @return $this
      */
     public function setIsActive($isActive)
@@ -311,7 +311,7 @@ class User implements UserInterface, \Serializable
     /**
      * Get isActive
      *
-     * @return boolean
+     * @return bool
      */
     public function getIsActive()
     {

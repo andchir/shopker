@@ -61,16 +61,16 @@ class Category
     protected $contentTypeName;
 
     /**
-     * @MongoDB\Field(type="boolean")
+     * @MongoDB\Field(type="bool")
      * @Groups({"details", "list"})
-     * @var boolean
+     * @var bool
      */
     protected $isFolder;
 
     /**
-     * @MongoDB\Field(type="boolean")
+     * @MongoDB\Field(type="bool")
      * @Groups({"details", "list"})
-     * @var boolean
+     * @var bool
      */
     protected $isActive;
 
@@ -315,7 +315,7 @@ class Category
     /**
      * Set isFolder
      *
-     * @param boolean $isFolder
+     * @param bool $isFolder
      * @return $this
      */
     public function setIsFolder($isFolder)
@@ -327,7 +327,7 @@ class Category
     /**
      * Get isFolder
      *
-     * @return boolean
+     * @return bool
      */
     public function getIsFolder()
     {
@@ -337,7 +337,7 @@ class Category
     /**
      * Set isActive
      *
-     * @param boolean $isActive
+     * @param bool $isActive
      * @return $this
      */
     public function setIsActive($isActive)
@@ -349,7 +349,7 @@ class Category
     /**
      * Get isActive
      *
-     * @return boolean
+     * @return bool
      */
     public function getIsActive()
     {

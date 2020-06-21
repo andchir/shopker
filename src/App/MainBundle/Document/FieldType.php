@@ -54,9 +54,9 @@ class FieldType
     protected $outputProperties;
 
     /**
-     * @MongoDB\Field(type="boolean")
+     * @MongoDB\Field(type="bool")
      * @Groups({"details", "list"})
-     * @var boolean
+     * @var bool
      */
     protected $isActive;
 
@@ -140,7 +140,7 @@ class FieldType
     /**
      * Set isActive
      *
-     * @param boolean $isActive
+     * @param bool $isActive
      * @return $this
      */
     public function setIsActive($isActive)
@@ -152,7 +152,7 @@ class FieldType
     /**
      * Get isActive
      *
-     * @return boolean
+     * @return bool
      */
     public function getIsActive()
     {

@@ -57,7 +57,7 @@ services:
     App\EventSubscriber\DoctrineEventSubscriber:
         tags:
             - { name: doctrine_mongodb.odm.event_subscriber, connection: default, lazy: true }
-        arguments: ['@service_container']
+        arguments: ['@service_container', '@app.catalog']
 
     App\EventListener\ExceptionListener:
         public: true

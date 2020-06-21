@@ -155,9 +155,9 @@ class Order
     protected $files;
 
     /**
-     * @MongoDB\Field(type="boolean")
+     * @MongoDB\Field(type="bool")
      * @Groups({"details", "list"})
-     * @var boolean
+     * @var bool
      */
     protected $isPaid;
 
@@ -770,7 +770,7 @@ class Order
     /**
      * Set isPaid
      *
-     * @param boolean $isPaid
+     * @param bool $isPaid
      * @return $this
      */
     public function setIsPaid($isPaid)
@@ -782,7 +782,7 @@ class Order
     /**
      * Get isPaid
      *
-     * @return boolean
+     * @return bool
      */
     public function getIsPaid()
     {

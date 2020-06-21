@@ -18,13 +18,18 @@ class DoctrineEventSubscriber implements EventSubscriber
 
     /** @var ContainerInterface */
     private $container;
+    
+    /** @var CatalogService */
+    private $catalogService;
 
     /**
      * DoctrineEventSubscriber constructor.
-     * @param $container
+     * @param ContainerInterface $container
+     * @param CatalogService $catalogService
      */
-    public function __construct($container) {
+    public function __construct($container, CatalogService $catalogService) {
         $this->container = $container;
+        $this->catalogService = $catalogService;
     }
 
     /**
@@ -41,6 +46,7 @@ class DoctrineEventSubscriber implements EventSubscriber
 
     /**
      * @param LifecycleEventArgs $args
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function postRemove(LifecycleEventArgs $args)
     {
@@ -87,6 +93,9 @@ class DoctrineEventSubscriber implements EventSubscriber
 
     /**
      * @param LifecycleEventArgs $args
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function postPersist(LifecycleEventArgs $args)
     {
@@ -96,6 +105,12 @@ class DoctrineEventSubscriber implements EventSubscriber
         }
     }
 
+    /**
+     * @param LifecycleEventArgs $args
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
+     */
     public function postUpdate(LifecycleEventArgs $args)
     {
         $document = $args->getDocument();
@@ -106,17 +121,18 @@ class DoctrineEventSubscriber implements EventSubscriber
 
     /**
      * @param ContentType $contentType
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function contentTypeUpdateFilters(ContentType $contentType)
     {
-        /** @var CatalogService $catalogService */
-        $catalogService = $this->container->get('app.catalog');
-
         /** @var ContentType $document */
         $categories = $contentType->getCategories();
+        
         /** @var Category $category */
         foreach ($categories as $category) {
-            $catalogService->updateFiltersData($category);
+            $this->catalogService->updateFiltersData($category);
         }
     }
 

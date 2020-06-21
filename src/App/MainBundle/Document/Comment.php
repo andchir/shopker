@@ -68,7 +68,7 @@ class Comment extends CommentAbstract {
     protected $publishedTime;
     /**
      * @Groups({"details", "list"})
-     * @var boolean
+     * @var bool
      */
     protected $isActive;
 

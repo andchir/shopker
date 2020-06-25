@@ -374,6 +374,19 @@ class ContentType
     }
 
     /**
+     * @return mixed|string
+     */
+    public function getCategoriesFieldName()
+    {
+        $contentTypeFields = $this->getFields();
+        $categoriesField = array_filter($contentTypeFields, function($field){
+            return $field['inputType'] == 'categories';
+        });
+        $categoriesField = array_merge($categoriesField);
+        return !empty($categoriesField) ? $categoriesField[0]['name'] : '';
+    }
+
+    /**
      * Get price field name
      * @return string
      */

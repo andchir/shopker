@@ -63,6 +63,9 @@ class ProductSubscriber implements EventSubscriberInterface
                 }
             }
         }
+        if ($itemData['parentId']) {
+            $this->updateCategoryFilters($itemData['parentId']);
+        }
     }
     
     public function onProductCreated(GenericEvent $event)
@@ -74,14 +77,23 @@ class ProductSubscriber implements EventSubscriberInterface
     public function onProductUpdated(GenericEvent $event)
     {
         $itemData = $event->getSubject();
-
         if ($itemData['parentId']) {
-            $categoriesRepository = $this->dm->getRepository(Category::class);
-            /** @var Category $category */
-            $category = $categoriesRepository->find($itemData['parentId']);
-            if ($category) {
-                $this->catalogService->updateFiltersData($category);
-            }
+            $this->updateCategoryFilters($itemData['parentId']);
+        }
+    }
+    
+    public function updateCategoryFilters($categoryId)
+    {
+        $categoriesRepository = $this->dm->getRepository(Category::class);
+        /** @var Category $category */
+        $category = $categoriesRepository->find($categoryId);
+        if ($category) {
+            /** @var ContentType $contentType */
+            $contentType = $category->getContentType();
+            $categoriesFieldName = $contentType->getCategoriesFieldName();
+            // TODO: Update filters for additional categories
+
+            $this->catalogService->updateFiltersData($category);
         }
     }
 }

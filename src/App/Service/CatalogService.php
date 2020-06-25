@@ -380,6 +380,7 @@ class CatalogService {
                 $filter = new Filter();
                 $filter->setCategory($cat);
                 $cat->setFilterData($filter);
+                $this->dm->persist($filter);
             } else {
                 if (empty($filterArr) && empty($filterData)) {
                     $this->dm->remove($filter);

@@ -100,9 +100,6 @@ class DoctrineEventSubscriber implements EventSubscriber
     public function postPersist(LifecycleEventArgs $args)
     {
         $document = $args->getDocument();
-        if ($document instanceof ContentType) {
-            $this->contentTypeUpdateFilters($document);
-        }
     }
 
     /**
@@ -114,26 +111,5 @@ class DoctrineEventSubscriber implements EventSubscriber
     public function postUpdate(LifecycleEventArgs $args)
     {
         $document = $args->getDocument();
-        if ($document instanceof ContentType) {
-            $this->contentTypeUpdateFilters($document);
-        }
     }
-
-    /**
-     * @param ContentType $contentType
-     * @throws \Doctrine\ODM\MongoDB\LockException
-     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
-     * @throws \Doctrine\ODM\MongoDB\MongoDBException
-     */
-    public function contentTypeUpdateFilters(ContentType $contentType)
-    {
-        /** @var ContentType $document */
-        $categories = $contentType->getCategories();
-        
-        /** @var Category $category */
-        foreach ($categories as $category) {
-            $this->catalogService->updateFiltersData($category);
-        }
-    }
-
 }

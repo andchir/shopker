@@ -2,9 +2,12 @@
 
 namespace App\Controller\Admin;
 
+use App\MainBundle\Document\Category;
+use App\Service\CatalogService;
+use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\Persistence\ObjectRepository;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\MainBundle\Document\ContentType;
 use App\MainBundle\Document\Collection;
@@ -34,6 +37,20 @@ class ContentTypeController extends StorageControllerAbstract
         'order_content',
         'payment'
     ];
+
+    /** @var CatalogService */
+    protected $catalogService;
+
+    public function __construct(
+        ParameterBagInterface $params,
+        DocumentManager $dm,
+        TranslatorInterface $translator,
+        CatalogService $catalogService
+    )
+    {
+        parent::__construct($params, $dm, $translator);
+        $this->catalogService = $catalogService;
+    }
 
     /**
      * @param $data
@@ -121,6 +138,8 @@ class ContentTypeController extends StorageControllerAbstract
             $this->dm->persist($collection);
             $this->dm->flush();
         }
+        
+        $this->contentTypeUpdateFilters($contentType);
 
         return new JsonResponse($contentType->toArray());
     }
@@ -182,6 +201,23 @@ class ContentTypeController extends StorageControllerAbstract
             ];
         }
         return ['success' => true];
+    }
+
+    /**
+     * @param ContentType $contentType
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
+     */
+    public function contentTypeUpdateFilters(ContentType $contentType)
+    {
+        /** @var ContentType $document */
+        $categories = $contentType->getCategories();
+
+        /** @var Category $category */
+        foreach ($categories as $category) {
+            $this->catalogService->updateFiltersData($category);
+        }
     }
 
     /**

@@ -34,6 +34,12 @@ class ProductSubscriber implements EventSubscriberInterface
         ];
     }
 
+    /**
+     * @param GenericEvent $event
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
+     */
     public function onProductDeleted(GenericEvent $event)
     {
         $itemData = $event->getSubject();
@@ -64,7 +70,7 @@ class ProductSubscriber implements EventSubscriberInterface
             }
         }
         if ($itemData['parentId']) {
-            $this->updateCategoryFilters($itemData['parentId']);
+            $this->updateCategoryFilters($itemData['parentId'], $itemData);
         }
     }
     
@@ -74,27 +80,50 @@ class ProductSubscriber implements EventSubscriberInterface
         
     }
 
+    /**
+     * @param GenericEvent $event
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
+     */
     public function onProductUpdated(GenericEvent $event)
     {
         $itemData = $event->getSubject();
         if ($itemData['parentId']) {
-            $this->updateCategoryFilters($itemData['parentId']);
+            $this->updateCategoryFilters($itemData['parentId'], $itemData);
         }
     }
-    
-    public function updateCategoryFilters($categoryId)
+
+    /**
+     * @param $categoryId
+     * @param $itemData
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
+     */
+    public function updateCategoryFilters($categoryId, $itemData)
     {
         $categoriesRepository = $this->dm->getRepository(Category::class);
         /** @var Category $category */
         $category = $categoriesRepository->find($categoryId);
         if ($category) {
+            $this->catalogService->updateFiltersData($category);
+            
+            // Update filters for additional categories
             /** @var ContentType $contentType */
             $contentType = $category->getContentType();
             $categoriesFieldName = $contentType->getCategoriesFieldName();
-            // TODO: Update filters for additional categories
-
-            $this->catalogService->updateFiltersData($category);
+            if (!empty($itemData[$categoriesFieldName])) {
+                foreach ($itemData[$categoriesFieldName] as $catId) {
+                    if ($categoryId === $catId) {
+                        continue;
+                    }
+                    $category = $categoriesRepository->find($catId);
+                    if ($category) {
+                        $this->catalogService->updateFiltersData($category);
+                    }
+                }
+            }
         }
     }
 }
-

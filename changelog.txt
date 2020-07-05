@@ -1,6 +1,7 @@
 4.2.1
 - Fixed issue with updating filter values while saving content type.
 - Automatic update of filters for additional product categories when editing a product.
+- Added option "app.catalog_show_all_children" - Show products from children categories.
 
 4.2.0
 - Symfony updated to version 5.0.9.

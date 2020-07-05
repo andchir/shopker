@@ -298,6 +298,12 @@ class CatalogService {
                             $filterArr[$fieldName] = $values;
                         }
                     }
+                    $fltData = $flt->getValuesData();
+                    if (!empty($fltData)) {
+                        foreach ($fltData as $i => $d) {
+                            $this->addFiltersData($filterData, $d['fieldName'], $d['name'], $d['values']);
+                        }
+                    }
                 }
                 unset($childCategories, $childCategory, $values);
             }
@@ -333,23 +339,10 @@ class CatalogService {
                             if (empty($name)) {
                                 continue;
                             }
-                            $index = array_search($name, array_column($filterData, 'name'));
-                            if ($index === false) {
-                                $filterData[] = [
-                                    'fieldName' => $fieldName,
-                                    'name' => $name,
-                                    'values' => []
-                                ];
-                                $index = count($filterData) - 1;
-                            }
-                            foreach ($data['values'] as $vk => $values) {
-                                if (empty($values[$nk])) {
-                                    continue;
-                                }
-                                if (!in_array($values[$nk], $filterData[$index]['values'])) {
-                                    $filterData[$index]['values'][] = $values[$nk];
-                                }
-                            }
+                            $values = array_map(function($val) use ($nk) {
+                                return $val[$nk];
+                            }, $data['values']);
+                            $this->addFiltersData($filterData, $fieldName, $name, $values);
                         }
                     }
 
@@ -384,12 +377,10 @@ class CatalogService {
                 $filter->setCategory($cat);
                 $cat->setFilterData($filter);
                 $this->dm->persist($filter);
-            } else {
-                if (empty($filterArr) && empty($filterData)) {
-                    $this->dm->remove($filter);
-                    $cat->setFilterData(null);
-                    continue;
-                }
+            } else if (empty($filterArr) && empty($filterData)) {
+                $this->dm->remove($filter);
+                $cat->setFilterData(null);
+                continue;
             }
             $filter
                 ->setValues($filterArr)
@@ -399,6 +390,30 @@ class CatalogService {
         $this->dm->flush();
 
         return true;
+    }
+
+    /**
+     * @param array $filterData
+     * @param string $fieldName
+     * @param string $name
+     * @param array $values
+     */
+    public function addFiltersData(&$filterData, $fieldName, $name, $values)
+    {
+        $index = array_search($name, array_column($filterData, 'name'));
+        if ($index === false) {
+            $filterData[] = [
+                'fieldName' => $fieldName,
+                'name' => $name,
+                'values' => []
+            ];
+            $index = count($filterData) - 1;
+        }
+        foreach ($values as $val) {
+            if (!in_array($val, $filterData[$index]['values'])) {
+                $filterData[$index]['values'][] = $val;
+            }
+        }
     }
 
     /**

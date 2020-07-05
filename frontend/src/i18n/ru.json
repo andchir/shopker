@@ -215,7 +215,9 @@
 		"tax_system": "Система налогообложения магазина (СНО)",
 		"template_theme": "Тема шаблонов",
 		"shopping_cart_lifetime": "Время хранения товаров в корзине, сек.",
-		"shopping_cart_lifetime_favorites": "Время хранения избранных товаров, сек."
+		"shopping_cart_lifetime_favorites": "Время хранения избранных товаров, сек.",
+        "pay_after_checkout": "Оплата сразу после оформления заказа",
+        "catalog_show_all_children": "Показывать товары вложенных категорий"
 	},
 	"locale": "Локаль",
 	"mailer_auth_mode": "Почта: метод авторизации",

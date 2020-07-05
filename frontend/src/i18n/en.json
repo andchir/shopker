@@ -215,7 +215,9 @@
 		"tax_system": "Store taxation system",
 		"template_theme": "Template theme",
 		"shopping_cart_lifetime": "Storage time of goods in the shopping cart, sec.",
-		"shopping_cart_lifetime_favorites": "Storage time of favorite goods, sec."
+		"shopping_cart_lifetime_favorites": "Storage time of favorite goods, sec.",
+        "pay_after_checkout": "Payment after checkout",
+        "catalog_show_all_children": "Show products from children categories"
 	},
 	"locale": "Locale",
 	"mailer_auth_mode": "Mail authorization mode",

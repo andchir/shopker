@@ -104,6 +104,9 @@ class CatalogController extends BaseController
             return $this->redirectToRoute('setup');
         }
         $localeDefault = $this->params->get('locale');
+        $showAllChildren = $this->params->has('app.catalog_show_all_children')
+            ? $this->params->get('app.catalog_show_all_children')
+            : false;
         $locale = $request->getLocale();
         $categoriesRepository = $this->getCategoriesRepository();
         $filtersRepository = $this->dm->getRepository(Filter::class);
@@ -161,7 +164,13 @@ class CatalogController extends BaseController
             'isActive' => true
         ];
         $this->applyFilters($queryOptions['filter'], $filters, $criteria);
-        $this->catalogService->applyCategoryFilter($currentCategory, $contentTypeFields, $criteria);
+
+        if ($showAllChildren && $currentCategory->getParentId()) {
+            $categoriesIdsArr = $categoriesRepository->getChildrenIdsByUri($categoryUri);
+        } else {
+            $categoriesIdsArr = [$currentCategory->getId()];
+        }
+        $this->catalogService->applyCategoryFilter($categoriesIdsArr, $contentTypeFields, $criteria);
         if ($locale !== $localeDefault && $headerFieldName) {
             $this->catalogService->applyLocaleFilter($locale, $headerFieldName, $criteria);
         }
@@ -429,7 +438,7 @@ class CatalogController extends BaseController
             'parentId' => $currentId,
             'isActive' => true
         ], ['title' => 'asc']);
-        
+
         /** @var Category $category */
         foreach ($results as $category) {
             $categories[] = $category->getMenuData($breadcrumbsUriArr, $locale);
@@ -539,7 +548,7 @@ class CatalogController extends BaseController
         }
         return $idsArr;
     }
-    
+
     /**
      * @param $mainTemplateName
      * @param $prefix

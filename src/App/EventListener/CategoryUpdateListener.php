@@ -66,7 +66,7 @@ class CategoryUpdateListener
     {
         /** @var CategoryRepository $repository */
         $repository = $this->dm->getRepository(Category::class);
-            
+
         /** @var Category $item */
         $item = $repository->find($itemId);
         if(!$item || !$item->getId()){
@@ -94,7 +94,7 @@ class CategoryUpdateListener
             return false;
         }
         /** @var CategoryRepository $repository */
-        $repository = $this->dm ->getRepository(Category::class);
+        $repository = $this->dm->getRepository(Category::class);
 
         $parents = $repository->getParents($category);
         $names = [];

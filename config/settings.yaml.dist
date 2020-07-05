@@ -34,6 +34,7 @@ parameters:
     app.receipt_option_name: receipt
     app.shopping_cart_lifetime: 172800
     app.shopping_cart_lifetime_favorites: 0
+    app.catalog_show_all_children: 0
     app.pay_after_checkout: 0
     router.request_context.host: localhost
     router.request_context.scheme: http

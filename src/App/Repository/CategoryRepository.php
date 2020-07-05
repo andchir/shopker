@@ -124,6 +124,35 @@ class CategoryRepository extends BaseRepository
     }
 
     /**
+     * @param $categoryUri
+     * @return array
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
+     */
+    public function getChildrenByUri($categoryUri)
+    {
+        return $this->createQueryBuilder()
+            ->field('uri')->equals(new \MongoDB\BSON\Regex("^{$categoryUri}", "i"))
+            ->sort('parentId', 'asc')
+            ->getQuery()
+            ->execute()
+            ->toArray(false);
+    }
+
+    /**
+     * @param $categoryUri
+     * @return array
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
+     */
+    public function getChildrenIdsByUri($categoryUri)
+    {
+        $childCategories = $this->getChildrenByUri($categoryUri);
+        return array_map(function($c) {
+            /** @var Category $c */
+            return $c->getId();
+        }, $childCategories);
+    }
+
+    /**
      * @param string $sortBy
      * @param string $sortDir
      * @param null $parentId
@@ -145,5 +174,4 @@ class CategoryRepository extends BaseRepository
             ->getQuery()
             ->execute();
     }
-
 }

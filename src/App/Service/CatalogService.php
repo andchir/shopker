@@ -16,7 +16,7 @@ use MongoDB\Model\IndexInfo;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class CatalogService {
-    
+
     /** @var ParameterBagInterface */
     protected $params;
     /** @var DocumentManager */
@@ -195,11 +195,11 @@ class CatalogService {
     }
 
     /**
-     * @param Category $currentCategory
+     * @param $categoriesAdsArr
      * @param array $contentTypeFields
      * @param array $criteria
      */
-    public function applyCategoryFilter(Category $currentCategory, $contentTypeFields, &$criteria)
+    public function applyCategoryFilter($categoriesAdsArr, $contentTypeFields, &$criteria)
     {
         $categoriesField = array_filter($contentTypeFields, function($field){
             return $field['inputType'] == 'categories';
@@ -210,34 +210,35 @@ class CatalogService {
 
             $orCriteria = [
                 '$or' => [
-                    ['parentId' => $currentCategory->getId()]
+                    ['parentId' => ['$in' => $categoriesAdsArr]]
                 ]
             ];
             $orCriteria['$or'][] = ["{$categoriesField['name']}" => [
-                '$elemMatch' => ['$in' => [$currentCategory->getId()]]
+                '$elemMatch' => ['$in' => $categoriesAdsArr]
             ]];
             $criteria = ['$and' => [$criteria, $orCriteria]];
 
         } else {
-            $criteria['parentId'] = $currentCategory->getId();
+            $criteria['parentId'] = ['$in' => $categoriesAdsArr];
         }
     }
 
     /**
      * @param Category $parentCategory
      * @param string $databaseName
-     * @param bool $updateParents
-     * @param bool $mixFromChild
      * @return bool
      * @throws \Doctrine\ODM\MongoDB\LockException
      * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
      * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
-    public function updateFiltersData(Category $parentCategory, $databaseName = '', $updateParents = false, $mixFromChild = false)
+    public function updateFiltersData(Category $parentCategory, $databaseName = '')
     {
+        $showAllChildren = $this->params->has('app.catalog_show_all_children')
+            ? $this->params->get('app.catalog_show_all_children')
+            : false;
         $categoriesRepository = $this->getCategoriesRepository();
 
-        if ($updateParents) {
+        if ($showAllChildren) {
             $categoriesData = $categoriesRepository->getBreadcrumbs($parentCategory->getUri(), false);
             $categoriesData = array_reverse($categoriesData);
         } else {
@@ -257,13 +258,17 @@ class CatalogService {
             /** @var ContentType $contentType */
             $contentType = $cat->getContentType();
             $contentTypeFields = $contentType->getFields();
+            $contentTypeFilterFields = array_filter($contentTypeFields, function($f) {
+                return $f['isFilter'];
+            });
+            $contentTypeFilterFields = array_merge($contentTypeFilterFields);
             $collection = $this->getCollection($contentType->getCollection(), $databaseName);
 
             $filterArr = [];
             $filterData = [];
 
             // Mix from child categories
-            if ($mixFromChild) {
+            if ($showAllChildren) {
                 $childCategories = $categoriesRepository->findBy([
                     'parentId' => $cat->getId(),
                     'isActive' => true
@@ -277,10 +282,7 @@ class CatalogService {
                         continue;
                     }
                     $filterValues = $flt->getValues();
-                    foreach ($contentTypeFields as $contentTypeField) {
-                        if (!$contentTypeField['isFilter']) {
-                            continue;
-                        }
+                    foreach ($contentTypeFilterFields as $contentTypeField) {
                         $fieldName = $contentTypeField['name'];
                         if (!empty($filterValues[$fieldName])) {
                             if (!isset($filterArr[$fieldName])) {
@@ -300,10 +302,7 @@ class CatalogService {
                 unset($childCategories, $childCategory, $values);
             }
 
-            foreach ($contentTypeFields as $contentTypeField) {
-                if (!$contentTypeField['isFilter']) {
-                    continue;
-                }
+            foreach ($contentTypeFilterFields as $contentTypeField) {
                 $fieldName = $contentTypeField['name'];
 
                 $criteria = [
@@ -313,7 +312,7 @@ class CatalogService {
                 // Get products fields unique data
                 if ($contentTypeField['inputType'] === 'parameters') {
 
-                    $this->applyCategoryFilter($cat, $contentTypeFields, $criteria);
+                    $this->applyCategoryFilter([$cat->getId()], $contentTypeFields, $criteria);
                     $uniqueValues = $collection->aggregate([
                         ['$match' => $criteria],
                         ['$group' => [
@@ -355,7 +354,7 @@ class CatalogService {
                     }
 
                 } else {
-                    $this->applyCategoryFilter($cat, $contentTypeFields, $criteria);
+                    $this->applyCategoryFilter([$cat->getId()], $contentTypeFields, $criteria);
                     $uniqueValues = $collection->distinct($fieldName, $criteria);
 
                     $uniqueValues = array_filter($uniqueValues, function($val) {
@@ -367,7 +366,11 @@ class CatalogService {
                             $filterArr[$fieldName] = [];
                         }
                         $filterArr[$fieldName] = array_unique(array_merge($filterArr[$fieldName], $uniqueValues));
-                        sort($filterArr[$fieldName]);
+                        if ($contentTypeField['outputType'] == 'number') {
+                            sort($filterArr[$fieldName], SORT_NUMERIC);
+                        } else {
+                            sort($filterArr[$fieldName]);
+                        }
                     }
                 }
             }

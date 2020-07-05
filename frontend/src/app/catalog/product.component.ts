@@ -16,7 +16,6 @@ import {ContentTypesService} from './services/content_types.service';
 import {ProductsService} from './services/products.service';
 import {FilesService} from './services/files.service';
 import {ContentField, FieldIndexData} from './models/content_field.model';
-import {TranslationsComponent} from '../translations.component';
 import {AppSettings} from '../services/app-settings.service';
 import {FormFieldInterface} from '../models/form-field.interface';
 

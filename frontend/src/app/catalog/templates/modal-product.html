@@ -68,7 +68,8 @@
             </div>
         </div>
 
-        <app-input-field-renderer
+        <div class="min-height110">
+            <app-input-field-renderer
                 [(fields)]="currentContentType.fields"
                 [(groups)]="currentContentType.groups"
                 [(formErrors)]="formErrors"
@@ -78,6 +79,7 @@
                 [(files)]="files"
                 [localeFieldsAllowed]="localeFieldsAllowed"
                 [isLocalizationActive]="localeCurrent !== localeDefault"></app-input-field-renderer>
+        </div>
 
         <div class="alert alert-danger mt-3 mb-0" [hidden]="!errorMessage">
             <button type="button" class="close" (click)="errorMessage = ''">

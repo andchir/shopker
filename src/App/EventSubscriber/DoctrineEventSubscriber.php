@@ -18,7 +18,7 @@ class DoctrineEventSubscriber implements EventSubscriber
 
     /** @var ContainerInterface */
     private $container;
-    
+
     /** @var CatalogService */
     private $catalogService;
 
@@ -27,7 +27,7 @@ class DoctrineEventSubscriber implements EventSubscriber
      * @param ContainerInterface $container
      * @param CatalogService $catalogService
      */
-    public function __construct($container, CatalogService $catalogService) {
+    public function __construct(ContainerInterface $container, CatalogService $catalogService) {
         $this->container = $container;
         $this->catalogService = $catalogService;
     }

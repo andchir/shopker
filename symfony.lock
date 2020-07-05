@@ -165,9 +165,6 @@
     "ivopetkov/html5-dom-document-php": {
         "version": "v2.2.4"
     },
-    "jean85/pretty-package-versions": {
-        "version": "1.3.0"
-    },
     "justinrainbow/json-schema": {
         "version": "5.2.7"
     },

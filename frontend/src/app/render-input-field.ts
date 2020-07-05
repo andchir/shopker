@@ -9,9 +9,10 @@ import {
     EventEmitter
 } from '@angular/core';
 import {FormGroup, FormControl, Validators} from '@angular/forms';
-import {cloneDeep, map, zipObject, isArray, extend, defer} from 'lodash';
+import {cloneDeep, map, zipObject, extend, defer} from 'lodash';
 import {isNumeric} from 'rxjs/util/isNumeric';
 import {TranslateService} from '@ngx-translate/core';
+import {TreeNode} from 'primeng';
 
 import {ContentField} from './catalog/models/content_field.model';
 import {MultiValues} from './models/multivalues.model';
@@ -79,6 +80,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
     filesDirBaseUrl: string;
     loadingCategories = false;
     categories = [];
+    categoriesTree: TreeNode[] = [];
     categoriesSelection: {[key: string]: any} = {};
     calendarLocale = calendarLocale;
 
@@ -102,7 +104,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
         const fieldNames = map(this.fields, (field) => {
             return field.name;
         });
-        if (this.categories.length === 0 && fieldNames.indexOf('categories') === -1) {
+        if (this.categoriesTree.length === 0 && fieldNames.indexOf('categories') === -1) {
             this.getCategoriesTree();
         }
         if (changedKeys.indexOf('model') > -1) {
@@ -118,6 +120,9 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
             this.formErrors[field.name] = '';
             if (!this.validationMessages[field.name]) {
                 this.validationMessages[field.name] = {};
+            }
+            if (field.inputType === 'categories') {
+                this.categoriesSelection[field.name] = [];
             }
 
             if (!this.form.controls[field.name]) {
@@ -262,7 +267,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                     ? String(field.inputProperties['values_list']).split('||')
                     : [];
 
-                if (!isArray(this.model[field.name])) {
+                if (!Array.isArray(this.model[field.name])) {
                     this.model[field.name] = [];
                 }
 
@@ -306,7 +311,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                 if (typeof defaultValue !== 'object') {
                     defaultValue = defaultValue ? JSON.parse(defaultValue) : [];
                 }
-                if (!isArray(defaultValue)) {
+                if (!Array.isArray(defaultValue)) {
                     defaultValue = [defaultValue];
                 }
                 break;
@@ -319,7 +324,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
     }
 
     selectValue(e, fieldName: string, value: string): void {
-        if (!isArray(this.model[fieldName])) {
+        if (!Array.isArray(this.model[fieldName])) {
             this.model[fieldName] = [];
         }
         const valIndex = this.fieldsMultivalues[fieldName].values.indexOf(value);
@@ -422,7 +427,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
         this.loadingCategories = true;
         this.categoriesService.getTree()
             .subscribe((data) => {
-                this.categories = data;
+                this.categoriesTree = data;
                 this.loadingCategories = false;
             }, (err) => {
                 this.loadingCategories = false;
@@ -433,11 +438,11 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
         this.fields.forEach((field) => {
             if (field.inputType === 'categories') {
                 this.categoriesSelection[field.name] = [];
-                if (this.model[field.name] && isArray(this.model[field.name])) {
+                if (this.model[field.name] && Array.isArray(this.model[field.name])) {
                     this.model[field.name].forEach((id) => {
-                        const category = this.getCategoryById(id, this.categories);
+                        const category = this.getCategoryById(id, this.categoriesTree);
                         if (category) {
-                            const parent = this.getCategoryById(category.parentId, this.categories);
+                            const parent = this.getCategoryById(category.parentId, this.categoriesTree);
                             if (parent) {
                                 category.parent = parent;
                             }

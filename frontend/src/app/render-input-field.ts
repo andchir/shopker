@@ -437,7 +437,9 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
     updateTreeSelections(): void {
         this.fields.forEach((field) => {
             if (field.inputType === 'categories') {
-                this.categoriesSelection[field.name] = [];
+                if (!this.categoriesSelection[field.name]) {
+                    this.categoriesSelection[field.name] = [];
+                }
                 if (this.model[field.name] && Array.isArray(this.model[field.name])) {
                     this.model[field.name].forEach((id) => {
                         const category = this.getCategoryById(id, this.categoriesTree);

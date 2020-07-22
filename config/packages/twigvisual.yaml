@@ -283,6 +283,43 @@ twig_visual:
 
                 deleteRightSiblings: {title: Delete next child, type: checkbox}
 
+        contentList:
+            title: Список страниц
+            configuration:
+                saveBackupCopy: true
+            components:
+                root:
+                    title: Root element
+                    type: elementSelect
+                    output: '<root/>'
+                    template: |
+                        {{ contentList(
+                        'list_simple',
+                        'products',
+                        {"isActive": true, "tags": {"$elemMatch": {"$in": ["New", "Новинка"]}}},
+                        {"_id": "desc"},
+                        20, 0, 'homepage_novelty', 'hn_page', 'hn_limit', {currency: currency, sliderName: 'Novelty'}
+                        ) }}
+
+                childItem:
+                    title: Product block
+                    type: elementSelect
+                    isChildItem: true
+
+                collectionName: {title: Название коллекции БД, type: text, value: 'products'}
+
+                limit: {title: Максимально число записей, type: number, value: 20}
+
+                orderBy: {title: Поле сортировки, type: text, value: '_id'}
+
+                orderDir: {title: Направление сортировки (asc/desc), type: text, value: 'desc'}
+
+                filterFieldName: {title: Название поля для фильтрации, type: text, value: 'tags'}
+
+                filterFieldValue: {title: Значение поля для фильтрации, type: text, value: 'Новинка'}
+
+                nameSuffix: {title: Name suffix, type: text}
+
         pagination:
             title: Page navigation for products
             configuration:

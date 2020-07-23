@@ -291,20 +291,30 @@ twig_visual:
                 root:
                     title: Root element
                     type: elementSelect
-                    output: '<root/>'
-                    template: |
+                    templatePath: catalog/content_list
+                    saveBackupCopy: true
+                    output: |
                         {{ contentList(
-                        'list_simple',
-                        'products',
-                        {"isActive": true, "tags": {"$elemMatch": {"$in": ["New", "Новинка"]}}},
-                        {"_id": "desc"},
-                        20, 0, 'homepage_novelty', 'hn_page', 'hn_limit', {currency: currency, sliderName: 'Novelty'}
+                        'content_list{{ nameSuffix }}',
+                        '{{ collectionName }}',
+                        {"isActive": true, "{{ filterFieldName }}": {"$elemMatch": {"$in": ["{{ filterFieldValue }}"]}}},
+                        {"{{ orderBy }}": "{{ orderDir }}"},
+                        {{ limit }}, 0, 'content_list{{ nameSuffix }}', 'hn_page', 'hn_limit', {currency: currency}
                         ) }}
+                    template: |
+                        {%% if items | length > 0 %%}
+                            <root/>
+                        {%% endif %%}
 
                 childItem:
                     title: Product block
                     type: elementSelect
                     isChildItem: true
+                    output: '<childItem/>'
+                    template: |
+                        {%% for item in items %%}
+                            <childItem/>
+                        {%% endfor %%}
 
                 collectionName: {title: Название коллекции БД, type: text, value: 'products'}
 
@@ -317,6 +327,10 @@ twig_visual:
                 filterFieldName: {title: Название поля для фильтрации, type: text, value: 'tags'}
 
                 filterFieldValue: {title: Значение поля для фильтрации, type: text, value: 'Новинка'}
+
+                deleteLeftSiblings: {title: Delete previous child, type: checkbox}
+
+                deleteRightSiblings: {title: Delete next child, type: checkbox}
 
                 nameSuffix: {title: Name suffix, type: text}
 

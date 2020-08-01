@@ -248,7 +248,7 @@ twig_visual:
                 childItemTitle:
                     title: Product name
                     type: elementSelect
-                    template: '<childItemTitle href="{{ catalogPath(currentUri, item.name) }}">{{ item.title }}</childItemTitle>'
+                    template: '<childItemTitle href="{{ catalogPath(currentUri, item.name, item) }}">{{ item.title }}</childItemTitle>'
 
                 childItemPrice:
                     title: Price of the product
@@ -258,7 +258,7 @@ twig_visual:
                             <span class="shk-price">{{ item.price }}</span>
                             <span class="shk-currency">{{ currency }}</span>
                         </childItemPrice>
-                        
+
                 childItemImage:
                     title: Photo of the product
                     type: elementSelect
@@ -266,7 +266,7 @@ twig_visual:
                         <childItemImage>
                             <img src="{{ imageUrl(item.image, '/img/nofoto.png') | imagine_filter('thumb_small') }}" alt="{{ item.title }}"/>
                         </childItemImage>
-                        
+
                 childItemAddToCartButton:
                     title: Add to cart button
                     type: elementSelect
@@ -295,11 +295,11 @@ twig_visual:
                     saveBackupCopy: true
                     output: |
                         {{ contentList(
-                        'content_list{{ nameSuffix }}',
-                        '{{ collectionName }}',
-                        {"isActive": true, "{{ filterFieldName }}": {"$elemMatch": {"$in": ["{{ filterFieldValue }}"]}}},
-                        {"{{ orderBy }}": "{{ orderDir }}"},
-                        {{ limit }}, 0, 'content_list{{ nameSuffix }}', 'hn_page', 'hn_limit', {currency: currency}
+                            'content_list{{ nameSuffix }}',
+                            '{{ collectionName }}',
+                            {"isActive": true, "{{ filterFieldName }}": {"$elemMatch": {"$in": ["{{ filterFieldValue }}"]}}},
+                            {"{{ orderBy }}": "{{ orderDir }}"},
+                            {{ limit }}, 0, 'content_list{{ nameSuffix }}', 'hn_page', 'hn_limit', {currency: currency, currentUri: ''}
                         ) }}
                     template: |
                         {%% if items | length > 0 %%}
@@ -315,6 +315,40 @@ twig_visual:
                         {%% for item in items %%}
                             <childItem/>
                         {%% endfor %%}
+
+                childItemTitle:
+                    title: Product name
+                    type: elementSelect
+                    template: '<childItemTitle href="{{ catalogPath(currentUri, item.name, item) }}">{{ item.title }}</childItemTitle>'
+
+                childItemPrice:
+                    title: Price of the product
+                    type: elementSelect
+                    template: |
+                        <childItemPrice>
+                            <span class="shk-price">{{ item.price }}</span>
+                            <span class="shk-currency">{{ currency }}</span>
+                        </childItemPrice>
+
+                childItemImage:
+                    title: Photo of the product
+                    type: elementSelect
+                    template: |
+                        <childItemImage>
+                            <img src="{{ imageUrl(item.image, '/img/nofoto.png') | imagine_filter('thumb_small') }}" alt="{{ item.title }}"/>
+                        </childItemImage>
+
+                childItemAddToCartButton:
+                    title: Add to cart button
+                    type: elementSelect
+                    output: '<childItemAddToCartButton/>'
+                    template: |
+                        <form id="shk-form" action="{{ pathLocalized('shop_cart_action') }}" method="post">
+                            <input type="hidden" name="item_id" value="{{ item._id }}">
+                            <input type="hidden" name="category_id" value="{{ item.parentId }}">
+                            <input type="hidden" name="type" value="shop">
+                            <childItemAddToCartButton type="submit"/>
+                        </form>
 
                 collectionName: {title: Название коллекции БД, type: text, value: 'products'}
 

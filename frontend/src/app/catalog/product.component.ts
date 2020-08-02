@@ -279,7 +279,6 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
                 }
             }
         }
-
         data['fieldsSort'] = this.getFieldsSortData();
         return data;
     }

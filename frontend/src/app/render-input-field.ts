@@ -201,7 +201,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                 if (!this.fullCalendarEvents) {
                     this.fullCalendarEvents = {};
                 }
-                this.fullCalendarEvents[field.name] = [];
+                this.fullCalendarEvents[field.name] = this.model[field.name] || [];
                 this.fullCalendarOptions[field.name] = {
                     headerToolbar: {
                         left: 'prev,next today',
@@ -668,6 +668,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
             if (index > -1) {
                 this.fullCalendarEvents[fieldName].splice(index, 1);
                 this.fullCalendarOptions[fieldName].initialEvents = this.fullCalendarEvents[fieldName];
+                this.model[fieldName] = this.fullCalendarEvents[fieldName];
             }
         }
     }
@@ -675,6 +676,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
     handleFullCalendarEventAdd(fieldName: string, api: EventAddArg): void {
         this.fullCalendarEvents[fieldName] = [...this.fullCalendarEvents[fieldName], api.event.toJSON()];
         this.fullCalendarOptions[fieldName].initialEvents = this.fullCalendarEvents[fieldName];
+        this.model[fieldName] = this.fullCalendarEvents[fieldName];
     }
     
     handleFullCalendarEventChange(fieldName: string, api: EventChangeArg): void {
@@ -685,6 +687,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
         if (index > -1) {
             Object.assign(this.fullCalendarEvents[fieldName][index], event);
             this.fullCalendarOptions[fieldName].initialEvents = this.fullCalendarEvents[fieldName];
+            this.model[fieldName] = this.fullCalendarEvents[fieldName];
         }
     }
     

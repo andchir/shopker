@@ -6,13 +6,25 @@ import {
     SimpleChange,
     ChangeDetectorRef,
     Output,
-    EventEmitter
+    EventEmitter, ViewChild
 } from '@angular/core';
 import {FormGroup, FormControl, Validators} from '@angular/forms';
 import {cloneDeep, map, zipObject, extend, defer} from 'lodash';
 import {isNumeric} from 'rxjs/util/isNumeric';
 import {TranslateService} from '@ngx-translate/core';
 import {TreeNode} from 'primeng';
+
+import {
+    FullCalendarComponent,
+    CalendarOptions,
+    EventInput,
+    EventApi,
+    DateSelectArg,
+    EventClickArg,
+    EventAddArg,
+    EventChangeArg
+} from '@fullcalendar/angular';
+import ruLocale from '@fullcalendar/core/locales/ru';
 
 import {ContentField} from './catalog/models/content_field.model';
 import {MultiValues} from './models/multivalues.model';
@@ -75,6 +87,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
     @Input() localeFieldsAllowed: string[] = [];
     @Input() isLocalizationActive: boolean;
     @Output() onAddTranslation = new EventEmitter<string>();
+    @ViewChild('fullCalendar') private fullCalendar: FullCalendarComponent;
     fieldsMultivalues: {[key: string]: MultiValues} = {};
     submitted = false;
     filesDirBaseUrl: string;
@@ -83,6 +96,8 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
     categoriesTree: TreeNode[] = [];
     categoriesSelection: {[key: string]: any} = {};
     calendarLocale = calendarLocale;
+    fullCalendarOptions: {[key: string]: CalendarOptions};
+    fullCalendarEvents: {[key: string]: EventInput[]};
 
     constructor(
         private changeDetectionRef: ChangeDetectorRef,
@@ -148,7 +163,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                     max: null,
                     step: 1
                 };
-                field.inputProperties = this.extendProperties(
+                this.extendProperties(
                     field.inputProperties,
                     propertiesDefault
                 );
@@ -164,13 +179,61 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                     hour_format: 24,
                     locale: 'en'
                 };
-                field.inputProperties = this.extendProperties(
+                this.extendProperties(
                     field.inputProperties,
                     propertiesDefault
                 );
 
                 break;
-
+            case 'schedule':
+    
+                propertiesDefault = {
+                    slotDuration: '0:10:00'
+                };
+                this.extendProperties(
+                    field.inputProperties,
+                    propertiesDefault
+                );
+                
+                if (!this.fullCalendarOptions) {
+                    this.fullCalendarOptions = {};
+                }
+                if (!this.fullCalendarEvents) {
+                    this.fullCalendarEvents = {};
+                }
+                this.fullCalendarEvents[field.name] = [];
+                this.fullCalendarOptions[field.name] = {
+                    headerToolbar: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+                    },
+                    locales: [ruLocale],
+                    locale: this.appSettings.settings.locale,
+                    initialView: 'dayGridMonth',
+                    weekends: true,
+                    editable: true,
+                    selectable: true,
+                    selectMirror: true,
+                    dayMaxEvents: true,
+                    slotDuration: '0:10:00',
+                    initialEvents: this.fullCalendarEvents[field.name],
+                    select: (selectInfo: DateSelectArg) => {
+                        this.handleFullCalendarDateSelect(field.name, selectInfo);
+                    },
+                    eventClick: (clickInfo: EventClickArg) => {
+                        this.handleFullCalendarEventClick(field.name, clickInfo);
+                    },
+                    eventAdd: (api: EventAddArg) => {
+                        this.handleFullCalendarEventAdd(field.name, api);
+                    },
+                    eventChange: (api: EventChangeArg) => {
+                        this.handleFullCalendarEventChange(field.name, api);
+                    }
+                };
+                Object.assign(this.fullCalendarOptions[field.name], field.inputProperties);
+                
+                break;
             case 'rich_text':
 
                 propertiesDefault = {
@@ -180,7 +243,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                     + 'strike,script,underline,blockquote,header,indent,'
                     + 'list,align,direction,code-block,formula,image,video,clean'
                 };
-                field.inputProperties = this.extendProperties(
+                this.extendProperties(
                     field.inputProperties,
                     propertiesDefault
                 );
@@ -195,7 +258,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                     allowed_extensions: '.zip,.rar,.doc,.docx,.xls,.xlsx,.ods,.odt',
                     has_preview_image: 0
                 };
-                field.inputProperties = this.extendProperties(
+                this.extendProperties(
                     field.inputProperties,
                     propertiesDefault
                 );
@@ -208,7 +271,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                     multiple: 0,
                     layout: 'vertical'
                 };
-                field.inputProperties = this.extendProperties(
+                this.extendProperties(
                     field.inputProperties,
                     propertiesDefault
                 );
@@ -221,7 +284,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                     multiple: 0,
                     inline: 0
                 };
-                field.inputProperties = this.extendProperties(
+                this.extendProperties(
                     field.inputProperties,
                     propertiesDefault
                 );
@@ -233,7 +296,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                     handler: '',
                     multiple: 0
                 };
-                field.inputProperties = this.extendProperties(
+                this.extendProperties(
                     field.inputProperties,
                     propertiesDefault
                 );
@@ -352,8 +415,8 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
         return validators;
     }
 
-    extendProperties(object1: Properties, object2: Properties): Properties {
-        object1 = extend({}, object2, object1);
+    extendProperties(object1: Properties, object2: Properties): void {
+        object1 = Object.assign({}, object2, object1);
         for (const key in object1) {
             if (object1.hasOwnProperty(key)) {
                 if (isNumeric(object1[key])) {
@@ -361,7 +424,6 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                 }
             }
         }
-        return object1;
     }
 
     generateName(field: ContentField): void {
@@ -577,5 +639,62 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
             event.preventDefault();
         }
         this.onAddTranslation.emit(fieldName);
+    }
+
+    handleFullCalendarDateSelect(fieldName: string, selectInfo: DateSelectArg): void {
+        const title = prompt('Please enter a new title for your event');
+        const calendarApi = selectInfo.view.calendar;
+
+        calendarApi.unselect();
+
+        if (title) {
+            calendarApi.addEvent({
+                id: this.fullCalendarCreateId(fieldName),
+                title,
+                start: selectInfo.startStr,
+                end: selectInfo.endStr,
+                allDay: selectInfo.allDay
+            });
+        }
+    }
+    
+    handleFullCalendarEventClick(fieldName: string, clickInfo: EventClickArg): void {
+        if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
+            clickInfo.event.remove();
+            const event = clickInfo.event.toPlainObject();
+            const index = this.fullCalendarEvents[fieldName].findIndex((item) => {
+                return item.id === event.id;
+            });
+            if (index > -1) {
+                this.fullCalendarEvents[fieldName].splice(index, 1);
+                this.fullCalendarOptions[fieldName].initialEvents = this.fullCalendarEvents[fieldName];
+            }
+        }
+    }
+    
+    handleFullCalendarEventAdd(fieldName: string, api: EventAddArg): void {
+        this.fullCalendarEvents[fieldName] = [...this.fullCalendarEvents[fieldName], api.event.toJSON()];
+        this.fullCalendarOptions[fieldName].initialEvents = this.fullCalendarEvents[fieldName];
+    }
+    
+    handleFullCalendarEventChange(fieldName: string, api: EventChangeArg): void {
+        const event = api.event.toPlainObject();
+        const index = this.fullCalendarEvents[fieldName].findIndex((item) => {
+            return item.id === event.id;
+        });
+        if (index > -1) {
+            Object.assign(this.fullCalendarEvents[fieldName][index], event);
+            this.fullCalendarOptions[fieldName].initialEvents = this.fullCalendarEvents[fieldName];
+        }
+    }
+    
+    fullCalendarCreateId(fieldName: string): string {
+        let lastId = 0;
+        this.fullCalendarEvents[fieldName].forEach((item) => {
+            if (parseInt(item.id, 10) > lastId) {
+                lastId = parseInt(item.id, 10);
+            }
+        });
+        return String(lastId + 1);
     }
 }

@@ -249,6 +249,19 @@
                             </div>
                         </div>
                         <!-- /date -->
+                        
+                        <!-- schedule -->
+                        <div *ngSwitchCase="'schedule'">
+    
+                            <label class="d-block mb-3" for="field_{{field.name}}">
+                                {{field.title}}
+                                <span class="text-muted">({{field.name}})</span>
+                                <span class="text-danger" *ngIf="field.required">*</span>
+                            </label>
+                            <full-calendar #fullCalendar [options]="fullCalendarOptions[field.name]"></full-calendar>
+                            
+                        </div>
+                        <!-- /schedule -->
 
                         <!-- select -->
                         <div class="row" *ngSwitchCase="'select'">

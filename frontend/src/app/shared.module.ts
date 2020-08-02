@@ -8,6 +8,7 @@ import {NgbModule, NgbActiveModal, NgbTooltipConfig} from '@ng-bootstrap/ng-boot
 import {EditorModule} from 'primeng/editor';
 import {ToastModule} from 'primeng/toast';
 import {CalendarModule} from 'primeng/calendar';
+import {FullCalendarModule} from '@fullcalendar/angular';
 import {ChipsModule} from 'primeng/chips';
 import {ColorPickerModule} from 'primeng/colorpicker';
 import {TreeModule} from 'primeng/tree';
@@ -36,6 +37,19 @@ import {UserRoleColorPipe, UserRoleNamePipe} from './pipes/user-role.pipe';
 import {OrderByPipe} from './pipes/orderby.pipe';
 import {FilterArrayPipe} from './pipes/filter-array-pipe';
 
+// FullCalendar - https://fullcalendar.io/docs/angular
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import listPlugin from '@fullcalendar/list';
+import interactionPlugin from '@fullcalendar/interaction';
+
+FullCalendarModule.registerPlugins([
+    dayGridPlugin,
+    timeGridPlugin,
+    listPlugin,
+    interactionPlugin
+]);
+
 const components = [
     TableComponent,
     NotFoundComponent,
@@ -60,6 +74,7 @@ const components = [
 
         EditorModule,
         CalendarModule,
+        FullCalendarModule,
         ChipsModule,
         ColorPickerModule,
         TreeModule,
@@ -94,6 +109,7 @@ const components = [
         NgbModule,
         EditorModule,
         CalendarModule,
+        FullCalendarModule,
         ChipsModule,
         ColorPickerModule,
         TreeModule,

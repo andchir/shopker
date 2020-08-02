@@ -270,6 +270,7 @@ input.form-control[readonly] { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); curso
 /* calendar */
 .ui-datepicker a:hover { text-decoration: none; }
 body .ui-datepicker .ui-datepicker-header .ui-datepicker-title select { margin-left: 7px; }
+.fc .fc-list-event:hover td { background-color: #3491bf !important; }
 
 /* colorpicker */
 .ui-colorpicker-panel { background-color: #ddd; box-shadow: 1px 1px 10px rgba(0,0,0,0.5); }

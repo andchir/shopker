@@ -1,0 +1,28 @@
+{% block body -%}
+    {% set fieldName = getFieldOption(fields, 'schedule', 'name') %}
+    <div class="card">
+        <div class="card-header">
+            <span>{{ 'Reservation' | trans }}</span>
+        </div>
+        <div class="card-body">
+
+
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets -%}
+
+{% endblock %}
+
+{% block javascripts -%}
+    <script src="{{ asset('node_modules/moment/min/moment.min.js') }}"></script>
+    {% if app.request.locale != 'en' -%}
+        <script src="{{ asset('node_modules/moment/locale/' ~ app.request.locale ~ '.js') }}"></script>
+    {% endif -%}
+
+    <script type="text/javascript">
+
+    </script>
+{% endblock %}

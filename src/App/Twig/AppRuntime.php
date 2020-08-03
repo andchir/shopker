@@ -506,18 +506,18 @@ class AppRuntime
     }
 
     /**
-     * @param array $itemData
-     * @param array $fieldsData
      * @param string $chunkName
+     * @param array $fieldsData
+     * @param string $defaultValue
      * @return string
      */
-    public function getFieldNameByChunkFunction($itemData, $fieldsData, $chunkName)
+    public function getFieldNameByChunkFunction($chunkName, $fieldsData, $defaultValue = '')
     {
         $fields = array_filter($fieldsData, function($field) use ($chunkName) {
             return $field['outputProperties']['chunkName'] === $chunkName;
         });
         if (empty($fields)) {
-            return '';
+            return $defaultValue;
         }
         $fields = array_merge($fields);
         return !empty($fields) ? $fields[0]['name'] : '';

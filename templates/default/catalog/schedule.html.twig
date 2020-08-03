@@ -43,13 +43,17 @@
 
 {% block javascripts -%}
     <script src="{{ asset('node_modules/moment/min/moment.min.js') }}"></script>
-    {% if app.request.locale != 'en' %}
+    {% if app.request.locale != 'en' -%}
         <script src="{{ asset('node_modules/moment/locale/' ~ app.request.locale ~ '.js') }}"></script>
-    {% endif %}
+    {% endif -%}
     <script src="{{ asset('node_modules/pc-bootstrap4-datetimepicker/build/js/bootstrap-datetimepicker.min.js') }}"></script>
 
     <script type="text/javascript">
-        var reservedTime = [{% for d in currentPage.schedule %}{% if loop.index0 > 0 %},{% endif %}{start: '{{ d.start }}', end: '{{ d.end }}'}{% endfor %}];
+        {% if currentPage.schedule is defined -%}
+            var reservedTime = [{% for d in currentPage.schedule %}{% if loop.index0 > 0 %},{% endif %}{start: '{{ d.start }}', end: '{{ d.end }}'}{% endfor %}];
+        {% else -%}
+            var reservedTime = [];
+        {% endif -%}
         document.addEventListener('DOMContentLoaded', function() {
             var datetimepickerOptions = {
                 icons: {
@@ -64,7 +68,8 @@
                 tooltips: {
                     selectTime: '{{ 'Select time' | trans }}',
                     selectDate: '{{ 'Select date' | trans }}'
-                }
+                },
+                disabledDates: createDisabledDates(reservedTime)
             };
             jQuery('#datetimepicker1')
                 .datetimepicker(Object.assign({}, datetimepickerOptions, {

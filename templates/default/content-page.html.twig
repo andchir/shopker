@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% set styles = [] %}
-{% set scripts = [] %}
+{% use 'catalog/schedule.html.twig' with body as schedule_body, stylesheets as schedule_stylesheets, javascripts as schedule_javascripts %}
+
 {% set favoritesCount = shopCartProductCount('products', 'favorites') %}
 {% set favoritesItemCount = shopCartProductCount('products', 'favorites', currentPage.id) %}
 
@@ -64,10 +64,9 @@
                             {{ renderOutputTypeChunk(currentPage, fields, 'parameters', 'page_') }}
                             {{ renderOutputTypeChunk(currentPage, fields, 'file') }}
 
-                            {% if currentPage.schedule is defined %}
-                                {% use 'catalog/schedule.html.twig' with stylesheets as schedule_stylesheets, body as schedule_body, javascripts as schedule_javascripts %}
+                            {% if getFieldNameByChunk('schedule', fields) is not empty -%}
                                 {{ block('schedule_body') }}
-                            {% endif %}
+                            {% endif -%}
 
                             {% if currentPage.price > 0 %}
                                 <div class="my-3">
@@ -104,16 +103,16 @@
 {% block stylesheets -%}
     {{ parent() }}
     <link href="{{ asset('bundles/comments/css/comments.css') }}" rel="stylesheet">
-    {% if block('schedule_stylesheets') is defined -%}
+    {% if getFieldNameByChunk('schedule', fields) is not empty -%}
         {{ block('schedule_stylesheets') }}
-    {% endif %}
+    {% endif -%}
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
-    {% if block('schedule_javascripts') is defined -%}
+    {% if getFieldNameByChunk('schedule', fields) is not empty -%}
         {{ block('schedule_javascripts') }}
-    {% endif %}
+    {% endif -%}
 
     <script>
         var shoppingCart;

@@ -8,7 +8,7 @@
             <div class="col-lg-6">
                 <div class="mb-3 mb-lg-0">
                     <div class="input-group relative">
-                        <input type="text" class="form-control" id="datetimepicker1" placeholder="{{ 'Start date' | trans }}">
+                        <input type="text" class="form-control" id="datetimepicker1" name="param__{{ fieldData.name }}[]" placeholder="{{ 'Start date' | trans }}">
                         <span class="input-group-append">
                             <span class="input-group-text">
                                 <span class="icon-date_range"></span>
@@ -20,7 +20,7 @@
             <div class="col-lg-6">
                 <div>
                     <div class="input-group relative">
-                        <input type="text" class="form-control" id="datetimepicker2" placeholder="{{ 'End date' | trans }}">
+                        <input type="text" class="form-control" id="datetimepicker2" name="param__{{ fieldData.name }}[]" placeholder="{{ 'End date' | trans }}">
                         <span class="input-group-append">
                             <span class="input-group-text">
                                 <span class="icon-date_range"></span>

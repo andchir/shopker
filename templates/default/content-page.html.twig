@@ -1,15 +1,11 @@
 {% extends 'base.html.twig' %}
 
+{% set styles = [] %}
+{% set scripts = [] %}
 {% set favoritesCount = shopCartProductCount('products', 'favorites') %}
 {% set favoritesItemCount = shopCartProductCount('products', 'favorites', currentPage.id) %}
 
 {% block title %}{{ currentPage.title | default('') }} - {{ app_name }}{% endblock %}
-
-{% block stylesheets -%}
-    {{ parent() }}
-    <link href="{{ asset('bundles/comments/css/comments.css') }}" rel="stylesheet">
-    <link href="{{ asset('node_modules/pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
-{% endblock -%}
 
 {% block body %}
     {% include 'header.html.twig' %}
@@ -67,7 +63,11 @@
                             {{ renderOutputTypeChunk(currentPage, fields, 'description') }}
                             {{ renderOutputTypeChunk(currentPage, fields, 'parameters', 'page_') }}
                             {{ renderOutputTypeChunk(currentPage, fields, 'file') }}
-                            {{ renderOutputTypeChunk(currentPage, fields, 'schedule') }}
+
+                            {% if currentPage.schedule is defined %}
+                                {% use 'catalog/schedule.html.twig' with stylesheets as schedule_stylesheets, body as schedule_body, javascripts as schedule_javascripts %}
+                                {{ block('schedule_body') }}
+                            {% endif %}
 
                             {% if currentPage.price > 0 %}
                                 <div class="my-3">
@@ -101,13 +101,20 @@
     </main>
 {% endblock %}
 
+{% block stylesheets -%}
+    {{ parent() }}
+    <link href="{{ asset('bundles/comments/css/comments.css') }}" rel="stylesheet">
+    {% if block('schedule_stylesheets') is defined -%}
+        {{ block('schedule_stylesheets') }}
+    {% endif %}
+{% endblock %}
+
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('node_modules/moment/min/moment.min.js') }}"></script>
-    {% if app.request.locale != 'en' %}
-        <script src="{{ asset('node_modules/moment/locale/' ~ app.request.locale ~ '.js') }}"></script>
+    {% if block('schedule_javascripts') is defined -%}
+        {{ block('schedule_javascripts') }}
     {% endif %}
-    <script src="{{ asset('node_modules/pc-bootstrap4-datetimepicker/build/js/bootstrap-datetimepicker.min.js') }}"></script>
+
     <script>
         var shoppingCart;
         document.addEventListener('DOMContentLoaded', function() {

@@ -111,6 +111,11 @@ Hide password: Скрыть пароль
 Your user has read-only permission.: Ваш пользователь имеет разрешение только на чтение.
 Category not found.: Категория не найдена.
 item not found.: Объект не найдена.
+Reservation: Бронирование
+Select time: Выбрать время
+Select date: Выбрать дату
+Start date: Дата начала
+End date: Дата окончания
 
 Sort by: Сортировать по
 catalog.sort_by_novelty: Новизне

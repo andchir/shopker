@@ -8,6 +8,7 @@
 {% block stylesheets -%}
     {{ parent() }}
     <link href="{{ asset('bundles/comments/css/comments.css') }}" rel="stylesheet">
+    <link href="{{ asset('node_modules/pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
 {% endblock -%}
 
 {% block body %}
@@ -66,6 +67,7 @@
                             {{ renderOutputTypeChunk(currentPage, fields, 'description') }}
                             {{ renderOutputTypeChunk(currentPage, fields, 'parameters', 'page_') }}
                             {{ renderOutputTypeChunk(currentPage, fields, 'file') }}
+                            {{ renderOutputTypeChunk(currentPage, fields, 'schedule') }}
 
                             {% if currentPage.price > 0 %}
                                 <div class="my-3">
@@ -101,6 +103,11 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <script src="{{ asset('node_modules/moment/min/moment.min.js') }}"></script>
+    {% if app.request.locale != 'en' %}
+        <script src="{{ asset('node_modules/moment/locale/' ~ app.request.locale ~ '.js') }}"></script>
+    {% endif %}
+    <script src="{{ asset('node_modules/pc-bootstrap4-datetimepicker/build/js/bootstrap-datetimepicker.min.js') }}"></script>
     <script>
         var shoppingCart;
         document.addEventListener('DOMContentLoaded', function() {

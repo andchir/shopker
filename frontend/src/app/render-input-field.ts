@@ -642,35 +642,41 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
     }
 
     handleFullCalendarDateSelect(fieldName: string, selectInfo: DateSelectArg): void {
-        const title = prompt('Please enter a new title for your event');
-        const calendarApi = selectInfo.view.calendar;
-
-        calendarApi.unselect();
-
-        if (title) {
-            calendarApi.addEvent({
-                id: this.fullCalendarCreateId(fieldName),
-                title,
-                start: selectInfo.startStr,
-                end: selectInfo.endStr,
-                allDay: selectInfo.allDay
+        this.translateService.get('PLEASE_ENTER_NEW_TITLE_FOR_EVENT')
+            .subscribe((translatedString: string) => {
+                const title = prompt(translatedString);
+                const calendarApi = selectInfo.view.calendar;
+    
+                calendarApi.unselect();
+    
+                if (title) {
+                    calendarApi.addEvent({
+                        id: this.fullCalendarCreateId(fieldName),
+                        title,
+                        start: selectInfo.startStr,
+                        end: selectInfo.endStr,
+                        allDay: selectInfo.allDay
+                    });
+                }
             });
-        }
     }
     
     handleFullCalendarEventClick(fieldName: string, clickInfo: EventClickArg): void {
-        if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-            clickInfo.event.remove();
-            const event = clickInfo.event.toPlainObject();
-            const index = this.fullCalendarEvents[fieldName].findIndex((item) => {
-                return item.id === event.id;
+        this.translateService.get('YOU_SURE_YOU_WANT_DELETE_NAME', {name: clickInfo.event.title})
+            .subscribe((translatedString: string) => {
+                if (confirm(translatedString)) {
+                    clickInfo.event.remove();
+                    const event = clickInfo.event.toPlainObject();
+                    const index = this.fullCalendarEvents[fieldName].findIndex((item) => {
+                        return item.id === event.id;
+                    });
+                    if (index > -1) {
+                        this.fullCalendarEvents[fieldName].splice(index, 1);
+                        this.fullCalendarOptions[fieldName].initialEvents = this.fullCalendarEvents[fieldName];
+                        this.model[fieldName] = this.fullCalendarEvents[fieldName];
+                    }
+                }
             });
-            if (index > -1) {
-                this.fullCalendarEvents[fieldName].splice(index, 1);
-                this.fullCalendarOptions[fieldName].initialEvents = this.fullCalendarEvents[fieldName];
-                this.model[fieldName] = this.fullCalendarEvents[fieldName];
-            }
-        }
     }
     
     handleFullCalendarEventAdd(fieldName: string, api: EventAddArg): void {

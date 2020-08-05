@@ -12,8 +12,9 @@
   "author": "Andchir",
   "license": "MIT",
   "dependencies": {
-    "bootstrap": "^4.4.1",
-    "jquery": "^3.4.1",
+    "bootstrap": "^4.5.1",
+    "fullcalendar": "^5.2.0",
+    "jquery": "^3.5.1",
     "moment": "^2.27.0",
     "nouislider": "^12.1.0",
     "pc-bootstrap4-datetimepicker": "^4.17.51",
@@ -22,6 +23,6 @@
   },
   "devDependencies": {
     "@symfony/webpack-encore": "^0.27.0",
-    "serialize-javascript": "^3.0.0"
+    "serialize-javascript": "^3.1.0"
   }
 }

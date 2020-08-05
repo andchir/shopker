@@ -112,6 +112,9 @@ Your user has read-only permission.: Ваш пользователь имеет 
 Category not found.: Категория не найдена.
 item not found.: Объект не найдена.
 Reservation: Бронирование
+Reserved: Занято
+New booking: Новая бронь
+Are you sure you want to reserve this time?: Вы уверены, что хотите забранировать это время?
 Select time: Выбрать время
 Select date: Выбрать дату
 Start date: Дата начала

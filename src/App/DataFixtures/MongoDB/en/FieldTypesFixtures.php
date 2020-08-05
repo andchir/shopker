@@ -577,6 +577,45 @@ class FieldTypesFixtures extends Fixture implements FixtureGroupInterface
                         'default_value' => '0'
                     ]
                 ]
+            ],
+            'schedule' => [
+                'title' => 'Schedule',
+                'description' => 'Reservation for the date and time.',
+                'isActive' => true,
+                'inputProperties' => [
+                    [
+                        'name' => 'value',
+                        'title' => 'Default value',
+                        'default_value' => ''
+                    ],
+                    [
+                        'name' => 'handler',
+                        'title' => 'Handler',
+                        'default_value' => ''
+                    ],
+                    [
+                        'name' => 'slotDuration',
+                        'title' => 'Minimum duration',
+                        'default_value' => '0:10:00'
+                    ]
+                ],
+                'outputProperties' => [
+                    [
+                        'name' => 'className',
+                        'title' => 'CSS class',
+                        'default_value' => ''
+                    ],
+                    [
+                        'name' => 'chunkName',
+                        'title' => 'Chunk name',
+                        'default_value' => ''
+                    ],
+                    [
+                        'name' => 'slotDuration',
+                        'title' => 'Minimum duration',
+                        'default_value' => '0:10:00'
+                    ]
+                ]
             ]
         ];
 

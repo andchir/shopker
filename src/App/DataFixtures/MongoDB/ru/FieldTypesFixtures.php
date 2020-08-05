@@ -577,6 +577,45 @@ class FieldTypesFixtures extends Fixture implements FixtureGroupInterface
                         'default_value' => '0'
                     ]
                 ]
+            ],
+            'schedule' => [
+                'title' => 'Расписание',
+                'description' => 'Бронирование на дату и время.',
+                'isActive' => true,
+                'inputProperties' => [
+                    [
+                        'name' => 'value',
+                        'title' => 'Значение по умолчанию',
+                        'default_value' => ''
+                    ],
+                    [
+                        'name' => 'handler',
+                        'title' => 'Обработчик',
+                        'default_value' => ''
+                    ],
+                    [
+                        'name' => 'slotDuration',
+                        'title' => 'Минимальная продолжительность',
+                        'default_value' => '0:10:00'
+                    ]
+                ],
+                'outputProperties' => [
+                    [
+                        'name' => 'className',
+                        'title' => 'CSS класс',
+                        'default_value' => ''
+                    ],
+                    [
+                        'name' => 'chunkName',
+                        'title' => 'Название чанка',
+                        'default_value' => ''
+                    ],
+                    [
+                        'name' => 'slotDuration',
+                        'title' => 'Минимальная продолжительность',
+                        'default_value' => '0:10:00'
+                    ]
+                ]
             ]
         ];
 

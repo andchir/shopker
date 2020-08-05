@@ -6,23 +6,90 @@
         </div>
         <div class="card-body">
 
-
+            <div id="calendar"></div>
 
         </div>
     </div>
 {% endblock %}
 
 {% block stylesheets -%}
-
+    <link href="{{ asset('node_modules/fullcalendar/main.css') }}" rel="stylesheet">
 {% endblock %}
 
 {% block javascripts -%}
     <script src="{{ asset('node_modules/moment/min/moment.min.js') }}"></script>
+    <script src="{{ asset('node_modules/fullcalendar/main.js') }}"></script>
     {% if app.request.locale != 'en' -%}
         <script src="{{ asset('node_modules/moment/locale/' ~ app.request.locale ~ '.js') }}"></script>
+        <script src="{{ asset('node_modules/fullcalendar/locales/' ~ app.request.locale ~ '.js') }}"></script>
     {% endif -%}
 
     <script type="text/javascript">
+        var reservedTime = [
+            {% if currentPage.schedule is defined -%}
+            {% for d in currentPage.schedule %}
+            {% if loop.index0 > 0 %},{% endif %}{
+                id: '{{ d.id }}',
+                title: '{{ 'Reserved' | trans }}',
+                start: '{{ d.start }}',
+                end: '{{ d.end }}'
+            }
+            {% endfor %}
+            {% endif -%}
+        ];
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                plugins: [],
+                locale: '{{ app.request.locale }}',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                iconClasses: {
+                    close: 'icon-cross',
+                    prev: 'icon-keyboard_arrow_left',
+                    next: 'icon-keyboard_arrow_right',
+                    prevYear: 'icon-arrow-left',
+                    nextYear: 'icon-arrow-right'
+                },
+                slotDuration: '0:10:00',
+                initialDate: null,
+                navLinks: true,
+                editable: false,
+                selectable: true,
+                dayMaxEvents: false,
+                select: function(selectInfo) {
+                    const calendarApi = selectInfo.view.calendar;
 
+                    if (confirm('{{ 'Are you sure you want to reserve this time?' | trans }}')) {
+                        calendarApi.addEvent({
+                            id: fullCalendarCreateId(),
+                            title: '{{ 'New booking' | trans }}',
+                            start: selectInfo.startStr,
+                            end: selectInfo.endStr,
+                            allDay: selectInfo.allDay,
+                            editable: true,
+                            backgroundColor: '#32a852',
+                            borderColor: '#1d8c3c',
+                            overlap: false
+                        });
+                    }
+                },
+                events: reservedTime
+            });
+            calendar.render();
+        });
+
+        var fullCalendarCreateId = function() {
+            let lastId = 0;
+            reservedTime.forEach((item) => {
+                if (parseInt(item.id, 10) > lastId) {
+                    lastId = parseInt(item.id, 10);
+                }
+            });
+            return String(lastId + 1);
+        }
     </script>
 {% endblock %}

@@ -64,6 +64,7 @@ class AppExtension extends AbstractExtension
                 'is_safe' => ['html'],
                 'needs_environment' => true
             ]),
+            new TwigFunction('getField', [$this, 'getFieldFunction']),
             new TwigFunction('getFieldOption', [$this, 'getFieldOptionFunction']),
             new TwigFunction('renderOutputType', [$this, 'renderOutputTypeFunction'], [
                 'is_safe' => ['html'],
@@ -219,8 +220,28 @@ class AppExtension extends AbstractExtension
     }
 
     /**
-     * @param $fieldsData
-     * @param $fieldName
+     * @param array $fieldsData
+     * @param string $fieldName
+     * @param string $chunkName
+     * @return |null
+     */
+    public function getFieldFunction($fieldsData, $fieldName, $chunkName = '')
+    {
+        if ($chunkName) {
+            $fields = array_filter($fieldsData, function($field) use ($chunkName) {
+                return isset($field['outputProperties']['chunkName'])
+                    && $field['outputProperties']['chunkName'] === $chunkName;
+            });
+            $fields = array_merge($fields);
+            return count($fields) > 0 ? $fields[0] : null;
+        }
+        $index = array_search($fieldName, array_column($fieldsData, 'name'));
+        return $index !== false ? $fieldsData[$index] : null;
+    }
+
+    /**
+     * @param array $fieldsData
+     * @param string $fieldName
      * @param string $optionName
      * @return string|array
      */
@@ -230,7 +251,7 @@ class AppExtension extends AbstractExtension
         if ($index === false) {
             return '';
         }
-        return isset($fieldsData[$index][$optionName]) ? $fieldsData[$index][$optionName] : '';
+        return $fieldsData[$index][$optionName] ?? '';
     }
 
     /**

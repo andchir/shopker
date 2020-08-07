@@ -6,7 +6,9 @@
         </div>
         <div class="card-body">
 
-            <div id="calendar"></div>
+            <input type="hidden" id="calendarStart" name="param__{{ fieldName }}[]">
+            <input type="hidden" id="calendarEnd" name="param__{{ fieldName }}[]">
+            <div id="calendar" class="min-height150 shopping-cart-loading"></div>
 
         </div>
     </div>
@@ -17,6 +19,7 @@
 {% endblock %}
 
 {% block javascripts -%}
+    {% set fieldData = getField(fields, '', 'schedule') %}
     <script src="{{ asset('node_modules/moment/min/moment.min.js') }}"></script>
     <script src="{{ asset('node_modules/fullcalendar/main.js') }}"></script>
     {% if app.request.locale != 'en' -%}
@@ -25,21 +28,22 @@
     {% endif -%}
 
     <script type="text/javascript">
+        var calendar;
         var reservedTime = [
-            {% if currentPage.schedule is defined -%}
-            {% for d in currentPage.schedule %}
-            {% if loop.index0 > 0 %},{% endif %}{
-                id: '{{ d.id }}',
-                title: '{{ 'Reserved' | trans }}',
-                start: '{{ d.start }}',
-                end: '{{ d.end }}'
-            }
-            {% endfor %}
-            {% endif -%}
+            {%- if currentPage[fieldData.name] is defined -%}
+                {%- for d in currentPage[fieldData.name] -%}
+                    {%- if loop.index0 > 0 %},{% endif -%}{
+                        id: '{{ d.id }}',
+                        title: '{{ 'Reserved' | trans }}',
+                        start: '{{ d.start }}',
+                        end: '{{ d.end }}'
+                    }
+                {%- endfor -%}
+            {%- endif -%}
         ];
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('calendar');
-            var calendar = new FullCalendar.Calendar(calendarEl, {
+            calendar = new FullCalendar.Calendar(calendarEl, {
                 plugins: [],
                 locale: '{{ app.request.locale }}',
                 headerToolbar: {
@@ -61,11 +65,25 @@
                 selectable: true,
                 dayMaxEvents: false,
                 select: function(selectInfo) {
-                    const calendarApi = selectInfo.view.calendar;
+                    var calendarApi = selectInfo.view.calendar;
+                    var events = calendarApi.getEvents();
+                    var currentEvents = events.filter((event) => {
+                        return event.startStr === selectInfo.startStr && event.endStr === selectInfo.endStr;
+                    });
+                    if (currentEvents.length > 0) {
+                        return;
+                    }
 
                     if (confirm('{{ 'Are you sure you want to reserve this time?' | trans }}')) {
+                        events.forEach(function(event) {
+                            if (event.groupId === 'new') {
+                                event.remove();
+                            }
+                        });
+
                         calendarApi.addEvent({
                             id: fullCalendarCreateId(),
+                            groupId: 'new',
                             title: '{{ 'New booking' | trans }}',
                             start: selectInfo.startStr,
                             end: selectInfo.endStr,
@@ -77,10 +95,22 @@
                         });
                     }
                 },
+                eventAdd: function(addInfo) {
+                    fullCalendarOnEventChange(addInfo.event);
+                },
+                eventChange: function(changeInfo) {
+                    fullCalendarOnEventChange(changeInfo.event);
+                },
                 events: reservedTime
             });
             calendar.render();
+            calendarEl.classList.remove('shopping-cart-loading');
         });
+
+        var fullCalendarOnEventChange = function(event) {
+            document.getElementById('calendarStart').value = event.startStr;
+            document.getElementById('calendarEnd').value = event.endStr;
+        };
 
         var fullCalendarCreateId = function() {
             let lastId = 0;

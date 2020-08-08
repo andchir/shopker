@@ -230,7 +230,7 @@ class CartController extends BaseController
             try {
                 $this->addCartContent($shoppingCart, $category, $productDocument, $count, $locale, $localeDefault);
             } catch (MongoDBException $e) {
-                
+            
             }
         }
         return ['success' => true];
@@ -500,8 +500,23 @@ class CartController extends BaseController
                 continue;
             }
             $contentTypeField = $contentTypeFields[$index];
+            
+            // Schedule
+            if ($contentTypeField['outputType'] === 'schedule') {
+                if (!is_array($value)) {
+                    $value = [$value];
+                }
+                $value = array_filter($value, function($val) {
+                    return ShopCartService::validateDateTime($val, 'Y-m-d')
+                        || ShopCartService::validateDateTime($val, 'Y-m-d\TH:i:sP');
+                });
+                if (!empty($value)) {
+                    $parameters[] = $this->getDatesParameterValue($contentTypeField, $value);
+                }
+                continue;
+            }
 
-            if ($contentTypeField['inputType'] != 'parameters') {
+            if ($contentTypeField['outputType'] !== 'parameters') {
                 continue;
             }
             $outputType = isset($contentTypeField['outputProperties']) && isset($contentTypeField['outputProperties']['type'])
@@ -548,6 +563,32 @@ class CartController extends BaseController
             }
         }
         return $parameters;
+    }
+    
+    /**
+     * @param array $contentTypeField
+     * @param array $value
+     * @return array
+     */
+    public function getDatesParameterValue($contentTypeField, $value)
+    {
+        $outputDateFormat = $contentTypeField['outputProperties']['outputFormat'] ?? 'd/m/Y H:i';
+        $value = array_map(function($val) use ($outputDateFormat) {
+            if (ShopCartService::validateDateTime($val, 'Y-m-d')) {
+                $date = \DateTime::createFromFormat('Y-m-d', $val);
+                if (strpos($outputDateFormat, 'H:i') !== false) {
+                    $outputDateFormat = str_replace([' H:i:s', ' H:i'], '', $outputDateFormat);
+                }
+            } else {
+                $date = \DateTime::createFromFormat('Y-m-d\TH:i:sP', $val);
+            }
+            return $date ? $date->format($outputDateFormat) : '';
+        }, $value);
+        return [
+            'name' => $contentTypeField['title'],
+            'value' => implode(' - ', $value),
+            'price' => 0
+        ];
     }
 
     /**

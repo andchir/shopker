@@ -49,7 +49,7 @@
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                    right: '{{ fieldData.outputProperties.headerToolbar_right | default('dayGridMonth,timeGridWeek,timeGridDay') }}'
                 },
                 iconClasses: {
                     close: 'icon-cross',
@@ -58,7 +58,12 @@
                     prevYear: 'icon-arrow-left',
                     nextYear: 'icon-arrow-right'
                 },
-                slotDuration: '0:10:00',
+                initialView: '{{ fieldData.outputProperties.initialView | default('dayGridMonth') }}',
+                defaultAllDayEventDuration: '{{ fieldData.outputProperties.defaultAllDayEventDuration | default('24:00:00') }}',
+                defaultTimedEventDuration: '{{ fieldData.outputProperties.defaultTimedEventDuration | default('0:30:00') }}',
+                slotMinTime: '{{ fieldData.outputProperties.slotMinTime | default('08:00:00') }}',
+                slotMaxTime: '{{ fieldData.outputProperties.slotMaxTime | default('20:00:00') }}',
+                slotDuration: '{{ fieldData.outputProperties.slotDuration | default('0:30:00') }}',
                 initialDate: null,
                 navLinks: true,
                 editable: false,
@@ -67,8 +72,17 @@
                 select: function(selectInfo) {
                     var calendarApi = selectInfo.view.calendar;
                     var events = calendarApi.getEvents();
+                    var eventStartDay = selectInfo.start;
+                    var eventEndDay = selectInfo.end;
+                    
                     var currentEvents = events.filter((event) => {
-                        return event.startStr === selectInfo.startStr && event.endStr === selectInfo.endStr;
+                        if (eventStartDay > event.start && eventStartDay < event.end) {
+                            return true;
+                        }
+                        if (eventEndDay > event.start && eventEndDay < event.end) {
+                            return true;
+                        }
+                        return eventStartDay <= event.start && eventEndDay >= event.end;
                     });
                     if (currentEvents.length > 0) {
                         return;

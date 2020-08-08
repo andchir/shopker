@@ -356,4 +356,15 @@ class ShopCartService
             $itemData['extension']
         );
     }
+    
+    /**
+     * @param $dateStr
+     * @param $format
+     * @return bool
+     */
+    public static function validateDateTime($dateStr, $format)
+    {
+        $date = \DateTime::createFromFormat($format, $dateStr);
+        return $date && ($date->format($format) === $dateStr);
+    }
 }

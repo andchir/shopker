@@ -20,10 +20,8 @@
 
 {% block javascripts -%}
     {% set fieldData = getField(fields, '', 'schedule') %}
-    <script src="{{ asset('node_modules/moment/min/moment.min.js') }}"></script>
     <script src="{{ asset('node_modules/fullcalendar/main.js') }}"></script>
     {% if app.request.locale != 'en' -%}
-        <script src="{{ asset('node_modules/moment/locale/' ~ app.request.locale ~ '.js') }}"></script>
         <script src="{{ asset('node_modules/fullcalendar/locales/' ~ app.request.locale ~ '.js') }}"></script>
     {% endif -%}
 

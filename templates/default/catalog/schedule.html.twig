@@ -1,5 +1,7 @@
 {% block body -%}
     {% set fieldName = getFieldOption(fields, 'schedule', 'name') %}
+    <input type="hidden" id="calendarStart" name="param__{{ fieldName }}[]">
+    <input type="hidden" id="calendarEnd" name="param__{{ fieldName }}[]">
     <div class="card">
         <div class="card-header">
             <span>{{ 'Reservation' | trans }}</span>
@@ -10,7 +12,7 @@
                 <div class="col-lg-6">
                     <div class="mb-3 mb-lg-0">
                         <div class="input-group relative">
-                            <input type="text" class="form-control" id="datetimepicker1" name="param__{{ fieldName }}[]" placeholder="{{ 'Start date' | trans }}">
+                            <input type="text" class="form-control" id="datetimepicker1" placeholder="{{ 'Start date' | trans }}">
                             <span class="input-group-append">
                                 <span class="input-group-text">
                                     <span class="icon-date_range"></span>
@@ -22,7 +24,7 @@
                 <div class="col-lg-6">
                     <div>
                         <div class="input-group relative">
-                            <input type="text" class="form-control" id="datetimepicker2" name="param__{{ fieldName }}[]" placeholder="{{ 'End date' | trans }}">
+                            <input type="text" class="form-control" id="datetimepicker2" placeholder="{{ 'End date' | trans }}">
                             <span class="input-group-append">
                                 <span class="input-group-text">
                                     <span class="icon-date_range"></span>
@@ -42,6 +44,7 @@
 {% endblock %}
 
 {% block javascripts -%}
+    {% set fieldData = getField(fields, '', 'schedule') %}
     <script src="{{ asset('node_modules/moment/min/moment.min.js') }}"></script>
     {% if app.request.locale != 'en' -%}
         <script src="{{ asset('node_modules/moment/locale/' ~ app.request.locale ~ '.js') }}"></script>
@@ -49,11 +52,18 @@
     <script src="{{ asset('node_modules/pc-bootstrap4-datetimepicker/build/js/bootstrap-datetimepicker.min.js') }}"></script>
 
     <script type="text/javascript">
-        {% if currentPage.schedule is defined -%}
-            var reservedTime = [{% for d in currentPage.schedule %}{% if loop.index0 > 0 %},{% endif %}{start: '{{ d.start }}', end: '{{ d.end }}'}{% endfor %}];
-        {% else -%}
-            var reservedTime = [];
-        {% endif -%}
+        var reservedTime = [
+            {%- if currentPage[fieldData.name] is defined -%}
+                {%- for d in currentPage[fieldData.name] -%}
+                    {%- if loop.index0 > 0 %},{% endif -%}{
+                        id: '{{ d.id }}',
+                        title: '{{ 'Reserved' | trans }}',
+                        start: '{{ d.start }}',
+                        end: '{{ d.end }}'
+                    }
+                {%- endfor -%}
+            {%- endif -%}
+        ];
         document.addEventListener('DOMContentLoaded', function() {
             var datetimepickerOptions = {
                 icons: {
@@ -78,14 +88,20 @@
                 .on('dp.change', function (e) {
                     $('#datetimepicker2').data('DateTimePicker').minDate(e.date);
                     $('#datetimepicker1').data('DateTimePicker').disabledTimeIntervals(createDisabledHours(e.date, reservedTime));
+                    calendarOnChange(e.date, 'calendarStart');
                 });
             jQuery('#datetimepicker2')
                 .datetimepicker(Object.assign({}, datetimepickerOptions))
                 .on('dp.change', function (e) {
                     $('#datetimepicker1').data('DateTimePicker').maxDate(e.date);
                     $('#datetimepicker2').data('DateTimePicker').disabledTimeIntervals(createDisabledHours(e.date, reservedTime));
+                    calendarOnChange(e.date, 'calendarEnd');
                 });
         });
+        
+        var calendarOnChange = function(moment, targetFieldId) {
+            document.getElementById(targetFieldId).value = moment.format('YYYY-MM-DDTHH:mm:ssZ');
+        };
 
         var createDisabledDates = function(dates) {
             dates = dates || [];

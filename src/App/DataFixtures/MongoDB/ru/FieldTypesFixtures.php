@@ -589,11 +589,6 @@ class FieldTypesFixtures extends Fixture implements FixtureGroupInterface
                         'default_value' => ''
                     ],
                     [
-                        'name' => 'handler',
-                        'title' => 'Обработчик',
-                        'default_value' => ''
-                    ],
-                    [
                         'name' => 'slotDuration',
                         'title' => 'Минимальная продолжительность',
                         'default_value' => '0:10:00'
@@ -608,12 +603,47 @@ class FieldTypesFixtures extends Fixture implements FixtureGroupInterface
                     [
                         'name' => 'chunkName',
                         'title' => 'Название чанка',
-                        'default_value' => ''
+                        'default_value' => 'schedule'
                     ],
                     [
                         'name' => 'slotDuration',
                         'title' => 'Минимальная продолжительность',
                         'default_value' => '0:10:00'
+                    ],
+                    [
+                        'name' => 'headerToolbar_right',
+                        'title' => 'Кнопки переключения режима',
+                        'default_value' => 'dayGridMonth,timeGridWeek,timeGridDay'
+                    ],
+                    [
+                        'name' => 'initialView',
+                        'title' => 'Режим по умолчанию',
+                        'default_value' => 'dayGridMonth'
+                    ],
+                    [
+                        'name' => 'defaultAllDayEventDuration',
+                        'title' => 'Длительность по умолчанию для события - полный день',
+                        'default_value' => '24:00:00'
+                    ],
+                    [
+                        'name' => 'defaultTimedEventDuration',
+                        'title' => 'Длительность по умолчанию для события - часть дня',
+                        'default_value' => '0:30:00'
+                    ],
+                    [
+                        'name' => 'slotMinTime',
+                        'title' => 'Минимальное время',
+                        'default_value' => '08:00:00'
+                    ],
+                    [
+                        'name' => 'slotMaxTime',
+                        'title' => 'Максимальное время',
+                        'default_value' => '20:00:00'
+                    ],
+                    [
+                        'name' => 'outputFormat',
+                        'title' => 'Формат даты и времени на выходе (PHP)',
+                        'default_value' => 'd/m/Y H:i'
                     ]
                 ]
             ]

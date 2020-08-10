@@ -124,12 +124,12 @@ class CartController extends BaseController
                 }
             }
             if (!empty($output['message'])) {
-                $output['message'] = $this->translator->trans($output['message']);
+                $output['message'] = $this->translator->trans($output['message'], ['%name%' => $output['name'] ?? '']);
             }
             return $this->json($output);
         } else {
             if (!$output['success'] && isset($output['message'])) {
-                $this->addFlash('errors', $this->translator->trans($output['message']));
+                $this->addFlash('errors', $this->translator->trans($output['message'], ['%name%' => $output['name'] ?? '']));
             }
             return new RedirectResponse($back_url ?: '/');
         }
@@ -164,6 +164,11 @@ class CartController extends BaseController
         $options = [];
         $files = [];
         $parameters = $this->getProductParameters($request, $productDocument, $contentTypeFields);
+        $missedParameters = $this->checkParametersRequired($contentTypeFields, $parameters);
+
+        if (!empty($missedParameters)) {
+            return ['success' => false, 'message' => 'Field "%name%" is required.', 'name' => $missedParameters[0]['title']];
+        }
 
         // Files required?
         if ($type === ShoppingCart::TYPE_MAIN) {
@@ -493,10 +498,7 @@ class CartController extends BaseController
             $fieldBaseName = ContentType::getCleanFieldName($paramName);
 
             $index = array_search($fieldBaseName, array_column($contentTypeFields, 'name'));
-            
-            if ($index === false
-                || !isset($productDocument[$fieldBaseName])
-                || !is_array($productDocument[$fieldBaseName])) {
+            if ($index === false) {
                 continue;
             }
             $contentTypeField = $contentTypeFields[$index];
@@ -522,6 +524,9 @@ class CartController extends BaseController
             $outputType = isset($contentTypeField['outputProperties']) && isset($contentTypeField['outputProperties']['type'])
                 ? $contentTypeField['outputProperties']['type']
                 : 'radio';
+            if (!isset($productDocument[$fieldBaseName])) {
+                $productDocument[$fieldBaseName] = [];
+            }
             switch ($outputType) {
                 case 'select':
                 case 'radio':
@@ -563,6 +568,44 @@ class CartController extends BaseController
             }
         }
         return $parameters;
+    }
+
+    /**
+     * @param array $contentTypeFields
+     * @param array $parameters
+     * @return array
+     */
+    public function checkParametersRequired($contentTypeFields, $parameters)
+    {
+        $fieldsRequired = array_filter($contentTypeFields, function($contentTypeField) {
+            return in_array($contentTypeField['outputType'], ['parameters', 'schedule'])
+                && !empty($contentTypeField['outputProperties']['required']);
+        });
+        $fieldsRequired = array_merge($fieldsRequired);
+        $fieldsRequired = array_map(function($field) {
+            return $field['name'];
+        }, $fieldsRequired);
+
+        if (empty($fieldsRequired)) {
+            return [];
+        }
+
+        $missedParameters = [];
+        foreach ($fieldsRequired as $fieldNameRequired) {
+            $index = array_search($fieldNameRequired, array_column($contentTypeFields, 'name'));
+            if ($index === false) {
+                continue;
+            }
+            $field = $contentTypeFields[$index];
+            $ind = array_search($field['title'], array_column($parameters, 'name'));
+            if ($ind === false) {
+                $missedParameters[] = [
+                    'name' => $field['name'],
+                    'title' => $field['title']
+                ];
+            }
+        }
+        return $missedParameters;
     }
     
     /**

@@ -644,6 +644,11 @@ class FieldTypesFixtures extends Fixture implements FixtureGroupInterface
                         'name' => 'outputFormat',
                         'title' => 'Output date and time format (PHP)',
                         'default_value' => 'd/m/Y H:i'
+                    ],
+                    [
+                        'name' => 'required',
+                        'title' => 'Required',
+                        'default_value' => '1'
                     ]
                 ]
             ]

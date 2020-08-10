@@ -1,13 +1,13 @@
 {% block body -%}
-    {% set fieldName = getFieldOption(fields, 'schedule', 'name') %}
+    {% set fieldData = getField(fields, '', 'schedule') %}
     <div class="card">
         <div class="card-header">
             <span>{{ 'Reservation' | trans }}</span>
         </div>
         <div class="card-body">
 
-            <input type="hidden" id="calendarStart" name="param__{{ fieldName }}[]">
-            <input type="hidden" id="calendarEnd" name="param__{{ fieldName }}[]">
+            <input type="hidden" id="calendarStart" name="param__{{ fieldData['name'] }}[]">
+            <input type="hidden" id="calendarEnd" name="param__{{ fieldData['name'] }}[]">
             <div id="calendar" class="min-height150 shopping-cart-loading"></div>
 
         </div>

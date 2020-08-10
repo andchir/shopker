@@ -644,6 +644,11 @@ class FieldTypesFixtures extends Fixture implements FixtureGroupInterface
                         'name' => 'outputFormat',
                         'title' => 'Формат даты и времени на выходе (PHP)',
                         'default_value' => 'd/m/Y H:i'
+                    ],
+                    [
+                        'name' => 'required',
+                        'title' => 'Обязательный',
+                        'default_value' => '1'
                     ]
                 ]
             ]

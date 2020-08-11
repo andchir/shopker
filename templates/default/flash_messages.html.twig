@@ -1,13 +1,7 @@
 {% for type, messages in app.flashes %}
     {% for message in messages %}
-        {% if type == 'errors' %}
-            <div class="alert alert-danger">
-                {{ message | trans }}
-            </div>
-        {% else %}
-            <div class="alert alert-info">
-                {{ message | trans }}
-            </div>
-        {% endif %}
+        <div class="alert alert-{% if type == 'errors' %}danger{% else %}info{% endif %}">
+            {{ message | trans }}
+        </div>
     {% endfor %}
 {% endfor %}

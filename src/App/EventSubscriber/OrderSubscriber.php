@@ -79,8 +79,7 @@ class OrderSubscriber implements EventSubscriberInterface
         /** @var Order $order */
         $order = $event->getSubject();
 
-        // Do something...
-
+        $this->updateSchedule($order);
     }
 
     /**
@@ -178,6 +177,83 @@ class OrderSubscriber implements EventSubscriberInterface
                 ]
             );
         }
+    }
+
+    /**
+     * @param Order $order
+     */
+    public function updateSchedule(Order $order)
+    {
+        $orderContent = $order->getContent();
+        /** @var OrderContent $content */
+        foreach ($orderContent as $content) {
+            if (empty($content->getParameters())) {
+                continue;
+            }
+            $contentTypeName = $content->getContentTypeName();
+            /** @var ContentType $contentType */
+            $contentType = $this->dm->getRepository(ContentType::class)->findOneBy(['name' => $contentTypeName]);
+            if (!$contentType) {
+                continue;
+            }
+            if (!($collection = $this->catalogService->getCollection($contentType->getCollection()))) {
+                continue;
+            }
+            $parameters = $content->getParameters();
+
+            foreach ($parameters as $parameter) {
+                $contentTypeField = $contentType->getFieldByName($parameter['name']);
+                if (!$contentTypeField) {
+                    continue;
+                }
+                if ($contentTypeField['outputType'] === 'schedule') {
+                    $value = $parameter['value'];
+                    $valueArr = explode(' - ', $value);
+                    $outputDateFormat = $contentTypeField['outputProperties']['outputFormat'];
+
+                    $productDocument = $collection->findOne([
+                        '_id' => $content->getId(),
+                        'isActive' => true
+                    ]);
+                    if (!$productDocument) {
+                        continue;
+                    }
+
+                    $dateStart = $this->createDateObject($valueArr[0], $outputDateFormat);
+                    if (!$dateStart) {
+                        continue;
+                    }
+                    $dateEnd = isset($valueArr[1])
+                        ? $this->createDateObject($valueArr[1], $outputDateFormat)
+                        : (clone $dateStart)->add(new \DateInterval('P1D'));
+                    if (!$dateEnd) {
+                        continue;
+                    }
+
+                    // TODO: update schedule dates for product
+
+                }
+            }
+
+            // var_dump($content->toArray()); exit;
+
+        }
+    }
+
+    /**
+     * @param string $dateStr
+     * @param string $outputDateFormat
+     * @return \DateTime|false
+     */
+    public function createDateObject($dateStr, $outputDateFormat)
+    {
+        $date = \DateTime::createFromFormat($outputDateFormat, $dateStr);
+        if (!$date) {
+            $outputDateFormatDays = trim(str_replace(['H:i:s', 'H:i'], '', $outputDateFormat));
+            var_dump($dateStr, $outputDateFormat, $outputDateFormatDays);
+            $date = \DateTime::createFromFormat($outputDateFormatDays, $dateStr);
+        }
+        return $date;
     }
 
     /**

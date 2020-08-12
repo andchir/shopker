@@ -356,6 +356,20 @@ class ContentType
     }
 
     /**
+     * @param $fieldName
+     * @return array|null
+     */
+    public function getFieldByName($fieldName)
+    {
+        $contentTypeFields = $this->getFields();
+        $fields = array_filter($contentTypeFields, function($contentTypeField) use ($fieldName) {
+            return in_array($fieldName, [$contentTypeField['name'], $contentTypeField['title']]);
+        });
+        $fields = array_merge($fields);
+        return !empty($fields) ? $fields[0] : null;
+    }
+
+    /**
      * Get system field name
      * @return string
      */

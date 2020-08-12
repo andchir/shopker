@@ -502,28 +502,14 @@ class CartController extends BaseController
                 continue;
             }
             $contentTypeField = $contentTypeFields[$index];
-            
-            // Schedule
-            if ($contentTypeField['outputType'] === 'schedule') {
-                if (!is_array($value)) {
-                    $value = [$value];
-                }
-                $value = array_filter($value, function($val) {
-                    return ShopCartService::validateDateTime($val, 'Y-m-d')
-                        || ShopCartService::validateDateTime($val, 'Y-m-d\TH:i:sP');
-                });
-                if (!empty($value)) {
-                    $parameters[] = $this->getDatesParameterValue($contentTypeField, $value);
-                }
-                continue;
-            }
 
-            if ($contentTypeField['outputType'] !== 'parameters') {
+            if (!in_array($contentTypeField['outputType'], ['parameters', 'schedule'])) {
                 continue;
             }
             $outputType = isset($contentTypeField['outputProperties']) && isset($contentTypeField['outputProperties']['type'])
                 ? $contentTypeField['outputProperties']['type']
-                : 'radio';
+                : ($contentTypeField['outputType'] === 'schedule' ? 'datetime' : 'radio');
+
             if (!isset($productDocument[$fieldBaseName])) {
                 $productDocument[$fieldBaseName] = [];
             }
@@ -564,6 +550,20 @@ class CartController extends BaseController
                             ]);
                         }
                     }
+                    break;
+                case 'datetime':
+
+                    if (!is_array($value)) {
+                        $value = [$value];
+                    }
+                    $value = array_filter($value, function($val) {
+                        return ShopCartService::validateDateTime($val, 'Y-m-d')
+                            || ShopCartService::validateDateTime($val, 'Y-m-d\TH:i:sP');
+                    });
+                    if (!empty($value)) {
+                        $parameters[] = $this->getDatesParameterValue($contentTypeField, $value);
+                    }
+
                     break;
             }
         }

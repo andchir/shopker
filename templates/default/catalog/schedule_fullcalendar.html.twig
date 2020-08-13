@@ -47,7 +47,7 @@
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
-                    right: '{{ fieldData.outputProperties.headerToolbar_right | default('dayGridMonth,timeGridWeek,timeGridDay') }}'
+                    right: '{% if fieldData.outputProperties.headerToolbar_right is defined %}{{ fieldData.outputProperties.headerToolbar_right }}{% endif %}'
                 },
                 iconClasses: {
                     close: 'icon-cross',

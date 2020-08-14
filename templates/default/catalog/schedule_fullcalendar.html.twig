@@ -47,7 +47,7 @@
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
-                    right: '{% if fieldData.outputProperties.headerToolbar_right is defined %}{{ fieldData.outputProperties.headerToolbar_right }}{% endif %}'
+                    right: '{% if fieldData.outputProperties.headerToolbar_right is defined %}{{ fieldData.outputProperties.headerToolbar_right }}{% else %}dayGridMonth,timeGridWeek,timeGridDay{% endif %}'
                 },
                 iconClasses: {
                     close: 'icon-cross',
@@ -105,6 +105,14 @@
                             borderColor: '#1d8c3c',
                             overlap: false
                         });
+                    }
+                },
+                eventClick: function(info) {
+                    if (!info.event.startEditable) {
+                        return;
+                    }
+                    if (confirm('{{ 'Cancel reservation?' | trans }}')) {
+                        info.event.remove();
                     }
                 },
                 eventAdd: function(addInfo) {

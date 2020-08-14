@@ -54,6 +54,7 @@ class CartController extends BaseController
      * @param Request $request
      * @return Response
      * @throws \Doctrine\ODM\MongoDB\MongoDBException
+     * @throws \Twig\Error\RuntimeError
      */
     public function actionResponseAction(Request $request)
     {

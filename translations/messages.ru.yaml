@@ -116,6 +116,8 @@ Reservation: Бронирование
 Reserved: Занято
 New booking: Новая бронь
 Are you sure you want to reserve this time?: Вы уверены, что хотите забранировать это время?
+Are you sure you want to cancel your booking?: Вы уверены, что хотите отменить бронирование?
+Cancel reservation?: Отменить бронирование?
 Select time: Выбрать время
 Select date: Выбрать дату
 Start date: Дата начала

@@ -181,6 +181,7 @@ class OrderSubscriber implements EventSubscriberInterface
 
     /**
      * @param Order $order
+     * @throws \Exception
      */
     public function updateSchedule(Order $order)
     {
@@ -219,41 +220,72 @@ class OrderSubscriber implements EventSubscriberInterface
                         continue;
                     }
 
-                    $dateStart = $this->createDateObject($valueArr[0], $outputDateFormat);
+                    list($dateStart, $dateStartHasTime) = $this->createDateObject($valueArr[0], $outputDateFormat, true);
                     if (!$dateStart) {
                         continue;
                     }
-                    $dateEnd = isset($valueArr[1])
-                        ? $this->createDateObject($valueArr[1], $outputDateFormat)
-                        : (clone $dateStart)->add(new \DateInterval('P1D'));
+                    list($dateEnd, $dateEndHasTime) = isset($valueArr[1])
+                        ? $this->createDateObject($valueArr[1], $outputDateFormat, true)
+                        : [(clone $dateStart)->add(new \DateInterval('P1D')), $dateStartHasTime];
                     if (!$dateEnd) {
                         continue;
                     }
 
-                    // TODO: update schedule dates for product
+                    $currentValue = $productDocument[$contentTypeField['name']] ?? [];
 
+                    $currentValue[] = [
+                        'id' => $this->getScheduleEventId($currentValue),
+                        'title' => $order->getFullName() ?: $order->getEmail(),
+                        'start' => $dateStartHasTime ? $dateStart->format('Y-m-d\TH:i:sP') : $dateStart->format('Y-m-d'),
+                        'end' => $dateEndHasTime ? $dateEnd->format('Y-m-d\TH:i:sP') : $dateEnd->format('Y-m-d')
+                    ];
+
+                    try {
+                        $result = $collection->updateOne(
+                            ['_id' => $content->getId()],
+                            ['$set' => array_combine([$contentTypeField['name']], [$currentValue])]
+                        );
+                    } catch (\Exception $e) {
+                        $result = false;
+                    }
                 }
             }
-
-            // var_dump($content->toArray()); exit;
-
         }
+    }
+
+    /**
+     * @param array $events
+     * @return int
+     */
+    public function getScheduleEventId($events)
+    {
+        if (empty($events)) {
+            return 1;
+        }
+        $output = 0;
+        foreach ($events as $event) {
+            if (isset($event['id']) && intval($event['id']) > $output) {
+                $output = intval($event['id']);
+            }
+        }
+        return $output + 1;
     }
 
     /**
      * @param string $dateStr
      * @param string $outputDateFormat
-     * @return \DateTime|false
+     * @param bool $returnArray
+     * @return array|\DateTime|false
      */
-    public function createDateObject($dateStr, $outputDateFormat)
+    public function createDateObject($dateStr, $outputDateFormat, $returnArray = false)
     {
+        $hasTime = strpos($outputDateFormat, 'H:i:s') !== false || strpos($dateStr, 'H:i') !== false;
         $date = \DateTime::createFromFormat($outputDateFormat, $dateStr);
         if (!$date) {
             $outputDateFormatDays = trim(str_replace(['H:i:s', 'H:i'], '', $outputDateFormat));
-            var_dump($dateStr, $outputDateFormat, $outputDateFormatDays);
             $date = \DateTime::createFromFormat($outputDateFormatDays, $dateStr);
         }
-        return $date;
+        return $returnArray ? [$date, $hasTime] : $date;
     }
 
     /**

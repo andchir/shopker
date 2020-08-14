@@ -235,7 +235,7 @@ class OrderSubscriber implements EventSubscriberInterface
 
                     $currentValue[] = [
                         'id' => $this->getScheduleEventId($currentValue),
-                        'title' => $order->getFullName() ?: $order->getEmail(),
+                        'title' => ($order->getFullName() ?: $order->getEmail()) . ' (' . $order->getId() . ')',
                         'start' => $dateStartHasTime ? $dateStart->format('Y-m-d\TH:i:sP') : $dateStart->format('Y-m-d'),
                         'end' => $dateEndHasTime ? $dateEnd->format('Y-m-d\TH:i:sP') : $dateEnd->format('Y-m-d')
                     ];

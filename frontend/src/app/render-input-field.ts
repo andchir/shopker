@@ -668,7 +668,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                     clickInfo.event.remove();
                     const event = clickInfo.event.toPlainObject();
                     const index = this.fullCalendarEvents[fieldName].findIndex((item) => {
-                        return item.id === event.id;
+                        return String(item.id) === String(event.id);
                     });
                     if (index > -1) {
                         this.fullCalendarEvents[fieldName].splice(index, 1);
@@ -688,7 +688,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
     handleFullCalendarEventChange(fieldName: string, api: EventChangeArg): void {
         const event = api.event.toPlainObject();
         const index = this.fullCalendarEvents[fieldName].findIndex((item) => {
-            return item.id === event.id;
+            return String(item.id) === String(event.id);
         });
         if (index > -1) {
             Object.assign(this.fullCalendarEvents[fieldName][index], event);

@@ -164,7 +164,7 @@ class CartController extends BaseController
 
         $options = [];
         $files = [];
-        $parameters = $this->getProductParameters($request, $productDocument, $contentTypeFields);
+        $parameters = $this->getProductParameters($request, $productDocument, $contentType);
         $missedParameters = $this->checkParametersRequired($contentTypeFields, $parameters);
 
         if (!empty($missedParameters)) {
@@ -484,12 +484,13 @@ class CartController extends BaseController
     /**
      * @param Request $request
      * @param array $productDocument
-     * @param array $contentTypeFields
+     * @param ContentType $contentType
      * @return array
      */
-    public function getProductParameters(Request $request, $productDocument, $contentTypeFields)
+    public function getProductParameters(Request $request, $productDocument, $contentType)
     {
         $postData = $request->request->all();
+        $contentTypeFields = $contentType->getFields();
         $parameters = [];
         foreach ($postData as $key => $value) {
             if (strpos($key, 'param__') === false) {
@@ -562,7 +563,9 @@ class CartController extends BaseController
                             || ShopCartService::validateDateTime($val, 'Y-m-d\TH:i:sP');
                     });
                     if (!empty($value)) {
-                        $parameters[] = $this->getDatesParameterValue($contentTypeField, $value);
+                        $priceField = $contentType->getPriceFieldName();
+                        $productPrice = $priceField ? ($productDocument[$priceField] ?? 0) : 0;
+                        $parameters[] = $this->getDatesParameterValue($contentTypeField, $value, $productPrice);
                     }
 
                     break;
@@ -611,27 +614,54 @@ class CartController extends BaseController
     
     /**
      * @param array $contentTypeField
-     * @param array $value
+     * @param array $valueArr
+     * @param float|int $productPrice
      * @return array
+     * @throws \Exception
      */
-    public function getDatesParameterValue($contentTypeField, $value)
+    public function getDatesParameterValue($contentTypeField, $valueArr, $productPrice)
     {
         $outputDateFormat = $contentTypeField['outputProperties']['outputFormat'] ?? 'd/m/Y H:i';
-        $value = array_map(function($val) use ($outputDateFormat) {
-            if (ShopCartService::validateDateTime($val, 'Y-m-d')) {
-                $date = \DateTime::createFromFormat('Y-m-d', $val);
-                if (strpos($outputDateFormat, 'H:i') !== false) {
-                    $outputDateFormat = str_replace([' H:i:s', ' H:i'], '', $outputDateFormat);
-                }
-            } else {
-                $date = \DateTime::createFromFormat('Y-m-d\TH:i:sP', $val);
+        $slotDuration = $contentTypeField['outputProperties']['slotDuration'] ?? '00:30:00';
+        $inputDateFormat = 'Y-m-d\TH:i:sP';
+        $price = 0;
+    
+        /** @var \DateTime $dateStart */
+        list($dateStart, $dateStartHasTime) = ShopCartService::createDateObject($valueArr[0], $inputDateFormat, true);
+        /** @var \DateTime $dateEnd */
+        list($dateEnd, $dateEndHasTime) = isset($valueArr[1])
+            ? ShopCartService::createDateObject($valueArr[1], $inputDateFormat, true)
+            : [($dateStart ? (clone $dateStart)->add(new \DateInterval('P1D')) : null), $dateStartHasTime];
+        
+        // Get price
+        if ($dateStart && $dateEnd && $slotDuration) {
+            $diff = $dateEnd->diff($dateStart);
+            $diffMinutes = ShopCartService::getTotalMinutes($diff);
+            list($sHours, $sMinutes) = explode(':', $slotDuration);
+            $sHours = (int) $sHours;
+            $sMinutes = (int) $sMinutes;
+            $sMinutes += $sHours * 60;
+            $minutesDiff = $diffMinutes / $sMinutes;
+            if ($minutesDiff > 1) {
+                $price = $productPrice * ($minutesDiff - 1);
             }
-            return $date ? $date->format($outputDateFormat) : '';
-        }, $value);
+        }
+    
+        if (!$dateStartHasTime) {
+            $outputDateFormat = str_replace([' H:i:s', ' H:i'], '', $outputDateFormat);
+        }
+        $outputDates = [];
+        if ($dateStart) {
+            $outputDates[] = $dateStart->format($outputDateFormat);
+        }
+        if ($dateEnd) {
+            $outputDates[] = $dateEnd->format($outputDateFormat);
+        }
+        
         return [
             'name' => $contentTypeField['title'],
-            'value' => implode(' - ', $value),
-            'price' => 0
+            'value' => implode(' - ', $outputDates),
+            'price' => $price
         ];
     }
 

@@ -9,6 +9,7 @@ use App\Events;
 use App\MainBundle\Document\OrderContent;
 use App\Service\CatalogService;
 use App\Service\SettingsService;
+use App\Service\ShopCartService;
 use App\Service\UtilsService;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -220,12 +221,12 @@ class OrderSubscriber implements EventSubscriberInterface
                         continue;
                     }
 
-                    list($dateStart, $dateStartHasTime) = $this->createDateObject($valueArr[0], $outputDateFormat, true);
+                    list($dateStart, $dateStartHasTime) = ShopCartService::createDateObject($valueArr[0], $outputDateFormat, true);
                     if (!$dateStart) {
                         continue;
                     }
                     list($dateEnd, $dateEndHasTime) = isset($valueArr[1])
-                        ? $this->createDateObject($valueArr[1], $outputDateFormat, true)
+                        ? ShopCartService::createDateObject($valueArr[1], $outputDateFormat, true)
                         : [(clone $dateStart)->add(new \DateInterval('P1D')), $dateStartHasTime];
                     if (!$dateEnd) {
                         continue;
@@ -269,23 +270,6 @@ class OrderSubscriber implements EventSubscriberInterface
             }
         }
         return $output + 1;
-    }
-
-    /**
-     * @param string $dateStr
-     * @param string $outputDateFormat
-     * @param bool $returnArray
-     * @return array|\DateTime|false
-     */
-    public function createDateObject($dateStr, $outputDateFormat, $returnArray = false)
-    {
-        $hasTime = strpos($outputDateFormat, 'H:i:s') !== false || strpos($dateStr, 'H:i') !== false;
-        $date = \DateTime::createFromFormat($outputDateFormat, $dateStr);
-        if (!$date) {
-            $outputDateFormatDays = trim(str_replace(['H:i:s', 'H:i'], '', $outputDateFormat));
-            $date = \DateTime::createFromFormat($outputDateFormatDays, $dateStr);
-        }
-        return $returnArray ? [$date, $hasTime] : $date;
     }
 
     /**

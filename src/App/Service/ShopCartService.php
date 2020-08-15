@@ -367,4 +367,30 @@ class ShopCartService
         $date = \DateTime::createFromFormat($format, $dateStr);
         return $date && ($date->format($format) === $dateStr);
     }
+    
+    /**
+     * @param string $dateStr
+     * @param $outputDateFormat
+     * @param bool $returnArray
+     * @return array|\DateTime|false
+     */
+    public static function createDateObject($dateStr, $outputDateFormat, $returnArray = false)
+    {
+        $hasTime = true;
+        $date = \DateTime::createFromFormat($outputDateFormat, $dateStr);
+        if (!$date) {
+            $outputDateFormatDays = trim(str_replace(['\TH:i:sP', 'H:i:s', 'H:i'], '', $outputDateFormat));
+            $date = \DateTime::createFromFormat($outputDateFormatDays, $dateStr);
+            $hasTime = false;
+        }
+        return $returnArray ? [$date, $hasTime] : $date;
+    }
+    
+    /**
+     * @param \DateInterval $interval
+     * @return float|int
+     */
+    public static function getTotalMinutes(\DateInterval $interval){
+        return ($interval->d * 24 * 60) + ($interval->h * 60) + $interval->i;
+    }
 }

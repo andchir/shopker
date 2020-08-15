@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% use 'catalog/schedule_fullcalendar.html.twig' with body as schedule_body, stylesheets as schedule_stylesheets, javascripts as schedule_javascripts %}
+
 {% set favoritesCount = shopCartProductCount('products', 'favorites') %}
 {% set favoritesItemCount = shopCartProductCount('products', 'favorites', currentPage.id) %}
 
@@ -62,6 +64,10 @@
                             {{ renderOutputTypeChunk(currentPage, fields, 'parameters', 'page_') }}
                             {{ renderOutputTypeChunk(currentPage, fields, 'file') }}
 
+                            {% if getFieldNameByChunk('schedule', fields) is not empty -%}
+                                {{ block('schedule_body') }}
+                            {% endif -%}
+
                             {% if currentPage.price > 0 %}
                                 <div class="my-3">
                                     {{ 'Price' | trans }}:
@@ -75,9 +81,9 @@
                                         {{ 'Proceed to checkout' | trans }}
                                     </a>
                                 {% else %}
-                                    <input type="number" class="form-control d-inline-block text-center mr-2" value="1" min="1" step="1" name="count" style="width: 100px;">
+                                    <input type="hidden" value="1" name="count">
                                     <button type="submit" class="btn btn-primary" name="submit_button">
-                                        {{ 'Add to cart' | trans }}
+                                        {{ 'Book now' | trans }}
                                     </button>
                                 {% endif %}
                             </div>
@@ -97,10 +103,16 @@
 {% block stylesheets -%}
     {{ parent() }}
     <link href="{{ asset('bundles/comments/css/comments.css') }}" rel="stylesheet">
+    {% if getFieldNameByChunk('schedule', fields) is not empty -%}
+        {{ block('schedule_stylesheets') }}
+    {% endif -%}
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
+    {% if getFieldNameByChunk('schedule', fields) is not empty -%}
+        {{ block('schedule_javascripts') }}
+    {% endif -%}
 
     <script>
         var shoppingCart;

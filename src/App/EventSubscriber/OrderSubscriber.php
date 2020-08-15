@@ -233,6 +233,9 @@ class OrderSubscriber implements EventSubscriberInterface
                     }
 
                     $currentValue = $productDocument[$contentTypeField['name']] ?? [];
+                    if (!is_array($currentValue)) {
+                        $currentValue = [];
+                    }
 
                     $currentValue[] = [
                         'id' => $this->getScheduleEventId($currentValue),

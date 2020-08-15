@@ -97,7 +97,6 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
     categoriesSelection: {[key: string]: any} = {};
     calendarLocale = calendarLocale;
     fullCalendarOptions: {[key: string]: CalendarOptions};
-    fullCalendarEvents: {[key: string]: EventInput[]};
 
     constructor(
         private changeDetectionRef: ChangeDetectorRef,
@@ -198,10 +197,6 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                 if (!this.fullCalendarOptions) {
                     this.fullCalendarOptions = {};
                 }
-                if (!this.fullCalendarEvents) {
-                    this.fullCalendarEvents = {};
-                }
-                this.fullCalendarEvents[field.name] = this.model[field.name] || [];
                 this.fullCalendarOptions[field.name] = {
                     headerToolbar: {
                         left: 'prev,next today',
@@ -215,9 +210,10 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                     editable: true,
                     selectable: true,
                     selectMirror: true,
-                    dayMaxEvents: true,
+                    dayMaxEvents: false,
+                    navLinks: true,
                     slotDuration: '0:10:00',
-                    initialEvents: this.fullCalendarEvents[field.name],
+                    initialEvents: this.model[field.name],
                     select: (selectInfo: DateSelectArg) => {
                         this.handleFullCalendarDateSelect(field.name, selectInfo);
                     },
@@ -346,6 +342,12 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                 });
 
                 break;
+            case 'schedule':
+            case 'parameters':
+    
+                if (!Array.isArray(this.model[field.name])) {
+                    this.model[field.name] = [];
+                }
         }
     }
 
@@ -370,6 +372,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
             case 'number':
                 defaultValue = defaultValue ? parseFloat(String(defaultValue)) : null;
                 break;
+            case 'schedule':
             case 'parameters':
                 if (typeof defaultValue !== 'object') {
                     defaultValue = defaultValue ? JSON.parse(defaultValue) : [];
@@ -545,7 +548,7 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
     }
 
     parametersRemove(fieldName: string, index: number): void {
-        if (typeof this.model[fieldName] === 'object') {
+        if (Array.isArray(this.model[fieldName])) {
             this.model[fieldName].splice(index, 1);
         }
     }
@@ -667,39 +670,36 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                 if (confirm(translatedString)) {
                     clickInfo.event.remove();
                     const event = clickInfo.event.toPlainObject();
-                    const index = this.fullCalendarEvents[fieldName].findIndex((item) => {
+                    const index = this.model[fieldName].findIndex((item) => {
                         return String(item.id) === String(event.id);
                     });
                     if (index > -1) {
-                        this.fullCalendarEvents[fieldName].splice(index, 1);
-                        this.fullCalendarOptions[fieldName].initialEvents = this.fullCalendarEvents[fieldName];
-                        this.model[fieldName] = this.fullCalendarEvents[fieldName];
+                        this.model[fieldName].splice(index, 1);
+                        this.fullCalendarOptions[fieldName].initialEvents = this.model[fieldName];
                     }
                 }
             });
     }
     
     handleFullCalendarEventAdd(fieldName: string, api: EventAddArg): void {
-        this.fullCalendarEvents[fieldName] = [...this.fullCalendarEvents[fieldName], api.event.toJSON()];
-        this.fullCalendarOptions[fieldName].initialEvents = this.fullCalendarEvents[fieldName];
-        this.model[fieldName] = this.fullCalendarEvents[fieldName];
+        this.model[fieldName] = [...this.model[fieldName], api.event.toJSON()];
+        this.fullCalendarOptions[fieldName].initialEvents = this.model[fieldName];
     }
     
     handleFullCalendarEventChange(fieldName: string, api: EventChangeArg): void {
         const event = api.event.toPlainObject();
-        const index = this.fullCalendarEvents[fieldName].findIndex((item) => {
+        const index = this.model[fieldName].findIndex((item) => {
             return String(item.id) === String(event.id);
         });
         if (index > -1) {
-            Object.assign(this.fullCalendarEvents[fieldName][index], event);
-            this.fullCalendarOptions[fieldName].initialEvents = this.fullCalendarEvents[fieldName];
-            this.model[fieldName] = this.fullCalendarEvents[fieldName];
+            Object.assign(this.model[fieldName][index], event);
+            this.fullCalendarOptions[fieldName].initialEvents = this.model[fieldName];
         }
     }
     
     fullCalendarCreateId(fieldName: string): string {
         let lastId = 0;
-        this.fullCalendarEvents[fieldName].forEach((item) => {
+        this.model[fieldName].forEach((item) => {
             if (parseInt(item.id, 10) > lastId) {
                 lastId = parseInt(item.id, 10);
             }

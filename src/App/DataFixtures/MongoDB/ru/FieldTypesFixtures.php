@@ -646,6 +646,11 @@ class FieldTypesFixtures extends Fixture implements FixtureGroupInterface
                         'default_value' => 'd/m/Y H:i'
                     ],
                     [
+                        'name' => 'allDaySlot',
+                        'title' => 'Возможность бронирования полного дня',
+                        'default_value' => '1'
+                    ],
+                    [
                         'name' => 'required',
                         'title' => 'Обязательный',
                         'default_value' => '1'

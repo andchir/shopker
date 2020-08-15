@@ -646,6 +646,11 @@ class FieldTypesFixtures extends Fixture implements FixtureGroupInterface
                         'default_value' => 'd/m/Y H:i'
                     ],
                     [
+                        'name' => 'allDaySlot',
+                        'title' => 'Full day booking option',
+                        'default_value' => '1'
+                    ],
+                    [
                         'name' => 'required',
                         'title' => 'Required',
                         'default_value' => '1'

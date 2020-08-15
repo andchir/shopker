@@ -67,6 +67,7 @@
                 editable: false,
                 selectable: true,
                 dayMaxEvents: false,
+                allDaySlot: {% if fieldData.outputProperties.allDaySlot %}true{% else %}false{% endif %},
                 select: function(selectInfo) {
                     var calendarApi = selectInfo.view.calendar;
                     var events = calendarApi.getEvents();

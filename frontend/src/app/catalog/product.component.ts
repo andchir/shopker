@@ -32,6 +32,7 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
     currentContentType: ContentType = new ContentType(0, '', '', '', '', [], [], true);
     model = {} as Product;
     timer: any;
+    dataLoaded = false;
 
     formFields: FormFieldInterface = {
         parentId: {
@@ -96,13 +97,16 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
                     return Promise.reject('');
                 }
             }, (err) => {
+                this.dataLoaded = true;
                 this.errorMessage = err.error || 'Error.';
                 return Promise.reject('');
             })
             .then((data) => {
+                this.dataLoaded = true;
                 this.onAfterGetData();
                 this.updateForm();
             }, () => {
+                this.dataLoaded = true;
                 this.onAfterGetData();
             });
     }
@@ -124,11 +128,9 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
     }
 
     getCategories() {
-        this.loading = true;
         this.categoriesService.getListPage()
             .subscribe(data => {
                 this.categories = data.items;
-                this.loading = false;
             }, (err) => {
                 this.errorMessage = err.error || 'Error.';
             });

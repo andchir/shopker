@@ -2,8 +2,6 @@ import {
     Component,
     OnInit,
     Input,
-    OnChanges,
-    SimpleChange,
     ChangeDetectorRef,
     Output,
     EventEmitter, ViewChild
@@ -75,7 +73,7 @@ export const calendarLocale = {
     templateUrl: 'templates/render-input-field.html',
     providers: []
 })
-export class InputFieldRenderComponent implements OnInit, OnChanges {
+export class InputFieldRenderComponent implements OnInit {
 
     @Input() fields: ContentField[];
     @Input() groups: string[];
@@ -109,21 +107,8 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
     }
 
     ngOnInit(): void {
+        this.getCategoriesTree(true);
         this.buildControls();
-    }
-
-    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-        this.buildControls();
-        const changedKeys = Object.keys(changes);
-        const fieldNames = map(this.fields, (field) => {
-            return field.name;
-        });
-        if (this.categoriesTree.length === 0 && fieldNames.indexOf('categories') === -1) {
-            this.getCategoriesTree();
-        }
-        if (changedKeys.indexOf('model') > -1) {
-            this.updateTreeSelections();
-        }
     }
 
     buildControls() {
@@ -488,12 +473,15 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
         return FileData.getImageUrl(this.filesDirBaseUrl, fileData);
     }
 
-    getCategoriesTree(): void {
+    getCategoriesTree(updateTreeSelections = false): void {
         this.loadingCategories = true;
         this.categoriesService.getTree()
             .subscribe((data) => {
                 this.categoriesTree = data;
                 this.loadingCategories = false;
+                if (updateTreeSelections) {
+                    this.updateTreeSelections();
+                }
             }, (err) => {
                 this.loadingCategories = false;
             });
@@ -509,10 +497,10 @@ export class InputFieldRenderComponent implements OnInit, OnChanges {
                     this.model[field.name].forEach((id) => {
                         const category = this.getCategoryById(id, this.categoriesTree);
                         if (category) {
-                            const parent = this.getCategoryById(category.parentId, this.categoriesTree);
-                            if (parent) {
-                                category.parent = parent;
-                            }
+                            // const parent = this.getCategoryById(category.parentId, this.categoriesTree);
+                            // if (parent) {
+                            //     category.parent = parent;
+                            // }
                             this.categoriesSelection[field.name].push(category);
                         }
                     });

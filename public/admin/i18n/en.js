@@ -173,6 +173,7 @@ var APP_LANG = {
     "STATUS": "Status",
     "STYLES": "Styles",
     "SYSTEM_NAME": "System name",
+    "SYSTEM_UPDATE": "System update",
     "TEMPLATES": "Templates",
     "TEMPLATE": "Template",
     "TEMPLATE_THEME_NAME": "Template theme",

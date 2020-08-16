@@ -9,6 +9,7 @@
         </div>
 
         <div class="float-md-right">
+            
             <div ngbDropdown class="d-block d-md-inline-block" placement="bottom-right">
                 <button class="btn btn-info btn-sm d-block d-md-inline-block width-100 width-md-auto mb-2 mb-md-0" ngbDropdownToggle>
                     <i class="icon-repeat"></i>
@@ -499,8 +500,16 @@
                         <ng-template ngbPanelContent>
 
                             <div [ngClass]="{'loading': settings.SETTINGS_COMPOSER_PACKAGES.loading}">
+                                
+                                <div class="float-right">
+                                    <button type="button" class="btn btn-sm btn-success">
+                                        <span class="icon-arrow-down-circle"></span>
+                                        {{ 'SYSTEM_UPDATE' | translate }}
+                                    </button>
+                                </div>
+                                
                                 <div class="pb-3 text-muted">
-                                    {{'SETTINGS_COMPOSER_PACKAGES_DESCRIPTION' | translate}}
+                                    {{ 'SETTINGS_COMPOSER_PACKAGES_DESCRIPTION' | translate }}
                                 </div>
 
                                 <div class="form-control-search mb-3" [ngClass]="{'form-control-search-clear': !!composerPackageNameFilter}">

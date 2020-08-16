@@ -5,12 +5,14 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {cloneDeep, findIndex, cloneDeepWith, extend} from 'lodash';
 import {MessageService} from 'primeng/api';
+import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 
 import {Setting, SettingOption, SettingsGroup, SettingsData} from './models/setting.model';
 import {AppSettings} from '../services/app-settings.service';
 import {SettingsService} from './settings.service';
 import {TranslateService} from '@ngx-translate/core';
 import {ComposerPackage} from './models/composer-package.interface';
+import {ModalSystemUpdateComponent} from './modal-system-update.component';
 
 @Component({
     selector: 'app-settings',
@@ -19,7 +21,7 @@ import {ComposerPackage} from './models/composer-package.interface';
 })
 export class SettingsComponent implements OnInit {
     static title = 'SETTINGS';
-
+    
     baseUrl: string;
     loading = false;
     forms: {[key: string]: FormGroup} = {};
@@ -27,6 +29,7 @@ export class SettingsComponent implements OnInit {
     composerPackageName = '';
     composerPackageVersion = '';
     composerPackageNameFilter = '';
+    modalRef: NgbModalRef;
     settings = {
         SETTINGS_MAIN: new SettingsData(false, true, [], null),
         SETTINGS_ORDER_STATUSES: new SettingsData(
@@ -69,6 +72,7 @@ export class SettingsComponent implements OnInit {
         private messageService: MessageService,
         private settingsService: SettingsService,
         private appSettings: AppSettings,
+        private modalService: NgbModal,
         public translateService: TranslateService
     ) {
         this.baseUrl = this.appSettings.settings.webApiUrl + '/';
@@ -294,6 +298,22 @@ export class SettingsComponent implements OnInit {
                     this.settings.SETTINGS_COMPOSER_PACKAGES.loading = false;
                 }
             });
+    }
+    
+    modalSystemUpdate(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        if (this.modalRef) {
+            this.modalRef.dismiss();
+            this.modalRef = null;
+        }
+    
+        this.modalRef = this.modalService.open(ModalSystemUpdateComponent, {
+            backdrop: 'static',
+            keyboard: false
+        });
+        
     }
 
     onValueChanged(groupName: string): void {

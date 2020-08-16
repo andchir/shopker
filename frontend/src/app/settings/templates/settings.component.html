@@ -502,7 +502,7 @@
                             <div [ngClass]="{'loading': settings.SETTINGS_COMPOSER_PACKAGES.loading}">
                                 
                                 <div class="float-right">
-                                    <button type="button" class="btn btn-sm btn-success">
+                                    <button type="button" class="btn btn-sm btn-success" (click)="modalSystemUpdate($event)">
                                         <span class="icon-arrow-down-circle"></span>
                                         {{ 'SYSTEM_UPDATE' | translate }}
                                     </button>

@@ -4,6 +4,7 @@ import {CommonModule} from '@angular/common';
 import {SharedModule} from '../shared.module';
 import {SettingsRoutingModule} from './settings-routing.module';
 import {SettingsComponent} from './settings.component';
+import {ModalSystemUpdateComponent} from './modal-system-update.component';
 
 @NgModule({
     imports: [
@@ -13,7 +14,11 @@ import {SettingsComponent} from './settings.component';
     ],
     providers: [],
     declarations: [
-        SettingsComponent
+        SettingsComponent,
+        ModalSystemUpdateComponent
+    ],
+    entryComponents: [
+        ModalSystemUpdateComponent
     ]
 })
 export class SettingsModule {

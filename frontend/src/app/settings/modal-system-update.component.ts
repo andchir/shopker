@@ -1,34 +1,77 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, OnDestroy, ViewChild} from '@angular/core';
 
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import {Subject} from 'rxjs';
+
 import {FileWidgetComponent} from '../components/file-widget.component';
+import {SettingsService} from './settings.service';
+import {takeUntil} from "rxjs/operators";
 
 @Component({
     selector: 'app-modal-file-upload',
     templateUrl: 'templates/modal-system-update.component.html'
 })
-export class ModalSystemUpdateComponent {
+export class ModalSystemUpdateComponent implements OnDestroy {
     
-    messageText: string;
-    @ViewChild('filesWidget', { static: true }) filesWidget: FileWidgetComponent;
+    @ViewChild('filesWidget') filesWidget: FileWidgetComponent;
+    errorMessage: string;
+    loading = false;
+    destroyed$ = new Subject<void>();
+    stepNumber = 1;
     
     constructor(
-        public activeModal: NgbActiveModal
+        private activeModal: NgbActiveModal,
+        private dataService: SettingsService
     ) {
     }
     
-    submitHandler(event?: MouseEvent): void {
+    nextStepHandler(event?: MouseEvent): void {
         if (event) {
             event.preventDefault();
         }
-        this.messageText = '';
-        if (this.filesWidget.filesRaw.length === 0) {
-            this.messageText = 'PLEASE_SELECT_FILE';
-            return;
-        }
-        // this.activeModal.close(this.filesWidget.filesRaw);
+        this.errorMessage = '';
         
-        console.log(this.filesWidget.filesRaw);
+        switch (this.stepNumber) {
+            case 1:
+    
+                if (this.filesWidget.filesRaw.length === 0) {
+                    this.errorMessage = 'PLEASE_SELECT_FILE';
+                    return;
+                }
+    
+                const formData = new FormData();
+                formData.append('file', this.filesWidget.filesRaw[0]);
+    
+                this.loading = true;
+                this.dataService.postFormData(formData, 'admin/system_update/upload')
+                    .pipe(takeUntil(this.destroyed$))
+                    .subscribe({
+                        next: (res) => {
+                            this.loading = false;
+                            this.stepNumber = 2;
+                        },
+                        error: (err) => {
+                            if (err['error']) {
+                                this.errorMessage = err['error'];
+                            }
+                            this.loading = false;
+                        }
+                    });
+                
+                break;
+            case 2:
+        
+                
+                
+                break;
+            case 3:
+        
+                break;
+        }
     }
     
+    ngOnDestroy(): void {
+        this.destroyed$.next();
+        this.destroyed$.complete();
+    }
 }

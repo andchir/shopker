@@ -90,7 +90,8 @@ class SettingsController extends AbstractController
      * @throws \Exception
      */
     public function updateGroupAction(
-        Request $request, $groupName,
+        Request $request,
+        $groupName,
         SettingsService $settingsService,
         TranslatorInterface $translator,
         TwigEnvironment $twig

@@ -44,6 +44,7 @@ var APP_LANG = {
     "CONTENT_COUNT": "Number of products",
     "CONTENT_TYPE": "Content type",
     "CONTENT_TYPES": "Content types",
+    "CONTINUE": "Continue",
     "COPY": "Copy",
     "COPY_CATEGORY": "Copy category",
     "COPY_TO_CLIPBOARD": "Copy to clipboard",

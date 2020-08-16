@@ -44,6 +44,7 @@ var APP_LANG = {
     "CONTENT_COUNT": "Кол-во товаров",
     "CONTENT_TYPE": "Тип контента",
     "CONTENT_TYPES": "Типы контента",
+    "CONTINUE": "Продолжить",
     "COPY": "Копировать",
     "COPY_CATEGORY": "Копировать категорию",
     "COPY_TO_CLIPBOARD": "Копировать в буффер обмена",

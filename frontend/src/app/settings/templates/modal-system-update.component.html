@@ -1,30 +1,55 @@
-<div class="modal-header d-block">
-    <h4 class="modal-title">{{ 'SYSTEM_UPDATE' | translate }}</h4>
-</div>
-<div class="modal-body" #modalBody>
+<div [ngClass]="{'no-events loading': loading}">
     
-    <div>
-        <app-file-widget
-            fieldName="zipFile"
-            [hasPreviewImage]="false"
-            [allowMultiple]="false"
-            [allowedExtensions]="'.zip'"
-            #filesWidget></app-file-widget>
+    <div class="modal-header d-block">
+        <h4 class="modal-title text-success">
+            <i class="icon-arrow-up-circle"></i>
+            {{ 'SYSTEM_UPDATE' | translate }}
+        </h4>
     </div>
+    <div class="modal-body">
+        
+        <div>
+            <div class="mb-3" [ngClass]="{'text-muted': stepNumber != 1}">
+                <i class="icon-check-circle mr-2 text-success" *ngIf="stepNumber > 1; else iconCircleTemplate"></i>
+                Uploading ZIP archive with system files.
+            </div>
+            <div class="mb-3" [ngClass]="{'text-muted': stepNumber != 2}">
+                <i class="icon-check-circle mr-2 text-success" *ngIf="stepNumber > 2; else iconCircleTemplate"></i>
+                Checking file contents and system settings.
+            </div>
+            <div class="mb-3" [ngClass]="{'text-muted': stepNumber != 3}">
+                <i class="icon-check-circle mr-2 text-success" *ngIf="stepNumber > 3; else iconCircleTemplate"></i>
+                Updating all system components.
+            </div>
+            <ng-template #iconCircleTemplate>
+                <i class="icon-circle mr-2"></i>
+            </ng-template>
+        </div>
+        <div *ngIf="stepNumber == 1">
+            <app-file-widget
+                fieldName="file"
+                [hasPreviewImage]="false"
+                [allowMultiple]="false"
+                [allowedExtensions]="'.zip'"
+                #filesWidget></app-file-widget>
+        </div>
+        
+        <div class="alert alert-danger mt-3 mb-0" *ngIf="errorMessage">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="errorMessage = ''">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {{ errorMessage | translate }}
+        </div>
     
-    <div class="alert alert-info mt-3 mb-0" *ngIf="messageText">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="messageText = ''">
-            <span aria-hidden="true">&times;</span>
+    </div>
+    <div class="modal-footer d-block pt-0">
+        <button type="button" class="btn btn-primary btn-wide" (click)="nextStepHandler($event)" [disabled]="loading">
+            {{ 'CONTINUE' | translate }}
+            <i class="icon-arrow-right ml-2"></i>
         </button>
-        {{ messageText | translate }}
+        <button type="button" class="btn btn-secondary btn-wide" (click)="activeModal.close()" [disabled]="loading">
+            {{ 'CLOSE' | translate }}
+        </button>
     </div>
 
-</div>
-<div class="modal-footer d-block pt-0">
-    <button type="button" class="btn btn-primary btn-wide" (click)="submitHandler($event)">
-        {{ 'UPLOAD' | translate }}
-    </button>
-    <button type="button" class="btn btn-secondary btn-wide" (click)="activeModal.close()">
-        {{ 'CLOSE' | translate }}
-    </button>
 </div>

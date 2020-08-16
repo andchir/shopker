@@ -497,10 +497,10 @@ export class InputFieldRenderComponent implements OnInit {
                     this.model[field.name].forEach((id) => {
                         const category = this.getCategoryById(id, this.categoriesTree);
                         if (category) {
-                            // const parent = this.getCategoryById(category.parentId, this.categoriesTree);
-                            // if (parent) {
-                            //     category.parent = parent;
-                            // }
+                            const parent = this.getCategoryById(category.parentId, this.categoriesTree);
+                            if (parent) {
+                                category.parent = parent;
+                            }
                             this.categoriesSelection[field.name].push(category);
                         }
                     });

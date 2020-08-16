@@ -1,5 +1,6 @@
 4.2.2
 - Integration with FullCalendar (https://fullcalendar.io/).
+- Fixed problem with displaying selected additional product categories.
 
 4.2.1
 - Fixed issue with updating filter values while saving content type.

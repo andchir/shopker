@@ -315,7 +315,7 @@ class SettingsController extends AbstractController
         // Update JS files
         foreach ($lang as $k => $value) {
             $targetFilePath = $jsPublicDirPath . "/{$k}.js";
-            if (!is_writable($targetFilePath)) {
+            if (file_exists($targetFilePath) && !is_writable($targetFilePath)) {
                 throw new \Exception('File is not writable.');
             }
             $content  = 'var APP_LANG = ';

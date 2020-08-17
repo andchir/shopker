@@ -47,3 +47,4 @@ Your cart is empty.: Ваша корзина пуста.
 'These products are not available in the quantity you need in stock: %list%.': 'Товары отсутствуют в необходимом количестве на складе: %list%.'
 Your user has read-only permission.: Ваш пользователь имеет разрешение только на чтение.
 A file with the same name already exists.: Файл с таким именем уже существует.
+Error unpacking archive.: Ошибка при распаковке архива.

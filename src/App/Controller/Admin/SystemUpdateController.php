@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Service\UtilsService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -39,9 +40,9 @@ class SystemUpdateController extends AbstractController
     public function uploadAction(Request $request)
     {
         $rootPath = $this->params->get('kernel.project_dir');
-        $uploadDirPath = $rootPath . '/var/updates';
-        if (!is_dir($uploadDirPath)) {
-            mkdir($uploadDirPath);
+        $targetDirPath = $rootPath . '/var/updates';
+        if (!is_dir($targetDirPath)) {
+            mkdir($targetDirPath);
         }
     
         /** @var UploadedFile $file */
@@ -54,9 +55,14 @@ class SystemUpdateController extends AbstractController
         if ($ext !== 'zip') {
             return $this->setError($this->translator->trans('File type is not allowed.', [], 'validators'));
         }
-    
+
+        UtilsService::cleanDirectory($targetDirPath);
         $fileName = $file->getClientOriginalName();
-        $file->move($uploadDirPath, $fileName);
+        $file->move($targetDirPath, $fileName);
+
+        if (!UtilsService::unZip($targetDirPath . DIRECTORY_SEPARATOR . $fileName, $targetDirPath)) {
+            return $this->setError($this->translator->trans('Error unpacking archive.', [], 'validators'));
+        }
     
         return $this->json([
             'fileName' => $fileName,

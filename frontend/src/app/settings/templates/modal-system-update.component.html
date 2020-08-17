@@ -11,15 +11,15 @@
         <div>
             <div class="mb-3" [ngClass]="{'text-muted': stepNumber != 1}">
                 <i class="icon-check-circle mr-2 text-success" *ngIf="stepNumber > 1; else iconCircleTemplate"></i>
-                Uploading ZIP archive with system files.
+                {{ 'SYSTEM_UPDATE_STEP1_DESCRIPTION' | translate }}
             </div>
             <div class="mb-3" [ngClass]="{'text-muted': stepNumber != 2}">
                 <i class="icon-check-circle mr-2 text-success" *ngIf="stepNumber > 2; else iconCircleTemplate"></i>
-                Checking file contents and system settings.
+                {{ 'SYSTEM_UPDATE_STEP2_DESCRIPTION' | translate }}
             </div>
             <div class="mb-3" [ngClass]="{'text-muted': stepNumber != 3}">
                 <i class="icon-check-circle mr-2 text-success" *ngIf="stepNumber > 3; else iconCircleTemplate"></i>
-                Updating all system components.
+                {{ 'SYSTEM_UPDATE_STEP3_DESCRIPTION' | translate }}
             </div>
             <ng-template #iconCircleTemplate>
                 <i class="icon-circle mr-2"></i>

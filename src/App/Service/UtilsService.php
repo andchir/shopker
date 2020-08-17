@@ -480,4 +480,38 @@ class UtilsService
         return sprintf('%.' . $decimals . 'f ' . $unit, $value);
     }
 
+    /**
+     * @param $dirPath
+     */
+    public static function cleanDirectory($dirPath)
+    {
+        if (!is_dir($dirPath)) {
+            return;
+        }
+        $dir = new \DirectoryIterator($dirPath);
+        foreach ($dir as $fileinfo) {
+            if (!$fileinfo->isDot()) {
+                if (is_file($fileinfo->getPathname())) {
+                    unlink($fileinfo->getPathname());
+                }
+            }
+        }
+    }
+
+    /**
+     * @param string $filePath
+     * @param string $targetDirPath
+     * @return bool
+     */
+    public static function unZip($filePath, $targetDirPath)
+    {
+        $zip = new \ZipArchive;
+        $res = $zip->open($filePath);
+        if ($res === false) {
+            return false;
+        }
+        $zip->extractTo($targetDirPath);
+        $zip->close();
+        return true;
+    }
 }

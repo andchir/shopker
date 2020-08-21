@@ -92,6 +92,13 @@ export class SettingsService {
             );
     }
 
+    runAction(actionPath: string): Observable<any> {
+        return this.http.get<any>(this.baseUrl + actionPath)
+            .pipe(
+                catchError(this.handleError<any>())
+            );
+    }
+
     handleError<T> (operation = 'operation', result?: T) {
         return (err: HttpErrorResponse): Observable<T> => {
             if (err.status && [401, 403].indexOf(err.status) > -1) {

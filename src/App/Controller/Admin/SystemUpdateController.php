@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Yaml\Yaml;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -66,6 +67,39 @@ class SystemUpdateController extends AbstractController
     
         return $this->json([
             'fileName' => $fileName,
+            'success' => true
+        ]);
+    }
+
+    /**
+     * @Route("/pre_update", methods={"GET"})
+     * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function checkAction(Request $request)
+    {
+        $rootPath = $this->params->get('kernel.project_dir');
+        $targetDirPath = $rootPath . '/var/updates';
+        if (!is_dir($targetDirPath)) {
+            return $this->setError($this->translator->trans('File not found.', [], 'validators'));
+        }
+
+        $changeLogFilePath = $targetDirPath . DIRECTORY_SEPARATOR . 'changelog.txt';
+        if (!file_exists($changeLogFilePath)) {
+            return $this->setError($this->translator->trans('Changelog file not found.', [], 'validators'));
+        }
+        if (!file_exists($targetDirPath . '/config/parameters.yaml')) {
+            return $this->setError($this->translator->trans('Configuration file not found.', [], 'validators'));
+        }
+
+        $changelogContent = file_get_contents($changeLogFilePath);
+        $parameters = Yaml::parseFile($targetDirPath . '/config/parameters.yaml');
+        $version = isset($parameters['parameters']) ? $parameters['parameters']['app.version'] ?? '' : '';
+
+        return $this->json([
+            'version' => $version,
+            'changelogContent' => $changelogContent,
             'success' => true
         ]);
     }

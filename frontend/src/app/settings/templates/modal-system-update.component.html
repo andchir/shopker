@@ -40,6 +40,20 @@
             </button>
             {{ errorMessage | translate }}
         </div>
+        
+        <div *ngIf="changelogContent">
+            <div class="text-success mb-2">
+                Current version: <span>{{ currentVersion }}</span><br>
+                Target version: <b class="big">{{ version }}</b>
+            </div>
+            <ngb-accordion class="ngb-accordion">
+                <ngb-panel id="accordion-settings-1" [title]="'CHANGELOG' | translate">
+                    <ng-template ngbPanelContent>
+                        <pre class="max-height400 mb-0">{{ changelogContent }}</pre>
+                    </ng-template>
+                </ngb-panel>
+            </ngb-accordion>
+        </div>
     
     </div>
     <div class="modal-footer d-block pt-0">

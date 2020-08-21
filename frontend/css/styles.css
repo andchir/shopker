@@ -10,7 +10,8 @@ body { background-color: #eee; }
 .min-width250 { min-width: 250px; }
 .max-width150 { max-width: 150px; }
 .max-width250 { max-width: 250px; }
-.max-height400 { max-height: 400px; overflow: hidden; overflow-y: auto; }
+.max-height400:not(pre) { max-height: 400px; overflow: hidden; overflow-y: auto; }
+pre.max-height400 { max-height: 400px; overflow: auto; }
 .big { font-size: 120%; }
 .tooltip { pointer-events: none; }
 .no-wrap { white-space: nowrap; }

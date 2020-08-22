@@ -18,7 +18,7 @@ export class ModalSystemUpdateComponent implements OnInit, OnDestroy {
     errorMessage: string;
     loading = false;
     destroyed$ = new Subject<void>();
-    stepNumber = 2;
+    stepNumber = 1;
     updatePercent = 0;
     isUpdateStarted = false;
     changelogContent: string;

@@ -93,7 +93,7 @@ export class SettingsService {
     }
 
     runAction(actionPath: string): Observable<any> {
-        return this.http.get<any>(this.baseUrl + actionPath)
+        return this.http.post<any>(this.baseUrl + actionPath, {}, {headers: this.headers})
             .pipe(
                 catchError(this.handleError<any>())
             );

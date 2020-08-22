@@ -72,7 +72,7 @@ class SystemUpdateController extends AbstractController
     }
 
     /**
-     * @Route("/pre_update", methods={"GET"})
+     * @Route("/pre_update", methods={"POST"})
      * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param Request $request
      * @return JsonResponse
@@ -100,6 +100,34 @@ class SystemUpdateController extends AbstractController
         return $this->json([
             'version' => $version,
             'changelogContent' => $changelogContent,
+            'success' => true
+        ]);
+    }
+    
+    /**
+     * @Route("/execute/{stepName}", methods={"POST"})
+     * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function executeAction($stepName)
+    {
+        switch ($stepName) {
+            case 'vendors':
+                
+                break;
+            case 'src':
+        
+                break;
+            case 'template':
+        
+                break;
+            case 'config':
+        
+                break;
+        }
+    
+        return $this->json([
             'success' => true
         ]);
     }

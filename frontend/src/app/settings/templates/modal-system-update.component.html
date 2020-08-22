@@ -25,6 +25,7 @@
                 <i class="icon-circle mr-2"></i>
             </ng-template>
         </div>
+        
         <div *ngIf="stepNumber == 1">
             <app-file-widget
                 fieldName="file"
@@ -34,17 +35,10 @@
                 #filesWidget></app-file-widget>
         </div>
         
-        <div class="alert alert-danger mt-3 mb-0" *ngIf="errorMessage">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="errorMessage = ''">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            {{ errorMessage | translate }}
-        </div>
-        
-        <div *ngIf="changelogContent">
+        <div *ngIf="stepNumber == 3 && !isUpdateStarted">
             <div class="text-success mb-2">
-                Current version: <span>{{ currentVersion }}</span><br>
-                Target version: <b class="big">{{ version }}</b>
+                {{ 'CURRENT_VERSION' | translate }}: <span>{{ currentVersion }}</span><br>
+                {{ 'NEW_VERSION' | translate }}: <b class="big">{{ version }}</b>
             </div>
             <ngb-accordion class="ngb-accordion">
                 <ngb-panel id="accordion-settings-1" [title]="'CHANGELOG' | translate">
@@ -53,6 +47,17 @@
                     </ng-template>
                 </ngb-panel>
             </ngb-accordion>
+        </div>
+        
+        <div class="py-4" *ngIf="isUpdateStarted">
+            <ngb-progressbar type="info" textType="white" [striped]="true" [animated]="true" [value]="updatePercent" [showValue]="true"></ngb-progressbar>
+        </div>
+    
+        <div class="alert alert-danger mt-3 mb-0" *ngIf="errorMessage">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="errorMessage = ''">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {{ errorMessage | translate }}
         </div>
     
     </div>

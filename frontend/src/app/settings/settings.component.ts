@@ -308,12 +308,21 @@ export class SettingsComponent implements OnInit {
             this.modalRef.dismiss();
             this.modalRef = null;
         }
-    
         this.modalRef = this.modalService.open(ModalSystemUpdateComponent, {
             backdrop: 'static',
             keyboard: false
         });
-        
+        this.modalRef.result.then((result) => {
+            if (result === 'completed') {
+                this.messageService.add({
+                    key: 'message',
+                    severity: 'success',
+                    summary: this.getLangString('MESSAGE'),
+                    detail: this.getLangString('SYSTEM_UPDATE_COMPLETED')
+                });
+                setTimeout(this.pageReload.bind(this), 2000);
+            }
+        });
     }
 
     onValueChanged(groupName: string): void {

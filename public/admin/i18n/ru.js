@@ -182,6 +182,7 @@ var APP_LANG = {
     "SYSTEM_UPDATE_STEP2_DESCRIPTION": "Проверка распакованных файлов и настройки системы.",
     "SYSTEM_UPDATE_STEP3_DESCRIPTION": "Обновление всех компонентов системы.",
     "SYSTEM_UPDATE_COMPLETED": "Система успешно обновлена.",
+    "SKIP": "Пропустить",
     "TEMPLATES": "Шаблоны",
     "TEMPLATE": "Шаблон",
     "TEMPLATE_THEME_NAME": "Тема шаблона",

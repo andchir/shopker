@@ -182,6 +182,7 @@
     "SYSTEM_UPDATE_STEP2_DESCRIPTION": "Checking unpacked files and system settings.",
     "SYSTEM_UPDATE_STEP3_DESCRIPTION": "Updating all system components.",
     "SYSTEM_UPDATE_COMPLETED": "The system has been successfully updated.",
+    "SKIP": "Skip",
 	"TEMPLATES": "Templates",
     "TEMPLATE": "Template",
 	"TEMPLATE_THEME_NAME": "Template theme",

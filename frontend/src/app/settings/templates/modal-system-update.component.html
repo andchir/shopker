@@ -26,13 +26,18 @@
             </ng-template>
         </div>
         
-        <div *ngIf="stepNumber == 1">
+        <div class="show-on-hover-parent" *ngIf="stepNumber == 1">
             <app-file-widget
                 fieldName="file"
                 [hasPreviewImage]="false"
                 [allowMultiple]="false"
                 [allowedExtensions]="'.zip'"
                 #filesWidget></app-file-widget>
+            <div class="pos-absolute-left-bottom10 show-on-hover">
+                <button type="button" class="btn btn-sm btn-secondary" (click)="skipStepHandler($event)">
+                    {{ 'SKIP' | translate }}
+                </button>
+            </div>
         </div>
         
         <div *ngIf="stepNumber == 3 && !isUpdateStarted">

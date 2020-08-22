@@ -26,8 +26,10 @@ pre.max-height400 { max-height: 400px; overflow: auto; }
 .pos-absolute-left { position: absolute; left: 0; top: 0; }
 .pos-absolute-left10 { position: absolute; left: 10px; top: 10px; }
 .pos-absolute-right { position: absolute; right: 0; top: 0; }
+.pos-absolute-right10 { position: absolute; right: 10px; top: 10px; }
 .pos-absolute-right-bottom { position: absolute; right: 0; bottom: 0; top: auto; }
 .pos-absolute-right-bottom10 { position: absolute; right: 10px; bottom: 10px; top: auto; }
+.pos-absolute-left-bottom10 { position: absolute; left: 10px; bottom: 10px; top: auto; }
 .pos-absolute-right2 { right: 0.6rem; top: 0.6rem; }
 .min-height110 { min-height: 110px; }
 .min-height300 { min-height: 300px; }

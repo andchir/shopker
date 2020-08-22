@@ -100,6 +100,14 @@ export class ModalSystemUpdateComponent implements OnInit, OnDestroy {
                 break;
         }
     }
+    
+    skipStepHandler(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.errorMessage = '';
+        this.stepNumber++;
+    }
 
     updateRunStep(stepName): void {
         const steps = ['vendors', 'src', 'template', 'config'];

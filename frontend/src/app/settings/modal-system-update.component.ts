@@ -110,7 +110,7 @@ export class ModalSystemUpdateComponent implements OnInit, OnDestroy {
     }
 
     updateRunStep(stepName): void {
-        const steps = ['vendors', 'src', 'template', 'config'];
+        const steps = ['vendor', 'src', 'template', 'config'];
         const currentIndex = steps.indexOf(stepName);
         if (currentIndex === 0) {
             this.loading = true;

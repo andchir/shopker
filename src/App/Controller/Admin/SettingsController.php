@@ -68,7 +68,7 @@ class SettingsController extends AbstractController
             Setting::GROUP_LANGUAGES => []
         ];
 
-        $output[Setting::GROUP_MAIN] = $this->getSettingsFromYaml('settings');
+        $output[Setting::GROUP_MAIN] = $settingsService->getSettingsFromYaml('settings');
         $output[Setting::GROUP_ORDER_STATUSES] = $settingsService->getSettingsGroup(Setting::GROUP_ORDER_STATUSES);
         $output[Setting::GROUP_DELIVERY] = $settingsService->getSettingsGroup(Setting::GROUP_DELIVERY);
         $output[Setting::GROUP_PAYMENT] = $settingsService->getSettingsGroup(Setting::GROUP_PAYMENT);
@@ -102,7 +102,7 @@ class SettingsController extends AbstractController
         switch ($groupName) {
             case Setting::GROUP_MAIN:
 
-                $settings = $this->getSettingsFromYaml('settings', false);
+                $settings = $settingsService->getSettingsFromYaml('settings', false);
                 $data = SettingsService::transformParametersInverse($data);
                 $templatesDirPath = $this->getTemplatesDirPath();
 
@@ -115,7 +115,7 @@ class SettingsController extends AbstractController
 
                 $settings = array_merge($settings, $data);
 
-                if (!$this->saveSettingsToYaml($settings, 'settings')) {
+                if (!$settingsService->saveSettingsToYaml($settings, 'settings')) {
                     return $this->setError($translator->trans('File is not writable.', [], 'validators'));
                 }
 
@@ -175,11 +175,11 @@ class SettingsController extends AbstractController
                         return $setting->getOption('value');
                     }, $settings);
                     $localeListString = !empty($localeList) ? implode(',', array_unique($localeList)) : '';
-                    $settingsData = $this->getSettingsFromYaml('settings', false);
+                    $settingsData = $settingsService->getSettingsFromYaml('settings', false);
                     $settingsData = array_merge($settingsData, [
                         'app.locale_list' => $localeListString
                     ]);
-                    if (!$this->saveSettingsToYaml($settingsData, 'settings')) {
+                    if (!$settingsService->saveSettingsToYaml($settingsData, 'settings')) {
                         return $this->setError($translator->trans('File is not writable.', [], 'validators'));
                     }
                     if ($settingsService->fileCacheClear()) {
@@ -350,47 +350,6 @@ class SettingsController extends AbstractController
             }
         }
         return $outputPathArr;
-    }
-
-    /**
-     * @param string $yamlFileName
-     * @return array
-     */
-    public function getSettingsFromYaml($yamlFileName = 'settings', $transform = true)
-    {
-        $rootPath = $this->params->get('kernel.project_dir');
-        $settingsFilePath = $rootPath . DIRECTORY_SEPARATOR . "config/{$yamlFileName}.yaml";
-        if (file_exists($settingsFilePath)) {
-            try {
-                $settings = Yaml::parse(file_get_contents($settingsFilePath));
-                if (!$transform) {
-                    return $settings['parameters'];
-                }
-                return SettingsService::transformParameters($settings['parameters']);
-            } catch (ParseException $e) {
-                return [];
-            }
-        }
-        return [];
-    }
-
-    /**
-     * @param $data
-     * @param string $yamlFileName
-     * @return bool|int
-     */
-    public function saveSettingsToYaml($data, $yamlFileName = 'settings')
-    {
-        $rootPath = $this->params->get('kernel.project_dir');
-        $settingsFilePath = $rootPath . DIRECTORY_SEPARATOR . "config/{$yamlFileName}.yaml";
-        $yaml = Yaml::dump(['parameters' => $data]);
-
-        if (!is_writable($settingsFilePath)) {
-            return false;
-        }
-        file_put_contents($settingsFilePath, $yaml);
-
-        return true;
     }
 
     /**

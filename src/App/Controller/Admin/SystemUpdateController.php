@@ -2,9 +2,11 @@
 
 namespace App\Controller\Admin;
 
+use App\Service\SettingsService;
 use App\Service\UtilsService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -117,24 +119,100 @@ class SystemUpdateController extends AbstractController
     /**
      * @Route("/execute/{stepName}", methods={"POST"})
      * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
-     * @param Request $request
+     * @param Filesystem $fs
+     * @param SettingsService $settingsService
+     * @param string $stepName
      * @return JsonResponse
+     * @throws \Exception
      */
-    public function executeAction($stepName)
+    public function executeAction(Filesystem $fs, SettingsService $settingsService, $stepName)
     {
+        $rootPath = $this->params->get('kernel.project_dir');
+        $sourceDirPath = $rootPath . '/var/updates';
+        $pathToCopyArr = [];
+        
         switch ($stepName) {
-            case 'vendors':
+            case 'vendor':
+            
+                $pathToCopyArr[] = 'vendor';
                 
                 break;
             case 'src':
+    
+                $pathToCopyArr[] = 'src';
+                $pathToCopyArr[] = 'frontend';
         
                 break;
             case 'template':
+            
+                $themeName = $this->params->get('app.template_theme');
+                
+                // Copy default theme templates
+                if ($themeName === 'default') {
+                    $themes = array_diff(scandir($rootPath . DIRECTORY_SEPARATOR . 'templates'), ['..', '.']);
+                    $number = 0;
+                    foreach ($themes as $themeName) {
+                        if (strpos($themeName, 'default_copy') !== false) {
+                            $number++;
+                        }
+                    }
+                    $copyThemeName = 'default_copy' . ($number > 0 ? $number + 1 : '');
+                    $templateDirPath = $rootPath . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . 'default';
+                    $newTemplateDirPath = $rootPath . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $copyThemeName;
+                    $fs->mkdir($newTemplateDirPath);
+                    try {
+                        $fs->mirror($templateDirPath, $newTemplateDirPath);
+                    } catch (\Throwable $e) {
+                        return $this->setError($e->getMessage());
+                    }
+                    $settingsData = $settingsService->getSettingsFromYaml('settings', false);
+                    $settingsData = array_merge($settingsData, [
+                        'app.template_theme' => $copyThemeName
+                    ]);
+                    if (!$settingsService->saveSettingsToYaml($settingsData, 'settings')) {
+                        return $this->setError($this->translator->trans('File is not writable.', [], 'validators'));
+                    }
+                }
+                
+                $pathToCopyArr[] = 'templates/default';
+                $pathToCopyArr[] = 'public/admin';
+                $pathToCopyArr[] = 'public/app_build';
+                $pathToCopyArr[] = 'public/node_modules';
+                $pathToCopyArr[] = 'config/bootstrap.php';
+                $pathToCopyArr[] = 'public/index.php';
         
                 break;
             case 'config':
-        
+    
+                $pathToCopyArr[] = 'config/packages';
+                $pathToCopyArr[] = 'config/resources';
+                $pathToCopyArr[] = 'config/routes';
+                $pathToCopyArr[] = 'config/bundles.php';
+                $pathToCopyArr[] = 'config/parameters.yaml';
+                $pathToCopyArr[] = 'config/routes.yaml';
+                $pathToCopyArr[] = 'config/services.yaml';
+                
                 break;
+        }
+    
+        if (!empty($pathToCopyArr)) {
+            foreach ($pathToCopyArr as $path) {
+                try {
+                    if (is_dir($sourceDirPath . DIRECTORY_SEPARATOR . $path)) {
+                        $fs->mirror($sourceDirPath . DIRECTORY_SEPARATOR . $path, $rootPath . DIRECTORY_SEPARATOR . $path);
+                    } else {
+                        $fs->copy($sourceDirPath . DIRECTORY_SEPARATOR . $path, $rootPath . DIRECTORY_SEPARATOR . $path, true);
+                    }
+                } catch (\Throwable $e) {
+                    return $this->setError($e->getMessage());
+                }
+            }
+        }
+        
+        if ($stepName === 'config') {
+            if ($settingsService->fileCacheClear()) {
+                $settingsService->systemCacheClear();
+            }
         }
     
         return $this->json([

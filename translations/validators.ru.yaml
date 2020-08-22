@@ -48,3 +48,6 @@ Your cart is empty.: Ваша корзина пуста.
 Your user has read-only permission.: Ваш пользователь имеет разрешение только на чтение.
 A file with the same name already exists.: Файл с таким именем уже существует.
 Error unpacking archive.: Ошибка при распаковке архива.
+"The folder is not writable: %dir_name%.": "Папка недоступна для записи: %dir_name%."
+
+

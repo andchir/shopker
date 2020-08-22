@@ -66,7 +66,7 @@
             {{ 'CONTINUE' | translate }}
             <i class="icon-arrow-right ml-2"></i>
         </button>
-        <button type="button" class="btn btn-secondary btn-wide" (click)="activeModal.close()" [disabled]="loading">
+        <button type="button" class="btn btn-secondary btn-wide" (click)="closeModal('close')" [disabled]="loading">
             {{ 'CLOSE' | translate }}
         </button>
     </div>

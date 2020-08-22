@@ -96,7 +96,17 @@ class SystemUpdateController extends AbstractController
         $changelogContent = file_get_contents($changeLogFilePath);
         $parameters = Yaml::parseFile($targetDirPath . '/config/parameters.yaml');
         $version = isset($parameters['parameters']) ? $parameters['parameters']['app.version'] ?? '' : '';
-
+        
+        $dirs = [
+            'src', 'vendor', 'translations', 'templates', 'templates/default', 'config',
+            'public', 'public/admin', 'public/app_build', 'public/bundles'
+        ];
+        foreach ($dirs as $dir) {
+            if (!is_writable($rootPath . DIRECTORY_SEPARATOR . $dir)) {
+                return $this->setError($this->translator->trans('The folder is not writable: %dir_name%.', ['%dir_name%' => $dir], 'validators'));
+            }
+        }
+    
         return $this->json([
             'version' => $version,
             'changelogContent' => $changelogContent,

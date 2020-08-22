@@ -132,9 +132,13 @@ export class ModalSystemUpdateComponent implements OnInit, OnDestroy {
             });
     }
     
+    closeModal(reason): void {
+        this.activeModal.close(reason);
+    }
+    
     onUpdateComplete(): void {
         this.loading = false;
-        this.activeModal.close('completed');
+        this.closeModal('completed');
     }
 
     ngOnDestroy(): void {

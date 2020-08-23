@@ -98,12 +98,23 @@ class HomepageController extends AbstractController
         if (!file_exists($indexPagePath)) {
             return '';
         }
+        $version = $this->params->get('app.version');
         $content = file_get_contents($indexPagePath);
         $content = str_replace([
-            '{{locale}}', '{{timestamp}}', '{{app_name}}'
+            '{{locale}}',
+            '{{timestamp}}',
+            '{{app_name}}'
         ], [
-            $locale, time(), $this->params->get('app.name')
+            $locale,
+            time(),
+            $this->params->get('app.name')
         ], $content);
+    
+        $content = str_replace(
+            ['.js"', '.css"'],
+            [".js?{$version}\"", ".css?{$version}\""],
+            $content);
+        
         return $content;
     }
 }

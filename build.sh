@@ -33,6 +33,7 @@ mkdir "$DIR"/"$OUTPUT_DIRNAME"/var/log
 
 mkdir "$DIR"/"$OUTPUT_DIRNAME"/public
 cp "$DIR"/public/*.* "$DIR"/"$OUTPUT_DIRNAME"/public
+cp "$DIR"/public/.htaccess "$DIR"/"$OUTPUT_DIRNAME"/public
 rm "$DIR"/"$OUTPUT_DIRNAME"/public/package-lock.json
 cp -r "$DIR"/public/app_build "$DIR"/"$OUTPUT_DIRNAME"/public
 cp -r "$DIR"/public/css "$DIR"/"$OUTPUT_DIRNAME"/public
@@ -50,6 +51,8 @@ cp -r "$DIR"/public/node_modules/jquery "$DIR"/"$OUTPUT_DIRNAME"/public/node_mod
 cp -r "$DIR"/public/node_modules/nouislider "$DIR"/"$OUTPUT_DIRNAME"/public/node_modules
 cp -r "$DIR"/public/node_modules/popper.js "$DIR"/"$OUTPUT_DIRNAME"/public/node_modules
 cp -r "$DIR"/public/node_modules/wnumb "$DIR"/"$OUTPUT_DIRNAME"/public/node_modules
+cp -r "$DIR"/public/node_modules/fullcalendar "$DIR"/"$OUTPUT_DIRNAME"/public/node_modules
+cp -r "$DIR"/public/node_modules/moment "$DIR"/"$OUTPUT_DIRNAME"/public/node_modules
 
 mkdir "$DIR"/"$OUTPUT_DIRNAME"/frontend
 cp "$DIR"/frontend/*.* "$DIR"/"$OUTPUT_DIRNAME"/frontend

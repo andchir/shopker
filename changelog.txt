@@ -1,5 +1,6 @@
 4.2.2
 - Integration with FullCalendar (https://fullcalendar.io/).
+- Upgradeable from the admin interface.
 - Fixed problem with displaying selected additional product categories.
 
 4.2.1

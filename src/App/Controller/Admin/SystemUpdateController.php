@@ -175,9 +175,13 @@ class SystemUpdateController extends AbstractController
                 }
                 
                 $pathToCopyArr[] = 'templates/default';
+                $pathToCopyArr[] = 'translations';
                 $pathToCopyArr[] = 'public/admin';
                 $pathToCopyArr[] = 'public/app_build';
                 $pathToCopyArr[] = 'public/node_modules';
+                $pathToCopyArr[] = 'public/css';
+                $pathToCopyArr[] = 'public/img';
+                $pathToCopyArr[] = 'public/js';
                 $pathToCopyArr[] = 'config/bootstrap.php';
                 $pathToCopyArr[] = 'public/index.php';
         

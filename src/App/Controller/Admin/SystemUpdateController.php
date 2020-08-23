@@ -203,7 +203,12 @@ class SystemUpdateController extends AbstractController
             foreach ($pathToCopyArr as $path) {
                 try {
                     if (is_dir($sourceDirPath . DIRECTORY_SEPARATOR . $path)) {
-                        $fs->mirror($sourceDirPath . DIRECTORY_SEPARATOR . $path, $rootPath . DIRECTORY_SEPARATOR . $path);
+                        $fs->mirror(
+                            $sourceDirPath . DIRECTORY_SEPARATOR . $path,
+                            $rootPath . DIRECTORY_SEPARATOR . $path,
+                            null,
+                            ['override' => true]
+                        );
                     } else {
                         $fs->copy($sourceDirPath . DIRECTORY_SEPARATOR . $path, $rootPath . DIRECTORY_SEPARATOR . $path, true);
                     }

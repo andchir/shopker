@@ -214,6 +214,7 @@ class SystemUpdateController extends AbstractController
         }
         
         if ($stepName === 'config') {
+            UtilsService::cleanDirectory($sourceDirPath, true);
             if ($settingsService->fileCacheClear()) {
                 $settingsService->systemCacheClear();
             }

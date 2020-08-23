@@ -479,11 +479,12 @@ class UtilsService
         }
         return sprintf('%.' . $decimals . 'f ' . $unit, $value);
     }
-
+    
     /**
-     * @param $dirPath
+     * @param string $dirPath
+     * @param bool $removeDir
      */
-    public static function cleanDirectory($dirPath)
+    public static function cleanDirectory($dirPath, $removeDir = false)
     {
         if (!is_dir($dirPath)) {
             return;
@@ -491,7 +492,10 @@ class UtilsService
         $dir = new \DirectoryIterator($dirPath);
         foreach ($dir as $fileinfo) {
             if (!$fileinfo->isDot()) {
-                if (is_file($fileinfo->getPathname())) {
+                if (is_dir($fileinfo->getPathname()) && $removeDir) {
+                    self::cleanDirectory($fileinfo->getPathname(), true);
+                    rmdir($fileinfo->getPathname());
+                } else if (is_file($fileinfo->getPathname())) {
                     unlink($fileinfo->getPathname());
                 }
             }

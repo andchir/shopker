@@ -651,6 +651,11 @@ class FieldTypesFixtures extends Fixture implements FixtureGroupInterface
                         'default_value' => '1'
                     ],
                     [
+                        'name' => 'navLinks',
+                        'title' => 'Ссылка на страницу дня',
+                        'default_value' => '1'
+                    ],
+                    [
                         'name' => 'required',
                         'title' => 'Обязательный',
                         'default_value' => '1'

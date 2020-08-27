@@ -63,7 +63,7 @@
                 slotMaxTime: '{{ fieldData.outputProperties.slotMaxTime | default('20:00:00') }}',
                 slotDuration: '{{ fieldData.outputProperties.slotDuration | default('0:30:00') }}',
                 initialDate: null,
-                navLinks: true,
+                navLinks: {% if fieldData.outputProperties.navLinks %}true{% else %}false{% endif %},
                 editable: false,
                 selectable: true,
                 dayMaxEvents: false,

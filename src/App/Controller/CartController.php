@@ -563,9 +563,8 @@ class CartController extends BaseController
                             || ShopCartService::validateDateTime($val, 'Y-m-d\TH:i:sP');
                     });
                     if (!empty($value)) {
-                        $priceField = $contentType->getPriceFieldName();
-                        $productPrice = $priceField ? ($productDocument[$priceField] ?? 0) : 0;
-                        $parameters[] = $this->getDatesParameterValue($contentTypeField, $value, $productPrice);
+                        $priceFieldName = $contentType->getPriceFieldName();
+                        $parameters[] = $this->getDatesParameterValue($contentTypeField, $value, $productDocument, $priceFieldName);
                     }
 
                     break;
@@ -611,20 +610,29 @@ class CartController extends BaseController
         }
         return $missedParameters;
     }
-    
+
     /**
      * @param array $contentTypeField
      * @param array $valueArr
-     * @param float|int $productPrice
+     * @param array $productDocument
+     * @param string $priceFieldName
      * @return array
      * @throws \Exception
      */
-    public function getDatesParameterValue($contentTypeField, $valueArr, $productPrice)
+    public function getDatesParameterValue($contentTypeField, $valueArr, $productDocument, $priceFieldName)
     {
+        $productPrice = $productDocument[$priceFieldName] ?? 0;
         $outputDateFormat = $contentTypeField['outputProperties']['outputFormat'] ?? 'd/m/Y H:i';
         $slotDuration = $contentTypeField['outputProperties']['slotDuration'] ?? '00:30:00';
         $inputDateFormat = 'Y-m-d\TH:i:sP';
         $price = 0;
+        if (!empty($contentTypeField['outputProperties']['fullCalendarOptionsFieldName'])) {
+            $calendarOptions = $productDocument[$contentTypeField['outputProperties']['fullCalendarOptionsFieldName']] ?? [];
+            $optIndex = array_search('slotDuration', array_column($calendarOptions, 'name'));
+            if ($optIndex !== false) {
+                $slotDuration = $calendarOptions[$optIndex]['value'];
+            }
+        }
     
         /** @var \DateTime $dateStart */
         list($dateStart, $dateStartHasTime) = ShopCartService::createDateObject($valueArr[0], $inputDateFormat, true);

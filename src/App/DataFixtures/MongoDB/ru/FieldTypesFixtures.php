@@ -656,6 +656,11 @@ class FieldTypesFixtures extends Fixture implements FixtureGroupInterface
                         'default_value' => '1'
                     ],
                     [
+                        'name' => 'fullCalendarOptionsFieldName',
+                        'title' => 'Название поля с параметрами календаря',
+                        'default_value' => ''
+                    ],
+                    [
                         'name' => 'required',
                         'title' => 'Обязательный',
                         'default_value' => '1'

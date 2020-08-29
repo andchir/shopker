@@ -1,3 +1,6 @@
+4.2.3
+- For the "Schedule" (booking) field, the "fullCalendarOptionsFieldName" parameter has been added, in which you can specify the field where the calendar settings come from (you can create different calendar options for each item).
+
 4.2.2
 - Integration with FullCalendar (https://fullcalendar.io/).
 - Upgradeable from the admin interface.

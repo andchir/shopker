@@ -36,14 +36,14 @@
                         </td>
                         <td class="d-none d-lg-table-cell">
                             <span class="shk-price">{{ item.price | price }}</span>
-                            <span class="shk-currency">{{ currencySelected }}</span>
+                            <span class="shk-currency">{{ currencySelected | default(currency) }}</span>
                         </td>
                         <td>
                             <input type="number" class="form-control" min="1" step="1" name="count[]" value="{{ item.count }}" style="width: 80px;">
                         </td>
                         <td>
                             <span class="shk-price">{{ item.priceTotal | price }}</span>
-                            <span class="shk-currency">{{ currencySelected }}</span>
+                            <span class="shk-currency">{{ currencySelected | default(currency) }}</span>
                         </td>
                         <td class="text-right">
                             <button class="btn btn-outline-info ml-1" type="submit" name="remove_by_index" value="{{ loop.index0 }}" title="{{ 'Delete item' | trans }}">
@@ -68,7 +68,7 @@
                     </th>
                     <th colspan="2">
                         <span class="big shk-price">{{ priceTotal | price }}</span>
-                        <span class="shk-currency">{{ currencySelected }}</span>
+                        <span class="shk-currency">{{ currencySelected | default(currency) }}</span>
                     </th>
                 </tr>
                 </tfoot>

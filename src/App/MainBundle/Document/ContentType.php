@@ -432,7 +432,7 @@ class ContentType
      */
     public static function getValueByLocale($data, $locale = '', $fieldName = 'title')
     {
-        if (!$locale || !is_array($data['translations'])) {
+        if (!$locale || !isset($data['translations']) || !is_array($data['translations'])) {
             return $data[$fieldName] ?? '';
         }
         return !empty($data['translations'][$fieldName]) && !empty($data['translations'][$fieldName][$locale])

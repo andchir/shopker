@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\MainBundle\Document\Category;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Twig\Environment as TwigEnvironment;
 
 class CatalogController extends BaseController
 {
@@ -25,18 +26,22 @@ class CatalogController extends BaseController
     protected $settingsService;
     /** @var CatalogService */
     protected $catalogService;
+    /** @var TwigEnvironment */
+    protected $twig;
 
     public function __construct(
         ParameterBagInterface $params,
         DocumentManager $dm,
         TranslatorInterface $translator,
         SettingsService $settingsService,
-        CatalogService $catalogService
+        CatalogService $catalogService,
+        TwigEnvironment $twig
     )
     {
         parent::__construct($params, $dm, $translator);
         $this->settingsService = $settingsService;
         $this->catalogService = $catalogService;
+        $this->twig = $twig;
     }
 
     /**
@@ -205,7 +210,7 @@ class CatalogController extends BaseController
         });
         $currency = $this->settingsService->getCurrency();
 
-        return $this->render($this->getTemplateName('category', $contentType->getName()), [
+        return $this->render($this->getTemplateName($this->twig, 'category', $contentType->getName()), [
             'currentCategory' => $currentCategory,
             'activeCategoriesIds' => $activeCategoriesIds,
             'currentPage' => $currentPage,
@@ -295,7 +300,7 @@ class CatalogController extends BaseController
             $activeCategoriesIds[] = 0 - $currentPage['id'];
         }
 
-        return $this->render($this->getTemplateName('content-page', $contentType->getName()), [
+        return $this->render($this->getTemplateName($this->twig, 'content-page', $contentType->getName()), [
             'currentCategory' => $category,
             'activeCategoriesIds' => $activeCategoriesIds,
             'currentPage' => $currentPage,
@@ -547,22 +552,6 @@ class CatalogController extends BaseController
             }
         }
         return $idsArr;
-    }
-
-    /**
-     * @param $mainTemplateName
-     * @param $prefix
-     * @return string
-     */
-    public function getTemplateName($mainTemplateName, $prefix)
-    {
-        /** @var \Twig\Environment */
-        $twig = $this->get('twig');
-        $templateName = sprintf('%s_%s.html.twig', $prefix, $mainTemplateName);
-        if ($twig->getLoader()->exists($templateName)) {
-            return $templateName;
-        }
-        return sprintf('%s.html.twig', $mainTemplateName);
     }
 
     /**

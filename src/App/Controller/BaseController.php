@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Twig\Environment as TwigEnvironment;
 
 class BaseController extends AbstractController
 {
@@ -43,5 +44,22 @@ class BaseController extends AbstractController
     public function getRootPath()
     {
         return $this->params->get('kernel.project_dir');
+    }
+
+    /**
+     * @param TwigEnvironment $twigEnvironment
+     * @param string $mainTemplateName
+     * @param string $prefix
+     * @param string $path
+     * @param string $format
+     * @return string
+     */
+    public function getTemplateName(TwigEnvironment $twigEnvironment, $mainTemplateName, $prefix, $path = '', $format = 'html')
+    {
+        $templateName = $path . sprintf('%s_%s.%s.twig', $prefix, $mainTemplateName, $format);
+        if ($twigEnvironment->getLoader()->exists($templateName)) {
+            return $templateName;
+        }
+        return $path . sprintf('%s.%s.twig', $mainTemplateName, $format);
     }
 }

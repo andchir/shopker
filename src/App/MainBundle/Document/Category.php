@@ -265,7 +265,8 @@ class Category
             'contentTypeName' => $this->getContentTypeName(),
             'menuIndex' => $this->getMenuIndex(),
             'isFolder' => $this->getIsFolder(),
-            'isActive' => $this->getIsActive()
+            'isActive' => $this->getIsActive(),
+            'translations' => $this->getTranslations()
         ];
     }
 

@@ -50,15 +50,30 @@ class CatalogExportController extends BaseController
     {
         $localeDefault = $this->params->get('locale');
         $locale = $request->getLocale();
+        $templatePath = $this->getTemplateName($twig, 'export', '', 'catalog/', $format);
+        $productsCollectionName = $this->params->has('app.catalog_export_collection')
+            ? $this->params->get('app.catalog_export_collection')
+            : 'products';
+        $productsLimit = $this->params->has('app.catalog_export_limit')
+            ? $this->params->get('app.catalog_export_limit')
+            : 0;
+        $productsOrderBy = $this->params->has('app.catalog_export_orderby')
+            ? $this->params->get('app.catalog_export_orderby')
+            : '_id';
+        $deliveryDays = $this->params->has('app.catalog_export_delivery_days')
+            ? $this->params->get('app.catalog_export_delivery_days')
+            : 5;
+        if (!$twig->getLoader()->exists($templatePath)) {
+            throw $this->createNotFoundException('Page not found.');
+        }
 
-        $response = new Response();
-        $response->headers->set('Content-Type', 'text/xml');
-
-        $categories = $this->dm->getRepository(Category::class)->findActiveAll()->toArray();
+        // Get delivery options
         $deliverySettings = $this->dm->getRepository(Setting::class)->findBy([
             'groupName' => 'SETTINGS_DELIVERY'
         ], ['id' => 'asc']);
 
+        // Get categories
+        $categories = $this->dm->getRepository(Category::class)->findActiveAll()->toArray();
         $categories = array_map(function($category) use ($locale) {
             /** @var Category $category */
             return [
@@ -69,9 +84,33 @@ class CatalogExportController extends BaseController
             ];
         }, $categories);
 
-        return $this->render($this->getTemplateName($twig, 'export', 'yandex-market', 'catalog/', $format), [
+        // Get products
+        $collection = $this->catalogService->getCollection($productsCollectionName);
+        $criteria = [
+            'isActive' => true
+        ];
+        $queryOptions = [
+            'sort' => [$productsOrderBy => 1],
+            'skip' => 0,
+            'cursor' => []
+        ];
+        if ($productsLimit) {
+            $queryOptions['limit'] = $productsLimit;
+        }
+        $items = $collection->find($criteria, $queryOptions)->toArray();
+
+        // Render output
+        $pageContent = $this->renderView($templatePath, [
             'categories' => $categories,
-            'deliverySettings' => $deliverySettings
-        ], $response);
+            'deliverySettings' => $deliverySettings,
+            'deliveryDays' => $deliveryDays,
+            'items' => $items
+        ]);
+
+        $response = new Response();
+        $response->headers->set('Content-Type', 'text/xml');
+        $response->setContent($pageContent);
+
+        return $response;
     }
 }

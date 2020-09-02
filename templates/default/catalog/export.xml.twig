@@ -1,0 +1,44 @@
+{%- set baseUrl = absolute_url('/') -%}
+<?xml version="1.0" encoding="UTF-8"?>
+<yml_catalog date="{{ 'now' | date('Y-m-d H:i:s') }}">
+    <shop>
+        <name>{{ app_name }}</name>
+        <company>{{ app_name }}</company>
+        <url>{{ baseUrl }}</url>
+        <currencies>
+            <currency id="RUR" rate="1"/>
+        </currencies>
+        <categories>
+            {% for category in categories -%}
+            <category id="{{ category.id }}">{{ category.title }}</category>
+            {% endfor -%}
+        </categories>
+        <delivery-options>
+            {% for delivery in deliverySettings -%}
+                <option cost="{{ delivery.options.price.value }}" days="{{ deliveryDays }}"/>
+            {% endfor -%}
+        </delivery-options>
+        <offers>
+            {% for item in items -%}
+            <offer id="{{ item._id }}">
+                <name>{{ fieldByLocale(item, 'title') }}</name>
+                <url>{{ baseUrl }}{{ catalogPath('', item.name, item) | slice(1) }}</url>
+                <price>{{ item.price }}</price>
+                <currencyId>RUR</currencyId>
+                <categoryId>{{ item.parentId }}</categoryId>
+                <delivery>true</delivery>
+                <vendor>{{ item.brand }}</vendor>
+                <country_of_origin>{{ item.country }}</country_of_origin>
+                <picture>{{ baseUrl }}{{ imageUrl(item.image, baseUrl ~ 'img/nofoto.png') | slice(1) }}</picture>
+                <description>
+                    <![CDATA[
+                    {{ fieldByLocale(item, 'description') | raw }}
+                    ]]>
+                </description>
+            </offer>
+            {% endfor -%}
+        </offers>
+        <gifts/>
+        <promos/>
+    </shop>
+</yml_catalog>

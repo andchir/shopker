@@ -8,6 +8,7 @@ use App\MainBundle\Document\Setting;
 use App\Service\CatalogService;
 use App\Service\SettingsService;
 use Doctrine\ODM\MongoDB\DocumentManager;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -45,8 +46,9 @@ class CatalogExportController extends BaseController
      * @param TwigEnvironment $twig
      * @param $format
      * @return Response
+     * @throws \Exception
      */
-    public function catalogExportAction(Request $request, TwigEnvironment $twig, $format)
+    public function catalogExportAction(Request $request, TwigEnvironment $twig, FilesystemAdapter $fileCache, $format)
     {
         $localeDefault = $this->params->get('locale');
         $locale = $request->getLocale();
@@ -65,6 +67,16 @@ class CatalogExportController extends BaseController
             : 5;
         if (!$twig->getLoader()->exists($templatePath)) {
             throw $this->createNotFoundException('Page not found.');
+        }
+
+        // Get from cache if exists
+        $cacheKey = "catalog_export_{$locale}_{$format}";
+        $cacheItem = $fileCache->getItem($cacheKey);
+        if ($cacheItem && $cacheItem->isHit()) {
+            $response = new Response();
+            $response->headers->set('Content-Type', 'text/xml');
+            $response->setContent($cacheItem->get());
+            return $response;
         }
 
         // Get delivery options
@@ -106,6 +118,11 @@ class CatalogExportController extends BaseController
             'deliveryDays' => $deliveryDays,
             'items' => $items
         ]);
+
+        // Caching
+        $cacheItem->set($pageContent);
+        $cacheItem->expiresAt(new \DateTime('+12 hours'));
+        $fileCache->save($cacheItem);
 
         $response = new Response();
         $response->headers->set('Content-Type', 'text/xml');

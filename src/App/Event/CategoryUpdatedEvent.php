@@ -3,7 +3,7 @@
 namespace App\Event;
 
 use Doctrine\ODM\MongoDB\DocumentManager;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Contracts\EventDispatcher\Event;
 use App\MainBundle\Document\Category;
 

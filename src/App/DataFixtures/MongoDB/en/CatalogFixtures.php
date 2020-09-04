@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Doctrine\Bundle\MongoDBBundle\Fixture\Fixture;
 use Doctrine\Bundle\MongoDBBundle\Fixture\FixtureGroupInterface;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use App\MainBundle\Document\ContentType;
 use App\MainBundle\Document\Category;
 use App\Event\CategoryUpdatedEvent;

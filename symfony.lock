@@ -165,6 +165,9 @@
     "ivopetkov/html5-dom-document-php": {
         "version": "v2.2.4"
     },
+    "jean85/pretty-package-versions": {
+        "version": "1.5.0"
+    },
     "justinrainbow/json-schema": {
         "version": "5.2.7"
     },
@@ -272,6 +275,9 @@
     },
     "psr/http-client": {
         "version": "1.0.0"
+    },
+    "psr/http-factory": {
+        "version": "1.0.1"
     },
     "psr/http-message": {
         "version": "1.0.1"
@@ -452,6 +458,9 @@
     },
     "symfony/polyfill-intl-idn": {
         "version": "v1.11.0"
+    },
+    "symfony/polyfill-intl-normalizer": {
+        "version": "v1.18.1"
     },
     "symfony/polyfill-mbstring": {
         "version": "v1.9.0"

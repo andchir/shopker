@@ -9,7 +9,7 @@ use App\Repository\CategoryRepository;
 use App\Repository\ContentTypeRepository;
 use Doctrine\Persistence\ObjectRepository;
 use Doctrine\ODM\MongoDB\DocumentManager;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Mimey\MimeTypes;
 use MongoDB\Collection;
 use MongoDB\Model\IndexInfo;

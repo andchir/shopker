@@ -79,7 +79,8 @@ class CatalogExportController extends BaseController
                 !isset($_SERVER['PHP_AUTH_USER'])
                 || $_SERVER['PHP_AUTH_USER'] !== $login
                 || $_SERVER['PHP_AUTH_PW'] !== $password
-            )) {
+            )
+        && !$this->isGranted('ROLE_ADMIN')) {
                 throw $this->createAccessDeniedException();
         }
 

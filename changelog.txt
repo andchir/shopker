@@ -1,6 +1,7 @@
 4.2.3
 - For the "Schedule" (booking) field, the "fullCalendarOptionsFieldName" parameter has been added, in which you can specify the field where the calendar settings come from (you can create different calendar options for each item).
 - Added export catalog to YML (Yandex.Market).
+- Fixed problem with not applying default parameters for input fields.
 
 4.2.2
 - Integration with FullCalendar (https://fullcalendar.io/).

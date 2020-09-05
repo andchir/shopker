@@ -74,16 +74,16 @@
         },
         {
             "name": "andchir/omnipay-bundle",
-            "version": "1.0.22",
+            "version": "1.0.23",
             "source": {
                 "type": "git",
                 "url": "https://github.com/andchir/omnipay-bundle.git",
-                "reference": "6e4e896d7c50688f8c8d926414aeb918ecb9a6e9"
+                "reference": "3c5ad1484ef4b9914b2ffaecee748f43d3f33130"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/andchir/omnipay-bundle/zipball/6e4e896d7c50688f8c8d926414aeb918ecb9a6e9",
-                "reference": "6e4e896d7c50688f8c8d926414aeb918ecb9a6e9",
+                "url": "https://api.github.com/repos/andchir/omnipay-bundle/zipball/3c5ad1484ef4b9914b2ffaecee748f43d3f33130",
+                "reference": "3c5ad1484ef4b9914b2ffaecee748f43d3f33130",
                 "shasum": ""
             },
             "require": {
@@ -118,7 +118,7 @@
                 "shopkeeper",
                 "symfony"
             ],
-            "time": "2020-06-11T11:05:59+00:00"
+            "time": "2020-09-04T10:17:37+00:00"
         },
         {
             "name": "andchir/omnipay3-yandexkassa",
@@ -158,7 +158,7 @@
                     "email": "baltaev.artur+opensource@gmail.com"
                 },
                 {
-                    "name": "Andchir",
+                    "name": "andchir",
                     "email": "andchir@gmail.com"
                 }
             ],
@@ -167,16 +167,16 @@
         },
         {
             "name": "andchir/shopkeeper4-comments",
-            "version": "1.0.12",
+            "version": "1.0.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/andchir/shopkeeper4-comments.git",
-                "reference": "59c83e290998c50c4bc67d13eab06f29da2940d0"
+                "reference": "ae32181caf8b26ba3766dd2eeb4ea8bdd4c4e84e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/andchir/shopkeeper4-comments/zipball/59c83e290998c50c4bc67d13eab06f29da2940d0",
-                "reference": "59c83e290998c50c4bc67d13eab06f29da2940d0",
+                "url": "https://api.github.com/repos/andchir/shopkeeper4-comments/zipball/ae32181caf8b26ba3766dd2eeb4ea8bdd4c4e84e",
+                "reference": "ae32181caf8b26ba3766dd2eeb4ea8bdd4c4e84e",
                 "shasum": ""
             },
             "require": {
@@ -215,7 +215,7 @@
                 "symfony-bundle",
                 "symfony4"
             ],
-            "time": "2020-05-23T20:30:01+00:00"
+            "time": "2020-09-04T10:26:58+00:00"
         },
         {
             "name": "andchir/twig-visual",

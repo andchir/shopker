@@ -404,9 +404,12 @@ export class InputFieldRenderComponent implements OnInit {
     }
 
     extendProperties(object1: Properties, object2: Properties): void {
-        object1 = Object.assign({}, object2, object1);
-        for (const key in object1) {
-            if (object1.hasOwnProperty(key)) {
+        for (const key in object2) {
+            if (object2.hasOwnProperty(key)) {
+                if (object1[key]) {
+                    continue;
+                }
+                object1[key] = object2[key];
                 if (isNumeric(object1[key])) {
                     object1[key] = parseInt(String(object1[key]), 10);
                 }

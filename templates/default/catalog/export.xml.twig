@@ -26,7 +26,6 @@
                 <price>{{ item.price }}</price>
                 <currencyId>RUR</currencyId>
                 <categoryId>{{ item.parentId }}</categoryId>
-                <delivery>true</delivery>
                 <vendor>{{ item.brand }}</vendor>
                 <country_of_origin>{{ item.country }}</country_of_origin>
                 <picture>{{ baseUrl }}{{ imageUrl(item.image, baseUrl ~ 'img/nofoto.png') | slice(1) }}</picture>
@@ -35,6 +34,9 @@
                     {{ fieldByLocale(item, 'description') | raw }}
                     ]]>
                 </description>
+                <delivery>true</delivery>
+                <pickup>false</pickup>
+                <store>false</store>
             </offer>
             {% endfor -%}
         </offers>

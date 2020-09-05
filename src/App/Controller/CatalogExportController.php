@@ -53,6 +53,12 @@ class CatalogExportController extends BaseController
         $localeDefault = $this->params->get('locale');
         $locale = $request->getLocale();
         $templatePath = $this->getTemplateName($twig, 'export', '', 'catalog/', $format);
+        $login = $this->params->has('app.catalog_export_login')
+            ? $this->params->get('app.catalog_export_login')
+            : '';
+        $password = $this->params->has('app.catalog_export_password')
+            ? $this->params->get('app.catalog_export_password')
+            : '';
         $productsCollectionName = $this->params->has('app.catalog_export_collection')
             ? $this->params->get('app.catalog_export_collection')
             : 'products';
@@ -67,6 +73,14 @@ class CatalogExportController extends BaseController
             : 5;
         if (!$twig->getLoader()->exists($templatePath)) {
             throw $this->createNotFoundException('Page not found.');
+        }
+        if ($login && $password
+            && (
+                !isset($_SERVER['PHP_AUTH_USER'])
+                || $_SERVER['PHP_AUTH_USER'] !== $login
+                || $_SERVER['PHP_AUTH_PW'] !== $password
+            )) {
+                throw $this->createNotFoundException('Page not found.');
         }
 
         // Get from cache if exists

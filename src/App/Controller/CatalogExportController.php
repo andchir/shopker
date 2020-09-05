@@ -80,7 +80,7 @@ class CatalogExportController extends BaseController
                 || $_SERVER['PHP_AUTH_USER'] !== $login
                 || $_SERVER['PHP_AUTH_PW'] !== $password
             )) {
-                throw $this->createNotFoundException('Page not found.');
+                throw $this->createAccessDeniedException();
         }
 
         // Get from cache if exists

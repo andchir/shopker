@@ -140,7 +140,12 @@ class CatalogExportController extends BaseController
         $fileCache->save($cacheItem);
 
         $response = new Response();
-        $response->headers->set('Content-Type', 'text/xml');
+        if ($format === 'xml') {
+            $response->headers->set('Content-Type', 'text/xml');
+        }
+        else if ($format === 'json') {
+            $response->headers->set('Content-Type', 'application/json');
+        }
         $response->setContent($pageContent);
 
         return $response;

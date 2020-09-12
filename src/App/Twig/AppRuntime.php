@@ -356,7 +356,7 @@ class AppRuntime
             'fileFields' => $fileFields
         ]);
     }
-
+    
     /**
      * @param TwigEnvironment $environment
      * @param int $parentId
@@ -366,6 +366,9 @@ class AppRuntime
      * @param bool $cacheEnabled
      * @param string $activeClassName
      * @return string
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function categoriesTreeFunction(
         TwigEnvironment $environment,

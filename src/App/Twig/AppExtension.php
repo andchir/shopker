@@ -140,8 +140,15 @@ class AppExtension extends AbstractExtension
     public function catalogPathFunction($parentUri = '', $systemName = '', $itemData = [], $categoriesField = '', $linkField = 'href')
     {
         $baseUrl = $this->container->get('router')->getContext()->getBaseUrl();
+        $request = $this->requestStack->getCurrentRequest();
         $path = $baseUrl;
         if ($linkField && !empty($itemData[$linkField])) {
+            $locale = $request->getLocale();
+            if ($request->attributes->has('locale_url_prefix')
+                && !empty($itemData['translations'])
+                && !empty($itemData['translations'][$linkField])) {
+                    return $itemData['translations'][$linkField][$locale] ?? $itemData[$linkField];
+            }
             return $itemData[$linkField];
         }
         if ($categoriesField && !empty($itemData[$categoriesField])) {
@@ -193,8 +200,7 @@ class AppExtension extends AbstractExtension
             $path .= $parentUri;
         }
         $path .= $systemName;
-
-        $request = $this->requestStack->getCurrentRequest();
+        
         $localeUrlPrefix = $request->attributes->has('locale_url_prefix')
             ? $request->attributes->get('locale_url_prefix')
             : '/';

@@ -14,6 +14,7 @@ var APP_LANG = {
     "ADD_TEMPLATE": "Add template",
     "APPLY": "Apply",
     "ALL": "All",
+    "API_TOKEN": "API token",
     "BACK": "Back",
     "BATCH_ACTIONS": "Batch Actions",
     "BUY": "Buy",

@@ -131,6 +131,7 @@ class User implements UserInterface, \Serializable
     
     /**
      * @MongoDB\Field(type="string")
+     * @Groups({"details"})
      * @var string
      */
     private $apiToken;
@@ -639,5 +640,14 @@ class User implements UserInterface, \Serializable
     public function getIsSuperAdmin()
     {
         return in_array('ROLE_SUPER_ADMIN', $this->getRoles());
+    }
+    
+    /**
+     * @return string
+     * @throws \Exception
+     */
+    public static function createApiToken()
+    {
+        return bin2hex(random_bytes(60));
     }
 }

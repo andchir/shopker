@@ -103,7 +103,8 @@ class UserController extends StorageControllerAbstract
             ->setEmail($data['email'])
             ->setFullName($data['fullName'])
             ->setPhone($data['phone'])
-            ->setIsActive(!empty($data['isActive']));
+            ->setIsActive(!empty($data['isActive']))
+            ->setApiToken($data['apiToken'] ?? '');
 
         if (isset($data['role']) && $currentUser->getId() !== $item->getId()) {
             $item->setRoles([$data['role']]);
@@ -235,8 +236,24 @@ class UserController extends StorageControllerAbstract
      */
     public function getRolesHierarchyAction()
     {
-        return new JsonResponse([
+        return $this->json([
             'roles' => $this->getRolesHierarchy()
+        ]);
+    }
+    
+    /**
+     * @Route("/create_api_token", methods={"POST"})
+     * @return JsonResponse
+     */
+    public function createApiTokenAction()
+    {
+        try {
+            $token = User::createApiToken();
+        } catch (\Exception $e) {
+            return $this->setError($e->getMessage());
+        }
+        return $this->json([
+            'token' => $token
         ]);
     }
 

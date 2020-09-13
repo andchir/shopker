@@ -14,6 +14,7 @@ var APP_LANG = {
     "ADD_TEMPLATE": "Добавить шаблон",
     "APPLY": "Применить",
     "ALL": "Все",
+    "API_TOKEN": "API токен",
     "BACK": "Вернуться",
     "BATCH_ACTIONS": "Групповые действия",
     "BUY": "Купить",

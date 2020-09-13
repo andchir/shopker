@@ -58,6 +58,10 @@ export class ModalUserContentComponent extends AppModalContentAbstractComponent<
             validators: []
         },
         {
+            name: 'apiToken',
+            validators: []
+        },
+        {
             name: 'options',
             validators: [],
             children: [
@@ -115,6 +119,34 @@ export class ModalUserContentComponent extends AppModalContentAbstractComponent<
                 takeUntil(this.destroyed$),
                 map(res => res['roles'])
             );
+    }
+    
+    clearApiToken(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.getControl(this.form, null, 'apiToken').setValue('');
+    }
+    
+    generateApiToken(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.loading = true;
+        this.dataService.createApiToken()
+            .pipe(
+                takeUntil(this.destroyed$)
+            )
+            .subscribe({
+                next: (res) => {
+                    this.getControl(this.form, null, 'apiToken').setValue(res.token);
+                    this.loading = false;
+                },
+                error: (err) => {
+                    this.errorMessage = err.error || this.getLangString('ERROR');
+                    this.loading = false;
+                }
+            });
     }
 }
 

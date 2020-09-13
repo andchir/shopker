@@ -124,12 +124,34 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="form-group">
-                    <div class="card card-body p-2 pl-3">
-                        <div class="custom-control custom-checkbox m-0">
-                            <input type="checkbox" class="custom-control-input" id="fieldIsActive{{ model.id }}" value="1" formControlName="isActive">
-                            <label class="custom-control-label" for="fieldIsActive{{ model.id }}">{{'ACTIVE' | translate}}</label>
+                    <label class="label-filled">
+                        {{'API_TOKEN' | translate}}
+                    </label>
+                    <div class="input-group" [class.is-invalid]="formErrors.name">
+                        <input type="text" class="form-control" name="apiToken" autocomplete="off" formControlName="apiToken">
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-secondary" ngbTooltip="{{'CLEAR' | translate}}" container="body" (click)="clearApiToken($event)">
+                                <i class="icon-cross"></i>
+                            </button>
+                            <button type="button" class="btn btn-secondary" ngbTooltip="{{'GENERATE' | translate}}" container="body" (click)="generateApiToken($event)">
+                                <i class="icon-reload"></i>
+                            </button>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="form-group">
+    
+                    <div class="form-group mt-0 mt-lg-4">
+                        <div class="card card-body p-2 pl-3">
+                            <div class="custom-control custom-checkbox m-0">
+                                <input type="checkbox" class="custom-control-input" id="fieldIsActive{{ model.id }}" value="1" formControlName="isActive">
+                                <label class="custom-control-label" for="fieldIsActive{{ model.id }}">{{'ACTIVE' | translate}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
         </div>

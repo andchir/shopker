@@ -17,6 +17,7 @@ export class User {
         public role?: string,
         public phone?: string,
         public password?: string,
-        public confirmPassword?: string
+        public confirmPassword?: string,
+        public apiToken?: string
     ) { }
 }

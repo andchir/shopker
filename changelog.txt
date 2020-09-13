@@ -1,3 +1,6 @@
+4.2.4
+- Added authorization by API token. For users, you can create an API token in the admin interface.
+
 4.2.3
 - For the "Schedule" (booking) field, the "fullCalendarOptionsFieldName" parameter has been added, in which you can specify the field where the calendar settings come from (you can create different calendar options for each item).
 - Added export catalog to YML (Yandex.Market).

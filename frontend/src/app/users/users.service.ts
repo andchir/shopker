@@ -22,5 +22,11 @@ export class UsersService extends DataService<User> {
                 catchError(this.handleError<any>())
             );
     }
-
+    
+    createApiToken(): Observable<{token: string}> {
+        const url = this.getRequestUrl() + '/create_api_token';
+        return this.http.post<{token: string}>(url, {}, {headers: this.headers}).pipe(
+            catchError(this.handleError<any>())
+        );
+    }
 }

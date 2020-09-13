@@ -41,6 +41,8 @@ security:
             guard:
                 authenticators:
                     - App\Security\LoginFormAuthenticator
+                    - App\Security\TokenAuthenticator
+                entry_point: App\Security\LoginFormAuthenticator
 
             # http_basic: true
             # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate

@@ -128,6 +128,12 @@ class User implements UserInterface, \Serializable
      * @var string
      */
     protected $role;
+    
+    /**
+     * @MongoDB\Field(type="string")
+     * @var string
+     */
+    private $apiToken;
 
     public function __construct()
     {
@@ -193,6 +199,24 @@ class User implements UserInterface, \Serializable
     public function setPassword($password)
     {
         $this->password = $password;
+        return $this;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getApiToken()
+    {
+        return $this->apiToken;
+    }
+    
+    /**
+     * @param string $apiToken
+     * @return $this
+     */
+    public function setApiToken($apiToken)
+    {
+        $this->apiToken = $apiToken;
         return $this;
     }
 

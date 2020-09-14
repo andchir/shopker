@@ -23,6 +23,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -35,20 +36,8 @@ use App\Form\Model\Registration;
 use App\Form\Model\ResetPassword;
 use App\Form\Type\ResetPasswordType;
 
-class AccountController extends AbstractController
+class AccountController extends BaseController
 {
-
-    /** @var ParameterBagInterface */
-    protected $params;
-    /** @var DocumentManager */
-    private $dm;
-
-    public function __construct(ParameterBagInterface $params, DocumentManager $dm)
-    {
-        $this->params = $params;
-        $this->dm = $dm;
-    }
-
     /**
      * @Route(
      *     "/{_locale}/login",
@@ -455,6 +444,43 @@ class AccountController extends AbstractController
 
         return $this->render('profile/contacts.html.twig', [
             'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route(
+     *     "/{_locale}/token",
+     *     name="get_token_localized",
+     *     requirements={"_locale": "^[a-z]{2}$"},
+     *     methods={"POST"}
+     * )
+     * @Route(
+     *     "/token",
+     *     name="get_token",
+     *     requirements={"_locale": "^[a-z]{2}$"},
+     *     methods={"POST"}
+     * )
+     * @param Request $request
+     * @param UserPasswordEncoderInterface $encoder
+     * @return JsonResponse
+     */
+    public function getApiTokenAction(Request $request, UserPasswordEncoderInterface $encoder)
+    {
+        $data = json_decode($request->getContent(), true);
+        $username = $data['username'] ?? '';
+        $password = $data['password'] ?? '';
+        if (!$username || !$password) {
+            return $this->setError($this->translator->trans('Bad credentials.', [], 'validators'));
+        }
+
+        /** @var User $user */
+        $user = $this->getUserRepository()->loadUserByUsername($username);
+        if (!$user || !$encoder->isPasswordValid($user, $password)) {
+            return $this->setError($this->translator->trans('Bad credentials.', [], 'validators'));
+        }
+
+        return $this->json([
+            'token' => $user->getApiToken()
         ]);
     }
 

@@ -463,6 +463,7 @@ class AccountController extends BaseController
      * @param Request $request
      * @param UserPasswordEncoderInterface $encoder
      * @return JsonResponse
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function getApiTokenAction(Request $request, UserPasswordEncoderInterface $encoder)
     {
@@ -472,11 +473,22 @@ class AccountController extends BaseController
         if (!$username || !$password) {
             return $this->setError($this->translator->trans('Bad credentials.', [], 'validators'));
         }
+        $allowCreateToken = $this->params->has('app.allow_create_token')
+            ? $this->params->get('app.allow_create_token')
+            : true;
 
         /** @var User $user */
         $user = $this->getUserRepository()->loadUserByUsername($username);
         if (!$user || !$encoder->isPasswordValid($user, $password)) {
             return $this->setError($this->translator->trans('Bad credentials.', [], 'validators'));
+        }
+        if (!$user->getApiToken()) {
+            if ($allowCreateToken) {
+                $user->setApiToken(User::createApiToken());
+                $this->dm->flush();
+            } else {
+                return $this->setError($this->translator->trans('Bad credentials.', [], 'validators'));
+            }
         }
 
         return $this->json([

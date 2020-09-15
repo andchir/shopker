@@ -22,8 +22,12 @@ class UserRepository extends BaseRepository implements UserLoaderInterface
         $email = mb_strtolower($email);
         $qb = $this->createQueryBuilder();
         return $qb
-            ->addOr($qb->expr()->field('username')->equals($email))
-            ->addOr($qb->expr()->field('email')->equals($email))
+            ->addAnd(
+                $qb->expr()
+                    ->addOr($qb->expr()->field('username')->equals($email))
+                    ->addOr($qb->expr()->field('email')->equals($email))
+            )
+            ->addAnd($qb->expr()->field('isActive')->equals(true))
             ->getQuery()
             ->getSingleResult();
     }

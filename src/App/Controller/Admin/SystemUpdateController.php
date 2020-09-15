@@ -188,8 +188,21 @@ class SystemUpdateController extends AbstractController
                 break;
             case 'config':
     
-                $pathToCopyArr[] = 'config/packages';
-                $pathToCopyArr[] = 'config/resources';
+                $pathToCopyArr[] = 'config/packages/dev';
+                $pathToCopyArr[] = 'config/packages/prod';
+                $pathToCopyArr[] = 'config/packages/test';
+                $pathToCopyArr[] = 'config/packages/validator.yaml';
+                $pathToCopyArr[] = 'config/packages/twig.yaml';
+                $pathToCopyArr[] = 'config/packages/translation.yaml';
+                $pathToCopyArr[] = 'config/packages/swiftmailer.yaml';
+                $pathToCopyArr[] = 'config/packages/sensio_framework_extra.yaml';
+                $pathToCopyArr[] = 'config/packages/security.yaml';
+                $pathToCopyArr[] = 'config/packages/routing.yaml';
+                $pathToCopyArr[] = 'config/packages/framework.yaml';
+                $pathToCopyArr[] = 'config/packages/doctrine_mongodb.yaml';
+                $pathToCopyArr[] = 'config/packages/doctrine_migrations.yaml';
+                $pathToCopyArr[] = 'config/packages/doctrine.yaml';
+
                 $pathToCopyArr[] = 'config/routes';
                 $pathToCopyArr[] = 'config/bundles.php';
                 $pathToCopyArr[] = 'config/parameters.yaml';

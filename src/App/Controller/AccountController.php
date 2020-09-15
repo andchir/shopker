@@ -348,13 +348,20 @@ class AccountController extends BaseController
      *     requirements={"page"="\d+", "orderId"="\d+"},
      *     defaults={"page": "1", "orderId": "0"}
      * )
+     * @Route(
+     *     "/api/{_locale}/profile/history_orders/{page}/{orderId}",
+     *     name="profile_history_orders_api",
+     *     requirements={"_locale"="^[a-z]{2}$", "page"="\d+", "orderId"="\d+"},
+     *     defaults={"page": "1", "orderId": "0"}
+     * )
      * @param Request $request
-     * @param string $page
-     * @param string $orderId
      * @param SettingsService $settingsService
+     * @param ShopCartService $shopCartService
+     * @param int|string $page
+     * @param int|string $orderId
      * @return RedirectResponse|Response
      */
-    public function historyOrdersAction(Request $request, $page, $orderId, SettingsService $settingsService, ShopCartService $shopCartService )
+    public function historyOrdersAction(Request $request, SettingsService $settingsService, ShopCartService $shopCartService, $page, $orderId)
     {
         $pageLimit = 10;
 
@@ -398,6 +405,13 @@ class AccountController extends BaseController
                         $isPaymentAllowed = true;
                 }
             }
+        }
+
+        if ($this->getIsJsonApi($request)) {
+            return $this->json([
+                'orders' => $orders,
+                'pagesOptions' => $pagesOptions
+            ], 200, [], ['groups' => ['details']]);
         }
 
         return $this->render('profile/history_orders.html.twig', [

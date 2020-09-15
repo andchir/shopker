@@ -6,6 +6,7 @@ use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment as TwigEnvironment;
@@ -61,5 +62,14 @@ class BaseController extends AbstractController
             return $templateName;
         }
         return $path . sprintf('%s.%s.twig', $mainTemplateName, $format);
+    }
+
+    /**
+     * @param Request $request
+     * @return bool
+     */
+    public function getIsJsonApi(Request $request)
+    {
+        return strpos($request->getPathInfo(), '/api/') !== false;
     }
 }

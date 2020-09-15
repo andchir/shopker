@@ -13,6 +13,18 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
 {
 
     /**
+     * @param array $options
+     * @param int $userId
+     * @param array $filterIds
+     * @return array
+     */
+    public function findAllByOptions($options = [], $userId = 0, $filterIds = [])
+    {
+        $options['only_active'] = false;
+        return parent::findAllByOptions($options, $userId, $filterIds);
+    }
+
+    /**
      * @param $id
      * @param $userId
      * @return object

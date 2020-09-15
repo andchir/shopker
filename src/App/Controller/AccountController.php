@@ -350,6 +350,7 @@ class AccountController extends BaseController
      * )
      * @Route(
      *     "/api/{_locale}/profile/history_orders/{page}/{orderId}",
+     *     condition="request.headers.get('Content-Type') === 'application/json'",
      *     name="profile_history_orders_api",
      *     requirements={"_locale"="^[a-z]{2}$", "page"="\d+", "orderId"="\d+"},
      *     defaults={"page": "1", "orderId": "0"}

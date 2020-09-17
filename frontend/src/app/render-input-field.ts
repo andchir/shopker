@@ -169,6 +169,29 @@ export class InputFieldRenderComponent implements OnInit {
                 );
 
                 break;
+            case 'parameters':
+
+                propertiesDefault = {
+                    handler: '',
+                    multiple: 0,
+                    names: 'NAME,VALUE,PRICE,IMAGE_NUMBER',
+                    keys: 'name,value,price,imageNum',
+                    types: 'text,text,number,number'
+                };
+                this.extendProperties(
+                    field.inputProperties,
+                    propertiesDefault
+                );
+                ['names', 'keys', 'types'].forEach((k) => {
+                    const defaultValues = String(propertiesDefault[k]).split(',');
+                    let values = String(field.inputProperties[k]).split(',');
+                    if (defaultValues.length > values.length) {
+                        values = values.concat(defaultValues.slice(values.length));
+                    }
+                    field.inputProperties[k] = values;
+                });
+
+                break;
             case 'schedule':
     
                 propertiesDefault = {

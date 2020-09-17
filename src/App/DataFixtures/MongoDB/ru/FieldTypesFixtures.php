@@ -548,6 +548,21 @@ class FieldTypesFixtures extends Fixture implements FixtureGroupInterface
                         'name' => 'handler',
                         'title' => 'Обработчик',
                         'default_value' => ''
+                    ],
+                    [
+                        'name' => 'names',
+                        'title' => 'Названия',
+                        'default_value' => 'NAME,VALUE,PRICE,IMAGE_NUMBER'
+                    ],
+                    [
+                        'name' => 'keys',
+                        'title' => 'Ключи',
+                        'default_value' => 'name,value,price,imageNum'
+                    ],
+                    [
+                        'name' => 'types',
+                        'title' => 'Типы полей',
+                        'default_value' => 'text,text,number,number'
                     ]
                 ],
                 'outputProperties' => [

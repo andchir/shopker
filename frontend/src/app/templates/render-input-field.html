@@ -397,16 +397,16 @@
                                         <thead>
                                             <tr>
                                                 <th>
-                                                    {{'NAME' | translate}}
+                                                    {{field.inputProperties.names[0] | translate}}
                                                 </th>
                                                 <th>
-                                                    {{'VALUE' | translate}}
+                                                    {{field.inputProperties.names[1] | translate}}
                                                 </th>
                                                 <th>
-                                                    {{'PRICE' | translate}}
+                                                    {{field.inputProperties.names[2] | translate}}
                                                 </th>
                                                 <th>
-                                                    {{'IMAGE_NUMBER' | translate}}
+                                                    {{field.inputProperties.names[3] | translate}}
                                                 </th>
                                                 <th></th>
                                             </tr>
@@ -414,16 +414,16 @@
                                         <tbody>
                                             <tr *ngFor="let item of model[field.name]; index as index">
                                                 <td>
-                                                    <input type="text" class="form-control form-control-sm" [(ngModel)]="item.name" [ngModelOptions]="{standalone: true}">
+                                                    <input [type]="field.inputProperties.types[0]" class="form-control form-control-sm" [(ngModel)]="item[field.inputProperties.keys[0]]" [ngModelOptions]="{standalone: true}">
                                                 </td>
                                                 <td>
-                                                    <input type="text" class="form-control form-control-sm" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
+                                                    <input [type]="field.inputProperties.types[1]" class="form-control form-control-sm" [(ngModel)]="item[field.inputProperties.keys[1]]" [ngModelOptions]="{standalone: true}">
                                                 </td>
                                                 <td class="text-center">
-                                                    <input type="number" class="form-control form-control-sm" min="0" [(ngModel)]="item.price" [ngModelOptions]="{standalone: true}">
+                                                    <input [type]="field.inputProperties.types[2]" class="form-control form-control-sm" min="0" [(ngModel)]="item[field.inputProperties.keys[2]]" [ngModelOptions]="{standalone: true}">
                                                 </td>
                                                 <td class="text-center">
-                                                    <input type="number" class="form-control form-control-sm" min="0" [(ngModel)]="item.imageNum" [ngModelOptions]="{standalone: true}">
+                                                    <input [type]="field.inputProperties.types[3]" class="form-control form-control-sm" min="0" [(ngModel)]="item[field.inputProperties.keys[3]]" [ngModelOptions]="{standalone: true}">
                                                 </td>
                                                 <td class="text-center">
                                                     <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'DELETE' | translate}}" (click)="parametersRemove(field.name, index)">

@@ -570,9 +570,18 @@ export class InputFieldRenderComponent implements OnInit {
         if (!this.model[fieldName]) {
             this.model[fieldName] = [];
         }
-        this.model[fieldName].push({
-            name: '', value: '', price: 0, imageNum: 0
+        const index = this.fields.findIndex((field) => {
+            return field.name === fieldName;
         });
+        const obj = {name: '', value: '', price: 0, imageNum: 0};
+        if (index > -1 && this.fields[index].inputProperties.keys) {
+            (this.fields[index].inputProperties.keys as string[]).forEach((key) => {
+                if (typeof obj[key] === 'undefined') {
+                    obj[key] = '';
+                }
+            });
+        }
+        this.model[fieldName].push(obj);
     }
 
     /**

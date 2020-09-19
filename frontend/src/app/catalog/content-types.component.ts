@@ -31,7 +31,7 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
     @ViewChild('blockFieldList') blockFieldList;
     modalRef: NgbModalRef;
 
-    model = new ContentType(0, '', '', '', 'products', [], ['General', 'Service'], true);
+    model = new ContentType(0, '', '', '', 'products', [], ['General', 'Service'], true, false);
     fieldModel = new ContentField(0, '', '', '', '', {}, '', {}, '', false, false, false);
     sortData: SortData[] = [];
     sortingfieldName = '';
@@ -82,6 +82,12 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
                 pattern: 'The name must contain only Latin letters and numbers.',
                 exists: 'Collection with the same name already exists.'
             }
+        },
+        isCreateByUsersAllowed: {
+            fieldLabel: 'CREATE_BY_USERS_ALLOWED',
+            value: '',
+            validators: [],
+            messages: {}
         },
         isActive: {
             fieldLabel: 'ACTIVE',

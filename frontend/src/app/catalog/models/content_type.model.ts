@@ -21,6 +21,11 @@ export class ContentType {
         public collection: string,
         public fields: ContentField[],
         public groups: string[],
-        public isActive: boolean
-    ) { }
+        public isActive: boolean,
+        public isCreateByUsersAllowed?: boolean
+    ) {
+        if (!this.isCreateByUsersAllowed) {
+            this.isCreateByUsersAllowed = false;
+        }
+    }
 }

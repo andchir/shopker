@@ -59,6 +59,13 @@ class ContentType
      * @var array
      */
     protected $groups;
+    
+    /**
+     * @MongoDB\Field(type="bool")
+     * @Groups({"details", "list"})
+     * @var bool
+     */
+    protected $isCreateByUsersAllowed;
 
     /**
      * @MongoDB\Field(type="bool")
@@ -254,6 +261,7 @@ class ContentType
             'name' => $this->getName(),
             'description' => $this->getDescription(),
             'collection' => $this->getCollection(),
+            'isCreateByUsersAllowed' => $this->getIsCreateByUsersAllowed(),
             'isActive' => $this->getIsActive()
         ];
         if($full){
@@ -464,5 +472,23 @@ class ContentType
             $aggregateFields['parentId'] = 1;
         }
         return $aggregateFields;
+    }
+    
+    /**
+     * @return bool
+     */
+    public function getIsCreateByUsersAllowed()
+    {
+        return $this->isCreateByUsersAllowed;
+    }
+    
+    /**
+     * @param bool $isCreateByUsersAllowed
+     * @return ContentType
+     */
+    public function setIsCreateByUsersAllowed($isCreateByUsersAllowed)
+    {
+        $this->isCreateByUsersAllowed = $isCreateByUsersAllowed;
+        return $this;
     }
 }

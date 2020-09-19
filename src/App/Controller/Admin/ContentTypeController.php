@@ -116,7 +116,8 @@ class ContentTypeController extends StorageControllerAbstract
             ->setCollection($collectionName)
             ->setFields($data['fields'])
             ->setGroups(isset($data['groups']) ? $data['groups'] : [])
-            ->setIsActive(isset($data['isActive']) ? $data['isActive'] : true);
+            ->setIsActive(isset($data['isActive']) ? $data['isActive'] : true)
+            ->setIsCreateByUsersAllowed(isset($data['isCreateByUsersAllowed']) ? $data['isCreateByUsersAllowed'] : false);
         
         if (!$contentType->getId()) {
             $this->dm->persist($contentType);

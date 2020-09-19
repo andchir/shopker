@@ -163,6 +163,7 @@ class TemplatesController extends StorageControllerAbstract
         $editable['css'] = $this->params->get('app.editable_css');
         $editable['js'] = $this->params->get('app.editable_js');
         $editable['config'] = $this->params->get('app.editable_config');
+        $rootPath = $this->params->get('kernel.project_dir');
 
         $fileTypes = ['css', 'js', 'config'];
         foreach ($fileTypes as $fileType) {
@@ -171,7 +172,7 @@ class TemplatesController extends StorageControllerAbstract
             }
             foreach($editable[$fileType] as $filePath) {
                 $fileFullPath = $this->getFilePathByType($fileType, $filePath);
-                if (!file_exists($fileFullPath)) {
+                if (!$fileFullPath || !file_exists($fileFullPath)) {
                     continue;
                 }
                 $items[] = [
@@ -179,7 +180,7 @@ class TemplatesController extends StorageControllerAbstract
                     'type' => $fileType,
                     'extension' => UtilsService::getExtension($fileFullPath),
                     'size' => UtilsService::sizeFormat(filesize($fileFullPath)),
-                    'path' => dirname(str_replace($this->getFilePathByType($fileType, ''), '', $fileFullPath))
+                    'path' => dirname($filePath)
                 ];
             }
         }
@@ -291,7 +292,7 @@ class TemplatesController extends StorageControllerAbstract
     /**
      * @param $fileType
      * @param $filePath
-     * @return string
+     * @return string|bool
      * @throws \Twig\Error\LoaderError
      */
     public function getFilePathByType($fileType, $filePath)
@@ -301,7 +302,7 @@ class TemplatesController extends StorageControllerAbstract
         $configDirPath = $rootPath . DIRECTORY_SEPARATOR . 'config';
         $templatesDirPath = $this->getTemplatesDirPath();
         $filePath = trim($filePath, DIRECTORY_SEPARATOR);
-        $filePath = str_replace(['..', './'], '', $filePath);
+        $filePath = str_replace('../../', '', $filePath);
 
         switch ($fileType) {
             case 'css':
@@ -314,7 +315,8 @@ class TemplatesController extends StorageControllerAbstract
             default:
                 $filePath = $templatesDirPath . DIRECTORY_SEPARATOR . $filePath;
         }
-        return $filePath;
+        $output = realpath($filePath);
+        return strpos($output, $rootPath) !== false ? $output : false;
     }
 
     /**

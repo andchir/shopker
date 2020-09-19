@@ -594,6 +594,42 @@ class CatalogService {
         }
         return $result;
     }
+    
+    /**
+     * @param ContentType $contentType
+     * @param array $queryOptions
+     * @param array $filter
+     * @param int $skip
+     * @return array
+     */
+    public function getContentList(ContentType $contentType, $queryOptions, $filter, $skip = 0)
+    {
+        $collection = $this->getCollection($contentType->getCollection());
+        $contentTypeFields = $contentType->getFields();
+    
+        $results = $collection->find($filter, [
+            'sort' => $queryOptions['sortOptionsAggregation'],
+            'skip' => $skip,
+            'limit' => $queryOptions['limit']
+        ]);
+    
+        $data = [];
+        foreach ($results as $entry) {
+            $row = [
+                'id' => $entry['_id'],
+                'parentId' => $entry['parentId'],
+                'isActive' => $entry['isActive']
+            ];
+            foreach ($contentTypeFields as $field){
+                $row[$field['name']] = isset($entry[$field['name']])
+                    ? $entry[$field['name']]
+                    : '';
+            }
+            $data[] = $row;
+        }
+    
+        return $data;
+    }
 
     /**
      * @param $collectionName

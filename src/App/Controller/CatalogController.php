@@ -52,8 +52,8 @@ class CatalogController extends BaseController
     
     /**
      * @Route(
-     *     "/api/{_locale}/content/{categoryId}",
-     *     name="content_create_api",
+     *     "/api/{_locale}/user_content/{categoryId}",
+     *     name="user_content_create_api",
      *     requirements={"_locale"="^[a-z]{2}$"},
      *     condition="request.headers.get('Content-Type') === 'application/json'",
      *     methods={"POST"}
@@ -64,7 +64,7 @@ class CatalogController extends BaseController
      * @param Category $category
      * @return JsonResponse
      */
-    public function createContentPage(Request $request, EventDispatcherInterface $eventDispatcher, Category $category = null)
+    public function createUserContentAction(Request $request, EventDispatcherInterface $eventDispatcher, Category $category = null)
     {
         if(!$category){
             return $this->setError($this->translator->trans('Category not found.', [], 'validators'));
@@ -125,8 +125,81 @@ class CatalogController extends BaseController
         
         return $this->json([
             'success' => true,
-            'document' => $document
+            'result' => $document
         ]);
+    }
+    
+    /**
+     * @Route(
+     *     "/api/{_locale}/user_content/{categoryId}/{itemId}",
+     *     name="user_content_item_api",
+     *     requirements={"_locale"="^[a-z]{2}$"},
+     *     condition="request.headers.get('Content-Type') === 'application/json'",
+     *     methods={"GET"}
+     * )
+     * @ParamConverter("category", class="App\MainBundle\Document\Category", options={"id" = "categoryId"})
+     * @param Request $request
+     * @param Category $category
+     * @param string|int $itemId
+     * @return JsonResponse
+     */
+    public function getUserContentAction(Request $request, Category $category = null, $itemId = 0)
+    {
+        if(!$category){
+            return $this->setError($this->translator->trans('Category not found.', [], 'validators'));
+        }
+        $contentType = $category->getContentType();
+        if(!$contentType){
+            return $this->setError($this->translator->trans('Content type not found.', [], 'validators'));
+        }
+        
+        /** @var User $user */
+        $user = $this->getUser();
+        $collection = $this->catalogService->getCollection($contentType->getCollection());
+        $itemId = intval($itemId);
+        
+        if ($itemId) {
+    
+            try {
+                $document = $collection->findOne([
+                    '_id' => $itemId,
+                    'parentId' => $category->getId(),
+                    'userId' => $user->getId()
+                ]);
+            } catch (\Exception $e) {
+                return $this->setError('Item not found.');
+            }
+            
+            if (!$document) {
+                return $this->setError('Item not found.');
+            }
+    
+            return $this->json([
+                'success' => true,
+                'result' => $document
+            ]);
+            
+        } else {
+    
+            $queryString = $request->getQueryString();
+            $queryOptions = UtilsService::getQueryOptions('', $queryString, $contentType->getFields());
+            $skip = ($queryOptions['page'] - 1) * $queryOptions['limit'];
+            
+            $data = $this->catalogService->getContentList($contentType, $queryOptions, [
+                'parentId' => $category->getId(),
+                'userId' => $user->getId()
+            ], $skip);
+    
+            $total = $collection->countDocuments([
+                'parentId' => $category->getId(),
+                'userId' => $user->getId()
+            ]);
+    
+            return $this->json([
+                'items' => $data,
+                'total' => $total
+            ]);
+        }
     }
 
     /**

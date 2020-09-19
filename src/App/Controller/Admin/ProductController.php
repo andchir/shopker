@@ -76,33 +76,12 @@ class ProductController extends BaseController
 
         $queryString = $request->getQueryString();
         $queryOptions = UtilsService::getQueryOptions('', $queryString, $contentType->getFields());
-        $contentTypeFields = $contentType->getFields();
         $collection = $this->catalogService->getCollection($contentType->getCollection());
 
         $skip = ($queryOptions['page'] - 1) * $queryOptions['limit'];
-
-        $data = [];
-        $results = $collection->find([
+        $data = $this->catalogService->getContentList($contentType, $queryOptions, [
             'parentId' => $category->getId()
-        ], [
-            'sort' => $queryOptions['sortOptionsAggregation'],
-            'skip' => $skip,
-            'limit' => $queryOptions['limit']
-        ]);
-
-        foreach ($results as $entry) {
-            $row = [
-                'id' => $entry['_id'],
-                'parentId' => $entry['parentId'],
-                'isActive' => $entry['isActive']
-            ];
-            foreach ($contentTypeFields as $field){
-                $row[$field['name']] = isset($entry[$field['name']])
-                    ? $entry[$field['name']]
-                    : '';
-            }
-            $data[] = $row;
-        }
+        ], $skip);
 
         $total = $collection->countDocuments([
             'parentId' => $category->getId()

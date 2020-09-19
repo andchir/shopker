@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Events;
 use App\MainBundle\Document\ContentType;
 use App\MainBundle\Document\Filter;
+use App\MainBundle\Document\User;
 use App\Repository\CategoryRepository;
 use App\Repository\ContentTypeRepository;
 use App\Service\CatalogService;
@@ -11,11 +13,15 @@ use App\Service\SettingsService;
 use App\Service\UtilsService;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\Persistence\ObjectRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use App\MainBundle\Document\Category;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment as TwigEnvironment;
 
@@ -42,6 +48,85 @@ class CatalogController extends BaseController
         $this->settingsService = $settingsService;
         $this->catalogService = $catalogService;
         $this->twig = $twig;
+    }
+    
+    /**
+     * @Route(
+     *     "/api/{_locale}/content/{categoryId}",
+     *     name="content_create_api",
+     *     requirements={"_locale"="^[a-z]{2}$"},
+     *     condition="request.headers.get('Content-Type') === 'application/json'",
+     *     methods={"POST"}
+     * )
+     * @ParamConverter("category", class="App\MainBundle\Document\Category", options={"id" = "categoryId"})
+     * @param Request $request
+     * @param EventDispatcherInterface $eventDispatcher
+     * @param Category $category
+     * @return JsonResponse
+     */
+    public function createContentPage(Request $request, EventDispatcherInterface $eventDispatcher, Category $category = null)
+    {
+        if(!$category){
+            return $this->setError($this->translator->trans('Category not found.', [], 'validators'));
+        }
+        $contentType = $category->getContentType();
+        if(!$contentType){
+            return $this->setError($this->translator->trans('Content type not found.', [], 'validators'));
+        }
+        if (!$contentType->getIsCreateByUsersAllowed()) {
+            return $this->setError($this->translator->trans('You are not allowed to create this page.', [], 'validators'));
+        }
+        
+        /** @var User $user */
+        $user = $this->getUser();
+        $data = json_decode($request->getContent(), true);
+    
+        $collection = $this->catalogService->getCollection($contentType->getCollection());
+        if (!$collection) {
+            return $this->setError('Item not saved.');
+        }
+        $contentTypeFields = $contentType->getFields();
+    
+        $document = [
+            '_id' => $this->catalogService->getNextId($contentType->getCollection()),
+            'parentId' => $category->getId(),
+            'translations' =>  $data['translations'] ?? null,
+            'isActive' => isset($data['isActive']) ? $data['isActive'] : true,
+            'userId' => $user->getId()
+        ];
+        foreach ($data as $key => $value) {
+            if (in_array($key, ['id', '_id', 'parentId', 'isActive', 'userId', 'translations'])) {
+                continue;
+            }
+            $fIndex = array_search($key, array_column($contentTypeFields, 'name'));
+            if ($fIndex === false) {
+                continue;
+            }
+            if (is_array($value)) {
+                // TODO: add checking and filtering data
+            } else {
+                if ($contentTypeFields[$fIndex]['inputType'] === 'number') {
+                    $document[$key] = floatval(str_replace([',', ' '], ['.', ''], $value));
+                } else {
+                    $document[$key] = UtilsService::cleanString($value, UtilsService::STRING_TYPE_HTML);
+                }
+            }
+        }
+    
+        try {
+            $result = $collection->insertOne($document);
+        } catch (\Exception $e) {
+            return $this->setError('Item not saved.');
+        }
+    
+        $event = new GenericEvent($document, ['contentType' => $contentType]);
+        $eventDispatcher->dispatch($event, Events::PRODUCT_CREATED);
+        $eventDispatcher->dispatch($event, Events::PRODUCT_UPDATED);
+        
+        return $this->json([
+            'success' => true,
+            'document' => $document
+        ]);
     }
 
     /**

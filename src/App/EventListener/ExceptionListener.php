@@ -52,7 +52,7 @@ class ExceptionListener
             $message = $exception->getMessage() . " - {$filePath} ({$exception->getLine()})";
         }
 
-        if($request->isXmlHttpRequest()) {
+        if($request->getContentType() === 'json') {
             $content = [
                 'error' => $message ?: 'Not found.',
                 'statusCode' => $statusCode

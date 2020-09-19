@@ -49,5 +49,5 @@ Your user has read-only permission.: Ваш пользователь имеет 
 A file with the same name already exists.: Файл с таким именем уже существует.
 Error unpacking archive.: Ошибка при распаковке архива.
 "The folder is not writable: %dir_name%.": "Папка недоступна для записи: %dir_name%."
-
+You are not allowed to create this page.: Вам не разрешено создание этой страницы.
 

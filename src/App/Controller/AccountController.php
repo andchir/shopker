@@ -467,12 +467,14 @@ class AccountController extends BaseController
      *     "/{_locale}/token",
      *     name="get_token_localized",
      *     requirements={"_locale": "^[a-z]{2}$"},
+     *     condition="request.headers.get('Content-Type') === 'application/json'",
      *     methods={"POST"}
      * )
      * @Route(
      *     "/token",
      *     name="get_token",
      *     requirements={"_locale": "^[a-z]{2}$"},
+     *     condition="request.headers.get('Content-Type') === 'application/json'",
      *     methods={"POST"}
      * )
      * @param Request $request

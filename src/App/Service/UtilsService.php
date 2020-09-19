@@ -5,6 +5,8 @@ namespace App\Service;
 use App\MainBundle\Document\ContentType;
 use App\MainBundle\Document\Order;
 use App\MainBundle\Document\Setting;
+use HTMLPurifier;
+use HTMLPurifier_Config;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -15,6 +17,8 @@ use Symfony\Component\Yaml\Yaml;
 
 class UtilsService
 {
+    const STRING_TYPE_HTML = 'html';
+    
     /** @var ContainerInterface */
     protected $container;
 
@@ -517,5 +521,24 @@ class UtilsService
         $zip->extractTo($targetDirPath);
         $zip->close();
         return true;
+    }
+    
+    /**
+     * @param string $string
+     * @param string $type
+     * @return string
+     */
+    public static function cleanString(string $string, $type = ''): string
+    {
+        $config = HTMLPurifier_Config::createDefault();
+        switch ($type) {
+            case self::STRING_TYPE_HTML:
+                $config->set('HTML.Allowed', 'p,b,a[href|name],i,img[src|alt|width|height]');
+                break;
+            default:
+                $config->set('HTML.Allowed', '');
+        }
+        $purifier = new HTMLPurifier($config);
+        return trim($purifier->purify($string));
     }
 }

@@ -1,5 +1,5 @@
 4.2.4
-- Added authorization by API token. For users, you can create an API token in the admin interface.
+- Added authorization by API token. For users, you can create an API token in the admin interface. Documentation: https://shopker.org/api_doc/index.html
 - You can now specify field names and types for the "Parameters" input type.
 - Added the ability to create pages by the user. Added checkbox "Creation by users allowed" for content type. Read more in the API documentation.
 - Added a function to filter content that comes from the user: ``UtilsService::cleanString($string, 'html')``.

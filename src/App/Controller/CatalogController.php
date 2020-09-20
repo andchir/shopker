@@ -148,30 +148,20 @@ class CatalogController extends BaseController
         if(!$category){
             return $this->setError($this->translator->trans('Category not found.', [], 'validators'));
         }
-        $contentType = $category->getContentType();
-        if(!$contentType){
-            return $this->setError($this->translator->trans('Content type not found.', [], 'validators'));
-        }
         
         /** @var User $user */
         $user = $this->getUser();
-        $collection = $this->catalogService->getCollection($contentType->getCollection());
-        $itemId = intval($itemId);
         
         if ($itemId) {
     
             try {
-                $document = $collection->findOne([
-                    '_id' => $itemId,
+                $document = $this->catalogService->getContentItem($category, [
+                    '_id' => (int) $itemId,
                     'parentId' => $category->getId(),
                     'userId' => $user->getId()
                 ]);
             } catch (\Exception $e) {
-                return $this->setError('Item not found.');
-            }
-            
-            if (!$document) {
-                return $this->setError('Item not found.');
+                return $this->setError($this->translator->trans($e->getMessage()));
             }
     
             return $this->json([
@@ -180,6 +170,9 @@ class CatalogController extends BaseController
             ]);
             
         } else {
+    
+            $contentType = $category->getContentType();
+            $collection = $this->catalogService->getCollection($contentType->getCollection());
     
             $queryString = $request->getQueryString();
             $queryOptions = UtilsService::getQueryOptions('', $queryString, $contentType->getFields());
@@ -200,6 +193,64 @@ class CatalogController extends BaseController
                 'total' => $total
             ]);
         }
+    }
+    
+    /**
+     * @Route(
+     *     "/api/{_locale}/user_content/{categoryId}/{itemId}",
+     *     name="delete_user_content_item_api",
+     *     requirements={"_locale"="^[a-z]{2}$"},
+     *     condition="request.headers.get('Content-Type') === 'application/json'",
+     *     methods={"DELETE"}
+     * )
+     * @ParamConverter("category", class="App\MainBundle\Document\Category", options={"id" = "categoryId"})
+     * @param EventDispatcherInterface $eventDispatcher
+     * @param Category $category
+     * @param string|int $itemId
+     * @return JsonResponse
+     */
+    public function deleteUserContentAction(EventDispatcherInterface $eventDispatcher, Category $category, $itemId)
+    {
+        if(!$category){
+            return $this->setError($this->translator->trans('Category not found.', [], 'validators'));
+        }
+    
+        /** @var User $user */
+        $user = $this->getUser();
+        
+        try {
+            $document = $this->catalogService->getContentItem($category, [
+                '_id' => (int) $itemId,
+                'parentId' => $category->getId(),
+                'userId' => $user->getId()
+            ]);
+        } catch (\Exception $e) {
+            return $this->setError($this->translator->trans($e->getMessage()));
+        }
+    
+        $contentType = $category->getContentType();
+        $collection = $this->catalogService->getCollection($contentType->getCollection());
+    
+        try {
+            $result = $collection->deleteOne([
+                '_id' => (int) $itemId
+            ]);
+        } catch (\Exception $e) {
+            $result = false;
+        }
+        
+        if (empty($result) || !$result->getDeletedCount()) {
+            return $this->setError('Deletion error. Please try again later.');
+        }
+        
+        // Dispatch event
+        $event = new GenericEvent($document, ['contentType' => $contentType]);
+        $eventDispatcher->dispatch($event, Events::PRODUCT_DELETED);
+        $eventDispatcher->dispatch($event, Events::PRODUCT_UPDATED);
+    
+        return $this->json([
+            'success' => true
+        ]);
     }
 
     /**

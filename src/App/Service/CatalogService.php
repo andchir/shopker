@@ -630,6 +630,36 @@ class CatalogService {
     
         return $data;
     }
+    
+    /**
+     * @param Category $category
+     * @param array $filter
+     * @return array|object|null
+     * @throws \Exception
+     */
+    public function getContentItem(Category $category, $filter)
+    {
+        if(!$category){
+            throw new \Exception('Category not found.');
+        }
+        $contentType = $category->getContentType();
+        if(!$contentType){
+            throw new \Exception('Content type not found.');
+        }
+        
+        $collection = $this->getCollection($contentType->getCollection());
+    
+        try {
+            $document = $collection->findOne($filter);
+        } catch (\Exception $e) {
+            throw new \Exception('Item not found.');
+        }
+        if (!$document) {
+            throw new \Exception('Item not found.');
+        }
+        
+        return $document;
+    }
 
     /**
      * @param $collectionName

@@ -85,44 +85,87 @@ class CatalogController extends BaseController
         if (!$collection) {
             return $this->setError('Item not saved.');
         }
-        $contentTypeFields = $contentType->getFields();
     
-        $document = [
-            '_id' => $this->catalogService->getNextId($contentType->getCollection()),
-            'parentId' => $category->getId(),
-            'translations' =>  $data['translations'] ?? null,
-            'isActive' => isset($data['isActive']) ? $data['isActive'] : true,
-            'userId' => $user->getId()
-        ];
-        foreach ($data as $key => $value) {
-            if (in_array($key, ['id', '_id', 'parentId', 'isActive', 'userId', 'translations'])) {
-                continue;
-            }
-            $fIndex = array_search($key, array_column($contentTypeFields, 'name'));
-            if ($fIndex === false) {
-                continue;
-            }
-            if (is_array($value)) {
-                // TODO: add checking and filtering data
-            } else {
-                if ($contentTypeFields[$fIndex]['inputType'] === 'number') {
-                    $document[$key] = floatval(str_replace([',', ' '], ['.', ''], $value));
-                } else {
-                    $document[$key] = UtilsService::cleanString($value, UtilsService::STRING_TYPE_HTML);
-                }
-            }
-        }
+        $document = $this->catalogService->updateContentItemData($category, $data, $user->getId());
     
         try {
             $result = $collection->insertOne($document);
         } catch (\Exception $e) {
-            return $this->setError('Item not saved.');
+            return $this->setError($this->translator->trans('Item not saved.'));
+        }
+
+        if (!$result || !$result->getInsertedCount()) {
+            return $this->setError($this->translator->trans('Item not saved.'));
         }
     
         $event = new GenericEvent($document, ['contentType' => $contentType]);
         $eventDispatcher->dispatch($event, Events::PRODUCT_CREATED);
         $eventDispatcher->dispatch($event, Events::PRODUCT_UPDATED);
         
+        return $this->json([
+            'success' => true,
+            'result' => $document
+        ]);
+    }
+
+    /**
+     * @Route(
+     *     "/api/{_locale}/user_content/{categoryId}/{itemId}",
+     *     name="user_content_update_api",
+     *     requirements={"_locale"="^[a-z]{2}$"},
+     *     condition="request.headers.get('Content-Type') === 'application/json'",
+     *     methods={"PUT"}
+     * )
+     * @ParamConverter("category", class="App\MainBundle\Document\Category", options={"id" = "categoryId"})
+     * @param Request $request
+     * @param EventDispatcherInterface $eventDispatcher
+     * @param Category $category
+     * @param int|string $itemId
+     * @return JsonResponse
+     */
+    public function updateUserContentAction(Request $request, EventDispatcherInterface $eventDispatcher, Category $category = null, $itemId = 0)
+    {
+        if(!$category){
+            return $this->setError($this->translator->trans('Category not found.', [], 'validators'));
+        }
+
+        /** @var User $user */
+        $user = $this->getUser();
+
+        try {
+            $document = $this->catalogService->getContentItem($category, [
+                '_id' => (int) $itemId,
+                'parentId' => $category->getId(),
+                'userId' => $user->getId()
+            ]);
+        } catch (\Exception $e) {
+            return $this->setError($this->translator->trans($e->getMessage()));
+        }
+
+        $contentType = $category->getContentType();
+        $collection = $this->catalogService->getCollection($contentType->getCollection());
+
+        $data = json_decode($request->getContent(), true);
+
+        $document = $this->catalogService->updateContentItemData($category, $data, $user->getId(), (int) $itemId);
+
+        try {
+            $update = ['$set' => $document];
+            $result = $collection->updateOne(
+                ['_id' => (int) $itemId],
+                $update
+            );
+        } catch (\Exception $e) {
+            return $this->setError($this->translator->trans('Item not saved.'));
+        }
+
+        if (!$result || !$result->getModifiedCount()) {
+            return $this->setError($this->translator->trans('Item not saved.'));
+        }
+
+        $event = new GenericEvent($document, ['contentType' => $contentType]);
+        $eventDispatcher->dispatch($event, Events::PRODUCT_UPDATED);
+
         return $this->json([
             'success' => true,
             'result' => $document
@@ -198,7 +241,7 @@ class CatalogController extends BaseController
     /**
      * @Route(
      *     "/api/{_locale}/user_content/{categoryId}/{itemId}",
-     *     name="delete_user_content_item_api",
+     *     name="user_content_delete_item_api",
      *     requirements={"_locale"="^[a-z]{2}$"},
      *     condition="request.headers.get('Content-Type') === 'application/json'",
      *     methods={"DELETE"}
@@ -240,7 +283,7 @@ class CatalogController extends BaseController
         }
         
         if (empty($result) || !$result->getDeletedCount()) {
-            return $this->setError('Deletion error. Please try again later.');
+            return $this->setError($this->translator->trans('Deletion error. Please try again later.'));
         }
         
         // Dispatch event

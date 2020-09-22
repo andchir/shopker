@@ -662,6 +662,53 @@ class CatalogService {
     }
 
     /**
+     * @param Category $category
+     * @param array $data
+     * @param int $userId
+     * @param int $itemId
+     * @return array
+     */
+    public function updateContentItemData(Category $category, $data, $userId = 0, $itemId = 0)
+    {
+        $contentType = $category->getContentType();
+        $contentTypeFields = $contentType->getFields();
+
+        $document = [
+            'parentId' => $category->getId(),
+            'translations' =>  $data['translations'] ?? null,
+            'isActive' => isset($data['isActive']) ? $data['isActive'] : true
+        ];
+
+        if (!$itemId) {
+            $document['_id'] = $this->getNextId($contentType->getCollection());
+        }
+        if ($userId) {
+            $document['userId'] = $userId;
+        }
+
+        foreach ($data as $key => $value) {
+            if (in_array($key, ['id', '_id', 'parentId', 'isActive', 'userId', 'translations'])) {
+                continue;
+            }
+            $fIndex = array_search($key, array_column($contentTypeFields, 'name'));
+            if ($fIndex === false) {
+                continue;
+            }
+            if (is_array($value)) {
+                // TODO: add checking and filtering data
+            } else {
+                if ($contentTypeFields[$fIndex]['inputType'] === 'number') {
+                    $document[$key] = floatval(str_replace([',', ' '], ['.', ''], $value));
+                } else {
+                    $document[$key] = UtilsService::cleanString($value, UtilsService::STRING_TYPE_HTML);
+                }
+            }
+        }
+
+        return $document;
+    }
+
+    /**
      * @param $collectionName
      * @param string $databaseName
      * @return \MongoDB\Collection

@@ -85,8 +85,17 @@ class CatalogController extends BaseController
         if (!$collection) {
             return $this->setError('Item not saved.');
         }
-    
-        $document = $this->catalogService->updateContentItemData($category, $data, $user->getId());
+
+        try {
+            $document = $this->catalogService->createContentItemData($category, $data, $user->getId());
+        } catch (\Exception $e) {
+            $msg = unserialize($e->getMessage());
+            if (is_array($msg) && isset($msg['msg'])) {
+                return $this->setError($this->translator->trans($msg['msg'], $msg, 'validators'));
+            } else {
+                return $this->setError($this->translator->trans($e->getMessage()));
+            }
+        }
     
         try {
             $result = $collection->insertOne($document);
@@ -133,7 +142,7 @@ class CatalogController extends BaseController
         $user = $this->getUser();
 
         try {
-            $document = $this->catalogService->getContentItem($category, [
+            $doc = $this->catalogService->getContentItem($category, [
                 '_id' => (int) $itemId,
                 'parentId' => $category->getId(),
                 'userId' => $user->getId()
@@ -147,13 +156,21 @@ class CatalogController extends BaseController
 
         $data = json_decode($request->getContent(), true);
 
-        $document = $this->catalogService->updateContentItemData($category, $data, $user->getId(), (int) $itemId);
+        try {
+            $document = $this->catalogService->createContentItemData($category, $data, $user->getId(), (int) $itemId);
+        } catch (\Exception $e) {
+            $msg = unserialize($e->getMessage());
+            if (is_array($msg) && isset($msg['msg'])) {
+                return $this->setError($this->translator->trans($msg['msg'], $msg, 'validators'));
+            } else {
+                return $this->setError($this->translator->trans($e->getMessage()));
+            }
+        }
 
         try {
-            $update = ['$set' => $document];
             $result = $collection->updateOne(
                 ['_id' => (int) $itemId],
-                $update
+                ['$set' => $document]
             );
         } catch (\Exception $e) {
             return $this->setError($this->translator->trans('Item not saved.'));

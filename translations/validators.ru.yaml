@@ -50,4 +50,4 @@ A file with the same name already exists.: Файл с таким именем �
 Error unpacking archive.: Ошибка при распаковке архива.
 "The folder is not writable: %dir_name%.": "Папка недоступна для записи: %dir_name%."
 You are not allowed to create this page.: Вам не разрешено создание этой страницы.
-
+The "%name%" field is required.: Поле "%name%" обязательно для заполнения.

@@ -667,8 +667,9 @@ class CatalogService {
      * @param int $userId
      * @param int $itemId
      * @return array
+     * @throws \Exception
      */
-    public function updateContentItemData(Category $category, $data, $userId = 0, $itemId = 0)
+    public function createContentItemData(Category $category, $data, $userId = 0, $itemId = 0)
     {
         $contentType = $category->getContentType();
         $contentTypeFields = $contentType->getFields();
@@ -686,21 +687,20 @@ class CatalogService {
             $document['userId'] = $userId;
         }
 
-        foreach ($data as $key => $value) {
-            if (in_array($key, ['id', '_id', 'parentId', 'isActive', 'userId', 'translations'])) {
+        foreach ($contentTypeFields as $contentTypeField) {
+            if ($contentTypeField['required'] && empty($data[$contentTypeField['name']])) {
+                throw new \Exception(serialize(['msg' => 'The "%name%" field is required.', '%name%' => $contentTypeField['title']]));
+            } else if (!isset($data[$contentTypeField['name']])) {
                 continue;
             }
-            $fIndex = array_search($key, array_column($contentTypeFields, 'name'));
-            if ($fIndex === false) {
-                continue;
-            }
+            $value = $data[$contentTypeField['name']];
             if (is_array($value)) {
                 // TODO: add checking and filtering data
             } else {
-                if ($contentTypeFields[$fIndex]['inputType'] === 'number') {
-                    $document[$key] = floatval(str_replace([',', ' '], ['.', ''], $value));
+                if ($contentTypeField['inputType'] === 'number') {
+                    $document[$contentTypeField['name']] = floatval(str_replace([',', ' '], ['.', ''], $value));
                 } else {
-                    $document[$key] = UtilsService::cleanString($value, UtilsService::STRING_TYPE_HTML);
+                    $document[$contentTypeField['name']] = UtilsService::cleanString($value, UtilsService::STRING_TYPE_HTML);
                 }
             }
         }

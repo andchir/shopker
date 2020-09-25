@@ -65,6 +65,7 @@ class SettingsController extends AbstractController
             Setting::GROUP_DELIVERY => [],
             Setting::GROUP_PAYMENT => [],
             Setting::GROUP_CURRENCY => [],
+            Setting::GROUP_PROMOCODES => [],
             Setting::GROUP_LANGUAGES => []
         ];
 
@@ -73,6 +74,7 @@ class SettingsController extends AbstractController
         $output[Setting::GROUP_DELIVERY] = $settingsService->getSettingsGroup(Setting::GROUP_DELIVERY);
         $output[Setting::GROUP_PAYMENT] = $settingsService->getSettingsGroup(Setting::GROUP_PAYMENT);
         $output[Setting::GROUP_CURRENCY] = $settingsService->getSettingsGroup(Setting::GROUP_CURRENCY);
+        $output[Setting::GROUP_PROMOCODES] = $settingsService->getSettingsGroup(Setting::GROUP_PROMOCODES);
         $output[Setting::GROUP_LANGUAGES] = $settingsService->getSettingsGroup(Setting::GROUP_LANGUAGES);
 
         return $this->json($output, 200, [], ['groups' => ['list']]);

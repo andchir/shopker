@@ -419,6 +419,82 @@
                     </ngb-panel>
                     <!-- /currencies -->
 
+                    <!-- promo_codes -->
+                    <ngb-panel id="accordion-settings-7" [title]="'SETTINGS_PROMOCODES' | translate">
+                        <ng-template ngbPanelContent>
+                            <div [class.loading]="settings.SETTINGS_PROMOCODES.loading">
+                                <div class="text-muted">
+                                    {{'SETTINGS_PROMOCODES_DESCRIPTION' | translate}}
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-divided mb-0">
+                                        <colgroup>
+                                            <col width="45%">
+                                            <col width="45%">
+                                            <col width="10%">
+                                        </colgroup>
+                                        <thead>
+                                        <tr>
+                                            <th>
+                                                {{'PROMO_CODE' | translate}}
+                                            </th>
+                                            <th>
+                                                {{'VALUE' | translate}}
+                                            </th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let setting of settings.SETTINGS_PROMOCODES.values; let index=index">
+                                                <td>
+                                                    <input type="text" class="form-control form-control-sm" [(ngModel)]="setting.name" (ngModelChange)="onValueChanged('SETTINGS_PROMOCODES')">
+                                                </td>
+                                                <td class="text-center">
+                                                    <input type="text" class="form-control form-control-sm" [(ngModel)]="setting.options.value.value" (ngModelChange)="onValueChanged('SETTINGS_PROMOCODES')">
+                                                </td>
+                                                <td class="text-center">
+                                                    <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'REMOVE' | translate}}" (click)="deleteSetting('SETTINGS_PROMOCODES', index)">
+                                                        <i class="icon-cross"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                        <tr class="bg-faded">
+                                            <td colspan="4" class="text-center">
+
+                                                <div class="relative">
+                                                    <div class="pos-absolute-right" *ngIf="settings.SETTINGS_PROMOCODES.changed">
+
+                                                        <button type="button" class="btn btn-info btn-sm" (click)="saveSettings('SETTINGS_PROMOCODES')">
+                                                            <i class="icon-check"></i>
+                                                            &nbsp;
+                                                            <span>{{'SAVE' | translate}}</span>
+                                                        </button>
+                                                        &nbsp;
+                                                        <button type="button" class="btn btn-secondary btn-sm" (click)="resetSettingsForm('SETTINGS_PROMOCODES')" ngbTooltip="{{'FORM_RESET' | translate}}">
+                                                            <i class="icon-reload"></i>
+                                                        </button>
+
+                                                    </div>
+                                                </div>
+
+                                                <button type="button" class="btn btn-secondary btn-sm" (click)="addSetting('SETTINGS_PROMOCODES')">
+                                                    <i class="icon-plus"></i>
+                                                    &nbsp;
+                                                    <span>{{'ADD' | translate}}</span>
+                                                </button>
+
+                                            </td>
+                                        </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngb-panel>
+                    <!-- /promo_codes -->
+
                     <!-- languages -->
                     <ngb-panel id="accordion-settings-5" [title]="'SETTINGS_LANGUAGES' | translate">
                         <ng-template ngbPanelContent>

@@ -46,6 +46,12 @@ export class SettingsComponent implements OnInit {
                 priceLimit: {value: 0, type: 'number'}
             }
         ),
+        SETTINGS_PROMOCODES: new SettingsData(
+            false, true, [],
+            {
+                value: {value: '', type: 'text'}
+            }
+        ),
         SETTINGS_PAYMENT: new SettingsData(
             false, true, [],
             {
@@ -55,7 +61,7 @@ export class SettingsComponent implements OnInit {
         SETTINGS_CURRENCY: new SettingsData(
             false, true, [],
             {
-                value: {value: '', type: 'number'}
+                value: {value: 1, type: 'number'}
             }
         ),
         SETTINGS_LANGUAGES: new SettingsData(
@@ -111,6 +117,11 @@ export class SettingsComponent implements OnInit {
                     this.settings.SETTINGS_CURRENCY.values = res['SETTINGS_CURRENCY'];
                     this.settings.SETTINGS_CURRENCY.defaultValues = cloneDeep(res['SETTINGS_CURRENCY']);
                     this.settings.SETTINGS_CURRENCY.loading = false;
+                }
+                if (res['SETTINGS_PROMOCODES']) {
+                    this.settings.SETTINGS_PROMOCODES.values = res['SETTINGS_PROMOCODES'];
+                    this.settings.SETTINGS_PROMOCODES.defaultValues = cloneDeep(res['SETTINGS_PROMOCODES']);
+                    this.settings.SETTINGS_PROMOCODES.loading = false;
                 }
                 if (res['SETTINGS_LANGUAGES']) {
                     this.settings.SETTINGS_LANGUAGES.values = res['SETTINGS_LANGUAGES'];

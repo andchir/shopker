@@ -135,6 +135,9 @@ export class Order {
         public price?: number,
         public currency?: string,
         public options?: UserOption[],
-        public currencyRate?: number
+        public currencyRate?: number,
+        public discount?: number,
+        public discountPercent?: number,
+        public promoCode?: string
     ) { }
 }

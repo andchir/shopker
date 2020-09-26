@@ -182,13 +182,20 @@ export class ModalOrderContentComponent extends AppModalContentAbstractComponent
     }
 
     priceTotalUpdate(): void {
-        let priceTotal = parseFloat(String(this.model.deliveryPrice));
+        let priceTotal = 0;
         this.model.content.forEach((content) => {
             if (content instanceof OrderContent) {
                 content.priceUpdate();
             }
             priceTotal += content.priceTotal;
         });
+        if (this.model.discount) {
+            priceTotal -= this.model.discount;
+        }
+        if (this.model.discountPercent) {
+            priceTotal *= this.model.discountPercent / 100;
+        }
+        priceTotal += this.model.deliveryPrice || 0;
         this.model.price = priceTotal;
     }
 }

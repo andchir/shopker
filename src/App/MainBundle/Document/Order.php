@@ -526,7 +526,6 @@ class Order
     public function setDiscount($discount, $currencyRate = 1)
     {
         $this->discount = round($discount / $currencyRate, 2);
-        $this->discountPercent = null;
         return $this;
     }
     
@@ -545,7 +544,6 @@ class Order
     public function setDiscountPercent($discountPercent)
     {
         $this->discountPercent = $discountPercent;
-        $this->discount = null;
         return $this;
     }
 

@@ -24,6 +24,7 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
     form: FormGroup;
     submitted = false;
     loading = false;
+    dataLoaded = false;
     errorMessage: string;
     closeReason = 'canceled';
     files: {[key: string]: File} = {};
@@ -84,6 +85,7 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
     onAfterInit(): void {}
 
     onAfterGetData(): void {
+        this.dataLoaded = true;
         this.buildControls(this.form, this.formFields);
     }
 

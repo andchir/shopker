@@ -67,6 +67,7 @@ var APP_LANG = {
     "DELIVERY_METHOD": "Delivery method",
     "DESCRIPTION": "Description",
     "DISABLE_ENABLE": "Disable \/ Enable",
+    "DISCOUNT": "Discount",
     "EDIT": "Edit",
     "EDITING": "Editing",
     "EDIT_CATEGORY": "Edit category",

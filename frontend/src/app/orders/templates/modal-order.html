@@ -68,7 +68,7 @@
                     <input type="text" class="form-control" name="title"
                            formControlName="email"
                            [(ngModel)]="model.email"
-                           [class.is-invalid]="formErrors.email">
+                           [ngClass]="{'is-invalid': form.controls.email.touched && !form.controls.email.valid}">
                     <div *ngIf="formErrors.email" class="alert alert-danger">
                         {{formErrors.email}}
                     </div>
@@ -86,7 +86,7 @@
                     <input type="text" class="form-control" name="title"
                            formControlName="fullName"
                            [(ngModel)]="model.fullName"
-                           [class.is-invalid]="formErrors.fullName">
+                           [ngClass]="{'is-invalid': form.controls.fullName.touched && !form.controls.fullName.valid}">
                     <div *ngIf="formErrors.fullName" class="alert alert-danger">
                         {{formErrors.fullName}}
                     </div>
@@ -98,8 +98,7 @@
                     </label>
                     <input type="text" class="form-control" name="phone"
                            formControlName="phone"
-                           [(ngModel)]="model.phone"
-                           [class.is-invalid]="formErrors.phone">
+                           [(ngModel)]="model.phone">
                     <div *ngIf="formErrors.phone" class="alert alert-danger">
                         {{formErrors.phone}}
                     </div>
@@ -114,8 +113,7 @@
                     <textarea class="form-control" name="comment"
                               formControlName="comment"
                               rows="5"
-                              [(ngModel)]="model.comment"
-                              [class.is-invalid]="formErrors.comment"></textarea>
+                              [(ngModel)]="model.comment"></textarea>
                 </div>
             </div>
         </div>
@@ -129,7 +127,6 @@
                     <select class="custom-select" name="deliveryName"
                             formControlName="deliveryName"
                             [(ngModel)]="model.deliveryName"
-                            [class.is-invalid]="formErrors.deliveryName"
                             (ngModelChange)="onDeliveryUpdate()">
                         <ng-container *ngIf="settings">
                             <option [value]="setting.name" *ngFor="let setting of settings.SETTINGS_DELIVERY">{{setting.name}}</option>
@@ -144,8 +141,7 @@
                     </label>
                     <select class="custom-select" name="paymentName"
                             formControlName="paymentName"
-                            [(ngModel)]="model.paymentName"
-                            [class.is-invalid]="formErrors.paymentName">
+                            [(ngModel)]="model.paymentName">
                         <ng-container *ngIf="settings">
                             <option [value]="setting.name" *ngFor="let setting of settings.SETTINGS_PAYMENT">{{setting.name}}</option>
                         </ng-container>
@@ -305,13 +301,22 @@
                                     </ng-container>
 
                                 </ng-container>
+                                <ng-container *ngIf="model.discount || model.discountPercent">
+                                    <tr>
+                                        <td></td>
+                                        <td  colspan="3">{{ 'DISCOUNT' | translate }}</td>
+                                        <td class="text-center">
+                                            <span *ngIf="model.discount">{{ model.discount | number: '1.2-2':'ru-RU' }}</span>
+                                            <span *ngIf="model.discountPercent">{{ model.discountPercent }}%</span>
+                                        </td>
+                                    </tr>
+                                </ng-container>
                                 <tr>
                                     <td></td>
-                                    <td>{{ 'DELIVERY' | translate }}</td>
+                                    <td colspan="3">{{ 'DELIVERY' | translate }}</td>
                                     <td class="text-center">
                                         {{ model.deliveryPrice | number: '1.2-2':'ru-RU' }}
                                     </td>
-                                    <td colspan="2"></td>
                                 </tr>
                             </tbody>
                             <tfoot>
@@ -327,6 +332,12 @@
                                 </tr>
                             </tfoot>
                         </table>
+    
+                        <ng-container *ngIf="model.promoCode">
+                            <div class="pt-3">
+                                {{ 'PROMO_CODE' | translate }}: {{ model.promoCode }}
+                            </div>
+                        </ng-container>
 
                     </ng-template>
                 </ngb-panel>

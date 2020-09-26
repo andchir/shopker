@@ -57,23 +57,40 @@
                 {% endfor %}
                 </tbody>
                 <tfoot>
-                <tr>
-                    <th colspan="5">
-                        <div class="float-left">
-                            <button type="submit" class="btn btn-sm btn-info" name="action" value="update">
-                                <i class="icon-reload"></i>
-                                {{ 'Recalculate' | trans }}
-                            </button>
-                        </div>
-                        <div class="text-right">
-                            {{ 'Total' | trans }}:
-                        </div>
-                    </th>
-                    <th colspan="2">
-                        <span class="big shk-price">{{ priceTotal | price }}</span>
-                        <span class="shk-currency">{{ currencySelected | default(currency) }}</span>
-                    </th>
-                </tr>
+                    {% if shoppingCart.discountPercent is not empty or shoppingCart.discount is not empty %}
+                    <tr>
+                        <td colspan="5">
+                            <div class="text-right text-danger">
+                                {{ 'Discount' | trans }}:
+                            </div>
+                        </td>
+                        <td colspan="2" class="text-danger">
+                            {% if shoppingCart.discountPercent is not empty %}
+                                {{ shoppingCart.discountPercent }}%
+                            {% else %}
+                                <span class="shk-price">{{ shoppingCart.discount }}</span>
+                                <span class="shk-currency">{{ currencySelected | default(currency) }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <th colspan="5">
+                            <div class="float-left">
+                                <button type="submit" class="btn btn-sm btn-info" name="action" value="update">
+                                    <i class="icon-reload"></i>
+                                    {{ 'Recalculate' | trans }}
+                                </button>
+                            </div>
+                            <div class="text-right">
+                                {{ 'Total' | trans }}:
+                            </div>
+                        </th>
+                        <th colspan="2">
+                            <span class="big shk-price">{{ priceTotal | price }}</span>
+                            <span class="shk-currency">{{ currencySelected | default(currency) }}</span>
+                        </th>
+                    </tr>
                 </tfoot>
             </table>
         </form>

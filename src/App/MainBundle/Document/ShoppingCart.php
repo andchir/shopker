@@ -109,14 +109,14 @@ class ShoppingCart {
     protected $promoCode;
     
     /**
-     * @MongoDB\Field(type="string")
+     * @MongoDB\Field(type="float")
      * @Groups({"details", "list"})
      * @var int|float
      */
     protected $discount;
     
     /**
-     * @MongoDB\Field(type="string")
+     * @MongoDB\Field(type="float")
      * @Groups({"details", "list"})
      * @var int|float
      */
@@ -459,6 +459,11 @@ class ShoppingCart {
         if ($this->deliveryPrice) {
             $priceTotal += $this->deliveryPrice;
         }
+        if ($this->discount) {
+            $priceTotal -= $this->discount;
+        } else if ($this->discountPercent) {
+            $priceTotal *= $this->discountPercent / 100;
+        }
         $this
             ->setPrice($priceTotal)
             ->setCount($countTotal);
@@ -657,6 +662,7 @@ class ShoppingCart {
     public function setDiscount($discount)
     {
         $this->discount = $discount;
+        $this->discountPercent = null;
         return $this;
     }
     
@@ -675,6 +681,7 @@ class ShoppingCart {
     public function setDiscountPercent($discountPercent)
     {
         $this->discountPercent = $discountPercent;
+        $this->discount = null;
         return $this;
     }
 }

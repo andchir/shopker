@@ -58,6 +58,7 @@ class AppRuntime
         if (empty($shoppingCartContent) && $emptyChunkName) {
             $templateName = $this->getTemplateName($environment, $templatesPath, $emptyChunkName);
             return $environment->render($templateName, [
+                'shoppingCart' => $shoppingCart,
                 'countTotal' => 0,
                 'priceTotal' => 0,
                 'items' => []
@@ -69,6 +70,7 @@ class AppRuntime
             $shoppingCart->updateTotal();
         }
         $data = [
+            'shoppingCart' => $shoppingCart,
             'currencySelected' => ShopCartService::getCurrencyCookie(),
             'currency' => $shoppingCart ? $shoppingCart->getCurrency() : '',
             'countTotal' => $shoppingCart ? $shoppingCart->getCount() : 0,

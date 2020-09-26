@@ -285,7 +285,7 @@ class ShopCartService
     
         $shoppingCart->setPromoCode($promoCode);
         if (strpos($value, '%') !== false) {
-            $shoppingCart->setDiscountPercent(intval(str_replace($value, '%', '')));
+            $shoppingCart->setDiscountPercent(intval(str_replace('%', '', $value)));
         } else {
             $shoppingCart->setDiscount(intval($value));
         }

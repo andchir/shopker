@@ -100,6 +100,27 @@ class ShoppingCart {
      * @var string
      */
     protected $paymentValue;
+    
+    /**
+     * @MongoDB\Field(type="string")
+     * @Groups({"details", "list"})
+     * @var string
+     */
+    protected $promoCode;
+    
+    /**
+     * @MongoDB\Field(type="string")
+     * @Groups({"details", "list"})
+     * @var int|float
+     */
+    protected $discount;
+    
+    /**
+     * @MongoDB\Field(type="string")
+     * @Groups({"details", "list"})
+     * @var int|float
+     */
+    protected $discountPercent;
 
     /**
      * @MongoDB\Field(type="collection")
@@ -601,5 +622,59 @@ class ShoppingCart {
             'delivery_name' => $this->getDeliveryName(),
             'ids' => $this->getContentValues('id')
         ];
+    }
+    
+    /**
+     * @return string
+     */
+    public function getPromoCode()
+    {
+        return $this->promoCode;
+    }
+    
+    /**
+     * @param string $promoCode
+     * @return ShoppingCart
+     */
+    public function setPromoCode(string $promoCode)
+    {
+        $this->promoCode = $promoCode;
+        return $this;
+    }
+    
+    /**
+     * @return float|int
+     */
+    public function getDiscount()
+    {
+        return $this->discount;
+    }
+    
+    /**
+     * @param float|int $discount
+     * @return ShoppingCart
+     */
+    public function setDiscount($discount)
+    {
+        $this->discount = $discount;
+        return $this;
+    }
+    
+    /**
+     * @return float|int
+     */
+    public function getDiscountPercent()
+    {
+        return $this->discountPercent;
+    }
+    
+    /**
+     * @param float|int $discountPercent
+     * @return ShoppingCart
+     */
+    public function setDiscountPercent($discountPercent)
+    {
+        $this->discountPercent = $discountPercent;
+        return $this;
     }
 }

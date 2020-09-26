@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\MainBundle\Document\Order;
 use App\MainBundle\Document\OrderContent;
+use App\MainBundle\Document\Setting;
 use App\MainBundle\Document\ShoppingCart;
 use App\Repository\ShoppingCartRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -251,6 +252,45 @@ class ShopCartService
                 break;
         }
         return $receipt;
+    }
+    
+    /**
+     * @param string $promoCode
+     * @param string $type
+     * @return array
+     */
+    public function promoCodeApply($promoCode, $type = ShoppingCart::TYPE_MAIN)
+    {
+        if (!$promoCode) {
+            return ['success' => false, 'message' => 'Promo code not found.'];
+        }
+        /** @var SettingsService $settingsService */
+        $settingsService = $this->container->get('app.settings');
+        $promoCodesSettings = $settingsService->getSettingsGroup(Setting::GROUP_PROMOCODES);
+        
+        $promoCodeCurrent = array_filter($promoCodesSettings, function($item) use ($promoCode) {
+            /** @var Setting $item */
+            return $item->getName() === $promoCode;
+        });
+        if (empty($promoCodeCurrent)) {
+            return ['success' => false, 'message' => 'Promo code not found.'];
+        }
+    
+        /** @var Setting $promoCodeCurrent */
+        $promoCodeCurrent = current($promoCodeCurrent);
+        $value = (string) $promoCodeCurrent->getOption('value');
+    
+        /** @var ShoppingCart $shoppingCart */
+        $shoppingCart = $this->getShoppingCartByType($type);
+    
+        $shoppingCart->setPromoCode($promoCode);
+        if (strpos($value, '%') !== false) {
+            $shoppingCart->setDiscountPercent(intval(str_replace($value, '%', '')));
+        } else {
+            $shoppingCart->setDiscount(intval($value));
+        }
+        
+        return ['success' => true];
     }
 
     /**

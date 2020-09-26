@@ -2,6 +2,9 @@
     <h1>
         {{ 'Shopping cart' | trans }}
     </h1>
+    
+    {% include 'flash_messages.html.twig' %}
+    
     {% if items | length > 0 %}
         <form action="{{ path('shop_cart_action') }}" method="post">
             <input type="hidden" name="type" value="{{ type }}">
@@ -74,12 +77,40 @@
                 </tfoot>
             </table>
         </form>
-        <div class="float-right">
-            <a class="btn btn-outline-info" href="{{ pathLocalized('page_checkout') }}">
-                {{ 'Continue' | trans }}
-                <i class="icon-keyboard_arrow_right"></i>
-            </a>
+        
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card mb-3">
+                    <div class="card-body">
+    
+                        <form action="{{ path('shop_cart_action') }}" method="post">
+                            <input type="hidden" name="type" value="{{ type }}">
+                            <label for="fieldPromoCode">
+                                {{ 'Promo code' | trans }}
+                            </label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="promo_code" placeholder="{{ 'Enter promo code here' | trans }}" id="fieldPromoCode">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="submit" name="action" value="promo_code">
+                                        {{ 'Submit' | trans }}
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="float-right">
+                    <a class="btn btn-outline-info" href="{{ pathLocalized('page_checkout') }}">
+                        {{ 'Continue' | trans }}
+                        <i class="icon-keyboard_arrow_right"></i>
+                    </a>
+                </div>
+            </div>
         </div>
+        
     {% else %}
         <div class="alert alert-info">
             {{ 'The cart is empty' | trans }}.

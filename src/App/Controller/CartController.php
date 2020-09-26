@@ -102,6 +102,12 @@ class CartController extends BaseController
                 $this->shopCartService->clearContent($type);
 
                 break;
+            case 'promo_code':
+    
+                $promoCode = $request->get('promo_code');
+                $output = $this->shopCartService->promoCodeApply($promoCode, $type);
+        
+                break;
         }
 
         if ($request->isXmlHttpRequest()) {

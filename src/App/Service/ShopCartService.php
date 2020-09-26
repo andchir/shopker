@@ -289,6 +289,7 @@ class ShopCartService
         } else {
             $shoppingCart->setDiscount(intval($value));
         }
+        $this->dm->flush();
         
         return ['success' => true];
     }

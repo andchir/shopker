@@ -429,8 +429,9 @@
                                 <div class="table-responsive">
                                     <table class="table table-divided mb-0">
                                         <colgroup>
-                                            <col width="45%">
-                                            <col width="45%">
+                                            <col width="30%">
+                                            <col width="30%">
+                                            <col width="30%">
                                             <col width="10%">
                                         </colgroup>
                                         <thead>
@@ -440,6 +441,9 @@
                                             </th>
                                             <th>
                                                 {{'VALUE' | translate}}
+                                            </th>
+                                            <th>
+                                                {{'QUANTITY' | translate}}
                                             </th>
                                             <th></th>
                                         </tr>
@@ -453,6 +457,9 @@
                                                     <input type="text" class="form-control form-control-sm" [(ngModel)]="setting.options.value.value" (ngModelChange)="onValueChanged('SETTINGS_PROMOCODES')">
                                                 </td>
                                                 <td class="text-center">
+                                                    <input type="number" class="form-control form-control-sm" [(ngModel)]="setting.options.quantity.value" (ngModelChange)="onValueChanged('SETTINGS_PROMOCODES')">
+                                                </td>
+                                                <td class="text-center">
                                                     <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'REMOVE' | translate}}" (click)="deleteSetting('SETTINGS_PROMOCODES', index)">
                                                         <i class="icon-cross"></i>
                                                     </button>
@@ -461,7 +468,7 @@
                                         </tbody>
                                         <tfoot>
                                         <tr class="bg-faded">
-                                            <td colspan="4" class="text-center">
+                                            <td colspan="5" class="text-center">
 
                                                 <div class="relative">
                                                     <div class="pos-absolute-right" *ngIf="settings.SETTINGS_PROMOCODES.changed">

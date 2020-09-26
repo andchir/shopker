@@ -268,20 +268,30 @@ class ShopCartService
         $settingsService = $this->container->get('app.settings');
         $promoCodesSettings = $settingsService->getSettingsGroup(Setting::GROUP_PROMOCODES);
         
-        $promoCodeCurrent = array_filter($promoCodesSettings, function($item) use ($promoCode) {
+        $settingPromoCode = array_filter($promoCodesSettings, function($item) use ($promoCode) {
             /** @var Setting $item */
             return $item->getName() === $promoCode;
         });
-        if (empty($promoCodeCurrent)) {
+        if (empty($settingPromoCode)) {
             return ['success' => false, 'message' => 'Promo code not found.'];
         }
     
-        /** @var Setting $promoCodeCurrent */
-        $promoCodeCurrent = current($promoCodeCurrent);
-        $value = (string) $promoCodeCurrent->getOption('value');
-    
         /** @var ShoppingCart $shoppingCart */
         $shoppingCart = $this->getShoppingCartByType($type);
+    
+        /** @var Setting $settingPromoCode */
+        $settingPromoCode = current($settingPromoCode);
+        $value = (string) $settingPromoCode->getOption('value');
+        $quantity = (int) $settingPromoCode->getOption('quantity');
+        
+        if ($quantity === 0) {
+            $shoppingCart
+                ->setDiscountPercent(null)
+                ->setDiscount(null)
+                ->setPromoCode('');
+            $this->dm->flush();
+            return ['success' => false, 'message' => 'The promo code has expired.'];
+        }
     
         $shoppingCart->setPromoCode($promoCode);
         if (strpos($value, '%') !== false) {
@@ -289,6 +299,13 @@ class ShopCartService
         } else {
             $shoppingCart->setDiscount(intval($value));
         }
+    
+        $settingPromoCode->updateOptionsValues([
+            'quantity' => [
+                'value' => $quantity - 1
+            ]
+        ]);
+        
         $this->dm->flush();
         
         return ['success' => true];

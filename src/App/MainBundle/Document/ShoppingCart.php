@@ -456,13 +456,13 @@ class ShoppingCart {
             $priceTotal += $content->getPriceTotal();
             $countTotal += $content->getCount();
         }
-        if ($this->deliveryPrice) {
-            $priceTotal += $this->deliveryPrice;
-        }
         if ($this->discount) {
             $priceTotal -= $this->discount;
         } else if ($this->discountPercent) {
             $priceTotal *= $this->discountPercent / 100;
+        }
+        if ($this->deliveryPrice) {
+            $priceTotal += $this->deliveryPrice;
         }
         $this
             ->setPrice($priceTotal)

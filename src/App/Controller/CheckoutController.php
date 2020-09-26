@@ -136,6 +136,9 @@ class CheckoutController extends BaseController
                 $order
                     ->setDeliveryPrice($deliveryPrice, $currencyRate)
                     ->setPaymentValue($paymentName)
+                    ->setPromoCode($shoppingCart->getPromoCode())
+                    ->setDiscount($shoppingCart->getDiscount(), $currencyRate)
+                    ->setDiscountPercent($shoppingCart->getDiscountPercent())
                     ->setContentFromCart($shopCartContent, $currencyRate)
                     ->setCurrency($currency)
                     ->setCurrencyRate($currencyRate);

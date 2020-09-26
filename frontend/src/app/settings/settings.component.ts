@@ -49,7 +49,8 @@ export class SettingsComponent implements OnInit {
         SETTINGS_PROMOCODES: new SettingsData(
             false, true, [],
             {
-                value: {value: '', type: 'text'}
+                value: {value: '', type: 'text'},
+                quantity: {value: 0, type: 'number'}
             }
         ),
         SETTINGS_PAYMENT: new SettingsData(

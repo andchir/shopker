@@ -89,6 +89,27 @@ class Order
      * @var string
      */
     protected $paymentValue;
+    
+    /**
+     * @MongoDB\Field(type="string")
+     * @Groups({"details", "list"})
+     * @var string
+     */
+    protected $promoCode;
+    
+    /**
+     * @MongoDB\Field(type="float")
+     * @Groups({"details", "list"})
+     * @var int|float
+     */
+    protected $discount;
+    
+    /**
+     * @MongoDB\Field(type="float")
+     * @Groups({"details", "list"})
+     * @var int|float
+     */
+    protected $discountPercent;
 
     /**
      * @MongoDB\Field(type="integer")
@@ -206,7 +227,7 @@ class Order
      * Set createdDate
      *
      * @param \DateTime $createdDate
-     * @return $this
+     * @return Order
      */
     public function setCreatedDate($createdDate)
     {
@@ -228,7 +249,7 @@ class Order
      * Set updatedDate
      *
      * @param \DateTime $updatedDate
-     * @return $this
+     * @return Order
      */
     public function setUpdatedDate($updatedDate)
     {
@@ -251,7 +272,7 @@ class Order
      *
      * @param string $status
      * @param string $paidStatusName
-     * @return $this
+     * @return Order
      */
     public function setStatus($status, $paidStatusName = '')
     {
@@ -276,7 +297,7 @@ class Order
      * Set userId
      *
      * @param integer $userId
-     * @return $this
+     * @return Order
      */
     public function setUserId($userId)
     {
@@ -298,7 +319,7 @@ class Order
      * Set comment
      *
      * @param string $comment
-     * @return $this
+     * @return Order
      */
     public function setComment($comment)
     {
@@ -320,7 +341,7 @@ class Order
      * Set email
      *
      * @param string $email
-     * @return $this
+     * @return Order
      */
     public function setEmail($email)
     {
@@ -342,7 +363,7 @@ class Order
      * Set fullName
      *
      * @param string $fullName
-     * @return $this
+     * @return Order
      */
     public function setFullName($fullName)
     {
@@ -364,7 +385,7 @@ class Order
      * Set phone
      *
      * @param string $phone
-     * @return $this
+     * @return Order
      */
     public function setPhone($phone)
     {
@@ -386,7 +407,7 @@ class Order
      * Set deliveryName
      *
      * @param string $deliveryName
-     * @return $this
+     * @return Order
      */
     public function setDeliveryName($deliveryName)
     {
@@ -409,7 +430,7 @@ class Order
      *
      * @param $deliveryPrice
      * @param int $currencyRate
-     * @return $this
+     * @return Order
      */
     public function setDeliveryPrice($deliveryPrice, $currencyRate = 1)
     {
@@ -431,7 +452,7 @@ class Order
      * Set paymentName
      *
      * @param string $paymentName
-     * @return $this
+     * @return Order
      */
     public function setPaymentName($paymentName)
     {
@@ -453,7 +474,7 @@ class Order
      * Set paymentValue
      *
      * @param string $paymentValue
-     * @return $this
+     * @return Order
      */
     public function setPaymentValue($paymentValue)
     {
@@ -470,12 +491,69 @@ class Order
     {
         return $this->paymentValue;
     }
+    
+    /**
+     * @return string
+     */
+    public function getPromoCode()
+    {
+        return $this->promoCode;
+    }
+    
+    /**
+     * @param string $promoCode
+     * @return Order
+     */
+    public function setPromoCode(string $promoCode)
+    {
+        $this->promoCode = $promoCode;
+        return $this;
+    }
+    
+    /**
+     * @return float|int
+     */
+    public function getDiscount()
+    {
+        return $this->discount;
+    }
+    
+    /**
+     * @param float|int $discount
+     * @param int $currencyRate
+     * @return Order
+     */
+    public function setDiscount($discount, $currencyRate = 1)
+    {
+        $this->discount = round($discount / $currencyRate, 2);
+        $this->discountPercent = null;
+        return $this;
+    }
+    
+    /**
+     * @return float|int
+     */
+    public function getDiscountPercent()
+    {
+        return $this->discountPercent;
+    }
+    
+    /**
+     * @param float|int $discountPercent
+     * @return Order
+     */
+    public function setDiscountPercent($discountPercent)
+    {
+        $this->discountPercent = $discountPercent;
+        $this->discount = null;
+        return $this;
+    }
 
     /**
      * Set note
      *
      * @param string $note
-     * @return $this
+     * @return Order
      */
     public function setNote($note)
     {
@@ -526,6 +604,9 @@ class Order
             'deliveryPrice' => $this->getDeliveryPrice(),
             'paymentName' => $this->getPaymentName(),
             'deliveryValue' => $this->getPaymentValue(),
+            'promoCode' => $this->getPromoCode(),
+            'discount' => $this->getDiscount(),
+            'discountPercent' => $this->getDiscountPercent(),
             'comment' => $this->getComment(),
             'status' => $this->getStatus(),
             'contentCount' => $this->getContentCount(),
@@ -545,7 +626,7 @@ class Order
      *
      * @param $price
      * @param int $currencyRate
-     * @return $this
+     * @return Order
      */
     public function setPrice($price, $currencyRate = 1)
     {
@@ -564,7 +645,7 @@ class Order
     }
 
     /**
-     * @return $this
+     * @return Order
      */
     public function updatePriceTotal()
     {
@@ -572,6 +653,11 @@ class Order
         /** @var OrderContent $content */
         foreach ($this->content as $content) {
             $priceTotal += $content->getPriceTotal();
+        }
+        if ($this->discount) {
+            $priceTotal -= $this->discount;
+        } else if ($this->discountPercent) {
+            $priceTotal *= $this->discountPercent / 100;
         }
         if ($this->deliveryPrice) {
             $priceTotal += $this->deliveryPrice;
@@ -584,7 +670,7 @@ class Order
      * Set currency
      *
      * @param string $currency
-     * @return $this
+     * @return Order
      */
     public function setCurrency($currency)
     {
@@ -606,7 +692,7 @@ class Order
      * Set currency rate
      *
      * @param float $currencyRate
-     * @return $this
+     * @return Order
      */
     public function setCurrencyRate($currencyRate)
     {
@@ -628,7 +714,7 @@ class Order
      * Set options
      *
      * @param array $options
-     * @return $this
+     * @return Order
      */
     public function setOptions($options)
     {
@@ -650,7 +736,7 @@ class Order
      * @param string $key
      * @param mixed $value
      * @param string $title
-     * @return $this
+     * @return Order
      */
     public function setOptionValue($key, $value, $title = '')
     {
@@ -705,7 +791,7 @@ class Order
      * Set content
      *
      * @param ArrayCollection $content
-     * @return $this
+     * @return Order
      */
     public function setContent($content)
     {
@@ -737,7 +823,7 @@ class Order
      * Add file
      *
      * @param FileDocument $file
-     * @return $this
+     * @return Order
      */
     public function addFile(FileDocument $file)
     {
@@ -749,7 +835,7 @@ class Order
      * Remove file
      *
      * @param FileDocument $file
-     * @return $this
+     * @return Order
      */
     public function removeFile(FileDocument $file)
     {
@@ -771,7 +857,7 @@ class Order
      * Set isPaid
      *
      * @param bool $isPaid
-     * @return $this
+     * @return Order
      */
     public function setIsPaid($isPaid)
     {
@@ -873,7 +959,7 @@ class Order
     /**
      * @param $shopCartContent
      * @param int $currencyRate
-     * @return $this
+     * @return Order
      */
     public function setContentFromCart($shopCartContent, $currencyRate = 1)
     {

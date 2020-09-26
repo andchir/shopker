@@ -25,10 +25,14 @@ export class OrderContent {
         public image?: string,
         public parameters?: OrderContentParameter[],
         public files?: FileData[],
-        public currency?: string
+        public currency?: string,
+        public deleted?: boolean
     ) {
         this.createParametersString();
         this.createFilesString();
+        if (!this.deleted) {
+            this.deleted = false;
+        }
     }
 
     get parametersString(): string {
@@ -48,6 +52,10 @@ export class OrderContent {
     }
 
     priceUpdate(): void {
+        if (this.deleted) {
+            this.priceTotal = 0;
+            return;
+        }
         this.priceTotal = this.price * this.count;
         let parametersPrice = 0;
         if (typeof this.parameters !== 'undefined') {

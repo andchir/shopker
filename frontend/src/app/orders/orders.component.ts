@@ -162,8 +162,7 @@ export class ModalOrderContentComponent extends AppModalContentAbstractComponent
             contentTypeName: content.contentTypeName
         });
         if (index > -1) {
-            this.model.content.splice(index, 1);
-            this.arrayFields.content.removeAt(index);
+            this.model.content[index].deleted = !this.model.content[index].deleted;
             this.priceTotalUpdate();
         }
     }
@@ -196,7 +195,7 @@ export class ModalOrderContentComponent extends AppModalContentAbstractComponent
             priceTotal *= this.model.discountPercent / 100;
         }
         priceTotal += this.model.deliveryPrice || 0;
-        this.model.price = priceTotal;
+        this.model.price = Math.max(priceTotal, 0);
     }
 }
 

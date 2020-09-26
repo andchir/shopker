@@ -238,7 +238,7 @@
                                 <ng-container *ngFor="let content of model.content">
 
                                     <ng-container *ngIf="!getIsContentEdit(content)">
-                                        <tr class="show-on-hover-parent">
+                                        <tr class="show-on-hover-parent" [style.textDecoration]="content.deleted ? 'line-through' : 'none'">
                                             <td>{{content.id}}</td>
                                             <td>
                                                 <ng-container *ngIf="!content.uri; else productLink">

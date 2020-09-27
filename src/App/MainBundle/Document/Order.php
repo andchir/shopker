@@ -504,7 +504,7 @@ class Order
      * @param string $promoCode
      * @return Order
      */
-    public function setPromoCode(string $promoCode)
+    public function setPromoCode($promoCode)
     {
         $this->promoCode = $promoCode;
         return $this;

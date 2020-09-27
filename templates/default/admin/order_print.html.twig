@@ -126,33 +126,52 @@
             </thead>
             <tbody>
                 {% for orderContent in order.content %}
-                    <tr>
-                        <td>
-                            {{ orderContent.id }}
-                        </td>
-                        <td>
-                            {{ orderContent.title }}
-                            {% if orderContent.parametersString is not empty %}
-                                <div>
-                                    <small>{{ orderContent.parametersString }}</small>
-                                </div>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {{ orderContent.price | price }}
-                            {{ order.currency }}
-                        </td>
-                        <td>
-                            {{ orderContent.count }}
-                        </td>
-                        <td>
-                            {{ orderContent.priceTotal | price }}
-                            {{ order.currency }}
-                        </td>
-                    </tr>
+                    {% if not orderContent.deleted %}
+                        <tr>
+                            <td>
+                                {{ orderContent.id }}
+                            </td>
+                            <td>
+                                {{ orderContent.title }}
+                                {% if orderContent.parametersString is not empty %}
+                                    <div>
+                                        <small>{{ orderContent.parametersString }}</small>
+                                    </div>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ orderContent.price | price }}
+                                {{ order.currency }}
+                            </td>
+                            <td>
+                                {{ orderContent.count }}
+                            </td>
+                            <td>
+                                {{ orderContent.priceTotal | price }}
+                                {{ order.currency }}
+                            </td>
+                        </tr>
+                    {% endif %}
                 {% endfor %}
             </tbody>
             <tfoot>
+                {% if order.discountPercent is not empty or order.discount is not empty %}
+                    <tr>
+                        <td colspan="4">
+                            <div class="text-danger">
+                                {{ 'Discount' | trans }}
+                            </div>
+                        </td>
+                        <td>
+                            {% if order.discountPercent is not empty %}
+                                {{ order.discountPercent }}%
+                            {% else %}
+                                {{ order.discount }}
+                                {{ order.currency }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endif %}
                 <tr>
                     <td colspan="4">
                         {{ 'Delivery method' | trans }}: {{ order.deliveryName }}

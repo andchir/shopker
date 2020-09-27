@@ -74,9 +74,9 @@
                                     </thead>
                                     <tbody>
                                         {% for orderContent in order.content %}
-                                        <tr>
+                                        <tr{% if orderContent.deleted %} class="text-muted" style="text-decoration: line-through;"{% endif %}>
                                             <td>
-                                                <a href="/{{ orderContent.uri }}" target="_blank">
+                                                <a href="/{{ orderContent.uri }}" target="_blank"{% if orderContent.deleted %} class="text-muted"{% endif %}>
                                                     {{ orderContent.title }}
                                                 </a>
                                                 {% if orderContent.parametersString is not empty %}
@@ -104,6 +104,25 @@
                                             </td>
                                         </tr>
                                         {% endfor %}
+
+                                        {% if order.discountPercent is not empty or order.discount is not empty %}
+                                            <tr>
+                                                <td colspan="3">
+                                                    <div class="text-danger">
+                                                        {{ 'Discount' | trans }}
+                                                    </div>
+                                                </td>
+                                                <td class="text-danger">
+                                                    {% if order.discountPercent is not empty %}
+                                                        {{ order.discountPercent }}%
+                                                    {% else %}
+                                                        {{ order.discount }}
+                                                        {{ order.currency }}
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endif %}
+                                        
                                         <tr>
                                             <td colspan="3">
                                                 {{ 'Delivery method' | trans }}:

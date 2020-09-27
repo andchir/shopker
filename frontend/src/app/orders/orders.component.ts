@@ -93,6 +93,10 @@ export class ModalOrderContentComponent extends AppModalContentAbstractComponent
                 {
                     name: 'count',
                     validators: []
+                },
+                {
+                    name: 'deleted',
+                    validators: []
                 }
             ]
         }
@@ -162,6 +166,7 @@ export class ModalOrderContentComponent extends AppModalContentAbstractComponent
             contentTypeName: content.contentTypeName
         });
         if (index > -1) {
+            this.arrayFields.content.at(index).get('deleted').setValue(!this.model.content[index].deleted);
             this.model.content[index].deleted = !this.model.content[index].deleted;
             this.priceTotalUpdate();
         }
@@ -185,6 +190,9 @@ export class ModalOrderContentComponent extends AppModalContentAbstractComponent
         this.model.content.forEach((content) => {
             if (content instanceof OrderContent) {
                 content.priceUpdate();
+            }
+            if (content.deleted) {
+                return;
             }
             priceTotal += content.priceTotal;
         });

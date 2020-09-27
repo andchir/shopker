@@ -3,6 +3,7 @@
 - You can now specify field names and types for the "Parameters" input type.
 - Added the ability to create pages by the user. Added checkbox "Creation by users allowed" for content type. Read more in the API documentation.
 - Added a function to filter content that comes from the user: ``UtilsService::cleanString($string, 'html')``.
+- The deleted item in the order is no longer deleted, but marked as deleted (crossed out).
 
 4.2.3
 - For the "Schedule" (booking) field, the "fullCalendarOptionsFieldName" parameter has been added, in which you can specify the field where the calendar settings come from (you can create different calendar options for each item).

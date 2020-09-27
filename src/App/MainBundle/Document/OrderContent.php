@@ -93,6 +93,13 @@ class OrderContent
      * @var string
      */
     protected $currency;
+    
+    /**
+     * @MongoDB\Field(type="boolean")
+     * @Groups({"details", "list"})
+     * @var bool
+     */
+    protected $deleted;
 
     /**
      * Get uniqId
@@ -548,6 +555,24 @@ class OrderContent
             ->setParameters($object->getParameters(), $currencyRate)
             ->setFiles($object->getFiles());
 
+        return $this;
+    }
+    
+    /**
+     * @return bool
+     */
+    public function getDeleted()
+    {
+        return $this->deleted;
+    }
+    
+    /**
+     * @param bool $deleted
+     * @return OrderContent
+     */
+    public function setDeleted($deleted)
+    {
+        $this->deleted = $deleted;
         return $this;
     }
 }

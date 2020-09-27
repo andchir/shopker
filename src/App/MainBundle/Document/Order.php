@@ -650,6 +650,9 @@ class Order
         $priceTotal = 0;
         /** @var OrderContent $content */
         foreach ($this->content as $content) {
+            if ($content->getDeleted()) {
+                continue;
+            }
             $priceTotal += $content->getPriceTotal();
         }
         if ($this->discount) {

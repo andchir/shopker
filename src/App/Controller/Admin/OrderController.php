@@ -100,7 +100,8 @@ class OrderController extends StorageControllerAbstract
             } else {
                 $orderContent
                     ->setPrice($content[$index]['price'])
-                    ->setCount($content[$index]['count']);
+                    ->setCount($content[$index]['count'])
+                    ->setDeleted($content[$index]['deleted'] ?? false);
             }
         }
 

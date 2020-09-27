@@ -30,7 +30,7 @@ export class OrderContent {
     ) {
         this.createParametersString();
         this.createFilesString();
-        if (!this.deleted) {
+        if (typeof this.deleted === 'undefined') {
             this.deleted = false;
         }
     }
@@ -52,10 +52,6 @@ export class OrderContent {
     }
 
     priceUpdate(): void {
-        if (this.deleted) {
-            this.priceTotal = 0;
-            return;
-        }
         this.priceTotal = this.price * this.count;
         let parametersPrice = 0;
         if (typeof this.parameters !== 'undefined') {
@@ -121,7 +117,9 @@ export class Order {
                 cont['uri'],
                 cont['image'],
                 cont['parameters'],
-                cont['files'] || []
+                cont['files'] || [],
+                '',
+                cont['deleted'] || false
             ));
         });
     }

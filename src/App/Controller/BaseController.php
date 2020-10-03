@@ -5,6 +5,7 @@ namespace App\Controller;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,6 +26,32 @@ class BaseController extends AbstractController
         $this->params = $params;
         $this->dm = $dm;
         $this->translator = $translator;
+    }
+    
+    /**
+     * @param FormInterface $form
+     * @param array $output
+     * @param string $parentFormName
+     * @return array
+     */
+    public function getErrorsFromForm(FormInterface $form, $output = [], $parentFormName = '')
+    {
+        foreach ($form->getErrors() as $error) {
+            if ($parentFormName) {
+                if (!isset($output[$parentFormName])) {
+                    $output[$parentFormName] = [];
+                }
+                $output[$parentFormName][$form->getName()] = $error->getMessage();
+            } else {
+                $output[$form->getName()] = $error->getMessage();
+            }
+        }
+        foreach ($form->all() as $childForm) {
+            if ($childForm instanceof FormInterface) {
+                $output = $this->getErrorsFromForm($childForm, $output, $form->getName());
+            }
+        }
+        return $output;
     }
 
     /**

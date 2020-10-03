@@ -60,7 +60,7 @@ class CheckoutController extends BaseController
      * @param Request $request
      * @param EventDispatcherInterface $eventDispatcher
      * @param SettingsService $settingsService
-     * @return RedirectResponse|Response
+     * @return RedirectResponse|Response|JsonResponse
      * @throws \Doctrine\ODM\MongoDB\LockException
      * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
      * @throws \Doctrine\ODM\MongoDB\MongoDBException
@@ -205,11 +205,28 @@ class CheckoutController extends BaseController
                 // Dispatch events
                 $eventDispatcher->dispatch($event, Events::ORDER_CREATED);
                 $eventDispatcher->dispatch($event, Events::ORDER_STATUS_UPDATED);
+    
+                if ($request->isXmlHttpRequest() || $request->headers->get('Accept') === 'application/json') {
+                    return $this->json([
+                        'result' => $order
+                    ]);
+                }
 
                 return $this->redirectToRoute('page_checkout_success_localized', [
                     '_locale' => $request->getLocale()
                 ]);
             }
+        }
+    
+        if ($request->isXmlHttpRequest() || $request->headers->get('Accept') === 'application/json') {
+            if ($form->isSubmitted() && $form->isValid()) {
+                return $this->json(['success' => true]);
+            }
+            $output = [
+                'message' => (string) $form->getErrors(true, false),
+                'errors' => $this->getErrorsFromForm($form)
+            ];
+            return $this->json($output, Response::HTTP_BAD_REQUEST);
         }
 
         return $this->render('page_checkout.html.twig', [

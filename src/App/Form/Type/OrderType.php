@@ -141,7 +141,8 @@ class OrderType extends AbstractType
             'choicePayment' => null,
             'noDeliveryFirst' => false,
             'checkoutFields' => [],
-            'currency' => ''
+            'currency' => '',
+            'csrf_protection' => false
         ]);
     }
 }

@@ -19,6 +19,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -110,7 +111,7 @@ class CartController extends BaseController
                 break;
         }
 
-        if ($request->isXmlHttpRequest()) {
+        if ($request->isXmlHttpRequest() || $request->headers->get('Accept') === 'application/json') {
             if ($output['success']) {
                 $shoppingCart = $this->shopCartService->getShoppingCartByType($type);
                 if ($shoppingCart) {
@@ -723,7 +724,7 @@ class CartController extends BaseController
         }
         return $files;
     }
-
+    
     /**
      * @Route(
      *     "/{_locale}/shop_cart/{type}",
@@ -747,6 +748,26 @@ class CartController extends BaseController
         return $this->render('page_shop_cart.html.twig', [
             'shoppingCartContentType' => $type,
             'currentUri' => 'shop_cart/' . $type
+        ]);
+    }
+    
+    /**
+     * @Route(
+     *     "/api/{_locale}/shop_cart/{type}",
+     *     condition="request.headers.get('Content-Type') === 'application/json'",
+     *     name="shop_cart_edit_api",
+     *     requirements={"_locale"="^[a-z]{2}$", "type"=".+"},
+     *     defaults={"type": "shop"}
+     * )
+     * @param Request $request
+     * @param $type
+     * @return JsonResponse
+     */
+    public function showContentAction(Request $request, $type)
+    {
+        $shoppingCart = $this->shopCartService->getShoppingCart($type, $this->getUserId());
+        return $this->json($shoppingCart, 200, [], [
+            'groups' => ['details']
         ]);
     }
 

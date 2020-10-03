@@ -131,12 +131,14 @@ class ShoppingCart {
     protected $content;
 
     /**
+     * @MongoDB\Field(type="float")
      * @Groups({"details", "list"})
      * @var float
      */
     protected $price;
 
     /**
+     * @MongoDB\Field(type="int")
      * @Groups({"details", "list"})
      * @var int
      */

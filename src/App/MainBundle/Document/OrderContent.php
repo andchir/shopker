@@ -53,7 +53,7 @@ class OrderContent
     protected $contentTypeName;
 
     /**
-     * @MongoDB\Field(type="float")
+     * @MongoDB\Field(type="int")
      * @Groups({"details", "list"})
      * @var float
      */

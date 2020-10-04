@@ -97,6 +97,7 @@ class BaseController extends AbstractController
      */
     public function getIsJsonApi(Request $request)
     {
-        return strpos($request->getPathInfo(), '/api/') !== false;
+        return strpos($request->getPathInfo(), '/api/') !== false
+            && $request->headers->get('Accept') === 'application/json';
     }
 }

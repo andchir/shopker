@@ -57,6 +57,12 @@ class CheckoutController extends BaseController
      *     requirements={"_locale": "^[a-z]{2}$"}
      * )
      * @Route("/checkout", name="page_checkout")
+     * @Route(
+     *     "/api/{_locale}/checkout",
+     *     methods={"POST"},
+     *     condition="request.headers.get('Accept') === 'application/json'",
+     *     requirements={"_locale": "^[a-z]{2}$"}
+     * )
      * @param Request $request
      * @param EventDispatcherInterface $eventDispatcher
      * @param SettingsService $settingsService
@@ -206,7 +212,7 @@ class CheckoutController extends BaseController
                 $eventDispatcher->dispatch($event, Events::ORDER_CREATED);
                 $eventDispatcher->dispatch($event, Events::ORDER_STATUS_UPDATED);
     
-                if ($request->isXmlHttpRequest() || $request->headers->get('Accept') === 'application/json') {
+                if ($this->getIsJsonApi($request)) {
                     return $this->json([
                         'result' => $order
                     ]);
@@ -218,7 +224,7 @@ class CheckoutController extends BaseController
             }
         }
     
-        if ($request->isXmlHttpRequest() || $request->headers->get('Accept') === 'application/json') {
+        if ($this->getIsJsonApi($request)) {
             if ($form->isSubmitted() && $form->isValid()) {
                 return $this->json(['success' => true]);
             }

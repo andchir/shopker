@@ -19,7 +19,6 @@ cp "$DIR"/.env.dist "$DIR"/"$OUTPUT_DIRNAME"/.env
 cp -r "$DIR"/bin "$DIR"/"$OUTPUT_DIRNAME"
 cp -r "$DIR"/config "$DIR"/"$OUTPUT_DIRNAME"
 cp -r "$DIR"/src "$DIR"/"$OUTPUT_DIRNAME"
-cp -r "$DIR"/templates "$DIR"/"$OUTPUT_DIRNAME"
 #cp -r "$DIR"/tests "$DIR"/"$OUTPUT_DIRNAME"
 cp -r "$DIR"/translations "$DIR"/"$OUTPUT_DIRNAME"
 cp -r "$DIR"/vendor "$DIR"/"$OUTPUT_DIRNAME"
@@ -30,6 +29,9 @@ touch "$DIR"/"$OUTPUT_DIRNAME"/config/settings.yaml
 mkdir "$DIR"/"$OUTPUT_DIRNAME"/var
 mkdir "$DIR"/"$OUTPUT_DIRNAME"/var/cache
 mkdir "$DIR"/"$OUTPUT_DIRNAME"/var/log
+
+mkdir "$DIR"/"$OUTPUT_DIRNAME"/templates
+cp -r "$DIR"/templates/default "$DIR"/"$OUTPUT_DIRNAME"/templates/default
 
 mkdir "$DIR"/"$OUTPUT_DIRNAME"/public
 cp "$DIR"/public/*.* "$DIR"/"$OUTPUT_DIRNAME"/public
@@ -61,6 +63,13 @@ cp -r "$DIR"/frontend/e2e "$DIR"/"$OUTPUT_DIRNAME"/frontend
 cp -r "$DIR"/frontend/img "$DIR"/"$OUTPUT_DIRNAME"/frontend
 cp -r "$DIR"/frontend/locale "$DIR"/"$OUTPUT_DIRNAME"/frontend
 cp -r "$DIR"/frontend/src "$DIR"/"$OUTPUT_DIRNAME"/frontend
+
+rm -rf "$DIR"/"$OUTPUT_DIRNAME"/vendor/andchir/digital-goods-bundle/.git
+rm -rf "$DIR"/"$OUTPUT_DIRNAME"/vendor/andchir/import-export-bundle/.git
+rm -rf "$DIR"/"$OUTPUT_DIRNAME"/vendor/andchir/omnipay-bundle/.git
+rm -rf "$DIR"/"$OUTPUT_DIRNAME"/vendor/andchir/shopkeeper4-comments/.git
+rm -rf "$DIR"/"$OUTPUT_DIRNAME"/vendor/andchir/twig-visual/.git
+rm -rf "$DIR"/"$OUTPUT_DIRNAME"/vendor/andchir/twig-visual/src/Resources/src/node_modules
 
 cd "$DIR"/"$OUTPUT_DIRNAME"; zip -r -9 ../"$OUTPUT_FILENAME" .
 rm -rfv "$DIR"/"$OUTPUT_DIRNAME"/*

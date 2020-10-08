@@ -143,11 +143,16 @@ class CheckoutController extends BaseController
                     ->setDeliveryPrice($deliveryPrice, $currencyRate)
                     ->setPaymentValue($paymentName)
                     ->setPromoCode($shoppingCart->getPromoCode())
-                    ->setDiscount($shoppingCart->getDiscount(), $currencyRate)
-                    ->setDiscountPercent($shoppingCart->getDiscountPercent())
                     ->setContentFromCart($shopCartContent, $currencyRate)
                     ->setCurrency($currency)
                     ->setCurrencyRate($currencyRate);
+
+                if ($shoppingCart->getDiscount()) {
+                    $order->setDiscount($shoppingCart->getDiscount(), $currencyRate);
+                }
+                if ($shoppingCart->getDiscountPercent()) {
+                    $order->setDiscountPercent($shoppingCart->getDiscountPercent());
+                }
 
                 // Filter options by public data keys
                 $publicUserData = $form->has('options') ? array_keys($form->get('options')->all()) : [];

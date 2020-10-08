@@ -64,6 +64,7 @@ cp -r "$DIR"/frontend/img "$DIR"/"$OUTPUT_DIRNAME"/frontend
 cp -r "$DIR"/frontend/locale "$DIR"/"$OUTPUT_DIRNAME"/frontend
 cp -r "$DIR"/frontend/src "$DIR"/"$OUTPUT_DIRNAME"/frontend
 
+rm -rf "$DIR"/"$OUTPUT_DIRNAME"/bin/.phpunit
 rm -rf "$DIR"/"$OUTPUT_DIRNAME"/vendor/andchir/digital-goods-bundle/.git
 rm -rf "$DIR"/"$OUTPUT_DIRNAME"/vendor/andchir/import-export-bundle/.git
 rm -rf "$DIR"/"$OUTPUT_DIRNAME"/vendor/andchir/omnipay-bundle/.git

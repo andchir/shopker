@@ -1,4 +1,5 @@
 4.2.4
+- Ability to create discount promo codes for buyers. The discount can be set as a fixed amount or as a percentage.
 - Added authorization by API token. For users, you can create an API token in the admin interface. Documentation: https://shopker.org/api_doc/index.html
 - You can now specify field names and types for the "Parameters" input type.
 - Added the ability to create pages by the user. Added checkbox "Creation by users allowed" for content type. Read more in the API documentation.

@@ -50,7 +50,7 @@ if [ "$key" = '' ]; then
     if [ ! -f "$MONGOD_PATH" ]; then
         if wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc | apt-key add - >> "$LOG_FILE_PATH" 2>> "$LOG_FILE_PATH"; then
 
-            echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-4.4.list
+            echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" | tee "/etc/apt/sources.list.d/mongodb-org-4.4.list" >> "$LOG_FILE_PATH" 2>> "$LOG_FILE_PATH";
             apt update >> "$LOG_FILE_PATH" 2>> "$LOG_FILE_PATH";
             apt install -y mongodb-org >> "$LOG_FILE_PATH" 2>> "$LOG_FILE_PATH";
             echo -e "${GREEN}Готово."

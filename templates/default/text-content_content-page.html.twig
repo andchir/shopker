@@ -3,7 +3,7 @@
 {% block title %}{{ currentPage.title | default('') }} - {{ app_name }}{% endblock %}
 
 {% block body %}
-    <h1>{{ fieldByLocale(currentPage, getFieldNameByChunk(currentPage, fields, 'header')) }}</h1>
+    <h1>{{ fieldByLocale(currentPage, getFieldNameByChunk('header', fields, 'title')) }}</h1>
 
     {{ renderOutputTypeChunk(currentPage, fields, 'description') }}
 

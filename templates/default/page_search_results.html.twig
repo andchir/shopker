@@ -1,60 +1,55 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {% include 'header.html.twig' %}
-    <main role="main" class="container">
+    <div class="min-height400">
 
-        <div class="min-height400">
+        <h1>
+            {{ 'Searching results' | trans }}
+        </h1>
 
-            <h1>
-                {{ 'Searching results' | trans }}
-            </h1>
-
-            <div class="card card-body bg-light mb-3">
-                <form class="d-block m-0" action="{{ pathLocalized('search_results') }}" method="get" id="formSearch">
-                    <div class="input-group input-group-lg">
-                        <input type="text" class="form-control" placeholder="{{ 'Search' | trans }}..." name="query" value="{{ searchWord }}">
-                        <div class="input-group-append">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="icon-search"></i>
-                                {{ 'Search' | trans }}
-                            </button>
-                        </div>
+        <div class="card card-body bg-light mb-3">
+            <form class="d-block m-0" action="{{ pathLocalized('search_results') }}" method="get" id="formSearch">
+                <div class="input-group input-group-lg">
+                    <input type="text" class="form-control" placeholder="{{ 'Search' | trans }}..." name="query" value="{{ searchWord }}">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="icon-search"></i>
+                            {{ 'Search' | trans }}
+                        </button>
                     </div>
-                </form>
-            </div>
-
-            {% if totalItems is defined and totalItems > 0 %}
-
-                <p>
-                    {{ '%count% product found|%count% products found' | trans({'%count%': totalItems}) }}.
-                </p>
-
-                {% for item in items %}
-                    <div class="card card-body mb-3">
-                        <div class="catalog-list-item">
-                            <div class="catalog-list-item-inner">
-                                {{ renderOutputTypeChunk(item, fieldsAll, 'tag', 'list_', [], 1) }}
-                                {{ renderOutputTypeChunk(item, fieldsAll, 'image', '', [], 1) }}
-                                {{ renderOutputTypeChunk(item, fieldsAll, 'header', '', [], 1) }}
-                                {{ renderOutputTypeChunk(item, fieldsAll, 'description', '', [], 1) }}
-                                {{ renderOutputTypeChunk(item, fieldsAll, 'price', '', {"currency": currency}, 1) }}
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-
-                {% include 'nav/pagination.html.twig' %}
-
-            {% else %}
-                {% if searchWord is not empty %}
-                    <div class="alert alert-info">
-                        {{ 'search.nothing_found' | trans }}
-                    </div>
-                {% endif %}
-            {% endif %}
-
+                </div>
+            </form>
         </div>
 
-    </main>
+        {% if totalItems is defined and totalItems > 0 %}
+
+            <p>
+                {{ '%count% product found|%count% products found' | trans({'%count%': totalItems}) }}.
+            </p>
+
+            {% for item in items %}
+                <div class="card card-body mb-3">
+                    <div class="catalog-list-item">
+                        <div class="catalog-list-item-inner">
+                            {{ renderOutputTypeChunk(item, fieldsAll, 'tag', 'list_', [], 1) }}
+                            {{ renderOutputTypeChunk(item, fieldsAll, 'image', '', [], 1) }}
+                            {{ renderOutputTypeChunk(item, fieldsAll, 'header', '', [], 1) }}
+                            {{ renderOutputTypeChunk(item, fieldsAll, 'description', '', [], 1) }}
+                            {{ renderOutputTypeChunk(item, fieldsAll, 'price', '', {"currency": currency}, 1) }}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+            {% include 'nav/pagination.html.twig' %}
+
+        {% else %}
+            {% if searchWord is not empty %}
+                <div class="alert alert-info">
+                    {{ 'search.nothing_found' | trans }}
+                </div>
+            {% endif %}
+        {% endif %}
+
+    </div>
 {% endblock %}

@@ -6,92 +6,88 @@
 {% block title %}{{ currentPage.title | default('') }} - {{ app_name }}{% endblock %}
 
 {% block body %}
-    {% include 'header.html.twig' %}
-    <main role="main" class="container">
+    <div class="float-lg-right mb-3 text-right">
+        {{ shopCart('favorites_link', 'favorites') }}
+    </div>
 
-        <div class="float-lg-right mb-3 text-right">
-            {{ shopCart('favorites_link', 'favorites') }}
-        </div>
+    {% include 'nav/breadcrumbs.html.twig' %}
 
-        {% include 'nav/breadcrumbs.html.twig' %}
+    {% include 'nav/child-categories-menu.html.twig' %}
 
-        {% include 'nav/child-categories-menu.html.twig' %}
+    <div class="min-height400">
 
-        <div class="min-height400">
+        {{ renderOutputTypeChunk(currentPage, fields, 'tag', 'page_') }}
+        {{ renderOutputTypeChunk(currentPage, fields, 'header', 'page_') }}
 
-            {{ renderOutputTypeChunk(currentPage, fields, 'tag', 'page_') }}
-            {{ renderOutputTypeChunk(currentPage, fields, 'header', 'page_') }}
-
-            <div>
-                <div class="column-left">
-                    <div class="position-relative js-shopping-cart-favorites">
-                        <div class="position-absolute pos-right-top10" style="z-index: 100;">
-                            <form id="shk-form-rating" action="{{ pathLocalized('shop_cart_action') }}" method="post">
-                                <input type="hidden" name="item_id" value="{{ currentPage.id }}">
-                                <input type="hidden" name="category_id" value="{{ currentPage.parentId }}">
-                                <input type="hidden" name="type" value="favorites">
-                                {% if favoritesItemCount == 0 %}
-                                    <button class="btn btn-outline-secondary-white" type="submit" data-toggle="tooltip" name="action" value="add_to_cart" title="{{ 'To favorites' | trans }}">
-                                        <i class="icon-heart1"></i>
-                                    </button>
-                                {% else %}
-                                    <button class="btn btn-info" type="submit" data-toggle="tooltip" name="action" value="remove_by_id" title="{{ 'Remove from favorites' | trans }}">
-                                        <i class="icon-heart1"></i>
-                                    </button>
-                                {% endif %}
-                            </form>
-                        </div>
-                    </div>
-
-                    {{ renderOutputGallery(currentPage, fields, 'image') }}
-
-                    {{ renderOutputTypeChunk(currentPage, fields, 'rating', 'page_') }}
-
-                </div>
-                <div class="column-right js-shopping-cart-product">
-                    <div class="float-left w-100">
-
-                        {% include 'flash_messages.html.twig' %}
-
-                        <form id="shk-form" action="{{ pathLocalized('shop_cart_action') }}" method="post">
+        <div>
+            <div class="column-left">
+                <div class="position-relative js-shopping-cart-favorites">
+                    <div class="position-absolute pos-right-top10" style="z-index: 100;">
+                        <form id="shk-form-rating" action="{{ pathLocalized('shop_cart_action') }}" method="post">
                             <input type="hidden" name="item_id" value="{{ currentPage.id }}">
                             <input type="hidden" name="category_id" value="{{ currentPage.parentId }}">
-                            <input type="hidden" name="type" value="shop">
-
-                            {{ renderOutputTypeChunk(currentPage, fields, 'description') }}
-                            {{ renderOutputTypeChunk(currentPage, fields, 'parameters', 'page_') }}
-                            {{ renderOutputTypeChunk(currentPage, fields, 'file') }}
-
-                            {% if currentPage.price > 0 %}
-                                <div class="my-3">
-                                    {{ 'Price' | trans }}:
-                                    <span class="big font-weight-bold shk-price">{{ currentPage.price | price }}</span>
-                                    <span class="shk-currency">{{ currency }}</span>
-                                </div>
+                            <input type="hidden" name="type" value="favorites">
+                            {% if favoritesItemCount == 0 %}
+                                <button class="btn btn-outline-secondary-white" type="submit" data-toggle="tooltip" name="action" value="add_to_cart" title="{{ 'To favorites' | trans }}">
+                                    <i class="icon-heart1"></i>
+                                </button>
+                            {% else %}
+                                <button class="btn btn-info" type="submit" data-toggle="tooltip" name="action" value="remove_by_id" title="{{ 'Remove from favorites' | trans }}">
+                                    <i class="icon-heart1"></i>
+                                </button>
                             {% endif %}
-                            <div class="my-3">
-                                {% if shopCartProductCount(contentType.name, 'shop', currentPage.id) > 0 %}
-                                    <a class="btn btn-info btn-wide rounded-pill" href="{{ pathLocalized('shop_cart_edit') }}">
-                                        {{ 'Proceed to checkout' | trans }}
-                                    </a>
-                                {% else %}
-                                    <input type="number" class="form-control d-inline-block text-center mr-2" value="1" min="1" step="1" name="count" style="width: 100px;">
-                                    <button type="submit" class="btn btn-success btn-wide rounded-pill" name="submit_button">
-                                        {{ 'Add to cart' | trans }}
-                                    </button>
-                                {% endif %}
-                            </div>
                         </form>
-
-                        {% include '@Comments/Default/async.html.twig' with {'threadId': currentCategory.contentTypeName ~ '_' ~ currentId} only %}
-
                     </div>
                 </div>
-                <div class="clearfix"></div>
-            </div>
 
+                {{ renderOutputGallery(currentPage, fields, 'image') }}
+
+                {{ renderOutputTypeChunk(currentPage, fields, 'rating', 'page_') }}
+
+            </div>
+            <div class="column-right js-shopping-cart-product">
+                <div class="float-left w-100">
+
+                    {% include 'flash_messages.html.twig' %}
+
+                    <form id="shk-form" action="{{ pathLocalized('shop_cart_action') }}" method="post">
+                        <input type="hidden" name="item_id" value="{{ currentPage.id }}">
+                        <input type="hidden" name="category_id" value="{{ currentPage.parentId }}">
+                        <input type="hidden" name="type" value="shop">
+
+                        {{ renderOutputTypeChunk(currentPage, fields, 'description') }}
+                        {{ renderOutputTypeChunk(currentPage, fields, 'parameters', 'page_') }}
+                        {{ renderOutputTypeChunk(currentPage, fields, 'file') }}
+
+                        {% if currentPage.price > 0 %}
+                            <div class="my-3">
+                                {{ 'Price' | trans }}:
+                                <span class="big font-weight-bold shk-price">{{ currentPage.price | price }}</span>
+                                <span class="shk-currency">{{ currency }}</span>
+                            </div>
+                        {% endif %}
+                        <div class="my-3">
+                            {% if shopCartProductCount(contentType.name, 'shop', currentPage.id) > 0 %}
+                                <a class="btn btn-info btn-wide rounded-pill" href="{{ pathLocalized('shop_cart_edit') }}">
+                                    {{ 'Proceed to checkout' | trans }}
+                                </a>
+                            {% else %}
+                                <input type="number" class="form-control d-inline-block text-center mr-2" value="1" min="1" step="1" name="count" style="width: 100px;">
+                                <button type="submit" class="btn btn-success btn-wide rounded-pill" name="submit_button">
+                                    {{ 'Add to cart' | trans }}
+                                </button>
+                            {% endif %}
+                        </div>
+                    </form>
+
+                    {% include '@Comments/Default/async.html.twig' with {'threadId': currentCategory.contentTypeName ~ '_' ~ currentId} only %}
+
+                </div>
+            </div>
+            <div class="clearfix"></div>
         </div>
-    </main>
+
+    </div>
 {% endblock %}
 
 {% block stylesheets -%}

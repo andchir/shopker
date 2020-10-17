@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ app.request.locale }}">
+<html lang="{{ app.request.locale }}" class="h-100">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -25,12 +25,18 @@
     <!-- /twv-script -->
 
 </head>
-<body class="bg-light">
+<body class="d-flex flex-column h-100 bg-light">
 
-{% block body %}{% endblock %}
+{% include 'header.html.twig' %}
+
+<main role="main" class="flex-shrink-0">
+    <div class="container">
+        {% block body %}{% endblock %}
+    </div>
+</main>
 
 {% block footer %}
-    <div class="footer border-top mt-3">
+    <footer class="footer mt-auto border-top mt-3">
         <div class="container">
             <div class="float-right p-2">
                 <a href="https://shopker.org/" target="_blank">
@@ -41,7 +47,7 @@
                 {{ app_name }} &copy; {{ 'now' | date('Y') }}
             </div>
         </div>
-    </div>
+    </footer>
     {% if 'shop_cart_edit' not in app.request.attributes.get('_route') %}
         {{ shopCart('shop_cart', 'shop', 'shop_cart_empty') }}
     {% endif %}

@@ -3,22 +3,17 @@
 {% block title %}{{ currentPage.title | default('') }} - {{ app_name }}{% endblock %}
 
 {% block body %}
-    {% include 'header.html.twig' %}
-    <main role="main" class="container min-height400">
+    <h1>{{ fieldByLocale(currentPage, getFieldNameByChunk(currentPage, fields, 'header')) }}</h1>
 
-        <h1>{{ fieldByLocale(currentPage, getFieldNameByChunk(currentPage, fields, 'header')) }}</h1>
+    {{ renderOutputTypeChunk(currentPage, fields, 'description') }}
 
-        {{ renderOutputTypeChunk(currentPage, fields, 'description') }}
-
-        {% if currentPage.form_name is defined and currentPage.form_name is not empty -%}
-            <div class="row">
-                <div class="col-lg-6 offset-lg-3">
-                    {{ renderForm(currentPage.form_name, 'form/bootstrap_4_horizontal_layout.html.twig') }}
-                </div>
+    {% if currentPage.form_name is defined and currentPage.form_name is not empty -%}
+        <div class="row">
+            <div class="col-lg-6 offset-lg-3">
+                {{ renderForm(currentPage.form_name, 'form/bootstrap_4_horizontal_layout.html.twig') }}
             </div>
-        {% endif %}
+        </div>
+    {% endif %}
 
-        {% include 'flash_messages.html.twig' %}
-
-    </main>
+    {% include 'flash_messages.html.twig' %}
 {% endblock %}

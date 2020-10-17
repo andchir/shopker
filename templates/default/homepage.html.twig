@@ -1,55 +1,50 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {% include 'header.html.twig' %}
+    <div class="min-height400">
 
-    <main role="main" class="container">
-
-        <div class="min-height400">
-
-            <div class="card mb-3">
-                <div class="card-body">
-                    <div class="float-right">
-                        {{ shopCart('favorites_link', 'favorites') }}
-                    </div>
-                    <h4 class="card-title">
-                        {{ 'Catalog' | trans }}
-                    </h4>
-                    <hr>
-                    <div class="card-text">
-                        <p>
-                            {{ 'Total Categories' | trans }}: <b>{{ countCategories }}</b>
-                        </p>
-                        <p>
-                            {{ 'Total products' | trans }}: <b>{{ countProducts }}</b>
-                        </p>
-                    </div>
-                    {% if categoriesTopLevel|length > 0 %}
-                        <a href="{{ catalogPath(categoriesTopLevel[0].uri) }}" class="btn btn-primary btn-wide rounded-pill">
-                            {{ 'Go to product catalog' | trans }}
-                        </a>
-                    {% endif %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="float-right">
+                    {{ shopCart('favorites_link', 'favorites') }}
                 </div>
-            </div>
-
-            {% if description is not empty %}
-                <div class="py-3">
-                    {{ description | raw }}
+                <h4 class="card-title">
+                    {{ 'Catalog' | trans }}
+                </h4>
+                <hr>
+                <div class="card-text">
+                    <p>
+                        {{ 'Total Categories' | trans }}: <b>{{ countCategories }}</b>
+                    </p>
+                    <p>
+                        {{ 'Total products' | trans }}: <b>{{ countProducts }}</b>
+                    </p>
                 </div>
-            {% endif %}
-
-            <div class="mb-5">
-                <h3>{{ 'New items' | trans }}</h3>
-
-                {{ contentList(
-                'content_list_slider',
-                'products',
-                {"isActive": true, "tags": {"$elemMatch": {"$in": ["New", "Новинка"]}}},
-                {"_id": "desc"},
-                20, 4, 'homepage_novelty', 'hn_page', 'hn_limit', {currency: currency, sliderName: 'Novelty'}
-                ) }}
+                {% if categoriesTopLevel|length > 0 %}
+                    <a href="{{ catalogPath(categoriesTopLevel[0].uri) }}" class="btn btn-primary btn-wide rounded-pill">
+                        {{ 'Go to product catalog' | trans }}
+                    </a>
+                {% endif %}
             </div>
-
         </div>
-    </main>
+
+        {% if description is not empty %}
+            <div class="py-3">
+                {{ description | raw }}
+            </div>
+        {% endif %}
+
+        <div class="mb-5">
+            <h3>{{ 'New items' | trans }}</h3>
+
+            {{ contentList(
+            'content_list_slider',
+            'products',
+            {"isActive": true, "tags": {"$elemMatch": {"$in": ["New", "Новинка"]}}},
+            {"_id": "desc"},
+            20, 4, 'homepage_novelty', 'hn_page', 'hn_limit', {currency: currency, sliderName: 'Novelty'}
+            ) }}
+        </div>
+
+    </div>
 {% endblock %}

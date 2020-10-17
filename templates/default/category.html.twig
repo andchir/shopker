@@ -8,122 +8,117 @@
 {% endblock -%}
 
 {% block body %}
-    {% include 'header.html.twig' %}
-    <main role="main" class="container">
+    <div class="float-lg-right mb-3 text-right">
+        {{ shopCart('favorites_link', 'favorites') }}
+    </div>
 
-        <div class="float-lg-right mb-3 text-right">
-            {{ shopCart('favorites_link', 'favorites') }}
-        </div>
+    {% include 'nav/breadcrumbs.html.twig' %}
 
-        {% include 'nav/breadcrumbs.html.twig' %}
+    <div class="min-height400">
 
-        <div class="min-height400">
+        <h1>{{ fieldByLocale(currentPage.menuData, 'title') }}</h1>
 
-            <h1>{{ fieldByLocale(currentPage.menuData, 'title') }}</h1>
+        {% include 'nav/child-categories-menu.html.twig' %}
 
-            {% include 'nav/child-categories-menu.html.twig' %}
+        {% include 'nav/siblings-menu.html.twig' %}
 
-            {% include 'nav/siblings-menu.html.twig' %}
+        {% if items | length == 0 and queryOptions.filter | length == 0 %}
+            {% if categoriesMenu | length == 0 %}
+                <div class="alert alert-info">
+                    {{ 'This category is empty' | trans }}.
+                </div>
+            {% endif %}
+        {% else %}
 
-            {% if items | length == 0 and queryOptions.filter | length == 0 %}
-                {% if categoriesMenu | length == 0 %}
-                    <div class="alert alert-info">
-                        {{ 'This category is empty' | trans }}.
-                    </div>
-                {% endif %}
-            {% else %}
+            {% include 'catalog/sort.html.twig' %}
 
-                {% include 'catalog/sort.html.twig' %}
+            <div class="row">
+                <div class="col-md-3">
 
-                <div class="row">
-                    <div class="col-md-3">
+                    {% include 'catalog/filters.html.twig' %}
 
-                        {% include 'catalog/filters.html.twig' %}
+                </div>
+                <div class="col-md-9">
 
-                    </div>
-                    <div class="col-md-9">
+                    {% if items | length > 0 %}
+                        <div class="row">
 
-                        {% if items | length > 0 %}
-                            <div class="row">
-
-                                {% for item in items %}
-                                    {% if listTemplate == 'grid' %}
-                                        <div class="col-6 col-lg-4">
-                                            <div class="card mb-3 show-on-hover-parent card-border-on-hover">
-                                                <div class="card-body">
-                                                    <div class="position-relative js-shopping-cart-favorites">
-                                                        <div class="position-absolute pos-right-top show-on-hover">
-                                                            <form action="{{ pathLocalized('shop_cart_action') }}" method="post">
-                                                                <input type="hidden" name="item_id" value="{{ item._id }}">
-                                                                <input type="hidden" name="category_id" value="{{ item.parentId }}">
-                                                                <input type="hidden" name="type" value="favorites">
-                                                                <button class="btn btn-outline-secondary-white" type="submit" data-toggle="tooltip" name="action" value="add_to_cart" title="{{ 'To favorites' | trans }}">
-                                                                    <i class="icon-heart1"></i>
-                                                                </button>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                    <div class="js-shopping-cart-product">
+                            {% for item in items %}
+                                {% if listTemplate == 'grid' %}
+                                    <div class="col-6 col-lg-4">
+                                        <div class="card mb-3 show-on-hover-parent card-border-on-hover">
+                                            <div class="card-body">
+                                                <div class="position-relative js-shopping-cart-favorites">
+                                                    <div class="position-absolute pos-right-top show-on-hover">
                                                         <form action="{{ pathLocalized('shop_cart_action') }}" method="post">
-                                                            {{ renderOutputTypeArray(item, fields, '', {"currency": currency}) }}
-                                                            <div class="position-relative">
-                                                                <div class="card-footer-absolute show-on-hover">
-                                                                    <input type="hidden" name="item_id" value="{{ item._id }}">
-                                                                    <input type="hidden" name="category_id" value="{{ item.parentId }}">
-                                                                    <input type="hidden" name="type" value="shop">
-                                                                    <div class="row no-gutters">
-                                                                        <div class="col-4">
-                                                                            <input type="number" class="form-control d-inline-block text-center" value="1" min="1" step="1" name="count">
-                                                                        </div>
-                                                                        <div class="col-8 pl-2">
-                                                                            <button type="submit" class="btn btn-success btn-block rounded-pill" name="submit_button">
-                                                                                {{ 'Add to cart' | trans }}
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="clearfix"></div>
-                                                                </div>
-                                                            </div>
+                                                            <input type="hidden" name="item_id" value="{{ item._id }}">
+                                                            <input type="hidden" name="category_id" value="{{ item.parentId }}">
+                                                            <input type="hidden" name="type" value="favorites">
+                                                            <button class="btn btn-outline-secondary-white" type="submit" data-toggle="tooltip" name="action" value="add_to_cart" title="{{ 'To favorites' | trans }}">
+                                                                <i class="icon-heart1"></i>
+                                                            </button>
                                                         </form>
                                                     </div>
                                                 </div>
+                                                <div class="js-shopping-cart-product">
+                                                    <form action="{{ pathLocalized('shop_cart_action') }}" method="post">
+                                                        {{ renderOutputTypeArray(item, fields, '', {"currency": currency}) }}
+                                                        <div class="position-relative">
+                                                            <div class="card-footer-absolute show-on-hover">
+                                                                <input type="hidden" name="item_id" value="{{ item._id }}">
+                                                                <input type="hidden" name="category_id" value="{{ item.parentId }}">
+                                                                <input type="hidden" name="type" value="shop">
+                                                                <div class="row no-gutters">
+                                                                    <div class="col-4">
+                                                                        <input type="number" class="form-control d-inline-block text-center" value="1" min="1" step="1" name="count">
+                                                                    </div>
+                                                                    <div class="col-8 pl-2">
+                                                                        <button type="submit" class="btn btn-success btn-block rounded-pill" name="submit_button">
+                                                                            {{ 'Add to cart' | trans }}
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="clearfix"></div>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
                                             </div>
                                         </div>
-                                    {% elseif listTemplate == 'list' %}
-                                        <div class="col-12 shk-item">
-                                            <div class="card mb-3">
-                                                <div class="card-body">
-                                                    <div class="catalog-list-item">
-                                                        <div class="catalog-list-item-inner">
-                                                            {{ renderOutputTypeChunk(item, fieldsAll, 'tag', 'list_', [], 1) }}
-                                                            {{ renderOutputTypeChunk(item, fieldsAll, 'image', '', [], 1) }}
-                                                            {{ renderOutputTypeChunk(item, fieldsAll, 'header', '', [], 1) }}
-                                                            {{ renderOutputTypeChunk(item, fieldsAll, 'description', '', [], 1) }}
-                                                            {{ renderOutputTypeChunk(item, fieldsAll, 'price', '', {"currency": currency}, 1) }}
-                                                        </div>
+                                    </div>
+                                {% elseif listTemplate == 'list' %}
+                                    <div class="col-12 shk-item">
+                                        <div class="card mb-3">
+                                            <div class="card-body">
+                                                <div class="catalog-list-item">
+                                                    <div class="catalog-list-item-inner">
+                                                        {{ renderOutputTypeChunk(item, fieldsAll, 'tag', 'list_', [], 1) }}
+                                                        {{ renderOutputTypeChunk(item, fieldsAll, 'image', '', [], 1) }}
+                                                        {{ renderOutputTypeChunk(item, fieldsAll, 'header', '', [], 1) }}
+                                                        {{ renderOutputTypeChunk(item, fieldsAll, 'description', '', [], 1) }}
+                                                        {{ renderOutputTypeChunk(item, fieldsAll, 'price', '', {"currency": currency}, 1) }}
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    {% endif %}
-                                {% endfor %}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
 
-                            </div>
+                        </div>
 
-                            {% include 'nav/pagination.html.twig' %}
-                        {% else %}
-                            <div class="alert alert-info">
-                                {{ 'search.nothing_found' | trans }}
-                            </div>
-                        {% endif %}
+                        {% include 'nav/pagination.html.twig' %}
+                    {% else %}
+                        <div class="alert alert-info">
+                            {{ 'search.nothing_found' | trans }}
+                        </div>
+                    {% endif %}
 
-                    </div>
                 </div>
-            {% endif %}
+            </div>
+        {% endif %}
 
-        </div>
-
-    </main>
+    </div>
 {% endblock %}
 
 {% block javascripts %}

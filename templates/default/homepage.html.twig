@@ -5,16 +5,13 @@
 
     <main role="main" class="container">
 
-        <div class="float-lg-right mb-3 text-right">
-            {{ shopCart('favorites_link', 'favorites') }}
-        </div>
-
-        <h1>{{ 'Home page' | trans }}</h1>
-
         <div class="min-height400">
 
-            <div class="card bg-light mb-3">
+            <div class="card mb-3">
                 <div class="card-body">
+                    <div class="float-right">
+                        {{ shopCart('favorites_link', 'favorites') }}
+                    </div>
                     <h4 class="card-title">
                         {{ 'Catalog' | trans }}
                     </h4>
@@ -28,7 +25,7 @@
                         </p>
                     </div>
                     {% if categoriesTopLevel|length > 0 %}
-                        <a href="{{ catalogPath(categoriesTopLevel[0].uri) }}" class="btn btn-primary">
+                        <a href="{{ catalogPath(categoriesTopLevel[0].uri) }}" class="btn btn-primary btn-wide rounded-pill">
                             {{ 'Go to product catalog' | trans }}
                         </a>
                     {% endif %}

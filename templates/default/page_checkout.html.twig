@@ -19,7 +19,7 @@
                                 <a href="{{ pathLocalized('register') }}">{{ 'Sign up' | trans }}</a>
                             </div>
                         {% endif %}
-                        <a class="btn btn-outline-info" href="{{ pathLocalized('shop_cart_edit') }}">
+                        <a class="btn btn-outline-info rounded-pill" href="{{ pathLocalized('shop_cart_edit') }}">
                             <i class="icon-keyboard_arrow_left"></i>
                             {{ 'Edit an order' | trans }}
                         </a>
@@ -48,7 +48,7 @@
                             {{ form_widget(form) }}
 
                             <div class="form-group text-right">
-                                <button type="submit" class="btn btn-info btn-lg" name="button-submit">
+                                <button type="submit" class="btn btn-primary btn-lg btn-wide rounded-pill" name="button-submit">
                                     {{ 'Submit order' | trans }}
                                 </button>
                             </div>

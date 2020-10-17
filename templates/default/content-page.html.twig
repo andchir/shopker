@@ -71,12 +71,12 @@
                             {% endif %}
                             <div class="my-3">
                                 {% if shopCartProductCount(contentType.name, 'shop', currentPage.id) > 0 %}
-                                    <a class="btn btn-info" href="{{ pathLocalized('shop_cart_edit') }}">
+                                    <a class="btn btn-info btn-wide rounded-pill" href="{{ pathLocalized('shop_cart_edit') }}">
                                         {{ 'Proceed to checkout' | trans }}
                                     </a>
                                 {% else %}
                                     <input type="number" class="form-control d-inline-block text-center mr-2" value="1" min="1" step="1" name="count" style="width: 100px;">
-                                    <button type="submit" class="btn btn-primary" name="submit_button">
+                                    <button type="submit" class="btn btn-success btn-wide rounded-pill" name="submit_button">
                                         {{ 'Add to cart' | trans }}
                                     </button>
                                 {% endif %}

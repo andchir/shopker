@@ -1,8 +1,8 @@
-<nav class="navbar-header navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container d-block">
+<nav class="navbar-header navbar navbar-expand-lg">
+    <div class="container d-block px-0">
         <div class="position-relative">
-            <div class="navbar-header-right">
-
+            <div class="navbar-header-right pr-3">
+                
                 <div class="d-inline-block">
                     {% if is_granted('ROLE_USER') %}
                         {% if is_granted('ROLE_ADMIN') %}
@@ -43,38 +43,39 @@
                             </div>
                         </div>
                     {% else %}
-                        <a class="btn btn-sm btn-outline-primary ml-1" href="{{ pathLocalized('login') }}" rel="nofollow">
+                        <a class="btn btn-sm btn-outline-primary btn-wide rounded-pill ml-1" href="{{ pathLocalized('login') }}" rel="nofollow">
                             {{ 'Log in' | trans }}
                             <i class="icon-unlock"></i>
                         </a>
                     {% endif %}
                 </div>
-
+                
                 <div class="d-inline-block ml-1">
                     {{ settingsList('SETTINGS_LANGUAGES', 'languages_list', false, true) }}
                 </div>
-
+            
             </div>
             {{ categoriesTree(0, 'menu_dropdown', null, activeCategoriesIds, true) }}
         </div>
     </div>
 </nav>
-<header>
+
+<header class="bg-primary mb-4">
     <div class="inner">
         <div class="container">
-
+            
             <div class="float-right ml-2">
                 {{ settingsList('SETTINGS_CURRENCY', 'currency_list', true) }}
             </div>
-
+            
             {% if app.request.attributes.get('_route') not in ['search'] %}
                 <div class="float-right position-relative">
                     <div class="position-absolute pos-right-top">
                         <form class="d-block" action="{{ pathLocalized('search_results') }}" method="get" id="formSearch">
                             <div class="input-group input-group-sm" style="width: 220px;">
-                                <input type="text" class="form-control" placeholder="{{ 'Search' | trans }}..." name="query">
+                                <input type="text" class="form-control border-secondary" placeholder="{{ 'Search' | trans }}..." name="query">
                                 <div class="input-group-append">
-                                    <button type="submit" class="btn btn-outline-secondary">
+                                    <button type="submit" class="btn btn-secondary bg-white text-black-50">
                                         <i class="icon-search"></i>
                                     </button>
                                 </div>
@@ -83,7 +84,7 @@
                     </div>
                 </div>
             {% endif %}
-
+            
             <a class="header-brand" href="{{ pathLocalized('homepage') }}">
                 {{ app_name }}
             </a>

@@ -16,10 +16,10 @@
                         </div>
                         {% if 'page_checkout' not in app.request.attributes.get('_route') %}
                             <div class="float-md-right mt-3 mt-md-0">
-                                <a class="btn btn-outline-light" href="{{ pathLocalized('shop_cart_edit') }}">
+                                <a class="btn btn-outline-light btn-wide rounded-pill" href="{{ pathLocalized('shop_cart_edit') }}">
                                     {{ 'Proceed to checkout' | trans }}
                                 </a>
-                                <button type="submit" class="btn btn-outline-light ml-1" data-toggle="tooltip" data-placement="top" title="{{ 'Empty cart' | trans }}" name="action" value="clean">
+                                <button type="submit" class="btn btn-outline-light ml-1" title="{{ 'Empty cart' | trans }}" name="action" value="clean">
                                     <i class="icon-cross"></i>
                                 </button>
                             </div>

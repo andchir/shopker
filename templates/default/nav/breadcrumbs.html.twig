@@ -1,11 +1,11 @@
 <!-- breadcrumbs -->
 {% if breadcrumbs | length > 0 %}
     <div class="btn-group btn-breadcrumb mb-3">
-        <a href="{{ app.request.get('locale_url_prefix') }}" class="btn btn-secondary">
+        <a href="{{ app.request.get('locale_url_prefix') }}" class="btn btn-primary">
             <i class="icon-home"></i>
         </a>
         {% for crumb in breadcrumbs %}
-            <a href="{{ catalogPath(crumb.uri) }}" class="btn btn-secondary">{{ crumb.title }}</a>
+            <a href="{{ catalogPath(crumb.uri) }}" class="btn btn-primary">{{ crumb.title }}</a>
         {% endfor %}
     </div>
 {% endif %}

@@ -1,5 +1,5 @@
 {% if data is not empty %}
-<select class="custom-select custom-select-sm d-inline-block" id="shk-currency" style="width: 70px;">
+<select class="custom-select custom-select-sm d-inline-block border-secondary" id="shk-currency" style="width: 70px;">
     {% for currency in data %}
         <option value="{{ currency.name }}" data-rate="{{ currency.options.value.value }}">{{ currency.name }}</option>
     {% endfor %}

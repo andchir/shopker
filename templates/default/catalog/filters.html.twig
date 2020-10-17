@@ -5,7 +5,7 @@
     <input type="hidden" name="order_by" value="{{ queryOptions.order_by }}">
     <div class="catalog-filters" id="catalog-filters">
         <div class="catalog-filters-header d-block d-md-none">
-            <button class="btn btn-secondary btn-block shk-button-filters-hide" type="button">
+            <button class="btn btn-secondary btn-block shk-button-filters-hide rounded-pill" type="button">
                 <i class="icon-keyboard_arrow_left"></i>
                 {{ 'Hide Filters' | trans }}
             </button>
@@ -22,7 +22,7 @@
             </div>
         </div>
         <div class="my-2"{% if queryOptions.filter | length == 0 %} style="display: none;"{% endif %}>
-            <a class="btn btn-info btn-sm btn-block shk-button-filters-reset" href="{{ catalogPath(currentUri) }}?limit={{ pagesOptions.limit }}&page=1&order_by={{ queryOptions.order_by }}">
+            <a class="btn btn-info btn-sm btn-block shk-button-filters-reset rounded-pill" href="{{ catalogPath(currentUri) }}?limit={{ pagesOptions.limit }}&page=1&order_by={{ queryOptions.order_by }}">
                 {{ 'Reset' | trans }}
             </a>
         </div>

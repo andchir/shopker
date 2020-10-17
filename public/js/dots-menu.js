@@ -1,6 +1,6 @@
 /**
  * DotsMenu https://github.com/andchir/dots-menu
- * @version 1.0.4
+ * @version 1.1.0
  * @author Andchir <andchir@gmail.com>
  * @license: MIT
  */
@@ -146,6 +146,7 @@
         this.onResize = function () {
             var elRect, liFirstlevelArr, menuParentContainer, dotsMenu, dotsMenuDrop, menuRect,
                 menuArr = document.querySelectorAll(mainOptions.selector+':not(.dots-menu-drop)');
+            
             menuArr.forEach(function(menuEl) {
                 menuRect = menuEl.getBoundingClientRect();
                 menuParentContainer = menuEl.parentNode;

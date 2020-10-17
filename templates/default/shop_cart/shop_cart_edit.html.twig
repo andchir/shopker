@@ -9,7 +9,7 @@
         <form action="{{ path('shop_cart_action') }}" method="post">
             <input type="hidden" name="type" value="{{ type }}">
             <div class="float-right">
-                <button class="btn btn-outline-info btn-sm mb-2" type="submit" name="action" value="clean">
+                <button class="btn btn-outline-info btn-sm rounded-pill mb-2" type="submit" name="action" value="clean">
                     <i class="icon-cross"></i>
                     {{ 'Empty cart' | trans }}
                 </button>
@@ -77,7 +77,7 @@
                     <tr>
                         <th colspan="5">
                             <div class="float-left">
-                                <button type="submit" class="btn btn-sm btn-info" name="action" value="update">
+                                <button type="submit" class="btn btn-sm btn-info rounded-pill" name="action" value="update">
                                     <i class="icon-reload"></i>
                                     {{ 'Recalculate' | trans }}
                                 </button>
@@ -120,7 +120,7 @@
             </div>
             <div class="col-lg-6">
                 <div class="float-right">
-                    <a class="btn btn-outline-info" href="{{ pathLocalized('page_checkout') }}">
+                    <a class="btn btn-outline-info rounded-pill btn-wide" href="{{ pathLocalized('page_checkout') }}">
                         {{ 'Continue' | trans }}
                         <i class="icon-keyboard_arrow_right"></i>
                     </a>

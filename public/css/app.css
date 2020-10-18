@@ -70,6 +70,10 @@ header .header-brand { display: inline-block; padding: 0.1rem 0.2rem 0 0; font-s
 }
 .navbar-header { width: 100%; padding: 0; position: fixed; left: 0; top: 0; z-index: 111; background-color: #fff; box-shadow: 0 0 15px rgba(0,0,0,0.3); }
 .navbar-header-right { position: absolute; right: 0; top: 9px; z-index: 10; }
+.navbar-header-right .header-search { width: 200px; }
+@media (max-width: 767.98px) {
+    .navbar-header-right .header-search { width: 110px; }
+}
 
 /* Bredcrumbs */
 .btn-breadcrumb { max-width: 100%; overflow: hidden; }
@@ -128,7 +132,7 @@ header .header-brand { display: inline-block; padding: 0.1rem 0.2rem 0 0; font-s
 .bg-cover-transparent:before { content: ''; display: block; position: absolute; left: 0; top: 0; z-index: -1; width: 100%; height: 100%; background-image: inherit; background-repeat: no-repeat; background-size: cover; pointer-events: none; opacity: 0.2; }
 .card-border-on-hover:hover { border-width: 3px; border-top-left-radius: 0.35rem; border-top-right-radius: 0.35rem; }
 .card-border-on-hover:hover .card-body { padding: 13px; }
-.card-footer-absolute { position: absolute; left: 0; padding: 14px; margin: 0 -16px; background-color: #fff; z-index: 1; border: 3px solid rgba(0,0,0,.125); border-top: 0; border-bottom-left-radius: 0.4rem; border-bottom-right-radius: 0.4rem; }
+.card-footer-absolute { position: absolute; left: 0; right: 0; top: 0; padding: 14px; margin: 0 -16px; background-color: #fff; z-index: 1; border: 3px solid rgba(0,0,0,.125); border-top: 0; border-bottom-left-radius: 0.4rem; border-bottom-right-radius: 0.4rem; }
 
 /* carousel */
 .carousel-indicators { bottom: -40px; }

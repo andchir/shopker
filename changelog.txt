@@ -1,3 +1,6 @@
+4.2.5
+- Updated the default template style.
+
 4.2.4
 - Ability to create discount promo codes for buyers. The discount can be set as a fixed amount or as a percentage.
 - Added authorization by API token. For users, you can create an API token in the admin interface. Documentation: https://shopker.org/api_doc/index.html

@@ -1,7 +1,7 @@
 <!-- child categories -->
 <div class="row">
     {% for category in categoriesMenu %}
-        <div class="col-6 col-lg-4 mb-3">
+        <div class="col-12 col-sm-6 col-lg-4 mb-3">
             <div class="card">
                 <div class="card-body min-height150 bg-cover-transparent" style="background-image: url('{{ imageUrl(category.image, '/img/market2.jpg') | imagine_filter('thumb_medium_relative') }}');">
                     <h4>

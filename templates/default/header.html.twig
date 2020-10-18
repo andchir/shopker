@@ -7,8 +7,8 @@
                     {% if app.request.attributes.get('_route') not in ['search'] %}
                         <div>
                             <form class="d-block" action="{{ pathLocalized('search_results') }}" method="get" id="formSearch">
-                                <div class="input-group input-group-sm" style="width: 220px;">
-                                    <input type="text" class="form-control border-secondary" placeholder="{{ 'Search' | trans }}..." name="query">
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control border-secondary header-search" placeholder="{{ 'Search' | trans }}..." name="query">
                                     <div class="input-group-append">
                                         <button type="submit" class="btn btn-secondary bg-white text-black-50">
                                             <i class="icon-search"></i>
@@ -29,8 +29,14 @@
 <header class="bg-primary mb-4">
     <div class="inner">
         <div class="container">
+    
+            <div class="float-none float-sm-left text-center text-sm-left mb-2 mb-sm-0">
+                <a class="header-brand" href="{{ pathLocalized('homepage') }}">
+                    {{ app_name }}
+                </a>
+            </div>
             
-            <div class="float-right ml-2">
+            <div class="float-none float-sm-right text-center">
     
                 <div class="d-inline-block">
                     {% if is_granted('ROLE_USER') %}
@@ -79,7 +85,6 @@
                     {% endif %}
                 </div>
                 
-                
                 <div class="d-inline-block ml-1">
                     {{ settingsList('SETTINGS_LANGUAGES', 'languages_list', false, true) }}
                 </div>
@@ -87,10 +92,7 @@
                     {{ settingsList('SETTINGS_CURRENCY', 'currency_list', true) }}
                 </div>
             </div>
-            
-            <a class="header-brand" href="{{ pathLocalized('homepage') }}">
-                {{ app_name }}
-            </a>
+            <div class="clearfix"></div>
         </div>
     </div>
 </header>

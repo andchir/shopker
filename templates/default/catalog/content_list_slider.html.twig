@@ -1,43 +1,16 @@
 <div class="pt-3">
-    <div id="carouselContent{{ sliderName | default('') }}" class="carousel slide" data-ride="carousel" data-interval="8000">
-        {% if items | length > 4 %}
-            <ol class="carousel-indicators carousel-indicators-inverted">
-                {% for i in 1..groupCount %}
-                    <li data-target="#carouselContent{{ sliderName | default('') }}" data-slide-to="{{ loop.index0 }}"{% if loop.index0 == 0 %} class="active"{% endif %}></li>
-                {% endfor %}
-            </ol>
-        {% endif %}
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <div class="row">
-                    {% for item in items %}
-                    <div class="col-6 col-md-{{ 12 / groupSize }}">
-                        <div class="card mb-3 mb-md-0">
-                            <div class="card-body">
-                                {{ renderOutputTypeChunk(item, fields, 'header', '', {systemNameField: systemNameField}, 1) }}
-                                {{ renderOutputTypeChunk(item, fields, 'tag', '', [], 1) }}
-                                {{ renderOutputTypeChunk(item, fields, 'image', '', {systemNameField: systemNameField}, 1) }}
-                                {{ renderOutputTypeChunk(item, fields, 'price', '', {currency: currency | default('')}, 1) }}
-                            </div>
-                        </div>
+    <div class="row responsive-carousel">
+        {% for item in items %}
+            <div class="col-3 px-2">
+                <div class="card mb-3 mb-md-0">
+                    <div class="card-body">
+                        {{ renderOutputTypeChunk(item, fields, 'header', '', {systemNameField: systemNameField}, 1) }}
+                        {{ renderOutputTypeChunk(item, fields, 'tag', '', [], 1) }}
+                        {{ renderOutputTypeChunk(item, fields, 'image', '', {systemNameField: systemNameField}, 1) }}
+                        {{ renderOutputTypeChunk(item, fields, 'price', '', {currency: currency | default('')}, 1) }}
                     </div>
-                    {% if loop.index != total and loop.index % groupSize == 0 %}
                 </div>
             </div>
-            <div class="carousel-item">
-                <div class="row">
-                    {% endif %}
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-        {% if items | length > 4 %}
-            <a class="carousel-control-prev carousel-control-icon" href="#carouselContent{{ sliderName | default('') }}" role="button" data-slide="prev">
-                <i class="icon-keyboard_arrow_left"></i>
-            </a>
-            <a class="carousel-control-next carousel-control-icon" href="#carouselContent{{ sliderName | default('') }}" role="button" data-slide="next">
-                <i class="icon-keyboard_arrow_right"></i>
-            </a>
-        {% endif %}
+        {% endfor %}
     </div>
 </div>

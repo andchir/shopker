@@ -9,7 +9,11 @@
         <form action="{{ path('shop_cart_action') }}" method="post">
             <input type="hidden" name="type" value="{{ type }}">
             <div class="float-right">
-                <button class="btn btn-outline-info btn-sm rounded-pill mb-2" type="submit" name="action" value="clean">
+                <button type="submit" class="btn btn-sm btn-info rounded-pill mb-2" name="action" value="update">
+                    <i class="icon-reload"></i>
+                    {{ 'Recalculate' | trans }}
+                </button>
+                <button class="btn btn-outline-info btn-sm rounded-pill mb-2 ml-1" type="submit" name="action" value="clean">
                     <i class="icon-cross"></i>
                     {{ 'Empty cart' | trans }}
                 </button>
@@ -19,8 +23,8 @@
                 <tbody>
                 {% for item in items %}
                     <tr>
-                        <td>{{ loop.index }}</td>
-                        <td>
+                        <td class="d-none d-lg-table-cell">{{ loop.index }}</td>
+                        <td class="d-none d-lg-table-cell">
                             <img src="{{ item.image | default('/img/nofoto.png') | imagine_filter('thumb_small') }}" width="100" alt="">
                         </td>
                         <td>
@@ -49,7 +53,7 @@
                             <span class="shk-currency">{{ currencySelected | default(currency) }}</span>
                         </td>
                         <td class="text-right">
-                            <button class="btn btn-outline-info ml-1" type="submit" name="remove_by_index" value="{{ loop.index0 }}" title="{{ 'Delete item' | trans }}">
+                            <button class="btn btn-outline-info btn-sm ml-1" type="submit" name="remove_by_index" value="{{ loop.index0 }}" title="{{ 'Delete item' | trans }}">
                                 <i class="icon-cross"></i>
                             </button>
                         </td>
@@ -59,7 +63,11 @@
                 <tfoot>
                     {% if shoppingCart.discountPercent is not empty or shoppingCart.discount is not empty %}
                     <tr>
-                        <td colspan="5">
+                        <td class="d-none d-lg-table-cell"></td>
+                        <td class="d-none d-lg-table-cell"></td>
+                        <td></td>
+                        <td class="d-none d-lg-table-cell"></td>
+                        <td>
                             <div class="text-right text-danger">
                                 {{ 'Discount' | trans }}:
                             </div>
@@ -75,12 +83,13 @@
                     </tr>
                     {% endif %}
                     <tr>
-                        <th colspan="5">
+                        <td class="d-none d-lg-table-cell"></td>
+                        <td class="d-none d-lg-table-cell"></td>
+                        <td></td>
+                        <td class="d-none d-lg-table-cell"></td>
+                        <th>
                             <div class="float-left">
-                                <button type="submit" class="btn btn-sm btn-info rounded-pill" name="action" value="update">
-                                    <i class="icon-reload"></i>
-                                    {{ 'Recalculate' | trans }}
-                                </button>
+                            
                             </div>
                             <div class="text-right">
                                 {{ 'Total' | trans }}:

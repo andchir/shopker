@@ -5,6 +5,11 @@
   "app_build/fonts/icomoon.woff?ukbiqr": "./fonts/icomoon.5fd577bc.woff",
   "app_build/fonts/icomoon.ttf?ukbiqr": "./fonts/icomoon.69cfd26b.ttf",
   "app_build/fonts/icomoon.eot?ukbiqr": "./fonts/icomoon.6cb4fc30.eot",
+  "app_build/fonts/slick.woff": "./fonts/slick.b7c9e1e4.woff",
+  "app_build/fonts/slick.eot": "./fonts/slick.ced611da.eot",
+  "app_build/fonts/slick.ttf": "./fonts/slick.d41f55a7.ttf",
+  "app_build/images/ajax-loader.gif": "./images/ajax-loader.c5cd7f53.gif",
   "app_build/images/icomoon.svg?ukbiqr": "./images/icomoon.ec847f21.svg",
+  "app_build/images/slick.svg": "./images/slick.f97e3bbf.svg",
   "app_build/images/slider-handle.gif": "./images/slider-handle.879a34e1.gif"
 }

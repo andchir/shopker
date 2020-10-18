@@ -8,6 +8,8 @@ Encore
     .addStyleEntry('app_styles', [
         './node_modules/bootstrap/dist/css/bootstrap.min.css',
         './node_modules/nouislider/distribute/nouislider.min.css',
+        './node_modules/slick-carousel/slick/slick.css',
+        './node_modules/slick-carousel/slick/slick-theme.css',
         './css/icomoon/style.css',
         './css/dots-menu.css',
         './css/shopkeeper.css',

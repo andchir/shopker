@@ -14,6 +14,7 @@ global.noUiSlider = noUiSlider;
 global.DotsMenu = DotsMenu;
 global.shk = new Shopkeeper();
 global.dotsMenu = new DotsMenu({
+    fixedMode: true,
     dotsMenuButtonPosition: 'left',
     rightSpace: 165
 });

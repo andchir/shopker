@@ -238,7 +238,7 @@ class OrderContent
      */
     public function setPrice($price, $currencyRate = 1)
     {
-        $this->price = round($price / $currencyRate, 2);
+        $this->price = round(floatval($price) / $currencyRate, 2);
         return $this;
     }
 

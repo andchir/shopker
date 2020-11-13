@@ -283,7 +283,7 @@ class CartController extends BaseController
         $cartContent = $shoppingCart->getContent();
         $contentIndex = $this->getContentIndex($cartContent, [
             'id' => $productDocument['_id'],
-            'price' => $productDocument[$priceFieldName] ?: 0,
+            'price' => $productDocument[$priceFieldName] ?? 0,
             'parameters' => $parameters,
             'options' => $options,
             'contentTypeName' => $category->getContentTypeName()
@@ -301,7 +301,7 @@ class CartController extends BaseController
             $content
                 ->setId($productDocument['_id'])
                 ->setTitle(ShopCartService::getTranslatedField($productDocument, $titleFieldName, $locale, $localeDefault))
-                ->setPrice($productDocument[$priceFieldName] ?: 0)
+                ->setPrice($productDocument[$priceFieldName] ?? 0)
                 ->setCount($count)
                 ->setParameters($parameters)
                 ->setFiles($files)

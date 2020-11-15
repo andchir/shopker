@@ -100,7 +100,7 @@ class CartController extends BaseController
                 break;
             case 'clean':
 
-                $this->shopCartService->clearContent($type);
+                $this->shopCartService->clearContent($type, true);
 
                 break;
             case 'promo_code':

@@ -509,6 +509,14 @@ class FileDocument
         }
         return $this->getUploadDir() . '/' . $this->getFullFileName();
     }
+    
+    /**
+     * @return string
+     */
+    public function getFileUrl()
+    {
+        return '/uploads/' . $this->getDirBasePath() . '/' . $this->getFullFileName();
+    }
 
     /**
      * @MongoDB\PrePersist()

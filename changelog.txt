@@ -1,3 +1,6 @@
+4.2.6
+- The standard slider tooltips now merge when close.
+
 4.2.5
 - Updated the default template style.
 

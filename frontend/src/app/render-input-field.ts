@@ -10,7 +10,7 @@ import {FormGroup, FormControl, Validators} from '@angular/forms';
 import {cloneDeep, map, zipObject, extend, defer} from 'lodash';
 import {isNumeric} from 'rxjs/util/isNumeric';
 import {TranslateService} from '@ngx-translate/core';
-import {TreeNode} from 'primeng';
+import {TreeNode} from 'primeng/api';
 
 import {
     FullCalendarComponent,
@@ -95,6 +95,7 @@ export class InputFieldRenderComponent implements OnInit {
     categoriesSelection: {[key: string]: any} = {};
     calendarLocale = calendarLocale;
     fullCalendarOptions: {[key: string]: CalendarOptions};
+    activeTabId = 0;
 
     constructor(
         private changeDetectionRef: ChangeDetectorRef,

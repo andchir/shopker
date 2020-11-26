@@ -14,6 +14,7 @@ import {FormFieldInterface, FormFieldOptionsInterface} from './models/form-field
 /**
  * @deprecated since version 4.1.1. Use AppModalContentAbstractComponent instead.
  */
+@Directive()
 export abstract class ModalContentAbstractComponent<M> implements OnInit, OnDestroy {
 
     @Input() modalTitle: string;

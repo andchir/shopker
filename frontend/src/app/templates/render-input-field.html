@@ -1,138 +1,140 @@
 
-<ngb-tabset (tabChange)="onGroupChange($event)" justify="fill">
-    <ngb-tab *ngFor="let groupName of groups; let i=index">
-        <ng-template ngbTabTitle>{{groupName}}</ng-template>
-        <ng-template ngbTabContent>
-            <div class="pt-3">
+<ul ngbNav #nav="ngbNav" [(activeId)]="activeTabId" class="nav-tabs">
+    <ng-container *ngFor="let groupName of groups; let i=index">
+        <li [ngbNavItem]="i">
+            <a ngbNavLink>{{ groupName }}</a>
+            <ng-template ngbNavContent>
 
-                <div class="form-group form-group-message"
-                     [formGroup]="form"
-                     *ngFor="let field of fields | filterFieldByGroup: groupName">
+                <div class="pt-3">
 
-                    <div class="show-on-hover-parent" [ngSwitch]="field.inputType" [ngClass]="{'pr-5': field.inputProperties.multiple}">
+                    <div class="form-group form-group-message"
+                         [formGroup]="form"
+                         *ngFor="let field of fields | filterFieldByGroup: groupName">
 
-                        <ng-container *ngIf="field.inputProperties.multiple">
-                            <div class="show-on-hover-child pos-absolute-right-bottom" style="z-index: 11;">
-                                <div class="mb-2">
-                                    <button type="button" class="btn btn-secondary btn-sm" [ngbTooltip]="'MOVE_UP' | translate" placement="left" (click)="fieldMove(field, 'up', $event)">
-                                        <i class="icon-arrow-up"></i>
-                                    </button>
+                        <div class="show-on-hover-parent" [ngSwitch]="field.inputType" [ngClass]="{'pr-5': field.inputProperties.multiple}">
+
+                            <ng-container *ngIf="field.inputProperties.multiple">
+                                <div class="show-on-hover-child pos-absolute-right-bottom" style="z-index: 11;">
+                                    <div class="mb-2">
+                                        <button type="button" class="btn btn-secondary btn-sm" [ngbTooltip]="'MOVE_UP' | translate" placement="left" (click)="fieldMove(field, 'up', $event)">
+                                            <i class="icon-arrow-up"></i>
+                                        </button>
+                                    </div>
+                                    <div class="mb-2">
+                                        <button type="button" class="btn btn-secondary btn-sm" [ngbTooltip]="'MOVE_DOWN' | translate" placement="left" (click)="fieldMove(field, 'down', $event)">
+                                            <i class="icon-arrow-down"></i>
+                                        </button>
+                                    </div>
+                                    <div>
+                                        <button type="button" class="btn btn-secondary btn-sm" [ngbTooltip]="'ADD' | translate" placement="left" (click)="fieldAdd(field, $event)">
+                                            <i class="icon-plus"></i>
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="mb-2">
-                                    <button type="button" class="btn btn-secondary btn-sm" [ngbTooltip]="'MOVE_DOWN' | translate" placement="left" (click)="fieldMove(field, 'down', $event)">
-                                        <i class="icon-arrow-down"></i>
-                                    </button>
+                            </ng-container>
+
+                            <!-- system_name -->
+                            <div class="row" *ngSwitchCase="'system_name'">
+                                <div class="col-md-5">
+                                    <label for="field_{{field.name}}">
+                                        {{field.title}}
+                                        <span class="text-muted">({{field.name}})</span>
+                                        <span class="text-danger" *ngIf="field.required">*</span>
+                                    </label>
                                 </div>
-                                <div>
-                                    <button type="button" class="btn btn-secondary btn-sm" [ngbTooltip]="'ADD' | translate" placement="left" (click)="fieldAdd(field, $event)">
-                                        <i class="icon-plus"></i>
-                                    </button>
+                                <div class="col-md-7">
+                                    <div class="input-group" [class.is-invalid]="formErrors[field.name]">
+                                        <input type="text" class="form-control" id="field_{{field.name}}"
+                                               [name]="field.name"
+                                               [formControlName]="field.name"
+                                               [(ngModel)]="model[field.name]"
+                                               [class.is-invalid]="formErrors[field.name]">
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-secondary" ngbTooltip="{{'GENERATE' | translate}}" (click)="generateName(field)">
+                                                <i class="icon-reload"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                                        {{formErrors[field.name]}}
+                                    </div>
                                 </div>
                             </div>
-                        </ng-container>
+                            <!-- /system_name -->
 
-                        <!-- system_name -->
-                        <div class="row" *ngSwitchCase="'system_name'">
-                            <div class="col-md-5">
-                                <label for="field_{{field.name}}">
-                                    {{field.title}}
-                                    <span class="text-muted">({{field.name}})</span>
-                                    <span class="text-danger" *ngIf="field.required">*</span>
-                                </label>
-                            </div>
-                            <div class="col-md-7">
-                                <div class="input-group" [class.is-invalid]="formErrors[field.name]">
+                            <!-- name -->
+                            <div class="row" *ngSwitchCase="'name'">
+                                <div class="col-md-5">
+                                    <label for="field_{{field.name}}">
+                                        {{field.title}}
+                                        <span class="text-muted">({{field.name}})</span>
+                                        <span class="text-danger" *ngIf="field.required">*</span>
+                                    </label>
+                                </div>
+                                <div class="col-md-7">
                                     <input type="text" class="form-control" id="field_{{field.name}}"
                                            [name]="field.name"
                                            [formControlName]="field.name"
                                            [(ngModel)]="model[field.name]"
                                            [class.is-invalid]="formErrors[field.name]">
-                                    <div class="input-group-append">
-                                        <button type="button" class="btn btn-secondary" ngbTooltip="{{'GENERATE' | translate}}" (click)="generateName(field)">
-                                            <i class="icon-reload"></i>
-                                        </button>
+                                    <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                                        {{formErrors[field.name]}}
                                     </div>
                                 </div>
-                                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
-                                    {{formErrors[field.name]}}
+                            </div>
+                            <!-- /name -->
+
+                            <!-- number -->
+                            <div class="row" *ngSwitchCase="'number'">
+                                <div class="col-md-5">
+                                    <label for="field_{{field.name}}">
+                                        {{field.title}}
+                                        <span class="text-muted">({{field.name}})</span>
+                                        <span class="text-danger" *ngIf="field.required">*</span>
+                                    </label>
+                                </div>
+                                <div class="col-md-7">
+                                    <input type="number" class="form-control" id="field_{{field.name}}"
+                                           [name]="field.name"
+                                           [formControlName]="field.name"
+                                           [class.is-invalid]="formErrors[field.name]"
+                                           [(ngModel)]="model[field.name]"
+                                           [min]="field.inputProperties.min"
+                                           [max]="field.inputProperties.max"
+                                           [step]="field.inputProperties.step">
+                                    <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                                        {{formErrors[field.name]}}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <!-- /system_name -->
+                            <!-- /number -->
 
-                        <!-- name -->
-                        <div class="row" *ngSwitchCase="'name'">
-                            <div class="col-md-5">
-                                <label for="field_{{field.name}}">
-                                    {{field.title}}
-                                    <span class="text-muted">({{field.name}})</span>
-                                    <span class="text-danger" *ngIf="field.required">*</span>
-                                </label>
-                            </div>
-                            <div class="col-md-7">
-                                <input type="text" class="form-control" id="field_{{field.name}}"
-                                       [name]="field.name"
-                                       [formControlName]="field.name"
-                                       [(ngModel)]="model[field.name]"
-                                       [class.is-invalid]="formErrors[field.name]">
-                                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
-                                    {{formErrors[field.name]}}
+                            <!-- textarea -->
+                            <div *ngSwitchCase="'textarea'" [class.row]="field.inputProperties.rows < 7">
+                                <div [class.col-md-5]="field.inputProperties.rows < 7">
+                                    <label for="field_{{field.name}}">
+                                        {{field.title}}
+                                        <span class="text-muted">({{field.name}})</span>
+                                        <span class="text-danger" *ngIf="field.required">*</span>
+                                    </label>
                                 </div>
-                            </div>
-                        </div>
-                        <!-- /name -->
-
-                        <!-- number -->
-                        <div class="row" *ngSwitchCase="'number'">
-                            <div class="col-md-5">
-                                <label for="field_{{field.name}}">
-                                    {{field.title}}
-                                    <span class="text-muted">({{field.name}})</span>
-                                    <span class="text-danger" *ngIf="field.required">*</span>
-                                </label>
-                            </div>
-                            <div class="col-md-7">
-                                <input type="number" class="form-control" id="field_{{field.name}}"
-                                       [name]="field.name"
-                                       [formControlName]="field.name"
-                                       [class.is-invalid]="formErrors[field.name]"
-                                       [(ngModel)]="model[field.name]"
-                                       [min]="field.inputProperties.min"
-                                       [max]="field.inputProperties.max"
-                                       [step]="field.inputProperties.step">
-                                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
-                                    {{formErrors[field.name]}}
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /number -->
-
-                        <!-- textarea -->
-                        <div *ngSwitchCase="'textarea'" [class.row]="field.inputProperties.rows < 7">
-                            <div [class.col-md-5]="field.inputProperties.rows < 7">
-                                <label for="field_{{field.name}}">
-                                    {{field.title}}
-                                    <span class="text-muted">({{field.name}})</span>
-                                    <span class="text-danger" *ngIf="field.required">*</span>
-                                </label>
-                            </div>
-                            <div [class.col-md-7]="field.inputProperties.rows < 7">
+                                <div [class.col-md-7]="field.inputProperties.rows < 7">
                                 <textarea class="form-control" id="field_{{field.name}}" [name]="field.name"
                                           [formControlName]="field.name"
                                           [(ngModel)]="model[field.name]"
                                           [rows]="field.inputProperties.rows"
                                           [class.is-invalid]="formErrors[field.name]"
                                           [ngClass]="{'border-success': isLocalizationActive}"></textarea>
-                                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
-                                    {{formErrors[field.name]}}
+                                    <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                                        {{formErrors[field.name]}}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <!-- /textarea -->
+                            <!-- /textarea -->
 
-                        <!-- file -->
-                        <ng-container *ngSwitchCase="'file'">
-                            <app-file-widget
+                            <!-- file -->
+                            <ng-container *ngSwitchCase="'file'">
+                                <app-file-widget
                                     [formControlName]="field.name"
                                     [fieldTitle]="field.title"
                                     [fieldName]="field.name"
@@ -140,261 +142,261 @@
                                     [allowedExtensions]="field.inputProperties.allowed_extensions"
                                     [(files)]="files"
                                     [(ngModel)]="model[field.name]"></app-file-widget>
-                            <div *ngIf="formErrors[field.name]" class="alert alert-danger mt-3">
-                                {{formErrors[field.name]}}
-                            </div>
-                        </ng-container>
-                        <!-- /file -->
-
-                        <!-- color -->
-                        <div class="row" *ngSwitchCase="'color'">
-                            <div class="col-md-5">
-                                <label for="field_{{field.name}}">
-                                    {{field.title}}
-                                    <span class="text-muted">({{field.name}})</span>
-                                    <span class="text-danger" *ngIf="field.required">*</span>
-                                </label>
-                            </div>
-                            <div class="col-md-7">
-
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="position-relative">
-                                            <div class="position-absolute pos-absolute-right" style="right: 3px; top: 3px;">
-                                                <p-colorPicker [inputId]="'field_' + field.name"
-                                                               [formControlName]="field.name"
-                                                               [inline]="field.inputProperties['inline']"
-                                                               [(ngModel)]="model[field.name]"></p-colorPicker>
-                                            </div>
-                                        </div>
-                                        <input type="text" class="form-control" maxlength="7" [(ngModel)]="model[field.name]" [ngModelOptions]="{standalone: true}">
-                                    </div>
-                                </div>
-
-                                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                                <div *ngIf="formErrors[field.name]" class="alert alert-danger mt-3">
                                     {{formErrors[field.name]}}
                                 </div>
-                            </div>
-                        </div>
-                        <!-- /color -->
+                            </ng-container>
+                            <!-- /file -->
 
-                        <!-- rich_text -->
-                        <div class="row" *ngSwitchCase="'rich_text'">
-                            <div class="col-12">
-                                <label for="field_{{field.name}}">
-                                    {{field.title}}
-                                    <span class="text-muted">({{field.name}})</span>
-                                    <span class="text-danger" *ngIf="field.required">*</span>
-                                </label>
-                                <div class="border rounded" [ngClass]="{'border-success': isLocalizationActive}">
-                                    <p-editor [formControlName]="field.name"
-                                              [(ngModel)]="model[field.name]"
-                                              [formats]="field.inputProperties.formats"
-                                              [style]="{'height':'320px'}"
-                                              (onInit)="onInitTextEditor($event)">
-                                        <p-header>
-                                            <select class="ql-header" *ngIf="field.inputProperties.formats.indexOf('header') > -1"></select>
-                                            <select class="ql-font" *ngIf="field.inputProperties.formats.indexOf('font') > -1"></select>
-                                            <select class="ql-size" *ngIf="field.inputProperties.formats.indexOf('size') > -1"></select>
-                                            <button class="ql-bold" aria-label="Bold" *ngIf="field.inputProperties.formats.indexOf('bold') > -1"></button>
-                                            <button class="ql-italic" aria-label="Italic" *ngIf="field.inputProperties.formats.indexOf('italic') > -1"></button>
-                                            <button class="ql-underline" aria-label="Underline" *ngIf="field.inputProperties.formats.indexOf('underline') > -1"></button>
-                                            <button class="ql-strike" aria-label="Strike" *ngIf="field.inputProperties.formats.indexOf('strike') > -1"></button>
-                                            <select class="ql-color" *ngIf="field.inputProperties.formats.indexOf('color') > -1"></select>
-                                            <select class="ql-background" *ngIf="field.inputProperties.formats.indexOf('background') > -1"></select>
-                                            <button class="ql-list" value="ordered" aria-label="Ordered List" *ngIf="field.inputProperties.formats.indexOf('list') > -1"></button>
-                                            <button class="ql-list" value="bullet" aria-label="Unordered List" *ngIf="field.inputProperties.formats.indexOf('list') > -1"></button>
-                                            <select class="ql-align" *ngIf="field.inputProperties.formats.indexOf('align') > -1"></select>
-                                            <button class="ql-link" aria-label="Insert Link" *ngIf="field.inputProperties.formats.indexOf('link') > -1"></button>
-                                            <button class="ql-image" aria-label="Insert Image" *ngIf="field.inputProperties.formats.indexOf('image') > -1"></button>
-                                            <button class="ql-video" aria-label="Insert Video" *ngIf="field.inputProperties.formats.indexOf('video') > -1"></button>
-                                            <button class="ql-code-block" aria-label="Insert Code Block" *ngIf="field.inputProperties.formats.indexOf('code-block') > -1"></button>
-                                            <button class="ql-clean" aria-label="Remove Styles" *ngIf="field.inputProperties.formats.indexOf('clean') > -1"></button>
-                                        </p-header>
-                                    </p-editor>
-                                </div>
-                                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
-                                    {{formErrors[field.name]}}
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /rich_text -->
-
-                        <!-- date -->
-                        <div class="row" *ngSwitchCase="'date'">
-                            <div class="col-md-5">
-                                <label for="field_{{field.name}}">
-                                    {{field.title}}
-                                    <span class="text-muted">({{field.name}})</span>
-                                    <span class="text-danger" *ngIf="field.required">*</span>
-                                </label>
-                            </div>
-                            <div class="col-md-7">
-
-                                <div class="ui-fluid">
-                                    <p-calendar [formControlName]="field.name"
-                                                [(ngModel)]="model[field.name]"
-                                                [dateFormat]="field.inputProperties.format"
-                                                [showTime]="field.inputProperties.show_time"
-                                                [hourFormat]="field.inputProperties.hour_format"
-                                                [locale]="calendarLocale[field.inputProperties.locale]"
-                                                [showButtonBar]="true"
-                                                [showIcon]="true"
-                                                [icon]="'icon-date_range'"></p-calendar>
-                                </div>
-
-                                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
-                                    {{formErrors[field.name]}}
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /date -->
-                        
-                        <!-- schedule -->
-                        <div *ngSwitchCase="'schedule'">
-    
-                            <label class="d-block mb-3" for="field_{{field.name}}">
-                                {{field.title}}
-                                <span class="text-muted">({{field.name}})</span>
-                                <span class="text-danger" *ngIf="field.required">*</span>
-                            </label>
-                            <full-calendar #fullCalendar [options]="fullCalendarOptions[field.name]"></full-calendar>
-                            
-                        </div>
-                        <!-- /schedule -->
-
-                        <!-- select -->
-                        <div class="row" *ngSwitchCase="'select'">
-                            <div class="col-md-5">
-                                <label for="field_{{field.name}}">
-                                    {{field.title}}
-                                    <span class="text-muted">({{field.name}})</span>
-                                    <span class="text-danger" *ngIf="field.required">*</span>
-                                </label>
-                            </div>
-                            <div class="col-md-7">
-                                <select id="field_{{field.name}}" class="form-control" [name]="field.name"
-                                        [formControlName]="field.name"
-                                        [(ngModel)]="model[field.name]"
-                                        [class.is-invalid]="formErrors[field.name]">
-                                    <option *ngFor="let opt of field.options" [value]="opt.value">{{opt.title}}</option>
-                                </select>
-                                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
-                                    {{formErrors[field.name]}}
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /select -->
-
-                        <!-- radio -->
-                        <div class="row" *ngSwitchCase="'radio'">
-                            <div class="col-md-5">
-                                <label for="field_{{field.name}}">
-                                    {{field.title}}
-                                    <span class="text-muted">({{field.name}})</span>
-                                    <span class="text-danger" *ngIf="field.required">*</span>
-                                </label>
-                            </div>
-                            <div class="col-md-7">
-                                <div>
-                                    <div class="custom-control custom-radio d-inline-block mr-4" *ngFor="let opt of field.options; index as index">
-                                        <input type="radio" id="radio_{{field.name}}{{index}}" class="custom-control-input"
-                                               [name]="field.name"
-                                               [value]="opt.value"
-                                               [formControlName]="field.name"
-                                               [(ngModel)]="model[field.name]">
-                                        <label class="custom-control-label" for="radio_{{field.name}}{{index}}">{{opt.title}}</label>
-                                    </div>
-                                </div>
-                                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
-                                    {{formErrors[field.name]}}
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /radio -->
-
-                        <!-- checkbox -->
-                        <div class="row" *ngSwitchCase="'checkbox'">
-                            <div class="col-md-5">
-                                <label for="field_{{field.name}}">
-                                    {{field.title}}
-                                    <span class="text-muted">({{field.name}})</span>
-                                    <span class="text-danger" *ngIf="field.required">*</span>
-                                </label>
-                            </div>
-                            <div class="col-md-7">
-                                <div>
-                                    <div class="custom-control custom-checkbox d-inline-block mr-4" *ngFor="let opt of field.options; index as index">
-                                        <input type="checkbox" class="custom-control-input"
-                                               id="chk_{{field.name}}{{index}}"
-                                               [name]="field.name + index"
-                                               [value]="opt.value"
-                                               (change)="selectValue($event, field.name, opt.value)"
-                                               [checked]="fieldsMultivalues[field.name].checked[index]">
-                                        <label class="custom-control-label" for="chk_{{field.name}}{{index}}">{{opt.title}}</label>
-                                    </div>
-                                </div>
-                                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
-                                    {{formErrors[field.name]}}
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /checkbox -->
-
-                        <!-- tags -->
-                        <div class="row" *ngSwitchCase="'tags'">
-                            <div class="col-md-5">
-                                <label for="field_{{field.name}}">
-                                    {{field.title}}
-                                    <span class="text-muted">({{field.name}})</span>
-                                    <span class="text-danger" *ngIf="field.required">*</span>
-                                </label>
-                            </div>
-                            <div class="col-md-7">
-
-                                <p-chips [formControlName]="field.name" [(ngModel)]="model[field.name]"></p-chips>
-
-                                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
-                                    {{formErrors[field.name]}}
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /tags -->
-
-                        <!-- categories -->
-                        <div class="row" *ngSwitchCase="'categories'">
-                            <div class="col-md-5">
-                                <label for="field_{{field.name}}">
-                                    {{field.title}}
-                                    <span class="text-muted">({{field.name}})</span>
-                                    <span class="text-danger" *ngIf="field.required">*</span>
-                                </label>
-                            </div>
-                            <div class="col-md-7">
-                                <p-tree selectionMode="checkbox"
-                                        [value]="categoriesTree"
-                                        [(selection)]="categoriesSelection[field.name]"
-                                        [loading]="loadingCategories"
-                                        [layout]="field.inputProperties.layout"
-                                        [loadingIcon]="'icon-loader'"
-                                        (onNodeSelect)="categorySelect(field.name)"
-                                        (onNodeUnselect)="categorySelect(field.name)"></p-tree>
-                            </div>
-                        </div>
-                        <!-- /categories -->
-
-                        <!-- parameters -->
-                        <div class="row" *ngSwitchCase="'parameters'">
-                            <div class="col-12">
-                                <div class="card card-body p-2">
+                            <!-- color -->
+                            <div class="row" *ngSwitchCase="'color'">
+                                <div class="col-md-5">
                                     <label for="field_{{field.name}}">
                                         {{field.title}}
                                         <span class="text-muted">({{field.name}})</span>
                                         <span class="text-danger" *ngIf="field.required">*</span>
                                     </label>
+                                </div>
+                                <div class="col-md-7">
 
-                                    <table class="table table-divided mb-0">
-                                        <thead>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="position-relative">
+                                                <div class="position-absolute pos-absolute-right" style="right: 3px; top: 3px;">
+                                                    <p-colorPicker [inputId]="'field_' + field.name"
+                                                                   [formControlName]="field.name"
+                                                                   [inline]="field.inputProperties['inline']"
+                                                                   [(ngModel)]="model[field.name]"></p-colorPicker>
+                                                </div>
+                                            </div>
+                                            <input type="text" class="form-control" maxlength="7" [(ngModel)]="model[field.name]" [ngModelOptions]="{standalone: true}">
+                                        </div>
+                                    </div>
+
+                                    <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                                        {{formErrors[field.name]}}
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /color -->
+
+                            <!-- rich_text -->
+                            <div class="row" *ngSwitchCase="'rich_text'">
+                                <div class="col-12">
+                                    <label for="field_{{field.name}}">
+                                        {{field.title}}
+                                        <span class="text-muted">({{field.name}})</span>
+                                        <span class="text-danger" *ngIf="field.required">*</span>
+                                    </label>
+                                    <div class="border rounded" [ngClass]="{'border-success': isLocalizationActive}">
+                                        <p-editor [formControlName]="field.name"
+                                                  [(ngModel)]="model[field.name]"
+                                                  [formats]="field.inputProperties.formats"
+                                                  [style]="{'height':'320px'}"
+                                                  (onInit)="onInitTextEditor($event)">
+                                            <p-header>
+                                                <select class="ql-header" *ngIf="field.inputProperties.formats.indexOf('header') > -1"></select>
+                                                <select class="ql-font" *ngIf="field.inputProperties.formats.indexOf('font') > -1"></select>
+                                                <select class="ql-size" *ngIf="field.inputProperties.formats.indexOf('size') > -1"></select>
+                                                <button class="ql-bold" aria-label="Bold" *ngIf="field.inputProperties.formats.indexOf('bold') > -1"></button>
+                                                <button class="ql-italic" aria-label="Italic" *ngIf="field.inputProperties.formats.indexOf('italic') > -1"></button>
+                                                <button class="ql-underline" aria-label="Underline" *ngIf="field.inputProperties.formats.indexOf('underline') > -1"></button>
+                                                <button class="ql-strike" aria-label="Strike" *ngIf="field.inputProperties.formats.indexOf('strike') > -1"></button>
+                                                <select class="ql-color" *ngIf="field.inputProperties.formats.indexOf('color') > -1"></select>
+                                                <select class="ql-background" *ngIf="field.inputProperties.formats.indexOf('background') > -1"></select>
+                                                <button class="ql-list" value="ordered" aria-label="Ordered List" *ngIf="field.inputProperties.formats.indexOf('list') > -1"></button>
+                                                <button class="ql-list" value="bullet" aria-label="Unordered List" *ngIf="field.inputProperties.formats.indexOf('list') > -1"></button>
+                                                <select class="ql-align" *ngIf="field.inputProperties.formats.indexOf('align') > -1"></select>
+                                                <button class="ql-link" aria-label="Insert Link" *ngIf="field.inputProperties.formats.indexOf('link') > -1"></button>
+                                                <button class="ql-image" aria-label="Insert Image" *ngIf="field.inputProperties.formats.indexOf('image') > -1"></button>
+                                                <button class="ql-video" aria-label="Insert Video" *ngIf="field.inputProperties.formats.indexOf('video') > -1"></button>
+                                                <button class="ql-code-block" aria-label="Insert Code Block" *ngIf="field.inputProperties.formats.indexOf('code-block') > -1"></button>
+                                                <button class="ql-clean" aria-label="Remove Styles" *ngIf="field.inputProperties.formats.indexOf('clean') > -1"></button>
+                                            </p-header>
+                                        </p-editor>
+                                    </div>
+                                    <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                                        {{formErrors[field.name]}}
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /rich_text -->
+
+                            <!-- date -->
+                            <div class="row" *ngSwitchCase="'date'">
+                                <div class="col-md-5">
+                                    <label for="field_{{field.name}}">
+                                        {{field.title}}
+                                        <span class="text-muted">({{field.name}})</span>
+                                        <span class="text-danger" *ngIf="field.required">*</span>
+                                    </label>
+                                </div>
+                                <div class="col-md-7">
+
+                                    <div class="ui-fluid">
+                                        <p-calendar [formControlName]="field.name"
+                                                    [(ngModel)]="model[field.name]"
+                                                    [dateFormat]="field.inputProperties.format"
+                                                    [showTime]="field.inputProperties.show_time"
+                                                    [hourFormat]="field.inputProperties.hour_format"
+                                                    [locale]="calendarLocale[field.inputProperties.locale]"
+                                                    [showButtonBar]="true"
+                                                    [showIcon]="true"
+                                                    [icon]="'icon-date_range'"></p-calendar>
+                                    </div>
+
+                                    <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                                        {{formErrors[field.name]}}
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /date -->
+
+                            <!-- schedule -->
+                            <div *ngSwitchCase="'schedule'">
+
+                                <label class="d-block mb-3" for="field_{{field.name}}">
+                                    {{field.title}}
+                                    <span class="text-muted">({{field.name}})</span>
+                                    <span class="text-danger" *ngIf="field.required">*</span>
+                                </label>
+                                <full-calendar #fullCalendar [options]="fullCalendarOptions[field.name]"></full-calendar>
+
+                            </div>
+                            <!-- /schedule -->
+
+                            <!-- select -->
+                            <div class="row" *ngSwitchCase="'select'">
+                                <div class="col-md-5">
+                                    <label for="field_{{field.name}}">
+                                        {{field.title}}
+                                        <span class="text-muted">({{field.name}})</span>
+                                        <span class="text-danger" *ngIf="field.required">*</span>
+                                    </label>
+                                </div>
+                                <div class="col-md-7">
+                                    <select id="field_{{field.name}}" class="form-control" [name]="field.name"
+                                            [formControlName]="field.name"
+                                            [(ngModel)]="model[field.name]"
+                                            [class.is-invalid]="formErrors[field.name]">
+                                        <option *ngFor="let opt of field.options" [value]="opt.value">{{opt.title}}</option>
+                                    </select>
+                                    <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                                        {{formErrors[field.name]}}
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /select -->
+
+                            <!-- radio -->
+                            <div class="row" *ngSwitchCase="'radio'">
+                                <div class="col-md-5">
+                                    <label for="field_{{field.name}}">
+                                        {{field.title}}
+                                        <span class="text-muted">({{field.name}})</span>
+                                        <span class="text-danger" *ngIf="field.required">*</span>
+                                    </label>
+                                </div>
+                                <div class="col-md-7">
+                                    <div>
+                                        <div class="custom-control custom-radio d-inline-block mr-4" *ngFor="let opt of field.options; index as index">
+                                            <input type="radio" id="radio_{{field.name}}{{index}}" class="custom-control-input"
+                                                   [name]="field.name"
+                                                   [value]="opt.value"
+                                                   [formControlName]="field.name"
+                                                   [(ngModel)]="model[field.name]">
+                                            <label class="custom-control-label" for="radio_{{field.name}}{{index}}">{{opt.title}}</label>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                                        {{formErrors[field.name]}}
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /radio -->
+
+                            <!-- checkbox -->
+                            <div class="row" *ngSwitchCase="'checkbox'">
+                                <div class="col-md-5">
+                                    <label for="field_{{field.name}}">
+                                        {{field.title}}
+                                        <span class="text-muted">({{field.name}})</span>
+                                        <span class="text-danger" *ngIf="field.required">*</span>
+                                    </label>
+                                </div>
+                                <div class="col-md-7">
+                                    <div>
+                                        <div class="custom-control custom-checkbox d-inline-block mr-4" *ngFor="let opt of field.options; index as index">
+                                            <input type="checkbox" class="custom-control-input"
+                                                   id="chk_{{field.name}}{{index}}"
+                                                   [name]="field.name + index"
+                                                   [value]="opt.value"
+                                                   (change)="selectValue($event, field.name, opt.value)"
+                                                   [checked]="fieldsMultivalues[field.name].checked[index]">
+                                            <label class="custom-control-label" for="chk_{{field.name}}{{index}}">{{opt.title}}</label>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                                        {{formErrors[field.name]}}
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /checkbox -->
+
+                            <!-- tags -->
+                            <div class="row" *ngSwitchCase="'tags'">
+                                <div class="col-md-5">
+                                    <label for="field_{{field.name}}">
+                                        {{field.title}}
+                                        <span class="text-muted">({{field.name}})</span>
+                                        <span class="text-danger" *ngIf="field.required">*</span>
+                                    </label>
+                                </div>
+                                <div class="col-md-7">
+
+                                    <p-chips [formControlName]="field.name" [(ngModel)]="model[field.name]"></p-chips>
+
+                                    <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                                        {{formErrors[field.name]}}
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /tags -->
+
+                            <!-- categories -->
+                            <div class="row" *ngSwitchCase="'categories'">
+                                <div class="col-md-5">
+                                    <label for="field_{{field.name}}">
+                                        {{field.title}}
+                                        <span class="text-muted">({{field.name}})</span>
+                                        <span class="text-danger" *ngIf="field.required">*</span>
+                                    </label>
+                                </div>
+                                <div class="col-md-7">
+                                    <p-tree selectionMode="checkbox"
+                                            [value]="categoriesTree"
+                                            [(selection)]="categoriesSelection[field.name]"
+                                            [loading]="loadingCategories"
+                                            [layout]="field.inputProperties.layout"
+                                            [loadingIcon]="'icon-loader'"
+                                            (onNodeSelect)="categorySelect(field.name)"
+                                            (onNodeUnselect)="categorySelect(field.name)"></p-tree>
+                                </div>
+                            </div>
+                            <!-- /categories -->
+
+                            <!-- parameters -->
+                            <div class="row" *ngSwitchCase="'parameters'">
+                                <div class="col-12">
+                                    <div class="card card-body p-2">
+                                        <label for="field_{{field.name}}">
+                                            {{field.title}}
+                                            <span class="text-muted">({{field.name}})</span>
+                                            <span class="text-danger" *ngIf="field.required">*</span>
+                                        </label>
+
+                                        <table class="table table-divided mb-0">
+                                            <thead>
                                             <tr>
                                                 <th>
                                                     {{field.inputProperties.names[0] | translate}}
@@ -410,8 +412,8 @@
                                                 </th>
                                                 <th></th>
                                             </tr>
-                                        </thead>
-                                        <tbody>
+                                            </thead>
+                                            <tbody>
                                             <tr *ngFor="let item of model[field.name]; index as index">
                                                 <td>
                                                     <input [type]="field.inputProperties.types[0]" class="form-control form-control-sm" [(ngModel)]="item[field.inputProperties.keys[0]]" [ngModelOptions]="{standalone: true}">
@@ -431,8 +433,8 @@
                                                     </button>
                                                 </td>
                                             </tr>
-                                        </tbody>
-                                        <tfoot>
+                                            </tbody>
+                                            <tfoot>
                                             <tr class="bg-faded">
                                                 <td colspan="5" class="text-center pb-2">
                                                     <button type="button" class="btn btn-secondary btn-sm" (click)="parametersAdd(field.name)">
@@ -441,38 +443,40 @@
                                                     </button>
                                                 </td>
                                             </tr>
-                                        </tfoot>
-                                    </table>
+                                            </tfoot>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <!-- /parameters -->
+                            <!-- /parameters -->
 
-                        <div class="row" *ngSwitchDefault>
-                            <div class="col-md-5">
-                                <label for="field_{{field.name}}">
-                                    {{field.title}}
-                                    <span class="text-muted">({{field.name}})</span>
-                                    <span class="text-danger" *ngIf="field.required">*</span>
-                                </label>
-                            </div>
-                            <div class="col-md-7">
-                                <input type="text" class="form-control" id="field_{{field.name}}" [name]="field.name"
-                                       [formControlName]="field.name"
-                                       [(ngModel)]="model[field.name]"
-                                       [class.is-invalid]="formErrors[field.name]"
-                                       [ngClass]="{'border-success': isLocalizationActive}">
-                                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
-                                    {{formErrors[field.name]}}
+                            <div class="row" *ngSwitchDefault>
+                                <div class="col-md-5">
+                                    <label for="field_{{field.name}}">
+                                        {{field.title}}
+                                        <span class="text-muted">({{field.name}})</span>
+                                        <span class="text-danger" *ngIf="field.required">*</span>
+                                    </label>
+                                </div>
+                                <div class="col-md-7">
+                                    <input type="text" class="form-control" id="field_{{field.name}}" [name]="field.name"
+                                           [formControlName]="field.name"
+                                           [(ngModel)]="model[field.name]"
+                                           [class.is-invalid]="formErrors[field.name]"
+                                           [ngClass]="{'border-success': isLocalizationActive}">
+                                    <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                                        {{formErrors[field.name]}}
+                                    </div>
                                 </div>
                             </div>
+
                         </div>
 
                     </div>
 
                 </div>
 
-            </div>
-        </ng-template>
-    </ngb-tab>
-</ngb-tabset>
+            </ng-template>
+        </li>
+    </ng-container>
+</ul>

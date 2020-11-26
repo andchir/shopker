@@ -14,7 +14,7 @@ import {FormBuilder, Validators} from '@angular/forms';
 
 import {Observable, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {TreeNode} from 'primeng/primeng';
+import {TreeNode} from 'primeng/api';
 
 import {findIndex, clone, cloneDeep} from 'lodash';
 import {TranslateService} from '@ngx-translate/core';

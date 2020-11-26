@@ -1,6 +1,6 @@
 import {Component, OnInit, Input, forwardRef, ViewChild} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
-import {TreeNode} from 'primeng/primeng';
+import {TreeNode} from 'primeng/api';
 import {cloneDeep} from 'lodash';
 
 import {CategoriesService} from './services/categories.service';

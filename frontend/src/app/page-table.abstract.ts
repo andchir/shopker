@@ -9,6 +9,7 @@ import {QueryOptions} from './models/query-options';
 import {DataService} from './services/data-service.abstract';
 import {AlertModalContentComponent, ConfirmModalContentComponent} from './components/modal-confirm-text.component';
 
+@Directive()
 export abstract class PageTableAbstractComponent<M> implements OnInit, OnDestroy {
 
     static title = '';

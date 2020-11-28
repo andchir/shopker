@@ -166,6 +166,7 @@ input.form-control[readonly] { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); curso
 .navbar-vertical-left .nav-link.active { background-color: rgba(255,225,255,0.2); }
 .navbar-vertical-left .item-icon { font-size: 1.2rem; }
 .navbar-vertical-left-bottom { position: absolute; right: 0; bottom: 20px; }
+.main-menu-container { width: 350px; }
 
 /* modals */
 #modals-container,
@@ -282,6 +283,8 @@ body .ui-datepicker .ui-datepicker-header .ui-datepicker-title select { margin-l
 
 /* tree */
 .ui-tree { width: 100%; }
+.p-tree .p-tree-container .p-treenode .p-treenode-content .p-tree-toggler { width: 1.5rem; height: 1.5rem; }
+.p-tree .p-tree-container .p-treenode .p-treenode-content { padding: 0.3rem; }
 .ui-tree .ui-treenode-label { padding: 0 .25em !important; }
 .ui-tree.ui-tree-horizontal .ui-treenode-content { white-space: nowrap; }
 .ui-tree .ui-treenode .ui-treenode-content .ui-treenode-label.ui-state-highlight { background-color: rgba(2,117,216,0.8); }
@@ -308,28 +311,19 @@ body .ui-tree .ui-tree-filter-container .ui-tree-filter-icon { margin-top: -0.75
 
 /* icons */
 .ui-chips-token .ui-chips-token-icon { margin-top: -0.6em !important; }
-.fa:before, .pi:before { font-family: 'icomoon'; }
+.fa:before { font-family: 'icomoon'; }
 .fa.fa-angle-up:before { content: "\e906"; }
 .fa.fa-angle-down:before { content: "\e909"; }
 .fa.fa-close:before { content: "\e117"; }
 .fa.fa-caret-right:before { content: "\e907"; }
 .fa.fa-caret-down:before { content: "\e909"; }
 .fa.fa-check:before,
-.pi.pi-check:before { content: "\e116"; }
 .fa.fa-plus:before { content: "\e114"; }
 .fa.fa-minus:before { content: "\e115"; }
 .fa.fa-circle-o-notch:before { content: "\e105"; font-style: normal; font-size: 1.5rem; color: rgba(0,0,0,0.5); }
-.pi.pi-times:before { content: "\e117"; }
 .ui-toast .ui-toast-icon:before { content: "\e006"; }
 .ui-toast-message-error .ui-toast-icon:before { content: "\e043"; }
 .ui-toast-message-success .ui-toast-icon:before { content: "\e042"; }
-.pi.pi-chevron-up:before { font-family: 'icomoon'; content: "\e906"; }
-.pi.pi-chevron-down:before,
-.pi.pi-caret-down:before { font-family: 'icomoon'; content: "\e909"; }
-.pi.pi-chevron-right:before,
-.pi.pi-caret-right:before { font-family: 'icomoon'; content: "\e907"; }
-.pi.pi-search:before { font-family: 'icomoon'; content: "\e036"; }
-.pi.pi-chevron-left:before { font-family: 'icomoon'; content: "\e908"; }
 
 /* spin */
 .fa.fa-spin { display: inline-block; animation-name: spin; animation-duration: 3000ms; animation-iteration-count: infinite; animation-timing-function: linear; }

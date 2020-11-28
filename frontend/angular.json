@@ -24,8 +24,8 @@
                         ],
                         "styles": [
                             "node_modules/bootstrap/dist/css/bootstrap.css",
-                            "node_modules/primeng/resources/primeng.css",
                             "node_modules/primeng/resources/themes/bootstrap4-light-blue/theme.css",
+                            "node_modules/primeng/resources/primeng.css",
                             "node_modules/primeicons/primeicons.css",
                             "node_modules/dragula/dist/dragula.css",
                             "node_modules/quill/dist/quill.core.css",
@@ -37,7 +37,12 @@
                             "node_modules/quill/dist/quill.js",
                             "node_modules/chart.js/dist/Chart.js"
                         ],
-                        "lazyModules": []
+                        "allowedCommonJsDependencies": [
+                            "lodash",
+                            "dragula",
+                            "chart.js",
+                            "rxjs/util/isNumeric"
+                        ]
                     },
                     "configurations": {
                         "production": {

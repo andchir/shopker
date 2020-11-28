@@ -1,4 +1,5 @@
 4.2.6
+- Angular updated to version 11 (TypeScript 4.0).
 - The standard slider tooltips now merge when close.
 
 4.2.5

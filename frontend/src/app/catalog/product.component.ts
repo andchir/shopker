@@ -25,8 +25,8 @@ import {FormFieldInterface} from '../models/form-field.interface';
     providers: [ProductsService]
 })
 export class ProductModalContentComponent extends ModalContentAbstractComponent<Product> implements OnInit {
-
-    @Input() category: Category;
+    
+    @Input() categoryId: number;
     categories: Category[] = [];
     contentTypes: ContentType[] = [];
     currentContentType: ContentType = new ContentType(0, '', '', '', '', [], [], true);
@@ -68,12 +68,10 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
         private appSettings: AppSettings
     ) {
         super(fb, dataService, systemNameService, activeModal, tooltipConfig, translateService, elRef);
-
-        this.model.id = 0;
-        this.model.parentId = 0;
     }
 
     ngOnInit(): void {
+        this.model = {id: 0, parentId: this.categoryId};
         this.uniqueId = this.createUniqueId();
         if (this.elRef) {
             this.getRootElement().setAttribute('id', this.modalId);
@@ -84,8 +82,7 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
             this.localeCurrent = this.localeList[0];
         }
         this.model.clearCache = true;
-        this.model.parentId = this.category.id;
-        this.dataService.setRequestUrl('/admin/products/' + this.category.id);
+        this.dataService.setRequestUrl(`/admin/products/${this.categoryId}`);
 
         this.buildForm();
         this.getCategories();
@@ -138,11 +135,9 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
 
     getContentType(): Promise<ContentType> {
         this.loading = true;
-        if (!this.category.contentTypeName) {
-            return Promise.reject({error: 'Content type name not found.'});
-        }
+
         return new Promise((resolve, reject) => {
-            this.contentTypesService.getItemByName(this.category.contentTypeName)
+            this.contentTypesService.getItemByCategory(this.categoryId)
                 .subscribe((data) => {
                     this.currentContentType = data as ContentType;
                     this.errorMessage = '';
@@ -211,8 +206,8 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
         }
         if (!this.currentContentType
             || (this.currentContentType.name !== this.categories[index].contentTypeName)) {
-                this.model.previousParentId = this.category.id;
-                this.category = cloneDeep(this.categories[index]);
+                this.model.previousParentId = this.categoryId;
+                this.categoryId = this.categories[index].id;
                 this.getContentType();
         }
     }
@@ -311,7 +306,7 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
         }
 
         this.loading = true;
-        this.dataService.setRequestUrl('/admin/products/' + this.category.id);
+        this.dataService.setRequestUrl(`/admin/products/${this.categoryId}`);
 
         this.saveRequest()
             .subscribe({

@@ -191,6 +191,7 @@ class UtilsService
                 : $queryOptionsDefault['limit'];
         }
 
+        $queryOptions['search_word'] = UtilsService::cleanString($queryOptions['search_word'] ?? '');
         $queryOptions['uri'] = $currentUri;
 
         // Sorting

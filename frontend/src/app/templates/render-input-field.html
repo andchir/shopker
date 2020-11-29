@@ -187,7 +187,7 @@
                                     <span class="text-muted">({{field.name}})</span>
                                     <span class="text-danger" *ngIf="field.required">*</span>
                                 </label>
-                                <div class="border rounded" [ngClass]="{'border-success': isLocalizationActive}">
+                                <div class="border rounded" *ngIf="field.inputProperties.formats" [ngClass]="{'border-success': isLocalizationActive}">
                                     <p-editor [formControlName]="field.name"
                                               [(ngModel)]="model[field.name]"
                                               [formats]="field.inputProperties.formats"

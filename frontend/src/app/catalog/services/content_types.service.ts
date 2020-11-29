@@ -23,4 +23,11 @@ export class ContentTypesService extends DataService<ContentType> {
             catchError(this.handleError<ContentType>())
         );
     }
+    
+    getItemByCategory(categoryId?: number): Observable<ContentType> {
+        const url = this.getRequestUrl() + `/by_category/${categoryId}`;
+        return this.http.get<ContentType>(url).pipe(
+            catchError(this.handleError<ContentType>())
+        );
+    }
 }

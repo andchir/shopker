@@ -59,41 +59,88 @@ class ProductController extends BaseController
     
     /**
      * @Route("/{categoryId}", name="category_product_list", methods={"GET"})
-     * @ParamConverter("category", class="App\MainBundle\Document\Category", options={"id" = "categoryId"})
      * @param Request $request
-     * @param Category $category
+     * @param $categoryId
      * @return JsonResponse
      */
-    public function getListByCategoryAction(Request $request, Category $category = null)
+    public function getListByCategoryAction(Request $request, $categoryId)
     {
-        if(!$category){
-            return new JsonResponse([]);
+        $searchWord = $request->get('search_word');
+        if ($searchWord && empty($categoryId)) {
+            $contentTypes = $this->dm->getRepository(ContentType::class)->findAll();
+            $output = [];
+            /** @var ContentType $contentType */
+            foreach ($contentTypes as $contentType) {
+                try {
+                    $output = $this->findContent($request, null, $contentType);
+                } catch (\Exception $e) {
+                    return $this->setError($this->translator->trans($e->getMessage(), [], 'validators'));
+                }
+                if (!empty($output['items'])) {
+                    break;
+                }
+            }
+            return $this->json($output);
+        } else {
+            try {
+                $output = $this->findContent($request, (int) $categoryId);
+            } catch (\Exception $e) {
+                return $this->setError($this->translator->trans($e->getMessage(), [], 'validators'));
+            }
+            return $this->json($output);
         }
-        $contentType = $category->getContentType();
+    }
+    
+    /**
+     * @param Request $request
+     * @param null|int $categoryId
+     * @param null|ContentType $contentType
+     * @return array
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Exception
+     */
+    public function findContent(Request $request, $categoryId = null, $contentType = null)
+    {
+        if ($categoryId !== null) {
+            /** @var Category $category */
+            $category = $this->getCategoriesRepository()->find($categoryId);
+            if (!$category) {
+                throw new \Exception('Category not found.');
+            }
+            /** @var ContentType $contentType */
+            $contentType = $category->getContentType();
+        }
         if(!$contentType){
-            return $this->setError($this->translator->trans('Content type not found.', [], 'validators'));
+            throw new \Exception('Content type not found.');
         }
-
+    
         $queryString = $request->getQueryString();
         $queryOptions = UtilsService::getQueryOptions('', $queryString, $contentType->getFields());
-        $collection = $this->catalogService->getCollection($contentType->getCollection());
+        $skip = ($queryOptions['page'] - 1) * $queryOptions['limit'];
     
         $titleFieldName = $contentType->getFieldByChunkName('header');
-        $filter = ['parentId' => $category->getId()];
+        $filter = [];
         if ($queryOptions['search_word'] && $titleFieldName) {
             $filter[$titleFieldName] = [
                 '$regex' => $queryOptions['search_word'],
                 '$options' => 'i'
             ];
+            if ($categoryId) {
+                $filter['parentId'] = $categoryId;
+            }
+        } else {
+            $filter['parentId'] = $categoryId;
         }
-        $skip = ($queryOptions['page'] - 1) * $queryOptions['limit'];
+    
+        $collection = $this->catalogService->getCollection($contentType->getCollection());
         $data = $this->catalogService->getContentList($contentType, $queryOptions, $filter, $skip);
         $total = $collection->countDocuments($filter);
-
-        return new JsonResponse([
+        
+        return [
             'items' => $data,
             'total' => $total
-        ]);
+        ];
     }
 
     /**
@@ -348,7 +395,7 @@ class ProductController extends BaseController
         }
 
         if (!empty($result)) {
-            return new JsonResponse($document);
+            return $this->json($document);
         } else {
             return $this->setError('Item not saved.');
         }
@@ -409,7 +456,7 @@ class ProductController extends BaseController
         }
 
         if ($count === count($data['ids'])) {
-            return new JsonResponse([]);
+            return $this->json([]);
         } else {
             return $this->setError('Error.');
         }
@@ -446,7 +493,7 @@ class ProductController extends BaseController
         $result = $this->deleteItem($contentType, $document);
 
         if ($result) {
-            return new JsonResponse([]);
+            return $this->json([]);
         } else {
             return $this->setError('Error.');
         }
@@ -545,7 +592,7 @@ class ProductController extends BaseController
             return $this->setError('Product not found.');
         }
 
-        return new JsonResponse(array_merge($entity, ['id' => $entity['_id']]));
+        return $this->json(array_merge($entity, ['id' => $entity['_id']]));
     }
 
     /**

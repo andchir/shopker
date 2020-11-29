@@ -122,7 +122,15 @@ export class CatalogCategoryComponent extends PageTableAbstractComponent<Product
         this.modalRef.componentInstance.itemId = itemId || 0;
         this.modalRef.componentInstance.isItemCopy = isItemCopy || false;
         this.modalRef.componentInstance.isEditMode = isEditMode;
-        this.modalRef.componentInstance.category = Object.assign({}, this.currentCategory);
+        
+        const index = this.items.findIndex((item) => {
+            return item.id === itemId;
+        });
+        if (index > -1) {
+            this.modalRef.componentInstance.categoryId = this.items[index].parentId;
+        } else {
+            this.modalRef.componentInstance.categoryId = this.currentCategory.id;
+        }
     }
 
     getModalElementId(itemId?: number): string {

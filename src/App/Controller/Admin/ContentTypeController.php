@@ -142,7 +142,7 @@ class ContentTypeController extends StorageControllerAbstract
         
         $this->contentTypeUpdateFilters($contentType);
 
-        return new JsonResponse($contentType->toArray());
+        return $this->json($contentType->toArray());
     }
 
     /**
@@ -153,15 +153,30 @@ class ContentTypeController extends StorageControllerAbstract
     public function getItemByName($itemName)
     {
         $repository = $this->getRepository();
-
-        $fieldType = $repository->findOneBy([
+        /** @var ContentType $contentType */
+        $contentType = $repository->findOneBy([
             'name' => $itemName
         ]);
-        if (!$fieldType) {
-            return $this->setError('Item not found.');
+        if (!$contentType) {
+            return $this->setError($this->translator->trans('Item not found.', [], 'validators'));
         }
 
-        return new JsonResponse($fieldType->toArray(true));
+        return $this->json($contentType->toArray(true));
+    }
+    
+    /**
+     * @Route("/by_category/{categoryId}", methods={"GET"})
+     * @param int $categoryId
+     * @return JsonResponse
+     */
+    public function getItemByCategory($categoryId)
+    {
+        /** @var Category $category */
+        $category = $this->dm->getRepository(Category::class)->find((int) $categoryId);
+        if (!$category) {
+            return $this->setError($this->translator->trans('Item not found.', [], 'validators'));
+        }
+        return $this->json($category->getContentType(), 200, [], ['groups' => ['details']]);
     }
 
     /**

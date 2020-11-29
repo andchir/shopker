@@ -135,7 +135,6 @@ export class ProductModalContentComponent extends ModalContentAbstractComponent<
 
     getContentType(): Promise<ContentType> {
         this.loading = true;
-
         return new Promise((resolve, reject) => {
             this.contentTypesService.getItemByCategory(this.categoryId)
                 .subscribe((data) => {

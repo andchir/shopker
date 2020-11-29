@@ -113,7 +113,7 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit, OnDest
 
     /** Build form groups */
     buildForm(): void {
-        const controls = this.buildControls(this.formFields, 'model');
+        const controls = this.buildControls(this.formFields);
         this.form = this.fb.group(controls);
         this.form.valueChanges
             .pipe(takeUntil(this.destroyed$))
@@ -123,7 +123,7 @@ export abstract class ModalContentAbstractComponent<M> implements OnInit, OnDest
     }
 
     /** Build controls */
-    buildControls(options: {}, modelName: string, keyPrefix: string = ''): { [s: string]: FormControl; } {
+    buildControls(options: {}, modelName = 'model', keyPrefix = ''): { [s: string]: FormControl; } {
         const controls = {};
         for (const key in options) {
             if (!options.hasOwnProperty(key)) {

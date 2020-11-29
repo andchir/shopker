@@ -8,22 +8,21 @@ import {FormFieldInterface} from '../models/form-field.interface';
 import {ContentField} from './models/content_field.model';
 import {ContentType} from './models/content_type.model';
 import {FieldType} from './models/field-type.model';
-import {FieldTypeProperty} from './models/field-type-property.model';
 import {QueryOptions} from '../models/query-options';
 import {PageTableAbstractComponent} from '../page-table.abstract';
-import {ModalContentAbstractComponent} from '../modal.abstract';
-
+import {SortData} from '../components/sorting-dnd.conponent';
+import {AppModalContentAbstractComponent} from '../components/app-modal-content.abstract';
 import {ContentTypesService} from './services/content_types.service';
 import {SystemNameService} from '../services/system-name.service';
 import {CollectionsService} from './services/collections.service';
 import {FieldTypesService} from './services/field-types.service';
-import {SortData} from '../components/sorting-dnd.conponent';
+import {FormFieldsOptions} from '../models/form-fields-options.interface';
 
 @Component({
     selector: 'app-content-type-modal-content',
     templateUrl: 'templates/modal-content_type.html'
 })
-export class ContentTypeModalContentComponent extends ModalContentAbstractComponent<ContentType> implements OnInit {
+export class ContentTypeModalContentComponent extends AppModalContentAbstractComponent<ContentType> implements OnInit {
 
     @ViewChild('addCollectionBlock', { static: true }) elementAddCollectionBlock;
     @ViewChild('addGroupBlock', { static: true }) elementAddGroupBlock;
@@ -46,56 +45,49 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
         input: [],
         output: []
     };
-
-    formFields: FormFieldInterface = {
-        name: {
-            fieldLabel: 'SYSTEM_NAME',
-            value: '',
-            validators: [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')],
-            messages: {
-                pattern: 'The name must contain only Latin letters and numbers.'
-            }
+    
+    formFields: FormFieldsOptions[] = [
+        {
+            name: 'name',
+            validators: [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')]
         },
-        title: {
-            fieldLabel: 'TITLE',
-            value: '',
-            validators: [Validators.required],
-            messages: {}
+        {
+            name: 'title',
+            validators: [Validators.required]
         },
-        description: {
-            fieldLabel: 'DESCRIPTION',
-            value: '',
-            validators: [],
-            messages: {}
+        {
+            name: 'description',
+            validators: []
         },
-        collection: {
-            fieldLabel: 'COLLECTION',
-            value: '',
-            validators: [Validators.required],
-            messages: {}
+        {
+            name: 'collection',
+            validators: [Validators.required]
         },
-        newCollection: {
-            fieldLabel: 'COLLECTION',
-            value: '',
-            validators: [Validators.pattern('[A-Za-z0-9_-]+')],
-            messages: {
-                pattern: 'The name must contain only Latin letters and numbers.',
-                exists: 'Collection with the same name already exists.'
-            }
+        {
+            name: 'newCollection',
+            validators: [Validators.pattern('[A-Za-z0-9_-]+')]
         },
-        isCreateByUsersAllowed: {
-            fieldLabel: 'CREATE_BY_USERS_ALLOWED',
-            value: '',
-            validators: [],
-            messages: {}
+        {
+            name: 'isCreateByUsersAllowed',
+            validators: []
         },
-        isActive: {
-            fieldLabel: 'ACTIVE',
-            value: '',
-            validators: [],
-            messages: {}
+        {
+            name: 'isActive',
+            validators: []
         }
-    };
+    ];
+
+    // formFields: FormFieldInterface = {
+    //     newCollection: {
+    //         fieldLabel: 'COLLECTION',
+    //         value: '',
+    //         validators: [Validators.pattern('[A-Za-z0-9_-]+')],
+    //         messages: {
+    //             pattern: 'The name must contain only Latin letters and numbers.',
+    //             exists: 'Collection with the same name already exists.'
+    //         }
+    //     }
+    // };
 
     fieldsFormOptions = {
         title: {
@@ -164,36 +156,50 @@ export class ContentTypeModalContentComponent extends ModalContentAbstractCompon
         }
     };
 
+    // constructor(
+    //     public fb: FormBuilder,
+    //     public dataService: ContentTypesService,
+    //     public systemNameService: SystemNameService,
+    //     public activeModal: NgbActiveModal,
+    //     public tooltipConfig: NgbTooltipConfig,
+    //     public translateService: TranslateService,
+    //     public elRef: ElementRef,
+    //     private fieldTypesService: FieldTypesService,
+    //     private collectionsService: CollectionsService,
+    //     private modalService: NgbModal
+    // ) {
+    //     super(fb, dataService, systemNameService, activeModal, tooltipConfig, translateService, elRef);
+    // }
+    
     constructor(
         public fb: FormBuilder,
-        public dataService: ContentTypesService,
-        public systemNameService: SystemNameService,
         public activeModal: NgbActiveModal,
-        public tooltipConfig: NgbTooltipConfig,
         public translateService: TranslateService,
+        public dataService: ContentTypesService,
         public elRef: ElementRef,
+        private systemNameService: SystemNameService,
         private fieldTypesService: FieldTypesService,
         private collectionsService: CollectionsService,
         private modalService: NgbModal
     ) {
-        super(fb, dataService, systemNameService, activeModal, tooltipConfig, translateService, elRef);
+        super(fb, activeModal, translateService, dataService, elRef);
     }
 
-    /** On initialize */
-    ngOnInit(): void {
-        super.ngOnInit();
-        this.getFieldTypes();
-        this.getCollectionsList();
-    }
-
-    buildForm(): void {
-        super.buildForm();
-
-        const controls = this.buildControls(this.fieldsFormOptions, 'fieldModel', 'fld_');
-        this.fieldForm = this.fb.group(controls);
-        this.fieldForm.valueChanges
-            .subscribe(() => this.onValueChanged('fieldForm', 'fld_'));
-    }
+    // /** On initialize */
+    // ngOnInit(): void {
+    //     super.ngOnInit();
+    //     this.getFieldTypes();
+    //     this.getCollectionsList();
+    // }
+    //
+    // buildForm(): void {
+    //     super.buildForm();
+    //
+    //     const controls = this.buildControls(this.fieldsFormOptions, 'fieldModel', 'fld_');
+    //     this.fieldForm = this.fb.group(controls);
+    //     this.fieldForm.valueChanges
+    //         .subscribe(() => this.onValueChanged('fieldForm', 'fld_'));
+    // }
 
     /** Get field types */
     getFieldTypes(): void {

@@ -10,7 +10,6 @@ import {SimpleEntity} from '../models/simple-entity.interface';
 import {FormFieldsErrors, FormFieldsOptions} from '../models/form-fields-options.interface';
 import {DataService} from '../services/data-service.abstract';
 
-@Directive()
 export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> implements OnInit, OnDestroy {
 
     @Input() modalTitle: string;

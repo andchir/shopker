@@ -4,6 +4,11 @@
         <div class="float-md-left">
 
             <app-categories-menu (changeRequest)="openCategory($event)"></app-categories-menu>
+            
+            <div class="form-control-search d-block d-md-inline-block ml-0 ml-md-3 mb-2 mb-lg-0" [ngClass]="{'form-control-search-clear': !!queryOptions.search_word}">
+                <input type="text" class="form-control min-width250" placeholder="{{ 'SEARCH' | translate }}..." [(ngModel)]="queryOptions.search_word" (ngModelChange)="onSearchWordUpdate()">
+                <span (click)="onSearchWordUpdate('')"></span>
+            </div>
 
         </div>
         <div class="float-md-right">

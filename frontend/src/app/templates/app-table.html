@@ -8,7 +8,8 @@
                         <label class="custom-control-label" for="fieldSelectAll"></label>
                     </div>
                 </th>
-                <th *ngFor="let tableField of tableFields; let index=index">
+                <th *ngFor="let tableField of tableFields; let index=index"
+                    [ngClass]="{'d-none d-lg-table-cell': index > 1 && index !== tableFields.length - 1}">
                     <button type="button" class="btn btn-block btn-link" (click)="selectSortBy(tableField.sortName)" *ngIf="tableField.sortName; else noSortable">
                         {{tableField.title | translate}}
                         <i [class.icon-arrow-down]="queryOptions.sort_dir == 'asc'" [class.icon-arrow-up]="queryOptions.sort_dir == 'desc'" [style.visibility]="tableField.sortName == queryOptions.sort_by ? 'visible' : 'hidden'"></i>
@@ -27,7 +28,8 @@
                         <label class="custom-control-label" for="fieldCheck{{item.id}}"></label>
                     </div>
                 </td>
-                <td *ngFor="let tableField of tableFields; let index=index">
+                <td *ngFor="let tableField of tableFields; let index=index"
+                    [ngClass]="{'d-none d-lg-table-cell': index > 1 && index !== tableFields.length - 1}">
                     <div class="relative" *ngIf="index == tableFields.length - 1">
                         <div class="show-on-hover-right no-wrap">
                             <button type="button" class="btn btn-secondary btn-sm ml-2" ngbTooltip="{{'EDIT' | translate}}" (click)="action('edit', item.id)">

@@ -77,15 +77,18 @@ class ProductController extends BaseController
         $queryString = $request->getQueryString();
         $queryOptions = UtilsService::getQueryOptions('', $queryString, $contentType->getFields());
         $collection = $this->catalogService->getCollection($contentType->getCollection());
-
+    
+        $titleFieldName = $contentType->getFieldByChunkName('header');
+        $filter = ['parentId' => $category->getId()];
+        if ($queryOptions['search_word'] && $titleFieldName) {
+            $filter[$titleFieldName] = [
+                '$regex' => $queryOptions['search_word'],
+                '$options' => 'i'
+            ];
+        }
         $skip = ($queryOptions['page'] - 1) * $queryOptions['limit'];
-        $data = $this->catalogService->getContentList($contentType, $queryOptions, [
-            'parentId' => $category->getId()
-        ], $skip);
-
-        $total = $collection->countDocuments([
-            'parentId' => $category->getId()
-        ]);
+        $data = $this->catalogService->getContentList($contentType, $queryOptions, $filter, $skip);
+        $total = $collection->countDocuments($filter);
 
         return new JsonResponse([
             'items' => $data,

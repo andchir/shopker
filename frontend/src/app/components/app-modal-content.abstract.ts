@@ -1,4 +1,4 @@
-import { ElementRef, Input, OnDestroy, OnInit, ViewChild, Directive } from '@angular/core';
+import {ElementRef, Input, OnDestroy, OnInit, ViewChild, Directive, Component} from '@angular/core';
 import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
 
 import {Observable, Subject} from 'rxjs';
@@ -10,6 +10,9 @@ import {SimpleEntity} from '../models/simple-entity.interface';
 import {FormFieldsErrors, FormFieldsOptions} from '../models/form-fields-options.interface';
 import {DataService} from '../services/data-service.abstract';
 
+@Component({
+    template: ''
+})
 export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> implements OnInit, OnDestroy {
 
     @Input() modalTitle: string;
@@ -475,6 +478,11 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
 
     createUniqueId(): string {
         return Math.random().toString(36).substr(2, 9);
+    }
+    
+    displayToggle(element: HTMLElement, display?: boolean): void {
+        display = display || element.style.display === 'none';
+        element.style.display = display ? 'block' : 'none';
     }
 
     ngOnDestroy(): void {

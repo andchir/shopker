@@ -1,6 +1,13 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import {NgbModal, NgbActiveModal, NgbModalRef, NgbPopover, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
+import {
+    NgbModal,
+    NgbActiveModal,
+    NgbModalRef,
+    NgbPopover,
+    NgbTooltipConfig,
+    NgbAccordion
+} from '@ng-bootstrap/ng-bootstrap';
 import {find, map, findIndex, cloneDeep, extend} from 'lodash';
 import {TranslateService} from '@ngx-translate/core';
 
@@ -22,7 +29,7 @@ import {FormFieldsOptions} from '../models/form-fields-options.interface';
     selector: 'app-content-type-modal-content',
     templateUrl: 'templates/modal-content_type.html'
 })
-export class ContentTypeModalContentComponent extends AppModalContentAbstractComponent<ContentType> implements OnInit {
+export class ContentTypeModalContentComponent extends AppModalContentAbstractComponent<ContentType> implements OnInit, OnDestroy {
 
     @ViewChild('addCollectionBlock', { static: true }) elementAddCollectionBlock;
     @ViewChild('addGroupBlock', { static: true }) elementAddGroupBlock;
@@ -279,7 +286,7 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
         const value = control.value;
 
         if (this.collections.indexOf(value) > -1) {
-            this.formErrors[fieldName] += this.validationMessages[fieldName].exists;
+            // this.formErrors[fieldName] += this.validationMessages[fieldName].exists;
             return false;
         }
         this.collections.push(value);
@@ -340,7 +347,7 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
         const value = control.value;
         const index = this.model.groups.indexOf(value);
         if ( index > -1 ) {
-            this.formErrors['fld_' + fieldName] += this.validationMessages['fld_' + fieldName].exists;
+            // this.formErrors['fld_' + fieldName] += this.validationMessages['fld_' + fieldName].exists;
             return false;
         }
         this.model.groups.push(value);
@@ -369,7 +376,7 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
      * @param field
      */
     editField(field: ContentField) {
-        this.toggleAccordion(this.accordion, 'accordion-content-type-fields');
+        // this.toggleAccordion(this.accordion, 'accordion-content-type-fields');
         this.action = 'edit_field';
         this.fieldModel = cloneDeep(field);
         const newFormValue = {};
@@ -389,7 +396,7 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
      * @param field
      */
     copyField(field: ContentField) {
-        this.toggleAccordion(this.accordion, 'accordion-content-type-fields');
+        // this.toggleAccordion(this.accordion, 'accordion-content-type-fields');
         this.action = 'add_field';
         this.fieldModel = cloneDeep(field);
         this.fieldModel.name = '';
@@ -424,9 +431,9 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
 
     /** Cancel edit field */
     editFieldCancel() {
-        this.toggleAccordion(this.accordion, 'accordion-content-type-fields', true);
-        this.resetFieldForm();
-        this.onValueChanged('fieldForm', 'fld_');
+        // this.toggleAccordion(this.accordion, 'accordion-content-type-fields', true);
+        // this.resetFieldForm();
+        // this.onValueChanged('fieldForm', 'fld_');
     }
 
     /** Change field order index */
@@ -444,10 +451,10 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
 
     /** Submit field */
     submitField() {
-        this.toggleAccordion(this.accordion, 'accordion-content-type-fields', true);
+        // this.toggleAccordion(this.accordion, 'accordion-content-type-fields', true);
         this.fld_submitted = true;
         if (!this.fieldForm.valid) {
-            this.onValueChanged('fieldForm', 'fld_');
+            // this.onValueChanged('fieldForm', 'fld_');
             this.fld_submitted = false;
             return;
         }
@@ -512,7 +519,7 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
         this.blockFieldList.nativeElement.style.display = 'none';
     }
 
-    sortingApply(): void {
+    sortingApply(items?: any): void {
         if (this.sortingfieldName) {
             this.sortData.forEach((field, index) => {
                 const ind = this.model.fields.findIndex((fld) => {
@@ -559,28 +566,41 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
                 this.submitted = false;
                 return;
             }
-            this.loading = true;
-            this.saveRequest()
-                .subscribe({
-                    next: (res) => {
-                        if (autoClose) {
-                            this.closeModal();
-                        } else if (res && res['id']) {
-                            this.model.id = res['id'];
-                            this.onAfterGetData();
-                            this.isEditMode = true;
-                        }
-                        this.closeReason = 'updated';
-                        this.loading = false;
-                        this.submitted = false;
-                    },
-                    error: err => {
-                        this.errorMessage = err.error || 'Error.';
-                        this.submitted = false;
-                        this.loading = false;
-                    }
-                });
+            // this.loading = true;
+            // this.saveRequest()
+            //     .subscribe({
+            //         next: (res) => {
+            //             if (autoClose) {
+            //                 this.closeModal();
+            //             } else if (res && res['id']) {
+            //                 this.model.id = res['id'];
+            //                 this.onAfterGetData();
+            //                 this.isEditMode = true;
+            //             }
+            //             this.closeReason = 'updated';
+            //             this.loading = false;
+            //             this.submitted = false;
+            //         },
+            //         error: err => {
+            //             this.errorMessage = err.error || 'Error.';
+            //             this.submitted = false;
+            //             this.loading = false;
+            //         }
+            //     });
         }, 1);
+    }
+
+    toggleAccordion(accordion: NgbAccordion, panelId: string, display?: boolean): void {
+        const isOpened = accordion.activeIds.indexOf(panelId) > -1;
+        if (isOpened && display) {
+            return;
+        }
+        accordion.toggle(panelId);
+    }
+
+    generateName(model): void {
+        const title = model.title || '';
+        model.name = this.systemNameService.generateName(title);
     }
 }
 

@@ -1,4 +1,4 @@
-import { ElementRef, Input, OnDestroy, OnInit, Directive } from '@angular/core';
+import {ElementRef, Input, OnDestroy, OnInit, Component} from '@angular/core';
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
 import {Subject} from 'rxjs';
@@ -14,7 +14,9 @@ import {FormFieldInterface, FormFieldOptionsInterface} from './models/form-field
 /**
  * @deprecated since version 4.1.1. Use AppModalContentAbstractComponent instead.
  */
-@Directive()
+@Component({
+    template: ''
+})
 export abstract class ModalContentAbstractComponent<M> implements OnInit, OnDestroy {
 
     @Input() modalTitle: string;

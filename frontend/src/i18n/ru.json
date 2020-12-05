@@ -84,6 +84,7 @@
 	"FIELDS": "Поля",
 	"FIELD_REQUIRED": "Поле \"{{name}}\" обязательно для заполнения.",
 	"FIELD_TYPE": "Тип поля",
+    "FIELD_NAME_EXISTS": "Поле с таким именем уже существует.",
 	"FIELD_TYPES": "Типы полей",
 	"FILE_MANAGER": "Файл-менеджер",
 	"FILE_PATH_COPIED": "Путь файла успешно скопирован в буффер обмена.",
@@ -217,6 +218,7 @@
 	"YOU_SURE_YOU_WANT_DELETE_NAME": "Вы уверены, что хотите удалить \"{{name}}\"?",
 	"YOU_SURE_YOU_WANT_DELETE_SELECTED": "Вы уверены, что хотите удалить все выбранные элементы?",
     "YOU_CANT_DELETE_NOTEMPTY_GROUP": "Вы не можете удалить группу, которая не пуста.",
+    "THERE_NO_PARAMETERS": "Нет параметров.",
 	"admin_email": "Адрес эл. почты администратора",
 	"app": {
 		"admin_email": "Адрес эл. почты администратора",

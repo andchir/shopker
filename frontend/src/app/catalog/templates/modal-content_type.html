@@ -263,14 +263,15 @@
                     <div class="card card-body bg-light mb-3" #inputTypeOptionsBlock style="display: none;" [hidden]="!fieldModel.inputType">
                         <div>
                             <div class="alert alert-secondary small" [hidden]="fieldTypeProperties.input.length > 0">
-                                There are no parameters.
+                                {{ 'THERE_NO_PARAMETERS' | translate }}
                             </div>
                             <div class="row form-group" *ngFor="let property of fieldTypeProperties.input">
                                 <div class="col-md-5">
-                                    {{property.title}}
+                                    <label for="parameterInputField{{ property.name }}">{{property.title}}</label>
                                 </div>
                                 <div class="col-md-7">
                                     <input type="text" class="form-control form-control-sm"
+                                           id="parameterInputField{{ property.name }}"
                                            [(ngModel)]="fieldModel.inputProperties[property.name]"
                                            [ngModelOptions]="{standalone: true}">
                                 </div>
@@ -314,14 +315,15 @@
 
                     <div class="card card-body bg-light mb-3" #outputTypeOptionsBlock style="display: none;" [hidden]="!fieldModel.outputType">
                         <div class="alert alert-secondary small" [hidden]="fieldTypeProperties.output.length > 0">
-                            There are no parameters.
+                            {{ 'THERE_NO_PARAMETERS' | translate }}
                         </div>
                         <div class="row form-group" *ngFor="let property of fieldTypeProperties.output">
                             <div class="col-md-5">
-                                {{property.title}}
+                                <label for="parameterOutputField{{ property.name }}">{{property.title}}</label>
                             </div>
                             <div class="col-md-7">
                                 <input type="text" class="form-control form-control-sm"
+                                       id="parameterOutputField{{ property.name }}"
                                        [(ngModel)]="fieldModel.outputProperties[property.name]"
                                        [ngModelOptions]="{standalone: true}">
                             </div>

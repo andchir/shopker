@@ -210,20 +210,16 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
         }
         this.fieldModel[`${type}Type`] = fieldTypeName;
         const fieldType = find(this.fieldTypes, {name: fieldTypeName});
-        
         if (!fieldType) {
             this.fieldTypeProperties[type] = [];
             return;
         }
-
-        const modelPropertiesField = type + 'Properties';
-        const propNames = map(fieldType[type + 'Properties'], 'name');
+        const modelPropertiesField = `${type}Properties`;
+        const propNames = map(fieldType[`${type}Properties`], 'name');
         this.fieldTypeProperties[type].splice(0);
-
         fieldType[type + 'Properties'].forEach((v, i) => {
             this.fieldTypeProperties[type].push(v);
         });
-
         for (const prop in this.fieldModel[modelPropertiesField]) {
             if (this.fieldModel[modelPropertiesField].hasOwnProperty(prop)) {
                 if (propNames.indexOf(prop) === -1) {
@@ -231,7 +227,6 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
                 }
             }
         }
-
         for (const i in this.fieldTypeProperties[type]) {
             if (this.fieldTypeProperties[type].hasOwnProperty(i)) {
                 const fldName = this.fieldTypeProperties[type][i].name;
@@ -366,6 +361,8 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
             newFormValue[opt.name] = field[opt.name] || '';
         });
         this.secondForm.setValue(newFormValue);
+        this.selectFieldTypeProperties('input');
+        this.selectFieldTypeProperties('output');
         this.currentFieldName = this.fieldModel.name;
         this.fld_submitted = false;
     }
@@ -434,9 +431,7 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
         if (event) {
             event.preventDefault();
         }
-        console.log('submitField', this.secondForm, this.secondForm.value);
-        
-        this.toggleAccordion(this.accordion, 'accordion-content-type-fields', true);
+        this.errorFieldMessage = '';
         this.fld_submitted = true;
         if (!this.secondForm.valid) {
             this.formGroupMarkTouched(this.secondForm);
@@ -444,25 +439,25 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
             this.fld_submitted = false;
             return;
         }
-        // const data = cloneDeep(this.fieldModel);
-        // data.inputProperties = extend({}, this.fieldModel.inputProperties);
-        // data.outputProperties = extend({}, this.fieldModel.outputProperties);
-        //
-        // let index = findIndex(this.model.fields, {name: data.name});
-        // if (index > -1 && this.currentFieldName !== data.name) {
-        //     this.errorMessage = 'A field named "' + data.name + '" already exists.';
-        //     return;
-        // }
-        //
-        // if (this.action === 'add_field') {
-        //     this.model.fields.push(data);
-        // } else if (this.action === 'edit_field') {
-        //     index = findIndex(this.model.fields, {name: this.currentFieldName});
-        //     if (index > -1) {
-        //         this.model.fields[index] = data;
-        //     }
-        // }
-        // this.resetFieldForm();
+        const data = cloneDeep(Object.assign({}, this.secondForm.value, {
+            inputProperties: this.fieldModel.inputProperties,
+            outputProperties: this.fieldModel.outputProperties
+        }));
+        let index = findIndex(this.model.fields, {name: data.name});
+        if (index > -1 && this.currentFieldName !== data.name) {
+            this.errorFieldMessage = this.getLangString('FIELD_NAME_EXISTS');
+            return;
+        }
+        this.toggleAccordion(this.accordion, 'accordion-content-type-fields', true);
+        if (this.action === 'add_field') {
+            this.model.fields.push(data);
+        } else if (this.action === 'edit_field') {
+            index = findIndex(this.model.fields, {name: this.currentFieldName});
+            if (index > -1) {
+                this.model.fields[index] = data;
+            }
+        }
+        this.resetFieldForm();
     }
 
     getFieldTypeProperty(inputType: string|null, propertyName: string): string|null {

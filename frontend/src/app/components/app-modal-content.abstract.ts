@@ -9,6 +9,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {SimpleEntity} from '../models/simple-entity.interface';
 import {FormFieldsErrors, FormFieldsOptions} from '../models/form-fields-options.interface';
 import {DataService} from '../services/data-service.abstract';
+import {SystemNameService} from '../services/system-name.service';
 
 @Component({
     template: ''
@@ -62,6 +63,7 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
         public fb: FormBuilder,
         public activeModal: NgbActiveModal,
         public translateService: TranslateService,
+        public systemNameService: SystemNameService,
         public dataService: DataService<T>,
         public elRef: ElementRef
     ) {}
@@ -289,6 +291,15 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
         }
         const groupControls = this.buildControls(null, formField.children, null);
         this.arrayFields[fieldName].push(this.fb.group(groupControls));
+    }
+    
+    generateName(model: any, event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        const title = this.getControl(this.form, null, 'title').value || '';
+        model.name = this.systemNameService.generateName(title);
+        this.getControl(this.form, null, 'name').setValue(model.name);
     }
 
     closeModal(event?: MouseEvent): void {

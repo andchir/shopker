@@ -10,6 +10,7 @@ import {TranslateService} from '@ngx-translate/core';
 
 import {UserOption, User} from './models/user.model';
 import {PageTableAbstractComponent} from '../page-table.abstract';
+import {SystemNameService} from '../services/system-name.service';
 import {UsersService} from './users.service';
 import {AppSettings} from '../services/app-settings.service';
 import {QueryOptions} from '../models/query-options';
@@ -85,11 +86,12 @@ export class ModalUserContentComponent extends AppModalContentAbstractComponent<
         public fb: FormBuilder,
         public activeModal: NgbActiveModal,
         public translateService: TranslateService,
+        public systemNameService: SystemNameService,
         public dataService: UsersService,
         public elRef: ElementRef,
         private appSettings: AppSettings
     ) {
-        super(fb, activeModal, translateService, dataService, elRef);
+        super(fb, activeModal, translateService, systemNameService, dataService, elRef);
     }
 
     onBeforeInit(): void {

@@ -84,18 +84,6 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
         }
     ];
 
-    // formFields: FormFieldInterface = {
-    //     newCollection: {
-    //         fieldLabel: 'COLLECTION',
-    //         value: '',
-    //         validators: [Validators.pattern('[A-Za-z0-9_-]+')],
-    //         messages: {
-    //             pattern: 'The name must contain only Latin letters and numbers.',
-    //             exists: 'Collection with the same name already exists.'
-    //         }
-    //     }
-    // };
-
     fieldsFormOptions = {
         title: {
             fieldLabel: 'TITLE',
@@ -182,14 +170,14 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
         public fb: FormBuilder,
         public activeModal: NgbActiveModal,
         public translateService: TranslateService,
+        public systemNameService: SystemNameService,
         public dataService: ContentTypesService,
         public elRef: ElementRef,
-        private systemNameService: SystemNameService,
         private fieldTypesService: FieldTypesService,
         private collectionsService: CollectionsService,
         private modalService: NgbModal
     ) {
-        super(fb, activeModal, translateService, dataService, elRef);
+        super(fb, activeModal, translateService, systemNameService, dataService, elRef);
     }
 
     // /** On initialize */
@@ -274,9 +262,19 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
             this.selectFieldTypeProperties('output', this.fieldModel.inputType);
         }
     }
+    
+    addCollectionToggle(addCollectionField: HTMLInputElement, event?: MouseEvent): void {
+        this.displayToggle(this.elementAddCollectionBlock.nativeElement);
+        addCollectionField.value = '';
+        this.onValueChanged();
+        addCollectionField.focus();
+    }
 
     /** Add collection */
-    addCollection() {
+    addCollection(event?: MouseEvent) {
+        if (event) {
+            event.preventDefault();
+        }
         const fieldName = 'newCollection';
         const control = this.form.get(fieldName);
         if (!control.valid || !control.value) {
@@ -286,11 +284,13 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
         const value = control.value;
 
         if (this.collections.indexOf(value) > -1) {
-            // this.formErrors[fieldName] += this.validationMessages[fieldName].exists;
+            this.getControl(this.form, null, fieldName).setErrors({exists: 'COLLECTION_EXISTS'});
+            this.formErrors[fieldName] = this.getLangString('COLLECTION_EXISTS');
             return false;
         }
         this.collections.push(value);
         this.model.collection = value;
+        this.getControl(this.form, null, fieldName).setValue(value);
         this.elementAddCollectionBlock.nativeElement.style.display = 'none';
         return true;
     }
@@ -300,24 +300,22 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
         if (!this.model.collection) {
             return;
         }
-
         if (popover.isOpen()) {
             popover.close();
             return;
         }
-
         let popoverContent: any;
         popover.placement = 'top';
         popover.popoverTitle = this.getLangString('CONFIRM');
 
-        const confirm = function() {
+        const confirm = () => {
             this.loading = true;
             this.collectionsService.deleteItemByName(this.model.collection)
                 .subscribe((data) => {
                     const index = this.collections.indexOf(this.model.collection);
                     if (index > -1) {
                         this.collections.splice(index, 1);
-                        this.model.collection = this.collections[0];
+                        this.model.collection = this.collections[0] || '';
                     }
                     popover.close();
                     this.loading = false;
@@ -552,43 +550,43 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
         this.blockFieldList.nativeElement.style.display = 'block';
     }
 
-    save(autoClose = false, event?: MouseEvent): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.submitted = true;
-        if (this.sortData.length > 0) {
-            this.sortingApply();
-        }
-        setTimeout(() => {
-            if (!this.form.valid) {
-                this.onValueChanged('form');
-                this.submitted = false;
-                return;
-            }
-            // this.loading = true;
-            // this.saveRequest()
-            //     .subscribe({
-            //         next: (res) => {
-            //             if (autoClose) {
-            //                 this.closeModal();
-            //             } else if (res && res['id']) {
-            //                 this.model.id = res['id'];
-            //                 this.onAfterGetData();
-            //                 this.isEditMode = true;
-            //             }
-            //             this.closeReason = 'updated';
-            //             this.loading = false;
-            //             this.submitted = false;
-            //         },
-            //         error: err => {
-            //             this.errorMessage = err.error || 'Error.';
-            //             this.submitted = false;
-            //             this.loading = false;
-            //         }
-            //     });
-        }, 1);
-    }
+    // save(autoClose = false, event?: MouseEvent): void {
+    //     if (event) {
+    //         event.preventDefault();
+    //     }
+    //     this.submitted = true;
+    //     if (this.sortData.length > 0) {
+    //         this.sortingApply();
+    //     }
+    //     setTimeout(() => {
+    //         if (!this.form.valid) {
+    //             this.onValueChanged('form');
+    //             this.submitted = false;
+    //             return;
+    //         }
+    //         // this.loading = true;
+    //         // this.saveRequest()
+    //         //     .subscribe({
+    //         //         next: (res) => {
+    //         //             if (autoClose) {
+    //         //                 this.closeModal();
+    //         //             } else if (res && res['id']) {
+    //         //                 this.model.id = res['id'];
+    //         //                 this.onAfterGetData();
+    //         //                 this.isEditMode = true;
+    //         //             }
+    //         //             this.closeReason = 'updated';
+    //         //             this.loading = false;
+    //         //             this.submitted = false;
+    //         //         },
+    //         //         error: err => {
+    //         //             this.errorMessage = err.error || 'Error.';
+    //         //             this.submitted = false;
+    //         //             this.loading = false;
+    //         //         }
+    //         //     });
+    //     }, 1);
+    // }
 
     toggleAccordion(accordion: NgbAccordion, panelId: string, display?: boolean): void {
         const isOpened = accordion.activeIds.indexOf(panelId) > -1;
@@ -596,11 +594,6 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
             return;
         }
         accordion.toggle(panelId);
-    }
-
-    generateName(model): void {
-        const title = model.title || '';
-        model.name = this.systemNameService.generateName(title);
     }
 }
 

@@ -97,14 +97,14 @@ export class CategoriesModalComponent extends AppModalContentAbstractComponent<C
         public fb: FormBuilder,
         public activeModal: NgbActiveModal,
         public translateService: TranslateService,
+        public systemNameService: SystemNameService,
         public dataService: CategoriesService,
         public elRef: ElementRef,
         private filesService: FilesService,
         private contentTypesService: ContentTypesService,
-        private appSettings: AppSettings,
-        private systemNameService: SystemNameService
+        private appSettings: AppSettings
     ) {
-        super(fb, activeModal, translateService, dataService, elRef);
+        super(fb, activeModal, translateService, systemNameService, dataService, elRef);
     }
 
     /** On initialize */

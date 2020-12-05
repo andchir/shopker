@@ -79,20 +79,11 @@ export class FieldTypeModalContentComponent extends AppModalContentAbstractCompo
         public fb: FormBuilder,
         public activeModal: NgbActiveModal,
         public translateService: TranslateService,
+        public systemNameService: SystemNameService,
         public dataService: FieldTypesService,
-        public elRef: ElementRef,
-        private systemNameService: SystemNameService
+        public elRef: ElementRef
     ) {
-        super(fb, activeModal, translateService, dataService, elRef);
-    }
-
-    generateName(model, event?: MouseEvent): void {
-        if (event) {
-            event.preventDefault();
-        }
-        const title = this.getControl(this.form, null, 'title').value || '';
-        model.name = this.systemNameService.generateName(title);
-        this.getControl(this.form, null, 'name').setValue(model.name);
+        super(fb, activeModal, translateService, systemNameService, dataService, elRef);
     }
 }
 

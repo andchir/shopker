@@ -38,72 +38,72 @@
     </div>
 </ng-template>
 
-<form [class.loading]="loading">
+<div class="modal-body py-0">
 
-    <div class="modal-body py-0">
+    <div class="row mb-3">
+    
+        <!-- ContentType form -->
+        <div class="col-lg-4" [formGroup]="form">
 
-        <div class="row mb-3">
-
-            <!-- ContentType form -->
-            <div class="col-lg-4" [formGroup]="form">
+            <form [formGroup]="form" method="post" (ngSubmit)="onSubmit()" [ngClass]="{'no-events': submitted}" #formEl>
 
                 <div class="form-group form-group-message">
-                    <label class="label-filled">
+                    <label class="label-filled" for="fieldTitle">
                         {{'TITLE' | translate}}
                     </label>
                     <input type="text" class="form-control" name="title"
+                           id="fieldTitle"
                            formControlName="title"
-                           [(ngModel)]="model.title"
-                           [class.is-invalid]="formErrors.title">
-                    <div *ngIf="formErrors.title" class="alert alert-danger">
+                           [ngClass]="{'is-invalid': form.controls.title.touched && !form.controls.title.valid}">
+                    <div class="alert alert-danger">
                         {{formErrors.title}}
                     </div>
                 </div>
-
+    
                 <div class="form-group form-group-message">
-                    <label for="fieldName" class="label-filled">
+                    <label class="label-filled" for="fieldName">
                         {{'SYSTEM_NAME' | translate}}
                     </label>
-                    <div class="input-group" [class.is-invalid]="formErrors.name">
+                    <div class="input-group" [ngClass]="{'is-invalid': form.controls.name.touched && !form.controls.name.valid}">
                         <input type="text" class="form-control" name="name"
-                               formControlName="name"
                                id="fieldName"
-                               [(ngModel)]="model.name"
-                               [class.is-invalid]="formErrors.name">
+                               formControlName="name"
+                               [ngClass]="{'is-invalid': form.controls.name.touched && !form.controls.name.valid}">
                         <div class="input-group-append">
                             <button type="button" class="btn btn-secondary" ngbTooltip="{{'GENERATE' | translate}}" (click)="generateName(model)">
                                 <i class="icon-reload"></i>
                             </button>
                         </div>
                     </div>
-                    <div *ngIf="formErrors.name" class="alert alert-danger">
+                    <div class="alert alert-danger">
                         {{formErrors.name}}
                     </div>
                 </div>
-
+    
                 <div class="form-group">
-                    <label class="label-filled">
+                    <label class="label-filled" for="fieldDescription">
                         {{'DESCRIPTION' | translate}}
                     </label>
-                    <textarea type="text" class="form-control" rows="3" name="description" formControlName="description" [(ngModel)]="model.description"></textarea>
+                    <textarea type="text" class="form-control" rows="3" name="description" id="fieldDescription"
+                              formControlName="description"></textarea>
                 </div>
-
+    
                 <div class="form-group row form-group-message">
                     <div class="col-12">
-
+    
                         <div class="form-group mb-0">
                             <label class="label-filled">{{'COLLECTION' | translate}}</label>
-
-                            <div class="input-group" [class.is-invalid]="formErrors.collection">
+    
+                            <div class="input-group" [ngClass]="{'is-invalid': form.controls.collection.touched && !form.controls.collection.valid}">
                                 <select class="custom-select custom-select-sm"
                                         name="collection"
                                         formControlName="collection"
                                         [(ngModel)]="model.collection"
-                                        [class.is-invalid]="formErrors.collection">
+                                        [ngClass]="{'is-invalid': form.controls.collection.touched && !form.controls.collection.valid}">
                                     <option value="{{collection}}" *ngFor="let collection of collections">{{collection}}</option>
                                 </select>
                                 <div class="input-group-append">
-                                    <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'ADD_COLLECTION' | translate}}" (click)="displayToggle(addCollectionBlock); addCollectionField.value = ''; onValueChanged(); addCollectionField.focus()">
+                                    <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'ADD_COLLECTION' | translate}}" (click)="addCollectionToggle(addCollectionField, $event)">
                                         <i class="icon-plus"></i>
                                     </button>
                                 </div>
@@ -113,18 +113,18 @@
                                     </button>
                                 </div>
                             </div>
-
+    
                             <div class="card p-1 mt-2 form-group-message" #addCollectionBlock style="display: none;">
                                 <input type="text" class="form-control form-control-sm"
                                        formControlName="newCollection"
                                        #addCollectionField
-                                       [class.is-invalid]="formErrors.newCollection">
+                                       [ngClass]="{'is-invalid': form.controls.newCollection.touched && !form.controls.newCollection.valid}">
                                 <div *ngIf="formErrors.newCollection" class="alert alert-danger mb-1">
                                     {{formErrors.newCollection}}
                                 </div>
-
+    
                                 <div class="text-right mt-1">
-                                    <button type="button" class="btn btn-secondary btn-sm" (click)="addCollection()">
+                                    <button type="button" class="btn btn-secondary btn-sm" (click)="addCollection($event)">
                                         {{'ADD' | translate}}
                                     </button>
                                     &nbsp;
@@ -133,9 +133,9 @@
                                     </button>
                                 </div>
                             </div>
-
+    
                         </div>
-
+    
                     </div>
                 </div>
     
@@ -143,441 +143,437 @@
                     <div class="custom-control custom-checkbox m-0">
                         <input type="checkbox" class="custom-control-input" id="fieldIsCreateByUsersAllowed{{ uniqueId }}" value="1"
                                name="isCreateByUsersAllowed"
-                               formControlName="isCreateByUsersAllowed"
-                               [(ngModel)]="model.isCreateByUsersAllowed">
+                               formControlName="isCreateByUsersAllowed">
                         <label class="custom-control-label" for="fieldIsCreateByUsersAllowed{{ uniqueId }}">
                             {{'CREATE_BY_USERS_ALLOWED' | translate}}
                         </label>
                     </div>
                 </div>
-
+    
                 <div class="form-group">
                     <div class="card card-body p-2 pl-3">
-
+    
                         <div class="custom-control custom-checkbox m-0">
                             <input type="checkbox" class="custom-control-input" id="fieldIsActive{{ uniqueId }}" value="1"
                                    name="isActive"
-                                   formControlName="isActive"
-                                   [(ngModel)]="model.isActive">
+                                   formControlName="isActive">
                             <label class="custom-control-label" for="fieldIsActive{{ uniqueId }}">{{'ACTIVE' | translate}}</label>
                         </div>
-
+    
                     </div>
                 </div>
 
-            </div>
-            <!-- /ContentType form -->
+            </form>
+        </div>
+        <!-- /ContentType form -->
 
-            <!-- Field form -->
-            <div class="col-lg-8" [formGroup]="fieldForm">
+        <!-- Field form -->
+        <!--<div class="col-lg-8" [formGroup]="fieldForm">
 
-                <label class="label-filled" [hidden]="action != 'add_field'">
-                    {{'ADD_FIELD' | translate}}
-                </label>
-                <label class="label-filled" [hidden]="action != 'edit_field'">
-                    {{'EDIT_FIELD' | translate}}
-                </label>
+            <label class="label-filled" [hidden]="action != 'add_field'">
+                {{'ADD_FIELD' | translate}}
+            </label>
+            <label class="label-filled" [hidden]="action != 'edit_field'">
+                {{'EDIT_FIELD' | translate}}
+            </label>
 
-                <div class="card">
-                    <div class="card-body">
+            <div class="card">
+                <div class="card-body">
 
-                        <div class="form-group row form-group-message">
-                            <div class="col-md-5">
-                                <label>{{'TITLE' | translate}}</label>
+                    <div class="form-group row form-group-message">
+                        <div class="col-md-5">
+                            <label>{{'TITLE' | translate}}</label>
+                        </div>
+                        <div class="col-md-7">
+                            <input type="text" class="form-control form-control-sm"
+                                   name="field_title"
+                                   [(ngModel)]="fieldModel.title"
+                                   [ngModelOptions]="{standalone: true}"
+                                   [class.is-invalid]="formErrors.fld_title">
+                            <div *ngIf="formErrors.fld_title" class="alert alert-danger">
+                                {{formErrors.fld_title}}
                             </div>
-                            <div class="col-md-7">
+                        </div>
+                    </div>
+
+                    <div class="form-group row form-group-message">
+                        <div class="col-md-5">
+                            <label>{{'SYSTEM_NAME' | translate}}</label>
+                        </div>
+                        <div class="col-md-7">
+
+                            <div class="input-group" [class.is-invalid]="formErrors.fld_name">
                                 <input type="text" class="form-control form-control-sm"
-                                       name="field_title"
-                                       formControlName="title"
-                                       [(ngModel)]="fieldModel.title"
-                                       [class.is-invalid]="formErrors.fld_title">
-                                <div *ngIf="formErrors.fld_title" class="alert alert-danger">
-                                    {{formErrors.fld_title}}
+                                       name="field_name"
+                                       [(ngModel)]="fieldModel.name"
+                                       [ngModelOptions]="{standalone: true}"
+                                       [class.is-invalid]="formErrors.fld_name">
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'GENERATE' | translate}}" (click)="generateName(fieldModel)">
+                                        <i class="icon-reload"></i>
+                                    </button>
                                 </div>
                             </div>
+                            <div *ngIf="formErrors.fld_name" class="alert alert-danger">
+                                {{formErrors.fld_name}}
+                            </div>
+
                         </div>
+                    </div>
 
-                        <div class="form-group row form-group-message">
-                            <div class="col-md-5">
-                                <label>{{'SYSTEM_NAME' | translate}}</label>
-                            </div>
-                            <div class="col-md-7">
-
-                                <div class="input-group" [class.is-invalid]="formErrors.fld_name">
-                                    <input type="text" class="form-control form-control-sm"
-                                           name="field_name"
-                                           formControlName="name"
-                                           [(ngModel)]="fieldModel.name"
-                                           [class.is-invalid]="formErrors.fld_name">
-                                    <div class="input-group-append">
-                                        <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'GENERATE' | translate}}" (click)="generateName(fieldModel)">
-                                            <i class="icon-reload"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div *ngIf="formErrors.fld_name" class="alert alert-danger">
-                                    {{formErrors.fld_name}}
-                                </div>
-
-                            </div>
+                    <div class="form-group row">
+                        <div class="col-md-5">
+                            <label>{{'DESCRIPTION' | translate}}</label>
                         </div>
-
-                        <div class="form-group row">
-                            <div class="col-md-5">
-                                <label>{{'DESCRIPTION' | translate}}</label>
-                            </div>
-                            <div class="col-md-7">
-                                <textarea type="text" class="form-control form-control-sm" rows="3" name="field_description" formControlName="description" [(ngModel)]="fieldModel.description"></textarea>
-                            </div>
+                        <div class="col-md-7">
+                            <textarea type="text" class="form-control form-control-sm" rows="3" name="field_description" [(ngModel)]="fieldModel.description" [ngModelOptions]="{standalone: true}"></textarea>
                         </div>
+                    </div>
 
-                        <div class="form-group row form-group-message">
-                            <div class="col-md-5">
-                                <label>{{'INPUT_TYPE' | translate}}</label>
-                            </div>
-                            <div class="col-md-7">
-
-                                <div class="input-group" [class.is-invalid]="formErrors.fld_inputType">
-                                    <select class="custom-select custom-select-sm"
-                                            name="field_inputType"
-                                            formControlName="inputType"
-                                            [(ngModel)]="fieldModel.inputType"
-                                            (ngModelChange)="selectFieldTypeProperties('input')"
-                                            [ngbTooltip]="getFieldTypeProperty(fieldModel.inputType, 'description')"
-                                            placement="left"
-                                            [class.is-invalid]="formErrors.fld_inputType">
-                                        <option value=""></option>
-                                        <option value="{{fieldType.name}}" *ngFor="let fieldType of fieldTypes">{{fieldType.title}}</option>
-                                    </select>
-                                    <div class="input-group-append">
-                                        <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'OPTIONS' | translate}}" (click)="displayToggle(inputTypeOptionsBlock)">
-                                            <i class="icon-cog"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div *ngIf="formErrors.fld_inputType" class="alert alert-danger">
-                                    {{formErrors.fld_inputType}}
-                                </div>
-
-                            </div>
+                    <div class="form-group row form-group-message">
+                        <div class="col-md-5">
+                            <label>{{'INPUT_TYPE' | translate}}</label>
                         </div>
+                        <div class="col-md-7">
 
-                        <div class="card card-body bg-light mb-3" #inputTypeOptionsBlock style="display: none;" [hidden]="!fieldModel.inputType">
-                            <div>
-                                <div class="alert alert-secondary small" [hidden]="fieldTypeProperties.input.length > 0">
-                                    There are no parameters.
-                                </div>
-                                <div class="row form-group" *ngFor="let property of fieldTypeProperties.input">
-                                    <div class="col-md-5">
-                                        {{property.title}}
-                                    </div>
-                                    <div class="col-md-7">
-                                        <input type="text" class="form-control form-control-sm" [(ngModel)]="fieldModel.inputProperties[property.name]" [ngModelOptions]="{standalone: true}">
-                                    </div>
+                            <div class="input-group" [class.is-invalid]="formErrors.fld_inputType">
+                                <select class="custom-select custom-select-sm"
+                                        name="field_inputType"
+                                        [(ngModel)]="fieldModel.inputType"
+                                        [ngModelOptions]="{standalone: true}"
+                                        (ngModelChange)="selectFieldTypeProperties('input')"
+                                        [ngbTooltip]="getFieldTypeProperty(fieldModel.inputType, 'description')"
+                                        placement="left"
+                                        [class.is-invalid]="formErrors.fld_inputType">
+                                    <option value=""></option>
+                                    <option value="{{fieldType.name}}" *ngFor="let fieldType of fieldTypes">{{fieldType.title}}</option>
+                                </select>
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'OPTIONS' | translate}}" (click)="displayToggle(inputTypeOptionsBlock)">
+                                        <i class="icon-cog"></i>
+                                    </button>
                                 </div>
                             </div>
-                            <div class="text-right mt-1">
-                                <button type="button" class="btn btn-secondary btn-sm" (click)="inputTypeOptionsBlock.style.display = 'none';">
-                                    {{'CLOSE' | translate}}
-                                </button>
+                            <div *ngIf="formErrors.fld_inputType" class="alert alert-danger">
+                                {{formErrors.fld_inputType}}
                             </div>
+
                         </div>
+                    </div>
 
-                        <div class="form-group row form-group-message">
-                            <div class="col-md-5">
-                                <label>{{'OUTPUT_TYPE' | translate}}</label>
-                            </div>
-                            <div class="col-md-7">
-
-                                <div class="input-group" [class.is-invalid]="formErrors.fld_outputType">
-                                    <select class="custom-select custom-select-sm"
-                                            name="field_outputType"
-                                            formControlName="outputType"
-                                            [(ngModel)]="fieldModel.outputType"
-                                            (ngModelChange)="selectFieldTypeProperties('output')"
-                                            [ngbTooltip]="getFieldTypeProperty(fieldModel.outputType, 'description')"
-                                            placement="left"
-                                            [class.is-invalid]="formErrors.fld_outputType">
-                                        <option value=""></option>
-                                        <option value="{{fieldType.name}}" *ngFor="let fieldType of fieldTypes">{{fieldType.title}}</option>
-                                    </select>
-                                    <div class="input-group-append">
-                                        <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'OPTIONS' | translate}}" (click)="displayToggle(outputTypeOptionsBlock)">
-                                            <i class="icon-cog"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div *ngIf="formErrors.fld_outputType" class="alert alert-danger">
-                                    {{formErrors.fld_outputType}}
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div class="card card-body bg-light mb-3" #outputTypeOptionsBlock style="display: none;" [hidden]="!fieldModel.outputType">
-                            <div class="alert alert-secondary small" [hidden]="fieldTypeProperties.output.length > 0">
+                    <div class="card card-body bg-light mb-3" #inputTypeOptionsBlock style="display: none;" [hidden]="!fieldModel.inputType">
+                        <div>
+                            <div class="alert alert-secondary small" [hidden]="fieldTypeProperties.input.length > 0">
                                 There are no parameters.
                             </div>
-                            <div class="row form-group" *ngFor="let property of fieldTypeProperties.output">
+                            <div class="row form-group" *ngFor="let property of fieldTypeProperties.input">
                                 <div class="col-md-5">
                                     {{property.title}}
                                 </div>
                                 <div class="col-md-7">
-                                    <input type="text" class="form-control form-control-sm" [(ngModel)]="fieldModel.outputProperties[property.name]" [ngModelOptions]="{standalone: true}">
+                                    <input type="text" class="form-control form-control-sm" [(ngModel)]="fieldModel.inputProperties[property.name]" [ngModelOptions]="{standalone: true}">
                                 </div>
                             </div>
-                            <div class="text-right mt-1">
-                                <button type="button" class="btn btn-secondary btn-sm" (click)="outputTypeOptionsBlock.style.display = 'none'">
-                                    {{'CLOSE' | translate}}
-                                </button>
-                            </div>
                         </div>
+                        <div class="text-right mt-1">
+                            <button type="button" class="btn btn-secondary btn-sm" (click)="inputTypeOptionsBlock.style.display = 'none';">
+                                {{'CLOSE' | translate}}
+                            </button>
+                        </div>
+                    </div>
 
-                        <div class="form-group row">
+                    <div class="form-group row form-group-message">
+                        <div class="col-md-5">
+                            <label>{{'OUTPUT_TYPE' | translate}}</label>
+                        </div>
+                        <div class="col-md-7">
+
+                            <div class="input-group" [class.is-invalid]="formErrors.fld_outputType">
+                                <select class="custom-select custom-select-sm"
+                                        name="field_outputType"
+                                        [(ngModel)]="fieldModel.outputType"
+                                        [ngModelOptions]="{standalone: true}"
+                                        (ngModelChange)="selectFieldTypeProperties('output')"
+                                        [ngbTooltip]="getFieldTypeProperty(fieldModel.outputType, 'description')"
+                                        placement="left"
+                                        [class.is-invalid]="formErrors.fld_outputType">
+                                    <option value=""></option>
+                                    <option value="{{fieldType.name}}" *ngFor="let fieldType of fieldTypes">{{fieldType.title}}</option>
+                                </select>
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'OPTIONS' | translate}}" (click)="displayToggle(outputTypeOptionsBlock)">
+                                        <i class="icon-cog"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div *ngIf="formErrors.fld_outputType" class="alert alert-danger">
+                                {{formErrors.fld_outputType}}
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="card card-body bg-light mb-3" #outputTypeOptionsBlock style="display: none;" [hidden]="!fieldModel.outputType">
+                        <div class="alert alert-secondary small" [hidden]="fieldTypeProperties.output.length > 0">
+                            There are no parameters.
+                        </div>
+                        <div class="row form-group" *ngFor="let property of fieldTypeProperties.output">
                             <div class="col-md-5">
-                                <label>{{'GROUP' | translate}}</label>
+                                {{property.title}}
                             </div>
                             <div class="col-md-7">
-
-                                <div class="form-group-message">
-                                    <div class="input-group input-group-sm" [class.is-invalid]="formErrors.fld_group">
-                                        <select class="custom-select" name="field_group"
-                                                formControlName="group"
-                                                [(ngModel)]="fieldModel.group"
-                                                [class.is-invalid]="formErrors.fld_group">
-                                            <option value=""></option>
-                                            <option [value]="groupName" *ngFor="let groupName of model.groups">{{groupName}}</option>
-                                        </select>
-                                        <div class="input-group-append">
-                                            <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'ADD_GROUP' | translate}}" (click)="displayToggle(addGroupBlock); addGroupField.value = ''; addGroupField.focus()">
-                                                <i class="icon-plus"></i>
-                                            </button>
-                                        </div>
-                                        <div class="input-group-append">
-                                            <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'DELETE_GROUP' | translate}}" (click)="deleteGroup()">
-                                                <i class="icon-cross"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div *ngIf="formErrors.fld_group" class="alert alert-danger">
-                                        {{formErrors.fld_group}}
-                                    </div>
-
-                                    <div class="card p-1 mt-2 form-group-message" #addGroupBlock style="display: none;">
-                                        <input type="text" class="form-control form-control-sm" #addGroupField
-                                               formControlName="newGroup"
-                                               [class.is-invalid]="formErrors.fld_newGroup">
-                                        <div *ngIf="formErrors.fld_newGroup" class="alert alert-danger mb-1">
-                                            {{formErrors.fld_newGroup}}
-                                        </div>
-                                        <div class="text-right mt-1">
-                                            <button type="button" class="btn btn-secondary btn-sm" (click)="addGroup();">
-                                                {{'ADD' | translate}}
-                                            </button>
-                                            &nbsp;
-                                            <button type="button" class="btn btn-secondary btn-sm" (click)="addGroupBlock.style.display = 'none'; formErrors.fld_newGroup = ''">
-                                                {{'CANCEL' | translate}}
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
+                                <input type="text" class="form-control form-control-sm" [(ngModel)]="fieldModel.outputProperties[property.name]" [ngModelOptions]="{standalone: true}">
                             </div>
                         </div>
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-7 offset-md-5">
-
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="fieldRequired{{ uniqueId }}" value="1" name="required" formControlName="required" [(ngModel)]="fieldModel.required">
-                                    <label class="custom-control-label" for="fieldRequired{{ uniqueId }}">{{'REQUIRED' | translate}}</label>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-7 offset-md-5">
-
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="fieldShowInTable{{ uniqueId }}" value="1" name="showInTable" formControlName="showInTable" [(ngModel)]="fieldModel.showInTable">
-                                    <label class="custom-control-label" for="fieldShowInTable{{ uniqueId }}">{{'SHOW_IN_TABLE' | translate}}</label>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-7 offset-md-5">
-
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="fieldShowInList{{ uniqueId }}" value="1" name="showInList" formControlName="showInList" [(ngModel)]="fieldModel.showInList">
-                                    <label class="custom-control-label" for="fieldShowInList{{ uniqueId }}">{{'SHOW_IN_LIST' | translate}}</label>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-7 offset-md-5">
-
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="fieldIsFilter{{ uniqueId }}" value="1" name="isFilter" formControlName="isFilter" [(ngModel)]="fieldModel.isFilter">
-                                    <label class="custom-control-label" for="fieldIsFilter{{ uniqueId }}">{{'SHOW_IN_FILTER' | translate}}</label>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div class="alert alert-danger mt-3 mb-3" [hidden]="!errorFieldMessage">
-                            <button type="button" class="close" (click)="errorFieldMessage = ''">
-                                <span aria-hidden="true">&times;</span>
+                        <div class="text-right mt-1">
+                            <button type="button" class="btn btn-secondary btn-sm" (click)="outputTypeOptionsBlock.style.display = 'none'">
+                                {{'CLOSE' | translate}}
                             </button>
-                            {{errorFieldMessage}}
                         </div>
+                    </div>
 
-                        <div class="mt-3">
-                            <button type="button" class="btn btn-sm btn-info btn-wide" (click)="submitField()" [hidden]="action != 'add_field'">
-                                <i class="icon-plus"></i>
-                                {{'ADD_FIELD' | translate}}
-                            </button>
-                            <button type="button" class="btn btn-sm btn-success btn-wide" (click)="submitField()" [hidden]="action != 'edit_field'">
-                                <i class="icon-check"></i>
-                                {{'SAVE_FIELD' | translate}}
+                    <div class="form-group row">
+                        <div class="col-md-5">
+                            <label>{{'GROUP' | translate}}</label>
+                        </div>
+                        <div class="col-md-7">
+
+                            <div class="form-group-message">
+                                <div class="input-group input-group-sm" [class.is-invalid]="formErrors.fld_group">
+                                    <select class="custom-select" name="field_group"
+                                            [(ngModel)]="fieldModel.group"
+                                            [ngModelOptions]="{standalone: true}"
+                                            [class.is-invalid]="formErrors.fld_group">
+                                        <option value=""></option>
+                                        <option [value]="groupName" *ngFor="let groupName of model.groups">{{groupName}}</option>
+                                    </select>
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'ADD_GROUP' | translate}}" (click)="displayToggle(addGroupBlock); addGroupField.value = ''; addGroupField.focus()">
+                                            <i class="icon-plus"></i>
+                                        </button>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'DELETE_GROUP' | translate}}" (click)="deleteGroup()">
+                                            <i class="icon-cross"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div *ngIf="formErrors.fld_group" class="alert alert-danger">
+                                    {{formErrors.fld_group}}
+                                </div>
+
+                                <div class="card p-1 mt-2 form-group-message" #addGroupBlock style="display: none;">
+                                    <input type="text" class="form-control form-control-sm" #addGroupField
+                                           [class.is-invalid]="formErrors.fld_newGroup">
+                                    <div *ngIf="formErrors.fld_newGroup" class="alert alert-danger mb-1">
+                                        {{formErrors.fld_newGroup}}
+                                    </div>
+                                    <div class="text-right mt-1">
+                                        <button type="button" class="btn btn-secondary btn-sm" (click)="addGroup();">
+                                            {{'ADD' | translate}}
+                                        </button>
+                                        &nbsp;
+                                        <button type="button" class="btn btn-secondary btn-sm" (click)="addGroupBlock.style.display = 'none'; formErrors.fld_newGroup = ''">
+                                            {{'CANCEL' | translate}}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group row mb-0">
+                        <div class="col-md-7 offset-md-5">
+
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="fieldRequired{{ uniqueId }}" value="1" name="required" [(ngModel)]="fieldModel.required" [ngModelOptions]="{standalone: true}">
+                                <label class="custom-control-label" for="fieldRequired{{ uniqueId }}">{{'REQUIRED' | translate}}</label>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group row mb-0">
+                        <div class="col-md-7 offset-md-5">
+
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="fieldShowInTable{{ uniqueId }}" value="1" name="showInTable" [(ngModel)]="fieldModel.showInTable" [ngModelOptions]="{standalone: true}">
+                                <label class="custom-control-label" for="fieldShowInTable{{ uniqueId }}">{{'SHOW_IN_TABLE' | translate}}</label>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group row mb-0">
+                        <div class="col-md-7 offset-md-5">
+
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="fieldShowInList{{ uniqueId }}" value="1" name="showInList" [(ngModel)]="fieldModel.showInList" [ngModelOptions]="{standalone: true}">
+                                <label class="custom-control-label" for="fieldShowInList{{ uniqueId }}">{{'SHOW_IN_LIST' | translate}}</label>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group row mb-0">
+                        <div class="col-md-7 offset-md-5">
+
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="fieldIsFilter{{ uniqueId }}" value="1" name="isFilter" [(ngModel)]="fieldModel.isFilter" [ngModelOptions]="{standalone: true}">
+                                <label class="custom-control-label" for="fieldIsFilter{{ uniqueId }}">{{'SHOW_IN_FILTER' | translate}}</label>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="alert alert-danger mt-3 mb-3" [hidden]="!errorFieldMessage">
+                        <button type="button" class="close" (click)="errorFieldMessage = ''">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        {{errorFieldMessage}}
+                    </div>
+
+                    <div class="mt-3">
+                        <button type="button" class="btn btn-sm btn-info btn-wide" (click)="submitField()" [hidden]="action != 'add_field'">
+                            <i class="icon-plus"></i>
+                            {{'ADD_FIELD' | translate}}
+                        </button>
+                        <button type="button" class="btn btn-sm btn-success btn-wide" (click)="submitField()" [hidden]="action != 'edit_field'">
+                            <i class="icon-check"></i>
+                            {{'SAVE_FIELD' | translate}}
+                        </button>
+                        &nbsp;
+                        <button type="button" class="btn btn-sm btn-secondary btn-wide" (click)="editFieldCancel()">
+                            {{'CANCEL' | translate}}
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>-->
+        <!-- /Field form -->
+
+    </div>
+
+    <!-- Fields -->
+    <ngb-accordion [closeOthers]="true" activeIds="accordion-content-type-fields" class="ngb-accordion" #accordion="ngbAccordion">
+        <ngb-panel id="accordion-content-type-fields" [title]="'FIELDS' | translate">
+            <ng-template ngbPanelContent>
+
+                <div #blockFieldList>
+                    <div>
+                        <div class="text-right mb-2" [hidden]="model.fields.length < 2">
+                            <button type="button" class="btn btn-sm btn-secondary" (click)="sortingInit('', '', $event)">
+                                <i class="icon-shuffle"></i>
+                                {{'SORT_FIELDS' | translate}}
                             </button>
                             &nbsp;
-                            <button type="button" class="btn btn-sm btn-secondary btn-wide" (click)="editFieldCancel()">
-                                {{'CANCEL' | translate}}
+                            <button type="button" class="btn btn-sm btn-secondary" (click)="sortingInit('listOrder', 'showInList', $event)">
+                                <i class="icon-shuffle"></i>
+                                {{'SORT_FIELDS_LIST' | translate}}
+                            </button>
+                            &nbsp;
+                            <button type="button" class="btn btn-sm btn-secondary" (click)="sortingInit('filterOrder', 'isFilter', $event)">
+                                <i class="icon-shuffle"></i>
+                                {{'SORT_FILTERS' | translate}}
                             </button>
                         </div>
 
-                    </div>
-                </div>
-
-            </div>
-            <!-- /Field form -->
-
-        </div>
-
-        <!-- Fields -->
-        <ngb-accordion [closeOthers]="true" activeIds="accordion-content-type-fields" class="ngb-accordion" #accordion="ngbAccordion">
-            <ngb-panel id="accordion-content-type-fields" [title]="'FIELDS' | translate">
-                <ng-template ngbPanelContent>
-
-                    <div #blockFieldList>
-                        <div>
-                            <div class="text-right mb-2" [hidden]="model.fields.length < 2">
-                                <button type="button" class="btn btn-sm btn-secondary" (click)="sortingInit('', '', $event)">
-                                    <i class="icon-shuffle"></i>
-                                    {{'SORT_FIELDS' | translate}}
-                                </button>
-                                &nbsp;
-                                <button type="button" class="btn btn-sm btn-secondary" (click)="sortingInit('listOrder', 'showInList', $event)">
-                                    <i class="icon-shuffle"></i>
-                                    {{'SORT_FIELDS_LIST' | translate}}
-                                </button>
-                                &nbsp;
-                                <button type="button" class="btn btn-sm btn-secondary" (click)="sortingInit('filterOrder', 'isFilter', $event)">
-                                    <i class="icon-shuffle"></i>
-                                    {{'SORT_FILTERS' | translate}}
-                                </button>
-                            </div>
-
-                            <div class="table-responsive">
-                                <table class="table table-striped table-divided mb-0">
-                                    <thead>
-                                    <tr>
-                                        <th>{{'TITLE' | translate}}</th>
-                                        <th>{{'INPUT_TYPE' | translate}}</th>
-                                        <th>{{'GROUP' | translate}}</th>
-                                        <th>{{'REQUIRED' | translate}}?</th>
-                                        <th>{{'SHOW_IN_TABLE' | translate}}?</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr class="show-on-hover-parent" *ngFor="let field of model.fields; let index=index">
-                                        <td>
-                                            {{field.title}}
-                                            <span class="text-muted">({{field.name}})</span>
-                                        </td>
-                                        <td>
-                                            {{field.inputType}}
-                                        </td>
-                                        <td>
-                                            {{field.group}}
-                                        </td>
-                                        <td>
-                                            <app-output-field [value]="field.required" outputType="boolean"></app-output-field>
-                                        </td>
-                                        <td>
-                                            <div class="relative">
-                                                <div class="show-on-hover-right">
-                                                    <!--<button type="button" class="btn btn-secondary btn-sm ml-2" (click)="fieldMove(index, 'up')" ngbTooltip="{{'MOVE_UP' | translate}}" *ngIf="index > 0">-->
-                                                        <!--<i class="icon-arrow-up"></i>-->
-                                                    <!--</button>-->
-                                                    <!--<button type="button" class="btn btn-secondary btn-sm ml-2" (click)="fieldMove(index, 'down')" ngbTooltip="{{'MOVE_DOWN' | translate}}" *ngIf="index < model.fields.length - 1">-->
-                                                        <!--<i class="icon-arrow-down"></i>-->
-                                                    <!--</button>-->
-                                                    <button type="button" class="btn btn-secondary btn-sm ml-2" (click)="editField(field)" [hidden]="field.name == currentFieldName" ngbTooltip="{{'EDIT' | translate}}">
-                                                        <i class="icon-pencil"></i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-secondary btn-sm ml-2" (click)="copyField(field)" ngbTooltip="{{'COPY' | translate}}">
-                                                        <i class="icon-stack"></i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-secondary btn-sm ml-2" (click)="deleteField(field)" [hidden]="field.name == currentFieldName" ngbTooltip="{{'DELETE' | translate}}">
-                                                        <i class="icon-cross"></i>
-                                                    </button>
-                                                </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-divided mb-0">
+                                <thead>
+                                <tr>
+                                    <th>{{'TITLE' | translate}}</th>
+                                    <th>{{'INPUT_TYPE' | translate}}</th>
+                                    <th>{{'GROUP' | translate}}</th>
+                                    <th>{{'REQUIRED' | translate}}?</th>
+                                    <th>{{'SHOW_IN_TABLE' | translate}}?</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="show-on-hover-parent" *ngFor="let field of model.fields; let index=index">
+                                    <td>
+                                        {{field.title}}
+                                        <span class="text-muted">({{field.name}})</span>
+                                    </td>
+                                    <td>
+                                        {{field.inputType}}
+                                    </td>
+                                    <td>
+                                        {{field.group}}
+                                    </td>
+                                    <td>
+                                        <app-output-field [value]="field.required" outputType="boolean"></app-output-field>
+                                    </td>
+                                    <td>
+                                        <div class="relative">
+                                            <div class="show-on-hover-right">
+                                                <!--<button type="button" class="btn btn-secondary btn-sm ml-2" (click)="fieldMove(index, 'up')" ngbTooltip="{{'MOVE_UP' | translate}}" *ngIf="index > 0">-->
+                                                    <!--<i class="icon-arrow-up"></i>-->
+                                                <!--</button>-->
+                                                <!--<button type="button" class="btn btn-secondary btn-sm ml-2" (click)="fieldMove(index, 'down')" ngbTooltip="{{'MOVE_DOWN' | translate}}" *ngIf="index < model.fields.length - 1">-->
+                                                    <!--<i class="icon-arrow-down"></i>-->
+                                                <!--</button>-->
+                                                <button type="button" class="btn btn-secondary btn-sm ml-2" (click)="editField(field)" [hidden]="field.name == currentFieldName" ngbTooltip="{{'EDIT' | translate}}">
+                                                    <i class="icon-pencil"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-secondary btn-sm ml-2" (click)="copyField(field)" ngbTooltip="{{'COPY' | translate}}">
+                                                    <i class="icon-stack"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-secondary btn-sm ml-2" (click)="deleteField(field)" [hidden]="field.name == currentFieldName" ngbTooltip="{{'DELETE' | translate}}">
+                                                    <i class="icon-cross"></i>
+                                                </button>
                                             </div>
+                                        </div>
 
-                                            <app-output-field [value]="field.showInTable" outputType="boolean"></app-output-field>
-                                        </td>
-                                    </tr>
-                                    <tr [hidden]="model.fields.length > 0" class="table-active">
-                                        <td colspan="5" class="text-center p-3">
-                                            {{'EMPTY' | translate}}
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                                        <app-output-field [value]="field.showInTable" outputType="boolean"></app-output-field>
+                                    </td>
+                                </tr>
+                                <tr [hidden]="model.fields.length > 0" class="table-active">
+                                    <td colspan="5" class="text-center p-3">
+                                        {{'EMPTY' | translate}}
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
+                </div>
 
-                    <app-sorting-dnd
-                            [(items)]="sortData"
-                            (save)="sortingApply($event)"
-                            (cancel)="sortingReset()"></app-sorting-dnd>
+                <app-sorting-dnd
+                        [(items)]="sortData"
+                        (save)="sortingApply($event)"
+                        (cancel)="sortingReset()"></app-sorting-dnd>
 
-                </ng-template>
-            </ngb-panel>
-        </ngb-accordion>
-        <!-- /Fields -->
+            </ng-template>
+        </ngb-panel>
+    </ngb-accordion>
+    <!-- /Fields -->
 
-        <div class="alert alert-danger mt-3 mb-0" [hidden]="!errorMessage">
-            <button type="button" class="close" (click)="errorMessage = ''">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            {{errorMessage}}
-        </div>
-
+    <div class="alert alert-danger mt-3 mb-0" *ngIf="errorMessage">
+        <button type="button" class="close" (click)="errorMessage = ''">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        {{errorMessage}}
     </div>
 
-    <div class="modal-footer d-block">
-        <div class="btn-group mr-1">
-            <button type="button" class="btn btn-success btn-wide" [disabled]="submitted" (click)="save(true, $event)">
-                <span>{{'SAVE_AND_CLOSE' | translate}}</span>
-            </button>
-            <div class="btn-group" ngbDropdown role="group" placement="top-right">
-                <button type="button" class="btn btn-success dropdown-toggle-split" ngbDropdownToggle [disabled]="submitted"></button>
-                <div class="dropdown-menu" ngbDropdownMenu>
-                    <button type="button" ngbDropdownItem (click)="save(false, $event)">{{'SAVE' | translate}}</button>
-                </div>
+</div>
+
+<div class="modal-footer d-block">
+    <div class="btn-group mr-1">
+        <button type="button" class="btn btn-success btn-wide" [disabled]="submitted" (click)="save(true, $event)">
+            <span>{{'SAVE_AND_CLOSE' | translate}}</span>
+        </button>
+        <div class="btn-group" ngbDropdown role="group" placement="top-right">
+            <button type="button" class="btn btn-success dropdown-toggle-split" ngbDropdownToggle [disabled]="submitted"></button>
+            <div class="dropdown-menu" ngbDropdownMenu>
+                <button type="button" ngbDropdownItem (click)="save(false, $event)">{{'SAVE' | translate}}</button>
             </div>
         </div>
-        <button type="button" class="btn btn-secondary btn-wide" (click)="closeModal($event)">
-            <span>{{'CLOSE' | translate}}</span>
-        </button>
     </div>
-
-</form>
+    <button type="button" class="btn btn-secondary btn-wide" (click)="closeModal($event)">
+        <span>{{'CLOSE' | translate}}</span>
+    </button>
+</div>

@@ -15,6 +15,7 @@ import {AppSettings} from '../services/app-settings.service';
 import {QueryOptions} from '../models/query-options';
 import {UserOption} from '../users/models/user.model';
 import {FormFieldsOptions} from '../models/form-fields-options.interface';
+import {SystemNameService} from '../services/system-name.service';
 
 @Component({
     selector: 'app-modal-order',
@@ -108,12 +109,13 @@ export class ModalOrderContentComponent extends AppModalContentAbstractComponent
         public fb: FormBuilder,
         public activeModal: NgbActiveModal,
         public translateService: TranslateService,
+        public systemNameService: SystemNameService,
         public dataService: OrdersService,
         public elRef: ElementRef,
         private settingsService: SettingsService,
         private appSettings: AppSettings
     ) {
-        super(fb, activeModal, translateService, dataService, elRef);
+        super(fb, activeModal, translateService, systemNameService, dataService, elRef);
     }
 
     onBeforeInit(): void {

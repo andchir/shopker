@@ -129,20 +129,20 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
         });
     }
 
-    buildForm(): void {
-        this.form = this.fb.group(this.buildControls(null, this.formFields));
-        this.form.valueChanges
+    buildForm(formName = 'form', formFields: FormFieldsOptions[] = null, formErrorsObj: FormFieldsErrors = null, modelName = 'model'): void {
+        if (!formFields) {
+            formFields = this.formFields;
+        }
+        this[formName] = this.fb.group(this.buildControls(null, formFields, modelName));
+        this[formName].valueChanges
             .pipe(takeUntil(this.destroyed$))
-            .subscribe(() => this.onValueChanged());
+            .subscribe(() => this.onValueChanged(formName, formErrorsObj));
     }
 
-    buildControls(formGroup: FormGroup, options: FormFieldsOptions[], modelName = 'model'): { [k: string]: FormControl; } {
+    buildControls(formGroup: FormGroup = null, options: FormFieldsOptions[] = [], modelName = 'model'): { [k: string]: FormControl; } {
         const controls = {};
-        if (typeof formGroup === 'undefined') {
-            formGroup = this.form || null;
-        }
         options.forEach((opt) => {
-            const control = this.getControl(formGroup, opt);
+            const control = formGroup ? this.getControl(formGroup, opt) : null;
             let value = null;
             if (modelName && this[modelName]) {
                 if (!this[modelName].options) {
@@ -186,23 +186,26 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
         return controls;
     }
 
-    onValueChanged(formName = 'form'): void {
+    onValueChanged(formName = 'form', formErrorsObj: FormFieldsErrors = null): void {
         if (!this[formName]) {
             return;
+        }
+        if (!formErrorsObj) {
+            formErrorsObj = this.formErrors;
         }
         if (this[formName].valid) {
             this.errorMessage = '';
         }
         const data = this[formName].value;
         Object.keys(data).forEach((fieldName) => {
-            this.formErrors[fieldName] = '';
-            const control = this.getControl(this.form, null, fieldName);
+            formErrorsObj[fieldName] = '';
+            const control = this.getControl(this[formName], null, fieldName);
             if (control && !control.valid && control.errors) {
                 let message = '';
                 Object.keys(control.errors).forEach((errorKey) => {
                     message += (message ? ' ' : '') + this.getLangString('INVALID_' + errorKey.toUpperCase());
                 });
-                this.formErrors[fieldName] = message;
+                formErrorsObj[fieldName] = message;
             }
         });
     }
@@ -293,13 +296,16 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
         this.arrayFields[fieldName].push(this.fb.group(groupControls));
     }
     
-    generateName(model: any, event?: MouseEvent): void {
+    generateName(model: any, event?: MouseEvent, formGroup: FormGroup = null): void {
         if (event) {
             event.preventDefault();
         }
-        const title = this.getControl(this.form, null, 'title').value || '';
+        if (!formGroup) {
+            formGroup = this.form;
+        }
+        const title = this.getControl(formGroup, null, 'title').value || '';
         model.name = this.systemNameService.generateName(title);
-        this.getControl(this.form, null, 'name').setValue(model.name);
+        this.getControl(formGroup, null, 'name').setValue(model.name);
     }
 
     closeModal(event?: MouseEvent): void {
@@ -491,7 +497,10 @@ export abstract class AppModalContentAbstractComponent<T extends SimpleEntity> i
         return Math.random().toString(36).substr(2, 9);
     }
     
-    displayToggle(element: HTMLElement, display?: boolean): void {
+    displayToggle(element: HTMLElement, display?: boolean, event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
         display = display || element.style.display === 'none';
         element.style.display = display ? 'block' : 'none';
     }

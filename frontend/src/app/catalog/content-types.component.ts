@@ -23,7 +23,7 @@ import {ContentTypesService} from './services/content_types.service';
 import {SystemNameService} from '../services/system-name.service';
 import {CollectionsService} from './services/collections.service';
 import {FieldTypesService} from './services/field-types.service';
-import {FormFieldsOptions} from '../models/form-fields-options.interface';
+import {FormFieldsErrors, FormFieldsOptions} from '../models/form-fields-options.interface';
 
 @Component({
     selector: 'app-content-type-modal-content',
@@ -36,9 +36,10 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
     @ViewChild('accordion', { static: true }) accordion;
     @ViewChild('blockFieldList') blockFieldList;
     modalRef: NgbModalRef;
-
+    
+    private _secondFormFieldsErrors: FormFieldsErrors = {};
     model = new ContentType(0, '', '', '', 'products', [], ['General', 'Service'], true, false);
-    fieldModel = new ContentField(0, '', '', '', '', {}, '', {}, '', false, false, false);
+    fieldModel = new ContentField(0, '', '', '', '', {}, '', {}, '');
     sortData: SortData[] = [];
     sortingfieldName = '';
     fld_submitted = false;
@@ -46,7 +47,7 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
     action = 'add_field';
     currentFieldName = '';
     collections: string[] = ['products'];
-    fieldForm: FormGroup;
+    secondForm: FormGroup;
     fieldTypes: FieldType[];
     fieldTypeProperties = {
         input: [],
@@ -55,12 +56,12 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
     
     formFields: FormFieldsOptions[] = [
         {
-            name: 'name',
-            validators: [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')]
-        },
-        {
             name: 'title',
             validators: [Validators.required]
+        },
+        {
+            name: 'name',
+            validators: [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')]
         },
         {
             name: 'description',
@@ -83,88 +84,73 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
             validators: []
         }
     ];
-
-    fieldsFormOptions = {
-        title: {
-            fieldLabel: 'TITLE',
-            value: '',
-            validators: [Validators.required],
-            messages: {}
+    
+    secondFormFields: FormFieldsOptions[] = [
+        {
+            name: 'title',
+            validators: [Validators.required]
         },
-        name: {
-            fieldLabel: 'SYSTEM_NAME',
-            value: '',
-            validators: [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')],
-            messages: {
-                pattern: 'The name must contain only Latin letters.'
-            }
+        {
+            name: 'name',
+            validators: [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')]
         },
-        description: {
-            fieldLabel: 'DESCRIPTION',
-            value: '',
-            validators: [],
-            messages: {}
+        {
+            name: 'description',
+            validators: []
         },
-        inputType: {
-            fieldLabel: 'INPUT_TYPE',
-            value: '',
-            validators: [Validators.required],
-            messages: {}
+        {
+            name: 'inputType',
+            validators: [Validators.required]
         },
-        outputType: {
-            fieldLabel: 'OUTPUT_TYPE',
-            value: '',
-            validators: [Validators.required],
-            messages: {}
+        {
+            name: 'outputType',
+            validators: [Validators.required]
         },
-        group: {
-            fieldLabel: 'GROUP',
-            value: '',
-            validators: [Validators.required],
-            messages: {}
+        {
+            name: 'group',
+            validators: [Validators.required]
         },
-        newGroup: {
-            fieldLabel: 'GROUP',
-            value: '',
-            validators: [],
-            messages: {}
+        {
+            name: 'newGroup',
+            validators: []
         },
-        required: {
-            value: '',
-            validators: [],
-            messages: {}
+        {
+            name: 'required',
+            validators: []
         },
-        showInTable: {
-            value: '',
-            validators: [],
-            messages: {}
+        {
+            name: 'showInTable',
+            validators: []
         },
-        showInList: {
-            value: '',
-            validators: [],
-            messages: {}
+        {
+            name: 'showOnPage',
+            validators: []
         },
-        isFilter: {
-            value: '',
-            validators: [],
-            messages: {}
+        {
+            name: 'showInList',
+            validators: []
+        },
+        {
+            name: 'isFilter',
+            validators: []
         }
-    };
-
-    // constructor(
-    //     public fb: FormBuilder,
-    //     public dataService: ContentTypesService,
-    //     public systemNameService: SystemNameService,
-    //     public activeModal: NgbActiveModal,
-    //     public tooltipConfig: NgbTooltipConfig,
-    //     public translateService: TranslateService,
-    //     public elRef: ElementRef,
-    //     private fieldTypesService: FieldTypesService,
-    //     private collectionsService: CollectionsService,
-    //     private modalService: NgbModal
-    // ) {
-    //     super(fb, dataService, systemNameService, activeModal, tooltipConfig, translateService, elRef);
-    // }
+    ];
+    
+    set secondFormErrors(formFieldsErrors: FormFieldsErrors) {
+        for (const key in formFieldsErrors) {
+            if (formFieldsErrors.hasOwnProperty(key)) {
+                const control = this.getControl(this.form, null, key);
+                if (control) {
+                    control.setErrors({incorrect: true});
+                }
+            }
+        }
+        this._secondFormFieldsErrors = formFieldsErrors;
+    }
+    
+    get secondFormErrors() {
+        return this._secondFormFieldsErrors;
+    }
     
     constructor(
         public fb: FormBuilder,
@@ -179,22 +165,14 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
     ) {
         super(fb, activeModal, translateService, systemNameService, dataService, elRef);
     }
-
-    // /** On initialize */
-    // ngOnInit(): void {
-    //     super.ngOnInit();
-    //     this.getFieldTypes();
-    //     this.getCollectionsList();
-    // }
-    //
-    // buildForm(): void {
-    //     super.buildForm();
-    //
-    //     const controls = this.buildControls(this.fieldsFormOptions, 'fieldModel', 'fld_');
-    //     this.fieldForm = this.fb.group(controls);
-    //     this.fieldForm.valueChanges
-    //         .subscribe(() => this.onValueChanged('fieldForm', 'fld_'));
-    // }
+    
+    onAfterInit(): void {
+        this.buildForm('secondForm', this.secondFormFields, this.secondFormErrors, 'fieldModel');
+        this.onValueChanged('secondForm', this.secondFormErrors);
+        
+        this.getFieldTypes();
+        this.getCollectionsList();
+    }
 
     /** Get field types */
     getFieldTypes(): void {
@@ -226,9 +204,13 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
      */
     selectFieldTypeProperties(type: string, fieldTypeName?: string): void {
         if (fieldTypeName) {
-            this.fieldModel[type + 'Type'] = fieldTypeName;
+            this.secondForm.get(`${type}Type`).setValue(fieldTypeName);
+        } else {
+            fieldTypeName = this.secondForm.get(`${type}Type`).value;
         }
-        const fieldType = find(this.fieldTypes, {name: this.fieldModel[type + 'Type']});
+        this.fieldModel[`${type}Type`] = fieldTypeName;
+        const fieldType = find(this.fieldTypes, {name: fieldTypeName});
+        
         if (!fieldType) {
             this.fieldTypeProperties[type] = [];
             return;
@@ -259,7 +241,7 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
             }
         }
         if (type === 'input' && !this.fieldModel.outputType) {
-            this.selectFieldTypeProperties('output', this.fieldModel.inputType);
+            this.selectFieldTypeProperties('output', fieldTypeName);
         }
     }
     
@@ -335,9 +317,12 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
     }
 
     /** Add group */
-    addGroup() {
+    addGroup(event?: MouseEvent) {
+        if (event) {
+            event.preventDefault();
+        }
         const fieldName = 'newGroup';
-        const control = this.fieldForm.get(fieldName);
+        const control = this.secondForm.get(fieldName);
         if (!control || !control.valid || !control.value) {
             return false;
         }
@@ -356,11 +341,11 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
 
     /** Delete group */
     deleteGroup() {
-        const currentGroupName = this.fieldForm.get('group').value;
+        const currentGroupName = this.secondForm.get('group').value;
         let index = findIndex(this.model.fields, {group: currentGroupName});
         this.errorFieldMessage = '';
         if (index > -1) {
-            this.errorFieldMessage = 'You can\'t delete a group because it is not empty.';
+            this.errorFieldMessage = this.getLangString('YOU_CANT_DELETE_NOTEMPTY_GROUP');
             return;
         }
         index = this.model.groups.indexOf(currentGroupName);
@@ -368,46 +353,40 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
             this.model.groups.splice(index, 1);
         }
     }
-
-    /**
-     * Edit field
-     * @param field
-     */
-    editField(field: ContentField) {
-        // this.toggleAccordion(this.accordion, 'accordion-content-type-fields');
+    
+    editField(field: ContentField, event?: MouseEvent) {
+        if (event) {
+            event.preventDefault();
+        }
+        this.toggleAccordion(this.accordion, 'accordion-content-type-fields');
         this.action = 'edit_field';
         this.fieldModel = cloneDeep(field);
         const newFormValue = {};
-        for (const key in this.fieldsFormOptions) {
-            if (!this.fieldsFormOptions.hasOwnProperty(key)) {
-                continue;
-            }
-            newFormValue[key] = field[key] || '';
-        }
-        this.fieldForm.setValue(newFormValue);
+        this.secondFormFields.forEach((opt) => {
+            newFormValue[opt.name] = field[opt.name] || '';
+        });
+        this.secondForm.setValue(newFormValue);
         this.currentFieldName = this.fieldModel.name;
         this.fld_submitted = false;
     }
-
-    /**
-     * Copy field
-     * @param field
-     */
-    copyField(field: ContentField) {
-        // this.toggleAccordion(this.accordion, 'accordion-content-type-fields');
+    
+    copyField(field: ContentField, event?: MouseEvent) {
+        if (event) {
+            event.preventDefault();
+        }
+        this.toggleAccordion(this.accordion, 'accordion-content-type-fields');
         this.action = 'add_field';
         this.fieldModel = cloneDeep(field);
         this.fieldModel.name = '';
-        this.fieldForm.setValue(this.fieldModel);
+        this.secondForm.setValue(this.fieldModel);
         this.currentFieldName = '';
         this.fld_submitted = false;
     }
-
-    /**
-     * Delete field
-     * @param field
-     */
-    deleteField(field: ContentField) {
+    
+    deleteField(field: ContentField, event?: MouseEvent) {
+        if (event) {
+            event.preventDefault();
+        }
         const index = findIndex( this.model.fields, {name: field.name} );
         if (index === -1 ) {
             this.errorMessage = 'Field not found.';
@@ -423,15 +402,18 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
         this.errorFieldMessage = '';
         this.fld_submitted = false;
         this.currentFieldName = '';
-        this.fieldForm.reset();
-        this.fieldModel = new ContentField(0, '', '', '', '', {}, '', {}, '', false, false, false);
+        this.secondForm.reset();
+        this.fieldModel = new ContentField(0, '', '', '', '', {}, '', {}, '');
     }
 
     /** Cancel edit field */
-    editFieldCancel() {
-        // this.toggleAccordion(this.accordion, 'accordion-content-type-fields', true);
-        // this.resetFieldForm();
-        // this.onValueChanged('fieldForm', 'fld_');
+    editFieldCancel(event?: MouseEvent) {
+        if (event) {
+            event.preventDefault();
+        }
+        this.toggleAccordion(this.accordion, 'accordion-content-type-fields', true);
+        this.resetFieldForm();
+        this.onValueChanged('secondForm', this.secondFormErrors);
     }
 
     /** Change field order index */
@@ -448,33 +430,39 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
     }
 
     /** Submit field */
-    submitField() {
-        // this.toggleAccordion(this.accordion, 'accordion-content-type-fields', true);
+    submitField(event?: MouseEvent) {
+        if (event) {
+            event.preventDefault();
+        }
+        console.log('submitField', this.secondForm, this.secondForm.value);
+        
+        this.toggleAccordion(this.accordion, 'accordion-content-type-fields', true);
         this.fld_submitted = true;
-        if (!this.fieldForm.valid) {
-            // this.onValueChanged('fieldForm', 'fld_');
+        if (!this.secondForm.valid) {
+            this.formGroupMarkTouched(this.secondForm);
+            this.onValueChanged('secondForm', this.secondFormErrors);
             this.fld_submitted = false;
             return;
         }
-        const data = cloneDeep(this.fieldModel);
-        data.inputProperties = extend({}, this.fieldModel.inputProperties);
-        data.outputProperties = extend({}, this.fieldModel.outputProperties);
-
-        let index = findIndex(this.model.fields, {name: data.name});
-        if (index > -1 && this.currentFieldName !== data.name) {
-            this.errorMessage = 'A field named "' + data.name + '" already exists.';
-            return;
-        }
-
-        if (this.action === 'add_field') {
-            this.model.fields.push(data);
-        } else if (this.action === 'edit_field') {
-            index = findIndex(this.model.fields, {name: this.currentFieldName});
-            if (index > -1) {
-                this.model.fields[index] = data;
-            }
-        }
-        this.resetFieldForm();
+        // const data = cloneDeep(this.fieldModel);
+        // data.inputProperties = extend({}, this.fieldModel.inputProperties);
+        // data.outputProperties = extend({}, this.fieldModel.outputProperties);
+        //
+        // let index = findIndex(this.model.fields, {name: data.name});
+        // if (index > -1 && this.currentFieldName !== data.name) {
+        //     this.errorMessage = 'A field named "' + data.name + '" already exists.';
+        //     return;
+        // }
+        //
+        // if (this.action === 'add_field') {
+        //     this.model.fields.push(data);
+        // } else if (this.action === 'edit_field') {
+        //     index = findIndex(this.model.fields, {name: this.currentFieldName});
+        //     if (index > -1) {
+        //         this.model.fields[index] = data;
+        //     }
+        // }
+        // this.resetFieldForm();
     }
 
     getFieldTypeProperty(inputType: string|null, propertyName: string): string|null {

@@ -179,6 +179,7 @@
 	"SHOW_IN_FILTER": "Show in filter",
 	"SHOW_IN_LIST": "Show in list",
 	"SHOW_IN_TABLE": "Show in table",
+    "SHOW_ON_PAGE": "Show on page",
 	"SKIP": "Skip",
 	"SORT_FIELDS": "Sort fields",
 	"SORT_FIELDS_LIST": "Sort fields in the list",
@@ -215,6 +216,7 @@
 	"YOU_SURE_YOU_WANT_DELETE_FOLDER": "Are you sure you want to delete the folder?",
 	"YOU_SURE_YOU_WANT_DELETE_NAME": "Are you sure you want to remove \"{{name}}\"?",
 	"YOU_SURE_YOU_WANT_DELETE_SELECTED": "Are you sure you want to delete all selected items?",
+    "YOU_CANT_DELETE_NOTEMPTY_GROUP": "You can't delete a group because it is not empty.",
 	"admin_email": "Admin email",
 	"app": {
 		"admin_email": "Admin email",

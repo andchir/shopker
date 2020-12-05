@@ -36,9 +36,10 @@ export class ContentField {
         public outputType: string,
         public outputProperties: {[key: string]: string|number},
         public group: string,
-        public required: boolean,
-        public isFilter: boolean,
-        public showInTable: boolean,
+        public required?: boolean,
+        public isFilter?: boolean,
+        public showInTable?: boolean,
+        public showOnPage?: boolean,
         public showInList?: boolean,
         public options?: {}[],
         public inputTypeMain?: string,
@@ -50,6 +51,24 @@ export class ContentField {
         }
         if (typeof this.listOrder === 'undefined') {
             this.listOrder = 0;
+        }
+        if (typeof this.required === 'undefined') {
+            this.required = false;
+        }
+        if (typeof this.isFilter === 'undefined') {
+            this.isFilter = false;
+        }
+        if (typeof this.showInTable === 'undefined') {
+            this.showInTable = false;
+        }
+        if (typeof this.showOnPage === 'undefined') {
+            this.showOnPage = false;
+        }
+        if (typeof this.showInList === 'undefined') {
+            this.showInList = false;
+        }
+        if (typeof this.options === 'undefined') {
+            this.options = [];
         }
     }
 }

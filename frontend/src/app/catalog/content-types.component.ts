@@ -548,6 +548,7 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
         }
         const data = this.form.value as ContentType;
         data.id = this.model.id || 0;
+        data.groups = this.model.groups;
         data.fields = this.model.fields;
         return data;
     }

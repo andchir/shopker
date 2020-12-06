@@ -183,11 +183,11 @@
 
                     <div class="form-group row form-group-message">
                         <div class="col-md-5">
-                            <label for="field_fieldTitle">{{'TITLE' | translate}}</label>
+                            <label for="field_fieldTitle{{ uniqueId }}">{{'TITLE' | translate}}</label>
                         </div>
                         <div class="col-md-7">
                             <input type="text" class="form-control form-control-sm"
-                                   id="field_fieldTitle"
+                                   id="field_fieldTitle{{ uniqueId }}"
                                    name="field_title"
                                    formControlName="title"
                                    [ngClass]="{'is-invalid': secondForm.controls.title.touched && !secondForm.controls.title.valid}">
@@ -197,13 +197,13 @@
 
                     <div class="form-group row form-group-message">
                         <div class="col-md-5">
-                            <label for="field_fieldName">{{'SYSTEM_NAME' | translate}}</label>
+                            <label for="field_fieldName{{ uniqueId }}">{{'SYSTEM_NAME' | translate}}</label>
                         </div>
                         <div class="col-md-7">
 
                             <div class="input-group" [ngClass]="{'is-invalid': secondForm.controls.name.touched && !secondForm.controls.name.valid}">
                                 <input type="text" class="form-control form-control-sm"
-                                       id="field_fieldName"
+                                       id="field_fieldName{{ uniqueId }}"
                                        name="field_name"
                                        formControlName="name"
                                        [ngClass]="{'is-invalid': secondForm.controls.name.touched && !secondForm.controls.name.valid}">
@@ -220,11 +220,11 @@
 
                     <div class="form-group row">
                         <div class="col-md-5">
-                            <label for="field_fieldDescription">{{'DESCRIPTION' | translate}}</label>
+                            <label for="field_fieldDescription{{ uniqueId }}">{{'DESCRIPTION' | translate}}</label>
                         </div>
                         <div class="col-md-7">
                             <textarea type="text" class="form-control form-control-sm" rows="3"
-                                      id="field_fieldDescription"
+                                      id="field_fieldDescription{{ uniqueId }}"
                                       name="field_description"
                                       formControlName="description"
                                       [ngClass]="{'is-invalid': secondForm.controls.description.touched && !secondForm.controls.description.valid}"></textarea>
@@ -233,13 +233,13 @@
 
                     <div class="form-group row form-group-message">
                         <div class="col-md-5">
-                            <label for="field_fieldInputType">{{'INPUT_TYPE' | translate}}</label>
+                            <label for="field_fieldInputType{{ uniqueId }}">{{'INPUT_TYPE' | translate}}</label>
                         </div>
                         <div class="col-md-7">
 
                             <div class="input-group" [ngClass]="{'is-invalid': secondForm.controls.inputType.touched && !secondForm.controls.inputType.valid}">
                                 <select class="custom-select custom-select-sm"
-                                        id="field_fieldInputType"
+                                        id="field_fieldInputType{{ uniqueId }}"
                                         name="field_inputType"
                                         formControlName="inputType"
                                         (change)="selectFieldTypeProperties('input')"
@@ -267,11 +267,11 @@
                             </div>
                             <div class="row form-group" *ngFor="let property of fieldTypeProperties.input">
                                 <div class="col-md-5">
-                                    <label for="parameterInputField{{ property.name }}">{{property.title}}</label>
+                                    <label for="parameterInputField{{ property.name }}{{ uniqueId }}">{{property.title}}</label>
                                 </div>
                                 <div class="col-md-7">
                                     <input type="text" class="form-control form-control-sm"
-                                           id="parameterInputField{{ property.name }}"
+                                           id="parameterInputField{{ property.name }}{{ uniqueId }}"
                                            [(ngModel)]="fieldModel.inputProperties[property.name]"
                                            [ngModelOptions]="{standalone: true}">
                                 </div>
@@ -286,13 +286,13 @@
 
                     <div class="form-group row form-group-message">
                         <div class="col-md-5">
-                            <label for="field_fieldOutputType">{{'OUTPUT_TYPE' | translate}}</label>
+                            <label for="field_fieldOutputType{{ uniqueId }}">{{'OUTPUT_TYPE' | translate}}</label>
                         </div>
                         <div class="col-md-7">
 
                             <div class="input-group" [ngClass]="{'is-invalid': secondForm.controls.outputType.touched && !secondForm.controls.outputType.valid}">
                                 <select class="custom-select custom-select-sm"
-                                        id="field_fieldOutputType"
+                                        id="field_fieldOutputType{{ uniqueId }}"
                                         name="field_outputType"
                                         formControlName="outputType"
                                         (change)="selectFieldTypeProperties('output')"
@@ -319,11 +319,11 @@
                         </div>
                         <div class="row form-group" *ngFor="let property of fieldTypeProperties.output">
                             <div class="col-md-5">
-                                <label for="parameterOutputField{{ property.name }}">{{property.title}}</label>
+                                <label for="parameterOutputField{{ property.name }}{{ uniqueId }}">{{property.title}}</label>
                             </div>
                             <div class="col-md-7">
                                 <input type="text" class="form-control form-control-sm"
-                                       id="parameterOutputField{{ property.name }}"
+                                       id="parameterOutputField{{ property.name }}{{ uniqueId }}"
                                        [(ngModel)]="fieldModel.outputProperties[property.name]"
                                        [ngModelOptions]="{standalone: true}">
                             </div>

@@ -10,6 +10,7 @@ use Doctrine\Persistence\ObjectRepository;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -136,6 +137,7 @@ class CategoryController extends StorageControllerAbstract
         }
 
         $oldImageData = $item->getId() ? $item->getImage() : null;
+        $oldName = $item->getName();
 
         $item
             ->setTitle($data['title'])
@@ -155,7 +157,7 @@ class CategoryController extends StorageControllerAbstract
         $this->dm->flush();
 
         // Dispatch event
-        $event = new CategoryUpdatedEvent($this->dm, $item, $previousParentId);
+        $event = new CategoryUpdatedEvent($this->dm, $item, $previousParentId, $oldName);
         $item = $this->eventDispatcher->dispatch($event, CategoryUpdatedEvent::NAME)->getCategory();
 
         // Delete unused files

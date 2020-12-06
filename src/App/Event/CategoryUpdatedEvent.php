@@ -17,12 +17,15 @@ class CategoryUpdatedEvent extends Event
     protected $category;
     /** @var int */
     protected $previousParentId;
+    /** @var string */
+    protected $previousName;
 
-    public function __construct($dm, Category $category = null, $previousParentId = 0)
+    public function __construct($dm, Category $category = null, $previousParentId = 0, $previousName = '')
     {
         $this->category = $category;
         $this->dm = $dm;
         $this->previousParentId = $previousParentId;
+        $this->previousName = $previousName;
     }
 
     public function getCategory()
@@ -38,5 +41,10 @@ class CategoryUpdatedEvent extends Event
     public function getPreviousParentId()
     {
         return $this->previousParentId;
+    }
+    
+    public function getPreviousName()
+    {
+        return $this->previousName;
     }
 }

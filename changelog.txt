@@ -1,8 +1,10 @@
 4.2.6
 - Angular updated to version 11 (TypeScript 4.0).
+- Symfony updated to version 5.1.
 - The standard slider tooltips now merge when close.
 - Improved the responsiveness of the layout in the admin panel.
 - Search products by title in the admin area.
+- When the system name of a category is changed, URLs of child categories are automatically updated.
 
 4.2.5
 - Updated the default template style.

@@ -107,18 +107,21 @@ class CategoryRepository extends BaseRepository
         }
         return $parents;
     }
-
+    
     /**
      * @param Category $category
      * @param array $children
+     * @param bool $recursive
      * @return array
      */
-    public function getChildren(Category $category, $children = [])
+    public function getChildren(Category $category, $children = [], $recursive = true)
     {
         $childs = $this->findBy(['parentId' => $category->getId()]);
         foreach ($childs as $child) {
             $children[] = $child;
-            $children = $this->getChildren($child, $children);
+            if ($recursive) {
+                $children = $this->getChildren($child, $children);
+            }
         }
         return $children;
     }

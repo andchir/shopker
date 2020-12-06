@@ -359,7 +359,7 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
         this.fieldModel = cloneDeep(field);
         const newFormValue = {};
         this.secondFormFields.forEach((opt) => {
-            newFormValue[opt.name] = field[opt.name] || '';
+            newFormValue[opt.name] = field[opt.name] || null;
         });
         this.secondForm.setValue(newFormValue);
         this.selectFieldTypeProperties('input');

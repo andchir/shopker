@@ -59,10 +59,10 @@ export class ContentField {
             this.isFilter = false;
         }
         if (typeof this.showInTable === 'undefined') {
-            this.showInTable = false;
+            this.showInTable = true;
         }
         if (typeof this.showOnPage === 'undefined') {
-            this.showOnPage = false;
+            this.showOnPage = true;
         }
         if (typeof this.showInList === 'undefined') {
             this.showInList = false;

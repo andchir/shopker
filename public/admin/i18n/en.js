@@ -94,6 +94,7 @@ var APP_LANG = {
     "FULL_NAME": "Full name",
     "GENERATE": "Generate",
     "GROUP": "Group",
+    "GROUP_ALREADY_EXISTS": "The group already exists",
     "ID": "ID",
     "IMAGE": "Image",
     "IMAGE_NUMBER": "Number of the image",

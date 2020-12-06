@@ -94,6 +94,7 @@ var APP_LANG = {
     "FULL_NAME": "Ф.И.О.",
     "GENERATE": "Генерировать",
     "GROUP": "Группа",
+    "GROUP_ALREADY_EXISTS": "Группа уже сществует",
     "ID": "ID",
     "IMAGE": "Изображение",
     "IMAGE_NUMBER": "Номер картинки",

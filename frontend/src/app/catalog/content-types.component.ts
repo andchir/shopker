@@ -5,13 +5,12 @@ import {
     NgbActiveModal,
     NgbModalRef,
     NgbPopover,
-    NgbTooltipConfig,
     NgbAccordion
 } from '@ng-bootstrap/ng-bootstrap';
 import {find, map, findIndex, cloneDeep, extend} from 'lodash';
 import {TranslateService} from '@ngx-translate/core';
+import {Observable} from 'rxjs';
 
-import {FormFieldInterface} from '../models/form-field.interface';
 import {ContentField} from './models/content_field.model';
 import {ContentType} from './models/content_type.model';
 import {FieldType} from './models/field-type.model';
@@ -24,7 +23,6 @@ import {SystemNameService} from '../services/system-name.service';
 import {CollectionsService} from './services/collections.service';
 import {FieldTypesService} from './services/field-types.service';
 import {FormFieldsErrors, FormFieldsOptions} from '../models/form-fields-options.interface';
-import {Observable} from "rxjs";
 
 @Component({
     selector: 'app-content-type-modal-content',
@@ -322,11 +320,13 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
         if (!control || !control.valid || !control.value) {
             return false;
         }
-        this.formErrors['fld_' + fieldName] = '';
+        this.errorFieldMessage = '';
+        this.secondFormErrors[fieldName] = '';
         const value = control.value;
         const index = this.model.groups.indexOf(value);
-        if ( index > -1 ) {
-            // this.formErrors['fld_' + fieldName] += this.validationMessages['fld_' + fieldName].exists;
+        if (index > -1) {
+            this.getControl(this.secondForm, null, fieldName).setErrors({exists: 'GROUP_ALREADY_EXISTS'});
+            this.secondFormErrors[fieldName] = this.getLangString('GROUP_ALREADY_EXISTS');
             return false;
         }
         this.model.groups.push(value);

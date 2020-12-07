@@ -259,7 +259,9 @@
                                 <span class="text-muted">({{field.name}})</span>
                                 <span class="text-danger" *ngIf="field.required">*</span>
                             </label>
-                            <full-calendar #fullCalendar [options]="fullCalendarOptions[field.name]"></full-calendar>
+                            <div class="min-height300 w-100">
+                                <p-fullCalendar #fullCalendar [options]="fullCalendarOptions[field.name]"></p-fullCalendar>
+                            </div>
 
                         </div>
                         <!-- /schedule -->

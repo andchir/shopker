@@ -13,16 +13,17 @@ import {TranslateService} from '@ngx-translate/core';
 import {TreeNode} from 'primeng/api';
 
 import {
-    FullCalendarComponent,
     CalendarOptions,
-    EventInput,
-    EventApi,
     DateSelectArg,
     EventClickArg,
     EventAddArg,
     EventChangeArg
 } from '@fullcalendar/angular';
 import ruLocale from '@fullcalendar/core/locales/ru';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import listPlugin from '@fullcalendar/list';
+import interactionPlugin from '@fullcalendar/interaction';
 
 import {ContentField} from './catalog/models/content_field.model';
 import {MultiValues} from './models/multivalues.model';
@@ -85,7 +86,6 @@ export class InputFieldRenderComponent implements OnInit {
     @Input() localeFieldsAllowed: string[] = [];
     @Input() isLocalizationActive: boolean;
     @Output() onAddTranslation = new EventEmitter<string>();
-    @ViewChild('fullCalendar') private fullCalendar: FullCalendarComponent;
     fieldsMultivalues: {[key: string]: MultiValues} = {};
     submitted = false;
     filesDirBaseUrl: string;
@@ -95,7 +95,6 @@ export class InputFieldRenderComponent implements OnInit {
     categoriesSelection: {[key: string]: any} = {};
     calendarLocale = calendarLocale;
     fullCalendarOptions: {[key: string]: CalendarOptions};
-    activeTabId = 0;
 
     constructor(
         private changeDetectionRef: ChangeDetectorRef,
@@ -207,6 +206,7 @@ export class InputFieldRenderComponent implements OnInit {
                     this.fullCalendarOptions = {};
                 }
                 this.fullCalendarOptions[field.name] = {
+                    plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin],
                     headerToolbar: {
                         left: 'prev,next today',
                         center: 'title',

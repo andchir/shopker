@@ -331,6 +331,7 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
         }
         this.model.groups.push(value);
         this.fieldModel.group = value;
+        this.getControl(this.secondForm, null, 'group').setValue(this.fieldModel.group);
         this.elementAddGroupBlock.nativeElement.style.display = 'none';
         return true;
     }

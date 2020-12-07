@@ -240,9 +240,6 @@
     "php-http/discovery": {
         "version": "1.7.4"
     },
-    "php-http/guzzle6-adapter": {
-        "version": "v2.0.1"
-    },
     "php-http/guzzle7-adapter": {
         "version": "0.1.1"
     },

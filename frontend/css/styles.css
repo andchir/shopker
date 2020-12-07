@@ -277,6 +277,7 @@ input.form-control[readonly] { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); curso
 body .ui-datepicker .ui-datepicker-header .ui-datepicker-title select { margin-left: 7px; }
 .fc .fc-list-event:hover td { background-color: #3491bf !important; }
 .p-datepicker-trigger .p-button-label { display: none; }
+.fc .fc-toolbar .fc-button { display: inline-block; font-size: 14px; }
 
 /* colorpicker */
 .ui-colorpicker-panel { background-color: #ddd; box-shadow: 1px 1px 10px rgba(0,0,0,0.5); }

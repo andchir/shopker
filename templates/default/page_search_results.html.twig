@@ -24,20 +24,21 @@
         {% if totalItems is defined and totalItems > 0 %}
             {% for item in itemsArr %}
                 {% set index = loop.index0 %}
-                <h3>{{ contentTypeArr[index].title }}</h3>
-                <p>
-                    {{ '%count% product found|%count% products found' | trans({'%count%': totalItemsArr[index]}) }}.
-                </p>
-    
-                {% for item in itemsArr[index] %}
-                    <div class="card card-body mb-3">
-                        <div class="catalog-list-item">
-                            <div class="catalog-list-item-inner">
-                                {{ renderOutputTypeArray(item, contentTypeArr[index].getFieldsForList(), '', {"currency": currency}) }}
+                {% if itemsArr[index] | length > 0 %}
+                    <h3>{{ contentTypeArr[index].title | default('') }}</h3>
+                    <p>
+                        {{ '%count% product found|%count% products found' | trans({'%count%': totalItemsArr[index]}) }}.
+                    </p>
+                    {% for item in itemsArr[index] %}
+                        <div class="card card-body mb-3">
+                            <div class="catalog-list-item">
+                                <div class="catalog-list-item-inner">
+                                    {{ renderOutputTypeArray(item, contentTypeArr[index].getFieldsForList(), '', {"currency": currency}) }}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                {% endfor %}
+                    {% endfor %}
+                {% endif %}
             {% endfor %}
 
             {% include 'nav/pagination.html.twig' %}

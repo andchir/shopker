@@ -64,11 +64,12 @@ class SearchController extends CatalogController
             $itemsArr[] = $items;
         }
     
-        $pagesOptions = UtilsService::getPagesOptions($queryOptions, max($totalArr), $catalogNavSettingsDefaults);
+        $totalItems = !empty($totalArr) ? max($totalArr) : 0;
+        $pagesOptions = UtilsService::getPagesOptions($queryOptions, $totalItems, $catalogNavSettingsDefaults);
 
         return $this->render('page_search_results.html.twig', [
             'currency' =>  $this->settingsService->getCurrency(),
-            'totalItems' => max($totalArr),
+            'totalItems' => $totalItems,
             'totalItemsArr' => $totalArr,
             'contentTypeArr' => $contentTypeArr,
             'itemsArr' => $itemsArr,
@@ -94,23 +95,29 @@ class SearchController extends CatalogController
         $contentType = $this->getContentTypeRepository()->findOneBy([
             'collection' => $collectionName
         ]);
-        if (!$contentType) {
-            throw new \Exception('Content type not found.');
-        }
-    
         $collection = $this->catalogService->getCollection($collectionName);
+        if (!$collection) {
+            throw new \Exception('Collection not found.');
+        }
     
         $criteria = [
             'isActive' => true,
             '$text' => [ '$search' => $searchWord ]
         ];
     
-        $total = $collection->countDocuments($criteria);
+        try {
+            $total = $collection->countDocuments($criteria);
+        } catch (\Exception $e) {
+            return [[], 0, $contentType];
+        }
+        
         $skip = !empty($queryOptions)
             ? ($queryOptions['page'] - 1) * $queryOptions['limit']
             : 0;
     
-        $aggregateFields = $contentType->getAggregationFields($locale, $localeDefault, true);
+        $aggregateFields = $contentType
+            ? $contentType->getAggregationFields($locale, $localeDefault, true)
+            : [];
         $aggregateFields['score'] = ['$meta' => 'textScore'];
     
         $pipeline = $this->catalogService->createAggregatePipeline(

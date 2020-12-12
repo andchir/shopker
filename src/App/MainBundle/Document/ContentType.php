@@ -431,6 +431,34 @@ class ContentType
             return $field['name'];
         }, $fields);
     }
+    
+    /**
+     * @param string $showFlagName
+     * @return array
+     */
+    public function getFieldsByFlag($showFlagName = 'showInList')
+    {
+        $fields = array_filter($this->getFields(), function($field) use ($showFlagName) {
+            return !empty($field[$showFlagName]);
+        });
+        return array_merge($fields);
+    }
+    
+    /**
+     * @return array
+     */
+    public function getFieldsForList()
+    {
+        return $this->getFieldsByFlag('showInList');
+    }
+    
+    /**
+     * @return array
+     */
+    public function getFieldsForPage()
+    {
+        return $this->getFieldsByFlag('showOnPage');
+    }
 
     /**
      * @param array $data

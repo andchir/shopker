@@ -140,6 +140,7 @@ class ContentTypeController extends StorageControllerAbstract
             $this->dm->flush();
         }
         
+        $this->contentTypeUpdateTextIndex($contentType);
         $this->contentTypeUpdateFilters($contentType);
 
         return $this->json($contentType->toArray());
@@ -217,6 +218,36 @@ class ContentTypeController extends StorageControllerAbstract
             ];
         }
         return ['success' => true];
+    }
+    
+    /**
+     * @param ContentType $contentType
+     * @return bool
+     */
+    public function contentTypeUpdateTextIndex(ContentType $contentType)
+    {
+        $fields = $contentType->getFields();
+        $fields = array_filter($fields, function($field) {
+            return in_array($field['inputType'], ['text', 'textarea', 'rich_text']);
+        });
+        
+        $collection = $this->catalogService->getCollection($contentType->getCollection());
+        if (!$collection) {
+            return false;
+        }
+    
+        $indexInfo = $collection->listIndexes();
+        if (iterator_count($indexInfo) > 0) {
+            $collection->dropIndexes();
+        }
+        $fieldsNames = array_map(function($field) {
+            return $field['name'];
+        }, $fields);
+        $collection->createIndex(array_fill_keys($fieldsNames, 'text'), [
+            'default_language' => 'russian'
+        ]);
+        
+        return true;
     }
 
     /**

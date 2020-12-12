@@ -10,10 +10,6 @@ import {FileRegularInterface} from './models/file-regular.interface';
 import {AppSettings} from '../services/app-settings.service';
 
 declare const ace: any;
-import 'ace-builds/src-min-noconflict/ace';
-import 'ace-builds/src-min-noconflict/theme-kuroir';
-import 'ace-builds/src-min-noconflict/ext-modelist';
-import '../../ace-builds/webpack-resolver';
 
 @Component({
     selector: 'app-modal-template',
@@ -28,8 +24,8 @@ export class ModalTemplateEditComponent implements OnInit, AfterViewInit, OnDest
     @Input() isItemCopy: boolean;
     @Input() isEditMode: boolean;
     @Input() modalId = '';
-    @ViewChild('editor', { static: true }) editor: ElementRef;
 
+    editor: any;
     model: FileRegularInterface = {} as FileRegularInterface;
     errorMessage = '';
     submitted = false;
@@ -73,20 +69,9 @@ export class ModalTemplateEditComponent implements OnInit, AfterViewInit, OnDest
             this.model.type = 'template';
         }
     }
-
+    
     ngAfterViewInit(): void {
-        const modelist = ace.require('ace/ext/modelist');
-        const editorMode = this.isEditMode
-            ? modelist.getModeForPath(this.model.path + '/' + this.model.name).mode
-            : 'ace/mode/twig';
-
-        ace.edit(`editor-${this.modalId}`, {
-            mode: editorMode,
-            theme: 'ace/theme/kuroir',
-            maxLines: 30,
-            minLines: 15,
-            fontSize: 18
-        });
+        this.editorInit();
     }
 
     getContent(): void {
@@ -104,8 +89,10 @@ export class ModalTemplateEditComponent implements OnInit, AfterViewInit, OnDest
             .subscribe({
                 next: (res) => {
                     if (res['content']) {
-                        this.model.content = res['content'];
-                        ace.edit(`editor-${this.modalId}`).setValue(this.model.content, -1);
+                        setTimeout(() => {
+                            this.model.content = res['content'];
+                            this.editor.setValue(this.model.content, -1);
+                        }, 0);
                     }
                     this.loading = false;
                 },
@@ -116,6 +103,24 @@ export class ModalTemplateEditComponent implements OnInit, AfterViewInit, OnDest
                     this.loading = false;
                 }
             });
+    }
+    
+    editorInit(): void {
+        const modelist = ace.require('ace/ext/modelist');
+        const editorMode = this.isEditMode
+            ? modelist.getModeForPath(this.model.path + '/' + this.model.name).mode
+            : 'ace/mode/twig';
+        
+        ace.config.setModuleUrl('ace/mode/javascript_worker', '../js/worker-javascript.js');
+        ace.config.setModuleUrl('ace/mode/css_worker', '../js/worker-css.js');
+        
+        this.editor = ace.edit(`editor-${this.modalId}`, {
+            mode: editorMode,
+            theme: 'ace/theme/kuroir',
+            maxLines: 30,
+            minLines: 15,
+            fontSize: 18
+        });
     }
 
     closeModal(event?: MouseEvent) {
@@ -152,7 +157,7 @@ export class ModalTemplateEditComponent implements OnInit, AfterViewInit, OnDest
         this.submitted = true;
         this.loading = true;
 
-        this.model.content = ace.edit(`editor-${this.modalId}`).getValue();
+        this.model.content = this.editor.getValue();
 
         this.dataService.saveContent(this.model)
             .pipe(takeUntil(this.destroyed$))

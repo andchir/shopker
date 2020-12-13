@@ -315,7 +315,7 @@ class TemplatesController extends StorageControllerAbstract
             default:
                 $filePath = $templatesDirPath . DIRECTORY_SEPARATOR . $filePath;
         }
-        $output = realpath($filePath);
+        $output = $filePath;
         return strpos($output, $rootPath) !== false ? $output : false;
     }
 

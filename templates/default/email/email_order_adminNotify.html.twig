@@ -136,26 +136,44 @@
         {% endfor %}
         </tbody>
         <tfoot>
-        <tr>
-            <td colspan="2">
-                {{ 'Delivery' | trans }}
-            </td>
-            <td>
-                {{ order.deliveryPrice | price }}
-            </td>
-            <td colspan="2"></td>
-        </tr>
-        <tr>
-            <td colspan="4" class="text-right">
-                {{ 'Price total' | trans }}:
-            </td>
-            <td>
-                <b>
-                    {{ order.price | price }}
-                    {{ order.currency }}
-                </b>
-            </td>
-        </tr>
+            <tr>
+                <td colspan="2">
+                    {{ 'Delivery' | trans }}
+                </td>
+                <td>
+                    {{ order.deliveryPrice | price }}
+                </td>
+                <td colspan="2"></td>
+            </tr>
+            {% if order.discountPercent is not empty or order.discount is not empty %}
+                <tr>
+                    <td colspan="2">
+                        <div class="text-danger">
+                            {{ 'Discount' | trans }}:
+                        </div>
+                    </td>
+                    <td class="text-danger">
+                        {% if order.discountPercent is not empty %}
+                            {{ order.discountPercent }}%
+                        {% else %}
+                            <span class="shk-price">{{ order.discount }}</span>
+                            <span class="shk-currency">{{ order.currency }}</span>
+                        {% endif %}
+                    </td>
+                    <td colspan="2"></td>
+                </tr>
+            {% endif %}
+            <tr>
+                <td colspan="4" class="text-right">
+                    {{ 'Price total' | trans }}:
+                </td>
+                <td>
+                    <b>
+                        {{ order.price | price }}
+                        {{ order.currency }}
+                    </b>
+                </td>
+            </tr>
         </tfoot>
     </table>
 

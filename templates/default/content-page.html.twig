@@ -55,7 +55,7 @@
                         <input type="hidden" name="category_id" value="{{ currentPage.parentId }}">
                         <input type="hidden" name="type" value="shop">
     
-                        {{ renderOutputTypeArray(currentPage, contentType.getFieldsForPage(['title', 'image', 'price', 'rating']), 'page_', {"currency": currency}) }}
+                        {{ renderOutputTypeArray(currentPage, contentType.getFieldsForPage(['title', 'image', 'price', 'rating', 'tags']), 'page_', {"currency": currency}) }}
 
                         {% if currentPage.price > 0 %}
                             <div class="my-3">

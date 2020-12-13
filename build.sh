@@ -4,14 +4,14 @@ DIR="$(pwd)"
 OUTPUT_DIRNAME="build"
 OUTPUT_FILENAME="shopker-latest.zip"
 
-[ -d "$DIR"/"$OUTPUT_DIRNAME" ] || mkdir "$DIR"/"$OUTPUT_DIRNAME"
+[ -d "${DIR:?}"/"${OUTPUT_DIRNAME:?}" ] || mkdir "${DIR:?}"/"${OUTPUT_DIRNAME:?}"
 
-if [ -e "$DIR"/"$OUTPUT_FILENAME" ]
+if [ -e "${DIR:?}"/"${OUTPUT_FILENAME:?}" ]
 then
-    rm "$DIR"/"$OUTPUT_FILENAME"
+    rm "${DIR:?}"/"${OUTPUT_FILENAME:?}"
 fi
 
-rm -rfv "$DIR"/"$OUTPUT_DIRNAME"/*
+rm -rfv "${DIR:?}"/"${OUTPUT_DIRNAME:?}"/*
 
 cp "$DIR"/composer.json "$DIR"/"$OUTPUT_DIRNAME"
 cp "$DIR"/changelog.txt "$DIR"/"$OUTPUT_DIRNAME"
@@ -72,5 +72,5 @@ rm -rf "$DIR"/"$OUTPUT_DIRNAME"/vendor/andchir/shopkeeper4-comments/.git
 rm -rf "$DIR"/"$OUTPUT_DIRNAME"/vendor/andchir/twig-visual/.git
 rm -rf "$DIR"/"$OUTPUT_DIRNAME"/vendor/andchir/twig-visual/src/Resources/src/node_modules
 
-cd "$DIR"/"$OUTPUT_DIRNAME"; zip -r -9 ../"$OUTPUT_FILENAME" .
-rm -rfv "$DIR"/"$OUTPUT_DIRNAME"/*
+cd "${DIR:?}"/"${OUTPUT_DIRNAME:?}" || exit; zip -r -9 ../"${OUTPUT_FILENAME:?}" .
+rm -rfv "${DIR:?}"/"${OUTPUT_DIRNAME:?}"/*

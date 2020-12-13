@@ -44,7 +44,8 @@ export class ContentField {
         public options?: {}[],
         public inputTypeMain?: string,
         public filterOrder?: number,
-        public listOrder?: number
+        public listOrder?: number,
+        public pageOrder?: number
     ) {
         if (typeof this.filterOrder === 'undefined') {
             this.filterOrder = 0;

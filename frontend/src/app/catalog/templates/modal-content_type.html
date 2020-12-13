@@ -491,19 +491,15 @@
                 <div #blockFieldList>
                     <div>
                         <div class="text-right mb-2" [hidden]="model.fields.length < 2">
-                            <button type="button" class="btn btn-sm btn-secondary" (click)="sortingInit('', '', $event)">
+                            <select class="custom-select custom-select-sm d-block d-md-inline-block width-100 width-md-auto mb-2 mb-md-0" #sortTypeSelect>
+                                <option value="">{{'SORT_FIELDS' | translate}}</option>
+                                <option value="listOrder-showInList">{{'SORT_FIELDS_LIST' | translate}}</option>
+                                <option value="pageOrder-showOnPage">{{'SORT_FIELDS_PAGE' | translate}}</option>
+                                <option value="filterOrder-isFilter">{{'SORT_FILTERS' | translate}}</option>
+                            </select>
+                            <button type="button" class="btn btn-sm btn-secondary d-block d-md-inline-block width-100 width-md-auto ml-md-2" (click)="sortingStart(sortTypeSelect.value, $event)">
                                 <i class="icon-shuffle"></i>
-                                {{'SORT_FIELDS' | translate}}
-                            </button>
-                            &nbsp;
-                            <button type="button" class="btn btn-sm btn-secondary" (click)="sortingInit('listOrder', 'showInList', $event)">
-                                <i class="icon-shuffle"></i>
-                                {{'SORT_FIELDS_LIST' | translate}}
-                            </button>
-                            &nbsp;
-                            <button type="button" class="btn btn-sm btn-secondary" (click)="sortingInit('filterOrder', 'isFilter', $event)">
-                                <i class="icon-shuffle"></i>
-                                {{'SORT_FILTERS' | translate}}
+                                {{'SORT' | translate}}
                             </button>
                         </div>
 

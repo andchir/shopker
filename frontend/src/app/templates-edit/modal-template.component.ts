@@ -111,8 +111,8 @@ export class ModalTemplateEditComponent implements OnInit, AfterViewInit, OnDest
             ? modelist.getModeForPath(this.model.path + '/' + this.model.name).mode
             : 'ace/mode/twig';
         
-        ace.config.setModuleUrl('ace/mode/javascript_worker', '../js/worker-javascript.js');
-        ace.config.setModuleUrl('ace/mode/css_worker', '../js/worker-css.js');
+        ace.config.setModuleUrl('ace/mode/javascript_worker', '../js/ace/worker-javascript.js');
+        ace.config.setModuleUrl('ace/mode/css_worker', '../js/ace/worker-css.js');
         
         this.editor = ace.edit(`editor-${this.modalId}`, {
             mode: editorMode,

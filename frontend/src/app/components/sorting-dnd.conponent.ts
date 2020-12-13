@@ -18,7 +18,7 @@ export class SortingComponent implements OnDestroy {
     @Output() itemsChange = new EventEmitter<any[]>();
     @Output() save = new EventEmitter<any[]>();
     @Output() cancel = new EventEmitter();
-    BAG = "DRAGULA_EVENTS";
+    BAG = 'DRAGULA_EVENTS';
     subs = new Subscription();
 
     constructor(

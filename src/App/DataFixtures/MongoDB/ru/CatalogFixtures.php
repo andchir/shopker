@@ -85,6 +85,7 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface, Fixtur
                 'required' => true,
                 'showInTable' => true,
                 'showInList' => true,
+                'showOnPage' => true,
                 'isFilter' => false,
                 'listOrder' => 0
             ],
@@ -106,6 +107,7 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface, Fixtur
                 'required' => true,
                 'showInTable' => true,
                 'showInList' => false,
+                'showOnPage' => false,
                 'isFilter' => false
             ],
             [
@@ -129,6 +131,7 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface, Fixtur
                 'required' => false,
                 'showInTable' => false,
                 'showInList' => true,
+                'showOnPage' => true,
                 'isFilter' => false,
                 'listOrder' => 2
             ],
@@ -151,6 +154,7 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface, Fixtur
                 'required' => false,
                 'showInTable' => false,
                 'showInList' => false,
+                'showOnPage' => true,
                 'isFilter' => false
             ],
             [
@@ -177,6 +181,7 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface, Fixtur
                 'required' => false,
                 'showInTable' => true,
                 'showInList' => true,
+                'showOnPage' => true,
                 'isFilter' => true,
                 'filterOrder' => 0,
                 'listOrder' => 3
@@ -204,6 +209,7 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface, Fixtur
                 'required' => false,
                 'showInTable' => false,
                 'showInList' => false,
+                'showOnPage' => false,
                 'isFilter' => false,
                 'filterOrder' => 0,
                 'listOrder' => 3
@@ -225,6 +231,7 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface, Fixtur
                 'required' => false,
                 'showInTable' => false,
                 'showInList' => false,
+                'showOnPage' => true,
                 'isFilter' => true,
                 'filterOrder' => 1
             ],
@@ -245,6 +252,7 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface, Fixtur
                 'required' => false,
                 'showInTable' => false,
                 'showInList' => false,
+                'showOnPage' => true,
                 'isFilter' => true,
                 'filterOrder' => 2
             ],
@@ -265,6 +273,7 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface, Fixtur
                 'required' => false,
                 'showInTable' => false,
                 'showInList' => false,
+                'showOnPage' => false,
                 'isFilter' => true,
                 'filterOrder' => 3
             ],
@@ -285,6 +294,7 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface, Fixtur
                 'required' => false,
                 'showInTable' => false,
                 'showInList' => false,
+                'showOnPage' => true,
                 'isFilter' => true,
                 'filterOrder' => 4
             ],
@@ -307,6 +317,7 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface, Fixtur
                 'required' => false,
                 'showInTable' => false,
                 'showInList' => true,
+                'showOnPage' => true,
                 'isFilter' => true,
                 'filterOrder' => 5,
                 'listOrder' => 1
@@ -328,6 +339,7 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface, Fixtur
                 'required' => false,
                 'showInTable' => false,
                 'showInList' => false,
+                'showOnPage' => true,
                 'isFilter' => false,
                 'filterOrder' => 5
             ],
@@ -355,6 +367,7 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface, Fixtur
                 'required' => false,
                 'showInTable' => false,
                 'showInList' => false,
+                'showOnPage' => false,
                 'isFilter' => false,
                 'filterOrder' => 0,
                 'listOrder' => 6
@@ -383,6 +396,7 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface, Fixtur
                 'required' => false,
                 'showInTable' => false,
                 'showInList' => true,
+                'showOnPage' => true,
                 'isFilter' => false,
                 'filterOrder' => 0,
                 'listOrder' => 7
@@ -407,6 +421,7 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface, Fixtur
                 'required' => false,
                 'showInTable' => false,
                 'showInList' => false,
+                'showOnPage' => true,
                 'isFilter' => false
             ],
             [
@@ -427,6 +442,7 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface, Fixtur
                 'required' => false,
                 'showInTable' => false,
                 'showInList' => false,
+                'showOnPage' => false,
                 'isFilter' => false
             ]
         ];

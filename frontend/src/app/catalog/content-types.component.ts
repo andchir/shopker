@@ -501,6 +501,31 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
         });
         this.blockFieldList.nativeElement.style.display = 'none';
     }
+    
+    sortingStart(sortTypeValue: string, event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.errorMessage = '';
+        const sortTypeValueArr = sortTypeValue.split('-');
+        this.sortingfieldName = sortTypeValueArr[0];
+        const filteredData = sortTypeValueArr[1]
+            ? this.model.fields.filter((field) => {
+                return field[sortTypeValueArr[1]];
+            })
+            : this.model.fields;
+        filteredData.sort(function(a, b) {
+            return a[sortTypeValueArr[0]] - b[sortTypeValueArr[0]]
+        });
+        if (filteredData.length === 0) {
+            this.errorMessage = this.getLangString('SORT_FIELDS_EMPTY');
+            return;
+        }
+        this.sortData = filteredData.map((data) => {
+            return {name: data.name, title: data.title};
+        });
+        this.blockFieldList.nativeElement.style.display = 'none';
+    }
 
     sortingApply(items?: any): void {
         if (this.sortingfieldName) {

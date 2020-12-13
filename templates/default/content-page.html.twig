@@ -54,10 +54,8 @@
                         <input type="hidden" name="item_id" value="{{ currentPage.id }}">
                         <input type="hidden" name="category_id" value="{{ currentPage.parentId }}">
                         <input type="hidden" name="type" value="shop">
-
-                        {{ renderOutputTypeChunk(currentPage, fields, 'description') }}
-                        {{ renderOutputTypeChunk(currentPage, fields, 'parameters', 'page_') }}
-                        {{ renderOutputTypeChunk(currentPage, fields, 'file') }}
+    
+                        {{ renderOutputTypeArray(currentPage, contentType.getFieldsForPage(['title', 'image', 'price', 'rating']), 'page_', {"currency": currency}) }}
 
                         {% if currentPage.price > 0 %}
                             <div class="my-3">

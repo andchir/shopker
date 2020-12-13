@@ -35,6 +35,8 @@ services:
 #        resource: '../src/App/DataFixtures'
 #        tags: ['doctrine.fixture.odm.mongodb']
 
+    Symfony\Component\DependencyInjection\ContainerInterface: '@service_container'
+
     App\Form\DataTransformer\SettingToStringTransformer:
         public: true
         arguments: ['@doctrine_mongodb.odm.document_manager']

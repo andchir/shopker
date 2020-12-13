@@ -434,30 +434,53 @@ class ContentType
     
     /**
      * @param string $showFlagName
+     * @param string $sortField
+     * @param array $filterFields
      * @return array
      */
-    public function getFieldsByFlag($showFlagName = 'showInList')
+    public function getFieldsByFlag($showFlagName = 'showInList', $sortField = 'listOrder', $filterFields = [])
     {
         $fields = array_filter($this->getFields(), function($field) use ($showFlagName) {
             return !empty($field[$showFlagName]);
         });
+        if (!empty($filterFields)) {
+            $fields = array_filter($fields, function($field) use ($filterFields) {
+                return !in_array($field['name'], $filterFields);
+            });
+        }
+        if ($sortField) {
+            usort($fields, function($a, $b) use ($sortField) {
+                if (!isset($a[$sortField])) {
+                    $a[$sortField] = 0;
+                }
+                if (!isset($b[$sortField])) {
+                    $b[$sortField] = 0;
+                }
+                if ($a[$sortField] == $b[$sortField]) {
+                    return 0;
+                }
+                return ($a[$sortField] < $b[$sortField]) ? -1 : 1;
+            });
+        }
         return array_merge($fields);
     }
     
     /**
+     * @param array $filterFields
      * @return array
      */
-    public function getFieldsForList()
+    public function getFieldsForList($filterFields = [])
     {
-        return $this->getFieldsByFlag('showInList');
+        return $this->getFieldsByFlag('showInList', 'listOrder', $filterFields);
     }
     
     /**
+     * @param array $filterFields
      * @return array
      */
-    public function getFieldsForPage()
+    public function getFieldsForPage($filterFields = [])
     {
-        return $this->getFieldsByFlag('showOnPage');
+        return $this->getFieldsByFlag('showOnPage', 'pageOrder', $filterFields);
     }
 
     /**

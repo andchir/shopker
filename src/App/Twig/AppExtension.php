@@ -154,7 +154,8 @@ class AppExtension extends AbstractExtension
         if ($categoriesField && !empty($itemData[$categoriesField])) {
             $parentUri = '';
         }
-        if (!$parentUri || !$systemName) {
+        $isCategory = isset($itemData['uri']) && substr($itemData['uri'], -1) === '/';
+        if ((!$parentUri || !$systemName) && !$isCategory && isset($itemData['parentId'])) {
             $parentId = isset($itemData['parentId']) ? $itemData['parentId'] : 0;
             if (!isset($this->cache['categoryUriData'])) {
                 $this->cache['categoryUriData'] = [];

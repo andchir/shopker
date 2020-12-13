@@ -7,6 +7,7 @@
 - Search products by title in the admin area.
 - When the system name of a category is changed, URLs of child categories are automatically updated.
 - Text search now works for multiple collections. In the "app.search_collections" parameter, you can specify several collection names separated by commas.
+- Added the "Show on page" checkbox for the content type. Now you can display fields on the page depending on this value.
 
 4.2.5
 - Updated the default template style.

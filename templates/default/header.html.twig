@@ -62,7 +62,7 @@
                                         {{ 'Contact details' | trans }}
                                     </a>
                                     <div class="dropdown-divider"></div>
-                                    {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+                                    {% if is_granted('IS_IMPERSONATOR') %}
                                         <a class="dropdown-item text-muted" href="{{ path('homepage', {'_switch_user': '_exit'}) }}" rel="nofollow">
                                             <i class="icon-esc"></i>
                                             &nbsp;

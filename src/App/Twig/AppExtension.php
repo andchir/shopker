@@ -609,6 +609,9 @@ class AppExtension extends AbstractExtension
     {
         $templateName = sprintf($path . '%s%s%s.html.twig', $chunkNamePrefix, $chunkName, $chunkNameSuffix);
         if (!$environment->getLoader()->exists($templateName)) {
+            $templateName = sprintf($path . '%s%s.html.twig', $chunkName, $chunkNameSuffix);
+        }
+        if (!$environment->getLoader()->exists($templateName)) {
             $templateName = $path . $defaultName . '.html.twig';
         }
         return $templateName;

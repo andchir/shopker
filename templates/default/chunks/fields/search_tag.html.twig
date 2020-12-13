@@ -1,0 +1,11 @@
+<div class="position-relative">
+    <div class="position-absolute pos-right-top text-right">
+        {% for tagValue in data %}
+            <div>
+                <span class="badge {{ switch(arraySearch(tagValue, fieldProperties.inputProperties.values_list|split('||')), [0, 1, 2], ['badge-success', 'badge-warning', 'badge-info']) }}">
+                    {{ tagValue }}
+                </span>
+            </div>
+        {% endfor %}
+    </div>
+</div>

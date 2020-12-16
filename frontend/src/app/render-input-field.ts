@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 import {FormGroup, FormControl, Validators} from '@angular/forms';
 import {cloneDeep, map, zipObject, extend, defer} from 'lodash';
-import {isNumeric} from 'rxjs/util/isNumeric';
 import {TranslateService} from '@ngx-translate/core';
 import {TreeNode} from 'primeng/api';
 
@@ -433,7 +432,7 @@ export class InputFieldRenderComponent implements OnInit {
                 if (!object1[key]) {
                     object1[key] = object2[key];
                 }
-                if (isNumeric(object1[key])) {
+                if (typeof object1[key] === 'string' && !Number.isNaN(Number(object1[key]))) {
                     object1[key] = parseInt(String(object1[key]), 10);
                 }
             }

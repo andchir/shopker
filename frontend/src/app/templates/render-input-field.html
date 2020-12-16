@@ -1,5 +1,5 @@
 
-<nav ngbNav #nav="ngbNav" class="nav-tabs">
+<nav ngbNav [animation]="true" [destroyOnHide]="false" #nav="ngbNav" class="nav-tabs">
     <ng-container ngbNavItem *ngFor="let groupName of groups; let i=index">
         <a ngbNavLink>{{ groupName }}</a>
         <ng-template ngbNavContent>

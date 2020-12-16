@@ -1,6 +1,5 @@
 import {Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef} from '@angular/core';
 import {extend, findIndex} from 'lodash';
-import {isNumeric} from 'rxjs/util/isNumeric';
 
 import {ContentField} from './catalog/models/content_field.model';
 import {AppSettings} from './services/app-settings.service';
@@ -34,7 +33,7 @@ export class OutputFieldComponent implements OnInit {
 
     updateOptions(): void {
 
-        let propertiesDefault: Properties;
+        let propertiesDefault: Properties = {};
 
         switch (this.outputType) {
             case 'date':
@@ -55,7 +54,7 @@ export class OutputFieldComponent implements OnInit {
         object1 = extend({}, object2, object1);
         for (const key in object1) {
             if (object1.hasOwnProperty(key)) {
-                if (isNumeric(object1[key])) {
+                if (typeof object1[key] === 'string' && !Number.isNaN(Number(object1[key]))) {
                     object1[key] = parseInt(String(object1[key]), 10);
                 }
             }

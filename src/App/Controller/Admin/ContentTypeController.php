@@ -240,12 +240,14 @@ class ContentTypeController extends StorageControllerAbstract
         if (iterator_count($indexInfo) > 0) {
             $collection->dropIndexes();
         }
-        $fieldsNames = array_map(function($field) {
-            return $field['name'];
-        }, $fields);
-        $collection->createIndex(array_fill_keys($fieldsNames, 'text'), [
-            'default_language' => 'russian'
-        ]);
+        if (!empty($fields)) {
+            $fieldsNames = array_map(function($field) {
+                return $field['name'];
+            }, $fields);
+            $collection->createIndex(array_fill_keys($fieldsNames, 'text'), [
+                'default_language' => 'russian'
+            ]);
+        }
         
         return true;
     }

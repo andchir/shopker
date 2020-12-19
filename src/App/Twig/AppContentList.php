@@ -126,7 +126,9 @@ class AppContentList
             'groupSize' => $groupSize,
             'groupCount' => $groupSize ? ceil(count($items) / $groupSize) : 1,
             'queryOptions' => $queryOptions,
-            'pagesOptions' => $pagesOptions
+            'pagesOptions' => $pagesOptions,
+            'contentType' => $contentType,
+            'collectionName' => $collectionName
         ]));
         if ($cacheItemHtml) {
             $cacheItemHtml->set($output);

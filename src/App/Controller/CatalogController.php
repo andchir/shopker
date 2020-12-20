@@ -457,9 +457,9 @@ class CatalogController extends BaseController
         $pipeline = $this->catalogService->createAggregatePipeline(
             $criteria,
             $aggregateFields,
-            $queryOptions['limit'],
+            abs($queryOptions['limit']),
             $queryOptions['sortOptionsAggregation'],
-            $pagesOptions['skip']
+            abs($pagesOptions['skip'])
         );
         $items = $collection->aggregate($pipeline, [
             'cursor' => []

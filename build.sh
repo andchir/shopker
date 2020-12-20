@@ -32,6 +32,7 @@ mkdir "$DIR"/"$OUTPUT_DIRNAME"/var/log
 
 mkdir "$DIR"/"$OUTPUT_DIRNAME"/templates
 cp -r "$DIR"/templates/default "$DIR"/"$OUTPUT_DIRNAME"/templates/default
+cp -r "$DIR"/templates/blank "$DIR"/"$OUTPUT_DIRNAME"/templates/blank
 
 mkdir "$DIR"/"$OUTPUT_DIRNAME"/public
 cp "$DIR"/public/*.* "$DIR"/"$OUTPUT_DIRNAME"/public

@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'security/base.html.twig' %}
 
 {% block body %}
 
@@ -15,10 +15,10 @@
 
             <h2>{{ 'Registration' | trans }}</h2>
 
-            {{ form_start(form, {'action': path('register')}) }}
+            {{ form_start(form) }}
             {{ form_widget(form) }}
             <div class="form-group">
-                <button type="submit" class="btn btn-primary" name="button-submit">
+                <button type="submit" class="btn btn-primary btn-wide rounded-pill" name="button-submit">
                     {{ 'Sign up' | trans }}
                 </button>
             </div>
@@ -26,11 +26,11 @@
 
             <hr>
             <p>
-                <a href="{{ path('homepage_localized', {'_locale': app.request.locale}) }}">
+                <a href="{{ pathLocalized('homepage') }}">
                     {{ 'Go to home page' | trans }}
                 </a>
                 &nbsp;&bull;&nbsp;
-                <a href="{{ path('login') }}">
+                <a href="{{ pathLocalized('login') }}">
                     {{ 'Log in' | trans }}
                 </a>
             </p>
@@ -40,5 +40,3 @@
 </div>
 
 {% endblock %}
-
-{% block footer %}{% endblock %}

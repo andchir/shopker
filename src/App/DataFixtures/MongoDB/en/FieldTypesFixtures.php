@@ -388,6 +388,11 @@ class FieldTypesFixtures extends Fixture implements FixtureGroupInterface
                         'name' => 'locale',
                         'title' => 'Calendar language',
                         'default_value' => 'en'
+                    ],
+                    [
+                        'name' => 'default_current',
+                        'title' => 'Current date and time by default',
+                        'default_value' => '1'
                     ]
                 ],
                 'outputProperties' => [

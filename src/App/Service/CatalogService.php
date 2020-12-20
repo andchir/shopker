@@ -690,22 +690,41 @@ class CatalogService {
         foreach ($contentTypeFields as $contentTypeField) {
             if ($contentTypeField['required'] && empty($data[$contentTypeField['name']])) {
                 throw new \Exception(serialize(['msg' => 'The "%name%" field is required.', '%name%' => $contentTypeField['title']]));
-            } else if (!isset($data[$contentTypeField['name']])) {
-                continue;
             }
-            $value = $data[$contentTypeField['name']];
-            if (is_array($value)) {
-                // TODO: add checking and filtering data
-            } else {
-                if ($contentTypeField['inputType'] === 'number') {
-                    $document[$contentTypeField['name']] = floatval(str_replace([',', ' '], ['.', ''], $value));
-                } else {
-                    $document[$contentTypeField['name']] = UtilsService::cleanString($value, UtilsService::STRING_TYPE_HTML);
-                }
-            }
+            $document[$contentTypeField['name']] = self::getFieldValue($contentTypeField, $data[$contentTypeField['name']] ?? null);
         }
 
         return $document;
+    }
+    
+    /**
+     * @param $contentTypeField
+     * @param $value
+     * @return float
+     */
+    public static function getFieldValue($contentTypeField, $value)
+    {
+        if (is_array($value)) {
+            $value = array_map(function($val) {
+                return is_numeric($val)
+                    ? $val
+                    : UtilsService::cleanString($val, UtilsService::STRING_TYPE_HTML);
+            }, $value);
+        } else {
+            switch ($contentTypeField['inputType']) {
+                case 'number':
+                    $value = floatval(str_replace([',', ' '], ['.', ''], $value));
+                    break;
+                case 'date':
+                    if (empty($value) && !empty($contentTypeField['inputProperties']['default_current'])) {
+                        $value = date('Y-m-d H:i:s');
+                    }
+                    break;
+                default:
+                    $value = UtilsService::cleanString($value, UtilsService::STRING_TYPE_HTML);
+            }
+        }
+        return $value;
     }
 
     /**

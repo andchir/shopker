@@ -191,18 +191,31 @@
                 }
                 valuesArr.forEach(function(value) {
                     if (typeof value.from !== 'undefined' && typeof value.to !== 'undefined') {
-                        self.updateSliderValue(key, value.from, value.to);
+                        fieldEl = filtersContainerEl.querySelector('[name="' + fieldName + '[from]"]');
                     } else {
-                        fieldEl = filtersContainerEl.querySelector('[name="' + fieldName + '"][value="' + value + '"]');
-                        if (!fieldEl) {
-                            return;
-                        }
-                        inputType = self.getInputType(fieldEl);
-                        if (inputType === 'checkbox') {
+                        fieldEl = filtersContainerEl.querySelector('[name="' + fieldName + '"]');
+                    }
+                    if (!fieldEl) {
+                        return;
+                    }
+                    inputType = self.getInputType(fieldEl);
+                    switch (inputType) {
+                        case 'range':
+                            self.updateSliderValue(key, value.from, value.to);
+                            break;
+                        case 'date':
+                            fieldEl.value = value.from;
+                            fieldEl = filtersContainerEl.querySelector('[name="' + fieldName + '[to]"]');
+                            if (fieldEl) {
+                                fieldEl.value = value.to;
+                            }
+                            break;
+                        case 'checkbox':
                             fieldEl.checked = true;
-                        } else if (inputType === 'select') {
+                            break;
+                        case 'select':
                             fieldEl.value = value;
-                        }
+                            break;
                     }
                 });
             });

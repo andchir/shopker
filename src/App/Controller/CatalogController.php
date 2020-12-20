@@ -764,7 +764,19 @@ class CatalogController extends BaseController
                 }
             }
             if (isset($filter['from']) && isset($filter['to'])) {
-                $criteria[$name] = ['$gte' => floatval($filter['from']), '$lte' => floatval($filter['to'])];
+                if ($outputType === 'date') {
+                    if (!empty($filter['from'])) {
+                        $criteria[$name] = ['$gte' => $filter['from']];
+                    }
+                    if (!empty($filter['to'])) {
+                        if (!isset($criteria[$name])) {
+                            $criteria[$name] = [];
+                        }
+                        $criteria[$name]['$lte'] = $filter['to'];
+                    }
+                } else {
+                    $criteria[$name] = ['$gte' => floatval($filter['from']), '$lte' => floatval($filter['to'])];
+                }
             } else if ($outputType === 'parameters') {
                 $fData = [];
                 foreach ($filter as $fValue) {

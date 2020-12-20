@@ -1,3 +1,7 @@
+4.2.7
+- Edit translations YAML files in admin area.
+- Twig function "contentList" now supports negative limit (from the end).
+
 4.2.6
 - Angular updated to version 11 (TypeScript 4.0).
 - Symfony updated to version 5.1.

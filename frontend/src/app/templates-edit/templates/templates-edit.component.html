@@ -37,6 +37,12 @@
                         <span>{{'CONFIG_FILES' | translate}}</span>
                     </button>
                     <div class="max-height400" ngbDropdownMenu>
+                        <button class="dropdown-item" *ngFor="let item of files['translations']" (click)="editFile(item, $event)">
+                            {{ item.name }} <span class="text-muted small">({{ item.size }})</span>
+                        </button>
+                        <ng-container *ngIf="files['translations'].length && files['config'].length">
+                            <div class="dropdown-divider"></div>
+                        </ng-container>
                         <button class="dropdown-item" *ngFor="let item of files['config']" (click)="editFile(item, $event)">
                             {{ item.name }} <span class="text-muted small">({{ item.size }})</span>
                         </button>

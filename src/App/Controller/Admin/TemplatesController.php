@@ -159,18 +159,19 @@ class TemplatesController extends StorageControllerAbstract
     public function getFilesListAction(Request $request)
     {
         $items = [];
-        $editable = [];
-        $editable['css'] = $this->params->get('app.editable_css');
-        $editable['js'] = $this->params->get('app.editable_js');
-        $editable['config'] = $this->params->get('app.editable_config');
+        $editable = [
+            'css' => $this->params->get('app.editable_css'),
+            'js' => $this->params->get('app.editable_js'),
+            'config' => $this->params->get('app.editable_config'),
+            'translations' => $this->params->get('app.editable_translations')
+        ];
         $rootPath = $this->params->get('kernel.project_dir');
-
-        $fileTypes = ['css', 'js', 'config'];
-        foreach ($fileTypes as $fileType) {
-            if (is_null($editable[$fileType])) {
+        
+        foreach ($editable as $fileType => $val) {
+            if (!is_array($val)) {
                 continue;
             }
-            foreach($editable[$fileType] as $filePath) {
+            foreach($val as $filePath) {
                 $fileFullPath = $this->getFilePathByType($fileType, $filePath);
                 if (!$fileFullPath || !file_exists($fileFullPath)) {
                     continue;
@@ -300,6 +301,7 @@ class TemplatesController extends StorageControllerAbstract
         $rootPath = $this->params->get('kernel.project_dir');
         $publicDirPath = $this->params->get('app.web_dir_path');
         $configDirPath = $rootPath . DIRECTORY_SEPARATOR . 'config';
+        $translationsDirPath = $rootPath . DIRECTORY_SEPARATOR . 'translations';
         $templatesDirPath = $this->getTemplatesDirPath();
         $filePath = trim($filePath, DIRECTORY_SEPARATOR);
         $filePath = str_replace('../../', '', $filePath);
@@ -311,6 +313,9 @@ class TemplatesController extends StorageControllerAbstract
                 break;
             case 'config':
                 $filePath = implode(DIRECTORY_SEPARATOR, [$configDirPath, $filePath]);
+                break;
+            case 'translations':
+                $filePath = implode(DIRECTORY_SEPARATOR, [$translationsDirPath, $filePath]);
                 break;
             default:
                 $filePath = $templatesDirPath . DIRECTORY_SEPARATOR . $filePath;

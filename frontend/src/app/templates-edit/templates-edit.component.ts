@@ -78,6 +78,9 @@ export class TemplatesEditComponent extends PageTableAbstractComponent<Template>
                     this.files['config'] = res.items.filter((item) => {
                         return item.type === 'config';
                     });
+                    this.files['translations'] = res.items.filter((item) => {
+                        return item.type === 'translations';
+                    });
                 }
             });
     }

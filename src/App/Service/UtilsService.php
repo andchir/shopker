@@ -137,14 +137,20 @@ class UtilsService
                 : [12],
             'current' => $queryOptions['page'],
             'limit' => $queryOptions['limit'],
-            'total' => ceil($itemsTotal / $queryOptions['limit']),
+            'total' => ceil($itemsTotal / abs($queryOptions['limit'])),
             'prev' => max(1, $queryOptions['page'] - 1),
-            'skip' => ($queryOptions['page'] - 1) * $queryOptions['limit'],
+            'skip' => ($queryOptions['page'] - 1) * abs($queryOptions['limit']),
             'pageVar' => isset($options['pageVar']) ? $options['pageVar'] : 'page',
             'limitVar' => isset($options['limitVar']) ? $options['limitVar'] : 'limit',
             'orderByVar' => isset($options['orderByVar']) ? $options['orderByVar'] : 'order_by'
         ];
-        $pagesOptions['next'] = min($pagesOptions['total'], $queryOptions['page'] + 1);
+        if ($pagesOptions['limit'] < 0) {
+            $pagesOptions['limit'] = abs($pagesOptions['limit']);
+            $pagesOptions['current'] = $pagesOptions['total'];
+            $pagesOptions['skip'] = max(0, $itemsTotal - abs($queryOptions['limit']));
+            $pagesOptions['prev'] = max(1, $pagesOptions['current'] - 1);
+        }
+        $pagesOptions['next'] = min($pagesOptions['total'], $pagesOptions['current'] + 1);
 
         return $pagesOptions;
     }
@@ -240,8 +246,8 @@ class UtilsService
         if(!is_numeric($queryOptions['page'])){
             $queryOptions['page'] = $queryOptionsDefault['page'];
         }
-        $queryOptions['limit'] = min(abs(intval($queryOptions['limit'])), $queryOptions['limit_max']);
-        $queryOptions['page'] = abs(intval($queryOptions['page']));
+        $queryOptions['limit'] = min(intval($queryOptions['limit']), $queryOptions['limit_max']);
+        $queryOptions['page'] = intval($queryOptions['page']);
 
         if (!empty($queryOptions['filter']) && is_array($queryOptions['filter'])) {
             $queryOptions['filterStr'] = '&' . http_build_query(['filter' => $queryOptions['filter']]);

@@ -78,7 +78,7 @@ class AppContentList
         $skip = null;
         if ($limit < 0) {
             $limit = abs($limit);
-            $skip = $total - $limit;
+            $skip = $total > $limit ? $total - $limit : 0;
         }
 
         $currentUri = $this->getCurrentURI();

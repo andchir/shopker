@@ -75,6 +75,11 @@ class AppContentList
         $collection = $catalogService->getCollection($collectionName);
 
         $total = $collection->countDocuments($criteria);
+        $skip = null;
+        if ($limit < 0) {
+            $limit = abs($limit);
+            $skip = $total - $limit;
+        }
 
         $currentUri = $this->getCurrentURI();
         $queryString = $request->getQueryString();
@@ -84,6 +89,9 @@ class AppContentList
         ];
         $queryOptions = UtilsService::getQueryOptions($currentUri, $queryString, [], ['pageSizeArr' => [$limit]], $options);
         $pagesOptions = UtilsService::getPagesOptions($queryOptions, $total, [], $options);
+        if (is_null($skip)) {
+            $skip = $pagesOptions['skip'];
+        }
 
         /** @var ContentType $contentType */
         $contentType = $catalogService->getContentTypeRepository()->findOneBy([
@@ -104,6 +112,12 @@ class AppContentList
         }
 
         $orderBy = array_map(function($orderByDir) {
+            if (is_numeric($orderByDir)) {
+                return intval($orderByDir);
+            }
+            if (is_array($orderByDir)) {
+                return $orderByDir;
+            }
             return $orderByDir === 'asc' ? 1 : -1;
         }, $orderBy);
 
@@ -112,7 +126,7 @@ class AppContentList
             $aggregateFields,
             $queryOptions['limit'],
             $orderBy,
-            $pagesOptions['skip']
+            $skip
         );
         $items = $collection->aggregate($pipeline, [
             'cursor' => []

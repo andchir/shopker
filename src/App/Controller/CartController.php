@@ -547,7 +547,7 @@ class CartController extends BaseController
                         break;
                     }
                     foreach($value as $index => $val) {
-                        if (empty($val)) {
+                        if (empty($val) && !is_numeric($val)) {
                             continue;
                         }
                         if (is_array($val)) {

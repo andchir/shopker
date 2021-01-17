@@ -134,6 +134,7 @@ class CartController extends BaseController
             if (!empty($output['message'])) {
                 $output['message'] = $this->translator->trans($output['message'], ['%name%' => $output['name'] ?? '']);
             }
+            $output['action'] = $action;
             return $this->json($output);
         } else {
             if (!$output['success'] && isset($output['message'])) {

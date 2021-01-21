@@ -10,9 +10,9 @@ The engine for creating an online store using Symfony 5.x, Angular 11+, MongoDB 
 ***
 
 **Demo**  
-[http://shk4-demo.modx-shopkeeper.ru/](http://shk4-demo.modx-shopkeeper.ru/)  
-Login: admin  
-Password: admin
+[https://demo.shopker.org/](https://demo.shopker.org/)  
+Login: demo@shopker.org  
+Password: demopass  
 
 ***
 

@@ -3,7 +3,9 @@
 The engine for creating an online store using Symfony 5.x, Angular 11+, MongoDB 4+.
 
 - Official site [https://shopker.org/](https://shopker.org/)
-- Documentation: [https://github.com/andchir/shk4-wiki/](https://github.com/andchir/shk4-wiki/)
+- Documentation:
+    - https://shopker.org/documentation/
+    - [https://github.com/andchir/shopker-wiki/](https://github.com/andchir/shopker-wiki/)
 - Telegram channel (русскоязычный): [https://t.me/shopker_rus](https://t.me/shopker_rus)
 - VK group: [https://vk.com/shopker_rus](https://vk.com/shopker_rus)
 

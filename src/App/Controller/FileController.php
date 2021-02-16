@@ -184,6 +184,39 @@ class FileController extends BaseController
     }
 
     /**
+     * @Route("/download/{ownerType}/{ownerId}/{fileName}", methods={"GET"}, name="file_download_by_filename")
+     * @param string $ownerType
+     * @param string $ownerId
+     * @param string $fileName
+     * @return Response
+     */
+    public function downloadFileByFileName($ownerType, $ownerId, $fileName)
+    {
+        /** @var FileDocument $fileDocument */
+        $fileDocument = $this->getRepository()->findOneBy([
+            'ownerType' => $ownerType,
+            'ownerId' => $ownerId,
+            'fileName' => $fileName
+        ]);
+
+        if (!$fileDocument) {
+            throw $this->createNotFoundException();
+        }
+
+        $filesDirPath = $this->params->get('app.files_dir_path');
+        $fileDocument->setUploadRootDir($filesDirPath);
+
+        $filePath = $fileDocument->getUploadedPath();
+        if (!file_exists($filePath)) {
+            throw $this->createNotFoundException();
+        }
+
+        $fileName = str_replace(' ', '-', $fileDocument->getTitle()) . '.' . $fileDocument->getExtension();
+
+        return UtilsService::downloadFile($filePath, $fileName);
+    }
+
+    /**
      * @return CategoryRepository|ObjectRepository
      */
     public function getCategoryRepository()

@@ -109,7 +109,8 @@ class DefaultController extends AbstractController
             'description' => $description,
             'countCategories' => $countCategories,
             'currentId' => 0,
-            'countProducts' => $countProducts
+            'countProducts' => $countProducts,
+            'currentPage' => $rootCategory
         ]);
         $response->setEtag(md5($response->getContent()));
         $response->setPublic();

@@ -461,7 +461,11 @@ class ShoppingCart {
         if ($this->discount) {
             $priceTotal -= $this->discount;
         } else if ($this->discountPercent) {
-            $priceTotal *= $this->discountPercent / 100;
+            if ($this->discountPercent == 100) {
+                $priceTotal = 0;
+            } else {
+                $priceTotal *= $this->discountPercent / 100;
+            }
         }
         if ($this->deliveryPrice) {
             $priceTotal += $this->deliveryPrice;

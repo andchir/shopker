@@ -1,3 +1,6 @@
+4.2.8
+- Fixed incorrect work of the percentage discount for a promotional code.
+
 4.2.7
 - Edit translations YAML files in admin area.
 - Twig function "contentList" now supports negative limit (show last page by default).

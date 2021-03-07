@@ -658,7 +658,7 @@ class Order
         if ($this->discount) {
             $priceTotal -= $this->discount;
         } else if ($this->discountPercent) {
-            $priceTotal *= $this->discountPercent / 100;
+            $priceTotal = $priceTotal - ($priceTotal * $this->discountPercent / 100);
         }
         if ($this->deliveryPrice) {
             $priceTotal += $this->deliveryPrice;

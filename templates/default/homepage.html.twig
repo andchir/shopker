@@ -28,9 +28,9 @@
             </div>
         </div>
 
-        {% if description is not empty %}
+        {% if currentPage.description is not empty %}
             <div class="py-3">
-                {{ description | raw }}
+                {{ fieldByLocale(currentPage.menuData, 'description') }}
             </div>
         {% endif %}
 

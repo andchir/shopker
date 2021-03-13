@@ -749,7 +749,7 @@ class CatalogController extends BaseController
                 continue;
             }
             if (!is_array($filter)) {
-                $filter = [$filter];
+                $filter = [is_numeric($filter) ? floatval($filter) : $filter];
             }
             $index = array_search($name, array_column($filtersData, 'name'));
             $outputType = '';

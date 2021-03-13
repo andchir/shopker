@@ -745,7 +745,7 @@ class CatalogController extends BaseController
             return;
         }
         foreach ($filters as $name => $filter) {
-            if (empty($filter)) {
+            if ($filter === '') {
                 continue;
             }
             if (!is_array($filter)) {

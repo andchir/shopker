@@ -136,7 +136,7 @@
             }
         };
 
-        this.filtersInit = function(checkSelected) {
+        this.filtersInit = function(checkSelected, callback) {
             checkSelected = checkSelected || false;
             this.slidersInit();
             if (isFiltersInitialized) {
@@ -149,9 +149,19 @@
                     case 'input':
 
                         if (['checkbox', 'radio'].indexOf(input.getAttribute('type'))) {
-                            input.addEventListener('click', self.onFilterChange.bind(self), false);
+                            input.addEventListener('click', function(e) {
+                                if (callback && typeof callback === 'function') {
+                                    callback(e);
+                                }
+                                self.onFilterChange();
+                            }, false);
                         } else if (['range', 'select'].indexOf(input.getAttribute('type'))) {
-                            input.addEventListener('change', self.onFilterChange.bind(self), false);
+                            input.addEventListener('change', function(e) {
+                                if (callback && typeof callback === 'function') {
+                                    callback(e);
+                                }
+                                self.onFilterChange();
+                            }, false);
                         }
 
                         break;
@@ -193,7 +203,10 @@
                     if (typeof value.from !== 'undefined' && typeof value.to !== 'undefined') {
                         fieldEl = filtersContainerEl.querySelector('[name="' + fieldName + '[from]"]');
                     } else {
-                        fieldEl = filtersContainerEl.querySelector('[name="' + fieldName + '"]');
+                        fieldEl = filtersContainerEl.querySelector('[name="' + fieldName + '"][value="' + value + '"]');
+                        if (!fieldEl) {
+                            fieldEl = filtersContainerEl.querySelector('[name="' + fieldName + '"]');
+                        }
                     }
                     if (!fieldEl) {
                         return;

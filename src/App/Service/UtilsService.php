@@ -142,7 +142,8 @@ class UtilsService
             'skip' => ($queryOptions['page'] - 1) * abs($queryOptions['limit']),
             'pageVar' => isset($options['pageVar']) ? $options['pageVar'] : 'page',
             'limitVar' => isset($options['limitVar']) ? $options['limitVar'] : 'limit',
-            'orderByVar' => isset($options['orderByVar']) ? $options['orderByVar'] : 'order_by'
+            'orderByVar' => isset($options['orderByVar']) ? $options['orderByVar'] : 'order_by',
+            'orderBy' => isset($queryOptions['order_by']) ? $queryOptions['order_by'] : 'id_desc'
         ];
         if ($pagesOptions['limit'] < 0) {
             $pagesOptions['limit'] = abs($pagesOptions['limit']);

@@ -313,7 +313,7 @@ class AppRuntime
         if (!$orderBy) {
             $orderBy = isset($_GET[$pagesOptions['orderByVar']])
                 ? $_GET[$pagesOptions['orderByVar']]
-                : 'id_desc';
+                : ($pagesOptions['orderBy'] ?? 'id_desc');
         }
         if (!$pageNumber) {
             $pageNumber = isset($_GET[$pagesOptions['pageVar']])

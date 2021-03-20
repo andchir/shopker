@@ -306,6 +306,9 @@
     "ralouphie/mimey": {
         "version": "2.0.0"
     },
+    "react/promise": {
+        "version": "v2.8.0"
+    },
     "seld/jsonlint": {
         "version": "1.7.1"
     },

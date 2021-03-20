@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
+use Twig\Environment as TwigEnvironment;
 
 class UtilsService
 {
@@ -22,14 +23,17 @@ class UtilsService
     /** @var ContainerInterface */
     protected $container;
 
-    /** @var \Twig\Environment */
+    /** @var TwigEnvironment */
     protected $twig;
-
-    /** @param ContainerInterface $container */
-    public function __construct(ContainerInterface $container)
+    
+    /**
+     * @param ContainerInterface $container
+     * @param \Twig\Environment $twig
+     */
+    public function __construct(ContainerInterface $container, TwigEnvironment $twig)
     {
         $this->container = $container;
-        $this->twig = $this->container->get('twig');
+        $this->twig = $twig;
     }
 
     /**

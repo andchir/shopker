@@ -42,14 +42,14 @@ class Payment implements PaymentInterface
     protected $status;
 
     /**
-     * @MongoDB\Field(type="integer")
+     * @MongoDB\Field(type="int")
      * @Groups({"details", "list"})
      * @var int
      */
     protected $userId;
 
     /**
-     * @MongoDB\Field(type="integer")
+     * @MongoDB\Field(type="int")
      * @Groups({"details", "list"})
      * @var int
      */

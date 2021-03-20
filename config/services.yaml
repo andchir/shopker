@@ -107,7 +107,7 @@ services:
     app.shop_cart:
         class: App\Service\ShopCartService
         public: true
-        arguments: ['@service_container']
+        arguments: ['@service_container', '@doctrine_mongodb.odm.default_document_manager', '@twig']
 
     app.settings:
         class: App\Service\SettingsService
@@ -117,7 +117,7 @@ services:
     app.utils:
         class: App\Service\UtilsService
         public: true
-        arguments: ['@service_container']
+        arguments: ['@service_container', '@twig']
 
     app.catalog:
         class: App\Service\CatalogService

@@ -61,21 +61,21 @@ class FileDocument
     protected $mimeType;
 
     /**
-     * @MongoDB\Field(type="integer")
+     * @MongoDB\Field(type="int")
      * @Groups({"details", "list"})
      * @var int
      */
     protected $size;
 
     /**
-     * @MongoDB\Field(type="integer")
+     * @MongoDB\Field(type="int")
      * @Groups({"details", "list"})
      * @var int
      */
     protected $downloads;
 
     /**
-     * @MongoDB\Field(type="integer")
+     * @MongoDB\Field(type="int")
      * @Groups({"details", "list"})
      * @var int
      */

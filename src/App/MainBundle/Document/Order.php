@@ -112,7 +112,7 @@ class Order
     protected $discountPercent;
 
     /**
-     * @MongoDB\Field(type="integer")
+     * @MongoDB\Field(type="int")
      * @Groups({"details", "list"})
      * @var int
      */

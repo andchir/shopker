@@ -21,11 +21,14 @@ class ShopCartService
     protected $container;
     /** @var DocumentManager */
     protected $dm;
+    /** @var TwigEnvironment */
+    protected $twig;
     
-    public function __construct(ContainerInterface $container, DocumentManager $dm)
+    public function __construct(ContainerInterface $container, DocumentManager $dm, TwigEnvironment $twig)
     {
         $this->container = $container;
         $this->dm = $dm;
+        $this->twig = $twig;
     }
 
     /**
@@ -146,11 +149,8 @@ class ShopCartService
      */
     public function renderShopCart($shoppingCart, $templateName, $type = ShoppingCart::TYPE_MAIN)
     {
-        /** @var TwigEnvironment $twig */
-        $twig = $this->container->get('twig');
-
-        $output = $twig->getRuntime(\App\Twig\AppRuntime::class)
-            ->shopCartFunction($twig, $templateName, $type, '', $shoppingCart);
+        $output = $this->twig->getRuntime(\App\Twig\AppRuntime::class)
+            ->shopCartFunction($this->twig, $templateName, $type, '', $shoppingCart);
 
         return $output;
     }

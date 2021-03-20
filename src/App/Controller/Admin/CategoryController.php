@@ -195,7 +195,7 @@ class CategoryController extends StorageControllerAbstract
     {
         $expanded = (bool) $request->get('expanded', false);
         $tree = $this->getCategoriesTree($parentId, $expanded);
-        return new JsonResponse($tree);
+        return $this->json($tree);
     }
 
     /**
@@ -266,10 +266,11 @@ class CategoryController extends StorageControllerAbstract
         /** @var Category $child */
         foreach ($children as $child) {
             $this->deleteProductsByCategory($child, false);
-
+            
             $this->dm->remove($child);
             $this->dm->flush();
-
+    
+            $this->dm->detach($child);
             $child->setId(null);
 
             //Dispatch event
@@ -280,7 +281,9 @@ class CategoryController extends StorageControllerAbstract
         // Clear file cache
         $this->cacheAdapter->clear();
 
-        return new JsonResponse([]);
+        return $this->json([
+            'success' => true
+        ]);
     }
 
     /**

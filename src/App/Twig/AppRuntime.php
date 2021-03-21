@@ -529,20 +529,23 @@ class AppRuntime
     }
 
     /**
-     * @param array $dataArr
+     * @param array/object $data
      * @param string $fieldName
      * @return string
      */
-    public function fieldByLocaleFunction($dataArr, $fieldName)
+    public function fieldByLocaleFunction($data, $fieldName)
     {
         $request = $this->requestStack->getCurrentRequest();
         $locale = $request->getLocale();
-        if (empty($dataArr['translations']) || empty($dataArr['translations'][$fieldName])) {
-            return $dataArr[$fieldName] ?? '';
-        }
-        return isset($dataArr['translations'][$fieldName][$locale])
-            ? $dataArr['translations'][$fieldName][$locale]
-            : $dataArr[$fieldName] ?? '';
+        $translations = is_object($data) && method_exists($data, 'getTranslations')
+            ? call_user_func([$data, 'getTranslations'])
+            : $data['translations'] ?? [];
+        $fieldContent = is_object($data) && method_exists($data, 'get' . $fieldName)
+            ? call_user_func([$data, 'get' . $fieldName])
+            : $data[$fieldName] ?? '';
+        return isset($translations[$fieldName], $translations[$fieldName][$locale])
+            ? $translations[$fieldName][$locale]
+            : $fieldContent;
     }
 
     /**

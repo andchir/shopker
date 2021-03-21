@@ -529,7 +529,7 @@ class AppRuntime
     }
 
     /**
-     * @param array/object $data
+     * @param array|object $data
      * @param string $fieldName
      * @return string
      */

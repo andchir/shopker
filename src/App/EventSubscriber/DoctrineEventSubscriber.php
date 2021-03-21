@@ -39,31 +39,25 @@ class DoctrineEventSubscriber implements EventSubscriber
     public function getSubscribedEvents()
     {
         return [
+            Events::preRemove => 'preRemove',
             Events::postRemove => 'postRemove',
             Events::postPersist => 'postPersist',
             Events::postUpdate => 'postUpdate'
         ];
     }
-
+    
     /**
      * @param LifecycleEventArgs $args
      * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
-    public function postRemove(LifecycleEventArgs $args)
+    public function preRemove(LifecycleEventArgs $args)
     {
         $document = $args->getDocument();
         /** @var DocumentManager $dm */
         $dm = $args->getDocumentManager();
-        $filesDirPath = $this->container->getParameter('app.files_dir_path');
-        
         $fileDocumentRepository = $dm->getRepository(FileDocument::class);
-
-        if ($document instanceof FileDocument) {
-            /** @var FileDocument $document */
-            $document->setUploadRootDir($filesDirPath);
-            $document->removeFile();
-        }
-        else if ($document instanceof OrderContent) {
+        
+        if ($document instanceof OrderContent) {
             /** @var OrderContent $document */
             $files = $document->getFiles();
             foreach ($files as $fileData) {
@@ -87,6 +81,24 @@ class DoctrineEventSubscriber implements EventSubscriber
                     $dm->remove($fileDocument);
                 }
             }
+        }
+    }
+
+    /**
+     * @param LifecycleEventArgs $args
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
+     */
+    public function postRemove(LifecycleEventArgs $args)
+    {
+        $document = $args->getDocument();
+        /** @var DocumentManager $dm */
+        $dm = $args->getDocumentManager();
+        $filesDirPath = $this->container->getParameter('app.files_dir_path');
+
+        if ($document instanceof FileDocument) {
+            /** @var FileDocument $document */
+            $document->setUploadRootDir($filesDirPath);
+            $document->removeFile();
         }
     }
 

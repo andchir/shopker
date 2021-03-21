@@ -1,7 +1,8 @@
 4.2.8
+- Symfony updated to version 5.2.
 - Fixed incorrect work of the percentage discount for a promotional code.
 - Fixed marking of active filter checkboxes, which did not always work correctly.
-- Symfony updated to version 5.2.
+- Fixed problem with deleting orders that have attached files.
 
 4.2.7
 - Edit translations YAML files in admin area.

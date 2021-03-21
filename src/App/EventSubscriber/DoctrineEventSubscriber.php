@@ -2,9 +2,7 @@
 
 namespace App\EventSubscriber;
 
-use App\Controller\Admin\ProductController;
 use App\MainBundle\Document\Category;
-use App\MainBundle\Document\ContentType;
 use App\MainBundle\Document\FileDocument;
 use App\MainBundle\Document\OrderContent;
 use App\Service\CatalogService;
@@ -19,12 +17,8 @@ class DoctrineEventSubscriber implements EventSubscriber
 
     /** @var ContainerInterface */
     private $container;
-
     /** @var CatalogService */
     private $catalogService;
-    
-    /** @var DocumentManager */
-    protected $dm;
 
     /**
      * DoctrineEventSubscriber constructor.
@@ -33,12 +27,10 @@ class DoctrineEventSubscriber implements EventSubscriber
      */
     public function __construct(
         ContainerInterface $container,
-        CatalogService $catalogService,
-        DocumentManager $dm
+        CatalogService $catalogService
     ) {
         $this->container = $container;
         $this->catalogService = $catalogService;
-        $this->dm = $dm;
     }
 
     /**
@@ -60,9 +52,11 @@ class DoctrineEventSubscriber implements EventSubscriber
     public function postRemove(LifecycleEventArgs $args)
     {
         $document = $args->getDocument();
+        /** @var DocumentManager $dm */
+        $dm = $args->getDocumentManager();
         $filesDirPath = $this->container->getParameter('app.files_dir_path');
         
-        $fileDocumentRepository = $this->dm->getRepository(FileDocument::class);
+        $fileDocumentRepository = $dm->getRepository(FileDocument::class);
 
         if ($document instanceof FileDocument) {
             /** @var FileDocument $document */
@@ -79,7 +73,7 @@ class DoctrineEventSubscriber implements EventSubscriber
                 /** @var FileDocument $fileDocument */
                 $fileDocument = $fileDocumentRepository->find($fileData['fileId']);
                 if ($fileDocument) {
-                    $this->dm->remove($fileDocument);
+                    $dm->remove($fileDocument);
                 }
             }
         }
@@ -90,7 +84,7 @@ class DoctrineEventSubscriber implements EventSubscriber
                 /** @var FileDocument $fileDocument */
                 $fileDocument = $fileDocumentRepository->find($fileData['fileId']);
                 if ($fileDocument) {
-                    $this->dm->remove($fileDocument);
+                    $dm->remove($fileDocument);
                 }
             }
         }

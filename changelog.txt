@@ -1,3 +1,6 @@
+4.2.9
+- Import and export translations.
+
 4.2.8
 - Symfony updated to version 5.2.
 - Fixed incorrect work of the percentage discount for a promotional code.

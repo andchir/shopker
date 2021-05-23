@@ -39,6 +39,9 @@
     "composer/composer": {
         "version": "1.8.0"
     },
+    "composer/metadata-minifier": {
+        "version": "1.0.0"
+    },
     "composer/semver": {
         "version": "1.4.2"
     },
@@ -71,6 +74,9 @@
     },
     "doctrine/dbal": {
         "version": "v2.8.0"
+    },
+    "doctrine/deprecations": {
+        "version": "v0.5.3"
     },
     "doctrine/doctrine-bundle": {
         "version": "1.6",

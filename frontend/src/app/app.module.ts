@@ -15,6 +15,7 @@ import {
     ConfirmModalContentComponent,
     ModalConfirmTextComponent
 } from './components/modal-confirm-text.component';
+import {ModalEditTextareaComponent} from '@app/components/modal-edit-textarea.component';
 
 import localeEn from '@angular/common/locales/en';
 import localeRu from '@angular/common/locales/ru';
@@ -41,12 +42,14 @@ registerLocaleData(localeRu, 'ru-RU');
         AlertModalContentComponent,
         ConfirmModalContentComponent,
         ModalConfirmTextComponent,
+        ModalEditTextareaComponent
     ],
     providers: [],
     entryComponents: [
         AlertModalContentComponent,
         ConfirmModalContentComponent,
         ModalConfirmTextComponent,
+        ModalEditTextareaComponent
     ],
     exports: [
 

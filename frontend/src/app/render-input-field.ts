@@ -7,9 +7,11 @@ import {
     EventEmitter, ViewChild
 } from '@angular/core';
 import {FormGroup, FormControl, Validators} from '@angular/forms';
+
 import {cloneDeep, map, zipObject, extend, defer} from 'lodash';
 import {TranslateService} from '@ngx-translate/core';
 import {TreeNode} from 'primeng/api';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 import {
     CalendarOptions,
@@ -32,6 +34,7 @@ import {FileData} from './catalog/models/file-data.model';
 import {SystemNameService} from './services/system-name.service';
 import {AppSettings} from './services/app-settings.service';
 import {CategoriesService} from './catalog/services/categories.service';
+import {ModalEditTextareaComponent} from '@app/components/modal-edit-textarea.component';
 
 export const calendarLocale = {
     en: {
@@ -100,6 +103,7 @@ export class InputFieldRenderComponent implements OnInit {
         private systemNameService: SystemNameService,
         private categoriesService: CategoriesService,
         private translateService: TranslateService,
+        private modalService: NgbModal,
         private appSettings: AppSettings
     ) {
         this.filesDirBaseUrl = this.appSettings.settings.filesDirUrl;
@@ -566,7 +570,10 @@ export class InputFieldRenderComponent implements OnInit {
         }
     }
 
-    parametersAdd(fieldName: string): void {
+    parametersAdd(fieldName: string, event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
         if (!this.model[fieldName]) {
             this.model[fieldName] = [];
         }
@@ -584,8 +591,34 @@ export class InputFieldRenderComponent implements OnInit {
         this.model[fieldName].push(obj);
     }
 
+    parametersExport(fieldName: string, event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        if (!this.model[fieldName]) {
+            this.model[fieldName] = [];
+        }
+        const dataStr = JSON.stringify(this.model[fieldName], null, '\t');
+        const modalRef = this.modalService.open(ModalEditTextareaComponent, {
+            backdrop: 'static',
+            keyboard: false,
+            container: '#modals-container'
+        });
+        modalRef.componentInstance.modalTitle = `${this.getLangString('EXPORT')} JSON`;
+        modalRef.componentInstance.textValue = dataStr;
+        modalRef.result.then((result) => {
+            if (result.data) {
+                const outputData = JSON.parse(result.data);
+                this.model[fieldName].splice(0, this.model[fieldName].length);
+                this.model[fieldName].push(...outputData);
+            }
+        }, (reason) => {
+            // console.log(reason);
+        });
+    }
+
     /**
-     * Move field
+     * Move fieldparametersAdd(
      * @param field
      * @param direction
      * @param event
@@ -727,5 +760,13 @@ export class InputFieldRenderComponent implements OnInit {
             }
         });
         return String(lastId + 1);
+    }
+
+    getLangString(value: string): string {
+        if (!this.translateService.store.translations[this.translateService.currentLang]) {
+            return value;
+        }
+        const translations = this.translateService.store.translations[this.translateService.currentLang];
+        return translations[value] || value;
     }
 }

@@ -1,5 +1,6 @@
 4.2.9
 - Import and export translations.
+- Import/Export parameters value via JSON. You can quickly transfer all parameters from one product to another.
 
 4.2.8
 - Symfony updated to version 5.2.

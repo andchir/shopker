@@ -389,63 +389,72 @@
                         <!-- parameters -->
                         <div class="row" *ngSwitchCase="'parameters'">
                             <div class="col-12">
-                                <div class="card card-body p-2">
-                                    <label for="field_{{field.name}}">
-                                        {{field.title}}
-                                        <span class="text-muted">({{field.name}})</span>
-                                        <span class="text-danger" *ngIf="field.required">*</span>
-                                    </label>
+                                <div class="card">
+                                    <div class="card-body p-2">
+                                        <div class="float-right">
+                                            <button type="button" class="btn btn-secondary btn-sm"
+                                                    ngbTooltip="{{'EXPORT' | translate}}"
+                                                    (click)="parametersExport(field.name, $event);">
+                                                <i class="icon-inbox"></i>
+                                            </button>
+                                        </div>
+                                        <label for="field_{{field.name}}">
+                                            {{field.title}}
+                                            <span class="text-muted">({{field.name}})</span>
+                                            <span class="text-danger" *ngIf="field.required">*</span>
+                                        </label>
 
-                                    <table class="table table-divided mb-0">
-                                        <thead>
-                                        <tr>
-                                            <th>
-                                                {{field.inputProperties.names[0] | translate}}
-                                            </th>
-                                            <th>
-                                                {{field.inputProperties.names[1] | translate}}
-                                            </th>
-                                            <th>
-                                                {{field.inputProperties.names[2] | translate}}
-                                            </th>
-                                            <th>
-                                                {{field.inputProperties.names[3] | translate}}
-                                            </th>
-                                            <th></th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr *ngFor="let item of model[field.name]; index as index">
-                                            <td>
-                                                <input [type]="field.inputProperties.types[0]" class="form-control form-control-sm" [(ngModel)]="item[field.inputProperties.keys[0]]" [ngModelOptions]="{standalone: true}">
-                                            </td>
-                                            <td>
-                                                <input [type]="field.inputProperties.types[1]" class="form-control form-control-sm" [(ngModel)]="item[field.inputProperties.keys[1]]" [ngModelOptions]="{standalone: true}">
-                                            </td>
-                                            <td class="text-center">
-                                                <input [type]="field.inputProperties.types[2]" class="form-control form-control-sm" min="0" [(ngModel)]="item[field.inputProperties.keys[2]]" [ngModelOptions]="{standalone: true}">
-                                            </td>
-                                            <td class="text-center">
-                                                <input [type]="field.inputProperties.types[3]" class="form-control form-control-sm" min="0" [(ngModel)]="item[field.inputProperties.keys[3]]" [ngModelOptions]="{standalone: true}">
-                                            </td>
-                                            <td class="text-center">
-                                                <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'DELETE' | translate}}" (click)="parametersRemove(field.name, index)">
-                                                    <i class="icon-cross"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                        <tfoot>
-                                        <tr class="bg-faded">
-                                            <td colspan="5" class="text-center pb-2">
-                                                <button type="button" class="btn btn-secondary btn-sm" (click)="parametersAdd(field.name)">
-                                                    <i class="icon-plus mr-1"></i>
-                                                    <span>{{'ADD' | translate}}</span>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        </tfoot>
-                                    </table>
+                                        <table class="table table-divided mb-0">
+                                            <thead>
+                                            <tr>
+                                                <th>
+                                                    {{field.inputProperties.names[0] | translate}}
+                                                </th>
+                                                <th>
+                                                    {{field.inputProperties.names[1] | translate}}
+                                                </th>
+                                                <th>
+                                                    {{field.inputProperties.names[2] | translate}}
+                                                </th>
+                                                <th>
+                                                    {{field.inputProperties.names[3] | translate}}
+                                                </th>
+                                                <th></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr *ngFor="let item of model[field.name]; index as index">
+                                                <td>
+                                                    <input [type]="field.inputProperties.types[0]" class="form-control form-control-sm" [(ngModel)]="item[field.inputProperties.keys[0]]" [ngModelOptions]="{standalone: true}">
+                                                </td>
+                                                <td>
+                                                    <input [type]="field.inputProperties.types[1]" class="form-control form-control-sm" [(ngModel)]="item[field.inputProperties.keys[1]]" [ngModelOptions]="{standalone: true}">
+                                                </td>
+                                                <td class="text-center">
+                                                    <input [type]="field.inputProperties.types[2]" class="form-control form-control-sm" min="0" [(ngModel)]="item[field.inputProperties.keys[2]]" [ngModelOptions]="{standalone: true}">
+                                                </td>
+                                                <td class="text-center">
+                                                    <input [type]="field.inputProperties.types[3]" class="form-control form-control-sm" min="0" [(ngModel)]="item[field.inputProperties.keys[3]]" [ngModelOptions]="{standalone: true}">
+                                                </td>
+                                                <td class="text-center">
+                                                    <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'DELETE' | translate}}" (click)="parametersRemove(field.name, index)">
+                                                        <i class="icon-cross"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                            <tfoot>
+                                            <tr class="bg-faded">
+                                                <td colspan="5" class="text-center pb-2">
+                                                    <button type="button" class="btn btn-secondary btn-sm" (click)="parametersAdd(field.name, $event)">
+                                                        <i class="icon-plus mr-1"></i>
+                                                        <span>{{'ADD' | translate}}</span>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>

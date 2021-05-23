@@ -1,0 +1,30 @@
+<div class="modal-header d-block">
+    <div class="position-relative modal-on-minimized">
+        <div class="pos-absolute-right">
+            <button type="button" class="btn btn-no-border btn-sm-sm ml-1"
+                    [disabled]="submitted"
+                    [title]="'CLOSE' | translate"
+                    (click)="closeModal($event)">
+                <i class="icon-cross"></i>
+            </button>
+        </div>
+    </div>
+    <h4 class="modal-title text-overflow mr-5">{{modalTitle}}</h4>
+</div>
+<div class="modal-body">
+    
+    <div class="border" id="editor-json"></div>
+    
+</div>
+<div class="modal-footer d-block">
+    <button type="button" class="btn btn-info btn-wide"
+            [disabled]="submitted"
+            (click)="saveHandler($event)">
+        Ok
+    </button>
+    <button type="button" class="btn btn-secondary btn-wide"
+            [disabled]="submitted"
+            (click)="closeModal($event)">
+        <span>{{'CLOSE' | translate}}</span>
+    </button>
+</div>

@@ -47,6 +47,7 @@
                             "node_modules/ace-builds/src/mode-html.js",
                             "node_modules/ace-builds/src/mode-javascript.js",
                             "node_modules/ace-builds/src/mode-css.js",
+                            "node_modules/ace-builds/src/mode-json.js",
                             "node_modules/ace-builds/src/mode-twig.js"
                         ],
                         "allowedCommonJsDependencies": [

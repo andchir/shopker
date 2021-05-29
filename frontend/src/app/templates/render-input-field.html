@@ -327,14 +327,14 @@
                             </div>
                             <div class="col-md-7">
                                 <div>
-                                    <div class="custom-control custom-checkbox d-inline-block me-4" *ngFor="let opt of field.options; index as index">
-                                        <input type="checkbox" class="custom-control-input"
+                                    <div class="form-check d-inline-block me-4" *ngFor="let opt of field.options; index as index">
+                                        <input type="checkbox" class="form-check-input"
                                                id="chk_{{field.name}}{{index}}"
                                                [name]="field.name + index"
                                                [value]="opt.value"
                                                (change)="selectValue($event, field.name, opt.value)"
                                                [checked]="fieldsMultivalues[field.name].checked[index]">
-                                        <label class="custom-control-label" for="chk_{{field.name}}{{index}}">{{opt.title}}</label>
+                                        <label class="form-check-label" for="chk_{{field.name}}{{index}}">{{opt.title}}</label>
                                     </div>
                                 </div>
                                 <div *ngIf="formErrors[field.name]" class="alert alert-danger">

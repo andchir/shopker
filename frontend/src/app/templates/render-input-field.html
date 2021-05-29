@@ -10,7 +10,7 @@
                      [formGroup]="form"
                      *ngFor="let field of fields | filterFieldByGroup: groupName">
 
-                    <div class="show-on-hover-parent" [ngSwitch]="field.inputType" [ngClass]="{'pr-5': field.inputProperties.multiple}">
+                    <div class="show-on-hover-parent" [ngSwitch]="field.inputType" [ngClass]="{'pe-5': field.inputProperties.multiple}">
 
                         <ng-container *ngIf="field.inputProperties.multiple">
                             <div class="show-on-hover-child pos-absolute-right-bottom" style="z-index: 11;">
@@ -300,7 +300,7 @@
                             </div>
                             <div class="col-md-7">
                                 <div>
-                                    <div class="custom-control custom-radio d-inline-block mr-4" *ngFor="let opt of field.options; index as index">
+                                    <div class="custom-control custom-radio d-inline-block me-4" *ngFor="let opt of field.options; index as index">
                                         <input type="radio" id="radio_{{field.name}}{{index}}" class="custom-control-input"
                                                [name]="field.name"
                                                [value]="opt.value"
@@ -327,7 +327,7 @@
                             </div>
                             <div class="col-md-7">
                                 <div>
-                                    <div class="custom-control custom-checkbox d-inline-block mr-4" *ngFor="let opt of field.options; index as index">
+                                    <div class="custom-control custom-checkbox d-inline-block me-4" *ngFor="let opt of field.options; index as index">
                                         <input type="checkbox" class="custom-control-input"
                                                id="chk_{{field.name}}{{index}}"
                                                [name]="field.name + index"
@@ -391,7 +391,7 @@
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-body p-2">
-                                        <div class="float-right">
+                                        <div class="float-end">
                                             <button type="button" class="btn btn-secondary btn-sm"
                                                     ngbTooltip="{{'EXPORT' | translate}}"
                                                     (click)="parametersExport(field.name, $event);">
@@ -447,7 +447,7 @@
                                             <tr class="bg-faded">
                                                 <td colspan="5" class="text-center pb-2">
                                                     <button type="button" class="btn btn-secondary btn-sm" (click)="parametersAdd(field.name, $event)">
-                                                        <i class="icon-plus mr-1"></i>
+                                                        <i class="icon-plus me-1"></i>
                                                         <span>{{'ADD' | translate}}</span>
                                                     </button>
                                                 </td>

@@ -1,17 +1,17 @@
 <div class="mb-3">
 
     <div>
-        <div class="float-md-left">
+        <div class="float-md-start">
 
             <app-categories-menu (changeRequest)="openCategory($event)"></app-categories-menu>
             
-            <div class="form-control-search d-block d-md-inline-block ml-0 ml-md-3 mb-2 mb-lg-0" [ngClass]="{'form-control-search-clear': !!queryOptions.search_word}">
+            <div class="form-control-search d-block d-md-inline-block ms-0 ms-md-3 mb-2 mb-lg-0" [ngClass]="{'form-control-search-clear': !!queryOptions.search_word}">
                 <input type="text" class="form-control min-width250" placeholder="{{ 'SEARCH' | translate }}..." [(ngModel)]="queryOptions.search_word" (ngModelChange)="onSearchWordUpdate()">
                 <span (click)="onSearchWordUpdate('')"></span>
             </div>
 
         </div>
-        <div class="float-md-right">
+        <div class="float-md-end">
 
             <div ngbDropdown class="d-block d-md-inline-block mb-2 mb-md-0" placement="bottom-right">
                 <button class="btn btn-info d-block d-md-inline-block width-100 width-md-auto" ngbDropdownToggle>
@@ -22,7 +22,7 @@
                     <button class="dropdown-item" (click)="deleteSelected()">{{'DELETE' | translate}}</button>
                 </div>
             </div>
-            <button type="button" class="btn btn-success btn-wide d-block d-md-inline-block width-100 width-md-auto ml-md-2" (click)="modalOpen()">
+            <button type="button" class="btn btn-success btn-wide d-block d-md-inline-block width-100 width-md-auto ms-md-2" (click)="modalOpen()">
                 <i class="icon-plus"></i>
                 &nbsp;
                 <span>{{'ADD' | translate}}</span>

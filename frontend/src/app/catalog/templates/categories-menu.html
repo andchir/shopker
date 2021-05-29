@@ -1,15 +1,15 @@
 <div class="d-block d-md-inline-block dropdown">
     <button class="btn btn-secondary dropdown-toggle dropdown-toggle-hover d-block d-md-inline-block width-100 width-md-auto mb-2 mb-md-0">
-        <i class="icon-folder mr-1"></i>
+        <i class="icon-folder me-1"></i>
         {{currentCategory.title}}
     </button>
     <div class="dropdown-menu main-menu-container py-3 shadow" #categoriesDropdown>
         <div [class.loading]="loading">
 
             <div class="px-3 pb-3">
-                <div class="float-right">
+                <div class="float-end">
                     <ng-container *ngIf="categoriesTree[0].children">
-                        <button type="button" class="btn btn-sm btn-secondary mr-2" ngbTooltip="{{'EXPAND_ALL' | translate}}" (click)="expandAll($event)">
+                        <button type="button" class="btn btn-sm btn-secondary me-2" ngbTooltip="{{'EXPAND_ALL' | translate}}" (click)="expandAll($event)">
                             <i class="pi pi-angle-double-down"></i>
                         </button>
                         <button type="button" class="btn btn-sm btn-secondary" ngbTooltip="{{'COLLAPSE_ALL' | translate}}" (click)="collapseAll($event)">
@@ -17,19 +17,19 @@
                         </button>
                     </ng-container>
                 </div>
-                <button type="button" class="btn btn-sm btn-secondary mr-2" ngbTooltip="{{'OPEN_ROOT_CATEGORY' | translate}}" (click)="goToRootCategory()" *ngIf="currentCategory.id > 0">
+                <button type="button" class="btn btn-sm btn-secondary me-2" ngbTooltip="{{'OPEN_ROOT_CATEGORY' | translate}}" (click)="goToRootCategory()" *ngIf="currentCategory.id > 0">
                     <i class="icon-home"></i>
                 </button>
-                <button type="button" class="btn btn-sm btn-secondary mr-2" ngbTooltip="{{'ADD_NEW_CATEGORY' | translate}}" (click)="openModalCategory()">
+                <button type="button" class="btn btn-sm btn-secondary me-2" ngbTooltip="{{'ADD_NEW_CATEGORY' | translate}}" (click)="openModalCategory()">
                     <i class="icon-plus"></i>
                 </button>
-                <button type="button" class="btn btn-sm btn-secondary mr-2" ngbTooltip="{{'EDIT_CATEGORY' | translate}}" (click)="openModalCategory(currentCategory.id)">
+                <button type="button" class="btn btn-sm btn-secondary me-2" ngbTooltip="{{'EDIT_CATEGORY' | translate}}" (click)="openModalCategory(currentCategory.id)">
                     <i class="icon-pencil"></i>
                 </button>
-                <button type="button" class="btn btn-sm btn-secondary mr-2" ngbTooltip="{{'COPY_CATEGORY' | translate}}" (click)="copyCategory()" [hidden]="!currentCategory.id">
+                <button type="button" class="btn btn-sm btn-secondary me-2" ngbTooltip="{{'COPY_CATEGORY' | translate}}" (click)="copyCategory()" [hidden]="!currentCategory.id">
                     <i class="icon-stack"></i>
                 </button>
-                <button type="button" class="btn btn-sm btn-secondary mr-2" ngbTooltip="{{'DELETE_CATEGORY' | translate}}" (click)="deleteCategoryItemConfirm(currentCategory.id)" [hidden]="!currentCategory.id">
+                <button type="button" class="btn btn-sm btn-secondary me-2" ngbTooltip="{{'DELETE_CATEGORY' | translate}}" (click)="deleteCategoryItemConfirm(currentCategory.id)" [hidden]="!currentCategory.id">
                     <i class="icon-cross"></i>
                 </button>
             </div>

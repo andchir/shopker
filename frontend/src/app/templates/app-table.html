@@ -3,7 +3,7 @@
         <thead *ngIf="items.length > 0">
             <tr>
                 <th class="text-left">
-                    <div class="custom-control custom-checkbox custom-checkbox-single mr-4" [hidden]="items.length === 0">
+                    <div class="custom-control custom-checkbox custom-checkbox-single me-4" [hidden]="items.length === 0">
                         <input type="checkbox" class="custom-control-input" id="fieldSelectAll" (click)="selectAll($event)" [checked]="getIsSelectedAll()">
                         <label class="custom-control-label" for="fieldSelectAll"></label>
                     </div>
@@ -23,7 +23,7 @@
         <tbody>
             <tr class="show-on-hover-parent" *ngFor="let item of items">
                 <td>
-                    <div class="custom-control custom-checkbox custom-checkbox-single mr-4">
+                    <div class="custom-control custom-checkbox custom-checkbox-single me-4">
                         <input type="checkbox" class="custom-control-input" id="fieldCheck{{item.id}}" [checked]="getIsSelected(item.id)" (click)="setSelected($event, item.id)">
                         <label class="custom-control-label" for="fieldCheck{{item.id}}"></label>
                     </div>
@@ -32,13 +32,13 @@
                     [ngClass]="{'d-none d-lg-table-cell': index > 1 && index !== tableFields.length - 1}">
                     <div class="relative" *ngIf="index == tableFields.length - 1">
                         <div class="show-on-hover-right no-wrap">
-                            <button type="button" class="btn btn-secondary btn-sm ml-2" ngbTooltip="{{'EDIT' | translate}}" (click)="action('edit', item.id)">
+                            <button type="button" class="btn btn-secondary btn-sm ms-2" ngbTooltip="{{'EDIT' | translate}}" (click)="action('edit', item.id)">
                                 <i class="icon-pencil"></i>
                             </button>
-                            <button type="button" class="btn btn-secondary btn-sm ml-2" ngbTooltip="{{'CLONE' | translate}}" (click)="action('copy', item.id)" *ngIf="isCloneAllowed">
+                            <button type="button" class="btn btn-secondary btn-sm ms-2" ngbTooltip="{{'CLONE' | translate}}" (click)="action('copy', item.id)" *ngIf="isCloneAllowed">
                                 <i class="icon-stack"></i>
                             </button>
-                            <button type="button" class="btn btn-secondary btn-sm ml-2" ngbTooltip="{{'DELETE' | translate}}" (click)="action('delete', item.id)">
+                            <button type="button" class="btn btn-secondary btn-sm ms-2" ngbTooltip="{{'DELETE' | translate}}" (click)="action('delete', item.id)">
                                 <i class="icon-cross"></i>
                             </button>
                         </div>
@@ -67,7 +67,7 @@
     </table>
     <div class="pt-3" [hidden]="items.length === 0">
 
-        <div class="float-right">
+        <div class="float-end">
             <select class="form-control" [(ngModel)]="queryOptions.limit" (change)="pageChange('limit')">
                 <option [value]="10">10</option>
                 <option [value]="20">20</option>

@@ -3,13 +3,13 @@
         <button type="button" class="btn btn-outline-primary btn-sm d-block"
                 [disabled]="submitted"
                 (click)="closeModal($event)">
-            <i class="icon-cross mr-1"></i>
+            <i class="icon-cross me-1"></i>
             <span>{{'CLOSE' | translate}}</span>
         </button>
         <button type="button" class="btn btn-outline-primary btn-sm d-block"
                 [disabled]="submitted"
                 (click)="minimize($event)">
-            <i class="icon-minimize mr-1"></i>
+            <i class="icon-minimize me-1"></i>
             <span>{{'MINIMIZE' | translate}}</span>
         </button>
     </div>
@@ -20,12 +20,12 @@
             <button type="button" class="btn btn-no-border btn-sm-sm" [title]="'EXPAND' | translate" (click)="maximize($event)">
                 <i class="icon-maximize"></i>
             </button>
-            <button type="button" class="btn btn-no-border btn-sm-sm ml-1" [title]="'CLOSE' | translate" (click)="closeModal($event)">
+            <button type="button" class="btn btn-no-border btn-sm-sm ms-1" [title]="'CLOSE' | translate" (click)="closeModal($event)">
                 <i class="icon-cross"></i>
             </button>
         </div>
     </div>
-    <h4 class="modal-title text-overflow mr-5">{{modalTitle}}</h4>
+    <h4 class="modal-title text-overflow me-5">{{modalTitle}}</h4>
 </div>
 
 <form [formGroup]="form" [class.loading]="loading">
@@ -50,7 +50,7 @@
         </div>
 
         <div class="row form-group">
-            <div class="col-md-7 ml-md-auto">
+            <div class="col-md-7 ms-md-auto">
                 <div class="card card-body p-2 pl-3">
 
                     <div class="custom-control custom-checkbox m-0">
@@ -95,8 +95,8 @@
     </div>
 
     <div class="modal-footer d-block">
-        <div class="float-right" *ngIf="localeList.length > 1">
-            <button type="button" class="btn btn-success mr-2" ngbTooltip="{{'SAVE' | translate}}" placement="left"
+        <div class="float-end" *ngIf="localeList.length > 1">
+            <button type="button" class="btn btn-success me-2" ngbTooltip="{{'SAVE' | translate}}" placement="left"
                     [hidden]="localeCurrent == localeDefault"
                     (click)="saveTranslations($event)">
                 <i class="icon-check"></i>
@@ -108,7 +108,7 @@
                 </label>
             </div>
         </div>
-        <div class="btn-group mr-1">
+        <div class="btn-group me-1">
             <button type="button" class="btn btn-success btn-wide" [disabled]="submitted || isSaveButtonDisabled" (click)="save(true)">
                 <span>{{'SAVE_AND_CLOSE' | translate}}</span>
             </button>

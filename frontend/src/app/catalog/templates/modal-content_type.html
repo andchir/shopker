@@ -3,13 +3,13 @@
         <button type="button" class="btn btn-outline-primary btn-sm d-block"
                 [disabled]="submitted"
                 (click)="closeModal($event)">
-            <i class="icon-cross mr-1"></i>
+            <i class="icon-cross me-1"></i>
             <span>{{'CLOSE' | translate}}</span>
         </button>
         <button type="button" class="btn btn-outline-primary btn-sm d-block"
                 [disabled]="submitted"
                 (click)="minimize($event)">
-            <i class="icon-minimize mr-1"></i>
+            <i class="icon-minimize me-1"></i>
             <span>{{'MINIMIZE' | translate}}</span>
         </button>
     </div>
@@ -20,12 +20,12 @@
             <button type="button" class="btn btn-no-border btn-sm-sm" [title]="'EXPAND' | translate" (click)="maximize($event)">
                 <i class="icon-maximize"></i>
             </button>
-            <button type="button" class="btn btn-no-border btn-sm-sm ml-1" [title]="'CLOSE' | translate" (click)="closeModal($event)">
+            <button type="button" class="btn btn-no-border btn-sm-sm ms-1" [title]="'CLOSE' | translate" (click)="closeModal($event)">
                 <i class="icon-cross"></i>
             </button>
         </div>
     </div>
-    <h4 class="modal-title text-overflow mr-5">{{modalTitle}}</h4>
+    <h4 class="modal-title text-overflow me-5">{{modalTitle}}</h4>
 </div>
 
 <ng-template #confirmPopover let-confirm="confirm" let-p="p" let-msg="message">
@@ -497,7 +497,7 @@
                                 <option value="pageOrder-showOnPage">{{'SORT_FIELDS_PAGE' | translate}}</option>
                                 <option value="filterOrder-isFilter">{{'SORT_FILTERS' | translate}}</option>
                             </select>
-                            <button type="button" class="btn btn-sm btn-secondary d-block d-md-inline-block width-100 width-md-auto ml-md-2" (click)="sortingStart(sortTypeSelect.value, $event)">
+                            <button type="button" class="btn btn-sm btn-secondary d-block d-md-inline-block width-100 width-md-auto ms-md-2" (click)="sortingStart(sortTypeSelect.value, $event)">
                                 <i class="icon-shuffle"></i>
                                 {{'SORT' | translate}}
                             </button>
@@ -532,13 +532,13 @@
                                     <td>
                                         <div class="relative">
                                             <div class="show-on-hover-right">
-                                                <button type="button" class="btn btn-secondary btn-sm ml-2" (click)="editField(field, $event)" [hidden]="field.name == currentFieldName" ngbTooltip="{{'EDIT' | translate}}">
+                                                <button type="button" class="btn btn-secondary btn-sm ms-2" (click)="editField(field, $event)" [hidden]="field.name == currentFieldName" ngbTooltip="{{'EDIT' | translate}}">
                                                     <i class="icon-pencil"></i>
                                                 </button>
-                                                <button type="button" class="btn btn-secondary btn-sm ml-2" (click)="copyField(field, $event)" ngbTooltip="{{'COPY' | translate}}">
+                                                <button type="button" class="btn btn-secondary btn-sm ms-2" (click)="copyField(field, $event)" ngbTooltip="{{'COPY' | translate}}">
                                                     <i class="icon-stack"></i>
                                                 </button>
-                                                <button type="button" class="btn btn-secondary btn-sm ml-2" (click)="deleteField(field, $event)" [hidden]="field.name == currentFieldName" ngbTooltip="{{'DELETE' | translate}}">
+                                                <button type="button" class="btn btn-secondary btn-sm ms-2" (click)="deleteField(field, $event)" [hidden]="field.name == currentFieldName" ngbTooltip="{{'DELETE' | translate}}">
                                                     <i class="icon-cross"></i>
                                                 </button>
                                             </div>
@@ -578,7 +578,7 @@
 </div>
 
 <div class="modal-footer d-block">
-    <div class="btn-group mr-1">
+    <div class="btn-group me-1">
         <button type="button" class="btn btn-success btn-wide" [disabled]="submitted" (click)="save(true, $event)">
             <span>{{'SAVE_AND_CLOSE' | translate}}</span>
         </button>

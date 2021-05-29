@@ -20,7 +20,7 @@
             <button type="button" class="btn btn-no-border btn-sm-sm" [title]="'EXPAND' | translate" (click)="maximize($event)">
                 <i class="icon-maximize"></i>
             </button>
-            <button type="button" class="btn btn-no-border btn-sm-sm ml-1" [title]="'CLOSE' | translate" (click)="closeModal($event)">
+            <button type="button" class="btn btn-no-border btn-sm-sm ms-1" [title]="'CLOSE' | translate" (click)="closeModal($event)">
                 <i class="icon-cross"></i>
             </button>
         </div>
@@ -34,7 +34,7 @@
 
         <div class="card bg-light mb-3">
             <div class="card-body p-2">
-                <div class="float-right">
+                <div class="float-end">
                     <a class="btn btn-info btn-sm btn-wide" href="{{baseUrl}}admin/orders/print/{{model.id}}" target="_blank">
                         <i class="icon-printer"></i>
                         {{'PRINT' | translate}}
@@ -266,10 +266,10 @@
                                             <td class="text-center pr-2">
                                                 <div class="relative">
                                                     <div class="show-on-hover-right no-wrap">
-                                                        <button type="button" class="btn btn-secondary btn-sm ml-2" ngbTooltip="{{'EDIT' | translate}}" (click)="editContentToggle(content)">
+                                                        <button type="button" class="btn btn-secondary btn-sm ms-2" ngbTooltip="{{'EDIT' | translate}}" (click)="editContentToggle(content)">
                                                             <i class="icon-pencil"></i>
                                                         </button>
-                                                        <button type="button" class="btn btn-secondary btn-sm ml-2" ngbTooltip="{{'DELETE' | translate}}" (click)="deleteContent(content)">
+                                                        <button type="button" class="btn btn-secondary btn-sm ms-2" ngbTooltip="{{'DELETE' | translate}}" (click)="deleteContent(content)">
                                                             <i class="icon-cross"></i>
                                                         </button>
                                                     </div>
@@ -290,10 +290,10 @@
                                             </td>
                                             <td class="no-wrap" colspan="2">
                                                 <input type="number" class="d-inline-block form-control form-control-sm" name="count[]" min="1" step="1" style="width: 60px;" [(ngModel)]="content.count" (ngModelChange)="priceTotalUpdate()" [ngModelOptions]="{standalone: true}">
-                                                <button type="button" class="btn btn-secondary btn-sm ml-2" ngbTooltip="{{'ACCEPT' | translate}}" (click)="editContentToggle(content)">
+                                                <button type="button" class="btn btn-secondary btn-sm ms-2" ngbTooltip="{{'ACCEPT' | translate}}" (click)="editContentToggle(content)">
                                                     <i class="icon-check"></i>
                                                 </button>
-                                                <button type="button" class="btn btn-secondary btn-sm ml-2" ngbTooltip="{{'CANCEL' | translate}}" (click)="editContentCancel()">
+                                                <button type="button" class="btn btn-secondary btn-sm ms-2" ngbTooltip="{{'CANCEL' | translate}}" (click)="editContentCancel()">
                                                     <i class="icon-ban"></i>
                                                 </button>
                                             </td>

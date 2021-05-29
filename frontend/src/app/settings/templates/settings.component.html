@@ -1,14 +1,14 @@
 <div class="card">
     <div class="card-body" [class.loading]="loading">
 
-        <div class="float-md-left">
+        <div class="float-md-start">
             <h3>
                 <i class="icon-cog"></i>
                 {{'SETTINGS' | translate}}
             </h3>
         </div>
 
-        <div class="float-md-right">
+        <div class="float-md-end">
             
             <div ngbDropdown class="d-block d-md-inline-block" placement="bottom-right">
                 <button class="btn btn-info btn-sm d-block d-md-inline-block width-100 width-md-auto mb-2 mb-md-0" ngbDropdownToggle>
@@ -584,7 +584,7 @@
 
                             <div [ngClass]="{'loading': settings.SETTINGS_COMPOSER_PACKAGES.loading}">
                                 
-                                <div class="float-right">
+                                <div class="float-end">
                                     <button type="button" class="btn btn-sm btn-success" (click)="modalSystemUpdate($event)">
                                         <i class="icon-arrow-up-circle"></i>
                                         {{ 'SYSTEM_UPDATE' | translate }}

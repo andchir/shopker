@@ -3,7 +3,7 @@
 </div>
 <div class="modal-body" #modalBody>
 
-    <div class="float-right">
+    <div class="float-end">
         <button type="button" class="btn btn-secondary btn-sm"
                 [title]="'COPY_TO_CLIPBOARD' | translate"
                 (click)="copyToClipboard(filePath, $event)">
@@ -71,11 +71,11 @@
 
 </div>
 <div class="modal-footer d-block">
-    <div class="float-right">
-        <button type="button" class="btn btn-secondary btn-sm ml-2" [title]="'RENAME' | translate" (click)="switchAction('rename', $event)">
+    <div class="float-end">
+        <button type="button" class="btn btn-secondary btn-sm ms-2" [title]="'RENAME' | translate" (click)="switchAction('rename', $event)">
             <i class="icon-pencil"></i>
         </button>
-        <button type="button" class="btn btn-secondary btn-sm ml-2" [title]="'DELETE' | translate" (click)="switchAction('delete', $event)">
+        <button type="button" class="btn btn-secondary btn-sm ms-2" [title]="'DELETE' | translate" (click)="switchAction('delete', $event)">
             <i class="icon-cross"></i>
         </button>
     </div>

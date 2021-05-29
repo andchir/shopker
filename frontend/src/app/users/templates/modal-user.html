@@ -20,7 +20,7 @@
             <button type="button" class="btn btn-no-border btn-sm-sm" [title]="'EXPAND' | translate" (click)="maximize($event)">
                 <i class="icon-maximize"></i>
             </button>
-            <button type="button" class="btn btn-no-border btn-sm-sm ml-1" [title]="'CLOSE' | translate" (click)="closeModal($event)">
+            <button type="button" class="btn btn-no-border btn-sm-sm ms-1" [title]="'CLOSE' | translate" (click)="closeModal($event)">
                 <i class="icon-cross"></i>
             </button>
         </div>
@@ -230,7 +230,7 @@
 
     </div>
     <div class="modal-footer display-block">
-        <div class="float-right" *ngIf="allowImpersonation">
+        <div class="float-end" *ngIf="allowImpersonation">
             <a class="btn btn-primary" href="{{baseUrl}}?_switch_user={{model.email}}">
                 <span>{{'IMPERSONATION' | translate}}</span>
             </a>

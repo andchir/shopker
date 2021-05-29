@@ -8,7 +8,7 @@
         <hr>
 
         <div class="mb-2">
-            <div class="float-md-left">
+            <div class="float-md-start">
 
                 <select class="form-select align-middle w-auto mb-2 mr-2" [(ngModel)]="queryOptions.category" (ngModelChange)="onThemeChange()">
                     <option [value]="''">{{ 'ALL' | translate }}</option>
@@ -21,7 +21,7 @@
                 </div>
                 
             </div>
-            <div class="float-md-right">
+            <div class="float-md-end">
 
                 <div ngbDropdown class="d-block d-md-inline-block align-middle mb-2" placement="bottom-right">
                     <button class="btn btn-info d-block d-md-inline-block width-100 width-md-auto" ngbDropdownToggle>
@@ -32,7 +32,7 @@
                     </div>
                 </div>
 
-                <div ngbDropdown class="d-block d-md-inline-block align-middle ml-md-2 mb-2" placement="bottom-right" *ngIf="files['config'].length">
+                <div ngbDropdown class="d-block d-md-inline-block align-middle ms-md-2 mb-2" placement="bottom-right" *ngIf="files['config'].length">
                     <button class="btn btn-primary d-block d-md-inline-block width-100 width-md-auto" ngbDropdownToggle>
                         <span>{{'CONFIG_FILES' | translate}}</span>
                     </button>
@@ -49,7 +49,7 @@
                     </div>
                 </div>
 
-                <div ngbDropdown class="d-block d-md-inline-block align-middle ml-md-2 mb-2" placement="bottom-right" *ngIf="files['css'].length">
+                <div ngbDropdown class="d-block d-md-inline-block align-middle ms-md-2 mb-2" placement="bottom-right" *ngIf="files['css'].length">
                     <button class="btn btn-primary d-block d-md-inline-block width-100 width-md-auto" ngbDropdownToggle>
                         <span>CSS / JS</span>
                     </button>
@@ -68,7 +68,7 @@
                     </div>
                 </div>
 
-                <button type="button" class="btn btn-success btn-wide d-block d-md-inline-block width-100 width-md-auto ml-md-2 mb-2" (click)="modalOpen()">
+                <button type="button" class="btn btn-success btn-wide d-block d-md-inline-block width-100 width-md-auto ms-md-2 mb-2" (click)="modalOpen()">
                     <i class="icon-plus mr-2"></i>
                     <span>{{'ADD' | translate}}</span>
                 </button>

@@ -8,7 +8,7 @@
         <hr>
 
         <div class="mb-3">
-            <div class="float-md-left">
+            <div class="float-md-start">
 
                 <div class="form-control-search mb-2 mb-md-0" [ngClass]="{'form-control-search-clear': !!queryOptions.search_word}">
                     <input type="text" class="form-control min-width250" placeholder="{{ 'SEARCH' | translate }}..." [(ngModel)]="queryOptions.search_word" (ngModelChange)="onSearchWordUpdate()">
@@ -16,7 +16,7 @@
                 </div>
 
             </div>
-            <div class="float-md-right">
+            <div class="float-md-end">
 
                 <div ngbDropdown class="d-block d-md-inline-block mb-2 mb-md-0" placement="bottom-right">
                     <button class="btn btn-info d-block d-md-inline-block width-100 width-md-auto" ngbDropdownToggle>
@@ -26,12 +26,12 @@
                         <button class="dropdown-item" (click)="deleteSelected()">{{'DELETE' | translate}}</button>
                     </div>
                 </div>
-                <button type="button" class="btn btn-secondary d-block d-md-inline-block width-100 width-md-auto ml-md-2" ngbTooltip="{{'REFRESH' | translate}}" (click)="getList()">
+                <button type="button" class="btn btn-secondary d-block d-md-inline-block width-100 width-md-auto ms-md-2" ngbTooltip="{{'REFRESH' | translate}}" (click)="getList()">
                     <i class="icon-reload"></i>
                 </button>
 
             </div>
-            <div class="float-left">
+            <div class="float-start">
 
 
 

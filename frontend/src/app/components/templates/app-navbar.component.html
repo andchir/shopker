@@ -20,7 +20,8 @@
                [ngClass]="{'active': isFileManagerActive}"
                [ngbTooltip]="'FILE_MANAGER' | translate"
                placement="right"
-               tooltipClass="tooltip-left-blue tooltip-offset-left"
+               container="body"
+               tooltipClass="tooltip-left-blue"
                (click)="fileManagerToggle($event)">
                     <i class="icon-folder item-icon"></i>
             </a>
@@ -29,6 +30,7 @@
             <a class="nav-link" [href]="baseUrl" target="_blank"
                [ngbTooltip]="'PREVIEW_SITE' | translate"
                placement="right"
+               container="body"
                tooltipClass="tooltip-left-blue">
                     <i class="icon-home item-icon"></i>
             </a>
@@ -37,6 +39,7 @@
             <a class="nav-link" href="{{baseUrl}}logout"
                [ngbTooltip]="'LOGOUT' | translate"
                placement="right"
+               container="body"
                tooltipClass="tooltip-left-blue">
                     <i class="icon-power item-icon"></i>
             </a>

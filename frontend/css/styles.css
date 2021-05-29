@@ -342,7 +342,7 @@ body .ui-tree .ui-tree-filter-container .ui-tree-filter-icon { margin-top: -0.75
 .app-progress .progress { border: 2px solid rgba(255,255,255,0.5); box-shadow: 0 0 10px rgba(0,0,0,0.4); }
 
 /* tooltips */
-.tooltip-left-blue { margin-left: 2px; }
+.tooltip-left-blue { margin-left: 56px; }
 .tooltip-left-blue .tooltip-inner { background-color: #007bff; font-size: 125%; border-radius: 0; }
 .tooltip-left-blue .arrow::before { border-right-color: #007bff; }
 .tooltip-offset-left { margin-left: 7px; }

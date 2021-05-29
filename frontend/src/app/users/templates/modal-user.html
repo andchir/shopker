@@ -3,13 +3,13 @@
         <button type="button" class="btn btn-outline-primary btn-sm d-block"
                 [disabled]="submitted"
                 (click)="closeModal($event)">
-            <i class="icon-cross mr-1"></i>
+            <i class="icon-cross me-1"></i>
             <span>{{'CLOSE' | translate}}</span>
         </button>
         <button type="button" class="btn btn-outline-primary btn-sm d-block"
                 [disabled]="submitted"
                 (click)="minimize($event)">
-            <i class="icon-minimize mr-1"></i>
+            <i class="icon-minimize me-1"></i>
             <span>{{'MINIMIZE' | translate}}</span>
         </button>
     </div>
@@ -25,7 +25,7 @@
             </button>
         </div>
     </div>
-    <h4 class="modal-title text-overflow mr-5">{{modalTitle}}</h4>
+    <h4 class="modal-title text-overflow me-5">{{modalTitle}}</h4>
 </div>
 
 <form [formGroup]="form" method="post" (ngSubmit)="onSubmit()" [ngClass]="{'no-events': submitted}" #formEl>
@@ -237,7 +237,7 @@
                 <span>{{'IMPERSONATION' | translate}}</span>
             </a>
         </div>
-        <div class="btn-group mr-1">
+        <div class="btn-group me-1">
             <button type="button" class="btn btn-success btn-wide" [disabled]="submitted" (click)="save(true, $event)">
                 <span>{{'SAVE_AND_CLOSE' | translate}}</span>
             </button>

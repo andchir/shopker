@@ -21,7 +21,7 @@
                     <img [src]="imageUrl" alt="Preview" class="img-thumbnail" style="width: 265px;" #imgPreview>
                 </div>
                 <div class="file-buttons show-on-hover-child-left">
-                    <button type="button" class="btn btn-secondary btn-wide mr-2" (click)="buttonHandler($event)" (drop)="dropHandler($event)" (dragover)="dragOverHandler($event)">
+                    <button type="button" class="btn btn-secondary btn-wide me-2" (click)="buttonHandler($event)" (drop)="dropHandler($event)" (dragover)="dragOverHandler($event)">
                         <i class="icon-upload"></i>
                         {{ 'CHOOSE_FILE' | translate }}
                     </button>

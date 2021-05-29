@@ -35,7 +35,7 @@
         <div class="row">
             <div class="col-md-6">
 
-                <div class="form-group form-group-message">
+                <div class="mb-2 form-group-message">
                     <label for="fieldTitle" class="label-filled">{{'TITLE' | translate}}</label>
                     <input type="text" class="form-control" name="title"
                            formControlName="title"
@@ -46,7 +46,7 @@
                     </div>
                 </div>
 
-                <div class="form-group form-group-message">
+                <div class="mb-2 form-group-message">
                     <label for="fieldName" class="label-filled">{{'SYSTEM_NAME' | translate}}</label>
                     <div class="input-group" [ngClass]="{'is-invalid': form.controls.name.touched && !form.controls.name.valid}">
                         <input type="text" class="form-control" name="name"
@@ -64,7 +64,7 @@
                     </div>
                 </div>
 
-                <div class="form-group row">
+                <div class="mb-2 row">
                     <div class="col-12">
 
                         <div class="card card-body p-2 pl-3">
@@ -81,7 +81,7 @@
 
             </div>
             <div class="col-md-6">
-                <div class="form-group">
+                <div class="mb-2">
                     <label for="fieldDescription" class="label-filled">{{'DESCRIPTION' | translate}}</label>
                     <textarea class="form-control" rows="5" name="description" formControlName="description" id="fieldDescription"></textarea>
                 </div>

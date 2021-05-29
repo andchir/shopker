@@ -10,7 +10,7 @@
         <div class="mb-2">
             <div class="float-md-left">
 
-                <select class="custom-select align-middle w-auto mb-2 mr-2" [(ngModel)]="queryOptions.category" (ngModelChange)="onThemeChange()">
+                <select class="form-select align-middle w-auto mb-2 mr-2" [(ngModel)]="queryOptions.category" (ngModelChange)="onThemeChange()">
                     <option [value]="''">{{ 'ALL' | translate }}</option>
                     <option *ngFor="let theme of themes" [value]="theme.name">{{ theme.name }}</option>
                 </select>

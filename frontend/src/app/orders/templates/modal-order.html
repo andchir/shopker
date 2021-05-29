@@ -49,7 +49,7 @@
 
         <div class="row">
             <div class="col-lg-6">
-                <div class="form-group form-group-message">
+                <div class="mb-2 form-group-message">
                     <label class="label-filled">
                         {{'ID' | translate}}
                     </label>
@@ -61,7 +61,7 @@
                 </div>
             </div>
             <div class="col-lg-6">
-                <div class="form-group form-group-message">
+                <div class="mb-2 form-group-message">
                     <label class="label-filled">
                         {{'EMAIL' | translate}}
                     </label>
@@ -79,7 +79,7 @@
         <div class="row">
             <div class="col-lg-6">
 
-                <div class="form-group form-group-message">
+                <div class="mb-2 form-group-message">
                     <label class="label-filled">
                         {{'FULL_NAME' | translate}}
                     </label>
@@ -92,7 +92,7 @@
                     </div>
                 </div>
 
-                <div class="form-group form-group-message">
+                <div class="mb-2 form-group-message">
                     <label class="label-filled">
                         {{'PHONE' | translate}}
                     </label>
@@ -106,7 +106,7 @@
 
             </div>
             <div class="col-lg-6">
-                <div class="form-group form-group-message">
+                <div class="mb-2 form-group-message">
                     <label class="label-filled">
                         {{'COMMENT' | translate}}
                     </label>
@@ -120,11 +120,11 @@
 
         <div class="row">
             <div class="col-lg-6">
-                <div class="form-group form-group-message">
+                <div class="mb-2 form-group-message">
                     <label class="label-filled">
                         {{'DELIVERY_METHOD' | translate}}
                     </label>
-                    <select class="custom-select" name="deliveryName"
+                    <select class="form-select" name="deliveryName"
                             formControlName="deliveryName"
                             [(ngModel)]="model.deliveryName"
                             (ngModelChange)="onDeliveryUpdate()">
@@ -135,11 +135,11 @@
                 </div>
             </div>
             <div class="col-lg-6">
-                <div class="form-group form-group-message">
+                <div class="mb-2 form-group-message">
                     <label class="label-filled">
                         {{'PAYMENT_METHOD' | translate}}
                     </label>
-                    <select class="custom-select" name="paymentName"
+                    <select class="form-select" name="paymentName"
                             formControlName="paymentName"
                             [(ngModel)]="model.paymentName">
                         <ng-container *ngIf="settings">

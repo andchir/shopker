@@ -32,7 +32,7 @@
 
     <div class="modal-body py-0" [class.loading]="loading">
 
-        <div class="row form-group form-group-message" *ngIf="!isRoot">
+        <div class="row mb-2 form-group-message" *ngIf="!isRoot">
             <div class="col-md-5">
                 <label for="fieldContentType">{{'PARENT_FOLDER' | translate}}</label>
             </div>
@@ -48,7 +48,7 @@
             </div>
         </div>
 
-        <div class="row form-group show-on-hover-parent form-group-message">
+        <div class="row mb-2 show-on-hover-parent form-group-message">
             <div class="col-md-5">
                 <label for="fieldTitle">
                     {{'TITLE' | translate}}
@@ -64,7 +64,7 @@
             </div>
         </div>
 
-        <div class="row form-group form-group-message">
+        <div class="row mb-2 form-group-message">
             <div class="col-md-5">
                 <label for="fieldName">
                     {{'SYSTEM_NAME' | translate}}
@@ -89,7 +89,7 @@
             </div>
         </div>
 
-        <div class="row form-group show-on-hover-parent">
+        <div class="row mb-2 show-on-hover-parent">
             <div class="col-md-5">
                 <label for="fieldDescription">
                     {{'DESCRIPTION' | translate}}
@@ -101,7 +101,7 @@
             </div>
         </div>
 
-        <div class="row form-group">
+        <div class="row mb-2">
             <div class="col-md-5">
                 <label>
                     {{'IMAGE' | translate}}
@@ -118,14 +118,14 @@
             </div>
         </div>
 
-        <div class="row form-group form-group-message">
+        <div class="row mb-2 form-group-message">
             <div class="col-md-5">
                 <label for="fieldContentType">
                     {{'CONTENT_TYPE' | translate}}
                 </label>
             </div>
             <div class="col-md-7">
-                <select id="fieldContentType" class="custom-select" name="contentTypeName"
+                <select id="fieldContentType" class="form-select" name="contentTypeName"
                         formControlName="contentTypeName"
                         [class.is-invalid]="formErrors.contentTypeName">
                     <option value="1" *ngFor="let contentType of contentTypes" [value]="contentType.name">{{contentType.title}}</option>
@@ -136,7 +136,7 @@
             </div>
         </div>
 
-        <div class="row form-group form-group-message" *ngIf="!isRoot">
+        <div class="row mb-2 form-group-message" *ngIf="!isRoot">
             <div class="col-md-5">
                 <label for="fieldMenuIndex">
                     {{'MENU_INDEX' | translate}}
@@ -152,7 +152,7 @@
             </div>
         </div>
 
-        <div class="row form-group">
+        <div class="row mb-2">
             <div class="col-md-7 ms-md-auto">
 
                 <div class="card card-body p-2 pl-3">

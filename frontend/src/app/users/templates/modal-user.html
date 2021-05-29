@@ -34,7 +34,7 @@
 
         <div class="row">
             <div class="col-lg-6">
-                <div class="form-group form-group-message">
+                <div class="mb-2 form-group-message">
                     <label class="label-filled">
                         {{'EMAIL' | translate}}
                     </label>
@@ -47,7 +47,7 @@
                 </div>
             </div>
             <div class="col-lg-6">
-                <div class="form-group form-group-message">
+                <div class="mb-2 form-group-message">
                     <label class="label-filled">
                         {{'FULL_NAME' | translate}}
                     </label>
@@ -63,7 +63,7 @@
 
         <div class="row">
             <div class="col-lg-6">
-                <div class="form-group form-group-message">
+                <div class="mb-2 form-group-message">
                     <label class="label-filled">
                         {{'PHONE' | translate}}
                     </label>
@@ -74,11 +74,11 @@
                 </div>
             </div>
             <div class="col-lg-6">
-                <div class="form-group form-group-message">
+                <div class="mb-2 form-group-message">
                     <label class="label-filled">
                         {{'ROLE' | translate}}
                     </label>
-                    <select class="custom-select"
+                    <select class="form-select"
                             formControlName="role"
                             [ngClass]="{'is-invalid': form.controls.role.touched && !form.controls.role.valid}">
                         <ng-container *ngFor="let role of userRoles$ | async">
@@ -94,7 +94,7 @@
 
         <div class="row">
             <div class="col-lg-6">
-                <div class="form-group form-group-message">
+                <div class="mb-2 form-group-message">
                     <label class="label-filled">
                         {{'PASSWORD' | translate}}
                     </label>
@@ -107,7 +107,7 @@
                 </div>
             </div>
             <div class="col-lg-6">
-                <div class="form-group form-group-message">
+                <div class="mb-2 form-group-message">
                     <label class="label-filled">
                         {{'CONFIRM_PASSWORD' | translate}}
                     </label>
@@ -123,7 +123,7 @@
 
         <div class="row">
             <div class="col-lg-6">
-                <div class="form-group">
+                <div class="mb-2">
                     <label class="label-filled">
                         {{'API_TOKEN' | translate}}
                     </label>
@@ -141,9 +141,9 @@
                 </div>
             </div>
             <div class="col-lg-6">
-                <div class="form-group">
+                <div class="mb-2">
     
-                    <div class="form-group mt-0 mt-lg-4">
+                    <div class="mb-2 mt-0 mt-lg-4">
                         <div class="card card-body p-2 pl-3">
                             <div class="custom-control custom-checkbox m-0">
                                 <input type="checkbox" class="custom-control-input" id="fieldIsActive{{ model.id }}" value="1" formControlName="isActive">

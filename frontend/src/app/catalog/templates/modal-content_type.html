@@ -47,7 +47,7 @@
 
             <form [formGroup]="form" method="post" (ngSubmit)="onSubmit()" [ngClass]="{'no-events': submitted}" #formEl>
 
-                <div class="form-group form-group-message">
+                <div class="mb-2 form-group-message">
                     <label class="label-filled" for="fieldTitle">
                         {{'TITLE' | translate}}
                     </label>
@@ -60,7 +60,7 @@
                     </div>
                 </div>
     
-                <div class="form-group form-group-message">
+                <div class="mb-2 form-group-message">
                     <label class="label-filled" for="fieldName">
                         {{'SYSTEM_NAME' | translate}}
                     </label>
@@ -80,7 +80,7 @@
                     </div>
                 </div>
     
-                <div class="form-group">
+                <div class="mb-2">
                     <label class="label-filled" for="fieldDescription">
                         {{'DESCRIPTION' | translate}}
                     </label>
@@ -88,14 +88,14 @@
                               formControlName="description"></textarea>
                 </div>
     
-                <div class="form-group row form-group-message">
+                <div class="mb-2 row form-group-message">
                     <div class="col-12">
     
-                        <div class="form-group mb-0">
+                        <div class="mb-0">
                             <label class="label-filled" for="fieldCollectionName">{{'COLLECTION' | translate}}</label>
     
                             <div class="input-group" [ngClass]="{'is-invalid': form.controls.collection.touched && !form.controls.collection.valid}">
-                                <select class="custom-select custom-select-sm"
+                                <select class="form-select form-select-sm"
                                         id="fieldCollectionName"
                                         name="collection"
                                         formControlName="collection"
@@ -140,7 +140,7 @@
                     </div>
                 </div>
     
-                <div class="form-group">
+                <div class="mb-2">
                     <div class="custom-control custom-checkbox m-0">
                         <input type="checkbox" class="custom-control-input" id="fieldIsCreateByUsersAllowed{{ uniqueId }}" value="1"
                                name="isCreateByUsersAllowed"
@@ -151,7 +151,7 @@
                     </div>
                 </div>
     
-                <div class="form-group">
+                <div class="mb-2">
                     <div class="card card-body p-2 pl-3">
     
                         <div class="custom-control custom-checkbox m-0">
@@ -181,7 +181,7 @@
             <div class="card">
                 <div class="card-body">
 
-                    <div class="form-group row form-group-message">
+                    <div class="mb-2 row form-group-message">
                         <div class="col-md-5">
                             <label for="field_fieldTitle{{ uniqueId }}">{{'TITLE' | translate}}</label>
                         </div>
@@ -195,7 +195,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group row form-group-message">
+                    <div class="mb-2 row form-group-message">
                         <div class="col-md-5">
                             <label for="field_fieldName{{ uniqueId }}">{{'SYSTEM_NAME' | translate}}</label>
                         </div>
@@ -218,7 +218,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group row">
+                    <div class="mb-2 row">
                         <div class="col-md-5">
                             <label for="field_fieldDescription{{ uniqueId }}">{{'DESCRIPTION' | translate}}</label>
                         </div>
@@ -231,14 +231,14 @@
                         </div>
                     </div>
 
-                    <div class="form-group row form-group-message">
+                    <div class="mb-2 row form-group-message">
                         <div class="col-md-5">
                             <label for="field_fieldInputType{{ uniqueId }}">{{'INPUT_TYPE' | translate}}</label>
                         </div>
                         <div class="col-md-7">
 
                             <div class="input-group" [ngClass]="{'is-invalid': secondForm.controls.inputType.touched && !secondForm.controls.inputType.valid}">
-                                <select class="custom-select custom-select-sm"
+                                <select class="form-select form-select-sm"
                                         id="field_fieldInputType{{ uniqueId }}"
                                         name="field_inputType"
                                         formControlName="inputType"
@@ -265,7 +265,7 @@
                             <div class="alert alert-secondary small" [hidden]="fieldTypeProperties.input.length > 0">
                                 {{ 'THERE_NO_PARAMETERS' | translate }}
                             </div>
-                            <div class="row form-group" *ngFor="let property of fieldTypeProperties.input">
+                            <div class="row mb-2" *ngFor="let property of fieldTypeProperties.input">
                                 <div class="col-md-5">
                                     <label for="parameterInputField{{ property.name }}{{ uniqueId }}">{{property.title}}</label>
                                 </div>
@@ -284,14 +284,14 @@
                         </div>
                     </div>
 
-                    <div class="form-group row form-group-message">
+                    <div class="mb-2 row form-group-message">
                         <div class="col-md-5">
                             <label for="field_fieldOutputType{{ uniqueId }}">{{'OUTPUT_TYPE' | translate}}</label>
                         </div>
                         <div class="col-md-7">
 
                             <div class="input-group" [ngClass]="{'is-invalid': secondForm.controls.outputType.touched && !secondForm.controls.outputType.valid}">
-                                <select class="custom-select custom-select-sm"
+                                <select class="form-select form-select-sm"
                                         id="field_fieldOutputType{{ uniqueId }}"
                                         name="field_outputType"
                                         formControlName="outputType"
@@ -317,7 +317,7 @@
                         <div class="alert alert-secondary small" [hidden]="fieldTypeProperties.output.length > 0">
                             {{ 'THERE_NO_PARAMETERS' | translate }}
                         </div>
-                        <div class="row form-group" *ngFor="let property of fieldTypeProperties.output">
+                        <div class="row mb-2" *ngFor="let property of fieldTypeProperties.output">
                             <div class="col-md-5">
                                 <label for="parameterOutputField{{ property.name }}{{ uniqueId }}">{{property.title}}</label>
                             </div>
@@ -335,7 +335,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group row">
+                    <div class="mb-2 row">
                         <div class="col-md-5">
                             <label for="field_fieldGroup">{{'GROUP' | translate}}</label>
                         </div>
@@ -343,7 +343,7 @@
 
                             <div class="form-group-message">
                                 <div class="input-group input-group-sm" [ngClass]="{'is-invalid': secondForm.controls.group.touched && !secondForm.controls.group.valid}">
-                                    <select class="custom-select" 
+                                    <select class="form-select" 
                                             id="field_fieldGroup"
                                             name="field_group"
                                             formControlName="group"
@@ -388,7 +388,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group row mb-0">
+                    <div class="row mb-0">
                         <div class="col-md-7 offset-md-5">
 
                             <div class="custom-control custom-checkbox">
@@ -401,7 +401,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group row mb-0">
+                    <div class="row mb-0">
                         <div class="col-md-7 offset-md-5">
 
                             <div class="custom-control custom-checkbox">
@@ -414,7 +414,7 @@
                         </div>
                     </div>
     
-                    <div class="form-group row mb-0">
+                    <div class="row mb-0">
                         <div class="col-md-7 offset-md-5">
             
                             <div class="custom-control custom-checkbox">
@@ -427,7 +427,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group row mb-0">
+                    <div class="row mb-0">
                         <div class="col-md-7 offset-md-5">
 
                             <div class="custom-control custom-checkbox">
@@ -440,7 +440,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group row mb-0">
+                    <div class="row mb-0">
                         <div class="col-md-7 offset-md-5">
 
                             <div class="custom-control custom-checkbox">
@@ -491,7 +491,7 @@
                 <div #blockFieldList>
                     <div>
                         <div class="text-right mb-2" [hidden]="model.fields.length < 2">
-                            <select class="custom-select custom-select-sm d-block d-md-inline-block width-100 width-md-auto mb-2 mb-md-0" #sortTypeSelect>
+                            <select class="form-select form-select-sm d-block d-md-inline-block width-100 width-md-auto mb-2 mb-md-0" #sortTypeSelect>
                                 <option value="">{{'SORT_FIELDS' | translate}}</option>
                                 <option value="listOrder-showInList">{{'SORT_FIELDS_LIST' | translate}}</option>
                                 <option value="pageOrder-showOnPage">{{'SORT_FIELDS_PAGE' | translate}}</option>

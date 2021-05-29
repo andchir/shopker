@@ -6,6 +6,7 @@
                 href="#{{menuItem.route}}"
                 [ngbTooltip]="menuItem.title | translate"
                 placement="right"
+                container="body"
                 tooltipClass="tooltip-left-blue"
                 (click)="navigateRoute(menuItem, $event)">
                     <i class="item-icon" [ngClass]="menuItem.icon"></i>

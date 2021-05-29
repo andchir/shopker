@@ -32,7 +32,7 @@
 
     <div class="row">
         <div class="col-lg-6">
-            <div class="form-group">
+            <div class="mb-2">
                 <label class="label-filled">
                     {{'NAME' | translate}}
                 </label>
@@ -40,13 +40,13 @@
             </div>
         </div>
         <div class="col-lg-6">
-            <div class="form-group">
+            <div class="mb-2">
                 <label class="label-filled">
                     {{'PATH' | translate}}
                 </label>
                 <input type="text" class="form-control" name="path" [(ngModel)]="model.path" [readonly]="isPathReadOnly">
             </div>
-            <div class="form-group">
+            <div class="mb-2">
                 <div class="card card-body p-2 pl-3">
                     <div class="custom-control custom-checkbox m-0">
                         <input type="checkbox" class="custom-control-input" id="fieldClearCache{{ uniqueId }}" name="clearCache" [(ngModel)]="model.clearCache">
@@ -57,7 +57,7 @@
         </div>
     </div>
 
-    <div class="form-group mb-0">
+    <div class="mb-0">
         <label class="label-filled">
             {{'CODE' | translate}}
         </label>

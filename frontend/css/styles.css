@@ -111,10 +111,10 @@ input.form-control[readonly] { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); curso
 .custom-checkbox-single .custom-control-label:before,
 .custom-checkbox-single .custom-control-label:after { top: 0; left: 0; cursor: pointer; }
 .custom-checkbox .custom-control-label { cursor: pointer; }
-.input-group-on-hover .input-group-append { display: none; }
-.input-group-on-hover:hover .input-group-append { display: flex; }
-.input-group-on-hover.input-group-sm > .form-control { border-top-right-radius: 0.2rem; border-bottom-right-radius: 0.2rem; }
-.input-group-on-hover.input-group-sm:hover > .form-control { border-top-right-radius: 0; border-bottom-right-radius: 0; }
+.input-group-on-hover .btn { display: none; }
+.input-group-on-hover:hover .btn { display: inline-block; }
+.input-group-on-hover.input-group-sm > .form-control { border-top-right-radius: 0.2rem !important; border-bottom-right-radius: 0.2rem !important; }
+.input-group-on-hover.input-group-sm:hover > .form-control { border-top-right-radius: 0 !important; border-bottom-right-radius: 0 !important; }
 
 .form-group-message {  }
 .form-group-message .form-control ~ .alert,
@@ -296,20 +296,6 @@ body .ui-datepicker .ui-datepicker-header .ui-datepicker-title select { margin-l
 .ui-tree .ui-tree-loading-content { margin-top: -0.6em; }
 body .ui-tree .ui-tree-filter-container .ui-tree-filter-icon { margin-top: -0.75em; }
 .dropdown-menu .ui-tree.ui-widget-content { border: 0; }
-
-/* accordion */
-.ngb-accordion .card { margin-bottom: 0.325em; border: 1px solid rgba(0,0,0,.125) !important; border-radius: .25rem !important; }
-.ngb-accordion .card-header { padding: 0; border-bottom: 0; position: relative; background-image: linear-gradient(to bottom, #f7f7f7 0%, #e8e8e8 100%); text-shadow: 1px 1px 2px #fff, 1px 1px 1px #fff; }
-.ngb-accordion .card-header button:before { content: '\e906'; display: inline-block; font-family: 'icomoon'; position: absolute; right: 10px; top: 12px; color: rgba(0,0,0,0.5); }
-.ngb-accordion .card-header.active { border-bottom: 1px solid rgba(0,0,0,.125); background-color: #e8e8e8; background-image: linear-gradient(to bottom, #e8e8e8 0%, #d1d1d1 100%); }
-.ngb-accordion .card-header button.collapsed:before { content: '\e909'; }
-.ngb-accordion .card-header > a,
-.ngb-accordion .card-header button.btn-link { display: block; width: 100%; padding: 0.75rem 1.25rem; text-decoration: none; text-align: left; line-height: 1; color: rgba(0,0,0,0.7); }
-.ngb-accordion .card-header:hover { background-color: #e8e8e8; background-image: linear-gradient(to bottom, #e8e8e8 0%, #d1d1d1 100%); }
-.ngb-accordion .card-header.active a,
-.ngb-accordion .card-header:hover a,
-.ngb-accordion .card-header.active button.btn-link,
-.ngb-accordion .card-header:hover button.btn-link { color: rgba(0,0,0,0.8); }
 
 /* icons */
 .ui-chips-token .ui-chips-token-icon { margin-top: -0.6em !important; }

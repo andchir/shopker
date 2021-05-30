@@ -82,18 +82,16 @@
                                                 <input type="{{ getFieldTypeByName(setting.name) }}" class="form-control"
                                                        [(ngModel)]="setting.value"
                                                        readonly #inputField>
-                                                <div class="input-group-append">
-                                                    <button class="btn btn-outline-success" type="button"
-                                                            ngbTooltip="{{'SAVE' | translate}}"
-                                                            (click)="saveSettings('SETTINGS_MAIN', $event)" style="display: none;" #button>
-                                                        <i class="icon-check"></i>
-                                                    </button>
-                                                    <button class="btn btn-outline-secondary" type="button"
-                                                            ngbTooltip="{{'EDIT' | translate}}"
-                                                            (click)="inputDisableToggle(inputField, button, $event)">
-                                                        <i class="icon-edit"></i>
-                                                    </button>
-                                                </div>
+                                                <button class="btn btn-sm btn-outline-success" type="button"
+                                                        ngbTooltip="{{'SAVE' | translate}}"
+                                                        (click)="saveSettings('SETTINGS_MAIN', $event)" style="display: none;" #button>
+                                                    <i class="icon-check"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-secondary" type="button"
+                                                        ngbTooltip="{{'EDIT' | translate}}"
+                                                        (click)="inputDisableToggle(inputField, button, $event)">
+                                                    <i class="icon-edit"></i>
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>

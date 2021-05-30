@@ -48,11 +48,9 @@
                                            [formControlName]="field.name"
                                            [(ngModel)]="model[field.name]"
                                            [class.is-invalid]="formErrors[field.name]">
-                                    <div class="input-group-append">
-                                        <button type="button" class="btn btn-secondary" ngbTooltip="{{'GENERATE' | translate}}" (click)="generateName(field)">
-                                            <i class="icon-reload"></i>
-                                        </button>
-                                    </div>
+                                    <button type="button" class="btn btn-secondary" ngbTooltip="{{'GENERATE' | translate}}" (click)="generateName(field)">
+                                        <i class="icon-reload"></i>
+                                    </button>
                                 </div>
                                 <div *ngIf="formErrors[field.name]" class="alert alert-danger">
                                     {{formErrors[field.name]}}

@@ -22,11 +22,9 @@
         <b>{{ 'MODIFIED_DATE' | translate }}</b>: {{ file.modifiedDate }}
     </div>
 
-    <div class="alert alert-success" *ngIf="messageText">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="messageText = ''">
-            <span aria-hidden="true">&times;</span>
-        </button>
+    <div class="alert alert-dismissible alert-success" *ngIf="messageText">
         {{ messageText | translate }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="messageText = ''"></button>
     </div>
 
     <div class="card mb-0" *ngIf="actionName == 'rename'">
@@ -36,11 +34,9 @@
             </div>
             <div class="input-group mb-3">
                 <input type="text" class="form-control" id="fieldRename" [(ngModel)]="file.title">
-                <div class="input-group-append">
                 <span class="input-group-text">
                     .{{ file.extension }}
                 </span>
-                </div>
             </div>
             <div class="text-center">
                 <button type="button" class="btn btn-info btn-wide btn-sm mx-1" (click)="renameHandler($event)">

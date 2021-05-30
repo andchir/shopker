@@ -14,7 +14,7 @@
         <div class="clearfix"></div>
     </div>
     <div dragula="filters" [(dragulaModel)]="items" dragula="DRAGULA_EVENTS">
-        <div class="card card-body d-block p-2 bg-light cursor-ns-resize" *ngFor="let item of items">
+        <div class="card card-body d-block p-2 bg-light cursor-ns-resize mb-2" *ngFor="let item of items">
             {{item.title}}
             <span class="text-muted">({{item.name}})</span>
         </div>

@@ -129,14 +129,12 @@
                     </label>
                     <div class="input-group" [class.is-invalid]="formErrors.name">
                         <input type="text" class="form-control" name="apiToken" autocomplete="off" formControlName="apiToken">
-                        <div class="input-group-append">
-                            <button type="button" class="btn btn-secondary" ngbTooltip="{{'CLEAR' | translate}}" container="body" (click)="clearApiToken($event)">
-                                <i class="icon-cross"></i>
-                            </button>
-                            <button type="button" class="btn btn-secondary" ngbTooltip="{{'GENERATE' | translate}}" container="body" (click)="generateApiToken($event)">
-                                <i class="icon-reload"></i>
-                            </button>
-                        </div>
+                        <button type="button" class="btn btn-secondary" ngbTooltip="{{'CLEAR' | translate}}" container="body" (click)="clearApiToken($event)">
+                            <i class="icon-cross"></i>
+                        </button>
+                        <button type="button" class="btn btn-secondary" ngbTooltip="{{'GENERATE' | translate}}" container="body" (click)="generateApiToken($event)">
+                            <i class="icon-reload"></i>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -223,11 +221,9 @@
             </ngb-panel>
         </ngb-accordion>
 
-        <div class="alert alert-danger mt-3 mb-0" *ngIf="errorMessage">
-            <button type="button" class="close" (click)="errorMessage = ''">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            {{errorMessage}}
+        <div class="alert alert-dismissible alert-danger mt-3 mb-0" *ngIf="errorMessage">
+            {{ errorMessage }}
+            <button type="button" class="btn-close" (click)="errorMessage = ''"></button>
         </div>
 
     </div>

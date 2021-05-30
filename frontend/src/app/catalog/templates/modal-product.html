@@ -85,11 +85,9 @@
             
         </div>
 
-        <div class="alert alert-danger mt-3 mb-0" [hidden]="!errorMessage">
-            <button type="button" class="close" (click)="errorMessage = ''">
-                <span aria-hidden="true">&times;</span>
-            </button>
+        <div class="alert alert-dismissible alert-danger mt-3 mb-0" [hidden]="!errorMessage">
             {{errorMessage}}
+            <button type="button" class="btn-close" (click)="errorMessage = ''"></button>
         </div>
 
     </div>

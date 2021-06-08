@@ -1,6 +1,7 @@
 4.2.9
 - Import and export translations.
 - Import/Export parameters value via JSON. You can quickly transfer all parameters from one product to another.
+- Update Symfony 5.2 to 5.3.
 - Update Angular 11 to 12.
 - Update Bootstrap 4 to 5.
 

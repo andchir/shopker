@@ -483,9 +483,15 @@
                                 <option value="pageOrder-showOnPage">{{'SORT_FIELDS_PAGE' | translate}}</option>
                                 <option value="filterOrder-isFilter">{{'SORT_FILTERS' | translate}}</option>
                             </select>
-                            <button type="button" class="btn btn-sm btn-secondary d-block d-md-inline-block width-100 width-md-auto ms-md-2" (click)="sortingStart(sortTypeSelect.value, $event)">
+                            <button type="button" class="btn btn-sm btn-secondary d-block d-md-inline-block width-100 width-md-auto ms-md-2 mb-2 mb-md-0" (click)="sortingStart(sortTypeSelect.value, $event)">
                                 <i class="icon-shuffle"></i>
                                 {{'SORT' | translate}}
+                            </button>
+                            <button type="button" class="btn btn-sm btn-secondary d-block d-md-inline-block width-100 width-md-auto ms-md-2"
+                                    ngbTooltip="{{'EXPORT' | translate}}"
+                                    placement="bottom"
+                                    (click)="fieldsExport($event)">
+                                <i class="icon-inbox"></i>
                             </button>
                         </div>
 

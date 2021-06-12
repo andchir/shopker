@@ -40,7 +40,7 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
     model = new ContentType(0, '', '', '', 'products', [], ['General', 'Service'], true, false);
     fieldModel = new ContentField(0, '', '', '', '', {}, '', {}, '');
     sortData: SortData[] = [];
-    sortingfieldName = '';
+    sortingFieldName = '';
     fld_submitted = false;
     errorFieldMessage: string;
     action = 'add_field';
@@ -478,7 +478,7 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
         if (event) {
             event.preventDefault();
         }
-        this.sortingfieldName = sortingFieldName;
+        this.sortingFieldName = sortingFieldName;
         let filteredData;
         if (filterFieldName) {
             filteredData = this.model.fields.filter((field) => {
@@ -508,7 +508,7 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
         }
         this.errorMessage = '';
         const sortTypeValueArr = sortTypeValue.split('-');
-        this.sortingfieldName = sortTypeValueArr[0];
+        this.sortingFieldName = sortTypeValueArr[0];
         const filteredData = sortTypeValueArr[1]
             ? this.model.fields.filter((field) => {
                 return field[sortTypeValueArr[1]];
@@ -528,13 +528,13 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
     }
 
     sortingApply(items?: any): void {
-        if (this.sortingfieldName) {
+        if (this.sortingFieldName) {
             this.sortData.forEach((field, index) => {
                 const ind = this.model.fields.findIndex((fld) => {
                     return fld.name === field.name;
                 });
                 if (ind > -1) {
-                    this.model.fields[ind][this.sortingfieldName] = index;
+                    this.model.fields[ind][this.sortingFieldName] = index;
                 }
             });
         } else {
@@ -556,7 +556,7 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
             this.action = 'add_field';
         }
         this.sortData.splice(0, this.sortData.length);
-        this.sortingfieldName = '';
+        this.sortingFieldName = '';
         this.blockFieldList.nativeElement.style.display = 'block';
     }
     
@@ -585,6 +585,15 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
             return;
         }
         accordion.toggle(panelId);
+    }
+
+    fieldsExport(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        
+        console.log('EXPORT FIELDS', this.model.fields);
+        
     }
 }
 

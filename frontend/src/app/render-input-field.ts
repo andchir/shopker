@@ -598,6 +598,7 @@ export class InputFieldRenderComponent implements OnInit {
         if (!this.model[fieldName]) {
             this.model[fieldName] = [];
         }
+        this.formErrors[fieldName] = '';
         const dataStr = JSON.stringify(this.model[fieldName], null, '\t');
         const modalRef = this.modalService.open(ModalEditTextareaComponent, {
             backdrop: 'static',
@@ -608,9 +609,13 @@ export class InputFieldRenderComponent implements OnInit {
         modalRef.componentInstance.textValue = dataStr;
         modalRef.result.then((result) => {
             if (result.data) {
-                const outputData = JSON.parse(result.data);
-                this.model[fieldName].splice(0, this.model[fieldName].length);
-                this.model[fieldName].push(...outputData);
+                try {
+                    const outputData = JSON.parse(result.data);
+                    this.model[fieldName].splice(0, this.model[fieldName].length);
+                    this.model[fieldName].push(...outputData);
+                } catch (e) {
+                    this.formErrors[fieldName] = 'Syntax error.';
+                }
             }
         }, (reason) => {
             // console.log(reason);

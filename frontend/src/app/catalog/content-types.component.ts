@@ -23,6 +23,7 @@ import {SystemNameService} from '../services/system-name.service';
 import {CollectionsService} from './services/collections.service';
 import {FieldTypesService} from './services/field-types.service';
 import {FormFieldsErrors, FormFieldsOptions} from '../models/form-fields-options.interface';
+import {ModalEditTextareaComponent} from '../components/modal-edit-textarea.component';
 
 @Component({
     selector: 'app-content-type-modal-content',
@@ -591,9 +592,32 @@ export class ContentTypeModalContentComponent extends AppModalContentAbstractCom
         if (event) {
             event.preventDefault();
         }
-        
-        console.log('EXPORT FIELDS', this.model.fields);
-        
+        this.errorMessage = '';
+        if (!this.model.fields) {
+            this.model.fields = [];
+        }
+        this.errorMessage = '';
+        const dataStr = JSON.stringify(this.model.fields, null, '\t');
+        const modalRef = this.modalService.open(ModalEditTextareaComponent, {
+            backdrop: 'static',
+            keyboard: false,
+            container: '#modals-container'
+        });
+        modalRef.componentInstance.modalTitle = `${this.getLangString('EXPORT')} JSON`;
+        modalRef.componentInstance.textValue = dataStr;
+        modalRef.result.then((result) => {
+            if (result.data) {
+                try {
+                    const outputData = JSON.parse(result.data);
+                    this.model.fields.splice(0, this.model.fields.length);
+                    this.model.fields.push(...outputData);
+                } catch (e) {
+                    this.errorMessage = this.getLangString('JSON_SYNTAX_ERROR');
+                }
+            }
+        }, (reason) => {
+            // console.log(reason);
+        });
     }
 }
 

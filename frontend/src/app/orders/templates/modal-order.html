@@ -257,13 +257,13 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="text-center pr-2">
+                                            <td class="text-center pe-2">
                                                 {{ content.price | number: '1.2-2':'ru-RU' }}
                                             </td>
                                             <td class="text-center">
                                                 {{ content.count }}
                                             </td>
-                                            <td class="text-center pr-2">
+                                            <td class="text-center pe-2">
                                                 <div class="relative">
                                                     <div class="show-on-hover-right no-wrap">
                                                         <button type="button" class="btn btn-secondary btn-sm ms-2" ngbTooltip="{{'EDIT' | translate}}" (click)="editContentToggle(content)">
@@ -285,7 +285,7 @@
                                             <td>
                                                 {{ content.title }}
                                             </td>
-                                            <td class="text-center pr-2">
+                                            <td class="text-center pe-2">
                                                 <input type="number" class="d-inline-block form-control form-control-sm" name="price[]" min="0" step="0.01" style="width: 100px;" [(ngModel)]="content.price" (ngModelChange)="priceTotalUpdate()" [ngModelOptions]="{standalone: true}">
                                             </td>
                                             <td class="no-wrap" colspan="2">
@@ -345,7 +345,7 @@
 
             <div class="alert alert-dismissible alert-danger mt-3 mb-0" *ngIf="errorMessage">
                 {{errorMessage}}
-                <button type="button" class="close" (click)="errorMessage = ''"></button>
+                <button type="button" class="btn-close" (click)="errorMessage = ''"></button>
             </div>
 
         </div>

@@ -7,6 +7,7 @@
         "ext-iconv": "*",
         "ext-json": "*",
         "ext-zip": "*",
+        "composer-runtime-api": "^2.0",
         "alcaeus/mongo-php-adapter": "^1.1",
         "andchir/omnipay-bundle": "^1.0.17",
         "andchir/shopkeeper4-comments": "^1.0",

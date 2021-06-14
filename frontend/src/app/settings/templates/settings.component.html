@@ -633,14 +633,18 @@
 
                                 <div class="card card-body p-2 mt-3">
                                     <div class="row no-gutters">
-                                        <div class="col-5 pr-1">
-                                            <input type="text" class="form-control form-control-sm" [(ngModel)]="composerPackageName">
+                                        <div class="col-5 pe-1">
+                                            <input type="text" class="form-control form-control-sm"
+                                                   placeholder="package / class name"
+                                                   [(ngModel)]="composerPackageName">
                                         </div>
-                                        <div class="col-4 pl-1">
-                                            <input type="text" class="form-control form-control-sm" [(ngModel)]="composerPackageVersion">
+                                        <div class="col-4 ps-1 pe-1">
+                                            <input type="text" class="form-control form-control-sm"
+                                                   placeholder="version / class path"
+                                                   [(ngModel)]="composerPackageVersion">
                                         </div>
-                                        <div class="col-3 pl-2">
-                                            <button type="button" class="btn btn-success btn-sm btn-block" (click)="requirePackage($event)">
+                                        <div class="col-3 ps-1">
+                                            <button type="button" class="btn btn-success btn-sm d-block w-100" (click)="requirePackage($event)">
                                                 {{'INSTALL' | translate}}
                                             </button>
                                         </div>

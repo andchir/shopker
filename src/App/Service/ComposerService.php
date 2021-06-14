@@ -81,17 +81,27 @@ class ComposerService
 
         /** @var Composer $composer */
         $composer = Factory::create(new NullIO(), $jsonFilePath);
+        /** @var Installer $installer */
         $installer = Installer::create(new NullIO(), $composer);
         $installer
             ->setUpdate(true)
             ->setPreferLowest(true);
 
-        $status = $installer->run();
+        $msg = '';
+        try {
+            $status = $installer->run();
+        } catch (\Exception $e) {
+            $status = 1;
+            $msg = $e->getMessage();
+        }
+
         if ($status !== 0) {
             file_put_contents($jsonFilePath, $composerJsonBackup);
         }
 
-        return ['success' => !empty($status)];
+        return [
+            'success' => $status === 0,
+            'msg' => $msg
+        ];
     }
-
 }

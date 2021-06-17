@@ -41,13 +41,13 @@
                 <div class="d-inline-block">
                     {% if is_granted('ROLE_USER') %}
                         {% if is_granted('ROLE_ADMIN') %}
-                            <a class="btn btn-sm btn-outline-light" data-toggle="tooltip" title="{{ 'Administration' | trans }}" href="{{ path('admin') }}" rel="nofollow">
+                            <a class="btn btn-sm btn-outline-light" data-bs-toggle="tooltip" title="{{ 'Administration' | trans }}" href="{{ path('admin') }}" rel="nofollow">
                                 <i class="icon-cog"></i>
                             </a>
                         {% endif %}
                         <div class="d-inline-block ml-1">
                             <div class="dropdown">
-                                <button class="btn btn-sm btn-outline-light dropdown-toggle" type="button" data-toggle="dropdown">
+                                <button class="btn btn-sm btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
                                     <i class="icon-head"></i>
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right">

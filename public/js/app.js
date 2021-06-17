@@ -1,14 +1,15 @@
 
 const $ = require('jquery');
+const bootstrap = require('../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js');
 const Shopkeeper = require('../js/shopkeeper.js');
 const DotsMenu = require('../js/dots-menu.js');
 const wNumb = require('../node_modules/wnumb/wNumb.js');
 const noUiSlider = require('../node_modules/nouislider/distribute/nouislider.min.js');
 const slick = require('../node_modules/slick-carousel/slick/slick.min.js');
 const ShoppingCart = require('../js/shopping_cart.js');
-require('bootstrap');
 
 global.$ = global.jQuery = $;
+global.bootstrap = bootstrap;
 global.wNumb = wNumb;
 global.noUiSlider = noUiSlider;
 global.DotsMenu = DotsMenu;
@@ -20,11 +21,22 @@ global.dotsMenu = new DotsMenu({
 });
 global.ShoppingCart = ShoppingCart;
 
-$(document).ready(function() {
-    
-    $('[data-toggle="tooltip"],.js-tooltip').tooltip({
-        trigger: 'hover',
-        placement: 'bottom'
+document.addEventListener('DOMContentLoaded', function(event) {
+
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl, {
+            popperConfig: function (defaultBsPopperConfig) {
+                return Object.assign({}, defaultBsPopperConfig, {
+                    placement: 'bottom'
+                });
+            }
+        });
+    });
+
+    var dropdownTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="dropdown"]'));
+    var dropdownList = dropdownTriggerList.map(function (dropdownTriggerEl) {
+        return new bootstrap.Dropdown(dropdownTriggerEl);
     });
 
     $('.responsive-carousel').each(function(index, el) {

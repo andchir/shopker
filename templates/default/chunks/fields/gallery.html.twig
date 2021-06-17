@@ -14,7 +14,7 @@
             {% for fieldName in fileFields|keys %}
                 <div class="carousel-item{% if fieldName == fieldBaseName %} active{% endif %}">
                     {% if fileFields[fieldName] is not empty %}
-                        <a data-toggle="modal" data-target="#imageModal" href="{{ imageUrl(fileFields[fieldName]) }}" target="_blank">
+                        <a data-bs-toggle="modal" data-bs-target="#imageModal" href="{{ imageUrl(fileFields[fieldName]) }}" target="_blank">
                             <img class="d-block w-100" src="{{ imageUrl(fileFields[fieldName]) | imagine_filter('thumb_medium') }}" alt="">
                         </a>
                     {% else %}

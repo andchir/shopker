@@ -46,7 +46,7 @@
                             </span>
                         </td>
                         <td class="text-center">
-                            <a class="btn btn-secondary btn-sm" href="{{ path(app.request.attributes.get('_route'), {'page': pagesOptions.current, 'orderId': order.id}) }}#order_details{{ order.id }}" title="{{ 'Order list' | trans }}" data-toggle="tooltip" data-placement="bottom">
+                            <a class="btn btn-secondary btn-sm" href="{{ path(app.request.attributes.get('_route'), {'page': pagesOptions.current, 'orderId': order.id}) }}#order_details{{ order.id }}" title="{{ 'Order list' | trans }}" data-bs-toggle="tooltip" data-bs-placement="bottom">
                                 <i class="icon-list"></i>
                             </a>
                         </td>

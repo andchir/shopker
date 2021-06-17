@@ -30,11 +30,11 @@
                             <input type="hidden" name="category_id" value="{{ currentPage.parentId }}">
                             <input type="hidden" name="type" value="favorites">
                             {% if favoritesItemCount == 0 %}
-                                <button class="btn btn-outline-secondary-white" type="submit" data-toggle="tooltip" name="action" value="add_to_cart" title="{{ 'To favorites' | trans }}">
+                                <button class="btn btn-outline-secondary-white" type="submit" data-bs-toggle="tooltip" name="action" value="add_to_cart" title="{{ 'To favorites' | trans }}">
                                     <i class="icon-heart1"></i>
                                 </button>
                             {% else %}
-                                <button class="btn btn-info" type="submit" data-toggle="tooltip" name="action" value="remove_by_id" title="{{ 'Remove from favorites' | trans }}">
+                                <button class="btn btn-info" type="submit" data-bs-toggle="tooltip" name="action" value="remove_by_id" title="{{ 'Remove from favorites' | trans }}">
                                     <i class="icon-heart1"></i>
                                 </button>
                             {% endif %}

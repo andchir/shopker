@@ -2,7 +2,7 @@ twig:
     default_path: '%kernel.project_dir%/templates/%app.template_theme%'
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
-    form_themes: ['bootstrap_4_layout.html.twig']
+    form_themes: ['bootstrap_5_layout.html.twig']
     exception_controller: ~
     globals:
         app_name: '%app.name%'

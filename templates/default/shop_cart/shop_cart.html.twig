@@ -5,7 +5,7 @@
                 <form action="{{ path('shop_cart_action') }}" method="post">
                     <input type="hidden" name="type" value="{{ type }}">
                     <div class="container">
-                        <div class="float-md-left">
+                        <div class="float-md-start">
                             {{ 'Selected' | trans }}:
                             <span class="badge badge-pill badge-light big mx-2">
                             {{ countTotal }}
@@ -15,7 +15,7 @@
                             <span class="shk-currency">{{ currencySelected }}</span>
                         </div>
                         {% if 'page_checkout' not in app.request.attributes.get('_route') %}
-                            <div class="float-md-right mt-3 mt-md-0">
+                            <div class="float-md-end mt-3 mt-md-0">
                                 <a class="btn btn-outline-light btn-wide rounded-pill" href="{{ pathLocalized('shop_cart_edit') }}">
                                     {{ 'Proceed to checkout' | trans }}
                                 </a>

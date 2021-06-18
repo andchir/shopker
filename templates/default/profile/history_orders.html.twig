@@ -162,7 +162,7 @@
                                 {% endif %}
 
                                 <div class="text-right">
-                                    <div class="float-left">
+                                    <div class="float-start">
                                         {% if isPaymentAllowed %}
                                             <form action="{{ path('omnipay_start', {id: order.id}) }}" method="post">
                                                 <input name="{{ receiptOptionName }}" type="hidden" value='{{ receiptJSON | raw }}'>

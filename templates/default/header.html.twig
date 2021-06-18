@@ -1,7 +1,7 @@
 <nav class="navbar-header navbar navbar-expand-lg">
     <div class="container d-block px-0">
         <div class="position-relative">
-            <div class="navbar-header-right pr-3">
+            <div class="navbar-header-right pe-3">
                 
                 <div class="d-inline-block ml-1">
                     {% if app.request.attributes.get('_route') not in ['search'] %}
@@ -29,14 +29,14 @@
 <header class="bg-primary mb-4">
     <div class="inner">
         <div class="container">
-    
-            <div class="float-none float-sm-left text-center text-sm-left mb-2 mb-sm-0">
+
+            <div class="float-none float-sm-start text-center text-sm-start mb-2 mb-sm-0">
                 <a class="header-brand" href="{{ pathLocalized('homepage') }}">
                     {{ app_name }}
                 </a>
             </div>
             
-            <div class="float-none float-sm-right text-center">
+            <div class="float-none float-sm-end text-center">
     
                 <div class="d-inline-block">
                     {% if is_granted('ROLE_USER') %}

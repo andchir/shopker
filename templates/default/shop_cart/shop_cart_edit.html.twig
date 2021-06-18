@@ -8,7 +8,7 @@
     {% if items | length > 0 %}
         <form action="{{ path('shop_cart_action') }}" method="post">
             <input type="hidden" name="type" value="{{ type }}">
-            <div class="float-right">
+            <div class="float-end">
                 <button type="submit" class="btn btn-sm btn-info rounded-pill mb-2" name="action" value="update">
                     <i class="icon-reload"></i>
                     {{ 'Recalculate' | trans }}
@@ -88,7 +88,7 @@
                         <td></td>
                         <td class="d-none d-lg-table-cell"></td>
                         <th>
-                            <div class="float-left">
+                            <div class="float-start">
                             
                             </div>
                             <div class="text-right">
@@ -128,7 +128,7 @@
                 </div>
             </div>
             <div class="col-lg-6">
-                <div class="float-right">
+                <div class="float-end">
                     <a class="btn btn-outline-info rounded-pill btn-wide" href="{{ pathLocalized('page_checkout') }}">
                         {{ 'Continue' | trans }}
                         <i class="icon-keyboard_arrow_right"></i>

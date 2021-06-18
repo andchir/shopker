@@ -12,7 +12,7 @@
 
                 <div class="py-3">
                     {% if not is_granted('ROLE_USER') %}
-                        <div class="float-right">
+                        <div class="float-end">
                             <a href="{{ pathLocalized('register') }}">{{ 'Sign up' | trans }}</a>
                         </div>
                     {% endif %}

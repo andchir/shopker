@@ -15,7 +15,7 @@
                         </p>
                     {% endif %}
                     {% if category.children | length > 0 %}
-                        <ul class="nav flex-column mt-1 pl-3">
+                        <ul class="nav flex-column mt-1 ps-3">
                             {% for childCategory in category.children %}
                                 <li class="nav-item">
                                     <a href="{{ catalogPath(childCategory.uri) }}" class="nav-link py-1{% if childCategory.isActive %} disabled{% endif %}">

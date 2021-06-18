@@ -151,12 +151,10 @@ header .header-brand { display: inline-block; padding: 0.1rem 0.2rem 0 0; font-s
 }
 
 /* color-checkbox */
-.shk-color-checkbox {  }
-.shk-color-checkbox:before,
-.shk-color-checkbox:after { width: 24px; height: 24px; }
-.shk-color-checkbox:before {  background-color: inherit !important; border: 1px solid rgba(0,0,0,0.5); }
-.shk-color-checkbox:after { background-image: none !important; color: #fff; padding: 0 0 0 4px; }
-.custom-checkbox .custom-control-input:checked ~ .shk-color-checkbox:after { font-family: 'icomoon' !important; content: "\e116"; text-shadow: 0 0 2px #000, 0 0 2px #000; }
+.shk-color-checkbox { position: relative; }
+.shk-color-checkbox .form-check-input { display: block; width: 24px; height: 24px; background-image: none !important; }
+.shk-color-checkbox .form-check-label { display: block; width: 24px; height: 24px; text-align: center; padding-top: 0.2rem; position: absolute; left: 0; top: 0; }
+.shk-color-checkbox .form-check-input:checked ~ .form-check-label:after { font-family: 'icomoon' !important; color: #fff; content: "\e116"; text-shadow: 0 0 2px #000, 0 0 2px #000; }
 
 /* slider */
 .shk-slider-range input { display: none; }

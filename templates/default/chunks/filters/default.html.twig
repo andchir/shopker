@@ -6,13 +6,13 @@
         <div class="max-height200">
             {% for value in filter.values %}
                 <label class="p-2 mb-0">
-                    <div class="custom-control custom-checkbox">
+                    <div class="form-check">
                         <input type="checkbox"
-                               class="custom-control-input"
+                               class="form-check-input"
                                name="filter[{{ filter.name }}][]"
                                value="{{ value }}"
                                id="filter_{{ filter.name }}{{ loop.index }}">
-                        <label class="custom-control-label" for="filter_{{ filter.name }}{{ loop.index }}">
+                        <label class="form-check-label" for="filter_{{ filter.name }}{{ loop.index }}">
                             {{ value }}
                         </label>
                     </div>

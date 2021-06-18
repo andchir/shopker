@@ -12,15 +12,15 @@
             </div>
         </div>
         <div>
-            <span class="mr-2 d-inline-block mb-3 d-md-none">
+            <span class="me-2 d-inline-block mb-3 d-md-none">
                 <button type="button" class="btn btn-secondary btn-wide rounded-pill shk-button-filters-show">
                     {{ 'Filters' | trans }}
                     <i class="icon-keyboard_arrow_right"></i>
                 </button>
             </span>
             <span class="d-block d-md-inline-block">
-                <label class="mr-2 mb-0" for="catalogSortBy">{{ 'Sort by' | trans }}</label>
-                <select class="custom-select custom-select-sm width170 d-inline-block" id="shkNavSortBy" name="sortby">
+                <label class="me-2 mb-0" for="catalogSortBy">{{ 'Sort by' | trans }}</label>
+                <select class="form-select form-select-sm width170 d-inline-block" id="shkNavSortBy" name="sortby">
                     <option value="id_desc"{% if queryOptions.order_by == 'id_desc' %} selected{% endif %}>{{ 'catalog.sort_by_novelty' | trans }}</option>
                     <option value="price_asc"{% if queryOptions.order_by == 'price_asc' %} selected{% endif %}>{{ 'catalog.sort_by_price_increase' | trans }}</option>
                     <option value="price_desc"{% if queryOptions.order_by == 'price_desc' %} selected{% endif %}>{{ 'catalog.sort_by_price_reduction' | trans }}</option>

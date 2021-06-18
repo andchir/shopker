@@ -7,11 +7,11 @@
                     <div class="container">
                         <div class="float-md-start">
                             {{ 'Selected' | trans }}:
-                            <span class="badge badge-pill bg-light big mx-2">
+                            <span class="badge badge-pill bg-light text-dark big mx-2">
                             {{ countTotal }}
                         </span>
                             {{ 'product with a total cost|products with a total cost' | trans({'%count%': countTotal}) }}
-                            <span class="badge bg-light big mx-2 shk-price">{{ priceTotal | price }}</span>
+                            <span class="badge bg-light text-dark big mx-2 shk-price">{{ priceTotal | price }}</span>
                             <span class="shk-currency">{{ currencySelected }}</span>
                         </div>
                         {% if 'page_checkout' not in app.request.attributes.get('_route') %}

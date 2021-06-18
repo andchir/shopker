@@ -5,13 +5,13 @@
     <input type="hidden" name="order_by" value="{{ queryOptions.order_by }}">
     <div class="catalog-filters" id="catalog-filters">
         <div class="catalog-filters-header d-block d-md-none">
-            <button class="btn btn-secondary btn-block shk-button-filters-hide rounded-pill" type="button">
+            <button class="btn btn-secondary d-block w-100 shk-button-filters-hide rounded-pill" type="button">
                 <i class="icon-keyboard_arrow_left"></i>
                 {{ 'Hide Filters' | trans }}
             </button>
         </div>
         <div class="filters-button-apply shk-onfilter-change">
-            <button class="btn btn-secondary btn-block" type="submit">
+            <button class="btn btn-secondary d-block w-100" type="submit">
                 <i class="icon-search d-inline-block d-md-none"></i>
                 <span class="d-none d-md-inline-block">{{ 'Apply' | trans }}</span>
             </button>
@@ -22,7 +22,7 @@
             </div>
         </div>
         <div class="my-2"{% if queryOptions.filter | length == 0 %} style="display: none;"{% endif %}>
-            <a class="btn btn-info btn-sm btn-block shk-button-filters-reset rounded-pill" href="{{ catalogPath(currentUri) }}?limit={{ pagesOptions.limit }}&page=1&order_by={{ queryOptions.order_by }}">
+            <a class="btn btn-info btn-sm d-block w-100 shk-button-filters-reset rounded-pill" href="{{ catalogPath(currentUri) }}?limit={{ pagesOptions.limit }}&page=1&order_by={{ queryOptions.order_by }}">
                 {{ 'Reset' | trans }}
             </a>
         </div>

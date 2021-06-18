@@ -19,7 +19,7 @@
                 </button>
             </div>
             <div class="clearfix"></div>
-            <table class="table mb-0">
+            <table class="table mb-3">
                 <tbody>
                 {% for item in items %}
                     <tr>
@@ -52,7 +52,7 @@
                             <span class="shk-price">{{ item.priceTotal | price }}</span>
                             <span class="shk-currency">{{ currencySelected | default(currency) }}</span>
                         </td>
-                        <td class="text-right">
+                        <td class="text-end">
                             <button class="btn btn-outline-info btn-sm ml-1" type="submit" name="remove_by_index" value="{{ loop.index0 }}" title="{{ 'Delete item' | trans }}">
                                 <i class="icon-cross"></i>
                             </button>
@@ -68,7 +68,7 @@
                         <td></td>
                         <td class="d-none d-lg-table-cell"></td>
                         <td>
-                            <div class="text-right text-danger">
+                            <div class="text-end text-danger">
                                 {{ 'Discount' | trans }}:
                             </div>
                         </td>
@@ -87,18 +87,18 @@
                         <td class="d-none d-lg-table-cell"></td>
                         <td></td>
                         <td class="d-none d-lg-table-cell"></td>
-                        <th>
+                        <td>
                             <div class="float-start">
                             
                             </div>
-                            <div class="text-right">
+                            <div class="text-end">
                                 {{ 'Total' | trans }}:
                             </div>
-                        </th>
-                        <th colspan="2">
+                        </td>
+                        <td colspan="2">
                             <span class="big shk-price">{{ priceTotal | price }}</span>
                             <span class="shk-currency">{{ currencySelected | default(currency) }}</span>
-                        </th>
+                        </td>
                     </tr>
                 </tfoot>
             </table>

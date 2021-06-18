@@ -134,7 +134,7 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td colspan="3" class="text-right">
+                                            <td colspan="3" class="text-end">
                                                 {{ 'Price total' | trans }}:
                                             </td>
                                             <td>
@@ -161,7 +161,7 @@
                                     </div>
                                 {% endif %}
 
-                                <div class="text-right">
+                                <div class="text-end">
                                     <div class="float-start">
                                         {% if isPaymentAllowed %}
                                             <form action="{{ path('omnipay_start', {id: order.id}) }}" method="post">

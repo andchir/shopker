@@ -8,7 +8,7 @@
 {% endblock -%}
 
 {% block body %}
-    <div class="float-lg-end mb-3 text-right">
+    <div class="float-lg-end mb-3 text-end">
         {{ shopCart('favorites_link', 'favorites') }}
     </div>
 
@@ -64,16 +64,16 @@
                                                     <form action="{{ pathLocalized('shop_cart_action') }}" method="post">
                                                         {{ renderOutputTypeArray(item, fields, '', {"currency": currency}) }}
                                                         <div class="position-relative">
-                                                            <div class="card-footer-absolute show-on-hover">
+                                                            <div class="card-footer-absolute show-on-hover p-2">
                                                                 <input type="hidden" name="item_id" value="{{ item._id }}">
                                                                 <input type="hidden" name="category_id" value="{{ item.parentId }}">
                                                                 <input type="hidden" name="type" value="shop">
-                                                                <div class="row no-gutters">
+                                                                <div class="row g-0">
                                                                     <div class="col-4">
-                                                                        <input type="number" class="form-control d-inline-block text-center" value="1" min="1" step="1" name="count">
+                                                                        <input type="number" class="form-control form-control-sm d-inline-block text-center p-2" value="1" min="1" step="1" name="count">
                                                                     </div>
                                                                     <div class="col-8 ps-2">
-                                                                        <button type="submit" class="btn btn-success btn-block rounded-pill" name="submit_button">
+                                                                        <button type="submit" class="btn btn-success d-block w-100 rounded-pill" name="submit_button">
                                                                             {{ 'Add to cart' | trans }}
                                                                         </button>
                                                                     </div>

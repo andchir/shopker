@@ -3,7 +3,7 @@
     <button class="btn btn-sm btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <img src="/img/flag_{{ app.request.locale }}.png">
     </button>
-    <div class="dropdown-menu dropdown-menu-right border-secondary" aria-labelledby="dropdownMenuButton">
+    <div class="dropdown-menu dropdown-menu-end border-secondary" aria-labelledby="dropdownMenuButton">
         {% for setting in data %}
             {% if loop.index0 == 0 %}
                 <a class="dropdown-item rounded-0{% if app.request.locale == setting.options.value.value %} active{% endif %}" href="/{{ app.request.get('current_uri') }}" rel="nofollow">

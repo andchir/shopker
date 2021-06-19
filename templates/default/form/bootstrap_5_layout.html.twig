@@ -372,3 +372,15 @@
     {%- endif -%}
     {{- parent() -}}
 {%- endblock form_help %}
+
+{% block captcha_widget %}
+    <div class="form-group-captcha mb-3">
+        <div class="float-end">
+            <img src="{{ captcha_code }}" width="{{ captcha_width }}" height="{{ captcha_height }}" alt="">
+        </div>
+        <div style="margin-right: {{ captcha_width }}px; padding-right: 15px;">
+            {{ form_widget(form) }}
+        </div>
+        <div class="clearfix"></div>
+    </div>
+{% endblock %}

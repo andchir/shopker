@@ -11,12 +11,10 @@
             <form class="d-block m-0" action="{{ pathLocalized('search_results') }}" method="get" id="formSearch">
                 <div class="input-group input-group-lg">
                     <input type="text" class="form-control" placeholder="{{ 'Search' | trans }}..." name="query" value="{{ searchWord }}">
-                    <div class="input-group-append">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="icon-search"></i>
-                            {{ 'Search' | trans }}
-                        </button>
-                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="icon-search"></i>
+                        {{ 'Search' | trans }}
+                    </button>
                 </div>
             </form>
         </div>

@@ -1,9 +1,9 @@
-<div id="carouselImageGallery" class="carousel slide mb-3" data-ride="false" data-interval="false">
+<div id="carouselImageGallery" class="carousel slide mb-3" data-bs-ride="false" data-interval="false">
 
     {% if fileFields | length > 1 %}
         <ol class="carousel-indicators carousel-indicators-inverted">
             {% for fieldName in fileFields|keys %}
-                <li data-target="#carouselImageGallery" data-slide-to="{{ loop.index0 }}"{% if fieldName == fieldBaseName %} class="active"{% endif %}></li>
+                <li data-bs-target="#carouselImageGallery" data-bs-slide-to="{{ loop.index0 }}"{% if fieldName == fieldBaseName %} class="active"{% endif %}></li>
             {% endfor %}
         </ol>
     {% endif %}
@@ -29,12 +29,12 @@
     </div>
 
     {% if fileFields | length > 1 %}
-        <a class="carousel-control-prev carousel-control-icon" href="#carouselImageGallery" role="button" data-slide="prev">
+        <button type="button" class="carousel-control-prev carousel-control-icon" data-bs-target="#carouselImageGallery" data-bs-slide="prev">
             <i class="icon-keyboard_arrow_left"></i>
-        </a>
-        <a class="carousel-control-next carousel-control-icon" href="#carouselImageGallery" role="button" data-slide="next">
+        </button>
+        <button type="button" class="carousel-control-next carousel-control-icon" data-bs-target="#carouselImageGallery" data-bs-slide="next">
             <i class="icon-keyboard_arrow_right"></i>
-        </a>
+        </button>
     {% endif %}
 </div>
 
@@ -45,7 +45,7 @@
                 <img class="d-block w-100" src="" alt="">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'Close' | trans }}</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'Close' | trans }}</button>
             </div>
         </div>
     </div>

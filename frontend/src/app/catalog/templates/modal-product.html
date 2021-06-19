@@ -101,7 +101,7 @@
             </button>
             <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="localeCurrent" (ngModelChange)="onLocaleSwitch()" [ngModelOptions]="{standalone: true}">
                 <label ngbButtonLabel class="btn-secondary" *ngFor="let localeName of localeList">
-                    <input ngbButton type="radio" [value]="localeName">
+                    <input ngbButton type="radio" class="btn-check" [value]="localeName">
                     {{localeName}}
                 </label>
             </div>

@@ -13,7 +13,7 @@ body { background-color: #eee; }
 .max-height400:not(pre) { max-height: 400px; overflow: hidden; overflow-y: auto; }
 pre.max-height400 { max-height: 400px; overflow: auto; }
 .big { font-size: 120%; }
-.tooltip { pointer-events: none; }
+.tooltip, .tooltip * { pointer-events: none !important; }
 .no-wrap { white-space: nowrap; }
 .display-block { display: block; }
 .width80 { width: 80px; }
@@ -333,7 +333,7 @@ body .ui-tree .ui-tree-filter-container .ui-tree-filter-icon { margin-top: -0.75
 /* tooltips */
 .tooltip-left-blue { margin-left: 56px; }
 .tooltip-left-blue .tooltip-inner { background-color: #007bff; font-size: 125%; border-radius: 0; }
-.tooltip-left-blue .arrow::before { border-right-color: #007bff; }
+.tooltip-left-blue .tooltip-arrow::before { border-right-color: #007bff; }
 .tooltip-offset-left { margin-left: 7px; }
 
 /* left-overlay-menu */

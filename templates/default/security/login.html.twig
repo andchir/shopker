@@ -15,67 +15,68 @@
 
             <hr>
 
-            <form method="post">
-                {% if error %}
-                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                {% endif %}
+            {% if error %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
 
-                {% if app.user %}
+            {% if app.user %}
+                <div class="mb-3 pt-4">
+                    {{ 'You are logged in as %username%' | trans({'%username%': app.user.email}) }},
+                    <a href="{{ path('app_logout') }}">{{ 'Log out' | trans }}</a>
+                </div>
+            {% else %}
+
+                <form method="post">
                     <div class="mb-3">
-                        You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+                        <label for="inputEmail" class="form-label">{{ 'Email' | trans }}:</label>
+                        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
                     </div>
-                {% else %}
-
-                {% endif %}
-
-                <div class="mb-3">
-                    <label for="inputEmail" class="form-label">{{ 'Email' | trans }}:</label>
-                    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-                </div>
-                <div class="mb-3">
-                    <label for="inputPassword" class="form-label">{{ 'Password' | trans }}:</label>
-                    <div class="input-group">
-                        <input class="form-control" type="password" id="inputPassword" name="password">
-                        <button type="button" class="btn btn-secondary bg-white text-secondary" id="buttonShowPassword"
-                                title="{{ 'Show password' | trans }}">
-                            <i class="far icon-eye1"></i>
-                            <i class="far icon-eye-off" style="display: none;"></i>
-                        </button>
+                    <div class="mb-3">
+                        <label for="inputPassword" class="form-label">{{ 'Password' | trans }}:</label>
+                        <div class="input-group">
+                            <input class="form-control" type="password" id="inputPassword" name="password">
+                            <button type="button" class="btn btn-secondary bg-white text-secondary" id="buttonShowPassword"
+                                    title="{{ 'Show password' | trans }}">
+                                <i class="far icon-eye1"></i>
+                                <i class="far icon-eye-off" style="display: none;"></i>
+                            </button>
+                        </div>
                     </div>
-                </div>
 
-                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-                {% if target_path is not empty -%}
-                    <input type="hidden" name="go_to" value="{{ target_path }}">
-                {% endif %}
-                {% if failure_path is not empty -%}
-                    <input type="hidden" name="back_to" value="{{ failure_path }}">
-                {% else %}
-                    <input type="hidden" name="back_to" value="{{ app.request.get('locale_url_prefix') }}{{ app.request.get('current_uri') }}">
-                {% endif %}
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                    {% if target_path is not empty -%}
+                        <input type="hidden" name="go_to" value="{{ target_path }}">
+                    {% endif %}
+                    {% if failure_path is not empty -%}
+                        <input type="hidden" name="back_to" value="{{ failure_path }}">
+                    {% else %}
+                        <input type="hidden" name="back_to" value="{{ app.request.get('locale_url_prefix') }}{{ app.request.get('current_uri') }}">
+                    {% endif %}
 
-                <div class="form-check form-switch mb-3">
-                    <input class="form-check-input" type="checkbox" name="_remember_me" id="inputRememberMe">
-                    <label class="form-check-label" for="inputRememberMe">
-                        {{ 'Keep me logged in' | trans }}
-                    </label>
-                </div>
+                    <div class="form-check form-switch mb-3">
+                        <input class="form-check-input" type="checkbox" name="_remember_me" id="inputRememberMe">
+                        <label class="form-check-label" for="inputRememberMe">
+                            {{ 'Keep me logged in' | trans }}
+                        </label>
+                    </div>
 
-                <button type="submit" class="btn btn-primary btn-wide rounded-pill" name="login">
-                    {{ 'Log in' | trans }}
-                </button>
-            </form>
+                    <button type="submit" class="btn btn-primary btn-wide rounded-pill" name="login">
+                        {{ 'Log in' | trans }}
+                    </button>
+                </form>
 
-            <hr>
-            <p>
-                <a href="{{ pathLocalized('homepage') }}">
-                    {{ 'Go to home page' | trans }}
-                </a>
-                &nbsp;&bull;&nbsp;
-                <a href="{{ pathLocalized('register') }}">
-                    {{ 'Sign up' | trans }}
-                </a>
-            </p>
+                <hr>
+                <p>
+                    <a href="{{ pathLocalized('homepage') }}">
+                        {{ 'Go to home page' | trans }}
+                    </a>
+                    &nbsp;&bull;&nbsp;
+                    <a href="{{ pathLocalized('register') }}">
+                        {{ 'Sign up' | trans }}
+                    </a>
+                </p>
+
+            {% endif %}
 
         </div>
     </div>

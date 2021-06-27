@@ -5,6 +5,7 @@
 - Update Bootstrap 4 to 5.
 - Import/Export parameters value via JSON. You can quickly transfer all parameters from one product to another.
 - Import/Export content type fields via JSON.
+- New Authentication system (Symfony 5.1 - 5.2). Added protection against brute-force passwords.
 
 4.2.8
 - Symfony updated to version 5.2.

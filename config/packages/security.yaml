@@ -30,6 +30,9 @@ security:
                 secret: '%env(APP_SECRET)%'
                 lifetime: 604800 # 1 week in seconds
                 path: /
+            login_throttling:
+                max_attempts: 3
+                interval: '15 minutes'
 
 #            form_login:
 #                login_path: login

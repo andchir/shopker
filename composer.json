@@ -39,6 +39,7 @@
         "symfony/monolog-bundle": "^3.5",
         "symfony/orm-pack": "*",
         "symfony/process": "5.3.*",
+        "symfony/rate-limiter": "5.3.*",
         "symfony/requirements-checker": "^1.1",
         "symfony/security-bundle": "5.3.*",
         "symfony/serializer-pack": "*",

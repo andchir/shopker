@@ -40,32 +40,12 @@ security:
                 interval: '15 minutes'
 
 #            form_login:
-#                login_path: login
-#                check_path: login
+#                login_path: app_login
+#                check_path: app_login
 #                csrf_token_generator: security.csrf.token_manager
 #                default_target_path: homepage
 #                target_path_parameter: go_to
 #                failure_path_parameter: back_to
-
-#            logout:
-#                path: logout
-#                target: homepage
-
-#            remember_me:
-#                secret: '%env(APP_SECRET)%'
-#                lifetime: 604800 # 1 week in seconds
-#                path: /
-
-#            guard:
-#                authenticators:
-#                    - App\Security\LoginFormAuthenticator
-#                    - App\Security\TokenAuthenticator
-#                entry_point: App\Security\LoginFormAuthenticator
-
-#            entry_point: form_login
-
-#            login_throttling:
-#                limiter: app.login_rate_limiter
 
             # http_basic: true
             # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate

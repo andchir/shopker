@@ -2,12 +2,13 @@
 
 namespace App\Repository;
 
+use Doctrine\ODM\MongoDB\Repository\DocumentRepository;
+
 /**
  * ContentTypeRepository
  */
-class ContentTypeRepository extends BaseRepository
+class ContentTypeRepository extends DocumentRepository
 {
-
-
+    use BaseRepositoryTrait;
 
 }

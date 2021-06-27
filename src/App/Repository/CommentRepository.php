@@ -4,9 +4,12 @@ namespace App\Repository;
 
 use Andchir\CommentsBundle\Repository\CommentRepositoryInterface;
 use Doctrine\ODM\MongoDB\Query\Builder;
+use Doctrine\ODM\MongoDB\Repository\DocumentRepository;
 
-class CommentRepository extends BaseRepository implements CommentRepositoryInterface
+class CommentRepository extends DocumentRepository implements CommentRepositoryInterface
 {
+    use BaseRepositoryTrait;
+
     /**
      * @param string $threadId
      * @param string $status

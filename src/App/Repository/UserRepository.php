@@ -14,6 +14,8 @@ use Doctrine\ODM\MongoDB\Repository\DocumentRepository;
  */
 class UserRepository extends ServiceDocumentRepository implements UserLoaderInterface
 {
+    use BaseRepositoryTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);

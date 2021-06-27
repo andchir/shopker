@@ -4,25 +4,27 @@ namespace App\Repository;
 
 use Andchir\OmnipayBundle\Repository\OrderRepositoryInterface;
 use Doctrine\ODM\MongoDB\Query\Builder;
+use Doctrine\ODM\MongoDB\Repository\DocumentRepository;
 use Doctrine\ORM\ORMInvalidArgumentException;
 
 /**
  * OrderRepository
  */
-class OrderRepository extends BaseRepository implements OrderRepositoryInterface
+class OrderRepository extends DocumentRepository implements OrderRepositoryInterface
 {
+    use BaseRepositoryTrait;
 
-    /**
-     * @param array $options
-     * @param int $userId
-     * @param array $filterIds
-     * @return array
-     */
-    public function findAllByOptions($options = [], $userId = 0, $filterIds = [])
-    {
-        $options['only_active'] = false;
-        return parent::findAllByOptions($options, $userId, $filterIds);
-    }
+//    /**
+//     * @param array $options
+//     * @param int $userId
+//     * @param array $filterIds
+//     * @return array
+//     */
+//    public function findAllByOptions($options = [], $userId = 0, $filterIds = [])
+//    {
+//        $options['only_active'] = false;
+//        return parent::findAllByOptions($options, $userId, $filterIds);
+//    }
 
     /**
      * @param $id

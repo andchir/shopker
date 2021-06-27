@@ -162,11 +162,17 @@ class UserController extends StorageControllerAbstract
         // $filterIds[] = $user->getId();
         $filterIds = array_unique($filterIds);
 
-        $results = $repository->findAllByOptions($options, $user->getId(), $filterIds);
-
+//        $results = $repository->findAllByOptions($options, $user->getId(), $filterIds);
+//
+//        return $this->json([
+//            'items' => array_values($results['items']->toArray()),
+//            'total' => $results['total']
+//        ],
+//            200, [], ['groups' => ['list']]
+//        );
         return $this->json([
-            'items' => array_values($results['items']->toArray()),
-            'total' => $results['total']
+            'items' => [],
+            'total' => 0
         ],
             200, [], ['groups' => ['list']]
         );

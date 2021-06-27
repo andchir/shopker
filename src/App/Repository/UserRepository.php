@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\MainBundle\Document\User;
+use Doctrine\Bundle\MongoDBBundle\Repository\ServiceDocumentRepository;
+use Doctrine\Bundle\MongoDBBundle\ManagerRegistry;
 use Doctrine\ODM\MongoDB\Query\Builder;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Doctrine\ODM\MongoDB\Repository\DocumentRepository;
@@ -10,8 +12,40 @@ use Doctrine\ODM\MongoDB\Repository\DocumentRepository;
 /**
  * UserRepository
  */
-class UserRepository extends BaseRepository implements UserLoaderInterface
+class UserRepository extends ServiceDocumentRepository implements UserLoaderInterface
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, User::class);
+    }
+
+    /**
+     * @param string $id
+     * @return object|\Symfony\Component\Security\Core\User\UserInterface|null
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     */
+    public function loadUserByIdentifier($userIdentifier)
+    {
+        return $this->findOneBy([
+            'id' => (int) $userIdentifier,
+            'isActive' => true
+        ]);
+    }
+
+    /**
+     * @param string $id
+     * @return object|\Symfony\Component\Security\Core\User\UserInterface|null
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     */
+    public function loadUserByApiToken($userIdentifier)
+    {
+        return $this->findOneBy([
+            'apiToken' => $userIdentifier,
+            'isActive' => true
+        ]);
+    }
 
     /**
      * @param string $email

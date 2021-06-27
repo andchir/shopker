@@ -5,7 +5,9 @@ security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
         security_mongo_provider:
-            mongodb: { class: App\MainBundle\Document\User }
+            mongodb: { class: App\MainBundle\Document\User, property: email }
+        security_mongo_api_token_provider:
+            mongodb: { class: App\MainBundle\Document\User, property: apiToken }
 
     encoders:
         # bcrypt or argon21 are recommended
@@ -22,7 +24,10 @@ security:
             pattern: ^/
             switch_user: true
             provider: security_mongo_provider
-            custom_authenticator: App\Security\LoginFormAuthenticator
+            custom_authenticators:
+                - App\Security\LoginFormAuthenticator
+                - App\Security\TokenAuthenticator
+            # entry_point: App\Security\CustomEntryPoint
             logout:
                 path: app_logout
                 target: homepage

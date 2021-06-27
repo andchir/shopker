@@ -44,6 +44,7 @@ class AccountController extends BaseController
      *     name="login_localized",
      *     requirements={"_locale": "^[a-z]{2}$"}
      * )
+     * @Route("/login", name="app_login")
      * @Route("/login", name="login")
      * @param Request $request
      * @param AuthenticationUtils $authenticationUtils
@@ -58,8 +59,17 @@ class AccountController extends BaseController
             'target_path' => $request->get('go_to', ''),
             'failure_path' => $request->get('back_to', ''),
             'last_username' => $lastUsername,
-            'error' => $error ? $error->getMessage() : null
+            'error' => $error
         ]);
+    }
+
+    /**
+     * @Route("/logout", name="app_logout")
+     * @Route("/logout", name="logout")
+     */
+    public function logout()
+    {
+        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 
     /**

@@ -1,92 +1,96 @@
 {% extends 'security/base.html.twig' %}
 
+{% block title %}{{ 'Log in' | trans }} - {{ app_name }}{% endblock %}
+
 {% block body %}
 
-    <div class="container p-5">
+<div class="container p-5">
 
-        <div class="row justify-content-md-center">
-            <div class="col col-md-6">
+    <div class="row justify-content-md-center">
+        <div class="col col-md-6">
 
-                <div class="text-center">
-                    <img src="{{ app_logo_image_url }}" width="165" alt="{{ app_name }}">
-                </div>
+            <div class="text-center">
+                <img src="{{ app_logo_image_url }}" width="165" alt="{{ app_name }}">
+            </div>
 
-                <hr>
+            <hr>
 
-                {% include 'flash_messages.html.twig' %}
-
+            <form method="post">
                 {% if error %}
-                    <div class="alert alert-danger">
-                        {{ error | trans({}, 'validators') }}
-                    </div>
+                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                 {% endif %}
 
-                <form action="{{ path('login') }}" method="post">
-                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-                    {% if target_path is not empty -%}
-                        <input type="hidden" name="go_to" value="{{ target_path }}">
-                    {% endif %}
-                    {% if failure_path is not empty -%}
-                        <input type="hidden" name="back_to" value="{{ failure_path }}">
-                    {% else %}
-                        <input type="hidden" name="back_to" value="{{ app.request.get('locale_url_prefix') }}{{ app.request.get('current_uri') }}">
-                    {% endif %}
-                    <div class="form-group mb-3">
-                        <label for="email">{{ 'Email' | trans }}</label>
-                        <input type="text" class="form-control" id="email" name="email" value="{{ last_username }}">
+                {% if app.user %}
+                    <div class="mb-3">
+                        You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
                     </div>
-                    <div class="form-group mb-3">
-                        <label for="password">{{ 'Password' | trans }}</label>
-                        <div class="input-group">
-                            <input class="form-control" type="password" id="password" name="password">
-                            <button type="button" class="btn btn-secondary bg-white text-secondary" id="button-show-password"
-                                    title="{{ 'Show password' | trans }}">
-                                <i class="far icon-eye1"></i>
-                                <i class="far icon-eye-off" style="display: none;"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="form-group mb-3">
-                        <input type="checkbox" id="remember_me" name="_remember_me" checked>
-                        <label for="remember_me">{{ 'Keep me logged in' | trans }}</label>
-                    </div>
-                    <div class="form-group mb-3">
-                        <button type="submit" class="btn btn-primary btn-wide rounded-pill" name="login">
-                            {{ 'Log in' | trans }}
+                {% else %}
+
+                {% endif %}
+
+                <div class="mb-3">
+                    <label for="inputEmail" class="form-label">{{ 'Email' | trans }}:</label>
+                    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
+                </div>
+                <div class="mb-3">
+                    <label for="inputPassword" class="form-label">{{ 'Password' | trans }}:</label>
+                    <div class="input-group">
+                        <input class="form-control" type="password" id="inputPassword" name="password">
+                        <button type="button" class="btn btn-secondary bg-white text-secondary" id="buttonShowPassword"
+                                title="{{ 'Show password' | trans }}">
+                            <i class="far icon-eye1"></i>
+                            <i class="far icon-eye-off" style="display: none;"></i>
                         </button>
-                        &nbsp;
-                        <a href="{{ pathLocalized('password_reset') }}">
-                            {{ 'Forgot your password?' | trans }}
-                        </a>
                     </div>
-                </form>
+                </div>
 
-                <hr>
-                <p>
-                    <a href="{{ pathLocalized('homepage') }}">
-                        {{ 'Go to home page' | trans }}
-                    </a>
-                    &nbsp;&bull;&nbsp;
-                    <a href="{{ pathLocalized('register') }}">
-                        {{ 'Sign up' | trans }}
-                    </a>
-                </p>
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                {% if target_path is not empty -%}
+                    <input type="hidden" name="go_to" value="{{ target_path }}">
+                {% endif %}
+                {% if failure_path is not empty -%}
+                    <input type="hidden" name="back_to" value="{{ failure_path }}">
+                {% else %}
+                    <input type="hidden" name="back_to" value="{{ app.request.get('locale_url_prefix') }}{{ app.request.get('current_uri') }}">
+                {% endif %}
 
-            </div>
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" name="_remember_me" id="inputRememberMe">
+                    <label class="form-check-label" for="inputRememberMe">
+                        {{ 'Keep me logged in' | trans }}
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-wide rounded-pill" name="login">
+                    {{ 'Log in' | trans }}
+                </button>
+            </form>
+
+            <hr>
+            <p>
+                <a href="{{ pathLocalized('homepage') }}">
+                    {{ 'Go to home page' | trans }}
+                </a>
+                &nbsp;&bull;&nbsp;
+                <a href="{{ pathLocalized('register') }}">
+                    {{ 'Sign up' | trans }}
+                </a>
+            </p>
+
         </div>
-
     </div>
+</div>
 
     <div class="rounded position-absolute pos-right-top10 p-1" style="background-color: rgba(0,0,0,0.2);">
         {{ settingsList('SETTINGS_LANGUAGES', 'languages_list', false, true) }}
     </div>
 
     <script>
-        var passwordField = document.getElementById('password'),
-            buttonShowPassword = document.getElementById('button-show-password'),
+        var passwordField = document.getElementById('inputPassword'),
+            buttonShowPassword = document.getElementById('buttonShowPassword'),
             buttonIcons = buttonShowPassword.querySelectorAll('.far');
         buttonShowPassword.addEventListener('click', function() {
-            passwordField = document.getElementById('password');
+            passwordField = document.getElementById('inputPassword');
             if (passwordField.type === 'password') {
                 passwordField.type = 'text';
                 buttonShowPassword.title = '{{ 'Hide password' | trans }}';
@@ -102,4 +106,3 @@
     </script>
 
 {% endblock %}
-

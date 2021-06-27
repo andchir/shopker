@@ -21,7 +21,7 @@
                     </div>
                 {% endif %}
 
-                <form action="{{ path('login') }}" method="post">
+                <form action="{{ path('app_login') }}" method="post">
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
                     {% if target_path is not empty -%}
                         <input type="hidden" name="go_to" value="{{ target_path }}">

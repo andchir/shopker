@@ -128,3 +128,11 @@ services:
         class: App\Service\DataBaseUtilService
         public: true
         arguments: ['@parameter_bag', '@doctrine_mongodb.odm.default_document_manager']
+
+    app.login_rate_limiter:
+        class: Symfony\Component\Security\Http\RateLimiter\DefaultLoginRateLimiter
+        arguments:
+            # globalFactory is the limiter for IP
+            $globalFactory: '@limiter.ip_login'
+            # localFactory is the limiter for username+IP
+            $localFactory: '@limiter.username_ip_login'

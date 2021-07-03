@@ -448,22 +448,32 @@ class CatalogController extends BaseController
         if ($locale !== $localeDefault && $headerFieldName) {
             $this->catalogService->applyLocaleFilter($locale, $headerFieldName, $criteria);
         }
-        $total = $collection->countDocuments($criteria);
 
-        /* pages */
-        $pagesOptions = UtilsService::getPagesOptions($queryOptions, $total, $catalogNavSettingsDefaults);
-        $aggregateFields = $contentType->getAggregationFields($locale, $localeDefault, true);
+        /** @var User $user */
+        $user = $this->getUser();
+        if ($contentType->getIsCreateByUsersAllowed() && !$user) {
+            $total = 0;
+            $items = [];
+            $pagesOptions = UtilsService::getPagesOptions($queryOptions, $total, $catalogNavSettingsDefaults);
+        } else {
+            if ($contentType->getIsCreateByUsersAllowed() && !$user->getIsAdmin()) {
+                $criteria['userId'] = $user->getId();
+            }
+            $total = $collection->countDocuments($criteria);
+            $pagesOptions = UtilsService::getPagesOptions($queryOptions, $total, $catalogNavSettingsDefaults);
+            $aggregateFields = $contentType->getAggregationFields($locale, $localeDefault, true);
 
-        $pipeline = $this->catalogService->createAggregatePipeline(
-            $criteria,
-            $aggregateFields,
-            abs($queryOptions['limit']),
-            $queryOptions['sortOptionsAggregation'],
-            abs($pagesOptions['skip'])
-        );
-        $items = $collection->aggregate($pipeline, [
-            'cursor' => []
-        ])->toArray();
+            $pipeline = $this->catalogService->createAggregatePipeline(
+                $criteria,
+                $aggregateFields,
+                abs($queryOptions['limit']),
+                $queryOptions['sortOptionsAggregation'],
+                abs($pagesOptions['skip'])
+            );
+            $items = $collection->aggregate($pipeline, [
+                'cursor' => []
+            ])->toArray();
+        }
 
         $categoriesSiblings = [];
         if (count($categoriesMenu) === 0 && $levelNum > 1) {

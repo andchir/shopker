@@ -44,8 +44,13 @@ class AccountController extends BaseController
      *     name="login_localized",
      *     requirements={"_locale": "^[a-z]{2}$"}
      * )
-     * @Route("/login", name="app_login")
      * @Route("/login", name="login")
+     * @Route(
+     *     "/{_locale}/login",
+     *     name="app_login_localized",
+     *     requirements={"_locale": "^[a-z]{2}$"}
+     * )
+     * @Route("/login", name="app_login")
      * @param Request $request
      * @param AuthenticationUtils $authenticationUtils
      * @return RedirectResponse|Response

@@ -552,8 +552,10 @@ class CatalogController extends BaseController
         if ($contentType->getIsCreateByUsersAllowed() && !$user->getIsAdmin()) {
             $criteria['userId'] = $user->getId();
         }
-        if (is_numeric($pageAlias)) {
-            $criteria['_id'] = (int) $pageAlias;
+        if (is_numeric($pageAlias)
+            && $this->params->has('app.show_page_by_id')
+            && $this->params->get('app.show_page_by_id')) {
+                $criteria['_id'] = (int) $pageAlias;
         } else {
             $criteria['name'] = $pageAlias;
         }

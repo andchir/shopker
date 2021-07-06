@@ -532,6 +532,8 @@ class CatalogController extends BaseController
             throw $this->createNotFoundException();
         }
 
+        /** @var User $user */
+        $user = $this->getUser();
         $localeDefault = $this->params->get('locale');
         $collectionName = $contentType->getCollection();
         $contentTypeFields = $contentType->getFields();
@@ -540,12 +542,24 @@ class CatalogController extends BaseController
         $breadcrumbs = $categoriesRepository->getBreadcrumbs($categoryUri, false, $locale);
 
         $aggregateFields = $contentType->getAggregationFields($locale, $localeDefault, true);
+        if ($contentType->getIsCreateByUsersAllowed() && !$user) {
+            throw $this->createNotFoundException();
+        }
+        $criteria = [
+            'parentId' => $category->getId(),
+            'isActive' => true
+        ];
+        if ($contentType->getIsCreateByUsersAllowed() && !$user->getIsAdmin()) {
+            $criteria['userId'] = $user->getId();
+        }
+        if (is_numeric($pageAlias)) {
+            $criteria['_id'] = (int) $pageAlias;
+        } else {
+            $criteria['name'] = $pageAlias;
+        }
+
         $pipeline = $this->catalogService->createAggregatePipeline(
-            [
-                'name' => $pageAlias,
-                'parentId' => $category->getId(),
-                'isActive' => true
-            ],
+            $criteria,
             $aggregateFields,
             1
         );

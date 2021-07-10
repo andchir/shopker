@@ -112,7 +112,7 @@
             </button>
             <div class="btn-group" ngbDropdown role="group" placement="top-right">
                 <button class="btn btn-success dropdown-toggle-split" ngbDropdownToggle [disabled]="submitted || isSaveButtonDisabled"></button>
-                <div class="dropdown-menu" ngbDropdownMenu>
+                <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
                     <button ngbDropdownItem (click)="save()">{{'SAVE' | translate}}</button>
                 </div>
             </div>

@@ -239,7 +239,7 @@
             </button>
             <div class="btn-group" ngbDropdown role="group" placement="top-right">
                 <button type="button" class="btn btn-success dropdown-toggle-split" ngbDropdownToggle [disabled]="submitted"></button>
-                <div class="dropdown-menu" ngbDropdownMenu>
+                <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
                     <button type="button" ngbDropdownItem (click)="save(false, $event)">{{'SAVE' | translate}}</button>
                 </div>
             </div>

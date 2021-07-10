@@ -254,6 +254,7 @@ input.form-control[readonly] { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); curso
 .dropdown-toggle-hover:hover + .dropdown-menu,
 .dropdown-toggle-hover + .dropdown-menu:hover { display: block; }
 .dropdown-footer { white-space: nowrap; }
+.dropdown-menu-end { right: 0 !important; left: auto !important; }
 
 /* dropdown-menu-hover */
 .dropdown-menu-second { width: 100%; position: static; display: block; border: 0; box-shadow: none; }

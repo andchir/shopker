@@ -27,7 +27,7 @@
                     <button class="btn btn-info d-block d-md-inline-block width-100 width-md-auto" ngbDropdownToggle>
                         <span>{{'BATCH_ACTIONS' | translate}}</span>
                     </button>
-                    <div ngbDropdownMenu>
+                    <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
                         <button class="dropdown-item" (click)="deleteSelected()">{{'DELETE' | translate}}</button>
                     </div>
                 </div>
@@ -36,7 +36,7 @@
                     <button class="btn btn-primary d-block d-md-inline-block width-100 width-md-auto" ngbDropdownToggle>
                         <span>{{'CONFIG_FILES' | translate}}</span>
                     </button>
-                    <div class="max-height400" ngbDropdownMenu>
+                    <div class="max-height400 dropdown-menu dropdown-menu-end" ngbDropdownMenu>
                         <button class="dropdown-item" *ngFor="let item of files['translations']" (click)="editFile(item, $event)">
                             {{ item.name }} <span class="text-muted small">({{ item.size }})</span>
                         </button>
@@ -53,7 +53,7 @@
                     <button class="btn btn-primary d-block d-md-inline-block width-100 width-md-auto" ngbDropdownToggle>
                         <span>CSS / JS</span>
                     </button>
-                    <div class="max-height400" ngbDropdownMenu>
+                    <div class="max-height400 dropdown-menu dropdown-menu-end" ngbDropdownMenu>
                         <button class="dropdown-item" *ngFor="let item of files['css']" (click)="editFile(item, $event)">
                             {{ item.name }} <span class="text-muted small">({{ item.size }})</span>
                         </button>

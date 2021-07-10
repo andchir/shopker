@@ -64,7 +64,11 @@ class CatalogController extends BaseController
      * @param Category $category
      * @return JsonResponse
      */
-    public function createUserContentAction(Request $request, EventDispatcherInterface $eventDispatcher, Category $category = null)
+    public function createUserContentAction(
+        Request $request,
+        EventDispatcherInterface $eventDispatcher,
+        Category $category = null
+    )
     {
         if(!$category){
             return $this->setError($this->translator->trans('Category not found.', [], 'validators'));
@@ -89,7 +93,7 @@ class CatalogController extends BaseController
         try {
             $document = $this->catalogService->createContentItemData($category, $data, $user->getId());
         } catch (\Exception $e) {
-            $msg = unserialize($e->getMessage());
+            $msg = $e->getMessage();
             if (is_array($msg) && isset($msg['msg'])) {
                 return $this->setError($this->translator->trans($msg['msg'], $msg, 'validators'));
             } else {
@@ -132,7 +136,12 @@ class CatalogController extends BaseController
      * @param int|string $itemId
      * @return JsonResponse
      */
-    public function updateUserContentAction(Request $request, EventDispatcherInterface $eventDispatcher, Category $category = null, $itemId = 0)
+    public function updateUserContentAction(
+        Request $request,
+        EventDispatcherInterface $eventDispatcher,
+        Category $category = null,
+        $itemId = 0
+    )
     {
         if(!$category){
             return $this->setError($this->translator->trans('Category not found.', [], 'validators'));
@@ -159,7 +168,7 @@ class CatalogController extends BaseController
         try {
             $document = $this->catalogService->createContentItemData($category, $data, $user->getId(), (int) $itemId);
         } catch (\Exception $e) {
-            $msg = unserialize($e->getMessage());
+            $msg = $e->getMessage();
             if (is_array($msg) && isset($msg['msg'])) {
                 return $this->setError($this->translator->trans($msg['msg'], $msg, 'validators'));
             } else {

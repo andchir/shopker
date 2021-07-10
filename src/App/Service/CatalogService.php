@@ -673,6 +673,7 @@ class CatalogService {
     {
         $contentType = $category->getContentType();
         $contentTypeFields = $contentType->getFields();
+        $collectionName = $contentType->getCollection();
 
         $document = [
             'parentId' => $category->getId(),
@@ -687,11 +688,16 @@ class CatalogService {
             $document['userId'] = $userId;
         }
 
-        foreach ($contentTypeFields as $contentTypeField) {
-            if ($contentTypeField['required'] && empty($data[$contentTypeField['name']])) {
-                throw new \Exception(serialize(['msg' => 'The "%name%" field is required.', '%name%' => $contentTypeField['title']]));
+        foreach ($contentTypeFields as $field) {
+            if($error = $this->validateField(
+                $data[$field['name']] ?? '',
+                $field, [],
+                $collectionName,
+                $category->getId(),
+                $itemId)){
+                    throw new \Exception($error);
             }
-            $document[$contentTypeField['name']] = self::getFieldValue($contentTypeField, $data[$contentTypeField['name']] ?? null);
+            $document[$field['name']] = self::getFieldValue($field, $data[$field['name']] ?? null);
         }
 
         return $document;

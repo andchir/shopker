@@ -216,6 +216,8 @@
                         case 'range':
                             self.updateSliderValue(key, value.from, value.to);
                             break;
+                        case 'datetime-local':
+                        case 'datetime':
                         case 'date':
                             fieldEl.value = value.from;
                             fieldEl = filtersContainerEl.querySelector('[name="' + fieldName + '[to]"]');

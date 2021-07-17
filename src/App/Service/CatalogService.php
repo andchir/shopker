@@ -933,4 +933,35 @@ class CatalogService {
         }
         return $tree;
     }
+
+    /**
+     * @param string $dateTimeString
+     * @param string $timeZone
+     * @return string
+     * @throws \Exception
+     */
+    public static function dateTimeAddOffsertByTimezone($dateTimeString, $timeZone = '')
+    {
+        if ($timeZone) {
+            date_default_timezone_set($timeZone);
+        }
+        $timezoneOffset = date('Z');
+        $d = new \DateTime($dateTimeString);
+        $timestamp = $d->getTimestamp();
+        $timestamp -= $timezoneOffset;
+        $newDate = (new \DateTime('now'))->setTimestamp($timestamp);
+        return $newDate->format('Y-m-d\TH:i:s');
+    }
+
+    /**
+     * @param string $dateTimeString
+     * @return bool
+     */
+    public static function isDateString($dateTimeString)
+    {
+        if (strpos($dateTimeString, 'T') !== false) {
+            return (bool) preg_match("/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/", $dateTimeString);
+        }
+        return (bool) preg_match("/^\d{4}-\d{2}-\d{2}$/", $dateTimeString);
+    }
 }

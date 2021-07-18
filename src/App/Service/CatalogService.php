@@ -674,6 +674,8 @@ class CatalogService {
         $contentType = $category->getContentType();
         $contentTypeFields = $contentType->getFields();
         $collectionName = $contentType->getCollection();
+        $localeDefault = $this->params->get('locale');
+        $localeList = UtilsService::stringToArray($this->params->get('app.locale_list'));
 
         $document = [
             'parentId' => $category->getId(),
@@ -689,18 +691,72 @@ class CatalogService {
         }
 
         foreach ($contentTypeFields as $field) {
-            if($error = $this->validateField(
-                $data[$field['name']] ?? '',
-                $field, [],
-                $collectionName,
-                $category->getId(),
-                $itemId)){
-                    throw new \Exception($error);
+            $translations = self::getTranslationsArray($field, $data, $document, $localeList);
+            foreach ($translations as $val) {
+                if($error = $this->validateField(
+                    $val,
+                    $field, [],
+                    $collectionName,
+                    $category->getId(),
+                    $itemId)){
+                        throw new \Exception($error);
+                }
             }
             $document[$field['name']] = self::getFieldValue($field, $data[$field['name']] ?? null);
+            self::updateTranslations($field, $document);
         }
-
         return $document;
+    }
+
+    /**
+     * @param array $contentTypeField
+     * @param array $data
+     * @param array $document
+     * @param array $localeList
+     * @return array
+     */
+    public static function getTranslationsArray($contentTypeField, $data, &$document, $localeList)
+    {
+        if (empty($contentTypeField['name'])) {
+            return [];
+        }
+        $output = [];
+        $fieldName = $contentTypeField['name'];
+        $fieldValue = $data[$fieldName] ?? '';
+        $output[] = $fieldValue;
+        $localeDefault = array_shift($localeList);
+        if (!isset($document['translations'])) {
+            $document['translations'] = [];
+        }
+        if (!in_array($contentTypeField['inputType'], ['text', 'textarea',  'rich_text'])) {
+            return $output;
+        }
+        foreach ($localeList as $loc) {
+            if (!isset($document['translations'][$fieldName])) {
+                $document['translations'][$fieldName] = [];
+            }
+            if (empty($document['translations'][$fieldName][$loc])) {
+                $document['translations'][$fieldName][$loc] = $fieldValue;
+            }
+            $output[] = $document['translations'][$fieldName][$loc];
+        }
+        return $output;
+    }
+
+    /**
+     * @param array $contentTypeField
+     * @param array $document
+     */
+    public static function updateTranslations($contentTypeField, &$document)
+    {
+        if (!isset($document['translations'])
+            || !is_array($document['translations'])
+            || !isset($document['translations'][$contentTypeField['name']])) {
+            return;
+        }
+        foreach ($document['translations'][$contentTypeField['name']] as &$value) {
+            $value = self::getFieldValue($contentTypeField, $value);
+        }
     }
     
     /**
@@ -725,6 +781,11 @@ class CatalogService {
                     if (empty($value) && !empty($contentTypeField['inputProperties']['default_current'])) {
                         $value = date('Y-m-d H:i:s');
                     }
+                    break;
+                case 'system_name':
+                    $value = str_replace(' ', '-', $value);
+                    $value = str_replace(['"', "'", ' ', '\\', '/', '%', ':', ',', '!', '?'], '', $value);
+                    $value = UtilsService::cleanString($value, UtilsService::STRING_TYPE_HTML);
                     break;
                 default:
                     $value = UtilsService::cleanString($value, UtilsService::STRING_TYPE_HTML);

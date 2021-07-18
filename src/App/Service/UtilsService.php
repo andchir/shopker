@@ -540,7 +540,7 @@ class UtilsService
      * @param string $type
      * @return string
      */
-    public static function cleanString(string $string, $type = ''): string
+    public static function cleanString($string, $type = '')
     {
         $config = HTMLPurifier_Config::createDefault();
         switch ($type) {
@@ -551,6 +551,6 @@ class UtilsService
                 $config->set('HTML.Allowed', '');
         }
         $purifier = new HTMLPurifier($config);
-        return trim($purifier->purify($string));
+        return trim($purifier->purify((string) $string));
     }
 }

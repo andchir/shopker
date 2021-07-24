@@ -476,7 +476,7 @@
 
                 <div #blockFieldList>
                     <div>
-                        <div class="text-end mb-2" [hidden]="model.fields.length < 2">
+                        <div class="float-end mb-2" [hidden]="model.fields.length < 2">
                             <select class="form-select form-select-sm d-block d-md-inline-block width-100 width-md-auto mb-2 mb-md-0" #sortTypeSelect>
                                 <option value="">{{'SORT_FIELDS' | translate}}</option>
                                 <option value="listOrder-showInList">{{'SORT_FIELDS_LIST' | translate}}</option>
@@ -487,13 +487,15 @@
                                 <i class="icon-shuffle"></i>
                                 {{'SORT' | translate}}
                             </button>
-                            <button type="button" class="btn btn-sm btn-secondary d-block d-md-inline-block width-100 width-md-auto ms-md-2"
-                                    ngbTooltip="{{'EXPORT' | translate}}"
-                                    placement="bottom"
-                                    (click)="fieldsExport($event)">
-                                <i class="icon-inbox"></i>
-                            </button>
                         </div>
+
+                        <button type="button" class="btn btn-sm btn-secondary d-inline-block"
+                                (click)="fieldsExport($event)">
+                            <i class="icon-inbox me-2"></i>
+                            {{'EXPORT' | translate}}
+                        </button>
+                        
+                        <div class="clearfix"></div>
 
                         <div>
                             <table class="table table-striped table-divided mb-0">

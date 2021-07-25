@@ -443,7 +443,7 @@ class CatalogService {
                     !empty($value)
                     && $this->checkNameExists($field['name'], $value, $collectionName, $categoryId, $itemId)
                 ){
-                    $error = 'System name already exists.';
+                    $error = 'System name "' . $value . '" already exists.';
                 }
 
                 break;

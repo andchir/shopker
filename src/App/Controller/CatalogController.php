@@ -160,10 +160,16 @@ class CatalogController extends BaseController
             return $this->setError($this->translator->trans($e->getMessage()));
         }
 
+        $localeDefault = $this->params->get('locale');
+        $locale = $request->getLocale();
         $contentType = $category->getContentType();
         $collection = $this->catalogService->getCollection($contentType->getCollection());
 
         $data = json_decode($request->getContent(), true);
+
+        if ($locale !== $localeDefault && empty($data['translations'])) {
+            CatalogService::updateTranslation($contentType->getFields(), $data, $doc, $locale);
+        }
 
         try {
             $document = $this->catalogService->createContentItemData($category, $data, $user->getId(), (int) $itemId);

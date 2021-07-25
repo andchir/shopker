@@ -709,6 +709,32 @@ class CatalogService {
     }
 
     /**
+     * @param array $contentTypeFields
+     * @param array $data
+     * @param array $sourceDocument
+     * @param string $locale
+     */
+    public static function updateTranslation($contentTypeFields, &$data, $sourceDocument, $locale)
+    {
+        if (!isset($data['translations'])) {
+            $data['translations'] = $sourceDocument['translations'] ?? [];
+        }
+        foreach ($contentTypeFields as $contentTypeField) {
+            $fieldName = $contentTypeField['name'];
+            if (in_array($contentTypeField['inputType'], ['text', 'textarea',  'rich_text'])) {
+                if (!isset($data['translations'][$fieldName])) {
+                    $data['translations'][$fieldName] = [];
+                }
+                $data['translations'][$fieldName][$locale] = $data[$fieldName];
+                $data[$fieldName] = $sourceDocument[$fieldName] ?? '';
+            }
+            // else if (isset($sourceDocument[$fieldName])) {
+            //     $data[$fieldName] = $sourceDocument[$fieldName];
+            // }
+        }
+    }
+
+    /**
      * @param array $contentTypeField
      * @param array $data
      * @param array $document

@@ -725,7 +725,7 @@ class CatalogService {
                 if (!isset($data['translations'][$fieldName])) {
                     $data['translations'][$fieldName] = [];
                 }
-                $data['translations'][$fieldName][$locale] = $data[$fieldName];
+                $data['translations'][$fieldName][$locale] = $data[$fieldName] ?? '';
                 $data[$fieldName] = $sourceDocument[$fieldName] ?? '';
             }
             // else if (isset($sourceDocument[$fieldName])) {

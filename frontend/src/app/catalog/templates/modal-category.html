@@ -34,7 +34,7 @@
 
         <div class="row mb-2 form-group-message" *ngIf="!isRoot">
             <div class="col-md-5">
-                <label for="fieldContentType">{{'PARENT_FOLDER' | translate}}</label>
+                <label for="fieldParent">{{'PARENT_FOLDER' | translate}}</label>
             </div>
             <div class="col-md-7">
                 <app-select-parent-dropdown
@@ -189,7 +189,7 @@
                  (ngModelChange)="onLocaleSwitch()"
                  [ngModelOptions]="{standalone: true}">
                 <label ngbButtonLabel class="btn-secondary" *ngFor="let localeName of localeList">
-                    <input ngbButton type="radio" [value]="localeName">
+                    <input ngbButton type="radio" class="btn-check" [value]="localeName">
                     {{localeName}}
                 </label>
             </div>

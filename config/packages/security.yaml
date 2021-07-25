@@ -27,7 +27,7 @@ security:
             custom_authenticators:
                 - App\Security\LoginFormAuthenticator
                 - App\Security\TokenAuthenticator
-            # entry_point: App\Security\CustomEntryPoint
+            entry_point: App\Security\AuthenticationEntryPoint
             logout:
                 path: app_logout
                 target: homepage

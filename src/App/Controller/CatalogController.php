@@ -355,15 +355,15 @@ class CatalogController extends BaseController
 
     /**
      * @Route(
-     *     "/{_locale}/{uri<[a-z0-9\/\-_\.]+>}",
+     *     "/{_locale}/{uri<[a-zA-Z0-9\/\-_\.]+>}",
      *     name="catalog_page_localized",
-     *     requirements={"_locale": "^[a-z]{2}$", "uri": "[a-z0-9\/\-_\.]+"},
+     *     requirements={"_locale": "^[a-z]{2}$", "uri": "[a-zA-Z0-9\/\-_\.]+"},
      *     defaults={"uri": ""}
      * )
      * @Route(
-     *     "/{uri<[a-z0-9\/\-_\.]+>}",
+     *     "/{uri<[a-zA-Z0-9\/\-_\.]+>}",
      *     name="catalog_page",
-     *     requirements={"uri": "[a-z0-9\/\-_\.]+"},
+     *     requirements={"uri": "[a-zA-Z0-9\/\-_\.]+"},
      *     defaults={"uri": ""}
      * )
      * @param Request $request

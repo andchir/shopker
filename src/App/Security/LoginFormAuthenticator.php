@@ -25,6 +25,7 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     use TargetPathTrait;
 
     public const LOGIN_ROUTE = 'app_login';
+    public const LOGIN_ROUTE_LOCALIZED = 'app_login_localized';
 
     private $urlGenerator;
     private $userRepository;
@@ -68,6 +69,10 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
     protected function getLoginUrl(Request $request): string
     {
+        $locale = $request->getLocale();
+        if (strpos($request->getPathInfo(), "/{$locale}/") === 0) {
+            return $this->urlGenerator->generate(self::LOGIN_ROUTE_LOCALIZED);
+        }
         return $this->urlGenerator->generate(self::LOGIN_ROUTE);
     }
 }

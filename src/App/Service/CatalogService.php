@@ -896,6 +896,9 @@ class CatalogService {
      */
     public function applyLocaleFilter($locale, $headerFieldName, &$criteria)
     {
+        if (!$headerFieldName) {
+            return;
+        }
         $translationFieldName = "translations.{$headerFieldName}.{$locale}";
         $andCriteria = [$translationFieldName => ['$exists' => true]];
         if (!isset($criteria['$and'])) {

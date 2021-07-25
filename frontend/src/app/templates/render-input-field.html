@@ -121,7 +121,7 @@
                                       [(ngModel)]="model[field.name]"
                                       [rows]="field.inputProperties.rows"
                                       [class.is-invalid]="formErrors[field.name]"
-                                      [ngClass]="{'border-success': isLocalizationActive}"></textarea>
+                                      [ngClass]="{'border-success border-2': isLocalizationActive}"></textarea>
                                 <div *ngIf="formErrors[field.name]" class="alert alert-danger">
                                     {{formErrors[field.name]}}
                                 </div>
@@ -185,7 +185,7 @@
                                     <span class="text-muted">({{field.name}})</span>
                                     <span class="text-danger" *ngIf="field.required">*</span>
                                 </label>
-                                <div class="border rounded" *ngIf="field.inputProperties.formats" [ngClass]="{'border-success': isLocalizationActive}">
+                                <div class="border rounded" *ngIf="field.inputProperties.formats" [ngClass]="{'border-success border-2': isLocalizationActive}">
                                     <p-editor [formControlName]="field.name"
                                               [(ngModel)]="model[field.name]"
                                               [formats]="field.inputProperties.formats"
@@ -457,6 +457,28 @@
                             </div>
                         </div>
                         <!-- /parameters -->
+                        
+                        <!-- text-->
+                        <div class="row" *ngSwitchCase="'text'">
+                            <div class="col-md-5">
+                                <label for="field_{{field.name}}">
+                                    {{field.title}}
+                                    <span class="text-muted">({{field.name}})</span>
+                                    <span class="text-danger" *ngIf="field.required">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" id="field_{{field.name}}" [name]="field.name"
+                                       [formControlName]="field.name"
+                                       [(ngModel)]="model[field.name]"
+                                       [class.is-invalid]="formErrors[field.name]"
+                                       [ngClass]="{'border-success border-2': isLocalizationActive}">
+                                <div *ngIf="formErrors[field.name]" class="alert alert-danger">
+                                    {{formErrors[field.name]}}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /text-->
 
                         <div class="row" *ngSwitchDefault>
                             <div class="col-md-5">
@@ -470,8 +492,7 @@
                                 <input type="text" class="form-control" id="field_{{field.name}}" [name]="field.name"
                                        [formControlName]="field.name"
                                        [(ngModel)]="model[field.name]"
-                                       [class.is-invalid]="formErrors[field.name]"
-                                       [ngClass]="{'border-success': isLocalizationActive}">
+                                       [class.is-invalid]="formErrors[field.name]">
                                 <div *ngIf="formErrors[field.name]" class="alert alert-danger">
                                     {{formErrors[field.name]}}
                                 </div>

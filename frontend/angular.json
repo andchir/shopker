@@ -179,6 +179,7 @@
                         "main": "projects/comments/src/main.ts",
                         "polyfills": "projects/comments/src/polyfills.ts",
                         "tsConfig": "projects/comments/tsconfig.app.json",
+                        "preserveSymlinks": true,
                         "aot": true,
                         "assets": [
                             "projects/comments/src/favicon.ico",

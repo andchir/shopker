@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 
 import {StatisticsService} from './services/statistics.service';
-import {calendarLocale} from '../render-input-field';
 import {AppSettings} from '../services/app-settings.service';
 
 @Component({
@@ -17,9 +16,9 @@ export class StatisticsComponent implements OnInit {
     data: any;
     loading = false;
     rangeDates: Date[];
-    calendarLocale = calendarLocale;
     locale: string;
     yearRangeString: string;
+    dateFormat = 'MM/dd/yyyy';
 
     constructor(
         private dataService: StatisticsService,

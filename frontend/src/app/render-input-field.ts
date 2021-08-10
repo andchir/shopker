@@ -36,41 +36,6 @@ import {AppSettings} from './services/app-settings.service';
 import {CategoriesService} from './catalog/services/categories.service';
 import {ModalEditTextareaComponent} from '@app/components/modal-edit-textarea.component';
 
-export const calendarLocale = {
-    en: {
-        firstDayOfWeek: 0,
-        dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-        dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-        dayNamesMin: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-        monthNames: [
-            'January', 'February', 'March',
-            'April', 'May', 'June',
-            'July', 'August', 'September',
-            'October', 'November', 'December'
-        ],
-        monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        today: 'Today',
-        clear: 'Clear',
-        format: 'mm.dd.yy'
-    },
-    ru: {
-        firstDayOfWeek: 1,
-        dayNames: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'],
-        dayNamesShort: ['Вос', 'Пон', 'Втор', 'Среда', 'Чет', 'Пятн', 'Суб'],
-        dayNamesMin: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
-        monthNames: [
-            'Январь', 'Февраль', 'Март',
-            'Апрель', 'Май', 'Июнь',
-            'Июль', 'Август', 'Сентябрь',
-            'Октябрь', 'Ноябрь', 'Декабрь'
-        ],
-        monthNamesShort: ['Янв', 'Февр', 'Мар', 'Апр', 'Май', 'Июнь', 'Июль', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
-        today: 'Сегодня',
-        clear: 'Сбросить',
-        format: 'dd.mm.yy'
-    }
-};
-
 @Component({
     selector: 'app-input-field-renderer',
     templateUrl: 'templates/render-input-field.html',
@@ -95,7 +60,6 @@ export class InputFieldRenderComponent implements OnInit {
     categories = [];
     categoriesTree: TreeNode[] = [];
     categoriesSelection: {[key: string]: any} = {};
-    calendarLocale = calendarLocale;
     fullCalendarOptions: {[key: string]: CalendarOptions};
 
     constructor(
@@ -164,6 +128,7 @@ export class InputFieldRenderComponent implements OnInit {
                     format: 'MM/dd/yyyy',
                     show_time: 0,
                     hour_format: 24,
+                    first_day_of_week: 1,
                     locale: 'en'
                 };
                 this.extendProperties(

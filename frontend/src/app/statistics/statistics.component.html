@@ -18,8 +18,7 @@
                                 [monthNavigator]="true"
                                 [yearNavigator]="true"
                                 [yearRange]="yearRangeString"
-                                [dateFormat]="calendarLocale[locale].format"
-                                [locale]="calendarLocale[locale]"></p-calendar>
+                                [dateFormat]="dateFormat"></p-calendar>
                 </div>
                 <button type="button" class="btn btn-secondary ms-md-2" ngbTooltip="{{'REFRESH' | translate}}" (click)="getData()">
                     <i class="icon-reload"></i>

@@ -231,12 +231,13 @@
                             <div class="col-md-7">
 
                                 <div class="ui-fluid">
-                                    <p-calendar [formControlName]="field.name"
+                                    <p-calendar inputId="field_{{field.name}}"
+                                                [formControlName]="field.name"
                                                 [(ngModel)]="model[field.name]"
                                                 [dateFormat]="field.inputProperties.format"
                                                 [showTime]="field.inputProperties.show_time"
                                                 [hourFormat]="field.inputProperties.hour_format"
-                                                [locale]="calendarLocale[field.inputProperties.locale]"
+                                                [firstDayOfWeek]="field.inputProperties.first_day_of_week"
                                                 [showButtonBar]="true"
                                                 [showIcon]="true"
                                                 [icon]="'icon-date_range'"></p-calendar>

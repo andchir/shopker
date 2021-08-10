@@ -1,6 +1,7 @@
 import {Component, ElementRef, ViewChild, ViewEncapsulation} from '@angular/core';
 import {Router, NavigationEnd} from '@angular/router';
 import {Title} from '@angular/platform-browser';
+import {PrimeNGConfig} from 'primeng/api';
 import {NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateService} from '@ngx-translate/core';
 
@@ -19,19 +20,21 @@ export class AppComponent {
     currentRoute = '';
 
     constructor(
-        tooltipConfig: NgbTooltipConfig,
+        private config: PrimeNGConfig,
+        private tooltipConfig: NgbTooltipConfig,
         private titleService: Title,
         private router: Router,
-        private translate: TranslateService,
+        private translateService: TranslateService,
         private appSettings: AppSettings
     ) {
         tooltipConfig.placement = 'bottom';
         tooltipConfig.container = 'body';
         tooltipConfig.triggers = 'hover click';
 
-        this.translate.addLangs(['en', 'ru']);
-        this.translate.setDefaultLang('en');
-        this.translate.use(this.appSettings.settings.locale);
+        this.translateService.addLangs(['en', 'ru']);
+        this.translateService.setDefaultLang('en');
+        this.translateService.use(this.appSettings.settings.locale);
+        this.translateService.get('primeng').subscribe(res => this.config.setTranslation(res));
 
         this.router.events.subscribe(event => {
             if (event instanceof NavigationEnd) {
@@ -57,7 +60,7 @@ export class AppComponent {
         const promises = [];
         this.routeData.forEach((data) => {
             if (data.component && data.component.title) {
-                const promise = this.translate.get(data.component.title)
+                const promise = this.translateService.get(data.component.title)
                     .toPromise();
                 promises.push(promise);
             }
@@ -70,5 +73,10 @@ export class AppComponent {
 
     setTitle(newTitle: string): void {
         this.titleService.setTitle(newTitle);
+    }
+
+    translate(lang: string): void {
+        this.translateService.use(lang);
+        this.translateService.get('primeng').subscribe(res => this.config.setTranslation(res));
     }
 }

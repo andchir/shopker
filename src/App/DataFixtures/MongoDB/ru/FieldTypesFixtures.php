@@ -385,6 +385,11 @@ class FieldTypesFixtures extends Fixture implements FixtureGroupInterface
                         'default_value' => '24'
                     ],
                     [
+                        'name' => 'first_day_of_week',
+                        'title' => 'Первый день недели',
+                        'default_value' => '1'
+                    ],
+                    [
                         'name' => 'locale',
                         'title' => 'Язык календаря',
                         'default_value' => 'ru'

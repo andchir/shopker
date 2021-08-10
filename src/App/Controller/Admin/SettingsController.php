@@ -321,7 +321,7 @@ class SettingsController extends AbstractController
                 throw new \Exception('File is not writable.');
             }
             $content  = 'var APP_LANG = ';
-            $content .= json_encode($value, JSON_FORCE_OBJECT | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+            $content .= json_encode($value, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
             $content .= ';';
             file_put_contents($targetFilePath, $content);
         }

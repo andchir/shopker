@@ -18,7 +18,8 @@ export class StatisticsComponent implements OnInit {
     rangeDates: Date[];
     locale: string;
     yearRangeString: string;
-    dateFormat = 'MM/dd/yyyy';
+    dateFormat = 'dd.mm.yy';
+    firstDayOfWeek = 0;
 
     constructor(
         private dataService: StatisticsService,
@@ -28,6 +29,9 @@ export class StatisticsComponent implements OnInit {
         this.rangeDates[0].setMonth(this.rangeDates[1].getMonth() - 1);
         this.locale = this.appSettings.settings.locale;
         this.yearRangeString = [this.rangeDates[1].getFullYear() - 5, this.rangeDates[1].getFullYear()].join(':');
+        if (this.locale !== 'en') {
+            this.firstDayOfWeek = 1;
+        }
     }
 
     ngOnInit() {

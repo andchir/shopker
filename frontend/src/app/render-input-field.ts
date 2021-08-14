@@ -125,7 +125,7 @@ export class InputFieldRenderComponent implements OnInit {
                 propertiesDefault = {
                     handler: '',
                     multiple: 0,
-                    format: 'MM/dd/yyyy',
+                    format: 'dd.mm.yy',
                     show_time: 0,
                     hour_format: 24,
                     first_day_of_week: 1,

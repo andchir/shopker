@@ -88,7 +88,10 @@ class DefaultController extends AbstractController
             ->execute();
 
         // Get products count
-        $collection = $catalogService->getCollection($this->params->get('app.catalog_export_collection'));
+        $productsCollectionName = $this->params->has('app.catalog_export_collection')
+            ? $this->params->get('app.catalog_export_collection')
+            : 'products';
+        $collection = $catalogService->getCollection($productsCollectionName);
         $countProducts = $collection->countDocuments(['isActive' => true]);
 
         // Get page description

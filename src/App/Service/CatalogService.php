@@ -17,6 +17,8 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class CatalogService {
 
+    const RESERVER_FIELD_NAMES = ['id', '_id', 'parentId', 'userId', 'translations', 'isActive'];
+
     /** @var ParameterBagInterface */
     protected $params;
     /** @var DocumentManager */
@@ -691,6 +693,9 @@ class CatalogService {
         }
 
         foreach ($contentTypeFields as $field) {
+            if (in_array($field['name'], self::RESERVER_FIELD_NAMES)) {
+                continue;
+            }
             $translations = self::getTranslationsArray($field, $data, $document, $localeList);
             foreach ($translations as $val) {
                 if($error = $this->validateField(

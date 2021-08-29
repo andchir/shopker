@@ -808,13 +808,13 @@ class CatalogController extends BaseController
             if (isset($filter['from']) && isset($filter['to'])) {
                 if ($outputType === 'date') {
                     if (!empty($filter['from']) && CatalogService::isDateString($filter['from'])) {
-                        $criteria[$name] = ['$gte' => CatalogService::dateTimeAddOffsertByTimezone($filter['from'])];
+                        $criteria[$name] = ['$gte' => CatalogService::dateToUTCDate($filter['from'])];
                     }
                     if (!empty($filter['to']) && CatalogService::isDateString($filter['to'])) {
                         if (!isset($criteria[$name])) {
                             $criteria[$name] = [];
                         }
-                        $criteria[$name]['$lte'] = CatalogService::dateTimeAddOffsertByTimezone($filter['to']);
+                        $criteria[$name]['$lte'] = CatalogService::dateToUTCDate($filter['to']);
                     }
                 } else {
                     $criteria[$name] = ['$gte' => floatval($filter['from']), '$lte' => floatval($filter['to'])];

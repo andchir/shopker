@@ -334,7 +334,9 @@ class ProductController extends BaseController
                     $fileIds[] = $value['fileId'];
                 }
             }
-
+            if ($value && $field['inputType'] === 'date') {
+                $value = CatalogService::dateToUTCDate($value);
+            }
             $document[$key] = $value;
         }
 
@@ -395,7 +397,7 @@ class ProductController extends BaseController
         }
 
         if (!empty($result)) {
-            return $this->json($document);
+            return $this->json(CatalogService::mapResult($document, $contentTypeFields));
         } else {
             return $this->setError('Item not saved.');
         }

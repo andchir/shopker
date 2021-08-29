@@ -836,6 +836,9 @@ class CatalogService {
                     if (empty($value) && !empty($contentTypeField['inputProperties']['default_current'])) {
                         $value = date('Y-m-d H:i:s');
                     }
+                    if (!empty($value)) {
+                        $value = self::dateToUTCDate($value);
+                    }
                     break;
                 case 'system_name':
                     $value = str_replace(' ', '-', $value);
@@ -1082,5 +1085,18 @@ class CatalogService {
             return (bool) preg_match("/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/", $dateTimeString);
         }
         return (bool) preg_match("/^\d{4}-\d{2}-\d{2}$/", $dateTimeString);
+    }
+
+    /**
+     * @param string $date
+     * @return mixed|UTCDateTime
+     * @throws \Exception
+     */
+    public static function dateToUTCDate($date)
+    {
+        if ($date && self::isDateString($date)) {
+            return new UTCDateTime(new \DateTimeImmutable($date));
+        }
+        return $date;
     }
 }

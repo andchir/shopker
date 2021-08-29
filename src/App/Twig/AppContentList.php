@@ -90,6 +90,7 @@ class AppContentList
             'collection' => $collectionName
         ]);
 
+        $contentTypeFields = $contentType ? $contentType->getFields() : [];
         $aggregateFields = [];
         if ($locale !== $localeDefault) {
             if ($contentType) {
@@ -123,11 +124,12 @@ class AppContentList
         $items = $collection->aggregate($pipeline, [
             'cursor' => []
         ])->toArray();
+        $items = CatalogService::mapResults($items, $contentTypeFields);
 
         $output = $environment->render($templateName, array_merge($parameters, [
             'items' => $items,
             'total' => $total,
-            'fields' => $contentType ? $contentType->getFields() : [],
+            'fields' => $contentTypeFields,
             'systemNameField' => $contentType ? $contentType->getSystemNameField() : '',
             'groupSize' => $groupSize,
             'groupCount' => $groupSize ? ceil(count($items) / $groupSize) : 1,

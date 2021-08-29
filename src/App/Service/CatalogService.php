@@ -11,6 +11,7 @@ use Doctrine\Persistence\ObjectRepository;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\Persistence\ObjectManager;
 use Mimey\MimeTypes;
+use MongoDB\BSON\UTCDateTime;
 use MongoDB\Collection;
 use MongoDB\Model\IndexInfo;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -613,24 +614,47 @@ class CatalogService {
             'sort' => $queryOptions['sortOptionsAggregation'],
             'skip' => $skip,
             'limit' => $queryOptions['limit']
-        ]);
-    
+        ])->toArray();
+
+        return self::mapResults($results, $contentTypeFields);
+    }
+
+    /**
+     * @param array $results
+     * @param array $contentTypeFields
+     * @return array
+     */
+    public static function mapResults($results, $contentTypeFields)
+    {
         $data = [];
         foreach ($results as $entry) {
-            $row = [
-                'id' => $entry['_id'],
-                'parentId' => $entry['parentId'],
-                'isActive' => $entry['isActive']
-            ];
-            foreach ($contentTypeFields as $field){
-                $row[$field['name']] = isset($entry[$field['name']])
-                    ? $entry[$field['name']]
-                    : '';
-            }
-            $data[] = $row;
+            $data[] = self::mapResult($entry, $contentTypeFields);
         }
-    
         return $data;
+    }
+
+    /**
+     * @param array $entry
+     * @param array $contentTypeFields
+     * @return array
+     */
+    public static function mapResult($entry, $contentTypeFields)
+    {
+        $row = [
+            '_id' => $entry['_id'],
+            'id' => $entry['_id'],
+            'parentId' => $entry['parentId'],
+            'isActive' => $entry['isActive']
+        ];
+        foreach ($contentTypeFields as $field){
+            $row[$field['name']] = isset($entry[$field['name']])
+                ? $entry[$field['name']]
+                : '';
+            if ($row[$field['name']] instanceof UTCDateTime) {
+                $row[$field['name']] = $row[$field['name']]->toDateTime()->format(DATE_ISO8601);
+            }
+        }
+        return $row;
     }
     
     /**

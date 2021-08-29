@@ -585,6 +585,7 @@ class ProductController extends BaseController
             return $this->setError('Content type not found.');
         }
 
+        $contentTypeFields = $contentType->getFields();
         $collection = $this->catalogService->getCollection($contentType->getCollection());
 
         $entity = $collection->findOne(['_id' => $itemId]);
@@ -592,7 +593,10 @@ class ProductController extends BaseController
             return $this->setError('Product not found.');
         }
 
-        return $this->json(array_merge($entity, ['id' => $entity['_id']]));
+        return $this->json(CatalogService::mapResult(
+            array_merge($entity, ['id' => $entity['_id']]),
+            $contentTypeFields
+        ));
     }
 
     /**

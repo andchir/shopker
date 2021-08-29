@@ -488,6 +488,7 @@ class CatalogController extends BaseController
             $items = $collection->aggregate($pipeline, [
                 'cursor' => []
             ])->toArray();
+            $items = CatalogService::mapResults($items, $contentTypeFields);
         }
 
         $categoriesSiblings = [];

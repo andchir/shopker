@@ -646,6 +646,12 @@ class CatalogService {
             'parentId' => $entry['parentId'],
             'isActive' => $entry['isActive']
         ];
+        if (isset($entry['userId'])) {
+            $row['userId'] = $entry['userId'];
+        }
+        if (isset($entry['translations'])) {
+            $row['translations'] = $entry['translations'];
+        }
         foreach ($contentTypeFields as $field){
             $row[$field['name']] = isset($entry[$field['name']])
                 ? $entry[$field['name']]

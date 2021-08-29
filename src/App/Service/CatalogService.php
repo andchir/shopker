@@ -1081,8 +1081,8 @@ class CatalogService {
      */
     public static function isDateString($dateTimeString)
     {
-        if (strpos($dateTimeString, 'T') !== false) {
-            return (bool) preg_match("/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/", $dateTimeString);
+        if (strpos($dateTimeString, ':') !== false) {
+            return (bool) preg_match("/^\d{4}-\d{2}-\d{2}(T|\s)\d{2}:\d{2}/", $dateTimeString);
         }
         return (bool) preg_match("/^\d{4}-\d{2}-\d{2}$/", $dateTimeString);
     }
@@ -1097,6 +1097,6 @@ class CatalogService {
         if ($date && self::isDateString($date)) {
             return new UTCDateTime(new \DateTimeImmutable($date));
         }
-        return $date;
+        return '';
     }
 }

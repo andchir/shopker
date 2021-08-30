@@ -74,6 +74,7 @@ Order: Заказ
 Status: Статус
 Order list: Состав заказа
 Contacts: Контактная информация
+Timezone: Часовой пояс
 Submit: Отправить
 Empty.: Пусто.
 'Product rating: %rating% of 5': 'Оценка товара: %rating% из 5'

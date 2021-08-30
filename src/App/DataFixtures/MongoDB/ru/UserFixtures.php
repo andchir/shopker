@@ -44,6 +44,7 @@ class UserFixtures extends Fixture implements ContainerAwareInterface, FixtureGr
             ->setIsActive(true)
             ->setFullName('Администратор')
             ->setRoles(['ROLE_SUPER_ADMIN'])
+            ->setTimezone('Europe/Moscow')
             ->setPassword($password);
 
         $manager->persist($user);

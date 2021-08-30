@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Events;
+use App\Form\Type\FormTimezoneType;
 use App\MainBundle\Document\Order;
 use App\MainBundle\Document\Setting;
 use App\MainBundle\Document\User;
@@ -466,13 +467,40 @@ class AccountController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $this->dm->flush();
-
             $this->addFlash('messages', 'profile.contacts_data_saved_successfully');
         }
 
         return $this->render('profile/contacts.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route(
+     *     "/{_locale}/profile/timezone",
+     *     name="profile_timezone_localized",
+     *     requirements={"_locale": "^[a-z]{2}$"}
+     * )
+     * @Route("/profile/timezone", name="profile_timezone")
+     * @param Request $request
+     * @return RedirectResponse|Response
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
+     */
+    public function userTimeZoneAction(Request $request)
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $form = $this->createForm(FormTimezoneType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->dm->flush();
+            $this->addFlash('messages', 'profile.contacts_data_saved_successfully');
+        }
+
+        return $this->render('profile/timezone.html.twig', [
             'form' => $form->createView()
         ]);
     }

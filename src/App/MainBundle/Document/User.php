@@ -136,6 +136,13 @@ class User implements UserInterface, \Serializable
      */
     private $apiToken;
 
+    /**
+     * @MongoDB\Field(type="string")
+     * @Groups({"details", "list"})
+     * @var string
+     */
+    private $timezone;
+
     public function __construct()
     {
         $this->isActive = true;
@@ -650,5 +657,23 @@ class User implements UserInterface, \Serializable
     public static function createApiToken()
     {
         return bin2hex(random_bytes(60));
+    }
+
+    /**
+     * @return string
+     */
+    public function getTimezone()
+    {
+        return $this->timezone;
+    }
+
+    /**
+     * @param string $timezone
+     * @return $this
+     */
+    public function setTimezone(string $timezone)
+    {
+        $this->timezone = $timezone;
+        return $this;
     }
 }

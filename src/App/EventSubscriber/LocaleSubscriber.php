@@ -3,6 +3,7 @@
 namespace App\EventSubscriber;
 
 use App\Service\UtilsService;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -10,11 +11,14 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class LocaleSubscriber implements EventSubscriberInterface
 {
+    /** @var ContainerInterface */
+    private $container;
     private $defaultLocale;
     private $localeList;
 
-    public function __construct($defaultLocale = 'en', $localeList = '')
+    public function __construct($container, $defaultLocale = 'en', $localeList = '')
     {
+        $this->container = $container;
         $this->defaultLocale = is_string($defaultLocale) ? $defaultLocale : 'en';
         $this->localeList = is_string($localeList) ? $localeList : '';
     }
@@ -49,11 +53,31 @@ class LocaleSubscriber implements EventSubscriberInterface
         $request->attributes->set('current_uri', $currentUri);
     }
 
+    public function onKernelController($event)
+    {
+        if (!$this->getUser() || !$this->getUser()->getTimezone()) {
+            return;
+        }
+        date_default_timezone_set($this->getUser()->getTimezone());
+    }
+
+    public function getUser()
+    {
+        if (null === $token = $this->container->get('security.token_storage')->getToken()) {
+            return null;
+        }
+        if (!is_object($user = $token->getUser())) {
+            return null;
+        }
+        return $user;
+    }
+
     public static function getSubscribedEvents()
     {
         return array(
             // must be registered before (i.e. with a higher priority than) the default Locale listener
-            KernelEvents::REQUEST => array(array('onKernelRequest', 20)),
+            KernelEvents::REQUEST => [['onKernelRequest', 20]],
+            KernelEvents::CONTROLLER => [['onKernelController', 1]]
         );
     }
 }

@@ -54,7 +54,7 @@ services:
         arguments: ['@service_container']
 
     App\EventSubscriber\LocaleSubscriber:
-        arguments: ['%kernel.default_locale%', '%app.locale_list%']
+        arguments: ['@service_container', '%kernel.default_locale%', '%app.locale_list%']
 
     App\EventSubscriber\DoctrineEventSubscriber:
         tags:

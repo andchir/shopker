@@ -21,6 +21,9 @@
                         <a class="list-group-item list-group-item-action{% if 'profile_contacts' in app.request.attributes.get('_route') %} active{% endif %}" href="{{ pathLocalized('profile_contacts') }}">
                             {{ 'Contact details' | trans }}
                         </a>
+                        <a class="list-group-item list-group-item-action{% if 'timezone' in app.request.attributes.get('_route') %} active{% endif %}" href="{{ pathLocalized('profile_timezone') }}">
+                            {{ 'Timezone' | trans }}
+                        </a>
                         <a class="list-group-item list-group-item-action{% if 'profile_change_password' in app.request.attributes.get('_route') %} active{% endif %}" href="{{ pathLocalized('profile_change_password') }}">
                             {{ 'Change password' | trans }}
                         </a>

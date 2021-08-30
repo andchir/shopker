@@ -1,5 +1,6 @@
 4.2.10
 - If the input type is "date", it is automatically saved to the database as ISODate (UTC).
+- The user can select the time zone.
 
 4.2.9
 - Import and export translations.

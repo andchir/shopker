@@ -59,6 +59,11 @@
                                         &nbsp;
                                         {{ 'Contact details' | trans }}
                                     </a>
+                                    <a class="dropdown-item" href="{{ pathLocalized('profile_timezone') }}" rel="nofollow">
+                                        <i class="icon-clock text-muted"></i>
+                                        &nbsp;
+                                        {{ 'Timezone' | trans }}
+                                    </a>
                                     <div class="dropdown-divider"></div>
                                     {% if is_granted('IS_IMPERSONATOR') %}
                                         <a class="dropdown-item text-muted" href="{{ path('homepage', {'_switch_user': '_exit'}) }}" rel="nofollow">

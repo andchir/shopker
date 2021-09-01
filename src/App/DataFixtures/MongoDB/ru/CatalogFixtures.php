@@ -522,7 +522,8 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface, Fixtur
                 'required' => false,
                 'showInTable' => false,
                 'showInList' => false,
-                'isFilter' => false
+                'isFilter' => false,
+                'showOnPage' => true
             ],
             [
                 'title' => 'Позиция в меню',

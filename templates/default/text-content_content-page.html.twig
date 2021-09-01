@@ -3,9 +3,12 @@
 {% block title %}{{ currentPage.title | default('') }} - {{ app_name }}{% endblock %}
 
 {% block body %}
+
+    {% include 'nav/breadcrumbs.html.twig' %}
+
     <h1>{{ fieldByLocale(currentPage, getFieldNameByChunk('header', fields, 'title')) }}</h1>
 
-    {{ renderOutputTypeChunk(currentPage, fields, 'description') }}
+    {{ renderOutputTypeArray(currentPage, contentType.getFieldsForPage(['title']), 'page_') }}
 
     {% if currentPage.form_name is defined and currentPage.form_name is not empty -%}
         <div class="row">

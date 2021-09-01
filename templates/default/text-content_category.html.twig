@@ -10,6 +10,10 @@
 
         <h1>{{ fieldByLocale(currentPage, 'title') }}</h1>
 
+        {% include 'nav/child-categories-menu.html.twig' %}
+
+        {% include 'nav/siblings-menu.html.twig' %}
+
         {% if items | length == 0 and queryOptions.filter | length == 0 %}
             {% if categoriesMenu | length == 0 %}
                 <div class="alert alert-info">

@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ currentPage.title | default('') }} - {{ app_name }}{% endblock %}
+
+{% block body %}
+
+    {% include 'nav/breadcrumbs.html.twig' %}
+
+    <div class="min-height400">
+
+        <h1>{{ fieldByLocale(currentPage, 'title') }}</h1>
+
+        {% if items | length == 0 and queryOptions.filter | length == 0 %}
+            {% if categoriesMenu | length == 0 %}
+                <div class="alert alert-info">
+                    {{ 'This category is empty' | trans }}.
+                </div>
+            {% endif %}
+        {% else %}
+
+            {% if items | length > 0 %}
+                <ul>
+                    {% for item in items %}
+                        <li><a href="{{ catalogPath(currentCategory.uri, item.name, item, 'categories') }}">{{ item.title }}</a></li>
+                    {% endfor %}
+                </ul>
+
+                {% include 'nav/pagination.html.twig' %}
+            {% endif %}
+
+        {% endif %}
+
+        <ul>
+
+        </ul>
+
+    </div>
+
+{% endblock %}

@@ -13,6 +13,8 @@ export class TableComponent implements OnInit {
     @Input() currentPage: number;
     @Input() queryOptions = new QueryOptions('name', 'asc', 1, 10, 0, 0);
     @Input() loading: boolean;
+    @Input() isEditAllowed = true;
+    @Input() isDeleteAllowed = true;
     @Input() isCloneAllowed = false;
     @Input() selectedIds: number[] = [];
     @Output() actionRequest = new EventEmitter();

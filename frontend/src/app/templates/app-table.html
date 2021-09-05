@@ -32,13 +32,13 @@
                     [ngClass]="{'d-none d-lg-table-cell': index > 1 && index !== tableFields.length - 1}">
                     <div class="relative" *ngIf="index == tableFields.length - 1">
                         <div class="show-on-hover-right no-wrap">
-                            <button type="button" class="btn btn-secondary btn-sm ms-2" ngbTooltip="{{'EDIT' | translate}}" (click)="action('edit', item.id)">
+                            <button type="button" class="btn btn-secondary btn-sm ms-2" ngbTooltip="{{'EDIT' | translate}}" (click)="action('edit', item.id)" *ngIf="isEditAllowed">
                                 <i class="icon-pencil"></i>
                             </button>
                             <button type="button" class="btn btn-secondary btn-sm ms-2" ngbTooltip="{{'CLONE' | translate}}" (click)="action('copy', item.id)" *ngIf="isCloneAllowed">
                                 <i class="icon-stack"></i>
                             </button>
-                            <button type="button" class="btn btn-secondary btn-sm ms-2" ngbTooltip="{{'DELETE' | translate}}" (click)="action('delete', item.id)">
+                            <button type="button" class="btn btn-secondary btn-sm ms-2" ngbTooltip="{{'DELETE' | translate}}" (click)="action('delete', item.id)" *ngIf="isDeleteAllowed">
                                 <i class="icon-cross"></i>
                             </button>
                         </div>

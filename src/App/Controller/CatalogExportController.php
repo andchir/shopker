@@ -61,7 +61,7 @@ class CatalogExportController extends BaseController
             : '';
         $productsCollectionName = $this->params->has('app.catalog_export_collection')
             ? $this->params->get('app.catalog_export_collection')
-            : 'products';
+            : '';
         $productsLimit = $this->params->has('app.catalog_export_limit')
             ? $this->params->get('app.catalog_export_limit')
             : 0;
@@ -88,10 +88,7 @@ class CatalogExportController extends BaseController
         $cacheKey = "catalog_export_{$locale}_{$format}";
         $cacheItem = $fileCache->getItem($cacheKey);
         if ($cacheItem && $cacheItem->isHit()) {
-            $response = new Response();
-            $response->headers->set('Content-Type', 'text/xml');
-            $response->setContent($cacheItem->get());
-            return $response;
+            return $this->getResponse($format, $cacheItem->get());
         }
 
         // Get delivery options
@@ -107,24 +104,29 @@ class CatalogExportController extends BaseController
                 'id' => $category->getId(),
                 'title' => ContentType::getValueByLocale($category->toArray(), $locale, 'title'),
                 'parentId' => $category->getParentId(),
+                'contentTypeName' => $category->getContentTypeName(),
                 'uri' => $category->getUri()
             ];
         }, $categories);
 
         // Get products
-        $collection = $this->catalogService->getCollection($productsCollectionName);
-        $criteria = [
-            'isActive' => true
-        ];
-        $queryOptions = [
-            'sort' => [$productsOrderBy => 1],
-            'skip' => 0,
-            'cursor' => []
-        ];
-        if ($productsLimit) {
-            $queryOptions['limit'] = $productsLimit;
+        if ($productsCollectionName) {
+            $collection = $this->catalogService->getCollection($productsCollectionName);
+            $criteria = [
+                'isActive' => true
+            ];
+            $queryOptions = [
+                'sort' => [$productsOrderBy => 1],
+                'skip' => 0,
+                'cursor' => []
+            ];
+            if ($productsLimit) {
+                $queryOptions['limit'] = $productsLimit;
+            }
+            $items = $collection->find($criteria, $queryOptions)->toArray();
+        } else {
+            $items = [];
         }
-        $items = $collection->find($criteria, $queryOptions)->toArray();
 
         // Render output
         $pageContent = $this->renderView($templatePath, [
@@ -139,6 +141,16 @@ class CatalogExportController extends BaseController
         $cacheItem->expiresAt(new \DateTime('+12 hours'));
         $fileCache->save($cacheItem);
 
+        return $this->getResponse($format, $pageContent);
+    }
+
+    /**
+     * @param string $format
+     * @param string $pageContent
+     * @return Response
+     */
+    public function getResponse($format, $pageContent)
+    {
         $response = new Response();
         if ($format === 'xml') {
             $response->headers->set('Content-Type', 'text/xml');
@@ -147,7 +159,6 @@ class CatalogExportController extends BaseController
             $response->headers->set('Content-Type', 'application/json');
         }
         $response->setContent($pageContent);
-
         return $response;
     }
 }

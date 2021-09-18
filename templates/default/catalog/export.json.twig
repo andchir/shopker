@@ -1,0 +1,13 @@
+{%- set baseUrl = absolute_url('/') -%}
+{
+    "categories": [
+        {% for category in categories ~%}
+            {"id":  {{ category.id }}, "parentId": {{ category.parentId }}, "title":  "{{ category.title }}", "contentTypeName": "{{ category.contentTypeName }}"}{% if not loop.last %},{% endif %}
+        {% endfor %}
+    ],
+    "pages": [
+        {% for item in items ~%}
+            {"id":  {{ item._id }}, "parentId": {{ item.parentId }}, "title":  "{{ item.title }}"}{% if not loop.last %},{% endif %}
+        {% endfor %}
+    ]
+}

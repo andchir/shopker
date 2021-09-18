@@ -39,7 +39,7 @@
                         ],
                         "scripts": [
                             "node_modules/quill/dist/quill.js",
-                            "node_modules/chart.js/dist/Chart.js",
+                            "node_modules/chart.js/dist/chart.js",
                             "node_modules/ace-builds/src/ace.js",
                             "node_modules/ace-builds/src/ext-modelist.js",
                             "node_modules/ace-builds/src/theme-kuroir.js",
@@ -202,7 +202,7 @@
                         ],
                         "scripts": [
                             "node_modules/quill/dist/quill.js",
-                            "node_modules/chart.js/dist/Chart.js",
+                            "node_modules/chart.js/dist/chart.js",
                             "node_modules/ace-builds/src/ace.js",
                             "node_modules/ace-builds/src/ext-modelist.js",
                             "node_modules/ace-builds/src/theme-kuroir.js",
@@ -349,7 +349,7 @@
                         ],
                         "scripts": [
                             "node_modules/quill/dist/quill.js",
-                            "node_modules/chart.js/dist/Chart.js",
+                            "node_modules/chart.js/dist/chart.js",
                             "node_modules/ace-builds/src/ace.js",
                             "node_modules/ace-builds/src/ext-modelist.js",
                             "node_modules/ace-builds/src/theme-kuroir.js",

@@ -359,7 +359,11 @@ class DefaultController extends AbstractController
     public function loadDataFixtures(DocumentManager $dm, ContainerInterface $container, $locale)
     {
         $rootPath = $this->params->get('kernel.project_dir');
-        $fixturesPath = $rootPath . '/src/App/DataFixtures/MongoDB/' . $locale;
+        if ($this->params->has('app.fixtures_dir_path')) {
+            $fixturesPath = $rootPath . $this->params->get('app.fixtures_dir_path') . $locale;
+        } else {
+            $fixturesPath = $rootPath . '/src/App/DataFixtures/MongoDB/' . $locale;
+        }
         if (!is_dir($fixturesPath)) {
             return false;
         }

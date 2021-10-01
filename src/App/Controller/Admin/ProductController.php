@@ -568,23 +568,56 @@ class ProductController extends BaseController
     }
 
     /**
+     * @Route("_item/{itemId}", name="get_one_product", methods={"GET"})
+     * @param int $itemId
+     * @return JsonResponse
+     */
+    public function getOneItemAction($itemId)
+    {
+        $productsCollectionName = $this->params->has('app.catalog_export_collection')
+            ? $this->params->get('app.catalog_export_collection')
+            : '';
+        if (!$productsCollectionName) {
+            return $this->setError($this->translator->trans('Page not found.'));
+        }
+        $collection = $this->catalogService->getCollection($productsCollectionName);
+        $entity = $collection->findOne(['_id' => (int) $itemId]);
+        if(!$entity){
+            return $this->setError($this->translator->trans('Page not found.'));
+        }
+
+        $categoriesRepository = $this->getCategoriesRepository();
+        /** @var Category $category */
+        $category = $categoriesRepository->find($entity['parentId']);
+        if(!$category){
+            return $this->setError($this->translator->trans('Category not found.'));
+        }
+        $contentType = $category->getContentType();
+        $contentTypeFields = $contentType->getFields();
+
+        return $this->json(CatalogService::mapResult(
+            array_merge($entity, ['id' => $entity['_id']]),
+            $contentTypeFields
+        ));
+    }
+
+    /**
      * @Route("/{categoryId}/{itemId}", name="category_product", methods={"GET"})
      * @ParamConverter("category", class="App\MainBundle\Document\Category", options={"id" = "categoryId"})
-     * @param Request $request
      * @param Category $category
      * @param int $itemId
      * @return JsonResponse
      */
-    public function getOneByCategory(Request $request, Category $category, $itemId)
+    public function getOneByCategoryAction(Category $category, $itemId)
     {
         if(!$category){
-            return $this->setError('Category not found.');
+            return $this->setError($this->translator->trans('Category not found.'));
         }
         $itemId = intval($itemId);
 
         $contentType = $category->getContentType();
         if(!$contentType){
-            return $this->setError('Content type not found.');
+            return $this->setError($this->translator->trans('Content type not found.'));
         }
 
         $contentTypeFields = $contentType->getFields();

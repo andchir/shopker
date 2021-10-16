@@ -21,3 +21,5 @@ email.send_successful: Email sent successfully.
 email.recipient_error: The address of the recipient is not specified.
 search.nothing_found: Nothing was found by your request.
 months_short: Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec
+email_confirm.mail_subject: Email confirmation
+user_email.confirm.email_link: To confirm your email address, please follow the link

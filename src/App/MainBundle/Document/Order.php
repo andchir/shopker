@@ -662,10 +662,10 @@ class Order
             $priceTotal = $priceTotal - ($priceTotal * $this->discountPercent / 100);
         }
         if ($deliveryPriceLimit && $priceTotal >= $deliveryPriceLimit) {
-            $this->setDeliveryPrice(0);
+            $this->deliveryPrice = 0;
         }
-        if ($this->getDeliveryPrice()) {
-            $priceTotal += $this->getDeliveryPrice();
+        if ($this->deliveryPrice) {
+            $priceTotal += $this->deliveryPrice;
         }
         $this->price = $priceTotal;
         return $this;

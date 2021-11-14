@@ -158,7 +158,7 @@ class CheckoutController extends BaseController
                 // Filter options by public data keys
                 $publicUserData = $form->has('options') ? array_keys($form->get('options')->all()) : [];
                 $order->filterOptionsByPublic($publicUserData);
-                $order->setOptionValue('deliveryPriceLimit', $deliveryPriceLimit);
+                $order->setOptionValue('deliveryPriceLimit', $deliveryPriceLimit, $this->translator->trans('Free shipping amount'));
                 
                 // If the price is zero, then the order has already been paid.
                 $order->updatePriceTotal();

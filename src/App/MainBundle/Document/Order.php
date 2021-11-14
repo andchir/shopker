@@ -661,7 +661,7 @@ class Order
         } else if ($this->discountPercent) {
             $priceTotal = $priceTotal - ($priceTotal * $this->discountPercent / 100);
         }
-        if ($deliveryPriceLimit && $priceTotal > $deliveryPriceLimit) {
+        if ($deliveryPriceLimit && $priceTotal >= $deliveryPriceLimit) {
             $this->setDeliveryPrice(0);
         }
         if ($this->getDeliveryPrice()) {

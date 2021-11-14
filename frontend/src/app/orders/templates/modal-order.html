@@ -314,7 +314,7 @@
                                 <tr>
                                     <td></td>
                                     <td colspan="3">{{ 'DELIVERY' | translate }}</td>
-                                    <td class="text-center">
+                                    <td class="text-center" [style.textDecoration]="deliveryLimitApplied ? 'line-through' : 'none'">
                                         {{ model.deliveryPrice | number: '1.2-2':'ru-RU' }}
                                     </td>
                                 </tr>

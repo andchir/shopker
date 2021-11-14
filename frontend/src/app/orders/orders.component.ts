@@ -27,6 +27,8 @@ export class ModalOrderContentComponent extends AppModalContentAbstractComponent
     model = new Order(0, 0, '', '', '');
     modalTitle = 'Order';
     settings: {[groupName: string]: SettingPretty[]};
+    deliveryLimit = 0;
+    deliveryLimitApplied = false;
     baseUrl: string;
     formFields: FormFieldsOptions[] = [
         {
@@ -118,9 +120,26 @@ export class ModalOrderContentComponent extends AppModalContentAbstractComponent
         super(fb, activeModal, translateService, systemNameService, dataService, elRef);
     }
 
+    onAfterGetData(): void {
+        this.getDeliveryLimit();
+        super.onAfterGetData();
+    }
+
     onBeforeInit(): void {
         this.baseUrl = this.appSettings.settings.webApiUrl + '/';
         this.settings = this.appSettings.settings.systemSettings;
+    }
+
+    getDeliveryLimit(): void {
+        if (!this.model || !this.model.options) {
+            return;
+        }
+        const index = this.model.options.findIndex((item) => {
+            return item.name === 'deliveryPriceLimit';
+        });
+        if (index > -1) {
+            this.deliveryLimit = parseFloat(this.model.options[index].value);
+        }
     }
 
     editContentToggle(content: OrderContent): void {
@@ -204,7 +223,12 @@ export class ModalOrderContentComponent extends AppModalContentAbstractComponent
         if (this.model.discountPercent) {
             priceTotal *= this.model.discountPercent / 100;
         }
-        priceTotal += this.model.deliveryPrice || 0;
+        if (this.deliveryLimit && priceTotal >= this.deliveryLimit) {
+            this.deliveryLimitApplied = true;
+        } else {
+            priceTotal += this.model.deliveryPrice || 0;
+            this.deliveryLimitApplied = false;
+        }
         this.model.price = Math.max(priceTotal, 0);
     }
 }

@@ -6,6 +6,7 @@ import {RouterModule} from '@angular/router';
 
 import {NgbModule, NgbActiveModal, NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import {EditorModule} from 'primeng/editor';
+import {TooltipModule} from 'primeng/tooltip';
 import {ToastModule} from 'primeng/toast';
 import {CalendarModule} from 'primeng/calendar';
 import {FullCalendarModule} from 'primeng/fullcalendar';
@@ -67,6 +68,7 @@ const components = [
         TreeModule,
         ChartModule,
         ToastModule,
+        TooltipModule,
         NgbModule,
         TranslateModule,
         DragulaModule.forRoot(),
@@ -102,6 +104,7 @@ const components = [
         TreeModule,
         ChartModule,
         ToastModule,
+        TooltipModule,
         TranslateModule,
         DragulaModule,
         FilterFieldByGroupPipe,

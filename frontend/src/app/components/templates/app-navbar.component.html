@@ -4,10 +4,10 @@
             <a class="nav-link"
                 [ngClass]="{'active': menuItem.isActive}"
                 href="#{{menuItem.route}}"
-                [ngbTooltip]="menuItem.title | translate"
-                placement="right"
-                container="body"
-                tooltipClass="tooltip-left-blue"
+                [pTooltip]="menuItem.title | translate"
+                tooltipPosition="right"
+                appendTo="body"
+                tooltipStyleClass="tooltip-left-blue"
                 (click)="navigateRoute(menuItem, $event)">
                     <i class="item-icon" [ngClass]="menuItem.icon"></i>
             </a>
@@ -17,30 +17,30 @@
     <ul class="navbar-vertical-left-bottom">
         <li class="nav-item" *ngIf="isFileManagerEnabled">
             <a class="nav-link nav-link-circle" href="#"
-               [ngClass]="{'active': isFileManagerActive}"
-               [ngbTooltip]="'FILE_MANAGER' | translate"
-               placement="right"
-               container="body"
-               tooltipClass="tooltip-left-blue"
-               (click)="fileManagerToggle($event)">
+                [ngClass]="{'active': isFileManagerActive}"
+                [pTooltip]="'FILE_MANAGER' | translate"
+                tooltipPosition="right"
+                appendTo="body"
+                tooltipStyleClass="tooltip-left-blue"
+                (click)="fileManagerToggle($event)">
                     <i class="icon-folder item-icon"></i>
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link" [href]="baseUrl" target="_blank"
-               [ngbTooltip]="'PREVIEW_SITE' | translate"
-               placement="right"
-               container="body"
-               tooltipClass="tooltip-left-blue">
+                [pTooltip]="'PREVIEW_SITE' | translate"
+                tooltipPosition="right"
+                appendTo="body"
+                tooltipStyleClass="tooltip-left-blue">
                     <i class="icon-home item-icon"></i>
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="{{baseUrl}}logout"
-               [ngbTooltip]="'LOGOUT' | translate"
-               placement="right"
-               container="body"
-               tooltipClass="tooltip-left-blue">
+                [pTooltip]="'LOGOUT' | translate"
+                tooltipPosition="right"
+                appendTo="body"
+                tooltipStyleClass="tooltip-left-blue">
                     <i class="icon-power item-icon"></i>
             </a>
         </li>

@@ -336,9 +336,12 @@ body .ui-tree .ui-tree-filter-container .ui-tree-filter-icon { margin-top: -0.75
 .app-progress .progress { border: 2px solid rgba(255,255,255,0.5); box-shadow: 0 0 10px rgba(0,0,0,0.4); }
 
 /* tooltips */
-.tooltip-left-blue { margin-left: 56px; }
+.tooltip-left-blue:not(.p-tooltip) { margin-left: 56px; }
 .tooltip-left-blue .tooltip-inner { background-color: #007bff; font-size: 125%; border-radius: 0; }
 .tooltip-left-blue .tooltip-arrow::before { border-right-color: #007bff; }
+.tooltip-left-blue.p-tooltip { margin-left: 6px; }
+.tooltip-left-blue.p-tooltip .p-tooltip-arrow { border-right-color: #007bff; left: -0.2em; margin-top: -.45rem; border-width: .45em .45em 0.45em 0; }
+.tooltip-left-blue.p-tooltip .p-tooltip-text { background-color: #007bff; font-size: 125%; border-radius: 0; }
 .tooltip-offset-left { margin-left: 7px; }
 
 /* left-overlay-menu */

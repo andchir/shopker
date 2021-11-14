@@ -647,6 +647,7 @@ class Order
      */
     public function updatePriceTotal()
     {
+        $deliveryPriceLimit = $this->getOptionValue('deliveryPriceLimit');
         $priceTotal = 0;
         /** @var OrderContent $content */
         foreach ($this->content as $content) {
@@ -660,8 +661,11 @@ class Order
         } else if ($this->discountPercent) {
             $priceTotal = $priceTotal - ($priceTotal * $this->discountPercent / 100);
         }
-        if ($this->deliveryPrice) {
-            $priceTotal += $this->deliveryPrice;
+        if ($deliveryPriceLimit && $priceTotal > $deliveryPriceLimit) {
+            $this->setDeliveryPrice(0);
+        }
+        if ($this->getDeliveryPrice()) {
+            $priceTotal += $this->getDeliveryPrice();
         }
         $this->price = $priceTotal;
         return $this;

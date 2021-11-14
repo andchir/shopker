@@ -117,6 +117,7 @@ class CheckoutController extends BaseController
             /** @var Setting $delivery */
             $delivery = $form->has('deliveryName') ? $form->get('deliveryName')->getNormData() : '';
             $deliveryPrice = $delivery ? $delivery->getOption('price') : 0;
+            $deliveryPriceLimit = $delivery ? $delivery->getOption('priceLimit') : 0;
 
             /** @var Setting $payment */
             $payment = $form->has('paymentName') ? $form->get('paymentName')->getNormData() : '';
@@ -157,6 +158,7 @@ class CheckoutController extends BaseController
                 // Filter options by public data keys
                 $publicUserData = $form->has('options') ? array_keys($form->get('options')->all()) : [];
                 $order->filterOptionsByPublic($publicUserData);
+                $order->setOptionValue('deliveryPriceLimit', $deliveryPriceLimit);
                 
                 // If the price is zero, then the order has already been paid.
                 $order->updatePriceTotal();
@@ -183,7 +185,7 @@ class CheckoutController extends BaseController
                         $userOptions = [];
                     }
                     foreach ($orderOptions as $option) {
-                        if (!$option['value']) {
+                        if (!$option['value'] || !in_array($option['name'], $publicUserData)) {
                             continue;
                         }
                         $index = array_search($option['name'], array_column($userOptions, 'name'));

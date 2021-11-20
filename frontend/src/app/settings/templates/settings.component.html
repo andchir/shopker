@@ -83,14 +83,9 @@
                                         </div>
                                     </div>
                                     <div class="w-100 overflow-hidden white-space-nowrap text-overflow-ellipsis">
-                                        {{ setting.value | ifEmpty: '[Empty]' }}
+                                        {{ setting.value }}
                                     </div>
                                 </div>
-                                <!--<div class="p-inputgroup">
-                                        <button type="button" pButton pRipple icon="pi pi-check" styleClass="p-button-success"></button>
-                                        <input type="text" pInputText [(ngModel)]="setting.value">
-                                        <button type="button" pButton pRipple icon="pi pi-times" styleClass="p-button-danger"></button>
-                                    </div>-->
                             </td>
                         </tr>
                     </ng-template>

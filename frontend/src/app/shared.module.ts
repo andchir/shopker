@@ -14,6 +14,7 @@ import {ChipsModule} from 'primeng/chips';
 import {ColorPickerModule} from 'primeng/colorpicker';
 import {TreeModule} from 'primeng/tree';
 import {ChartModule} from 'primeng/chart';
+import {TableModule} from 'primeng/table';
 import {TranslateModule} from '@ngx-translate/core';
 import {DragulaModule} from 'ng2-dragula';
 import {ClipboardModule} from 'ngx-clipboard';
@@ -37,6 +38,7 @@ import {DateFromObjectPipe} from './pipes/date-from-object.pipe';
 import {UserRoleColorPipe, UserRoleNamePipe} from './pipes/user-role.pipe';
 import {OrderByPipe} from './pipes/orderby.pipe';
 import {FilterArrayPipe} from './pipes/filter-array-pipe';
+import {IfEmptyPipe} from '@app/pipes/if-empty.pipe';
 
 const components = [
     TableComponent,
@@ -66,6 +68,7 @@ const components = [
         ChipsModule,
         ColorPickerModule,
         TreeModule,
+        TableModule,
         ChartModule,
         ToastModule,
         TooltipModule,
@@ -82,6 +85,7 @@ const components = [
         UserRoleColorPipe,
         OrderByPipe,
         FilterArrayPipe,
+        IfEmptyPipe,
 
         ModalFileContentComponent,
         ModalFileUploadContentComponent
@@ -102,6 +106,7 @@ const components = [
         ChipsModule,
         ColorPickerModule,
         TreeModule,
+        TableModule,
         ChartModule,
         ToastModule,
         TooltipModule,
@@ -112,7 +117,8 @@ const components = [
         UserRoleNamePipe,
         UserRoleColorPipe,
         OrderByPipe,
-        FilterArrayPipe
+        FilterArrayPipe,
+        IfEmptyPipe
     ],
     entryComponents: [
         ModalFileContentComponent,

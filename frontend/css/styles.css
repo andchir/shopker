@@ -31,6 +31,8 @@ pre.max-height400 { max-height: 400px; overflow: auto; }
 .pos-absolute-right-bottom10 { position: absolute; right: 10px; bottom: 10px; top: auto; }
 .pos-absolute-left-bottom10 { position: absolute; left: 10px; bottom: 10px; top: auto; }
 .pos-absolute-right2 { right: 0.6rem; top: 0.6rem; }
+.pos-top-5 { top: -5px; }
+.min-height20 { min-height: 20px; }
 .min-height110 { min-height: 110px; }
 .min-height300 { min-height: 300px; }
 .min-height400 { min-height: 400px; }
@@ -246,6 +248,9 @@ input.form-control[readonly] { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); curso
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+/* table */
+.p-datatable table { width: 100%; }
 
 /* pagination */
 .pagination { margin-bottom: 0; }

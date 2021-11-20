@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {CommonModule, registerLocaleData} from '@angular/common';
+import {APP_BASE_HREF, CommonModule, registerLocaleData} from '@angular/common';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
@@ -44,7 +44,9 @@ registerLocaleData(localeRu, 'ru-RU');
         ModalConfirmTextComponent,
         ModalEditTextareaComponent
     ],
-    providers: [],
+    providers: [{
+        provide: APP_BASE_HREF, useValue: '/admin/'
+    }],
     entryComponents: [
         AlertModalContentComponent,
         ConfirmModalContentComponent,

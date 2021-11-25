@@ -659,8 +659,26 @@ class CatalogService {
             if ($row[$field['name']] instanceof UTCDateTime) {
                 $row[$field['name']] = $row[$field['name']]->toDateTime()->format(DATE_ISO8601);
             }
+            if ($field['inputType'] === 'file' && !empty($field['inputProperties']['multiple'])) {
+                self::addMultipleFiles($entry, $row, $field);
+            }
         }
         return $row;
+    }
+
+    /**
+     * @param array $entry
+     * @param array $row
+     * @param array $field
+     */
+    public static function addMultipleFiles($entry, &$row, $field)
+    {
+        $fieldName = $field['name'];
+        foreach ($entry as $fName => $value) {
+            if (strpos($fName, $fieldName . '__') !== false) {
+                $row[$fName] = $value;
+            }
+        }
     }
     
     /**

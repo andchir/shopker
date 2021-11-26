@@ -753,7 +753,7 @@ class CatalogController extends BaseController
         $results = $categoriesRepository->findBy([
             'parentId' => $currentId,
             'isActive' => true
-        ], ['title' => 'asc']);
+        ], ['menuIndex' => 'asc', 'title' => 'asc']);
 
         /** @var Category $category */
         foreach ($results as $category) {

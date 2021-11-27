@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input, AfterViewInit} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
 
 import {Subject} from 'rxjs';
@@ -14,12 +14,14 @@ import {TranslateService} from '@ngx-translate/core';
 import {ComposerPackage} from './models/composer-package.interface';
 import {ModalSystemUpdateComponent} from './modal-system-update.component';
 
+declare const window: Window;
+
 @Component({
     selector: 'app-settings',
     templateUrl: './templates/settings.component.html',
     providers: [MessageService]
 })
-export class SettingsComponent implements OnInit {
+export class SettingsComponent implements OnInit, AfterViewInit {
     static title = 'SETTINGS';
     
     baseUrl: string;
@@ -30,6 +32,8 @@ export class SettingsComponent implements OnInit {
     composerPackageVersion = '';
     composerPackageNameFilter = '';
     modalRef: NgbModalRef;
+    scrollHeight = 600;
+    settingsCloned: {[key: string]: string|number} = {};
     settings = {
         SETTINGS_MAIN: new SettingsData(false, true, [], null),
         SETTINGS_ORDER_STATUSES: new SettingsData(
@@ -88,6 +92,16 @@ export class SettingsComponent implements OnInit {
     ngOnInit(): void {
         this.getSettings();
         this.getComposerPackages();
+    }
+
+    ngAfterViewInit(): void {
+        setTimeout(this.scrollHeightUpdate.bind(this), 1);
+    }
+    
+    scrollHeightUpdate(): void {
+        const verticalOffset = 160;
+        const windowHeight = window.innerHeight;
+        this.scrollHeight = windowHeight - verticalOffset;
     }
 
     getSettings(): void {
@@ -353,5 +367,26 @@ export class SettingsComponent implements OnInit {
 
     pageReload(): void {
         window.location.reload();
+    }
+
+    onRowEditInit(setting: Setting) {
+        this.settingsCloned[setting.name] = setting.value;
+    }
+
+    onRowEditSave(setting: Setting) {
+        /*if (product.price > 0) {
+            delete this.clonedProducts[product.id];
+            this.messageService.add({severity:'success', summary: 'Success', detail:'Product is updated'});
+        }
+        else {
+            this.messageService.add({severity:'error', summary: 'Error', detail:'Invalid Price'});
+        }*/
+    }
+
+    onRowEditCancel(setting: Setting, index: number) {
+        if (this.settingsCloned[setting.name]) {
+            setting.value = this.settingsCloned[setting.name];
+            delete this.settingsCloned[setting.name];
+        }
     }
 }

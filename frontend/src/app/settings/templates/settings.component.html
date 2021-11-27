@@ -48,18 +48,18 @@
             <div class="col-lg-6 mb-3">
 
                 <!-- settings -->
-                <p-table [value]="settings.SETTINGS_MAIN.values"
+                <p-table dataKey="name" editMode="row" [value]="settings.SETTINGS_MAIN.values"
                          responsiveLayout="fixed"
                          [scrollable]="true"
-                         scrollHeight="600px">
+                         [scrollHeight]="scrollHeight + 'px'">
                     <ng-template pTemplate="header">
                         <tr>
                             <th>{{'PARAMETER' | translate}}</th>
                             <th>{{'VALUE' | translate}}</th>
                         </tr>
                     </ng-template>
-                    <ng-template pTemplate="body" let-setting>
-                        <tr>
+                    <ng-template pTemplate="body" let-setting let-editing="editing" let-ri="rowIndex">
+                        <tr [pEditableRow]="setting">
                             <td style="width: 50%;">
                                 <div class="show-on-hover-parent w-100">
                                     <div class="show-on-hover-child position-relative">
@@ -73,18 +73,28 @@
                                 </div>
                             </td>
                             <td style="width: 50%;">
-                                <div class="show-on-hover-parent w-100 min-height20">
-                                    <div class="show-on-hover-child position-relative">
-                                        <div class="pos-absolute-right pos-top-5">
-                                            <button pButton type="button" class="p-button-raised p-button-rounded"
-                                                    icon="pi pi-pencil"
-                                                    [pTooltip]="'EDIT' | translate"
-                                                    tooltipPosition="bottom"></button>
-                                        </div>
+                                <div class="show-on-hover-parent w-100">
+                                    <div class="show-on-hover-child position-absolute pos-right" [class.pos-top]="editing" [class.pos-top-5]="!editing">
+                                        <button *ngIf="!editing" pButton type="button"
+                                                pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInit(setting)"
+                                                class="p-button-raised p-button-rounded"></button>
+                                        <button *ngIf="editing" pButton type="button"
+                                                pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(setting)"
+                                                class="p-button-raised p-button-rounded p-button-success ml-2"></button>
+                                        <button *ngIf="editing" pButton type="button"
+                                                pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancel(setting, ri)"
+                                                class="p-button-raised p-button-rounded p-button-danger ml-2"></button>
                                     </div>
-                                    <div class="w-100 overflow-hidden white-space-nowrap text-overflow-ellipsis">
-                                        {{ setting.value }}
-                                    </div>
+                                    <p-cellEditor style="display: block; width: 100%;">
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" class="p-inputtext-sm w-100" [(ngModel)]="setting.value">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            <div class="w-100 overflow-hidden white-space-nowrap text-overflow-ellipsis">
+                                                {{ setting.value }}
+                                            </div>
+                                        </ng-template>
+                                    </p-cellEditor>
                                 </div>
                             </td>
                         </tr>

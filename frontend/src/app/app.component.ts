@@ -1,6 +1,7 @@
 import {Component, ElementRef, ViewChild, ViewEncapsulation} from '@angular/core';
 import {Router, NavigationEnd} from '@angular/router';
 import {Title} from '@angular/platform-browser';
+
 import {PrimeNGConfig} from 'primeng/api';
 import {NgbTooltipConfig} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateService} from '@ngx-translate/core';

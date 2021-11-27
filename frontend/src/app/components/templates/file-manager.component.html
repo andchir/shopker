@@ -1,15 +1,41 @@
 <div class="panel-file-manager bg-light" #container>
     <div class="panel-file-manager-top shadow" #toolsContainer>
-        <button type="button" class="btn btn-sm btn-secondary me-2" ngbTooltip="{{'UPLOAD_FILE' | translate}}" placement="right" [container]="toolsContainer" (click)="uploadFiles($event)">
+        <button type="button" class="btn btn-sm btn-secondary me-2"
+                [pTooltip]="'UPLOAD_FILE' | translate"
+                tooltipPosition="right"
+                positionStyle="fixed"
+                tooltipZIndex="2222"
+                [appendTo]="'body'"
+                (click)="uploadFiles($event)">
             <i class="icon-file"></i>
         </button>
-        <button type="button" class="btn btn-sm btn-secondary me-2" ngbTooltip="{{'CREATE_FOLDER' | translate}}" [container]="toolsContainer" (click)="createFolder($event)">
+        <button type="button" class="btn btn-sm btn-secondary me-2" 
+                [pTooltip]="'CREATE_FOLDER' | translate"
+                tooltipPosition="right"
+                positionStyle="fixed"
+                tooltipZIndex="2222"
+                [appendTo]="'body'"
+                (click)="createFolder($event)">
             <i class="icon-plus"></i>
         </button>
-        <button type="button" class="btn btn-sm btn-secondary me-2" ngbTooltip="{{'RENAME_FOLDER' | translate}}" [container]="toolsContainer" *ngIf="currentPath" (click)="renameFolder($event)">
+        <button type="button" class="btn btn-sm btn-secondary me-2"
+                [pTooltip]="'RENAME_FOLDER' | translate"
+                tooltipPosition="bottom"
+                positionStyle="fixed"
+                tooltipZIndex="2222"
+                [appendTo]="'body'"
+                *ngIf="currentPath"
+                (click)="renameFolder($event)">
             <i class="icon-pencil"></i>
         </button>
-        <button type="button" class="btn btn-sm btn-secondary me-2" ngbTooltip="{{'DELETE_FOLDER' | translate}}" [container]="toolsContainer" *ngIf="currentPath" (click)="deleteFolder($event)">
+        <button type="button" class="btn btn-sm btn-secondary me-2"
+                [pTooltip]="'DELETE_FOLDER' | translate"
+                tooltipPosition="bottom"
+                positionStyle="fixed"
+                tooltipZIndex="2222"
+                [appendTo]="'body'"
+                *ngIf="currentPath"
+                (click)="deleteFolder($event)">
             <i class="icon-cross"></i>
         </button>
     </div>

@@ -3,7 +3,6 @@
         <button type="button" class="btn btn-sm btn-secondary me-2"
                 [pTooltip]="'UPLOAD_FILE' | translate"
                 tooltipPosition="right"
-                positionStyle="fixed"
                 tooltipZIndex="2222"
                 [appendTo]="'body'"
                 (click)="uploadFiles($event)">
@@ -12,7 +11,6 @@
         <button type="button" class="btn btn-sm btn-secondary me-2" 
                 [pTooltip]="'CREATE_FOLDER' | translate"
                 tooltipPosition="right"
-                positionStyle="fixed"
                 tooltipZIndex="2222"
                 [appendTo]="'body'"
                 (click)="createFolder($event)">
@@ -21,7 +19,6 @@
         <button type="button" class="btn btn-sm btn-secondary me-2"
                 [pTooltip]="'RENAME_FOLDER' | translate"
                 tooltipPosition="bottom"
-                positionStyle="fixed"
                 tooltipZIndex="2222"
                 [appendTo]="'body'"
                 *ngIf="currentPath"
@@ -31,7 +28,6 @@
         <button type="button" class="btn btn-sm btn-secondary me-2"
                 [pTooltip]="'DELETE_FOLDER' | translate"
                 tooltipPosition="bottom"
-                positionStyle="fixed"
                 tooltipZIndex="2222"
                 [appendTo]="'body'"
                 *ngIf="currentPath"

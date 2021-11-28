@@ -77,12 +77,18 @@
                                     <div class="show-on-hover-child position-absolute pos-right" [class.pos-top]="editing" [class.pos-top-5]="!editing">
                                         <button *ngIf="!editing" pButton type="button"
                                                 pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInit(setting)"
+                                                [pTooltip]="'EDIT' | translate"
+                                                tooltipPosition="bottom"
                                                 class="p-button-raised p-button-rounded"></button>
                                         <button *ngIf="editing" pButton type="button"
                                                 pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(setting)"
+                                                [pTooltip]="'SAVE' | translate"
+                                                tooltipPosition="bottom"
                                                 class="p-button-raised p-button-rounded p-button-success ms-2"></button>
                                         <button *ngIf="editing" pButton type="button"
                                                 pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancel(setting, ri)"
+                                                [pTooltip]="'CANCEL' | translate"
+                                                tooltipPosition="bottom"
                                                 class="p-button-raised p-button-rounded p-button-danger ms-2"></button>
                                     </div>
                                     <p-cellEditor style="display: block; width: 100%;">
@@ -151,9 +157,11 @@
                                                             (ngModelChange)="onValueChanged('SETTINGS_ORDER_STATUSES')"></p-colorPicker>
                                                 </td>
                                                 <td class="text-center">
-                                                    <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'DELETE' | translate}}" (click)="deleteSetting('SETTINGS_ORDER_STATUSES', index)">
-                                                        <i class="icon-cross"></i>
-                                                    </button>
+                                                    <button pButton type="button" icon="pi pi-times"
+                                                            class="p-button-raised p-button-rounded p-button-secondary ms-2"
+                                                            (click)="deleteSetting('SETTINGS_ORDER_STATUSES', index)"
+                                                            [pTooltip]="'DELETE' | translate"
+                                                            tooltipPosition="bottom"></button>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -225,9 +233,11 @@
                                                     <input type="number" class="form-control form-control-sm mwidth-80 m-auto" step="1" min="0" [(ngModel)]="setting.options.priceLimit.value" (ngModelChange)="onValueChanged('SETTINGS_DELIVERY')">
                                                 </td>
                                                 <td class="text-center">
-                                                    <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'DELETE' | translate}}" (click)="deleteSetting('SETTINGS_DELIVERY', index)">
-                                                        <i class="icon-cross"></i>
-                                                    </button>
+                                                    <button pButton type="button" icon="pi pi-times"
+                                                            class="p-button-raised p-button-rounded p-button-secondary ms-2"
+                                                            (click)="deleteSetting('SETTINGS_DELIVERY', index)"
+                                                            [pTooltip]="'DELETE' | translate"
+                                                            tooltipPosition="bottom"></button>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -298,9 +308,11 @@
                                                     <input type="text" class="form-control form-control-sm" [(ngModel)]="setting.options.value.value" (ngModelChange)="onValueChanged('SETTINGS_PAYMENT')">
                                                 </td>
                                                 <td class="text-center">
-                                                    <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'DELETE' | translate}}" (click)="deleteSetting('SETTINGS_PAYMENT', index)">
-                                                        <i class="icon-cross"></i>
-                                                    </button>
+                                                    <button pButton type="button" icon="pi pi-times"
+                                                            class="p-button-raised p-button-rounded p-button-secondary ms-2"
+                                                            (click)="deleteSetting('SETTINGS_PAYMENT', index)"
+                                                            [pTooltip]="'DELETE' | translate"
+                                                            tooltipPosition="bottom"></button>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -374,9 +386,11 @@
                                                     <input type="number" class="form-control form-control-sm" step="1" min="0" [(ngModel)]="setting.options.value.value" (ngModelChange)="onValueChanged('SETTINGS_CURRENCY')">
                                                 </td>
                                                 <td class="text-center">
-                                                    <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'REMOVE' | translate}}" (click)="deleteSetting('SETTINGS_CURRENCY', index)">
-                                                        <i class="icon-cross"></i>
-                                                    </button>
+                                                    <button pButton type="button" icon="pi pi-times"
+                                                            class="p-button-raised p-button-rounded p-button-secondary ms-2"
+                                                            (click)="deleteSetting('SETTINGS_CURRENCY', index)"
+                                                            [pTooltip]="'DELETE' | translate"
+                                                            tooltipPosition="bottom"></button>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -457,9 +471,11 @@
                                                     <input type="number" class="form-control form-control-sm" [(ngModel)]="setting.options.quantity.value" (ngModelChange)="onValueChanged('SETTINGS_PROMOCODES')">
                                                 </td>
                                                 <td class="text-center">
-                                                    <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'REMOVE' | translate}}" (click)="deleteSetting('SETTINGS_PROMOCODES', index)">
-                                                        <i class="icon-cross"></i>
-                                                    </button>
+                                                    <button pButton type="button" icon="pi pi-times"
+                                                            class="p-button-raised p-button-rounded p-button-secondary ms-2"
+                                                            (click)="deleteSetting('SETTINGS_PROMOCODES', index)"
+                                                            [pTooltip]="'DELETE' | translate"
+                                                            tooltipPosition="bottom"></button>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -533,9 +549,11 @@
                                                 <input type="text" class="form-control form-control-sm" [(ngModel)]="setting.options.value.value" (ngModelChange)="onValueChanged('SETTINGS_LANGUAGES')">
                                             </td>
                                             <td class="text-center">
-                                                <button type="button" class="btn btn-secondary btn-sm" ngbTooltip="{{'DELETE' | translate}}" (click)="deleteSetting('SETTINGS_LANGUAGES', index)">
-                                                    <i class="icon-cross"></i>
-                                                </button>
+                                                <button pButton type="button" icon="pi pi-times"
+                                                        class="p-button-raised p-button-rounded p-button-secondary ms-2"
+                                                        (click)="deleteSetting('SETTINGS_LANGUAGES', index)"
+                                                        [pTooltip]="'DELETE' | translate"
+                                                        tooltipPosition="bottom"></button>
                                             </td>
                                         </tr>
                                         </tbody>

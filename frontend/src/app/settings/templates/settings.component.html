@@ -67,30 +67,30 @@
                                             <span class="badge bg-secondary">{{ setting.name }}</span>
                                         </div>
                                     </div>
-                                    <div class="w-100 overflow-hidden white-space-nowrap text-overflow-ellipsis">
+                                    <div class="text-overflow" [title]="setting.name | translate">
                                         {{ setting.name | translate }}
                                     </div>
                                 </div>
                             </td>
                             <td style="width: 50%;">
-                                <div class="show-on-hover-parent w-100">
+                                <div class="show-on-hover-parent min-height20 w-100">
                                     <div class="show-on-hover-child position-absolute pos-right" [class.pos-top]="editing" [class.pos-top-5]="!editing">
                                         <button *ngIf="!editing" pButton type="button"
                                                 pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInit(setting)"
                                                 class="p-button-raised p-button-rounded"></button>
                                         <button *ngIf="editing" pButton type="button"
                                                 pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(setting)"
-                                                class="p-button-raised p-button-rounded p-button-success ml-2"></button>
+                                                class="p-button-raised p-button-rounded p-button-success ms-2"></button>
                                         <button *ngIf="editing" pButton type="button"
                                                 pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancel(setting, ri)"
-                                                class="p-button-raised p-button-rounded p-button-danger ml-2"></button>
+                                                class="p-button-raised p-button-rounded p-button-danger ms-2"></button>
                                     </div>
                                     <p-cellEditor style="display: block; width: 100%;">
                                         <ng-template pTemplate="input">
                                             <input pInputText type="text" class="p-inputtext-sm w-100" [(ngModel)]="setting.value">
                                         </ng-template>
                                         <ng-template pTemplate="output">
-                                            <div class="w-100 overflow-hidden white-space-nowrap text-overflow-ellipsis">
+                                            <div class="text-overflow" [title]="setting.value" [ngClass]="{'text-password': getFieldTypeByName(setting) == 'password'}">
                                                 {{ setting.value }}
                                             </div>
                                         </ng-template>

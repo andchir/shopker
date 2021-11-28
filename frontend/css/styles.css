@@ -137,6 +137,9 @@ input.form-control[readonly] { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); curso
 .form-group-message .input-group.is-invalid ~ .alert,
 .form-group-message .custom-select.is-invalid ~ .alert { display: block; }
 
+.text-password { position: relative; z-index: 0; }
+.text-password:before { content: '***********'; position: absolute; left: 0; top: 0; background-color: #fff; pointer-events: none; }
+
 /* form-control-search */
 .form-control-search { position: relative; }
 .form-control-search input.form-control { padding-right: 30px; }
@@ -209,7 +212,7 @@ input.form-control[readonly] { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); curso
 .show-on-hover-parent:hover .show-on-hover,
 .show-on-hover-parent:hover .show-on-hover-right,
 .show-on-hover-parent:hover > .show-on-hover-child,
-.show-on-hover-parent:hover > .show-on-hover-child-left { display: block; }
+.show-on-hover-parent:hover > .show-on-hover-child-left { display: block; z-index: 111; }
 
 .slide-on-hover-parent .slide-on-hover,
 .slide-on-hover-parent > .slide-on-hover-child { max-height: 0; overflow: hidden; transition: 300ms max-height; }

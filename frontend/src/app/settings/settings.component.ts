@@ -195,8 +195,8 @@ export class SettingsComponent implements OnInit, AfterViewInit {
             });
     }
 
-    getFieldTypeByName(fieldName): string {
-        return fieldName.toLowerCase().indexOf('password') > -1
+    getFieldTypeByName(setting: Setting): string {
+        return setting.name.toLowerCase().indexOf('password') > -1 && setting.value
             ? 'password'
             : 'text';
     }
@@ -374,13 +374,7 @@ export class SettingsComponent implements OnInit, AfterViewInit {
     }
 
     onRowEditSave(setting: Setting) {
-        /*if (product.price > 0) {
-            delete this.clonedProducts[product.id];
-            this.messageService.add({severity:'success', summary: 'Success', detail:'Product is updated'});
-        }
-        else {
-            this.messageService.add({severity:'error', summary: 'Error', detail:'Invalid Price'});
-        }*/
+        this.saveSettings('SETTINGS_MAIN');
     }
 
     onRowEditCancel(setting: Setting, index: number) {

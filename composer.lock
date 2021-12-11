@@ -13795,5 +13795,5 @@
         "ext-mongo": "1.6.16",
         "php": "7.4.26"
     },
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.1.0"
 }

@@ -221,9 +221,10 @@ export class CategoriesMenuComponent implements OnInit, OnDestroy {
     @Input() rootTitle = 'Категории';
     @Output() changeRequest = new EventEmitter<Category>();
     currentCategory: Category = new Category(null, false, 0, 'root', this.rootTitle, '', '', true);
-    currentCategoryNode: CategoryNode = {id: 0} as CategoryNode;
+    currentCategoryNode: CategoryNode = {id: 0, key: 0} as CategoryNode;
     categoriesTree: CategoryNode[] = [{
         id: 0,
+        key: 0,
         parentId: 0,
         label: '',
         expanded: true,
@@ -423,7 +424,7 @@ export class CategoriesMenuComponent implements OnInit, OnDestroy {
     }
 
     openCategory(event): void {
-        this.router.navigate(['/catalog/category', event['node']['id']]);
+        this.router.navigate(['/catalog/category', event.node['id']]);
     }
 
     /** Go to root category */

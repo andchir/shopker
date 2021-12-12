@@ -38,8 +38,8 @@
                 <p-tree [value]="categoriesTree[0].children"
                         [emptyMessage]="'NO_CATEGORIES' | translate"
                         [selectionMode]="'single'"
-                        [selection]="currentCategoryNode"
-                        [filter]="!!categoriesTree[0].children"
+                        [(selection)]="currentCategoryNode"
+                        [filter]="true"
                         (onNodeSelect)="openCategory($event)"></p-tree>
             </div>
 

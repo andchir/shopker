@@ -3,6 +3,7 @@ import {findIndex} from 'lodash';
 
 export interface CategoryNode {
     id: number;
+    key: number,
     label: string;
     parentId: number;
     expanded: boolean;
@@ -22,6 +23,7 @@ export class Category {
             } else {
                 parent = {
                     id: 0,
+                    key: 0,
                     parentId: 0,
                     label: '',
                     expanded: true,
@@ -64,6 +66,7 @@ export class Category {
     static toTreeNode(category: Category, expanded = true): CategoryNode {
         return {
             id: category.id,
+            key: category.id,
             label: category.title,
             parentId: category.parentId || 0,
             expanded: expanded

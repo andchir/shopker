@@ -43,15 +43,16 @@
                 <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close" (click)="errorMessage = ''"></button>
             </div>
 
-            <nav aria-label="breadcrumb" *ngIf="currentPath">
-                <ol class="breadcrumb py-1 px-2">
-                    <li class="breadcrumb-item" aria-current="page">
-                        {{ currentPath }}
-                    </li>
-                </ol>
-            </nav>
-
             <div class="row no-gutters">
+                <div class="col-12 px-1">
+                    <nav class="bg-black-20 rounded" aria-label="breadcrumb" *ngIf="currentPath">
+                        <ol class="breadcrumb py-1 px-2 text-dark">
+                            <li class="breadcrumb-item" aria-current="page">
+                                {{ currentPath }}
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
 
                 <div class="col-4 py-1 px-1" *ngIf="currentPath">
                     <div class="card card-body p-1 bg-black-20 text-primary cursor-pointer" (click)="openDirPrevious($event)">

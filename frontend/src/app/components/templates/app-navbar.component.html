@@ -53,5 +53,5 @@
 </div>
 
 <ng-container *ngIf="isFileManagerEnabled">
-    <app-file-manager [(isActive)]="isFileManagerActive"></app-file-manager>
+    <app-file-manager [(isActive)]="isFileManagerActive" (isActiveChange)="onActiveToggle($event)"></app-file-manager>
 </ng-container>

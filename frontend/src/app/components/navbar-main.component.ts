@@ -67,5 +67,14 @@ export class NavbarMainComponent implements OnInit {
             event.preventDefault();
         }
         this.isFileManagerActive = !this.isFileManagerActive;
+        this.onActiveToggle();
+    }
+    
+    onActiveToggle(isActive?: boolean): void {
+        if (this.isFileManagerActive) {
+            window.document.body.classList.add('navbar-open');
+        } else {
+            window.document.body.classList.remove('navbar-open');
+        }
     }
 }

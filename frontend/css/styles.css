@@ -186,7 +186,9 @@ input.form-control[readonly] { box-shadow: inset 0 0 50px rgba(0,0,0,0.1); curso
 .modal-header { border-bottom: 0; }
 .modal-footer { border-top: 0; }
 .modal-left45,
-.modal-backdrop-left45 { left: auto; right: 0; width: calc(100% - 45px); }
+.modal-backdrop-left45 { left: auto; right: 0; width: calc(100% - 45px); transition: width 500ms; }
+.navbar-open .modal-left45,
+.navbar-open .modal-backdrop-left45 { width: calc(100% - 308px) !important; }
 
 /* modal-minimized */
 .modal-minimized { position: static; margin: 0 8px 8px 0; padding: 0; overflow: visible !important; width: auto; display: inline-block !important; }

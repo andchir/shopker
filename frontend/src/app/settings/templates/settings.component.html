@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card card-responsive">
     <div class="card-body" [class.loading]="loading">
 
         <div class="float-md-start">
@@ -111,17 +111,17 @@
             </div>
             <div class="col-lg-6 mb-3">
 
-                <ngb-accordion [closeOthers]="true" activeIds="accordion-settings-1" class="ngb-accordion">
+                <ngb-accordion [closeOthers]="true" activeIds="accordion-settings-1" class="ngb-accordion accordion-responsive">
 
                     <!-- statuses -->
                     <ngb-panel id="accordion-settings-1" [title]="'SETTINGS_ORDER_STATUSES' | translate">
                         <ng-template ngbPanelContent>
                             <div [class.loading]="settings.SETTINGS_DELIVERY.loading">
-                                <div class="text-muted pb-2">
+                                <div class="text-muted p-3 p-md-0">
                                     {{'SETTINGS_STATUSES_DESCRIPTION' | translate}}
                                 </div>
-                                <div class="table-responsive">
-                                    <p-table styleClass="p-datatable-sm" [value]="settings.SETTINGS_ORDER_STATUSES.values">
+                                <div class="table-responsive pt-0 pt-md-2">
+                                    <p-table styleClass="p-datatable-sm" responsiveLayout="scroll" [value]="settings.SETTINGS_ORDER_STATUSES.values">
                                         <ng-template pTemplate="header">
                                             <tr>
                                                 <th width="40%">{{'NAME' | translate}}</th>
@@ -158,7 +158,7 @@
                                             </tr>
                                         </ng-template>
                                     </p-table>
-                                    <div class="text-center pt-2">
+                                    <div class="text-center pt-2 pb-2 pb-md-0">
                                         <div class="relative">
                                             <div class="pos-absolute-right" *ngIf="settings.SETTINGS_ORDER_STATUSES.changed">
                                                 <button type="button" class="btn btn-info btn-sm"
@@ -191,11 +191,11 @@
                     <ngb-panel id="accordion-settings-2" [title]="'SETTINGS_DELIVERY' | translate">
                         <ng-template ngbPanelContent>
                             <div [class.loading]="settings.SETTINGS_DELIVERY.loading">
-                                <div class="text-muted pb-2">
+                                <div class="text-muted p-3 p-md-0">
                                     {{'SETTINGS_DELIVERY_DESCRIPTION' | translate}}
                                 </div>
                                 <div class="table-responsive">
-                                    <p-table styleClass="p-datatable-sm" [value]="settings.SETTINGS_DELIVERY.values">
+                                    <p-table styleClass="p-datatable-sm" responsiveLayout="scroll" [value]="settings.SETTINGS_DELIVERY.values">
                                         <ng-template pTemplate="header">
                                             <tr>
                                                 <th width="40%">{{'NAME' | translate}}</th>
@@ -231,7 +231,7 @@
                                             </tr>
                                         </ng-template>
                                     </p-table>
-                                    <div class="text-center pt-2">
+                                    <div class="text-center pt-2 pb-2 pb-md-0">
                                         <div class="relative">
                                             <div class="pos-absolute-right" *ngIf="settings.SETTINGS_DELIVERY.changed">
 
@@ -265,11 +265,11 @@
                     <ngb-panel id="accordion-settings-3" [title]="'SETTINGS_PAYMENT' | translate">
                         <ng-template ngbPanelContent>
                             <div [class.loading]="settings.SETTINGS_PAYMENT.loading">
-                                <div class="text-muted pb-2">
+                                <div class="text-muted p-3 p-md-0">
                                     {{'SETTINGS_PAYMENT_DESCRIPTION' | translate}}
                                 </div>
                                 <div class="table-responsive">
-                                    <p-table styleClass="p-datatable-sm" [value]="settings.SETTINGS_PAYMENT.values">
+                                    <p-table styleClass="p-datatable-sm" responsiveLayout="scroll" [value]="settings.SETTINGS_PAYMENT.values">
                                         <ng-template pTemplate="header">
                                             <tr>
                                                 <th width="45%">{{'NAME' | translate}}</th>
@@ -299,7 +299,7 @@
                                             </tr>
                                         </ng-template>
                                     </p-table>
-                                    <div class="text-center pt-2">
+                                    <div class="text-center pt-2 pb-2 pb-md-0">
                                         <div class="relative">
                                             <div class="pos-absolute-right" *ngIf="settings.SETTINGS_PAYMENT.changed">
 
@@ -333,11 +333,11 @@
                     <ngb-panel id="accordion-settings-4" [title]="'SETTINGS_CURRENCY' | translate">
                         <ng-template ngbPanelContent>
                             <div [class.loading]="settings.SETTINGS_CURRENCY.loading">
-                                <div class="text-muted pb-2">
+                                <div class="text-muted p-3 p-md-0">
                                     {{'SETTINGS_CURRENCY_RATE_DESCRIPTION' | translate}}
                                 </div>
                                 <div class="table-responsive">
-                                    <p-table styleClass="p-datatable-sm" [value]="settings.SETTINGS_CURRENCY.values">
+                                    <p-table styleClass="p-datatable-sm" responsiveLayout="scroll" [value]="settings.SETTINGS_CURRENCY.values">
                                         <ng-template pTemplate="header">
                                             <tr>
                                                 <th width="45%">{{'CURRENCY' | translate}}</th>
@@ -367,7 +367,7 @@
                                             </tr>
                                         </ng-template>
                                     </p-table>
-                                    <div class="text-center pt-2">
+                                    <div class="text-center pt-2 pb-2 pb-md-0">
                                         <div class="relative">
                                             <div class="pos-absolute-right" *ngIf="settings.SETTINGS_CURRENCY.changed">
 
@@ -400,11 +400,11 @@
                     <ngb-panel id="accordion-settings-7" [title]="'SETTINGS_PROMOCODES' | translate">
                         <ng-template ngbPanelContent>
                             <div [class.loading]="settings.SETTINGS_PROMOCODES.loading">
-                                <div class="text-muted pb-2">
+                                <div class="text-muted p-3 p-md-0">
                                     {{'SETTINGS_PROMOCODES_DESCRIPTION' | translate}}
                                 </div>
                                 <div class="table-responsive">
-                                    <p-table styleClass="p-datatable-sm" [value]="settings.SETTINGS_PROMOCODES.values">
+                                    <p-table styleClass="p-datatable-sm" responsiveLayout="scroll" [value]="settings.SETTINGS_PROMOCODES.values">
                                         <ng-template pTemplate="header">
                                             <tr>
                                                 <th width="30%">{{'PROMO_CODE' | translate}}</th>
@@ -440,7 +440,7 @@
                                             </tr>
                                         </ng-template>
                                     </p-table>
-                                    <div class="text-center pt-2">
+                                    <div class="text-center pt-2 pb-2 pb-md-0">
                                         <div class="relative">
                                             <div class="pos-absolute-right" *ngIf="settings.SETTINGS_PROMOCODES.changed">
                                                 <button type="button" class="btn btn-info btn-sm" (click)="saveSettings('SETTINGS_PROMOCODES')">
@@ -472,11 +472,11 @@
                     <ngb-panel id="accordion-settings-5" [title]="'SETTINGS_LANGUAGES' | translate">
                         <ng-template ngbPanelContent>
                             <div [class.loading]="settings.SETTINGS_LANGUAGES.loading">
-                                <div class="text-muted pb-2">
+                                <div class="text-muted p-3 p-md-0">
                                     {{'SETTINGS_LANGUAGES_DESCRIPTION' | translate}}
                                 </div>
                                 <div class="table-responsive">
-                                    <p-table styleClass="p-datatable-sm" [value]="settings.SETTINGS_LANGUAGES.values">
+                                    <p-table styleClass="p-datatable-sm" responsiveLayout="scroll" [value]="settings.SETTINGS_LANGUAGES.values">
                                         <ng-template pTemplate="header">
                                             <tr>
                                                 <th width="45%">{{'LANGUAGE' | translate}}</th>
@@ -506,7 +506,7 @@
                                             </tr>
                                         </ng-template>
                                     </p-table>
-                                    <div class="text-center pt-2">
+                                    <div class="text-center pt-2 pb-2 pb-md-0">
                                         <div class="relative">
                                             <div class="pos-absolute-right" *ngIf="settings.SETTINGS_LANGUAGES.changed">
                                                 <button type="button" class="btn btn-info btn-sm" (click)="saveSettings('SETTINGS_LANGUAGES')">
@@ -540,30 +540,32 @@
 
                             <div [ngClass]="{'loading': settings.SETTINGS_COMPOSER_PACKAGES.loading}">
                                 
-                                <div class="float-end">
-                                    <button type="button" class="btn btn-sm btn-success" (click)="modalSystemUpdate($event)">
-                                        <i class="icon-arrow-up-circle"></i>
-                                        {{ 'SYSTEM_UPDATE' | translate }}
-                                    </button>
-                                </div>
-                                
-                                <div class="pb-3 text-muted mb-2">
-                                    {{ 'SETTINGS_COMPOSER_PACKAGES_DESCRIPTION' | translate }}
-                                </div>
+                                <div class="p-3 p-md-0">
+                                    <div class="float-end">
+                                        <button type="button" class="btn btn-sm btn-success" (click)="modalSystemUpdate($event)">
+                                            <i class="icon-arrow-up-circle"></i>
+                                            {{ 'SYSTEM_UPDATE' | translate }}
+                                        </button>
+                                    </div>
 
-                                <div class="form-control-search mb-3" [ngClass]="{'form-control-search-clear': !!composerPackageNameFilter}">
-                                    <input type="text" class="form-control form-control-sm" placeholder="{{ 'SEARCH' | translate }}..." [(ngModel)]="composerPackageNameFilter">
-                                    <span (click)="composerPackageNameFilter = ''"></span>
-                                </div>
+                                    <div class="pb-3 text-muted mb-2">
+                                        {{ 'SETTINGS_COMPOSER_PACKAGES_DESCRIPTION' | translate }}
+                                    </div>
 
-                                <div class="alert alert-info py-1 px-3" *ngIf="(composerPackages | filter: {name: composerPackageNameFilter}).length === 0; else composerPackagesTable">
-                                    {{ 'NOTHING_FOUND' | translate }}.
+                                    <div class="form-control-search mb-3" [ngClass]="{'form-control-search-clear': !!composerPackageNameFilter}">
+                                        <input type="text" class="form-control form-control-sm" placeholder="{{ 'SEARCH' | translate }}..." [(ngModel)]="composerPackageNameFilter">
+                                        <span (click)="composerPackageNameFilter = ''"></span>
+                                    </div>
+
+                                    <div class="alert alert-info py-1 px-3" *ngIf="(composerPackages | filter: {name: composerPackageNameFilter}).length === 0; else composerPackagesTable">
+                                        {{ 'NOTHING_FOUND' | translate }}.
+                                    </div>
                                 </div>
 
                                 <ng-template #composerPackagesTable>
                                     <div>
                                         <div class="table-responsive">
-                                            <p-table [value]="composerPackages | filter: {name: composerPackageNameFilter}"
+                                            <p-table styleClass="p-datatable-sm" responsiveLayout="scroll" [value]="composerPackages | filter: {name: composerPackageNameFilter}"
                                                      [scrollable]="true"
                                                      scrollHeight="400px">
                                                 <ng-template pTemplate="header">

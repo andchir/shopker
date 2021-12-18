@@ -1,3 +1,8 @@
+4.2.11
+- Updated versions of components.
+- Fixed problem with free shipping.
+- Changed session settings. Session files are now stored in the folder "/var/sessions".
+
 4.2.10
 - If the input type is "date", it is automatically saved to the database as ISODate (UTC).
 - The user can select the time zone.

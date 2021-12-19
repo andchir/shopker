@@ -74,6 +74,7 @@
             "*": "dist"
         },
         "sort-packages": true,
+        "platform-check": false,
         "platform": {
             "ext-mongo": "1.6.16",
             "php": "7.4.26"

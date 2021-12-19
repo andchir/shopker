@@ -60,7 +60,7 @@ mkdir "$DIR"/"$OUTPUT_DIRNAME"/public/node_modules
 cp -r "$DIR"/public/node_modules/bootstrap "$DIR"/"$OUTPUT_DIRNAME"/public/node_modules
 cp -r "$DIR"/public/node_modules/jquery "$DIR"/"$OUTPUT_DIRNAME"/public/node_modules
 cp -r "$DIR"/public/node_modules/nouislider "$DIR"/"$OUTPUT_DIRNAME"/public/node_modules
-cp -r "$DIR"/public/node_modules/popper.js "$DIR"/"$OUTPUT_DIRNAME"/public/node_modules
+cp -r "$DIR"/public/node_modules/slick-carousel "$DIR"/"$OUTPUT_DIRNAME"/public/node_modules
 cp -r "$DIR"/public/node_modules/wnumb "$DIR"/"$OUTPUT_DIRNAME"/public/node_modules
 cp -r "$DIR"/public/node_modules/fullcalendar "$DIR"/"$OUTPUT_DIRNAME"/public/node_modules
 cp -r "$DIR"/public/node_modules/moment "$DIR"/"$OUTPUT_DIRNAME"/public/node_modules

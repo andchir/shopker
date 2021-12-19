@@ -43,8 +43,9 @@ class OrderType extends AbstractType
         if (empty($options['checkoutFields']) || in_array('options', $options['checkoutFields'])) {
             $builder
                 ->add('options', OrderOptionsType::class, [
-                'label' => false
-            ]);
+                    'constraints' => [],
+                    'label' => false
+                ]);
         }
         if (empty($options['checkoutFields']) || in_array('email', $options['checkoutFields'])) {
             $builder
@@ -123,7 +124,7 @@ class OrderType extends AbstractType
                                 $type = get_class($field->getConfig()->getType()->getInnerType());
                                 $options = $field->getConfig()->getOptions();
                                 $options['required'] = false;
-                                $options['constraints'] = null;
+                                $options['constraints'] = [];
                                 $form->get('options')->add($fieldName, $type, $options);
                             }
                         }

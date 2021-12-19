@@ -2,6 +2,8 @@
 - Updated versions of components.
 - Fixed problem with free shipping.
 - Changed session settings. Session files are now stored in the folder "/var/sessions".
+- Changed the appearance of the Settings section in the administrator's panel.
+- Fixed position of the window when the file manager is open.
 
 4.2.10
 - If the input type is "date", it is automatically saved to the database as ISODate (UTC).

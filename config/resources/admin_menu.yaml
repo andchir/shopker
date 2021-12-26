@@ -1,9 +1,9 @@
 menu:
-    - { title: 'ORDERS', route: '/orders', icon: 'icon-bag' }
-    - { title: 'CATALOG', route: '/catalog', icon: 'icon-layers' }
-    - { title: 'STATISTICS', route: '/statistics', icon: 'icon-bar-graph-2' }
-    - { title: 'COMMENTS', route: '/module/comments', icon: 'icon-message-circle' }
-    - { title: 'IMPORT_EXPORT', route: '/import-export', icon: 'icon-inbox' }
-    - { title: 'USERS', route: '/users', icon: 'icon-head' }
-    - { title: 'TEMPLATES', route: '/templates_edit', icon: 'icon-columns' }
-    - { title: 'SETTINGS', route: '/settings', icon: 'icon-cog' }
+    - { title: 'ORDERS', route: '/orders', icon: 'fi fi-br-shopping-bag' }
+    - { title: 'CATALOG', route: '/catalog', icon: 'fi fi-br-cube' }
+    - { title: 'STATISTICS', route: '/statistics', icon: 'fi fi-br-chart-histogram' }
+    - { title: 'COMMENTS', route: '/comments', icon: 'fi fi-br-comment-alt' }
+    - { title: 'IMPORT_EXPORT', route: '/import-export', icon: 'fi fi-br-upload' }
+    - { title: 'USERS', route: '/users', icon: 'fi fi-br-user' }
+    - { title: 'TEMPLATES', route: '/templates_edit', icon: 'fi fi-br-layout-fluid' }
+    - { title: 'SETTINGS', route: '/settings', icon: 'fi fi-br-settings' }

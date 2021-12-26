@@ -457,6 +457,134 @@
                     }
                 }
             }
+        },
+        "admin2": {
+            "projectType": "application",
+            "schematics": {},
+            "root": "projects/admin2",
+            "sourceRoot": "projects/admin2/src",
+            "prefix": "admin2",
+            "architect": {
+                "build": {
+                    "builder": "@angular-devkit/build-angular:browser",
+                    "options": {
+                        "outputPath": "dist/admin2",
+                        "index": "projects/admin2/src/index.html",
+                        "main": "projects/admin2/src/main.ts",
+                        "polyfills": "projects/admin2/src/polyfills.ts",
+                        "tsConfig": "projects/admin2/tsconfig.app.json",
+                        "preserveSymlinks": true,
+                        "aot": true,
+                        "assets": [
+                            "projects/admin2/src/favicon.ico",
+                            "projects/admin2/src/assets"
+                        ],
+                        "styles": [
+                            "projects/admin2/src/assets/css/uicons-bold-rounded/css/uicons-bold-rounded.css",
+                            "node_modules/primeicons/primeicons.css",
+                            "node_modules/primeng/resources/themes/lara-light-indigo/theme.css",
+                            "node_modules/primeng/resources/primeng.css",
+                            "node_modules/primeflex/primeflex.css",
+                            "projects/admin2/src/assets/css/styles.css"
+                        ],
+                        "scripts": [
+                            
+                        ],
+                        "allowedCommonJsDependencies": [
+                            
+                        ]
+                    },
+                    "configurations": {
+                        "production": {
+                            "fileReplacements": [
+                                {
+                                    "replace": "projects/admin2/src/environments/environment.ts",
+                                    "with": "projects/admin2/src/environments/environment.prod.ts"
+                                }
+                            ],
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "namedChunks": false,
+                            "aot": true,
+                            "extractLicenses": true,
+                            "vendorChunk": false,
+                            "buildOptimizer": true,
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "4mb",
+                                    "maximumError": "5mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "6kb",
+                                    "maximumError": "10kb"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "serve": {
+                    "builder": "@angular-devkit/build-angular:dev-server",
+                    "options": {
+                        "browserTarget": "admin2:build"
+                    },
+                    "configurations": {
+                        "production": {
+                            "browserTarget": "admin2:build:production"
+                        }
+                    }
+                },
+                "extract-i18n": {
+                    "builder": "@angular-devkit/build-angular:extract-i18n",
+                    "options": {
+                        "browserTarget": "admin2:build"
+                    }
+                },
+                "test": {
+                    "builder": "@angular-devkit/build-angular:karma",
+                    "options": {
+                        "main": "projects/admin2/src/test.ts",
+                        "polyfills": "projects/admin2/src/polyfills.ts",
+                        "tsConfig": "projects/admin2/tsconfig.spec.json",
+                        "karmaConfig": "projects/admin2/karma.conf.js",
+                        "assets": [
+                            "projects/admin2/src/favicon.ico",
+                            "projects/admin2/src/assets"
+                        ],
+                        "styles": [
+                            "projects/admin2/src/styles.css"
+                        ],
+                        "scripts": []
+                    }
+                },
+                "lint": {
+                    "builder": "@angular-devkit/build-angular:tslint",
+                    "options": {
+                        "tsConfig": [
+                            "projects/admin2/tsconfig.app.json",
+                            "projects/admin2/tsconfig.spec.json",
+                            "projects/admin2/e2e/tsconfig.json"
+                        ],
+                        "exclude": [
+                            "**/node_modules/**"
+                        ]
+                    }
+                },
+                "e2e": {
+                    "builder": "@angular-devkit/build-angular:protractor",
+                    "options": {
+                        "protractorConfig": "projects/admin2/e2e/protractor.conf.js",
+                        "devServerTarget": "admin2:serve"
+                    },
+                    "configurations": {
+                        "production": {
+                            "devServerTarget": "admin2:serve:production"
+                        }
+                    }
+                }
+            }
         }
     },
     "defaultProject": "shk-app",

@@ -1,0 +1,19 @@
+<div class="layout-sidebar">
+    <div class="layout-menu">
+        <ul class="menu-items">
+            <li *ngFor="let menuItem of menuItems">
+                <a class="router-link-exact-active"
+                    [ngClass]="{'active': menuItem.isActive}"
+                    href="#{{menuItem.route}}">
+                        <i [class]="menuItem.icon">
+                            <i class="text-gradient-blue" [ngClass]="menuItem.icon"></i>
+                        </i>
+                        {{ menuItem.title | translate }}
+                </a>
+            </li>
+        </ul>
+        <div class="layout-menu-footer">
+            v{{ appVersion }}
+        </div>
+    </div>
+</div>

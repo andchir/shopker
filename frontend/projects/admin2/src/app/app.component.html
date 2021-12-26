@@ -1,0 +1,30 @@
+<div class="layout-wrapper p-component">
+    <div class="layout-topbar">
+        <a class="menu-button">
+            <i class="pi pi-bars"></i>
+        </a>
+        <span class="layout-topbar-header text-3xl text-600">
+            <i class="fi fi-br-shopping-bag"></i>
+            {{ 'ORDERS' | translate }}
+        </span>
+        <ul class="topbar-menu">
+            <li class="active">
+                <a href="#">Section 1</a>
+            </li>
+            <li>
+                <a href="#">Section 2</a>
+            </li>
+        </ul>
+    </div>
+
+    <app-navbar></app-navbar>
+    
+    <div class="layout-mask"></div>
+    <div class="layout-content">
+        <div class="content-section">
+
+            <router-outlet></router-outlet>
+            
+        </div>
+    </div>
+</div>

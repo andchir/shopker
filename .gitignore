@@ -21,8 +21,6 @@
 /public/media/cache/
 ###< liip/imagine-bundle ###
 /docs/wiki/
-/frontend/projects/
-
 
 ###> phpunit/phpunit ###
 /phpunit.xml

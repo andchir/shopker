@@ -35,7 +35,10 @@ class HomepageController extends AbstractController
     {
         $environment = $kernel->getEnvironment();
         $publicDirPath = realpath($this->params->get('app.web_dir_path'));
-        $indexPagePath = $publicDirPath . '/admin/bundle';
+        $adminAppName = $this->params->has('app.admin_app_name')
+            ? $this->params->get('app.admin_app_name')
+            : 'admin';
+        $indexPagePath = $publicDirPath . '/' . $adminAppName . '/bundle';
         if ($environment == 'dev') {
             $indexPagePath .= '-dev';
         }

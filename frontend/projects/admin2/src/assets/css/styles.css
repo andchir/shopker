@@ -16,7 +16,7 @@ h1, h2, h3, h4, h5, h6 { margin-top: 0; }
 
 /* layout-sidebar */
 .layout-sidebar { position: fixed; left: 0; top: 0; height: 100%; background-color: var(--blue-700); width: 120px; border-right: 1px solid var(--blue-900); -webkit-user-select: none; user-select: none; transition: transform .4s cubic-bezier(.05, .74, .2, .99); display: flex; flex-direction: column; }
-.layout-sidebar .layout-menu .menu-items { padding: 0 0 26px 0; margin: 0; list-style-type: none; position: absolute; left: 0; top: 0; height: 100%; overflow-y: scroll; -ms-overflow-style: none; scrollbar-width: none; }
+.layout-sidebar .layout-menu .menu-items { padding: 0 0 26px 0; margin: 0; list-style-type: none; position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow-y: scroll; -ms-overflow-style: none; scrollbar-width: none; }
 .layout-sidebar .layout-menu .menu-items::-webkit-scrollbar { display: none; }
 .layout-sidebar .layout-menu .menu-items li { padding: 0; margin: 0; }
 .layout-sidebar .layout-menu .menu-items li > a { display: block; padding: 10px; text-align: center; text-decoration: none; font-size: 0.85rem; color: #73bfeb; transition: background-color 300ms, color 300ms; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); }

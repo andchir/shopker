@@ -3,7 +3,7 @@ body { background-color: var(--bluegray-100); }
 h1, h2, h3, h4, h5, h6 { margin-top: 0; }
 
 .layout-topbar { background-color: var(--surface-a); height: 70px; box-shadow: 0 0 4px #00000040; border-bottom: 1px solid var(--surface-d); display: flex; align-items: center; padding: 0 35px; margin-left: 120px; }
-.layout-topbar .menu-button { display: none; color: var(--text-color); width: 70px; height: 70px; line-height: 70px; text-align: center; transition: background-color .2s; cursor: pointer; }
+.layout-topbar .menu-button { display: none; color: var(--text-color); width: 70px; height: 70px; line-height: 70px; text-align: center; border: 0; transition: background-color .2s; cursor: pointer; }
 .layout-topbar .menu-button:hover { background-color: var(--surface-c); }
 .layout-topbar .menu-button i { font-size: 24px; line-height: inherit; }
 .layout-topbar .topbar-menu { list-style-type: none; padding: 0; height: 100%; margin: 0 0 0 auto; display: flex; }

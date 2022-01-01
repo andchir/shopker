@@ -13,7 +13,7 @@ declare const window: Window;
     selector: 'app-navbar',
     templateUrl: './templates/app-navbar.component.html'
 })
-export class NavbarMainComponent implements OnInit {
+export class AppNavbarComponent implements OnInit {
 
     @Input() hrefMode = false;
     @Input() baseRoute = '';
@@ -76,5 +76,10 @@ export class NavbarMainComponent implements OnInit {
         } else {
             window.document.body.classList.remove('navbar-open');
         }
+    }
+
+    navBarToggle(): void {
+        window.document.querySelector('.layout-sidebar').classList.toggle('active');
+        window.document.querySelector('.layout-mask').classList.toggle('layout-mask-active');
     }
 }

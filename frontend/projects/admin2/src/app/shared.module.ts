@@ -6,10 +6,10 @@ import {RouterModule} from '@angular/router';
 
 import {TranslateModule} from '@ngx-translate/core';
 
-import {NavbarMainComponent} from './components/navbar-main.component';
+import {AppNavbarComponent} from './components/app-navbar.component';
 
 const components = [
-    NavbarMainComponent
+    AppNavbarComponent
 ];
 
 @NgModule({

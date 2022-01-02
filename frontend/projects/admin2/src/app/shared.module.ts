@@ -5,6 +5,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {RouterModule} from '@angular/router';
 
 import {TranslateModule} from '@ngx-translate/core';
+import {TableModule} from 'primeng/table';
 
 import {AppNavbarComponent} from './components/app-navbar.component';
 
@@ -20,7 +21,8 @@ const components = [
         HttpClientModule,
         RouterModule,
 
-        TranslateModule
+        TranslateModule,
+        TableModule
     ],
     declarations: [
         ...components
@@ -31,7 +33,8 @@ const components = [
     exports: [
         ...components,
 
-        TranslateModule
+        TranslateModule,
+        TableModule
     ],
     entryComponents: [
         

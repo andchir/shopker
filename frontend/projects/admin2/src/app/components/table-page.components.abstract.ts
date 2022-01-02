@@ -9,6 +9,8 @@ import {QueryOptions} from '../models/query-options';
 import {SimpleEntity} from '../models/simple-entity.interface';
 import {DataService} from '../services/data-service.abstract';
 
+declare const window: Window;
+
 @Component({
     template: ''
 })
@@ -141,6 +143,11 @@ export abstract class AppTablePageAbstractComponent<T extends SimpleEntity> impl
         this.searchTimer = setTimeout(() => {
             this.getData();
         }, 500);
+    }
+
+    navBarToggle(): void {
+        window.document.querySelector('.layout-sidebar').classList.toggle('active');
+        window.document.querySelector('.layout-mask').classList.toggle('layout-mask-active');
     }
 
     ngOnDestroy() {

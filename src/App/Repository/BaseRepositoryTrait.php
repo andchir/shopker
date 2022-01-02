@@ -20,7 +20,7 @@ trait BaseRepositoryTrait
             'sort_by' => 'name',
             'sort_dir' => 'asc',
             'full' => 1,
-            'only_active' => 1,
+            'only_active' => 0,
             'search_word' => ''
         ];
         $opts = array_merge($defaults, $options);
@@ -78,9 +78,7 @@ trait BaseRepositoryTrait
             $query->field('id')->notIn($filterIds);
         }
 
-        $results = $query
-            ->getQuery()
-            ->execute();
+        $results = $query->getQuery()->execute();
 
         $query = $this->createQueryBuilder();
         if ($opts['search_word']) {

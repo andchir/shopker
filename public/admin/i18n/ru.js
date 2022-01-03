@@ -1,6 +1,7 @@
 var APP_LANG = {
     "ACCEPT": "Принять",
     "ACTIVE": "Активный",
+    "ACTIONS": "Действия",
     "ADD": "Добавить",
     "ADDRESS": "Адрес",
     "ADD_COLLECTION": "Добавить коллекцию",

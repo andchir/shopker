@@ -19,6 +19,7 @@ export abstract class AppTablePageAbstractComponent<T extends SimpleEntity> impl
     loading = false;
     items: T[] = [];
     itemSelected: T;
+    itemsSelected: T[];
     itemsTotal = 0;
     queryOptions: QueryOptions = new QueryOptions(1, 12, 'createdDate', 'desc');
     searchTimer: any;
@@ -154,6 +155,10 @@ export abstract class AppTablePageAbstractComponent<T extends SimpleEntity> impl
         this.searchTimer = setTimeout(() => {
             this.getData();
         }, 500);
+    }
+
+    deleteSelected() {
+        console.log('deleteSelected', this.itemsSelected);
     }
 
     navBarToggle(): void {

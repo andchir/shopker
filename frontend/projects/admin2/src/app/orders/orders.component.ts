@@ -1,7 +1,7 @@
-import {Component, OnInit, Input, ElementRef} from '@angular/core';
+import {Component, OnInit, Input, ElementRef, OnDestroy} from '@angular/core';
 
 import {DialogService} from 'primeng/dynamicdialog';
-import {ConfirmationService, MessageService} from 'primeng/api';
+import {ConfirmationService, MenuItem, MessageService} from 'primeng/api';
 
 import {Order} from './models/order.model';
 import {OrdersService} from './orders.service';
@@ -14,7 +14,7 @@ import {ModalOrderContentComponent} from './modal-order.component';
     templateUrl: 'templates/orders.component.html',
     providers: [DialogService, MessageService, ConfirmationService, OrdersService]
 })
-export class OrdersComponent extends AppTablePageAbstractComponent<Order> {
+export class OrdersComponent extends AppTablePageAbstractComponent<Order> implements OnInit, OnDestroy {
     
     queryOptions: QueryOptions = new QueryOptions(1, 12, 'id', 'desc');
     items: Order[] = [];
@@ -27,6 +27,7 @@ export class OrdersComponent extends AppTablePageAbstractComponent<Order> {
         { field: 'email', header: 'EMAIL' },
         { field: 'createdDate', header: 'DATE_TIME' }
     ];
+    menuItems: MenuItem[];
 
     constructor(
         public dialogService: DialogService,
@@ -37,6 +38,28 @@ export class OrdersComponent extends AppTablePageAbstractComponent<Order> {
         super(dialogService, dataService, messageService, confirmationService);
     }
     
+    ngOnInit() {
+        this.menuItems = [
+            {
+                label: 'Обновить',
+                icon: 'pi pi-refresh',
+                command: () => {
+                    this.queryOptions.page = 1;
+                    this.queryOptions.search_word = '';
+                    this.getData();
+                }
+            },
+            {
+                label: 'Удалить выбранные',
+                icon: 'pi pi-times',
+                command: () => {
+                    this.deleteSelected();
+                }
+            }
+        ];
+        super.ngOnInit();
+    }
+
     getModalComponent() {
         return ModalOrderContentComponent;
     }

@@ -6,31 +6,53 @@
         <i class="fi fi-br-shopping-bag vertical-align-middle mr-2"></i>
         <span class="vertical-align-middle">{{ 'ORDERS' | translate }}</span>
     </span>
-    <ul class="topbar-menu">
-        <li class="active">
-            <a href="#">Section 1</a>
-        </li>
-        <li>
-            <a href="#">Section 2</a>
-        </li>
-    </ul>
+<!--    <ul class="topbar-menu">-->
+<!--        <li class="active">-->
+<!--            <a href="#">Section 1</a>-->
+<!--        </li>-->
+<!--        <li>-->
+<!--            <a href="#">Section 2</a>-->
+<!--        </li>-->
+<!--    </ul>-->
 </div>
 
 <div class="layout-content">
     <div class="content-section">
 
         <p-table styleClass="p-datatable-striped"
-                 [(selection)]="itemSelected"
+                 [(selection)]="itemsSelected"
                  [sortField]="queryOptions.sort_by"
+                 [sortOrder]="queryOptions.sort_dir == 'asc' ? 1 : -1"
                  dataKey="id"
                  [lazy]="true"
                  (onLazyLoad)="getData($event)"
                  [paginator]="true"
+                 [showJumpToPageDropdown]="true"
                  [value]="items"
                  [columns]="cols"
                  [rows]="queryOptions.limit"
                  [totalRecords]="itemsTotal"
                  [loading]="loading">
+            <ng-template pTemplate="caption">
+                <div class="flex justify-content-between">
+                    <span class="p-input-icon-left lg:w-auto w-full">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text"
+                               class="lg:w-auto w-full"
+                               (input)="onInputSearch()"
+                               [(ngModel)]="queryOptions.search_word"
+                               placeholder="{{ 'SEARCH' | translate }}...">
+                    </span>
+                    <div>
+                        <button type="button" pButton
+                                class="ml-2"
+                                icon="pi pi-chevron-down"
+                                iconPos="right"
+                                [label]="'ACTIONS' | translate"
+                                (click)="menu.toggle($event)"></button>
+                    </div>
+                </div>
+            </ng-template>
             <ng-template pTemplate="header" let-columns>
                 <tr>
                     <th>
@@ -43,18 +65,42 @@
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-item let-columns="columns">
-                <tr>
+                <tr class="show-on-hover-parent">
                     <td>
                         <p-tableCheckbox [value]="item"></p-tableCheckbox>
                     </td>
-                    <td *ngFor="let col of columns">
+                    <td *ngFor="let col of columns; let index=index">
                         {{ item[col.field] }}
+                        <ng-container *ngIf="columns.length == index + 1">
+                            <div class="absolute show-on-hover pos-top5 pos-right5">
+                                <button pButton pRipple icon="pi pi-pencil"
+                                        class="p-button p-button-sm p-button-rounded p-button-info"
+                                        (click)="openModal(item)"></button>
+                                <button pButton pRipple icon="pi pi-trash"
+                                        class="p-button p-button-sm p-button-rounded p-button-danger ml-2"
+                                        (click)="deleteItem(item)"></button>
+                            </div>
+                        </ng-container>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns>
+                <tr>
+                    <td [colSpan]="columns.length + 1">
+                        <ng-container *ngIf="queryOptions.search_word; else emptyMessage">
+                            {{ 'NOTHING_FOUND' | translate  }}.
+                        </ng-container>
+                        <ng-template #emptyMessage>
+                            {{ 'EMPTY' | translate }}.
+                        </ng-template>
                     </td>
                 </tr>
             </ng-template>
         </p-table>
-        
-        
 
     </div>
 </div>
+
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+
+<p-menu #menu [popup]="true" [model]="menuItems"></p-menu>

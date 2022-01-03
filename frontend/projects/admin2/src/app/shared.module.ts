@@ -6,6 +6,20 @@ import {RouterModule} from '@angular/router';
 
 import {TranslateModule} from '@ngx-translate/core';
 import {TableModule} from 'primeng/table';
+import {InputTextModule} from 'primeng/inputtext';
+import {InputTextareaModule} from 'primeng/inputtextarea';
+import {InputNumberModule} from 'primeng/inputnumber';
+import {MultiSelectModule} from 'primeng/multiselect';
+import {InputSwitchModule} from 'primeng/inputswitch';
+import {DropdownModule} from 'primeng/dropdown';
+import {ButtonModule} from 'primeng/button';
+import {RippleModule} from 'primeng/ripple';
+import {ConfirmDialogModule} from 'primeng/confirmdialog';
+import {DialogModule} from 'primeng/dialog';
+import {DynamicDialogModule} from 'primeng/dynamicdialog';
+import {SplitButtonModule} from 'primeng/splitbutton';
+import {TooltipModule} from 'primeng/tooltip';
+import {MenuModule} from 'primeng/menu';
 
 import {AppNavbarComponent} from './components/app-navbar.component';
 
@@ -22,7 +36,21 @@ const components = [
         RouterModule,
 
         TranslateModule,
-        TableModule
+        TableModule,
+        InputTextModule,
+        InputTextareaModule,
+        InputNumberModule,
+        MultiSelectModule,
+        InputSwitchModule,
+        DropdownModule,
+        ButtonModule,
+        RippleModule,
+        ConfirmDialogModule,
+        DialogModule,
+        DynamicDialogModule,
+        SplitButtonModule,
+        TooltipModule,
+        MenuModule
     ],
     declarations: [
         ...components
@@ -32,9 +60,26 @@ const components = [
     ],
     exports: [
         ...components,
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
 
         TranslateModule,
-        TableModule
+        TableModule,
+        InputTextModule,
+        InputTextareaModule,
+        InputNumberModule,
+        MultiSelectModule,
+        InputSwitchModule,
+        DropdownModule,
+        ButtonModule,
+        RippleModule,
+        ConfirmDialogModule,
+        DialogModule,
+        DynamicDialogModule,
+        SplitButtonModule,
+        TooltipModule,
+        MenuModule
     ],
     entryComponents: [
         

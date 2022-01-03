@@ -6,10 +6,13 @@ export class QueryOptions {
         public sort_dir?: string,
         public order_by?: string,
         public full?: number,
-        public category?: string,
         public only_active?: number,
         public query?: string,
-        public filter?: string,
-        public groups?: string
-    ) { }
+        public search_word?: string,
+        public category?: string
+    ) {
+        if (typeof search_word === 'undefined') {
+            this.search_word = '';
+        }
+    }
 }

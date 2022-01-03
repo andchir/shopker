@@ -19,36 +19,36 @@
 <div class="layout-content">
     <div class="content-section">
 
-        <p-table [value]="items">
-            <ng-template pTemplate="header">
+        <p-table styleClass="p-datatable-striped"
+                 [(selection)]="itemSelected"
+                 [sortField]="queryOptions.sort_by"
+                 dataKey="id"
+                 [lazy]="true"
+                 (onLazyLoad)="getData($event)"
+                 [paginator]="true"
+                 [value]="items"
+                 [columns]="cols"
+                 [rows]="queryOptions.limit"
+                 [totalRecords]="itemsTotal"
+                 [loading]="loading">
+            <ng-template pTemplate="header" let-columns>
                 <tr>
-                    <th>ID</th>
-                    <th>{{ 'STATUS' | translate }}</th>
-                    <th>{{ 'PRICE' | translate }}</th>
-                    <th>{{ 'CONTENT_COUNT' | translate }}</th>
-                    <th>{{ 'EMAIL' | translate }}</th>
-                    <th>{{ 'DATE_TIME' | translate }}</th>
+                    <th>
+                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                    </th>
+                    <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                        {{ col.header | translate }}
+                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                    </th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-item>
+            <ng-template pTemplate="body" let-item let-columns="columns">
                 <tr>
                     <td>
-                        {{ item.id }}
+                        <p-tableCheckbox [value]="item"></p-tableCheckbox>
                     </td>
-                    <td>
-                        {{ item.status }}
-                    </td>
-                    <td>
-                        {{ item.price }}
-                    </td>
-                    <td>
-                        {{ item.contentCount }}
-                    </td>
-                    <td>
-                        {{ item.email }}
-                    </td>
-                    <td>
-                        {{ item.createdDate }}
+                    <td *ngFor="let col of columns">
+                        {{ item[col.field] }}
                     </td>
                 </tr>
             </ng-template>

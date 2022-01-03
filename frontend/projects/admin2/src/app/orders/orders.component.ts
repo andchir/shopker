@@ -16,9 +16,17 @@ import {ModalOrderContentComponent} from './modal-order.component';
 })
 export class OrdersComponent extends AppTablePageAbstractComponent<Order> {
     
-    queryOptions: QueryOptions = new QueryOptions(1, 12, 'createdDate', 'desc');
+    queryOptions: QueryOptions = new QueryOptions(1, 12, 'id', 'desc');
     items: Order[] = [];
     tableFields = [];
+    cols = [
+        { field: 'id', header: 'ID' },
+        { field: 'status', header: 'STATUS' },
+        { field: 'price', header: 'PRICE' },
+        { field: 'contentCount', header: 'CONTENT_COUNT' },
+        { field: 'email', header: 'EMAIL' },
+        { field: 'createdDate', header: 'DATE_TIME' }
+    ];
 
     constructor(
         public dialogService: DialogService,

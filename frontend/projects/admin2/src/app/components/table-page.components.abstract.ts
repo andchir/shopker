@@ -18,6 +18,7 @@ export abstract class AppTablePageAbstractComponent<T extends SimpleEntity> impl
 
     loading = false;
     items: T[] = [];
+    itemSelected: T;
     itemsTotal = 0;
     queryOptions: QueryOptions = new QueryOptions(1, 12, 'createdDate', 'desc');
     searchTimer: any;
@@ -34,10 +35,16 @@ export abstract class AppTablePageAbstractComponent<T extends SimpleEntity> impl
     abstract getModalComponent();
 
     ngOnInit(): void {
-        this.getData();
+        
     }
 
-    getData(): void {
+    getData(event?: any): void {
+        if (event && event.rows) {
+            this.pageChanged(event);
+        }
+        if (event && event.sortField) {
+            this.onSortingChange(event);
+        }
         this.loading = true;
         this.dataService.getListPage(this.queryOptions)
             .pipe(takeUntil(this.destroyed$))
@@ -128,14 +135,18 @@ export abstract class AppTablePageAbstractComponent<T extends SimpleEntity> impl
         });
     }
 
-    onSortingChange(): void {
-        this.queryOptions.sortDir = this.queryOptions.sortBy === 'createdDate' ? 'desc' : 'asc';
-        this.getData();
+    onSortingChange(event?: any): void {
+        if (event && event.sortField) {
+            this.queryOptions.sort_by = event.sortField;
+            this.queryOptions.sort_dir = event.sortOrder > 0 ? 'asc' : 'desc'
+        }
     }
 
-    pageChanged(pageData: {page: number, itemsPerPage?: number}): void {
-        this.queryOptions.page = pageData.page + 1;
-        this.getData();
+    pageChanged(event?: any): void {
+        if (event && event.rows) {
+            const page = event.first / event.rows;
+            this.queryOptions.page = page + 1;
+        }
     }
 
     onInputSearch(): void {

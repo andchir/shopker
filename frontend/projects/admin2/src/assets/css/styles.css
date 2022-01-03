@@ -71,6 +71,8 @@ h1, h2, h3, h4, h5, h6 { margin-top: 0; }
 .show-on-hover-parent .show-on-hover { white-space: nowrap; display: none; }
 .show-on-hover-parent:hover .show-on-hover { display: block; z-index: 111; }
 
-/**/
+/* menu */
 .p-button-menu-right .p-menu-overlay { left: auto !important; right: 0 !important; width: auto; }
 .p-button-menu-right .p-menu-overlay .p-menuitem { white-space: nowrap; }
+.p-menu-nowrap { width: auto; }
+.p-menu-nowrap .p-menuitem { white-space: nowrap; }

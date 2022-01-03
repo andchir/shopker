@@ -44,8 +44,8 @@
                                placeholder="{{ 'SEARCH' | translate }}...">
                     </span>
                     <div>
-                        <button type="button" pButton
-                                class="ml-2"
+                        <button type="button" pButton pRipple
+                                class="ml-3"
                                 icon="pi pi-chevron-down"
                                 iconPos="right"
                                 [label]="'ACTIONS' | translate"
@@ -101,6 +101,6 @@
     </div>
 </div>
 
-<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<p-confirmDialog [header]="'CONFIRM' | translate" icon="pi pi-exclamation-triangle"></p-confirmDialog>
 
 <p-menu #menu [popup]="true" [model]="menuItems" styleClass="p-menu-nowrap"></p-menu>

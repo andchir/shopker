@@ -2,7 +2,7 @@
     <div class="layout-menu">
         <ul class="menu-items">
             <li *ngFor="let menuItem of menuItems">
-                <a class="router-link-exact-active"
+                <a pRipple class="router-link-exact-active"
                     [ngClass]="{'active': menuItem.isActive}"
                     href="#{{menuItem.route}}">
                         <i [class]="menuItem.icon">

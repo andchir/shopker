@@ -76,3 +76,9 @@ h1, h2, h3, h4, h5, h6 { margin-top: 0; }
 .p-button-menu-right .p-menu-overlay .p-menuitem { white-space: nowrap; }
 .p-menu-nowrap { width: auto; }
 .p-menu-nowrap .p-menuitem { white-space: nowrap; }
+
+/* divider */
+.p-divider-horizontal { display: flex; width: 100%; position: relative; align-items: center; }
+.p-divider-horizontal:before { position: absolute; display: block; top: 50%; left: 0; width: 100%; content: ''; }
+.p-divider-solid.p-divider-horizontal:before { border-top-style: solid; }
+

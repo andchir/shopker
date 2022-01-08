@@ -170,6 +170,22 @@
                 </p-accordionTab>
             </p-accordion>
         </div>
+
+        <div role="separator" class="p-divider p-component p-divider-horizontal p-divider-solid p-divider-left">
+            <div class="p-divider-content"></div>
+        </div>
+
+        <div class="text-right pt-2">
+            <button pButton pRipple type="button" [label]="'SAVE_AND_CLOSE' | translate" icon="pi pi-check"
+                    class="p-button-success p-button-rounded p-button-raised ml-2"
+                    (click)="saveData($event)"></button>
+            <button pButton pRipple type="button" [label]="'SAVE' | translate" icon="pi pi-check"
+                    class="p-button-success p-button-rounded p-button-raised ml-2"
+                    (click)="saveData($event)"></button>
+            <button pButton pRipple type="button" [label]="'CLOSE' | translate"
+                    class="p-button-secondary p-button-rounded p-button-raised ml-2"
+                    (click)="dismissModal($event)"></button>
+        </div>
     </form>
     
 </div>

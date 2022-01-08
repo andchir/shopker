@@ -85,7 +85,7 @@ export abstract class AppTablePageAbstractComponent<T extends SimpleEntity> impl
         }
         const ref = this.dialogService.open(this.getModalComponent(), {
             header: this.getModalTitle(item),
-            width: '600px',
+            width: '800px',
             data: this.getItemData(item)
         });
         ref.onClose

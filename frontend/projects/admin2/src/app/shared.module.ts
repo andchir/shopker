@@ -20,6 +20,9 @@ import {DynamicDialogModule} from 'primeng/dynamicdialog';
 import {SplitButtonModule} from 'primeng/splitbutton';
 import {TooltipModule} from 'primeng/tooltip';
 import {MenuModule} from 'primeng/menu';
+import {SidebarModule} from 'primeng/sidebar';
+import {CardModule} from 'primeng/card';
+import {AccordionModule} from 'primeng/accordion';
 
 import {AppNavbarComponent} from './components/app-navbar.component';
 
@@ -50,7 +53,10 @@ const components = [
         DynamicDialogModule,
         SplitButtonModule,
         TooltipModule,
-        MenuModule
+        MenuModule,
+        SidebarModule,
+        CardModule,
+        AccordionModule
     ],
     declarations: [
         ...components
@@ -79,7 +85,10 @@ const components = [
         DynamicDialogModule,
         SplitButtonModule,
         TooltipModule,
-        MenuModule
+        MenuModule,
+        SidebarModule,
+        CardModule,
+        AccordionModule
     ],
     entryComponents: [
         

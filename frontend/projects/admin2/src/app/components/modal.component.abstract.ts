@@ -181,7 +181,7 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
             data = {};
         }
         const formField = this.form.controls[fieldName];
-        if (!formField) {
+        if (!formField || !this.arrayFields[fieldName]) {
             return;
         }
         const groupControls = this.buildFormGroup(fieldName, data);

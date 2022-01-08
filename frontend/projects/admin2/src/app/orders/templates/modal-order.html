@@ -1,0 +1,175 @@
+<div>
+    <form [formGroup]="form" #formEl>
+        
+        <div class="grid align-content-start mb-3 mt-0 border-round border-1 surface-200 border-400">
+            <div class="col-6">
+                <div class="p-2">
+                    {{model.createdDate | date: 'dd/MM/y H:mm:s'}}
+                </div>
+            </div>
+            <div class="col-6 text-right">
+                <a pButton class="no-underline" href="{{baseUrl}}orders/print/{{model.id}}" target="_blank">
+                    <i class="pi pi-print mr-2"></i>
+                    {{'PRINT' | translate}}
+                </a>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="col-12 md:col-6">
+                <label class="block" for="fieldId">
+                    {{'ID' | translate}}
+                </label>
+                <input type="text" id="fieldId" class="w-full" pInputText formControlName="id" readonly>
+            </div>
+            <div class="col-12 md:col-6">
+                <label class="block" for="fieldEmail">
+                    {{'EMAIL' | translate}}
+                </label>
+                <input type="text" id="fieldEmail" class="w-full" pInputText formControlName="email">
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="col-12 md:col-6">
+                <div class="mb-3">
+                    <label class="block" for="fieldFullName">
+                        {{'FULL_NAME' | translate}}
+                    </label>
+                    <input type="text" id="fieldFullName" class="w-full" pInputText formControlName="fullName">
+                </div>
+                <div>
+                    <label class="block" for="fieldPhone">
+                        {{'PHONE' | translate}}
+                    </label>
+                    <input type="text" id="fieldPhone" class="w-full" pInputText formControlName="phone">
+                </div>
+            </div>
+            <div class="col-12 md:col-6">
+                <label class="block" for="fieldComment">
+                    {{'COMMENT' | translate}}
+                </label>
+                <textarea id="fieldComment" class="w-full" rows="5" pInputTextarea formControlName="comment"></textarea>
+            </div>
+        </div>
+
+        <div class="grid mb-2" *ngIf="settings">
+            <div class="col-12 md:col-6">
+                <label class="block" for="fieldDeliveryName">
+                    {{'DELIVERY_METHOD' | translate}}
+                </label>
+                <p-dropdown [options]="settings.SETTINGS_DELIVERY" inputId="fieldDeliveryName"
+                            styleClass="w-full"
+                            optionLabel="name"
+                            formControlName="deliveryName"></p-dropdown>
+            </div>
+            <div class="col-12 md:col-6">
+                <label class="block" for="fieldPaymentName">
+                    {{'PAYMENT_METHOD' | translate}}
+                </label>
+                <p-dropdown [options]="settings.SETTINGS_PAYMENT" inputId="fieldPaymentName"
+                            styleClass="w-full"
+                            optionLabel="name"
+                            formControlName="paymentName"></p-dropdown>
+            </div>
+        </div>
+
+        <div *ngIf="model.content">
+            <p-accordion>
+                <p-accordionTab [header]="'OPTIONS' | translate">
+                    <div formArrayName="options">
+                        <p-table [value]="arrayFields.options.controls" styleClass="p-datatable-sm">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>{{ 'SYSTEM_NAME' | translate }}</th>
+                                    <th>{{ 'NAME' | translate }}</th>
+                                    <th>{{ 'VALUE' | translate }}</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-option let-rowIndex="rowIndex">
+                                <tr [formGroupName]="rowIndex + ''">
+                                    <td>
+                                        <input type="text" class="p-inputtext-sm w-full" pInputText formControlName="name">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="p-inputtext-sm w-full" pInputText formControlName="title">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="p-inputtext-sm w-full" pInputText formControlName="value">
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </p-accordionTab>
+                <p-accordionTab [header]="'ORDER_CONTENT' | translate" [selected]="true">
+                    <p-table [value]="model.content">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>{{ 'ID' | translate }}</th>
+                                <th>{{ 'NAME' | translate }}</th>
+                                <th class="text-center">{{ 'PRICE' | translate }}</th>
+                                <th class="text-center">{{ 'QUANTITY' | translate }}</th>
+                                <th class="text-center">{{ 'PRICE_TOTAL' | translate }}</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-content let-rowIndex="rowIndex">
+                            <tr>
+                                <td>
+                                    {{ content.id }}
+                                </td>
+                                <td>
+                                    <ng-container *ngIf="!content.uri; else productLink">
+                                        {{ content.title }}
+                                    </ng-container>
+                                    <ng-template #productLink>
+                                        <a href="/{{ baseUrl }}{{ content.uri }}" target="_blank">
+                                            {{ content.title }}
+                                        </a>
+                                    </ng-template>
+                                </td>
+                                <td>
+                                    {{ content.price | number: '1.2-2':'en-EN' }}
+                                </td>
+                                <td class="text-center">
+                                    {{ content.count }}
+                                </td>
+                                <td class="text-center">
+                                    {{ content.priceTotal | number: '1.2-2':'en-EN' }}
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="footer" let-columns>
+                            <ng-container *ngIf="model.discount || model.discountPercent">
+                                <tr>
+                                    <td colspan="4">{{ 'DISCOUNT' | translate }}</td>
+                                    <td class="text-center">
+                                        <span *ngIf="model.discount">{{ model.discount | number: '1.2-2':'ru-RU' }}</span>
+                                        <span *ngIf="model.discountPercent">{{ model.discountPercent }}%</span>
+                                    </td>
+                                </tr>
+                            </ng-container>
+                            <tr>
+                                <td colspan="4">{{ 'DELIVERY' | translate }}</td>
+                                <td class="text-center" [style.textDecoration]="deliveryLimitApplied ? 'line-through' : 'none'">
+                                    {{ model.deliveryPrice | number: '1.2-2':'ru-RU' }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-end" colspan="4">
+                                    {{ 'PRICE_TOTAL' | translate }}:
+                                </td>
+                                <td class="text-center big">
+                                    <b>{{ model.price | number: '1.2-2':'ru-RU' }}</b>
+                                    &nbsp;
+                                    <span class="small">{{ model.currency }}</span>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-accordionTab>
+            </p-accordion>
+        </div>
+    </form>
+    
+</div>

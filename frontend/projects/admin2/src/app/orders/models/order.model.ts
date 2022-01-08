@@ -13,6 +13,17 @@ export class OrderContent {
     private _parametersString: string;
     private _filesString: string;
 
+    static priceUpdate(content: OrderContent): void {
+        content.priceTotal = content.price * content.count;
+        let parametersPrice = 0;
+        if (typeof content.parameters !== 'undefined') {
+            content.parameters.forEach((parameter) => {
+                parametersPrice += parameter.price * content.count;
+            });
+        }
+        content.priceTotal += parametersPrice;
+    }
+
     constructor(
         public id: number,
         public title: string,

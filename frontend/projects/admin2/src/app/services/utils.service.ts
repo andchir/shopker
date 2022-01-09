@@ -9,6 +9,10 @@ export class UtilsService {
         }
         return new Date(dateObject.date);
     }
+    
+    static cloneDeep(object: any): any {
+        return JSON.parse(JSON.stringify(object));
+    }
 
     constructor() {
     }

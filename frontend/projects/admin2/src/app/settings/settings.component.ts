@@ -9,13 +9,14 @@ import {TranslateService} from '@ngx-translate/core';
 import {SettingsService} from './settings.service';
 import {AppSettings} from '../services/app-settings.service';
 import {Setting, SettingsData} from './models/setting.model';
+import {UtilsService} from '../services/utils.service';
 
 declare const window: Window;
 
 @Component({
     selector: 'app-settings',
     templateUrl: './templates/settings.component.html',
-    providers: [MessageService, DialogService]
+    providers: [DialogService]
 })
 export class SettingsComponent implements OnInit, AfterViewInit, OnDestroy {
 
@@ -83,7 +84,7 @@ export class SettingsComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     ngAfterViewInit(): void {
-        // setTimeout(this.scrollHeightUpdate.bind(this), 1);
+        setTimeout(this.scrollHeightUpdate.bind(this), 1);
     }
 
     getSettings(): void {
@@ -92,37 +93,37 @@ export class SettingsComponent implements OnInit, AfterViewInit, OnDestroy {
             .subscribe((res) => {
                 if (res['SETTINGS_MAIN']) {
                     this.settings.SETTINGS_MAIN.values = res['SETTINGS_MAIN'];
-                    this.settings.SETTINGS_MAIN.defaultValues = res['SETTINGS_MAIN'];
+                    this.settings.SETTINGS_MAIN.defaultValues = UtilsService.cloneDeep(res['SETTINGS_MAIN']);
                     this.settings.SETTINGS_MAIN.loading = false;
                 }
                 if (res['SETTINGS_ORDER_STATUSES']) {
                     this.settings.SETTINGS_ORDER_STATUSES.values = res['SETTINGS_ORDER_STATUSES'];
-                    this.settings.SETTINGS_ORDER_STATUSES.defaultValues = res['SETTINGS_ORDER_STATUSES'];
+                    this.settings.SETTINGS_ORDER_STATUSES.defaultValues = UtilsService.cloneDeep(res['SETTINGS_ORDER_STATUSES']);
                     this.settings.SETTINGS_ORDER_STATUSES.loading = false;
                 }
                 if (res['SETTINGS_DELIVERY']) {
                     this.settings.SETTINGS_DELIVERY.values = res['SETTINGS_DELIVERY'];
-                    this.settings.SETTINGS_DELIVERY.defaultValues = res['SETTINGS_DELIVERY'];
+                    this.settings.SETTINGS_DELIVERY.defaultValues = UtilsService.cloneDeep(res['SETTINGS_DELIVERY']);
                     this.settings.SETTINGS_DELIVERY.loading = false;
                 }
                 if (res['SETTINGS_PAYMENT']) {
                     this.settings.SETTINGS_PAYMENT.values = res['SETTINGS_PAYMENT'];
-                    this.settings.SETTINGS_PAYMENT.defaultValues = res['SETTINGS_PAYMENT'];
+                    this.settings.SETTINGS_PAYMENT.defaultValues = UtilsService.cloneDeep(res['SETTINGS_PAYMENT']);
                     this.settings.SETTINGS_PAYMENT.loading = false;
                 }
                 if (res['SETTINGS_CURRENCY']) {
                     this.settings.SETTINGS_CURRENCY.values = res['SETTINGS_CURRENCY'];
-                    this.settings.SETTINGS_CURRENCY.defaultValues = res['SETTINGS_CURRENCY'];
+                    this.settings.SETTINGS_CURRENCY.defaultValues = UtilsService.cloneDeep(res['SETTINGS_CURRENCY']);
                     this.settings.SETTINGS_CURRENCY.loading = false;
                 }
                 if (res['SETTINGS_PROMOCODES']) {
                     this.settings.SETTINGS_PROMOCODES.values = res['SETTINGS_PROMOCODES'];
-                    this.settings.SETTINGS_PROMOCODES.defaultValues = res['SETTINGS_PROMOCODES'];
+                    this.settings.SETTINGS_PROMOCODES.defaultValues = UtilsService.cloneDeep(res['SETTINGS_PROMOCODES']);
                     this.settings.SETTINGS_PROMOCODES.loading = false;
                 }
                 if (res['SETTINGS_LANGUAGES']) {
                     this.settings.SETTINGS_LANGUAGES.values = res['SETTINGS_LANGUAGES'];
-                    this.settings.SETTINGS_LANGUAGES.defaultValues = res['SETTINGS_LANGUAGES'];
+                    this.settings.SETTINGS_LANGUAGES.defaultValues = UtilsService.cloneDeep(res['SETTINGS_LANGUAGES']);
                     this.settings.SETTINGS_LANGUAGES.loading = false;
                 }
             });
@@ -145,7 +146,7 @@ export class SettingsComponent implements OnInit, AfterViewInit, OnDestroy {
                         detail: this.getLangString('DATA_SAVED_SUCCESSFULLY')
                     });
                     this.settings[groupName].defaultValues = res;
-                    this.settings[groupName].loading = false;
+                    // this.settings[groupName].loading = false;
                     this.settings[groupName].changed = false;
                     this.pageReload();
                 },
@@ -161,6 +162,40 @@ export class SettingsComponent implements OnInit, AfterViewInit, OnDestroy {
                     this.settings[groupName].loading = false;
                 }
             });
+    }
+
+    deleteSetting(groupName: string, index: number): void {
+        this.settings[groupName].values.splice(index, 1);
+        this.settings[groupName].changed = true;
+    }
+
+    addSetting(groupName: string): void {
+        const newSetting = {
+            name: '',
+            description: '',
+            options: UtilsService.cloneDeep(this.settings[groupName].defaultOptions)
+        };
+        this.settings[groupName].values.push(newSetting);
+    }
+
+    onValueChanged(groupName: string): void {
+        this.settings[groupName].changed = true;
+    }
+
+    resetSettingsForm(groupName: string): void {
+        const dataLength = this.settings[groupName].defaultValues.length;
+        if (dataLength < this.settings[groupName].values.length) {
+            this.settings[groupName].values.splice(dataLength - 1, this.settings[groupName].values.length - dataLength);
+        }
+        Object.assign(this.settings[groupName].values, UtilsService.cloneDeep(this.settings[groupName].defaultValues));
+        this.settings[groupName].loading = false;
+        this.settings[groupName].changed = false;
+    }
+
+    scrollHeightUpdate(): void {
+        const verticalOffset = 90;
+        const windowHeight = window.innerHeight;
+        this.scrollHeight = windowHeight - verticalOffset;
     }
 
     getFieldTypeByName(setting: Setting): string {

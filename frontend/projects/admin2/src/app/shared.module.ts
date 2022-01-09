@@ -23,6 +23,8 @@ import {MenuModule} from 'primeng/menu';
 import {SidebarModule} from 'primeng/sidebar';
 import {CardModule} from 'primeng/card';
 import {AccordionModule} from 'primeng/accordion';
+import {ToastModule} from 'primeng/toast';
+import {ColorPickerModule} from 'primeng/colorpicker';
 
 import {AppNavbarComponent} from './components/app-navbar.component';
 
@@ -56,7 +58,9 @@ const components = [
         MenuModule,
         SidebarModule,
         CardModule,
-        AccordionModule
+        AccordionModule,
+        ToastModule,
+        ColorPickerModule
     ],
     declarations: [
         ...components
@@ -88,7 +92,9 @@ const components = [
         MenuModule,
         SidebarModule,
         CardModule,
-        AccordionModule
+        AccordionModule,
+        ToastModule,
+        ColorPickerModule
     ],
     entryComponents: [
         

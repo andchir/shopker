@@ -7,21 +7,13 @@ import {HomeComponent} from './home/home.component';
 const routes: Routes = [
     {
         path: '',
-        redirectTo: 'home',
+        redirectTo: 'orders',
         pathMatch: 'full'
     },
-    {
-        path: 'home',
-        component: HomeComponent
-    },
-    {
-        path: 'orders',
-        loadChildren: () => import('./orders/orders.module').then(m => m.OrdersModule)
-    },
-    {
-        path: '**',
-        component: NotFoundComponent
-    }
+    {path: 'home', component: HomeComponent},
+    {path: 'orders', loadChildren: () => import('./orders/orders.module').then(m => m.OrdersModule)},
+    {path: 'settings', loadChildren: () => import('./settings/settings.module').then(m => m.SettingsModule)},
+    {path: '**', component: NotFoundComponent}
 ];
 
 @NgModule({

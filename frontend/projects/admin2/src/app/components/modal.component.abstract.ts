@@ -3,11 +3,13 @@ import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 
 import {Subject, takeUntil} from 'rxjs';
 import {DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
+import {MenuItem} from 'primeng/api';
 
 import {SimpleEntity} from '../models/simple-entity.interface';
 import {FormFieldsErrors} from '../models/form-fields-options.interface';
 import {DataService} from '../services/data-service.abstract';
 import {FormFieldsData} from '../models/form-field.interface';
+import {FileModel} from "../models/file.model";
 
 @Component({
     template: ''
@@ -18,11 +20,14 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
     protected _formFieldsErrors: FormFieldsErrors = {};
     loading = false;
     model: T;
+    files: {[key: string]: File} = {};
     form: FormGroup;
     arrayFields: {[key: string]: any} = {};
     arrayFieldsData: {[key: string]: FormFieldsData} = {};
     destroyed$ = new Subject<void>();
     errorMessage = '';
+    buttonMenuItems: MenuItem[];
+    closeReason = 'canceled';
 
     set formFieldsErrors(formFieldsErrors: FormFieldsErrors) {
         for (const key in formFieldsErrors) {
@@ -53,7 +58,8 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
     }
 
     onDataSaved(): void {
-        this.closeModal();
+        this.closeReason = 'updated';
+        this.loading = false;
     }
 
     ngOnInit(): void {
@@ -86,7 +92,27 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
             });
     }
 
-    saveData(event?: MouseEvent): void {
+    getFormData(): any {
+        const data = this.form.value;
+        Object.keys(this.model).forEach((key) => {
+            if (this.files[key]) {
+                data[key] = Array.isArray(this.model[key])
+                    ? [ FileModel.getFileData(this.files[key]) ]
+                    : FileModel.getFileData(this.files[key]);
+            }
+        });
+        return data;
+    }
+
+    saveRequest() {
+        if (this.model && this.model.id) {
+            return this.dataService.update(this.getFormData());
+        } else {
+            return this.dataService.create(this.getFormData());
+        }
+    }
+
+    saveData(autoClose = false, event?: MouseEvent): void {
         if (event) {
             event.preventDefault();
         }
@@ -97,16 +123,15 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
             return;
         }
         this.loading = true;
-        const data = this.form.value;
-        if (this.model && this.model.id) {
-            data.id = this.model.id;
-        }
-        this.dataService.create(data)
+        this.saveRequest()
             .pipe(takeUntil(this.destroyed$))
             .subscribe({
                 next: (res) => {
                     this.model = res;
                     this.onDataSaved();
+                    if (autoClose) {
+                        this.closeModal();
+                    }
                 },
                 error: (err) => {
                     if (err.error) {
@@ -216,7 +241,7 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
         if (event) {
             event.preventDefault();
         }
-        this.ref.close(this.model);
+        this.ref.close(this.closeReason);
     }
 
     dismissModal(event?: MouseEvent): void {

@@ -177,13 +177,13 @@
 
         <div class="text-right pt-2">
             <button pButton pRipple type="button" [label]="'SAVE_AND_CLOSE' | translate" icon="pi pi-check"
-                    class="p-button-success p-button-rounded p-button-raised ml-2"
-                    (click)="saveData($event)"></button>
+                    class="p-button-success p-button-raised w-full md:w-auto mb-2 md:mb-0 md:ml-2"
+                    (click)="saveData(true, $event)"></button>
             <button pButton pRipple type="button" [label]="'SAVE' | translate" icon="pi pi-check"
-                    class="p-button-success p-button-rounded p-button-raised ml-2"
-                    (click)="saveData($event)"></button>
+                    class="p-button-warning p-button-raised w-full md:w-auto mb-2 md:mb-0 md:ml-2"
+                    (click)="saveData(false, $event)"></button>
             <button pButton pRipple type="button" [label]="'CLOSE' | translate"
-                    class="p-button-secondary p-button-rounded p-button-raised ml-2"
+                    class="p-button-secondary p-button-raised w-full md:w-auto mb-2 md:mb-0 md:ml-2"
                     (click)="dismissModal($event)"></button>
         </div>
     </form>

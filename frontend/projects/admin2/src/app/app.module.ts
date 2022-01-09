@@ -39,7 +39,7 @@ registerLocaleData(localeRu, 'ru-RU');
         
     ],
     providers: [{
-        provide: APP_BASE_HREF, useValue: '/admin/'
+        provide: APP_BASE_HREF, useValue: ''
     }],
     bootstrap: [AppComponent]
 })

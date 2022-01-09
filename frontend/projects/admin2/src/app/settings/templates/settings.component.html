@@ -3,7 +3,7 @@
         <i class="pi pi-bars"></i>
     </button>
     <span class="layout-topbar-header text-3xl text-600">
-        <i class="fi fi-br-shopping-bag vertical-align-middle mr-2"></i>
+        <i class="fi fi-br-settings vertical-align-middle mr-2"></i>
         <span class="vertical-align-middle">{{ 'SETTINGS' | translate }}</span>
     </span>
 </div>
@@ -11,7 +11,75 @@
 <div class="layout-content">
     <div class="content-section">
         
-        
+        <div class="grid">
+            <div class="col-12 md:col-6">
+
+                <!-- settings -->
+                <p-table dataKey="name" editMode="row" [value]="settings.SETTINGS_MAIN.values"
+                         responsiveLayout="fixed"
+                         [scrollable]="true"
+                         [scrollHeight]="scrollHeight + 'px'">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>{{'PARAMETER' | translate}}</th>
+                            <th>{{'VALUE' | translate}}</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-setting let-editing="editing" let-ri="rowIndex">
+                        <tr [pEditableRow]="setting">
+                            <td style="width: 50%;">
+                                <div class="show-on-hover-parent w-100">
+                                    <div class="show-on-hover-child position-relative">
+                                        <div class="pos-absolute-right">
+                                            <span class="badge bg-secondary">{{ setting.name }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="text-overflow" [title]="setting.name | translate">
+                                        {{ setting.name | translate }}
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="width: 50%;">
+                                <div class="show-on-hover-parent min-height20 w-100">
+                                    <div class="show-on-hover-child position-absolute pos-right" [class.pos-top]="editing" [class.pos-top-5]="!editing">
+                                        <button *ngIf="!editing" pButton type="button"
+                                                pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInit(setting)"
+                                                [pTooltip]="'EDIT' | translate"
+                                                tooltipPosition="bottom"
+                                                class="p-button-raised p-button-rounded"></button>
+                                        <button *ngIf="editing" pButton type="button"
+                                                pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(setting)"
+                                                [pTooltip]="'SAVE' | translate"
+                                                tooltipPosition="bottom"
+                                                class="p-button-raised p-button-rounded p-button-success ms-2"></button>
+                                        <button *ngIf="editing" pButton type="button"
+                                                pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancel(setting, ri)"
+                                                [pTooltip]="'CANCEL' | translate"
+                                                tooltipPosition="bottom"
+                                                class="p-button-raised p-button-rounded p-button-danger ms-2"></button>
+                                    </div>
+                                    <p-cellEditor style="display: block; width: 100%;">
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" class="p-inputtext-sm w-100" [(ngModel)]="setting.value">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            <div class="text-overflow" [title]="setting.value" [ngClass]="{'text-password': getFieldTypeByName(setting) == 'password'}">
+                                                {{ setting.value }}
+                                            </div>
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+                <!-- /settings -->
+                
+            </div>
+            <div class="col-12 md:col-6">
+                
+            </div>
+        </div>
         
     </div>
 </div>

@@ -10,6 +10,9 @@ h1, h2, h3, h4, h5, h6 { margin-top: 0; }
 .text-overflow { display: block; max-width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .p-datatable-table-w-full .p-datatable-table { width: 100%; }
 
+.text-password { position: relative; z-index: 0; }
+.text-password:before { content: '*******************'; position: absolute; left: 0; top: 0; background-color: #fff; pointer-events: none; }
+
 /* position */
 .pos-top { top: 0; }
 .pos-top5 { top: 5px; }

@@ -90,45 +90,47 @@
                                 <div class="pb-3 text-600">
                                     {{'SETTINGS_STATUSES_DESCRIPTION' | translate}}
                                 </div>
-                                <p-table styleClass="p-datatable-sm" responsiveLayout="scroll"
-                                         [value]="settings.SETTINGS_ORDER_STATUSES.values"
-                                         [loading]="settings.SETTINGS_ORDER_STATUSES.loading">
-                                    <ng-template pTemplate="header">
-                                        <tr>
-                                            <th width="40%">{{'NAME' | translate}}</th>
-                                            <th width="40%">{{'MAIL_TEMPLATE' | translate}}</th>
-                                            <th width="10%">{{'COLOR' | translate}}</th>
-                                            <th width="10%"></th>
-                                        </tr>
-                                    </ng-template>
-                                    <ng-template pTemplate="body" let-setting let-index="rowIndex">
-                                        <tr>
-                                            <td>
-                                                <input type="text" pInputText class="p-inputtext-sm w-full"
-                                                       [(ngModel)]="setting.name"
-                                                       (ngModelChange)="onValueChanged('SETTINGS_ORDER_STATUSES')">
-                                            </td>
-                                            <td>
-                                                <input type="text" pInputText class="p-inputtext-sm w-full"
-                                                       [(ngModel)]="setting.options.template.value"
-                                                       (ngModelChange)="onValueChanged('SETTINGS_ORDER_STATUSES')">
-                                            </td>
-                                            <td>
-                                                <p-colorPicker
-                                                    [appendTo]="'body'"
-                                                    [(ngModel)]="setting.options.color.value"
-                                                    (ngModelChange)="onValueChanged('SETTINGS_ORDER_STATUSES')"></p-colorPicker>
-                                            </td>
-                                            <td>
-                                                <button pButton pRipple type="button" icon="pi pi-times"
-                                                        class="p-button-raised p-button-rounded p-button-secondary p-button-sm ms-2"
-                                                        (click)="deleteSetting('SETTINGS_ORDER_STATUSES', index)"
-                                                        [pTooltip]="'DELETE' | translate"
-                                                        tooltipPosition="bottom"></button>
-                                            </td>
-                                        </tr>
-                                    </ng-template>
-                                </p-table>
+                                <div class="p-datatable-table-w-full">
+                                    <p-table styleClass="p-datatable-sm" responsiveLayout="scroll"
+                                             [value]="settings.SETTINGS_ORDER_STATUSES.values"
+                                             [loading]="settings.SETTINGS_ORDER_STATUSES.loading">
+                                        <ng-template pTemplate="header">
+                                            <tr>
+                                                <th width="40%">{{'NAME' | translate}}</th>
+                                                <th width="40%">{{'MAIL_TEMPLATE' | translate}}</th>
+                                                <th width="10%">{{'COLOR' | translate}}</th>
+                                                <th width="10%"></th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-setting let-index="rowIndex">
+                                            <tr>
+                                                <td>
+                                                    <input type="text" pInputText class="p-inputtext-sm w-full"
+                                                           [(ngModel)]="setting.name"
+                                                           (ngModelChange)="onValueChanged('SETTINGS_ORDER_STATUSES')">
+                                                </td>
+                                                <td>
+                                                    <input type="text" pInputText class="p-inputtext-sm w-full"
+                                                           [(ngModel)]="setting.options.template.value"
+                                                           (ngModelChange)="onValueChanged('SETTINGS_ORDER_STATUSES')">
+                                                </td>
+                                                <td>
+                                                    <p-colorPicker
+                                                        [appendTo]="'body'"
+                                                        [(ngModel)]="setting.options.color.value"
+                                                        (ngModelChange)="onValueChanged('SETTINGS_ORDER_STATUSES')"></p-colorPicker>
+                                                </td>
+                                                <td>
+                                                    <button pButton pRipple type="button" icon="pi pi-times"
+                                                            class="p-button-raised p-button-rounded p-button-secondary p-button-sm ms-2"
+                                                            (click)="deleteSetting('SETTINGS_ORDER_STATUSES', index)"
+                                                            [pTooltip]="'DELETE' | translate"
+                                                            tooltipPosition="bottom"></button>
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
+                                </div>
                                 <div class="text-center pt-2 pb-2 pb-md-0">
                                     <div class="relative">
                                         <div class="absolute pos-right pos-top" *ngIf="settings.SETTINGS_ORDER_STATUSES.changed">
@@ -153,10 +155,124 @@
                             <div class="pb-3 text-600">
                                 {{'SETTINGS_DELIVERY_DESCRIPTION' | translate}}
                             </div>
+                            <div class="p-datatable-table-w-full">
+                                <p-table styleClass="p-datatable-sm" responsiveLayout="scroll"
+                                         [value]="settings.SETTINGS_DELIVERY.values"
+                                         [loading]="settings.SETTINGS_DELIVERY.loading">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th width="40%">{{'NAME' | translate}}</th>
+                                            <th width="25%">{{'PRICE' | translate}}</th>
+                                            <th width="25%">{{'MAX_PRICE' | translate}}</th>
+                                            <th width="10%"></th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-setting let-index="rowIndex">
+                                        <tr>
+                                            <td>
+                                                <input type="text" pInputText class="p-inputtext-sm w-full"
+                                                       [(ngModel)]="setting.name"
+                                                       (ngModelChange)="onValueChanged('SETTINGS_DELIVERY')">
+                                            </td>
+                                            <td class="text-center">
+                                                <p-inputNumber styleClass="p-inputtext-sm w-full" step="1" min="0"
+                                                               [showButtons]="true"
+                                                               [inputStyle]="{width: '70px'}"
+                                                               [(ngModel)]="setting.options.price.value"
+                                                               (ngModelChange)="onValueChanged('SETTINGS_DELIVERY')"></p-inputNumber>
+                                            </td>
+                                            <td class="text-center">
+                                                <p-inputNumber styleClass="p-inputtext-sm w-full" step="1" min="0"
+                                                               [showButtons]="true"
+                                                               [inputStyle]="{width: '70px'}"
+                                                               [(ngModel)]="setting.options.priceLimit.value"
+                                                               (ngModelChange)="onValueChanged('SETTINGS_DELIVERY')"></p-inputNumber>
+                                            </td>
+                                            <td>
+                                                <button pButton pRipple type="button" icon="pi pi-times"
+                                                        class="p-button-raised p-button-rounded p-button-secondary p-button-sm ms-2"
+                                                        (click)="deleteSetting('SETTINGS_DELIVERY', index)"
+                                                        [pTooltip]="'DELETE' | translate"
+                                                        tooltipPosition="bottom"></button>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                            <div class="text-center pt-2 pb-2 pb-md-0">
+                                <div class="relative">
+                                    <div class="absolute pos-right pos-top" *ngIf="settings.SETTINGS_DELIVERY.changed">
+                                        <button type="button" pButton pRipple icon="pi pi-check" class="p-button-success p-button-sm"
+                                                (click)="saveSettings('SETTINGS_DELIVERY')"
+                                                pTooltip="{{'SAVE' | translate}}"
+                                                tooltipPosition="bottom"></button>
+                                        &nbsp;
+                                        <button type="button" pButton pRipple icon="pi pi-refresh" class="p-button-secondary p-button-sm"
+                                                (click)="resetSettingsForm('SETTINGS_DELIVERY')"
+                                                pTooltip="{{'FORM_RESET' | translate}}"
+                                                tooltipPosition="bottom"></button>
+                                    </div>
+                                </div>
+                                <button type="button" pButton pRipple icon="pi pi-plus" class="p-button-secondary p-button-sm"
+                                        [label]="'ADD' | translate"
+                                        (click)="addSetting('SETTINGS_DELIVERY')"></button>
+                            </div>
                         </p-accordionTab>
                         <p-accordionTab [header]="'SETTINGS_PAYMENT' | translate">
                             <div class="pb-3 text-600">
                                 {{'SETTINGS_PAYMENT_DESCRIPTION' | translate}}
+                            </div>
+                            <div class="p-datatable-table-w-full">
+                                <p-table styleClass="p-datatable-sm" responsiveLayout="scroll"
+                                         [value]="settings.SETTINGS_PAYMENT.values"
+                                         [loading]="settings.SETTINGS_PAYMENT.loading">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th width="45%">{{'NAME' | translate}}</th>
+                                            <th width="45%">{{'VALUE' | translate}}</th>
+                                            <th width="10%"></th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-setting let-index="rowIndex">
+                                        <tr>
+                                            <td>
+                                                <input type="text" pInputText class="p-inputtext-sm w-full"
+                                                       [(ngModel)]="setting.name"
+                                                       (ngModelChange)="onValueChanged('SETTINGS_PAYMENT')">
+                                            </td>
+                                            <td>
+                                                <input type="text" pInputText class="p-inputtext-sm w-full"
+                                                       [(ngModel)]="setting.options.value.value"
+                                                       (ngModelChange)="onValueChanged('SETTINGS_PAYMENT')">
+                                            </td>
+                                            <td>
+                                                <button pButton pRipple type="button" icon="pi pi-times"
+                                                        class="p-button-raised p-button-rounded p-button-secondary p-button-sm ms-2"
+                                                        (click)="deleteSetting('SETTINGS_PAYMENT', index)"
+                                                        [pTooltip]="'DELETE' | translate"
+                                                        tooltipPosition="bottom"></button>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                            <div class="text-center pt-2 pb-2 pb-md-0">
+                                <div class="relative">
+                                    <div class="absolute pos-right pos-top" *ngIf="settings.SETTINGS_PAYMENT.changed">
+                                        <button type="button" pButton pRipple icon="pi pi-check" class="p-button-success p-button-sm"
+                                                (click)="saveSettings('SETTINGS_PAYMENT')"
+                                                pTooltip="{{'SAVE' | translate}}"
+                                                tooltipPosition="bottom"></button>
+                                        &nbsp;
+                                        <button type="button" pButton pRipple icon="pi pi-refresh" class="p-button-secondary p-button-sm"
+                                                (click)="resetSettingsForm('SETTINGS_PAYMENT')"
+                                                pTooltip="{{'FORM_RESET' | translate}}"
+                                                tooltipPosition="bottom"></button>
+                                    </div>
+                                </div>
+                                <button type="button" pButton pRipple icon="pi pi-plus" class="p-button-secondary p-button-sm"
+                                        [label]="'ADD' | translate"
+                                        (click)="addSetting('SETTINGS_PAYMENT')"></button>
                             </div>
                         </p-accordionTab>
                     </p-accordion>

@@ -1,9 +1,13 @@
 menu:
-    - { title: 'ORDERS', route: '/orders', icon: 'fi fi-br-shopping-bag' }
-    - { title: 'CATALOG', route: '/catalog', icon: 'fi fi-br-cube' }
-    - { title: 'STATISTICS', route: '/statistics', icon: 'fi fi-br-chart-histogram' }
-    - { title: 'COMMENTS', route: '/comments', icon: 'fi fi-br-comment-alt' }
-    - { title: 'IMPORT_EXPORT', route: '/import-export', icon: 'fi fi-br-upload' }
-    - { title: 'USERS', route: '/users', icon: 'fi fi-br-user' }
-    - { title: 'TEMPLATES', route: '/templates_edit', icon: 'fi fi-br-layout-fluid' }
-    - { title: 'SETTINGS', route: '/settings', icon: 'fi fi-br-settings' }
+    - { title: 'ORDERS', route: '/orders', icon: 'fi fi-br-shopping-bag', styleClass: 'menu-item-style1' }
+    - { title: 'CATALOG', route: '/catalog', icon: 'fi fi-br-cube', styleClass: 'menu-item-style1' }
+    - { title: 'STATISTICS', route: '/statistics', icon: 'fi fi-br-chart-histogram', styleClass: 'menu-item-style1' }
+    - { title: 'COMMENTS', route: '/comments', icon: 'fi fi-br-comment-alt', styleClass: 'menu-item-style1' }
+    - { title: 'IMPORT_EXPORT', route: '/import-export', icon: 'fi fi-br-upload', styleClass: 'menu-item-style1' }
+    - { title: 'USERS', route: '/users', icon: 'fi fi-br-user', styleClass: 'menu-item-style1' }
+    - { title: 'TEMPLATES', route: '/templates_edit', icon: 'fi fi-br-layout-fluid', styleClass: 'menu-item-style1' }
+    - { title: 'SETTINGS', route: '/settings', icon: 'fi fi-br-settings', styleClass: 'menu-item-style1' }
+    - { isSeparator: true }
+    - { title: 'FILE_MANAGER', route: '/file-manager', icon: 'fi fi-br-folder', styleClass: 'menu-item-style2' }
+    - { title: 'PREVIEW_SITE', route: '/view-site', icon: 'fi fi-br-home', styleClass: 'menu-item-style2' }
+    - { title: 'LOGOUT', route: '/logout', icon: 'fi fi-br-sign-out', styleClass: 'menu-item-style2' }

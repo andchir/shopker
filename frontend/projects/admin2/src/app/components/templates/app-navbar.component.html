@@ -1,10 +1,10 @@
 <div class="layout-sidebar">
     <div class="layout-menu">
         <ul class="menu-items">
-            <li *ngFor="let menuItem of menuItems">
+            <li *ngFor="let menuItem of menuItems" [class]="menuItem.styleClass">
                 <a pRipple class="router-link-exact-active"
                     [ngClass]="{'active': menuItem.isActive}"
-                    href="#{{menuItem.route}}">
+                    href="#{{menuItem.route}}" *ngIf="!menuItem.isSeparator; else separatorTemplate">
                         <i [class]="menuItem.icon">
                             <i class="text-gradient-blue" [ngClass]="menuItem.icon"></i>
                         </i>
@@ -18,3 +18,9 @@
     </div>
 </div>
 <div class="layout-mask" (click)="navBarToggle()"></div>
+
+<ng-template #separatorTemplate>
+    <div role="separator" class="p-divider p-divider-horizontal p-divider-solid p-divider-dark my-0">
+        <div class="p-divider-content"></div>
+    </div>
+</ng-template>

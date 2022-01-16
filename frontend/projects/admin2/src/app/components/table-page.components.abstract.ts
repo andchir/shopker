@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
@@ -8,25 +8,40 @@ import {DialogService} from 'primeng/dynamicdialog';
 import {QueryOptions} from '../models/query-options';
 import {SimpleEntity} from '../models/simple-entity.interface';
 import {DataService} from '../services/data-service.abstract';
+import {ContentField} from '../catalog/models/content_field.model';
+import {ContentTypesService} from '../catalog/services/content_types.service';
 
 declare const window: Window;
+
+export interface TableField {
+    field: string;
+    header: string;
+    outputType?: string;
+    outputProperties?: {[key: string]: string|number};
+}
 
 @Component({
     template: ''
 })
 export abstract class AppTablePageAbstractComponent<T extends SimpleEntity> implements OnInit, OnDestroy {
 
+    @Output() actionRequest = new EventEmitter();
+    @Output() changeRequest = new EventEmitter();
+    
     loading = false;
     items: T[] = [];
     itemSelected: T;
     itemsSelected: T[];
     itemsTotal = 0;
+    cols: TableField[];
+    contentTypeFields: ContentField[];
     queryOptions: QueryOptions = new QueryOptions(1, 12, 'createdDate', 'desc');
     searchTimer: any;
     destroyed$ = new Subject<void>();
 
     constructor(
         public dialogService: DialogService,
+        public contentTypesService: ContentTypesService,
         public dataService: DataService<T>,
         public messageService: MessageService,
         public confirmationService: ConfirmationService
@@ -36,7 +51,7 @@ export abstract class AppTablePageAbstractComponent<T extends SimpleEntity> impl
     abstract getModalComponent();
 
     ngOnInit(): void {
-        
+        this.getContentTypeFields();
     }
 
     getData(event?: any): void {
@@ -65,6 +80,24 @@ export abstract class AppTablePageAbstractComponent<T extends SimpleEntity> impl
                     this.items = [];
                     this.itemsTotal = 0;
                     this.loading = false;
+                }
+            });
+    }
+
+    getContentTypeFields(): void {
+        this.contentTypesService.getList()
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe({
+                next: (res) => {
+                    
+                },
+                error: (err) => {
+                    if (err.error) {
+                        this.messageService.add({
+                            severity: 'error',
+                            detail: err.error
+                        });
+                    }
                 }
             });
     }
@@ -164,6 +197,22 @@ export abstract class AppTablePageAbstractComponent<T extends SimpleEntity> impl
     navBarToggle(): void {
         window.document.querySelector('.layout-sidebar').classList.toggle('active');
         window.document.querySelector('.layout-mask').classList.toggle('layout-mask-active');
+    }
+
+    onOptionUpdate(e): void {
+        const [object, optionName, value] = e;
+        switch (optionName) {
+            case 'dropDownOpenChange':
+                // const tableParentEl = this.tableElement.nativeElement.parentNode;
+                // if (value) {
+                //     tableParentEl.classList.remove('table-responsive');
+                // } else {
+                //     tableParentEl.classList.add('table-responsive');
+                // }
+                break;
+            default:
+                this.changeRequest.emit(e);
+        }
     }
 
     ngOnDestroy() {

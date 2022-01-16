@@ -27,9 +27,11 @@ import {ToastModule} from 'primeng/toast';
 import {ColorPickerModule} from 'primeng/colorpicker';
 
 import {AppNavbarComponent} from './components/app-navbar.component';
+import {RenderOutputTypeComponent} from './components/render-output-type.component';
 
 const components = [
-    AppNavbarComponent
+    AppNavbarComponent,
+    RenderOutputTypeComponent
 ];
 
 @NgModule({

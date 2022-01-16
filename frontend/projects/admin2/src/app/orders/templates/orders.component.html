@@ -70,7 +70,14 @@
                         <p-tableCheckbox [value]="item"></p-tableCheckbox>
                     </td>
                     <td *ngFor="let col of columns; let index=index">
-                        {{ item[col.field] }}
+
+                        <app-render-output
+                            [value]="item[col.field]"
+                            [outputType]="col.outputType"
+                            [options]="col.outputProperties"
+                            [object]="item"
+                            (changeRequest)="onOptionUpdate($event)"></app-render-output>
+                        
                         <ng-container *ngIf="columns.length == index + 1">
                             <div class="absolute show-on-hover pos-top5 pos-right5">
                                 <button pButton pRipple icon="pi pi-pencil"

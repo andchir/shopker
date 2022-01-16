@@ -1,0 +1,37 @@
+<div [ngSwitch]="outputType">
+    <ng-container *ngSwitchCase="'boolean'" class="text-center">
+        <i class="big text-success icon-circle-check" [hidden]="!value"></i>
+        <i class="big text-muted icon-circle-cross" [hidden]="value"></i>
+    </ng-container>
+    <ng-container *ngSwitchCase="'number'">
+        {{ value | number: '1.2-2':'ru-RU' }}
+    </ng-container>
+    <ng-container *ngSwitchCase="'date'">
+        {{ value | date: options.format }}
+    </ng-container>
+    <ng-container *ngSwitchCase="'dateObject'">
+        {{ value | dateFromObject: options.format }}
+    </ng-container>
+    <ng-container *ngSwitchCase="'userRole'">
+        <span [class]="value | userRoleColor">
+            {{ value | userRoleName }}
+        </span>
+    </ng-container>
+    <ng-container *ngSwitchCase="'userEmail'">
+        <ng-container *ngIf="!object.userId; else emailLink">
+            {{ value }}
+        </ng-container>
+        <ng-template #emailLink>
+            <a href="#/users/{{ value }}">
+                <i class="icon-user"></i>
+                {{ value }}
+            </a>
+        </ng-template>
+    </ng-container>
+    <ng-container *ngSwitchCase="'text-center'">
+        <div class="text-center">{{ value }}</div>
+    </ng-container>
+    <ng-container *ngSwitchDefault>
+        {{ value }}
+    </ng-container>
+</div>

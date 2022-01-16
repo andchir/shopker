@@ -6,8 +6,9 @@ import {ConfirmationService, MenuItem, MessageService} from 'primeng/api';
 import {Order} from './models/order.model';
 import {OrdersService} from './orders.service';
 import {QueryOptions} from '../models/query-options';
-import {AppTablePageAbstractComponent} from '../components/table-page.components.abstract';
+import {AppTablePageAbstractComponent, TableField} from '../components/table-page.components.abstract';
 import {ModalOrderContentComponent} from './modal-order.component';
+import {ContentTypesService} from '../catalog/services/content_types.service';
 
 @Component({
     selector: 'app-orders',
@@ -18,24 +19,24 @@ export class OrdersComponent extends AppTablePageAbstractComponent<Order> implem
     
     queryOptions: QueryOptions = new QueryOptions(1, 12, 'id', 'desc');
     items: Order[] = [];
-    tableFields = [];
-    cols = [
-        { field: 'id', header: 'ID' },
-        { field: 'status', header: 'STATUS' },
-        { field: 'price', header: 'PRICE' },
-        { field: 'contentCount', header: 'CONTENT_COUNT' },
-        { field: 'email', header: 'EMAIL' },
-        { field: 'createdDate', header: 'DATE_TIME' }
+    cols: TableField[] = [
+        { field: 'id', header: 'ID', outputType: 'text-center', outputProperties: {} },
+        { field: 'status', header: 'STATUS', outputType: 'status', outputProperties: {} },
+        { field: 'price', header: 'PRICE', outputType: 'number', outputProperties: {} },
+        { field: 'contentCount', header: 'CONTENT_COUNT', outputType: 'text-center', outputProperties: {} },
+        { field: 'email', header: 'EMAIL', outputType: 'text', outputProperties: {} },
+        { field: 'createdDate', header: 'DATE_TIME', outputType: 'date', outputProperties: {format: 'dd/MM/y HH:mm:ss'} }
     ];
     menuItems: MenuItem[];
 
     constructor(
         public dialogService: DialogService,
+        public contentTypesService: ContentTypesService,
         public dataService: OrdersService,
         public messageService: MessageService,
         public confirmationService: ConfirmationService
     ) {
-        super(dialogService, dataService, messageService, confirmationService);
+        super(dialogService, contentTypesService, dataService, messageService, confirmationService);
     }
     
     ngOnInit() {

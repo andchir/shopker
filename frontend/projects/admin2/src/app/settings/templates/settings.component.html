@@ -85,7 +85,9 @@
                 <div class="p-2 bg-white" [style.minHeight]="scrollHeight + 'px'">
 
                     <p-accordion>
-                        <p-accordionTab [header]="'SETTINGS_ORDER_STATUSES' | translate" [selected]="true">
+
+                        <!-- order statuses -->
+                        <p-accordionTab [header]="'SETTINGS_ORDER_STATUSES' | translate">
                             <div [class.loading]="settings.SETTINGS_PAYMENT.loading">
                                 <div class="pb-3 text-600">
                                     {{'SETTINGS_STATUSES_DESCRIPTION' | translate}}
@@ -96,9 +98,9 @@
                                              [loading]="settings.SETTINGS_ORDER_STATUSES.loading">
                                         <ng-template pTemplate="header">
                                             <tr>
-                                                <th width="40%">{{'NAME' | translate}}</th>
-                                                <th width="40%">{{'MAIL_TEMPLATE' | translate}}</th>
-                                                <th width="10%">{{'COLOR' | translate}}</th>
+                                                <th width="40%">{{ 'NAME' | translate }}</th>
+                                                <th width="40%">{{ 'MAIL_TEMPLATE' | translate }}</th>
+                                                <th width="10%">{{ 'COLOR' | translate }}</th>
                                                 <th width="10%"></th>
                                             </tr>
                                         </ng-template>
@@ -136,12 +138,12 @@
                                         <div class="absolute pos-right pos-top" *ngIf="settings.SETTINGS_ORDER_STATUSES.changed">
                                             <button type="button" pButton pRipple icon="pi pi-check" class="p-button-success p-button-sm"
                                                     (click)="saveSettings('SETTINGS_ORDER_STATUSES')"
-                                                    pTooltip="{{'SAVE' | translate}}"
+                                                    pTooltip="{{ 'SAVE' | translate }}"
                                                     tooltipPosition="bottom"></button>
                                             &nbsp;
                                             <button type="button" pButton pRipple icon="pi pi-refresh" class="p-button-secondary p-button-sm"
                                                     (click)="resetSettingsForm('SETTINGS_ORDER_STATUSES')"
-                                                    pTooltip="{{'FORM_RESET' | translate}}"
+                                                    pTooltip="{{ 'FORM_RESET' | translate }}"
                                                     tooltipPosition="bottom"></button>
                                         </div>
                                     </div>
@@ -151,6 +153,9 @@
                                 </div>
                             </div>
                         </p-accordionTab>
+                        <!-- /order statuses -->
+
+                        <!-- delivery methods -->
                         <p-accordionTab [header]="'SETTINGS_DELIVERY' | translate">
                             <div class="pb-3 text-600">
                                 {{'SETTINGS_DELIVERY_DESCRIPTION' | translate}}
@@ -161,9 +166,9 @@
                                          [loading]="settings.SETTINGS_DELIVERY.loading">
                                     <ng-template pTemplate="header">
                                         <tr>
-                                            <th width="40%">{{'NAME' | translate}}</th>
-                                            <th width="25%">{{'PRICE' | translate}}</th>
-                                            <th width="25%">{{'MAX_PRICE' | translate}}</th>
+                                            <th width="40%">{{ 'NAME' | translate }}</th>
+                                            <th width="25%">{{ 'PRICE' | translate }}</th>
+                                            <th width="25%">{{ 'MAX_PRICE' | translate }}</th>
                                             <th width="10%"></th>
                                         </tr>
                                     </ng-template>
@@ -175,18 +180,14 @@
                                                        (ngModelChange)="onValueChanged('SETTINGS_DELIVERY')">
                                             </td>
                                             <td class="text-center">
-                                                <p-inputNumber styleClass="p-inputtext-sm w-full" step="1" min="0"
-                                                               [showButtons]="true"
-                                                               [inputStyle]="{width: '70px'}"
+                                                <input type="number" pInputText class="p-inputtext-sm w-full" step="1" min="0"
                                                                [(ngModel)]="setting.options.price.value"
-                                                               (ngModelChange)="onValueChanged('SETTINGS_DELIVERY')"></p-inputNumber>
+                                                               (ngModelChange)="onValueChanged('SETTINGS_DELIVERY')">
                                             </td>
                                             <td class="text-center">
-                                                <p-inputNumber styleClass="p-inputtext-sm w-full" step="1" min="0"
-                                                               [showButtons]="true"
-                                                               [inputStyle]="{width: '70px'}"
+                                                <input type="number" pInputText class="p-inputtext-sm w-full" step="1" min="0"
                                                                [(ngModel)]="setting.options.priceLimit.value"
-                                                               (ngModelChange)="onValueChanged('SETTINGS_DELIVERY')"></p-inputNumber>
+                                                               (ngModelChange)="onValueChanged('SETTINGS_DELIVERY')">
                                             </td>
                                             <td>
                                                 <button pButton pRipple type="button" icon="pi pi-times"
@@ -204,12 +205,12 @@
                                     <div class="absolute pos-right pos-top" *ngIf="settings.SETTINGS_DELIVERY.changed">
                                         <button type="button" pButton pRipple icon="pi pi-check" class="p-button-success p-button-sm"
                                                 (click)="saveSettings('SETTINGS_DELIVERY')"
-                                                pTooltip="{{'SAVE' | translate}}"
+                                                pTooltip="{{ 'SAVE' | translate }}"
                                                 tooltipPosition="bottom"></button>
                                         &nbsp;
                                         <button type="button" pButton pRipple icon="pi pi-refresh" class="p-button-secondary p-button-sm"
                                                 (click)="resetSettingsForm('SETTINGS_DELIVERY')"
-                                                pTooltip="{{'FORM_RESET' | translate}}"
+                                                pTooltip="{{ 'FORM_RESET' | translate }}"
                                                 tooltipPosition="bottom"></button>
                                     </div>
                                 </div>
@@ -218,9 +219,12 @@
                                         (click)="addSetting('SETTINGS_DELIVERY')"></button>
                             </div>
                         </p-accordionTab>
+                        <!-- /delivery methods -->
+
+                        <!-- payments methods -->
                         <p-accordionTab [header]="'SETTINGS_PAYMENT' | translate">
                             <div class="pb-3 text-600">
-                                {{'SETTINGS_PAYMENT_DESCRIPTION' | translate}}
+                                {{ 'SETTINGS_PAYMENT_DESCRIPTION' | translate }}
                             </div>
                             <div class="p-datatable-table-w-full">
                                 <p-table styleClass="p-datatable-sm" responsiveLayout="scroll"
@@ -228,8 +232,8 @@
                                          [loading]="settings.SETTINGS_PAYMENT.loading">
                                     <ng-template pTemplate="header">
                                         <tr>
-                                            <th width="45%">{{'NAME' | translate}}</th>
-                                            <th width="45%">{{'VALUE' | translate}}</th>
+                                            <th width="45%">{{ 'NAME' | translate }}</th>
+                                            <th width="45%">{{ 'VALUE' | translate }}</th>
                                             <th width="10%"></th>
                                         </tr>
                                     </ng-template>
@@ -275,6 +279,255 @@
                                         (click)="addSetting('SETTINGS_PAYMENT')"></button>
                             </div>
                         </p-accordionTab>
+                        <!-- /payments methods -->
+
+                        <!-- currencies -->
+                        <p-accordionTab [header]="'SETTINGS_CURRENCY' | translate">
+                            <div class="pb-3 text-600">
+                                {{'SETTINGS_CURRENCY_RATE_DESCRIPTION' | translate}}
+                            </div>
+                            <div class="p-datatable-table-w-full">
+                                <p-table styleClass="p-datatable-sm" responsiveLayout="scroll"
+                                         [value]="settings.SETTINGS_CURRENCY.values"
+                                         [loading]="settings.SETTINGS_CURRENCY.loading">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th width="45%">{{ 'CURRENCY' | translate }}</th>
+                                            <th width="45%">{{ 'VALUE' | translate }}</th>
+                                            <th width="10%"></th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-setting let-index="rowIndex">
+                                        <tr>
+                                            <td>
+                                                <input type="text" pInputText class="p-inputtext-sm w-full"
+                                                       [(ngModel)]="setting.name"
+                                                       (ngModelChange)="onValueChanged('SETTINGS_CURRENCY')">
+                                            </td>
+                                            <td>
+                                                <input type="number" pInputText class="p-inputtext-sm w-full"
+                                                       [(ngModel)]="setting.options.value.value"
+                                                       (ngModelChange)="onValueChanged('SETTINGS_CURRENCY')">
+                                            </td>
+                                            <td>
+                                                <button pButton pRipple type="button" icon="pi pi-times"
+                                                        class="p-button-raised p-button-rounded p-button-secondary p-button-sm ms-2"
+                                                        (click)="deleteSetting('SETTINGS_CURRENCY', index)"
+                                                        [pTooltip]="'DELETE' | translate"
+                                                        tooltipPosition="bottom"></button>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                            <div class="text-center pt-2 pb-2 pb-md-0">
+                                <div class="relative">
+                                    <div class="absolute pos-right pos-top" *ngIf="settings.SETTINGS_CURRENCY.changed">
+                                        <button type="button" pButton pRipple icon="pi pi-check" class="p-button-success p-button-sm"
+                                                (click)="saveSettings('SETTINGS_CURRENCY')"
+                                                pTooltip="{{'SAVE' | translate}}"
+                                                tooltipPosition="bottom"></button>
+                                        &nbsp;
+                                        <button type="button" pButton pRipple icon="pi pi-refresh" class="p-button-secondary p-button-sm"
+                                                (click)="resetSettingsForm('SETTINGS_CURRENCY')"
+                                                pTooltip="{{'FORM_RESET' | translate}}"
+                                                tooltipPosition="bottom"></button>
+                                    </div>
+                                </div>
+                                <button type="button" pButton pRipple icon="pi pi-plus" class="p-button-secondary p-button-sm"
+                                        [label]="'ADD' | translate"
+                                        (click)="addSetting('SETTINGS_CURRENCY')"></button>
+                            </div>
+                        </p-accordionTab>
+                        <!-- /currencies -->
+
+                        <!-- promo_codes -->
+                        <p-accordionTab [header]="'SETTINGS_PROMOCODES' | translate">
+                            <div class="pb-3 text-600">
+                                {{'SETTINGS_PROMOCODES_DESCRIPTION' | translate}}
+                            </div>
+                            <div class="p-datatable-table-w-full">
+                                <p-table styleClass="p-datatable-sm" responsiveLayout="scroll"
+                                         [value]="settings.SETTINGS_PROMOCODES.values"
+                                         [loading]="settings.SETTINGS_PROMOCODES.loading">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th width="30%">{{ 'PROMO_CODE' | translate }}</th>
+                                            <th width="30%">{{ 'VALUE' | translate }}</th>
+                                            <th width="30%">{{ 'QUANTITY' | translate }}</th>
+                                            <th width="10%"></th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-setting let-index="rowIndex">
+                                        <tr>
+                                            <td>
+                                                <input type="text" pInputText class="p-inputtext-sm w-full"
+                                                       [(ngModel)]="setting.name"
+                                                       (ngModelChange)="onValueChanged('SETTINGS_PROMOCODES')">
+                                            </td>
+                                            <td>
+                                                <input type="text" pInputText class="p-inputtext-sm w-full"
+                                                       [(ngModel)]="setting.options.value.value"
+                                                       (ngModelChange)="onValueChanged('SETTINGS_PROMOCODES')">
+                                            </td>
+                                            <td>
+                                                <input type="number" pInputText class="p-inputtext-sm w-full"
+                                                       [(ngModel)]="setting.options.quantity.value"
+                                                       (ngModelChange)="onValueChanged('SETTINGS_PROMOCODES')">
+                                            </td>
+                                            <td>
+                                                <button pButton pRipple type="button" icon="pi pi-times"
+                                                        class="p-button-raised p-button-rounded p-button-secondary p-button-sm ms-2"
+                                                        (click)="deleteSetting('SETTINGS_PROMOCODES', index)"
+                                                        [pTooltip]="'DELETE' | translate"
+                                                        tooltipPosition="bottom"></button>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                            <div class="text-center pt-2 pb-2 pb-md-0">
+                                <div class="relative">
+                                    <div class="absolute pos-right pos-top" *ngIf="settings.SETTINGS_PROMOCODES.changed">
+                                        <button type="button" pButton pRipple icon="pi pi-check" class="p-button-success p-button-sm"
+                                                (click)="saveSettings('SETTINGS_PROMOCODES')"
+                                                pTooltip="{{'SAVE' | translate}}"
+                                                tooltipPosition="bottom"></button>
+                                        &nbsp;
+                                        <button type="button" pButton pRipple icon="pi pi-refresh" class="p-button-secondary p-button-sm"
+                                                (click)="resetSettingsForm('SETTINGS_PROMOCODES')"
+                                                pTooltip="{{'FORM_RESET' | translate}}"
+                                                tooltipPosition="bottom"></button>
+                                    </div>
+                                </div>
+                                <button type="button" pButton pRipple icon="pi pi-plus" class="p-button-secondary p-button-sm"
+                                        [label]="'ADD' | translate"
+                                        (click)="addSetting('SETTINGS_PROMOCODES')"></button>
+                            </div>
+                        </p-accordionTab>
+                        <!-- /promo_codes -->
+
+                        <!-- languages -->
+                        <p-accordionTab [header]="'SETTINGS_LANGUAGES' | translate">
+                            <div class="pb-3 text-600">
+                                {{ 'SETTINGS_LANGUAGES_DESCRIPTION' | translate }}
+                            </div>
+                            <div class="p-datatable-table-w-full">
+                                <p-table styleClass="p-datatable-sm" responsiveLayout="scroll"
+                                         [value]="settings.SETTINGS_LANGUAGES.values"
+                                         [loading]="settings.SETTINGS_LANGUAGES.loading">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th width="45%">{{ 'LANGUAGE' | translate }}</th>
+                                            <th width="45%">{{ 'LOCALE' | translate }}</th>
+                                            <th width="10%"></th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-setting let-index="rowIndex">
+                                        <tr>
+                                            <td>
+                                                <input type="text" pInputText class="p-inputtext-sm w-full"
+                                                       [(ngModel)]="setting.name"
+                                                       (ngModelChange)="onValueChanged('SETTINGS_LANGUAGES')">
+                                            </td>
+                                            <td>
+                                                <input type="text" pInputText class="p-inputtext-sm w-full"
+                                                       [(ngModel)]="setting.options.value.value"
+                                                       (ngModelChange)="onValueChanged('SETTINGS_LANGUAGES')">
+                                            </td>
+                                            <td>
+                                                <button pButton pRipple type="button" icon="pi pi-times"
+                                                        class="p-button-raised p-button-rounded p-button-secondary p-button-sm ms-2"
+                                                        (click)="deleteSetting('SETTINGS_LANGUAGES', index)"
+                                                        [pTooltip]="'DELETE' | translate"
+                                                        tooltipPosition="bottom"></button>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                            <div class="text-center pt-2 pb-2 pb-md-0">
+                                <div class="relative">
+                                    <div class="absolute pos-right pos-top" *ngIf="settings.SETTINGS_LANGUAGES.changed">
+                                        <button type="button" pButton pRipple icon="pi pi-check" class="p-button-success p-button-sm"
+                                                (click)="saveSettings('SETTINGS_LANGUAGES')"
+                                                pTooltip="{{'SAVE' | translate}}"
+                                                tooltipPosition="bottom"></button>
+                                        &nbsp;
+                                        <button type="button" pButton pRipple icon="pi pi-refresh" class="p-button-secondary p-button-sm"
+                                                (click)="resetSettingsForm('SETTINGS_LANGUAGES')"
+                                                pTooltip="{{'FORM_RESET' | translate}}"
+                                                tooltipPosition="bottom"></button>
+                                    </div>
+                                </div>
+                                <button type="button" pButton pRipple icon="pi pi-plus" class="p-button-secondary p-button-sm"
+                                        [label]="'ADD' | translate"
+                                        (click)="addSetting('SETTINGS_LANGUAGES')"></button>
+                            </div>
+                        </p-accordionTab>
+                        <!-- /languages -->
+
+                        <!-- composer packages -->
+                        <p-accordionTab [header]="'SETTINGS_COMPOSER_PACKAGES' | translate">
+                            <div class="pb-3 text-600">
+                                <div class="flex">
+                                    <div class="flex-grow-1">
+                                        {{ 'SETTINGS_COMPOSER_PACKAGES_DESCRIPTION' | translate }}
+                                    </div>
+                                    <div class="flex-none">
+                                        <button type="button" pButton pRipple class="p-button-sm" (click)="modalSystemUpdate($event)">
+                                            <i class="pi pi-download mr-2"></i>
+                                            {{ 'SYSTEM_UPDATE' | translate }}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="p-input-icon-left w-full">
+                                    <i class="pi pi-search"></i>
+                                    <input pInputText type="text"
+                                           class="w-full"
+                                           [(ngModel)]="composerPackageNameFilter"
+                                           placeholder="{{ 'SEARCH' | translate }}...">
+                                </div>
+                            </div>
+                            <div class="p-datatable-table-w-full">
+                                <div class="alert alert-info py-1 px-3"
+                                     *ngIf="(composerPackages | filter: {name: composerPackageNameFilter}).length === 0; else composerPackagesTable">
+                                    {{ 'NOTHING_FOUND' | translate }}.
+                                </div>
+                                <ng-template #composerPackagesTable>
+                                    <div>
+                                        <div class="table-responsive">
+                                            <p-table styleClass="p-datatable-sm" responsiveLayout="scroll"
+                                                     [value]="composerPackages | filter: {name: composerPackageNameFilter}"
+                                                     [scrollable]="true"
+                                                     [loading]="settings.SETTINGS_COMPOSER_PACKAGES.loading"
+                                                     scrollHeight="400px">
+                                                <ng-template pTemplate="header">
+                                                    <tr>
+                                                        <th width="60%">{{ 'NAME' | translate }}</th>
+                                                        <th width="40%">{{ 'VERSION' | translate }}</th>
+                                                    </tr>
+                                                </ng-template>
+                                                <ng-template pTemplate="body" let-package let-index="rowIndex">
+                                                    <tr>
+                                                        <td>
+                                                            {{ package.name }}
+                                                        </td>
+                                                        <td>
+                                                            {{ package.version }}
+                                                        </td>
+                                                    </tr>
+                                                </ng-template>
+                                            </p-table>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </div>
+                        </p-accordionTab>
+                        <!-- /composer packages -->
+                        
                     </p-accordion>
                     
                 </div>

@@ -10,6 +10,7 @@ import {SettingsService} from './settings.service';
 import {AppSettings} from '../services/app-settings.service';
 import {Setting, SettingsData} from './models/setting.model';
 import {UtilsService} from '../services/utils.service';
+import {ComposerPackage} from './models/composer-package.interface';
 
 declare const window: Window;
 
@@ -22,6 +23,10 @@ export class SettingsComponent implements OnInit, AfterViewInit, OnDestroy {
 
     baseUrl = '';
     scrollHeight = 600;
+    composerPackages: ComposerPackage[] = [];
+    composerPackageName = '';
+    composerPackageVersion = '';
+    composerPackageNameFilter = '';
     settingsCloned: {[key: string]: string|number} = {};
     settings = {
         SETTINGS_MAIN: new SettingsData(false, true, [], null),
@@ -80,7 +85,7 @@ export class SettingsComponent implements OnInit, AfterViewInit, OnDestroy {
 
     ngOnInit(): void {
         this.getSettings();
-        // this.getComposerPackages();
+        this.getComposerPackages();
     }
 
     ngAfterViewInit(): void {
@@ -125,6 +130,21 @@ export class SettingsComponent implements OnInit, AfterViewInit, OnDestroy {
                     this.settings.SETTINGS_LANGUAGES.values = res['SETTINGS_LANGUAGES'];
                     this.settings.SETTINGS_LANGUAGES.defaultValues = UtilsService.cloneDeep(res['SETTINGS_LANGUAGES']);
                     this.settings.SETTINGS_LANGUAGES.loading = false;
+                }
+            });
+    }
+
+    getComposerPackages(): void {
+        this.settings.SETTINGS_COMPOSER_PACKAGES.loading = true;
+        this.settingsService.getComposerPackagesList()
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe({
+                next: (res) => {
+                    this.composerPackages = res as ComposerPackage[];
+                    this.settings.SETTINGS_COMPOSER_PACKAGES.loading = false;
+                },
+                error: (err) => {
+                    this.settings.SETTINGS_COMPOSER_PACKAGES.loading = false;
                 }
             });
     }
@@ -190,6 +210,13 @@ export class SettingsComponent implements OnInit, AfterViewInit, OnDestroy {
         Object.assign(this.settings[groupName].values, UtilsService.cloneDeep(this.settings[groupName].defaultValues));
         this.settings[groupName].loading = false;
         this.settings[groupName].changed = false;
+    }
+
+    modalSystemUpdate(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+
     }
 
     scrollHeightUpdate(): void {

@@ -29,6 +29,13 @@ import {ColorPickerModule} from 'primeng/colorpicker';
 import {AppNavbarComponent} from './components/app-navbar.component';
 import {RenderOutputTypeComponent} from './components/render-output-type.component';
 
+import {FilterFieldByGroupPipe} from './pipes/filter-field-by-group.pipe';
+import {DateFromObjectPipe} from './pipes/date-from-object.pipe';
+import {UserRoleColorPipe, UserRoleNamePipe} from './pipes/user-role.pipe';
+import {OrderByPipe} from './pipes/orderby.pipe';
+import {FilterArrayPipe} from './pipes/filter-array-pipe';
+import {IfEmptyPipe} from './pipes/if-empty.pipe';
+
 const components = [
     AppNavbarComponent,
     RenderOutputTypeComponent
@@ -65,7 +72,15 @@ const components = [
         ColorPickerModule
     ],
     declarations: [
-        ...components
+        ...components,
+
+        FilterFieldByGroupPipe,
+        DateFromObjectPipe,
+        UserRoleNamePipe,
+        UserRoleColorPipe,
+        OrderByPipe,
+        FilterArrayPipe,
+        IfEmptyPipe
     ],
     providers: [
         
@@ -96,7 +111,15 @@ const components = [
         CardModule,
         AccordionModule,
         ToastModule,
-        ColorPickerModule
+        ColorPickerModule,
+
+        FilterFieldByGroupPipe,
+        DateFromObjectPipe,
+        UserRoleNamePipe,
+        UserRoleColorPipe,
+        OrderByPipe,
+        FilterArrayPipe,
+        IfEmptyPipe
     ],
     entryComponents: [
         

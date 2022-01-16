@@ -64,12 +64,14 @@ export class RenderOutputTypeComponent implements OnInit {
         return object1;
     }
 
-    getStatusColor(statusValue): string {
+    getStatusColor(statusValue: string): string {
         let output = null;
         if (!this.settingsStatuses) {
             return output;
         }
-        const index = findIndex(this.settingsStatuses, {name: statusValue});
+        const index = this.settingsStatuses.findIndex((item) => {
+            return item.name === statusValue;
+        });
         if (index > -1 && this.settingsStatuses[index].options.color) {
             output = this.settingsStatuses[index].options.color;
         }

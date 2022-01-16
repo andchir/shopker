@@ -21,17 +21,38 @@
         <ng-container *ngIf="!object.userId; else emailLink">
             {{ value }}
         </ng-container>
-        <ng-template #emailLink>
-            <a href="#/users/{{ value }}">
-                <i class="icon-user"></i>
-                {{ value }}
-            </a>
-        </ng-template>
     </ng-container>
     <ng-container *ngSwitchCase="'text-center'">
         <div class="text-center">{{ value }}</div>
+    </ng-container>
+    <ng-container *ngSwitchCase="'status'">
+        <p-dropdown styleClass="p-dropdown-sm width160 p-dropdown-white-trigger"
+            [options]="settingsStatuses"
+            [(ngModel)]="value"
+            optionLabel="name"
+            optionValue="name"
+            (onChange)="optionUpdate(key, value)"
+            [style]="{backgroundColor: getStatusColor(value)}">
+            <ng-template pTemplate="selectedItem">
+                <div class="country-item country-item-value" *ngIf="value">
+                    <div class="text-overflow text-white text-shadow">
+                        {{ value }}
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template let-status pTemplate="item">
+                <span class="p-badge p-component p-badge-dot mr-1" [style.backgroundColor]="status.options.color"></span>
+                {{ status.name }}
+            </ng-template>
+        </p-dropdown>
     </ng-container>
     <ng-container *ngSwitchDefault>
         {{ value }}
     </ng-container>
 </div>
+<ng-template #emailLink>
+    <a href="#/users/{{ value }}">
+        <i class="icon-user"></i>
+        {{ value }}
+    </a>
+</ng-template>

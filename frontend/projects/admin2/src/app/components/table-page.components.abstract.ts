@@ -24,9 +24,6 @@ export interface TableField {
     template: ''
 })
 export abstract class AppTablePageAbstractComponent<T extends SimpleEntity> implements OnInit, OnDestroy {
-
-    @Output() actionRequest = new EventEmitter();
-    @Output() changeRequest = new EventEmitter();
     
     loading = false;
     items: T[] = [];
@@ -201,18 +198,7 @@ export abstract class AppTablePageAbstractComponent<T extends SimpleEntity> impl
 
     onOptionUpdate(e): void {
         const [object, optionName, value] = e;
-        switch (optionName) {
-            case 'dropDownOpenChange':
-                // const tableParentEl = this.tableElement.nativeElement.parentNode;
-                // if (value) {
-                //     tableParentEl.classList.remove('table-responsive');
-                // } else {
-                //     tableParentEl.classList.add('table-responsive');
-                // }
-                break;
-            default:
-                this.changeRequest.emit(e);
-        }
+        // Make save request
     }
 
     ngOnDestroy() {

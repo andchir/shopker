@@ -24,7 +24,7 @@ export class OrdersComponent extends AppTablePageAbstractComponent<Order> implem
         { field: 'status', header: 'STATUS', outputType: 'status', outputProperties: {} },
         { field: 'price', header: 'PRICE', outputType: 'number', outputProperties: {} },
         { field: 'contentCount', header: 'CONTENT_COUNT', outputType: 'text-center', outputProperties: {} },
-        { field: 'email', header: 'EMAIL', outputType: 'text', outputProperties: {} },
+        { field: 'email', header: 'EMAIL', outputType: 'userEmail', outputProperties: {} },
         { field: 'createdDate', header: 'DATE_TIME', outputType: 'date', outputProperties: {format: 'dd/MM/y HH:mm:ss'} }
     ];
     menuItems: MenuItem[];
@@ -63,5 +63,16 @@ export class OrdersComponent extends AppTablePageAbstractComponent<Order> implem
 
     getModalComponent() {
         return ModalOrderContentComponent;
+    }
+
+    onOptionUpdate(e): void {
+        const [object, optionName, value] = e;
+        if (!object['id']) {
+            return;
+        }
+        this.dataService.updateProperty(object['id'], optionName, value)
+            .subscribe(() => {
+                this.getData();
+            });
     }
 }

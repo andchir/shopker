@@ -64,7 +64,7 @@
             </div>
         </div>
 
-        <div class="border-1 border-solid border-300 border-round p-3 mb-3">
+        <div class="border-1 border-solid border-400 border-round p-3 mb-3">
             <div class="grid">
                 <div class="col-12 md:col-6">
                     <label class="block mb-2" for="fieldPassword">
@@ -81,9 +81,60 @@
             </div>
         </div>
 
+        <p-accordion>
+            <p-accordionTab [header]="'OPTIONS' | translate">
+                <div formArrayName="options">
+                    <p-table [value]="arrayFields.options.controls" styleClass="p-datatable-sm">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>{{ 'SYSTEM_NAME' | translate }}</th>
+                                <th>{{ 'NAME' | translate }}</th>
+                                <th>{{ 'VALUE' | translate }}</th>
+                                <th></th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-option let-rowIndex="rowIndex">
+                            <tr [formGroupName]="rowIndex + ''">
+                                <td>
+                                    <input type="text" class="p-inputtext-sm w-full" pInputText formControlName="name">
+                                </td>
+                                <td>
+                                    <input type="text" class="p-inputtext-sm w-full" pInputText formControlName="title">
+                                </td>
+                                <td>
+                                    <input type="text" class="p-inputtext-sm w-full" pInputText formControlName="value">
+                                </td>
+                                <td>
+                                    <button pButton pRipple type="button"
+                                            icon="pi pi-times"
+                                            (click)="arrayFieldDelete('options', rowIndex)"
+                                            [pTooltip]="'DELETE' | translate"
+                                            tooltipPosition="bottom"
+                                            class="p-button-raised p-button-rounded p-button-secondary p-button-sm"></button>
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="footer">
+                            <tr>
+                                <td colspan="4" class="text-center">
+                                    <button type="button" pButton pRipple icon="pi pi-plus" class="p-button-secondary p-button-sm"
+                                            [label]="'ADD' | translate"
+                                            (click)="arrayFieldAdd('options')"></button>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </p-accordionTab>
+        </p-accordion>
+
         <div role="separator" class="p-divider p-component p-divider-horizontal p-divider-solid p-divider-left">
             <div class="p-divider-content"></div>
         </div>
+
+        <p-message styleClass="block w-full text-left mb-3" severity="error"
+                   [text]="errorMessage"
+                    *ngIf="errorMessage"></p-message>
 
         <div class="text-right pt-2">
             <button pButton pRipple type="button" [label]="'SAVE_AND_CLOSE' | translate" icon="pi pi-check"

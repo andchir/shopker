@@ -11,6 +11,7 @@ import {UsersService} from './users.service';
 import {SettingsService} from '../settings/settings.service';
 import {AppSettings} from '../services/app-settings.service';
 import {User} from './models/user.model';
+import {FormFieldsData} from '../models/form-field.interface';
 
 @Component({
     selector: 'app-modal-order',
@@ -29,8 +30,16 @@ export class ModalUserContentComponent extends AppModalAbstractComponent<User> i
         isActive: new FormControl('', []),
         password: new FormControl('', []),
         confirmPassword: new FormControl('', []),
-        apiToken: new FormControl('', [])
+        apiToken: new FormControl('', []),
+        options: new FormArray([])
     });
+    arrayFieldsData: {[key: string]: FormFieldsData} = {
+        options: {
+            name: {validators: [Validators.required]},
+            title: {validators: [Validators.required]},
+            value: {validators: [Validators.required]}
+        }
+    };
     userRoles: {[key: string]: string}[];
 
     constructor(
@@ -46,6 +55,7 @@ export class ModalUserContentComponent extends AppModalAbstractComponent<User> i
     
     ngOnInit() {
         super.ngOnInit();
+        this.createArrayFieldsProperty('options');
         this.getUserRoles();
     }
 

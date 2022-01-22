@@ -198,7 +198,7 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
         return new FormGroup(controlsObj);
     }
 
-    arrayFieldAdd(fieldName: string, data: {[key: string]: number|string}, event?: MouseEvent): void {
+    arrayFieldAdd(fieldName: string, data?: {[key: string]: number|string}, event?: MouseEvent): void {
         if (event) {
             event.preventDefault();
         }

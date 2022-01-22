@@ -108,7 +108,7 @@ export abstract class AppTablePageAbstractComponent<T extends SimpleEntity> impl
     }
 
     getModalTitle(item: T): string {
-        return item ? 'Edit item' : 'Create item';
+        return this.getLangString(item ? 'EDIT' : 'CREATE');
     }
 
     openModal(item: T, event?: MouseEvent): void {
@@ -189,8 +189,43 @@ export abstract class AppTablePageAbstractComponent<T extends SimpleEntity> impl
         }, 500);
     }
 
+    blockSelected() {
+        if (!this.itemsSelected || this.itemsSelected.length === 0) {
+            this.showAlert(this.getLangString('NOTHING_IS_SELECTED'));
+            return;
+        }
+        // this.dataService.actionBatch(this.selectedIds, 'block')
+        //     .subscribe(res => {
+        //             this.clearSelected();
+        //             this.getList();
+        //         },
+        //         err => this.showAlert(err.error || this.getLangString('ERROR')));
+    }
+
     deleteSelected() {
-        console.log('deleteSelected', this.itemsSelected);
+        if (!this.itemsSelected || this.itemsSelected.length === 0) {
+            this.showAlert(this.getLangString('NOTHING_IS_SELECTED'));
+            return;
+        }
+        // this.confirmAction(this.getLangString('YOU_SURE_YOU_WANT_DELETE_SELECTED'))
+        //     .then((result) => {
+        //         if (result === 'accept') {
+        //             this.dataService.actionBatch(this.selectedIds, 'delete')
+        //                 .subscribe(res => {
+        //                         this.clearSelected();
+        //                         this.getList();
+        //                     },
+        //                     err => this.showAlert(err.error || this.getLangString('ERROR')));
+        //         }
+        //     });
+    }
+    
+    showAlert(message: string, type = 'error'): void {
+        this.messageService.add({
+            key: 'message',
+            severity: type,
+            detail: message
+        });
     }
 
     navBarToggle(): void {

@@ -26,18 +26,18 @@
                  [totalRecords]="itemsTotal"
                  [loading]="loading">
             <ng-template pTemplate="caption">
-                <div class="flex justify-content-between">
-                    <span class="p-input-icon-left w-full md:w-auto">
+                <div class="flex md:justify-content-between flex-wrap">
+                    <div class="p-input-icon-left w-full md:w-auto mb-2 md:mb-0">
                         <i class="pi pi-search"></i>
                         <input pInputText type="text"
                                class="lg:w-auto w-full"
                                (input)="onInputSearch()"
                                [(ngModel)]="queryOptions.search_word"
                                placeholder="{{ 'SEARCH' | translate }}...">
-                    </span>
+                    </div>
                     <div class="w-full md:w-auto">
                         <button type="button" pButton pRipple
-                                class="ml-0 md:ml-2 w-full md:w-auto"
+                                class="ml-0 md:ml-2 w-full md:w-auto mb-2 md:mb-0"
                                 icon="pi pi-chevron-down"
                                 iconPos="left"
                                 [label]="'ACTIONS' | translate"
@@ -47,7 +47,7 @@
                                 class="p-button-success ml-0 md:ml-2 w-full md:w-auto"
                                 icon="pi pi-plus"
                                 iconPos="left"
-                                [label]="'ADD' | translate"></button>
+                                [label]="'ADD' | translate" (click)="openModal(null, $event)"></button>
                     </div>
                 </div>
             </ng-template>

@@ -24,15 +24,15 @@ export class UserRoleColorPipe implements PipeTransform {
 
     transform(value: string): string {
         const colors = {
-            ROLE_USER: 'bg-primary',
-            ROLE_ADMIN_WRITE: 'bg-warning',
-            ROLE_SUPER_ADMIN: 'bg-warning',
-            ROLE_ADMIN: 'bg-success'
+            ROLE_USER: '#6366F1',
+            ROLE_ADMIN_WRITE: '#F59E0B',
+            ROLE_SUPER_ADMIN: '#F59E0B',
+            ROLE_ADMIN: '#22C55E'
         };
-        let output = 'bg-primary';
+        let output = '#6366F1';
         if (colors.hasOwnProperty(value)) {
             output = colors[value];
         }
-        return 'badge ' + output;
+        return output;
     }
 }

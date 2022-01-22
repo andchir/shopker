@@ -1,6 +1,9 @@
 import {Component, ElementRef, OnDestroy, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
+import {Observable, pluck} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+import {MessageService} from 'primeng/api';
 import {DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
 
 import {AppModalAbstractComponent} from '../components/modal.component.abstract';
@@ -18,13 +21,23 @@ export class ModalUserContentComponent extends AppModalAbstractComponent<User> i
 
     model = new User(0, '', '', [], true, []);
     form = new FormGroup({
-        id: new FormControl('', [])
+        id: new FormControl('', []),
+        email: new FormControl('', [Validators.required]),
+        fullName: new FormControl('', [Validators.required]),
+        phone: new FormControl('', []),
+        role: new FormControl('', [Validators.required]),
+        isActive: new FormControl('', []),
+        password: new FormControl('', []),
+        confirmPassword: new FormControl('', []),
+        apiToken: new FormControl('', [])
     });
+    userRoles: {[key: string]: string}[];
 
     constructor(
         public ref: DynamicDialogRef,
         public config: DynamicDialogConfig,
         public dataService: UsersService,
+        private messageService: MessageService,
         private settingsService: SettingsService,
         private appSettings: AppSettings
     ) {
@@ -33,5 +46,56 @@ export class ModalUserContentComponent extends AppModalAbstractComponent<User> i
     
     ngOnInit() {
         super.ngOnInit();
+        this.getUserRoles();
+    }
+
+    getUserRoles(): void {
+        this.dataService.getRolesList()
+            .pipe(
+                takeUntil(this.destroyed$),
+                pluck('roles')
+            )
+            .subscribe({
+                next: (res) => {
+                    this.userRoles = res;
+                    this.loading = false;
+                },
+                error: (err) => {
+                    if (err.error) {
+                        this.messageService.add({ severity: 'error', detail: err.error });
+                    }
+                    this.loading = false;
+                }
+            });
+    }
+
+    clearApiToken(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.form.controls['apiToken'].setValue('');
+    }
+
+    generateApiToken(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.loading = true;
+        this.dataService.createApiToken()
+            .pipe(
+                takeUntil(this.destroyed$)
+            )
+            .subscribe({
+                next: (res) => {
+                    this.form.controls['apiToken'].setValue(res.token);
+                    this.loading = false;
+                },
+                error: (err) => {
+                    if (err.error) {
+                        this.errorMessage = err.error;
+                    }
+                    this.loading = false;
+                }
+            });
     }
 }

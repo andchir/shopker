@@ -14,7 +14,7 @@ import {User} from './models/user.model';
 @Component({
     selector: 'app-orders',
     templateUrl: 'templates/users.component.html',
-    providers: [DialogService, MessageService, ConfirmationService, UsersService]
+    providers: [DialogService, ConfirmationService, UsersService]
 })
 export class UsersComponent extends AppTablePageAbstractComponent<User> implements OnInit, OnDestroy {
     
@@ -22,7 +22,11 @@ export class UsersComponent extends AppTablePageAbstractComponent<User> implemen
     items: User[] = [];
     cols: TableField[] = [
         { field: 'id', header: 'ID', outputType: 'text-center', outputProperties: {} },
-        { field: 'email', header: 'EMAIL', outputType: 'text', outputProperties: {} }
+        { field: 'email', header: 'EMAIL', outputType: 'text', outputProperties: {} },
+        { field: 'fullName', header: 'FULL_NAME', outputType: 'text', outputProperties: {} },
+        { field: 'role', header: 'ROLE', outputType: 'userRole', outputProperties: {} },
+        { field: 'createdDate', header: 'DATE_TIME', outputType: 'date', outputProperties: {format: 'dd/MM/y HH:mm:ss'} },
+        { field: 'isActive', header: 'STATUS', outputType: 'boolean', outputProperties: {} }
     ];
     menuItems: MenuItem[];
 
@@ -53,6 +57,13 @@ export class UsersComponent extends AppTablePageAbstractComponent<User> implemen
                 icon: 'pi pi-times',
                 command: () => {
                     this.deleteSelected();
+                }
+            },
+            {
+                label: this.getLangString('DISABLE_ENABLE'),
+                icon: 'pi pi-times-circle',
+                command: () => {
+                    this.blockSelected();
                 }
             }
         ];

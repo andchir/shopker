@@ -15,16 +15,16 @@ export class UsersService extends DataService<User> {
         this.setRequestUrl('/admin/users');
     }
 
-    getRolesList(): Observable<{roles: any[]}> {
-        const url = this.getRequestUrl() + '/roles';
-        return this.http.get<any[]>(url, {headers: this.headers})
+    getRolesList(): Observable<{roles: {[key: string]: string}[]}> {
+        const url = `${this.getRequestUrl()}/roles`;
+        return this.http.get<{roles: {[key: string]: string}[]}>(url, {headers: this.headers})
             .pipe(
                 catchError(this.handleError<any>())
             );
     }
     
     createApiToken(): Observable<{token: string}> {
-        const url = this.getRequestUrl() + '/create_api_token';
+        const url = `${this.getRequestUrl()}/create_api_token`;
         return this.http.post<{token: string}>(url, {}, {headers: this.headers}).pipe(
             catchError(this.handleError<any>())
         );

@@ -1,7 +1,9 @@
 <div [ngSwitch]="outputType">
     <ng-container *ngSwitchCase="'boolean'" class="text-center">
-        <i class="big text-success icon-circle-check" [hidden]="!value"></i>
-        <i class="big text-muted icon-circle-cross" [hidden]="value"></i>
+        <div class="text-center">
+            <i class="pi pi-check text-2xl text-green-400" [hidden]="!value"></i>
+            <i class="pi pi-times text-2xl text-400" [hidden]="value"></i>
+        </div>
     </ng-container>
     <ng-container *ngSwitchCase="'number'">
         {{ value | number: '1.2-2':'ru-RU' }}
@@ -13,7 +15,7 @@
         {{ value | dateFromObject: options.format }}
     </ng-container>
     <ng-container *ngSwitchCase="'userRole'">
-        <span [class]="value | userRoleColor">
+        <span class="p-tag" [style.backgroundColor]="value | userRoleColor">
             {{ value | userRoleName }}
         </span>
     </ng-container>

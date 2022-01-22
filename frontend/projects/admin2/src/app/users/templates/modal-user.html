@@ -1,7 +1,85 @@
 <div>
     <form [formGroup]="form" #formEl>
 
-        
+        <div class="grid">
+            <div class="col-12 md:col-6">
+                <label class="block mb-2" for="fieldEmail">
+                    {{ 'EMAIL' | translate }}
+                </label>
+                <input type="text" id="fieldEmail" class="w-full mb-2" pInputText formControlName="email">
+            </div>
+            <div class="col-12 md:col-6">
+                <label class="block mb-2" for="fieldFullName">
+                    {{ 'FULL_NAME' | translate }}
+                </label>
+                <input type="text" id="fieldFullName" class="w-full mb-2" pInputText formControlName="fullName">
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="col-12 md:col-6">
+                <label class="block mb-2" for="fieldPhone">
+                    {{ 'PHONE' | translate }}
+                </label>
+                <input type="text" id="fieldPhone" class="w-full mb-2" pInputText formControlName="phone">
+            </div>
+            <div class="col-12 md:col-6">
+                <label class="block mb-2" for="fieldRole">
+                    {{ 'ROLE' | translate }}
+                </label>
+                <p-dropdown inputId="fieldRole" styleClass="w-full mb-2"
+                            formControlName="role"
+                            [options]="userRoles"
+                            optionLabel="title"
+                            optionValue="name"></p-dropdown>
+            </div>
+        </div>
+
+        <div class="grid mb-3">
+            <div class="col-12 md:col-6">
+                <label class="block mb-2" for="fieldApiToken">
+                    {{ 'API_TOKEN' | translate }}
+                </label>
+                <div class="p-inputgroup w-full">
+                    <button type="button" pButton pRipple class="p-button-secondary"
+                            icon="pi pi-refresh"
+                            [pTooltip]="'GENERATE' | translate"
+                            tooltipPosition="bottom"
+                            (click)="generateApiToken($event)"></button>
+                    <input type="text" id="fieldApiToken" class="w-full" pInputText formControlName="apiToken">
+                    <button type="button" pButton pRipple class="p-button-secondary"
+                            icon="pi pi-times"
+                            [pTooltip]="'CLEAR' | translate"
+                            tooltipPosition="bottom"
+                            (click)="clearApiToken($event)"></button>
+                </div>
+            </div>
+            <div class="col-12 md:col-6">
+                <div class="p-3 mt-3">
+                    <p-inputSwitch inputId="fieldActive" styleClass="mr-2 vertical-align-middle" formControlName="isActive"></p-inputSwitch>
+                    <label class="vertical-align-middle" for="fieldActive">
+                        {{ 'ACTIVE' | translate }}
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="border-1 border-solid border-300 border-round p-3 mb-3">
+            <div class="grid">
+                <div class="col-12 md:col-6">
+                    <label class="block mb-2" for="fieldPassword">
+                        {{ 'PASSWORD' | translate }}
+                    </label>
+                    <input type="text" id="fieldPassword" class="w-full mb-2" pInputText formControlName="password">
+                </div>
+                <div class="col-12 md:col-6">
+                    <label class="block mb-2" for="fieldConfirmPassword">
+                        {{ 'CONFIRM_PASSWORD' | translate }}
+                    </label>
+                    <input type="text" id="fieldConfirmPassword" class="w-full mb-2" pInputText formControlName="confirmPassword">
+                </div>
+            </div>
+        </div>
 
         <div role="separator" class="p-divider p-component p-divider-horizontal p-divider-solid p-divider-left">
             <div class="p-divider-content"></div>

@@ -66,7 +66,8 @@ class SettingsController extends AbstractController
             Setting::GROUP_PAYMENT => [],
             Setting::GROUP_CURRENCY => [],
             Setting::GROUP_PROMOCODES => [],
-            Setting::GROUP_LANGUAGES => []
+            Setting::GROUP_LANGUAGES => [],
+            Setting::GROUP_USER_GROUPS => []
         ];
 
         $output[Setting::GROUP_MAIN] = $settingsService->getSettingsFromYaml('settings');
@@ -76,6 +77,7 @@ class SettingsController extends AbstractController
         $output[Setting::GROUP_CURRENCY] = $settingsService->getSettingsGroup(Setting::GROUP_CURRENCY);
         $output[Setting::GROUP_PROMOCODES] = $settingsService->getSettingsGroup(Setting::GROUP_PROMOCODES);
         $output[Setting::GROUP_LANGUAGES] = $settingsService->getSettingsGroup(Setting::GROUP_LANGUAGES);
+        $output[Setting::GROUP_USER_GROUPS] = $settingsService->getSettingsGroup(Setting::GROUP_USER_GROUPS);
 
         return $this->json($output, 200, [], ['groups' => ['list']]);
     }

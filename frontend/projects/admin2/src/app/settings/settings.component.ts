@@ -69,6 +69,12 @@ export class SettingsComponent implements OnInit, AfterViewInit, OnDestroy {
                 value: {value: '', type: 'text'}
             }
         ),
+        SETTINGS_USER_GROUPS: new SettingsData(
+            false, true, [],
+            {
+                value: {value: '', type: 'text'}
+            }
+        ),
         SETTINGS_COMPOSER_PACKAGES: new SettingsData(false, true, [], null),
     };
     destroyed$ = new Subject<void>();
@@ -130,6 +136,11 @@ export class SettingsComponent implements OnInit, AfterViewInit, OnDestroy {
                     this.settings.SETTINGS_LANGUAGES.values = res['SETTINGS_LANGUAGES'];
                     this.settings.SETTINGS_LANGUAGES.defaultValues = UtilsService.cloneDeep(res['SETTINGS_LANGUAGES']);
                     this.settings.SETTINGS_LANGUAGES.loading = false;
+                }
+                if (res['SETTINGS_USER_GROUPS']) {
+                    this.settings.SETTINGS_USER_GROUPS.values = res['SETTINGS_USER_GROUPS'];
+                    this.settings.SETTINGS_USER_GROUPS.defaultValues = UtilsService.cloneDeep(res['SETTINGS_USER_GROUPS']);
+                    this.settings.SETTINGS_USER_GROUPS.loading = false;
                 }
             });
     }

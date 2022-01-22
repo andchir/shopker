@@ -17,6 +17,7 @@ class Setting
     const GROUP_CURRENCY = 'SETTINGS_CURRENCY';
     const GROUP_PROMOCODES = 'SETTINGS_PROMOCODES';
     const GROUP_LANGUAGES = 'SETTINGS_LANGUAGES';
+    const GROUP_USER_GROUPS = 'SETTINGS_USER_GROUPS';
 
     /**
      * @MongoDB\Id(type="int", strategy="INCREMENT")

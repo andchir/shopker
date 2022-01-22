@@ -179,6 +179,8 @@ var APP_LANG = {
     "SETTINGS_PROMOCODES": "Promo codes",
     "SETTINGS_PROMOCODES_DESCRIPTION": "Enter the keyword of the promo code. The value can be the amount of a fixed discount or a percentage of the amount.",
     "SETTINGS_STATUSES_DESCRIPTION": "The names of the statuses of orders and the color for the output on the orders page in the administrative part.",
+    "SETTINGS_USER_GROUPS": "User groups",
+    "SETTINGS_USER_GROUPS_DESCRIPTION": "User groups can be used, for example, to restrict access to certain site functionality.",
     "SHOW_IN_FILTER": "Show in filter",
     "SHOW_IN_LIST": "Show in list",
     "SHOW_IN_TABLE": "Show in table",

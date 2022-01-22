@@ -131,25 +131,29 @@
                                                 </td>
                                             </tr>
                                         </ng-template>
+                                        <ng-template pTemplate="footer">
+                                            <tr>
+                                                <td colspan="4" class="text-center">
+                                                    <div class="relative">
+                                                        <div class="absolute pos-right pos-top" *ngIf="settings.SETTINGS_ORDER_STATUSES.changed">
+                                                            <button type="button" pButton pRipple icon="pi pi-check" class="p-button-success p-button-sm"
+                                                                    (click)="saveSettings('SETTINGS_ORDER_STATUSES')"
+                                                                    pTooltip="{{ 'SAVE' | translate }}"
+                                                                    tooltipPosition="bottom"></button>
+                                                            &nbsp;
+                                                            <button type="button" pButton pRipple icon="pi pi-refresh" class="p-button-secondary p-button-sm"
+                                                                    (click)="resetSettingsForm('SETTINGS_ORDER_STATUSES')"
+                                                                    pTooltip="{{ 'FORM_RESET' | translate }}"
+                                                                    tooltipPosition="bottom"></button>
+                                                        </div>
+                                                    </div>
+                                                    <button type="button" pButton pRipple icon="pi pi-plus" class="p-button-secondary p-button-sm"
+                                                            [label]="'ADD' | translate"
+                                                            (click)="addSetting('SETTINGS_ORDER_STATUSES')"></button>
+                                                </td>
+                                            </tr>
+                                        </ng-template>
                                     </p-table>
-                                </div>
-                                <div class="text-center pt-2 pb-2 pb-md-0">
-                                    <div class="relative">
-                                        <div class="absolute pos-right pos-top" *ngIf="settings.SETTINGS_ORDER_STATUSES.changed">
-                                            <button type="button" pButton pRipple icon="pi pi-check" class="p-button-success p-button-sm"
-                                                    (click)="saveSettings('SETTINGS_ORDER_STATUSES')"
-                                                    pTooltip="{{ 'SAVE' | translate }}"
-                                                    tooltipPosition="bottom"></button>
-                                            &nbsp;
-                                            <button type="button" pButton pRipple icon="pi pi-refresh" class="p-button-secondary p-button-sm"
-                                                    (click)="resetSettingsForm('SETTINGS_ORDER_STATUSES')"
-                                                    pTooltip="{{ 'FORM_RESET' | translate }}"
-                                                    tooltipPosition="bottom"></button>
-                                        </div>
-                                    </div>
-                                    <button type="button" pButton pRipple icon="pi pi-plus" class="p-button-secondary p-button-sm"
-                                            [label]="'ADD' | translate"
-                                            (click)="addSetting('SETTINGS_ORDER_STATUSES')"></button>
                                 </div>
                             </div>
                         </p-accordionTab>
@@ -198,25 +202,29 @@
                                             </td>
                                         </tr>
                                     </ng-template>
+                                    <ng-template pTemplate="footer">
+                                        <tr>
+                                            <td colspan="4" class="text-center">
+                                                <div class="relative">
+                                                    <div class="absolute pos-right pos-top" *ngIf="settings.SETTINGS_DELIVERY.changed">
+                                                        <button type="button" pButton pRipple icon="pi pi-check" class="p-button-success p-button-sm"
+                                                                (click)="saveSettings('SETTINGS_DELIVERY')"
+                                                                pTooltip="{{ 'SAVE' | translate }}"
+                                                                tooltipPosition="bottom"></button>
+                                                        &nbsp;
+                                                        <button type="button" pButton pRipple icon="pi pi-refresh" class="p-button-secondary p-button-sm"
+                                                                (click)="resetSettingsForm('SETTINGS_DELIVERY')"
+                                                                pTooltip="{{ 'FORM_RESET' | translate }}"
+                                                                tooltipPosition="bottom"></button>
+                                                    </div>
+                                                </div>
+                                                <button type="button" pButton pRipple icon="pi pi-plus" class="p-button-secondary p-button-sm"
+                                                        [label]="'ADD' | translate"
+                                                        (click)="addSetting('SETTINGS_DELIVERY')"></button>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
                                 </p-table>
-                            </div>
-                            <div class="text-center pt-2 pb-2 pb-md-0">
-                                <div class="relative">
-                                    <div class="absolute pos-right pos-top" *ngIf="settings.SETTINGS_DELIVERY.changed">
-                                        <button type="button" pButton pRipple icon="pi pi-check" class="p-button-success p-button-sm"
-                                                (click)="saveSettings('SETTINGS_DELIVERY')"
-                                                pTooltip="{{ 'SAVE' | translate }}"
-                                                tooltipPosition="bottom"></button>
-                                        &nbsp;
-                                        <button type="button" pButton pRipple icon="pi pi-refresh" class="p-button-secondary p-button-sm"
-                                                (click)="resetSettingsForm('SETTINGS_DELIVERY')"
-                                                pTooltip="{{ 'FORM_RESET' | translate }}"
-                                                tooltipPosition="bottom"></button>
-                                    </div>
-                                </div>
-                                <button type="button" pButton pRipple icon="pi pi-plus" class="p-button-secondary p-button-sm"
-                                        [label]="'ADD' | translate"
-                                        (click)="addSetting('SETTINGS_DELIVERY')"></button>
                             </div>
                         </p-accordionTab>
                         <!-- /delivery methods -->
@@ -258,25 +266,29 @@
                                             </td>
                                         </tr>
                                     </ng-template>
+                                    <ng-template pTemplate="footer">
+                                        <tr>
+                                            <td colspan="3" class="text-center">
+                                                <div class="relative">
+                                                    <div class="absolute pos-right pos-top" *ngIf="settings.SETTINGS_PAYMENT.changed">
+                                                        <button type="button" pButton pRipple icon="pi pi-check" class="p-button-success p-button-sm"
+                                                                (click)="saveSettings('SETTINGS_PAYMENT')"
+                                                                pTooltip="{{'SAVE' | translate}}"
+                                                                tooltipPosition="bottom"></button>
+                                                        &nbsp;
+                                                        <button type="button" pButton pRipple icon="pi pi-refresh" class="p-button-secondary p-button-sm"
+                                                                (click)="resetSettingsForm('SETTINGS_PAYMENT')"
+                                                                pTooltip="{{'FORM_RESET' | translate}}"
+                                                                tooltipPosition="bottom"></button>
+                                                    </div>
+                                                </div>
+                                                <button type="button" pButton pRipple icon="pi pi-plus" class="p-button-secondary p-button-sm"
+                                                        [label]="'ADD' | translate"
+                                                        (click)="addSetting('SETTINGS_PAYMENT')"></button>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
                                 </p-table>
-                            </div>
-                            <div class="text-center pt-2 pb-2 pb-md-0">
-                                <div class="relative">
-                                    <div class="absolute pos-right pos-top" *ngIf="settings.SETTINGS_PAYMENT.changed">
-                                        <button type="button" pButton pRipple icon="pi pi-check" class="p-button-success p-button-sm"
-                                                (click)="saveSettings('SETTINGS_PAYMENT')"
-                                                pTooltip="{{'SAVE' | translate}}"
-                                                tooltipPosition="bottom"></button>
-                                        &nbsp;
-                                        <button type="button" pButton pRipple icon="pi pi-refresh" class="p-button-secondary p-button-sm"
-                                                (click)="resetSettingsForm('SETTINGS_PAYMENT')"
-                                                pTooltip="{{'FORM_RESET' | translate}}"
-                                                tooltipPosition="bottom"></button>
-                                    </div>
-                                </div>
-                                <button type="button" pButton pRipple icon="pi pi-plus" class="p-button-secondary p-button-sm"
-                                        [label]="'ADD' | translate"
-                                        (click)="addSetting('SETTINGS_PAYMENT')"></button>
                             </div>
                         </p-accordionTab>
                         <!-- /payments methods -->
@@ -318,25 +330,29 @@
                                             </td>
                                         </tr>
                                     </ng-template>
+                                    <ng-template pTemplate="footer">
+                                        <tr>
+                                            <td colspan="3" class="text-center">
+                                                <div class="relative">
+                                                    <div class="absolute pos-right pos-top" *ngIf="settings.SETTINGS_CURRENCY.changed">
+                                                        <button type="button" pButton pRipple icon="pi pi-check" class="p-button-success p-button-sm"
+                                                                (click)="saveSettings('SETTINGS_CURRENCY')"
+                                                                pTooltip="{{'SAVE' | translate}}"
+                                                                tooltipPosition="bottom"></button>
+                                                        &nbsp;
+                                                        <button type="button" pButton pRipple icon="pi pi-refresh" class="p-button-secondary p-button-sm"
+                                                                (click)="resetSettingsForm('SETTINGS_CURRENCY')"
+                                                                pTooltip="{{'FORM_RESET' | translate}}"
+                                                                tooltipPosition="bottom"></button>
+                                                    </div>
+                                                </div>
+                                                <button type="button" pButton pRipple icon="pi pi-plus" class="p-button-secondary p-button-sm"
+                                                        [label]="'ADD' | translate"
+                                                        (click)="addSetting('SETTINGS_CURRENCY')"></button>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
                                 </p-table>
-                            </div>
-                            <div class="text-center pt-2 pb-2 pb-md-0">
-                                <div class="relative">
-                                    <div class="absolute pos-right pos-top" *ngIf="settings.SETTINGS_CURRENCY.changed">
-                                        <button type="button" pButton pRipple icon="pi pi-check" class="p-button-success p-button-sm"
-                                                (click)="saveSettings('SETTINGS_CURRENCY')"
-                                                pTooltip="{{'SAVE' | translate}}"
-                                                tooltipPosition="bottom"></button>
-                                        &nbsp;
-                                        <button type="button" pButton pRipple icon="pi pi-refresh" class="p-button-secondary p-button-sm"
-                                                (click)="resetSettingsForm('SETTINGS_CURRENCY')"
-                                                pTooltip="{{'FORM_RESET' | translate}}"
-                                                tooltipPosition="bottom"></button>
-                                    </div>
-                                </div>
-                                <button type="button" pButton pRipple icon="pi pi-plus" class="p-button-secondary p-button-sm"
-                                        [label]="'ADD' | translate"
-                                        (click)="addSetting('SETTINGS_CURRENCY')"></button>
                             </div>
                         </p-accordionTab>
                         <!-- /currencies -->
@@ -384,25 +400,29 @@
                                             </td>
                                         </tr>
                                     </ng-template>
+                                    <ng-template pTemplate="footer">
+                                        <tr>
+                                            <td colspan="4" class="text-center">
+                                                <div class="relative">
+                                                    <div class="absolute pos-right pos-top" *ngIf="settings.SETTINGS_PROMOCODES.changed">
+                                                        <button type="button" pButton pRipple icon="pi pi-check" class="p-button-success p-button-sm"
+                                                                (click)="saveSettings('SETTINGS_PROMOCODES')"
+                                                                pTooltip="{{'SAVE' | translate}}"
+                                                                tooltipPosition="bottom"></button>
+                                                        &nbsp;
+                                                        <button type="button" pButton pRipple icon="pi pi-refresh" class="p-button-secondary p-button-sm"
+                                                                (click)="resetSettingsForm('SETTINGS_PROMOCODES')"
+                                                                pTooltip="{{'FORM_RESET' | translate}}"
+                                                                tooltipPosition="bottom"></button>
+                                                    </div>
+                                                </div>
+                                                <button type="button" pButton pRipple icon="pi pi-plus" class="p-button-secondary p-button-sm"
+                                                        [label]="'ADD' | translate"
+                                                        (click)="addSetting('SETTINGS_PROMOCODES')"></button>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
                                 </p-table>
-                            </div>
-                            <div class="text-center pt-2 pb-2 pb-md-0">
-                                <div class="relative">
-                                    <div class="absolute pos-right pos-top" *ngIf="settings.SETTINGS_PROMOCODES.changed">
-                                        <button type="button" pButton pRipple icon="pi pi-check" class="p-button-success p-button-sm"
-                                                (click)="saveSettings('SETTINGS_PROMOCODES')"
-                                                pTooltip="{{'SAVE' | translate}}"
-                                                tooltipPosition="bottom"></button>
-                                        &nbsp;
-                                        <button type="button" pButton pRipple icon="pi pi-refresh" class="p-button-secondary p-button-sm"
-                                                (click)="resetSettingsForm('SETTINGS_PROMOCODES')"
-                                                pTooltip="{{'FORM_RESET' | translate}}"
-                                                tooltipPosition="bottom"></button>
-                                    </div>
-                                </div>
-                                <button type="button" pButton pRipple icon="pi pi-plus" class="p-button-secondary p-button-sm"
-                                        [label]="'ADD' | translate"
-                                        (click)="addSetting('SETTINGS_PROMOCODES')"></button>
                             </div>
                         </p-accordionTab>
                         <!-- /promo_codes -->
@@ -444,28 +464,96 @@
                                             </td>
                                         </tr>
                                     </ng-template>
+                                    <ng-template pTemplate="footer">
+                                        <tr>
+                                            <td colspan="3" class="text-center">
+                                                <div class="relative">
+                                                    <div class="absolute pos-right pos-top" *ngIf="settings.SETTINGS_LANGUAGES.changed">
+                                                        <button type="button" pButton pRipple icon="pi pi-check" class="p-button-success p-button-sm"
+                                                                (click)="saveSettings('SETTINGS_LANGUAGES')"
+                                                                pTooltip="{{'SAVE' | translate}}"
+                                                                tooltipPosition="bottom"></button>
+                                                        &nbsp;
+                                                        <button type="button" pButton pRipple icon="pi pi-refresh" class="p-button-secondary p-button-sm"
+                                                                (click)="resetSettingsForm('SETTINGS_LANGUAGES')"
+                                                                pTooltip="{{'FORM_RESET' | translate}}"
+                                                                tooltipPosition="bottom"></button>
+                                                    </div>
+                                                </div>
+                                                <button type="button" pButton pRipple icon="pi pi-plus" class="p-button-secondary p-button-sm"
+                                                        [label]="'ADD' | translate"
+                                                        (click)="addSetting('SETTINGS_LANGUAGES')"></button>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
                                 </p-table>
-                            </div>
-                            <div class="text-center pt-2 pb-2 pb-md-0">
-                                <div class="relative">
-                                    <div class="absolute pos-right pos-top" *ngIf="settings.SETTINGS_LANGUAGES.changed">
-                                        <button type="button" pButton pRipple icon="pi pi-check" class="p-button-success p-button-sm"
-                                                (click)="saveSettings('SETTINGS_LANGUAGES')"
-                                                pTooltip="{{'SAVE' | translate}}"
-                                                tooltipPosition="bottom"></button>
-                                        &nbsp;
-                                        <button type="button" pButton pRipple icon="pi pi-refresh" class="p-button-secondary p-button-sm"
-                                                (click)="resetSettingsForm('SETTINGS_LANGUAGES')"
-                                                pTooltip="{{'FORM_RESET' | translate}}"
-                                                tooltipPosition="bottom"></button>
-                                    </div>
-                                </div>
-                                <button type="button" pButton pRipple icon="pi pi-plus" class="p-button-secondary p-button-sm"
-                                        [label]="'ADD' | translate"
-                                        (click)="addSetting('SETTINGS_LANGUAGES')"></button>
                             </div>
                         </p-accordionTab>
                         <!-- /languages -->
+
+                        <!-- user groups -->
+                        <p-accordionTab [header]="'SETTINGS_USER_GROUPS' | translate">
+                            <div class="pb-3 text-600">
+                                {{ 'SETTINGS_USER_GROUPS_DESCRIPTION' | translate }}
+                            </div>
+                            <div class="p-datatable-table-w-full">
+                                <p-table styleClass="p-datatable-sm" responsiveLayout="scroll"
+                                         [value]="settings.SETTINGS_USER_GROUPS.values"
+                                         [loading]="settings.SETTINGS_USER_GROUPS.loading">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th width="45%">{{ 'SYSTEM_NAME' | translate }}</th>
+                                            <th width="45%">{{ 'NAME' | translate }}</th>
+                                            <th width="10%"></th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-setting let-index="rowIndex">
+                                        <tr>
+                                            <td>
+                                                <input type="text" pInputText class="p-inputtext-sm w-full"
+                                                       [(ngModel)]="setting.name"
+                                                       (ngModelChange)="onValueChanged('SETTINGS_USER_GROUPS')">
+                                            </td>
+                                            <td>
+                                                <input type="text" pInputText class="p-inputtext-sm w-full"
+                                                       [(ngModel)]="setting.options.value.value"
+                                                       (ngModelChange)="onValueChanged('SETTINGS_USER_GROUPS')">
+                                            </td>
+                                            <td>
+                                                <button pButton pRipple type="button" icon="pi pi-times"
+                                                        class="p-button-raised p-button-rounded p-button-secondary p-button-sm ms-2"
+                                                        (click)="deleteSetting('SETTINGS_USER_GROUPS', index)"
+                                                        [pTooltip]="'DELETE' | translate"
+                                                        tooltipPosition="bottom"></button>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="footer">
+                                        <tr>
+                                            <td colspan="3" class="text-center">
+                                                <div class="relative">
+                                                    <div class="absolute pos-right pos-top" *ngIf="settings.SETTINGS_USER_GROUPS.changed">
+                                                        <button type="button" pButton pRipple icon="pi pi-check" class="p-button-success p-button-sm"
+                                                                (click)="saveSettings('SETTINGS_USER_GROUPS')"
+                                                                pTooltip="{{'SAVE' | translate}}"
+                                                                tooltipPosition="bottom"></button>
+                                                        &nbsp;
+                                                        <button type="button" pButton pRipple icon="pi pi-refresh" class="p-button-secondary p-button-sm"
+                                                                (click)="resetSettingsForm('SETTINGS_USER_GROUPS')"
+                                                                pTooltip="{{'FORM_RESET' | translate}}"
+                                                                tooltipPosition="bottom"></button>
+                                                    </div>
+                                                </div>
+                                                <button type="button" pButton pRipple icon="pi pi-plus" class="p-button-secondary p-button-sm"
+                                                        [label]="'ADD' | translate"
+                                                        (click)="addSetting('SETTINGS_USER_GROUPS')"></button>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </p-accordionTab>
+                        <!-- /user groups -->
 
                         <!-- composer packages -->
                         <p-accordionTab [header]="'SETTINGS_COMPOSER_PACKAGES' | translate">

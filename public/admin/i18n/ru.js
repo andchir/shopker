@@ -65,6 +65,7 @@ var APP_LANG = {
     "DELETE_CATEGORY": "Удалить категорию",
     "DELETE_FOLDER": "Удалить папку",
     "DELETE_GROUP": "Удалить группу",
+    "DELETE_SELECTED": "Удалить выбранные",
     "DELIVERY": "Доставка",
     "DELIVERY_METHOD": "Способ доставки",
     "DESCRIPTION": "Описание",

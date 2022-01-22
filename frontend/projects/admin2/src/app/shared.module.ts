@@ -25,6 +25,7 @@ import {CardModule} from 'primeng/card';
 import {AccordionModule} from 'primeng/accordion';
 import {ToastModule} from 'primeng/toast';
 import {ColorPickerModule} from 'primeng/colorpicker';
+import {ProgressSpinnerModule} from 'primeng/progressspinner';
 
 import {AppNavbarComponent} from './components/app-navbar.component';
 import {RenderOutputTypeComponent} from './components/render-output-type.component';
@@ -69,7 +70,8 @@ const components = [
         CardModule,
         AccordionModule,
         ToastModule,
-        ColorPickerModule
+        ColorPickerModule,
+        ProgressSpinnerModule
     ],
     declarations: [
         ...components,
@@ -112,6 +114,7 @@ const components = [
         AccordionModule,
         ToastModule,
         ColorPickerModule,
+        ProgressSpinnerModule,
 
         FilterFieldByGroupPipe,
         DateFromObjectPipe,

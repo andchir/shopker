@@ -2,6 +2,7 @@ import {Component, OnInit, Input, ElementRef, OnDestroy} from '@angular/core';
 
 import {DialogService} from 'primeng/dynamicdialog';
 import {ConfirmationService, MenuItem, MessageService} from 'primeng/api';
+import {TranslateService} from '@ngx-translate/core';
 
 import {Order} from './models/order.model';
 import {OrdersService} from './orders.service';
@@ -33,16 +34,17 @@ export class OrdersComponent extends AppTablePageAbstractComponent<Order> implem
         public dialogService: DialogService,
         public contentTypesService: ContentTypesService,
         public dataService: OrdersService,
+        public translateService: TranslateService,
         public messageService: MessageService,
         public confirmationService: ConfirmationService
     ) {
-        super(dialogService, contentTypesService, dataService, messageService, confirmationService);
+        super(dialogService, contentTypesService, dataService, translateService, messageService, confirmationService);
     }
     
     ngOnInit() {
         this.menuItems = [
             {
-                label: 'Обновить',
+                label: this.getLangString('REFRESH'),
                 icon: 'pi pi-refresh',
                 command: () => {
                     this.queryOptions.page = 1;
@@ -51,7 +53,7 @@ export class OrdersComponent extends AppTablePageAbstractComponent<Order> implem
                 }
             },
             {
-                label: 'Удалить выбранные',
+                label: this.getLangString('DELETE_SELECTED'),
                 icon: 'pi pi-times',
                 command: () => {
                     this.deleteSelected();

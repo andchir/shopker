@@ -1,11 +1,19 @@
-<div class="layout-topbar">
+<div class="layout-topbar justify-content-between">
     <button type="button" class="menu-button" (click)="navBarToggle()">
         <i class="pi pi-bars"></i>
     </button>
-    <span class="layout-topbar-header text-3xl text-600">
+    <div class="layout-topbar-header text-3xl text-600">
         <i class="fi fi-br-settings vertical-align-middle mr-2"></i>
         <span class="vertical-align-middle">{{ 'SETTINGS' | translate }}</span>
-    </span>
+    </div>
+    <div class="layout-topbar-right">
+        <button type="button" pButton pRipple
+                class="w-full lg:w-auto"
+                icon="pi pi-chevron-down"
+                iconPos="right"
+                [label]="'ACTIONS' | translate"
+                (click)="menu.toggle($event)"></button>
+    </div>
 </div>
 
 <div class="layout-content">
@@ -623,4 +631,10 @@
         </div>
         
     </div>
+</div>
+
+<p-menu #menu [popup]="true" [model]="menuItems" styleClass="p-menu-nowrap"></p-menu>
+
+<div class="loading-overlay" *ngIf="loading">
+    <p-progressSpinner></p-progressSpinner>
 </div>

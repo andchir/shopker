@@ -4,6 +4,7 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {DialogService} from 'primeng/dynamicdialog';
+import {TranslateService} from '@ngx-translate/core';
 
 import {QueryOptions} from '../models/query-options';
 import {SimpleEntity} from '../models/simple-entity.interface';
@@ -40,6 +41,7 @@ export abstract class AppTablePageAbstractComponent<T extends SimpleEntity> impl
         public dialogService: DialogService,
         public contentTypesService: ContentTypesService,
         public dataService: DataService<T>,
+        public translateService: TranslateService,
         public messageService: MessageService,
         public confirmationService: ConfirmationService
     ) {
@@ -199,6 +201,14 @@ export abstract class AppTablePageAbstractComponent<T extends SimpleEntity> impl
     onOptionUpdate(e): void {
         const [object, optionName, value] = e;
         // Make save request
+    }
+
+    getLangString(value: string): string {
+        if (!this.translateService.store.translations[this.translateService.currentLang]) {
+            return value;
+        }
+        const translations = this.translateService.store.translations[this.translateService.currentLang];
+        return translations[value] || value;
     }
 
     ngOnDestroy() {

@@ -65,6 +65,7 @@
 	"DELETE_CATEGORY": "Delete category",
 	"DELETE_FOLDER": "Delete folder",
 	"DELETE_GROUP": "Delete group",
+    "DELETE_SELECTED": "Delete selected",
 	"DELIVERY": "Delivery",
 	"DELIVERY_METHOD": "Delivery method",
 	"DESCRIPTION": "Description",

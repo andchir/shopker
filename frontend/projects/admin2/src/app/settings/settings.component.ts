@@ -2,7 +2,7 @@ import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
 
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {MessageService} from 'primeng/api';
+import {MenuItem, MessageService} from 'primeng/api';
 import {DialogService} from 'primeng/dynamicdialog';
 import {TranslateService} from '@ngx-translate/core';
 
@@ -21,6 +21,7 @@ declare const window: Window;
 })
 export class SettingsComponent implements OnInit, AfterViewInit, OnDestroy {
 
+    loading = false;
     baseUrl = '';
     scrollHeight = 600;
     composerPackages: ComposerPackage[] = [];
@@ -77,6 +78,7 @@ export class SettingsComponent implements OnInit, AfterViewInit, OnDestroy {
         ),
         SETTINGS_COMPOSER_PACKAGES: new SettingsData(false, true, [], null),
     };
+    menuItems: MenuItem[];
     destroyed$ = new Subject<void>();
     
     constructor(
@@ -87,6 +89,36 @@ export class SettingsComponent implements OnInit, AfterViewInit, OnDestroy {
         public translateService: TranslateService
     ) {
         this.baseUrl = this.appSettings.settings.webApiUrl + '/';
+        this.menuItems = [
+            {
+                label: this.getLangString('CLEAR_FILE_CACHE'),
+                icon: 'pi pi-refresh',
+                command: () => {
+                    this.runActionPost('clear_cache');
+                }
+            },
+            {
+                label: this.getLangString('CLEAR_SYSTEM_CACHE'),
+                icon: 'pi pi-sync',
+                command: () => {
+                    this.runActionPost('clear_system_cache');
+                }
+            },
+            {
+                label: this.getLangString('UPDATE_DICTIONARIES'),
+                icon: 'pi pi-globe',
+                command: () => {
+                    this.runActionPost('update_internationalization');
+                }
+            },
+            {
+                label: this.getLangString('UPDATE_FILTERS'),
+                icon: 'pi pi-tags',
+                command: () => {
+                    this.runActionPost('update_filters');
+                }
+            }
+        ];
     }
 
     ngOnInit(): void {
@@ -156,6 +188,59 @@ export class SettingsComponent implements OnInit, AfterViewInit, OnDestroy {
                 },
                 error: (err) => {
                     this.settings.SETTINGS_COMPOSER_PACKAGES.loading = false;
+                }
+            });
+    }
+
+    getActionSuccessMessage(actionName: string): string {
+        let message = '';
+        switch (actionName) {
+            case 'clear_cache':
+                message = this.getLangString('CACHE_CLEAR_SUCCESSFULLY');
+                break;
+            case 'clear_system_cache':
+                message = this.getLangString('CACHE_SYSTEM_CLEAR_SUCCESSFULLY');
+                break;
+            case 'update_filters':
+                message = this.getLangString('UPDATE_FILTERS_SUCCESSFULLY');
+                break;
+        }
+        return message;
+    }
+
+    runActionPost(actionName: string): void {
+        this.loading = true;
+        this.settingsService.runActionPost(actionName)
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe({
+                next: (res) => {
+                    this.loading = false;
+                    if (['update_internationalization'].indexOf(actionName) > -1) {
+                        this.pageReload();
+                    } else {
+                        if (res && res.success) {
+                            const message = this.getActionSuccessMessage(actionName);
+                            if (message) {
+                                this.messageService.add({
+                                    key: 'message',
+                                    severity: 'success',
+                                    summary: this.getLangString('MESSAGE'),
+                                    detail: message
+                                });
+                            }
+                        }
+                    }
+                },
+                error: (err) => {
+                    if (err.error) {
+                        this.messageService.add({
+                            key: 'message',
+                            severity: 'error',
+                            summary: this.getLangString('ERROR'),
+                            detail: err.error
+                        });
+                    }
+                    this.loading = false;
                 }
             });
     }

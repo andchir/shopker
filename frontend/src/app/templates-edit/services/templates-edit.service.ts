@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 
-import {Observable} from 'rxjs/Rx';
-import {catchError} from 'rxjs/internal/operators';
+import {Observable} from 'rxjs';
+import {catchError} from 'rxjs/operators';
 
 import {DataService} from '../../services/data-service.abstract';
 import {Template} from '../models/template.model';

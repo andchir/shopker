@@ -12,6 +12,7 @@ import {SettingsService} from '../settings/settings.service';
 import {AppSettings} from '../services/app-settings.service';
 import {User} from './models/user.model';
 import {FormFieldsData} from '../models/form-field.interface';
+import {Setting} from '../settings/models/setting.model';
 
 @Component({
     selector: 'app-modal-order',
@@ -27,6 +28,7 @@ export class ModalUserContentComponent extends AppModalAbstractComponent<User> i
         fullName: new FormControl('', [Validators.required]),
         phone: new FormControl('', []),
         role: new FormControl('', [Validators.required]),
+        groups: new FormControl([], []),
         isActive: new FormControl('', []),
         password: new FormControl('', []),
         confirmPassword: new FormControl('', []),
@@ -41,6 +43,7 @@ export class ModalUserContentComponent extends AppModalAbstractComponent<User> i
         }
     };
     userRoles: {[key: string]: string}[];
+    userGroups: Setting[];
 
     constructor(
         public ref: DynamicDialogRef,
@@ -57,6 +60,7 @@ export class ModalUserContentComponent extends AppModalAbstractComponent<User> i
         super.ngOnInit();
         this.createArrayFieldsProperty('options');
         this.getUserRoles();
+        this.getUserGroups();
     }
 
     getUserRoles(): void {
@@ -75,6 +79,21 @@ export class ModalUserContentComponent extends AppModalAbstractComponent<User> i
                         this.messageService.add({ severity: 'error', detail: err.error });
                     }
                     this.loading = false;
+                }
+            });
+    }
+
+    getUserGroups(): void {
+        this.settingsService.getSetting('SETTINGS_USER_GROUPS')
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe({
+                next: (res) => {
+                    this.userGroups = res;
+                },
+                error: (err) => {
+                    if (err.error) {
+                        this.messageService.add({ severity: 'error', detail: err.error });
+                    }
                 }
             });
     }

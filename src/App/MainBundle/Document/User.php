@@ -128,6 +128,13 @@ class User implements UserInterface, \Serializable
      * @var string
      */
     protected $role;
+
+    /**
+     * @MongoDB\Field(type="collection")
+     * @Groups({"details", "list"})
+     * @var string[]
+     */
+    protected $groups;
     
     /**
      * @MongoDB\Field(type="string")
@@ -674,6 +681,24 @@ class User implements UserInterface, \Serializable
     public function setTimezone(string $timezone)
     {
         $this->timezone = $timezone;
+        return $this;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getGroups()
+    {
+        return $this->groups;
+    }
+
+    /**
+     * @param string[] $groups
+     * @return $this
+     */
+    public function setGroups($groups)
+    {
+        $this->groups = $groups;
         return $this;
     }
 }

@@ -4,7 +4,6 @@ import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from '@angular/c
 import {Observable, of} from 'rxjs';
 import {catchError, map, tap} from 'rxjs/operators';
 
-import {DataService} from '../services/data-service.abstract';
 import {Setting, SettingsGroup} from './models/setting.model';
 import {Properties} from '../models/properties.iterface';
 import {ComposerPackage} from './models/composer-package.interface';
@@ -41,6 +40,14 @@ export class SettingsService {
         return this.http.get<SettingsGroup>(this.getRequestUrl())
             .pipe(
                 catchError(this.handleError<SettingsGroup>())
+            );
+    }
+
+    getSetting(groupName: string): Observable<Setting[]> {
+        const url = `${this.getRequestUrl()}/${groupName}`;
+        return this.http.get<Setting[]>(url)
+            .pipe(
+                catchError(this.handleError<Setting[]>())
             );
     }
 

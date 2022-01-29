@@ -162,7 +162,7 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
         const controls = this.form.controls;
         Object.keys(controls).forEach((key) => {
             if (typeof this.model[key] !== 'undefined') {
-                if (Array.isArray(this.model[key])) {
+                if (Array.isArray(this.model[key]) && this.arrayFields[key]) {
                     this.model[key].forEach((value, index) => {
                         this.arrayFieldAdd(key, value);
                     });

@@ -34,6 +34,12 @@ class Setting
     private $name;
 
     /**
+     * @Groups({"details", "list"})
+     * @var string
+     */
+    private $value;
+
+    /**
      * @MongoDB\Field(type="string")
      * @Groups({"details"})
      * @var string
@@ -202,5 +208,23 @@ class Setting
             'description' => $this->getDescription(),
             'options' => $this->getOptions(true)
         ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getValue()
+    {
+        return $this->getOption('value');
+    }
+
+    /**
+     * @param string $value
+     * @return $this
+     */
+    public function setValue($value)
+    {
+        $this->value = $value;
+        return $this;
     }
 }

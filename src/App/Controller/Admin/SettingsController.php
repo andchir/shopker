@@ -83,6 +83,15 @@ class SettingsController extends AbstractController
     }
 
     /**
+     * @Route("/{groupName}", methods={"GET"})
+     */
+    public function getSettingByGroupAction(SettingsService $settingsService, $groupName)
+    {
+        $output = $settingsService->getSettingsGroup($groupName);
+        return $this->json($output, 200, [], ['groups' => ['list']]);
+    }
+
+    /**
      * @Route("/{groupName}", methods={"PUT"})
      * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param Request $request

@@ -107,9 +107,7 @@ class OrderController extends StorageControllerAbstract
 
         $this->dm->flush();
 
-        return new JsonResponse([
-            'success' => true
-        ]);
+        return $this->json($item, 200, [], ['groups' => ['details']]);
     }
 
     /**
@@ -147,9 +145,7 @@ class OrderController extends StorageControllerAbstract
             return $this->setError('Item not found.');
         }
 
-        return new JsonResponse([
-            'success' => true
-        ]);
+        return $this->json(['success' => true]);
     }
 
     /**

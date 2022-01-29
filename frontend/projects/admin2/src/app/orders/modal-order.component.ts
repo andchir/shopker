@@ -51,7 +51,8 @@ export class ModalOrderContentComponent extends AppModalAbstractComponent<Order>
             id: {validators: []},
             count: {validators: []},
             price: {validators: []},
-            title: {validators: []}
+            title: {validators: []},
+            uniqId: {validators: []}
         }
     };
 
@@ -76,6 +77,11 @@ export class ModalOrderContentComponent extends AppModalAbstractComponent<Order>
         super.onGetData(model);
         this.priceTotalUpdate();
         this.getDeliveryLimit();
+    }
+
+    onDataSaved(): void {
+        super.onDataSaved();
+        this.priceTotalUpdate();
     }
 
     getDeliveryLimit(): void {
@@ -116,5 +122,17 @@ export class ModalOrderContentComponent extends AppModalAbstractComponent<Order>
             this.deliveryLimitApplied = false;
         }
         this.model.price = Math.max(priceTotal, 0);
+    }
+
+    onRowEditInit(content: OrderContent): void {
+        console.log('onRowEditInit', content);
+    }
+
+    onRowEditSave(content: OrderContent): void {
+        console.log('onRowEditSave', content);
+    }
+
+    onRowEditCancel(content: OrderContent, rowIndex: number): void {
+        console.log('onRowEditCancel', content, rowIndex);
     }
 }

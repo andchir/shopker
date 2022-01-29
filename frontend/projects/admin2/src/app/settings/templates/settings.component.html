@@ -55,17 +55,23 @@
                                     <div class="min-height20 w-full">
                                         <div class="show-on-hover absolute pos-right10" [class.pos-top10]="!editing">
                                             <button *ngIf="!editing" pButton pRipple type="button"
-                                                    pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInit(setting)"
+                                                    pInitEditableRow
+                                                    icon="pi pi-pencil"
+                                                    (click)="onRowEditInit(setting)"
                                                     [pTooltip]="'EDIT' | translate"
                                                     tooltipPosition="bottom"
                                                     class="p-button-raised p-button-rounded p-button-sm"></button>
                                             <button *ngIf="editing" pButton pRipple type="button"
-                                                    pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(setting)"
+                                                    pSaveEditableRow
+                                                    icon="pi pi-check"
+                                                    (click)="onRowEditSave(setting)"
                                                     [pTooltip]="'SAVE' | translate"
                                                     tooltipPosition="bottom"
                                                     class="p-button-raised p-button-rounded p-button-success p-button-sm ml-2"></button>
                                             <button *ngIf="editing" pButton pRipple type="button"
-                                                    pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancel(setting, ri)"
+                                                    pCancelEditableRow
+                                                    icon="pi pi-times"
+                                                    (click)="onRowEditCancel(setting, ri)"
                                                     [pTooltip]="'CANCEL' | translate"
                                                     tooltipPosition="bottom"
                                                     class="p-button-raised p-button-rounded p-button-danger p-button-sm ml-2"></button>

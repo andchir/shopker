@@ -127,7 +127,9 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
             .pipe(takeUntil(this.destroyed$))
             .subscribe({
                 next: (res) => {
-                    this.model = res;
+                    if (res.id) {
+                        this.model = res;
+                    }
                     this.onDataSaved();
                     if (autoClose) {
                         this.closeModal();

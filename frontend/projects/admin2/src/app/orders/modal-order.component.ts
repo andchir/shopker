@@ -33,11 +33,11 @@ export class ModalOrderContentComponent extends AppModalAbstractComponent<Order>
         createdDate: new FormControl('', []),
         status: new FormControl('', []),
         email: new FormControl('', []),
-        fullName: new FormControl(true, []),
-        phone: new FormControl(true, []),
-        comment: new FormControl(true, []),
-        deliveryName: new FormControl(true, []),
-        paymentName: new FormControl(true, []),
+        fullName: new FormControl('', []),
+        phone: new FormControl('', []),
+        comment: new FormControl('', []),
+        deliveryName: new FormControl('', []),
+        paymentName: new FormControl('', []),
         options: new FormArray([]),
         content: new FormArray([])
     });
@@ -46,6 +46,12 @@ export class ModalOrderContentComponent extends AppModalAbstractComponent<Order>
             name: {validators: [Validators.required]},
             title: {validators: [Validators.required]},
             value: {validators: []}
+        },
+        content: {
+            id: {validators: []},
+            count: {validators: []},
+            price: {validators: []},
+            title: {validators: []}
         }
     };
 

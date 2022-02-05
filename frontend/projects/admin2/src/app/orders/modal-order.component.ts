@@ -49,10 +49,11 @@ export class ModalOrderContentComponent extends AppModalAbstractComponent<Order>
         },
         content: {
             id: {validators: []},
-            count: {validators: []},
-            price: {validators: []},
+            uniqId: {validators: []},
             title: {validators: []},
-            uniqId: {validators: []}
+            price: {validators: []},
+            count: {validators: []},
+            deleted: {validators: []}
         }
     };
 
@@ -124,15 +125,27 @@ export class ModalOrderContentComponent extends AppModalAbstractComponent<Order>
         this.model.price = Math.max(priceTotal, 0);
     }
 
-    onRowEditInit(content: OrderContent): void {
-        console.log('onRowEditInit', content);
+    deleteContent(content: OrderContent): void {
+        const index = this.model.content.findIndex((item) => {
+            return item.uniqId === content.uniqId && item.contentTypeName === content.contentTypeName;
+        });
+        if (index > -1) {
+            this.arrayFields.content.at(index).get('deleted').setValue(!this.model.content[index].deleted);
+            this.model.content[index].deleted = !this.model.content[index].deleted;
+            this.priceTotalUpdate();
+        }
     }
 
-    onRowEditSave(content: OrderContent): void {
-        console.log('onRowEditSave', content);
+    onRowEditSave(content: OrderContent, rowIndex: number): void {
+        const formContentRow = this.arrayFields.content.controls[rowIndex];
+        content.price = formContentRow.controls.price.value;
+        content.count = formContentRow.controls.count.value;
+        this.priceTotalUpdate();
     }
 
     onRowEditCancel(content: OrderContent, rowIndex: number): void {
-        console.log('onRowEditCancel', content, rowIndex);
+        const formContentRow = this.arrayFields.content.controls[rowIndex];
+        formContentRow.controls.price.setValue(content.price);
+        formContentRow.controls.count.setValue(content.count);
     }
 }

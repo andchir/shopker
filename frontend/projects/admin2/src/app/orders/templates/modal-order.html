@@ -104,109 +104,126 @@
                 </div>
             </p-accordionTab>
             <p-accordionTab [header]="'ORDER_CONTENT' | translate" [selected]="true">
-                <p-table [value]="model.content" editMode="row">
-                    <ng-template pTemplate="header">
-                        <tr>
-                            <th>{{ 'ID' | translate }}</th>
-                            <th>{{ 'NAME' | translate }}</th>
-                            <th class="text-center">{{ 'PRICE' | translate }}</th>
-                            <th class="text-center">{{ 'QUANTITY' | translate }}</th>
-                            <th class="text-center">{{ 'PRICE_TOTAL' | translate }}</th>
-                        </tr>
-                    </ng-template>
-                    <ng-template pTemplate="body" let-content let-editing="editing" let-rowIndex="rowIndex">
-                        <tr [pEditableRow]="content" class="show-on-hover-parent">
-                            <td>
-                                {{ content.id }}
-                            </td>
-                            <td>
-                                <div class="text-overflow">
-                                    <ng-container *ngIf="!content.uri; else productLink">
-                                        {{ content.title }}
-                                    </ng-container>
-                                    <ng-template #productLink>
-                                        <a href="/{{ baseUrl }}{{ content.uri }}" target="_blank">
-                                            {{ content.title }}
-                                        </a>
-                                    </ng-template>
-                                </div>
-                            </td>
-                            <td>
-                                <p-cellEditor>
-                                    <ng-template pTemplate="input">
-                                        <input pInputText type="number">
-                                    </ng-template>
-                                    <ng-template pTemplate="output">
-                                        {{ content.price | number: '1.2-2':'en-EN' }}
-                                    </ng-template>
-                                </p-cellEditor>
-                            </td>
-                            <td class="text-center">
-                                <p-cellEditor>
-                                    <ng-template pTemplate="input">
-                                        <input pInputText type="number">
-                                    </ng-template>
-                                    <ng-template pTemplate="output">
-                                        {{ content.count }}
-                                    </ng-template>
-                                </p-cellEditor>
-                            </td>
-                            <td class="text-center">
-                                {{ content.priceTotal | number: '1.2-2':'en-EN' }}
-                                <div class="show-on-hover absolute pos-right10">
-                                    <button *ngIf="!editing" pButton pRipple type="button"
-                                            pInitEditableRow
-                                            icon="pi pi-pencil"
-                                            (click)="onRowEditInit(content)"
-                                            [pTooltip]="'EDIT' | translate"
-                                            tooltipPosition="bottom"
-                                            class="p-button-raised p-button-rounded p-button-sm"></button>
-                                    <button *ngIf="editing" pButton pRipple type="button"
-                                            pSaveEditableRow
-                                            icon="pi pi-check"
-                                            (click)="onRowEditSave(content)"
-                                            [pTooltip]="'SAVE' | translate"
-                                            tooltipPosition="bottom"
-                                            class="p-button-raised p-button-rounded p-button-success p-button-sm ml-2"></button>
-                                    <button *ngIf="editing" pButton pRipple type="button"
-                                            pCancelEditableRow
-                                            icon="pi pi-times"
-                                            (click)="onRowEditCancel(content, rowIndex)"
-                                            [pTooltip]="'CANCEL' | translate"
-                                            tooltipPosition="bottom"
-                                            class="p-button-raised p-button-rounded p-button-danger p-button-sm ml-2"></button>
-                                </div>
-                            </td>
-                        </tr>
-                    </ng-template>
-                    <ng-template pTemplate="footer" let-columns>
-                        <ng-container *ngIf="model.discount || model.discountPercent">
+                <div formArrayName="content">
+                    <p-table [value]="model.content" dataKey="uniqId" editMode="row">
+                        <ng-template pTemplate="header">
                             <tr>
-                                <td colspan="4">{{ 'DISCOUNT' | translate }}</td>
+                                <th>{{ 'ID' | translate }}</th>
+                                <th>{{ 'NAME' | translate }}</th>
+                                <th class="text-center">{{ 'PRICE' | translate }}</th>
+                                <th class="text-center">{{ 'QUANTITY' | translate }}</th>
+                                <th class="text-center">{{ 'PRICE_TOTAL' | translate }}</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-content let-editing="editing" let-rowIndex="rowIndex">
+                            <tr class="show-on-hover-parent"
+                                [pEditableRow]="content"
+                                [formGroupName]="rowIndex + ''"
+                                [style.textDecoration]="content.deleted ? 'line-through' : 'none'">
+                                <td>
+                                    {{ content.id }}
+                                </td>
+                                <td>
+                                    <div class="text-overflow">
+                                        <ng-container *ngIf="!content.uri; else productLink">
+                                            {{ content.title }}
+                                        </ng-container>
+                                        <ng-template #productLink>
+                                            <a href="/{{ baseUrl }}{{ content.uri }}" target="_blank">
+                                                {{ content.title }}
+                                            </a>
+                                        </ng-template>
+                                        <div class="text-muted small" *ngIf="content.parametersString">
+                                            {{ content.parametersString }}
+                                            <div *ngIf="content.filesString">
+                                                <i class="pi pi-file"></i>&nbsp;
+                                                <span [innerHTML]="content.filesString"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="number" class="p-inputtext-sm w-full" formControlName="price">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{ content.price | number: '1.2-2':'en-EN' }}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
                                 <td class="text-center">
-                                    <span *ngIf="model.discount">{{ model.discount | number: '1.2-2':'ru-RU' }}</span>
-                                    <span *ngIf="model.discountPercent">{{ model.discountPercent }}%</span>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="number" class="p-inputtext-sm w-full" formControlName="count">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{ content.count }}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td class="text-center">
+                                    <div class="show-on-hover absolute pos-right10 pos-top10">
+                                        <button *ngIf="!editing && !content.deleted" pButton pRipple type="button"
+                                                pInitEditableRow
+                                                icon="pi pi-pencil"
+                                                [pTooltip]="'EDIT' | translate"
+                                                tooltipPosition="bottom"
+                                                class="p-button-raised p-button-rounded p-button-sm"></button>
+                                        <button *ngIf="!editing" pButton pRipple type="button"
+                                                icon="pi pi-trash"
+                                                (click)="deleteContent(content)"
+                                                [pTooltip]="'DELETE' | translate"
+                                                tooltipPosition="bottom"
+                                                class="p-button-raised p-button-rounded p-button-danger p-button-sm ml-2"></button>
+                                        <button *ngIf="editing" pButton pRipple type="button"
+                                                pSaveEditableRow
+                                                icon="pi pi-check"
+                                                (click)="onRowEditSave(content, rowIndex)"
+                                                [pTooltip]="'SAVE' | translate"
+                                                tooltipPosition="bottom"
+                                                class="p-button-raised p-button-rounded p-button-success p-button-sm ml-2"></button>
+                                        <button *ngIf="editing" pButton pRipple type="button"
+                                                pCancelEditableRow
+                                                icon="pi pi-times"
+                                                (click)="onRowEditCancel(content, rowIndex)"
+                                                [pTooltip]="'CANCEL' | translate"
+                                                tooltipPosition="bottom"
+                                                class="p-button-raised p-button-rounded p-button-secondary p-button-sm ml-2"></button>
+                                    </div>
+                                    {{ content.priceTotal | number: '1.2-2':'en-EN' }}
                                 </td>
                             </tr>
-                        </ng-container>
-                        <tr>
-                            <td colspan="4">{{ 'DELIVERY' | translate }}</td>
-                            <td class="text-center" [style.textDecoration]="deliveryLimitApplied ? 'line-through' : 'none'">
-                                {{ model.deliveryPrice | number: '1.2-2':'ru-RU' }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="text-end" colspan="4">
-                                {{ 'PRICE_TOTAL' | translate }}:
-                            </td>
-                            <td class="text-center big">
-                                <b>{{ model.price | number: '1.2-2':'ru-RU' }}</b>
-                                &nbsp;
-                                <span class="small">{{ model.currency }}</span>
-                            </td>
-                        </tr>
-                    </ng-template>
-                </p-table>
+                        </ng-template>
+                        <ng-template pTemplate="footer" let-columns>
+                            <ng-container *ngIf="model.discount || model.discountPercent">
+                                <tr>
+                                    <td colspan="4">{{ 'DISCOUNT' | translate }}</td>
+                                    <td class="text-center">
+                                        <span *ngIf="model.discount">{{ model.discount | number: '1.2-2':'ru-RU' }}</span>
+                                        <span *ngIf="model.discountPercent">{{ model.discountPercent }}%</span>
+                                    </td>
+                                </tr>
+                            </ng-container>
+                            <tr>
+                                <td colspan="4">{{ 'DELIVERY' | translate }}</td>
+                                <td class="text-center" [style.textDecoration]="deliveryLimitApplied ? 'line-through' : 'none'">
+                                    {{ model.deliveryPrice | number: '1.2-2':'ru-RU' }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-end" colspan="4">
+                                    {{ 'PRICE_TOTAL' | translate }}:
+                                </td>
+                                <td class="text-center big">
+                                    <b>{{ model.price | number: '1.2-2':'ru-RU' }}</b>
+                                    &nbsp;
+                                    <span class="small">{{ model.currency }}</span>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
             </p-accordionTab>
         </p-accordion>
 

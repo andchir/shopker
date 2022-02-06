@@ -1,0 +1,50 @@
+<div class="layout-topbar justify-content-between">
+    <button type="button" class="menu-button" (click)="navBarToggle()">
+        <i class="pi pi-bars"></i>
+    </button>
+    <span class="layout-topbar-header text-3xl text-600">
+        <i class="fi fi-br-chart-histogram vertical-align-middle mr-2"></i>
+        <span class="vertical-align-middle">{{ 'STATISTICS' | translate }}</span>
+    </span>
+</div>
+
+<div class="layout-content bg-white">
+    <div class="content-section">
+        
+        <div class="p-datatable p-component">
+            <div class="p-datatable-header">
+                <div class="md:flex md:justify-content-between md:flex-wrap">
+                    <div class="d-inline-block me-2 mb-2 md:mb-0">
+                        <p-calendar styleClass="w-full md:w-auto"
+                                    [(ngModel)]="rangeDates"
+                                    (onSelect)="getData()"
+                                    [selectionMode]="'range'"
+                                    [showIcon]="true"
+                                    [monthNavigator]="true"
+                                    [yearNavigator]="true"
+                                    [yearRange]="yearRangeString"
+                                    [dateFormat]="dateFormat"
+                                    [firstDayOfWeek]="firstDayOfWeek"></p-calendar>
+                    </div>
+                    <div class="w-full md:w-auto">
+                        <button type="button" pButton pRipple
+                                class="ml-0 md:ml-2 w-full md:w-auto"
+                                icon="pi pi-chevron-down"
+                                iconPos="right"
+                                [label]="'ACTIONS' | translate"
+                                (click)="menu.toggle($event)"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="min-height400" [class.loading]="loading">
+            <div>
+                <p-chart type="line" [data]="data" [height]="'400px'" [responsive]="true"></p-chart>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<p-menu #menu [popup]="true" [model]="menuItems" styleClass="p-menu-nowrap"></p-menu>

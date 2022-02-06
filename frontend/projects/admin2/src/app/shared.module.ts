@@ -28,6 +28,8 @@ import {ColorPickerModule} from 'primeng/colorpicker';
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
 import {MessagesModule} from 'primeng/messages';
 import {MessageModule} from 'primeng/message';
+import {ChartModule} from 'primeng/chart';
+import {CalendarModule} from 'primeng/calendar';
 
 import {AppNavbarComponent} from './components/app-navbar.component';
 import {RenderOutputTypeComponent} from './components/render-output-type.component';
@@ -75,7 +77,9 @@ const components = [
         ColorPickerModule,
         ProgressSpinnerModule,
         MessagesModule,
-        MessageModule
+        MessageModule,
+        ChartModule,
+        CalendarModule
     ],
     declarations: [
         ...components,
@@ -121,6 +125,8 @@ const components = [
         ProgressSpinnerModule,
         MessagesModule,
         MessageModule,
+        ChartModule,
+        CalendarModule,
 
         FilterFieldByGroupPipe,
         DateFromObjectPipe,

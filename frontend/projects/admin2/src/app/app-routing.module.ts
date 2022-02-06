@@ -13,6 +13,7 @@ const routes: Routes = [
     {path: 'home', component: HomeComponent},
     {path: 'orders', loadChildren: () => import('./orders/orders.module').then(m => m.OrdersModule)},
     {path: 'users', loadChildren: () => import('./users/users.module').then(m => m.UsersModule)},
+    {path: 'statistics', loadChildren: () => import('./statistics/statistics.module').then(m => m.StatisticsModule)},
     {path: 'settings', loadChildren: () => import('./settings/settings.module').then(m => m.SettingsModule)},
     {path: '**', component: NotFoundComponent}
 ];

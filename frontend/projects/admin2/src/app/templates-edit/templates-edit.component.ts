@@ -47,7 +47,7 @@ export class TemplatesEditComponent extends AppTablePageAbstractComponent<Templa
             {
                 label: this.getLangString('REFRESH'),
                 icon: 'pi pi-refresh',
-                command: () => {
+                command: (event?: any) => {
                     this.queryOptions.page = 1;
                     this.queryOptions.search_word = '';
                     this.getData();
@@ -56,7 +56,7 @@ export class TemplatesEditComponent extends AppTablePageAbstractComponent<Templa
             {
                 label: this.getLangString('DELETE_SELECTED'),
                 icon: 'pi pi-times',
-                command: () => {
+                command: (event?: any) => {
                     this.deleteSelected();
                 }
             }
@@ -110,6 +110,20 @@ export class TemplatesEditComponent extends AppTablePageAbstractComponent<Templa
     onThemeChange(): void {
         this.queryOptions.page = 1;
         this.getData();
+    }
+
+    getItemData(item: Template): {[name: string]: number|string} {
+        if (item) {
+            return {
+                id: item.id,
+                name: item.name,
+                path: item.path,
+                themeName: item.themeName
+            };
+        }
+        return {
+            id: 0
+        };
     }
 
     setModalInputs(itemId?: number, isItemCopy: boolean = false, modalId = ''): void {

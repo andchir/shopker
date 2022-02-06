@@ -1,13 +1,17 @@
-import {AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
+import {FormControl, FormGroup} from '@angular/forms';
 
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+import {DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
+import {MessageService} from 'primeng/api';
 
-import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {TemplatesEditService} from './services/templates-edit.service';
 import {Template} from './models/template.model';
 import {FileRegularInterface} from './models/file-regular.interface';
 import {AppSettings} from '../services/app-settings.service';
+import {SettingsService} from '../settings/settings.service';
+import {AppModalAbstractComponent} from '../components/modal.component.abstract';
 
 declare const ace: any;
 
@@ -16,17 +20,19 @@ declare const ace: any;
     templateUrl: './templates/modal-template.html',
     providers: [TemplatesEditService]
 })
-export class ModalTemplateEditComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ModalTemplateEditComponent extends AppModalAbstractComponent<Template> implements OnInit, AfterViewInit, OnDestroy {
+    
+    template: Template;
+    file: FileRegularInterface;
+    isItemCopy: boolean;
+    isEditMode: boolean;
+    modalId: string;
 
-    @Input() modalTitle: string;
-    @Input() template: Template;
-    @Input() file: FileRegularInterface;
-    @Input() isItemCopy: boolean;
-    @Input() isEditMode: boolean;
-    @Input() modalId = '';
+    form = new FormGroup({
+        id: new FormControl('', [])
+    });
 
     editor: any;
-    model: FileRegularInterface = {} as FileRegularInterface;
     errorMessage = '';
     submitted = false;
     loading = false;
@@ -36,37 +42,27 @@ export class ModalTemplateEditComponent implements OnInit, AfterViewInit, OnDest
     destroyed$ = new Subject<void>();
 
     constructor(
-        private dataService: TemplatesEditService,
-        private activeModal: NgbActiveModal,
-        private appSettings: AppSettings,
-        private elRef: ElementRef
+        public ref: DynamicDialogRef,
+        public config: DynamicDialogConfig,
+        public dataService: TemplatesEditService,
+        private messageService: MessageService,
+        private settingsService: SettingsService,
+        private appSettings: AppSettings
     ) {
-
+        super(ref, config, dataService);
     }
 
     ngOnInit(): void {
-        this.uniqueId = Math.random().toString(36).substr(2, 9);
-        if (this.elRef) {
-            this.getRootElement().setAttribute('id', this.modalId);
-        }
-        if (this.template) {
-            this.model.name = this.template.name;
-            this.model.path = this.template.path;
-            this.model.extension = 'twig';
-            this.model.type = 'template';
-            this.modalTitle += ` ${this.model.name}`;
-        } else if (this.file) {
-            this.model.name = this.file.name;
-            this.model.path = this.file.path;
-            this.model.extension = this.file.extension;
-            this.model.type = this.file.type;
-            this.isPathReadOnly = true;
+        this.modalId = String(this.config.data.id);
+        this.model = new Template(this.config.data.id, '', '');
+        if (this.config.data.id) {
+            this.isEditMode = true;
+            this.model.name = this.config.data.name;
+            this.model.path = this.config.data.path;
+            this.model.themeName = this.config.data.themeName;
         }
         if (this.isEditMode) {
             this.getContent();
-        } else {
-            this.model.path = this.appSettings.settings.templateTheme;
-            this.model.type = 'template';
         }
     }
     
@@ -77,13 +73,15 @@ export class ModalTemplateEditComponent implements OnInit, AfterViewInit, OnDest
     getContent(): void {
         this.loading = true;
         let filePath, fileType;
-        if (this.template) {
-            filePath = Template.getPath(this.template);
-            fileType = 'twig';
-        } else if (this.file) {
-            filePath = Template.getPath(this.file);
-            fileType = this.file.type;
-        }
+        // if (this.template) {
+        //     filePath = Template.getPath(this.template);
+        //     fileType = 'twig';
+        // } else if (this.file) {
+        //     filePath = Template.getPath(this.file);
+        //     fileType = this.file.type;
+        // }
+        fileType = 'twig';
+        filePath = Template.getPath(this.model);
         this.dataService.getItemContent(filePath, fileType)
             .pipe(takeUntil(this.destroyed$))
             .subscribe({
@@ -123,95 +121,13 @@ export class ModalTemplateEditComponent implements OnInit, AfterViewInit, OnDest
         });
     }
 
-    closeModal(event?: MouseEvent) {
-        if (event) {
-            event.preventDefault();
-        }
-        this.close(this.closeReason);
+    saveRequest() {
+        return this.dataService.saveContent(this.getFormData());
     }
 
-    close(reason: string, event?: MouseEvent) {
-        if (event) {
-            event.preventDefault();
-        }
-        this.activeModal.dismiss(this.closeReason);
-
-        if (['submit', 'updated'].indexOf(this.closeReason) > -1) {
-            const reasonStr = this.isEditMode ? 'edit' : 'create';
-            this.activeModal.close({reason: reasonStr, data: this.model});
-        } else {
-            this.activeModal.dismiss(reason);
-        }
-    }
-
-    /** Submit form */
-    onSubmit() {
-        this.submitted = true;
-        this.closeModal();
-    }
-
-    save(autoClose = false, event?: MouseEvent): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.submitted = true;
-        this.loading = true;
-
-        this.model.content = this.editor.getValue();
-
-        this.dataService.saveContent(this.model)
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe({
-                next: (res) => {
-                    this.closeReason = 'updated';
-                    if (autoClose) {
-                        this.closeModal();
-                    } else if (res && res['id']) {
-                        this.model = res as FileRegularInterface;
-                    }
-                    this.loading = false;
-                    this.submitted = false;
-                },
-                error: (err) => {
-                    this.errorMessage = err.error || 'Error.';
-                    this.loading = false;
-                    this.submitted = false;
-                }
-            });
-    }
-
-    minimize(event?: MouseEvent): void {
-        if (event) {
-            event.preventDefault();
-        }
-        window.document.body.classList.remove('modal-open');
-        const modalEl = this.getRootElement();
-        const backdropEl = modalEl.previousElementSibling;
-
-        modalEl.classList.remove('d-block');
-        modalEl.classList.add('modal-minimized');
-        backdropEl.classList.add('d-none');
-    }
-
-    maximize(event?: MouseEvent): void {
-        if (event) {
-            event.preventDefault();
-        }
-        window.document.body.classList.add('modal-open');
-        const modalEl = this.getRootElement();
-        const backdropEl = modalEl.previousElementSibling;
-
-        modalEl.classList.add('d-block');
-        modalEl.classList.remove('modal-minimized');
-        backdropEl.classList.remove('d-none');
-    }
-
-    getRootElement(): HTMLElement {
-        return this.elRef.nativeElement.parentNode.parentNode.parentNode;
-    }
-
-    ngOnDestroy(): void {
-        this.destroyed$.next();
-        this.destroyed$.complete();
+    getFormData(): any {
+        const data = Object.assign({}, this.model);
+        data.content = this.editor.getValue();
+        return data;
     }
 }

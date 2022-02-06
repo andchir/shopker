@@ -9,7 +9,7 @@ import {SimpleEntity} from '../models/simple-entity.interface';
 import {FormFieldsErrors} from '../models/form-fields-options.interface';
 import {DataService} from '../services/data-service.abstract';
 import {FormFieldsData} from '../models/form-field.interface';
-import {FileModel} from "../models/file.model";
+import {FileModel} from '../models/file.model';
 
 @Component({
     template: ''

@@ -1,88 +1,78 @@
-<div class="position-relative modal-on-maximized">
-    <div class="tabs-top">
-        <button type="button" class="btn btn-outline-primary btn-sm d-block"
-                [disabled]="submitted"
-                (click)="closeModal($event)">
-            <i class="icon-cross me-1"></i>
-            <span>{{'CLOSE' | translate}}</span>
-        </button>
-        <button type="button" class="btn btn-outline-primary btn-sm d-block"
-                [disabled]="submitted"
-                (click)="minimize($event)">
-            <i class="icon-minimize me-1"></i>
-            <span>{{'MINIMIZE' | translate}}</span>
-        </button>
-    </div>
-</div>
-<div class="modal-header d-block">
-    <div class="position-relative modal-on-minimized">
-        <div class="pos-absolute-right">
-            <button type="button" class="btn btn-no-border btn-sm-sm" [title]="'EXPAND' | translate" (click)="maximize($event)">
-                <i class="icon-maximize"></i>
-            </button>
-            <button type="button" class="btn btn-no-border btn-sm-sm ms-1" [title]="'CLOSE' | translate" (click)="closeModal($event)">
-                <i class="icon-cross"></i>
-            </button>
-        </div>
-    </div>
-    <h4 class="modal-title text-overflow me-5" [title]="modalTitle">{{ modalTitle }}</h4>
-</div>
+<!--<div class="row">-->
+<!--    <div class="col-lg-6">-->
+<!--        <div class="mb-2">-->
+<!--            <label class="label-filled">-->
+<!--                {{'NAME' | translate}}-->
+<!--            </label>-->
+<!--            <input type="text" class="form-control" name="name" [(ngModel)]="model.name">-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="col-lg-6">-->
+<!--        <div class="mb-2">-->
+<!--            <label class="label-filled">-->
+<!--                {{'PATH' | translate}}-->
+<!--            </label>-->
+<!--            <input type="text" class="form-control" name="path" [(ngModel)]="model.path" [readonly]="isPathReadOnly">-->
+<!--        </div>-->
+<!--        <div class="mb-2">-->
+<!--            <div class="card card-body p-2 ps-3">-->
+<!--                <div class="form-check m-0">-->
+<!--                    <input type="checkbox" class="form-check-input" id="fieldClearCache{{ uniqueId }}" name="clearCache" [(ngModel)]="model.clearCache">-->
+<!--                    <label class="form-check-label" for="fieldClearCache{{ uniqueId }}">{{'CLEAR_SYSTEM_CACHE' | translate}}</label>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 
-<div class="modal-body py-0" [class.loading]="loading">
-
-    <div class="row">
-        <div class="col-lg-6">
-            <div class="mb-2">
-                <label class="label-filled">
-                    {{'NAME' | translate}}
-                </label>
-                <input type="text" class="form-control" name="name" [(ngModel)]="model.name">
-            </div>
-        </div>
-        <div class="col-lg-6">
-            <div class="mb-2">
-                <label class="label-filled">
-                    {{'PATH' | translate}}
-                </label>
-                <input type="text" class="form-control" name="path" [(ngModel)]="model.path" [readonly]="isPathReadOnly">
-            </div>
-            <div class="mb-2">
-                <div class="card card-body p-2 ps-3">
-                    <div class="form-check m-0">
-                        <input type="checkbox" class="form-check-input" id="fieldClearCache{{ uniqueId }}" name="clearCache" [(ngModel)]="model.clearCache">
-                        <label class="form-check-label" for="fieldClearCache{{ uniqueId }}">{{'CLEAR_SYSTEM_CACHE' | translate}}</label>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="mb-0">
-        <label class="label-filled">
-            {{'CODE' | translate}}
+<div class="grid">
+    <div class="col-12 md:col-6">
+        <label class="block mb-2" for="fieldName">
+            {{ 'NAME' | translate }}
         </label>
-        <div class="border" id="editor-{{ modalId }}"></div>
+        <input type="text" id="fieldName" class="w-full mb-2" pInputText [(ngModel)]="model.name">
     </div>
-
-    <div class="alert alert-dismissible alert-danger mt-3 mb-0" [hidden]="!errorMessage">
-        {{ errorMessage }}
-        <button type="button" class="btn-close" (click)="errorMessage = ''"></button>
+    <div class="col-12 md:col-6">
+        <label class="block mb-2" for="fieldPath">
+            {{ 'PATH' | translate }}
+        </label>
+        <input type="text" id="fieldPath" class="w-full mb-2" pInputText [(ngModel)]="model.path" [readonly]="isPathReadOnly">
     </div>
-
 </div>
-<div class="modal-footer d-block">
-    <div class="btn-group me-1">
-        <button type="button" class="btn btn-success btn-wide" [disabled]="submitted" (click)="save(true, $event)">
-            <span>{{'SAVE_AND_CLOSE' | translate}}</span>
-        </button>
-        <div class="btn-group" ngbDropdown role="group" placement="top-right">
-            <button class="btn btn-success dropdown-toggle-split" ngbDropdownToggle [disabled]="submitted"></button>
-            <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
-                <button ngbDropdownItem (click)="save(false, $event)">{{'SAVE' | translate}}</button>
-            </div>
+
+<div class="grid mb-3">
+    <div class="col-12 md:col-6">
+        <div class="pt-2">
+            <p-inputSwitch inputId="fieldClearCache" styleClass="mr-2 vertical-align-middle"
+                           [(ngModel)]="model.clearCache"></p-inputSwitch>
+            <label class="vertical-align-middle" for="fieldClearCache">
+                {{ 'CLEAR_SYSTEM_CACHE' | translate }}
+            </label>
         </div>
     </div>
-    <button type="button" class="btn btn-secondary btn-wide" [disabled]="submitted" (click)="closeModal($event)">
-        <span>{{'CLOSE' | translate}}</span>
-    </button>
+</div>
+
+<div class="mb-0">
+    <label class="block mb-2">{{ 'CODE' | translate }}:</label>
+    <div class="border" id="editor-{{ modalId }}"></div>
+</div>
+
+<div role="separator" class="p-divider p-component p-divider-horizontal p-divider-solid p-divider-left">
+    <div class="p-divider-content"></div>
+</div>
+
+<p-message styleClass="block w-full text-left mb-3" severity="error"
+           [text]="errorMessage"
+           *ngIf="errorMessage"></p-message>
+
+<div class="text-right pt-2">
+    <button pButton pRipple type="button" [label]="'SAVE_AND_CLOSE' | translate" icon="pi pi-check"
+            class="p-button-success p-button-raised w-full md:w-auto mb-2 md:mb-0 md:ml-2"
+            (click)="saveData(true, $event)"></button>
+    <button pButton pRipple type="button" [label]="'SAVE' | translate" icon="pi pi-check"
+            class="p-button-warning p-button-raised w-full md:w-auto mb-2 md:mb-0 md:ml-2"
+            (click)="saveData(false, $event)"></button>
+    <button pButton pRipple type="button" [label]="'CLOSE' | translate"
+            class="p-button-secondary p-button-raised w-full md:w-auto mb-2 md:mb-0 md:ml-2"
+            (click)="dismissModal($event)"></button>
 </div>

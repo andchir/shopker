@@ -28,7 +28,6 @@ export class UsersComponent extends AppTablePageAbstractComponent<User> implemen
         { field: 'createdDate', header: 'DATE_TIME', outputType: 'date', outputProperties: {format: 'dd/MM/y HH:mm:ss'} },
         { field: 'isActive', header: 'STATUS', outputType: 'boolean', outputProperties: {} }
     ];
-    menuItems: MenuItem[];
 
     constructor(
         public dialogService: DialogService,

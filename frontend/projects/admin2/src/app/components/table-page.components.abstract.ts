@@ -2,7 +2,7 @@ import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core'
 
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {ConfirmationService, MessageService} from 'primeng/api';
+import {ConfirmationService, MenuItem, MessageService} from 'primeng/api';
 import {DialogService} from 'primeng/dynamicdialog';
 import {TranslateService} from '@ngx-translate/core';
 
@@ -32,6 +32,7 @@ export abstract class AppTablePageAbstractComponent<T extends SimpleEntity> impl
     itemsSelected: T[];
     itemsTotal = 0;
     cols: TableField[];
+    menuItems: MenuItem[];
     contentTypeFields: ContentField[];
     queryOptions: QueryOptions = new QueryOptions(1, 12, 'createdDate', 'desc');
     searchTimer: any;

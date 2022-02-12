@@ -152,7 +152,7 @@ class TemplatesController extends StorageControllerAbstract
     }
 
     /**
-     * @Route("/get_editable_files", methods={"GET"})
+     * @Route("/editable_files", methods={"GET"})
      * @param Request $request
      * @return JsonResponse
      */
@@ -176,11 +176,13 @@ class TemplatesController extends StorageControllerAbstract
                 if (!$fileFullPath || !file_exists($fileFullPath)) {
                     continue;
                 }
+                $fileSize = filesize($fileFullPath);
                 $items[] = [
                     'name' => basename($fileFullPath),
                     'type' => $fileType,
                     'extension' => UtilsService::getExtension($fileFullPath),
-                    'size' => UtilsService::sizeFormat(filesize($fileFullPath)),
+                    'fileSize' => $fileSize,
+                    'fileSizeString' => UtilsService::sizeFormat($fileSize),
                     'path' => dirname($filePath)
                 ];
             }

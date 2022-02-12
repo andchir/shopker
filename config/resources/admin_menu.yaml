@@ -4,7 +4,7 @@ menu:
     - { title: 'STATISTICS', route: '/statistics', icon: 'fi fi-br-chart-histogram', styleClass: 'menu-item-style1' }
     - { title: 'COMMENTS', route: '/comments', icon: 'fi fi-br-comment-alt', styleClass: 'menu-item-style1' }
     - { title: 'IMPORT_EXPORT', route: '/import-export', icon: 'fi fi-br-upload', styleClass: 'menu-item-style1' }
-    - { title: 'TEMPLATES', route: '/code_edit', icon: 'fi fi-br-layout-fluid', styleClass: 'menu-item-style1' }
+    - { title: 'CODE', route: '/code_edit', icon: 'fi fi-br-layout-fluid', styleClass: 'menu-item-style1' }
     - { title: 'USERS', route: '/users', icon: 'fi fi-br-user', styleClass: 'menu-item-style1' }
     - { title: 'SETTINGS', route: '/settings', icon: 'fi fi-br-settings', styleClass: 'menu-item-style1' }
     - { isSeparator: true }

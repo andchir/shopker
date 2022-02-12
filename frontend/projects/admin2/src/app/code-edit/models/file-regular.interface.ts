@@ -1,9 +1,11 @@
 export interface FileRegularInterface {
-    name: string;
-    extension: string;
-    path: string;
+    id?: number;
+    name?: string;
+    extension?: string;
+    path?: string;
     content?: string;
-    size?: number|string;
+    fileSize?: number|string;
+    fileSizeString?: string;
     clearCache?: boolean;
     type?: string;
 }

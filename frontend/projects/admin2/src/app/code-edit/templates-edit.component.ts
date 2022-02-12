@@ -19,9 +19,6 @@ import {ContentTypesService} from '../catalog/services/content_types.service';
 })
 export class TemplatesEditComponent extends AppTablePageAbstractComponent<Template> implements OnInit, OnDestroy {
     
-    @ViewChild('dropdownConfig') dropdownConfig: ElementRef;
-    @ViewChild('dropdownStyles') dropdownStyles: ElementRef;
-    @ViewChild('dropdownScripts') dropdownScripts: ElementRef;
     queryOptions: QueryOptions = new QueryOptions(1, 20, 'path', 'asc');
     themes: {name: string, title: string}[] = [];
     cols: TableField[] = [
@@ -29,7 +26,6 @@ export class TemplatesEditComponent extends AppTablePageAbstractComponent<Templa
         { field: 'themeName', header: 'TEMPLATE_THEME_NAME', outputType: 'text', outputProperties: {} },
         { field: 'path', header: 'PATH', outputType: 'text', outputProperties: {} }
     ];
-    files: {[key: string]: FileRegularInterface[]} = {config: [], css: [], js: []};
 
     constructor(
         public dialogService: DialogService,
@@ -62,31 +58,10 @@ export class TemplatesEditComponent extends AppTablePageAbstractComponent<Templa
             }
         ];
         this.getThemesList();
-        this.getEditableFiles();
     }
 
     getModalComponent() {
         return ModalTemplateEditComponent;
-    }
-
-    getEditableFiles(): void {
-        this.dataService.getEditableFiles()
-            .subscribe((res) => {
-                if (res.items) {
-                    this.files['css'] = res.items.filter((item) => {
-                        return item.type === 'css';
-                    });
-                    this.files['js'] = res.items.filter((item) => {
-                        return item.type === 'js';
-                    });
-                    this.files['config'] = res.items.filter((item) => {
-                        return item.type === 'config';
-                    });
-                    this.files['translations'] = res.items.filter((item) => {
-                        return item.type === 'translations';
-                    });
-                }
-            });
     }
 
     getThemesList(): void {

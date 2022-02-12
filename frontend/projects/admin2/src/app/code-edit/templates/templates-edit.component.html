@@ -1,0 +1,106 @@
+<p-table styleClass="p-datatable-striped"
+         [(selection)]="itemsSelected"
+         [sortField]="queryOptions.sort_by"
+         [sortOrder]="queryOptions.sort_dir == 'asc' ? 1 : -1"
+         dataKey="id"
+         [lazy]="true"
+         (onLazyLoad)="getData($event)"
+         [paginator]="true"
+         [showJumpToPageDropdown]="true"
+         [value]="items"
+         [columns]="cols"
+         [rows]="queryOptions.limit"
+         [totalRecords]="itemsTotal"
+         [loading]="loading">
+    <ng-template pTemplate="caption">
+        <div class="flex lg:justify-content-between flex-wrap">
+            <div class="w-full lg:w-auto mb-2 lg:mb-0">
+                <div class="p-input-icon-left w-full lg:w-auto lg-2 lg:mb-0 mr-0 lg:mr-2 mb-2 lg:mb-0">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text"
+                           class="lg:w-auto w-full"
+                           (input)="onInputSearch()"
+                           [(ngModel)]="queryOptions.search_word"
+                           placeholder="{{ 'SEARCH' | translate }}...">
+                </div>
+                <div class="lg:inline-block">
+                    <p-dropdown styleClass="w-full lg:w-auto"
+                                [options]="themes"
+                                optionLabel="title"
+                                optionValue="name"
+                                [(ngModel)]="queryOptions.category"
+                                (ngModelChange)="onThemeChange()"></p-dropdown>
+                </div>
+            </div>
+            <div class="w-full lg:w-auto">
+                <button type="button" pButton pRipple
+                        class="ml-0 lg:ml-2 w-full lg:w-auto mb-2 lg:mb-0"
+                        icon="pi pi-chevron-down"
+                        iconPos="left"
+                        [label]="'ACTIONS' | translate"
+                        (click)="menu.toggle($event)"></button>
+
+                <button type="button" pButton pRipple
+                        class="p-button-success ml-0 lg:ml-2 w-full lg:w-auto"
+                        icon="pi pi-plus"
+                        iconPos="left"
+                        [label]="'ADD' | translate" (click)="openModal(null, $event)"></button>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th>
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                {{ col.header | translate }}
+                <p-sortIcon [field]="col.field"></p-sortIcon>
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-item let-columns="columns">
+        <tr class="show-on-hover-parent">
+            <td>
+                <p-tableCheckbox [value]="item"></p-tableCheckbox>
+            </td>
+            <td *ngFor="let col of columns; let index=index">
+
+                <app-render-output
+                    [value]="item[col.field]"
+                    [key]="col.field"
+                    [outputType]="col.outputType"
+                    [options]="col.outputProperties"
+                    [object]="item"
+                    (changeRequest)="onOptionUpdate($event)"></app-render-output>
+
+                <ng-container *ngIf="columns.length == index + 1">
+                    <div class="absolute show-on-hover pos-top15 pos-right15">
+                        <button pButton pRipple icon="pi pi-pencil"
+                                class="p-button p-button-sm p-button-rounded p-button-info"
+                                (click)="openModal(item)"></button>
+                        <button pButton pRipple icon="pi pi-trash"
+                                class="p-button p-button-sm p-button-rounded p-button-danger ml-2"
+                                (click)="deleteItem(item)"></button>
+                    </div>
+                </ng-container>
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+            <td [colSpan]="columns.length + 1">
+                <ng-container *ngIf="queryOptions.search_word; else emptyMessage">
+                    {{ 'NOTHING_FOUND' | translate  }}.
+                </ng-container>
+                <ng-template #emptyMessage>
+                    {{ 'EMPTY' | translate }}.
+                </ng-template>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<p-confirmDialog [header]="'CONFIRM' | translate" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+
+<p-menu #menu [popup]="true" [model]="menuItems" styleClass="p-menu-nowrap"></p-menu>

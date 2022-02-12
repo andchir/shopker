@@ -14,7 +14,7 @@ const routes: Routes = [
     {path: 'orders', loadChildren: () => import('./orders/orders.module').then(m => m.OrdersModule)},
     {path: 'users', loadChildren: () => import('./users/users.module').then(m => m.UsersModule)},
     {path: 'statistics', loadChildren: () => import('./statistics/statistics.module').then(m => m.StatisticsModule)},
-    {path: 'templates_edit', loadChildren: () => import('./templates-edit/templates-edit.module').then(m => m.TemplatesEditModule)},
+    {path: 'code_edit', loadChildren: () => import('./code-edit/templates-edit.module').then(m => m.TemplatesEditModule)},
     {path: 'settings', loadChildren: () => import('./settings/settings.module').then(m => m.SettingsModule)},
     {path: '**', component: NotFoundComponent}
 ];

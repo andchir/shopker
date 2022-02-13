@@ -44,6 +44,8 @@ export class ModalUserContentComponent extends AppModalAbstractComponent<User> i
     };
     userRoles: {[key: string]: string}[];
     userGroups: Setting[];
+    allowImpersonation = false;
+    baseUrl: string;
 
     constructor(
         public ref: DynamicDialogRef,
@@ -61,6 +63,15 @@ export class ModalUserContentComponent extends AppModalAbstractComponent<User> i
         this.createArrayFieldsProperty('options');
         this.getUserRoles();
         this.getUserGroups();
+    }
+
+    onGetData(item: User): void {
+        this.model = item;
+        if (this.model.id
+            && this.appSettings.isSuperAdmin
+            && this.appSettings.settings.userEmail !== this.model.email) {
+                this.allowImpersonation = true;
+        }
     }
 
     getUserRoles(): void {

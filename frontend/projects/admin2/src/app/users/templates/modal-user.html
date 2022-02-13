@@ -68,17 +68,6 @@
             </div>
         </div>
 
-        <div class="grid mb-3">
-            <div class="col-12 md:col-6">
-                <div class="pt-2">
-                    <p-inputSwitch inputId="fieldActive" styleClass="mr-2 vertical-align-middle" formControlName="isActive"></p-inputSwitch>
-                    <label class="vertical-align-middle" for="fieldActive">
-                        {{ 'ACTIVE' | translate }}
-                    </label>
-                </div>
-            </div>
-        </div>
-
         <div class="border-1 border-solid border-400 border-round p-3 mb-3">
             <div class="grid">
                 <div class="col-12 md:col-6">
@@ -93,6 +82,24 @@
                     </label>
                     <input type="text" id="fieldConfirmPassword" class="w-full mb-2" pInputText formControlName="confirmPassword">
                 </div>
+            </div>
+        </div>
+
+        <div class="grid mb-3">
+            <div class="col-12 md:col-6">
+                <div class="pt-2">
+                    <p-inputSwitch inputId="fieldActive" styleClass="mr-2 vertical-align-middle" formControlName="isActive"></p-inputSwitch>
+                    <label class="vertical-align-middle" for="fieldActive">
+                        {{ 'ACTIVE' | translate }}
+                    </label>
+                </div>
+            </div>
+            <div class="col-12 md:col-6 text-center" *ngIf="allowImpersonation">
+                <a pButton pRipple
+                   class="p-button-raised p-button-rounded no-underline w-full md:w-auto"
+                   icon="pi pi-user"
+                   [label]="'IMPERSONATION' | translate"
+                   href="{{ baseUrl }}?_switch_user={{ model.email }}"></a>
             </div>
         </div>
 

@@ -11,6 +11,7 @@ import {EditableFile} from './models/editable-file.model';
 import {FileEditService} from './services/file-edit.service';
 import {ModalFileEditComponent} from './modal-file-edit.component';
 import {AssetsEditComponent} from './assets-edit.component';
+import {takeUntil} from "rxjs/operators";
 
 @Component({
     selector: 'app-template-edit',
@@ -60,10 +61,6 @@ export class TemplatesEditComponent extends AssetsEditComponent implements OnIni
         this.getThemesList();
     }
 
-    getModalComponent() {
-        return ModalFileEditComponent;
-    }
-
     getThemesList(): void {
         this.dataService.getThemesList()
             .subscribe({
@@ -85,5 +82,83 @@ export class TemplatesEditComponent extends AssetsEditComponent implements OnIni
     onThemeChange(): void {
         this.queryOptions.page = 1;
         this.getData();
+    }
+
+    deleteSelected() {
+        if (!this.itemsSelected || this.itemsSelected.length === 0) {
+            this.showAlert(this.getLangString('NOTHING_IS_SELECTED'));
+            return;
+        }
+        this.confirmationService.confirm({
+            message: this.getLangString('YOU_SURE_YOU_WANT_DELETE'),
+            accept: () => {
+                const pathArr = [];
+                this.itemsSelected.forEach((item) => {
+                    pathArr.push(EditableFile.getPath(item));
+                });
+                this.dataService.deleteFilesBatch(pathArr)
+                    .pipe(takeUntil(this.destroyed$))
+                    .subscribe({
+                        next: (res) => {
+                            this.messageService.add({
+                                key: 'message',
+                                severity: 'success',
+                                detail: this.getLangString('DELETED_SUCCESSFULLY')
+                            });
+                            if (this.items.length === 1) {
+                                this.queryOptions.page = 1;
+                            }
+                            this.getData();
+                        },
+                        error: (err) => {
+                            if (err.error) {
+                                this.messageService.add({
+                                    key: 'message',
+                                    severity: 'error',
+                                    detail: err.error
+                                });
+                            }
+                            this.loading = false;
+                        }
+                    });
+            }
+        });
+    }
+
+    deleteItem(item: EditableFile, event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.confirmationService.confirm({
+            message: this.getLangString('YOU_SURE_YOU_WANT_DELETE'),
+            accept: () => {
+                const filePath = EditableFile.getPath(item);
+                this.dataService.deleteFileItem(filePath)
+                    .pipe(takeUntil(this.destroyed$))
+                    .subscribe({
+                        next: (res) => {
+                            this.messageService.add({
+                                key: 'message',
+                                severity: 'success',
+                                detail: this.getLangString('DELETED_SUCCESSFULLY')
+                            });
+                            if (this.items.length === 1) {
+                                this.queryOptions.page = 1;
+                            }
+                            this.getData();
+                        },
+                        error: (err) => {
+                            if (err.error) {
+                                this.messageService.add({
+                                    key: 'message',
+                                    severity: 'error',
+                                    detail: err.error
+                                });
+                            }
+                            this.loading = false;
+                        }
+                    });
+            }
+        });
     }
 }

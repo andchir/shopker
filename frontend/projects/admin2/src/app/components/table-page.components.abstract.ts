@@ -69,10 +69,12 @@ export abstract class AppTablePageAbstractComponent<T extends SimpleEntity> impl
                     this.items = res.items;
                     this.itemsTotal = res.total;
                     this.loading = false;
+                    this.itemsSelected = [];
                 },
                 error: (err) => {
                     if (err.error) {
                         this.messageService.add({
+                            key: 'message',
                             severity: 'error',
                             detail: err.error
                         });
@@ -91,14 +93,7 @@ export abstract class AppTablePageAbstractComponent<T extends SimpleEntity> impl
                 next: (res) => {
                     
                 },
-                error: (err) => {
-                    if (err.error) {
-                        this.messageService.add({
-                            severity: 'error',
-                            detail: err.error
-                        });
-                    }
-                }
+                error: this.onRequestError.bind(this)
             });
     }
 
@@ -126,47 +121,13 @@ export abstract class AppTablePageAbstractComponent<T extends SimpleEntity> impl
             .subscribe((itemCurrent: T) => {
                 if (itemCurrent) {
                     this.messageService.add({
+                        key: 'message',
                         severity: 'success',
                         detail: item ? 'Edited successfully!' : 'Created successfully!'
                     });
                     this.getData();
                 }
             });
-    }
-
-    deleteItem(item: T, event?: MouseEvent): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.confirmationService.confirm({
-            message: 'Are you sure you want to remove this item?',
-            accept: () => {
-                this.loading = true;
-                this.dataService.deleteItem(item.id)
-                    .pipe(takeUntil(this.destroyed$))
-                    .subscribe({
-                        next: (res) => {
-                            this.messageService.add({
-                                severity: 'success',
-                                detail: 'Deleted successfully!'
-                            });
-                            if (this.items.length === 1) {
-                                this.queryOptions.page = 1;
-                            }
-                            this.getData();
-                        },
-                        error: (err) => {
-                            if (err.error) {
-                                this.messageService.add({
-                                    severity: 'error',
-                                    detail: err.error
-                                });
-                            }
-                            this.loading = false;
-                        }
-                    });
-            }
-        });
     }
 
     onSortingChange(event?: any): void {
@@ -190,17 +151,50 @@ export abstract class AppTablePageAbstractComponent<T extends SimpleEntity> impl
         }, 500);
     }
 
+    deleteItem(item: T, event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.confirmationService.confirm({
+            message: this.getLangString('YOU_SURE_YOU_WANT_DELETE'),
+            accept: () => {
+                this.loading = true;
+                this.dataService.deleteItem(item.id)
+                    .pipe(takeUntil(this.destroyed$))
+                    .subscribe({
+                        next: (res) => {
+                            this.messageService.add({
+                                key: 'message',
+                                severity: 'success',
+                                detail: this.getLangString('DELETED_SUCCESSFULLY')
+                            });
+                            if (this.items.length === 1) {
+                                this.queryOptions.page = 1;
+                            }
+                            this.getData();
+                        },
+                        error: this.onRequestError.bind(this)
+                    });
+            }
+        });
+    }
+
     blockSelected() {
         if (!this.itemsSelected || this.itemsSelected.length === 0) {
             this.showAlert(this.getLangString('NOTHING_IS_SELECTED'));
             return;
         }
-        // this.dataService.actionBatch(this.selectedIds, 'block')
-        //     .subscribe(res => {
-        //             this.clearSelected();
-        //             this.getList();
-        //         },
-        //         err => this.showAlert(err.error || this.getLangString('ERROR')));
+        const selectedIds = this.itemsSelected.map((item) => {
+            return item.id;
+        });
+        this.dataService.actionBatch(selectedIds, 'block')
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe({
+                next: (res) => {
+                    this.getData();
+                },
+                error: this.onRequestError.bind(this)
+            });
     }
 
     deleteSelected() {
@@ -208,17 +202,30 @@ export abstract class AppTablePageAbstractComponent<T extends SimpleEntity> impl
             this.showAlert(this.getLangString('NOTHING_IS_SELECTED'));
             return;
         }
-        // this.confirmAction(this.getLangString('YOU_SURE_YOU_WANT_DELETE_SELECTED'))
-        //     .then((result) => {
-        //         if (result === 'accept') {
-        //             this.dataService.actionBatch(this.selectedIds, 'delete')
-        //                 .subscribe(res => {
-        //                         this.clearSelected();
-        //                         this.getList();
-        //                     },
-        //                     err => this.showAlert(err.error || this.getLangString('ERROR')));
-        //         }
-        //     });
+        this.confirmationService.confirm({
+            message: this.getLangString('YOU_SURE_YOU_WANT_DELETE_SELECTED'),
+            accept: () => {
+                const selectedIds = this.itemsSelected.map((item) => {
+                    return item.id;
+                });
+                this.dataService.actionBatch(selectedIds, 'delete')
+                    .pipe(takeUntil(this.destroyed$))
+                    .subscribe({
+                        next: (res) => {
+                            this.messageService.add({
+                                key: 'message',
+                                severity: 'success',
+                                detail: this.getLangString('DELETED_SUCCESSFULLY')
+                            });
+                            if (this.items.length === 1) {
+                                this.queryOptions.page = 1;
+                            }
+                            this.getData();
+                        },
+                        error: this.onRequestError.bind(this)
+                    });
+            }
+        });
     }
     
     showAlert(message: string, type = 'error'): void {
@@ -245,6 +252,17 @@ export abstract class AppTablePageAbstractComponent<T extends SimpleEntity> impl
         }
         const translations = this.translateService.store.translations[this.translateService.currentLang];
         return translations[value] || value;
+    }
+    
+    onRequestError(err: any): void {
+        if (err.error) {
+            this.messageService.add({
+                key: 'message',
+                severity: 'error',
+                detail: err.error
+            });
+        }
+        this.loading = false;
     }
 
     ngOnDestroy() {

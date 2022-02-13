@@ -33,7 +33,7 @@ export class FileEditService extends DataService<EditableFile> {
         );
     }
 
-    deleteTemplateItem(path: string): Observable<any> {
+    deleteFileItem(path: string): Observable<any> {
         const url = this.getRequestUrl();
         let params = new HttpParams();
         params = params.append('path', path);

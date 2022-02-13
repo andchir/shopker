@@ -76,7 +76,11 @@ export class ModalUserContentComponent extends AppModalAbstractComponent<User> i
                 },
                 error: (err) => {
                     if (err.error) {
-                        this.messageService.add({ severity: 'error', detail: err.error });
+                        this.messageService.add({
+                            key: 'message',
+                            severity: 'error',
+                            detail: err.error
+                        });
                     }
                     this.loading = false;
                 }
@@ -92,7 +96,11 @@ export class ModalUserContentComponent extends AppModalAbstractComponent<User> i
                 },
                 error: (err) => {
                     if (err.error) {
-                        this.messageService.add({ severity: 'error', detail: err.error });
+                        this.messageService.add({
+                            key: 'message',
+                            severity: 'error',
+                            detail: err.error
+                        });
                     }
                 }
             });

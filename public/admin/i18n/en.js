@@ -68,6 +68,7 @@ var APP_LANG = {
     "DELETE_FOLDER": "Delete folder",
     "DELETE_GROUP": "Delete group",
     "DELETE_SELECTED": "Delete selected",
+    "DELETED_SUCCESSFULLY": "Deleted successfully!",
     "DELIVERY": "Delivery",
     "DELIVERY_METHOD": "Delivery method",
     "DESCRIPTION": "Description",

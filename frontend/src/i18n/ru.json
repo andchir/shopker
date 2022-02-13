@@ -68,6 +68,7 @@
 	"DELETE_FOLDER": "Удалить папку",
 	"DELETE_GROUP": "Удалить группу",
     "DELETE_SELECTED": "Удалить выбранные",
+    "DELETED_SUCCESSFULLY": "Успешно удалено!",
 	"DELIVERY": "Доставка",
 	"DELIVERY_METHOD": "Способ доставки",
 	"DESCRIPTION": "Описание",

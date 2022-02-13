@@ -256,7 +256,7 @@ class TemplatesController extends StorageControllerAbstract
 
         if (!in_array(UtilsService::getExtension($data['name']), ['twig', 'css', 'js', 'yml', 'yaml'])) {
             return $this->setError($this->translator->trans('Allowed file types: %extensions%.', [
-                '%extensions%' => 'twig, css, js'
+                '%extensions%' => 'twig, css, js, yaml'
             ], 'validators'));
         }
         if (!is_dir(dirname($filePath))) {

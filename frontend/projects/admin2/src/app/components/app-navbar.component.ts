@@ -57,8 +57,12 @@ export class AppNavbarComponent implements OnInit {
         }
         if (this.hrefMode) {
             window.location.href = `${this.baseUrl}admin/#${menuItem.route}`;
-        } else {
+        } else if (menuItem.route) {
             this.router.navigate([menuItem.route]);
+        } else if (menuItem.target) {
+            window.open(menuItem.href, menuItem.target).focus();
+        } else {
+            window.location.href = menuItem.href;
         }
     }
 

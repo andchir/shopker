@@ -4,7 +4,9 @@
             <li *ngFor="let menuItem of menuItems" [class]="menuItem.styleClass">
                 <a pRipple class="router-link-exact-active"
                     [ngClass]="{'active': menuItem.isActive}"
-                    href="#{{menuItem.route}}" *ngIf="!menuItem.isSeparator; else separatorTemplate">
+                    href="#{{ menuItem.route | ifEmpty: menuItem.href }}"
+                    (click)="navigateRoute(menuItem, $event)"
+                    *ngIf="!menuItem.isSeparator; else separatorTemplate">
                         <i [class]="menuItem.icon">
                             <i class="text-gradient-blue" [ngClass]="menuItem.icon"></i>
                         </i>

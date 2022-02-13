@@ -4,9 +4,9 @@ import {CommonModule} from '@angular/common';
 import {SharedModule} from '../shared.module';
 import {TemplatesEditComponent} from './templates-edit.component';
 import {TemplatesEditRoutingModule} from './templates-edit-routing.module';
-import {ModalTemplateEditComponent} from './modal-template.component';
 import {TemplatesEditMainComponent} from './main.component';
 import {AssetsEditComponent} from './assets-edit.component';
+import {ModalFileEditComponent} from './modal-file-edit.component';
 
 @NgModule({
     imports: [
@@ -18,10 +18,10 @@ import {AssetsEditComponent} from './assets-edit.component';
         TemplatesEditMainComponent,
         TemplatesEditComponent,
         AssetsEditComponent,
-        ModalTemplateEditComponent
+        ModalFileEditComponent
     ],
     entryComponents: [
-        ModalTemplateEditComponent
+        ModalFileEditComponent
     ]
 })
 export class TemplatesEditModule {

@@ -3,13 +3,16 @@
         <label class="block mb-2" for="fieldName">
             {{ 'NAME' | translate }}
         </label>
-        <input type="text" id="fieldName" class="w-full mb-2" pInputText [(ngModel)]="model.name">
+        <input type="text" id="fieldName" class="w-full mb-2" pInputText
+               [(ngModel)]="model.name">
     </div>
     <div class="col-12 md:col-6">
         <label class="block mb-2" for="fieldPath">
             {{ 'PATH' | translate }}
         </label>
-        <input type="text" id="fieldPath" class="w-full mb-2" pInputText [(ngModel)]="model.path" [readonly]="isPathReadOnly">
+        <input type="text" id="fieldPath" class="w-full mb-2" pInputText
+               [(ngModel)]="model.path"
+               [readonly]="isPathReadOnly">
     </div>
 </div>
 
@@ -27,7 +30,7 @@
 
 <div class="mb-0">
     <label class="block mb-2">{{ 'CODE' | translate }}:</label>
-    <div class="border" id="editor-{{ modalId }}"></div>
+    <div class="border" id="editor-{{ model.type }}-{{ model.id }}"></div>
 </div>
 
 <div role="separator" class="p-divider p-component p-divider-horizontal p-divider-solid p-divider-left">

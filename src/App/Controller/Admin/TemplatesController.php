@@ -99,25 +99,14 @@ class TemplatesController extends StorageControllerAbstract
                         : 'name';
                     $sortDir = isset($options['sort_dir']) ? $options['sort_dir'] : 'asc';
                 }
-                usort($filesArr, function($a, $b) use ($sortBy, $sortDir) {
-                    if ($sortDir == 'asc') {
-                        return $a[$sortBy] <=> $b[$sortBy];
-                    } else {
-                        return $b[$sortBy] <=> $a[$sortBy];
-                    }
-                });
+                $filesArr = self::sortArray($filesArr, $sortBy, $sortDir);
             }
-
             $items = array_merge($items, $filesArr);
         }
         
         // Search by name
         if (!empty($options['search_word'])) {
-            $items = array_filter($items, function ($item) use ($options) {
-                return strpos($item['name'], $options['search_word']) !== false
-                    || strpos($item['path'], $options['search_word']) !== false;
-            });
-            $items = array_merge($items);
+            $items = self::filterByKey($items, 'name', $options['search_word']);
         }
 
         $total = count($items);
@@ -158,6 +147,8 @@ class TemplatesController extends StorageControllerAbstract
      */
     public function getFilesListAction(Request $request)
     {
+        $queryString = $request->getQueryString();
+        $options = $this->getQueryOptions($queryString);
         $items = [];
         $editable = [
             'css' => $this->params->get('app.editable_css'),
@@ -165,7 +156,6 @@ class TemplatesController extends StorageControllerAbstract
             'config' => $this->params->get('app.editable_config'),
             'translations' => $this->params->get('app.editable_translations')
         ];
-        $rootPath = $this->params->get('kernel.project_dir');
         
         foreach ($editable as $fileType => $val) {
             if (!is_array($val)) {
@@ -188,6 +178,12 @@ class TemplatesController extends StorageControllerAbstract
             }
         }
 
+        if (isset($options['sort_by'])) {
+            $items = self::sortArray($items, $options['sort_by'], $options['sort_dir'] ?: 'asc');
+        }
+        if (!empty($options['search_word'])) {
+            $items = self::filterByKey($items, 'name', $options['search_word']);
+        }
         $total = count($items);
 
         return $this->json([
@@ -227,7 +223,7 @@ class TemplatesController extends StorageControllerAbstract
     public function getFileContentAction(Request $request)
     {
         $filePath = $request->get('path', '');
-        $fileType = $request->get('type', 'twig');
+        $fileType = $request->get('type', 'template');
 
         $filePath = $this->getFilePathByType($fileType, $filePath);
 
@@ -440,5 +436,26 @@ class TemplatesController extends StorageControllerAbstract
     protected function getRepository()
     {
         return null;
+    }
+
+    public static function sortArray($inputArr, $sortBy, $sortDir)
+    {
+        usort($inputArr, function($a, $b) use ($sortBy, $sortDir) {
+            if ($sortDir == 'asc') {
+                return $a[$sortBy] <=> $b[$sortBy];
+            } else {
+                return $b[$sortBy] <=> $a[$sortBy];
+            }
+        });
+        return $inputArr;
+    }
+
+    public static function filterByKey($inputArr, $key, $value)
+    {
+        $inputArr = array_filter($inputArr, function ($item) use ($key, $value) {
+            return strpos($item[$key], $value) !== false
+                || strpos($item[$key], $value) !== false;
+        });
+        return array_merge($inputArr);
     }
 }

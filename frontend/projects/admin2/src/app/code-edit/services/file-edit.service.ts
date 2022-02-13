@@ -5,12 +5,12 @@ import {Observable} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 
 import {DataService} from '../../services/data-service.abstract';
-import {Template} from '../models/template.model';
 import {FileRegularInterface} from '../models/file-regular.interface';
 import {DataList} from '../../models/data-list.interface';
+import {EditableFile} from '../models/editable-file.model';
 
 @Injectable()
-export class TemplatesEditService extends DataService<Template> {
+export class FileEditService extends DataService<EditableFile> {
 
     constructor(http: HttpClient) {
         super(http);

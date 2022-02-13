@@ -6,19 +6,20 @@ import {TranslateService} from '@ngx-translate/core';
 
 import {ContentTypesService} from '../catalog/services/content_types.service';
 import {AppTablePageAbstractComponent, TableField} from '../components/table-page.components.abstract';
-import {ModalTemplateEditComponent} from './modal-template.component';
 import {FileRegularInterface} from './models/file-regular.interface';
-import {AssetsService} from './services/assets.service';
 import {QueryOptions} from '../models/query-options';
+import {EditableFile} from './models/editable-file.model';
+import {FileEditService} from './services/file-edit.service';
+import {ModalFileEditComponent} from './modal-file-edit.component';
 
 @Component({
     selector: 'app-assets-edit',
     templateUrl: './templates/assets-edit.component.html',
-    providers: [DialogService, ConfirmationService, AssetsService]
+    providers: [DialogService, ConfirmationService, FileEditService]
 })
-export class AssetsEditComponent extends AppTablePageAbstractComponent<FileRegularInterface> implements OnInit, OnDestroy {
+export class AssetsEditComponent extends AppTablePageAbstractComponent<EditableFile> implements OnInit, OnDestroy {
 
-    queryOptions: QueryOptions = new QueryOptions(1, 20, 'name', 'asc');
+    queryOptions: QueryOptions = new QueryOptions(1, 20, 'type', 'asc');
     themes: {name: string, title: string}[] = [];
     cols: TableField[] = [
         { field: 'name', header: 'NAME', outputType: 'text', outputProperties: {} },
@@ -30,7 +31,7 @@ export class AssetsEditComponent extends AppTablePageAbstractComponent<FileRegul
     constructor(
         public dialogService: DialogService,
         public contentTypesService: ContentTypesService,
-        public dataService: AssetsService,
+        public dataService: FileEditService,
         public translateService: TranslateService,
         public messageService: MessageService,
         public confirmationService: ConfirmationService
@@ -39,6 +40,7 @@ export class AssetsEditComponent extends AppTablePageAbstractComponent<FileRegul
     }
 
     ngOnInit() {
+        this.dataService.setRequestUrl('/admin/templates/editable_files');
         this.menuItems = [
             {
                 label: this.getLangString('REFRESH'),
@@ -48,38 +50,27 @@ export class AssetsEditComponent extends AppTablePageAbstractComponent<FileRegul
                     this.queryOptions.search_word = '';
                     this.getData();
                 }
-            },
-            {
-                label: this.getLangString('DELETE_SELECTED'),
-                icon: 'pi pi-times',
-                command: (event?: any) => {
-                    this.deleteSelected();
-                }
             }
         ];
     }
 
     getModalComponent() {
-        return ModalTemplateEditComponent;
+        return ModalFileEditComponent;
     }
 
-    getEditableFiles(): void {
-        // this.dataService.getEditableFiles()
-        //     .subscribe((res) => {
-        //         if (res.items) {
-        //             // this.files['css'] = res.items.filter((item) => {
-        //             //     return item.type === 'css';
-        //             // });
-        //             // this.files['js'] = res.items.filter((item) => {
-        //             //     return item.type === 'js';
-        //             // });
-        //             // this.files['config'] = res.items.filter((item) => {
-        //             //     return item.type === 'config';
-        //             // });
-        //             // this.files['translations'] = res.items.filter((item) => {
-        //             //     return item.type === 'translations';
-        //             // });
-        //         }
-        //     });
+    getItemData(item: EditableFile): {[name: string]: number|string} {
+        if (item) {
+            return {
+                id: item.id || 0,
+                name: item.name,
+                path: item.path,
+                type: item.type,
+                extension: item.extension,
+                themeName: item.themeName || ''
+            };
+        }
+        return {
+            id: 0
+        };
     }
 }

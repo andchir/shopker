@@ -1,23 +1,23 @@
 import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 
-import {TemplatesEditService} from './services/templates-edit.service';
 import {TranslateService} from '@ngx-translate/core';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {DialogService} from 'primeng/dynamicdialog';
 
-import {Template} from './models/template.model';
 import {QueryOptions} from '../models/query-options';
-import {ModalTemplateEditComponent} from './modal-template.component';
-import {FileRegularInterface} from './models/file-regular.interface';
-import {AppTablePageAbstractComponent, TableField} from '../components/table-page.components.abstract';
+import {TableField} from '../components/table-page.components.abstract';
 import {ContentTypesService} from '../catalog/services/content_types.service';
+import {EditableFile} from './models/editable-file.model';
+import {FileEditService} from './services/file-edit.service';
+import {ModalFileEditComponent} from './modal-file-edit.component';
+import {AssetsEditComponent} from './assets-edit.component';
 
 @Component({
     selector: 'app-template-edit',
     templateUrl: './templates/templates-edit.component.html',
-    providers: [DialogService, ConfirmationService, TemplatesEditService]
+    providers: [DialogService, ConfirmationService, FileEditService]
 })
-export class TemplatesEditComponent extends AppTablePageAbstractComponent<Template> implements OnInit, OnDestroy {
+export class TemplatesEditComponent extends AssetsEditComponent implements OnInit, OnDestroy {
     
     queryOptions: QueryOptions = new QueryOptions(1, 20, 'path', 'asc');
     themes: {name: string, title: string}[] = [];
@@ -30,7 +30,7 @@ export class TemplatesEditComponent extends AppTablePageAbstractComponent<Templa
     constructor(
         public dialogService: DialogService,
         public contentTypesService: ContentTypesService,
-        public dataService: TemplatesEditService,
+        public dataService: FileEditService,
         public translateService: TranslateService,
         public messageService: MessageService,
         public confirmationService: ConfirmationService
@@ -61,7 +61,7 @@ export class TemplatesEditComponent extends AppTablePageAbstractComponent<Templa
     }
 
     getModalComponent() {
-        return ModalTemplateEditComponent;
+        return ModalFileEditComponent;
     }
 
     getThemesList(): void {
@@ -85,33 +85,6 @@ export class TemplatesEditComponent extends AppTablePageAbstractComponent<Templa
     onThemeChange(): void {
         this.queryOptions.page = 1;
         this.getData();
-    }
-
-    getItemData(item: Template): {[name: string]: number|string} {
-        if (item) {
-            return {
-                id: item.id,
-                name: item.name,
-                path: item.path,
-                themeName: item.themeName
-            };
-        }
-        return {
-            id: 0
-        };
-    }
-
-    setModalInputs(itemId?: number, isItemCopy: boolean = false, modalId = ''): void {
-        // const templateIndex = findIndex(this.items, {id: itemId});
-        // const template = templateIndex > -1 ? this.items[templateIndex] : null;
-        // const isEditMode = template && template.id > -1;
-        // this.modalRef.componentInstance.modalTitle = isEditMode
-        //     ? this.getLangString('TEMPLATE')
-        //     : this.getLangString('ADD_TEMPLATE');
-        // this.modalRef.componentInstance.modalId = modalId;
-        // this.modalRef.componentInstance['isItemCopy'] = isItemCopy || false;
-        // this.modalRef.componentInstance['isEditMode'] = isEditMode;
-        // this.modalRef.componentInstance['template'] = template;
     }
 
     deleteSelected() {
@@ -161,46 +134,4 @@ export class TemplatesEditComponent extends AppTablePageAbstractComponent<Templa
     //             }
     //         });
     // }
-
-    editFile(file: FileRegularInterface, event?: MouseEvent): void {
-        if (event) {
-            event.preventDefault();
-        }
-        console.log('editFile', file);
-        // const modalId = ['modal', 'file', file.type, file.name].join('-');
-        // window.document.body.classList.add('modal-open');
-        // if (window.document.getElementById(modalId)) {
-        //     const modalEl = window.document.getElementById(modalId);
-        //     const backdropEl = modalEl.previousElementSibling;
-        //     modalEl.classList.add('d-block');
-        //     modalEl.classList.remove('modal-minimized');
-        //     backdropEl.classList.remove('d-none');
-        //     return;
-        // }
-        // this.modalRef = this.modalService.open(ModalTemplateEditComponent, {
-        //     size: 'lg',
-        //     backdrop: 'static',
-        //     keyboard: false,
-        //     backdropClass: 'modal-backdrop-left45',
-        //     windowClass: 'modal-left45',
-        //     container: '#modals-container'
-        // });
-        // this.modalRef.componentInstance.modalTitle = this.getLangString('EDITING') + ` ${file.name}`;
-        // this.modalRef.componentInstance.isItemCopy = false;
-        // this.modalRef.componentInstance.isEditMode = true;
-        // this.modalRef.componentInstance.file = file;
-        // this.modalRef.componentInstance.modalId = modalId;
-        // this.modalRef.result.then((result) => {
-        //     if (this.destroyed$.isStopped) {
-        //         return;
-        //     }
-        //     this.getEditableFiles();
-        // }, (reason) => {
-        //     // console.log( 'reason', reason );
-        // });
-    }
-
-    getModalElementId(itemId?: number|string): string {
-        return ['modal', 'template', itemId || 0].join('-');
-    }
 }

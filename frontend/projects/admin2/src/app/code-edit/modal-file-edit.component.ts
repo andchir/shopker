@@ -6,32 +6,25 @@ import {takeUntil} from 'rxjs/operators';
 import {DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
 import {MessageService} from 'primeng/api';
 
-import {TemplatesEditService} from './services/templates-edit.service';
-import {Template} from './models/template.model';
-import {FileRegularInterface} from './models/file-regular.interface';
 import {AppSettings} from '../services/app-settings.service';
 import {SettingsService} from '../settings/settings.service';
 import {AppModalAbstractComponent} from '../components/modal.component.abstract';
+import {EditableFile} from './models/editable-file.model';
+import {FileEditService} from './services/file-edit.service';
 
 declare const ace: any;
 
 @Component({
-    selector: 'app-modal-template',
-    templateUrl: './templates/modal-template.html',
-    providers: [TemplatesEditService]
+    selector: 'app-modal-file-edit',
+    templateUrl: './templates/modal-file-edit.html',
+    providers: [FileEditService]
 })
-export class ModalTemplateEditComponent extends AppModalAbstractComponent<Template> implements OnInit, AfterViewInit, OnDestroy {
-    
-    template: Template;
-    file: FileRegularInterface;
-    isItemCopy: boolean;
-    isEditMode: boolean;
-    modalId: string;
+export class ModalFileEditComponent extends AppModalAbstractComponent<EditableFile> implements OnInit, AfterViewInit, OnDestroy {
 
     form = new FormGroup({
         id: new FormControl('', [])
     });
-
+    isEditMode = false;
     editor: any;
     errorMessage = '';
     submitted = false;
@@ -44,7 +37,7 @@ export class ModalTemplateEditComponent extends AppModalAbstractComponent<Templa
     constructor(
         public ref: DynamicDialogRef,
         public config: DynamicDialogConfig,
-        public dataService: TemplatesEditService,
+        public dataService: FileEditService,
         private messageService: MessageService,
         private settingsService: SettingsService,
         private appSettings: AppSettings
@@ -53,12 +46,13 @@ export class ModalTemplateEditComponent extends AppModalAbstractComponent<Templa
     }
 
     ngOnInit(): void {
-        this.modalId = String(this.config.data.id);
-        this.model = new Template(this.config.data.id, '', '');
-        if (this.config.data.id) {
+        this.model = new EditableFile(this.config.data.id, '', '');
+        this.model.type = this.config.data.type || 'template';
+        if (this.config.data.name) {
             this.isEditMode = true;
             this.model.name = this.config.data.name;
             this.model.path = this.config.data.path;
+            this.model.extension = this.config.data.extension;
             this.model.themeName = this.config.data.themeName;
         }
         if (this.isEditMode) {
@@ -72,17 +66,8 @@ export class ModalTemplateEditComponent extends AppModalAbstractComponent<Templa
 
     getContent(): void {
         this.loading = true;
-        let filePath, fileType;
-        // if (this.template) {
-        //     filePath = Template.getPath(this.template);
-        //     fileType = 'twig';
-        // } else if (this.file) {
-        //     filePath = Template.getPath(this.file);
-        //     fileType = this.file.type;
-        // }
-        fileType = 'twig';
-        filePath = Template.getPath(this.model);
-        this.dataService.getItemContent(filePath, fileType)
+        const filePath = EditableFile.getPath(this.model);
+        this.dataService.getItemContent(filePath, this.model.type)
             .pipe(takeUntil(this.destroyed$))
             .subscribe({
                 next: (res) => {
@@ -106,13 +91,13 @@ export class ModalTemplateEditComponent extends AppModalAbstractComponent<Templa
     editorInit(): void {
         const modelist = ace.require('ace/ext/modelist');
         const editorMode = this.isEditMode
-            ? modelist.getModeForPath(this.model.path + '/' + this.model.name).mode
+            ? modelist.getModeForPath(`${this.model.path}/${this.model.name}`).mode
             : 'ace/mode/twig';
         
         ace.config.setModuleUrl('ace/mode/javascript_worker', '../js/ace/worker-javascript.js');
         ace.config.setModuleUrl('ace/mode/css_worker', '../js/ace/worker-css.js');
         
-        this.editor = ace.edit(`editor-${this.modalId}`, {
+        this.editor = ace.edit(`editor-${this.model.type}-${this.model.id}`, {
             mode: editorMode,
             theme: 'ace/theme/kuroir',
             maxLines: 30,

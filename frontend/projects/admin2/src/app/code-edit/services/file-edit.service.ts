@@ -27,8 +27,8 @@ export class FileEditService extends DataService<EditableFile> {
         );
     }
 
-    saveContent(template: FileRegularInterface): Observable<any> {
-        return this.http.post<any>(this.getRequestUrl(), template, {headers: this.headers}).pipe(
+    saveContent(file: EditableFile): Observable<any> {
+        return this.http.post<any>(this.getRequestUrl(), file, {headers: this.headers}).pipe(
             catchError(this.handleError<any>())
         );
     }
@@ -47,14 +47,6 @@ export class FileEditService extends DataService<EditableFile> {
         return this.http.post<any>(url, {pathArr: pathArr}, {headers: this.headers}).pipe(
             catchError(this.handleError<any>())
         );
-    }
-
-    getEditableFiles(): Observable<DataList<FileRegularInterface>> {
-        const url = `${this.getRequestUrl()}/get_editable_files`;
-        return this.http.get<DataList<FileRegularInterface>>(url, {headers: this.headers})
-            .pipe(
-                catchError(this.handleError<any>())
-            );
     }
     
     getThemesList(): Observable<any> {

@@ -154,7 +154,7 @@ class TemplatesController extends StorageControllerAbstract
             'css' => $this->params->get('app.editable_css'),
             'js' => $this->params->get('app.editable_js'),
             'config' => $this->params->get('app.editable_config'),
-            'translations' => $this->params->get('app.editable_translations')
+            'translation' => $this->params->get('app.editable_translations')
         ];
         
         foreach ($editable as $fileType => $val) {
@@ -312,7 +312,7 @@ class TemplatesController extends StorageControllerAbstract
             case 'config':
                 $filePath = implode(DIRECTORY_SEPARATOR, [$configDirPath, $filePath]);
                 break;
-            case 'translations':
+            case 'translation':
                 $filePath = implode(DIRECTORY_SEPARATOR, [$translationsDirPath, $filePath]);
                 break;
             default:

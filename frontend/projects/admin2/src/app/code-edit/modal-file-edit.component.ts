@@ -16,7 +16,7 @@ declare const ace: any;
 
 @Component({
     selector: 'app-modal-file-edit',
-    templateUrl: './templates/modal-file-edit.html',
+    templateUrl: './templates/modal-file-edit.component.html',
     providers: [FileEditService]
 })
 export class ModalFileEditComponent extends AppModalAbstractComponent<EditableFile> implements OnInit, AfterViewInit, OnDestroy {

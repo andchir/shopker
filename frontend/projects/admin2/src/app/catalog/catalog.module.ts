@@ -8,6 +8,7 @@ import {CatalogCategoryComponent} from './catalog-category.component';
 import {ContentTypesComponent} from './content-types.component';
 import {FieldTypesComponent} from './field-types.component';
 import {ModalFieldTypeComponent} from './modal-field-type.component';
+import {ModalContentTypeComponent} from './modal-content-type.component';
 
 @NgModule({
     imports: [
@@ -21,11 +22,13 @@ import {ModalFieldTypeComponent} from './modal-field-type.component';
         ContentTypesComponent,
         FieldTypesComponent,
 
-        ModalFieldTypeComponent
+        ModalFieldTypeComponent,
+        ModalContentTypeComponent
     ],
     providers: [],
     entryComponents: [
-        ModalFieldTypeComponent
+        ModalFieldTypeComponent,
+        ModalContentTypeComponent
     ]
 })
 export class CatalogModule {

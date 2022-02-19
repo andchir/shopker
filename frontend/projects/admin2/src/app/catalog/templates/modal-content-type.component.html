@@ -1,0 +1,66 @@
+<div>
+    <form [formGroup]="form" #formEl>
+
+        <div class="grid">
+            <div class="col-12 md:col-6">
+                <div class="mb-2">
+                    <label class="block mb-2" for="fieldTitle">
+                        {{ 'TITLE' | translate }}
+                    </label>
+                    <input type="text" id="fieldTitle" class="w-full" pInputText
+                           formControlName="title">
+                </div>
+                <div class="mb-2">
+                    <label class="block mb-2" for="fieldSystemName">
+                        {{ 'SYSTEM_NAME' | translate }}
+                    </label>
+                    <input type="text" id="fieldSystemName" class="w-full mb-2" pInputText
+                           formControlName="name">
+                </div>
+            </div>
+            <div class="col-12 md:col-6">
+                <label class="block mb-2" for="fieldDescription">
+                    {{ 'DESCRIPTION' | translate }}
+                </label>
+                <textarea id="fieldDescription" class="w-full mb-2" rows="5" pInputTextarea
+                          formControlName="description"></textarea>
+            </div>
+        </div>
+
+        <div class="grid mb-3">
+            <div class="col-12 md:col-6">
+                <div>
+                    <p-inputSwitch inputId="fieldActive" styleClass="mr-2 vertical-align-middle"
+                                   formControlName="isActive"></p-inputSwitch>
+                    <label class="vertical-align-middle" for="fieldActive">
+                        {{ 'ACTIVE' | translate }}
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div role="separator" class="p-divider p-component p-divider-horizontal p-divider-solid p-divider-left">
+            <div class="p-divider-content"></div>
+        </div>
+
+        <p-message styleClass="block w-full text-left mb-3" severity="error"
+                   [text]="errorMessage"
+                   *ngIf="errorMessage"></p-message>
+
+        <div class="text-right pt-2">
+            <button pButton pRipple type="button" [label]="'SAVE_AND_CLOSE' | translate" icon="pi pi-check"
+                    class="p-button-success p-button-raised w-full md:w-auto mb-2 md:mb-0 md:ml-2"
+                    (click)="saveData(true, $event)"></button>
+            <button pButton pRipple type="button" [label]="'SAVE' | translate" icon="pi pi-check"
+                    class="p-button-warning p-button-raised w-full md:w-auto mb-2 md:mb-0 md:ml-2"
+                    (click)="saveData(false, $event)"></button>
+            <button pButton pRipple type="button" [label]="'CLOSE' | translate"
+                    class="p-button-secondary p-button-raised w-full md:w-auto mb-2 md:mb-0 md:ml-2"
+                    (click)="dismissModal($event)"></button>
+        </div>
+    </form>
+
+</div>
+<div class="loading-overlay" *ngIf="loading">
+    <p-progressSpinner></p-progressSpinner>
+</div>

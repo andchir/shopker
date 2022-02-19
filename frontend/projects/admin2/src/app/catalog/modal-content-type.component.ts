@@ -5,25 +5,23 @@ import {DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
 
 import {AppModalAbstractComponent} from '../components/modal.component.abstract';
 import {FormFieldsData} from '../models/form-field.interface';
-import {FieldType} from './models/field-type.model';
-import {FieldTypesService} from './services/field-types.service';
+import {ContentType} from './models/content_type.model';
+import {ContentTypesService} from './services/content_types.service';
 
 @Component({
-    selector: 'app-modal-field-type',
-    templateUrl: 'templates/modal-field-type.component.html',
+    selector: 'app-modal-content-type',
+    templateUrl: 'templates/modal-content-type.component.html',
     providers: []
 })
-export class ModalFieldTypeComponent extends AppModalAbstractComponent<FieldType> implements OnInit, OnDestroy {
+export class ModalContentTypeComponent extends AppModalAbstractComponent<ContentType> implements OnInit, OnDestroy {
 
-    model = new FieldType(0, '', '', '', true, [], []);
+    model = new ContentType(0, '', '', '', '', [], [], true);
     form = new FormGroup({
         id: new FormControl('', []),
         title: new FormControl('', [Validators.required]),
         name: new FormControl('', [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')]),
         description: new FormControl('', []),
-        isActive: new FormControl('', []),
-        inputProperties: new FormArray([]),
-        outputProperties: new FormArray([])
+        isActive: new FormControl('', [])
     });
     arrayFieldsData: {[key: string]: FormFieldsData} = {
         inputProperties: {
@@ -41,14 +39,12 @@ export class ModalFieldTypeComponent extends AppModalAbstractComponent<FieldType
     constructor(
         public ref: DynamicDialogRef,
         public config: DynamicDialogConfig,
-        public dataService: FieldTypesService
+        public dataService: ContentTypesService
     ) {
         super(ref, config, dataService);
     }
-    
+
     ngOnInit() {
         super.ngOnInit();
-        this.createArrayFieldsProperty('inputProperties');
-        this.createArrayFieldsProperty('outputProperties');
     }
 }

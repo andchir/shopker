@@ -65,6 +65,8 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
     ngOnInit(): void {
         if (this.config.data.id) {
             this.getData(this.config.data.id);
+        } else {
+            this.updateControls();
         }
         this.form.valueChanges
             .pipe(takeUntil(this.destroyed$))

@@ -1,0 +1,28 @@
+<div class="layout-topbar justify-content-between">
+    <button type="button" class="menu-button" (click)="navBarToggle()">
+        <i class="pi pi-bars"></i>
+    </button>
+    <span class="layout-topbar-header text-3xl text-600">
+        <i class="fi fi-br-cube vertical-align-middle mr-3"></i>
+        <span class="vertical-align-middle">{{ 'CATALOG' | translate }}</span>
+    </span>
+    <ul class="topbar-menu">
+        <li routerLinkActive="active">
+            <a routerLink="category">{{ 'CATALOG' | translate }}</a>
+        </li>
+        <li routerLinkActive="active">
+            <a routerLink="content_types">{{ 'CONTENT_TYPES' | translate }}</a>
+        </li>
+        <li routerLinkActive="active">
+            <a routerLink="field_types">{{ 'FIELD_TYPES' | translate }}</a>
+        </li>
+    </ul>
+</div>
+
+<div class="layout-content">
+    <div class="content-section">
+
+        <router-outlet></router-outlet>
+
+    </div>
+</div>

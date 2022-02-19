@@ -41,32 +41,14 @@ export class UsersComponent extends AppTablePageAbstractComponent<User> implemen
     }
     
     ngOnInit() {
-        this.menuItems = [
-            {
-                label: this.getLangString('REFRESH'),
-                icon: 'pi pi-refresh',
-                command: () => {
-                    this.queryOptions.page = 1;
-                    this.queryOptions.search_word = '';
-                    this.getData();
-                }
-            },
-            {
-                label: this.getLangString('DELETE_SELECTED'),
-                icon: 'pi pi-times',
-                command: () => {
-                    this.deleteSelected();
-                }
-            },
-            {
-                label: this.getLangString('DISABLE_ENABLE'),
-                icon: 'pi pi-times-circle',
-                command: () => {
-                    this.blockSelected();
-                }
-            }
-        ];
         super.ngOnInit();
+        this.menuItems.push({
+            label: this.getLangString('DISABLE_ENABLE'),
+            icon: 'pi pi-times-circle',
+            command: () => {
+                this.blockSelected();
+            }
+        });
     }
 
     getModalComponent() {

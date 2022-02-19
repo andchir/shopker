@@ -51,6 +51,24 @@ export abstract class AppTablePageAbstractComponent<T extends SimpleEntity> impl
     abstract getModalComponent();
 
     ngOnInit(): void {
+        this.menuItems = [
+            {
+                label: this.getLangString('REFRESH'),
+                icon: 'pi pi-refresh',
+                command: () => {
+                    this.queryOptions.page = 1;
+                    this.queryOptions.search_word = '';
+                    this.getData();
+                }
+            },
+            {
+                label: this.getLangString('DELETE_SELECTED'),
+                icon: 'pi pi-times',
+                command: () => {
+                    this.deleteSelected();
+                }
+            }
+        ];
         this.getContentTypeFields();
     }
 

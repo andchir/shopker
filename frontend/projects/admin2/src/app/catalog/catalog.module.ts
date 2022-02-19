@@ -9,6 +9,7 @@ import {ContentTypesComponent} from './content-types.component';
 import {FieldTypesComponent} from './field-types.component';
 import {ModalFieldTypeComponent} from './modal-field-type.component';
 import {ModalContentTypeComponent} from './modal-content-type.component';
+import {ModalProductComponent} from './modal-product.component';
 
 @NgModule({
     imports: [
@@ -23,12 +24,14 @@ import {ModalContentTypeComponent} from './modal-content-type.component';
         FieldTypesComponent,
 
         ModalFieldTypeComponent,
-        ModalContentTypeComponent
+        ModalContentTypeComponent,
+        ModalProductComponent
     ],
     providers: [],
     entryComponents: [
         ModalFieldTypeComponent,
-        ModalContentTypeComponent
+        ModalContentTypeComponent,
+        ModalProductComponent
     ]
 })
 export class CatalogModule {

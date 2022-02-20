@@ -27,15 +27,45 @@
             </div>
         </div>
 
+        <div class="grid">
+            <div class="col-12 md:col-6 mb-3">
+                <label class="block mb-2" for="fieldCollection">
+                    {{ 'COLLECTION' | translate }}
+                </label>
+                <div class="p-inputgroup">
+                    <button type="button" pButton pRipple icon="pi pi-plus" styleClass="p-button-info"
+                            [pTooltip]="'ADD_COLLECTION' | translate"
+                            tooltipPosition="bottom"
+                            (click)="addCollectionToggle(newCollectionField, $event)"></button>
+                    <p-dropdown styleClass="w-full border-noround" inputId="fieldCollection" [options]="collections" formControlName="collection"></p-dropdown>
+                    <button type="button" pButton pRipple icon="pi pi-times" styleClass="p-button-info"
+                            [pTooltip]="'DELETE' | translate"
+                            tooltipPosition="bottom"
+                            (click)="deleteCollection()"></button>
+                </div>
+                <div class="" #addCollectionBlock style="display: none;">
+                    <input type="text" id="fieldNewCollection" class="w-full mb-2" pInputText #newCollectionField>
+                </div>
+            </div>
+            <div class="col-12 md:col-6 mb-3">
+                
+            </div>
+        </div>
+
         <div class="grid mb-3">
             <div class="col-12 md:col-6">
-                <div>
-                    <p-inputSwitch inputId="fieldActive" styleClass="mr-2 vertical-align-middle"
-                                   formControlName="isActive"></p-inputSwitch>
-                    <label class="vertical-align-middle" for="fieldActive">
-                        {{ 'ACTIVE' | translate }}
-                    </label>
-                </div>
+                <p-inputSwitch inputId="fieldActive" styleClass="mr-2 vertical-align-middle"
+                               formControlName="isActive"></p-inputSwitch>
+                <label class="vertical-align-middle" for="fieldActive">
+                    {{ 'ACTIVE' | translate }}
+                </label>
+            </div>
+            <div class="col-12 md:col-6">
+                <p-inputSwitch inputId="fieldCreateByUsersAllowed" styleClass="mr-2 vertical-align-middle"
+                               formControlName="isCreateByUsersAllowed"></p-inputSwitch>
+                <label class="vertical-align-middle" for="fieldCreateByUsersAllowed">
+                    {{ 'CREATE_BY_USERS_ALLOWED' | translate }}
+                </label>
             </div>
         </div>
 

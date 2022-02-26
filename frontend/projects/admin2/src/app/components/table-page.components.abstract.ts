@@ -69,7 +69,6 @@ export abstract class AppTablePageAbstractComponent<T extends SimpleEntity> impl
                 }
             }
         ];
-        this.getContentTypeFields();
     }
 
     getData(event?: any): void {
@@ -101,17 +100,6 @@ export abstract class AppTablePageAbstractComponent<T extends SimpleEntity> impl
                     this.itemsTotal = 0;
                     this.loading = false;
                 }
-            });
-    }
-
-    getContentTypeFields(): void {
-        this.contentTypesService.getList()
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe({
-                next: (res) => {
-                    
-                },
-                error: this.onRequestError.bind(this)
             });
     }
 

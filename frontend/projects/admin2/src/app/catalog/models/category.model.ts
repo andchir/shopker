@@ -1,5 +1,6 @@
 import {FileData} from './file-data.model';
 import {findIndex} from 'lodash';
+import {ContentType} from "./content_type.model";
 
 export interface CategoryNode {
     id: number;
@@ -85,7 +86,8 @@ export class Category {
         public clearCache?: boolean,
         public menuIndex?: number,
         public translations?: {[fieldName: string]: {[lang: string]: string}},
-        public image?: FileData|null
+        public image?: FileData|null,
+        public contentType?: ContentType
     ) {
         if (typeof this.clearCache === 'undefined') {
             this.clearCache = false;

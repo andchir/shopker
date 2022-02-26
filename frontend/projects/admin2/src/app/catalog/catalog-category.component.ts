@@ -1,5 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 
+import {takeUntil} from 'rxjs/operators';
+import {Observable} from 'rxjs';
 import {DialogService} from 'primeng/dynamicdialog';
 import {ConfirmationService, MessageService} from 'primeng/api';
 
@@ -12,8 +15,7 @@ import {QueryOptions} from '../models/query-options';
 import {Category} from './models/category.model';
 import {ContentType} from './models/content_type.model';
 import {ModalProductComponent} from './modal-product.component';
-import {ActivatedRoute, Router} from "@angular/router";
-import {takeUntil} from "rxjs/operators";
+import {CategoriesService} from './services/categories.service';
 
 @Component({
     selector: 'app-catalog-category',
@@ -36,6 +38,7 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
         public translateService: TranslateService,
         public messageService: MessageService,
         public confirmationService: ConfirmationService,
+        private categoriesService: CategoriesService,
         private router: Router,
         private route: ActivatedRoute
     ) {
@@ -50,16 +53,67 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
                     this.categoryId = params.get('categoryId')
                         ? parseInt(params.get('categoryId'), 10)
                         : 0;
-                    console.log(this.categoryId);
+                    this.openCategory();
                 }
             );
     }
 
+    getContentType(): Observable<ContentType> {
+        return this.contentTypesService
+            .getItemByName(this.currentCategory.contentTypeName);
+    }
+
+    openCategory(): void {
+        this.dataService.setRequestUrl(`/admin/products/${this.categoryId}`);
+        this.categoriesService.getItem(this.categoryId)
+            .subscribe({
+                next: (data) => {
+                    this.currentCategory = data;
+                    this.currentContentType = data.contentType;
+                    this.updateTableConfig();
+                    this.getData();
+                },
+                error: () => {
+                    this.loading = false;
+                }
+            });
+    }
+
     getData(event?: any): void {
-        console.log('getData');
+        if (!this.currentContentType) {
+            return;
+        }
+        super.getData();
     }
 
     getModalComponent() {
         return ModalProductComponent;
+    }
+
+    updateTableConfig(): void {
+        if (!this.currentContentType) {
+            return;
+        }
+        this.cols = [];
+        this.currentContentType.fields.forEach((field) => {
+            this.cols.push({
+                field: field.name,
+                header: field.title,
+                outputType: field.outputType,
+                outputProperties: field.outputProperties
+            });
+        });
+        this.cols.unshift({
+            field: 'id',
+            header: 'ID',
+            outputType: 'text-center',
+            outputProperties: {}
+        });
+        this.cols.push({
+            field: 'isActive',
+            header: 'STATUS',
+            outputType: 'boolean',
+            outputProperties: {}
+        });
     }
 }

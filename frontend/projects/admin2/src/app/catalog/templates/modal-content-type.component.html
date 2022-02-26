@@ -73,6 +73,51 @@
             <div class="p-divider-content"></div>
         </div>
 
+        <div>
+            <p-table [value]="model.fields"
+                     [loading]="loading"
+                     dataKey="name"
+                     editMode="row"
+                     responsiveLayout="fixed">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>{{ 'TITLE' | translate }}</th>
+                        <th>{{ 'INPUT_TYPE' | translate }}</th>
+                        <th>{{ 'GROUP' | translate }}</th>
+                        <th>{{ 'REQUIRED' | translate }}</th>
+                        <th>{{ 'SHOW_IN_TABLE' | translate }}</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-field let-editing="editing" let-ri="rowIndex">
+                    <tr [pEditableRow]="field" class="show-on-hover-parent">
+                        <td>{{ field.title }} <span class="text-500">({{ field.name }})</span></td>
+                        <td>{{ field.inputType }}</td>
+                        <td>{{ field.group }}</td>
+                        <td>
+                            <app-render-output [value]="field.required" outputType="boolean"></app-render-output>
+                        </td>
+                        <td>
+                            <app-render-output [value]="field.showInTable" outputType="boolean"></app-render-output>
+                            <div class="absolute show-on-hover pos-top10 pos-right10">
+                                <button pButton pRipple icon="pi pi-pencil"
+                                        class="p-button p-button-sm p-button-rounded p-button-info"
+                                        [pTooltip]="'EDIT' | translate"
+                                        tooltipPosition="bottom"></button>
+                                <button pButton pRipple icon="pi pi-clone"
+                                        class="p-button p-button-sm p-button-rounded p-button-info ml-2"
+                                        [pTooltip]="'COPY' | translate"
+                                        tooltipPosition="bottom"></button>
+                                <button pButton pRipple icon="pi pi-trash"
+                                        class="p-button p-button-sm p-button-rounded p-button-danger ml-2"
+                                        [pTooltip]="'DELETE' | translate"
+                                        tooltipPosition="bottom"></button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
         <p-message styleClass="block w-full text-left mb-3" severity="error"
                    [text]="errorMessage"
                    *ngIf="errorMessage"></p-message>

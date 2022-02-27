@@ -10,11 +10,11 @@
                     <input type="text" id="fieldTitle" class="w-full" pInputText
                            formControlName="title">
                 </div>
-                <div class="mb-2">
+                <div>
                     <label class="block mb-2" for="fieldSystemName">
                         {{ 'SYSTEM_NAME' | translate }}
                     </label>
-                    <input type="text" id="fieldSystemName" class="w-full mb-2" pInputText
+                    <input type="text" id="fieldSystemName" class="w-full" pInputText
                            formControlName="name">
                 </div>
             </div>
@@ -115,15 +115,15 @@
                                 <button pButton pRipple icon="pi pi-pencil"
                                         class="p-button p-button-sm p-button-rounded p-button-info"
                                         [pTooltip]="'EDIT' | translate"
-                                        tooltipPosition="bottom"></button>
+                                        tooltipPosition="bottom" (click)="editField(field, $event)"></button>
                                 <button pButton pRipple icon="pi pi-clone"
                                         class="p-button p-button-sm p-button-rounded p-button-info ml-2"
                                         [pTooltip]="'COPY' | translate"
-                                        tooltipPosition="bottom"></button>
+                                        tooltipPosition="bottom" (click)="copyField(field, $event)"></button>
                                 <button pButton pRipple icon="pi pi-trash"
                                         class="p-button p-button-sm p-button-rounded p-button-danger ml-2"
                                         [pTooltip]="'DELETE' | translate"
-                                        tooltipPosition="bottom"></button>
+                                        tooltipPosition="bottom" (click)="deleteField(field, $event)"></button>
                             </div>
                         </td>
                     </tr>

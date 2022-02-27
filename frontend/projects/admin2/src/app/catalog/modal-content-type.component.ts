@@ -1,14 +1,17 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 
+import {takeUntil} from 'rxjs/operators';
+import {ConfirmationService} from 'primeng/api';
 import {TranslateService} from '@ngx-translate/core';
-import {DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
+import {DialogService, DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
 
 import {AppModalAbstractComponent} from '../components/modal.component.abstract';
 import {ContentType} from './models/content_type.model';
 import {ContentTypesService} from './services/content_types.service';
 import {CollectionsService} from './services/collections.service';
-import {ConfirmationService} from "primeng/api";
+import {ContentField} from './models/content_field.model';
+import {ModalContentTypeFieldComponent} from './modal-content-type-field';
 
 @Component({
     selector: 'app-modal-content-type',
@@ -37,9 +40,10 @@ export class ModalContentTypeComponent extends AppModalAbstractComponent<Content
         public ref: DynamicDialogRef,
         public config: DynamicDialogConfig,
         public dataService: ContentTypesService,
-        public translateService: TranslateService,
+        private dialogService: DialogService,
+        private translateService: TranslateService,
         private collectionsService: CollectionsService,
-        private confirmationService: ConfirmationService
+        private confirmationService: ConfirmationService,
     ) {
         super(ref, config, dataService);
     }
@@ -59,7 +63,7 @@ export class ModalContentTypeComponent extends AppModalAbstractComponent<Content
             );
     }
 
-    addCollection(inputElement: HTMLInputElement, event?: MouseEvent) {
+    addCollection(inputElement: HTMLInputElement, event?: MouseEvent): void {
         if (event) {
             event.preventDefault();
         }
@@ -113,6 +117,7 @@ export class ModalContentTypeComponent extends AppModalAbstractComponent<Content
                                 this.collections.splice(index, 1);
                                 this.form.controls['collection'].setValue(this.collections[0] || '');
                             }
+                            this.errorMessageTop = '';
                             this.loading = false;
                         },
                         error: (err) => {
@@ -122,6 +127,57 @@ export class ModalContentTypeComponent extends AppModalAbstractComponent<Content
                     });
             }
         });
+    }
+
+    deleteField(field: ContentField, event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        const index = this.model.fields.findIndex((f) => {
+            return f.name === field.name;
+        })
+        if (index === -1 ) {
+            this.errorMessage = this.getLangString('FIELD_NOR_FOUND');
+            return;
+        }
+        this.model.fields.splice(index, 1);
+    }
+    
+    modalContentTypeField(data: any): void {
+        const ref = this.dialogService.open(ModalContentTypeFieldComponent, {
+            header: this.getLangString('EDIT_FIELD'), // EDIT_FIELD | ADD_FIELD
+            width: '600px',
+            data: data
+        });
+        ref.onClose
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe({
+                next: () => {
+                    console.log('CLOSED');
+                }
+            });
+    }
+
+    editField(field: ContentField, event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        console.log('editField', field);
+        const data = Object.assign({}, field);
+        if (data.inputProperties) {
+            data.inputProperties = Object.assign({}, field.inputProperties);
+        }
+        if (data.outputProperties) {
+            data.outputProperties = Object.assign({}, field.outputProperties);
+        }
+        this.modalContentTypeField(data);
+    }
+
+    copyField(field: ContentField, event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        console.log('copyField', field);
     }
 
     getLangString(value: string): string {

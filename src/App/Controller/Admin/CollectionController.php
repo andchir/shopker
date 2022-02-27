@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\MainBundle\Document\Collection;
+use App\MainBundle\Document\ContentType;
 use Doctrine\Persistence\ObjectRepository;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -56,7 +57,7 @@ class CollectionController extends BaseController
             return $this->setError('Item not found.');
         }
 
-        $contentTypeRepository = $this->dm->getRepository('AppMainBundle:ContentType');
+        $contentTypeRepository = $this->dm->getRepository(ContentType::class);
 
         $count = $contentTypeRepository->createQueryBuilder()
             ->field('collection')->equals($itemName)

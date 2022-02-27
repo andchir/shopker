@@ -46,6 +46,14 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
     }
 
     ngOnInit(): void {
+        super.ngOnInit();
+        this.menuItems.push({
+            label: this.getLangString('DISABLE_ENABLE'),
+            icon: 'pi pi-times-circle',
+            command: () => {
+                this.blockSelected();
+            }
+        });
         this.route.paramMap
             .pipe(takeUntil(this.destroyed$))
             .subscribe(

@@ -30,6 +30,7 @@ import {MessagesModule} from 'primeng/messages';
 import {MessageModule} from 'primeng/message';
 import {ChartModule} from 'primeng/chart';
 import {CalendarModule} from 'primeng/calendar';
+import {PanelModule} from 'primeng/panel';
 
 import {AppNavbarComponent} from './components/app-navbar.component';
 import {RenderOutputTypeComponent} from './components/render-output-type.component';
@@ -79,7 +80,8 @@ const components = [
         MessagesModule,
         MessageModule,
         ChartModule,
-        CalendarModule
+        CalendarModule,
+        PanelModule
     ],
     declarations: [
         ...components,
@@ -127,6 +129,7 @@ const components = [
         MessageModule,
         ChartModule,
         CalendarModule,
+        PanelModule,
 
         FilterFieldByGroupPipe,
         DateFromObjectPipe,

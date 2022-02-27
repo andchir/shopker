@@ -36,15 +36,29 @@
                     <button type="button" pButton pRipple icon="pi pi-plus" styleClass="p-button-info"
                             [pTooltip]="'ADD_COLLECTION' | translate"
                             tooltipPosition="bottom"
-                            (click)="addCollectionToggle(newCollectionField, $event)"></button>
-                    <p-dropdown styleClass="w-full border-noround" inputId="fieldCollection" [options]="collections" formControlName="collection"></p-dropdown>
+                            (click)="openBlock(panelAddCollection, newCollectionField, $event)"></button>
+                    <p-dropdown styleClass="w-full border-noround" inputId="fieldCollection"
+                                [options]="collections"
+                                formControlName="collection"></p-dropdown>
                     <button type="button" pButton pRipple icon="pi pi-times" styleClass="p-button-info"
                             [pTooltip]="'DELETE' | translate"
                             tooltipPosition="bottom"
                             (click)="deleteCollection()"></button>
                 </div>
-                <div class="" #addCollectionBlock style="display: none;">
-                    <input type="text" id="fieldNewCollection" class="w-full mb-2" pInputText #newCollectionField>
+                <div class="pt-3 hidden" #panelAddCollection>
+                    <p-panel [header]="'ADD_COLLECTION' | translate">
+                        <input type="text" id="fieldNewCollection" class="w-full mb-2" pInputText #newCollectionField>
+                        <div class="text-right">
+                            <button type="button" pButton pRipple
+                                    class="p-button-secondary p-button-sm ml-2"
+                                    [label]="'ADD' | translate"
+                                    (click)="addCollection(newCollectionField, $event)"></button>
+                            <button type="button" pButton pRipple
+                                    class="p-button-secondary p-button-sm ml-2"
+                                    [label]="'CANCEL' | translate"
+                                    (click)="closeBlock(panelAddCollection, $event)"></button>
+                        </div>
+                    </p-panel>
                 </div>
             </div>
             <div class="col-12 md:col-6 mb-3">
@@ -69,11 +83,11 @@
             </div>
         </div>
 
-        <div role="separator" class="p-divider p-component p-divider-horizontal p-divider-solid p-divider-left">
-            <div class="p-divider-content"></div>
-        </div>
+        <p-message styleClass="block w-full text-left mb-3" severity="error"
+                   [text]="errorMessageTop"
+                   *ngIf="errorMessageTop"></p-message>
 
-        <div>
+        <div class="mb-3">
             <p-table [value]="model.fields"
                      [loading]="loading"
                      dataKey="name"
@@ -113,6 +127,15 @@
                             </div>
                         </td>
                     </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="text-center">
+                        <button type="button" pButton pRipple
+                                class="p-button-secondary p-button-sm"
+                                icon="pi pi-plus"
+                                iconPos="left"
+                                [label]="'ADD' | translate"></button>
+                    </div>
                 </ng-template>
             </p-table>
         </div>

@@ -1,5 +1,6 @@
 import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 
+import {takeUntil} from 'rxjs/operators';
 import {TranslateService} from '@ngx-translate/core';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {DialogService} from 'primeng/dynamicdialog';
@@ -11,7 +12,6 @@ import {EditableFile} from './models/editable-file.model';
 import {FileEditService} from './services/file-edit.service';
 import {ModalFileEditComponent} from './modal-file-edit.component';
 import {AssetsEditComponent} from './assets-edit.component';
-import {takeUntil} from "rxjs/operators";
 
 @Component({
     selector: 'app-template-edit',
@@ -56,6 +56,18 @@ export class TemplatesEditComponent extends AssetsEditComponent implements OnIni
                 command: (event?: any) => {
                     this.deleteSelected();
                 }
+            }
+        ];
+        this.contextMenuItems = [
+            {
+                label: this.getLangString('EDIT'),
+                icon: 'pi pi-fw pi-pencil',
+                command: () => this.openModal(this.itemSelected)
+            },
+            {
+                label: this.getLangString('DELETE'),
+                icon: 'pi pi-fw pi-trash',
+                command: () => this.deleteItem(this.itemSelected)
             }
         ];
         this.getThemesList();

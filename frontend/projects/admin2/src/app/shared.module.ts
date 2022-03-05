@@ -20,6 +20,7 @@ import {DynamicDialogModule} from 'primeng/dynamicdialog';
 import {SplitButtonModule} from 'primeng/splitbutton';
 import {TooltipModule} from 'primeng/tooltip';
 import {MenuModule} from 'primeng/menu';
+import {ContextMenuModule} from 'primeng/contextmenu';
 import {SidebarModule} from 'primeng/sidebar';
 import {CardModule} from 'primeng/card';
 import {AccordionModule} from 'primeng/accordion';
@@ -71,6 +72,7 @@ const components = [
         SplitButtonModule,
         TooltipModule,
         MenuModule,
+        ContextMenuModule,
         SidebarModule,
         CardModule,
         AccordionModule,
@@ -119,6 +121,7 @@ const components = [
         SplitButtonModule,
         TooltipModule,
         MenuModule,
+        ContextMenuModule,
         SidebarModule,
         CardModule,
         AccordionModule,

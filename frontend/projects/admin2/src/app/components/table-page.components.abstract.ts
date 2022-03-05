@@ -33,6 +33,7 @@ export abstract class AppTablePageAbstractComponent<T extends SimpleEntity> impl
     itemsTotal = 0;
     cols: TableField[];
     menuItems: MenuItem[];
+    contextMenuItems: MenuItem[];
     contentTypeFields: ContentField[];
     queryOptions: QueryOptions = new QueryOptions(1, 12, 'createdDate', 'desc');
     searchTimer: any;
@@ -67,6 +68,18 @@ export abstract class AppTablePageAbstractComponent<T extends SimpleEntity> impl
                 command: () => {
                     this.deleteSelected();
                 }
+            }
+        ];
+        this.contextMenuItems = [
+            {
+                label: this.getLangString('EDIT'),
+                icon: 'pi pi-fw pi-pencil',
+                command: () => this.openModal(this.itemSelected)
+            },
+            {
+                label: this.getLangString('DELETE'),
+                icon: 'pi pi-fw pi-trash',
+                command: () => this.deleteItem(this.itemSelected)
             }
         ];
     }

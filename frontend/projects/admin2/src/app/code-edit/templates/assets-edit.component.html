@@ -1,5 +1,7 @@
 <p-table styleClass="p-datatable-striped"
          [(selection)]="itemsSelected"
+         [(contextMenuSelection)]="itemSelected"
+         [contextMenu]="contextMenu"
          [sortField]="queryOptions.sort_by"
          [sortOrder]="queryOptions.sort_dir == 'asc' ? 1 : -1"
          dataKey="id"
@@ -46,7 +48,7 @@
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-item let-columns="columns">
-        <tr class="show-on-hover-parent">
+        <tr class="show-on-hover-parent" [pContextMenuRow]="item">
             <td>
                 <p-tableCheckbox [value]="item"></p-tableCheckbox>
             </td>
@@ -87,3 +89,5 @@
 <p-confirmDialog [header]="'CONFIRM' | translate" icon="pi pi-exclamation-triangle"></p-confirmDialog>
 
 <p-menu #menu [popup]="true" [model]="menuItems" styleClass="p-menu-nowrap"></p-menu>
+
+<p-contextMenu #contextMenu [model]="contextMenuItems"></p-contextMenu>

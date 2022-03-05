@@ -28,7 +28,6 @@ export class OrdersComponent extends AppTablePageAbstractComponent<Order> implem
         { field: 'email', header: 'EMAIL', outputType: 'userEmail', outputProperties: {} },
         { field: 'createdDate', header: 'DATE_TIME', outputType: 'date', outputProperties: {format: 'dd/MM/y HH:mm:ss'} }
     ];
-    menuItems: MenuItem[];
 
     constructor(
         public dialogService: DialogService,

@@ -52,6 +52,13 @@ export class AssetsEditComponent extends AppTablePageAbstractComponent<EditableF
                 }
             }
         ];
+        this.contextMenuItems = [
+            {
+                label: this.getLangString('EDIT'),
+                icon: 'pi pi-fw pi-pencil',
+                command: () => this.openModal(this.itemSelected)
+            }
+        ];
     }
 
     getModalComponent() {

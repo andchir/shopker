@@ -64,7 +64,6 @@
                         <p-tableCheckbox [value]="item"></p-tableCheckbox>
                     </td>
                     <td *ngFor="let col of columns; let index=index">
-
                         <app-render-output
                             [value]="item[col.field]"
                             [key]="col.field"

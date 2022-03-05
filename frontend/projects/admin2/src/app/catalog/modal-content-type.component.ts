@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 
 import {takeUntil} from 'rxjs/operators';
-import {ConfirmationService} from 'primeng/api';
+import {ConfirmationService, MenuItem} from 'primeng/api';
 import {TranslateService} from '@ngx-translate/core';
 import {DialogService, DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
 
@@ -35,6 +35,8 @@ export class ModalContentTypeComponent extends AppModalAbstractComponent<Content
     });
     collections: string[] = ['products'];
     errorMessageTop = '';
+    contextMenuItems: MenuItem[];
+    itemSelected: ContentField;
 
     constructor(
         public ref: DynamicDialogRef,
@@ -51,6 +53,23 @@ export class ModalContentTypeComponent extends AppModalAbstractComponent<Content
     ngOnInit() {
         super.ngOnInit();
         this.getCollectionsList();
+        this.contextMenuItems = [
+            {
+                label: this.getLangString('EDIT'),
+                icon: 'pi pi-fw pi-pencil',
+                command: () => this.editField(this.itemSelected)
+            },
+            {
+                label: this.getLangString('COPY'),
+                icon: 'pi pi-fw pi-clone',
+                command: () => this.copyField(this.itemSelected)
+            },
+            {
+                label: this.getLangString('DELETE'),
+                icon: 'pi pi-fw pi-trash',
+                command: () => this.deleteField(this.itemSelected)
+            }
+        ];
     }
 
     getCollectionsList(): void {

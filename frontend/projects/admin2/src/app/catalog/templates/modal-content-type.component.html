@@ -90,6 +90,8 @@
         <div class="mb-3">
             <p-table [value]="model.fields"
                      [loading]="loading"
+                     [(contextMenuSelection)]="itemSelected"
+                     [contextMenu]="contextMenu"
                      dataKey="name"
                      editMode="row">
                 <ng-template pTemplate="header">
@@ -102,7 +104,7 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-field let-editing="editing" let-ri="rowIndex">
-                    <tr [pEditableRow]="field" class="show-on-hover-parent">
+                    <tr [pEditableRow]="field" class="show-on-hover-parent" [pContextMenuRow]="field">
                         <td>{{ field.title }} <span class="text-500">({{ field.name }})</span></td>
                         <td>{{ field.inputType }}</td>
                         <td>{{ field.group }}</td>
@@ -161,3 +163,5 @@
 <div class="loading-overlay" *ngIf="loading">
     <p-progressSpinner></p-progressSpinner>
 </div>
+
+<p-contextMenu #contextMenu [model]="contextMenuItems" appendTo="body"></p-contextMenu>

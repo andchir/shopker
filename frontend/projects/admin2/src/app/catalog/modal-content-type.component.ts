@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 
 import {takeUntil} from 'rxjs/operators';
@@ -20,8 +20,8 @@ import {ModalContentTypeFieldComponent} from './modal-content-type-field';
 })
 export class ModalContentTypeComponent extends AppModalAbstractComponent<ContentType> implements OnInit, OnDestroy {
 
+    @ViewChild('formEl') formEl: ElementRef;
     @ViewChild('panelAddCollection', { static: true }) panelAddCollection;
-    @ViewChild('panelAddGroup', { static: true }) panelAddGroup;
     
     model = new ContentType(0, '', '', '', '', [], [], true);
     form = new FormGroup({
@@ -60,7 +60,7 @@ export class ModalContentTypeComponent extends AppModalAbstractComponent<Content
                 command: () => this.editField(this.itemSelected)
             },
             {
-                label: this.getLangString('COPY'),
+                label: this.getLangString('CLONE'),
                 icon: 'pi pi-fw pi-clone',
                 command: () => this.copyField(this.itemSelected)
             },
@@ -105,6 +105,10 @@ export class ModalContentTypeComponent extends AppModalAbstractComponent<Content
     openBlock(containerElement: HTMLElement, inputElement?: HTMLInputElement, event?: MouseEvent): void {
         if (event) {
             event.preventDefault();
+        }
+        if (containerElement.className.indexOf('hidden') === -1) {
+            containerElement.classList.add('hidden');
+            return;
         }
         containerElement.classList.remove('hidden');
         if (inputElement) {
@@ -165,7 +169,7 @@ export class ModalContentTypeComponent extends AppModalAbstractComponent<Content
     modalContentTypeField(data: any): void {
         const ref = this.dialogService.open(ModalContentTypeFieldComponent, {
             header: this.getLangString('EDIT_FIELD'), // EDIT_FIELD | ADD_FIELD
-            width: '600px',
+            width: '800px',
             data: data
         });
         ref.onClose
@@ -181,13 +185,15 @@ export class ModalContentTypeComponent extends AppModalAbstractComponent<Content
         if (event) {
             event.preventDefault();
         }
-        console.log('editField', field);
-        const data = Object.assign({}, field);
-        if (data.inputProperties) {
-            data.inputProperties = Object.assign({}, field.inputProperties);
+        const data = {
+            field: Object.assign({}, field),
+            contentType: this.model
+        };
+        if (data.field.inputProperties) {
+            data.field.inputProperties = Object.assign({}, field.inputProperties);
         }
-        if (data.outputProperties) {
-            data.outputProperties = Object.assign({}, field.outputProperties);
+        if (data.field.outputProperties) {
+            data.field.outputProperties = Object.assign({}, field.outputProperties);
         }
         this.modalContentTypeField(data);
     }

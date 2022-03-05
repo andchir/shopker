@@ -46,8 +46,8 @@
                             (click)="deleteCollection()"></button>
                 </div>
                 <div class="pt-3 hidden" #panelAddCollection>
-                    <p-panel [header]="'ADD_COLLECTION' | translate">
-                        <input type="text" id="fieldNewCollection" class="w-full mb-2" pInputText #newCollectionField>
+                    <p-panel [header]="'ADD_COLLECTION' | translate" styleClass="p-panel-sm">
+                        <input type="text" id="fieldNewCollection" class="w-full mb-3" pInputText #newCollectionField>
                         <div class="text-right">
                             <button type="button" pButton pRipple
                                     class="p-button-secondary p-button-sm ml-2"
@@ -120,7 +120,7 @@
                                         tooltipPosition="bottom" (click)="editField(field, $event)"></button>
                                 <button pButton pRipple icon="pi pi-clone"
                                         class="p-button p-button-sm p-button-rounded p-button-info ml-2"
-                                        [pTooltip]="'COPY' | translate"
+                                        [pTooltip]="'CLONE' | translate"
                                         tooltipPosition="bottom" (click)="copyField(field, $event)"></button>
                                 <button pButton pRipple icon="pi pi-trash"
                                         class="p-button p-button-sm p-button-rounded p-button-danger ml-2"

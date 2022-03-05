@@ -19,12 +19,160 @@
                 </div>
             </div>
             <div class="col-12 md:col-6">
-                <div class="mb-3">
+                <div>
                     <label class="block mb-2" for="contentTypeFieldDescription">
                         {{ 'DESCRIPTION' | translate }}
                     </label>
                     <textarea id="contentTypeFieldDescription" class="w-full mb-2" rows="5" pInputTextarea
                               formControlName="description"></textarea>
+                </div>
+            </div>
+        </div>
+        
+        <div class="grid">
+            <div class="col-12 md:col-6">
+                <label class="block mb-2" for="contentTypeFieldInputType">
+                    {{ 'INPUT_TYPE' | translate }}
+                </label>
+                <div class="p-inputgroup mb-2">
+                    <p-dropdown inputId="contentTypeFieldInputType" styleClass="w-full border-noround-right"
+                                formControlName="inputType"
+                                [options]="fieldTypes"
+                                optionLabel="title"
+                                optionValue="name"
+                                (onChange)="selectFieldTypeProperties('input')"></p-dropdown>
+                    <button type="button" pButton pRipple icon="pi pi-cog" styleClass="p-button-info"
+                            [pTooltip]="'OPTIONS' | translate"
+                            tooltipPosition="bottom"
+                            (click)="openBlock(inputTypeOptionsBlock, null, $event)"></button>
+                </div>
+                <div class="pt-2 hidden" #inputTypeOptionsBlock>
+                    <p-panel [header]="'OPTIONS' | translate" styleClass="p-panel-sm">
+                        <ng-container *ngIf="fieldTypeProperties.input.length > 0; else propertiesEmptyMessage">
+                            <div class="grid mb-2" *ngFor="let property of fieldTypeProperties.input">
+                                <div class="col-5">
+                                    <label class="text-sm" for="parameterInputField{{ property.name }}">
+                                        {{ property.title }}
+                                    </label>
+                                </div>
+                                <div class="col-7">
+                                    <input type="text" class="p-inputtext-sm w-full" pInputText
+                                           id="parameterInputField{{ property.name }}"
+                                           [(ngModel)]="fieldModel.inputProperties[property.name]"
+                                           [ngModelOptions]="{standalone: true}">
+                                </div>
+                            </div>
+                        </ng-container>
+                    </p-panel>
+                </div>
+            </div>
+            <div class="col-12 md:col-6">
+                <label class="block mb-2" for="contentTypeFieldOutputType">
+                    {{ 'OUTPUT_TYPE' | translate }}
+                </label>
+                <div class="p-inputgroup mb-2">
+                    <p-dropdown inputId="contentTypeFieldOutputType" styleClass="w-full border-noround-right"
+                                formControlName="outputType"
+                                [options]="fieldTypes"
+                                optionLabel="title"
+                                optionValue="name"
+                                (onChange)="selectFieldTypeProperties('output')"></p-dropdown>
+                    <button type="button" pButton pRipple icon="pi pi-cog" styleClass="p-button-info"
+                            [pTooltip]="'OPTIONS' | translate"
+                            tooltipPosition="bottom"
+                            (click)="openBlock(outputTypeOptionsBlock, null, $event)"></button>
+                </div>
+                <div class="pt-2 hidden" #outputTypeOptionsBlock>
+                    <p-panel [header]="'OPTIONS' | translate" styleClass="p-panel-sm">
+                        <ng-container *ngIf="fieldTypeProperties.output.length > 0; else propertiesEmptyMessage">
+                            <div class="grid mb-2" *ngFor="let property of fieldTypeProperties.output">
+                                <div class="col-5">
+                                    <label class="text-sm" for="parameterOutputField{{ property.name }}">
+                                        {{ property.title }}
+                                    </label>
+                                </div>
+                                <div class="col-7">
+                                    <input type="text" class="p-inputtext-sm w-full" pInputText
+                                           id="parameterOutputField{{ property.name }}"
+                                           [(ngModel)]="fieldModel.outputProperties[property.name]"
+                                           [ngModelOptions]="{standalone: true}">
+                                </div>
+                            </div>
+                        </ng-container>
+                    </p-panel>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="col-12 md:col-6">
+                <label class="block mb-2" for="contentTypeFieldGroup">
+                    {{ 'GROUP' | translate }}
+                </label>
+                <div class="p-inputgroup">
+                    <button type="button" pButton pRipple icon="pi pi-plus" styleClass="p-button-info"
+                            [pTooltip]="'ADD_GROUP' | translate"
+                            tooltipPosition="bottom"
+                            (click)="openBlock(panelAddGroup, newGroupField, $event)"></button>
+                    <p-dropdown styleClass="w-full border-noround" inputId="contentTypeFieldGroup"
+                                [options]="groups"
+                                formControlName="group"></p-dropdown>
+                    <button type="button" pButton pRipple icon="pi pi-times" styleClass="p-button-info"
+                            [pTooltip]="'DELETE' | translate"
+                            tooltipPosition="bottom"
+                            (click)="deleteGroup()"></button>
+                </div>
+                <div class="pt-3 hidden" #panelAddGroup>
+                    <p-panel [header]="'ADD_GROUP' | translate" styleClass="p-panel-sm">
+                        <input type="text" id="contentTypeFieldNewGroup" class="w-full mb-3" pInputText #newGroupField>
+                        <div class="text-right">
+                            <button type="button" pButton pRipple
+                                    class="p-button-secondary p-button-sm ml-2"
+                                    [label]="'ADD' | translate"
+                                    (click)="addGroup(newGroupField, $event)"></button>
+                            <button type="button" pButton pRipple
+                                    class="p-button-secondary p-button-sm ml-2"
+                                    [label]="'CANCEL' | translate"
+                                    (click)="closeBlock(panelAddGroup, $event)"></button>
+                        </div>
+                    </p-panel>
+                </div>
+            </div>
+            <div class="col-12 md:col-6 pt-3">
+                <div class="mb-3">
+                    <p-inputSwitch inputId="contentTypeFieldRequired" styleClass="mr-2 vertical-align-middle"
+                                   formControlName="required"></p-inputSwitch>
+                    <label class="vertical-align-middle" for="contentTypeFieldRequired">
+                        {{ 'REQUIRED' | translate }}
+                    </label>
+                </div>
+                <div class="mb-3">
+                    <p-inputSwitch inputId="contentTypeFieldShowInTable" styleClass="mr-2 vertical-align-middle"
+                                   formControlName="showInTable"></p-inputSwitch>
+                    <label class="vertical-align-middle" for="contentTypeFieldShowInTable">
+                        {{ 'SHOW_IN_TABLE' | translate }}
+                    </label>
+                </div>
+                <div class="mb-3">
+                    <p-inputSwitch inputId="contentTypeFieldShowOnPage" styleClass="mr-2 vertical-align-middle"
+                                   formControlName="showOnPage"></p-inputSwitch>
+                    <label class="vertical-align-middle" for="contentTypeFieldShowOnPage">
+                        {{ 'SHOW_IN_TABLE' | translate }}
+                    </label>
+                </div>
+                <div class="mb-3">
+                    <p-inputSwitch inputId="contentTypeFieldShowInList" styleClass="mr-2 vertical-align-middle"
+                                   formControlName="showInList"></p-inputSwitch>
+                    <label class="vertical-align-middle" for="contentTypeFieldShowInList">
+                        {{ 'SHOW_IN_LIST' | translate }}
+                    </label>
+                </div>
+                <div class="mb-3">
+                    <p-inputSwitch inputId="contentTypeFieldIsFilter" styleClass="mr-2 vertical-align-middle"
+                                   formControlName="isFilter"></p-inputSwitch>
+                    <label class="vertical-align-middle" for="contentTypeFieldIsFilter">
+                        {{ 'SHOW_IN_FILTER' | translate }}
+                    </label>
                 </div>
             </div>
         </div>
@@ -46,3 +194,8 @@
 <div class="loading-overlay" *ngIf="loading">
     <p-progressSpinner></p-progressSpinner>
 </div>
+<ng-template #propertiesEmptyMessage>
+    <div class="surface-200 border-round p-3">
+        {{ 'THERE_NO_PARAMETERS' | translate }}
+    </div>
+</ng-template>

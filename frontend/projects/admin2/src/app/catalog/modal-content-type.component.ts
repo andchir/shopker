@@ -175,8 +175,17 @@ export class ModalContentTypeComponent extends AppModalAbstractComponent<Content
         ref.onClose
             .pipe(takeUntil(this.destroyed$))
             .subscribe({
-                next: () => {
-                    console.log('CLOSED');
+                next: (result) => {
+                    if (result && result.name) {
+                        const index = this.model.fields.findIndex((field) => {
+                            return field.name === result.name;
+                        });
+                        if (index > -1) {
+                            Object.assign(this.model.fields[index], result);
+                        } else {
+                            this.model.fields.push(Object.assign({}, result));
+                        }
+                    }
                 }
             });
     }
@@ -195,6 +204,17 @@ export class ModalContentTypeComponent extends AppModalAbstractComponent<Content
         if (data.field.outputProperties) {
             data.field.outputProperties = Object.assign({}, field.outputProperties);
         }
+        this.modalContentTypeField(data);
+    }
+
+    addField(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        const data = {
+            field: null,
+            contentType: this.model
+        };
         this.modalContentTypeField(data);
     }
 

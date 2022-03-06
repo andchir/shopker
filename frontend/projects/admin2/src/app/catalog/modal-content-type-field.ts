@@ -59,8 +59,9 @@ export class ModalContentTypeFieldComponent extends AppModalAbstractComponent<Co
     }
 
     ngOnInit(): void {
-        this.fieldModel = this.config.data.field;
-        this.contentType = this.config.data.contentType;
+        this.fieldModel = this.config.data.field
+            || new ContentField(0, '', '', '', 'text', {}, 'text', {}, '');
+        this.contentType = this.config.data.contentType as ContentType;
         this.groups = this.contentType.groups.slice();
         super.ngOnInit();
         this.getFieldTypes();
@@ -145,6 +146,9 @@ export class ModalContentTypeFieldComponent extends AppModalAbstractComponent<Co
     }
 
     updateControls(): void {
+        if (!this.fieldModel) {
+            return;
+        }
         const controls = this.form.controls;
         Object.keys(controls).forEach((key) => {
             if (typeof this.fieldModel[key] !== 'undefined') {
@@ -169,7 +173,10 @@ export class ModalContentTypeFieldComponent extends AppModalAbstractComponent<Co
             this.focusFormError();
             return;
         }
-        console.log(this.form.value);
+        const data = Object.assign({}, this.form.value);
+        data.inputProperties = Object.assign({}, this.fieldModel.inputProperties);
+        data.outputProperties = Object.assign({}, this.fieldModel.outputProperties);
+        this.ref.close(data);
     }
 
     selectFieldTypeProperties(type: string, fieldTypeName?: string): void {

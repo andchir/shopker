@@ -77,6 +77,10 @@ export class ModalContentTypeComponent extends AppModalAbstractComponent<Content
             .subscribe(data => {
                     if (data.length > 0) {
                         this.collections = data;
+                        if (!this.model.collection) {
+                            this.model.collection = data[0];
+                            this.form.controls['collection'].setValue(data[0]);
+                        }
                     }
                 }
             );
@@ -185,6 +189,9 @@ export class ModalContentTypeComponent extends AppModalAbstractComponent<Content
                         } else {
                             this.model.fields.push(Object.assign({}, result));
                         }
+                        if (this.model.groups.indexOf(result.group) === -1) {
+                            this.model.groups.push(result.group);
+                        }
                     }
                 }
             });
@@ -231,5 +238,13 @@ export class ModalContentTypeComponent extends AppModalAbstractComponent<Content
         }
         const translations = this.translateService.store.translations[this.translateService.currentLang];
         return translations[value] || value;
+    }
+
+    getFormData(): any {
+        const data = super.getFormData();
+        data.id = this.model.id || 0;
+        data.fields = this.model.fields;
+        data.groups = this.model.groups;
+        return data;
     }
 }

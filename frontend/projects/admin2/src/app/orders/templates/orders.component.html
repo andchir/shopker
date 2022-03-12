@@ -76,9 +76,13 @@
                             <div class="absolute show-on-hover pos-top15 pos-right15">
                                 <button pButton pRipple icon="pi pi-pencil"
                                         class="p-button p-button-sm p-button-rounded p-button-info"
+                                        [pTooltip]="'EDIT' | translate"
+                                        tooltipPosition="bottom"
                                         (click)="openModal(item)"></button>
                                 <button pButton pRipple icon="pi pi-trash"
                                         class="p-button p-button-sm p-button-rounded p-button-danger ml-2"
+                                        [pTooltip]="'DELETE' | translate"
+                                        tooltipPosition="left"
                                         (click)="deleteItem(item)"></button>
                             </div>
                         </ng-container>

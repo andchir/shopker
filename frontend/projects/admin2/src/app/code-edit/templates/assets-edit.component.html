@@ -66,6 +66,8 @@
                     <div class="absolute show-on-hover pos-top10 pos-right10">
                         <button pButton pRipple icon="pi pi-pencil"
                                 class="p-button p-button-sm p-button-rounded p-button-info"
+                                [pTooltip]="'EDIT' | translate"
+                                tooltipPosition="left"
                                 (click)="openModal(item)"></button>
                     </div>
                 </ng-container>

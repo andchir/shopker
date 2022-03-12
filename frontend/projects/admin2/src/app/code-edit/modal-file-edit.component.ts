@@ -11,6 +11,7 @@ import {SettingsService} from '../settings/settings.service';
 import {AppModalAbstractComponent} from '../components/modal.component.abstract';
 import {EditableFile} from './models/editable-file.model';
 import {FileEditService} from './services/file-edit.service';
+import {SystemNameService} from '../services/system-name.service';
 
 declare const ace: any;
 
@@ -37,12 +38,13 @@ export class ModalFileEditComponent extends AppModalAbstractComponent<EditableFi
     constructor(
         public ref: DynamicDialogRef,
         public config: DynamicDialogConfig,
+        public systemNameService: SystemNameService,
         public dataService: FileEditService,
         private messageService: MessageService,
         private settingsService: SettingsService,
         private appSettings: AppSettings
     ) {
-        super(ref, config, dataService);
+        super(ref, config, systemNameService, dataService);
     }
 
     ngOnInit(): void {

@@ -13,6 +13,7 @@ import {AppSettings} from '../services/app-settings.service';
 import {User} from './models/user.model';
 import {FormFieldsData} from '../models/form-field.interface';
 import {Setting} from '../settings/models/setting.model';
+import {SystemNameService} from '../services/system-name.service';
 
 @Component({
     selector: 'app-modal-order',
@@ -50,12 +51,13 @@ export class ModalUserContentComponent extends AppModalAbstractComponent<User> i
     constructor(
         public ref: DynamicDialogRef,
         public config: DynamicDialogConfig,
+        public systemNameService: SystemNameService,
         public dataService: UsersService,
         private messageService: MessageService,
         private settingsService: SettingsService,
         private appSettings: AppSettings
     ) {
-        super(ref, config, dataService);
+        super(ref, config, systemNameService, dataService);
     }
     
     ngOnInit() {

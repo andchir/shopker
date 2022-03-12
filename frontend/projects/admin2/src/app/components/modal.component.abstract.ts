@@ -10,6 +10,7 @@ import {FormFieldsErrors} from '../models/form-fields-options.interface';
 import {DataService} from '../services/data-service.abstract';
 import {FormFieldsData} from '../models/form-field.interface';
 import {FileModel} from '../models/file.model';
+import {SystemNameService} from '../services/system-name.service';
 
 @Component({
     template: ''
@@ -48,6 +49,7 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
     constructor(
         public ref: DynamicDialogRef,
         public config: DynamicDialogConfig,
+        public systemNameService: SystemNameService,
         public dataService: DataService<T>
     ) {
 
@@ -222,6 +224,17 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
             event.preventDefault();
         }
         this.arrayFields[fieldName].removeAt(index);
+    }
+
+    generateName(model: any, event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        const title = this.form.controls['title'] ? this.form.controls['title'].value : (model.title || '');
+        model.name = this.systemNameService.generateName(title);
+        if (this.form.controls['name']) {
+            this.form.controls['name'].setValue(model.name);
+        }
     }
 
     focusFormError(): void {

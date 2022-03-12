@@ -6,6 +6,7 @@ import {DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
 import {AppModalAbstractComponent} from '../components/modal.component.abstract';
 import {Product} from './models/product.model';
 import {ProductsService} from './services/products.service';
+import {SystemNameService} from '../services/system-name.service';
 
 @Component({
     selector: 'app-modal-product',
@@ -22,9 +23,10 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
     constructor(
         public ref: DynamicDialogRef,
         public config: DynamicDialogConfig,
+        public systemNameService: SystemNameService,
         public dataService: ProductsService
     ) {
-        super(ref, config, dataService);
+        super(ref, config, systemNameService, dataService);
     }
 
     ngOnInit() {

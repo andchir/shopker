@@ -14,8 +14,14 @@
                     <label class="block mb-2" for="fieldSystemName">
                         {{ 'SYSTEM_NAME' | translate }}
                     </label>
-                    <input type="text" id="fieldSystemName" class="w-full mb-2" pInputText
-                           formControlName="name">
+                    <div class="p-inputgroup mb-2">
+                        <input type="text" id="fieldSystemName" class="w-full" pInputText
+                               formControlName="name">
+                        <button type="button" pButton pRipple icon="pi pi-refresh" styleClass="p-button-info"
+                                [pTooltip]="'GENERATE' | translate"
+                                tooltipPosition="bottom"
+                                (click)="generateName(model, $event)"></button>
+                    </div>
                 </div>
             </div>
             <div class="col-12 md:col-6">

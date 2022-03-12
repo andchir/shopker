@@ -11,6 +11,7 @@ import {OrdersService} from './orders.service';
 import {SettingsService} from '../settings/settings.service';
 import {AppSettings} from '../services/app-settings.service';
 import {FormFieldsData} from '../models/form-field.interface';
+import {SystemNameService} from '../services/system-name.service';
 
 @Component({
     selector: 'app-modal-order',
@@ -60,11 +61,12 @@ export class ModalOrderContentComponent extends AppModalAbstractComponent<Order>
     constructor(
         public ref: DynamicDialogRef,
         public config: DynamicDialogConfig,
+        public systemNameService: SystemNameService,
         public dataService: OrdersService,
         private settingsService: SettingsService,
         private appSettings: AppSettings
     ) {
-        super(ref, config, dataService);
+        super(ref, config, systemNameService, dataService);
     }
     
     ngOnInit() {

@@ -12,6 +12,7 @@ import {ContentField} from './models/content_field.model';
 import {FieldTypesService} from './services/field-types.service';
 import {QueryOptions} from '../models/query-options';
 import {FieldType} from './models/field-type.model';
+import {SystemNameService} from '../services/system-name.service';
 
 @Component({
     selector: 'app-modal-content-type-field',
@@ -51,11 +52,12 @@ export class ModalContentTypeFieldComponent extends AppModalAbstractComponent<Co
     constructor(
         public ref: DynamicDialogRef,
         public config: DynamicDialogConfig,
+        public systemNameService: SystemNameService,
         public dataService: ContentTypesService,
         private fieldTypesService: FieldTypesService,
         private translateService: TranslateService
     ) {
-        super(ref, config, dataService);
+        super(ref, config, systemNameService, dataService);
     }
 
     ngOnInit(): void {

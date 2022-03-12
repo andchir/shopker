@@ -172,7 +172,7 @@ export class ModalContentTypeComponent extends AppModalAbstractComponent<Content
         this.model.fields.splice(index, 1);
     }
     
-    modalContentTypeField(data: any): void {
+    modalContentTypeField(data: any, index = -1): void {
         const ref = this.dialogService.open(ModalContentTypeFieldComponent, {
             header: this.getLangString('EDIT_FIELD'), // EDIT_FIELD | ADD_FIELD
             width: '800px',
@@ -183,9 +183,6 @@ export class ModalContentTypeComponent extends AppModalAbstractComponent<Content
             .subscribe({
                 next: (result) => {
                     if (result && result.name) {
-                        const index = this.model.fields.findIndex((field) => {
-                            return field.name === result.name;
-                        });
                         if (index > -1) {
                             Object.assign(this.model.fields[index], result);
                         } else {
@@ -203,6 +200,9 @@ export class ModalContentTypeComponent extends AppModalAbstractComponent<Content
         if (event) {
             event.preventDefault();
         }
+        const index = this.model.fields.findIndex((f) => {
+            return f.name === field.name;
+        });
         const data = {
             field: Object.assign({}, field),
             contentType: this.model
@@ -213,7 +213,7 @@ export class ModalContentTypeComponent extends AppModalAbstractComponent<Content
         if (data.field.outputProperties) {
             data.field.outputProperties = Object.assign({}, field.outputProperties);
         }
-        this.modalContentTypeField(data);
+        this.modalContentTypeField(data, index);
     }
 
     addField(event?: MouseEvent): void {

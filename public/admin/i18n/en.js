@@ -91,6 +91,7 @@ var APP_LANG = {
     "FIELD_NAME_EXISTS": "A field with the same name already exists.",
     "FIELD_TYPE": "Field type",
     "FIELD_TYPES": "Field types",
+    "FIELD_ALREADY_EXISTS": "A field with this system name already exists.",
     "FILE_MANAGER": "File manager",
     "FILE_PATH_COPIED": "File path successfully copied to clipboard.",
     "FILE_SIZE": "File size",

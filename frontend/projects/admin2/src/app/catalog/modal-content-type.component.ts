@@ -176,7 +176,7 @@ export class ModalContentTypeComponent extends AppModalAbstractComponent<Content
         const ref = this.dialogService.open(ModalContentTypeFieldComponent, {
             header: this.getLangString('EDIT_FIELD'), // EDIT_FIELD | ADD_FIELD
             width: '800px',
-            data: data
+            data: Object.assign({}, data, {index})
         });
         ref.onClose
             .pipe(takeUntil(this.destroyed$))
@@ -231,7 +231,11 @@ export class ModalContentTypeComponent extends AppModalAbstractComponent<Content
         if (event) {
             event.preventDefault();
         }
-        console.log('copyField', field);
+        const data = {
+            field: JSON.parse(JSON.stringify(field)),
+            contentType: this.model
+        };
+        this.modalContentTypeField(data);
     }
 
     getLangString(value: string): string {

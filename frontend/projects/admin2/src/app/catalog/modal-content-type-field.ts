@@ -48,6 +48,7 @@ export class ModalContentTypeFieldComponent extends AppModalAbstractComponent<Co
         input: [],
         output: []
     };
+    fieldIndex: number;
     
     constructor(
         public ref: DynamicDialogRef,
@@ -65,6 +66,10 @@ export class ModalContentTypeFieldComponent extends AppModalAbstractComponent<Co
             || new ContentField(0, '', '', '', 'text', {}, 'text', {}, '');
         this.contentType = this.config.data.contentType as ContentType;
         this.groups = this.contentType.groups.slice();
+        this.fieldIndex = this.config.data.index;
+        if (!this.fieldModel.group) {
+            this.fieldModel.group = this.groups[0];
+        }
         super.ngOnInit();
         this.getFieldTypes();
     }
@@ -178,6 +183,14 @@ export class ModalContentTypeFieldComponent extends AppModalAbstractComponent<Co
         const data = Object.assign({}, this.form.value);
         data.inputProperties = Object.assign({}, this.fieldModel.inputProperties);
         data.outputProperties = Object.assign({}, this.fieldModel.outputProperties);
+
+        const fIndex = this.contentType.fields.findIndex((f) => {
+            return f.name === data.name;
+        });
+        if (fIndex > -1 && this.fieldIndex !== fIndex) {
+            this.errorMessage = this.getLangString('FIELD_ALREADY_EXISTS');
+            return;
+        }
         this.ref.close(data);
     }
 

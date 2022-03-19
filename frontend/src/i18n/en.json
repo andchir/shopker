@@ -115,6 +115,7 @@
 	"INVALID_REQUIRED": "Required.",
     "INVALID_PATTERN": "The string contains forbidden characters",
 	"IS_REQUIRED": "is required",
+    "JSON_SYNTAX_ERROR": "JSON syntax error.",
 	"LANGUAGE": "Language",
 	"LOCALE": "Locale",
 	"LOGOUT": "Log out",

@@ -244,9 +244,13 @@ export class ModalContentTypeComponent extends AppModalAbstractComponent<Content
         if (event) {
             event.preventDefault();
         }
-        const data = {};
+        this.errorMessage = '';
+        const dataStr = JSON.stringify(this.model.fields, null, '\t');
+        const data = {
+            textValue: dataStr
+        };
         const ref = this.dialogService.open(ModalContentTypeFieldsExportComponent, {
-            header: this.getLangString('IMPORT_EXPORT'),
+            header: this.getLangString('IMPORT_EXPORT') + ' JSON',
             width: '800px',
             data: data
         });
@@ -254,7 +258,15 @@ export class ModalContentTypeComponent extends AppModalAbstractComponent<Content
             .pipe(takeUntil(this.destroyed$))
             .subscribe({
                 next: (result) => {
-                    console.log(result);
+                    if (result && result.data) {
+                        try {
+                            const outputData = JSON.parse(result.data);
+                            this.model.fields.splice(0, this.model.fields.length);
+                            this.model.fields.push(...outputData);
+                        } catch (e) {
+                            this.errorMessage = this.getLangString('JSON_SYNTAX_ERROR');
+                        }
+                    }
                 }
             });
     }

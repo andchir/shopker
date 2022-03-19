@@ -115,6 +115,7 @@ var APP_LANG = {
     "INVALID_REQUIRED": "Обязательно для заполнения.",
     "INVALID_PATTERN": "Строка содержит запрещенные символы",
     "IS_REQUIRED": "обязательно для заполнения",
+    "JSON_SYNTAX_ERROR": "Ошибка синтаксиса JSON.",
     "LANGUAGE": "Язык",
     "LOCALE": "Локаль",
     "LOGOUT": "Выйти",

@@ -1,5 +1,11 @@
 <div>
-    
+    <div class="mb-3">
+        <div class="border" id="editor-json"></div>
+    </div>
+
+    <p-message styleClass="block w-full text-left mb-3" severity="error"
+               [text]="errorMessage"
+               *ngIf="errorMessage"></p-message>
     
     <div class="text-right pt-2">
         <button pButton pRipple type="button" [label]="'SAVE_AND_CLOSE' | translate" icon="pi pi-check"

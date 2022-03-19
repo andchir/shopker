@@ -275,7 +275,11 @@ export class ModalContentTypeComponent extends AppModalAbstractComponent<Content
         if (event) {
             event.preventDefault();
         }
-        const data = {};
+        this.errorMessage = '';
+        const fields = JSON.parse(JSON.stringify(this.model.fields));
+        const data = {
+            fields
+        };
         const ref = this.dialogService.open(ModalContentTypeFieldsSortingComponent, {
             header: this.getLangString('SORT'),
             width: '800px',

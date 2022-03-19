@@ -138,11 +138,25 @@
                 </ng-template>
                 <ng-template pTemplate="summary">
                     <div class="text-center">
+                        
                         <button type="button" pButton pRipple
                                 class="p-button-secondary p-button-sm"
                                 icon="pi pi-plus"
                                 iconPos="left"
                                 [label]="'ADD' | translate" (click)="addField($event)"></button>
+
+                        <button type="button" pButton pRipple
+                                class="p-button-secondary p-button-sm ml-2"
+                                icon="pi pi-sort-alt"
+                                iconPos="left"
+                                [label]="'SORT' | translate" (click)="sortingStart($event)"></button>
+
+                        <button type="button" pButton pRipple
+                                class="p-button-secondary p-button-sm ml-2"
+                                icon="pi pi-upload"
+                                iconPos="left"
+                                [label]="'IMPORT_EXPORT' | translate" (click)="fieldsExport($event)"></button>
+                        
                     </div>
                 </ng-template>
             </p-table>

@@ -13,6 +13,8 @@ import {CollectionsService} from './services/collections.service';
 import {ContentField} from './models/content_field.model';
 import {ModalContentTypeFieldComponent} from './modal-content-type-field';
 import {SystemNameService} from '../services/system-name.service';
+import {ModalContentTypeFieldsSortingComponent} from './modal-content-type-fields-sorting';
+import {ModalContentTypeFieldsExportComponent} from './modal-content-type-fields-export';
 
 @Component({
     selector: 'app-modal-content-type',
@@ -236,6 +238,44 @@ export class ModalContentTypeComponent extends AppModalAbstractComponent<Content
             contentType: this.model
         };
         this.modalContentTypeField(data);
+    }
+
+    fieldsExport(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        const data = {};
+        const ref = this.dialogService.open(ModalContentTypeFieldsExportComponent, {
+            header: this.getLangString('IMPORT_EXPORT'),
+            width: '800px',
+            data: data
+        });
+        ref.onClose
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe({
+                next: (result) => {
+                    console.log(result);
+                }
+            });
+    }
+
+    sortingStart(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        const data = {};
+        const ref = this.dialogService.open(ModalContentTypeFieldsSortingComponent, {
+            header: this.getLangString('SORT'),
+            width: '800px',
+            data: data
+        });
+        ref.onClose
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe({
+                next: (result) => {
+                    console.log(result);
+                }
+            });
     }
 
     getLangString(value: string): string {

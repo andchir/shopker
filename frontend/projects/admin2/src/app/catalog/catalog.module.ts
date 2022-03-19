@@ -11,6 +11,8 @@ import {ModalFieldTypeComponent} from './modal-field-type.component';
 import {ModalContentTypeComponent} from './modal-content-type.component';
 import {ModalProductComponent} from './modal-product.component';
 import {ModalContentTypeFieldComponent} from './modal-content-type-field';
+import {ModalContentTypeFieldsSortingComponent} from './modal-content-type-fields-sorting';
+import {ModalContentTypeFieldsExportComponent} from './modal-content-type-fields-export';
 
 @NgModule({
     imports: [
@@ -27,6 +29,8 @@ import {ModalContentTypeFieldComponent} from './modal-content-type-field';
         ModalFieldTypeComponent,
         ModalContentTypeComponent,
         ModalContentTypeFieldComponent,
+        ModalContentTypeFieldsSortingComponent,
+        ModalContentTypeFieldsExportComponent,
         ModalProductComponent
     ],
     providers: [],
@@ -34,6 +38,8 @@ import {ModalContentTypeFieldComponent} from './modal-content-type-field';
         ModalFieldTypeComponent,
         ModalContentTypeComponent,
         ModalContentTypeFieldComponent,
+        ModalContentTypeFieldsSortingComponent,
+        ModalContentTypeFieldsExportComponent,
         ModalProductComponent
     ]
 })

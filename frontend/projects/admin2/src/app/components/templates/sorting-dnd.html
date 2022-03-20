@@ -1,18 +1,4 @@
 <div *ngIf="items.length > 0">
-    <div class="mb-3">
-        <div class="float-end">
-            <button type="button" class="btn btn-sm btn-secondary" (click)="sortApply($event)">
-                <i class="icon-check"></i>
-                {{'APPLY' | translate}}
-            </button>
-            &nbsp;
-            <button type="button" class="btn btn-sm btn-secondary" (click)="sortCancel($event)">
-                {{'CANCEL' | translate}}
-            </button>
-        </div>
-        <div *ngIf="title">{{title}}</div>
-        <div class="clearfix"></div>
-    </div>
     <div dragula="filters" [(dragulaModel)]="items" dragula="DRAGULA_EVENTS">
         <div class="surface-ground border-round border-1 border-300 p-3 mb-2 cursor-ns-resize" *ngFor="let item of items">
             {{item.title}}

@@ -6,11 +6,8 @@
                     optionValue="name"
                     optionLabel="title"></p-dropdown>
     </div>
-    <div class="mb-3">
-        <app-sorting-dnd
-            [(items)]="sortData"
-            (save)="sortingApply($event)"
-            (cancel)="sortingReset()"></app-sorting-dnd>
+    <div class="min-height300 mb-3">
+        <app-sorting-dnd [(items)]="sortData"></app-sorting-dnd>
     </div>
     <div class="text-center pt-2">
         <button pButton pRipple type="button" [label]="'SAVE_AND_CLOSE' | translate" icon="pi pi-check"

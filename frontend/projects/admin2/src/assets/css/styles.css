@@ -14,6 +14,7 @@ h1, h2, h3, h4, h5, h6 { margin-top: 0; }
 .text-shadow { text-shadow: 1px 1px 3px rgba(0,0,0,0.5); }
 [hidden] { display: none !important; }
 .border-noround-right { border-top-right-radius: 0; border-bottom-right-radius: 0; }
+.cursor-ns-resize { cursor: ns-resize; }
 
 .text-password { position: relative; z-index: 0; }
 .text-password:before { content: '*******************'; position: absolute; left: 0; top: 0; background-color: #fff; pointer-events: none; }

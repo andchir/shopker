@@ -289,7 +289,10 @@ export class ModalContentTypeComponent extends AppModalAbstractComponent<Content
             .pipe(takeUntil(this.destroyed$))
             .subscribe({
                 next: (result) => {
-                    console.log(result);
+                    if (result && result.data) {
+                        this.model.fields.splice(0, this.model.fields.length);
+                        this.model.fields.push(...result.data);
+                    }
                 }
             });
     }

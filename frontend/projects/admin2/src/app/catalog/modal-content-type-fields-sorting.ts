@@ -61,7 +61,11 @@ export class ModalContentTypeFieldsSortingComponent implements OnInit {
         if (event) {
             event.preventDefault();
         }
-
+        this.sortingApply();
+        this.ref.close({
+            reason: 'submit',
+            data: this.fields
+        });
     }
 
     closeModal(event?: MouseEvent): void {
@@ -84,6 +88,7 @@ export class ModalContentTypeFieldsSortingComponent implements OnInit {
     }
 
     sortingInit(): void {
+        this.sortingApply();
         const sortTypeValueArr = this.sortType.split('-');
         this.sortingFieldName = sortTypeValueArr[0];
         const filteredData = sortTypeValueArr[1]
@@ -104,10 +109,9 @@ export class ModalContentTypeFieldsSortingComponent implements OnInit {
         this.sortData = filteredData.map((data) => {
             return {name: data.name, title: data.title};
         });
-        console.log(this.sortData);
     }
 
-    sortingApply(items?: any): void {
+    sortingApply(): void {
         if (this.sortingFieldName) {
             this.sortData.forEach((field, index) => {
                 const ind = this.fields.findIndex((fld) => {
@@ -125,7 +129,6 @@ export class ModalContentTypeFieldsSortingComponent implements OnInit {
                 return sortedNames.indexOf(a['name']) - sortedNames.indexOf(b['name']);
             });
         }
-        this.sortingReset();
     }
 
     sortingReset(): void {

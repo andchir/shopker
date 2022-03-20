@@ -1,5 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 
+import {takeUntil} from 'rxjs/operators';
 import {DialogService} from 'primeng/dynamicdialog';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {TranslateService} from '@ngx-translate/core';
@@ -63,6 +64,29 @@ export class AssetsEditComponent extends AppTablePageAbstractComponent<EditableF
 
     getModalComponent() {
         return ModalFileEditComponent;
+    }
+
+    openModal(item: EditableFile, event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        const ref = this.dialogService.open(this.getModalComponent(), {
+            header: this.getModalTitle(item),
+            width: '1200px',
+            data: this.getItemData(item)
+        });
+        ref.onClose
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe((itemCurrent: EditableFile) => {
+                if (itemCurrent) {
+                    this.messageService.add({
+                        key: 'message',
+                        severity: 'success',
+                        detail: item ? 'Edited successfully!' : 'Created successfully!'
+                    });
+                    this.getData();
+                }
+            });
     }
 
     getItemData(item: EditableFile): {[name: string]: number|string} {

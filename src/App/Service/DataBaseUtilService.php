@@ -31,6 +31,7 @@ class DataBaseUtilService
      */
     public function databaseExport($zipFilePath, $mongoExportToolPath = 'mongoexport')
     {
+        $dataBaseUserName = $this->params->get('mongodb_user');
         $dataBasePassword = $this->params->get('mongodb_password');
         $dataBaseName = $this->params->get('mongodb_database');
         $targetDirPath = dirname($zipFilePath) . DIRECTORY_SEPARATOR . pathinfo($zipFilePath, PATHINFO_FILENAME);
@@ -57,7 +58,7 @@ class DataBaseUtilService
             $cmd .= ' \\' . PHP_EOL . "--jsonArray --pretty";
             if ($dataBasePassword) {
                 $cmd .= ' \\' . PHP_EOL . "--authenticationDatabase admin";
-                $cmd .= ' \\' . PHP_EOL . "--username \"{$dataBaseName}\"";
+                $cmd .= ' \\' . PHP_EOL . "--username \"{$dataBaseUserName}\"";
                 $cmd .= ' \\' . PHP_EOL . "--password \"{$dataBasePassword}\"";
             }
             // $cmd .= ' \\' . PHP_EOL . "--out {$outputFilePath}";
@@ -96,6 +97,7 @@ class DataBaseUtilService
      */
     public function databaseImport($collectionName, $filePath, $mode = 'insert', $mongoImportToolPath = 'mongoimport')
     {
+        $dataBaseUserName = $this->params->get('mongodb_user');
         $dataBasePassword = $this->params->get('mongodb_password');
         $dataBaseName = $this->params->get('mongodb_database');
 
@@ -110,7 +112,7 @@ class DataBaseUtilService
         $cmd .= ' \\' . PHP_EOL . "--mode {$mode}";
         if ($dataBasePassword) {
             $cmd .= ' \\' . PHP_EOL . "--authenticationDatabase \"admin\"";
-            $cmd .= ' \\' . PHP_EOL . "--username \"{$dataBaseName}\"";
+            $cmd .= ' \\' . PHP_EOL . "--username \"{$dataBaseUserName}\"";
             $cmd .= ' \\' . PHP_EOL . "--password \"{$dataBasePassword}\"";
         }
         exec($cmd . ' 2>&1');

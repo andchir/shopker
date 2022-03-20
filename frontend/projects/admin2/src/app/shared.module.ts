@@ -4,6 +4,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {RouterModule} from '@angular/router';
 
+import {DragulaModule} from 'ng2-dragula';
 import {TranslateModule} from '@ngx-translate/core';
 import {TableModule} from 'primeng/table';
 import {InputTextModule} from 'primeng/inputtext';
@@ -42,10 +43,12 @@ import {UserRoleColorPipe, UserRoleNamePipe} from './pipes/user-role.pipe';
 import {OrderByPipe} from './pipes/orderby.pipe';
 import {FilterArrayPipe} from './pipes/filter-array-pipe';
 import {IfEmptyPipe} from './pipes/if-empty.pipe';
+import {SortingComponent} from './components/sorting-dnd.conponent';
 
 const components = [
     AppNavbarComponent,
-    RenderOutputTypeComponent
+    RenderOutputTypeComponent,
+    SortingComponent
 ];
 
 @NgModule({
@@ -83,7 +86,8 @@ const components = [
         MessageModule,
         ChartModule,
         CalendarModule,
-        PanelModule
+        PanelModule,
+        DragulaModule.forRoot()
     ],
     declarations: [
         ...components,
@@ -133,6 +137,7 @@ const components = [
         ChartModule,
         CalendarModule,
         PanelModule,
+        DragulaModule,
 
         FilterFieldByGroupPipe,
         DateFromObjectPipe,

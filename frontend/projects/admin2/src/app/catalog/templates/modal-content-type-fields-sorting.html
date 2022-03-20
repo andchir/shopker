@@ -2,15 +2,17 @@
     <div class="my-3">
         <p-dropdown [options]="sortOptions"
                     [(ngModel)]="sortType"
+                    (ngModelChange)="sortingInit()"
                     optionValue="name"
                     optionLabel="title"></p-dropdown>
     </div>
     <div class="mb-3">
-        <div class="surface-ground border-round border-1 border-300 p-3 mb-2" *ngFor="let field of fields">
-            {{ field.title }}
-        </div>
+        <app-sorting-dnd
+            [(items)]="sortData"
+            (save)="sortingApply($event)"
+            (cancel)="sortingReset()"></app-sorting-dnd>
     </div>
-    <div class="text-right pt-2">
+    <div class="text-center pt-2">
         <button pButton pRipple type="button" [label]="'SAVE_AND_CLOSE' | translate" icon="pi pi-check"
                 class="p-button-success p-button-raised w-full md:w-auto mb-2 md:mb-0 md:ml-2"
                 (click)="saveData($event)"></button>

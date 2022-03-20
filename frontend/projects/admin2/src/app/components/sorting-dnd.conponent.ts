@@ -13,7 +13,6 @@ export interface SortData {
     templateUrl: 'templates/sorting-dnd.html'
 })
 export class SortingComponent implements OnDestroy {
-    
     @Input() title: string;
     @Input() items: SortData[];
     @Output() itemsChange = new EventEmitter<any[]>();

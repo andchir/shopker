@@ -509,7 +509,10 @@
                             "node_modules/primeng/resources/themes/lara-light-indigo/theme.css",
                             "node_modules/primeng/resources/primeng.css",
                             "node_modules/primeflex/primeflex.css",
-                            "projects/admin2/src/assets/css/styles.css"
+                            "projects/admin2/src/assets/css/styles.css",
+                            "node_modules/dragula/dist/dragula.css",
+                            "node_modules/quill/dist/quill.core.css",
+                            "node_modules/quill/dist/quill.snow.css"
                         ],
                         "scripts": [
                             "node_modules/ace-builds/src/ace.js",

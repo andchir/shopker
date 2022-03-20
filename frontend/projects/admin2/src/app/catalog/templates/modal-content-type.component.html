@@ -93,6 +93,28 @@
                    [text]="errorMessageTop"
                    *ngIf="errorMessageTop"></p-message>
 
+        <div role="separator" class="p-divider p-component p-divider-horizontal p-divider-solid p-divider-left">
+            <div class="p-divider-content"></div>
+        </div>
+
+        <div class="text-center pb-3">
+            <button type="button" pButton pRipple
+                    class="p-button-secondary p-button-sm"
+                    icon="pi pi-plus"
+                    iconPos="left"
+                    [label]="'ADD' | translate" (click)="addField($event)"></button>
+            <button type="button" pButton pRipple
+                    class="p-button-secondary p-button-sm ml-2"
+                    icon="pi pi-sort-alt"
+                    iconPos="left"
+                    [label]="'SORT' | translate" (click)="sortingStart($event)"></button>
+            <button type="button" pButton pRipple
+                    class="p-button-secondary p-button-sm ml-2"
+                    icon="pi pi-upload"
+                    iconPos="left"
+                    [label]="'IMPORT_EXPORT' | translate" (click)="fieldsExport($event)"></button>
+        </div>
+
         <div class="mb-3">
             <p-table [value]="model.fields"
                      [loading]="loading"
@@ -136,29 +158,6 @@
                         </td>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="summary">
-                    <div class="text-center">
-                        
-                        <button type="button" pButton pRipple
-                                class="p-button-secondary p-button-sm"
-                                icon="pi pi-plus"
-                                iconPos="left"
-                                [label]="'ADD' | translate" (click)="addField($event)"></button>
-
-                        <button type="button" pButton pRipple
-                                class="p-button-secondary p-button-sm ml-2"
-                                icon="pi pi-sort-alt"
-                                iconPos="left"
-                                [label]="'SORT' | translate" (click)="sortingStart($event)"></button>
-
-                        <button type="button" pButton pRipple
-                                class="p-button-secondary p-button-sm ml-2"
-                                icon="pi pi-upload"
-                                iconPos="left"
-                                [label]="'IMPORT_EXPORT' | translate" (click)="fieldsExport($event)"></button>
-                        
-                    </div>
-                </ng-template>
             </p-table>
         </div>
 
@@ -166,7 +165,7 @@
                    [text]="errorMessage"
                    *ngIf="errorMessage"></p-message>
 
-        <div class="text-right pt-2">
+        <div class="text-center pt-2">
             <button pButton pRipple type="button" [label]="'SAVE_AND_CLOSE' | translate" icon="pi pi-check"
                     class="p-button-success p-button-raised w-full md:w-auto mb-2 md:mb-0 md:ml-2"
                     (click)="saveData(true, $event)"></button>

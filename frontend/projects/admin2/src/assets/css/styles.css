@@ -4,6 +4,7 @@ h1, h2, h3, h4, h5, h6 { margin-top: 0; }
 .vertical-align-middle { vertical-align: middle; }
 .min-height20 { min-height: 20px; }
 .min-height110 { min-height: 110px; }
+.min-height200 { min-height: 200px; }
 .min-height300 { min-height: 300px; }
 .min-height400 { min-height: 400px; }
 .max-width150 { max-width: 150px; }

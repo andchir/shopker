@@ -1,7 +1,18 @@
 <div>
     <form [formGroup]="form" #formEl>
-
         
+        <div class="min-height200">
+            <ng-container *ngIf="dataLoaded">
+                <app-render-input
+                    [fields]="currentContentType.fields"
+                    [groups]="currentContentType.groups"
+                    [model]="model"
+                    [form]="form"
+                    [files]="files"
+                    [localeFieldsAllowed]="localeFieldsAllowed"
+                    [isLocalizationActive]="localeCurrent !== localeDefault"></app-render-input>
+            </ng-container>
+        </div>
 
         <div role="separator" class="p-divider p-component p-divider-horizontal p-divider-solid p-divider-left">
             <div class="p-divider-content"></div>

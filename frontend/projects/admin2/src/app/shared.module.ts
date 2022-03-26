@@ -33,9 +33,11 @@ import {MessageModule} from 'primeng/message';
 import {ChartModule} from 'primeng/chart';
 import {CalendarModule} from 'primeng/calendar';
 import {PanelModule} from 'primeng/panel';
+import {TabViewModule} from 'primeng/tabview';
 
 import {AppNavbarComponent} from './components/app-navbar.component';
 import {RenderOutputTypeComponent} from './components/render-output-type.component';
+import {RenderInputTypeComponent} from './components/render-input-type.component';
 
 import {FilterFieldByGroupPipe} from './pipes/filter-field-by-group.pipe';
 import {DateFromObjectPipe} from './pipes/date-from-object.pipe';
@@ -48,6 +50,7 @@ import {SortingComponent} from './components/sorting-dnd.conponent';
 const components = [
     AppNavbarComponent,
     RenderOutputTypeComponent,
+    RenderInputTypeComponent,
     SortingComponent
 ];
 
@@ -87,6 +90,7 @@ const components = [
         ChartModule,
         CalendarModule,
         PanelModule,
+        TabViewModule,
         DragulaModule.forRoot()
     ],
     declarations: [
@@ -137,6 +141,7 @@ const components = [
         ChartModule,
         CalendarModule,
         PanelModule,
+        TabViewModule,
         DragulaModule,
 
         FilterFieldByGroupPipe,

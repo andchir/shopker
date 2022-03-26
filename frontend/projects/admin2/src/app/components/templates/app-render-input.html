@@ -1,0 +1,101 @@
+<p-tabView [scrollable]="true">
+    <p-tabPanel [header]="groupName" *ngFor="let groupName of groups">
+
+        <div class="min-height200">
+
+            <div class="mb-2"
+                 [formGroup]="form"
+                 *ngFor="let field of fields | filterFieldByGroup: groupName">
+
+                <div class="show-on-hover-parent" [ngSwitch]="field.inputType" [ngClass]="{'pe-5': field.inputProperties.multiple}">
+
+                    <!-- text-->
+                    <div class="grid" *ngSwitchCase="'text'">
+                        <div class="col-12 md:col-5">
+                            <label for="field_{{field.name}}">
+                                {{field.title}}
+                                <span class="text-500">({{field.name}})</span>
+                                <span class="text-orange-500" *ngIf="field.required">*</span>
+                            </label>
+                        </div>
+                        <div class="col-12 md:col-7">
+                            <input type="text" id="field_{{field.name}}" class="w-full" pInputText>
+                        </div>
+                    </div>
+                    <!-- /text-->
+                    
+                    <!-- system_name -->
+                    <div class="grid" *ngSwitchCase="'system_name'">
+                        <div class="col-12 md:col-5">
+                            <label for="field_{{ field.name }}">
+                                {{ field.title }}
+                                <span class="text-500">({{ field.name }})</span>
+                                <span class="text-orange-500" *ngIf="field.required">*</span>
+                            </label>
+                        </div>
+                        <div class="col-12 md:col-7">
+                            <div class="p-inputgroup">
+                                <input type="text" id="field_{{field.name}}" class="w-full" pInputText>
+                                <button type="button" pButton pRipple icon="pi pi-refresh" styleClass="p-button-info"
+                                        [pTooltip]="'GENERATE' | translate"
+                                        tooltipPosition="bottom"></button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /system_name -->
+
+                    <!-- textarea -->
+                    <div *ngSwitchCase="'textarea'" [class.grid]="field.inputProperties.rows < 7">
+                        <div [class.col-md-5]="field.inputProperties.rows < 7">
+                            <label for="field_{{ field.name }}">
+                                {{ field.title }}
+                                <span class="text-500">({{ field.name }})</span>
+                                <span class="text-orange-500" *ngIf="field.required">*</span>
+                            </label>
+                        </div>
+                        <div [class.col-md-7]="field.inputProperties.rows < 7">
+                            <textarea id="field_{{field.name}}" class="w-full mb-2" rows="8" pInputTextarea
+                                      [rows]="field.inputProperties.rows"></textarea>
+                        </div>
+                    </div>
+                    <!-- /textarea -->
+
+                    <!-- rich_text -->
+                    <div *ngSwitchCase="'rich_text'" [class.grid]="field.inputProperties.rows < 7">
+                        <div [class.col-md-5]="field.inputProperties.rows < 7">
+                            <label for="field_{{ field.name }}">
+                                {{ field.title }}
+                                <span class="text-500">({{ field.name }})</span>
+                                <span class="text-orange-500" *ngIf="field.required">*</span>
+                            </label>
+                        </div>
+                        <div [class.col-md-7]="field.inputProperties.rows < 7">
+                            <textarea id="field_{{field.name}}" class="w-full mb-2" rows="8" pInputTextarea
+                                      [rows]="field.inputProperties.rows"></textarea>
+                        </div>
+                    </div>
+                    <!-- /rich_text -->
+
+                    <!-- number -->
+                    <div class="grid" *ngSwitchCase="'number'">
+                        <div class="col-12 md:col-5">
+                            <label for="field_{{field.name}}">
+                                {{ field.title }}
+                                <span class="text-500">({{ field.name }})</span>
+                                <span class="text-orange-500" *ngIf="field.required">*</span>
+                            </label>
+                        </div>
+                        <div class="col-12 md:col-7">
+                            <input type="number" id="field_{{field.name}}" class="w-full" pInputText>
+                        </div>
+                    </div>
+                    <!-- /number -->
+                    
+                </div>
+                
+            </div>
+            
+        </div>
+
+    </p-tabPanel>
+</p-tabView>

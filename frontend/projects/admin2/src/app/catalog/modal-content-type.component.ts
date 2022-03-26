@@ -56,7 +56,9 @@ export class ModalContentTypeComponent extends AppModalAbstractComponent<Content
 
     ngOnInit() {
         super.ngOnInit();
-        this.getCollectionsList();
+        if (!this.config.data.id) {
+            this.getCollectionsList();
+        }
         this.contextMenuItems = [
             {
                 label: this.getLangString('EDIT'),
@@ -76,16 +78,26 @@ export class ModalContentTypeComponent extends AppModalAbstractComponent<Content
         ];
     }
 
+    onGetData(item: ContentType): void {
+        this.model = item;
+        this.getCollectionsList();
+    }
+
     getCollectionsList(): void {
         this.collectionsService.getList()
             .subscribe(data => {
                     if (data.length > 0) {
                         this.collections = data;
                         if (!this.model.collection) {
-                            this.model.collection = data[0];
-                            this.form.controls['collection'].setValue(data[0]);
+                            this.model.collection = this.collections[0];
+                        }
+                        if (this.collections.indexOf(this.model.collection) === -1) {
+                            this.collections.unshift(this.model.collection);
                         }
                     }
+                    setTimeout(() => {
+                        this.form.controls['collection'].setValue(this.model.collection);
+                    }, 1);
                 }
             );
     }

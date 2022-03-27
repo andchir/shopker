@@ -71,6 +71,11 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
             .getItemByName(this.currentCategory.contentTypeName);
     }
 
+    openCategoryFromMenu(event): void {
+        console.log('openCategoryFromMenu', event);
+        // this.router.navigate(['/catalog/category', event.node['id']]);
+    }
+
     openCategory(): void {
         this.dataService.setRequestUrl(`/admin/products/${this.categoryId}`);
         this.categoriesService.getItem(this.categoryId)

@@ -46,14 +46,14 @@
 
                     <!-- textarea -->
                     <div *ngSwitchCase="'textarea'" [class.grid]="field.inputProperties.rows < 7">
-                        <div [class.col-md-5]="field.inputProperties.rows < 7">
+                        <div [ngClass]="{'col-12 md:col-5': field.inputProperties.rows < 7, 'pb-2': field.inputProperties.rows >= 7}">
                             <label for="field_{{ field.name }}">
                                 {{ field.title }}
                                 <span class="text-500">({{ field.name }})</span>
                                 <span class="text-orange-500" *ngIf="field.required">*</span>
                             </label>
                         </div>
-                        <div [class.col-md-7]="field.inputProperties.rows < 7">
+                        <div [ngClass]="{'col-12 md:col-7': field.inputProperties.rows < 7}">
                             <textarea id="field_{{field.name}}" class="w-full mb-2" rows="8" pInputTextarea
                                       [rows]="field.inputProperties.rows"></textarea>
                         </div>

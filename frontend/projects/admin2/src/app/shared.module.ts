@@ -34,6 +34,8 @@ import {ChartModule} from 'primeng/chart';
 import {CalendarModule} from 'primeng/calendar';
 import {PanelModule} from 'primeng/panel';
 import {TabViewModule} from 'primeng/tabview';
+import {OverlayPanelModule} from 'primeng/overlaypanel';
+import {TreeModule} from 'primeng/tree';
 
 import {AppNavbarComponent} from './components/app-navbar.component';
 import {RenderOutputTypeComponent} from './components/render-output-type.component';
@@ -54,6 +56,40 @@ const components = [
     SortingComponent
 ];
 
+const modules = [
+    TranslateModule,
+    TableModule,
+    InputTextModule,
+    InputTextareaModule,
+    InputNumberModule,
+    MultiSelectModule,
+    InputSwitchModule,
+    DropdownModule,
+    ButtonModule,
+    RippleModule,
+    ConfirmDialogModule,
+    DialogModule,
+    DynamicDialogModule,
+    SplitButtonModule,
+    TooltipModule,
+    MenuModule,
+    ContextMenuModule,
+    SidebarModule,
+    CardModule,
+    AccordionModule,
+    ToastModule,
+    ColorPickerModule,
+    ProgressSpinnerModule,
+    MessagesModule,
+    MessageModule,
+    ChartModule,
+    CalendarModule,
+    PanelModule,
+    TabViewModule,
+    OverlayPanelModule,
+    TreeModule
+];
+
 @NgModule({
     imports: [
         CommonModule,
@@ -61,100 +97,39 @@ const components = [
         ReactiveFormsModule,
         HttpClientModule,
         RouterModule,
-
-        TranslateModule,
-        TableModule,
-        InputTextModule,
-        InputTextareaModule,
-        InputNumberModule,
-        MultiSelectModule,
-        InputSwitchModule,
-        DropdownModule,
-        ButtonModule,
-        RippleModule,
-        ConfirmDialogModule,
-        DialogModule,
-        DynamicDialogModule,
-        SplitButtonModule,
-        TooltipModule,
-        MenuModule,
-        ContextMenuModule,
-        SidebarModule,
-        CardModule,
-        AccordionModule,
-        ToastModule,
-        ColorPickerModule,
-        ProgressSpinnerModule,
-        MessagesModule,
-        MessageModule,
-        ChartModule,
-        CalendarModule,
-        PanelModule,
-        TabViewModule,
+        
+        ...modules,
         DragulaModule.forRoot()
     ],
     declarations: [
-        ...components,
-
         FilterFieldByGroupPipe,
         DateFromObjectPipe,
         UserRoleNamePipe,
         UserRoleColorPipe,
         OrderByPipe,
         FilterArrayPipe,
-        IfEmptyPipe
+        IfEmptyPipe,
+
+        ...components
     ],
-    providers: [
-        
-    ],
+    providers: [],
     exports: [
-        ...components,
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
 
-        TranslateModule,
-        TableModule,
-        InputTextModule,
-        InputTextareaModule,
-        InputNumberModule,
-        MultiSelectModule,
-        InputSwitchModule,
-        DropdownModule,
-        ButtonModule,
-        RippleModule,
-        ConfirmDialogModule,
-        DialogModule,
-        DynamicDialogModule,
-        SplitButtonModule,
-        TooltipModule,
-        MenuModule,
-        ContextMenuModule,
-        SidebarModule,
-        CardModule,
-        AccordionModule,
-        ToastModule,
-        ColorPickerModule,
-        ProgressSpinnerModule,
-        MessagesModule,
-        MessageModule,
-        ChartModule,
-        CalendarModule,
-        PanelModule,
-        TabViewModule,
-        DragulaModule,
-
         FilterFieldByGroupPipe,
         DateFromObjectPipe,
         UserRoleNamePipe,
         UserRoleColorPipe,
         OrderByPipe,
         FilterArrayPipe,
-        IfEmptyPipe
+        IfEmptyPipe,
+
+        ...components,
+        ...modules
     ],
-    entryComponents: [
-        
-    ]
+    entryComponents: []
 })
 export class SharedModule {
 }

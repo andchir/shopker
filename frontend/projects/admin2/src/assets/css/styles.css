@@ -2,11 +2,14 @@
 body { margin: 0; padding: 10px; background-color: var(--bluegray-100); }
 h1, h2, h3, h4, h5, h6 { margin-top: 0; }
 .vertical-align-middle { vertical-align: middle; }
+.vertical-align-top { vertical-align: top; }
 .min-height20 { min-height: 20px; }
 .min-height110 { min-height: 110px; }
 .min-height200 { min-height: 200px; }
 .min-height300 { min-height: 300px; }
 .min-height400 { min-height: 400px; }
+.max-height400:not(pre) { max-height: 400px; overflow: hidden; overflow-y: auto; }
+pre.max-height400 { max-height: 400px; overflow: auto; }
 .max-width150 { max-width: 150px; }
 .width160 { width: 160px; }
 .overflow-auto-y { overflow: hidden; overflow-y: auto; }
@@ -105,6 +108,7 @@ h1, h2, h3, h4, h5, h6 { margin-top: 0; }
 }
 
 @media screen and (max-width: 640px) {
+    body { padding: 0; }
     .layout-topbar .topbar-menu > li { position: static; }
     .layout-topbar-right { width: 100%; padding: 0.8rem; text-align: center; border-top: 1px solid var(--surface-d); }
 }
@@ -144,3 +148,5 @@ h1, h2, h3, h4, h5, h6 { margin-top: 0; }
 /* p-dynamic-dialog */
 .p-dynamic-dialog .p-dialog-content { border-bottom-left-radius: 6px; border-bottom-right-radius: 6px; }
 
+/* p-overlaypanel */
+.p-overlaypanel .p-overlaypanel-content { padding: 0.8rem; }

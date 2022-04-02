@@ -4,10 +4,14 @@ import {Router, ActivatedRoute} from '@angular/router';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 import {TranslateService} from '@ngx-translate/core';
+import {ConfirmationService} from 'primeng/api';
+import {DialogService} from 'primeng/dynamicdialog';
 
 import {Category, CategoryNode} from '../catalog/models/category.model';
 import {QueryOptions} from '../models/query-options';
 import {CategoriesService} from '../catalog/services/categories.service';
+import {ModalCategoryComponent} from '../catalog/modal-category';
+import {isNull} from "@angular/compiler/src/output/output_ast";
 
 @Component({
     selector: 'app-categories-menu',
@@ -36,8 +40,10 @@ export class CategoriesMenuComponent implements OnInit, OnDestroy {
     constructor(
         public router: Router,
         private route: ActivatedRoute,
+        public dialogService: DialogService,
         private categoriesService: CategoriesService,
-        private translateService: TranslateService
+        private translateService: TranslateService,
+        private confirmationService: ConfirmationService
     ) {
     }
 
@@ -113,8 +119,7 @@ export class CategoriesMenuComponent implements OnInit, OnDestroy {
         });
     }
     
-    openModalCategory(itemId?: number, isItemCopy: boolean = false): void {
-
+    openModalCategory(itemId?: number, isItemCopy: boolean = false, event?: MouseEvent): void {
         // Hide drop-down menu
         // this.categoriesDropdown.nativeElement.previousSibling.classList.remove('dropdown-toggle-hover');
         // setTimeout(() => {
@@ -174,24 +179,41 @@ export class CategoriesMenuComponent implements OnInit, OnDestroy {
         //     }
         //     this.loading = false;
         // });
+        
+        console.log('openModalCategory', itemId);
+
+        const data = {};
+
+        if (event) {
+            event.preventDefault();
+        }
+        const ref = this.dialogService.open(ModalCategoryComponent, {
+            header: typeof itemId !== 'undefined'
+                ? (itemId ? this.getLangString('CATEGORY') + ` #${itemId}` : this.getLangString('ROOT_FOLDER'))
+                : this.getLangString('ADD_NEW_CATEGORY'),
+            width: '800px',
+            data
+        });
+        ref.onClose
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe((e) => {
+                console.log(e);
+            });
     }
     
     deleteCategoryItemConfirm(itemId: number): void {
-        // const index = findIndex(this.categories, {id: itemId});
-        // if (index === -1) {
-        //     return;
-        // }
-        // this.modalRef = this.modalService.open(ConfirmModalContentComponent);
-        // this.modalRef.componentInstance.modalTitle = this.getLangString('CONFIRM');
-        // this.modalRef.componentInstance.modalContent = this.getLangString('YOU_SURE_YOU_WANT_DELETE_CATEGORY')
-        //     + ` "${this.categories[index].title}"?`;
-        // this.modalRef.result.then((result) => {
-        //     if (result === 'accept') {
-        //         this.deleteCategoryItem(itemId);
-        //     }
-        // }, (reason) => {
-        //
-        // });
+        const index = this.categories.findIndex((item) => {
+            return item.id === itemId;
+        });
+        if (index === -1) {
+            return;
+        }
+        this.confirmationService.confirm({
+            message: this.getLangString('YOU_SURE_YOU_WANT_DELETE'),
+            accept: () => {
+                this.deleteCategoryItem(itemId);
+            }
+        })
     }
     
     deleteCategoryItem(itemId: number): void {

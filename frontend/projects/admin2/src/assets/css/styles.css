@@ -149,6 +149,7 @@ pre.max-height400 { max-height: 400px; overflow: auto; }
 .p-dynamic-dialog .p-dialog-content { border-bottom-left-radius: 6px; border-bottom-right-radius: 6px; }
 
 /* p-overlaypanel */
+.p-overlaypanel { box-shadow: 0 0 15px rgba(0, 0, 0, 0.4); }
 .p-overlaypanel .p-overlaypanel-content { padding: 0.8rem; }
 
 /* p-tree */

@@ -14,6 +14,7 @@ import {ModalContentTypeFieldComponent} from './modal-content-type-field';
 import {ModalContentTypeFieldsSortingComponent} from './modal-content-type-fields-sorting';
 import {ModalContentTypeFieldsExportComponent} from './modal-content-type-fields-export';
 import {CategoriesMenuComponent} from '../components/categories-menu.component';
+import {ModalCategoryComponent} from './modal-category';
 
 @NgModule({
     imports: [
@@ -33,6 +34,7 @@ import {CategoriesMenuComponent} from '../components/categories-menu.component';
         ModalContentTypeFieldComponent,
         ModalContentTypeFieldsSortingComponent,
         ModalContentTypeFieldsExportComponent,
+        ModalCategoryComponent,
         ModalProductComponent
     ],
     providers: [],
@@ -42,6 +44,7 @@ import {CategoriesMenuComponent} from '../components/categories-menu.component';
         ModalContentTypeFieldComponent,
         ModalContentTypeFieldsSortingComponent,
         ModalContentTypeFieldsExportComponent,
+        ModalCategoryComponent,
         ModalProductComponent
     ]
 })

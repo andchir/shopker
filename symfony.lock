@@ -42,6 +42,9 @@
     "composer/metadata-minifier": {
         "version": "1.0.0"
     },
+    "composer/package-versions-deprecated": {
+        "version": "1.11.99.4"
+    },
     "composer/pcre": {
         "version": "1.0.0"
     },
@@ -141,9 +144,6 @@
     "doctrine/persistence": {
         "version": "v1.0.1"
     },
-    "doctrine/reflection": {
-        "version": "v1.0.0"
-    },
     "doctrine/sql-formatter": {
         "version": "1.1.0"
     },
@@ -237,12 +237,6 @@
     "nikic/php-parser": {
         "version": "v4.1.0"
     },
-    "ocramius/package-versions": {
-        "version": "1.5.1"
-    },
-    "ocramius/proxy-manager": {
-        "version": "2.2.2"
-    },
     "omnipay/common": {
         "version": "v3.0.3"
     },
@@ -255,14 +249,8 @@
     "phar-io/version": {
         "version": "3.1.0"
     },
-    "php": {
-        "version": "7.3.0"
-    },
     "php-http/discovery": {
         "version": "1.7.4"
-    },
-    "php-http/guzzle6-adapter": {
-        "version": "v2.0.1"
     },
     "php-http/guzzle7-adapter": {
         "version": "0.1.1"
@@ -671,9 +659,6 @@
             "ref": "3db029c03e452b4a23f7fc45cec7c922c2247eb8"
         }
     },
-    "symfony/templating": {
-        "version": "v4.1.6"
-    },
     "symfony/translation": {
         "version": "3.3",
         "recipe": {
@@ -736,11 +721,5 @@
     },
     "webmozart/assert": {
         "version": "1.3.0"
-    },
-    "zendframework/zend-code": {
-        "version": "3.3.1"
-    },
-    "zendframework/zend-eventmanager": {
-        "version": "3.2.1"
     }
 }

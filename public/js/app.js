@@ -1,11 +1,11 @@
 
 const $ = require('jquery');
-const bootstrap = require('../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js');
+const bootstrap = require('../node_modules/bootstrap/dist/js/bootstrap.bundle.js');
 const Shopkeeper = require('../js/shopkeeper.js');
 const DotsMenu = require('../js/dots-menu.js');
 const wNumb = require('../node_modules/wnumb/wNumb.js');
-const noUiSlider = require('../node_modules/nouislider/distribute/nouislider.min.js');
-const slick = require('../node_modules/slick-carousel/slick/slick.min.js');
+const noUiSlider = require('../node_modules/nouislider/dist/nouislider.js');
+const slick = require('../node_modules/slick-carousel/slick/slick.js');
 const ShoppingCart = require('../js/shopping_cart.js');
 
 global.$ = global.jQuery = $;

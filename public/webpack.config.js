@@ -6,8 +6,8 @@ Encore
     .setManifestKeyPrefix('app_build')
     .addEntry('app', './js/app.js')
     .addStyleEntry('app_styles', [
-        './node_modules/bootstrap/dist/css/bootstrap.min.css',
-        './node_modules/nouislider/distribute/nouislider.min.css',
+        './node_modules/bootstrap/dist/css/bootstrap.css',
+        './node_modules/nouislider/dist/nouislider.css',
         './node_modules/slick-carousel/slick/slick.css',
         './node_modules/slick-carousel/slick/slick-theme.css',
         './css/icomoon/style.css',

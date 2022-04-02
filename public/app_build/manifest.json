@@ -1,15 +1,15 @@
 {
   "app_build/app.js": "./app.js",
   "app_build/app_styles.css": "./app_styles.css",
-  "app_build/fonts/Comfortaa-Light.ttf": "./fonts/Comfortaa-Light.30790de0.ttf",
-  "app_build/fonts/icomoon.woff?ukbiqr": "./fonts/icomoon.5fd577bc.woff",
-  "app_build/fonts/icomoon.ttf?ukbiqr": "./fonts/icomoon.69cfd26b.ttf",
-  "app_build/fonts/icomoon.eot?ukbiqr": "./fonts/icomoon.6cb4fc30.eot",
-  "app_build/fonts/slick.woff": "./fonts/slick.b7c9e1e4.woff",
-  "app_build/fonts/slick.eot": "./fonts/slick.ced611da.eot",
-  "app_build/fonts/slick.ttf": "./fonts/slick.d41f55a7.ttf",
-  "app_build/images/ajax-loader.gif": "./images/ajax-loader.c5cd7f53.gif",
-  "app_build/images/icomoon.svg?ukbiqr": "./images/icomoon.ec847f21.svg",
-  "app_build/images/slick.svg": "./images/slick.f97e3bbf.svg",
-  "app_build/images/slider-handle.gif": "./images/slider-handle.879a34e1.gif"
+  "app_build/images/icomoon.svg?ukbiqr": "./images/icomoon.9a9ebfaf.svg",
+  "app_build/fonts/Comfortaa-Light.ttf": "./fonts/Comfortaa-Light.031518eb.ttf",
+  "app_build/fonts/icomoon.eot?ukbiqr": "./fonts/icomoon.3f1ebcf3.eot",
+  "app_build/fonts/icomoon.woff?ukbiqr": "./fonts/icomoon.d4ce4ac2.woff",
+  "app_build/fonts/icomoon.ttf?ukbiqr": "./fonts/icomoon.aba8b775.ttf",
+  "app_build/images/ajax-loader.gif": "./images/ajax-loader.fb6f3c23.gif",
+  "app_build/images/slick.svg": "./images/slick.2630a3e3.svg",
+  "app_build/fonts/slick.eot": "./fonts/slick.a4e97f5a.eot",
+  "app_build/fonts/slick.ttf": "./fonts/slick.c94f7671.ttf",
+  "app_build/fonts/slick.woff": "./fonts/slick.29518378.woff",
+  "app_build/images/slider-handle.gif": "./images/slider-handle.84103bb3.gif"
 }

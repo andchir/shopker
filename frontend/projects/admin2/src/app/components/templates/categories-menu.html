@@ -42,6 +42,7 @@
 
 <div class="max-height400">
     <p-tree [value]="categoriesTree[0].children"
+            [loading]="loading"
             [emptyMessage]="'NO_CATEGORIES' | translate"
             [selectionMode]="'single'"
             [(selection)]="currentCategoryNode"

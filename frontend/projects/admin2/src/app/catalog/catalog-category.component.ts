@@ -84,7 +84,7 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
                     this.currentCategory = data;
                     this.currentContentType = data.contentType;
                     this.updateTableConfig();
-                    this.getData();
+                    setTimeout(this.getData.bind(this), 1);
                 },
                 error: () => {
                     this.loading = false;
@@ -109,12 +109,14 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
         }
         this.cols = [];
         this.currentContentType.fields.forEach((field) => {
-            this.cols.push({
-                field: field.name,
-                header: field.title,
-                outputType: field.outputType,
-                outputProperties: field.outputProperties
-            });
+            if (field.showInTable) {
+                this.cols.push({
+                    field: field.name,
+                    header: field.title,
+                    outputType: field.outputType,
+                    outputProperties: field.outputProperties
+                });
+            }
         });
         this.cols.unshift({
             field: 'id',

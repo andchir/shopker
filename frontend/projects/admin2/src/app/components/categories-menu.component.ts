@@ -1,6 +1,7 @@
 import {Component, OnInit, Input, Output, EventEmitter, OnDestroy} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 
+import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 import {TranslateService} from '@ngx-translate/core';
 
@@ -48,17 +49,16 @@ export class CategoriesMenuComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.loading = true;
         this.getCategories().then((categories: Category[]) => {
-            // this.loading = false;
-            // this.route.paramMap
-            //     .pipe(takeUntil(this.destroyed$))
-            //     .subscribe(
-            //         params => {
-            //             this.categoryId = params.get('categoryId')
-            //                 ? parseInt(params.get('categoryId'), 10)
-            //                 : 0;
-            //             this.selectCurrent();
-            //         }
-            //     );
+            this.route.paramMap
+                .pipe(takeUntil(this.destroyed$))
+                .subscribe(
+                    params => {
+                        this.categoryId = params.get('categoryId')
+                            ? parseInt(params.get('categoryId'), 10)
+                            : 0;
+                        this.selectCurrent();
+                    }
+                );
         });
     }
     
@@ -66,7 +66,7 @@ export class CategoriesMenuComponent implements OnInit, OnDestroy {
         if (this.currentCategory.id === this.categoryId) {
             return;
         }
-        console.log(this.categoryId);
+        console.log('selectCurrent', this.categoryId);
         // const index = findIndex(this.categories, {id: this.categoryId});
         // if (index > -1) {
         //     this.currentCategory = cloneDeep(this.categories[index]);
@@ -78,23 +78,26 @@ export class CategoriesMenuComponent implements OnInit, OnDestroy {
     }
     
     getCategories(): Promise<Category[]> {
+        this.loading = true;
         return new Promise((resolve, reject) => {
             this.categoriesService.getListPage(
                 new QueryOptions(1, 0, 'menuIndex,title')
             )
-                .subscribe(
-                    data => {
-                        if (data.items && data.items.length > 0) {
-                            this.categories = data.items;
-                            this.categoriesTree = [Category.createTree(data.items)];
+                .subscribe({
+                    next: (res) => {
+                        if (res.items && res.items.length > 0) {
+                            this.categories = res.items;
+                            this.categoriesTree = [Category.createTree(res.items)];
                         }
-                        resolve(data.items);
+                        this.loading = false;
+                        resolve(res.items);
                     },
-                    error => {
-                        this.errorMessage = error;
+                    error: (err) => {
+                        this.errorMessage = err.error || err;
+                        this.loading = false;
                         reject();
                     }
-                );
+                })
         });
     }
     
@@ -182,20 +185,21 @@ export class CategoriesMenuComponent implements OnInit, OnDestroy {
     deleteCategoryItem(itemId: number): void {
         this.loading = true;
         this.categoriesService.deleteItem(itemId)
-            .subscribe((data) => {
+            .subscribe({
+                next: () => {
                     this.categoryId = 0;
                     this.getCategories().then(() => {
                         this.goToRootCategory();
                         this.loading = false;
                     });
                 },
-                (err) => {
-                    if (err['error']) {
-                        this.errorMessage = err['error'];
+                error: (err) => {
+                    if (err.error) {
+                        this.errorMessage = err.error;
                     }
                     this.loading = false;
                 }
-            );
+            });
     }
 
     openCategory(event): void {

@@ -150,3 +150,6 @@ pre.max-height400 { max-height: 400px; overflow: auto; }
 
 /* p-overlaypanel */
 .p-overlaypanel .p-overlaypanel-content { padding: 0.8rem; }
+
+/* p-tree */
+.p-tree-empty-message { padding-top: 1rem; }

@@ -56,14 +56,18 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
         });
         this.route.paramMap
             .pipe(takeUntil(this.destroyed$))
-            .subscribe(
-                params => {
+            .subscribe({
+                next: params => {
                     this.categoryId = params.get('categoryId')
                         ? parseInt(params.get('categoryId'), 10)
                         : 0;
                     this.openCategory();
+                },
+                error: (e) => {
+                    console.log(e);
                 }
-            );
+            });
+        this.openCategory();
     }
 
     getContentType(): Observable<ContentType> {

@@ -1,47 +1,43 @@
-<div class="mb-3">
-    <div class="float-end">
+<div class="flex justify-content-between flex-wrap mb-2">
+    <div class="flex align-items-center justify-content-center">
+        <button pButton pRipple type="button" icon="pi pi-home" class="p-button-sm p-button-warning mr-2"
+                [pTooltip]="'OPEN_ROOT_CATEGORY' | translate"
+                tooltipPosition="bottom"
+                (click)="goToRootCategory()" *ngIf="categoryId > 0"></button>
+        <button pButton pRipple type="button" icon="pi pi-plus" class="p-button-sm mr-2"
+                [pTooltip]="'ADD_NEW_CATEGORY' | translate"
+                tooltipPosition="bottom"
+                (click)="openModalCategory()"></button>
+        <button pButton pRipple type="button" icon="pi pi-pencil" class="p-button-sm mr-2"
+                [pTooltip]="'EDIT_CATEGORY' | translate"
+                tooltipPosition="bottom"
+                (click)="openModalCategory(currentCategory.id)"></button>
+        <button pButton pRipple type="button" icon="pi pi-clone" class="p-button-sm mr-2"
+                [pTooltip]="'COPY_CATEGORY' | translate"
+                tooltipPosition="bottom"
+                (click)="copyCategory()" [hidden]="!categoryId"></button>
+        <button pButton pRipple type="button" icon="pi pi-trash" class="p-button-sm mr-2"
+                [pTooltip]="'DELETE_CATEGORY' | translate"
+                tooltipPosition="bottom"
+                (click)="deleteCategoryItemConfirm(currentCategory.id)" [hidden]="!categoryId"></button>
+    </div>
+    <div class="flex align-items-center justify-content-center">
         <ng-container *ngIf="categoriesTree[0].children">
-            <button type="button" class="btn btn-sm btn-secondary me-2"
+            <button pButton pRipple type="button" icon="pi pi-angle-double-down" class="p-button-sm p-button-secondary"
                     [pTooltip]="'EXPAND_ALL' | translate"
-                    (click)="expandAll($event)">
-                <i class="pi pi-angle-double-down"></i>
-            </button>
-            <button type="button" class="btn btn-sm btn-secondary"
+                    tooltipPosition="bottom"
+                    (click)="expandAll($event)"></button>
+            <button pButton pRipple type="button" icon="pi pi-angle-double-up" class="p-button-sm p-button-secondary ml-2"
                     [pTooltip]="'COLLAPSE_ALL' | translate"
-                    (click)="collapseAll($event)">
-                <i class="pi pi-angle-double-up"></i>
-            </button>
+                    tooltipPosition="bottom"
+                    (click)="collapseAll($event)"></button>
         </ng-container>
     </div>
-    <button type="button" class="btn btn-sm btn-secondary me-2"
-            [pTooltip]="'OPEN_ROOT_CATEGORY' | translate"
-            (click)="goToRootCategory()" *ngIf="currentCategory.id > 0">
-        <i class="icon-home"></i>
-    </button>
-    <button type="button" class="btn btn-sm btn-secondary me-2"
-            [pTooltip]="'ADD_NEW_CATEGORY' | translate"
-            (click)="openModalCategory()">
-        <i class="icon-plus"></i>
-    </button>
-    <button type="button" class="btn btn-sm btn-secondary me-2"
-            [pTooltip]="'EDIT_CATEGORY' | translate"
-            (click)="openModalCategory(currentCategory.id)">
-        <i class="icon-pencil"></i>
-    </button>
-    <button type="button" class="btn btn-sm btn-secondary me-2"
-            [pTooltip]="'COPY_CATEGORY' | translate"
-            (click)="copyCategory()" [hidden]="!currentCategory.id">
-        <i class="icon-stack"></i>
-    </button>
-    <button type="button" class="btn btn-sm btn-secondary me-2"
-            [pTooltip]="'DELETE_CATEGORY' | translate"
-            (click)="deleteCategoryItemConfirm(currentCategory.id)" [hidden]="!currentCategory.id">
-        <i class="icon-cross"></i>
-    </button>
 </div>
 
-<div class="max-height400">
-    <p-tree [value]="categoriesTree[0].children"
+<div>
+    <p-tree scrollHeight="350px"
+            [value]="categoriesTree[0].children"
             [loading]="loading"
             [emptyMessage]="'NO_CATEGORIES' | translate"
             [selectionMode]="'single'"

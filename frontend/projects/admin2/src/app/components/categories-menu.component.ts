@@ -1,7 +1,7 @@
 import {Component, OnInit, Input, Output, EventEmitter, OnDestroy} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 
-import {takeUntil} from 'rxjs/operators';
+import {take, takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 import {TranslateService} from '@ngx-translate/core';
 
@@ -17,8 +17,8 @@ export class CategoriesMenuComponent implements OnInit, OnDestroy {
     
     @Input() rootTitle = 'Категории';
     @Output() changeRequest = new EventEmitter<Category>();
-    currentCategory: Category = new Category(null, false, 0, 'root', this.rootTitle, '', '', true);
-    currentCategoryNode: CategoryNode = {id: 0, key: 0} as CategoryNode;
+    currentCategory: Category = null;
+    currentCategoryNode: CategoryNode = null;
     categoriesTree: CategoryNode[] = [{
         id: 0,
         key: 0,
@@ -51,30 +51,42 @@ export class CategoriesMenuComponent implements OnInit, OnDestroy {
         this.getCategories().then((categories: Category[]) => {
             this.route.paramMap
                 .pipe(takeUntil(this.destroyed$))
-                .subscribe(
-                    params => {
+                .subscribe({
+                    next: (params) => {
                         this.categoryId = params.get('categoryId')
                             ? parseInt(params.get('categoryId'), 10)
                             : 0;
                         this.selectCurrent();
+                    },
+                    error: (e) => {
+                        console.log(e);
                     }
-                );
+                });
         });
     }
     
     selectCurrent(): void {
-        if (this.currentCategory.id === this.categoryId) {
+        if (this.currentCategory && this.currentCategory.id === this.categoryId) {
             return;
         }
-        console.log('selectCurrent', this.categoryId);
-        // const index = findIndex(this.categories, {id: this.categoryId});
-        // if (index > -1) {
-        //     this.currentCategory = cloneDeep(this.categories[index]);
-        //     this.changeRequest.emit(this.currentCategory);
-        // } else {
-        //     this.openRootCategory();
-        // }
-        // this.currentCategoryNode = Category.getCurrentNode(this.currentCategory.id, this.categoriesTree[0]);
+        if (!this.currentCategory) {
+            this.currentCategory = new Category(0, false, 0, 'root', this.rootTitle, '', '', true);
+        }
+        if (this.categoryId === 0) {
+            this.currentCategory.id = 0;
+            this.currentCategoryNode = null;
+            return;
+        }
+        const index = this.categories.findIndex((item) => {
+            return item.id === this.categoryId;
+        })
+        if (index > -1) {
+            Object.assign(this.currentCategory, this.categories[index]);
+            this.changeRequest.emit(this.currentCategory);
+        }
+        if (!this.currentCategoryNode) {
+            this.currentCategoryNode = Category.getCurrentNode(this.currentCategory.id, this.categoriesTree[0]);
+        }
     }
     
     getCategories(): Promise<Category[]> {
@@ -207,13 +219,7 @@ export class CategoriesMenuComponent implements OnInit, OnDestroy {
     }
     
     goToRootCategory(): void {
-        this.router.navigate(['/catalog/category', '']);
-    }
-    
-    openRootCategory(): void {
-        this.currentCategory = new Category(null, false, 0, 'root', this.rootTitle, '', '', true);
-        this.currentCategoryNode = this.categoriesTree[0];
-        this.changeRequest.emit(this.currentCategory);
+        this.router.navigate(['/catalog/category']);
     }
     
     copyCategory(): void {

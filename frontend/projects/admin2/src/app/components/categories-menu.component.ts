@@ -15,7 +15,7 @@ import {CategoriesService} from '../catalog/services/categories.service';
 })
 export class CategoriesMenuComponent implements OnInit, OnDestroy {
     
-    @Input() rootTitle = 'Категории';
+    @Input() rootTitle = 'ROOT_FOLDER';
     @Output() changeRequest = new EventEmitter<Category>();
     currentCategory: Category = null;
     currentCategoryNode: CategoryNode = null;

@@ -1,17 +1,14 @@
 <div>
     <form [formGroup]="form" #formEl>
 
-        <div class="grid">
+        <div class="grid" *ngIf="!isRoot">
             <div class="col-12 md:col-6 mb-2">
                 <label class="block mb-2" for="fieldParent">
                     {{ 'PARENT_FOLDER' | translate }}
                 </label>
-                <p-dropdown [options]="[]"
-                            styleClass="w-full"
-                            inputId="fieldParent"
-                            optionLabel="title"
-                            optionValue="name"
-                            name="contentTypeName"></p-dropdown>
+                <app-select-parent-dropdown formControlName="parentId"
+                                            [currentId]="model.parentId"
+                                            [filterId]="model.id"></app-select-parent-dropdown>
             </div>
         </div>
         
@@ -115,7 +112,7 @@
                     (click)="saveData(false, $event)"></button>
             <button pButton pRipple type="button" [label]="'CLOSE' | translate"
                     class="p-button-secondary p-button-raised w-full md:w-auto mb-2 md:mb-0 md:ml-2"
-                    (click)="dismissModal($event)"></button>
+                    (click)="closeModal($event)"></button>
         </div>
     </form>
 </div>

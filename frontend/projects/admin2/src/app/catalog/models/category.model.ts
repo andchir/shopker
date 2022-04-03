@@ -1,6 +1,6 @@
 import {FileData} from './file-data.model';
 import {findIndex} from 'lodash';
-import {ContentType} from "./content_type.model";
+import {ContentType} from './content_type.model';
 
 export interface CategoryNode {
     id: number;
@@ -18,7 +18,9 @@ export class Category {
             return null;
         }
         if (!parent) {
-            const index = findIndex(categories, {name: 'root'});
+            const index = categories.findIndex((item) => {
+                return item.name === 'root';
+            });
             if (index > -1) {
                 parent = Category.toTreeNode(categories[index], expanded);
             } else {

@@ -1,7 +1,7 @@
 import {Component, OnInit, Input, Output, EventEmitter, OnDestroy} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 
-import {takeUntil} from 'rxjs/operators';
+import {take, takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 import {TranslateService} from '@ngx-translate/core';
 import {ConfirmationService} from 'primeng/api';
@@ -11,7 +11,6 @@ import {Category, CategoryNode} from '../catalog/models/category.model';
 import {QueryOptions} from '../models/query-options';
 import {CategoriesService} from '../catalog/services/categories.service';
 import {ModalCategoryComponent} from '../catalog/modal-category';
-import {isNull} from "@angular/compiler/src/output/output_ast";
 
 @Component({
     selector: 'app-categories-menu',
@@ -21,6 +20,9 @@ export class CategoriesMenuComponent implements OnInit, OnDestroy {
     
     @Input() rootTitle = 'ROOT_FOLDER';
     @Output() changeRequest = new EventEmitter<Category>();
+    @Output() onUpdated = new EventEmitter<Category>();
+    @Output() onEditStarted = new EventEmitter<any>();
+    @Output() onEditEnded = new EventEmitter<any>();
     currentCategory: Category = null;
     currentCategoryNode: CategoryNode = null;
     categoriesTree: CategoryNode[] = [{
@@ -119,72 +121,10 @@ export class CategoriesMenuComponent implements OnInit, OnDestroy {
         });
     }
     
-    openModalCategory(itemId?: number, isItemCopy: boolean = false, event?: MouseEvent): void {
-        // Hide drop-down menu
-        // this.categoriesDropdown.nativeElement.previousSibling.classList.remove('dropdown-toggle-hover');
-        // setTimeout(() => {
-        //     this.categoriesDropdown.nativeElement.previousSibling.classList.add('dropdown-toggle-hover');
-        // }, 1);
-        //
-        // const modalId = '';//this.getModalElementId(itemId);
-        // window.document.body.classList.add('modal-open');
-        // if (window.document.getElementById(modalId)) {
-        //     const modalEl = window.document.getElementById(modalId);
-        //     const backdropEl = modalEl.previousElementSibling;
-        //     modalEl.classList.add('d-block');
-        //     modalEl.classList.remove('modal-minimized');
-        //     backdropEl.classList.remove('d-none');
-        //     return;
-        // }
-        // const isRoot = itemId === 0 || itemId === null;
-        // const isEditMode = typeof itemId !== 'undefined' && !isItemCopy;
-        // this.modalRef = this.modalService.open(CategoriesModalComponent, {
-        //     size: 'lg',
-        //     backdrop: 'static',
-        //     keyboard: false,
-        //     backdropClass: 'modal-backdrop-left45',
-        //     windowClass: 'modal-left45',
-        //     container: '#modals-container'
-        // });
-        // this.modalRef.componentInstance.modalTitle = isEditMode
-        //     ? this.getLangString('CATEGORY') + (itemId ? ` #${itemId}` : '')
-        //     : this.getLangString('ADD_NEW_CATEGORY');
-        // this.modalRef.componentInstance.modalId = modalId;
-        // this.modalRef.componentInstance.itemId = itemId || 0;
-        // this.modalRef.componentInstance.isItemCopy = isItemCopy || false;
-        // this.modalRef.componentInstance.currentCategory = this.currentCategory;
-        // this.modalRef.componentInstance.isRoot = isRoot;
-        // this.modalRef.componentInstance.isEditMode = isEditMode;
-        // this.modalRef.result.then((result) => {
-        //     if (this.destroyed$.isStopped) {
-        //         return;
-        //     }
-        //     this.currentCategory.id = null; // For update current category data
-        //     this.loading = true;
-        //     this.getCategories().then(() => {
-        //         this.selectCurrent();
-        //         this.loading = false;
-        //     });
-        // }, (reason) => {
-        //     if (this.destroyed$.isStopped) {
-        //         return;
-        //     }
-        //     if (reason && ['submit', 'updated'].indexOf(reason) > -1) {
-        //         this.currentCategory.id = null;
-        //         this.loading = true;
-        //         this.getCategories().then(() => {
-        //             this.selectCurrent();
-        //             this.loading = false;
-        //         });
-        //     }
-        //     this.loading = false;
-        // });
+    openModal(itemId?: number, isItemCopy: boolean = false): void {
         const data = {
             id: itemId
         };
-        if (event) {
-            event.preventDefault();
-        }
         const ref = this.dialogService.open(ModalCategoryComponent, {
             header: typeof itemId !== 'undefined'
                 ? (itemId ? this.getLangString('CATEGORY') + ` #${itemId}` : this.getLangString('ROOT_FOLDER'))
@@ -193,10 +133,25 @@ export class CategoriesMenuComponent implements OnInit, OnDestroy {
             data
         });
         ref.onClose
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe((e) => {
-                console.log(e);
+            .pipe(take(1))
+            .subscribe({
+                next: (result) => {
+                    if (result !== 'canceled') {
+                        this.onUpdated.emit(result);
+                    }
+                    this.onEditEnded.emit(this.currentCategoryNode);
+                }
             });
+    }
+    
+    openModalCategory(itemId?: number, isItemCopy: boolean = false, event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.onEditStarted.emit(this.currentCategoryNode);
+        setTimeout(() => {
+            this.openModal(itemId, isItemCopy);
+        }, 1);
     }
     
     deleteCategoryItemConfirm(itemId: number): void {

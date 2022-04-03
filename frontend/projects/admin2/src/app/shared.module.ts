@@ -49,13 +49,15 @@ import {FilterArrayPipe} from './pipes/filter-array-pipe';
 import {IfEmptyPipe} from './pipes/if-empty.pipe';
 import {SortingComponent} from './components/sorting-dnd.conponent';
 import {FileWidgetComponent} from './components/file-widget.component';
+import {SelectParentDropdownComponent} from './components/select-parent-dropdown.component';
 
 const components = [
     AppNavbarComponent,
     RenderOutputTypeComponent,
     RenderInputTypeComponent,
     SortingComponent,
-    FileWidgetComponent
+    FileWidgetComponent,
+    SelectParentDropdownComponent
 ];
 
 const modules = [

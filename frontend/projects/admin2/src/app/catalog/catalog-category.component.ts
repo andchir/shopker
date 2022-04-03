@@ -1,10 +1,11 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 
 import {takeUntil} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {DialogService} from 'primeng/dynamicdialog';
 import {ConfirmationService, MessageService} from 'primeng/api';
+import {OverlayPanel} from 'primeng/overlaypanel';
 
 import {AppTablePageAbstractComponent, TableField} from '../components/table-page.components.abstract';
 import {ContentTypesService} from './services/content_types.service';
@@ -23,7 +24,9 @@ import {CategoriesService} from './services/categories.service';
     providers: [DialogService, ConfirmationService, ProductsService]
 })
 export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Product> implements OnInit, OnDestroy {
-
+    
+    @ViewChild('panelTopMenu') panelTopMenu: OverlayPanel;
+    
     queryOptions: QueryOptions = new QueryOptions(1, 12, 'id', 'desc');
     items: Product[] = [];
     cols: TableField[] = [];
@@ -107,6 +110,11 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
         return ModalProductComponent;
     }
 
+    openModal(item: Product, event?: MouseEvent): void {
+        this.panelTopMenu.hide();
+        super.openModal(item, event);
+    }
+
     updateTableConfig(): void {
         if (!this.currentContentType) {
             return;
@@ -134,5 +142,13 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
             outputType: 'boolean',
             outputProperties: {}
         });
+    }
+
+    onCategoryUpdated(category: Category): void {
+        if (!category || !category.title) {
+            return;
+        }
+        this.currentCategory.title = category.title;
+        this.panelTopMenu.hide();
     }
 }

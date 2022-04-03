@@ -262,6 +262,9 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
     }
 
     dismissModal(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
         this.ref.close(null);
     }
 

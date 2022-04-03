@@ -5,9 +5,9 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --open --live-reload 0 --watch --port 4200 --output-path \"./dist_dev\"",
-    "build:dev": "ng build --optimization false --build-optimizer false --baseHref=\"/admin/\" --deployUrl=\"/admin/bundle-dev/\" --outputPath=\"../public/admin/bundle-dev\" --watch=true",
+    "build:dev": "ng build --optimization false --build-optimizer false --source-map true --baseHref=\"/admin/\" --deployUrl=\"/admin/bundle-dev/\" --outputPath=\"../public/admin/bundle-dev\" --watch=true",
     "build": "ng build --configuration production --baseHref=\"/admin/\" --deployUrl=\"/admin/bundle/\" --outputPath=\"../public/admin/bundle\"",
-    "admin-build:dev": "ng build admin2 --optimization false --build-optimizer false --baseHref=\"/admin/\" --deployUrl=\"/admin2/bundle-dev/\" --outputPath=\"../public/admin2/bundle-dev\" --watch=true",
+    "admin-build:dev": "ng build admin2 --optimization false --build-optimizer false --source-map true --baseHref=\"/admin/\" --deployUrl=\"/admin2/bundle-dev/\" --outputPath=\"../public/admin2/bundle-dev\" --watch=true",
     "admin-build": "ng build admin2 --configuration production --baseHref=\"/admin/\" --deployUrl=\"/admin2/bundle/\" --outputPath=\"../public/admin2/bundle\"",
     "test": "ng test",
     "lint": "ng lint",

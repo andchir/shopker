@@ -215,6 +215,7 @@ class CategoryController extends StorageControllerAbstract
         $data = [];
         $root = [
             'id' => $parentId,
+            'key' => $parentId,
             'label' => $this->translator->trans('Root category'),
             'parentId' => 0,
             'expanded' => true
@@ -226,6 +227,7 @@ class CategoryController extends StorageControllerAbstract
             }
             $row = [
                 'id' => $category->getId(),
+                'key' => $category->getId(),
                 'label' => $category->getTitle(),
                 'parentId' => $category->getParentId(),
                 'expanded' => $expanded

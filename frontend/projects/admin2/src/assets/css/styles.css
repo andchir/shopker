@@ -115,8 +115,16 @@ pre.max-height400 { max-height: 400px; overflow: auto; }
 
 /* show-on-hover */
 .show-on-hover-parent { position: relative; }
-.show-on-hover-parent .show-on-hover { white-space: nowrap; display: none; }
-.show-on-hover-parent:hover .show-on-hover { display: block; z-index: 111; }
+.show-on-hover-parent .show-on-hover,
+.show-on-hover-parent > .show-on-hover-child,
+.show-on-hover-parent > .show-on-hover-child-left,
+.show-on-hover-parent .show-on-hover-right { white-space: nowrap; display: none; }
+.show-on-hover-parent > .show-on-hover-child-left { position: absolute; top: 10px; left: 10px; }
+.show-on-hover-parent .show-on-hover-right { position: absolute; top: 0; right: 0; }
+.show-on-hover-parent:hover .show-on-hover,
+.show-on-hover-parent:hover .show-on-hover-right,
+.show-on-hover-parent:hover > .show-on-hover-child,
+.show-on-hover-parent:hover > .show-on-hover-child-left { display: block; z-index: 111; }
 
 /* menu */
 .p-button-menu-right .p-menu-overlay { left: auto !important; right: 0 !important; width: auto; }
@@ -154,3 +162,8 @@ pre.max-height400 { max-height: 400px; overflow: auto; }
 
 /* p-tree */
 .p-tree-empty-message { padding-top: 1rem; }
+
+/* p-datatable */
+@media screen and (max-width: 960px) {
+    .p-datatable-tbody > tr > td { padding: 0.3rem 1rem !important; }
+}

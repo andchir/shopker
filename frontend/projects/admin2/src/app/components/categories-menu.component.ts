@@ -179,11 +179,9 @@ export class CategoriesMenuComponent implements OnInit, OnDestroy {
         //     }
         //     this.loading = false;
         // });
-        
-        console.log('openModalCategory', itemId);
-
-        const data = {};
-
+        const data = {
+            id: itemId
+        };
         if (event) {
             event.preventDefault();
         }

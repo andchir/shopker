@@ -1,5 +1,19 @@
 <div>
     <form [formGroup]="form" #formEl>
+
+        <div class="grid">
+            <div class="col-12 md:col-6 mb-2">
+                <label class="block mb-2" for="fieldParent">
+                    {{ 'PARENT_FOLDER' | translate }}
+                </label>
+                <p-dropdown [options]="[]"
+                            styleClass="w-full"
+                            inputId="fieldParent"
+                            optionLabel="title"
+                            optionValue="name"
+                            name="contentTypeName"></p-dropdown>
+            </div>
+        </div>
         
         <div class="grid">
             <div class="col-12 md:col-6">
@@ -32,6 +46,57 @@
                           formControlName="description"></textarea>
             </div>
         </div>
+
+        <div class="grid">
+            <div class="col-12 md:col-6 mb-2">
+                <div class="mb-3">
+                    <label class="block mb-2" for="fieldContentType">
+                        {{ 'CONTENT_TYPE' | translate }}
+                    </label>
+                    <p-dropdown [options]="contentTypes"
+                                styleClass="w-full"
+                                inputId="fieldContentType"
+                                optionLabel="title"
+                                optionValue="name"
+                                name="contentTypeName"></p-dropdown>
+                </div>
+                <div class="mb-2">
+                    <label class="block mb-2" for="fieldMenuIndex">
+                        {{ 'MENU_INDEX' | translate }}
+                    </label>
+                    <input type="number" id="fieldMenuIndex" class="w-full" pInputText
+                           formControlName="menuIndex">
+                </div>
+            </div>
+            <div class="col-12 md:col-6 mb-2">
+                <label class="block mb-2" for="fieldImage">
+                    {{ 'IMAGE' | translate }}
+                </label>
+                <app-file-widget
+                    formControlName="image"
+                    [hasPreviewImage]="true"
+                    [allowedExtensions]="'image/*'"
+                    [(files)]="files"></app-file-widget>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="col-12 md:col-6">
+                <p-inputSwitch inputId="fieldActive" styleClass="mr-2 vertical-align-middle"
+                               formControlName="isActive"></p-inputSwitch>
+                <label class="vertical-align-middle" for="fieldActive">
+                    {{ 'ACTIVE' | translate }}
+                </label>
+            </div>
+            <div class="col-12 md:col-6">
+                <p-inputSwitch inputId="fieldClearCache" styleClass="mr-2 vertical-align-middle"
+                               formControlName="clearCache"></p-inputSwitch>
+                <label class="vertical-align-middle" for="fieldClearCache">
+                    {{ 'CLEAR_FILE_CACHE' | translate }}
+                </label>
+            </div>
+        </div>
+            
 
         <div role="separator" class="p-divider p-component p-divider-horizontal p-divider-solid p-divider-left">
             <div class="p-divider-content"></div>

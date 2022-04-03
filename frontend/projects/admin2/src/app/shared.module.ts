@@ -48,12 +48,14 @@ import {OrderByPipe} from './pipes/orderby.pipe';
 import {FilterArrayPipe} from './pipes/filter-array-pipe';
 import {IfEmptyPipe} from './pipes/if-empty.pipe';
 import {SortingComponent} from './components/sorting-dnd.conponent';
+import {FileWidgetComponent} from './components/file-widget.component';
 
 const components = [
     AppNavbarComponent,
     RenderOutputTypeComponent,
     RenderInputTypeComponent,
-    SortingComponent
+    SortingComponent,
+    FileWidgetComponent
 ];
 
 const modules = [

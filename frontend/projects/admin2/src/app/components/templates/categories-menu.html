@@ -7,15 +7,15 @@
         <button pButton pRipple type="button" icon="pi pi-plus" class="p-button-sm mr-2"
                 [pTooltip]="'ADD_NEW_CATEGORY' | translate"
                 tooltipPosition="bottom"
-                (click)="openModalCategory()"></button>
+                (click)="callAction('new')"></button>
         <button pButton pRipple type="button" icon="pi pi-pencil" class="p-button-sm mr-2"
                 [pTooltip]="'EDIT_CATEGORY' | translate"
                 tooltipPosition="bottom"
-                (click)="openModalCategory(currentCategory.id)"></button>
+                (click)="callAction('edit', currentCategory.id)"></button>
         <button pButton pRipple type="button" icon="pi pi-clone" class="p-button-sm mr-2"
                 [pTooltip]="'COPY_CATEGORY' | translate"
                 tooltipPosition="bottom"
-                (click)="copyCategory()" [hidden]="!categoryId"></button>
+                (click)="callAction('clone', currentCategory.id)" [hidden]="!categoryId"></button>
         <button pButton pRipple type="button" icon="pi pi-trash" class="p-button-sm mr-2"
                 [pTooltip]="'DELETE_CATEGORY' | translate"
                 tooltipPosition="bottom"

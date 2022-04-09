@@ -115,9 +115,10 @@
 
 <p-contextMenu #contextMenu [model]="contextMenuItems"></p-contextMenu>
 
-<p-overlayPanel [dismissable]="false" [style]="{minWidth: '350px'}" #panelTopMenu>
+<p-overlayPanel [dismissable]="true" [style]="{minWidth: '350px'}" #panelTopMenu>
     <ng-template pTemplate>
         <app-categories-menu [rootTitle]="'ROOT_FOLDER' | translate"
+                             (onAction)="onMenuAction($event)"
                              (onUpdated)="onCategoryUpdated($event)"></app-categories-menu>
     </ng-template>
 </p-overlayPanel>

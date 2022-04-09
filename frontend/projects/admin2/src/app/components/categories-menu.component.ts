@@ -10,7 +10,6 @@ import {DialogService} from 'primeng/dynamicdialog';
 import {Category, CategoryNode} from '../catalog/models/category.model';
 import {QueryOptions} from '../models/query-options';
 import {CategoriesService} from '../catalog/services/categories.service';
-import {ModalCategoryComponent} from '../catalog/modal-category';
 
 @Component({
     selector: 'app-categories-menu',
@@ -23,6 +22,7 @@ export class CategoriesMenuComponent implements OnInit, OnDestroy {
     @Output() onUpdated = new EventEmitter<Category>();
     @Output() onEditStarted = new EventEmitter<any>();
     @Output() onEditEnded = new EventEmitter<any>();
+    @Output() onAction = new EventEmitter<any>();
     currentCategory: Category = null;
     currentCategoryNode: CategoryNode = null;
     categoriesTree: CategoryNode[] = [{
@@ -121,39 +121,6 @@ export class CategoriesMenuComponent implements OnInit, OnDestroy {
         });
     }
     
-    openModal(itemId?: number, isItemCopy: boolean = false): void {
-        const data = {
-            id: itemId
-        };
-        const ref = this.dialogService.open(ModalCategoryComponent, {
-            header: typeof itemId !== 'undefined'
-                ? (itemId ? this.getLangString('CATEGORY') + ` #${itemId}` : this.getLangString('ROOT_FOLDER'))
-                : this.getLangString('ADD_NEW_CATEGORY'),
-            width: '800px',
-            data
-        });
-        ref.onClose
-            .pipe(take(1))
-            .subscribe({
-                next: (result) => {
-                    if (result !== 'canceled') {
-                        this.onUpdated.emit(result);
-                    }
-                    this.onEditEnded.emit(this.currentCategoryNode);
-                }
-            });
-    }
-    
-    openModalCategory(itemId?: number, isItemCopy: boolean = false, event?: MouseEvent): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.onEditStarted.emit(this.currentCategoryNode);
-        setTimeout(() => {
-            this.openModal(itemId, isItemCopy);
-        }, 1);
-    }
-    
     deleteCategoryItemConfirm(itemId: number): void {
         const index = this.categories.findIndex((item) => {
             return item.id === itemId;
@@ -189,16 +156,16 @@ export class CategoriesMenuComponent implements OnInit, OnDestroy {
             });
     }
 
+    callAction(action: string, itemId?: number): void {
+        this.onAction.emit([action, itemId]);
+    }
+
     openCategory(event): void {
         this.router.navigate(['/catalog/category', event.node['id']]);
     }
     
     goToRootCategory(): void {
         this.router.navigate(['/catalog/category']);
-    }
-    
-    copyCategory(): void {
-        this.openModalCategory(this.currentCategory.id, true);
     }
 
     expandAll(event?: MouseEvent): void {

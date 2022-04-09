@@ -1,15 +1,15 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 
-import {takeUntil} from 'rxjs/operators';
+import {take, takeUntil} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {DialogService} from 'primeng/dynamicdialog';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {OverlayPanel} from 'primeng/overlaypanel';
+import {TranslateService} from '@ngx-translate/core';
 
 import {AppTablePageAbstractComponent, TableField} from '../components/table-page.components.abstract';
 import {ContentTypesService} from './services/content_types.service';
-import {TranslateService} from '@ngx-translate/core';
 import {ProductsService} from './services/products.service';
 import {Product} from './models/product.model';
 import {QueryOptions} from '../models/query-options';
@@ -17,6 +17,7 @@ import {Category} from './models/category.model';
 import {ContentType} from './models/content_type.model';
 import {ModalProductComponent} from './modal-product.component';
 import {CategoriesService} from './services/categories.service';
+import {ModalCategoryComponent} from './modal-category';
 
 @Component({
     selector: 'app-catalog-category',
@@ -150,5 +151,54 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
         }
         this.currentCategory.title = category.title;
         this.panelTopMenu.hide();
+    }
+
+    openCategoryModal(itemId?: number, isItemCopy: boolean = false): void {
+        const data = {
+            id: itemId
+        };
+        const ref = this.dialogService.open(ModalCategoryComponent, {
+            header: typeof itemId !== 'undefined'
+                ? (itemId ? this.getLangString('CATEGORY') + ` #${itemId}` : this.getLangString('ROOT_FOLDER'))
+                : this.getLangString('ADD_NEW_CATEGORY'),
+            width: '800px',
+            data
+        });
+        ref.onClose
+            .pipe(take(1))
+            .subscribe({
+                next: (result) => {
+                    if (result !== 'canceled') {
+                        if (result && result.title) {
+                            this.currentCategory.title = result.title;
+                        }
+                    }
+                }
+            });
+    }
+
+    openModalCategory(itemId?: number, isItemCopy: boolean = false, event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        setTimeout(() => {
+            this.openCategoryModal(itemId, isItemCopy);
+        }, 1);
+    }
+
+    onMenuAction(data: any): void {
+        const action = data[0];
+        const itemId = data[1];
+        switch (action) {
+            case 'new':
+                this.openCategoryModal();
+                break;
+            case 'edit':
+                this.openModalCategory(itemId);
+                break;
+            case 'clone':
+                this.openModalCategory(itemId, true);
+                break;
+        }
     }
 }

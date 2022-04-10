@@ -7,7 +7,7 @@
         <button pButton pRipple type="button" icon="pi pi-plus" class="p-button-sm mr-2"
                 [pTooltip]="'ADD_NEW_CATEGORY' | translate"
                 tooltipPosition="bottom"
-                (click)="callAction('new')"></button>
+                (click)="callAction('new', currentCategory)"></button>
         <button pButton pRipple type="button" icon="pi pi-pencil" class="p-button-sm mr-2"
                 [pTooltip]="'EDIT_CATEGORY' | translate"
                 tooltipPosition="bottom"

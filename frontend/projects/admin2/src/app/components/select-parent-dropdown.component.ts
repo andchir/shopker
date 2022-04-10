@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, forwardRef, ViewChild, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, OnInit, Input, forwardRef, ViewChild} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 
 import {TreeNode} from 'primeng/api';
@@ -16,17 +16,17 @@ import {CategoriesService} from '../catalog/services/categories.service';
         }
     ]
 })
-export class SelectParentDropdownComponent implements OnInit, OnChanges, ControlValueAccessor {
+export class SelectParentDropdownComponent implements OnInit, ControlValueAccessor {
 
     private _disabled = false;
     loadingCategories = false;
     categoriesTree: TreeNode[] = [];
     currentCategoryNode: TreeNode;
     previousCategoryNode: TreeNode;
+    currentId: number = null;
 
     @ViewChild('dropdownElement', { static: true }) dropdownElement;
     @Input() filterId: number = null;
-    @Input() currentId: number = null;
     @Input()
     set disabled(value: boolean) {
         this._disabled = value;
@@ -43,16 +43,6 @@ export class SelectParentDropdownComponent implements OnInit, OnChanges, Control
     ngOnInit(): void {
         this.getCategoriesTree();
     }
-    
-    ngOnChanges(changes: SimpleChanges): void {
-        if (changes && typeof changes.currentId !== 'undefined'
-            && typeof changes.currentId.currentValue === 'number') {
-                if (this.currentId !== changes.currentId.currentValue) {
-                    this.currentId = changes.currentId.currentValue;
-                    this.getCategoriesTree();
-                }
-        }
-    }
 
     onChange: (value: number) => void = () => null;
     onTouched: () => void = () => null;
@@ -62,11 +52,10 @@ export class SelectParentDropdownComponent implements OnInit, OnChanges, Control
         this.dataService.getTree()
             .subscribe({
                 next: (res) => {
-                    if (typeof this.currentId !== 'number') {
-                        return;
-                    }
                     this.categoriesTree = this.filterNode(res, this.filterId);
-                    this.currentCategoryNode = this.getTreeCurrentNode(this.categoriesTree);
+                    if (!this.currentCategoryNode) {
+                        this.currentCategoryNode = this.getTreeCurrentNode(this.categoriesTree);
+                    }
                     this.loadingCategories = false;
                 },
                 error: () => {
@@ -95,6 +84,9 @@ export class SelectParentDropdownComponent implements OnInit, OnChanges, Control
     }
 
     getTreeCurrentNode(tree: TreeNode[]): TreeNode | null {
+        if (typeof this.currentId !== 'number') {
+            return null;
+        }
         let currentNode = null;
         for (const node of tree) {
             if (String(node.key) === String(this.currentId)) {
@@ -111,17 +103,6 @@ export class SelectParentDropdownComponent implements OnInit, OnChanges, Control
     }
 
     onCategorySelect(e: any): void {
-        if (e.node.key && e.node.key === this.filterId) {
-            if (this.previousCategoryNode) {
-                this.currentCategoryNode = JSON.parse(JSON.stringify(this.previousCategoryNode));
-                this.currentId = this.currentCategoryNode['id'] || this.currentCategoryNode['key'];
-            } else {
-                this.currentCategoryNode = null;
-                this.currentId = null;
-            }
-            return;
-        }
-        this.previousCategoryNode = {key: this.currentCategoryNode.key, label: this.currentCategoryNode.label};
         this.writeValue(e.node.key);
     }
 
@@ -129,8 +110,13 @@ export class SelectParentDropdownComponent implements OnInit, OnChanges, Control
         if (typeof value !== 'number') {
             return;
         }
-        this.currentId = value;
-        this.onChange(value);
+        if (this.currentId !== value) {
+            this.currentId = value;
+            if (!this.currentCategoryNode) {
+                this.currentCategoryNode = this.getTreeCurrentNode(this.categoriesTree);
+            }
+            this.onChange(value);
+        }
     }
 
     registerOnChange(fn: (_: number) => void): void {

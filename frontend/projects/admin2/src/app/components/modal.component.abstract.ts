@@ -57,6 +57,7 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
 
     onGetData(item: T): void {
         this.model = item;
+        this.updateControls();
     }
 
     onDataSaved(): void {
@@ -82,7 +83,6 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
             .subscribe({
                 next: (res) => {
                     this.onGetData(res);
-                    this.updateControls();
                     setTimeout(() => {
                         this.loading = false;
                     }, 300);

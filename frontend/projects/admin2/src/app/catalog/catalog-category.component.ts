@@ -155,9 +155,11 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
         this.panelTopMenu.hide();
     }
 
-    openCategoryModal(itemId?: number, isItemCopy: boolean = false): void {
+    openCategoryModal(itemId?: number, parentId?: number, isItemCopy = false): void {
         const data = {
-            id: itemId
+            id: itemId,
+            parentId,
+            isItemCopy
         };
         const ref = this.dialogService.open(ModalCategoryComponent, {
             header: typeof itemId !== 'undefined'
@@ -179,27 +181,18 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
             });
     }
 
-    openModalCategory(itemId?: number, isItemCopy: boolean = false, event?: MouseEvent): void {
-        if (event) {
-            event.preventDefault();
-        }
-        setTimeout(() => {
-            this.openCategoryModal(itemId, isItemCopy);
-        }, 1);
-    }
-
     onMenuAction(data: any): void {
         const action = data[0];
         const itemId = data[1];
         switch (action) {
             case 'new':
-                this.openCategoryModal();
+                this.openCategoryModal(null, itemId);
                 break;
             case 'edit':
-                this.openModalCategory(itemId);
+                this.openCategoryModal(itemId);
                 break;
             case 'clone':
-                this.openModalCategory(itemId, true);
+                this.openCategoryModal(itemId, null, true);
                 break;
         }
         this.panelTopMenu.hide();

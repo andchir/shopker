@@ -81,6 +81,7 @@ export class ModalContentTypeComponent extends AppModalAbstractComponent<Content
     onGetData(item: ContentType): void {
         this.model = item;
         this.getCollectionsList();
+        this.updateControls();
     }
 
     getCollectionsList(): void {

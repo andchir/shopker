@@ -74,6 +74,7 @@ export class ModalUserContentComponent extends AppModalAbstractComponent<User> i
             && this.appSettings.settings.userEmail !== this.model.email) {
                 this.allowImpersonation = true;
         }
+        this.updateControls();
     }
 
     getUserRoles(): void {

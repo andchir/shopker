@@ -33,6 +33,9 @@ export class ModalCategoryComponent extends AppModalAbstractComponent<Category> 
     });
     contentTypes: ContentType[] = [];
     isRoot = false;
+    isItemCopy = false;
+    filterParentId: number = null;
+    parentId: number;
     
     constructor(
         public ref: DynamicDialogRef,
@@ -46,13 +49,22 @@ export class ModalCategoryComponent extends AppModalAbstractComponent<Category> 
 
     ngOnInit(): void {
         this.getContentTypes();
-        if (typeof(this.config.data.id) !== 'undefined') {
+        if (typeof this.config.data.isItemCopy !== 'undefined') {
+            this.isItemCopy = this.config.data.isItemCopy;
+        }
+        if (typeof this.config.data.parentId !== 'undefined') {
+            this.parentId = this.config.data.parentId;
+        }
+        if (typeof this.config.data.id !== 'undefined' && this.config.data.id !== null) {
             if (!this.config.data.id) {
                 this.isRoot = true;
             }
             this.getData(this.config.data.id);
         } else {
             this.updateControls();
+            if (this.parentId) {
+                this.form.controls.parentId.setValue(this.parentId);
+            }
         }
         this.form.valueChanges
             .pipe(takeUntil(this.destroyed$))
@@ -64,6 +76,13 @@ export class ModalCategoryComponent extends AppModalAbstractComponent<Category> 
         if (this.isRoot) {
             this.model.id = 0;
             this.model.name = 'root';
+        }
+        this.filterParentId = this.model.id;
+        this.updateControls();
+        if (this.isItemCopy) {
+            setTimeout(() => {
+                this.model = null;
+            }, 1);
         }
     }
 

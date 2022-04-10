@@ -77,6 +77,7 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
     onGetData(item: Product): void {
         this.model = item;
         this.dataLoaded = true;
+        this.updateControls();
     }
 
     getCategories() {

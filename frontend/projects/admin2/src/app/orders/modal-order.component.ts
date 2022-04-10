@@ -76,10 +76,11 @@ export class ModalOrderContentComponent extends AppModalAbstractComponent<Order>
         this.createArrayFieldsProperty('content');
     }
 
-    onGetData(model: Order) {
-        super.onGetData(model);
+    onGetData(item: Order) {
+        this.model = item;
         this.priceTotalUpdate();
         this.getDeliveryLimit();
+        this.updateControls();
     }
 
     onDataSaved(): void {

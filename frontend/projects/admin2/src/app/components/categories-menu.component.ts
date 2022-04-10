@@ -121,9 +121,9 @@ export class CategoriesMenuComponent implements OnInit, OnDestroy {
         });
     }
     
-    deleteCategoryItemConfirm(itemId: number): void {
+    deleteCategoryItemConfirm(category: Category): void {
         const index = this.categories.findIndex((item) => {
-            return item.id === itemId;
+            return item.id === category.id;
         });
         if (index === -1) {
             return;
@@ -131,7 +131,7 @@ export class CategoriesMenuComponent implements OnInit, OnDestroy {
         this.confirmationService.confirm({
             message: this.getLangString('YOU_SURE_YOU_WANT_DELETE'),
             accept: () => {
-                this.deleteCategoryItem(itemId);
+                this.deleteCategoryItem(category.id);
             }
         })
     }
@@ -156,8 +156,12 @@ export class CategoriesMenuComponent implements OnInit, OnDestroy {
             });
     }
 
-    callAction(action: string, itemId?: number): void {
-        this.onAction.emit([action, itemId]);
+    callAction(action: string, category?: Category): void {
+        if (category) {
+            this.onAction.emit([action, category.id, category.parentId]);
+        } else {
+            this.onAction.emit([action, 0, 0]);
+        }
     }
 
     openCategory(event): void {

@@ -85,6 +85,7 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
     }
 
     openCategory(): void {
+        this.loading = true;
         this.dataService.setRequestUrl(`/admin/products/${this.categoryId}`);
         this.categoriesService.getItem(this.categoryId)
             .subscribe({
@@ -102,6 +103,7 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
 
     getData(event?: any): void {
         if (!this.currentContentType) {
+            this.loading = false;
             return;
         }
         super.getData();
@@ -200,5 +202,6 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
                 this.openModalCategory(itemId, true);
                 break;
         }
+        this.panelTopMenu.hide();
     }
 }

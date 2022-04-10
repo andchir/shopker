@@ -111,9 +111,9 @@
 
 <p-confirmDialog [header]="'CONFIRM' | translate" icon="pi pi-exclamation-triangle"></p-confirmDialog>
 
-<p-menu #menu [popup]="true" [model]="menuItems" styleClass="p-menu-nowrap"></p-menu>
+<p-menu [popup]="true" [model]="menuItems" styleClass="p-menu-nowrap" #menu></p-menu>
 
-<p-contextMenu #contextMenu [model]="contextMenuItems"></p-contextMenu>
+<p-contextMenu [model]="contextMenuItems" #contextMenu></p-contextMenu>
 
 <p-overlayPanel [dismissable]="true" [style]="{minWidth: '350px'}" #panelTopMenu>
     <ng-template pTemplate>

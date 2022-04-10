@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, forwardRef, ViewChild} from '@angular/core';
+import {Component, OnInit, Input, forwardRef, ViewChild, OnChanges, SimpleChanges} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 
 import {TreeNode} from 'primeng/api';
@@ -16,7 +16,7 @@ import {CategoriesService} from '../catalog/services/categories.service';
         }
     ]
 })
-export class SelectParentDropdownComponent implements OnInit, ControlValueAccessor {
+export class SelectParentDropdownComponent implements OnInit, OnChanges, ControlValueAccessor {
 
     private _disabled = false;
     loadingCategories = false;
@@ -43,6 +43,16 @@ export class SelectParentDropdownComponent implements OnInit, ControlValueAccess
     ngOnInit(): void {
         this.getCategoriesTree();
     }
+    
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes && typeof changes.currentId !== 'undefined'
+            && typeof changes.currentId.currentValue === 'number') {
+                if (this.currentId !== changes.currentId.currentValue) {
+                    this.currentId = changes.currentId.currentValue;
+                    this.getCategoriesTree();
+                }
+        }
+    }
 
     onChange: (value: number) => void = () => null;
     onTouched: () => void = () => null;
@@ -52,6 +62,9 @@ export class SelectParentDropdownComponent implements OnInit, ControlValueAccess
         this.dataService.getTree()
             .subscribe({
                 next: (res) => {
+                    if (typeof this.currentId !== 'number') {
+                        return;
+                    }
                     this.categoriesTree = this.filterNode(res, this.filterId);
                     this.currentCategoryNode = this.getTreeCurrentNode(this.categoriesTree);
                     this.loadingCategories = false;
@@ -113,6 +126,9 @@ export class SelectParentDropdownComponent implements OnInit, ControlValueAccess
     }
 
     writeValue(value: number): void {
+        if (typeof value !== 'number') {
+            return;
+        }
         this.currentId = value;
         this.onChange(value);
     }

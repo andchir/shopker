@@ -5,7 +5,7 @@
         (click)="opSelectParent.toggle($event)">
 </button>
 
-<p-overlayPanel #opSelectParent>
+<p-overlayPanel [style]="{minWidth: '350px'}" #opSelectParent>
     <ng-template pTemplate>
         <p-tree scrollHeight="350px"
                 [selectionMode]="'single'"

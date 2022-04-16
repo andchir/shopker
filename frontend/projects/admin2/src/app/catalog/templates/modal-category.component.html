@@ -49,7 +49,8 @@
                     <label class="block mb-2" for="fieldContentType">
                         {{ 'CONTENT_TYPE' | translate }}
                     </label>
-                    <p-dropdown [options]="contentTypes"
+                    <p-dropdown formControlName="contentTypeName"
+                                [options]="contentTypes"
                                 styleClass="w-full"
                                 inputId="fieldContentType"
                                 optionLabel="title"

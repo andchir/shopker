@@ -3,11 +3,12 @@ import {FileData} from '../catalog/models/file-data.model';
 export class FileModel {
 
     static getFileData(file: File): FileData {
-        const title = file.name.substr(0, file.name.lastIndexOf('.')),
+        const fileName = file.name.substr(0, file.name.lastIndexOf('.')),
             extension = file.name.substr(file.name.lastIndexOf('.') + 1),
             size = file.size;
-
-        return new FileData(0, title, extension, size);
+        const fileData = new FileData(0, fileName, extension.toLowerCase(), size);
+        fileData.fileName = fileName;
+        return fileData;
     }
 
     public toString = (): string => {

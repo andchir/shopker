@@ -10,11 +10,12 @@ import {CategoriesService} from './services/categories.service';
 import {SystemNameService} from '../services/system-name.service';
 import {ContentType} from './models/content_type.model';
 import {ContentTypesService} from './services/content_types.service';
+import {FilesService} from './services/files.service';
 
 @Component({
     selector: 'app-modal-category',
     templateUrl: 'templates/modal-category.component.html',
-    providers: []
+    providers: [FilesService]
 })
 export class ModalCategoryComponent extends AppModalAbstractComponent<Category> implements OnInit, OnDestroy {
     
@@ -42,7 +43,8 @@ export class ModalCategoryComponent extends AppModalAbstractComponent<Category> 
         public config: DynamicDialogConfig,
         public systemNameService: SystemNameService,
         public dataService: CategoriesService,
-        private contentTypesService: ContentTypesService
+        private contentTypesService: ContentTypesService,
+        private filesService: FilesService
     ) {
         super(ref, config, systemNameService, dataService);
     }
@@ -107,5 +109,13 @@ export class ModalCategoryComponent extends AppModalAbstractComponent<Category> 
                     this.errorMessage = error;
                 }
             });
+    }
+
+    filesUploadRequest(formData: FormData) {
+        return this.filesService.postFormData(formData);
+    }
+
+    saveFiles(itemId: number, ownerType = '', autoClose = false) {
+        super.saveFiles(itemId, 'category', autoClose);
     }
 }

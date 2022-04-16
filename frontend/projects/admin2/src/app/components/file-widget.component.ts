@@ -3,6 +3,7 @@ import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 
 import {FileData} from '../catalog/models/file-data.model';
 import {AppSettings} from '../services/app-settings.service';
+import {FileModel} from '../models/file.model';
 
 export const EPANDED_TEXTAREA_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
@@ -81,7 +82,7 @@ export class FileWidgetComponent implements ControlValueAccessor {
     }
 
     onGetFile(file: File): void {
-        const value: FileData = FileData.getFileData(file);
+        const value: FileData = FileModel.getFileData(file);
         if (!value) {
             return;
         }
@@ -108,7 +109,7 @@ export class FileWidgetComponent implements ControlValueAccessor {
         const fileTitle = fileName.replace(`.${fileExtension}`, '');
 
         const data = new FileData(0, fileTitle, fileExtension, 0, fileTitle, tmpArr.join('/'));
-        
+        data.fileName = fileName;
         if (FileData.getIsImageFile(data.extension)) {
             this.imgPreview.nativeElement.style.display = 'block';
             this.hasPreviewImage = true;
@@ -144,7 +145,6 @@ export class FileWidgetComponent implements ControlValueAccessor {
     dropHandler(event: DragEvent): void {
         event.preventDefault();
         event.stopPropagation();
-        
         this.getDroppedData(event.dataTransfer);
         if (this.filesRaw.length > 0) {
             this.onGetFile(this.filesRaw[0]);

@@ -142,7 +142,7 @@ class CategoryController extends StorageControllerAbstract
         $item
             ->setTitle($data['title'])
             ->setName($data['name'])
-            ->setImage($data['image'] ?? null)
+            ->setImage(($data['image'] ?? '') ?: null)
             ->setDescription($data['description'] ?? '')
             ->setIsActive($data['isActive'] ?? true)
             ->setParentId($data['parentId'] ?? 0)

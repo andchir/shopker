@@ -115,6 +115,10 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
             return this.dataService.create(this.getFormData());
         }
     }
+    
+    filesUploadRequest(formData: FormData) {
+        return this.dataService.postFormData(formData);
+    }
 
     saveData(autoClose = false, event?: MouseEvent): void {
         if (event) {
@@ -135,7 +139,9 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
                         this.model = res;
                     }
                     this.onDataSaved();
-                    if (autoClose) {
+                    if (Object.keys(this.files).length > 0) {
+                        this.saveFiles(res._id || res.id, '', autoClose);
+                    } else if (autoClose) {
                         this.closeModal();
                     }
                 },
@@ -148,6 +154,39 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
                         this.focusFormError();
                     }
                     this.loading = false;
+                }
+            });
+    }
+
+    saveFiles(itemId: number, ownerType = '', autoClose = false) {
+        if (Object.keys(this.files).length === 0) {
+            if (autoClose) {
+                this.closeModal();
+            }
+            return;
+        }
+
+        const formData = new FormData();
+        for (const key in this.files) {
+            if (this.files.hasOwnProperty(key) && this.files[key] instanceof File) {
+                formData.append(key, this.files[key], this.files[key].name);
+            }
+        }
+        formData.append('itemId', String(itemId));
+        formData.append('ownerType', 'category');
+
+        this.filesUploadRequest(formData)
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe({
+                next: () => {
+                    if (autoClose) {
+                        this.closeModal();
+                    }
+                    this.files = {};
+                },
+                error: (err) => {
+                    this.errorMessage = err.error;
+                    this.loading = false
                 }
             });
     }

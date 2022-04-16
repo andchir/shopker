@@ -8,8 +8,10 @@ export class FileData {
         const title = file.name.substr(0, file.name.lastIndexOf('.')),
             extension = file.name.substr(file.name.lastIndexOf('.') + 1),
             size = file.size;
-
-        return new FileData(0, title, extension, size);
+        
+        const fileData = new FileData(0, title, extension, size);
+        fileData.fileName = title;
+        return fileData;
     }
 
     static getImageUrl(filesDirBaseUrl: string, fileData: FileData|null): string|ArrayBuffer {
@@ -20,12 +22,15 @@ export class FileData {
             return fileData.dataUrl;
         }
         let output = '';
-        if (fileData.fileName) {
-            if (fileData.fileId) {
+        const fileName = fileData.fileName || fileData.title;
+        if (fileName) {
+            if (filesDirBaseUrl) {
                 output += `${filesDirBaseUrl}/`;
             }
-            output += `${fileData.dirPath}/`;
-            output += `${fileData.fileName}.${fileData.extension}`;
+            if (fileData.dirPath) {
+                output += `${fileData.dirPath}/`;
+            }
+            output += `${fileName}.${fileData.extension}`;
         }
         return output;
     }

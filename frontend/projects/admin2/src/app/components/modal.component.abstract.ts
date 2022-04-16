@@ -98,13 +98,15 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
 
     getFormData(): any {
         const data = this.form.value;
-        Object.keys(this.model).forEach((key) => {
-            if (this.files[key]) {
-                data[key] = Array.isArray(this.model[key])
-                    ? [ FileModel.getFileData(this.files[key]) ]
-                    : FileModel.getFileData(this.files[key]);
-            }
-        });
+        if (this.model) {
+            Object.keys(this.model).forEach((key) => {
+                if (this.files[key]) {
+                    data[key] = Array.isArray(this.model[key])
+                        ? [ FileModel.getFileData(this.files[key]) ]
+                        : FileModel.getFileData(this.files[key]);
+                }
+            });
+        }
         return data;
     }
 

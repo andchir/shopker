@@ -203,9 +203,7 @@ export class ModalContentTypeComponent extends AppModalAbstractComponent<Content
                         } else {
                             this.model.fields.push(Object.assign({}, result));
                         }
-                        if (this.model.groups.indexOf(result.group) === -1) {
-                            this.model.groups.push(result.group);
-                        }
+                        this.updateGroupsList();
                     }
                 }
             });
@@ -251,6 +249,16 @@ export class ModalContentTypeComponent extends AppModalAbstractComponent<Content
             contentType: this.model
         };
         this.modalContentTypeField(data);
+    }
+    
+    updateGroupsList(): void {
+        const groupsList = [];
+        this.model.fields.forEach((field) => {
+            if (groupsList.indexOf(field.group) === -1) {
+                groupsList.push(field.group);
+            }
+        });
+        this.model.groups = groupsList;
     }
 
     fieldsExport(event?: MouseEvent): void {

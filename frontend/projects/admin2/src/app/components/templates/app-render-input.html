@@ -12,14 +12,15 @@
                     <!-- text-->
                     <div class="grid" *ngSwitchCase="'text'">
                         <div class="col-12 md:col-5">
-                            <label for="field_{{field.name}}">
-                                {{field.title}}
-                                <span class="text-500">({{field.name}})</span>
+                            <label for="field_{{ field.name }}">
+                                {{ field.title }}
+                                <span class="text-500">({{ field.name }})</span>
                                 <span class="text-orange-500" *ngIf="field.required">*</span>
                             </label>
                         </div>
                         <div class="col-12 md:col-7">
-                            <input type="text" id="field_{{field.name}}" class="w-full" pInputText>
+                            <input pInputText type="text" id="field_{{ field.name }}" class="w-full"
+                                   [formControlName]="field.name">
                         </div>
                     </div>
                     <!-- /text-->
@@ -35,7 +36,8 @@
                         </div>
                         <div class="col-12 md:col-7">
                             <div class="p-inputgroup">
-                                <input type="text" id="field_{{field.name}}" class="w-full" pInputText>
+                                <input pInputText type="text" id="field_{{ field.name }}" class="w-full"
+                                       [formControlName]="field.name">
                                 <button type="button" pButton pRipple icon="pi pi-refresh" styleClass="p-button-info"
                                         [pTooltip]="'GENERATE' | translate"
                                         tooltipPosition="bottom"></button>
@@ -54,8 +56,8 @@
                             </label>
                         </div>
                         <div [ngClass]="{'col-12 md:col-7': field.inputProperties.rows < 7}">
-                            <textarea id="field_{{field.name}}" class="w-full mb-2" rows="8" pInputTextarea
-                                      [rows]="field.inputProperties.rows"></textarea>
+                            <textarea pInputTextarea id="field_{{ field.name }}" class="w-full mb-2" rows="8"
+                                      [rows]="field.inputProperties.rows" [formControlName]="field.name"></textarea>
                         </div>
                     </div>
                     <!-- /textarea -->
@@ -70,8 +72,8 @@
                             </label>
                         </div>
                         <div [class.col-md-7]="field.inputProperties.rows < 7">
-                            <textarea id="field_{{field.name}}" class="w-full mb-2" rows="8" pInputTextarea
-                                      [rows]="field.inputProperties.rows"></textarea>
+                            <textarea pInputTextarea id="field_{{ field.name }}" class="w-full mb-2" rows="8"
+                                      [rows]="field.inputProperties.rows" [formControlName]="field.name"></textarea>
                         </div>
                     </div>
                     <!-- /rich_text -->
@@ -86,7 +88,8 @@
                             </label>
                         </div>
                         <div class="col-12 md:col-7">
-                            <input type="number" id="field_{{field.name}}" class="w-full" pInputText>
+                            <input pInputText type="number" id="field_{{ field.name }}" class="w-full"
+                                   [formControlName]="field.name">
                         </div>
                     </div>
                     <!-- /number -->
@@ -109,7 +112,8 @@
                                                            [inline]="field.inputProperties['inline']"></p-colorPicker>
                                         </div>
                                     </div>
-                                    <input type="text" maxlength="7" class="w-full" id="field_{{field.name}}" pInputText>
+                                    <input pInputText type="text" maxlength="7" class="w-full" id="field_{{ field.name }}"
+                                           [formControlName]="field.name">
                                 </div>
                             </div>
                         </div>
@@ -124,17 +128,16 @@
                             [fieldName]="field.name"
                             [hasPreviewImage]="field.inputProperties.has_preview_image"
                             [allowedExtensions]="field.inputProperties.allowed_extensions"
-                            [(files)]="files"
-                            [(ngModel)]="model[field.name]"></app-file-widget>
+                            [(files)]="files"></app-file-widget>
                     </ng-container>
                     <!-- /file -->
 
                     <!-- categories -->
                     <div *ngSwitchCase="'categories'">
                         <div class="mb-2">
-                            <label for="field_{{field.name}}">
+                            <label for="field_{{ field.name }}">
                                 {{field.title}}
-                                <span class="text-500">({{field.name}})</span>
+                                <span class="text-500">({{ field.name }})</span>
                                 <span class="text-orange-500" *ngIf="field.required">*</span>
                             </label>
                         </div>
@@ -157,61 +160,65 @@
                         <div class="mb-2">
                             <label for="field_{{field.name}}">
                                 {{field.title}}
-                                <span class="text-500">({{field.name}})</span>
+                                <span class="text-500">({{ field.name }})</span>
                                 <span class="text-orange-500" *ngIf="field.required">*</span>
                             </label>
                         </div>
-                        <p-table styleClass="p-datatable-sm">
-                            <ng-template pTemplate="header">
-                                <tr>
-                                    <th>
-                                        {{ field.inputProperties.names[0] | translate }}
-                                    </th>
-                                    <th>
-                                        {{ field.inputProperties.names[1] | translate }}
-                                    </th>
-                                    <th>
-                                        {{ field.inputProperties.names[2] | translate }}
-                                    </th>
-                                    <th>
-                                        {{ field.inputProperties.names[3] | translate }}
-                                    </th>
-                                    <th></th>
-                                </tr>
-                            </ng-template>
-                            <ng-template pTemplate="body" let-option let-rowIndex="rowIndex">
-                                <tr [formGroupName]="rowIndex + ''">
-                                    <td>
-                                        <input type="text" class="p-inputtext-sm w-full" pInputText>
-                                    </td>
-                                    <td>
-                                        <input type="text" class="p-inputtext-sm w-full" pInputText>
-                                    </td>
-                                    <td>
-                                        <input type="text" class="p-inputtext-sm w-full" pInputText>
-                                    </td>
-                                    <td>
-                                        <input type="text" class="p-inputtext-sm w-full" pInputText>
-                                    </td>
-                                    <td>
-                                        <button pButton pRipple type="button"
-                                                icon="pi pi-times"
-                                                [pTooltip]="'DELETE' | translate"
-                                                tooltipPosition="bottom"
-                                                class="p-button-raised p-button-rounded p-button-secondary p-button-sm"></button>
-                                    </td>
-                                </tr>
-                            </ng-template>
-                            <ng-template pTemplate="footer">
-                                <tr>
-                                    <td colspan="5" class="text-center">
-                                        <button type="button" pButton pRipple icon="pi pi-plus"
-                                                class="p-button-secondary p-button-sm"
-                                                [label]="'ADD' | translate"></button>
-                                    </td>
-                                </tr>
-                            </ng-template>
-                        </p-table>
+                        <div [formArrayName]="field.name">
+                            <p-table styleClass="p-datatable-sm" [value]="arrayFields[field.name].controls">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th>
+                                            {{ field.inputProperties.names[0] | translate }}
+                                        </th>
+                                        <th>
+                                            {{ field.inputProperties.names[1] | translate }}
+                                        </th>
+                                        <th>
+                                            {{ field.inputProperties.names[2] | translate }}
+                                        </th>
+                                        <th>
+                                            {{ field.inputProperties.names[3] | translate }}
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-option let-rowIndex="rowIndex">
+                                    <tr [formGroupName]="rowIndex + ''">
+                                        <td>
+                                            <input type="text" class="p-inputtext-sm w-full" pInputText>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="p-inputtext-sm w-full" pInputText>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="p-inputtext-sm w-full" pInputText>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="p-inputtext-sm w-full" pInputText>
+                                        </td>
+                                        <td>
+                                            <button pButton pRipple type="button"
+                                                    icon="pi pi-times"
+                                                    [pTooltip]="'DELETE' | translate"
+                                                    tooltipPosition="bottom"
+                                                    class="p-button-raised p-button-rounded p-button-secondary p-button-sm"
+                                                    (click)="parametersRemove(field.name, rowIndex, $event)"></button>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="footer">
+                                    <tr>
+                                        <td colspan="5" class="text-center">
+                                            <button type="button" pButton pRipple icon="pi pi-plus"
+                                                    class="p-button-secondary p-button-sm"
+                                                    [label]="'ADD' | translate"
+                                                    (click)="parametersAdd(field.name, $event)"></button>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
                     </ng-container>
                     <!-- /parameters -->
                     

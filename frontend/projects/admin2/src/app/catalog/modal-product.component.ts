@@ -95,7 +95,7 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
                     this.form.addControl(field.name, control);
                 } else {
                     const validators = this.getValidators(field);
-                    const control = new FormControl(this.model[field.name], validators);
+                    const control = new FormControl(this.model[field.name] || '', validators);
                     this.form.addControl(field.name, control);
                 }
             }
@@ -143,5 +143,9 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
             validators.push(Validators.required);
         }
         return validators;
+    }
+    
+    onParametersDelete(data: any[]): void {
+        this.arrayFieldDelete(data[0], data[1]);
     }
 }

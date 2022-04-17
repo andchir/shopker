@@ -214,7 +214,11 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
                         this.arrayFieldAdd(key, value);
                     });
                 } else {
-                    controls[key].setValue(this.model[key]);
+                    if (controls[key] instanceof FormArray) {
+                        
+                    } else {
+                        controls[key].setValue(this.model[key] || '');
+                    }
                 }
             }
         });

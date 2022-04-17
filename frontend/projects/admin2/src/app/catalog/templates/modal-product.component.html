@@ -6,11 +6,14 @@
                 <app-render-input
                     [fields]="currentContentType.fields"
                     [groups]="currentContentType.groups"
+                    [arrayFields]="arrayFields"
                     [model]="model"
                     [form]="form"
                     [files]="files"
                     [localeFieldsAllowed]="localeFieldsAllowed"
-                    [isLocalizationActive]="localeCurrent !== localeDefault"></app-render-input>
+                    [isLocalizationActive]="localeCurrent !== localeDefault"
+                    (onParametersAdd)="arrayFieldAdd($event)"
+                    (onParametersDelete)="onParametersDelete($event)"></app-render-input>
             </ng-container>
         </div>
 

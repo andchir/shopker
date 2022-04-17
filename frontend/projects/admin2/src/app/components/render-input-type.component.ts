@@ -38,12 +38,13 @@ export class RenderInputTypeComponent implements OnInit {
     @Input() groups: string[];
     @Input() model: {[key: string]: any};
     @Input() form: FormGroup;
-    @Input() formErrors: {[key: string]: string};
-    @Input() validationMessages: {[key: string]: {[key: string]: string}};
     @Input() files: { [key: string]: File } = {};
     @Input() localeFieldsAllowed: string[] = [];
     @Input() isLocalizationActive: boolean;
+    @Input() arrayFields: {[key: string]: any} = {};
     @Output() onAddTranslation = new EventEmitter<string>();
+    @Output() onParametersAdd = new EventEmitter<string>();
+    @Output() onParametersDelete = new EventEmitter<any[]>();
     fieldsMultivalues: {[key: string]: MultiValues} = {};
     submitted = false;
     filesDirBaseUrl: string;
@@ -65,11 +66,11 @@ export class RenderInputTypeComponent implements OnInit {
 
     ngOnInit(): void {
         this.getCategoriesTree(true);
-        this.buildControls();
+        this.buildFieldsOptions();
     }
 
-    buildControls() {
-        this.fields.forEach(function(field) {
+    buildFieldsOptions() {
+        this.fields.forEach((field) => {
             this.setFieldProperties(field);
             this.setFieldOptions(field);
             this.setValue(field);
@@ -80,12 +81,12 @@ export class RenderInputTypeComponent implements OnInit {
             // if (field.inputType === 'categories') {
             //     this.categoriesSelection[field.name] = [];
             // }
-            if (!this.form.controls[field.name]) {
-                const validators = this.getValidators(field);
-                const control = new FormControl(this.model[field.name], validators);
-                this.form.addControl(field.name, control);
-            }
-        }.bind(this));
+            // if (!this.form.controls[field.name]) {
+            //     const validators = this.getValidators(field);
+            //     const control = new FormControl(this.model[field.name], validators);
+            //     this.form.addControl(field.name, control);
+            // }
+        });
         // this.changeDetectionRef.detectChanges();
     }
 
@@ -521,31 +522,33 @@ export class RenderInputTypeComponent implements OnInit {
         // });
     }
 
-    parametersRemove(fieldName: string, index: number): void {
-        if (Array.isArray(this.model[fieldName])) {
-            this.model[fieldName].splice(index, 1);
+    parametersRemove(fieldName: string, index: number, event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
         }
+        this.onParametersDelete.emit([fieldName, index]);
     }
 
     parametersAdd(fieldName: string, event?: MouseEvent): void {
         if (event) {
             event.preventDefault();
         }
-        if (!this.model[fieldName]) {
-            this.model[fieldName] = [];
-        }
-        const index = this.fields.findIndex((field) => {
-            return field.name === fieldName;
-        });
-        const obj = {name: '', value: '', price: 0, imageNum: 0};
-        if (index > -1 && this.fields[index].inputProperties.keys) {
-            (this.fields[index].inputProperties.keys as string[]).forEach((key) => {
-                if (typeof obj[key] === 'undefined') {
-                    obj[key] = '';
-                }
-            });
-        }
-        this.model[fieldName].push(obj);
+        this.onParametersAdd.emit(fieldName);
+        // if (!this.model[fieldName]) {
+        //     this.model[fieldName] = [];
+        // }
+        // const index = this.fields.findIndex((field) => {
+        //     return field.name === fieldName;
+        // });
+        // const obj = {name: '', value: '', price: 0, imageNum: 0};
+        // if (index > -1 && this.fields[index].inputProperties.keys) {
+        //     (this.fields[index].inputProperties.keys as string[]).forEach((key) => {
+        //         if (typeof obj[key] === 'undefined') {
+        //             obj[key] = '';
+        //         }
+        //     });
+        // }
+        // this.model[fieldName].push(obj);
     }
 
     parametersExport(fieldName: string, event?: MouseEvent): void {
@@ -555,7 +558,7 @@ export class RenderInputTypeComponent implements OnInit {
         if (!this.model[fieldName]) {
             this.model[fieldName] = [];
         }
-        this.formErrors[fieldName] = '';
+        // this.formErrors[fieldName] = '';
         const dataStr = JSON.stringify(this.model[fieldName], null, '\t');
         // const modalRef = this.modalService.open(ModalContentTypeFieldsExportComponent, {
         //     backdrop: 'static',

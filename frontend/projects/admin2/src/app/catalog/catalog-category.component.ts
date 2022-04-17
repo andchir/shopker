@@ -71,7 +71,6 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
                     console.log(e);
                 }
             });
-        this.openCategory();
     }
 
     getContentType(): Observable<ContentType> {
@@ -111,6 +110,13 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
 
     getModalComponent() {
         return ModalProductComponent;
+    }
+
+    getItemData(item: Product): {[name: string]: number|string} {
+        return {
+            id: item ? item.id : 0,
+            parentId: this.categoryId
+        };
     }
 
     openModal(item: Product, event?: MouseEvent): void {

@@ -22,7 +22,6 @@ import {AppSettings} from '../services/app-settings.service';
 export class ModalProductComponent extends AppModalAbstractComponent<Product> implements OnInit, OnDestroy {
 
     dataLoaded = false;
-    categoryId = 0;
     model: Product;
     categories: Category[] = [];
     contentTypes: ContentType[] = [];
@@ -50,13 +49,16 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
     }
 
     ngOnInit() {
-        this.model = {id: 0, parentId: 0};
+        this.model = {
+            id: this.config.data.id || 0,
+            parentId: this.config.data.parentId || 0
+        } as Product;
         this.localeList = this.appSettings.settings.localeList;
         if (this.localeList.length > 0) {
             this.localeDefault = this.localeList[0];
             this.localeCurrent = this.localeList[0];
         }
-        this.dataService.setRequestUrl(`/admin/products/${this.categoryId}`);
+        this.dataService.setRequestUrl(`/admin/products/${this.model.parentId}`);
 
         this.getCategories();
         this.getContentType()
@@ -95,7 +97,7 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
     getContentType(): Promise<ContentType> {
         this.loading = true;
         return new Promise((resolve, reject) => {
-            this.contentTypesService.getItemByCategory(this.categoryId)
+            this.contentTypesService.getItemByCategory(this.model.parentId)
                 .subscribe({
                     next: (data) => {
                         Object.assign(this.currentContentType, data);

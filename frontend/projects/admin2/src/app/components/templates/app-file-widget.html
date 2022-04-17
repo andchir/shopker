@@ -1,11 +1,11 @@
 <div class="border-1 border-400 border-round" (drop)="dropHandler($event)" (dragover)="dragOverHandler($event);">
     <div [ngClass]="{'min-height110': largeFieldMode}">
         <div [style.minHeight]="largeFieldMode ? '35px': 0">
-            <div class="text-600 py-3" *ngIf="fieldTitle">
+            <div class="text-600 p-2" *ngIf="fieldTitle">
                 <label for="field_{{ fieldName }}">
                     {{ fieldTitle }}
-                    <span class="text-muted" *ngIf="fieldName">({{ fieldName }})</span>
-                    <span class="text-danger" *ngIf="required">*</span>
+                    <span class="text-500" *ngIf="fieldName">({{ fieldName }})</span>
+                    <span class="text-orange-500" *ngIf="required">*</span>
                 </label>
             </div>
         </div>

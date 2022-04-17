@@ -90,6 +90,130 @@
                         </div>
                     </div>
                     <!-- /number -->
+
+                    <!-- color -->
+                    <div class="grid" *ngSwitchCase="'color'">
+                        <div class="col-12 md:col-5">
+                            <label for="field_{{ field.name }}">
+                                {{ field.title }}
+                                <span class="text-500">({{ field.name }})</span>
+                                <span class="text-orange-500" *ngIf="field.required">*</span>
+                            </label>
+                        </div>
+                        <div class="col-12 md:col-7">
+                            <div class="grid">
+                                <div class="col-12 md:col-6">
+                                    <div class="relative">
+                                        <div class="absolute pos-absolute-right" style="right: 3px; top: 3px;">
+                                            <p-colorPicker [inputId]="'field_' + field.name"
+                                                           [inline]="field.inputProperties['inline']"></p-colorPicker>
+                                        </div>
+                                    </div>
+                                    <input type="text" maxlength="7" class="w-full" id="field_{{field.name}}" pInputText>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /color -->
+
+                    <!-- file -->
+                    <ng-container *ngSwitchCase="'file'">
+                        <app-file-widget
+                            [formControlName]="field.name"
+                            [fieldTitle]="field.title"
+                            [fieldName]="field.name"
+                            [hasPreviewImage]="field.inputProperties.has_preview_image"
+                            [allowedExtensions]="field.inputProperties.allowed_extensions"
+                            [(files)]="files"
+                            [(ngModel)]="model[field.name]"></app-file-widget>
+                    </ng-container>
+                    <!-- /file -->
+
+                    <!-- categories -->
+                    <div *ngSwitchCase="'categories'">
+                        <div class="mb-2">
+                            <label for="field_{{field.name}}">
+                                {{field.title}}
+                                <span class="text-500">({{field.name}})</span>
+                                <span class="text-orange-500" *ngIf="field.required">*</span>
+                            </label>
+                        </div>
+                        <div>
+                            <p-tree selectionMode="checkbox"
+                                    scrollHeight="300px"
+                                    [value]="categoriesTree"
+                                    [(selection)]="categoriesSelection[field.name]"
+                                    [loading]="loadingCategories"
+                                    [layout]="field.inputProperties.layout"
+                                    [loadingIcon]="'icon-loader'"
+                                    (onNodeSelect)="categorySelect(field.name)"
+                                    (onNodeUnselect)="categorySelect(field.name)"></p-tree>
+                        </div>
+                    </div>
+                    <!-- /categories -->
+
+                    <!-- parameters -->
+                    <ng-container *ngSwitchCase="'parameters'">
+                        <div class="mb-2">
+                            <label for="field_{{field.name}}">
+                                {{field.title}}
+                                <span class="text-500">({{field.name}})</span>
+                                <span class="text-orange-500" *ngIf="field.required">*</span>
+                            </label>
+                        </div>
+                        <p-table styleClass="p-datatable-sm">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>
+                                        {{ field.inputProperties.names[0] | translate }}
+                                    </th>
+                                    <th>
+                                        {{ field.inputProperties.names[1] | translate }}
+                                    </th>
+                                    <th>
+                                        {{ field.inputProperties.names[2] | translate }}
+                                    </th>
+                                    <th>
+                                        {{ field.inputProperties.names[3] | translate }}
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-option let-rowIndex="rowIndex">
+                                <tr [formGroupName]="rowIndex + ''">
+                                    <td>
+                                        <input type="text" class="p-inputtext-sm w-full" pInputText>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="p-inputtext-sm w-full" pInputText>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="p-inputtext-sm w-full" pInputText>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="p-inputtext-sm w-full" pInputText>
+                                    </td>
+                                    <td>
+                                        <button pButton pRipple type="button"
+                                                icon="pi pi-times"
+                                                [pTooltip]="'DELETE' | translate"
+                                                tooltipPosition="bottom"
+                                                class="p-button-raised p-button-rounded p-button-secondary p-button-sm"></button>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="footer">
+                                <tr>
+                                    <td colspan="5" class="text-center">
+                                        <button type="button" pButton pRipple icon="pi pi-plus"
+                                                class="p-button-secondary p-button-sm"
+                                                [label]="'ADD' | translate"></button>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </ng-container>
+                    <!-- /parameters -->
                     
                 </div>
                 

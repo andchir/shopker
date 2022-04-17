@@ -13,6 +13,7 @@ import {ContentTypesService} from './services/content_types.service';
 import {CategoriesService} from './services/categories.service';
 import {FilesService} from './services/files.service';
 import {AppSettings} from '../services/app-settings.service';
+import {ContentField} from './models/content_field.model';
 
 @Component({
     selector: 'app-modal-product',
@@ -66,7 +67,7 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
                 if (this.config.data.id) {
                     this.getData(this.config.data.id);
                 } else {
-                    this.updateControls();
+                    this.buildControls();
                     this.dataLoaded = true;
                 }
             }, (err) => {
@@ -79,7 +80,29 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
     onGetData(item: Product): void {
         this.model = item;
         this.dataLoaded = true;
-        this.updateControls();
+        this.buildControls();
+    }
+
+    buildControls() {
+        this.currentContentType.fields.forEach((field) => {
+            if (!this.form.controls[field.name]) {
+                if (['parameters'].indexOf(field.inputType) > -1) {
+                    this.arrayFieldsData[field.name] = {
+                        name: {validators: [Validators.required]}
+                    };
+                    this.createArrayFieldsProperty(field.name);
+                    const control = new FormArray([]);
+                    this.form.addControl(field.name, control);
+                } else {
+                    const validators = this.getValidators(field);
+                    const control = new FormControl(this.model[field.name], validators);
+                    this.form.addControl(field.name, control);
+                }
+            }
+        });
+        setTimeout(() => {
+            this.updateControls();
+        }, 1);
     }
 
     getCategories() {
@@ -112,5 +135,13 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
                     }
                 });
         });
+    }
+
+    getValidators(field: ContentField): any[] {
+        const validators = [];
+        if (field.required) {
+            validators.push(Validators.required);
+        }
+        return validators;
     }
 }

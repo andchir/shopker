@@ -64,8 +64,8 @@ export class RenderInputTypeComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        // this.getCategoriesTree(true);
-        // this.buildControls();
+        this.getCategoriesTree(true);
+        this.buildControls();
     }
 
     buildControls() {
@@ -73,21 +73,20 @@ export class RenderInputTypeComponent implements OnInit {
             this.setFieldProperties(field);
             this.setFieldOptions(field);
             this.setValue(field);
-            this.formErrors[field.name] = '';
-            if (!this.validationMessages[field.name]) {
-                this.validationMessages[field.name] = {};
-            }
-            if (field.inputType === 'categories') {
-                this.categoriesSelection[field.name] = [];
-            }
-
+            // this.formErrors[field.name] = '';
+            // if (!this.validationMessages[field.name]) {
+            //     this.validationMessages[field.name] = {};
+            // }
+            // if (field.inputType === 'categories') {
+            //     this.categoriesSelection[field.name] = [];
+            // }
             if (!this.form.controls[field.name]) {
                 const validators = this.getValidators(field);
                 const control = new FormControl(this.model[field.name], validators);
                 this.form.addControl(field.name, control);
             }
         }.bind(this));
-        this.changeDetectionRef.detectChanges();
+        // this.changeDetectionRef.detectChanges();
     }
 
     setFieldProperties(field: ContentField): void {
@@ -376,11 +375,11 @@ export class RenderInputTypeComponent implements OnInit {
     getValidators(field: ContentField): any[] {
         const validators = [];
         if (field.required) {
-            validators.push(Validators.required);
-            this.translateService.get('FIELD_REQUIRED', {name: field.title})
-                .subscribe((res: string) => {
-                    this.validationMessages[field.name].required = res;
-                });
+            // validators.push(Validators.required);
+            // this.translateService.get('FIELD_REQUIRED', {name: field.title})
+            //     .subscribe((res: string) => {
+            //         this.validationMessages[field.name].required = res;
+            //     });
         }
         return validators;
     }
@@ -460,14 +459,17 @@ export class RenderInputTypeComponent implements OnInit {
     getCategoriesTree(updateTreeSelections = false): void {
         this.loadingCategories = true;
         this.categoriesService.getTree()
-            .subscribe((data) => {
-                this.categoriesTree = data;
-                this.loadingCategories = false;
-                if (updateTreeSelections) {
-                    this.updateTreeSelections();
+            .subscribe({
+                next: (data) => {
+                    this.categoriesTree = data;
+                    this.loadingCategories = false;
+                    if (updateTreeSelections) {
+                        this.updateTreeSelections();
+                    }
+                },
+                error: (err) => {
+                    this.loadingCategories = false;
                 }
-            }, (err) => {
-                this.loadingCategories = false;
             });
     }
 

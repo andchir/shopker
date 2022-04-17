@@ -55,16 +55,6 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
 
     }
 
-    onGetData(item: T): void {
-        this.model = item;
-        this.updateControls();
-    }
-
-    onDataSaved(): void {
-        this.closeReason = 'updated';
-        this.loading = false;
-    }
-
     ngOnInit(): void {
         if (this.config.data.id) {
             this.getData(this.config.data.id);
@@ -74,6 +64,16 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
         this.form.valueChanges
             .pipe(takeUntil(this.destroyed$))
             .subscribe(() => this.onValueChanged('form'));
+    }
+
+    onGetData(item: T): void {
+        this.model = item;
+        this.updateControls();
+    }
+
+    onDataSaved(): void {
+        this.closeReason = 'updated';
+        this.loading = false;
     }
 
     getData(itemId: number): void {

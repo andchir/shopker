@@ -107,13 +107,17 @@
                             <div class="grid">
                                 <div class="col-12 md:col-6">
                                     <div class="relative">
-                                        <div class="absolute pos-absolute-right" style="right: 3px; top: 3px;">
+                                        <div class="absolute pos-absolute-right" style="right: 6px; top: 6px;">
                                             <p-colorPicker [inputId]="'field_' + field.name"
-                                                           [inline]="field.inputProperties['inline']"></p-colorPicker>
+                                                           [inline]="field.inputProperties['inline']"
+                                                           [(ngModel)]="model[field.name]"
+                                                           [ngModelOptions]="{standalone: true}"></p-colorPicker>
                                         </div>
                                     </div>
                                     <input pInputText type="text" maxlength="7" class="w-full" id="field_{{ field.name }}"
-                                           [formControlName]="field.name">
+                                           [formControlName]="field.name"
+                                           [(ngModel)]="model[field.name]"
+                                           [ngModelOptions]="{standalone: true}">
                                 </div>
                             </div>
                         </div>

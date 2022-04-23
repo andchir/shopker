@@ -283,8 +283,17 @@ export class RenderInputTypeComponent implements OnInit {
                     if (!opts[1]) {
                         opts[1] = opts[0];
                     }
-                    // field.options.push(zipObject(['title', 'value'], opts));
+                    field.options.push({
+                        title: opts[0],
+                        value: opts[1]
+                    });
                 });
+                if (field.inputType === 'select') {
+                    field.options.unshift({
+                        title: '',
+                        value: ''
+                    });
+                }
 
                 break;
             case 'checkbox':
@@ -303,7 +312,10 @@ export class RenderInputTypeComponent implements OnInit {
                     if (!opts[1]) {
                         opts[1] = opts[0];
                     }
-                    // field.options.push(zipObject(['title', 'value'], opts));
+                    field.options.push({
+                        title: opts[0],
+                        value: opts[1]
+                    });
                     this.fieldsMultivalues[field.name].values.push(opts[1]);
                     this.fieldsMultivalues[field.name].checked.push(this.model[field.name].indexOf(opts[1]) > -1);
                 });

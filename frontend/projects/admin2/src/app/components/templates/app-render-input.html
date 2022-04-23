@@ -10,7 +10,7 @@
                 <div class="show-on-hover-parent" [ngSwitch]="field.inputType" [ngClass]="{'pe-5': field.inputProperties.multiple}">
 
                     <!-- text-->
-                    <div class="grid" *ngSwitchCase="'text'">
+                    <div class="grid" *ngSwitchDefault>
                         <div class="col-12 md:col-5">
                             <label for="field_{{ field.name }}">
                                 {{ field.title }}
@@ -135,6 +135,72 @@
                             [(files)]="files"></app-file-widget>
                     </ng-container>
                     <!-- /file -->
+
+                    <!-- date -->
+                    <div class="grid" *ngSwitchCase="'date'">
+                        <div class="col-12 md:col-5">
+                            <label for="field_{{field.name}}">
+                                {{field.title}}
+                                <span class="text-500">({{field.name}})</span>
+                                <span class="text-orange-500" *ngIf="field.required">*</span>
+                            </label>
+                        </div>
+                        <div class="col-12 md:col-7">
+                            <div class="ui-fluid">
+                                <p-calendar inputId="field_{{field.name}}"
+                                            [formControlName]="field.name"
+                                            [(ngModel)]="model[field.name]"
+                                            [dateFormat]="field.inputProperties.format"
+                                            [showTime]="field.inputProperties.show_time"
+                                            [hourFormat]="field.inputProperties.hour_format"
+                                            [firstDayOfWeek]="field.inputProperties.first_day_of_week"
+                                            [showButtonBar]="true"
+                                            [showIcon]="true"
+                                            [icon]="'pi pi-calendar'"></p-calendar>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /date -->
+
+                    <!-- select -->
+                    <div class="grid" *ngSwitchCase="'select'">
+                        <div class="col-12 md:col-5">
+                            <label for="field_{{field.name}}">
+                                {{field.title}}
+                                <span class="text-500">({{ field.name }})</span>
+                                <span class="text-orange-500" *ngIf="field.required">*</span>
+                            </label>
+                        </div>
+                        <div class="col-12 md:col-7">
+                            <p-dropdown inputId="field_{{ field.name }}" styleClass="w-full"
+                                        [options]="field.options"
+                                        [formControlName]="field.name"
+                                        optionLabel="title"
+                                        optionValue="value"></p-dropdown>
+                        </div>
+                    </div>
+                    <!-- /select -->
+
+                    <!-- radio -->
+                    <div class="grid" *ngSwitchCase="'radio'">
+                        <div class="col-12 md:col-5">
+                            <label for="field_{{ field.name }}">
+                                {{ field.title }}
+                                <span class="text-500">({{ field.name }})</span>
+                                <span class="text-orange-500" *ngIf="field.required">*</span>
+                            </label>
+                        </div>
+                        <div class="col-12 md:col-7">
+                            <div *ngFor="let opt of field.options; index as index" class="field-checkbox">
+                                <p-radioButton [inputId]="'radio-field-' + field.name + index"
+                                               [formControlName]="field.name"
+                                               [name]="field.name"
+                                               [value]="opt.value"></p-radioButton>
+                                <label [for]="'radio-field-' + field.name + index">{{ opt.title }}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /radio -->
 
                     <!-- categories -->
                     <div *ngSwitchCase="'categories'">

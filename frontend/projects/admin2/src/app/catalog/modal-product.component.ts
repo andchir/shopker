@@ -148,4 +148,17 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
     onParametersDelete(data: any[]): void {
         this.arrayFieldDelete(data[0], data[1]);
     }
+
+    saveData(autoClose = false, event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.errorMessage = '';
+        if (!this.form.valid) {
+            this.formGroupMarkTouched(this.form);
+            this.focusFormError();
+            return;
+        }
+        console.log(this.getFormData());
+    }
 }

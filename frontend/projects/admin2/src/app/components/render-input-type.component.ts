@@ -301,11 +301,9 @@ export class RenderInputTypeComponent implements OnInit {
                 valueArr = field.inputProperties['values_list']
                     ? String(field.inputProperties['values_list']).split('||')
                     : [];
-
                 if (!Array.isArray(this.model[field.name])) {
                     this.model[field.name] = [];
                 }
-
                 this.fieldsMultivalues[field.name] = new MultiValues([], []);
                 valueArr.forEach((optStr, index) => {
                     const opts = optStr.split('==');
@@ -322,10 +320,10 @@ export class RenderInputTypeComponent implements OnInit {
 
                 break;
             case 'schedule':
+            case 'tags':
             case 'parameters':
-
                 if (!Array.isArray(this.model[field.name])) {
-                    this.model[field.name] = [];
+                    this.model[field.name] = this.model[field.name] ? [this.model[field.name]] : [];
                 }
         }
     }

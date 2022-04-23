@@ -63,17 +63,39 @@
                     <!-- /textarea -->
 
                     <!-- rich_text -->
-                    <div *ngSwitchCase="'rich_text'" [class.grid]="field.inputProperties.rows < 7">
-                        <div [class.col-md-5]="field.inputProperties.rows < 7">
+                    <div *ngSwitchCase="'rich_text'">
+                        <div class="mb-2">
                             <label for="field_{{ field.name }}">
                                 {{ field.title }}
                                 <span class="text-500">({{ field.name }})</span>
                                 <span class="text-orange-500" *ngIf="field.required">*</span>
                             </label>
                         </div>
-                        <div [class.col-md-7]="field.inputProperties.rows < 7">
-                            <textarea pInputTextarea id="field_{{ field.name }}" class="w-full mb-2" rows="8"
-                                      [rows]="field.inputProperties.rows" [formControlName]="field.name"></textarea>
+                        <div class="border-round" *ngIf="field.inputProperties.formats" [ngClass]="{'border-solid border-green-500 border-2': isLocalizationActive}">
+                            <p-editor [formControlName]="field.name"
+                                      [formats]="field.inputProperties.formats"
+                                      [style]="{'height':'320px'}"
+                                      (onInit)="onInitTextEditor($event)">
+                                <p-header>
+                                    <select class="ql-header" *ngIf="field.inputProperties.formats.indexOf('header') > -1"></select>
+                                    <select class="ql-font" *ngIf="field.inputProperties.formats.indexOf('font') > -1"></select>
+                                    <select class="ql-size" *ngIf="field.inputProperties.formats.indexOf('size') > -1"></select>
+                                    <button class="ql-bold" aria-label="Bold" *ngIf="field.inputProperties.formats.indexOf('bold') > -1"></button>
+                                    <button class="ql-italic" aria-label="Italic" *ngIf="field.inputProperties.formats.indexOf('italic') > -1"></button>
+                                    <button class="ql-underline" aria-label="Underline" *ngIf="field.inputProperties.formats.indexOf('underline') > -1"></button>
+                                    <button class="ql-strike" aria-label="Strike" *ngIf="field.inputProperties.formats.indexOf('strike') > -1"></button>
+                                    <select class="ql-color" *ngIf="field.inputProperties.formats.indexOf('color') > -1"></select>
+                                    <select class="ql-background" *ngIf="field.inputProperties.formats.indexOf('background') > -1"></select>
+                                    <button class="ql-list" value="ordered" aria-label="Ordered List" *ngIf="field.inputProperties.formats.indexOf('list') > -1"></button>
+                                    <button class="ql-list" value="bullet" aria-label="Unordered List" *ngIf="field.inputProperties.formats.indexOf('list') > -1"></button>
+                                    <select class="ql-align" *ngIf="field.inputProperties.formats.indexOf('align') > -1"></select>
+                                    <button class="ql-link" aria-label="Insert Link" *ngIf="field.inputProperties.formats.indexOf('link') > -1"></button>
+                                    <button class="ql-image" aria-label="Insert Image" *ngIf="field.inputProperties.formats.indexOf('image') > -1"></button>
+                                    <button class="ql-video" aria-label="Insert Video" *ngIf="field.inputProperties.formats.indexOf('video') > -1"></button>
+                                    <button class="ql-code-block" aria-label="Insert Code Block" *ngIf="field.inputProperties.formats.indexOf('code-block') > -1"></button>
+                                    <button class="ql-clean" aria-label="Remove Styles" *ngIf="field.inputProperties.formats.indexOf('clean') > -1"></button>
+                                </p-header>
+                            </p-editor>
                         </div>
                     </div>
                     <!-- /rich_text -->
@@ -148,7 +170,6 @@
                             <div class="ui-fluid">
                                 <p-calendar inputId="field_{{field.name}}"
                                             [formControlName]="field.name"
-                                            [(ngModel)]="model[field.name]"
                                             [dateFormat]="field.inputProperties.format"
                                             [showTime]="field.inputProperties.show_time"
                                             [hourFormat]="field.inputProperties.hour_format"
@@ -222,6 +243,24 @@
                     </div>
                     <!-- /checkbox -->
 
+                    <!-- tags -->
+                    <div class="grid" *ngSwitchCase="'tags'">
+                        <div class="col-12 md:col-5">
+                            <label for="field_{{ field.name }}">
+                                {{ field.title }}
+                                <span class="text-500">({{ field.name }})</span>
+                                <span class="text-orange-500" *ngIf="field.required">*</span>
+                            </label>
+                        </div>
+                        <div class="col-12 md:col-7">
+                            <p-chips [inputId]="'field_' + field.name"
+                                     styleClass="w-full"
+                                     inputStyleClass="w-full"
+                                     [formControlName]="field.name"></p-chips>
+                        </div>
+                    </div>
+                    <!-- /tags -->
+
                     <!-- categories -->
                     <div *ngSwitchCase="'categories'">
                         <div class="mb-2">
@@ -248,8 +287,8 @@
                     <!-- parameters -->
                     <ng-container *ngSwitchCase="'parameters'">
                         <div class="mb-2">
-                            <label for="field_{{field.name}}">
-                                {{field.title}}
+                            <label for="field_{{ field.name }}">
+                                {{ field.title }}
                                 <span class="text-500">({{ field.name }})</span>
                                 <span class="text-orange-500" *ngIf="field.required">*</span>
                             </label>

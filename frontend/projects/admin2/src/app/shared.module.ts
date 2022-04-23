@@ -38,6 +38,8 @@ import {OverlayPanelModule} from 'primeng/overlaypanel';
 import {TreeModule} from 'primeng/tree';
 import {RadioButtonModule} from 'primeng/radiobutton';
 import {CheckboxModule} from 'primeng/checkbox';
+import {ChipsModule} from 'primeng/chips';
+import {EditorModule} from 'primeng/editor';
 
 import {AppNavbarComponent} from './components/app-navbar.component';
 import {RenderOutputTypeComponent} from './components/render-output-type.component';
@@ -95,7 +97,9 @@ const modules = [
     OverlayPanelModule,
     TreeModule,
     RadioButtonModule,
-    CheckboxModule
+    CheckboxModule,
+    ChipsModule,
+    EditorModule
 ];
 
 @NgModule({

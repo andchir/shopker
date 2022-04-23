@@ -383,18 +383,6 @@ export class RenderInputTypeComponent implements OnInit {
         }
     }
 
-    getValidators(field: ContentField): any[] {
-        const validators = [];
-        if (field.required) {
-            // validators.push(Validators.required);
-            // this.translateService.get('FIELD_REQUIRED', {name: field.title})
-            //     .subscribe((res: string) => {
-            //         this.validationMessages[field.name].required = res;
-            //     });
-        }
-        return validators;
-    }
-
     extendProperties(object1: Properties, object2: Properties): void {
         for (const key in object2) {
             if (object2.hasOwnProperty(key)) {
@@ -408,13 +396,20 @@ export class RenderInputTypeComponent implements OnInit {
         }
     }
 
-    generateName(field: ContentField): void {
+    generateName(field: ContentField, event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
         const sourceFieldName = field.inputProperties.source_field
             ? String(field.inputProperties.source_field)
             : 'title';
-        const title = this.model[sourceFieldName] || '';
-        this.model[field.name] = this.systemNameService.generateName(title);
-        this.changeDetectionRef.detectChanges();
+        const title = this.form.controls[sourceFieldName]
+            ? this.form.controls[sourceFieldName].value
+            : (this.model[sourceFieldName] || '');
+        this.model.name = this.systemNameService.generateName(title);
+        if (this.form.controls['name']) {
+            this.form.controls['name'].setValue(this.model.name);
+        }
     }
 
     fileChange(event, field: ContentField, imgPreview?: HTMLImageElement) {

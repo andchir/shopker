@@ -40,7 +40,8 @@
                                        [formControlName]="field.name">
                                 <button type="button" pButton pRipple icon="pi pi-refresh" styleClass="p-button-info"
                                         [pTooltip]="'GENERATE' | translate"
-                                        tooltipPosition="bottom"></button>
+                                        tooltipPosition="bottom"
+                                        (click)="generateName(field, $event)"></button>
                             </div>
                         </div>
                     </div>

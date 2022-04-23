@@ -14,6 +14,7 @@ import {CategoriesService} from './services/categories.service';
 import {FilesService} from './services/files.service';
 import {AppSettings} from '../services/app-settings.service';
 import {ContentField} from './models/content_field.model';
+import {FileModel} from "../models/file.model";
 
 @Component({
     selector: 'app-modal-product',
@@ -149,16 +150,10 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
         this.arrayFieldDelete(data[0], data[1]);
     }
 
-    saveData(autoClose = false, event?: MouseEvent): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.errorMessage = '';
-        if (!this.form.valid) {
-            this.formGroupMarkTouched(this.form);
-            this.focusFormError();
-            return;
-        }
-        console.log(this.getFormData());
+    getFormData(): any {
+        const data = super.getFormData();
+        
+        console.log(data);
+        return data;
     }
 }

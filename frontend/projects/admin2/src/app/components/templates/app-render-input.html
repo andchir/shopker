@@ -108,8 +108,7 @@
                                 <div class="col-12 md:col-6">
                                     <div class="relative">
                                         <div class="absolute pos-absolute-right" style="right: 6px; top: 6px;">
-                                            <p-colorPicker [inputId]="'field_' + field.name"
-                                                           [inline]="field.inputProperties['inline']"
+                                            <p-colorPicker [inline]="field.inputProperties['inline']"
                                                            [(ngModel)]="model[field.name]"
                                                            [ngModelOptions]="{standalone: true}"></p-colorPicker>
                                         </div>
@@ -201,6 +200,27 @@
                         </div>
                     </div>
                     <!-- /radio -->
+
+                    <!-- checkbox -->
+                    <div class="grid" *ngSwitchCase="'checkbox'">
+                        <div class="col-12 md:col-5">
+                            <label for="field_{{ field.name }}">
+                                {{ field.title }}
+                                <span class="text-500">({{ field.name }})</span>
+                                <span class="text-orange-500" *ngIf="field.required">*</span>
+                            </label>
+                        </div>
+                        <div class="col-12 md:col-7">
+                            <div *ngFor="let opt of field.options; index as index" class="field-checkbox">
+                                <p-checkbox [inputId]="'radio-field-' + field.name + index"
+                                               [formControl]="form.controls[field.name]"
+                                               [name]="field.name"
+                                               [value]="opt.value"></p-checkbox>
+                                <label [for]="'radio-field-' + field.name + index">{{ opt.title }}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /checkbox -->
 
                     <!-- categories -->
                     <div *ngSwitchCase="'categories'">

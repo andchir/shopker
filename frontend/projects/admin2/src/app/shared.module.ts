@@ -37,6 +37,7 @@ import {TabViewModule} from 'primeng/tabview';
 import {OverlayPanelModule} from 'primeng/overlaypanel';
 import {TreeModule} from 'primeng/tree';
 import {RadioButtonModule} from 'primeng/radiobutton';
+import {CheckboxModule} from 'primeng/checkbox';
 
 import {AppNavbarComponent} from './components/app-navbar.component';
 import {RenderOutputTypeComponent} from './components/render-output-type.component';
@@ -93,7 +94,8 @@ const modules = [
     TabViewModule,
     OverlayPanelModule,
     TreeModule,
-    RadioButtonModule
+    RadioButtonModule,
+    CheckboxModule
 ];
 
 @NgModule({

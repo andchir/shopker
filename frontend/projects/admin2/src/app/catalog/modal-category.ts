@@ -111,7 +111,7 @@ export class ModalCategoryComponent extends AppModalAbstractComponent<Category> 
             });
     }
 
-    filesUploadRequest(formData: FormData) {
+    filesUploadRequest(formData: FormData, itemId: number) {
         return this.filesService.postFormData(formData);
     }
 

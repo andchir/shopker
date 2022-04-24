@@ -162,6 +162,28 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
         return data;
     }
 
+    filesUploadRequest(formData: FormData, itemId: number) {
+        formData.append('itemId', String(itemId));
+        formData.append('ownerType', this.currentContentType.name);
+        formData.append('categoryId', String(this.model.parentId));
+        formData.append('fieldsSort', this.getFieldsSortData().join(','));
+        return this.filesService.postFormData(formData);
+    }
+
+    getFieldsSortData(): string[] {
+        let sordData = this.currentContentType.fields.map((field) => {
+            return field.name;
+        });
+        sordData = sordData.filter((fieldName: string) => {
+            if (!this.model[fieldName] || fieldName.indexOf('__') === -1) {
+                return false;
+            }
+            const tmp = fieldName.split('__');
+            return !isNaN(tmp[1] as any);
+        });
+        return sordData;
+    }
+
     // saveData(autoClose = false, event?: MouseEvent): void {
     //     if (event) {
     //         event.preventDefault();

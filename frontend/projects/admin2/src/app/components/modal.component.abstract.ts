@@ -118,7 +118,7 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
         }
     }
     
-    filesUploadRequest(formData: FormData) {
+    filesUploadRequest(formData: FormData, itemId: number) {
         return this.dataService.postFormData(formData);
     }
 
@@ -177,7 +177,7 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
         formData.append('itemId', String(itemId));
         formData.append('ownerType', 'category');
 
-        this.filesUploadRequest(formData)
+        this.filesUploadRequest(formData, itemId)
             .pipe(takeUntil(this.destroyed$))
             .subscribe({
                 next: () => {

@@ -7,8 +7,38 @@
                  [formGroup]="form"
                  *ngFor="let field of fields | filterFieldByGroup: groupName">
 
-                <div class="show-on-hover-parent" [ngSwitch]="field.inputType" [ngClass]="{'pe-5': field.inputProperties.multiple}">
+                <div class="show-on-hover-parent" [ngSwitch]="field.inputType"
+                     [ngClass]="{'pr-6': field.inputProperties.multiple}">
 
+                    <ng-container *ngIf="field.inputProperties.multiple">
+                        <div class="show-on-hover-child absolute bottom-0 right-0" style="z-index: 11;">
+                            <div class="mb-2">
+                                <button type="button" pButton class="p-button-raised p-button-rounded p-button-sm"
+                                        icon="pi pi-arrow-up"
+                                        [pTooltip]="'MOVE_UP' | translate"
+                                        tooltipPosition="left"
+                                        (click)="fieldMove(field, 'up', $event)">
+                                </button>
+                            </div>
+                            <div class="mb-2">
+                                <button type="button" pButton class="p-button-raised p-button-rounded p-button-sm"
+                                        icon="pi pi-arrow-down"
+                                        [pTooltip]="'MOVE_DOWN' | translate"
+                                        tooltipPosition="left"
+                                        (click)="fieldMove(field, 'down', $event)">
+                                </button>
+                            </div>
+                            <div>
+                                <button type="button" pButton class="p-button-raised p-button-rounded p-button-sm"
+                                        icon="pi pi-plus"
+                                        [pTooltip]="'ADD' | translate"
+                                        tooltipPosition="left"
+                                        (click)="fieldAdd(field, $event)">
+                                </button>
+                            </div>
+                        </div>
+                    </ng-container>
+                    
                     <!-- text-->
                     <div class="grid" *ngSwitchDefault>
                         <div class="col-12 md:col-5">

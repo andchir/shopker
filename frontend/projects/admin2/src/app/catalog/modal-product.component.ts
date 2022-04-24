@@ -154,11 +154,9 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
 
     getFormData(): any {
         const data = super.getFormData();
-        if (this.model && this.model.parentId) {
+        if (this.model && this.model.parentId && typeof data.parentId === 'undefined') {
             data.parentId = this.model.parentId;
         }
-        
-        console.log(data);
         return data;
     }
 

@@ -617,6 +617,7 @@ export class RenderInputTypeComponent implements OnInit {
             return;
         }
         const baseFieldName = ContentField.getFieldBaseName(field.name);
+        console.log('fieldAdd', baseFieldName);
         // const newField = cloneDeep(field);
         // newField.name = `${baseFieldName}__${fieldIndexData.additFieldsCount + 1}`;
 

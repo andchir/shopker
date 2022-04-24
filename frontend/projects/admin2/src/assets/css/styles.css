@@ -175,3 +175,6 @@ pre.max-height400 { max-height: 400px; overflow: auto; }
 .p-datepicker .p-timepicker button { width: 1rem; height: 1rem; }
 .p-datepicker .p-timepicker span { font-size: 1rem; }
 
+/* p-tabview-panels */
+.p-tabview-panels { padding: 1.25rem 0 !important; }
+

@@ -1,13 +1,29 @@
 <div>
     <form [formGroup]="form" #formEl>
 
-        <div class="grid" *ngIf="!isRoot">
-            <div class="col-12 md:col-6 mb-2">
+        <div class="grid">
+            <div class="col-12 md:col-6" *ngIf="!isRoot">
                 <label class="block mb-2" for="fieldParent">
                     {{ 'PARENT_FOLDER' | translate }}
                 </label>
                 <app-select-parent-dropdown formControlName="parentId"
                                             [filterId]="filterParentId"></app-select-parent-dropdown>
+            </div>
+            <div class="col-12 md:col-6">
+                <div class="mb-3">
+                    <p-inputSwitch inputId="fieldActive" styleClass="mr-2 vertical-align-middle"
+                                   formControlName="isActive"></p-inputSwitch>
+                    <label class="vertical-align-middle" for="fieldActive">
+                        {{ 'ACTIVE' | translate }}
+                    </label>
+                </div>
+                <div>
+                    <p-inputSwitch inputId="fieldClearCache" styleClass="mr-2 vertical-align-middle"
+                                   formControlName="clearCache"></p-inputSwitch>
+                    <label class="vertical-align-middle" for="fieldClearCache">
+                        {{ 'CLEAR_FILE_CACHE' | translate }}
+                    </label>
+                </div>
             </div>
         </div>
         
@@ -76,25 +92,7 @@
                     [(files)]="files"></app-file-widget>
             </div>
         </div>
-
-        <div class="grid">
-            <div class="col-12 md:col-6">
-                <p-inputSwitch inputId="fieldActive" styleClass="mr-2 vertical-align-middle"
-                               formControlName="isActive"></p-inputSwitch>
-                <label class="vertical-align-middle" for="fieldActive">
-                    {{ 'ACTIVE' | translate }}
-                </label>
-            </div>
-            <div class="col-12 md:col-6">
-                <p-inputSwitch inputId="fieldClearCache" styleClass="mr-2 vertical-align-middle"
-                               formControlName="clearCache"></p-inputSwitch>
-                <label class="vertical-align-middle" for="fieldClearCache">
-                    {{ 'CLEAR_FILE_CACHE' | translate }}
-                </label>
-            </div>
-        </div>
-            
-
+        
         <div role="separator" class="p-divider p-component p-divider-horizontal p-divider-solid p-divider-left">
             <div class="p-divider-content"></div>
         </div>

@@ -45,6 +45,7 @@ export class RenderInputTypeComponent implements OnInit {
     @Output() onAddTranslation = new EventEmitter<string>();
     @Output() onParametersAdd = new EventEmitter<string>();
     @Output() onParametersDelete = new EventEmitter<any[]>();
+    @Output() onFieldAdd = new EventEmitter<ContentField>();
     fieldsMultivalues: {[key: string]: MultiValues} = {};
     submitted = false;
     filesDirBaseUrl: string;
@@ -114,12 +115,9 @@ export class RenderInputTypeComponent implements OnInit {
     }
 
     setFieldProperties(field: ContentField): void {
-
         let propertiesDefault: Properties;
-
         switch (field.inputType) {
             case 'number':
-
                 propertiesDefault = {
                     handler: '',
                     multiple: 0,
@@ -131,10 +129,8 @@ export class RenderInputTypeComponent implements OnInit {
                     field.inputProperties,
                     propertiesDefault
                 );
-
                 break;
             case 'date':
-
                 propertiesDefault = {
                     handler: '',
                     multiple: 0,
@@ -148,15 +144,11 @@ export class RenderInputTypeComponent implements OnInit {
                     field.inputProperties,
                     propertiesDefault
                 );
-
                 break;
             case 'parameters':
-
                 RenderInputTypeComponent.getParametersOptions(field);
-
                 break;
             case 'schedule':
-
                 propertiesDefault = {
                     slotDuration: '0:10:00'
                 };
@@ -164,7 +156,6 @@ export class RenderInputTypeComponent implements OnInit {
                     field.inputProperties,
                     propertiesDefault
                 );
-
                 // if (!this.fullCalendarOptions) {
                 //     this.fullCalendarOptions = {};
                 // }
@@ -200,10 +191,8 @@ export class RenderInputTypeComponent implements OnInit {
                 //     }
                 // };
                 // Object.assign(this.fullCalendarOptions[field.name], field.inputProperties);
-
                 break;
             case 'rich_text':
-
                 propertiesDefault = {
                     handler: '',
                     multiple: 0,
@@ -216,10 +205,8 @@ export class RenderInputTypeComponent implements OnInit {
                     propertiesDefault
                 );
                 field.inputProperties['formats'] = String(field.inputProperties['formats']).split(',');
-
                 break;
             case 'file':
-
                 propertiesDefault = {
                     handler: '',
                     multiple: 0,
@@ -230,10 +217,8 @@ export class RenderInputTypeComponent implements OnInit {
                     field.inputProperties,
                     propertiesDefault
                 );
-
                 break;
             case 'categories':
-
                 propertiesDefault = {
                     handler: '',
                     multiple: 0,
@@ -243,10 +228,8 @@ export class RenderInputTypeComponent implements OnInit {
                     field.inputProperties,
                     propertiesDefault
                 );
-
                 break;
             case 'color':
-
                 propertiesDefault = {
                     handler: '',
                     multiple: 0,
@@ -256,10 +239,8 @@ export class RenderInputTypeComponent implements OnInit {
                     field.inputProperties,
                     propertiesDefault
                 );
-
                 break;
             default:
-
                 propertiesDefault = {
                     handler: '',
                     multiple: 0
@@ -272,14 +253,11 @@ export class RenderInputTypeComponent implements OnInit {
     }
 
     setFieldOptions(field: ContentField): void {
-
         field.options = [];
         let valueArr;
-
         switch (field.inputType) {
             case 'radio':
             case 'select':
-
                 valueArr = field.inputProperties['values_list']
                     ? String(field.inputProperties['values_list']).split('||')
                     : [];
@@ -299,10 +277,8 @@ export class RenderInputTypeComponent implements OnInit {
                         value: ''
                     });
                 }
-
                 break;
             case 'checkbox':
-
                 valueArr = field.inputProperties['values_list']
                     ? String(field.inputProperties['values_list']).split('||')
                     : [];
@@ -322,7 +298,6 @@ export class RenderInputTypeComponent implements OnInit {
                     this.fieldsMultivalues[field.name].values.push(opts[1]);
                     this.fieldsMultivalues[field.name].checked.push(this.model[field.name].indexOf(opts[1]) > -1);
                 });
-
                 break;
             case 'schedule':
             case 'tags':
@@ -343,7 +318,6 @@ export class RenderInputTypeComponent implements OnInit {
         if (typeof field.inputProperties.value !== 'undefined') {
             defaultValue = field.inputProperties.value;
         }
-
         switch (field.inputType) {
             case 'date':
                 defaultValue = new Date();
@@ -410,9 +384,7 @@ export class RenderInputTypeComponent implements OnInit {
         if (fileList.length > 0) {
             this.model[fieldName] = this.getFileData(fileList[0]);
             this.files[fieldName] = fileList[0];
-
             const parentEl = imgPreview.parentElement.parentElement;
-
             if (field.inputProperties.has_preview_image
                 && fileList[0].type.indexOf('image/') > -1) {
 
@@ -446,7 +418,6 @@ export class RenderInputTypeComponent implements OnInit {
         const title = file.name.substr(0, file.name.lastIndexOf('.')),
             extension = file.name.substr(file.name.lastIndexOf('.') + 1),
             size = file.size;
-
         return new FileData(0, title, extension, size);
     }
 
@@ -612,17 +583,7 @@ export class RenderInputTypeComponent implements OnInit {
         if (event) {
             event.preventDefault();
         }
-        const fieldIndexData = ContentField.getFieldIndexData(this.fields, field.name);
-        if (fieldIndexData.index === -1) {
-            return;
-        }
-        const baseFieldName = ContentField.getFieldBaseName(field.name);
-        console.log('fieldAdd', baseFieldName);
-        // const newField = cloneDeep(field);
-        // newField.name = `${baseFieldName}__${fieldIndexData.additFieldsCount + 1}`;
-
-        // this.fields.splice(fieldIndexData.index + 1, 0, newField);
-        // this.buildControls();
+        this.onFieldAdd.emit(field);
     }
     
     onInitTextEditor(event: any): void {

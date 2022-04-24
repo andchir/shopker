@@ -13,7 +13,7 @@ import {ContentTypesService} from './services/content_types.service';
 import {CategoriesService} from './services/categories.service';
 import {FilesService} from './services/files.service';
 import {AppSettings} from '../services/app-settings.service';
-import {ContentField} from './models/content_field.model';
+import {ContentField, FieldIndexData} from './models/content_field.model';
 import {RenderInputTypeComponent} from '../components/render-input-type.component';
 
 @Component({
@@ -34,7 +34,10 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
     localeFieldsAllowed: string[] = [];
     localePreviousValues: {[fieldName: string]: string} = {};
     form = new FormGroup({
-        id: new FormControl('', [])
+        id: new FormControl(0, []),
+        parentId: new FormControl(0, []),
+        isActive: new FormControl(true, []),
+        clearCache: new FormControl(true, [])
     });
 
     constructor(
@@ -68,6 +71,7 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
                 if (this.config.data.id) {
                     this.getData(this.config.data.id);
                 } else {
+                    this.updateForm();
                     this.buildControls();
                     this.dataLoaded = true;
                 }
@@ -81,6 +85,7 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
     onGetData(item: Product): void {
         this.model = item;
         this.dataLoaded = true;
+        this.updateForm();
         this.buildControls();
     }
 
@@ -108,6 +113,46 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
         }, 1);
     }
 
+    updateForm(data ?: any): void {
+        if (!data) {
+            data = JSON.parse(JSON.stringify(this.model));
+        }
+        const newKeys = this.currentContentType.fields.map((field) => {
+            return field.name;
+        });
+        newKeys.push('id', 'parentId', 'previousParentId', 'isActive', 'clearCache', 'translations');
+        data.clearCache = true;
+        Object.keys(this.model).forEach((key) => {
+            if (key.indexOf('__') > -1) {
+                const fieldBaseName = ContentField.getFieldBaseName(key);
+                if (fieldBaseName === key) {
+                    return;
+                }
+                const fieldIndexData: FieldIndexData = ContentField.getFieldIndexData(this.currentContentType.fields, fieldBaseName);
+                if (fieldIndexData.index === -1) {
+                    return;
+                }
+                const newField = JSON.parse(JSON.stringify(this.currentContentType.fields[fieldIndexData.index]));
+                newField.name = key;
+                this.currentContentType.fields.splice(
+                    fieldIndexData.index + fieldIndexData.additFieldsCount + 1,
+                    0,
+                    newField
+                );
+                newKeys.push(key);
+            }
+        });
+
+        // Remove keys
+        for (const key in this.form.controls) {
+            if (this.form.controls.hasOwnProperty(key)) {
+                if (newKeys.indexOf(key) === -1) {
+                    this.form.removeControl(key);
+                }
+            }
+        }
+    }
+    
     getCategories() {
         this.categoriesService.getListPage()
             .subscribe({
@@ -158,6 +203,18 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
             data.parentId = this.model.parentId;
         }
         return data;
+    }
+
+    fieldAdd(field: ContentField): void {
+        const fieldIndexData = ContentField.getFieldIndexData(this.currentContentType.fields, field.name);
+        if (fieldIndexData.index === -1) {
+            return;
+        }
+        const baseFieldName = ContentField.getFieldBaseName(field.name);
+        const newField = JSON.parse(JSON.stringify(field));
+        newField.name = `${baseFieldName}__${fieldIndexData.additFieldsCount + 1}`;
+        this.currentContentType.fields.splice(fieldIndexData.index + 1, 0, newField);
+        this.buildControls();
     }
 
     filesUploadRequest(formData: FormData, itemId: number) {

@@ -3,6 +3,33 @@
         
         <div class="min-height200">
             <ng-container *ngIf="dataLoaded">
+
+                <div class="grid mb-3">
+                    <div class="col-12 md:col-6">
+                        <label class="block mb-2" for="fieldParent">
+                            {{ 'PARENT_FOLDER' | translate }}
+                        </label>
+                        <app-select-parent-dropdown formControlName="parentId"
+                                                    [filterId]="filterParentId"></app-select-parent-dropdown>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <div class="mb-3">
+                            <p-inputSwitch inputId="fieldActive" styleClass="mr-2 vertical-align-middle"
+                                           formControlName="isActive"></p-inputSwitch>
+                            <label class="vertical-align-middle" for="fieldActive">
+                                {{ 'ACTIVE' | translate }}
+                            </label>
+                        </div>
+                        <div>
+                            <p-inputSwitch inputId="fieldClearCache" styleClass="mr-2 vertical-align-middle"
+                                           formControlName="clearCache"></p-inputSwitch>
+                            <label class="vertical-align-middle" for="fieldClearCache">
+                                {{ 'CLEAR_FILE_CACHE' | translate }}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
                 <app-render-input
                     [fields]="currentContentType.fields"
                     [groups]="currentContentType.groups"
@@ -12,6 +39,7 @@
                     [files]="files"
                     [localeFieldsAllowed]="localeFieldsAllowed"
                     [isLocalizationActive]="localeCurrent !== localeDefault"
+                    (onFieldAdd)="fieldAdd($event)"
                     (onParametersAdd)="arrayFieldAdd($event)"
                     (onParametersDelete)="onParametersDelete($event)"></app-render-input>
             </ng-container>

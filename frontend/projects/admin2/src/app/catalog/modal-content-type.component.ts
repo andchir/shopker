@@ -34,7 +34,7 @@ export class ModalContentTypeComponent extends AppModalAbstractComponent<Content
         description: new FormControl('', []),
         collection: new FormControl('', [Validators.required]),
         isActive: new FormControl('', []),
-        isCreateByUsersAllowed: new FormControl('', []),
+        isCreateByUsersAllowed: new FormControl('', [])
     });
     collections: string[] = ['products'];
     errorMessageTop = '';

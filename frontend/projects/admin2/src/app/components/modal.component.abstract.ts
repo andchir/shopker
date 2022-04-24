@@ -167,7 +167,6 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
             }
             return;
         }
-
         const formData = new FormData();
         for (const key in this.files) {
             if (this.files.hasOwnProperty(key) && this.files[key] instanceof File) {
@@ -176,7 +175,6 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
         }
         formData.append('itemId', String(itemId));
         formData.append('ownerType', 'category');
-
         this.filesUploadRequest(formData, itemId)
             .pipe(takeUntil(this.destroyed$))
             .subscribe({

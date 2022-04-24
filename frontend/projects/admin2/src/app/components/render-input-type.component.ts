@@ -54,6 +54,41 @@ export class RenderInputTypeComponent implements OnInit {
     categoriesSelection: {[key: string]: any} = {};
     // fullCalendarOptions: {[key: string]: CalendarOptions};
 
+    static extendProperties(object1: Properties, object2: Properties): void {
+        for (const key in object2) {
+            if (object2.hasOwnProperty(key)) {
+                if (!object1[key]) {
+                    object1[key] = object2[key];
+                }
+                if (typeof object1[key] === 'string' && !Number.isNaN(Number(object1[key]))) {
+                    object1[key] = parseInt(String(object1[key]), 10);
+                }
+            }
+        }
+    }
+
+    static getParametersOptions(field: ContentField) {
+        const propertiesDefault = {
+            handler: '',
+            multiple: 0,
+            names: 'NAME,VALUE,PRICE,IMAGE_NUMBER',
+            keys: 'name,value,price,imageNum',
+            types: 'text,text,number,number'
+        };
+        RenderInputTypeComponent.extendProperties(
+            field.inputProperties,
+            propertiesDefault
+        );
+        ['names', 'keys', 'types'].forEach((k) => {
+            const defaultValues = String(propertiesDefault[k]).split(',');
+            let values = String(field.inputProperties[k]).split(',');
+            if (defaultValues.length > values.length) {
+                values = values.concat(defaultValues.slice(values.length));
+            }
+            field.inputProperties[k] = values;
+        });
+    }
+    
     constructor(
         private changeDetectionRef: ChangeDetectorRef,
         private systemNameService: SystemNameService,
@@ -74,18 +109,6 @@ export class RenderInputTypeComponent implements OnInit {
             this.setFieldProperties(field);
             this.setFieldOptions(field);
             this.setValue(field);
-            // this.formErrors[field.name] = '';
-            // if (!this.validationMessages[field.name]) {
-            //     this.validationMessages[field.name] = {};
-            // }
-            // if (field.inputType === 'categories') {
-            //     this.categoriesSelection[field.name] = [];
-            // }
-            // if (!this.form.controls[field.name]) {
-            //     const validators = this.getValidators(field);
-            //     const control = new FormControl(this.model[field.name], validators);
-            //     this.form.addControl(field.name, control);
-            // }
         });
         // this.changeDetectionRef.detectChanges();
     }
@@ -104,7 +127,7 @@ export class RenderInputTypeComponent implements OnInit {
                     max: null,
                     step: 1
                 };
-                this.extendProperties(
+                RenderInputTypeComponent.extendProperties(
                     field.inputProperties,
                     propertiesDefault
                 );
@@ -121,7 +144,7 @@ export class RenderInputTypeComponent implements OnInit {
                     first_day_of_week: 1,
                     locale: 'en'
                 };
-                this.extendProperties(
+                RenderInputTypeComponent.extendProperties(
                     field.inputProperties,
                     propertiesDefault
                 );
@@ -129,25 +152,7 @@ export class RenderInputTypeComponent implements OnInit {
                 break;
             case 'parameters':
 
-                propertiesDefault = {
-                    handler: '',
-                    multiple: 0,
-                    names: 'NAME,VALUE,PRICE,IMAGE_NUMBER',
-                    keys: 'name,value,price,imageNum',
-                    types: 'text,text,number,number'
-                };
-                this.extendProperties(
-                    field.inputProperties,
-                    propertiesDefault
-                );
-                ['names', 'keys', 'types'].forEach((k) => {
-                    const defaultValues = String(propertiesDefault[k]).split(',');
-                    let values = String(field.inputProperties[k]).split(',');
-                    if (defaultValues.length > values.length) {
-                        values = values.concat(defaultValues.slice(values.length));
-                    }
-                    field.inputProperties[k] = values;
-                });
+                RenderInputTypeComponent.getParametersOptions(field);
 
                 break;
             case 'schedule':
@@ -155,7 +160,7 @@ export class RenderInputTypeComponent implements OnInit {
                 propertiesDefault = {
                     slotDuration: '0:10:00'
                 };
-                this.extendProperties(
+                RenderInputTypeComponent.extendProperties(
                     field.inputProperties,
                     propertiesDefault
                 );
@@ -206,7 +211,7 @@ export class RenderInputTypeComponent implements OnInit {
                         + 'strike,script,underline,blockquote,header,indent,'
                         + 'list,align,direction,code-block,formula,image,video,clean'
                 };
-                this.extendProperties(
+                RenderInputTypeComponent.extendProperties(
                     field.inputProperties,
                     propertiesDefault
                 );
@@ -221,7 +226,7 @@ export class RenderInputTypeComponent implements OnInit {
                     allowed_extensions: '.zip,.rar,.doc,.docx,.xls,.xlsx,.ods,.odt',
                     has_preview_image: 0
                 };
-                this.extendProperties(
+                RenderInputTypeComponent.extendProperties(
                     field.inputProperties,
                     propertiesDefault
                 );
@@ -234,7 +239,7 @@ export class RenderInputTypeComponent implements OnInit {
                     multiple: 0,
                     layout: 'vertical'
                 };
-                this.extendProperties(
+                RenderInputTypeComponent.extendProperties(
                     field.inputProperties,
                     propertiesDefault
                 );
@@ -247,7 +252,7 @@ export class RenderInputTypeComponent implements OnInit {
                     multiple: 0,
                     inline: 0
                 };
-                this.extendProperties(
+                RenderInputTypeComponent.extendProperties(
                     field.inputProperties,
                     propertiesDefault
                 );
@@ -259,7 +264,7 @@ export class RenderInputTypeComponent implements OnInit {
                     handler: '',
                     multiple: 0
                 };
-                this.extendProperties(
+                RenderInputTypeComponent.extendProperties(
                     field.inputProperties,
                     propertiesDefault
                 );
@@ -380,19 +385,6 @@ export class RenderInputTypeComponent implements OnInit {
         } else {
             this.model[fieldName].splice(this.model[fieldName].indexOf(value), 1);
             this.fieldsMultivalues[fieldName].checked[valIndex] = false;
-        }
-    }
-
-    extendProperties(object1: Properties, object2: Properties): void {
-        for (const key in object2) {
-            if (object2.hasOwnProperty(key)) {
-                if (!object1[key]) {
-                    object1[key] = object2[key];
-                }
-                if (typeof object1[key] === 'string' && !Number.isNaN(Number(object1[key]))) {
-                    object1[key] = parseInt(String(object1[key]), 10);
-                }
-            }
         }
     }
 

@@ -14,7 +14,7 @@ import {CategoriesService} from './services/categories.service';
 import {FilesService} from './services/files.service';
 import {AppSettings} from '../services/app-settings.service';
 import {ContentField} from './models/content_field.model';
-import {FileModel} from "../models/file.model";
+import {RenderInputTypeComponent} from '../components/render-input-type.component';
 
 @Component({
     selector: 'app-modal-product',
@@ -88,9 +88,11 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
         this.currentContentType.fields.forEach((field) => {
             if (!this.form.controls[field.name]) {
                 if (['parameters'].indexOf(field.inputType) > -1) {
-                    this.arrayFieldsData[field.name] = {
-                        name: {validators: [Validators.required]}
-                    };
+                    RenderInputTypeComponent.getParametersOptions(field);
+                    this.arrayFieldsData[field.name] = {};
+                    (field.inputProperties.keys as string[]).forEach((k) => {
+                        this.arrayFieldsData[field.name][k] = {validators: []}
+                    });
                     this.createArrayFieldsProperty(field.name);
                     const control = new FormArray([]);
                     this.form.addControl(field.name, control);
@@ -152,8 +154,18 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
 
     getFormData(): any {
         const data = super.getFormData();
+        if (this.model && this.model.parentId) {
+            data.parentId = this.model.parentId;
+        }
         
         console.log(data);
         return data;
     }
+
+    // saveData(autoClose = false, event?: MouseEvent): void {
+    //     if (event) {
+    //         event.preventDefault();
+    //     }
+    //     console.log(this.getFormData());
+    // }
 }

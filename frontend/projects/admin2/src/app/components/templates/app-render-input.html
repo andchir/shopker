@@ -316,16 +316,20 @@
                                 <ng-template pTemplate="body" let-option let-rowIndex="rowIndex">
                                     <tr [formGroupName]="rowIndex + ''">
                                         <td>
-                                            <input type="text" class="p-inputtext-sm w-full" pInputText>
+                                            <input [type]="field.inputProperties.types[0]" class="p-inputtext-sm w-full" pInputText
+                                                   [formControlName]="field.inputProperties.keys[0]">
                                         </td>
                                         <td>
-                                            <input type="text" class="p-inputtext-sm w-full" pInputText>
+                                            <input [type]="field.inputProperties.types[1]" class="p-inputtext-sm w-full" pInputText
+                                                   [formControlName]="field.inputProperties.keys[1]">
                                         </td>
                                         <td>
-                                            <input type="text" class="p-inputtext-sm w-full" pInputText>
+                                            <input [type]="field.inputProperties.types[2]" class="p-inputtext-sm w-full" pInputText
+                                                   [formControlName]="field.inputProperties.keys[2]">
                                         </td>
                                         <td>
-                                            <input type="text" class="p-inputtext-sm w-full" pInputText>
+                                            <input [type]="field.inputProperties.types[3]" class="p-inputtext-sm w-full" pInputText
+                                                   [formControlName]="field.inputProperties.keys[3]">
                                         </td>
                                         <td>
                                             <button pButton pRipple type="button"

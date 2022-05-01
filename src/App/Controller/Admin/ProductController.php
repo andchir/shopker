@@ -376,7 +376,7 @@ class ProductController extends BaseController
 
         // If $fileFields is not empty it will be done after saving the files
         // Otherwise do it now
-        if (empty($fileFields) && !empty($fileIds)) {
+        if (empty($fileFields)) {
             $fileIds = array_unique($fileIds);
             $fileController = new FileController(
                 $this->params,

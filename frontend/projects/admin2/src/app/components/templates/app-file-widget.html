@@ -26,10 +26,10 @@
                        (change)="fileChange($event)" #fileInput>
             </ng-template>
             <div class="mx-auto relative" [ngClass]="{'show-on-hover-parent': hasPreviewImage && fileName}" style="width: 265px; min-height: 40px;">
-                <div [style.display]="hasPreviewImage && fileName ? 'block' : 'none'">
+                <div class="text-center" [style.display]="hasPreviewImage && fileName ? 'block' : 'none'">
                     <img [src]="imageUrl" alt="Preview" class="img-thumbnail" style="width: 265px;" #imgPreview>
                 </div>
-                <div class="file-buttons show-on-hover-child-left">
+                <div class="file-buttons w-full text-center show-on-hover-child">
                     <button type="button" pButton pRipple
                             class="p-button-secondary"
                             icon="pi pi-upload"

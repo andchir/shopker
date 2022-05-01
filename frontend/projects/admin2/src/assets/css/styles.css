@@ -119,6 +119,7 @@ pre.max-height400 { max-height: 400px; overflow: auto; }
 .show-on-hover-parent > .show-on-hover-child,
 .show-on-hover-parent > .show-on-hover-child-left,
 .show-on-hover-parent .show-on-hover-right { white-space: nowrap; display: none; }
+.show-on-hover-parent > .show-on-hover-child { position: absolute; top: 10px; }
 .show-on-hover-parent > .show-on-hover-child-left { position: absolute; top: 10px; left: 10px; }
 .show-on-hover-parent .show-on-hover-right { position: absolute; top: 0; right: 0; }
 .show-on-hover-parent:hover .show-on-hover,

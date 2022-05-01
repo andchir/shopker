@@ -65,6 +65,7 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
         }
         this.dataService.setRequestUrl(`/admin/products/${this.model.parentId}`);
 
+        this.form.controls['parentId'].setValue(this.model.parentId);
         this.getCategories();
         this.getContentType()
             .then((data) => {
@@ -89,7 +90,7 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
         this.buildControls();
     }
 
-    buildControls() {
+    buildControls(updateControls = true) {
         this.currentContentType.fields.forEach((field) => {
             if (!this.form.controls[field.name]) {
                 if (['parameters'].indexOf(field.inputType) > -1) {
@@ -108,9 +109,11 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
                 }
             }
         });
-        setTimeout(() => {
-            this.updateControls();
-        }, 1);
+        if (updateControls) {
+            setTimeout(() => {
+                this.updateControls();
+            }, 1);
+        }
     }
 
     updateForm(data ?: any): void {
@@ -202,6 +205,7 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
         if (this.model && this.model.parentId && typeof data.parentId === 'undefined') {
             data.parentId = this.model.parentId;
         }
+        data['fieldsSort'] = this.getFieldsSortData();
         return data;
     }
 
@@ -214,7 +218,7 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
         const newField = JSON.parse(JSON.stringify(field));
         newField.name = `${baseFieldName}__${fieldIndexData.additFieldsCount + 1}`;
         this.currentContentType.fields.splice(fieldIndexData.index + 1, 0, newField);
-        this.buildControls();
+        this.buildControls(false);
     }
 
     filesUploadRequest(formData: FormData, itemId: number) {
@@ -226,17 +230,12 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
     }
 
     getFieldsSortData(): string[] {
-        let sordData = this.currentContentType.fields.map((field) => {
+        const fileFields = this.currentContentType.fields.filter((field) => {
+            return field.inputType === 'file';
+        });
+        return fileFields.map((field) => {
             return field.name;
         });
-        sordData = sordData.filter((fieldName: string) => {
-            if (!this.model[fieldName] || fieldName.indexOf('__') === -1) {
-                return false;
-            }
-            const tmp = fieldName.split('__');
-            return !isNaN(tmp[1] as any);
-        });
-        return sordData;
     }
 
     // saveData(autoClose = false, event?: MouseEvent): void {

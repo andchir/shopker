@@ -111,7 +111,6 @@ export class RenderInputTypeComponent implements OnInit {
             this.setFieldOptions(field);
             this.setValue(field);
         });
-        // this.changeDetectionRef.detectChanges();
     }
 
     setFieldProperties(field: ContentField): void {
@@ -308,10 +307,6 @@ export class RenderInputTypeComponent implements OnInit {
         }
     }
 
-    onGroupChange(e: any): void {
-        // console.log('onGroupChange', e);
-    }
-
     setValue(field: ContentField): void {
         let defaultValue = null,
             modelValue = typeof this.model[field.name] !== 'undefined' ? this.model[field.name] : null;
@@ -481,13 +476,13 @@ export class RenderInputTypeComponent implements OnInit {
 
     categorySelect(fieldName: string) {
         this.model[fieldName] = [];
-        // defer(() => {
-        //     this.categoriesSelection[fieldName].forEach((category) => {
-        //         if (this.model[fieldName].indexOf(category.id) === -1) {
-        //             this.model[fieldName].push(category.id);
-        //         }
-        //     });
-        // });
+        setTimeout(() => {
+            this.categoriesSelection[fieldName].forEach((category) => {
+                if (this.model[fieldName].indexOf(category.id) === -1) {
+                    this.model[fieldName].push(category.id);
+                }
+            });
+        }, 1);
     }
 
     parametersRemove(fieldName: string, index: number, event?: MouseEvent): void {
@@ -502,21 +497,6 @@ export class RenderInputTypeComponent implements OnInit {
             event.preventDefault();
         }
         this.onParametersAdd.emit(fieldName);
-        // if (!this.model[fieldName]) {
-        //     this.model[fieldName] = [];
-        // }
-        // const index = this.fields.findIndex((field) => {
-        //     return field.name === fieldName;
-        // });
-        // const obj = {name: '', value: '', price: 0, imageNum: 0};
-        // if (index > -1 && this.fields[index].inputProperties.keys) {
-        //     (this.fields[index].inputProperties.keys as string[]).forEach((key) => {
-        //         if (typeof obj[key] === 'undefined') {
-        //             obj[key] = '';
-        //         }
-        //     });
-        // }
-        // this.model[fieldName].push(obj);
     }
 
     parametersExport(fieldName: string, event?: MouseEvent): void {
@@ -546,7 +526,7 @@ export class RenderInputTypeComponent implements OnInit {
         //         }
         //     }
         // }, (reason) => {
-        //     // console.log(reason);
+        //     // console.log(reason);categoriesSelection
         // });
     }
     

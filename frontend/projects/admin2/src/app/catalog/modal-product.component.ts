@@ -206,6 +206,14 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
             data.parentId = this.model.parentId;
         }
         data['fieldsSort'] = this.getFieldsSortData();
+        const categoriesFields = this.currentContentType.fields.filter((field) => {
+            return field.inputType === 'categories';
+        });
+        categoriesFields.forEach((field) => {
+            if (this.model[field.name]) {
+                data[field.name] = this.model[field.name];
+            }
+        });
         return data;
     }
 

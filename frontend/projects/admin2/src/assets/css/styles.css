@@ -16,7 +16,7 @@ pre.max-height400 { max-height: 400px; overflow: auto; }
 .text-overflow { display: block; max-width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .p-datatable-table-w-full .p-datatable-table { width: 100%; }
 .text-shadow { text-shadow: 1px 1px 3px rgba(0,0,0,0.5); }
-.box-shadow1 { box-shadow: 0 0 15px rgba(0,0,0,0.6); }
+.box-shadow1 { box-shadow: 0 0 15px rgba(0, 0, 0, 0.4); }
 [hidden] { display: none !important; }
 .border-noround-right { border-top-right-radius: 0; border-bottom-right-radius: 0; }
 

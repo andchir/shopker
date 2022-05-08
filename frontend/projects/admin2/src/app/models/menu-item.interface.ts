@@ -4,6 +4,7 @@ export interface MenuItem {
     href?: string;
     target?: string;
     icon?: string;
+    component?: string;
     styleClass?: string;
     isActive?: boolean;
     isSeparator?: boolean;

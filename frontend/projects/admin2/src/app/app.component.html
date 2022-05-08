@@ -2,8 +2,15 @@
 
     <router-outlet></router-outlet>
 
-    <app-navbar></app-navbar>
+    <app-navbar (fileManagerActive)="fileManagerToggle($event)"></app-navbar>
     
 </div>
+
+<p-sidebar [(visible)]="isFileManagerActive"
+           styleClass="p-component box-shadow1"
+           [modal]="false"
+           (onHide)="fileManagerToggle(false)">
+    <app-file-manager [(isActive)]="isFileManagerActive"></app-file-manager>
+</p-sidebar>
 
 <p-toast position="bottom-right" key="message"></p-toast>

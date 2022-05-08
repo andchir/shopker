@@ -8,6 +8,6 @@ menu:
     - { title: 'USERS', route: '/users', icon: 'fi fi-br-user', styleClass: 'menu-item-style1' }
     - { title: 'SETTINGS', route: '/settings', icon: 'fi fi-br-settings', styleClass: 'menu-item-style1' }
     - { isSeparator: true }
-    - { title: 'FILE_MANAGER', route: '/file-manager', icon: 'fi fi-br-folder', styleClass: 'menu-item-style2' }
+    - { title: 'FILE_MANAGER', component: 'filemanager', route: '/file-manager', icon: 'fi fi-br-folder', styleClass: 'menu-item-style2' }
     - { title: 'PREVIEW_SITE', href: '/', target: '_blank', icon: 'fi fi-br-home', styleClass: 'menu-item-style2' }
     - { title: 'LOGOUT', href: '/logout', icon: 'fi fi-br-sign-out', styleClass: 'menu-item-style2' }

@@ -54,6 +54,7 @@ import {IfEmptyPipe} from './pipes/if-empty.pipe';
 import {SortingComponent} from './components/sorting-dnd.conponent';
 import {FileWidgetComponent} from './components/file-widget.component';
 import {SelectParentDropdownComponent} from './components/select-parent-dropdown.component';
+import {FileManagerComponent} from './components/file-manager.component';
 
 const components = [
     AppNavbarComponent,
@@ -61,6 +62,7 @@ const components = [
     RenderInputTypeComponent,
     SortingComponent,
     FileWidgetComponent,
+    FileManagerComponent,
     SelectParentDropdownComponent
 ];
 

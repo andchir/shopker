@@ -16,6 +16,7 @@ pre.max-height400 { max-height: 400px; overflow: auto; }
 .text-overflow { display: block; max-width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .p-datatable-table-w-full .p-datatable-table { width: 100%; }
 .text-shadow { text-shadow: 1px 1px 3px rgba(0,0,0,0.5); }
+.box-shadow1 { box-shadow: 0 0 15px rgba(0,0,0,0.6); }
 [hidden] { display: none !important; }
 .border-noround-right { border-top-right-radius: 0; border-bottom-right-radius: 0; }
 
@@ -156,6 +157,10 @@ pre.max-height400 { max-height: 400px; overflow: auto; }
 
 /* p-dynamic-dialog */
 .p-dynamic-dialog .p-dialog-content { border-bottom-left-radius: 6px; border-bottom-right-radius: 6px; }
+.p-component-overlay.modal-margin-left { margin-left: 120px; width: calc(100% - 120px); }
+@media screen and (max-width: 960px) {
+    .p-component-overlay.modal-margin-left { margin-left: 0; width: 100%; }
+}
 
 /* p-overlaypanel */
 .p-overlaypanel { box-shadow: 0 0 15px rgba(0, 0, 0, 0.4); }

@@ -12,6 +12,8 @@ import {AppSettings} from '@app/services/app-settings.service';
 })
 export class AppComponent implements OnInit {
 
+    isFileManagerActive = false;
+    
     constructor(
         private translateService: TranslateService,
         private appSettings: AppSettings,
@@ -38,5 +40,13 @@ export class AppComponent implements OnInit {
         }
         const translations = this.translateService.store.translations[this.translateService.currentLang];
         return translations[value] || value;
+    }
+
+    fileManagerToggle(isActive: boolean): void {
+        if (this.isFileManagerActive === isActive) {
+            return;
+        }
+        this.isFileManagerActive = isActive;
+        
     }
 }

@@ -1,0 +1,81 @@
+<div class="panel-file-manager" #container>
+    <div class="mb-3" #toolsContainer>
+        <button pButton pRipple type="button" class="p-button-sm mr-2"
+                icon="pi pi-file"
+                [pTooltip]="'UPLOAD_FILE' | translate"
+                tooltipPosition="right"
+                (click)="uploadFiles($event)"></button>
+        <button pButton pRipple type="button" class="p-button-sm mr-2"
+                icon="pi pi-plus"
+                [pTooltip]="'CREATE_FOLDER' | translate"
+                tooltipPosition="right"
+                (click)="createFolder($event)"></button>
+        <button pButton pRipple type="button" class="p-button-sm mr-2"
+                icon="pi pi-pencil"
+                [pTooltip]="'RENAME_FOLDER' | translate"
+                tooltipPosition="bottom"
+                *ngIf="currentPath"
+                (click)="renameFolder($event)"></button>
+        <button pButton pRipple type="button" class="p-button-sm p-button-danger mr-2"
+                icon="pi pi-trash"
+                [pTooltip]="'DELETE_FOLDER' | translate"
+                tooltipPosition="bottom"
+                *ngIf="currentPath"
+                (click)="deleteFolder($event)"></button>
+    </div>
+    <div class="panel-file-manager-b overflow-auto-y" [class.loading]="loading">
+        <div class="p-1">
+
+            <div class="alert alert-dismissible alert-danger" *ngIf="errorMessage">
+                {{errorMessage}}
+                <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close" (click)="errorMessage = ''"></button>
+            </div>
+
+            <div class="grid">
+                <div class="col-12 px-1 mb-3" *ngIf="currentPath">
+                    <div class="surface-200 border-round p-2" >
+                        {{ currentPath }}
+                    </div>
+                </div>
+
+                <div class="col-4 py-1 px-1" *ngIf="currentPath">
+                    <div class="border-1 border-solid border-round border-400 p-1 text-primary cursor-pointer"
+                         (click)="openDirPrevious($event)">
+                        <div class="text-center">
+                            <i class="pi pi-arrow-left"></i>
+                        </div>
+                        <div class="text-center text-overflow text-xs">
+                            {{ 'BACK' | translate }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-4 py-1 px-1" *ngFor="let file of files">
+                    <div class="surface-200 border-1 border-solid border-round border-400 p-1 cursor-pointer"
+                         draggable="true"
+                         [ngClass]="{'bg-black-20': file.isDir, 'bg-black-10': !file.isDir}" 
+                         (dragstart)="dragStartHandler(file, $event)"
+                         (click)="openFileHandler(file, $event)">
+                        <div class="text-center">
+                            <ng-container *ngIf="getIsImageFile(file.extension); else fileIcon">
+                                <div [title]="file.fileName">
+                                    <img [src]="getImageThumbnail(file)" alt="" class="max-width100 no-events" style="height: 42px;">
+                                </div>
+                            </ng-container>
+                            <ng-template #fileIcon>
+                                <div>
+                                    <i class="pi pi-folder" *ngIf="file.isDir"></i>
+                                    <i class="pi pi-file" *ngIf="!file.isDir"></i>
+                                </div>
+                                <div class="text-overflow text-xs" [title]="file.fileName">
+                                    {{ file.fileName }}
+                                </div>
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

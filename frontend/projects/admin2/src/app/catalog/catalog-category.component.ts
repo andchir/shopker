@@ -121,7 +121,7 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
 
     openModal(item: Product, event?: MouseEvent): void {
         this.panelTopMenu.hide();
-        super.openModal(item, event);
+        super.openModal(item, event, 'modal-margin-left');
     }
 
     updateTableConfig(): void {

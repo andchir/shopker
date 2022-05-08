@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 
 import {filter} from 'rxjs/operators';
@@ -17,6 +17,7 @@ export class AppNavbarComponent implements OnInit {
 
     @Input() hrefMode = false;
     @Input() baseRoute = '';
+    @Output() fileManagerActive = new EventEmitter<boolean>();
 
     baseUrl: string;
     appVersion: string;
@@ -57,12 +58,22 @@ export class AppNavbarComponent implements OnInit {
         }
         if (this.hrefMode) {
             window.location.href = `${this.baseUrl}admin/#${menuItem.route}`;
+        } else if (menuItem.component) {
+            this.displayComponent(menuItem.component);
         } else if (menuItem.route) {
             this.router.navigate([menuItem.route]);
         } else if (menuItem.target) {
             window.open(menuItem.href, menuItem.target).focus();
         } else {
             window.location.href = menuItem.href;
+        }
+    }
+
+    displayComponent(componentName: string): void {
+        switch (componentName) {
+            case 'filemanager':
+                this.fileManagerActive.emit(true);
+                break;
         }
     }
 

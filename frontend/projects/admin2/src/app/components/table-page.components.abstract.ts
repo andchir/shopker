@@ -126,7 +126,7 @@ export abstract class AppTablePageAbstractComponent<T extends SimpleEntity> impl
         return this.getLangString(item ? 'EDIT' : 'CREATE');
     }
 
-    openModal(item: T, event?: MouseEvent): void {
+    openModal(item: T, event?: MouseEvent, className = ''): void {
         if (event) {
             event.preventDefault();
         }
@@ -148,6 +148,14 @@ export abstract class AppTablePageAbstractComponent<T extends SimpleEntity> impl
                     this.getData();
                 }
             });
+        if (className) {
+            setTimeout(() => {
+                if (window.document.querySelector('.p-component-overlay')) {
+                    (window.document.querySelector('.p-component-overlay') as HTMLElement)
+                        .classList.add(className);
+                }
+            }, 1);
+        }
     }
 
     onSortingChange(event?: any): void {

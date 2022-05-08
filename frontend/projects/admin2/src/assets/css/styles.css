@@ -35,6 +35,10 @@ pre.max-height400 { max-height: 400px; overflow: auto; }
 .pos-top10 { top: 10px; }
 .pos-top15 { top: 15px; }
 .pos-top-5 { top: -5px; }
+.pos-left { left: 0; }
+.pos-left5 { left: 5px; }
+.pos-left10 { left: 10px; }
+.pos-left15 { left: 15px; }
 .pos-right { right: 0; }
 .pos-right5 { right: 5px; }
 .pos-right10 { right: 10px; }
@@ -183,4 +187,6 @@ pre.max-height400 { max-height: 400px; overflow: auto; }
 
 /* p-tabview-panels */
 .p-tabview-panels { padding: 1.25rem 0 !important; }
+
+.p-sidebar-content { position: static !important; }
 

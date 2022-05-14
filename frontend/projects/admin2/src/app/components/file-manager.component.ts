@@ -2,9 +2,9 @@ import {Component, EventEmitter, Input, OnDestroy, Output, ViewChild} from '@ang
 
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {cloneDeep} from 'lodash';
-import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateService} from '@ngx-translate/core';
+import {ConfirmationService} from 'primeng/api';
+import {DialogService} from 'primeng/dynamicdialog';
 
 import {FileManagerService} from '../services/file-manager.service';
 import {FileModel} from '../models/file.model';
@@ -13,12 +13,10 @@ import {FileData} from '@app/catalog/models/file-data.model';
 @Component({
     selector: 'app-file-manager',
     templateUrl: 'templates/file-manager.component.html',
-    providers: [FileManagerService]
+    providers: [FileManagerService, DialogService]
 })
 export class FileManagerComponent implements OnDestroy {
-
-    modalRef: NgbModalRef;
-    // isActive = false;
+    
     files: any[] = [];
     loading = false;
     currentPath = '';
@@ -39,7 +37,8 @@ export class FileManagerComponent implements OnDestroy {
 
     constructor(
         public dataService: FileManagerService,
-        public modalService: NgbModal,
+        public dialogService: DialogService,
+        public confirmationService: ConfirmationService,
         public translateService: TranslateService
     ) {
 
@@ -86,11 +85,13 @@ export class FileManagerComponent implements OnDestroy {
     }
 
     openModal(file: FileModel) {
-        if (this.modalRef) {
-            this.modalRef.dismiss();
-            this.modalRef = null;
-        }
-        const currentFile = cloneDeep(file);
+        console.log('openModal', file);
+        
+        // if (this.modalRef) {
+        //     this.modalRef.dismiss();
+        //     this.modalRef = null;
+        // }
+        // const currentFile = cloneDeep(file);
 
         // this.modalRef = this.modalService.open(ModalFileContentComponent, {backdrop: 'static', keyboard: false});
         // this.modalRef.componentInstance.modalTitle = currentFile.fileName;
@@ -141,10 +142,10 @@ export class FileManagerComponent implements OnDestroy {
         if (event) {
             event.preventDefault();
         }
-        if (this.modalRef) {
-            this.modalRef.dismiss();
-            this.modalRef = null;
-        }
+        // if (this.modalRef) {
+        //     this.modalRef.dismiss();
+        //     this.modalRef = null;
+        // }
         this.errorMessage = '';
         // this.modalRef = this.modalService.open(ModalConfirmTextComponent, {backdrop: 'static', keyboard: false});
         // this.modalRef.componentInstance.modalTitle = 'CREATE_FOLDER';
@@ -179,6 +180,24 @@ export class FileManagerComponent implements OnDestroy {
         if (event) {
             event.preventDefault();
         }
+        this.confirmationService.confirm({
+            message: this.getLangString('YOU_SURE_YOU_WANT_DELETE_FOLDER'),
+            accept: () => {
+                this.loading = true;
+                this.dataService.deleteFolder(this.currentPath)
+                    .subscribe({
+                        next: () => {
+                            this.openDirPrevious();
+                        },
+                        error: (err) => {
+                            if (err['error']) {
+                                this.errorMessage = err['error'];
+                            }
+                            this.loading = false;
+                        }
+                    });
+            }
+        });
         // if (this.modalRef) {
         //     this.modalRef.dismiss();
         //     this.modalRef = null;
@@ -204,14 +223,16 @@ export class FileManagerComponent implements OnDestroy {
         if (event) {
             event.preventDefault();
         }
-        if (this.modalRef) {
-            this.modalRef.dismiss();
-            this.modalRef = null;
-        }
+        // if (this.modalRef) {
+        //     this.modalRef.dismiss();
+        //     this.modalRef = null;
+        // }
         this.errorMessage = '';
 
         const tmp = this.currentPath.split('/');
         const folderName = tmp.pop();
+        
+        console.log(folderName);
 
         // this.modalRef = this.modalService.open(ModalConfirmTextComponent, {backdrop: 'static', keyboard: false});
         // this.modalRef.componentInstance.modalTitle = 'RENAME_FOLDER';
@@ -239,10 +260,10 @@ export class FileManagerComponent implements OnDestroy {
         if (event) {
             event.preventDefault();
         }
-        if (this.modalRef) {
-            this.modalRef.dismiss();
-            this.modalRef = null;
-        }
+        // if (this.modalRef) {
+        //     this.modalRef.dismiss();
+        //     this.modalRef = null;
+        // }
         this.errorMessage = '';
         // this.modalRef = this.modalService.open(ModalFileUploadContentComponent, {backdrop: 'static', keyboard: false});
         // this.modalRef.result.then((result: File[]) => {

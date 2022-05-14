@@ -22,7 +22,7 @@ import {ModalCategoryComponent} from './modal-category';
 @Component({
     selector: 'app-catalog-category',
     templateUrl: './templates/catalog-category.component.html',
-    providers: [DialogService, ConfirmationService, ProductsService]
+    providers: [DialogService, ProductsService]
 })
 export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Product> implements OnInit, OnDestroy {
     

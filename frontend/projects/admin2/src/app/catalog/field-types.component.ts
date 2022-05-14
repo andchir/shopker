@@ -14,7 +14,7 @@ import {ModalFieldTypeComponent} from './modal-field-type.component';
 @Component({
     selector: 'app-catalog-category',
     templateUrl: './templates/field-types.component.html',
-    providers: [DialogService, ConfirmationService, FieldTypesService]
+    providers: [DialogService, FieldTypesService]
 })
 export class FieldTypesComponent extends AppTablePageAbstractComponent<FieldType> implements OnInit, OnDestroy {
 

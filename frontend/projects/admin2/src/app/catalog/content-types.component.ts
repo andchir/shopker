@@ -13,7 +13,7 @@ import {ModalContentTypeComponent} from './modal-content-type.component';
 @Component({
     selector: 'app-catalog-category',
     templateUrl: './templates/content-types.component.html',
-    providers: [DialogService, ConfirmationService, ContentTypesService]
+    providers: [DialogService, ContentTypesService]
 })
 export class ContentTypesComponent extends AppTablePageAbstractComponent<ContentType> implements OnInit, OnDestroy {
 

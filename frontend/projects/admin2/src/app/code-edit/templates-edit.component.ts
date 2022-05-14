@@ -16,7 +16,7 @@ import {AssetsEditComponent} from './assets-edit.component';
 @Component({
     selector: 'app-template-edit',
     templateUrl: './templates/templates-edit.component.html',
-    providers: [DialogService, ConfirmationService, FileEditService]
+    providers: [DialogService, FileEditService]
 })
 export class TemplatesEditComponent extends AssetsEditComponent implements OnInit, OnDestroy {
     

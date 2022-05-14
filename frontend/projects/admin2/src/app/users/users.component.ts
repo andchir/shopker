@@ -14,7 +14,7 @@ import {User} from './models/user.model';
 @Component({
     selector: 'app-orders',
     templateUrl: 'templates/users.component.html',
-    providers: [DialogService, ConfirmationService, UsersService]
+    providers: [DialogService, UsersService]
 })
 export class UsersComponent extends AppTablePageAbstractComponent<User> implements OnInit, OnDestroy {
     

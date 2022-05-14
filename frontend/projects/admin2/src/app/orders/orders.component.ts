@@ -14,7 +14,7 @@ import {ContentTypesService} from '../catalog/services/content_types.service';
 @Component({
     selector: 'app-orders',
     templateUrl: 'templates/orders.component.html',
-    providers: [DialogService, ConfirmationService, OrdersService]
+    providers: [DialogService, OrdersService]
 })
 export class OrdersComponent extends AppTablePageAbstractComponent<Order> implements OnInit, OnDestroy {
     

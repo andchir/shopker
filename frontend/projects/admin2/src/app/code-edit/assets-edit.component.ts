@@ -16,7 +16,7 @@ import {ModalFileEditComponent} from './modal-file-edit.component';
 @Component({
     selector: 'app-assets-edit',
     templateUrl: './templates/assets-edit.component.html',
-    providers: [DialogService, ConfirmationService, FileEditService]
+    providers: [DialogService, FileEditService]
 })
 export class AssetsEditComponent extends AppTablePageAbstractComponent<EditableFile> implements OnInit, OnDestroy {
 

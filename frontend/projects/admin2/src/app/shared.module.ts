@@ -56,6 +56,7 @@ import {FileWidgetComponent} from './components/file-widget.component';
 import {SelectParentDropdownComponent} from './components/select-parent-dropdown.component';
 import {FileManagerComponent} from './components/file-manager.component';
 import {ModalConfirmTextComponent} from './components/modal-confirm-text.component';
+import {ModalFileUploadContentComponent} from './components/modal-file-upload.component';
 
 const components = [
     AppNavbarComponent,
@@ -126,6 +127,7 @@ const modules = [
         IfEmptyPipe,
 
         ModalConfirmTextComponent,
+        ModalFileUploadContentComponent,
 
         ...components
     ],
@@ -147,7 +149,8 @@ const modules = [
         ...modules
     ],
     entryComponents: [
-        ModalConfirmTextComponent
+        ModalConfirmTextComponent,
+        ModalFileUploadContentComponent
     ]
 })
 export class SharedModule {

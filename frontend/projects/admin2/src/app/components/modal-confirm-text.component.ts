@@ -20,8 +20,8 @@ export class ModalConfirmTextComponent implements OnInit, AfterViewInit {
     closeReason = '';
 
     constructor(
-        public ref: DynamicDialogRef,
-        public config: DynamicDialogConfig
+        private ref: DynamicDialogRef,
+        private config: DynamicDialogConfig
     ) {
     }
     

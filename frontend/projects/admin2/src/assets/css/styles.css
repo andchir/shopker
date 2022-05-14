@@ -188,5 +188,7 @@ pre.max-height400 { max-height: 400px; overflow: auto; }
 /* p-tabview-panels */
 .p-tabview-panels { padding: 1.25rem 0 !important; }
 
+/* p-sidebar */
+/*p-sidebar { position: relative; z-index: 22222; }*/
 .p-sidebar-content { position: static !important; }
 

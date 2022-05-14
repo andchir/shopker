@@ -122,6 +122,9 @@ export class FileWidgetComponent implements ControlValueAccessor {
     }
 
     getImageUrl(data?: FileData|null): string|ArrayBuffer {
+        if (!this.hasPreviewImage) {
+            return '';
+        }
         return FileData.getImageUrl(this.filesDirBaseUrl, data || this.controlValue);
     }
 

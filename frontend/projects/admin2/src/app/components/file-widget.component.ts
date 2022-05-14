@@ -18,6 +18,8 @@ export const EPANDED_TEXTAREA_VALUE_ACCESSOR: any = {
 })
 export class FileWidgetComponent implements ControlValueAccessor {
 
+    @ViewChild('fileInput') fileInput: ElementRef;
+    @ViewChild('imgPreview', { static: true }) imgPreview: ElementRef;
     @Input() fieldName = 'image';
     @Input() fieldTitle: string;
     @Input() hasPreviewImage = false;
@@ -27,9 +29,8 @@ export class FileWidgetComponent implements ControlValueAccessor {
     @Input() largeFieldMode = true;
     @Input() files: { [key: string]: File } = {};
     @Input() filesRaw: File[] = [];
-    @ViewChild('fileInput') fileInput: ElementRef;
-    @ViewChild('imgPreview', { static: true }) imgPreview: ElementRef;
     @Input('controlValue') _controlValue: FileData|null = null;
+    
     filesDirBaseUrl: string;
     fileName = '';
     imageUrl: string|ArrayBuffer = '';

@@ -160,7 +160,7 @@ pre.max-height400 { max-height: 400px; overflow: auto; }
 .p-panel.p-panel-sm .p-panel-content { padding: 0.75rem; }
 
 /* p-dynamic-dialog */
-.p-dynamic-dialog .p-dialog-content { border-bottom-left-radius: 6px; border-bottom-right-radius: 6px; }
+.p-dynamic-dialog .p-dialog-content { border-bottom-left-radius: 6px; border-bottom-right-radius: 6px; padding: 1.5rem; }
 .p-component-overlay.modal-margin-left { margin-left: 120px; width: calc(100% - 120px); }
 @media screen and (max-width: 960px) {
     .p-component-overlay.modal-margin-left { margin-left: 0; width: 100%; }
@@ -172,11 +172,6 @@ pre.max-height400 { max-height: 400px; overflow: auto; }
 
 /* p-tree */
 .p-tree-empty-message { padding-top: 1rem; }
-
-/* p-datatable */
-@media screen and (max-width: 960px) {
-    .p-datatable-tbody > tr > td { padding: 0.3rem 1rem !important; }
-}
 
 /* p-datepicker */
 .p-datepicker .p-datepicker-buttonbar,

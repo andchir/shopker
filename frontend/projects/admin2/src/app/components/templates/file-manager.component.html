@@ -39,7 +39,7 @@
                 </div>
 
                 <div class="col-4 py-1 px-1" *ngIf="currentPath">
-                    <div class="border-1 border-solid border-round border-400 p-1 text-primary cursor-pointer"
+                    <div class="border-1 border-solid border-round border-400 p-2 text-primary cursor-pointer"
                          (click)="openDirPrevious($event)">
                         <div class="text-center">
                             <i class="pi pi-arrow-left"></i>
@@ -51,7 +51,7 @@
                 </div>
 
                 <div class="col-4 py-1 px-1" *ngFor="let file of files">
-                    <div class="surface-200 border-1 border-solid border-round border-400 p-1 cursor-pointer"
+                    <div class="surface-200 border-1 border-solid border-round border-400 p-0 cursor-pointer"
                          draggable="true"
                          [ngClass]="{'bg-black-20': file.isDir, 'bg-black-10': !file.isDir}" 
                          (dragstart)="dragStartHandler(file, $event)"
@@ -59,16 +59,18 @@
                         <div class="text-center">
                             <ng-container *ngIf="getIsImageFile(file.extension); else fileIcon">
                                 <div [title]="file.fileName">
-                                    <img [src]="getImageThumbnail(file)" alt="" class="max-width100 no-events" style="height: 42px;">
+                                    <img [src]="getImageThumbnail(file)" alt="" class="max-width100 no-events" style="height: 60px;">
                                 </div>
                             </ng-container>
                             <ng-template #fileIcon>
-                                <div>
-                                    <i class="pi pi-folder" *ngIf="file.isDir"></i>
-                                    <i class="pi pi-file" *ngIf="!file.isDir"></i>
-                                </div>
-                                <div class="text-overflow text-xs" [title]="file.fileName">
-                                    {{ file.fileName }}
+                                <div class="p-2">
+                                    <div>
+                                        <i class="pi pi-folder" *ngIf="file.isDir"></i>
+                                        <i class="pi pi-file" *ngIf="!file.isDir"></i>
+                                    </div>
+                                    <div class="text-overflow text-xs" [title]="file.fileName">
+                                        {{ file.fileName }}
+                                    </div>
                                 </div>
                             </ng-template>
                         </div>

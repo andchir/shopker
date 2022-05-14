@@ -24,13 +24,17 @@ export class FileData {
         let output = '';
         const fileName = fileData.fileName || fileData.title;
         if (fileName) {
-            if (filesDirBaseUrl) {
-                output += `${filesDirBaseUrl}/`;
-            }
             if (fileData.dirPath) {
                 output += `${fileData.dirPath}/`;
+            } else if (filesDirBaseUrl) {
+                output += `${filesDirBaseUrl}/`;
             }
-            output += `${fileName}.${fileData.extension}`;
+            if (fileData.extension
+                && fileName.substr(fileName.length - fileData.extension.length - 1) !== `.${fileData.extension}`) {
+                    output += `${fileName}.${fileData.extension}`;
+            } else {
+                output += fileName;
+            }
         }
         return output;
     }

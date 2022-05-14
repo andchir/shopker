@@ -16,12 +16,18 @@
            *ngIf="errorMessage"></p-message>
 
 <div class="text-center pt-3">
-    <button pButton pRipple type="button" [label]="'UPLOAD' | translate" icon="pi pi-check"
-            class="p-button-success p-button-raised w-full md:w-auto mb-2 md:mb-0"
-            (click)="submitHandler($event)"></button>
-    <button pButton pRipple type="button" [label]="'CLOSE' | translate"
-            class="p-button-secondary p-button-raised w-full md:w-auto md:ml-2"
-            (click)="dismissModal($event)"></button>
+    <div class="grid">
+        <div class="col-12 md:col-6 pb-0">
+            <button pButton pRipple type="button" [label]="'UPLOAD' | translate" icon="pi pi-check"
+                    class="p-button-success p-button-raised w-full mb-2 md:mb-0"
+                    (click)="submitHandler($event)"></button>
+        </div>
+        <div class="col-12 md:col-6 pb-0">
+            <button pButton pRipple type="button" [label]="'CLOSE' | translate"
+                    class="p-button-secondary p-button-raised w-full"
+                    (click)="dismissModal($event)"></button>
+        </div>
+    </div>
 </div>
 
 <div class="loading-overlay" *ngIf="loading">

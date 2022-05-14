@@ -1,23 +1,46 @@
-import {Component, Input} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {FileModel} from '../models/file.model';
+import {DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
 
 @Component({
     selector: 'app-modal-confirm-text',
-    template: ''
-    // templateUrl: 'templates/modal-confirm-text.component.html'
+    templateUrl: 'templates/modal-confirm-text.component.html'
 })
-export class ModalConfirmTextComponent {
+export class ModalConfirmTextComponent implements OnInit, AfterViewInit {
 
+    @ViewChild('inputElement') inputElement: ElementRef<HTMLInputElement>;
     modalTitle: string;
     textValue: string;
     labelText: string;
     buttonText = 'CREATE';
+    loading = false;
+    errorMessage = '';
+    closeReason = '';
 
     constructor(
-        public activeModal: NgbActiveModal
+        public ref: DynamicDialogRef,
+        public config: DynamicDialogConfig
     ) {
+    }
+    
+    ngOnInit() {
+        if (this.config.data.labelText) {
+            this.labelText = this.config.data.labelText;
+        }
+        if (this.config.data.buttonText) {
+            this.buttonText = this.config.data.buttonText;
+        }
+        if (this.config.data.textValue) {
+            this.textValue = this.config.data.textValue;
+        }
+    }
+    
+    ngAfterViewInit() {
+        if (this.inputElement) {
+            this.inputElement.nativeElement.focus();
+        }
     }
 
     saveHandler(event?: MouseEvent): void {
@@ -27,7 +50,14 @@ export class ModalConfirmTextComponent {
         if (!this.textValue) {
             return;
         }
-        this.activeModal.close(this.textValue);
+        this.ref.close(this.textValue);
+    }
+
+    dismissModal(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.ref.close(null);
     }
 }
 
@@ -40,11 +70,11 @@ export class ConfirmModalContentComponent {
     @Input() modalTitle;
     @Input() modalContent;
 
-    constructor(public activeModal: NgbActiveModal) {
+    constructor() {
     }
 
     accept() {
-        this.activeModal.close('accept');
+        
     }
 }
 
@@ -58,6 +88,6 @@ export class AlertModalContentComponent {
     @Input() modalContent;
     @Input() messageType;
 
-    constructor(public activeModal: NgbActiveModal) {
+    constructor() {
     }
 }

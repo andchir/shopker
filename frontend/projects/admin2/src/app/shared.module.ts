@@ -55,6 +55,7 @@ import {SortingComponent} from './components/sorting-dnd.conponent';
 import {FileWidgetComponent} from './components/file-widget.component';
 import {SelectParentDropdownComponent} from './components/select-parent-dropdown.component';
 import {FileManagerComponent} from './components/file-manager.component';
+import {ModalConfirmTextComponent} from './components/modal-confirm-text.component';
 
 const components = [
     AppNavbarComponent,
@@ -124,6 +125,8 @@ const modules = [
         FilterArrayPipe,
         IfEmptyPipe,
 
+        ModalConfirmTextComponent,
+
         ...components
     ],
     providers: [],
@@ -143,7 +146,9 @@ const modules = [
         ...components,
         ...modules
     ],
-    entryComponents: []
+    entryComponents: [
+        ModalConfirmTextComponent
+    ]
 })
 export class SharedModule {
 }

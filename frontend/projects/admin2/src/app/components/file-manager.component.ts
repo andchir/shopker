@@ -8,7 +8,8 @@ import {DialogService} from 'primeng/dynamicdialog';
 
 import {FileManagerService} from '../services/file-manager.service';
 import {FileModel} from '../models/file.model';
-import {FileData} from '@app/catalog/models/file-data.model';
+import {ModalConfirmTextComponent} from './modal-confirm-text.component';
+import {FileData} from '../catalog/models/file-data.model';
 
 @Component({
     selector: 'app-file-manager',
@@ -22,6 +23,7 @@ export class FileManagerComponent implements OnDestroy {
     currentPath = '';
     errorMessage = '';
     closed$ = new Subject<void>();
+    destroyed$ = new Subject<void>();
     private _isActive = false;
 
     @ViewChild('container', { static: true }) container;
@@ -142,11 +144,43 @@ export class FileManagerComponent implements OnDestroy {
         if (event) {
             event.preventDefault();
         }
-        // if (this.modalRef) {
-        //     this.modalRef.dismiss();
-        //     this.modalRef = null;
-        // }
         this.errorMessage = '';
+        const ref = this.dialogService.open(ModalConfirmTextComponent, {
+            header: this.getLangString('CREATE_FOLDER'),
+            width: '400px',
+            style: {maxWidth: '100%'},
+            data: {
+                labelText: 'FOLDER_NAME',
+                buttonText: 'CREATE'
+            }
+        });
+        ref.onClose
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe((result) => {
+                if (result) {
+                    this.loading = true;
+                    this.dataService.createFolder(this.currentPath, result)
+                        .pipe(takeUntil(this.closed$))
+                        .subscribe({
+                            next: () => {
+                                if (!this.isActive) {
+                                    this.activeToggle();
+                                }
+                                this.getFilesList();
+                            },
+                            error: (err) => {
+                                if (err['error']) {
+                                    this.errorMessage = err['error'];
+                                }
+                                if (!this.isActive) {
+                                    this.activeToggle();
+                                }
+                                this.loading = false;
+                            }
+                        });
+                }
+            });
+        
         // this.modalRef = this.modalService.open(ModalConfirmTextComponent, {backdrop: 'static', keyboard: false});
         // this.modalRef.componentInstance.modalTitle = 'CREATE_FOLDER';
         // this.modalRef.componentInstance.labelText = 'FOLDER_NAME';
@@ -188,6 +222,7 @@ export class FileManagerComponent implements OnDestroy {
                     .subscribe({
                         next: () => {
                             this.openDirPrevious();
+                            this.loading = false;
                         },
                         error: (err) => {
                             if (err['error']) {
@@ -198,62 +233,47 @@ export class FileManagerComponent implements OnDestroy {
                     });
             }
         });
-        // if (this.modalRef) {
-        //     this.modalRef.dismiss();
-        //     this.modalRef = null;
-        // }
-        // this.confirmAction(this.getLangString('YOU_SURE_YOU_WANT_DELETE_FOLDER'))
-        //     .then((result) => {
-        //         if (result === 'accept') {
-        //             this.loading = true;
-        //             this.dataService.deleteFolder(this.currentPath)
-        //                 .subscribe((res) => {
-        //                     this.openDirPrevious();
-        //                 }, (err) => {
-        //                     if (err['error']) {
-        //                         this.errorMessage = err['error'];
-        //                     }
-        //                     this.loading = false;
-        //                 });
-        //         }
-        //     });
     }
 
     renameFolder(event?: MouseEvent): void {
         if (event) {
             event.preventDefault();
         }
-        // if (this.modalRef) {
-        //     this.modalRef.dismiss();
-        //     this.modalRef = null;
-        // }
         this.errorMessage = '';
-
         const tmp = this.currentPath.split('/');
         const folderName = tmp.pop();
-        
-        console.log(folderName);
 
-        // this.modalRef = this.modalService.open(ModalConfirmTextComponent, {backdrop: 'static', keyboard: false});
-        // this.modalRef.componentInstance.modalTitle = 'RENAME_FOLDER';
-        // this.modalRef.componentInstance.labelText = 'FOLDER_NAME';
-        // this.modalRef.componentInstance.textValue = folderName;
-        // this.modalRef.componentInstance.buttonText = 'RENAME';
-        // this.modalRef.result.then((result) => {
-        //     if (result && result !== folderName) {
-        //         this.loading = true;
-        //         this.dataService.rename(this.currentPath, result)
-        //             .pipe(takeUntil(this.closed$))
-        //             .subscribe((res) => {
-        //                 this.openDirPrevious();
-        //             }, (err) => {
-        //                 if (err['error']) {
-        //                     this.errorMessage = err['error'];
-        //                 }
-        //                 this.loading = false;
-        //             });
-        //     }
-        // });
+        const ref = this.dialogService.open(ModalConfirmTextComponent, {
+            header: this.getLangString('FOLDER_NAME'),
+            width: '400px',
+            style: {maxWidth: '100%'},
+            data: {
+                labelText: 'FOLDER_NAME',
+                buttonText: 'RENAME',
+                textValue: folderName
+            }
+        });
+        ref.onClose
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe((result) => {
+                if (result && result !== folderName) {
+                    this.loading = true;
+                    this.dataService.rename(this.currentPath, result)
+                        .pipe(takeUntil(this.closed$))
+                        .subscribe({
+                            next: () => {
+                                this.openDirPrevious();
+                                this.loading = false;
+                            },
+                            error: (err) => {
+                                if (err['error']) {
+                                    this.errorMessage = err['error'];
+                                }
+                                this.loading = false;
+                            }
+                        });
+                }
+            });
     }
 
     uploadFiles(event?: MouseEvent): void {
@@ -292,13 +312,6 @@ export class FileManagerComponent implements OnDestroy {
         //     }
         // });
     }
-
-    // confirmAction(message: string) {
-    //     this.modalRef = this.modalService.open(ConfirmModalContentComponent);
-    //     this.modalRef.componentInstance.modalTitle = this.getLangString('CONFIRM');
-    //     this.modalRef.componentInstance.modalContent = message;
-    //     return this.modalRef.result;
-    // }
 
     getLangString(value: string): string {
         if (!this.translateService.store.translations[this.translateService.currentLang]) {
@@ -356,5 +369,7 @@ export class FileManagerComponent implements OnDestroy {
     ngOnDestroy(): void {
         this.closed$.next();
         this.closed$.complete();
+        this.destroyed$.next();
+        this.destroyed$.complete();
     }
 }

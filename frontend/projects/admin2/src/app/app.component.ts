@@ -5,6 +5,8 @@ import {ConfirmationService, MessageService, PrimeNGConfig} from 'primeng/api';
 
 import {AppSettings} from '@app/services/app-settings.service';
 
+declare const window: Window;
+
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
@@ -13,6 +15,8 @@ import {AppSettings} from '@app/services/app-settings.service';
 export class AppComponent implements OnInit {
 
     isFileManagerActive = false;
+    sidebarPosition = 'left';
+    sidebarStyle = {width: '20rem', height: '100%'};
     
     constructor(
         private translateService: TranslateService,
@@ -45,6 +49,10 @@ export class AppComponent implements OnInit {
         if (this.isFileManagerActive === isActive) {
             return;
         }
+        this.sidebarPosition = window.innerWidth <= 960 ? 'bottom' : 'left';
+        this.sidebarStyle = window.innerWidth <= 960
+            ? {width: '100%', height: '20rem'}
+            : {width: '20rem', height: '100%'};
         this.isFileManagerActive = isActive;
     }
 }

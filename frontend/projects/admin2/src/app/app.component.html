@@ -7,8 +7,10 @@
 </div>
 
 <p-sidebar [(visible)]="isFileManagerActive"
-           appendTo="body"
+           [appendTo]="appSidebar"
            styleClass="p-component box-shadow1"
+           [style]="sidebarStyle"
+           [position]="sidebarPosition"
            [modal]="false"
            (onHide)="fileManagerToggle(false)">
     <app-file-manager [(isActive)]="isFileManagerActive"></app-file-manager>
@@ -17,3 +19,6 @@
 <p-toast position="bottom-right" key="message"></p-toast>
 
 <p-confirmDialog [header]="'CONFIRM' | translate" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+
+<div id="app-modals" #appModals></div>
+<div id="app-sidebar" #appSidebar></div>

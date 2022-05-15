@@ -90,11 +90,7 @@ export class FileManagerComponent implements OnDestroy {
     openModal(file: FileModel) {
         console.log('openModal', file);
         
-        // if (this.modalRef) {
-        //     this.modalRef.dismiss();
-        //     this.modalRef = null;
-        // }
-        // const currentFile = cloneDeep(file);
+        const currentFile = Object.assign({}, file);
 
         // this.modalRef = this.modalService.open(ModalFileContentComponent, {backdrop: 'static', keyboard: false});
         // this.modalRef.componentInstance.modalTitle = currentFile.fileName;

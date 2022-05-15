@@ -1,5 +1,5 @@
 <div>
-    <div class="my-3">
+    <div class="mb-3">
         <p-dropdown [options]="sortOptions"
                     [(ngModel)]="sortType"
                     (ngModelChange)="sortingInit()"
@@ -9,12 +9,17 @@
     <div class="min-height300 mb-3">
         <app-sorting-dnd [(items)]="sortData"></app-sorting-dnd>
     </div>
-    <div class="text-center pt-2">
-        <button pButton pRipple type="button" [label]="'SAVE_AND_CLOSE' | translate" icon="pi pi-check"
-                class="p-button-success p-button-raised w-full md:w-auto mb-2 md:mb-0 md:ml-2"
-                (click)="saveData($event)"></button>
-        <button pButton pRipple type="button" [label]="'CLOSE' | translate"
-                class="p-button-secondary p-button-raised w-full md:w-auto mb-2 md:mb-0 md:ml-2"
-                (click)="dismissModal($event)"></button>
+
+    <div class="grid mt-2">
+        <div class="col-12 md:col-6">
+            <button pButton pRipple type="button" [label]="'SAVE' | translate" icon="pi pi-check"
+                    class="p-button-success p-button-raised w-full"
+                    (click)="saveData($event)"></button>
+        </div>
+        <div class="col-12 md:col-6">
+            <button pButton pRipple type="button" [label]="'CLOSE' | translate"
+                    class="p-button-secondary p-button-raised w-full"
+                    (click)="dismissModal($event)"></button>
+        </div>
     </div>
 </div>

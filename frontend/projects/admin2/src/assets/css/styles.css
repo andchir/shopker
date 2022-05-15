@@ -3,6 +3,7 @@ body { margin: 0; padding: 10px; background-color: var(--bluegray-100); }
 h1, h2, h3, h4, h5, h6 { margin-top: 0; }
 .vertical-align-middle { vertical-align: middle; }
 .vertical-align-top { vertical-align: top; }
+.float-right { float: right; }
 .min-height20 { min-height: 20px; }
 .min-height110 { min-height: 110px; }
 .min-height200 { min-height: 200px; }
@@ -164,6 +165,7 @@ pre.max-height400 { max-height: 400px; overflow: auto; }
 .p-component-overlay.modal-margin-left { margin-left: 120px; width: calc(100% - 120px); }
 @media screen and (max-width: 960px) {
     .p-component-overlay.modal-margin-left { margin-left: 0; width: 100%; }
+    .p-dynamic-dialog { max-height: 100% !important; }
 }
 
 /* p-overlaypanel */

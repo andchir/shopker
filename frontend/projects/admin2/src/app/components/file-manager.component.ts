@@ -11,6 +11,7 @@ import {FileModel} from '../models/file.model';
 import {ModalConfirmTextComponent} from './modal-confirm-text.component';
 import {FileData} from '../catalog/models/file-data.model';
 import {ModalFileUploadContentComponent} from './modal-file-upload.component';
+import {ModalFileContentComponent} from './modal-file.component';
 
 @Component({
     selector: 'app-file-manager',
@@ -88,9 +89,23 @@ export class FileManagerComponent implements OnDestroy {
     }
 
     openModal(file: FileModel) {
-        console.log('openModal', file);
-        
         const currentFile = Object.assign({}, file);
+        const ref = this.dialogService.open(ModalFileContentComponent, {
+            header: currentFile.fileName,
+            width: '400px',
+            style: {maxWidth: '100%'},
+            data: {
+                file: currentFile,
+                filePath: `/${this.getFilePath(currentFile)}`
+            }
+        });
+        ref.onClose
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe((result) => {
+                if (result) {
+                    console.log(result);
+                }
+            });
 
         // this.modalRef = this.modalService.open(ModalFileContentComponent, {backdrop: 'static', keyboard: false});
         // this.modalRef.componentInstance.modalTitle = currentFile.fileName;

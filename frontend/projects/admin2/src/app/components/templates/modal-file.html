@@ -1,0 +1,87 @@
+<div class="float-right">
+    <button type="button" pButton class="p-button-sm w-auto py-1 px-2"
+            icon="pi pi-clone"
+            [pTooltip]="'COPY_TO_CLIPBOARD' | translate"
+            tooltipPosition="bottom"
+            (click)="copyToClipboard(filePath, $event)">
+        <i class="icon-clipboard1"></i>
+    </button>
+</div>
+<div style="margin-right: 45px;">
+    <div class="text-overflow">
+        <b>{{ 'PATH' | translate }}</b>: <a href="{{ filePath }}" target="_blank">{{ filePath }}</a>
+    </div>
+</div>
+<div>
+    <b>{{ 'FILE_SIZE' | translate }}</b>: {{ file.size }}
+</div>
+<div class="mb-3">
+    <b>{{ 'MODIFIED_DATE' | translate }}</b>: {{ file.modifiedDate }}
+</div>
+
+<p-message styleClass="block w-full text-left mb-3" severity="success"
+           [text]="messageText | translate"
+           *ngIf="messageText"></p-message>
+
+<div class="border-1 border-400 border-round mb-3" *ngIf="actionName == 'rename'">
+    <div class="p-3">
+        <div class="mb-1">
+            <label class="mb-1" for="fieldFielName">{{ 'RENAME' | translate }}</label>
+        </div>
+        <div class="p-inputgroup mb-3">
+            <input type="text" id="fieldFielName" pInputText [(ngModel)]="file.title">
+            <span class="p-inputgroup-addon">.{{ file.extension }}</span>
+        </div>
+        <div class="text-center">
+            <button type="button" pButton class="p-button-secondary p-button-sm"
+                    (click)="renameHandler($event)">
+                {{ 'ACCEPT' | translate }}
+            </button>
+            <button type="button" pButton class="p-button-secondary p-button-sm ml-2"
+                    (click)="switchAction('', $event)">
+                {{ 'CANCEL' | translate }}
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="border-1 border-400 border-round mb-3" *ngIf="actionName == 'delete'">
+    <div class="p-3">
+        <div class="text-center mb-3">
+            {{ 'YOU_SURE_YOU_WANT_DELETE_FILE' | translate }}
+        </div>
+        <div class="text-center">
+            <button type="button" pButton class="p-button-secondary p-button-sm"
+                    (click)="deleteFileHandler($event)">
+                {{ 'YES' | translate }}
+            </button>
+            <button type="button" pButton class="p-button-secondary p-button-sm ml-2"
+                    (click)="switchAction('', $event)">
+                {{ 'CANCEL' | translate }}
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="flex justify-content-between flex-wrap pt-3">
+    <div>
+        <button type="button" pButton class="p-button-sm"
+                icon="pi pi-pencil"
+                [pTooltip]="'RENAME' | translate"
+                tooltipPosition="top"
+                (click)="switchAction('rename', $event)">
+        </button>
+        <button type="button" pButton class="p-button-danger p-button-sm ml-2"
+                icon="pi pi-trash"
+                [pTooltip]="'DELETE' | translate"
+                tooltipPosition="top"
+                (click)="switchAction('delete', $event)">
+        </button>
+    </div>
+    <div>
+        <button type="button" pButton class="p-button-secondary"
+                (click)="dismissModal($event)">
+            {{ 'CLOSE' | translate }}
+        </button>
+    </div>
+</div>

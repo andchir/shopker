@@ -8,7 +8,6 @@ export class FileData {
         const title = file.name.substr(0, file.name.lastIndexOf('.')),
             extension = file.name.substr(file.name.lastIndexOf('.') + 1),
             size = file.size;
-        
         const fileData = new FileData(0, title, extension, size);
         fileData.fileName = title;
         return fileData;
@@ -40,7 +39,10 @@ export class FileData {
         return output;
     }
 
-    static getIsImageFile(fileExtension: string): boolean {
+    static getIsImageFile(fileExtension?: string, fileName?: string): boolean {
+        if (fileName) {
+            fileExtension = FileData.getExtension(fileName);
+        }
         return ['jpg', 'jpeg', 'png', 'webp', 'gif'].indexOf(fileExtension) > -1;
     }
 

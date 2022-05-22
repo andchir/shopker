@@ -22,15 +22,15 @@ export class FileWidgetComponent implements ControlValueAccessor {
     @ViewChild('imgPreview', { static: true }) imgPreview: ElementRef;
     @Input() fieldName = 'image';
     @Input() fieldTitle: string;
-    @Input() hasPreviewImage = false;
     @Input() allowedExtensions = '';
     @Input() required = false;
     @Input() allowMultiple = false;
     @Input() largeFieldMode = true;
     @Input() files: { [key: string]: File } = {};
     @Input() filesRaw: File[] = [];
-    @Input('controlValue') _controlValue: FileData|null = null;
-    
+    @Input() _controlValue: FileData|null = null;
+
+    hasPreviewImage = false;
     filesDirBaseUrl: string;
     fileName = '';
     imageUrl: string|ArrayBuffer = '';
@@ -83,13 +83,13 @@ export class FileWidgetComponent implements ControlValueAccessor {
     }
 
     onGetFile(file: File): void {
-        const value: FileData = FileModel.getFileData(file);
+        const value: FileData = FileModel.getFileData(file, this.filesDirBaseUrl);
         if (!value) {
             return;
         }
+        this.hasPreviewImage = FileData.getIsImageFile(value.extension);
         this.files[this.fieldName] = file;
         if (this.hasPreviewImage && file.type.indexOf('image/') > -1) {
-            this.imgPreview.nativeElement.style.display = 'block';
             const reader = new FileReader();
             reader.onload = (e: ProgressEvent) => {
                 const fr = e.target as FileReader;
@@ -98,7 +98,6 @@ export class FileWidgetComponent implements ControlValueAccessor {
             };
             reader.readAsDataURL(file);
         } else {
-            this.imgPreview.nativeElement.style.display = 'none';
             this.writeValue(value);
         }
     }
@@ -106,20 +105,15 @@ export class FileWidgetComponent implements ControlValueAccessor {
     onGetData(dataString: string): void {
         const tmpArr = dataString.split(/[\\\/]/);
         const fileName = tmpArr.pop();
-        const fileExtension = FileData.getExtension(dataString);
+        const fileExtension = FileData.getExtension(fileName);
         const fileTitle = fileName.replace(`.${fileExtension}`, '');
-
         const data = new FileData(0, fileTitle, fileExtension, 0, fileTitle, tmpArr.join('/'));
-        data.fileName = fileName;
-        if (FileData.getIsImageFile(data.extension)) {
-            this.imgPreview.nativeElement.style.display = 'block';
-            this.hasPreviewImage = true;
-            this.writeValue(data);
-        } else {
-            this.imgPreview.nativeElement.style.display = 'none';
-            this.hasPreviewImage = false;
-            this.writeValue(data);
-        }
+        data.fileName = fileTitle;
+        data.dirPath = data.dirPath
+            .replace(`/${this.filesDirBaseUrl}/`, '')
+            .replace(`${this.filesDirBaseUrl}/`, '');
+        this.hasPreviewImage = FileData.getIsImageFile(data.extension);
+        this.writeValue(data);
     }
 
     getImageUrl(data?: FileData|null): string|ArrayBuffer {
@@ -140,10 +134,6 @@ export class FileWidgetComponent implements ControlValueAccessor {
         this.writeValue(null, true);
         delete this.files[this.fieldName];
         this.filesRaw.splice(0, this.filesRaw.length);
-        if (this.imgPreview && this.imgPreview.nativeElement) {
-            this.imgPreview.nativeElement.src = '';
-            this.imgPreview.nativeElement.style.display = 'none';
-        }
     }
 
     dropHandler(event: DragEvent): void {
@@ -163,11 +153,13 @@ export class FileWidgetComponent implements ControlValueAccessor {
         if (!data) {
             this.fileName = '';
             this.imageUrl = '';
+            this.hasPreviewImage = false;
             if (clearValue) {
                 this.controlValue = null;
             }
         } else {
             this.fileName = `${data.title}.${data.extension}`;
+            this.hasPreviewImage = FileData.getIsImageFile(data.extension);
             this.imageUrl = this.getImageUrl(data);
             this.controlValue = data;
             if (this.allowMultiple && this.filesRaw.length > 1) {

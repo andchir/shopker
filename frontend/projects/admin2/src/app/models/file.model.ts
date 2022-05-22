@@ -2,7 +2,7 @@ import {FileData} from '../catalog/models/file-data.model';
 
 export class FileModel {
 
-    static getFileData(file: File): FileData {
+    static getFileData(file: File, filesDirBaseUrl = ''): FileData {
         const fileName = file.name.substr(0, file.name.lastIndexOf('.')),
             extension = file.name.substr(file.name.lastIndexOf('.') + 1),
             size = file.size;

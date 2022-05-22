@@ -15,7 +15,7 @@ import ruLocale from '@fullcalendar/core/locales/ru';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
-import interactionPlugin from '@fullcalendar/interaction';
+import interactionPlugin, {EventDragStartArg} from '@fullcalendar/interaction';
 
 import {ContentField} from '../catalog/models/content_field.model';
 import {MultiValues} from '../models/multivalues.model';
@@ -187,6 +187,10 @@ export class RenderInputTypeComponent implements OnInit {
                     },
                     eventChange: (api: EventChangeArg) => {
                         this.handleFullCalendarEventChange(field.name, api);
+                    },
+                    eventDragStart: (info: EventDragStartArg) => {
+                        const leftPos = document.querySelector('.p-dialog').getBoundingClientRect().x;
+                        info.el.style.transform = `translate(-${leftPos}px, 0)`;
                     }
                 };
                 Object.assign(this.fullCalendarOptions[field.name], field.inputProperties);

@@ -1,5 +1,5 @@
 import {Component, OnInit, Input, ChangeDetectorRef, Output, EventEmitter} from '@angular/core';
-import {FormGroup, FormControl, Validators} from '@angular/forms';
+import {FormGroup, FormControl, Validators, FormArray} from '@angular/forms';
 
 import {TranslateService} from '@ngx-translate/core';
 import {TreeNode} from 'primeng/api';
@@ -16,6 +16,8 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import interactionPlugin, {EventDragStartArg} from '@fullcalendar/interaction';
+import {take} from 'rxjs/operators';
+import {DialogService} from 'primeng/dynamicdialog';
 
 import {ContentField} from '../catalog/models/content_field.model';
 import {MultiValues} from '../models/multivalues.model';
@@ -25,7 +27,7 @@ import {FileData} from '../catalog/models/file-data.model';
 import {SystemNameService} from '../services/system-name.service';
 import {AppSettings} from '../services/app-settings.service';
 import {CategoriesService} from '../catalog/services/categories.service';
-import {ModalContentTypeFieldsExportComponent} from '../catalog/modal-content-type-fields-export';
+import {ModalExportJsonComponent} from '../catalog/modal-export-json';
 
 @Component({
     selector: 'app-render-input',
@@ -44,6 +46,7 @@ export class RenderInputTypeComponent implements OnInit {
     @Input() arrayFields: {[key: string]: any} = {};
     @Output() onAddTranslation = new EventEmitter<string>();
     @Output() onParametersAdd = new EventEmitter<string>();
+    @Output() onParametersUpdate = new EventEmitter<any[]>();
     @Output() onParametersDelete = new EventEmitter<any[]>();
     @Output() onFieldAdd = new EventEmitter<ContentField>();
     fieldsMultivalues: {[key: string]: MultiValues} = {};
@@ -95,6 +98,7 @@ export class RenderInputTypeComponent implements OnInit {
         private systemNameService: SystemNameService,
         private categoriesService: CategoriesService,
         private translateService: TranslateService,
+        private dialogService: DialogService,
         private appSettings: AppSettings
     ) {
         this.filesDirBaseUrl = this.appSettings.settings.filesDirUrl;
@@ -511,28 +515,31 @@ export class RenderInputTypeComponent implements OnInit {
         if (!this.model[fieldName]) {
             this.model[fieldName] = [];
         }
-        // this.formErrors[fieldName] = '';
-        const dataStr = JSON.stringify(this.model[fieldName], null, '\t');
-        // const modalRef = this.modalService.open(ModalContentTypeFieldsExportComponent, {
-        //     backdrop: 'static',
-        //     keyboard: false,
-        //     container: '#modals-container'
-        // });
-        // modalRef.componentInstance.modalTitle = `${this.getLangString('EXPORT')} JSON`;
-        // modalRef.componentInstance.textValue = dataStr;
-        // modalRef.result.then((result) => {
-        //     if (result.data) {
-        //         try {
-        //             const outputData = JSON.parse(result.data);
-        //             this.model[fieldName].splice(0, this.model[fieldName].length);
-        //             this.model[fieldName].push(...outputData);
-        //         } catch (e) {
-        //             this.formErrors[fieldName] = 'Syntax error.';
-        //         }
-        //     }
-        // }, (reason) => {
-        //     // console.log(reason);categoriesSelection
-        // });
+        const fieldData = (this.form.controls[fieldName] as FormArray).getRawValue();
+        const fieldDataStr = JSON.stringify(fieldData, null, '\t');
+        const data = {
+            textValue: fieldDataStr
+        };
+        const ref = this.dialogService.open(ModalExportJsonComponent, {
+            header: this.getLangString('IMPORT_EXPORT') + ' JSON',
+            width: '800px',
+            data
+        });
+        ref.onClose
+            .pipe(take(1))
+            .subscribe({
+                next: (result) => {
+                    if (result && result.data) {
+                        try {
+                            const outputData = JSON.parse(result.data);
+                            this.model[fieldName] = outputData;
+                            this.onParametersUpdate.emit([fieldName, outputData]);
+                        } catch (e) {
+                            // this.errorMessage = this.getLangString('JSON_SYNTAX_ERROR');
+                        }
+                    }
+                }
+            });
     }
     
     fieldMove(field: ContentField, direction: string, event?: MouseEvent): void {

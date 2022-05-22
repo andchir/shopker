@@ -12,9 +12,9 @@ import {ModalContentTypeComponent} from './modal-content-type.component';
 import {ModalProductComponent} from './modal-product.component';
 import {ModalContentTypeFieldComponent} from './modal-content-type-field';
 import {ModalContentTypeFieldsSortingComponent} from './modal-content-type-fields-sorting';
-import {ModalContentTypeFieldsExportComponent} from './modal-content-type-fields-export';
 import {CategoriesMenuComponent} from '../components/categories-menu.component';
 import {ModalCategoryComponent} from './modal-category';
+import {ModalExportJsonComponent} from './modal-export-json';
 
 @NgModule({
     imports: [
@@ -33,7 +33,7 @@ import {ModalCategoryComponent} from './modal-category';
         ModalContentTypeComponent,
         ModalContentTypeFieldComponent,
         ModalContentTypeFieldsSortingComponent,
-        ModalContentTypeFieldsExportComponent,
+        ModalExportJsonComponent,
         ModalCategoryComponent,
         ModalProductComponent
     ],
@@ -43,7 +43,7 @@ import {ModalCategoryComponent} from './modal-category';
         ModalContentTypeComponent,
         ModalContentTypeFieldComponent,
         ModalContentTypeFieldsSortingComponent,
-        ModalContentTypeFieldsExportComponent,
+        ModalExportJsonComponent,
         ModalCategoryComponent,
         ModalProductComponent
     ]

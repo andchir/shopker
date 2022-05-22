@@ -373,6 +373,14 @@
                                 <ng-template pTemplate="footer">
                                     <tr>
                                         <td colspan="5" class="text-center">
+                                            <div class="float-right">
+                                                <button type="button" pButton
+                                                        class="p-button-warning p-button-sm"
+                                                        icon="pi pi-upload"
+                                                        [pTooltip]="'EXPORT' | translate"
+                                                        tooltipPosition="bottom"
+                                                        (click)="parametersExport(field.name, $event)"></button>
+                                            </div>
                                             <button type="button" pButton pRipple icon="pi pi-plus"
                                                     class="p-button-secondary p-button-sm"
                                                     [label]="'ADD' | translate"

@@ -269,6 +269,17 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
         this.arrayFields[fieldName].removeAt(index);
     }
 
+    arrayFieldUpdate(fieldName: string, data: {[key: string]: number|string}[]): void {
+        const formField = this.form.controls[fieldName];
+        if (!formField || !this.arrayFields[fieldName]) {
+            return;
+        }
+        this.arrayFields[fieldName].clear();
+        data.forEach((value, index) => {
+            this.arrayFieldAdd(fieldName, value);
+        });
+    }
+
     generateName(model: any, event?: MouseEvent): void {
         if (event) {
             event.preventDefault();

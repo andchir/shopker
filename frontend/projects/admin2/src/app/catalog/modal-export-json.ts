@@ -5,11 +5,11 @@ import {DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
 declare const ace: any;
 
 @Component({
-    selector: 'app-modal-content-type-fields-export',
-    templateUrl: 'templates/modal-content-type-fields-export.html',
+    selector: 'app-modal-export-json',
+    templateUrl: 'templates/modal-export-json.html',
     providers: []
 })
-export class ModalContentTypeFieldsExportComponent implements OnInit, AfterViewInit {
+export class ModalExportJsonComponent implements OnInit, AfterViewInit {
 
     closeReason = 'canceled';
     errorMessage = '';

@@ -41,6 +41,7 @@
                     [isLocalizationActive]="localeCurrent !== localeDefault"
                     (onFieldAdd)="fieldAdd($event)"
                     (onParametersAdd)="arrayFieldAdd($event)"
+                    (onParametersUpdate)="onParametersUpdate($event)"
                     (onParametersDelete)="onParametersDelete($event)"></app-render-input>
             </ng-container>
         </div>

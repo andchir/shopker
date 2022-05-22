@@ -200,6 +200,10 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
         this.arrayFieldDelete(data[0], data[1]);
     }
 
+    onParametersUpdate(data: any[]): void {
+        this.arrayFieldUpdate(data[0], data[1]);
+    }
+
     getFormData(): any {
         const data = super.getFormData();
         if (this.model && this.model.parentId && typeof data.parentId === 'undefined') {

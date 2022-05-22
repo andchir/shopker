@@ -14,7 +14,7 @@ import {ContentField} from './models/content_field.model';
 import {ModalContentTypeFieldComponent} from './modal-content-type-field';
 import {SystemNameService} from '../services/system-name.service';
 import {ModalContentTypeFieldsSortingComponent} from './modal-content-type-fields-sorting';
-import {ModalContentTypeFieldsExportComponent} from './modal-content-type-fields-export';
+import {ModalExportJsonComponent} from './modal-export-json';
 
 @Component({
     selector: 'app-modal-content-type',
@@ -270,7 +270,7 @@ export class ModalContentTypeComponent extends AppModalAbstractComponent<Content
         const data = {
             textValue: dataStr
         };
-        const ref = this.dialogService.open(ModalContentTypeFieldsExportComponent, {
+        const ref = this.dialogService.open(ModalExportJsonComponent, {
             header: this.getLangString('IMPORT_EXPORT') + ' JSON',
             width: '800px',
             data: data

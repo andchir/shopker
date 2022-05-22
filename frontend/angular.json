@@ -512,7 +512,11 @@
                             "projects/admin2/src/assets/css/styles.css",
                             "node_modules/dragula/dist/dragula.css",
                             "node_modules/quill/dist/quill.core.css",
-                            "node_modules/quill/dist/quill.snow.css"
+                            "node_modules/quill/dist/quill.snow.css",
+                            "node_modules/@fullcalendar/common/main.min.css",
+                            "node_modules/@fullcalendar/daygrid/main.min.css",
+                            "node_modules/@fullcalendar/timegrid/main.min.css",
+                            "node_modules/@fullcalendar/list/main.min.css"
                         ],
                         "scripts": [
                             "node_modules/ace-builds/src/ace.js",

@@ -4,18 +4,18 @@ import {FormGroup, FormControl, Validators} from '@angular/forms';
 import {TranslateService} from '@ngx-translate/core';
 import {TreeNode} from 'primeng/api';
 
-// import {
-//     CalendarOptions,
-//     DateSelectArg,
-//     EventClickArg,
-//     EventAddArg,
-//     EventChangeArg
-// } from '@fullcalendar/angular';
-// import ruLocale from '@fullcalendar/core/locales/ru';
-// import dayGridPlugin from '@fullcalendar/daygrid';
-// import timeGridPlugin from '@fullcalendar/timegrid';
-// import listPlugin from '@fullcalendar/list';
-// import interactionPlugin from '@fullcalendar/interaction';
+import {
+    CalendarOptions,
+    DateSelectArg,
+    EventClickArg,
+    EventAddArg,
+    EventChangeArg
+} from '@fullcalendar/angular';
+import ruLocale from '@fullcalendar/core/locales/ru';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import listPlugin from '@fullcalendar/list';
+import interactionPlugin from '@fullcalendar/interaction';
 
 import {ContentField} from '../catalog/models/content_field.model';
 import {MultiValues} from '../models/multivalues.model';
@@ -53,7 +53,7 @@ export class RenderInputTypeComponent implements OnInit {
     categories = [];
     categoriesTree: TreeNode[] = [];
     categoriesSelection: {[key: string]: any} = {};
-    // fullCalendarOptions: {[key: string]: CalendarOptions};
+    fullCalendarOptions: {[key: string]: CalendarOptions};
 
     static extendProperties(object1: Properties, object2: Properties): void {
         for (const key in object2) {
@@ -155,41 +155,41 @@ export class RenderInputTypeComponent implements OnInit {
                     field.inputProperties,
                     propertiesDefault
                 );
-                // if (!this.fullCalendarOptions) {
-                //     this.fullCalendarOptions = {};
-                // }
-                // this.fullCalendarOptions[field.name] = {
-                //     plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin],
-                //     headerToolbar: {
-                //         left: 'prev,next today',
-                //         center: 'title',
-                //         right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
-                //     },
-                //     locales: [ruLocale],
-                //     locale: this.appSettings.settings.locale,
-                //     initialView: 'dayGridMonth',
-                //     weekends: true,
-                //     editable: true,
-                //     selectable: true,
-                //     selectMirror: true,
-                //     dayMaxEvents: false,
-                //     navLinks: true,
-                //     slotDuration: '0:10:00',
-                //     initialEvents: this.model[field.name],
-                //     select: (selectInfo: DateSelectArg) => {
-                //         this.handleFullCalendarDateSelect(field.name, selectInfo);
-                //     },
-                //     eventClick: (clickInfo: EventClickArg) => {
-                //         this.handleFullCalendarEventClick(field.name, clickInfo);
-                //     },
-                //     eventAdd: (api: EventAddArg) => {
-                //         this.handleFullCalendarEventAdd(field.name, api);
-                //     },
-                //     eventChange: (api: EventChangeArg) => {
-                //         this.handleFullCalendarEventChange(field.name, api);
-                //     }
-                // };
-                // Object.assign(this.fullCalendarOptions[field.name], field.inputProperties);
+                if (!this.fullCalendarOptions) {
+                    this.fullCalendarOptions = {};
+                }
+                this.fullCalendarOptions[field.name] = {
+                    plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin],
+                    headerToolbar: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+                    },
+                    locales: [ruLocale],
+                    locale: this.appSettings.settings.locale,
+                    initialView: 'dayGridMonth',
+                    weekends: true,
+                    editable: true,
+                    selectable: true,
+                    selectMirror: true,
+                    dayMaxEvents: false,
+                    navLinks: true,
+                    slotDuration: '0:10:00',
+                    initialEvents: this.model[field.name],
+                    select: (selectInfo: DateSelectArg) => {
+                        this.handleFullCalendarDateSelect(field.name, selectInfo);
+                    },
+                    eventClick: (clickInfo: EventClickArg) => {
+                        this.handleFullCalendarEventClick(field.name, clickInfo);
+                    },
+                    eventAdd: (api: EventAddArg) => {
+                        this.handleFullCalendarEventAdd(field.name, api);
+                    },
+                    eventChange: (api: EventChangeArg) => {
+                        this.handleFullCalendarEventChange(field.name, api);
+                    }
+                };
+                Object.assign(this.fullCalendarOptions[field.name], field.inputProperties);
                 break;
             case 'rich_text':
                 propertiesDefault = {
@@ -482,6 +482,7 @@ export class RenderInputTypeComponent implements OnInit {
                     this.model[fieldName].push(category.id);
                 }
             });
+            this.form.controls[fieldName].setValue(this.model[fieldName]);
         }, 1);
     }
 
@@ -588,68 +589,69 @@ export class RenderInputTypeComponent implements OnInit {
         this.onAddTranslation.emit(fieldName);
     }
 
-    // handleFullCalendarDateSelect(fieldName: string, selectInfo: DateSelectArg): void {
-    //     this.translateService.get('PLEASE_ENTER_NEW_TITLE_FOR_EVENT')
-    //         .subscribe((translatedString: string) => {
-    //             const title = prompt(translatedString);
-    //             const calendarApi = selectInfo.view.calendar;
-    //
-    //             calendarApi.unselect();
-    //
-    //             if (title) {
-    //                 calendarApi.addEvent({
-    //                     id: this.fullCalendarCreateId(fieldName),
-    //                     title,
-    //                     start: selectInfo.startStr,
-    //                     end: selectInfo.endStr,
-    //                     allDay: selectInfo.allDay
-    //                 });
-    //             }
-    //         });
-    // }
-    //
-    // handleFullCalendarEventClick(fieldName: string, clickInfo: EventClickArg): void {
-    //     this.translateService.get('YOU_SURE_YOU_WANT_DELETE_NAME', {name: clickInfo.event.title})
-    //         .subscribe((translatedString: string) => {
-    //             if (confirm(translatedString)) {
-    //                 clickInfo.event.remove();
-    //                 const event = clickInfo.event.toPlainObject();
-    //                 const index = this.model[fieldName].findIndex((item) => {
-    //                     return String(item.id) === String(event.id);
-    //                 });
-    //                 if (index > -1) {
-    //                     this.model[fieldName].splice(index, 1);
-    //                     this.fullCalendarOptions[fieldName].initialEvents = this.model[fieldName];
-    //                 }
-    //             }
-    //         });
-    // }
-    //
-    // handleFullCalendarEventAdd(fieldName: string, api: EventAddArg): void {
-    //     this.model[fieldName] = [...this.model[fieldName], api.event.toJSON()];
-    //     this.fullCalendarOptions[fieldName].initialEvents = this.model[fieldName];
-    // }
-    //
-    // handleFullCalendarEventChange(fieldName: string, api: EventChangeArg): void {
-    //     const event = api.event.toPlainObject();
-    //     const index = this.model[fieldName].findIndex((item) => {
-    //         return String(item.id) === String(event.id);
-    //     });
-    //     if (index > -1) {
-    //         Object.assign(this.model[fieldName][index], event);
-    //         this.fullCalendarOptions[fieldName].initialEvents = this.model[fieldName];
-    //     }
-    // }
-    //
-    // fullCalendarCreateId(fieldName: string): string {
-    //     let lastId = 0;
-    //     this.model[fieldName].forEach((item) => {
-    //         if (parseInt(item.id, 10) > lastId) {
-    //             lastId = parseInt(item.id, 10);
-    //         }
-    //     });
-    //     return String(lastId + 1);
-    // }
+    handleFullCalendarDateSelect(fieldName: string, selectInfo: DateSelectArg): void {
+        this.translateService.get('PLEASE_ENTER_NEW_TITLE_FOR_EVENT')
+            .subscribe((translatedString: string) => {
+                const title = prompt(translatedString);
+                const calendarApi = selectInfo.view.calendar;
+                calendarApi.unselect();
+                if (title) {
+                    calendarApi.addEvent({
+                        id: this.fullCalendarCreateId(fieldName),
+                        title,
+                        start: selectInfo.startStr,
+                        end: selectInfo.endStr,
+                        allDay: selectInfo.allDay
+                    });
+                }
+            });
+    }
+
+    handleFullCalendarEventClick(fieldName: string, clickInfo: EventClickArg): void {
+        this.translateService.get('YOU_SURE_YOU_WANT_DELETE_NAME', {name: clickInfo.event.title})
+            .subscribe((translatedString: string) => {
+                if (confirm(translatedString)) {
+                    clickInfo.event.remove();
+                    const event = clickInfo.event.toPlainObject();
+                    const index = this.model[fieldName].findIndex((item) => {
+                        return String(item.id) === String(event.id);
+                    });
+                    if (index > -1) {
+                        this.model[fieldName].splice(index, 1);
+                        this.fullCalendarOptions[fieldName].initialEvents = this.model[fieldName];
+                        this.form.controls[fieldName].setValue(this.model[fieldName]);
+                    }
+                }
+            });
+    }
+
+    handleFullCalendarEventAdd(fieldName: string, api: EventAddArg): void {
+        this.model[fieldName] = [...this.model[fieldName], api.event.toJSON()];
+        this.form.controls[fieldName].setValue(this.model[fieldName]);
+        this.fullCalendarOptions[fieldName].initialEvents = this.model[fieldName];
+    }
+
+    handleFullCalendarEventChange(fieldName: string, api: EventChangeArg): void {
+        const event = api.event.toPlainObject();
+        const index = this.model[fieldName].findIndex((item) => {
+            return String(item.id) === String(event.id);
+        });
+        if (index > -1) {
+            Object.assign(this.model[fieldName][index], event);
+            this.form.controls[fieldName].setValue(this.model[fieldName]);
+            this.fullCalendarOptions[fieldName].initialEvents = this.model[fieldName];
+        }
+    }
+
+    fullCalendarCreateId(fieldName: string): string {
+        let lastId = 0;
+        this.model[fieldName].forEach((item) => {
+            if (parseInt(item.id, 10) > lastId) {
+                lastId = parseInt(item.id, 10);
+            }
+        });
+        return String(lastId + 1);
+    }
 
     getLangString(value: string): string {
         if (!this.translateService.store.translations[this.translateService.currentLang]) {

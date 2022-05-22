@@ -40,6 +40,8 @@ import {RadioButtonModule} from 'primeng/radiobutton';
 import {CheckboxModule} from 'primeng/checkbox';
 import {ChipsModule} from 'primeng/chips';
 import {EditorModule} from 'primeng/editor';
+import {Calendar} from '@fullcalendar/core';
+import {FullCalendarModule} from 'primeng/fullcalendar';
 
 import {AppNavbarComponent} from './components/app-navbar.component';
 import {RenderOutputTypeComponent} from './components/render-output-type.component';
@@ -104,7 +106,8 @@ const modules = [
     RadioButtonModule,
     CheckboxModule,
     ChipsModule,
-    EditorModule
+    EditorModule,
+    FullCalendarModule
 ];
 
 @NgModule({

@@ -189,3 +189,8 @@ pre.max-height400 { max-height: 400px; overflow: auto; }
 /*p-sidebar { position: relative; z-index: 22222; }*/
 .p-sidebar-content { position: static !important; }
 
+/* fullcalendar */
+@media screen and (max-width: 960px) {
+    .fc .fc-toolbar.fc-header-toolbar { display: block; text-align: center; }
+    .fc .fc-toolbar.fc-header-toolbar > div { margin-top: 0.5rem; }
+}

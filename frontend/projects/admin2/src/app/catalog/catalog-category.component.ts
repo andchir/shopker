@@ -185,6 +185,12 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
                     }
                 }
             });
+        setTimeout(() => {
+            if (window.document.querySelector('.p-component-overlay')) {
+                (window.document.querySelector('.p-component-overlay') as HTMLElement)
+                    .classList.add('modal-margin-left');
+            }
+        }, 1);
     }
 
     onMenuAction(data: any): void {

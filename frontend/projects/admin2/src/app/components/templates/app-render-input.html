@@ -385,6 +385,21 @@
                         </div>
                     </ng-container>
                     <!-- /parameters -->
+
+                    <!-- schedule -->
+                    <div *ngSwitchCase="'schedule'">
+                        <div class="mb-2">
+                            <label for="field_{{ field.name }}">
+                                {{ field.title }}
+                                <span class="text-500">({{ field.name }})</span>
+                                <span class="text-orange-500" *ngIf="field.required">*</span>
+                            </label>
+                        </div>
+                        <div class="min-height300 w-100">
+                            <p-fullCalendar #fullCalendar [options]="fullCalendarOptions[field.name]"></p-fullCalendar>
+                        </div>
+                    </div>
+                    <!-- /schedule -->
                     
                 </div>
             </div>

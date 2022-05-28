@@ -1,5 +1,5 @@
 <p-treeSelect
-    inputId="fieldParent"
+    [inputId]="inputId"
     [(ngModel)]="currentCategoryNode"
     (ngModelChange)="onCategorySelect()"
     [options]="categoriesTree"
@@ -12,23 +12,23 @@
                     <button pButton pRipple type="button" icon="pi pi-home" class="p-button-sm p-button-warning mr-2"
                             [pTooltip]="'OPEN_ROOT_CATEGORY' | translate"
                             tooltipPosition="bottom"
-                            (click)="goToRootCategory()" *ngIf="categoryId > 0"></button>
+                            (click)="goToRootCategory()" *ngIf="currentId > 0"></button>
                     <button pButton pRipple type="button" icon="pi pi-plus" class="p-button-sm mr-2"
                             [pTooltip]="'ADD_NEW_CATEGORY' | translate"
                             tooltipPosition="bottom"
-                            (click)="callAction('new', currentCategory)"></button>
+                            (click)="callAction('new')"></button>
                     <button pButton pRipple type="button" icon="pi pi-pencil" class="p-button-sm mr-2"
                             [pTooltip]="'EDIT_CATEGORY' | translate"
                             tooltipPosition="bottom"
-                            (click)="callAction('edit', currentCategory)"></button>
+                            (click)="callAction('edit')"></button>
                     <button pButton pRipple type="button" icon="pi pi-clone" class="p-button-sm mr-2"
                             [pTooltip]="'COPY_CATEGORY' | translate"
                             tooltipPosition="bottom"
-                            (click)="callAction('clone', currentCategory)" [hidden]="!categoryId"></button>
-                    <button pButton pRipple type="button" icon="pi pi-trash" class="p-button-sm mr-2"
+                            (click)="callAction('clone')" [hidden]="!currentId"></button>
+                    <button pButton pRipple type="button" icon="pi pi-trash" class="p-button-sm p-button-danger mr-2"
                             [pTooltip]="'DELETE_CATEGORY' | translate"
                             tooltipPosition="bottom"
-                            (click)="deleteCategoryItemConfirm(currentCategory)" [hidden]="!categoryId"></button>
+                            (click)="deleteCategoryItemConfirm()" [hidden]="!currentId"></button>
                 </div>
                 <div class="flex align-items-center justify-content-center">
                     <ng-container *ngIf="categoriesTree[0].children">

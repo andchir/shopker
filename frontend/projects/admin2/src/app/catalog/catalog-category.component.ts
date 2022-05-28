@@ -82,12 +82,6 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
             .getItemByName(this.currentCategory.contentTypeName);
     }
 
-    openCategoryFromMenu(event?: any): void {
-        if (this.currentCategoryNode) {
-            this.router.navigate(['/catalog/category', this.currentCategoryNode.key]);
-        }
-    }
-
     openCategory(): void {
         this.loading = true;
         this.dataService.setRequestUrl(`/admin/products/${this.categoryId}`);
@@ -174,11 +168,12 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
             });
     }
 
-    onCategoryUpdated(category: Category): void {
-        if (!category || !category.title) {
+    onCategoryUpdated(categoryId: number): void {
+        if (this.categoryId) {
+            this.router.navigate(['/catalog', 'category', this.categoryId]);
             return;
         }
-        this.currentCategory.title = category.title;
+        this.router.navigate(['/catalog', 'category']);
     }
 
     openCategoryModal(itemId?: number, parentId?: number, isItemCopy = false): void {
@@ -216,6 +211,7 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
     onMenuAction(data: any): void {
         const action = data[0];
         const itemId = data[1];
+        const parentId = data[2] || 0;
         switch (action) {
             case 'new':
                 this.openCategoryModal(null, itemId);
@@ -226,6 +222,44 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
             case 'clone':
                 this.openCategoryModal(itemId, null, true);
                 break;
+            case 'delete':
+                this.confirmationService.confirm({
+                    message: this.getLangString('YOU_SURE_YOU_WANT_DELETE'),
+                    accept: () => {
+                        this.deleteCategoryItem(itemId);
+                    }
+                });
+                break;
+            case 'root':
+                this.categoryId = 0;
+                break;
         }
+    }
+
+    deleteCategoryItem(itemId: number): void {
+        if (!itemId) {
+            return;
+        }
+        this.loading = true;
+        this.categoriesService.deleteItem(itemId)
+            .subscribe({
+                next: () => {
+                    this.categoryId = 0;
+                    // this.getCategories().then(() => {
+                    //     this.goToRootCategory();
+                    //     this.loading = false;
+                    // });
+                },
+                error: (err) => {
+                    if (err.error) {
+                        this.messageService.add({
+                            key: 'message',
+                            severity: 'error',
+                            detail: err.error
+                        });
+                    }
+                    this.loading = false;
+                }
+            });
     }
 }

@@ -20,9 +20,11 @@
                 <div class="block lg:inline-block vertical-align-top mr-0 lg:mr-2 w-full lg:w-auto mb-2 lg:mb-0">
                     <div class="w-full-parent-lg">
                         <app-select-parent-dropdown
+                            inputId="fieldSelectCategory"
                             [showHeaderButtons]="true"
-                            (onAction)="onMenuAction($event)"
-                            (onUpdated)="onCategoryUpdated($event)"></app-select-parent-dropdown>
+                            [(ngModel)]="categoryId"
+                            (ngModelChange)="onCategoryUpdated($event)"
+                            (onAction)="onMenuAction($event)"></app-select-parent-dropdown>
                     </div>
                 </div>
                 <div class="inline-block vertical-align-top w-full lg:w-auto">

@@ -4,7 +4,7 @@ import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {TreeNode} from 'primeng/api';
 
 import {CategoriesService} from '../catalog/services/categories.service';
-import {Category, CategoryNode} from "../catalog/models/category.model";
+import {FileData} from '../catalog/models/file-data.model';
 
 @Component({
     selector: 'app-select-parent-dropdown',
@@ -26,25 +26,15 @@ export class SelectParentDropdownComponent implements OnInit, ControlValueAccess
     previousCategoryNode: TreeNode;
     currentId: number = null;
 
-    categoryId = 1;
-    currentCategory: Category = null;
-
     @ViewChild('dropdownElement', { static: true }) dropdownElement;
     @Input() filterId: number = null;
     @Input() showHeaderButtons = false;
     @Input() rootTitle = 'ROOT_FOLDER';
-    @Input()
-    set disabled(value: boolean) {
-        this._disabled = value;
-    }
-    get disabled(): boolean {
-        return this._disabled;
-    }
-    @Output() changeRequest = new EventEmitter<Category>();
-    @Output() onUpdated = new EventEmitter<Category>();
-    @Output() onEditStarted = new EventEmitter<any>();
-    @Output() onEditEnded = new EventEmitter<any>();
+    @Input() inputId = 'fieldParent';
     @Output() onAction = new EventEmitter<any>();
+
+    _onChange: (value: FileData) => void = () => null;
+    _onTouched: () => void = () => null;
     
     static getTreeCurrentNode(tree: TreeNode[], currentId: number|string): TreeNode | null {
         if (typeof currentId !== 'number') {
@@ -119,31 +109,18 @@ export class SelectParentDropdownComponent implements OnInit, ControlValueAccess
     }
 
     goToRootCategory(): void {
-        // this.router.navigate(['/catalog/category']);
+        this.callAction('root');
     }
 
-    deleteCategoryItemConfirm(category: Category): void {
-        console.log('deleteCategoryItemConfirm', category);
-        // const index = this.categories.findIndex((item) => {
-        //     return item.id === category.id;
-        // });
-        // if (index === -1) {
-        //     return;
-        // }
-        // this.confirmationService.confirm({
-        //     message: this.getLangString('YOU_SURE_YOU_WANT_DELETE'),
-        //     accept: () => {
-        //         this.deleteCategoryItem(category.id);
-        //     }
-        // })
+    deleteCategoryItemConfirm(): void {
+        this.callAction('delete', this.currentId);
     }
 
-    callAction(action: string, category?: Category): void {
-        if (category) {
-            this.onAction.emit([action, category.id, category.parentId]);
-        } else {
-            this.onAction.emit([action, 0, 0]);
-        }
+    callAction(action: string, categoryId?: number): void {
+        const parentId = this.currentCategoryNode && this.currentCategoryNode.parent
+            ? this.currentCategoryNode.parent.key
+            : 0;
+        this.onAction.emit([action, this.currentId, parentId]);
     }
 
     expandAll(event?: MouseEvent): void {
@@ -179,9 +156,7 @@ export class SelectParentDropdownComponent implements OnInit, ControlValueAccess
         }
         if (this.currentId !== value) {
             this.currentId = value;
-            if (!this.currentCategoryNode) {
-                this.currentCategoryNode = SelectParentDropdownComponent.getTreeCurrentNode(this.categoriesTree, this.currentId);
-            }
+            this.currentCategoryNode = SelectParentDropdownComponent.getTreeCurrentNode(this.categoriesTree, this.currentId);
             this.onChange(value);
         }
     }
@@ -192,9 +167,5 @@ export class SelectParentDropdownComponent implements OnInit, ControlValueAccess
 
     registerOnTouched(fn: () => void): void {
         this.onTouched = fn;
-    }
-
-    setDisabledState(isDisabled: boolean): void {
-        this.disabled = isDisabled;
     }
 }

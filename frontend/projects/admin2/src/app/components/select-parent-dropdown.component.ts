@@ -1,9 +1,10 @@
-import {Component, OnInit, Input, forwardRef, ViewChild} from '@angular/core';
+import {Component, OnInit, Input, forwardRef, ViewChild, Output, EventEmitter} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 
 import {TreeNode} from 'primeng/api';
 
 import {CategoriesService} from '../catalog/services/categories.service';
+import {Category, CategoryNode} from "../catalog/models/category.model";
 
 @Component({
     selector: 'app-select-parent-dropdown',
@@ -25,10 +26,26 @@ export class SelectParentDropdownComponent implements OnInit, ControlValueAccess
     previousCategoryNode: TreeNode;
     currentId: number = null;
 
+    categoryId = 1;
+    currentCategory: Category = null;
+
     @ViewChild('dropdownElement', { static: true }) dropdownElement;
     @Input() filterId: number = null;
+    @Input() showHeaderButtons = false;
+    @Input() rootTitle = 'ROOT_FOLDER';
     @Input()
-
+    set disabled(value: boolean) {
+        this._disabled = value;
+    }
+    get disabled(): boolean {
+        return this._disabled;
+    }
+    @Output() changeRequest = new EventEmitter<Category>();
+    @Output() onUpdated = new EventEmitter<Category>();
+    @Output() onEditStarted = new EventEmitter<any>();
+    @Output() onEditEnded = new EventEmitter<any>();
+    @Output() onAction = new EventEmitter<any>();
+    
     static getTreeCurrentNode(tree: TreeNode[], currentId: number|string): TreeNode | null {
         if (typeof currentId !== 'number') {
             return null;
@@ -47,7 +64,7 @@ export class SelectParentDropdownComponent implements OnInit, ControlValueAccess
         }
         return currentNode;
     }
-    
+
     static filterNode(tree: TreeNode[], filterId: number | string): TreeNode[] {
         if (!filterId) {
             return tree;
@@ -65,13 +82,6 @@ export class SelectParentDropdownComponent implements OnInit, ControlValueAccess
             });
         }
         return tree;
-    }
-    
-    set disabled(value: boolean) {
-        this._disabled = value;
-    }
-    get disabled(): boolean {
-        return this._disabled;
     }
 
     constructor(
@@ -106,6 +116,61 @@ export class SelectParentDropdownComponent implements OnInit, ControlValueAccess
     onCategorySelect(): void {
         const value = this.currentCategoryNode ? parseInt(String(this.currentCategoryNode.key), 10) : null;
         this.writeValue(value);
+    }
+
+    goToRootCategory(): void {
+        // this.router.navigate(['/catalog/category']);
+    }
+
+    deleteCategoryItemConfirm(category: Category): void {
+        console.log('deleteCategoryItemConfirm', category);
+        // const index = this.categories.findIndex((item) => {
+        //     return item.id === category.id;
+        // });
+        // if (index === -1) {
+        //     return;
+        // }
+        // this.confirmationService.confirm({
+        //     message: this.getLangString('YOU_SURE_YOU_WANT_DELETE'),
+        //     accept: () => {
+        //         this.deleteCategoryItem(category.id);
+        //     }
+        // })
+    }
+
+    callAction(action: string, category?: Category): void {
+        if (category) {
+            this.onAction.emit([action, category.id, category.parentId]);
+        } else {
+            this.onAction.emit([action, 0, 0]);
+        }
+    }
+
+    expandAll(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.categoriesTree.forEach(node => {
+            this.expandRecursive(node, true);
+        });
+    }
+
+    collapseAll(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.categoriesTree.forEach(node => {
+            this.expandRecursive(node, false);
+        });
+    }
+
+    private expandRecursive(node: TreeNode, isExpand: boolean): void {
+        node.expanded = isExpand;
+        if (node.children) {
+            node.children.forEach(childNode => {
+                this.expandRecursive(childNode, isExpand);
+            });
+        }
     }
 
     writeValue(value: number|null): void {

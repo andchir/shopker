@@ -4,7 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {take, takeUntil} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {DialogService} from 'primeng/dynamicdialog';
-import {ConfirmationService, MessageService} from 'primeng/api';
+import {ConfirmationService, MessageService, TreeNode} from 'primeng/api';
 import {OverlayPanel} from 'primeng/overlaypanel';
 import {TranslateService} from '@ngx-translate/core';
 
@@ -34,6 +34,9 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
     currentCategory: Category;
     currentContentType: ContentType;
     categoryId: number;
+    categoriesTree: TreeNode[] = [];
+    currentCategoryNode: TreeNode;
+    loadingCategories = false;
     
     constructor(
         public dialogService: DialogService,
@@ -71,6 +74,7 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
                     console.log(e);
                 }
             });
+        this.getCategoriesTree();
     }
 
     getContentType(): Observable<ContentType> {
@@ -78,9 +82,10 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
             .getItemByName(this.currentCategory.contentTypeName);
     }
 
-    openCategoryFromMenu(event): void {
-        console.log('openCategoryFromMenu', event);
-        // this.router.navigate(['/catalog/category', event.node['id']]);
+    openCategoryFromMenu(event?: any): void {
+        if (this.currentCategoryNode) {
+            this.router.navigate(['/catalog/category', this.currentCategoryNode.key]);
+        }
     }
 
     openCategory(): void {
@@ -120,7 +125,6 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
     }
 
     openModal(item: Product, event?: MouseEvent): void {
-        this.panelTopMenu.hide();
         super.openModal(item, event, 'modal-margin-left');
     }
 
@@ -153,12 +157,28 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
         });
     }
 
+    getCategoriesTree(): void {
+        this.loadingCategories = true;
+        this.categoriesService.getTree()
+            .subscribe({
+                next: (res) => {
+                    this.categoriesTree = res;
+                    if (!this.currentCategoryNode) {
+                        // this.currentCategoryNode = SelectParentDropdownComponent.getTreeCurrentNode(this.categoriesTree, this.currentId);
+                    }
+                    this.loadingCategories = false;
+                },
+                error: () => {
+                    this.loadingCategories = false;
+                }
+            });
+    }
+
     onCategoryUpdated(category: Category): void {
         if (!category || !category.title) {
             return;
         }
         this.currentCategory.title = category.title;
-        this.panelTopMenu.hide();
     }
 
     openCategoryModal(itemId?: number, parentId?: number, isItemCopy = false): void {
@@ -207,6 +227,5 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
                 this.openCategoryModal(itemId, null, true);
                 break;
         }
-        this.panelTopMenu.hide();
     }
 }

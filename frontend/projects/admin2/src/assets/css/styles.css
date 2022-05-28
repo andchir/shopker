@@ -13,6 +13,7 @@ h1, h2, h3, h4, h5, h6 { margin-top: 0; }
 pre.max-height400 { max-height: 400px; overflow: auto; }
 .max-width150 { max-width: 150px; }
 .width160 { width: 160px; }
+.width420 { width: 420px; }
 .overflow-auto-y { overflow: hidden; overflow-y: auto; }
 .text-overflow { display: block; max-width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .p-datatable-table-w-full .p-datatable-table { width: 100%; }
@@ -175,6 +176,9 @@ pre.max-height400 { max-height: 400px; overflow: auto; }
 /* p-tree */
 .p-tree-empty-message { padding-top: 1rem; }
 .w-full-parent .p-treeselect { width: 100%; }
+@media screen and (max-width: 960px) {
+    .w-full-parent-lg .p-treeselect { width: 100%; }
+}
 
 /* p-datepicker */
 .p-datepicker .p-datepicker-buttonbar,

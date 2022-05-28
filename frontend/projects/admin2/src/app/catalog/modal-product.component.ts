@@ -1,6 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 
+import {TreeNode} from 'primeng/api';
 import {DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
 
 import {AppModalAbstractComponent} from '../components/modal.component.abstract';
@@ -15,6 +16,7 @@ import {FilesService} from './services/files.service';
 import {AppSettings} from '../services/app-settings.service';
 import {ContentField, FieldIndexData} from './models/content_field.model';
 import {RenderInputTypeComponent} from '../components/render-input-type.component';
+import {SelectParentDropdownComponent} from '../components/select-parent-dropdown.component';
 
 @Component({
     selector: 'app-modal-product',
@@ -25,7 +27,9 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
 
     dataLoaded = false;
     model: Product;
+    categoriesTree: TreeNode[] = [];
     categories: Category[] = [];
+    currentCategoryNode: TreeNode;
     contentTypes: ContentType[] = [];
     currentContentType: ContentType = new ContentType(0, '', '', '', '', [], [], true);
     localeList: string[];
@@ -66,7 +70,6 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
         this.dataService.setRequestUrl(`/admin/products/${this.model.parentId}`);
 
         this.form.controls['parentId'].setValue(this.model.parentId);
-        this.getCategories();
         this.getContentType()
             .then((data) => {
                 if (this.config.data.id) {
@@ -86,6 +89,7 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
     onGetData(item: Product): void {
         this.model = item;
         this.dataLoaded = true;
+        this.getCategories();
         this.updateForm();
         this.buildControls();
     }

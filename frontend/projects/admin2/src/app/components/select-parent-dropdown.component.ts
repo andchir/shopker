@@ -28,6 +28,45 @@ export class SelectParentDropdownComponent implements OnInit, ControlValueAccess
     @ViewChild('dropdownElement', { static: true }) dropdownElement;
     @Input() filterId: number = null;
     @Input()
+
+    static getTreeCurrentNode(tree: TreeNode[], currentId: number|string): TreeNode | null {
+        if (typeof currentId !== 'number') {
+            return null;
+        }
+        let currentNode = null;
+        for (const node of tree) {
+            if (String(node.key) === String(currentId)) {
+                currentNode = node;
+                break;
+            } else if (node.children && node.children.length > 0) {
+                currentNode = this.getTreeCurrentNode(node.children, currentId);
+                if (currentNode !== null) {
+                    break;
+                }
+            }
+        }
+        return currentNode;
+    }
+    
+    static filterNode(tree: TreeNode[], filterId: number | string): TreeNode[] {
+        if (!filterId) {
+            return tree;
+        }
+        const index = tree.findIndex((node) => {
+            return String(node.key) === String(filterId);
+        });
+        if (index > -1) {
+            tree.splice(index, 1);
+        } else {
+            tree.forEach((node) => {
+                if (node.children) {
+                    this.filterNode(node.children, filterId);
+                }
+            });
+        }
+        return tree;
+    }
+    
     set disabled(value: boolean) {
         this._disabled = value;
     }
@@ -52,9 +91,9 @@ export class SelectParentDropdownComponent implements OnInit, ControlValueAccess
         this.dataService.getTree()
             .subscribe({
                 next: (res) => {
-                    this.categoriesTree = this.filterNode(res, this.filterId);
+                    this.categoriesTree = SelectParentDropdownComponent.filterNode(res, this.filterId);
                     if (!this.currentCategoryNode) {
-                        this.currentCategoryNode = this.getTreeCurrentNode(this.categoriesTree);
+                        this.currentCategoryNode = SelectParentDropdownComponent.getTreeCurrentNode(this.categoriesTree, this.currentId);
                     }
                     this.loadingCategories = false;
                 },
@@ -63,57 +102,20 @@ export class SelectParentDropdownComponent implements OnInit, ControlValueAccess
                 }
             });
     }
-    
-    filterNode(tree: TreeNode[], filterId: number | string): TreeNode[] {
-        if (!filterId) {
-            return tree;
-        }
-        const index = tree.findIndex((node) => {
-            return String(node.key) === String(filterId);
-        });
-        if (index > -1) {
-            tree.splice(index, 1);
-        } else {
-            tree.forEach((node) => {
-                if (node.children) {
-                    this.filterNode(node.children, filterId);
-                }
-            });
-        }
-        return tree;
+
+    onCategorySelect(): void {
+        const value = this.currentCategoryNode ? parseInt(String(this.currentCategoryNode.key), 10) : null;
+        this.writeValue(value);
     }
 
-    getTreeCurrentNode(tree: TreeNode[]): TreeNode | null {
-        if (typeof this.currentId !== 'number') {
-            return null;
-        }
-        let currentNode = null;
-        for (const node of tree) {
-            if (String(node.key) === String(this.currentId)) {
-                currentNode = node;
-                break;
-            } else if (node.children && node.children.length > 0) {
-                currentNode = this.getTreeCurrentNode(node.children);
-                if (currentNode !== null) {
-                    break;
-                }
-            }
-        }
-        return currentNode;
-    }
-
-    onCategorySelect(e: any): void {
-        this.writeValue(e.node.key);
-    }
-
-    writeValue(value: number): void {
+    writeValue(value: number|null): void {
         if (typeof value !== 'number') {
             return;
         }
         if (this.currentId !== value) {
             this.currentId = value;
             if (!this.currentCategoryNode) {
-                this.currentCategoryNode = this.getTreeCurrentNode(this.categoriesTree);
+                this.currentCategoryNode = SelectParentDropdownComponent.getTreeCurrentNode(this.categoriesTree, this.currentId);
             }
             this.onChange(value);
         }

@@ -1,20 +1,8 @@
-<button type="button" pButton pRipple
-        icon="pi pi-folder"
-        class="w-full text-left"
-        [label]="currentCategoryNode ? currentCategoryNode.label : ''"
-        (click)="opSelectParent.toggle($event)">
-</button>
-
-<p-overlayPanel [style]="{minWidth: '350px'}" #opSelectParent>
-    <ng-template pTemplate>
-        <p-tree scrollHeight="350px"
-                [selectionMode]="'single'"
-                [value]="categoriesTree"
-                [(selection)]="currentCategoryNode"
-                [loading]="loadingCategories"
-                [loadingIcon]="'icon-loader'"
-                [layout]="'vertical'"
-                (onNodeSelect)="onCategorySelect($event)"
-                (onNodeUnselect)="onCategorySelect($event)"></p-tree>
-    </ng-template>
-</p-overlayPanel>
+<p-treeSelect
+    panelClass="w-full"
+    inputId="fieldParent"
+    [(ngModel)]="currentCategoryNode"
+    (ngModelChange)="onCategorySelect()"
+    [options]="categoriesTree"
+    [filter]="true"
+    [placeholder]="'PARENT_FOLDER' | translate"></p-treeSelect>

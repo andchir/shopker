@@ -36,6 +36,7 @@ import {PanelModule} from 'primeng/panel';
 import {TabViewModule} from 'primeng/tabview';
 import {OverlayPanelModule} from 'primeng/overlaypanel';
 import {TreeModule} from 'primeng/tree';
+import {TreeSelectModule} from 'primeng/treeselect';
 import {RadioButtonModule} from 'primeng/radiobutton';
 import {CheckboxModule} from 'primeng/checkbox';
 import {ChipsModule} from 'primeng/chips';
@@ -103,6 +104,7 @@ const modules = [
     TabViewModule,
     OverlayPanelModule,
     TreeModule,
+    TreeSelectModule,
     RadioButtonModule,
     CheckboxModule,
     ChipsModule,

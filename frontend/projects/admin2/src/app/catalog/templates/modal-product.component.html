@@ -9,8 +9,9 @@
                         <label class="block mb-2" for="fieldParent">
                             {{ 'PARENT_FOLDER' | translate }}
                         </label>
-                        <app-select-parent-dropdown formControlName="parentId"
-                                                    [filterId]="filterParentId"></app-select-parent-dropdown>
+                        <div class="w-full-parent">
+                            <app-select-parent-dropdown formControlName="parentId"></app-select-parent-dropdown>
+                        </div>
                     </div>
                     <div class="col-12 md:col-6">
                         <div class="mb-3">

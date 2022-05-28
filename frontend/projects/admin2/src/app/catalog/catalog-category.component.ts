@@ -18,6 +18,7 @@ import {ContentType} from './models/content_type.model';
 import {ModalProductComponent} from './modal-product.component';
 import {CategoriesService} from './services/categories.service';
 import {ModalCategoryComponent} from './modal-category';
+import {SelectParentDropdownComponent} from '../components/select-parent-dropdown.component';
 
 @Component({
     selector: 'app-catalog-category',
@@ -26,7 +27,7 @@ import {ModalCategoryComponent} from './modal-category';
 })
 export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Product> implements OnInit, OnDestroy {
     
-    @ViewChild('panelTopMenu') panelTopMenu: OverlayPanel;
+    @ViewChild('selectParentInput') selectParentInput: SelectParentDropdownComponent;
     
     queryOptions: QueryOptions = new QueryOptions(1, 12, 'id', 'desc');
     items: Product[] = [];
@@ -194,8 +195,8 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
             .subscribe({
                 next: (result) => {
                     if (result !== 'canceled') {
-                        if (result && result.title) {
-                            this.currentCategory.title = result.title;
+                        if (this.selectParentInput) {
+                            this.selectParentInput.getCategoriesTree();
                         }
                     }
                 }
@@ -245,10 +246,9 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
             .subscribe({
                 next: () => {
                     this.categoryId = 0;
-                    // this.getCategories().then(() => {
-                    //     this.goToRootCategory();
-                    //     this.loading = false;
-                    // });
+                    if (this.selectParentInput) {
+                        this.selectParentInput.getCategoriesTree();
+                    }
                 },
                 error: (err) => {
                     if (err.error) {

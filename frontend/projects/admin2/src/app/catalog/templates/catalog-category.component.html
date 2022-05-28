@@ -24,7 +24,7 @@
                             [showHeaderButtons]="true"
                             [(ngModel)]="categoryId"
                             (ngModelChange)="onCategoryUpdated($event)"
-                            (onAction)="onMenuAction($event)"></app-select-parent-dropdown>
+                            (onAction)="onMenuAction($event)" #selectParentInput></app-select-parent-dropdown>
                     </div>
                 </div>
                 <div class="inline-block vertical-align-top w-full lg:w-auto">

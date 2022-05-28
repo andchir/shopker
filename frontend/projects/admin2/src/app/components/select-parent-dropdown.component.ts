@@ -92,9 +92,7 @@ export class SelectParentDropdownComponent implements OnInit, ControlValueAccess
             .subscribe({
                 next: (res) => {
                     this.categoriesTree = SelectParentDropdownComponent.filterNode(res, this.filterId);
-                    if (!this.currentCategoryNode) {
-                        this.currentCategoryNode = SelectParentDropdownComponent.getTreeCurrentNode(this.categoriesTree, this.currentId);
-                    }
+                    this.currentCategoryNode = SelectParentDropdownComponent.getTreeCurrentNode(this.categoriesTree, this.currentId);
                     this.loadingCategories = false;
                 },
                 error: () => {

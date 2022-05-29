@@ -43,6 +43,7 @@ export class RenderInputTypeComponent implements OnInit {
     @Input() files: { [key: string]: File } = {};
     @Input() localeFieldsAllowed: string[] = [];
     @Input() isLocalizationActive: boolean;
+    @Input() localeCurrent: string;
     @Input() arrayFields: {[key: string]: any} = {};
     @Output() onAddTranslation = new EventEmitter<string>();
     @Output() onParametersAdd = new EventEmitter<string>();

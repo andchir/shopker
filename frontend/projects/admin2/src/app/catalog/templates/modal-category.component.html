@@ -47,7 +47,7 @@
                 <div class="mb-3">
                     <label class="block mb-2" for="fieldTitle" [ngClass]="{'text-green-500': localeCurrent != localeDefault}">
                         {{ 'TITLE' | translate }}
-                        <span class="font-bold text-green-500" *ngIf="localeCurrent != localeDefault">({{ localeCurrent }})</span>
+                        <span class="font-bold text-green-500" *ngIf="localeCurrent != localeDefault">[{{ localeCurrent }}]</span>
                     </label>
                     <input type="text" id="fieldTitle" class="w-full" pInputText
                            formControlName="title">
@@ -71,7 +71,7 @@
             <div class="col-12 md:col-6">
                 <label class="block mb-2" for="fieldDescription" [ngClass]="{'text-green-500': localeCurrent != localeDefault}">
                     {{ 'DESCRIPTION' | translate }}
-                    <span class="font-bold" *ngIf="localeCurrent != localeDefault">({{ localeCurrent }})</span>
+                    <span class="font-bold" *ngIf="localeCurrent != localeDefault">[{{ localeCurrent }}]</span>
                 </label>
                 <textarea id="fieldDescription" class="w-full mb-2" rows="6" pInputTextarea
                           formControlName="description"></textarea>

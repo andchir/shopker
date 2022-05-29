@@ -42,9 +42,10 @@
                     <!-- text-->
                     <div class="grid" *ngSwitchDefault>
                         <div class="col-12 md:col-5">
-                            <label for="field_{{ field.name }}">
+                            <label for="field_{{ field.name }}" [ngClass]="{'text-green-500': isLocalizationActive}">
                                 {{ field.title }}
-                                <span class="text-500">({{ field.name }})</span>
+                                <span [ngClass]="{'text-green-500': isLocalizationActive, 'text-500': !isLocalizationActive}">({{ field.name }})</span>
+                                <span class="font-bold text-green-500 px-1" *ngIf="isLocalizationActive">[{{ localeCurrent }}]</span>
                                 <span class="text-orange-500" *ngIf="field.required">*</span>
                             </label>
                         </div>
@@ -80,9 +81,10 @@
                     <!-- textarea -->
                     <div *ngSwitchCase="'textarea'" [class.grid]="field.inputProperties.rows < 7">
                         <div [ngClass]="{'col-12 md:col-5': field.inputProperties.rows < 7, 'pb-2': field.inputProperties.rows >= 7}">
-                            <label for="field_{{ field.name }}">
+                            <label for="field_{{ field.name }}" [ngClass]="{'text-green-500': isLocalizationActive}">
                                 {{ field.title }}
-                                <span class="text-500">({{ field.name }})</span>
+                                <span [ngClass]="{'text-green-500': isLocalizationActive, 'text-500': !isLocalizationActive}">({{ field.name }})</span>
+                                <span class="font-bold text-green-500 px-1" *ngIf="isLocalizationActive">[{{ localeCurrent }}]</span>
                                 <span class="text-orange-500" *ngIf="field.required">*</span>
                             </label>
                         </div>
@@ -96,13 +98,14 @@
                     <!-- rich_text -->
                     <div *ngSwitchCase="'rich_text'">
                         <div class="mb-2">
-                            <label for="field_{{ field.name }}">
+                            <label for="field_{{ field.name }}" [ngClass]="{'text-green-500': isLocalizationActive}">
                                 {{ field.title }}
-                                <span class="text-500">({{ field.name }})</span>
+                                <span [ngClass]="{'text-green-500': isLocalizationActive, 'text-500': !isLocalizationActive}">({{ field.name }})</span>
+                                <span class="font-bold text-green-500 px-1" *ngIf="isLocalizationActive">[{{ localeCurrent }}]</span>
                                 <span class="text-orange-500" *ngIf="field.required">*</span>
                             </label>
                         </div>
-                        <div class="border-round" *ngIf="field.inputProperties.formats" [ngClass]="{'border-solid border-green-500 border-2': isLocalizationActive}">
+                        <div *ngIf="field.inputProperties.formats">
                             <p-editor [formControlName]="field.name"
                                       [formats]="field.inputProperties.formats"
                                       [style]="{'height':'320px'}"

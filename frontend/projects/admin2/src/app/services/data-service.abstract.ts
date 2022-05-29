@@ -115,7 +115,7 @@ export abstract class DataService<M extends SimpleEntity> {
     }
 
     update(item: M): Observable<M> {
-        const url = this.getRequestUrl() + `/${item.id}`;
+        const url = this.getRequestUrl() + `/${item.id || 0}`;
         return this.http.put<M>(url, item, {headers: this.headers}).pipe(
             catchError(this.handleError<any>())
         );

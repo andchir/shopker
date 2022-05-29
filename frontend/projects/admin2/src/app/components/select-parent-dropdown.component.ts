@@ -38,7 +38,7 @@ export class SelectParentDropdownComponent implements OnInit, ControlValueAccess
     
     static getTreeCurrentNode(tree: TreeNode[], currentId: number|string): TreeNode | null {
         if (typeof currentId !== 'number') {
-            return null;
+            currentId = 0;
         }
         let currentNode = null;
         for (const node of tree) {

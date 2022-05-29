@@ -3,7 +3,7 @@
 
         <div class="grid">
             <div class="col-12 md:col-6">
-                <div class="mb-3">
+                <div class="mb-3" *ngIf="localeListFull.length > 1">
                     <p-selectButton
                         [options]="localeListFull"
                         optionLabel="title"
@@ -58,10 +58,12 @@
                     </label>
                     <div class="p-inputgroup">
                         <input type="text" id="fieldSystemName" class="w-full" pInputText
+                               [readOnly]="isRoot"
                                formControlName="name">
                         <button type="button" pButton pRipple icon="pi pi-refresh" styleClass="p-button-info"
                                 [pTooltip]="'GENERATE' | translate"
                                 tooltipPosition="bottom"
+                                [disabled]="isRoot"
                                 (click)="generateName(model, $event)"></button>
                     </div>
                 </div>

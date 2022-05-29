@@ -4,6 +4,7 @@ export class SimpleEntity {
         public title?: string,
         public isActive?: boolean,
         public _id?: number,
-        public translations?: {[fieldName: string]: {[lang: string]: string}}
+        public translations?: {[fieldName: string]: {[lang: string]: string}},
+        public parentId?: number
     ) { }
 }

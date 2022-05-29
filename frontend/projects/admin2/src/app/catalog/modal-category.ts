@@ -85,11 +85,11 @@ export class ModalCategoryComponent extends AppModalAbstractComponent<Category> 
         }
         this.filterParentId = this.model.id;
         this.updateControls();
-        if (this.isItemCopy) {
-            setTimeout(() => {
-                this.model = null;
-            }, 1);
-        }
+        setTimeout(() => {
+            if (this.isItemCopy) {
+                this.model.id = 0;
+            }
+        }, 1);
     }
 
     closeModal(event?: MouseEvent): void {
@@ -121,5 +121,13 @@ export class ModalCategoryComponent extends AppModalAbstractComponent<Category> 
 
     saveFiles(itemId: number, ownerType = '', autoClose = false) {
         super.saveFiles(itemId, 'category', autoClose);
+    }
+
+    saveRequest() {
+        if (this.model && (this.model.id || this.isRoot)) {
+            return this.dataService.update(this.getFormData());
+        } else {
+            return this.dataService.create(this.getFormData());
+        }
     }
 }

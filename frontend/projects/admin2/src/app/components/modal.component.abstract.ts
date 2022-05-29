@@ -300,7 +300,7 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
         this.saveTranslations();
         if (localeCurrent === this.localeDefault) {
             this.localeFieldsAllowed.forEach((fieldName) => {
-                if (this.localePreviousValues[fieldName]) {
+                if (typeof this.localePreviousValues[fieldName] !== 'undefined') {
                     this.model[fieldName] = this.localePreviousValues[fieldName];
                     this.form.controls[fieldName].setValue(this.model[fieldName]);
                     delete this.localePreviousValues[fieldName];
@@ -367,6 +367,10 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
             event.preventDefault();
         }
         const title = this.form.controls['title'] ? this.form.controls['title'].value : (model.title || '');
+        const currentName = this.form.controls['name'] ? this.form.controls['name'].value : (model.name || '');
+        if (currentName === 'root') {
+            return;
+        }
         model.name = this.systemNameService.generateName(title);
         if (this.form.controls['name']) {
             this.form.controls['name'].setValue(model.name);

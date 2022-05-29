@@ -303,6 +303,7 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
                 if (this.localePreviousValues[fieldName]) {
                     this.model[fieldName] = this.localePreviousValues[fieldName];
                     this.form.controls[fieldName].setValue(this.model[fieldName]);
+                    delete this.localePreviousValues[fieldName];
                 }
             });
             this.localeCurrent = localeCurrent;

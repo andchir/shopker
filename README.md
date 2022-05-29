@@ -21,14 +21,14 @@ Password: demopass
 Screenshots
 -----------
 
-![Shopkeeper 4 - screenshot #1](https://github.com/andchir/shopkeeper4/blob/master/docs/screenshots/001.png?raw=true "Shopkeeper 4 - screenshot #1")
+![Shopkeeper 4 - screenshot #1](https://github.com/andchir/shopkeeper4/blob/master/docs/screenshots/001.jpg?raw=true "Shopkeeper 4 - screenshot #1")
 
-![Shopkeeper 4 - screenshot #2](https://github.com/andchir/shopkeeper4/blob/master/docs/screenshots/002.png?raw=true "Shopkeeper 4 - screenshot #2")
+![Shopkeeper 4 - screenshot #2](https://github.com/andchir/shopkeeper4/blob/master/docs/screenshots/002.jpg?raw=true "Shopkeeper 4 - screenshot #2")
 
-![Shopkeeper 4 - screenshot #3](https://github.com/andchir/shopkeeper4/blob/master/docs/screenshots/003.png?raw=true "Shopkeeper 4 - screenshot #3")
+![Shopkeeper 4 - screenshot #3](https://github.com/andchir/shopkeeper4/blob/master/docs/screenshots/003.jpg?raw=true "Shopkeeper 4 - screenshot #3")
 
 ![Shopkeeper 4 - screenshot #4](https://github.com/andchir/shopkeeper4/blob/master/docs/screenshots/004.png?raw=true "Shopkeeper 4 - screenshot #4")
 
 ![Shopkeeper 4 - screenshot #5](https://github.com/andchir/shopkeeper4/blob/master/docs/screenshots/005.png?raw=true "Shopkeeper 4 - screenshot #5")
 
-![Shopkeeper 4 - screenshot #6](https://github.com/andchir/shopkeeper4/blob/master/docs/screenshots/006.png?raw=true "Shopkeeper 4 - screenshot #6")
+![Shopkeeper 4 - screenshot #6](https://github.com/andchir/shopkeeper4/blob/master/docs/screenshots/007.jpg?raw=true "Shopkeeper 4 - screenshot #6")

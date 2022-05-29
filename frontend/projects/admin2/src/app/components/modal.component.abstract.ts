@@ -116,7 +116,7 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
                 }
             });
         }
-        if (this.model.translations) {
+        if (this.model.translations && Object.keys(this.model.translations).length > 0) {
             data.translations = this.model.translations;
         }
         return data;

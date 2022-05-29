@@ -303,6 +303,7 @@
                         <div>
                             <p-tree selectionMode="checkbox"
                                     scrollHeight="300px"
+                                    [filter]="true"
                                     [value]="categoriesTree"
                                     [(selection)]="categoriesSelection[field.name]"
                                     [loading]="loadingCategories"

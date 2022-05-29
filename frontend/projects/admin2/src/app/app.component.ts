@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 
 import {TranslateService} from '@ngx-translate/core';
-import {ConfirmationService, MessageService, PrimeNGConfig} from 'primeng/api';
+import {ConfirmationService, MessageService, PrimeNGConfig, Translation} from 'primeng/api';
 
 import {AppSettings} from '@app/services/app-settings.service';
 
@@ -31,13 +31,10 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.primengConfig.setTranslation({
-            accept: this.getLangString('YES'),
-            reject: this.getLangString('NO')
-        });
+        this.primengConfig.setTranslation(this.getLangString('primeng') as Translation);
     }
 
-    getLangString(value: string): string {
+    getLangString(value: string): string|Translation {
         if (!this.translateService.store.translations[this.translateService.currentLang]) {
             return value;
         }

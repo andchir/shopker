@@ -12,7 +12,6 @@ import {ModalContentTypeComponent} from './modal-content-type.component';
 import {ModalProductComponent} from './modal-product.component';
 import {ModalContentTypeFieldComponent} from './modal-content-type-field';
 import {ModalContentTypeFieldsSortingComponent} from './modal-content-type-fields-sorting';
-import {CategoriesMenuComponent} from '../components/categories-menu.component';
 import {ModalCategoryComponent} from './modal-category';
 import {ModalExportJsonComponent} from './modal-export-json';
 
@@ -27,7 +26,6 @@ import {ModalExportJsonComponent} from './modal-export-json';
         CatalogCategoryComponent,
         ContentTypesComponent,
         FieldTypesComponent,
-        CategoriesMenuComponent,
 
         ModalFieldTypeComponent,
         ModalContentTypeComponent,

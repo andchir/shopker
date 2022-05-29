@@ -227,7 +227,7 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
                 this.confirmationService.confirm({
                     message: this.getLangString('YOU_SURE_YOU_WANT_DELETE'),
                     accept: () => {
-                        this.deleteCategoryItem(itemId);
+                        this.deleteCategoryItem(itemId, parentId);
                     }
                 });
                 break;
@@ -237,7 +237,7 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
         }
     }
 
-    deleteCategoryItem(itemId: number): void {
+    deleteCategoryItem(itemId: number, parentId?: number): void {
         if (!itemId) {
             return;
         }
@@ -245,7 +245,7 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
         this.categoriesService.deleteItem(itemId)
             .subscribe({
                 next: () => {
-                    this.categoryId = 0;
+                    this.categoryId = parentId || 0;
                     if (this.selectParentInput) {
                         this.selectParentInput.getCategoriesTree();
                     }

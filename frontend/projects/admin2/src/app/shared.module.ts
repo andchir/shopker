@@ -38,10 +38,10 @@ import {OverlayPanelModule} from 'primeng/overlaypanel';
 import {TreeModule} from 'primeng/tree';
 import {TreeSelectModule} from 'primeng/treeselect';
 import {RadioButtonModule} from 'primeng/radiobutton';
+import {SelectButtonModule} from 'primeng/selectbutton';
 import {CheckboxModule} from 'primeng/checkbox';
 import {ChipsModule} from 'primeng/chips';
 import {EditorModule} from 'primeng/editor';
-import {Calendar} from '@fullcalendar/core';
 import {FullCalendarModule} from 'primeng/fullcalendar';
 
 import {AppNavbarComponent} from './components/app-navbar.component';
@@ -106,6 +106,7 @@ const modules = [
     TreeModule,
     TreeSelectModule,
     RadioButtonModule,
+    SelectButtonModule,
     CheckboxModule,
     ChipsModule,
     EditorModule,

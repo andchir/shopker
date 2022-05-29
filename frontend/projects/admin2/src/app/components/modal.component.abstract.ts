@@ -11,6 +11,8 @@ import {DataService} from '../services/data-service.abstract';
 import {FormFieldsData} from '../models/form-field.interface';
 import {FileModel} from '../models/file.model';
 import {SystemNameService} from '../services/system-name.service';
+import {SettingPretty} from "../settings/models/setting.model";
+import {AppSettingsModel} from "../models/app-settings.model";
 
 @Component({
     template: ''
@@ -29,6 +31,13 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
     errorMessage = '';
     buttonMenuItems: MenuItem[];
     closeReason = 'canceled';
+    
+    localeListFull: {name: string, title: string}[] = [];
+    localeList: string[];
+    localeDefault = '';
+    localeCurrent = '';
+    localeFieldsAllowed: string[] = [];
+    localePreviousValues: {[fieldName: string]: string} = {};
 
     set formFieldsErrors(formFieldsErrors: FormFieldsErrors) {
         for (const key in formFieldsErrors) {
@@ -107,6 +116,9 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
                 }
             });
         }
+        if (this.model.translations) {
+            data.translations = this.model.translations;
+        }
         return data;
     }
 
@@ -132,6 +144,7 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
             this.focusFormError();
             return;
         }
+        this.onLocaleSwitch(this.localeDefault);
         this.loading = true;
         this.saveRequest()
             .pipe(takeUntil(this.destroyed$))
@@ -278,6 +291,74 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
         data.forEach((value, index) => {
             this.arrayFieldAdd(fieldName, value);
         });
+    }
+
+    onLocaleSwitch(localeCurrent: string): void {
+        if (!this.model.translations || Array.isArray(this.model.translations)) {
+            this.model.translations = {};
+        }
+        this.saveTranslations();
+        if (localeCurrent === this.localeDefault) {
+            this.localeFieldsAllowed.forEach((fieldName) => {
+                if (this.localePreviousValues[fieldName]) {
+                    this.model[fieldName] = this.localePreviousValues[fieldName];
+                    this.form.controls[fieldName].setValue(this.model[fieldName]);
+                }
+            });
+            this.localeCurrent = localeCurrent;
+            return;
+        }
+        this.localeFieldsAllowed.forEach((fieldName) => {
+            this.localePreviousValues[fieldName] = this.form.controls[fieldName].value || '';
+            if (this.model.translations[fieldName]) {
+                this.model[fieldName] = this.model.translations[fieldName][localeCurrent] || '';
+            } else {
+                this.model[fieldName] = '';
+            }
+            this.form.controls[fieldName].setValue(this.model[fieldName]);
+        });
+        this.localeCurrent = localeCurrent;
+    }
+
+    saveTranslations(): void {
+        if (this.localeCurrent === this.localeDefault) {
+            return;
+        }
+        this.localeFieldsAllowed.forEach((fieldName) => {
+            if (this.form.controls[fieldName].value) {
+                if (!this.model.translations[fieldName]) {
+                    this.model.translations[fieldName] = {};
+                }
+                this.model.translations[fieldName][this.localeCurrent] = this.form.controls[fieldName].value;
+            } else if (this.model.translations[fieldName]) {
+                if (this.model.translations[fieldName][this.localeCurrent]) {
+                    delete this.model.translations[fieldName][this.localeCurrent];
+                }
+                if (Object.keys(this.model.translations[fieldName]).length === 0) {
+                    delete this.model.translations[fieldName];
+                }
+            }
+        });
+    }
+    
+    createLanguageSettings(settings: AppSettingsModel): void {
+        this.localeListFull = this.getLanguagesList(settings.systemSettings.SETTINGS_LANGUAGES);
+        this.localeList = settings.localeList;
+        if (this.localeList.length > 0) {
+            this.localeDefault = this.localeList[0];
+            this.localeCurrent = this.localeList[0];
+        }
+    }
+
+    getLanguagesList(languages: SettingPretty[]): {name: string, title: string}[] {
+        const langOptions = [];
+        languages.forEach((lang) => {
+            langOptions.push({
+                title: lang.name,
+                name: lang.options.value
+            });
+        });
+        return langOptions;
     }
 
     generateName(model: any, event?: MouseEvent): void {

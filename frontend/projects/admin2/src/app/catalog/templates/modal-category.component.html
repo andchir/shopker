@@ -2,11 +2,18 @@
     <form [formGroup]="form" #formEl>
 
         <div class="grid">
-            <div class="col-12 md:col-6" *ngIf="!isRoot">
-                <label class="block mb-2" for="fieldParent">
-                    {{ 'PARENT_FOLDER' | translate }}
-                </label>
-                <div class="w-full-parent">
+            <div class="col-12 md:col-6">
+                <div class="mb-3">
+                    <p-selectButton
+                        [options]="localeListFull"
+                        optionLabel="title"
+                        optionValue="name"
+                        styleClass="buttons-sm"
+                        [ngModel]="localeCurrent"
+                        (ngModelChange)="onLocaleSwitch($event)"
+                        [ngModelOptions]="{standalone: true}"></p-selectButton>
+                </div>
+                <div class="w-full-parent" *ngIf="!isRoot">
                     <app-select-parent-dropdown
                         inputId="fieldParent"
                         formControlName="parentId"
@@ -30,12 +37,17 @@
                 </div>
             </div>
         </div>
+
+        <div role="separator" class="p-divider p-component p-divider-horizontal p-divider-solid p-divider-left">
+            <div class="p-divider-content"></div>
+        </div>
         
         <div class="grid">
             <div class="col-12 md:col-6">
                 <div class="mb-3">
-                    <label class="block mb-2" for="fieldTitle">
+                    <label class="block mb-2" for="fieldTitle" [ngClass]="{'text-green-500': localeCurrent != localeDefault}">
                         {{ 'TITLE' | translate }}
+                        <span class="font-bold text-green-500" *ngIf="localeCurrent != localeDefault">({{ localeCurrent }})</span>
                     </label>
                     <input type="text" id="fieldTitle" class="w-full" pInputText
                            formControlName="title">
@@ -55,8 +67,9 @@
                 </div>
             </div>
             <div class="col-12 md:col-6">
-                <label class="block mb-2" for="fieldDescription">
+                <label class="block mb-2" for="fieldDescription" [ngClass]="{'text-green-500': localeCurrent != localeDefault}">
                     {{ 'DESCRIPTION' | translate }}
+                    <span class="font-bold" *ngIf="localeCurrent != localeDefault">({{ localeCurrent }})</span>
                 </label>
                 <textarea id="fieldDescription" class="w-full mb-2" rows="6" pInputTextarea
                           formControlName="description"></textarea>

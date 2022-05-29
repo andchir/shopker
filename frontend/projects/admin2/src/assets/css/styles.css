@@ -150,6 +150,7 @@ pre.max-height400 { max-height: 400px; overflow: auto; }
 .p-button.p-button-icon-only.p-button-rounded.p-button-sm { width: 2.357rem; height: 2.357rem; }
 .p-dropdown.p-dropdown-white-trigger .p-dropdown-trigger { color: #fff !important; }
 .p-dropdown.p-dropdown-sm .p-dropdown-label { padding: 0.5rem; }
+.buttons-sm .p-button { font-size: 0.75rem; padding: 0.5rem 1rem; }
 
 /* loading-overlay */
 .loading-overlay { position: absolute; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(255,255,255,0.5); }

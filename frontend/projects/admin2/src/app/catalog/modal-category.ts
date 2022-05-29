@@ -11,6 +11,7 @@ import {SystemNameService} from '../services/system-name.service';
 import {ContentType} from './models/content_type.model';
 import {ContentTypesService} from './services/content_types.service';
 import {FilesService} from './services/files.service';
+import {AppSettings} from '../services/app-settings.service';
 
 @Component({
     selector: 'app-modal-category',
@@ -37,6 +38,7 @@ export class ModalCategoryComponent extends AppModalAbstractComponent<Category> 
     isItemCopy = false;
     filterParentId: number = null;
     parentId: number;
+    localeFieldsAllowed: string[] = ['title', 'description'];
     
     constructor(
         public ref: DynamicDialogRef,
@@ -44,12 +46,14 @@ export class ModalCategoryComponent extends AppModalAbstractComponent<Category> 
         public systemNameService: SystemNameService,
         public dataService: CategoriesService,
         private contentTypesService: ContentTypesService,
-        private filesService: FilesService
+        private filesService: FilesService,
+        private appSettings: AppSettings
     ) {
         super(ref, config, systemNameService, dataService);
     }
 
     ngOnInit(): void {
+        this.createLanguageSettings(this.appSettings.settings);
         this.getContentTypes();
         if (typeof this.config.data.isItemCopy !== 'undefined') {
             this.isItemCopy = this.config.data.isItemCopy;

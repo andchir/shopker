@@ -32,8 +32,8 @@ export class ModalContentTypeFieldComponent extends AppModalAbstractComponent<Co
         title: new FormControl('', [Validators.required]),
         name: new FormControl('', [Validators.required, Validators.pattern('[A-Za-z0-9_-]+')]),
         description: new FormControl('', []),
-        inputType: new FormControl('', [Validators.required]),
-        outputType: new FormControl('', [Validators.required]),
+        inputType: new FormControl(null, [Validators.required]),
+        outputType: new FormControl(null, [Validators.required]),
         group: new FormControl('', [Validators.required]),
         required: new FormControl(false, []),
         showInTable: new FormControl(false, []),
@@ -67,10 +67,11 @@ export class ModalContentTypeFieldComponent extends AppModalAbstractComponent<Co
         this.contentType = this.config.data.contentType as ContentType;
         this.groups = this.contentType.groups.slice();
         this.fieldIndex = this.config.data.index;
+        console.log(this.fieldModel);
         if (!this.fieldModel.group) {
             this.fieldModel.group = this.groups[0];
         }
-        super.ngOnInit();
+        // super.ngOnInit();
         this.getFieldTypes();
     }
 
@@ -81,6 +82,7 @@ export class ModalContentTypeFieldComponent extends AppModalAbstractComponent<Co
             .subscribe({
                 next: (res) => {
                     this.fieldTypes = res.items;
+                    this.updateControls();
                     this.selectFieldTypeProperties('input');
                     this.selectFieldTypeProperties('output');
                 },
@@ -164,10 +166,12 @@ export class ModalContentTypeFieldComponent extends AppModalAbstractComponent<Co
                         this.arrayFieldAdd(key, value);
                     });
                 } else {
+                    console.log(key, this.fieldModel[key]);
                     controls[key].setValue(this.fieldModel[key]);
                 }
             }
         });
+        console.log(controls['inputType'].value);
     }
 
     saveData(autoClose = false, event?: MouseEvent): void {
@@ -200,6 +204,7 @@ export class ModalContentTypeFieldComponent extends AppModalAbstractComponent<Co
         } else {
             fieldTypeName = this.form.controls[`${type}Type`].value;
         }
+        console.log(fieldTypeName);
         const fieldTypeIndex = this.fieldTypes.findIndex((fType) => {
             return fType.name === fieldTypeName;
         });

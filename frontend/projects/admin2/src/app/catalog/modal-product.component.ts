@@ -62,11 +62,7 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
             id: this.config.data.id || 0,
             parentId: this.config.data.parentId || 0
         } as Product;
-        this.localeList = this.appSettings.settings.localeList;
-        if (this.localeList.length > 0) {
-            this.localeDefault = this.localeList[0];
-            this.localeCurrent = this.localeList[0];
-        }
+        this.createLanguageSettings(this.appSettings.settings);
         this.dataService.setRequestUrl(`/admin/products/${this.model.parentId}`);
 
         this.form.controls['parentId'].setValue(this.model.parentId);
@@ -79,6 +75,11 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
                     this.buildControls();
                     this.dataLoaded = true;
                 }
+                this.currentContentType.fields.forEach((field) => {
+                    if (['text', 'textarea', 'rich_text'].indexOf(field.inputType) > -1) {
+                        this.localeFieldsAllowed.push(field.name);
+                    }
+                });
             }, (err) => {
                 this.dataLoaded = true;
                 this.errorMessage = err.error || 'Error.';

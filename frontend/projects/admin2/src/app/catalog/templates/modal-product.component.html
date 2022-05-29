@@ -6,9 +6,16 @@
 
                 <div class="grid mb-3">
                     <div class="col-12 md:col-6">
-                        <label class="block mb-2" for="fieldParent">
-                            {{ 'PARENT_FOLDER' | translate }}
-                        </label>
+                        <div class="mb-3" *ngIf="localeListFull.length > 1">
+                            <p-selectButton
+                                [options]="localeListFull"
+                                optionLabel="title"
+                                optionValue="name"
+                                styleClass="buttons-sm"
+                                [ngModel]="localeCurrent"
+                                (ngModelChange)="onLocaleSwitch($event)"
+                                [ngModelOptions]="{standalone: true}"></p-selectButton>
+                        </div>
                         <div class="w-full-parent">
                             <app-select-parent-dropdown formControlName="parentId"></app-select-parent-dropdown>
                         </div>

@@ -144,7 +144,8 @@ export abstract class AppTablePageAbstractComponent<T extends SimpleEntity> impl
                     this.messageService.add({
                         key: 'message',
                         severity: 'success',
-                        detail: item ? 'Edited successfully!' : 'Created successfully!'
+                        summary: this.getLangString('MESSAGE'),
+                        detail: this.getLangString('DATA_SAVED_SUCCESSFULLY')
                     });
                     this.getData();
                 }

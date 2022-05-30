@@ -67,7 +67,6 @@ export class ModalContentTypeFieldComponent extends AppModalAbstractComponent<Co
         this.contentType = this.config.data.contentType as ContentType;
         this.groups = this.contentType.groups.slice();
         this.fieldIndex = this.config.data.index;
-        console.log(this.fieldModel);
         if (!this.fieldModel.group) {
             this.fieldModel.group = this.groups[0];
         }
@@ -82,9 +81,11 @@ export class ModalContentTypeFieldComponent extends AppModalAbstractComponent<Co
             .subscribe({
                 next: (res) => {
                     this.fieldTypes = res.items;
-                    this.updateControls();
-                    this.selectFieldTypeProperties('input');
-                    this.selectFieldTypeProperties('output');
+                    setTimeout(() => {
+                        this.updateControls();
+                        this.selectFieldTypeProperties('input');
+                        this.selectFieldTypeProperties('output');
+                    }, 1);
                 },
                 error: (err) => {
                     this.errorMessage = err;
@@ -166,12 +167,10 @@ export class ModalContentTypeFieldComponent extends AppModalAbstractComponent<Co
                         this.arrayFieldAdd(key, value);
                     });
                 } else {
-                    console.log(key, this.fieldModel[key]);
                     controls[key].setValue(this.fieldModel[key]);
                 }
             }
         });
-        console.log(controls['inputType'].value);
     }
 
     saveData(autoClose = false, event?: MouseEvent): void {
@@ -204,7 +203,6 @@ export class ModalContentTypeFieldComponent extends AppModalAbstractComponent<Co
         } else {
             fieldTypeName = this.form.controls[`${type}Type`].value;
         }
-        console.log(fieldTypeName);
         const fieldTypeIndex = this.fieldTypes.findIndex((fType) => {
             return fType.name === fieldTypeName;
         });

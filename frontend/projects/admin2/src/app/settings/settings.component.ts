@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
 
 import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {takeUntil, take} from 'rxjs/operators';
 import {MenuItem, MessageService} from 'primeng/api';
 import {DialogService} from 'primeng/dynamicdialog';
 import {TranslateService} from '@ngx-translate/core';
@@ -11,6 +11,7 @@ import {AppSettings} from '../services/app-settings.service';
 import {Setting, SettingsData} from './models/setting.model';
 import {UtilsService} from '../services/utils.service';
 import {ComposerPackage} from './models/composer-package.interface';
+import {ModalSystemUpdateComponent} from './modal-system-update.component';
 
 declare const window: Window;
 
@@ -312,7 +313,25 @@ export class SettingsComponent implements OnInit, AfterViewInit, OnDestroy {
         if (event) {
             event.preventDefault();
         }
-
+        const ref = this.dialogService.open(ModalSystemUpdateComponent, {
+            header: this.getLangString('SYSTEM_UPDATE'),
+            width: '550px',
+            style: {maxWidth: '100%'},
+            data: {}
+        });
+        ref.onClose
+            .pipe(take(1))
+            .subscribe((result) => {
+                if (result === 'completed') {
+                    this.messageService.add({
+                        key: 'message',
+                        severity: 'success',
+                        summary: this.getLangString('MESSAGE'),
+                        detail: this.getLangString('SYSTEM_UPDATE_COMPLETED')
+                    });
+                    setTimeout(this.pageReload.bind(this), 2000);
+                }
+            });
     }
 
     scrollHeightUpdate(): void {

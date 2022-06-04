@@ -1,0 +1,81 @@
+<div [ngClass]="{'no-events loading': loading}">
+    <div>
+        <div class="mb-3" [ngClass]="{'text-400': stepNumber != 1}">
+            <i class="pi pi-check-circle mr-2 text-green-500" *ngIf="stepNumber > 1; else iconCircleTemplate"></i>
+            {{ 'SYSTEM_UPDATE_STEP1_DESCRIPTION' | translate }}
+        </div>
+        <div class="mb-3" [ngClass]="{'text-400': stepNumber != 2}">
+            <i class="pi pi-check-circle mr-2 text-green-500" *ngIf="stepNumber > 2; else iconCircleTemplate"></i>
+            {{ 'SYSTEM_UPDATE_STEP2_DESCRIPTION' | translate }}
+        </div>
+        <div class="mb-3" [ngClass]="{'text-400': stepNumber != 3}">
+            <i class="pi pi-check-circle mr-2 text-green-500" *ngIf="stepNumber > 3; else iconCircleTemplate"></i>
+            {{ 'SYSTEM_UPDATE_STEP3_DESCRIPTION' | translate }}
+        </div>
+        <ng-template #iconCircleTemplate>
+            <i class="pi pi-circle mr-2"></i>
+        </ng-template>
+    </div>
+    
+    <div class="show-on-hover-parent" *ngIf="stepNumber == 1">
+        <app-file-widget
+            fieldName="file"
+            [hasPreviewImage]="false"
+            [allowMultiple]="false"
+            [allowedExtensions]="'.zip'"
+            #filesWidget></app-file-widget>
+        <div class="absolute pos-left10 pos-bottom10 show-on-hover">
+            <button pButton pRipple type="button" class="p-button-outlined p-button-sm px-2 py-1"
+                    [label]="'SKIP' | translate"
+                    (click)="skipStepHandler($event)"></button>
+        </div>
+    </div>
+    
+    <div *ngIf="stepNumber == 3 && !isUpdateStarted">
+        <div class="text-green-500 mb-2">
+            {{ 'CURRENT_VERSION' | translate }}: <span>{{ currentVersion }}</span><br>
+            {{ 'NEW_VERSION' | translate }}: <b class="big">{{ version }}</b>
+        </div>
+        <p-accordion>
+            <p-accordionTab [header]="'CHANGELOG' | translate">
+                <pre class="max-height400 mb-0">{{ changelogContent }}</pre>
+            </p-accordionTab>
+        </p-accordion>
+    </div>
+    
+    <div class="py-4" *ngIf="isUpdateStarted">
+        <ngb-progressbar type="info" textType="white"
+                         [striped]="true"
+                         [animated]="true"
+                         [value]="updatePercent"
+                         [showValue]="true"></ngb-progressbar>
+    </div>
+    
+    <div class="pt-3 mb-3" *ngIf="errorMessage">
+        <p-message styleClass="block w-full text-left" severity="error"
+                   [closable]="true"
+                   [text]="errorMessage | translate"></p-message>
+    </div>
+</div>
+
+<div class="text-center pt-3">
+    <div class="grid">
+        <div class="col-12 md:col-6 pb-0">
+            <button pButton pRipple type="button"
+                    class="p-button-success p-button-raised w-full mb-2 md:mb-0"
+                    [label]="'CONTINUE' | translate"
+                    icon="pi pi-arrow-right"
+                    (click)="nextStepHandler($event)"></button>
+        </div>
+        <div class="col-12 md:col-6 pb-0">
+            <button pButton pRipple type="button"
+                    [label]="'CLOSE' | translate"
+                    class="p-button-secondary p-button-raised w-full"
+                    (click)="closeModal('close')"></button>
+        </div>
+    </div>
+</div>
+
+<div class="loading-overlay" *ngIf="loading">
+    <p-progressSpinner></p-progressSpinner>
+</div>

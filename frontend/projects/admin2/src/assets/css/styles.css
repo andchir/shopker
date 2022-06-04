@@ -37,6 +37,7 @@ pre.max-height400 { max-height: 400px; overflow: auto; }
 .pos-top10 { top: 10px; }
 .pos-top15 { top: 15px; }
 .pos-top-5 { top: -5px; }
+.pos-bottom10 { bottom: 10px; }
 .pos-left { left: 0; }
 .pos-left5 { left: 5px; }
 .pos-left10 { left: 10px; }

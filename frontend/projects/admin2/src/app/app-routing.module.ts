@@ -3,6 +3,7 @@ import {Routes, RouterModule} from '@angular/router';
 
 import {NotFoundComponent} from './not-found.component';
 import {HomeComponent} from './home/home.component';
+import {ModuleLoaderComponent} from './moduleloader/moduleloader.component';
 
 const routes: Routes = [
     {
@@ -17,6 +18,7 @@ const routes: Routes = [
     {path: 'statistics', loadChildren: () => import('./statistics/statistics.module').then(m => m.StatisticsModule)},
     {path: 'code_edit', loadChildren: () => import('./code-edit/templates-edit.module').then(m => m.TemplatesEditModule)},
     {path: 'settings', loadChildren: () => import('./settings/settings.module').then(m => m.SettingsModule)},
+    {path: 'module/:moduleName', component: ModuleLoaderComponent},
     {path: '**', component: NotFoundComponent}
 ];
 

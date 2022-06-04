@@ -10,6 +10,7 @@ import {SharedModule} from './shared.module';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {HomeComponent} from './home/home.component';
+import {ModuleLoaderComponent} from './moduleloader/moduleloader.component';
 
 import localeEn from '@angular/common/locales/en';
 import localeRu from '@angular/common/locales/ru';
@@ -20,7 +21,8 @@ registerLocaleData(localeRu, 'ru-RU');
 @NgModule({
     declarations: [
         AppComponent,
-        HomeComponent
+        HomeComponent,
+        ModuleLoaderComponent
     ],
     imports: [
         CommonModule,

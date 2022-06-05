@@ -4,7 +4,7 @@
     "preserveSymlinks": true,
     "outDir": "../../out-tsc/admin2",
     "types": [],
-    "baseUrl": "../../src",
+    "baseUrl": "src",
     "paths": {
       "@app/*": [
         "app/*"

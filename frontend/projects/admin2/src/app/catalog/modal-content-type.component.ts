@@ -14,7 +14,7 @@ import {ContentField} from './models/content_field.model';
 import {ModalContentTypeFieldComponent} from './modal-content-type-field';
 import {SystemNameService} from '../services/system-name.service';
 import {ModalContentTypeFieldsSortingComponent} from './modal-content-type-fields-sorting';
-import {ModalExportJsonComponent} from './modal-export-json';
+import {ModalExportJsonComponent} from '../components/modal-export-json';
 
 @Component({
     selector: 'app-modal-content-type',

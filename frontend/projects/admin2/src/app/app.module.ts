@@ -19,11 +19,6 @@ registerLocaleData(localeEn, 'en-EN');
 registerLocaleData(localeRu, 'ru-RU');
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        HomeComponent,
-        ModuleLoaderComponent
-    ],
     imports: [
         CommonModule,
         BrowserModule,
@@ -36,6 +31,11 @@ registerLocaleData(localeRu, 'ru-RU');
                 useClass: TranslateCustomLoader
             }
         })
+    ],
+    declarations: [
+        AppComponent,
+        HomeComponent,
+        ModuleLoaderComponent
     ],
     entryComponents: [
         

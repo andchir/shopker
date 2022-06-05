@@ -11,8 +11,8 @@ import {DataService} from '../services/data-service.abstract';
 import {FormFieldsData} from '../models/form-field.interface';
 import {FileModel} from '../models/file.model';
 import {SystemNameService} from '../services/system-name.service';
-import {SettingPretty} from "../settings/models/setting.model";
-import {AppSettingsModel} from "../models/app-settings.model";
+import {SettingPretty} from '../settings/models/setting.model';
+import {AppSettingsModel} from '../models/app-settings.model';
 
 @Component({
     template: ''

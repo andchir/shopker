@@ -13,7 +13,7 @@ import {ModalProductComponent} from './modal-product.component';
 import {ModalContentTypeFieldComponent} from './modal-content-type-field';
 import {ModalContentTypeFieldsSortingComponent} from './modal-content-type-fields-sorting';
 import {ModalCategoryComponent} from './modal-category';
-import {ModalExportJsonComponent} from './modal-export-json';
+import {ModalExportJsonComponent} from '../components/modal-export-json';
 
 @NgModule({
     imports: [

@@ -27,7 +27,7 @@ import {FileData} from '../catalog/models/file-data.model';
 import {SystemNameService} from '../services/system-name.service';
 import {AppSettings} from '../services/app-settings.service';
 import {CategoriesService} from '../catalog/services/categories.service';
-import {ModalExportJsonComponent} from '../catalog/modal-export-json';
+import {ModalExportJsonComponent} from '../components/modal-export-json';
 
 @Component({
     selector: 'app-render-input',

@@ -194,23 +194,22 @@
                             "projects/comments/src/assets"
                         ],
                         "styles": [
-                            "node_modules/bootstrap/dist/css/bootstrap.css",
+                            "projects/admin2/src/assets/css/uicons-bold-rounded/css/uicons-bold-rounded.css",
+                            "node_modules/primeicons/primeicons.css",
+                            "node_modules/primeng/resources/themes/lara-light-indigo/theme.css",
+                            "node_modules/primeng/resources/primeng.css",
+                            "node_modules/primeflex/primeflex.css",
+                            "projects/admin2/src/assets/css/styles.css",
+                            "node_modules/dragula/dist/dragula.css",
+                            "node_modules/quill/dist/quill.core.css",
+                            "node_modules/quill/dist/quill.snow.css",
                             "node_modules/@fullcalendar/common/main.min.css",
                             "node_modules/@fullcalendar/daygrid/main.min.css",
                             "node_modules/@fullcalendar/timegrid/main.min.css",
                             "node_modules/@fullcalendar/list/main.min.css",
-                            "node_modules/primeng/resources/themes/saga-blue/theme.css",
-                            "node_modules/primeng/resources/primeng.css",
-                            "node_modules/primeicons/primeicons.css",
-                            "node_modules/dragula/dist/dragula.css",
-                            "node_modules/quill/dist/quill.core.css",
-                            "node_modules/quill/dist/quill.snow.css",
-                            "css/icomoon/style.css",
                             "css/styles.css"
                         ],
                         "scripts": [
-                            "node_modules/quill/dist/quill.js",
-                            "node_modules/chart.js/dist/chart.js",
                             "node_modules/ace-builds/src/ace.js",
                             "node_modules/ace-builds/src/ext-modelist.js",
                             "node_modules/ace-builds/src/theme-kuroir.js",
@@ -218,14 +217,11 @@
                             "node_modules/ace-builds/src/mode-html.js",
                             "node_modules/ace-builds/src/mode-javascript.js",
                             "node_modules/ace-builds/src/mode-css.js",
+                            "node_modules/ace-builds/src/mode-json.js",
                             "node_modules/ace-builds/src/mode-twig.js"
                         ],
                         "allowedCommonJsDependencies": [
-                            "lodash",
-                            "dragula",
-                            "chart.js",
-                            "rxjs/util/isNumeric",
-                            "rxjs/internal/operators"
+                            "dragula"
                         ]
                     },
                     "configurations": {
@@ -530,7 +526,7 @@
                             "node_modules/ace-builds/src/mode-twig.js"
                         ],
                         "allowedCommonJsDependencies": [
-                            
+                            "dragula"
                         ]
                     },
                     "configurations": {

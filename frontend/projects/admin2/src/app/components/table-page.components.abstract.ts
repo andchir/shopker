@@ -1,7 +1,7 @@
 import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 
 import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {takeUntil, take} from 'rxjs/operators';
 import {ConfirmationService, MenuItem, MessageService} from 'primeng/api';
 import {DialogService} from 'primeng/dynamicdialog';
 import {TranslateService} from '@ngx-translate/core';
@@ -138,9 +138,9 @@ export abstract class AppTablePageAbstractComponent<T extends SimpleEntity> impl
             data: this.getItemData(item)
         });
         ref.onClose
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe((itemCurrent: T) => {
-                if (itemCurrent) {
+            .pipe(take(1))
+            .subscribe((reason?: string) => {
+                if (reason && reason === 'updated') {
                     this.messageService.add({
                         key: 'message',
                         severity: 'success',

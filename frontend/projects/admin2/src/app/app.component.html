@@ -2,7 +2,9 @@
 
     <router-outlet></router-outlet>
 
-    <app-navbar (fileManagerActive)="fileManagerToggle($event)"></app-navbar>
+    <app-navbar
+        [hrefMode]="true"
+        (fileManagerActive)="fileManagerToggle($event)"></app-navbar>
     
 </div>
 

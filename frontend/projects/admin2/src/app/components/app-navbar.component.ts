@@ -56,16 +56,16 @@ export class AppNavbarComponent implements OnInit {
         if (event) {
             event.preventDefault();
         }
-        if (this.hrefMode) {
-            window.location.href = `${this.baseUrl}admin/#${menuItem.route}`;
-        } else if (menuItem.component) {
+        if (menuItem.component) {
             this.displayComponent(menuItem.component);
-        } else if (menuItem.route) {
-            this.router.navigate([menuItem.route]);
         } else if (menuItem.target) {
             window.open(menuItem.href, menuItem.target).focus();
-        } else {
+        } else if (menuItem.href) {
             window.location.href = menuItem.href;
+        } else if (this.hrefMode) {
+            window.location.href = `${this.baseUrl}admin/#${menuItem.route}`;
+        } else if (menuItem.route) {
+            this.router.navigate([menuItem.route]);
         }
     }
 

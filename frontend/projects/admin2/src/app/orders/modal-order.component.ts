@@ -3,15 +3,15 @@ import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angul
 
 import {DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
 
+import {SettingPretty} from '@app/settings/models/setting.model';
+import {FormFieldsOptions} from '@app/models/form-fields-options.interface';
+import {AppModalAbstractComponent} from '@app/components/modal.component.abstract';
+import {SettingsService} from '@app/settings/settings.service';
+import {AppSettings} from '@app/services/app-settings.service';
+import {FormFieldsData} from '@app/models/form-field.interface';
+import {SystemNameService} from '@app/services/system-name.service';
 import {Order, OrderContent} from './models/order.model';
-import {SettingPretty} from '../settings/models/setting.model';
-import {FormFieldsOptions} from '../models/form-fields-options.interface';
-import {AppModalAbstractComponent} from '../components/modal.component.abstract';
 import {OrdersService} from './orders.service';
-import {SettingsService} from '../settings/settings.service';
-import {AppSettings} from '../services/app-settings.service';
-import {FormFieldsData} from '../models/form-field.interface';
-import {SystemNameService} from '../services/system-name.service';
 
 @Component({
     selector: 'app-modal-order',

@@ -218,18 +218,24 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
 
     updateControls(): void {
         const controls = this.form.controls;
+        let controlValue = '';
         Object.keys(controls).forEach((key) => {
-            if (typeof this.model[key] !== 'undefined') {
-                if (Array.isArray(this.model[key]) && this.arrayFields[key]) {
-                    this.model[key].forEach((value, index) => {
-                        this.arrayFieldAdd(key, value);
-                    });
+            if (key.indexOf('__') > -1) {
+                const tmp = key.split('__');
+                if (!this.model[tmp[0]]) {
+                    this.model[tmp[0]] = {};
+                }
+                controlValue = this.model[tmp[0]][tmp[1]] ?? '';
+            }
+            if (Array.isArray(controlValue) && this.arrayFields[key]) {
+                controlValue.forEach((value, index) => {
+                    this.arrayFieldAdd(key, value);
+                });
+            } else {
+                if (controls[key] instanceof FormArray) {
+                    
                 } else {
-                    if (controls[key] instanceof FormArray) {
-                        
-                    } else {
-                        controls[key].setValue(this.model[key] || '');
-                    }
+                    controls[key].setValue(controlValue || '');
                 }
             }
         });

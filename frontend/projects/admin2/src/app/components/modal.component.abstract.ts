@@ -119,6 +119,19 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
         if (this.model.translations && Object.keys(this.model.translations).length > 0) {
             data.translations = this.model.translations;
         }
+        Object.keys(data).forEach((key) => {
+            if (key.indexOf('__') > -1) {
+                const tmp = key.split('__');
+                if (!data[tmp[0]]) {
+                    data[tmp[0]] = {};
+                }
+                data[tmp[0]][tmp[1]] = data[key];
+                delete data[key];
+            }
+        });
+        if (this.model.id && !data.id) {
+            data.id = this.model.id;
+        }
         return data;
     }
 
@@ -226,6 +239,8 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
                     this.model[tmp[0]] = {};
                 }
                 controlValue = this.model[tmp[0]][tmp[1]] ?? '';
+            } else {
+                controlValue = this.model[key] || '';
             }
             if (Array.isArray(controlValue) && this.arrayFields[key]) {
                 controlValue.forEach((value, index) => {

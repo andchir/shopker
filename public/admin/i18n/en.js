@@ -402,6 +402,7 @@ var APP_LANG = {
     "PRODUCT_DATA": "Product data",
     "FORMAT": "Format",
     "SAVE_CATEGORIES_TYPE": "Type of category record",
+    "COLUMN": "Column",
     "COLUMNS": "Columns",
     "ROWS": "Rows",
     "DOWNLOAD": "Download",

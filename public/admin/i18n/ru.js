@@ -402,6 +402,7 @@ var APP_LANG = {
     "PRODUCT_DATA": "Данные объекта",
     "FORMAT": "Формат",
     "SAVE_CATEGORIES_TYPE": "Тип записи категорий",
+    "COLUMN": "Колонка",
     "COLUMNS": "Колонки",
     "ROWS": "Строки",
     "DOWNLOAD": "Скачать",

@@ -1,5 +1,5 @@
 <div class="border-1 border-400 border-round" (drop)="dropHandler($event)" (dragover)="dragOverHandler($event);">
-    <div [ngClass]="{'min-height110': largeFieldMode}">
+    <div [ngClass]="{'min-height110': largeFieldMode, 'py-2': !largeFieldMode}">
         <div [style.minHeight]="largeFieldMode ? '35px': 0">
             <div class="text-600 p-2" *ngIf="fieldTitle">
                 <label for="field_{{ fieldName }}">
@@ -10,21 +10,12 @@
             </div>
         </div>
         <div class="text-center">
-            <ng-container *ngIf="allowMultiple; else fileInputTemplate">
-                <input type="file" id="field_{{ fieldName }}"
-                       [name]="fieldName"
-                       [accept]="allowedExtensions"
-                       multiple
-                       style="display:none;"
-                       (change)="fileChange($event)" #fileInput>
-            </ng-container>
-            <ng-template #fileInputTemplate>
-                <input type="file" id="field_{{ fieldName }}"
-                       [name]="fieldName"
-                       [accept]="allowedExtensions"
-                       style="display:none;"
-                       (change)="fileChange($event)" #fileInput>
-            </ng-template>
+            <input type="file" id="field_{{ fieldName }}"
+                   [name]="fieldName"
+                   [accept]="allowedExtensions"
+                   [attr.multiple]="allowMultiple ? true : null"
+                   style="display:none;"
+                   (change)="fileChange($event)" #fileInput>
             <div class="mx-auto relative" [ngClass]="{'show-on-hover-parent': hasPreviewImage && fileName}" style="width: 265px; min-height: 40px;">
                 <div class="text-center" *ngIf="hasPreviewImage && fileName">
                     <img [src]="imageUrl" alt="Preview" class="img-thumbnail" style="width: 265px;" #imgPreview>
@@ -44,8 +35,8 @@
                             (click)="fileClear()"></button>
                 </div>
             </div>
-            <div style="min-height: 35px;">
-                <div class="text-600 py-3 text-overflow" *ngIf="fileName">
+            <div [style.minHeight]="largeFieldMode ? '35px': 0">
+                <div class="text-600 pt-2 text-overflow" *ngIf="fileName">
                     <i class="pi pi-file"></i>
                     {{ fileName }}
                 </div>

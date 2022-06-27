@@ -134,6 +134,7 @@ export class FileWidgetComponent implements ControlValueAccessor {
         this.writeValue(null, true);
         delete this.files[this.fieldName];
         this.filesRaw.splice(0, this.filesRaw.length);
+        this.fileInput.nativeElement.value = null;
     }
 
     dropHandler(event: DragEvent): void {

@@ -17,11 +17,11 @@ export class ContentType {
         public id: number,
         public name: string,
         public title: string,
-        public description: string,
-        public collection: string,
-        public fields: ContentField[],
-        public groups: string[],
-        public isActive: boolean,
+        public description?: string,
+        public collection?: string,
+        public fields?: ContentField[],
+        public groups?: string[],
+        public isActive?: boolean,
         public isCreateByUsersAllowed?: boolean
     ) {
         if (!this.isCreateByUsersAllowed) {

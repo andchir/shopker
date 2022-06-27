@@ -28,6 +28,7 @@ import {AccordionModule} from 'primeng/accordion';
 import {ToastModule} from 'primeng/toast';
 import {ColorPickerModule} from 'primeng/colorpicker';
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
+import {ProgressBarModule} from 'primeng/progressbar';
 import {MessagesModule} from 'primeng/messages';
 import {MessageModule} from 'primeng/message';
 import {ChartModule} from 'primeng/chart';
@@ -96,6 +97,7 @@ const modules = [
     ToastModule,
     ColorPickerModule,
     ProgressSpinnerModule,
+    ProgressBarModule,
     MessagesModule,
     MessageModule,
     ChartModule,

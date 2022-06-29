@@ -85,6 +85,10 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
         this.loading = false;
     }
 
+    onFilesSaved(response: any): void {
+        
+    }
+
     getData(itemId: number): void {
         this.loading = true;
         this.dataService.getItem(itemId)
@@ -204,11 +208,12 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
         this.filesUploadRequest(formData, itemId)
             .pipe(takeUntil(this.destroyed$))
             .subscribe({
-                next: () => {
+                next: (res: any) => {
                     if (autoClose) {
                         this.closeModal();
                     }
                     this.files = {};
+                    this.onFilesSaved(res);
                 },
                 error: (err) => {
                     this.errorMessage = err.error;

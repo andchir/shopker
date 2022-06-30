@@ -68,7 +68,7 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
         if (this.config.data.id) {
             this.getData(this.config.data.id);
         } else {
-            this.updateControls();
+            setTimeout(this.updateControls.bind(this), 0);
         }
         this.form.valueChanges
             .pipe(takeUntil(this.destroyed$))

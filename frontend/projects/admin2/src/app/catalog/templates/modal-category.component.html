@@ -90,7 +90,7 @@
                                 inputId="fieldContentType"
                                 optionLabel="title"
                                 optionValue="name"
-                                name="contentTypeName"></p-dropdown>
+                                name="contentTypeName" *ngIf="contentTypes.length > 0"></p-dropdown>
                 </div>
                 <div class="mb-2">
                     <label class="block mb-2" for="fieldMenuIndex">

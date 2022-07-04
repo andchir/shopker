@@ -365,6 +365,7 @@ var APP_LANG = {
         "emptyMessage": "No results found",
         "emptyFilterMessage": "No results found"
     },
+    "EXPORT_COMPLETED": "Export completerd",
     "ALIAS_ADDITIONAL_FIELD": "Additional field for alias",
     "BROWSE": "Select a file",
     "FILE": "File",

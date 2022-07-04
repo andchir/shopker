@@ -365,6 +365,7 @@ var APP_LANG = {
         "emptyMessage": "Результаты не найдены",
         "emptyFilterMessage": "Результаты не найдены"
     },
+    "EXPORT_COMPLETED": "Экспорт завершен",
     "ALIAS_ADDITIONAL_FIELD": "Дополнительное поле для псевдонима",
     "BROWSE": "Выбрать файл",
     "FILE": "Файл",

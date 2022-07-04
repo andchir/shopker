@@ -170,10 +170,12 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
                     if (res.id) {
                         this.model = res;
                     }
-                    this.onDataSaved();
                     if (Object.keys(this.files).length > 0) {
                         this.saveFiles(res._id || res.id, '', autoClose);
-                    } else if (autoClose) {
+                        return;
+                    }
+                    this.onDataSaved();
+                    if (autoClose) {
                         this.closeModal();
                     }
                 },
@@ -209,11 +211,13 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
             .pipe(takeUntil(this.destroyed$))
             .subscribe({
                 next: (res: any) => {
+                    this.files = {};
+                    this.onDataSaved();
                     if (autoClose) {
                         this.closeModal();
+                    } else {
+                        this.onFilesSaved(res);
                     }
-                    this.files = {};
-                    this.onFilesSaved(res);
                 },
                 error: (err) => {
                     this.errorMessage = err.error;

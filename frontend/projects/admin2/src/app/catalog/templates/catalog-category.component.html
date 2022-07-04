@@ -23,7 +23,7 @@
                             inputId="fieldSelectCategory"
                             [showHeaderButtons]="true"
                             [(ngModel)]="categoryId"
-                            (ngModelChange)="onCategoryUpdated($event)"
+                            (ngModelChange)="onCategoryUpdated()"
                             (onAction)="onMenuAction($event)" #selectParentInput></app-select-parent-dropdown>
                     </div>
                 </div>
@@ -34,7 +34,6 @@
                                class="lg:w-auto w-full"
                                (input)="onInputSearch()"
                                [(ngModel)]="queryOptions.search_word"
-                               (focus)="panelTopMenu.hide()"
                                placeholder="{{ 'SEARCH' | translate }}...">
                     </div>
                 </div>

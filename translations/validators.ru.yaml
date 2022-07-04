@@ -24,6 +24,7 @@ Data is empty.: Вы передете пустой набор данных.
 Title is empty.: Заголовок не может быть пустым.
 System name is empty.: Системное имя не может быть пустым.
 Collection name is empty.: Имя коллекции не может быть пустым.
+File is required.: Пожалуйста, выберите файл.
 Please create fields for content type.: Пожалуйста, создайте поля для типа контента.
 You can not save content in system collections. Please choose a different collection name.: Данное имя коллекции зарезервировано. Пожалуйста, выберите другое имя.
 Item not found.: Запись в БД не найдена.
@@ -51,3 +52,4 @@ Error unpacking archive.: Ошибка при распаковке архива.
 "The folder is not writable: %dir_name%.": "Папка недоступна для записи: %dir_name%."
 You are not allowed to create this page.: Вам не разрешено создание этой страницы.
 The "%name%" field is required.: Поле "%name%" обязательно для заполнения.
+

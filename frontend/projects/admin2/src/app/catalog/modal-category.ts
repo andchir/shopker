@@ -108,6 +108,9 @@ export class ModalCategoryComponent extends AppModalAbstractComponent<Category> 
             .subscribe({
                 next: (res) => {
                     this.contentTypes = res.items;
+                    if (this.contentTypes.length > 0 && !this.form.controls.contentTypeName.value) {
+                        this.form.controls.contentTypeName.setValue(this.contentTypes[0].name);
+                    }
                 },
                 error: (error) => {
                     this.errorMessage = error;

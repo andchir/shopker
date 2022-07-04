@@ -96,6 +96,7 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
                 },
                 error: () => {
                     this.loading = false;
+                    this.router.navigate(['/catalog', 'category']);
                 }
             });
     }
@@ -105,7 +106,7 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
             this.loading = false;
             return;
         }
-        super.getData();
+        super.getData(event);
     }
 
     getModalComponent() {
@@ -169,7 +170,10 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
             });
     }
 
-    onCategoryUpdated(categoryId: number): void {
+    onCategoryUpdated(categoryId?: number): void {
+        if (categoryId) {
+            this.categoryId = categoryId;
+        }
         if (this.categoryId) {
             this.router.navigate(['/catalog', 'category', this.categoryId]);
             return;
@@ -197,6 +201,9 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
                     if (result !== 'canceled') {
                         if (this.selectParentInput) {
                             this.selectParentInput.getCategoriesTree();
+                        }
+                        if ((!itemId || isItemCopy) && result && result.id) {
+                            this.onCategoryUpdated(result.id);
                         }
                     }
                 }
@@ -249,6 +256,7 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
                     if (this.selectParentInput) {
                         this.selectParentInput.getCategoriesTree();
                     }
+                    this.onCategoryUpdated();
                 },
                 error: (err) => {
                     if (err.error) {

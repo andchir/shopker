@@ -94,6 +94,7 @@
     "FIELD_ALREADY_EXISTS": "A field with this system name already exists.",
 	"FILE_MANAGER": "File manager",
 	"FILE_PATH_COPIED": "File path successfully copied to clipboard.",
+    "FILE_NAME": "File name",
 	"FILE_SIZE": "File size",
 	"FOLDER_NAME": "Folder name",
 	"FORM_RESET": "Reset",

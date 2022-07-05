@@ -1,10 +1,21 @@
-import {Component, EventEmitter, Input, OnDestroy, Output, ViewChild} from '@angular/core';
+import {
+    Component, ElementRef,
+    EventEmitter,
+    Input,
+    OnDestroy,
+    OnInit,
+    Output,
+    QueryList,
+    ViewChild,
+    ViewChildren
+} from '@angular/core';
 
-import {Subject} from 'rxjs';
+import {defer, Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
 import {TranslateService} from '@ngx-translate/core';
-import {ConfirmationService} from 'primeng/api';
+import {ConfirmationService, MenuItem} from 'primeng/api';
 import {DialogService} from 'primeng/dynamicdialog';
+import {ContextMenu} from 'primeng/contextmenu';
 
 import {FileManagerService} from '../services/file-manager.service';
 import {FileModel} from '../models/file.model';
@@ -18,16 +29,19 @@ import {ModalFileContentComponent} from './modal-file.component';
     templateUrl: 'templates/file-manager.component.html',
     providers: [FileManagerService, DialogService]
 })
-export class FileManagerComponent implements OnDestroy {
+export class FileManagerComponent implements OnInit, OnDestroy {
     
-    files: any[] = [];
+    files: FileModel[] = [];
+    fileItemSelected: FileModel;
     loading = false;
     currentPath = '';
     errorMessage = '';
     closed$ = new Subject<void>();
     destroyed$ = new Subject<void>();
     private _isActive = false;
-
+    contextMenuItems: MenuItem[];
+    
+    @ViewChild('contextMenu', { static: true }) contextMenu: ContextMenu;
     @ViewChild('container', { static: true }) container;
     @Output() isActiveChange = new EventEmitter<boolean>();
     @Input() set isActive(value: boolean) {
@@ -46,6 +60,25 @@ export class FileManagerComponent implements OnDestroy {
         public translateService: TranslateService
     ) {
 
+    }
+
+    ngOnInit(): void {
+        this.contextMenuItems = [
+            {
+                label: this.getLangString('RENAME'),
+                icon: 'pi pi-pencil',
+                command: () => {
+                    this.renameItem(this.fileItemSelected);
+                }
+            },
+            {
+                label: this.getLangString('DELETE'),
+                icon: 'pi pi-trash',
+                command: () => {
+                    this.deleteItem(this.fileItemSelected);
+                }
+            }
+        ];
     }
 
     getFilesList(): void {
@@ -81,7 +114,7 @@ export class FileManagerComponent implements OnDestroy {
             event.preventDefault();
         }
         if (file.isDir) {
-            this.currentPath = this.getFilePath(file);
+            this.currentPath = FileModel.getFilePath(file, this.currentPath);
             this.getFilesList();
         } else {
             this.openModal(file);
@@ -97,7 +130,7 @@ export class FileManagerComponent implements OnDestroy {
             style: {maxWidth: '100%'},
             data: {
                 file: currentFile,
-                filePath: `/${this.getFilePath(currentFile)}`
+                filePath: `/${FileModel.getFilePath(currentFile, this.currentPath)}`
             }
         });
         ref.onClose
@@ -106,45 +139,10 @@ export class FileManagerComponent implements OnDestroy {
                 if (result) {
                     switch (result) {
                         case 'delete':
-                            this.loading = true;
-                            this.dataService.deleteFile(this.currentPath, currentFile)
-                                .pipe(takeUntil(this.closed$))
-                                .subscribe({
-                                    next: () => {
-                                        if (!this.isActive) {
-                                            this.activeToggle();
-                                        }
-                                        this.getFilesList();
-                                    },
-                                    error: (err) => {
-                                        if (err['error']) {
-                                            this.errorMessage = err['error'];
-                                            if (!this.isActive) {
-                                                this.activeToggle();
-                                            }
-                                        }
-                                        this.loading = false;
-                                    }
-                                });
+                            this.deleteItemAction(currentFile);
                             break;
                         case 'rename':
-                            this.loading = true;
-                            this.dataService.rename(this.getFilePath(currentFile), currentFile.title, 'file')
-                                .pipe(takeUntil(this.closed$))
-                                .subscribe({
-                                    next: (res) => {
-                                        if (!this.isActive) {
-                                            this.activeToggle();
-                                        }
-                                        this.getFilesList();
-                                    },
-                                    error: (err) => {
-                                        if (err['error']) {
-                                            this.errorMessage = err['error'];
-                                        }
-                                        this.loading = false;
-                                    }
-                                });
+                            this.renameItemAction(currentFile.title, currentFile);
                             break;
                         case 'unpack':
                             this.loading = true;
@@ -214,69 +212,102 @@ export class FileManagerComponent implements OnDestroy {
                 }
             });
     }
-
-    deleteFolder(event?: MouseEvent): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.confirmationService.confirm({
-            message: this.getLangString('YOU_SURE_YOU_WANT_DELETE_FOLDER'),
-            accept: () => {
-                this.loading = true;
-                this.dataService.deleteFolder(this.currentPath)
-                    .subscribe({
-                        next: () => {
-                            this.openDirPrevious();
-                            this.loading = false;
-                        },
-                        error: (err) => {
-                            if (err['error']) {
-                                this.errorMessage = err['error'];
-                            }
-                            this.loading = false;
-                        }
-                    });
+    
+    deleteItemAction(item?: FileModel): void {
+        this.loading = true;
+        defer(() => {
+            return item && !item.isDir
+                ? this.dataService.deleteFile(this.currentPath, item)
+                : this.dataService.deleteFolder(this.currentPath + (item && item.isDir ? '/' + item.fileName : ''));
+        })
+        .pipe(takeUntil(this.closed$))
+        .subscribe({
+            next: () => {
+                if (item) {
+                    this.getFilesList();
+                } else {
+                    this.openDirPrevious();
+                }
+            },
+            error: (err) => {
+                if (err['error']) {
+                    this.errorMessage = err['error'];
+                }
+                this.loading = false;
             }
         });
     }
 
-    renameFolder(event?: MouseEvent): void {
+    deleteItem(item?: FileModel, event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.confirmationService.confirm({
+            message: item && !item.isDir
+                ? this.getLangString('YOU_SURE_YOU_WANT_DELETE')
+                : this.getLangString('YOU_SURE_YOU_WANT_DELETE_FOLDER'),
+            accept: () => {
+                this.deleteItemAction(item);
+            }
+        });
+    }
+
+    renameItemAction(newTitle: string, item?: FileModel): void {
+        this.loading = true;
+        const targetType = !item || item.isDir ? 'folder' : 'file';
+        defer(() => {
+            return item
+                ? this.dataService.rename(FileModel.getFilePath(item, this.currentPath), newTitle, targetType)
+                : this.dataService.rename(this.currentPath, newTitle);
+        })
+            .pipe(takeUntil(this.closed$))
+            .subscribe({
+                next: (res) => {
+                    if (!res || !res.success) {
+                        this.loading = false;
+                        return;
+                    }
+                    if (item) {
+                        this.getFilesList();
+                    } else {
+                        this.openDirPrevious();
+                    }
+                },
+                error: (err) => {
+                    if (err['error']) {
+                        this.errorMessage = err['error'];
+                    }
+                    this.loading = false;
+                }
+            });
+    }
+
+    renameItem(item?: FileModel, event?: MouseEvent): void {
         if (event) {
             event.preventDefault();
         }
         this.errorMessage = '';
         const tmp = this.currentPath.split('/');
-        const folderName = tmp.pop();
+        const itemName = item ? item.title : tmp.pop();
+        const fileExtension = item ? item.extension : '';
+        const labelName = !item || item.isDir ? 'FOLDER_NAME' : 'FILE_NAME';
 
         const ref = this.dialogService.open(ModalConfirmTextComponent, {
-            header: this.getLangString('FOLDER_NAME'),
+            header: this.getLangString(labelName),
             width: '400px',
             style: {maxWidth: '100%'},
             data: {
-                labelText: 'FOLDER_NAME',
+                labelText: labelName,
                 buttonText: 'RENAME',
-                textValue: folderName
+                textValue: itemName,
+                fileExtension
             }
         });
         ref.onClose
             .pipe(takeUntil(this.destroyed$))
             .subscribe((result) => {
-                if (result && result !== folderName) {
-                    this.loading = true;
-                    this.dataService.rename(this.currentPath, result)
-                        .pipe(takeUntil(this.closed$))
-                        .subscribe({
-                            next: () => {
-                                this.openDirPrevious();
-                                this.loading = false;
-                            },
-                            error: (err) => {
-                                if (err['error']) {
-                                    this.errorMessage = err['error'];
-                                }
-                                this.loading = false;
-                            }
-                        });
+                if (result && result !== itemName) {
+                    this.renameItemAction(result, item);
                 }
             });
     }
@@ -329,12 +360,6 @@ export class FileManagerComponent implements OnDestroy {
         return translations[value] || value;
     }
 
-    getFilePath(file: FileModel): string {
-        return this.currentPath
-            ? `${this.currentPath}/${file.fileName}`
-            : `${file.fileName}`;
-    }
-
     openDirPrevious(event?: MouseEvent): void {
         if (event) {
             event.preventDefault();
@@ -346,6 +371,13 @@ export class FileManagerComponent implements OnDestroy {
         tmp.pop();
         this.currentPath = tmp.join('/');
         this.getFilesList();
+    }
+    
+    onContextMenu(index: number, event: MouseEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+        this.fileItemSelected = this.files[index];
+        this.contextMenu.show(event);
     }
 
     onAfterActiveToggle(): void {
@@ -370,7 +402,7 @@ export class FileManagerComponent implements OnDestroy {
     }
 
     getImageThumbnail(file: FileModel, filterSet = 'thumb_small'): string {
-        const src = this.getFilePath(file);
+        const src = FileModel.getFilePath(file, this.currentPath);
         return `/media/cache/resolve/${filterSet}/${src}`;
     }
 

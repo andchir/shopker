@@ -13,6 +13,7 @@ export class ModalConfirmTextComponent implements OnInit, AfterViewInit {
     @ViewChild('inputElement') inputElement: ElementRef<HTMLInputElement>;
     modalTitle: string;
     textValue: string;
+    fileExtension: string;
     labelText: string;
     buttonText = 'CREATE';
     loading = false;
@@ -34,6 +35,9 @@ export class ModalConfirmTextComponent implements OnInit, AfterViewInit {
         }
         if (this.config.data.textValue) {
             this.textValue = this.config.data.textValue;
+        }
+        if (this.config.data.fileExtension) {
+            this.fileExtension = this.config.data.fileExtension;
         }
     }
     

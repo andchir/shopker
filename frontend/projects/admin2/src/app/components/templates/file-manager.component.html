@@ -15,13 +15,13 @@
                 [pTooltip]="'RENAME_FOLDER' | translate"
                 tooltipPosition="bottom"
                 *ngIf="currentPath"
-                (click)="renameFolder($event)"></button>
+                (click)="renameItem(null, $event)"></button>
         <button pButton pRipple type="button" class="p-button-sm p-button-danger mr-2"
                 icon="pi pi-trash"
                 [pTooltip]="'DELETE_FOLDER' | translate"
                 tooltipPosition="bottom"
                 *ngIf="currentPath"
-                (click)="deleteFolder($event)"></button>
+                (click)="deleteItem(null, $event)"></button>
     </div>
     <div class="panel-file-manager-b overflow-auto-y" [class.loading]="loading">
         <div class="p-1">
@@ -49,12 +49,13 @@
                     </div>
                 </div>
 
-                <div class="col-4 py-1 px-1" *ngFor="let file of files">
+                <div class="col-4 py-1 px-1" *ngFor="let file of files; index as index">
                     <div class="surface-200 border-1 border-solid border-round border-400 p-0 cursor-pointer"
                          draggable="true"
                          [ngClass]="{'bg-black-20': file.isDir, 'bg-black-10': !file.isDir}" 
                          (dragstart)="dragStartHandler(file, $event)"
-                         (click)="openFileHandler(file, $event)">
+                         (click)="openFileHandler(file, $event)"
+                         (contextmenu)="onContextMenu(index, $event)">
                         <div class="text-center">
                             <ng-container *ngIf="getIsImageFile(file.extension); else fileIcon">
                                 <div [title]="file.fileName">
@@ -83,3 +84,5 @@
 <div class="loading-overlay" *ngIf="loading">
     <p-progressSpinner></p-progressSpinner>
 </div>
+
+<p-contextMenu [model]="contextMenuItems" #contextMenu></p-contextMenu>

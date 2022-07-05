@@ -1,8 +1,11 @@
 <div class="mb-3">
-    <label class="inline-block mb-2" for="fieldTextValue">
+    <label class="mb-2 hidden" for="fieldTextValue">
         {{ labelText | translate }}
     </label>
-    <input type="text" pInputText class="w-full" id="fieldTextValue" #inputElement [(ngModel)]="textValue">
+    <div class="p-inputgroup mb-3">
+        <input type="text" pInputText class="w-full" id="fieldTextValue" #inputElement [(ngModel)]="textValue">
+        <span class="p-inputgroup-addon" *ngIf="fileExtension">.{{ fileExtension }}</span>
+    </div>
 </div>
 
 <p-message styleClass="block w-full text-left mb-3" severity="error"

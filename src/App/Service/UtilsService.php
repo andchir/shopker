@@ -523,8 +523,11 @@ class UtilsService
      * @param string $targetDirPath
      * @return bool
      */
-    public static function unZip($filePath, $targetDirPath)
+    public static function unZip($filePath, $targetDirPath = '')
     {
+        if (!$targetDirPath) {
+            $targetDirPath = dirname($filePath);
+        }
         $zip = new \ZipArchive;
         $res = $zip->open($filePath);
         if ($res === false) {

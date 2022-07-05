@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnDestroy, Output, ViewChild} from '@angular/core';
 
 import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {take, takeUntil} from 'rxjs/operators';
 import {TranslateService} from '@ngx-translate/core';
 import {ConfirmationService} from 'primeng/api';
 import {DialogService} from 'primeng/dynamicdialog';
@@ -89,6 +89,7 @@ export class FileManagerComponent implements OnDestroy {
     }
 
     openModal(file: FileModel) {
+        this.errorMessage = '';
         const currentFile = Object.assign({}, file);
         const ref = this.dialogService.open(ModalFileContentComponent, {
             header: currentFile.fileName,
@@ -100,56 +101,76 @@ export class FileManagerComponent implements OnDestroy {
             }
         });
         ref.onClose
-            .pipe(takeUntil(this.destroyed$))
+            .pipe(take(1))
             .subscribe((result) => {
                 if (result) {
-                    console.log(result);
+                    switch (result) {
+                        case 'delete':
+                            this.loading = true;
+                            this.dataService.deleteFile(this.currentPath, currentFile)
+                                .pipe(takeUntil(this.closed$))
+                                .subscribe({
+                                    next: () => {
+                                        if (!this.isActive) {
+                                            this.activeToggle();
+                                        }
+                                        this.getFilesList();
+                                    },
+                                    error: (err) => {
+                                        if (err['error']) {
+                                            this.errorMessage = err['error'];
+                                            if (!this.isActive) {
+                                                this.activeToggle();
+                                            }
+                                        }
+                                        this.loading = false;
+                                    }
+                                });
+                            break;
+                        case 'rename':
+                            this.loading = true;
+                            this.dataService.rename(this.getFilePath(currentFile), currentFile.title, 'file')
+                                .pipe(takeUntil(this.closed$))
+                                .subscribe({
+                                    next: (res) => {
+                                        if (!this.isActive) {
+                                            this.activeToggle();
+                                        }
+                                        this.getFilesList();
+                                    },
+                                    error: (err) => {
+                                        if (err['error']) {
+                                            this.errorMessage = err['error'];
+                                        }
+                                        this.loading = false;
+                                    }
+                                });
+                            break;
+                        case 'unpack':
+                            this.loading = true;
+                            this.dataService.unpackFile(this.currentPath, currentFile)
+                                .pipe(takeUntil(this.closed$))
+                                .subscribe({
+                                    next: () => {
+                                        if (!this.isActive) {
+                                            this.activeToggle();
+                                        }
+                                        this.getFilesList();
+                                    },
+                                    error: (err) => {
+                                        if (err['error']) {
+                                            this.errorMessage = err['error'];
+                                            if (!this.isActive) {
+                                                this.activeToggle();
+                                            }
+                                        }
+                                        this.loading = false;
+                                    }
+                                });
+                            break;
+                    }
                 }
             });
-
-        // this.modalRef = this.modalService.open(ModalFileContentComponent, {backdrop: 'static', keyboard: false});
-        // this.modalRef.componentInstance.modalTitle = currentFile.fileName;
-        // this.modalRef.componentInstance.file = currentFile;
-        // this.modalRef.componentInstance.filePath = `/${this.getFilePath(currentFile)}`;
-        // this.modalRef.result.then((result: string) => {
-        //     switch (result) {
-        //         case 'delete':
-        //             this.loading = true;
-        //             this.dataService.deleteFile(this.currentPath, currentFile)
-        //                 .pipe(takeUntil(this.closed$))
-        //                 .subscribe((res) => {
-        //                     if (!this.isActive) {
-        //                         this.activeToggle();
-        //                     }
-        //                     this.getFilesList();
-        //                 }, (err) => {
-        //                     if (err['error']) {
-        //                         this.errorMessage = err['error'];
-        //                         if (!this.isActive) {
-        //                             this.activeToggle();
-        //                         }
-        //                     }
-        //                     this.loading = false;
-        //                 });
-        //             break;
-        //         case 'rename':
-        //             this.loading = true;
-        //             this.dataService.rename(this.getFilePath(currentFile), currentFile.title, 'file')
-        //                 .pipe(takeUntil(this.closed$))
-        //                 .subscribe((res) => {
-        //                     if (!this.isActive) {
-        //                         this.activeToggle();
-        //                     }
-        //                     this.getFilesList();
-        //                 }, (err) => {
-        //                     if (err['error']) {
-        //                         this.errorMessage = err['error'];
-        //                     }
-        //                     this.loading = false;
-        //                 });
-        //             break;
-        //     }
-        // });
     }
 
     createFolder(event?: MouseEvent): void {

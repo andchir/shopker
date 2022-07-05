@@ -65,13 +65,19 @@
 
 <div class="flex justify-content-between flex-wrap pt-3">
     <div>
-        <button type="button" pButton class="p-button-sm"
+        <button type="button" pButton class="p-button-sm mr-2"
                 icon="pi pi-pencil"
                 [pTooltip]="'RENAME' | translate"
                 tooltipPosition="top"
                 (click)="switchAction('rename', $event)">
         </button>
-        <button type="button" pButton class="p-button-danger p-button-sm ml-2"
+        <button type="button" pButton class="p-button-sm mr-2"
+                icon="pi pi-file-o"
+                [pTooltip]="'UNPACK' | translate"
+                tooltipPosition="top"
+                (click)="unpackHandler($event)" *ngIf="isArchiveFile">
+        </button>
+        <button type="button" pButton class="p-button-danger p-button-sm mr-2"
                 icon="pi pi-trash"
                 [pTooltip]="'DELETE' | translate"
                 tooltipPosition="top"

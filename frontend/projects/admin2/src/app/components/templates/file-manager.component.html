@@ -26,10 +26,9 @@
     <div class="panel-file-manager-b overflow-auto-y" [class.loading]="loading">
         <div class="p-1">
 
-            <div class="alert alert-dismissible alert-danger" *ngIf="errorMessage">
-                {{errorMessage}}
-                <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close" (click)="errorMessage = ''"></button>
-            </div>
+            <p-message styleClass="block w-full text-left mb-3" severity="error"
+                       [text]="errorMessage"
+                       *ngIf="errorMessage"></p-message>
 
             <div class="grid">
                 <div class="col-12 px-1 mb-2" *ngIf="currentPath">

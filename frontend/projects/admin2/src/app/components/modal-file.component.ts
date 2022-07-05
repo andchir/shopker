@@ -15,6 +15,7 @@ export class ModalFileContentComponent implements OnInit {
     @Input() filePath: string;
     messageText: string;
     actionName = '';
+    isArchiveFile = false;
 
     constructor(
         private ref: DynamicDialogRef,
@@ -29,6 +30,9 @@ export class ModalFileContentComponent implements OnInit {
         }
         if (this.config.data.filePath) {
             this.filePath = this.config.data.filePath;
+        }
+        if (this.file && ['zip'].indexOf(this.file.extension) > -1) {
+            this.isArchiveFile = true;
         }
     }
 
@@ -55,14 +59,21 @@ export class ModalFileContentComponent implements OnInit {
         if (event) {
             event.preventDefault();
         }
-        // this.activeModal.close('rename');
+        this.ref.close('rename');
     }
 
     deleteFileHandler(event?: MouseEvent): void {
         if (event) {
             event.preventDefault();
         }
-        // this.activeModal.close('delete');
+        this.ref.close('delete');
+    }
+
+    unpackHandler(event?: MouseEvent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.ref.close('unpack');
     }
 
     showMessage(messageText, delay = 3000): void {

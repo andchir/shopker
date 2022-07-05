@@ -239,6 +239,38 @@ class FileManagerController extends BaseController
     }
 
     /**
+     * @Route("/file_unpack", methods={"POST"})
+     * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function unpackFileAction(Request $request)
+    {
+        if (!$this->params->get('app.file_manager_enabled')) {
+            return $this->setError($this->translator->trans('File manager is disabled.'));
+        }
+        $content = json_decode($request->getContent(), true);
+        if (!isset($content['path']) || empty($content['name'])) {
+            return $this->json(['success' => false]);
+        }
+        $publicDirPath = $this->getFolderPath($content['path']);
+        if ($publicDirPath === false) {
+            return $this->json(['success' => false]);
+        }
+        $filePath = $publicDirPath . DIRECTORY_SEPARATOR . $content['name'];
+        if (!file_exists($filePath)) {
+            return $this->setError($this->translator->trans('File not found.', [], 'validators'));
+        }
+        if (!is_writable($filePath)) {
+            return $this->setError($this->translator->trans('File is not writable.', [], 'validators'));
+        }
+        if (!UtilsService::unZip($filePath)) {
+            return $this->setError($this->translator->trans('Error unpacking the file.', [], 'validators'));
+        }
+        return $this->json(['success' => true]);
+    }
+
+    /**
      * @Route("/upload", methods={"POST"})
      * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
      * @param Request $request

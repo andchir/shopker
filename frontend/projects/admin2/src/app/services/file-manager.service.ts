@@ -68,6 +68,13 @@ export class FileManagerService {
         );
     }
 
+    unpackFile(path: string, file: FileModel): Observable<any> {
+        const url = `${this.getRequestUrl()}/file_unpack`;
+        return this.http.post<any>(url, {path: path, name: file.fileName}, {headers: this.headers}).pipe(
+            catchError(this.handleError<any>())
+        );
+    }
+
     getFormData(item: any): FormData {
         const formData: FormData = new FormData();
         Object.keys(item).forEach((key) => {

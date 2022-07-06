@@ -1,7 +1,7 @@
 parameters:
     locale: 'en'
     app.name: Shopker
-    app.version: '4.2.12'
+    app.version: '2.0.0'
     app.web_dir_path: '%kernel.project_dir%/public'
     app.files_dir_path: '%app.web_dir_path%/uploads'
     app.locale_list: ''
@@ -16,10 +16,10 @@ parameters:
         - pl
         - cgi
     app.editable_css:
-        - /custom.css
+        - /css/custom.css
     app.editable_js:
-        - /app.js
-        - /shopkeeper.js
+        - /js/app.js
+        - /js/shopkeeper.js
     app.editable_translations:
         - /messages.ru.yaml
     app.editable_config:

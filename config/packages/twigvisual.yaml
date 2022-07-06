@@ -59,6 +59,23 @@ twig_visual:
                     title: Value key
                     type: text
 
+        translatedText:
+            title: Translated text
+            configuration:
+                saveBackupCopy: true
+            components:
+                root:
+                    title: Root element
+                    type: elementSelect
+                    required: true
+                    template: "<root>{{ '{{ text_en }}' | trans }}</root>"
+                text_en:
+                    title: English
+                    type: text
+                text_ru:
+                    title: Russian
+                    type: text
+
         includeCreate:
             title: Make included
             configuration:

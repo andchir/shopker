@@ -302,12 +302,12 @@ class TemplatesController extends StorageControllerAbstract
         $translationsDirPath = $rootPath . DIRECTORY_SEPARATOR . 'translations';
         $templatesDirPath = $this->getTemplatesDirPath();
         $filePath = trim($filePath, DIRECTORY_SEPARATOR);
-        $filePath = str_replace('../../', '', $filePath);
+        $filePath = str_replace('../', '', $filePath);
 
         switch ($fileType) {
             case 'css':
             case 'js':
-                $filePath = implode(DIRECTORY_SEPARATOR, [$publicDirPath, $fileType, $filePath]);
+                $filePath = implode(DIRECTORY_SEPARATOR, [$publicDirPath, $filePath]);
                 break;
             case 'config':
                 $filePath = implode(DIRECTORY_SEPARATOR, [$configDirPath, $filePath]);

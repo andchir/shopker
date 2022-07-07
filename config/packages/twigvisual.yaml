@@ -308,11 +308,11 @@ twig_visual:
                 root:
                     title: Root element
                     type: elementSelect
-                    templatePath: catalog/content_list
+                    templatePath: catalog/content-list
                     saveBackupCopy: true
                     output: |
                         {{ contentList(
-                            'content_list{{ nameSuffix }}',
+                            'content-list{{ nameSuffix }}',
                             '{{ collectionName }}',
                             {"isActive": true, "{{ filterFieldName }}": {"$elemMatch": {"$in": ["{{ filterFieldValue }}"]}}},
                             {"{{ orderBy }}": "{{ orderDir }}"},
@@ -416,6 +416,33 @@ twig_visual:
                 deleteLeftSiblings: {title: Delete previous child, type: checkbox}
 
                 deleteRightSiblings: {title: Delete next child, type: checkbox}
+
+        includeContent:
+            title: Content of the page
+            configuration:
+                saveBackupCopy: true
+            components:
+                root:
+                    title: Root element
+                    type: elementSelect
+                    templatePath: content-data
+                    saveBackupCopy: true
+                    output: |
+                        {{ includeContent(
+                            'content-data{{ nameSuffix }}',
+                            '{{ collectionName }}',
+                            '{{ contentId }}',
+                            '{{ cacheKey }}'
+                        ) }}
+                    template: <root/>
+
+                collectionName: {title: Название коллекции БД, type: text, value: 'products'}
+
+                contentId: {title: Content ID, type: text}
+
+                cacheKey: {title: Cache key, type: text}
+
+                nameSuffix: {title: Name suffix, type: text}
 
         productPrice:
             title: Price of the product

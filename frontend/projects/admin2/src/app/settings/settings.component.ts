@@ -358,7 +358,16 @@ export class SettingsComponent implements OnInit, AfterViewInit, OnDestroy {
         window.location.reload();
     }
 
-    onRowEditInit(setting: Setting) {
+    onRowEditInit(setting: Setting, event?: MouseEvent) {
+        if (event) {
+            event.preventDefault();
+            const parentEl = (event.target as HTMLElement).parentNode.parentNode
+            setTimeout(() => {
+                if (parentEl.querySelector('input[type="text"]')) {
+                    (parentEl.querySelector('input[type="text"]') as HTMLInputElement).focus();
+                }
+            }, 0);
+        }
         this.settingsCloned[setting.name] = setting.value;
     }
 

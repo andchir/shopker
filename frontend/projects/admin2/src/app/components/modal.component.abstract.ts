@@ -241,6 +241,9 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
     updateControls(): void {
         const controls = this.form.controls;
         let controlValue = '';
+        Object.keys(this.arrayFieldsData).forEach((key) => {
+            this.arrayFields[key].clear();
+        });
         Object.keys(controls).forEach((key) => {
             if (key.indexOf('__') > -1) {
                 const tmp = key.split('__');

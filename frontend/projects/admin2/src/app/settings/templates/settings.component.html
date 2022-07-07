@@ -57,7 +57,7 @@
                                             <button *ngIf="!editing" pButton pRipple type="button"
                                                     pInitEditableRow
                                                     icon="pi pi-pencil"
-                                                    (click)="onRowEditInit(setting)"
+                                                    (click)="onRowEditInit(setting, $event)"
                                                     [pTooltip]="'EDIT' | translate"
                                                     tooltipPosition="bottom"
                                                     class="p-button-raised p-button-rounded p-button-sm"></button>

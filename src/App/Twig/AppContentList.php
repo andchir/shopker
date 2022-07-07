@@ -183,7 +183,7 @@ class AppContentList
         /** @var CatalogService $catalogService */
         $catalogService = $this->container->get('app.catalog');
         $collection = $catalogService->getCollection($collectionName);
-        $criteria = ['_id' => $contentId];
+        $criteria = ['_id' => (int) $contentId];
 
         $aggregateFields = [];
         if ($locale !== $localeDefault) {

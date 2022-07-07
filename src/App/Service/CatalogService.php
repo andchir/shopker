@@ -46,11 +46,12 @@ class CatalogService {
     /**
      * @param int $parentId
      * @param string $locale
+     * @param bool $activeOnly
      * @return array
      * @throws \Doctrine\ODM\MongoDB\LockException
      * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
      */
-    public function getCategoriesTree($parentId = 0, $locale = '')
+    public function getCategoriesTree($parentId = 0, $locale = '', $activeOnly = true)
     {
         $data = [];
         $categoriesRepository = $this->getCategoriesRepository();
@@ -60,7 +61,9 @@ class CatalogService {
             return [];
         }
 
-        $results = $categoriesRepository->findActiveAll();
+        $results = $activeOnly
+            ? $categoriesRepository->findActiveAll()
+            : $categoriesRepository->findAll();
 
         $parentIdsArr = [$parentId];
         /** @var Category $category */
@@ -94,10 +97,12 @@ class CatalogService {
             return [];
         }
         if (!$parentId) {
-            return self::createTree($data, [[
-                'id' => 0,
-                'title' => 'Root'
-            ]]);
+            if (!empty($data) && !empty($data[0]) && $data[0][0]['id'] === $parentId) {
+                $parentData = [array_shift($data[0])];
+            } else {
+                $parentData = [['id' => 0, 'title' => 'Root']];
+            }
+            return self::createTree($data, $parentData);
         }
         else {
             return self::createTree($data, [$parentCategory->getMenuData([], $locale)]);
@@ -597,7 +602,7 @@ class CatalogService {
         }
         return $result;
     }
-    
+
     /**
      * @param ContentType $contentType
      * @param array $queryOptions
@@ -609,7 +614,7 @@ class CatalogService {
     {
         $collection = $this->getCollection($contentType->getCollection());
         $contentTypeFields = $contentType->getFields();
-    
+
         $results = $collection->find($filter, [
             'sort' => $queryOptions['sortOptionsAggregation'],
             'skip' => $skip,
@@ -680,7 +685,7 @@ class CatalogService {
             }
         }
     }
-    
+
     /**
      * @param Category $category
      * @param array $filter
@@ -696,9 +701,9 @@ class CatalogService {
         if(!$contentType){
             throw new \Exception('Content type not found.');
         }
-        
+
         $collection = $this->getCollection($contentType->getCollection());
-    
+
         try {
             $document = $collection->findOne($filter);
         } catch (\Exception $e) {
@@ -707,7 +712,7 @@ class CatalogService {
         if (!$document) {
             throw new \Exception('Item not found.');
         }
-        
+
         return $document;
     }
 
@@ -837,7 +842,7 @@ class CatalogService {
             $value = self::getFieldValue($contentTypeField, $value);
         }
     }
-    
+
     /**
      * @param $contentTypeField
      * @param $value

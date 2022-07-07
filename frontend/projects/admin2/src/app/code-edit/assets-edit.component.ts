@@ -82,7 +82,8 @@ export class AssetsEditComponent extends AppTablePageAbstractComponent<EditableF
                     this.messageService.add({
                         key: 'message',
                         severity: 'success',
-                        detail: item ? 'Edited successfully!' : 'Created successfully!'
+                        summary: this.getLangString('MESSAGE'),
+                        detail: this.getLangString('DATA_SAVED_SUCCESSFULLY')
                     });
                     this.getData();
                 }

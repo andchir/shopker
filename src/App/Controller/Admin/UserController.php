@@ -105,7 +105,7 @@ class UserController extends StorageControllerAbstract
             ->setPhone($data['phone'])
             ->setIsActive(!empty($data['isActive']))
             ->setApiToken($data['apiToken'] ?? '')
-            ->setGroups($data['groups'] ?? []);
+            ->setGroups(!empty($data['groups']) ? $data['groups'] : []);
 
         if (isset($data['role']) && $currentUser->getId() !== $item->getId()) {
             $item->setRoles([$data['role']]);

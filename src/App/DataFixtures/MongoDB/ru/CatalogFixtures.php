@@ -591,33 +591,33 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface, Fixtur
         $data = [
             [
                 'title' => 'Каталог',
-                'name' => 'katalog',
+                'name' => 'catalog',
                 'menuIndex' => 0,
                 'translations' => ['title' => ['en' => 'Catalog']],
                 'children' => [
                     [
                         'title' => 'Книги',
-                        'name' => 'knigi',
+                        'name' => 'books',
                         'menuIndex' => 3,
                         'translations' => ['title' => ['en' => 'Books']],
                         'children' => [
                             [
                                 'title' => 'Учебная литература',
-                                'name' => 'uchebnaya-literatura',
+                                'name' => 'educational-literature',
                                 'menuIndex' => 0,
                                 'translations' => ['title' => ['en' => 'Educational literature']],
                                 'children' => []
                             ],
                             [
                                 'title' => 'Художественная литература',
-                                'name' => 'khudozhestvennaya-literatura',
+                                'name' => 'fiction',
                                 'menuIndex' => 0,
                                 'translations' => ['title' => ['en' => 'Fiction']],
                                 'children' => []
                             ],
                             [
                                 'title' => 'Детям',
-                                'name' => 'detyam',
+                                'name' => 'for-children',
                                 'menuIndex' => 0,
                                 'translations' => ['title' => ['en' => 'For children']],
                                 'children' => []
@@ -626,19 +626,19 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface, Fixtur
                     ],
                     [
                         'title' => 'Одежда, обувь, сумки',
-                        'name' => 'odezhda-obuv-sumki',
+                        'name' => 'clothes-shoes-bags',
                         'menuIndex' => 4,
                         'translations' => ['title' => ['en' => 'Clothes, shoes, bags']],
                         'children' => [
                             [
                                 'title' => 'Oдежда',
-                                'name' => 'odezhda',
+                                'name' => 'clothes',
                                 'menuIndex' => 0,
                                 'translations' => ['title' => ['en' => 'Clothes']],
                                 'children' => [
                                     [
                                         'title' => 'Женская одежда',
-                                        'name' => 'zhenskaya-odezhda',
+                                        'name' => 'womens-clothing',
                                         'menuIndex' => 0,
                                         'translations' => ['title' => ['en' => 'Women\'s clothing']],
                                         'children' => [
@@ -647,7 +647,7 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface, Fixtur
                                     ],
                                     [
                                         'title' => 'Мужская одежда',
-                                        'name' => 'muzhskaya-odezhda',
+                                        'name' => 'mens-clothing',
                                         'menuIndex' => 0,
                                         'translations' => ['title' => ['en' => 'Men\'s clothing']],
                                         'children' => [
@@ -656,7 +656,7 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface, Fixtur
                                     ],
                                     [
                                         'title' => 'Детская одежда',
-                                        'name' => 'detskaya-odezhda',
+                                        'name' => 'baby-clothes',
                                         'menuIndex' => 0,
                                         'translations' => ['title' => ['en' => 'Baby clothes']],
                                         'children' => [
@@ -667,13 +667,13 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface, Fixtur
                             ],
                             [
                                 'title' => 'Обувь',
-                                'name' => 'obuv',
+                                'name' => 'footwear',
                                 'menuIndex' => 0,
                                 'translations' => ['title' => ['en' => 'Footwear']],
                                 'children' => [
                                     [
                                         'title' => 'Женская обувь',
-                                        'name' => 'zhenskaya-obuv',
+                                        'name' => 'womens-shoes',
                                         'menuIndex' => 0,
                                         'translations' => ['title' => ['en' => 'Women\'s shoes']],
                                         'children' => [
@@ -682,7 +682,7 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface, Fixtur
                                     ],
                                     [
                                         'title' => 'Мужская обувь',
-                                        'name' => 'muzhskaya-obuv',
+                                        'name' => 'mens-footwear',
                                         'menuIndex' => 0,
                                         'translations' => ['title' => ['en' => 'Men\'s footwear']],
                                         'children' => [
@@ -855,7 +855,7 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface, Fixtur
                                     ],
                                     [
                                         'title' => 'Детская обувь',
-                                        'name' => 'detskaya-obuv',
+                                        'name' => 'childrens-shoes',
                                         'menuIndex' => 0,
                                         'translations' => ['title' => ['en' => 'Children\'s shoes']],
                                         'children' => [
@@ -866,7 +866,7 @@ class CatalogFixtures extends Fixture implements ContainerAwareInterface, Fixtur
                             ],
                             [
                                 'title' => 'Сумки',
-                                'name' => 'sumki',
+                                'name' => 'bags',
                                 'menuIndex' => 0,
                                 'translations' => ['title' => ['en' => 'Bags']],
                                 'children' => [

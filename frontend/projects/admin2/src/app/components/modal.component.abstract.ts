@@ -66,7 +66,7 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
 
     ngOnInit(): void {
         if (this.config.data.id) {
-            this.getData(this.config.data.id);
+            this.getData(this.config.data.id, this.config.data.isClone || false);
         } else {
             setTimeout(this.updateControls.bind(this), 0);
         }
@@ -75,8 +75,11 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
             .subscribe(() => this.onValueChanged('form'));
     }
 
-    onGetData(item: T): void {
+    onGetData(item: T, isClone = false): void {
         this.model = item;
+        if (isClone) {
+            this.model.id = 0;
+        }
         this.updateControls();
     }
 
@@ -89,13 +92,13 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
         
     }
 
-    getData(itemId: number): void {
+    getData(itemId: number, isClone = false): void {
         this.loading = true;
         this.dataService.getItem(itemId)
             .pipe(takeUntil(this.destroyed$))
             .subscribe({
                 next: (res) => {
-                    this.onGetData(res);
+                    this.onGetData(res, isClone);
                     setTimeout(() => {
                         this.loading = false;
                     }, 300);

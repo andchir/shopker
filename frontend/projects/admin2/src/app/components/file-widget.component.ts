@@ -87,7 +87,7 @@ export class FileWidgetComponent implements ControlValueAccessor {
         if (!value) {
             return;
         }
-        this.hasPreviewImage = FileData.getIsImageFile(value.extension);
+        this.hasPreviewImage = FileData.getIsImageFile(value.extension, '', true);
         this.files[this.fieldName] = file;
         if (this.hasPreviewImage && file.type.indexOf('image/') > -1) {
             const reader = new FileReader();
@@ -112,7 +112,7 @@ export class FileWidgetComponent implements ControlValueAccessor {
         data.dirPath = data.dirPath
             .replace(`/${this.filesDirBaseUrl}/`, '')
             .replace(`${this.filesDirBaseUrl}/`, '');
-        this.hasPreviewImage = FileData.getIsImageFile(data.extension);
+        this.hasPreviewImage = FileData.getIsImageFile(data.extension, '', true);
         this.writeValue(data);
     }
 
@@ -160,7 +160,7 @@ export class FileWidgetComponent implements ControlValueAccessor {
             }
         } else {
             this.fileName = `${data.title}.${data.extension}`;
-            this.hasPreviewImage = FileData.getIsImageFile(data.extension);
+            this.hasPreviewImage = FileData.getIsImageFile(data.extension, '', true);
             this.imageUrl = this.getImageUrl(data);
             this.controlValue = data;
             if (this.allowMultiple && this.filesRaw.length > 1) {

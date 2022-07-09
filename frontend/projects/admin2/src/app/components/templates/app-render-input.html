@@ -265,12 +265,21 @@
                             </label>
                         </div>
                         <div class="col-12 md:col-7">
-                            <div *ngFor="let opt of field.options; index as index" class="field-checkbox">
-                                <p-checkbox [inputId]="'radio-field-' + field.name + index"
-                                               [formControl]="form.controls[field.name]"
-                                               [name]="field.name"
-                                               [value]="opt.value"></p-checkbox>
-                                <label [for]="'radio-field-' + field.name + index">{{ opt.title }}</label>
+                            <ng-container *ngIf="field.options.length > 0">
+                                <div *ngFor="let opt of field.options; index as index" class="field-checkbox">
+                                    <p-checkbox [inputId]="'radio-field-' + field.name + index"
+                                                [formControl]="form.controls[field.name]"
+                                                [name]="field.name"
+                                                [value]="opt.value"></p-checkbox>
+                                    <label [for]="'radio-field-' + field.name + index">{{ opt.title }}</label>
+                                </div>
+                            </ng-container>
+                            <div class="mb-3" *ngIf="field.options.length === 0">
+                                <p-inputSwitch inputId="field_switch_{{ field.name }}" styleClass="mr-2 vertical-align-middle"
+                                               [formControl]="form.controls[field.name]"></p-inputSwitch>
+                                <label class="vertical-align-middle" for="field_switch_{{ field.name }}">
+                                    {{ field.title }}
+                                </label>
                             </div>
                         </div>
                     </div>

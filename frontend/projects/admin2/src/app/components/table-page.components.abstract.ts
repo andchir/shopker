@@ -126,7 +126,7 @@ export abstract class AppTablePageAbstractComponent<T extends SimpleEntity> impl
         return this.getLangString(item ? 'EDIT' : 'CREATE');
     }
 
-    openModal(item: T, event?: MouseEvent, className = ''): void {
+    openModal(item: T, event?: MouseEvent, className = '', isClone = false): void {
         if (event) {
             event.preventDefault();
         }
@@ -135,7 +135,7 @@ export abstract class AppTablePageAbstractComponent<T extends SimpleEntity> impl
             autoZIndex: false,
             width: '800px',
             style: {maxWidth: '100%'},
-            data: this.getItemData(item)
+            data: Object.assign({}, this.getItemData(item), {isClone})
         });
         ref.onClose
             .pipe(take(1))

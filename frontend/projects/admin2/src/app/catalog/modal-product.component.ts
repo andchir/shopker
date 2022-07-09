@@ -246,11 +246,4 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
             return field.name;
         });
     }
-
-    // saveData(autoClose = false, event?: MouseEvent): void {
-    //     if (event) {
-    //         event.preventDefault();
-    //     }
-    //     console.log(this.getFormData());
-    // }
 }

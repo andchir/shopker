@@ -78,8 +78,11 @@ export class ModalContentTypeComponent extends AppModalAbstractComponent<Content
         ];
     }
 
-    onGetData(item: ContentType): void {
+    onGetData(item: ContentType, isClone = false): void {
         this.model = item;
+        if (isClone) {
+            this.model.id = 0;
+        }
         this.getCollectionsList();
         this.updateControls();
     }

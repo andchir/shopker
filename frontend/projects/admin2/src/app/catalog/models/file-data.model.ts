@@ -39,11 +39,15 @@ export class FileData {
         return output;
     }
 
-    static getIsImageFile(fileExtension?: string, fileName?: string): boolean {
+    static getIsImageFile(fileExtension?: string, fileName?: string, includeSvg = false): boolean {
         if (fileName) {
             fileExtension = FileData.getExtension(fileName);
         }
-        return ['jpg', 'jpeg', 'png', 'webp', 'gif'].indexOf(fileExtension) > -1;
+        const imagesExt = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+        if (includeSvg) {
+            imagesExt.push('svg');
+        }
+        return imagesExt.indexOf(fileExtension) > -1;
     }
 
     static getFileName(fileData: FileData): string {

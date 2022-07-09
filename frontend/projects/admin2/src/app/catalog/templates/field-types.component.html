@@ -73,6 +73,10 @@
                                 [pTooltip]="'EDIT' | translate"
                                 tooltipPosition="bottom"
                                 (click)="openModal(item)"></button>
+                        <button pButton pRipple icon="pi pi-clone"
+                                class="p-button p-button-sm p-button-rounded p-button-info ml-2"
+                                [pTooltip]="'CLONE' | translate"
+                                tooltipPosition="bottom" (click)="openModal(item, $event, '', true)"></button>
                         <button pButton pRipple icon="pi pi-trash"
                                 class="p-button p-button-sm p-button-rounded p-button-danger ml-2"
                                 [pTooltip]="'DELETE' | translate"

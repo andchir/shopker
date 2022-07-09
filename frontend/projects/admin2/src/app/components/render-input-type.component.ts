@@ -269,6 +269,9 @@ export class RenderInputTypeComponent implements OnInit {
                 valueArr = field.inputProperties['values_list']
                     ? String(field.inputProperties['values_list']).split('||')
                     : [];
+                if (valueArr.length === 0) {
+                    valueArr.push(`${field.title}==${field.name}`);
+                }
                 valueArr.forEach((optStr, index) => {
                     const opts = optStr.split('==');
                     if (!opts[1]) {
@@ -290,7 +293,7 @@ export class RenderInputTypeComponent implements OnInit {
                 valueArr = field.inputProperties['values_list']
                     ? String(field.inputProperties['values_list']).split('||')
                     : [];
-                if (!Array.isArray(this.model[field.name])) {
+                if (valueArr.length > 0 && !Array.isArray(this.model[field.name])) {
                     this.model[field.name] = [];
                 }
                 this.fieldsMultivalues[field.name] = new MultiValues([], []);
@@ -343,27 +346,10 @@ export class RenderInputTypeComponent implements OnInit {
                 break;
             case 'tags':
             case 'checkbox':
-                defaultValue = defaultValue ? defaultValue.split('||') : [];
+                defaultValue = defaultValue ? defaultValue.split('||') : (field.inputProperties['values_list'] ? [] : false);
                 break;
         }
         this.model[field.name] = modelValue !== null ? modelValue : defaultValue;
-    }
-
-    selectValue(e, fieldName: string, value: string): void {
-        if (!Array.isArray(this.model[fieldName])) {
-            this.model[fieldName] = [];
-        }
-        const valIndex = this.fieldsMultivalues[fieldName].values.indexOf(value);
-        if (valIndex === -1) {
-            return;
-        }
-        if (e.target.checked) {
-            this.model[fieldName].push(value);
-            this.fieldsMultivalues[fieldName].checked[valIndex] = true;
-        } else {
-            this.model[fieldName].splice(this.model[fieldName].indexOf(value), 1);
-            this.fieldsMultivalues[fieldName].checked[valIndex] = false;
-        }
     }
 
     generateName(field: ContentField, event?: MouseEvent): void {
@@ -586,7 +572,7 @@ export class RenderInputTypeComponent implements OnInit {
             e.stopPropagation();
             const value = e.dataTransfer.getData('text/plain');
             const ext = value.split('.').pop();
-            if (['jpg', 'jpeg', 'png', 'gif'].indexOf(ext.toLowerCase()) === -1) {
+            if (['jpg', 'jpeg', 'png', 'gif', 'svg'].indexOf(ext.toLowerCase()) === -1) {
                 return;
             }
             const range = quillEditorRef.getSelection();

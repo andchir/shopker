@@ -68,7 +68,12 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
         if (this.config.data.id) {
             this.getData(this.config.data.id, this.config.data.isClone || false);
         } else {
-            setTimeout(this.updateControls.bind(this), 0);
+            setTimeout(() => {
+                this.updateControls();
+                if (this.form.controls.isActive) {
+                    this.form.controls.isActive.setValue(true);
+                }
+            }, 0);
         }
         this.form.valueChanges
             .pipe(takeUntil(this.destroyed$))

@@ -109,9 +109,6 @@ export class FileWidgetComponent implements ControlValueAccessor {
         const fileTitle = fileName.replace(`.${fileExtension}`, '');
         const data = new FileData(0, fileTitle, fileExtension, 0, fileTitle, tmpArr.join('/'));
         data.fileName = fileTitle;
-        data.dirPath = data.dirPath
-            .replace(`/${this.filesDirBaseUrl}/`, '')
-            .replace(`${this.filesDirBaseUrl}/`, '');
         this.hasPreviewImage = FileData.getIsImageFile(data.extension, '', true);
         this.writeValue(data);
     }
@@ -120,7 +117,7 @@ export class FileWidgetComponent implements ControlValueAccessor {
         if (!this.hasPreviewImage) {
             return '';
         }
-        return FileData.getImageUrl(this.filesDirBaseUrl, data || this.controlValue);
+        return FileData.getImageUrl('', data || this.controlValue);
     }
 
     buttonHandler(event?: MouseEvent): void {

@@ -73,6 +73,12 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
                 } else {
                     this.updateForm();
                     this.buildControls();
+                    setTimeout(() => {
+                        this.updateControls();
+                        if (this.form.controls.isActive) {
+                            this.form.controls.isActive.setValue(true);
+                        }
+                    }, 0);
                     this.dataLoaded = true;
                 }
                 this.currentContentType.fields.forEach((field) => {
@@ -93,9 +99,12 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
         this.getCategories();
         this.updateForm();
         this.buildControls();
+        setTimeout(() => {
+            this.updateControls();
+        }, 0);
     }
 
-    buildControls(updateControls = true) {
+    buildControls() {
         this.currentContentType.fields.forEach((field) => {
             if (!this.form.controls[field.name]) {
                 if (['parameters'].indexOf(field.inputType) > -1) {
@@ -114,11 +123,6 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
                 }
             }
         });
-        if (updateControls) {
-            setTimeout(() => {
-                this.updateControls();
-            }, 1);
-        }
     }
 
     updateForm(data ?: any): void {
@@ -227,7 +231,7 @@ export class ModalProductComponent extends AppModalAbstractComponent<Product> im
         const newField = JSON.parse(JSON.stringify(field));
         newField.name = `${baseFieldName}__${fieldIndexData.additFieldsCount + 1}`;
         this.currentContentType.fields.splice(fieldIndexData.index + 1, 0, newField);
-        this.buildControls(false);
+        this.buildControls();
     }
 
     filesUploadRequest(formData: FormData, itemId: number) {

@@ -47,11 +47,12 @@ class CatalogService {
      * @param int $parentId
      * @param string $locale
      * @param bool $activeOnly
+     * @param bool $getPagesFromRoot
      * @return array
      * @throws \Doctrine\ODM\MongoDB\LockException
      * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
      */
-    public function getCategoriesTree($parentId = 0, $locale = '', $activeOnly = true)
+    public function getCategoriesTree($parentId = 0, $locale = '', $activeOnly = true, $getPagesFromRoot = false)
     {
         $data = [];
         $categoriesRepository = $this->getCategoriesRepository();
@@ -78,7 +79,7 @@ class CatalogService {
             $data[$pId][] = $category->getMenuData([], $locale);
         }
 
-        if ($parentId === 0) {
+        if ($parentId === 0 && $getPagesFromRoot) {
             $childContent = $parentCategory ? $this->getCategoryContent($parentCategory, [], $locale) : [];
             // Content pages (not categories)
             if (!empty($childContent)) {

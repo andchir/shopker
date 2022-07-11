@@ -125,7 +125,7 @@ class ContentTypeController extends StorageControllerAbstract
         $this->dm->flush();
 
         //Add new collection
-        $collectionRepository = $this->dm->getRepository('AppMainBundle:Collection');
+        $collectionRepository = $this->dm->getRepository(Collection::class);
 
         $count = $collectionRepository->createQueryBuilder()
             ->field('name')->equals($collectionName)

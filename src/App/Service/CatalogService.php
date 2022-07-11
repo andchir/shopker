@@ -62,8 +62,8 @@ class CatalogService {
         }
 
         $results = $activeOnly
-            ? $categoriesRepository->findActiveAll()
-            : $categoriesRepository->findAll();
+            ? $categoriesRepository->findActiveAll('id', 'asc')
+            : $categoriesRepository->findBy([], ['id' => 'asc']);
 
         $parentIdsArr = [$parentId];
         /** @var Category $category */
@@ -1075,9 +1075,12 @@ class CatalogService {
      * @return array
      */
     public static function createTree(&$list, $parent){
-        $tree = array();
+        $tree = [];
         foreach ($parent as $k => $l){
             if(isset($l['id']) && isset($list[$l['id']])){
+                if ($l['id'] === $list[$l['id']]) {
+                    continue;
+                }
                 $l['children'] = self::createTree($list, $list[$l['id']]);
             }
             $tree[] = $l;

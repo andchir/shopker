@@ -1,9 +1,9 @@
 <div [ngSwitch]="outputType">
-    <ng-container *ngSwitchCase="'boolean'" class="text-center">
-        <div class="text-center">
-            <i class="pi pi-check text-2xl text-green-400" [hidden]="!value"></i>
-            <i class="pi pi-times text-2xl text-400" [hidden]="value"></i>
-        </div>
+    <ng-container *ngSwitchCase="'checkbox'">
+        <ng-container *ngTemplateOutlet="checkbox"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="'boolean'">
+        <ng-container *ngTemplateOutlet="checkbox"></ng-container>
     </ng-container>
     <ng-container *ngSwitchCase="'number'">
         {{ value | number: '1.2-2':'ru-RU' }}
@@ -57,4 +57,10 @@
         <i class="icon-user"></i>
         {{ value }}
     </a>
+</ng-template>
+<ng-template #checkbox>
+    <div class="text-center">
+        <i class="pi pi-check text-2xl text-green-400" [hidden]="!value"></i>
+        <i class="pi pi-times text-2xl text-400" [hidden]="value"></i>
+    </div>
 </ng-template>

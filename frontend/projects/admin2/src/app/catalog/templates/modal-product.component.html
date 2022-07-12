@@ -1,43 +1,43 @@
 <div>
     <form [formGroup]="form" #formEl>
-        
-        <div class="min-height200">
-            <ng-container *ngIf="dataLoaded">
 
-                <div class="grid mb-3">
-                    <div class="col-12 md:col-6">
-                        <div class="mb-3" *ngIf="localeListFull.length > 1">
-                            <p-selectButton
-                                [options]="localeListFull"
-                                optionLabel="title"
-                                optionValue="name"
-                                styleClass="buttons-sm"
-                                [ngModel]="localeCurrent"
-                                (ngModelChange)="onLocaleSwitch($event)"
-                                [ngModelOptions]="{standalone: true}"></p-selectButton>
-                        </div>
-                        <div class="w-full-parent">
-                            <app-select-parent-dropdown formControlName="parentId"></app-select-parent-dropdown>
-                        </div>
+        <ng-container *ngIf="dataLoaded">
+
+            <div class="grid mb-3">
+                <div class="col-12 md:col-6">
+                    <div class="mb-3" *ngIf="localeListFull.length > 1">
+                        <p-selectButton
+                            [options]="localeListFull"
+                            optionLabel="title"
+                            optionValue="name"
+                            styleClass="buttons-sm"
+                            [ngModel]="localeCurrent"
+                            (ngModelChange)="onLocaleSwitch($event)"
+                            [ngModelOptions]="{standalone: true}"></p-selectButton>
                     </div>
-                    <div class="col-12 md:col-6">
-                        <div class="mb-3">
-                            <p-inputSwitch inputId="fieldActive" styleClass="mr-2 vertical-align-middle"
-                                           formControlName="isActive"></p-inputSwitch>
-                            <label class="vertical-align-middle" for="fieldActive">
-                                {{ 'ACTIVE' | translate }}
-                            </label>
-                        </div>
-                        <div>
-                            <p-inputSwitch inputId="fieldClearCache" styleClass="mr-2 vertical-align-middle"
-                                           formControlName="clearCache"></p-inputSwitch>
-                            <label class="vertical-align-middle" for="fieldClearCache">
-                                {{ 'CLEAR_FILE_CACHE' | translate }}
-                            </label>
-                        </div>
+                    <div class="w-full-parent">
+                        <app-select-parent-dropdown formControlName="parentId"></app-select-parent-dropdown>
                     </div>
                 </div>
-                
+                <div class="col-12 md:col-6">
+                    <div class="mb-3">
+                        <p-inputSwitch inputId="fieldActive" styleClass="mr-2 vertical-align-middle"
+                                       formControlName="isActive"></p-inputSwitch>
+                        <label class="vertical-align-middle" for="fieldActive">
+                            {{ 'ACTIVE' | translate }}
+                        </label>
+                    </div>
+                    <div>
+                        <p-inputSwitch inputId="fieldClearCache" styleClass="mr-2 vertical-align-middle"
+                                       formControlName="clearCache"></p-inputSwitch>
+                        <label class="vertical-align-middle" for="fieldClearCache">
+                            {{ 'CLEAR_FILE_CACHE' | translate }}
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="min-height400">
                 <app-render-input
                     [fields]="currentContentType.fields"
                     [groups]="currentContentType.groups"
@@ -52,8 +52,8 @@
                     (onParametersAdd)="arrayFieldAdd($event)"
                     (onParametersUpdate)="onParametersUpdate($event)"
                     (onParametersDelete)="onParametersDelete($event)"></app-render-input>
-            </ng-container>
-        </div>
+            </div>
+        </ng-container>
 
         <div role="separator" class="p-divider p-component p-divider-horizontal p-divider-solid p-divider-left">
             <div class="p-divider-content"></div>

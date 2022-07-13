@@ -23,7 +23,7 @@ export class FileData {
         let output = '';
         const fileName = fileData.fileName || fileData.title;
         if (fileName) {
-            if (filesDirBaseUrl) {
+            if (filesDirBaseUrl && fileData.fileId) {
                 output += `${filesDirBaseUrl}/`;
             }
             if (fileData.dirPath) {

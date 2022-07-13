@@ -18,7 +18,7 @@
                    (change)="fileChange($event)" #fileInput>
             <div class="mx-auto relative" [ngClass]="{'show-on-hover-parent': hasPreviewImage && fileName}" style="width: 265px; min-height: 40px;">
                 <div class="text-center" *ngIf="hasPreviewImage && fileName">
-                    <img [src]="imageUrl" alt="Preview" class="img-thumbnail" style="width: 265px;" #imgPreview>
+                    <img [src]="imageUrl | safe: 'resourceUrl'" alt="Preview" class="img-thumbnail" style="width: 265px;" #imgPreview>
                 </div>
                 <div class="file-buttons w-full text-center show-on-hover-child">
                     <button type="button" pButton pRipple

@@ -55,6 +55,8 @@ import {UserRoleColorPipe, UserRoleNamePipe} from './pipes/user-role.pipe';
 import {OrderByPipe} from './pipes/orderby.pipe';
 import {FilterArrayPipe} from './pipes/filter-array-pipe';
 import {IfEmptyPipe} from './pipes/if-empty.pipe';
+import {SafePipe} from '@app/pipes/safe.pipe';
+
 import {SortingComponent} from './components/sorting-dnd.conponent';
 import {FileWidgetComponent} from './components/file-widget.component';
 import {SelectParentDropdownComponent} from './components/select-parent-dropdown.component';
@@ -134,6 +136,7 @@ const modules = [
         OrderByPipe,
         FilterArrayPipe,
         IfEmptyPipe,
+        SafePipe,
 
         ModalConfirmTextComponent,
         ModalFileUploadContentComponent,

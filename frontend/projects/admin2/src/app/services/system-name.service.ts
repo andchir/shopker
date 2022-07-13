@@ -34,6 +34,9 @@ export class SystemNameService {
 
     generateName(title: string): string {
         title = this.transliterate(title);
-        return title.toLowerCase();
+        return title.toLowerCase()
+            .replace('#', '')
+            .replace('&', '')
+            .replace('--', '-');
     }
 }

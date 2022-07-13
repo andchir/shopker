@@ -72,7 +72,7 @@ class FileController extends BaseController
         }
 
         /** @var Category $category */
-        $category = $this->dm->getRepository('AppMainBundle:Category')->find($categoryId);
+        $category = $this->dm->getRepository(Category::class)->find($categoryId);
         if (!$category) {
             return $this->setError($this->translator->trans('Category not found.', [], 'validators'));
         }
@@ -119,7 +119,7 @@ class FileController extends BaseController
             return [$usedFiles, $error];
         }
 
-        if (!$this->settingsService->fileUploadAllowed($file->getClientOriginalName(), ['jpg','jpeg','png','gif'])) {
+        if (!$this->settingsService->fileUploadAllowed($file->getClientOriginalName(), ['jpg','jpeg','png','gif','svg'])) {
             $error = 'File type is not allowed.';
             return [$usedFiles, $error];
         }

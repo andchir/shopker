@@ -117,7 +117,8 @@ export class FileWidgetComponent implements ControlValueAccessor {
         if (!this.hasPreviewImage) {
             return '';
         }
-        return FileData.getImageUrl('', data || this.controlValue);
+        const filesDirBaseUrl = data.fileId ? this.filesDirBaseUrl : '';
+        return FileData.getImageUrl(filesDirBaseUrl, data || this.controlValue);
     }
 
     buttonHandler(event?: MouseEvent): void {

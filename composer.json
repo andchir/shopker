@@ -78,6 +78,9 @@
         "platform": {
             "ext-mongo": "1.6.16",
             "php": "7.4.26"
+        },
+        "allow-plugins": {
+            "symfony/flex": true
         }
     },
     "autoload": {

@@ -600,6 +600,8 @@ class CatalogController extends BaseController
         ];
         list($filters, $fields) = $this->getFieldsData($contentTypeFields, $options);
 
+        CatalogService::convertDateField($currentPage, $fields);
+
         // Get categories menu
         $categoriesMenu = $this->getCategoriesMenu($category, $breadcrumbs, $locale);
         $currency = $this->settingsService->getCurrency();

@@ -1132,4 +1132,20 @@ class CatalogService {
         }
         return '';
     }
+
+    /**
+     * @param array $pageData
+     * @param array $fields
+     * @return void
+     */
+    public static function convertDateField(&$pageData, $fields)
+    {
+        foreach ($fields as $field) {
+            if ($field['outputType'] == 'date'
+                && isset($pageData[$field['name']])
+                && $pageData[$field['name']] instanceof UTCDateTime) {
+                    $pageData[$field['name']] = $pageData[$field['name']]->toDateTime()->format('Y-m-d\TH:i:sP');
+            }
+        }
+    }
 }

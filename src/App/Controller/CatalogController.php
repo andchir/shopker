@@ -515,6 +515,7 @@ class CatalogController extends BaseController
             'categoriesMenu' => $categoriesMenu,
             'listTemplate' => $listTemplate,
             'items' => $items,
+            'itemsTotal' => $total,
             'priceFieldName' => $priceFieldName,
             'fields' => $fields,
             'fieldsAll' => $fieldsAll,

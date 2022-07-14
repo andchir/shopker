@@ -423,6 +423,10 @@
          * @param orderByVar
          */
         this.orderByChange = function(currentUrl, orderBy, orderByVar) {
+            if (!currentUrl) {
+                const locationSearch = window.location.search || '?page=1&order_by=id_desc';
+                currentUrl = window.location.pathname + locationSearch;
+            }
             var qsArr = currentUrl.split(/[\?&]/),
                 newUrl = qsArr.shift();
             orderByVar = orderByVar || 'order_by';

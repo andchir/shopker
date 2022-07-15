@@ -52,9 +52,12 @@ Proceed to checkout: Оформить заказ
 Edit an order: Редактировать заказ
 Selected: Выбрано
 Close: Закрыть
-Total: Общая сумма
+Subtotal: Подытог
+Total: Итог
+Sum: Сумма
 Files: Файлы
 File|Files: Файл|Файлы
+Product: Товар
 product|products: товар|товара|товаров
 '%count% product found|%count% products found': 'Найден %count% товар|Найдено %count% товара|Найдено %count% товаров'
 '%count% pages found|%count% pages found': 'Найдена %count% страница|Найдено %count% страницы|Найдено %count% страниц'
@@ -133,7 +136,8 @@ Promo code not found.: Промо код не найден.
 Discount: Скидка
 The promo code has expired.: Промо код не действителен.
 You are logged in as %username%: Вы авторизованы как %username%
-
+Top Selling: Лидер продаж
+Promo: Акция
 Sort by: Сортировать по
 catalog.sort_by_novelty: Новизне
 catalog.sort_by_price_increase: Увеличению цены
@@ -142,6 +146,7 @@ catalog.sort_by_name: Названию
 
 Shopping cart: Корзина товаров
 Order checkout: Оформление заказа
+Checkout: Оформить
 Delete item: Удалить
 Print: Печать
 I agree to the processing of personal data: Согласен на обработку персональных данных

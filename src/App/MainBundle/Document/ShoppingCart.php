@@ -138,6 +138,13 @@ class ShoppingCart {
     protected $price;
 
     /**
+     * @MongoDB\Field(type="float")
+     * @Groups({"details", "list"})
+     * @var float
+     */
+    protected $subTotal;
+
+    /**
      * @MongoDB\Field(type="int")
      * @Groups({"details", "list"})
      * @var int
@@ -407,7 +414,7 @@ class ShoppingCart {
      * Set price
      *
      * @param $price
-     * @param int $currencyRate
+     * @param float $currencyRate
      * @return $this
      */
     public function setPrice($price, $currencyRate = 1)
@@ -424,6 +431,26 @@ class ShoppingCart {
     public function getPrice()
     {
         return $this->price;
+    }
+
+    /**
+     * @param float $subTotal
+     * @return $this
+     */
+    public function setSubTotal($subTotal)
+    {
+        $this->subTotal = $subTotal;
+        return $this;
+    }
+
+    /**
+     * Get subtotal
+     *
+     * @return float
+     */
+    public function getSubTotal()
+    {
+        return $this->subTotal;
     }
 
     /**
@@ -453,11 +480,13 @@ class ShoppingCart {
     {
         $countTotal = 0;
         $priceTotal = 0;
+        $priceSubTotal = 0;
         /** @var OrderContent $content */
         foreach ($this->content as $content) {
             $priceTotal += $content->getPriceTotal();
             $countTotal += $content->getCount();
         }
+        $priceSubTotal = $priceTotal;
         if ($this->discount) {
             $priceTotal -= $this->discount;
         } else if ($this->discountPercent) {
@@ -468,6 +497,7 @@ class ShoppingCart {
         }
         $this
             ->setPrice($priceTotal)
+            ->setSubTotal($priceSubTotal)
             ->setCount($countTotal);
         return $this;
     }

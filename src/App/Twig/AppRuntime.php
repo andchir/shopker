@@ -549,6 +549,19 @@ class AppRuntime
     }
 
     /**
+     * @param string $collectionName
+     * @param string $fieldName
+     * @return mixed[]
+     */
+    public function distinctValuesFunction($collectionName, $fieldName)
+    {
+        /** @var CatalogService $catalogService */
+        $catalogService = $this->container->get('app.catalog');
+        $collection = $catalogService->getCollection($collectionName);
+        return $collection->distinct($fieldName);
+    }
+
+    /**
      * @param $errorMessage
      * @return string
      */

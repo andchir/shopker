@@ -125,7 +125,8 @@ class AppExtension extends AbstractExtension
                 'is_safe' => ['html'],
                 'needs_environment' => true
             ]),
-            new TwigFunction('fieldByLocale', [AppRuntime::class, 'fieldByLocaleFunction'])
+            new TwigFunction('fieldByLocale', [AppRuntime::class, 'fieldByLocaleFunction']),
+            new TwigFunction('distinctValues', [AppRuntime::class, 'distinctValuesFunction'])
         ];
     }
 

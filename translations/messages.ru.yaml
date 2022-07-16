@@ -12,6 +12,9 @@ Database connection URI (Optional): URI для подключения (не об
 Clear the database: Очистить базу данных
 Russian: Русский
 
+Blog: Блог
+News: Новости
+Tags: Метки
 Home page: Главная страница
 Log in: Войти
 Log out: Выйти
@@ -78,7 +81,7 @@ Free shipping amount: Сумма для бесплатной доставки
 Order: Заказ
 Status: Статус
 Order list: Состав заказа
-Contacts: Контактная информация
+Contacts: Контакты
 Timezone: Часовой пояс
 Submit: Отправить
 Empty.: Пусто.

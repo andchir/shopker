@@ -20,8 +20,11 @@ export class FileData {
         if (fileData.dataUrl) {
             return fileData.dataUrl;
         }
+        if (!fileData.fileName) {
+            return '';
+        }
         let output = '';
-        const fileName = fileData.fileName || fileData.title;
+        const fileName = fileData.fileName;
         if (fileName) {
             if (filesDirBaseUrl && fileData.fileId) {
                 output += `${filesDirBaseUrl}/`;

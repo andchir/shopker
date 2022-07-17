@@ -3,8 +3,10 @@
 namespace App\Command;
 
 use App\MainBundle\Document\Category;
+use App\MainBundle\Document\FileDocument;
 use App\Service\CatalogService;
 use App\Service\DataBaseUtilService;
+use App\Service\UtilsService;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\LockException;
 use Doctrine\ODM\MongoDB\Mapping\MappingException;
@@ -137,6 +139,108 @@ class ActionCommand extends Command
                 }
 
                 break;
+            case 'search_images':
+
+                list($apiKey, $customSearchId) = strpos($option, '__') !== false ? explode('__', $option) : ['', $option];
+                $collectionName = $option2;
+                $imageFieldName = 'image';
+                $imgSize = 'HUGE';// HUGE|LARGE
+                $maxResults = 3;
+                $apiUrl = "https://customsearch.googleapis.com/customsearch/v1?imgSize={$imgSize}&searchType=image&cx={$customSearchId}&key={$apiKey}";
+                $apiUrl .= "&imgType=photo&lr=lang_ru&num=10";
+
+                $collection = $this->catalogService->getCollection($collectionName);
+                $filesDirPath = $this->params->get('app.files_dir_path');
+                if (!is_dir($filesDirPath)) {
+                    mkdir($filesDirPath);
+                }
+                $now = new \DateTime();
+
+                $countTotal = 0;
+                $items = $collection->find([])->toArray();
+                if (count($items) > 0) {
+
+                    foreach ($items as $entity) {
+                        if (!empty($entity[$imageFieldName]) && !empty($entity[$imageFieldName . '__1']) && !empty($entity[$imageFieldName . '__2'])) {
+                            continue;
+                        }
+                        try {
+                            $result = file_get_contents($apiUrl . '&q=' . rawurlencode($entity['title']));
+                        } catch (\Exception $e) {
+                            $io->error($e->getMessage());
+                            break;
+                        }
+                        $result = json_decode($result, true);
+                        if (empty($result['items'])) {
+                            continue;
+                        }
+                        $count = 0;
+                        $resultsTotal = count($result['items']);
+                        foreach ($result['items'] as $index => $image) {
+                            if ($count === 0 && !empty($entity[$imageFieldName])) {
+                                $count++;
+                                continue;
+                            }
+                            if ($count === 1 && !empty($entity[$imageFieldName . '__1'])) {
+                                $count++;
+                                continue;
+                            }
+                            if ($count >= $maxResults) {
+                                $io->note("Uploaded MAX images {$count}/{$resultsTotal} - {$entity['title']}.");
+                                break;
+                            }
+                            $extension = UtilsService::getExtension($image['link']);
+                            if (!$extension || !in_array($extension, ['jpg', 'jpeg', 'png'])) {
+                                $io->note("Bad image extension: {$extension}.");
+                                continue;
+                            }
+
+                            $fileDocument = new FileDocument();
+                            $fileDocument
+                                ->setUploadRootDir($filesDirPath)
+                                ->setCreatedDate($now)
+                                ->setOwnerType('products')
+                                ->setOwnerDocId($entity['_id'])
+                                ->setUserId(1)
+                                ->setUniqueFileName()
+                                ->setExtension($extension)
+                                ->setOriginalFileName(basename($image['link']));
+
+                            $originalName = $fileDocument->getOriginalFileName();
+                            $title = mb_substr($originalName, 0, mb_strrpos($originalName, '.'));
+                            $fileDocument->setTitle($title);
+
+                            $filePath = $fileDocument->getUploadedPath();
+                            try {
+                                file_put_contents($filePath, file_get_contents($image['link']));
+                            } catch (\Exception $e) {
+                                $io->error($e->getMessage());
+                                continue;
+                            }
+
+                            $fileDocument->setSize(filesize($filePath));
+
+                            $this->dm->persist($fileDocument);
+                            $this->dm->flush();
+
+                            $imageFieldNameCur = $imageFieldName . ($count ? '__' . $count : '');
+                            $entity[$imageFieldNameCur] = $fileDocument->getRecordData();
+                            $collection->updateOne(['_id' => $entity['_id']], ['$set' => $entity]);
+
+                            $count++;
+                            $countTotal++;
+
+                            $io->note("UPLOADED {$count}/{$resultsTotal} - $imageFieldNameCur - {$entity['title']}: {$image['link']}");
+                        }
+                    }
+
+                    $io->success("TOTAL UPLOADED: {$countTotal} images.");
+
+                } else {
+                    $io->error('Collection is empty.');
+                }
+
+                break;
             default:
 
                 $io->error('Action not found.');
@@ -146,5 +250,7 @@ class ActionCommand extends Command
         $time = round($time_end - $time_start, 3);
 
         $io->note("The operation has been processed in time {$time} sec.");
+
+        return 1;
     }
 }

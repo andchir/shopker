@@ -134,6 +134,9 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
         Object.keys(data).forEach((key) => {
             if (key.indexOf('__') > -1) {
                 const tmp = key.split('__');
+                if (!Number.isNaN(tmp[1] as string)) {
+                    return;
+                }
                 if (!data[tmp[0]]) {
                     data[tmp[0]] = {};
                 }
@@ -255,10 +258,14 @@ export abstract class AppModalAbstractComponent<T extends SimpleEntity> implemen
         Object.keys(controls).forEach((key) => {
             if (key.indexOf('__') > -1) {
                 const tmp = key.split('__');
-                if (!this.model[tmp[0]]) {
-                    this.model[tmp[0]] = {};
+                if (!Number.isNaN(tmp[1] as string)) {
+                    controlValue = this.model[key] || '';
+                } else {
+                    if (!this.model[tmp[0]]) {
+                        this.model[tmp[0]] = {};
+                    }
+                    controlValue = this.model[tmp[0]][tmp[1]] ?? '';
                 }
-                controlValue = this.model[tmp[0]][tmp[1]] ?? '';
             } else {
                 controlValue = this.model[key] || '';
             }

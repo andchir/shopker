@@ -786,7 +786,7 @@ class CatalogController extends BaseController
      */
     public function applyFilters($filters, $filtersData, &$criteria)
     {
-        if (empty($filters)) {
+        if (empty($filters) || !is_array($filters)) {
             return;
         }
         foreach ($filters as $name => $filter) {

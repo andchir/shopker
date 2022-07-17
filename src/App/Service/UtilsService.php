@@ -458,8 +458,12 @@ class UtilsService
      */
     public static function getExtension($filePath)
     {
-        $temp_arr = $filePath ? explode('.', $filePath) : [];
-        $ext = !empty($temp_arr) ? end($temp_arr) : '';
+        if (strpos($filePath, '?') !== false) {
+            $filePath = substr($filePath, 0, strpos($filePath, '?'));
+        }
+        $temp_arr1 = $filePath ? explode('/', $filePath) : [];
+        $temp_arr = count($temp_arr1) ? explode('.', end($temp_arr1)) : [];
+        $ext = count($temp_arr) > 1 ? end($temp_arr) : '';
         return strtolower($ext);
     }
 

@@ -142,10 +142,17 @@ class ActionCommand extends Command
             case 'search_images':
 
                 list($apiKey, $customSearchId) = strpos($option, '__') !== false ? explode('__', $option) : ['', $option];
-                $collectionName = $option2;
+                $collectionName = $option2 ?: 'products';
+
+                if (!$apiKey || $customSearchId) {
+                    $io->info("How to use: \nbin/console app:action search_images <API_KEY>__<SEARCH_ENGINE_ID> <COLLECTION_NAME>");
+                    break;
+                }
+
                 $imageFieldName = 'image';
                 $imgSize = 'HUGE';// HUGE|LARGE
                 $maxResults = 3;
+                // Docs: https://developers.google.com/custom-search/v1/reference/rest/v1/cse/list
                 $apiUrl = "https://customsearch.googleapis.com/customsearch/v1?imgSize={$imgSize}&searchType=image&cx={$customSearchId}&key={$apiKey}";
                 $apiUrl .= "&imgType=photo&lr=lang_ru&num=10";
 
@@ -158,87 +165,86 @@ class ActionCommand extends Command
 
                 $countTotal = 0;
                 $items = $collection->find([])->toArray();
-                if (count($items) > 0) {
+                if (count($items) == 0) {
+                    $io->error('Collection is empty.');
+                    break;
+                }
 
-                    foreach ($items as $entity) {
-                        if (!empty($entity[$imageFieldName]) && !empty($entity[$imageFieldName . '__1']) && !empty($entity[$imageFieldName . '__2'])) {
+                foreach ($items as $entity) {
+                    if (!empty($entity[$imageFieldName]) && !empty($entity[$imageFieldName . '__1']) && !empty($entity[$imageFieldName . '__2'])) {
+                        continue;
+                    }
+                    try {
+                        $result = file_get_contents($apiUrl . '&q=' . rawurlencode($entity['title']));
+                    } catch (\Exception $e) {
+                        $io->error($e->getMessage());
+                        break;
+                    }
+                    $result = json_decode($result, true);
+                    if (empty($result['items'])) {
+                        continue;
+                    }
+                    $count = 0;
+                    $resultsTotal = count($result['items']);
+                    foreach ($result['items'] as $index => $image) {
+                        if ($count === 0 && !empty($entity[$imageFieldName])) {
+                            $count++;
                             continue;
                         }
-                        try {
-                            $result = file_get_contents($apiUrl . '&q=' . rawurlencode($entity['title']));
-                        } catch (\Exception $e) {
-                            $io->error($e->getMessage());
+                        if ($count === 1 && !empty($entity[$imageFieldName . '__1'])) {
+                            $count++;
+                            continue;
+                        }
+                        if ($count >= $maxResults) {
+                            $io->note("Uploaded MAX images {$count}/{$resultsTotal} - {$entity['title']}.");
                             break;
                         }
-                        $result = json_decode($result, true);
-                        if (empty($result['items'])) {
+                        $extension = UtilsService::getExtension($image['link']);
+                        if (!$extension || !in_array($extension, ['jpg', 'jpeg', 'png'])) {
+                            $io->note("Bad image extension: {$extension}.");
                             continue;
                         }
-                        $count = 0;
-                        $resultsTotal = count($result['items']);
-                        foreach ($result['items'] as $index => $image) {
-                            if ($count === 0 && !empty($entity[$imageFieldName])) {
-                                $count++;
-                                continue;
-                            }
-                            if ($count === 1 && !empty($entity[$imageFieldName . '__1'])) {
-                                $count++;
-                                continue;
-                            }
-                            if ($count >= $maxResults) {
-                                $io->note("Uploaded MAX images {$count}/{$resultsTotal} - {$entity['title']}.");
-                                break;
-                            }
-                            $extension = UtilsService::getExtension($image['link']);
-                            if (!$extension || !in_array($extension, ['jpg', 'jpeg', 'png'])) {
-                                $io->note("Bad image extension: {$extension}.");
-                                continue;
-                            }
 
-                            $fileDocument = new FileDocument();
-                            $fileDocument
-                                ->setUploadRootDir($filesDirPath)
-                                ->setCreatedDate($now)
-                                ->setOwnerType('products')
-                                ->setOwnerDocId($entity['_id'])
-                                ->setUserId(1)
-                                ->setUniqueFileName()
-                                ->setExtension($extension)
-                                ->setOriginalFileName(basename($image['link']));
+                        $fileDocument = new FileDocument();
+                        $fileDocument
+                            ->setUploadRootDir($filesDirPath)
+                            ->setCreatedDate($now)
+                            ->setOwnerType('products')
+                            ->setOwnerDocId($entity['_id'])
+                            ->setUserId(1)
+                            ->setUniqueFileName()
+                            ->setExtension($extension)
+                            ->setOriginalFileName(basename($image['link']));
 
-                            $originalName = $fileDocument->getOriginalFileName();
-                            $title = mb_substr($originalName, 0, mb_strrpos($originalName, '.'));
-                            $fileDocument->setTitle($title);
+                        $originalName = $fileDocument->getOriginalFileName();
+                        $title = mb_substr($originalName, 0, mb_strrpos($originalName, '.'));
+                        $fileDocument->setTitle($title);
 
-                            $filePath = $fileDocument->getUploadedPath();
-                            try {
-                                file_put_contents($filePath, file_get_contents($image['link']));
-                            } catch (\Exception $e) {
-                                $io->error($e->getMessage());
-                                continue;
-                            }
-
-                            $fileDocument->setSize(filesize($filePath));
-
-                            $this->dm->persist($fileDocument);
-                            $this->dm->flush();
-
-                            $imageFieldNameCur = $imageFieldName . ($count ? '__' . $count : '');
-                            $entity[$imageFieldNameCur] = $fileDocument->getRecordData();
-                            $collection->updateOne(['_id' => $entity['_id']], ['$set' => $entity]);
-
-                            $count++;
-                            $countTotal++;
-
-                            $io->note("UPLOADED {$count}/{$resultsTotal} - $imageFieldNameCur - {$entity['title']}: {$image['link']}");
+                        $filePath = $fileDocument->getUploadedPath();
+                        try {
+                            file_put_contents($filePath, file_get_contents($image['link']));
+                        } catch (\Exception $e) {
+                            $io->error($e->getMessage());
+                            continue;
                         }
+
+                        $fileDocument->setSize(filesize($filePath));
+
+                        $this->dm->persist($fileDocument);
+                        $this->dm->flush();
+
+                        $imageFieldNameCur = $imageFieldName . ($count ? '__' . $count : '');
+                        $entity[$imageFieldNameCur] = $fileDocument->getRecordData();
+                        $collection->updateOne(['_id' => $entity['_id']], ['$set' => $entity]);
+
+                        $count++;
+                        $countTotal++;
+
+                        $io->note("UPLOADED {$count}/{$resultsTotal} - $imageFieldNameCur - {$entity['title']}: {$image['link']}");
                     }
-
-                    $io->success("TOTAL UPLOADED: {$countTotal} images.");
-
-                } else {
-                    $io->error('Collection is empty.');
                 }
+
+                $io->success("TOTAL UPLOADED: {$countTotal} images.");
 
                 break;
             default:

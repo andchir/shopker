@@ -1,3 +1,10 @@
+2.0.0
+- Version numbering changed.
+- New design of the admin panel. Better support for mobile devices. Now PrimeNG (13.3) is the main library of components.
+- Possibility of unpacking ZIP archive in a file manager.
+- Groups can be assigned to users (new panel in settings).
+- Command for automatic search and uploading of images for products.
+
 4.2.11
 - Updated versions of components.
 - Fixed problem with free shipping.

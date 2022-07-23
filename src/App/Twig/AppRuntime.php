@@ -399,7 +399,7 @@ class AppRuntime
             } else {
                 /** @var CatalogService $catalogService */
                 $catalogService = $this->container->get('app.catalog');
-                $categoriesTree = $catalogService->getCategoriesTree($parentId, $locale);
+                $categoriesTree = $catalogService->getCategoriesTree($parentId, $locale, true, true);
                 $data = !empty($categoriesTree) ? $categoriesTree[0] : [];
             }
         }

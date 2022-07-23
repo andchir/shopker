@@ -144,7 +144,7 @@ class ActionCommand extends Command
                 list($apiKey, $customSearchId) = strpos($option, '__') !== false ? explode('__', $option) : ['', $option];
                 $collectionName = $option2 ?: 'products';
 
-                if (!$apiKey || $customSearchId) {
+                if (!$apiKey || !$customSearchId) {
                     $io->info("How to use: \nbin/console app:action search_images <API_KEY>__<SEARCH_ENGINE_ID> <COLLECTION_NAME>");
                     break;
                 }

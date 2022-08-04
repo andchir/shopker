@@ -10,8 +10,7 @@ if (document.querySelectorAll('#shkNavListType a').length > 0) {
     });
 }
 
-var shkCurrentUrl = '{{ pageUrl(pagesOptions) | raw }}';
-var sortingParentEl = document.getElementById('shkNavSortBy');
+// Sorting
 if (document.querySelectorAll('#shkNavSortBy a').length > 0) {
     // selectEl.addEventListener('change', function(){
     //     shk.orderByChange(shkCurrentUrl, this.value, '{{ pagesOptions.orderByVar }}');

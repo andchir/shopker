@@ -11,6 +11,23 @@ shk.onFilterChange = function(element) {
     });
 };
 
+// Filters accordion
+UIkit.util
+    .on('.js-accordion-section', 'shown', function (e) {
+        let openIndex = 0;
+        e.detail[0].items.forEach(function(item, ind) {
+            if (item.classList.contains('uk-open')) {
+                openIndex = ind;
+            }
+        });
+        shk.setCookie('filtersAccordionOpen', openIndex, 7);
+    });
+
+if (shk.getCookie('filtersAccordionOpen')) {
+    UIkit.accordion(document.querySelector('.js-accordion-section').parentNode)
+        .toggle(parseInt(shk.getCookie('filtersAccordionOpen')), false);
+}
+
 // View list switch
 if (document.querySelectorAll('#shkNavListType a').length > 0) {
     document.querySelectorAll('#shkNavListType a').forEach(function(buttonEl) {

@@ -523,7 +523,8 @@ class CatalogController extends BaseController
             'categoriesSiblings' => $categoriesSiblings,
             'breadcrumbs' => $breadcrumbs,
             'queryOptions' => $queryOptions,
-            'pagesOptions' => $pagesOptions
+            'pagesOptions' => $pagesOptions,
+            'showAllChildren' => $showAllChildren
         ]);
     }
 

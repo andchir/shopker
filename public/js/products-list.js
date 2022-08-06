@@ -1,4 +1,16 @@
 
+shk.onAfterInit(function() {
+    shk.filtersInit(true);
+});
+
+shk.onFilterChange = function(element) {
+    const onFilterChangeElements = document.querySelectorAll('.shk-onfilter-change');
+    onFilterChangeElements.forEach(function(el) {
+        el.style.display = 'block';
+        el.style.top = ((element.tagName === 'DIV' ? element : element.parentNode).offsetTop - 20) + 'px';
+    });
+};
+
 // View list switch
 if (document.querySelectorAll('#shkNavListType a').length > 0) {
     document.querySelectorAll('#shkNavListType a').forEach(function(buttonEl) {

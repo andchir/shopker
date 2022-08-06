@@ -38,7 +38,7 @@
             multiCurrency: false,
             currencyOptions: [],
             priceElSelector: '.shk-price',
-            priceFilterName: '',
+            priceFilterName: 'price',
             currencyTranslate: {
                 RUB: 'руб.',
                 UAH: 'грн'
@@ -111,8 +111,8 @@
             buttonsFiltersHide.forEach(function(button) {
                 button.addEventListener('click', function(e) {
                     e.preventDefault();
-                    if (document.getElementById('catalog-filters')) {
-                        document.getElementById('catalog-filters').style.display = 'none';
+                    if (document.querySelector('.shk-catalog-filters')) {
+                        document.querySelector('.shk-catalog-filters').style.display = 'none';
                         self.setCookie('filters-hidden', 1);
                     }
                 }, false);
@@ -122,16 +122,16 @@
             buttonsFiltersShow.forEach(function(button) {
                 button.addEventListener('click', function(e) {
                     e.preventDefault();
-                    if (document.getElementById('catalog-filters')) {
-                        document.getElementById('catalog-filters').style.display = 'block';
+                    if (document.querySelector('.shk-catalog-filters')) {
+                        document.querySelector('.shk-catalog-filters').style.display = 'block';
                         self.setCookie('filters-hidden', 0);
                     }
                 }, false);
             });
 
             if (this.getCookie('filters-hidden')) {
-                if (document.getElementById('catalog-filters')) {
-                    document.getElementById('catalog-filters').style.display = 'none';
+                if (document.querySelector('.shk-catalog-filters')) {
+                    document.querySelector('.shk-catalog-filters').style.display = 'none';
                 }
             }
         };
@@ -147,23 +147,21 @@
             filtersInputs.forEach(function(input){
                 switch (input.tagName.toLowerCase()) {
                     case 'input':
-
                         if (['checkbox', 'radio'].indexOf(input.getAttribute('type'))) {
                             input.addEventListener('click', function(e) {
                                 if (callback && typeof callback === 'function') {
                                     callback(e);
                                 }
-                                self.onFilterChange();
+                                self.onFilterChange(input);
                             }, false);
                         } else if (['range', 'select'].indexOf(input.getAttribute('type'))) {
                             input.addEventListener('change', function(e) {
                                 if (callback && typeof callback === 'function') {
                                     callback(e);
                                 }
-                                self.onFilterChange();
+                                self.onFilterChange(input);
                             }, false);
                         }
-
                         break;
                 }
             });
@@ -175,7 +173,7 @@
             isFiltersInitialized = true;
         };
 
-        this.onFilterChange = function() {
+        this.onFilterChange = function(element) {
             var onFilterChangeElements = document.querySelectorAll('.shk-onfilter-change');
             onFilterChangeElements.forEach(function(element) {
                 element.style.display = 'block';
@@ -187,7 +185,7 @@
          */
         this.markSelected = function() {
             var urlParams = this.getUrlParams(), fieldName, fieldEl, inputType, valuesArr, value;
-            var filtersContainerEl = document.getElementById('catalog-filters');
+            var filtersContainerEl = document.querySelector('.shk-catalog-filters');
             if (!urlParams.filter || !filtersContainerEl) {
                 return;
             }
@@ -375,7 +373,7 @@
                     }
                 });
                 sliderContainer.noUiSlider.on('change', function(values, handle) {
-                    self.onFilterChange();
+                    self.onFilterChange(sliderContainer);
                 });
             });
         };
@@ -966,34 +964,34 @@
  * @param separator String joining tooltips
  */
 function mergeTooltips(slider, threshold, separator) {
-    
+
     var textIsRtl = getComputedStyle(slider).direction === 'rtl';
     var isRtl = slider.noUiSlider.options.direction === 'rtl';
     var isVertical = slider.noUiSlider.options.orientation === 'vertical';
     var tooltips = slider.noUiSlider.getTooltips();
     var origins = slider.noUiSlider.getOrigins();
-    
+
     // Move tooltips into the origin element. The default stylesheet handles this.
     tooltips.forEach(function (tooltip, index) {
         if (tooltip) {
             origins[index].appendChild(tooltip);
         }
     });
-    
+
     slider.noUiSlider.on('update', function (values, handle, unencoded, tap, positions) {
-        
+
         var pools = [[]];
         var poolPositions = [[]];
         var poolValues = [[]];
         var atPool = 0;
-        
+
         // Assign the first tooltip to the first pool, if the tooltip is configured
         if (tooltips[0]) {
             pools[0][0] = 0;
             poolPositions[0][0] = positions[0];
             poolValues[0][0] = values[0];
         }
-        
+
         for (var i = 1; i < positions.length; i++) {
             if (!tooltips[i] || (positions[i] - positions[i - 1]) > threshold) {
                 atPool++;
@@ -1001,32 +999,32 @@ function mergeTooltips(slider, threshold, separator) {
                 poolValues[atPool] = [];
                 poolPositions[atPool] = [];
             }
-            
+
             if (tooltips[i]) {
                 pools[atPool].push(i);
                 poolValues[atPool].push(values[i]);
                 poolPositions[atPool].push(positions[i]);
             }
         }
-        
+
         pools.forEach(function (pool, poolIndex) {
             var handlesInPool = pool.length;
-            
+
             for (var j = 0; j < handlesInPool; j++) {
                 var handleNumber = pool[j];
-                
+
                 if (j === handlesInPool - 1) {
                     var offset = 0;
-                    
+
                     poolPositions[poolIndex].forEach(function (value) {
-                        offset += 1000 - 10 * value;
+                        offset += 1000 - value;
                     });
-                    
+
                     var direction = isVertical ? 'bottom' : 'right';
                     var last = isRtl ? 0 : handlesInPool - 1;
-                    var lastOffset = 1000 - 10 * poolPositions[poolIndex][last];
+                    var lastOffset = 1000 - poolPositions[poolIndex][last];
                     offset = (textIsRtl && !isVertical ? 100 : 0) + (offset / handlesInPool) - lastOffset;
-                    
+
                     // Center this tooltip over the affected handles
                     tooltips[handleNumber].innerHTML = poolValues[poolIndex].join(separator);
                     tooltips[handleNumber].style.display = 'block';

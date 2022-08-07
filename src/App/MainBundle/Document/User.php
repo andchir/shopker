@@ -569,6 +569,27 @@ class User implements UserInterface, \Serializable
         return $this->options ?: [];
     }
 
+    public function setSubOptions($subOptions, $key)
+    {
+        if (empty($subOptions)) {
+            return $this;
+        }
+        $userOptions = $this->getOptions();
+        if (empty($userOptions)) {
+            $userOptions = [];
+        }
+        foreach ($subOptions as $option) {
+            $index = array_search($option['name'], array_column($userOptions, 'name'));
+            if ($index === false) {
+                $userOptions[] = $option;
+            } else {
+                $userOptions[$index]['value'] = $option['value'];
+            }
+        }
+        $this->setOptions($userOptions);
+        return $this;
+    }
+
     /**
      * @param string $key
      * @param mixed $value

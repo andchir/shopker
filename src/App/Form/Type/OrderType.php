@@ -40,9 +40,9 @@ class OrderType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        if (empty($options['checkoutFields']) || in_array('options', $options['checkoutFields'])) {
+        if (empty($options['checkoutFields']) || in_array('shipping', $options['checkoutFields'])) {
             $builder
-                ->add('options', OrderOptionsType::class, [
+                ->add('shipping', OrderShippingType::class, [
                     'constraints' => [],
                     'label' => false
                 ]);
@@ -115,17 +115,17 @@ class OrderType extends AbstractType
 
                 // Set delivery address not required
                 if ($form->getConfig()->getOption('noDeliveryFirst')
-                    && (empty($checkoutFields) || in_array('options', $checkoutFields))) {
+                    && (empty($checkoutFields) || in_array('shipping', $checkoutFields))) {
                         $deliveryIndex = isset($_POST['order']) && isset($_POST['order']['deliveryName'])
                             ? intval($_POST['order']['deliveryName'])
                             : -1;
                         if ($deliveryIndex === 0) {
-                            foreach ($form->get('options')->all() as $fieldName => $field) {
+                            foreach ($form->get('shipping')->all() as $fieldName => $field) {
                                 $type = get_class($field->getConfig()->getType()->getInnerType());
                                 $options = $field->getConfig()->getOptions();
                                 $options['required'] = false;
                                 $options['constraints'] = [];
-                                $form->get('options')->add($fieldName, $type, $options);
+                                $form->get('shipping')->add($fieldName, $type, $options);
                             }
                         }
                 }

@@ -163,7 +163,7 @@ class OrderSubscriber implements EventSubscriberInterface
                 continue;
             }
             $stockValue = $productDocument[$stockFieldName] ?? null;
-            if (is_null($stockValue)) {
+            if (is_null($stockValue) || !is_numeric($stockValue)) {
                 continue;
             }
             $newValue = $isReduce

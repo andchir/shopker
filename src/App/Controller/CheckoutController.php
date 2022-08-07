@@ -80,8 +80,7 @@ class CheckoutController extends BaseController
             ? $this->params->get('app.checkout_fields')
             : '';
         $paymentStatusAfterNumber = (int) $this->params->get('app.payment_status_after_number');
-        $checkoutFields = $checkoutFields ? explode(',', $checkoutFields) : [];
-        $checkoutFields = array_map('trim', $checkoutFields);
+        $checkoutFields = UtilsService::stringToArray($checkoutFields);
 
         // Get currency
         $currency = $settingsService->getCurrency();
@@ -92,7 +91,7 @@ class CheckoutController extends BaseController
                 ->setEmail($user->getEmail())
                 ->setFullName($user->getFullName())
                 ->setPhone($user->getPhone())
-                ->setOptions($user->getOptions());
+                ->setShipping($user->getOptions());
         }
 
         $form = $this->createForm(OrderType::class, $order, [
@@ -155,9 +154,6 @@ class CheckoutController extends BaseController
                     $order->setDiscountPercent($shoppingCart->getDiscountPercent());
                 }
 
-                // Filter options by public data keys
-                $publicUserData = $form->has('options') ? array_keys($form->get('options')->all()) : [];
-                $order->filterOptionsByPublic($publicUserData);
                 $order->setOptionValue('deliveryPriceLimit', $deliveryPriceLimit, $this->translator->trans('Free shipping amount'));
                 
                 // If the price is zero, then the order has already been paid.
@@ -177,25 +173,7 @@ class CheckoutController extends BaseController
                     if (!$user->getPhone()) {
                         $user->setPhone($order->getPhone());
                     }
-
-                    $orderOptions = $order->getOptions();
-                    $userOptions = $user->getOptions();
-
-                    if (empty($userOptions)) {
-                        $userOptions = [];
-                    }
-                    foreach ($orderOptions as $option) {
-                        if (!$option['value'] || !in_array($option['name'], $publicUserData)) {
-                            continue;
-                        }
-                        $index = array_search($option['name'], array_column($userOptions, 'name'));
-                        if ($index === false) {
-                            $userOptions[] = $option;
-                        } else {
-                            $userOptions[$index]['value'] = $option['value'];
-                        }
-                    }
-                    $user->setOptions($userOptions);
+                    $user->setSubOptions($order->getShipping(), 'shipping');
                 } else {
                     $order->setUserId(0);
                 }
@@ -279,7 +257,7 @@ class CheckoutController extends BaseController
                 continue;
             }
             $stockValue = $productDocument[$stockFieldName] ?? null;
-            if (is_null($stockValue)) {
+            if (is_null($stockValue) || !is_numeric($stockValue)) {
                 continue;
             }
             if ($content->getCount() > $stockValue) {
@@ -287,19 +265,6 @@ class CheckoutController extends BaseController
             }
         }
         return array_unique($notAvailable);
-    }
-
-    /**
-     * @param Order $order
-     * @param $publicUserDataKeys
-     */
-    public function filterOrderOptionsUserData(Order &$order, $publicUserDataKeys)
-    {
-        $orderOptions = $order->getOptions();
-        $orderOptions = array_filter($orderOptions, function($value) use ($publicUserDataKeys) {
-            return in_array($value['name'], $publicUserDataKeys);
-        });
-        $order->setOptions($orderOptions);
     }
 
     /**

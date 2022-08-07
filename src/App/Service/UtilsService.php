@@ -399,9 +399,9 @@ class UtilsService
      * @param $string
      * @return array
      */
-    public static function stringToArray($string)
+    public static function stringToArray($string, $separator = ',')
     {
-        $output = $string ? explode(',', $string) : [];
+        $output = $string ? explode($separator, $string) : [];
         return array_map('trim', $output);
     }
 

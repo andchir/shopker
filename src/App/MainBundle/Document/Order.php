@@ -161,6 +161,12 @@ class Order
     protected $options;
 
     /**
+     * @Groups({"details"})
+     * @var array
+     */
+    protected $shipping;
+
+    /**
      * @MongoDB\Field(type="collection")
      * @MongoDB\EmbedMany(targetDocument="App\MainBundle\Document\OrderContent")
      * @Groups({"details"})
@@ -201,6 +207,7 @@ class Order
     {
         $this->createdDate = new \DateTime();
         $this->updatedDate = new \DateTime();
+        $this->mergeOptions($this->getShipping());
         $this->updatePriceTotal();
     }
 
@@ -735,6 +742,46 @@ class Order
     public function getOptions()
     {
         return $this->options ?: [];
+    }
+
+    public function mergeOptions($subOptions)
+    {
+        if (empty($subOptions)) {
+            return;
+        }
+        if (empty($this->options)) {
+            $this->options = [];
+        }
+        foreach ($subOptions as $subOption) {
+            $this->options[] = $subOption;
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getShipping()
+    {
+        return $this->shipping ?: [];
+    }
+
+    /**
+     * @param array $shipping
+     * @return Order
+     */
+    public function setShipping($options)
+    {
+        if (empty($options)) {
+            $options = [];
+        }
+        $shipping = [];
+        foreach ($options as $opt) {
+            if (strpos($opt['name'], 'shipping.') === 0) {
+                $shipping[] = $opt;
+            }
+        }
+        $this->shipping = $shipping;
+        return $this;
     }
 
     /**

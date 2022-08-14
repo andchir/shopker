@@ -336,7 +336,7 @@
                                 <span class="text-orange-500" *ngIf="field.required">*</span>
                             </label>
                         </div>
-                        <div [formArrayName]="field.name">
+                        <div class="mb-3" [formArrayName]="field.name">
                             <p-table styleClass="p-datatable-sm" [value]="arrayFields[field.name].controls">
                                 <ng-template pTemplate="header">
                                     <tr>

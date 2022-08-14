@@ -340,16 +340,16 @@
                             <p-table styleClass="p-datatable-sm" [value]="arrayFields[field.name].controls">
                                 <ng-template pTemplate="header">
                                     <tr>
-                                        <th>
+                                        <th *ngIf="field.inputProperties.keys[0]">
                                             {{ field.inputProperties.names[0] | translate }}
                                         </th>
-                                        <th>
+                                        <th *ngIf="field.inputProperties.keys[1]">
                                             {{ field.inputProperties.names[1] | translate }}
                                         </th>
-                                        <th>
+                                        <th *ngIf="field.inputProperties.keys[2]">
                                             {{ field.inputProperties.names[2] | translate }}
                                         </th>
-                                        <th>
+                                        <th *ngIf="field.inputProperties.keys[3]">
                                             {{ field.inputProperties.names[3] | translate }}
                                         </th>
                                         <th></th>
@@ -357,19 +357,19 @@
                                 </ng-template>
                                 <ng-template pTemplate="body" let-option let-rowIndex="rowIndex">
                                     <tr [formGroupName]="rowIndex + ''">
-                                        <td>
+                                        <td *ngIf="field.inputProperties.keys[0]">
                                             <input [type]="field.inputProperties.types[0]" class="p-inputtext-sm w-full" pInputText
                                                    [formControlName]="field.inputProperties.keys[0]">
                                         </td>
-                                        <td>
+                                        <td *ngIf="field.inputProperties.keys[1]">
                                             <input [type]="field.inputProperties.types[1]" class="p-inputtext-sm w-full" pInputText
                                                    [formControlName]="field.inputProperties.keys[1]">
                                         </td>
-                                        <td>
+                                        <td *ngIf="field.inputProperties.keys[2]">
                                             <input [type]="field.inputProperties.types[2]" class="p-inputtext-sm w-full" pInputText
                                                    [formControlName]="field.inputProperties.keys[2]">
                                         </td>
-                                        <td>
+                                        <td *ngIf="field.inputProperties.keys[3]">
                                             <input [type]="field.inputProperties.types[3]" class="p-inputtext-sm w-full" pInputText
                                                    [formControlName]="field.inputProperties.keys[3]">
                                         </td>
@@ -385,7 +385,7 @@
                                 </ng-template>
                                 <ng-template pTemplate="footer">
                                     <tr>
-                                        <td colspan="5" class="text-center">
+                                        <td [attr.colspan]="field.inputProperties.keys.length + 1" class="text-center">
                                             <div class="float-right">
                                                 <button type="button" pButton
                                                         class="p-button-warning p-button-sm"

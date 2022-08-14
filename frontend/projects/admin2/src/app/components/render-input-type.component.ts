@@ -88,7 +88,7 @@ export class RenderInputTypeComponent implements OnInit {
             const defaultValues = String(propertiesDefault[k]).split(',');
             let values = String(field.inputProperties[k]).split(',');
             if (defaultValues.length > values.length) {
-                values = values.concat(defaultValues.slice(values.length));
+                // values = values.concat(defaultValues.slice(values.length));
             }
             field.inputProperties[k] = values;
         });

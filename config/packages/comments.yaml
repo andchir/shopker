@@ -1,3 +1,5 @@
 comments:
     comment_class: App\MainBundle\Document\Comment
     status_default: pending
+    template_comments: 'reviews/comments.html.twig'
+    template_add_comment_form: 'reviews/add_comment_form.html.twig'

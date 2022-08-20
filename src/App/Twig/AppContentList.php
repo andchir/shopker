@@ -227,6 +227,19 @@ class AppContentList
     }
 
     /**
+     * @param string $collectionName
+     * @param array $criteria
+     * @return int
+     */
+    public function getCountContentFunction($collectionName, $criteria = [])
+    {
+        /** @var CatalogService $catalogService */
+        $catalogService = $this->container->get('app.catalog');
+        $collection = $catalogService->getCollection($collectionName);
+        return $collection->countDocuments($criteria);
+    }
+
+    /**
      * @return string
      */
     public function getCurrentURI()

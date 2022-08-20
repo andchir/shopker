@@ -1,3 +1,6 @@
+2.0.1
+- "countContent" Twig function added.
+
 2.0.0
 - Version numbering changed.
 - New design of the admin panel. Better support for mobile devices. Now PrimeNG (13.3) is the main library of components.

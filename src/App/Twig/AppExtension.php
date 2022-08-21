@@ -44,7 +44,8 @@ class AppExtension extends AbstractExtension
     public function getFilters()
     {
         return [
-            new TwigFilter('price', [AppRuntime::class, 'priceFilter'])
+            new TwigFilter('price', [AppRuntime::class, 'priceFilter']),
+            new TwigFilter('intval', 'intval')
         ];
     }
 

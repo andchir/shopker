@@ -233,10 +233,26 @@ class AppContentList
      */
     public function getCountContentFunction($collectionName, $criteria = [])
     {
+        /** @var FilesystemAdapter $cache */
+        $cache = $this->container->get('app.filecache');
+        $cacheKey = $collectionName . md5(json_encode($criteria));
+        /** @var CacheItemInterface $cacheItem */
+        $cacheItem = $cache->getItem("getCountContent_.{$cacheKey}");
+        if ($cacheItem && $cacheItem->isHit()) {
+            return $cacheItem->get();
+        }
+
         /** @var CatalogService $catalogService */
         $catalogService = $this->container->get('app.catalog');
         $collection = $catalogService->getCollection($collectionName);
-        return $collection->countDocuments($criteria);
+        $output = $collection->countDocuments($criteria);
+
+        if ($cacheItem) {
+            $cacheItem->set($output);
+            $cache->save($cacheItem);
+        }
+
+        return $output;
     }
 
     /**

@@ -397,6 +397,7 @@ class Category
             'isActive' => in_array($this->getUri(), $breadcrumbsUriArr),
             'menuIndex' => $this->getMenuIndex(),
             'translations' => $this->getTranslations(),
+            'contentTypeName' => $this->getContentTypeName(),
             'children' => []
         ];
     }

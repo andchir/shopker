@@ -185,7 +185,8 @@ export class CatalogCategoryComponent extends AppTablePageAbstractComponent<Prod
         const data = {
             id: itemId,
             parentId,
-            isItemCopy
+            isItemCopy,
+            contentTypeName: this.currentCategory ? this.currentCategory.contentTypeName : ''
         };
         const ref = this.dialogService.open(ModalCategoryComponent, {
             header: typeof itemId !== 'undefined'

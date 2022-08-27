@@ -61,6 +61,9 @@ export class ModalCategoryComponent extends AppModalAbstractComponent<Category> 
         if (typeof this.config.data.parentId !== 'undefined') {
             this.parentId = this.config.data.parentId;
         }
+        if (typeof this.config.data.contentTypeName !== 'undefined' && !this.model.contentTypeName) {
+            this.model.contentTypeName = this.config.data.contentTypeName;
+        }
         if (typeof this.config.data.id !== 'undefined' && this.config.data.id !== null) {
             if (!this.config.data.id) {
                 this.isRoot = true;
@@ -108,9 +111,6 @@ export class ModalCategoryComponent extends AppModalAbstractComponent<Category> 
             .subscribe({
                 next: (res) => {
                     this.contentTypes = res.items;
-                    if (this.contentTypes.length > 0 && !this.form.controls.contentTypeName.value) {
-                        this.form.controls.contentTypeName.setValue(this.contentTypes[0].name);
-                    }
                 },
                 error: (error) => {
                     this.errorMessage = error;

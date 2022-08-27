@@ -92,6 +92,7 @@ class AppExtension extends AbstractExtension
                 'is_safe' => ['html'],
                 'needs_environment' => true
             ]),
+            new TwigFunction('childCategories', [AppRuntime::class, 'childCategoriesFunction']),
             new TwigFunction('twigNextPass', [$this, 'twigNextPassFunction']),
             new TwigFunction('shopCart', [AppRuntime::class, 'shopCartFunction'], [
                 'is_safe' => ['html'],

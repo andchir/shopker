@@ -2,6 +2,7 @@
 
 namespace App\Twig;
 
+use App\MainBundle\Document\Category;
 use App\MainBundle\Document\Order;
 use App\MainBundle\Document\OrderContent;
 use App\MainBundle\Document\Setting;
@@ -10,6 +11,7 @@ use App\Service\CatalogService;
 use App\Service\SettingsService;
 use App\Service\ShopCartService;
 use App\Service\UtilsService;
+use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\FormError;
@@ -435,6 +437,37 @@ class AppRuntime
     }
 
     /**
+     * @param int $parentId
+     * @param bool $parentIdInclude
+     * @return array|mixed
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function childCategoriesFunction($parentId = 0, $parentIdInclude = true)
+    {
+        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
+        $dm = $this->container->get('doctrine_mongodb')->getManager();
+        $cacheKey = "child_categories_{$parentId}";
+        /** @var FilesystemAdapter $cache */
+        $cache = $this->container->get('app.filecache');
+        /** @var CacheItemInterface $cacheItem */
+        $cacheItem = $cache->getItem($cacheKey);
+
+        if ($cacheItem && $cacheItem->isHit()) {
+            $output = $cacheItem->get();
+        } else {
+            $output = $this->getChildCategoriesArr($dm, $parentId);
+            if ($cacheItem) {
+                $cacheItem->set($output);
+                $cache->save($cacheItem);
+            }
+        }
+        if ($parentIdInclude) {
+            array_unshift($output, $parentId);
+        }
+        return $output;
+    }
+
+    /**
      * @param TwigEnvironment $environment
      * @param string $formName
      * @param string|null $layoutPath
@@ -626,6 +659,26 @@ class AppRuntime
             return null;
         }
         return $user;
+    }
+
+    /**
+     * @param DocumentManager $dm
+     * @param int $parentId
+     * @param array $data
+     * @return array|mixed
+     */
+    public function getChildCategoriesArr(DocumentManager $dm, $parentId = 0, &$data = [])
+    {
+        $categories = $dm->getRepository(Category::class)
+            ->findBy([
+                'parentId' => $parentId
+            ], ['menuIndex' => 'asc', 'id' => 'asc']);
+        /** @var Category $category */
+        foreach ($categories as $category) {
+            $data[] = $category->getId();
+            $this->getChildCategoriesArr($dm, $category->getId(), $data);
+        }
+        return $data;
     }
 }
 

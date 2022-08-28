@@ -728,6 +728,20 @@ class CartController extends BaseController
     
     /**
      * @Route(
+     *     "/{_locale}/saved_items/{type}",
+     *     name="saved_items_edit_localized",
+     *     methods={"GET", "POST"},
+     *     requirements={"_locale": "^[a-z]{2}$", "type"=".+"},
+     *     defaults={"type": "shop"}
+     * )
+     * @Route(
+     *     "/saved_items/{type}",
+     *     name="saved_items_edit",
+     *     methods={"GET", "POST"},
+     *     requirements={"type"=".+"},
+     *     defaults={"type": "shop"}
+     * )
+     * @Route(
      *     "/{_locale}/shop_cart/{type}",
      *     name="shop_cart_edit_localized",
      *     methods={"GET", "POST"},

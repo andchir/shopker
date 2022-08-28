@@ -116,11 +116,13 @@ class CartController extends BaseController
                 $shoppingCart = $this->shopCartService->getShoppingCartByType($type);
                 if ($shoppingCart) {
                     $output = array_merge($output, $shoppingCart->toArray(), [
-                        'item_id' => (int) $request->get('item_id', 0)
+                        'item_id' => (int) $request->get('item_id', 0),
+                        'action' => $action
                     ]);
                 } else {
                     $output = array_merge($output, [
                         'type' => $type,
+                        'action' => $action,
                         'item_id' => (int) $request->get('item_id', 0),
                         'price_total' => 0,
                         'items_total' => 0,

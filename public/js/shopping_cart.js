@@ -1,6 +1,6 @@
 /**
  * ShoppingCart
- * @version 1.0.1
+ * @version 1.0.2
  * @author Andchir<andchir@gmail.com>
  */
 
@@ -37,13 +37,14 @@
             snippetPropertySetName: '',
             selector: '',
             useNumberFormat: true,
-            selectorPriceTotal: '.shopping-cart-price-total',
-            selectorCountTotal: '.shopping-cart-count-total',
-            selectorCountUniqueTotal: '.shopping-cart-count-unique-total',
+            selectorPriceTotal: '',
+            selectorCountTotal: '',
+            selectorCountUniqueTotal: '',
             selectorDeclension: '.shopping-cart-declension',
             productFormSelector: '',
             templateName: '',
-            autoUpdateElements: false
+            autoUpdateElements: false,
+            hiddenClassName: 'hidden'
         };
 
         this.data = {
@@ -73,9 +74,18 @@
             }
             this.submitFormInit();
             this.productSubmitFormInit();
+            if (!shoppingCartContentType) {
+                this.updateShoppingCartContentType();
+            }
             if (typeof options.data === 'object') {
                 this.updateData(options.data);
                 delete mainOptions.data;
+            } else if (container.dataset.shoppingCartData) {
+                const data = JSON.parse(container.dataset.shoppingCartData);
+                this.updateData(data);
+            }
+            if (mainOptions.autoUpdateElements) {
+                this.updateElementsBySelectors();
             }
             isInitialized = true;
         };
@@ -126,7 +136,7 @@
             }
             if (!formEl) {
                 if (console && console.log) {
-                    console.log('[ShoppingCart] Shopping Cart form element not found.');
+                    // console.log('[ShoppingCart] Shopping Cart form element not found.');
                 }
                 return;
             }
@@ -184,11 +194,15 @@
          * @param formEl
          */
         this.updateShoppingCartContentType = function(formEl) {
-            if (!formEl) {
+            if (formEl && formEl.querySelector('input[name="type"]')) {
+                shoppingCartContentType = formEl.querySelector('input[name="type"]').value;
                 return;
             }
-            var typeInputEl = formEl.querySelector('input[name="type"]');
-            shoppingCartContentType = typeInputEl ? typeInputEl.value : TYPE_MAIN;
+            if (container && container.dataset.shoppingCartType) {
+                shoppingCartContentType = container.dataset.shoppingCartType;
+                return;
+            }
+            shoppingCartContentType = TYPE_MAIN;
         };
 
         /**
@@ -269,6 +283,21 @@
             if (data) {
                 this.updateData(data);
             }
+            if (!self.data[shoppingCartContentType]) {
+                self.data[shoppingCartContentType] = {};
+            }
+            if (!mainOptions.selectorPriceTotal) {
+                mainOptions.selectorPriceTotal = '.js-shopping-cart-' + shoppingCartContentType + '-price-total';
+            }
+            if (!mainOptions.selectorCountTotal) {
+                mainOptions.selectorCountTotal = '.js-shopping-cart-' + shoppingCartContentType + '-count-total';
+            }
+            if (!mainOptions.selectorCountUniqueTotal) {
+                mainOptions.selectorCountUniqueTotal = '.js-shopping-cart-' + shoppingCartContentType + '-count-unique-total';
+            }
+            if (!mainOptions.selectorDeclension) {
+                mainOptions.selectorDeclension = '.js-shopping-cart-' + shoppingCartContentType + '-declension';
+            }
             var elementsTotalPrice = mainOptions.selectorPriceTotal
                     ? document.querySelectorAll(mainOptions.selectorPriceTotal)
                     : [],
@@ -284,14 +313,20 @@
 
             elementsTotalPrice.forEach(function (el) {
                 el.textContent = mainOptions.useNumberFormat
-                    ? self.numFormat(self.data[shoppingCartContentType].price_total)
-                    : self.data[shoppingCartContentType].price_total;
+                    ? self.numFormat(self.data[shoppingCartContentType].price_total || 0)
+                    : self.data[shoppingCartContentType].price_total || 0;
             });
             elementsCountTotal.forEach(function (el) {
-                el.textContent = self.data[shoppingCartContentType].items_total;
+                el.textContent = self.data[shoppingCartContentType].items_total || 0;
+                if (self.data[shoppingCartContentType].items_total) {
+                    el.classList.remove(mainOptions.hiddenClassName);
+                }
             });
             elementsCountUniqueTotal.forEach(function (el) {
-                el.textContent = self.data[shoppingCartContentType].items_unique_total;
+                el.textContent = self.data[shoppingCartContentType].items_unique_total || 0;
+                if (self.data[shoppingCartContentType].items_unique_total > 0) {
+                    el.classList.remove(mainOptions.hiddenClassName);
+                }
             });
             elementsDeclension.forEach(function (el) {
                 var words = el.dataset.value ? el.dataset.value.split('|') : [];

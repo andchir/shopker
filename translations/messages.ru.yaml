@@ -1,58 +1,57 @@
-Installing the application: Установка приложения
+'Installing the application': 'Установка приложения'
 Install: Установить
-App name: Название сайта
-Main language: Основной язык
-Admin email: Адрес эл. почты администратора
-MongoDB Setup: Настройки MongoDB
+'App name': 'Название сайта'
+'Main language': 'Основной язык'
+'Admin email': 'Адрес эл. почты администратора'
+'MongoDB Setup': 'Настройки MongoDB'
 Server: Сервер
 Port: Порт
-User name: Имя пользователя
-Database name: Имя базы данных
-Database connection URI (Optional): URI для подключения (не обязательно)
-Clear the database: Очистить базу данных
+'User name': 'Имя пользователя'
+'Database name': 'Имя базы данных'
+'Database connection URI (Optional)': 'URI для подключения (не обязательно)'
+'Clear the database': 'Очистить базу данных'
 Russian: Русский
-
 Blog: Блог
 News: Новости
 Tags: Метки
-Home page: Главная страница
-Log in: Войти
-Log out: Выйти
-Exit impersonation: Выйти из перевоплощения
+'Home page': 'Главная страница'
+'Log in': Войти
+'Log out': Выйти
+'Exit impersonation': 'Выйти из перевоплощения'
 Impersonation: Воплотиться
-Sign up: Зарегистрироваться
+'Sign up': Зарегистрироваться
 Registration: Регистрация
 Password: Пароль
-Old password: Старый пароль
-Change password: Изменить пароль
-New password: Новый пароль
-Keep me logged in: Запомнить меня
-Confirm password: Подтвердите пароль
-Contact details: Контактные данные
+'Old password': 'Старый пароль'
+'Change password': 'Изменить пароль'
+'New password': 'Новый пароль'
+'Keep me logged in': 'Запомнить меня'
+'Confirm password': 'Подтвердите пароль'
+'Contact details': 'Контактные данные'
 Catalog: Каталог
 Brands: Бренды
-Root category: Корневая категория
+'Root category': 'Корневая категория'
 Administration: Администрирование
-Go to product catalog: Перейти в каталог
-Total Categories: Всего категорий
-Total products: Всего товаров
-This category is empty: Данная категория пуста
-Hide Filters: Скрыть фильтры
+'Go to product catalog': 'Перейти в каталог'
+'Total Categories': 'Всего категорий'
+'Total products': 'Всего товаров'
+'This category is empty': 'Данная категория пуста'
+'Hide Filters': 'Скрыть фильтры'
 Apply: Применить
 Reset: Сбросить
 Filters: Фильтры
-Product Name: Наименование
+'Product Name': Наименование
 Name: Название
 Continue: Продолжить
 Quantity: Кол-во
 Price: Цена
-Price total: Итого
-Add to cart: В корзину
+'Price total': Итого
+'Add to cart': 'В корзину'
 Buy: Купить
-Empty cart: Очистить корзину
-The cart is empty: Корзина пуста
-Proceed to checkout: Оформить заказ
-Edit an order: Редактировать заказ
+'Empty cart': 'Очистить корзину'
+'The cart is empty': 'Корзина пуста'
+'Proceed to checkout': 'Оформить заказ'
+'Edit an order': 'Редактировать заказ'
 Selected: Выбрано
 Close: Закрыть
 Subtotal: Подытог
@@ -65,115 +64,114 @@ product|products: товар|товара|товаров
 '%count% product found|%count% products found': 'Найден %count% товар|Найдено %count% товара|Найдено %count% товаров'
 '%count% page found|%count% pages found': 'Найдена %count% страница|Найдено %count% страницы|Найдено %count% страниц'
 '%count% item|%count% items': '%count% товар|%count% товара|%count% товаров'
-product with a total cost|products with a total cost: товар на сумму|товара на сумму|товаров на сумму
-Your cart is empty.: Ваша корзина пуста.
-Thanks for your order!: Спасибо за заказ! В ближайшее время Вы получите подтверждение по эл. почте.
-Go to home page: На главную страницу
-Submit order: Отправить заказ
-Email: Адрес эл. почты
-Full name: Ф.И.О.
-Phone: Номер телефона
+'product with a total cost|products with a total cost': 'товар на сумму|товара на сумму|товаров на сумму'
+'Your cart is empty.': 'Ваша корзина пуста.'
+'Thanks for your order!': 'Спасибо за заказ! В ближайшее время Вы получите подтверждение по эл. почте.'
+'Go to home page': 'На главную страницу'
+'Submit order': 'Отправить заказ'
+Email: 'Адрес эл. почты'
+'Full name': Ф.И.О.
+Phone: 'Номер телефона'
 Address: Адрес
 Comment: Комментарий
-Compare: Сравнение товаров
-Payment method: Способ оплаты
-Delivery method: Способ доставки
+Compare: 'Сравнение товаров'
+'Payment method': 'Способ оплаты'
+'Delivery method': 'Способ доставки'
 Delivery: Доставка
-Free shipping amount: Сумма для бесплатной доставки
+'Free shipping amount': 'Сумма для бесплатной доставки'
 Order: Заказ
 Status: Статус
-Order list: Состав заказа
+'Order list': 'Состав заказа'
 Contacts: Контакты
-Timezone: Часовой пояс
+Timezone: 'Часовой пояс'
 Submit: Отправить
 Empty.: Пусто.
 'Product rating: %rating% of 5': 'Оценка товара: %rating% из 5'
-New items: Новинки
+'New items': Новинки
 New: Новинка
 Next: Следующая
 Previous: Предыдущая
-Sales leaders: Лидеры продаж
+'Sales leaders': 'Лидеры продаж'
 Recalculate: Пересчитать
-Your name: Ваше имя
-Your email: Ваш адрес эл. почты
-E-mail text: Текст письма
-Captcha: Защитный код
-Upload file: Загрузить файл
-Download file: Скачать файл
-You can upload files: Вы можете загрузить файлы
-You can upload file: Вы можете загрузить файл
+'Your name': 'Ваше имя'
+'Your email': 'Ваш адрес эл. почты'
+'E-mail text': 'Текст письма'
+Captcha: 'Защитный код'
+'Upload file': 'Загрузить файл'
+'Download file': 'Скачать файл'
+'You can upload files': 'Вы можете загрузить файлы'
+'You can upload file': 'Вы можете загрузить файл'
 Cancel: Отменить
-Email from your website: Письмо с вашего сайта
+'Email from your website': 'Письмо с вашего сайта'
 Search: Поиск
-Searching results: Результаты поиска
-search.nothing_found: По Вашему запросу ничего не найдено.
-The file type is not allowed to be uploaded.: Тип файла не разрешен для загрузки.
-File type is not allowed.: Тип файла не разрешен для загрузки.
-File is required.: Необходимо загрузить файл.
-Field "%name%" is required.: Поле "%name%" обязательно для заполнения.
-You can not upload a file larger than %size% MB.: Вы не можете загрузить файл больше %size% МБ.
-A folder with the same name already exists.: Папка с таким именем уже существует.
-You cannot delete or rename the system folder.: Вы не можете удалить или переименовать системную папку.
-File manager is disabled.: Файл-менеджер отключен.
-Templates theme "%theme%" not found.: Тема шаблонов "%theme%" не найдена.
-File downloaded %count% time.|File downloaded %count% times.: 'Файл скачали %count% раз.|Файл скачали %count% раза.|Файл скачали %count% раз.'
-Template "%name%" not found.: Шаблон "%name%" не найден.
+'Searching results': 'Результаты поиска'
+search.nothing_found: 'По Вашему запросу ничего не найдено.'
+'The file type is not allowed to be uploaded.': 'Тип файла не разрешен для загрузки.'
+'File type is not allowed.': 'Тип файла не разрешен для загрузки.'
+'File is required.': 'Необходимо загрузить файл.'
+'Field "%name%" is required.': 'Поле "%name%" обязательно для заполнения.'
+'You can not upload a file larger than %size% MB.': 'Вы не можете загрузить файл больше %size% МБ.'
+'A folder with the same name already exists.': 'Папка с таким именем уже существует.'
+'You cannot delete or rename the system folder.': 'Вы не можете удалить или переименовать системную папку.'
+'File manager is disabled.': 'Файл-менеджер отключен.'
+'Templates theme "%theme%" not found.': 'Тема шаблонов "%theme%" не найдена.'
+'File downloaded %count% time.|File downloaded %count% times.': 'Файл скачали %count% раз.|Файл скачали %count% раза.|Файл скачали %count% раз.'
+'Template "%name%" not found.': 'Шаблон "%name%" не найден.'
 Favorites: Избранное
-To favorites: В избранное
-Remove from favorites: Убрать из избранного
-Show password: Показать пароль
-Hide password: Скрыть пароль
-Your user has read-only permission.: Ваш пользователь имеет разрешение только на чтение.
-Category not found.: Категория не найдена.
-item not found.: Объект не найдена.
+'To favorites': 'В избранное'
+'Remove from favorites': 'Убрать из избранного'
+'Show password': 'Показать пароль'
+'Hide password': 'Скрыть пароль'
+'Your user has read-only permission.': 'Ваш пользователь имеет разрешение только на чтение.'
+'Category not found.': 'Категория не найдена.'
+'item not found.': 'Объект не найдена.'
 Reservation: Бронирование
 Reserved: Занято
-New booking: Новая бронь
-Are you sure you want to reserve this time?: Вы уверены, что хотите забранировать это время?
-Are you sure you want to cancel your booking?: Вы уверены, что хотите отменить бронирование?
-Cancel reservation?: Отменить бронирование?
-Select time: Выбрать время
-Select date: Выбрать дату
-Start date: Дата начала
-End date: Дата окончания
-Book now: Забронировать
-Promo code: Промо код
-Enter promo code here: Введите промо код здесь
-Promo code not found.: Промо код не найден.
+'New booking': 'Новая бронь'
+'Are you sure you want to reserve this time?': 'Вы уверены, что хотите забранировать это время?'
+'Are you sure you want to cancel your booking?': 'Вы уверены, что хотите отменить бронирование?'
+'Cancel reservation?': 'Отменить бронирование?'
+'Select time': 'Выбрать время'
+'Select date': 'Выбрать дату'
+'Start date': 'Дата начала'
+'End date': 'Дата окончания'
+'Book now': Забронировать
+'Promo code': 'Промо код'
+'Enter promo code here': 'Введите промо код здесь'
+'Promo code not found.': 'Промо код не найден.'
 Discount: Скидка
-The promo code has expired.: Промо код не действителен.
-You are logged in as %username%: Вы авторизованы как %username%
-Top Selling: Лидер продаж
+'The promo code has expired.': 'Промо код не действителен.'
+'You are logged in as %username%': 'Вы авторизованы как %username%'
+'Top Selling': 'Лидер продаж'
 Promo: Акция
-Sort by: Сортировать по
+'Sort by': 'Сортировать по'
 catalog.sort_by_novelty: Новизне
-catalog.sort_by_price_increase: Увеличению цены
-catalog.sort_by_price_reduction: Уменьшению цены
+catalog.sort_by_price_increase: 'Увеличению цены'
+catalog.sort_by_price_reduction: 'Уменьшению цены'
 catalog.sort_by_name: Названию
-
-Shopping cart: Корзина товаров
-Order checkout: Оформление заказа
+'Shopping cart': 'Корзина товаров'
+'Order checkout': 'Оформление заказа'
 Checkout: Оформить
-Delete item: Удалить
+'Delete item': Удалить
 Print: Печать
-View cart: В корзину
-Contact information: Контактная информация
-I agree to the processing of personal data: Согласен на обработку персональных данных
-Forgot your password?: Забыли пароль?
-Reset password: Сбросить пароль
-You are successfully registered. Now you can enter.: Вы успешно зарегистрированы. Теперь Вы можете войти.
-An email with further instructions has been sent to your email address.: На ваш адрес электронной почты отправлено письмо с дальнейшими инструкциями.
-Your password has been changed successfully.: Ваш пароль успешно изменен.
-Your password has been changed successfully. Now you can enter.: Ваш пароль успешно изменен. Теперь Вы можете войти.
-Your email has been successfully verified. Now you can enter.: Ваш адрес эл. почты успешно подтвержден. Теперь Вы можете войти.
-reset_password.confirm.email_link: Для подтверждения изменения пароля, пожалуйста, перейдите по ссылке
+'View cart': 'В корзину'
+'Contact information': 'Контактная информация'
+'I agree to the processing of personal data': 'Согласен на обработку персональных данных'
+'Forgot your password?': 'Забыли пароль?'
+'Reset password': 'Сбросить пароль'
+'You are successfully registered. Now you can enter.': 'Вы успешно зарегистрированы. Теперь Вы можете войти.'
+'An email with further instructions has been sent to your email address.': 'На ваш адрес электронной почты отправлено письмо с дальнейшими инструкциями.'
+'Your password has been changed successfully.': 'Ваш пароль успешно изменен.'
+'Your password has been changed successfully. Now you can enter.': 'Ваш пароль успешно изменен. Теперь Вы можете войти.'
+'Your email has been successfully verified. Now you can enter.': 'Ваш адрес эл. почты успешно подтвержден. Теперь Вы можете войти.'
+reset_password.confirm.email_link: 'Для подтверждения изменения пароля, пожалуйста, перейдите по ссылке'
 Profile: Профиль
-History of orders: История заказов
-Delivery address: Адрес доставки
-Pay now: Оплатить
+'History of orders': 'История заказов'
+'Delivery address': 'Адрес доставки'
+'Pay now': Оплатить
 Paid: Оплачен
 ROLE_USER: Пользователь
-ROLE_ADMIN: Администратор - Только чтение
+ROLE_ADMIN: 'Администратор - Только чтение'
 ROLE_SUPER_ADMIN: Супер-Администратор
 ROLE_ADMIN_WRITE: Администратор
 user_options.state: Регион
@@ -182,16 +180,76 @@ user_options.city: Город
 user_options.street: Улица
 user_options.house: Дом
 user_options.apartment: Квартира
-
-app_install.message.success: Приложение успешно установлено. Теперь Вы можете войти в панель администрирования.
-mail_subject.new_order: Новый заказ
-mail_subject.order_status_change: Статус заказа обновлен
-Order date: Дата заказа
-Order status: Статус
-password_reset.mail_subject: Сброс пароля
-profile.contacts_data_saved_successfully: Данные успешно созранены.
-email.send_successful: Письмо успешно отправлено.
-email.recipient_error: Не указан адрес получателя.
-email_confirm.mail_subject: Подтверждение адреса эл. почты
-user_email.confirm.email_link: Для подтверждения адреса эл. почты, пожалуйста, перейдите по ссылке
-months_short: Янв,Фев,Мар,Апр,Май,Июнь,Июль,Авг,Сент,Окт,Нояб,Дек
+app_install.message.success: 'Приложение успешно установлено. Теперь Вы можете войти в панель администрирования.'
+mail_subject.new_order: 'Новый заказ'
+mail_subject.order_status_change: 'Статус заказа обновлен'
+'Order date': 'Дата заказа'
+'Order status': Статус
+password_reset.mail_subject: 'Сброс пароля'
+profile.contacts_data_saved_successfully: 'Данные успешно созранены.'
+email.send_successful: 'Письмо успешно отправлено.'
+email.recipient_error: 'Не указан адрес получателя.'
+email_confirm.mail_subject: 'Подтверждение адреса эл. почты'
+user_email.confirm.email_link: 'Для подтверждения адреса эл. почты, пожалуйста, перейдите по ссылке'
+months_short: 'Янв,Фев,Мар,Апр,Май,Июнь,Июль,Авг,Сент,Окт,Нояб,Дек'
+'Page not found.': 'Страница не найдена.'
+'Content type not found.': 'Тип контента не найден.'
+'Item not saved.': 'Объект не сохранен.'
+'Deletion error. Please try again later.': 'Ошибка удаления. Пожалуйста, попробуйте снова позже.'
+user_options.: __user_options.
+'Please upload the template files (HTML, CSS, images) at "%themePath%".': 'Пожалуйста, загрузите файлы шаблона (HTML, CSS, images) в папку "%themePath%".'
+'The main page file must be of type HTML.': 'Файл главной страницы должен быть в формате HTML.'
+'Home page file not found.': 'Файл главной страницы не найден.'
+'Error copying files by default.': 'Ошибка копирования файлов.'
+'Templates theme created successfully.': 'Шаблоны темы созданы успешно.'
+'Template name can not be empty.': 'Название шаблона не может быть пустым.'
+'Page HTML file not found.': 'HTML файл страницы не найден.'
+'Template created successfully.': 'Шаблон успешно создан.'
+'Image file has not been uploaded.': 'Файл картинки не был загружен.'
+'Please select a root item.': 'Пожалуйста, выберите корневой элемент.'
+'The item is already dynamic.': 'Элемент уже динамический.'
+'Template not found.': 'Шаблон не найден.'
+'Backup copy not found.': 'Резервная копия не найдена.'
+'You cannot restore the source code of this item.': 'Вы не можете восстановить исходный код элемента.'
+'Template is not writable.': 'Шаблон не имеет прав на запись.'
+'Only authorized users can post reviews.': 'Только авторизованные пользователи могут писать отзывы.'
+Hide: Скрыть
+Publish: Опубликовать
+Reply: Ответить
+Delete: Удалить
+'Your review will be the first.': 'Ваш отзыв будет первым'
+'Add Comment': 'Добавить комментарий'
+Authorize: Авторизовать
+'Detailed specifications': 'Подробные характеристики'
+Overview: Обзор
+Specifications: Характеристики
+Accessories: Аксессуары
+Reviews: Отзывы
+'Q&A': 'Вопросы и ответы'
+'Average rating': 'Средний рейтинг'
+'Write a review': 'Написать отзыв'
+'Related products': 'Сопутствующие товары'
+'Trending items': 'Популярные товары'
+'Read more': 'Читать далее'
+'Favorites is empty': 'Список избранного пуст'
+'Items in order': 'Товары в заказе'
+Shipping: Доставка
+Payment: Оплата
+'Compare is empty': 'Список для сравнения пуст'
+'Reset all filters': 'Сбросить все фильтры'
+'Popular Brands': 'Популярные бренды'
+'See all brands': 'Смотреть все бренды'
+'Add to favorites': 'Добавить в избранное'
+'Add to compare': 'Добавить к сравнению'
+'See all articles': 'Смотреть все публикации'
+Grid: Сетка
+List: Список
+'Load more': 'Загрузить ещё'
+'Latest News': 'Последние новости'
+'See all news': 'Смотреть все новости'
+'Subscribe for updates': 'Подписаться на обновления'
+'Shop all': 'Купить всё'
+'Be aware of new products and special offers.': 'Будьте в курсе новинок и специальных предложений.'
+Subscribe: Подписаться
+FAQ: 'Вопросы и ответы'
+About: О нас

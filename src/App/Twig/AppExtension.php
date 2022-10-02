@@ -119,6 +119,7 @@ class AppExtension extends AbstractExtension
                 'is_safe' => ['html'],
                 'needs_environment' => true
             ]),
+            new TwigFunction('getContent', [AppContentList::class, 'getContentFunction']),
             new TwigFunction('countContent', [AppContentList::class, 'getCountContentFunction']),
             new TwigFunction('arraySearch', [AppRuntime::class, 'arraySearchFunction']),
             new TwigFunction('switch', [AppRuntime::class, 'switchFunction'], [

@@ -167,7 +167,6 @@ class AppContentList
             return '';
         }
         $request = $this->requestStack->getCurrentRequest();
-        $localeDefault = $this->container->getParameter('locale');
         $locale = $request->getLocale();
 
         /** @var FilesystemAdapter $cache */
@@ -179,7 +178,33 @@ class AppContentList
         }
 
         $templateName = $chunkName . '.html.twig';
+        $document = $this->getContentFunction($collectionName, $contentId);
 
+        if (empty($document)) {
+            return '';
+        }
+        $document['id'] = $document['_id'];
+
+        $output = $environment->render($templateName, array_merge($parameters, $document));
+
+        if ($cacheItemHtml) {
+            $cacheItemHtml->set($output);
+            $cache->save($cacheItemHtml);
+        }
+
+        return $output;
+    }
+
+    /**
+     * @param string $collectionName
+     * @param int $contentId
+     * @return mixed
+     */
+    public function getContentFunction($collectionName, $contentId)
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        $localeDefault = $this->container->getParameter('locale');
+        $locale = $request->getLocale();
         /** @var CatalogService $catalogService */
         $catalogService = $this->container->get('app.catalog');
         $collection = $catalogService->getCollection($collectionName);
@@ -206,24 +231,11 @@ class AppContentList
             $aggregateFields,
             1
         );
-        $document = $collection->aggregate($pipeline, [
+        $items = $collection->aggregate($pipeline, [
             'cursor' => []
         ])->toArray();
 
-        if (empty($document)) {
-            return '';
-        }
-        $document = current($document);
-        $document['id'] = $document['_id'];
-
-        $output = $environment->render($templateName, array_merge($parameters, $document));
-
-        if ($cacheItemHtml) {
-            $cacheItemHtml->set($output);
-            $cache->save($cacheItemHtml);
-        }
-
-        return $output;
+        return count($items) > 0 ? current($items) : [];
     }
 
     /**

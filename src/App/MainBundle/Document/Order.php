@@ -744,6 +744,25 @@ class Order
         return $this->options ?: [];
     }
 
+    /**
+     * @param string $subKey
+     * @return array
+     */
+    public function getSubOptions($subKey)
+    {
+        $subOptions = [];
+        foreach ($this->options as $opts) {
+            if (strpos($opts['name'], $subKey . '.') !== false) {
+                $subOptions[] = $opts;
+            }
+        }
+        return $subOptions;
+    }
+
+    /**
+     * @param array $subOptions
+     * @return void
+     */
     public function mergeOptions($subOptions)
     {
         if (empty($subOptions)) {
@@ -758,30 +777,49 @@ class Order
     }
 
     /**
+     * @param bool $cleanKeys
      * @return array
      */
-    public function getShipping()
+    public function getShipping($cleanKeys = false)
     {
-        return $this->shipping ?: [];
+        if (empty($this->shipping)) {
+            $this->shipping = $this->getSubOptions('shipping');
+        }
+        if ($cleanKeys) {
+            foreach ($this->shipping as &$opts) {
+                $opts['name'] = str_replace('shipping.', '', $opts['name']);
+            }
+        }
+        return $this->shipping;
     }
 
     /**
      * @param array $shipping
-     * @return Order
+     * @return $this
      */
     public function setShipping($options)
     {
         if (empty($options)) {
             $options = [];
         }
-        $shipping = [];
+        $this->shipping = $this->setSubOptions($options, 'shipping');
+        return $this;
+    }
+
+    /**
+     * @param array $options
+     * @param string $key
+     * @return array
+     */
+    public function setSubOptions($options, $key)
+    {
+        $subOptions = [];
         foreach ($options as $opt) {
-            if (strpos($opt['name'], 'shipping.') === 0) {
-                $shipping[] = $opt;
+            if (strpos($opt['name'], $key . '.') === 0) {
+                $subOptions[] = $opt;
             }
         }
-        $this->shipping = $shipping;
-        return $this;
+        return $subOptions;
     }
 
     /**

@@ -173,7 +173,7 @@ class CheckoutController extends BaseController
                     if (!$user->getPhone()) {
                         $user->setPhone($order->getPhone());
                     }
-                    $user->setSubOptions($order->getShipping(), 'shipping');
+                    $user->setSubOptions($order->getShipping(true), 'shipping');
                 } else {
                     $order->setUserId(0);
                 }

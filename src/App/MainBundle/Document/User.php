@@ -63,6 +63,12 @@ class User implements UserInterface, \Serializable
     protected $options;
 
     /**
+     * @Groups({"details"})
+     * @var array
+     */
+    protected $shipping;
+
+    /**
      * @MongoDB\Field(type="date", nullable=true)
      * @Groups({"details", "list"})
      * @var \DateTime
@@ -569,7 +575,27 @@ class User implements UserInterface, \Serializable
         return $this->options ?: [];
     }
 
-    public function setSubOptions($subOptions, $key)
+    /**
+     * @param string $subKey
+     * @return array
+     */
+    public function getSubOptions($subKey)
+    {
+        $subOptions = [];
+        foreach ($this->options as $opts) {
+            if (strpos($opts['name'], $subKey . '.') !== false) {
+                $subOptions[] = $opts;
+            }
+        }
+        return $subOptions;
+    }
+
+    /**
+     * @param array $subOptions
+     * @param string $subKey
+     * @return $this
+     */
+    public function setSubOptions($subOptions, $subKey)
     {
         if (empty($subOptions)) {
             return $this;
@@ -579,6 +605,9 @@ class User implements UserInterface, \Serializable
             $userOptions = [];
         }
         foreach ($subOptions as $option) {
+            if (strpos($option['name'], $subKey . '.') === false) {
+                $option['name'] = $subKey . '.' . $option['name'];
+            }
             $index = array_search($option['name'], array_column($userOptions, 'name'));
             if ($index === false) {
                 $userOptions[] = $option;
@@ -625,6 +654,19 @@ class User implements UserInterface, \Serializable
         return $index !== false ? $options[$index]['value'] : null;
     }
 
+    public function mergeOptions($subOptions)
+    {
+        if (empty($subOptions)) {
+            return;
+        }
+        if (empty($this->options)) {
+            $this->options = [];
+        }
+        foreach ($subOptions as $subOption) {
+            $this->options[] = $subOption;
+        }
+    }
+
     /**
      * @return array
      */
@@ -659,6 +701,36 @@ class User implements UserInterface, \Serializable
         } else {
             array_push($this->options, $option);
         }
+    }
+
+    /**
+     * @param bool $cleanKeys
+     * @return array
+     */
+    public function getShipping($cleanKeys = false)
+    {
+        if (empty($this->shipping)) {
+            $this->shipping = $this->getSubOptions('shipping');
+        }
+        if ($cleanKeys) {
+            foreach ($this->shipping as &$opts) {
+                $opts['name'] = str_replace('shipping.', '', $opts['name']);
+            }
+        }
+        return $this->shipping;
+    }
+
+    /**
+     * @param array $shipping
+     * @return $this
+     */
+    public function setShipping($options)
+    {
+        if (empty($options)) {
+            $options = [];
+        }
+        $this->shipping = $this->setSubOptions($options, 'shipping');
+        return $this;
     }
 
     /**

@@ -13,7 +13,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class UserProfileType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -26,7 +25,7 @@ class UserProfileType extends AbstractType
             ->add('phone', TextType::class, [
                 'constraints' => new NotBlank()
             ])
-            ->add('options', OrderOptionsType::class, [
+            ->add('shipping', OrderShippingType::class, [
                 'label' => false
             ]);
     }

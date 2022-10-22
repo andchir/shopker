@@ -1,7 +1,7 @@
 parameters:
     locale: 'en'
     app.name: Shopker
-    app.version: '2.0.0'
+    app.version: '2.0.1'
     app.web_dir_path: '%kernel.project_dir%/public'
     app.files_dir_path: '%app.web_dir_path%/uploads'
     app.locale_list: ''

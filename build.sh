@@ -41,6 +41,7 @@ mkdir "$DIR"/"$OUTPUT_DIRNAME"/var/log
 mkdir "$DIR"/"$OUTPUT_DIRNAME"/templates
 cp -r "$DIR"/templates/default "$DIR"/"$OUTPUT_DIRNAME"/templates/default
 cp -r "$DIR"/templates/blank "$DIR"/"$OUTPUT_DIRNAME"/templates/blank
+cp -r "$DIR"/templates/uikit-ecommerce "$DIR"/"$OUTPUT_DIRNAME"/templates/uikit-ecommerce
 
 mkdir "$DIR"/"$OUTPUT_DIRNAME"/public
 cp "$DIR"/public/*.* "$DIR"/"$OUTPUT_DIRNAME"/public
@@ -51,6 +52,7 @@ cp -r "$DIR"/public/css "$DIR"/"$OUTPUT_DIRNAME"/public
 cp -r "$DIR"/public/img "$DIR"/"$OUTPUT_DIRNAME"/public
 cp -r "$DIR"/public/js "$DIR"/"$OUTPUT_DIRNAME"/public
 cp -r "$DIR"/public/bundles "$DIR"/"$OUTPUT_DIRNAME"/public/bundles
+cp -r "$DIR"/public/assets "$DIR"/"$OUTPUT_DIRNAME"/public/assets
 mkdir "$DIR"/"$OUTPUT_DIRNAME"/public/uploads
 
 cp -r "$DIR"/public/admin "$DIR"/"$OUTPUT_DIRNAME"/public/admin

@@ -21,7 +21,7 @@ parameters:
     app.catalog_default_order_by: id_desc
     app.search_collections: products
     app.checkout_fields: shipping,email,fullName,phone,deliveryName,paymentName,comment
-    app.template_theme: uikit-ecommerce
+    app.template_theme: default
     app.admin_email: ''
     app.payment_status_number: 1
     app.payment_status_after_number: 2

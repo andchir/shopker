@@ -369,6 +369,7 @@ class AppRuntime
      * @param array|null $activeCategoriesIds
      * @param bool $cacheEnabled
      * @param string $activeClassName
+     * @param array $customData
      * @return string
      * @throws \Doctrine\ODM\MongoDB\LockException
      * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
@@ -381,7 +382,9 @@ class AppRuntime
         $data = null,
         $activeCategoriesIds = null,
         $cacheEnabled = false,
-        $activeClassName = 'active')
+        $activeClassName = 'active',
+        $customData = []
+    )
     {
         $request = $this->requestStack->getCurrentRequest();
         $currentUri = substr($request->getPathInfo(), 1);
@@ -415,7 +418,7 @@ class AppRuntime
             $data['uriArr'] = $uriArr;
             $data['activeCategoriesIds'] = $activeCategoriesIds;
             try {
-                $output = $environment->render($templateName, $data);
+                $output = $environment->render($templateName, array_merge($data, $customData));
             } catch (\Exception $e) {
                 $output .= $this->twigAddError($e->getMessage());
             }

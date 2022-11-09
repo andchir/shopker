@@ -436,9 +436,13 @@ twig_visual:
                         ) }}
                     template: <root/>
 
-                collectionName: {title: Название коллекции БД, type: text, value: 'products'}
+                collectionName: {title: Название коллекции БД, type: dbCollectionName, value: 'products'}
 
                 contentId: {title: Content ID, type: text}
+
+                parentId: {title: Content parent ID, type: text}
+
+                contentFieldName: {title: Content field name, type: text, value: 'description'}
 
                 cacheKey: {title: Cache key, type: text}
 

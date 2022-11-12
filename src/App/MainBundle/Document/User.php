@@ -582,7 +582,8 @@ class User implements UserInterface, \Serializable
     public function getSubOptions($subKey)
     {
         $subOptions = [];
-        foreach ($this->options as $opts) {
+        $options = $this->getOptions();
+        foreach ($options as $opts) {
             if (strpos($opts['name'], $subKey . '.') !== false) {
                 $subOptions[] = $opts;
             }

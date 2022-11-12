@@ -434,7 +434,10 @@ twig_visual:
                             '{{ contentId }}',
                             '{{ cacheKey }}'
                         ) }}
-                    template: <root/>
+                    template: |
+                        <root data-editor-content-id="{{ contentId }}" data-editor-content-type="{{ collectionName }}">
+                            {{ {{ contentFieldName }} | raw }}
+                        </root>
 
                 collectionName: {title: 'DB collection name', type: dbCollectionName, value: 'products'}
 

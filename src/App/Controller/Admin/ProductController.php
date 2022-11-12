@@ -172,6 +172,9 @@ class ProductController extends BaseController
         $error = '';
 
         foreach ($contentTypeFields as $field){
+            if (!isset($data[$field['name']])) {
+                continue;
+            }
             if($error = $this->catalogService->validateField($data[$field['name']], $field, [], $collectionName, $category->getId(), $itemId)){
                 break;
             }

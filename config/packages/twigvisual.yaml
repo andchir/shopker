@@ -38,6 +38,23 @@ twig_visual:
     file_upload_dir_path: '%app.web_dir_path%/uploads'
     editor_user_role: 'ROLE_ADMIN_WRITE'
     ui:
+        wrapElement:
+            title: Wrap element
+            configuration:
+                saveBackupCopy: true
+            components:
+                root:
+                    title: Root element
+                    type: elementSelect
+                    required: true
+                    template: '<{{ wrapperType }}><root/></{{ wrapperType }}>'
+
+                wrapperType:
+                    title: Wrapper element type
+                    type: text
+                    value: 'div'
+                    required: true
+
         field:
             title: Content field
             configuration:
@@ -434,20 +451,19 @@ twig_visual:
                             '{{ contentId }}',
                             '{{ cacheKey }}'
                         ) }}
-                    template: |
-                        <root data-editor-content-id="{{ contentId }}" data-editor-content-type="{{ collectionName }}">
-                            {{ {{ contentFieldName }} | raw }}
-                        </root>
+                    template: '<root data-editor-content-id="{{ contentId }}" data-editor-content-type="{{ collectionName }}"/>'
 
                 collectionName: {title: 'DB collection name', type: dbCollectionName, value: 'products'}
+
+                contentFields: {title: Content fields, type: dbCollectionFieldsLIst, value: 'description'}
 
                 contentId: {title: Content ID, type: text}
 
                 parentId: {title: Content parent ID, type: text}
 
-                title: {title: Content title, type: text}
+                contentTitle: {title: Content title, type: text}
 
-                contentFieldName: {title: Content field, type: dbCollectionField, value: 'description'}
+                # contentFieldName: {title: Content field, type: dbCollectionField, value: 'description'}
 
                 cacheKey: {title: Cache key, type: text}
 

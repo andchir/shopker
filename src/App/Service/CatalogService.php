@@ -626,6 +626,26 @@ class CatalogService {
     }
 
     /**
+     * @param array $filter
+     * @return void
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
+     */
+    public function getQueryChildCategories(&$filter)
+    {
+        $categoriesRepository = $this->getCategoriesRepository();
+        /** @var Category $category */
+        $category = $categoriesRepository->find($filter['parentId']);
+        $categoriesIdsArr = $category ? $categoriesRepository->getChildrenIdsByUri($category->getUri()) : [];
+        if (count($categoriesIdsArr) > 0) {
+            $filter['parentId'] = [
+                '$in' => $categoriesIdsArr
+            ];
+        }
+    }
+
+    /**
      * @param array $results
      * @param array $contentTypeFields
      * @return array

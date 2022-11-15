@@ -132,7 +132,9 @@ class ProductController extends BaseController
         } else {
             $filter['parentId'] = $categoryId;
         }
-    
+        if (!empty($queryOptions['from_child']) && $filter['parentId']) {
+            $this->catalogService->getQueryChildCategories($filter);
+        }
         $collection = $this->catalogService->getCollection($contentType->getCollection());
         $data = $this->catalogService->getContentList($contentType, $queryOptions, $filter, $skip);
         $total = $collection->countDocuments($filter);

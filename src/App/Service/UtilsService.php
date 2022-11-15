@@ -185,6 +185,7 @@ class UtilsService
                 : 'id_desc',
             'full' => 1,
             'only_active' => 1,
+            'from_child' => 0,
             'filter' => [],
             'filterStr' => ''
         ];

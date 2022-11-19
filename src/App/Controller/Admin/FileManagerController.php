@@ -292,14 +292,19 @@ class FileManagerController extends BaseController
 
         $filesBlacklist = $this->params->get('app.files_ext_blacklist');
 
+        $error = '';
         $files = $request->files;
         /** @var UploadedFile $file */
         foreach ($files as $file) {
             $ext = strtolower($file->getClientOriginalExtension());
             if (in_array($ext, $filesBlacklist)) {
+                $error = $this->translator->trans('The file could not be uploaded.');
                 continue;
             }
             $file->move($publicDirPath, $file->getClientOriginalName());
+        }
+        if ($error) {
+            return $this->setError($error);
         }
 
         return $this->json(['success' => true]);

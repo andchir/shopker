@@ -264,10 +264,13 @@ class FileManagerController extends BaseController
         if (!is_writable($filePath)) {
             return $this->setError($this->translator->trans('File is not writable.', [], 'validators'));
         }
-        if (!UtilsService::unZip($filePath)) {
+        if (!($result = UtilsService::unZip($filePath, '', $this->params->get('app.files_ext_blacklist')))) {
             return $this->setError($this->translator->trans('Error unpacking the file.', [], 'validators'));
         }
-        return $this->json(['success' => true]);
+        return $this->json([
+            'result' => str_replace([$publicDirPath . DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR], '', $result),
+            'success' => true
+        ]);
     }
 
     /**

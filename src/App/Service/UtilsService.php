@@ -503,9 +503,11 @@ class UtilsService
     
     /**
      * @param string $dirPath
+     * @param bool $includeDir
      * @param bool $removeDir
+     * @param array $fileExtensions
      */
-    public static function cleanDirectory($dirPath, $removeDir = false)
+    public static function cleanDirectory($dirPath, $includeDir = true, $removeDir = true, $fileExtensions = [])
     {
         if (!is_dir($dirPath)) {
             return;
@@ -513,10 +515,15 @@ class UtilsService
         $dir = new \DirectoryIterator($dirPath);
         foreach ($dir as $fileinfo) {
             if (!$fileinfo->isDot()) {
-                if (is_dir($fileinfo->getPathname()) && $removeDir) {
-                    self::cleanDirectory($fileinfo->getPathname(), true);
-                    rmdir($fileinfo->getPathname());
-                } else if (is_file($fileinfo->getPathname())) {
+                if (is_dir($fileinfo->getPathname()) && $includeDir) {
+                    self::cleanDirectory($fileinfo->getPathname(), $includeDir, $removeDir, $fileExtensions);
+                    if ($removeDir) {
+                        rmdir($fileinfo->getPathname());
+                    }
+                } else if (
+                    is_file($fileinfo->getPathname())
+                    && (empty($fileExtensions) || in_array(self::getExtension($fileinfo->getPathname()), $fileExtensions))
+                ) {
                     unlink($fileinfo->getPathname());
                 }
             }
@@ -526,21 +533,42 @@ class UtilsService
     /**
      * @param string $filePath
      * @param string $targetDirPath
-     * @return bool
+     * @param array $fileExtBlacklist
+     * @return bool|string
      */
-    public static function unZip($filePath, $targetDirPath = '')
+    public static function unZip($filePath, $targetDirPath = '', $fileExtBlacklist = [])
     {
         if (!$targetDirPath) {
             $targetDirPath = dirname($filePath);
         }
+        $ext = self::getExtension($filePath);
         $zip = new \ZipArchive;
         $res = $zip->open($filePath);
         if ($res === false) {
             return false;
         }
+        $hasFolder = true;
+        $firstFolderName = $zip->statIndex(0)['name'];
+        for ($i = 0; $i < $zip->numFiles; $i++) {
+            $stat = $zip->statIndex($i);
+            if (strpos($stat['name'], $firstFolderName) === false) {
+                $hasFolder = false;
+                break;
+            }
+        }
+        if (!$hasFolder) {
+            $firstFolderName = '';
+            $targetDirPath .= DIRECTORY_SEPARATOR . basename($filePath, '.' . $ext);
+        }
+        if (!is_dir($targetDirPath)) {
+            mkdir($targetDirPath);
+        }
         $zip->extractTo($targetDirPath);
         $zip->close();
-        return true;
+        if (!empty($fileExtBlacklist)) {
+            self::cleanDirectory($targetDirPath . DIRECTORY_SEPARATOR . $firstFolderName, true, false, $fileExtBlacklist);
+        }
+        return $targetDirPath . DIRECTORY_SEPARATOR . $firstFolderName;
     }
     
     /**

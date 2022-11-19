@@ -298,7 +298,7 @@ class FileManagerController extends BaseController
         foreach ($files as $file) {
             $ext = strtolower($file->getClientOriginalExtension());
             if (in_array($ext, $filesBlacklist)) {
-                $error = $this->translator->trans('The file could not be uploaded.');
+                $error = $this->translator->trans('The file type is not allowed to be uploaded.');
                 continue;
             }
             $file->move($publicDirPath, $file->getClientOriginalName());

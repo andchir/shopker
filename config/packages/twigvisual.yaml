@@ -710,6 +710,7 @@ twig_visual:
                     required: true
                     output: "{{ renderForm('{{ formName }}', '{{ formName }}') }}"
                     template: |
+                        {{ form_errors(form) }}
                         {{ form_start(form, {attr: {class: '{{ root.class }}'}}) }}
                             <root/>
                         {{ form_end(form) }}

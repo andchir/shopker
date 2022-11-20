@@ -281,6 +281,41 @@ class SettingsController extends AbstractController
     }
 
     /**
+     * @Route("/switch_theme/{themeName}", name="switch_theme", methods={"POST"})
+     * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
+     * @param SettingsService $settingsService
+     * @param TranslatorInterface $translator
+     * @param string $themeName
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function switchThemeAction(SettingsService $settingsService, TranslatorInterface $translator, $themeName)
+    {
+        $templatesDirPath = $this->getTemplatesDirPath();
+
+        if (!is_dir($templatesDirPath . DIRECTORY_SEPARATOR . $themeName)) {
+            return $this->setError($translator->trans('Templates theme "%theme%" not found.', [
+                '%theme%' => $themeName
+            ]));
+        }
+
+        $settings = $settingsService->getSettingsFromYaml('settings', false);
+        $settings = array_merge($settings, [
+            'app.template_theme' => $themeName
+        ]);
+
+        if (!$settingsService->saveSettingsToYaml($settings)) {
+            return $this->setError($translator->trans('File is not writable.', [], 'validators'));
+        }
+
+        $settingsService->systemCacheClear();
+
+        return $this->json([
+            'success' => true
+        ]);
+    }
+
+    /**
      * Update Internationalization files
      * @return bool
      * @throws \Exception

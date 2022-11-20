@@ -473,11 +473,12 @@ class AppRuntime
     /**
      * @param TwigEnvironment $environment
      * @param string $formName
+     * @param string $templateName
      * @param string|null $layoutPath
      * @param string $varName
      * @return string
      */
-    public function renderFormFunction(TwigEnvironment $environment, $formName = '', $layoutPath = null, $varName = 'form')
+    public function renderFormFunction(TwigEnvironment $environment, $formName = '', $templateName = 'custom_form', $layoutPath = null, $varName = 'form')
     {
         if (!$formName) {
             return '';
@@ -539,7 +540,7 @@ class AppRuntime
             }
         }
 
-        return $environment->render('form/custom_form.html.twig', [
+        return $environment->render('form/' . $templateName . '.html.twig', [
             'form' => $form->createView(),
             'varName' => $varName,
             'layoutPath' => $layoutPath

@@ -698,3 +698,57 @@ twig_visual:
                         - {title: 'Insert', value: 'inside'}
                         - {title: 'Insert before', value: 'before'}
                         - {title: 'Insert after', value: 'after'}
+
+        form:
+            title: Form
+            configuration:
+                saveBackupCopy: true
+            components:
+                root:
+                    title: Root element
+                    type: elementSelect
+                    required: true
+                    output: "{{ renderForm('{{ formName }}', '{{ formName }}') }}"
+                    template: |
+                        {{ form_start(form, {class: '{{ elementClassName }}'}) }}
+                            <root/>
+                        {{ form_end(form) }}
+                    templatePath: "form/{{ formName }}"
+
+                formName:
+                    title: Form name
+                    type: text
+                    value: contacts
+
+                elementClassName:
+                    title: Form CSS class name
+                    type: static
+                    fromAttribute: class
+
+                fieldName:
+                    title: Name field
+                    type: elementSelect
+                    template: '<fieldName/>'
+                    output: |
+                        {{ form_widget(form.name) }}
+
+                fieldEmail:
+                    title: Email field
+                    type: elementSelect
+                    template: '<fieldEmail/>'
+                    output: |
+                        {{ form_widget(form.email) }}
+
+                fieldSubject:
+                    title: Subject field
+                    type: elementSelect
+                    template: '<fieldSubject/>'
+                    output: |
+                        {{ form_widget(form.subject) }}
+
+                fieldContent:
+                    title: Message field
+                    type: elementSelect
+                    template: '<fieldContent/>'
+                    output: |
+                        {{ form_widget(form.content) }}

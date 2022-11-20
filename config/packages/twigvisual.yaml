@@ -710,7 +710,7 @@ twig_visual:
                     required: true
                     output: "{{ renderForm('{{ formName }}', '{{ formName }}') }}"
                     template: |
-                        {{ form_start(form, {class: '{{ elementClassName }}'}) }}
+                        {{ form_start(form, {attr: {class: '{{ elementClassName }}'}}) }}
                             <root/>
                         {{ form_end(form) }}
                     templatePath: "form/{{ formName }}"
@@ -722,7 +722,7 @@ twig_visual:
 
                 elementClassName:
                     title: Form CSS class name
-                    type: static
+                    type: hidden
                     fromAttribute: class
 
                 fieldName:

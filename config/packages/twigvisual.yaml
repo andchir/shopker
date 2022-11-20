@@ -710,7 +710,7 @@ twig_visual:
                     required: true
                     output: "{{ renderForm('{{ formName }}', '{{ formName }}') }}"
                     template: |
-                        {{ form_start(form, {attr: {class: '{{ elementClassName }}'}}) }}
+                        {{ form_start(form, {attr: {class: '{{ root.class }}'}}) }}
                             <root/>
                         {{ form_end(form) }}
                     templatePath: "form/{{ formName }}"
@@ -720,35 +720,30 @@ twig_visual:
                     type: text
                     value: contacts
 
-                elementClassName:
-                    title: Form CSS class name
-                    type: hidden
-                    fromAttribute: class
-
                 fieldName:
                     title: Name field
                     type: elementSelect
                     template: '<fieldName/>'
                     output: |
-                        {{ form_widget(form.name) }}
+                        {{ form_widget(form.name, {attr: {placeholder: '{{ fieldName.placeholder }}'}}) }}
 
                 fieldEmail:
                     title: Email field
                     type: elementSelect
                     template: '<fieldEmail/>'
                     output: |
-                        {{ form_widget(form.email) }}
+                        {{ form_widget(form.email, {attr: {placeholder: '{{ fieldEmail.placeholder }}'}}) }}
 
                 fieldSubject:
                     title: Subject field
                     type: elementSelect
                     template: '<fieldSubject/>'
                     output: |
-                        {{ form_widget(form.subject) }}
+                        {{ form_widget(form.subject, {attr: {placeholder: '{{ fieldSubject.placeholder }}'}}) }}
 
                 fieldContent:
                     title: Message field
                     type: elementSelect
                     template: '<fieldContent/>'
                     output: |
-                        {{ form_widget(form.content) }}
+                        {{ form_widget(form.content, {attr: {placeholder: '{{ fieldContent.placeholder }}'}}) }}

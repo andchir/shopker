@@ -527,7 +527,7 @@ class AppRuntime
                 }
 
                 $formTextFields = array_filter($formOptions['fields'], function($field) {
-                    return !in_array($field['type'], ['SubmitType', 'CaptchaType']);
+                    return !in_array($field['type'], ['SubmitType', 'CaptchaType']) && !in_array($field['name'], ['customer_full_name']);
                 });
                 $emailBody = $environment->render('email/email_custom_form.html.twig', [
                     'fields' => $formTextFields,

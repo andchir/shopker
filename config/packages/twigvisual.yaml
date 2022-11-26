@@ -713,6 +713,7 @@ twig_visual:
                     title: Root element
                     type: elementSelect
                     required: true
+                    useInnerHTML: true
                     output: "{{ renderForm('{{ formName }}', '{{ formName }}') }}"
                     template: |
                         {{ form_errors(form) }}
@@ -753,10 +754,4 @@ twig_visual:
                     template: '<fieldContent/>'
                     output: |
                         {{ form_widget(form.content, {attr: {class: '{{ fieldContent.class }}', placeholder: '{{ fieldContent.placeholder }}'}}) }}
-
-#                buttonSubmit:
-#                    title: Submit button
-#                    type: elementSelect
-#                    template: '<buttonSubmit/>'
-#                    output: |
-#                        {{ form_widget(form.submit, {attr: {class: '{{ buttonSubmit.class }}'}}) }}
+                    

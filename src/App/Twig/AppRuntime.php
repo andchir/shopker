@@ -533,7 +533,10 @@ class AppRuntime
 
                 if (!empty($formOptions['saveFileCSV'])) {
                     // Save to CSV file
-                    UtilsService::csvSaveFile($formData, $formName);
+                    if (UtilsService::csvSaveFile($formData, $formName)) {
+                        $request->getSession()->getFlashBag()->add('messages', 'csv.created_successful');
+                        return '';
+                    }
                 } else {
                     // Send Email
                     $emailBody = $environment->render('email/email_custom_form.html.twig', [
@@ -541,10 +544,7 @@ class AppRuntime
                         'formData' => $formData
                     ]);
                     if ($utilsService->sendMail($emailSubject, $emailBody, $emailTo)) {
-                        $request->getSession()
-                            ->getFlashBag()
-                            ->add('messages', 'email.send_successful');
-
+                        $request->getSession()->getFlashBag()->add('messages', 'email.send_successful');
                         return '';
                     }
                 }

@@ -364,7 +364,7 @@ class DefaultController extends AbstractController
         $pageContent = $environment->createTemplate($templateCode)->render([]);
 
         $messages = $request->getSession()->getFlashBag()->get('messages');
-        if (!empty($messages) && $messages[0] === 'email.send_successful') {
+        if (!empty($messages) && in_array($messages[0], ['email.send_successful', 'csv.created_successful'])) {
             return new Response('OK');
         }
         return new Response($pageContent);

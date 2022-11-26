@@ -610,6 +610,9 @@ class UtilsService
 
     public static function csvGetData($filePath)
     {
+        if (!file_exists($filePath)) {
+            return [];
+        }
         $output = [];
         if (($handle = fopen($filePath, 'r')) !== false) {
             while (($data = fgetcsv($handle)) !== false) {

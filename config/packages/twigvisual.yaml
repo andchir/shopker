@@ -704,8 +704,8 @@ twig_visual:
                         - {title: 'Insert before', value: 'before'}
                         - {title: 'Insert after', value: 'after'}
 
-        form:
-            title: Form
+        form_mail:
+            title: Feedback form
             configuration:
                 saveBackupCopy: true
             components:
@@ -754,4 +754,33 @@ twig_visual:
                     template: '<fieldContent/>'
                     output: |
                         {{ form_widget(form.content, {attr: {class: '{{ fieldContent.class }}', placeholder: '{{ fieldContent.placeholder }}'}}) }}
-                    
+
+        form_subscribe:
+            title: Subscription form
+            configuration:
+                saveBackupCopy: true
+            components:
+                root:
+                    title: Root element
+                    type: elementSelect
+                    required: true
+                    useInnerHTML: true
+                    output: "{{ renderForm('{{ formName }}', '{{ formName }}') }}"
+                    template: |
+                        {{ form_errors(form) }}
+                        {{ form_start(form, {attr: {action: '/form_action/{{ formName }}', class: '{{ root.class }}'}}) }}
+                            <root/>
+                        {{ form_end(form) }}
+                    templatePath: "form/{{ formName }}"
+
+                formName:
+                    title: Form name
+                    type: text
+                    value: subscribe
+
+                fieldEmail:
+                    title: Email field
+                    type: elementSelect
+                    template: '<fieldEmail/>'
+                    output: |
+                        {{ form_widget(form.email, {attr: {class: '{{ fieldEmail.class }}', placeholder: '{{ fieldEmail.placeholder }}'}}) }}

@@ -1,6 +1,6 @@
 emailTo: ~
 emailSubject: ~
-saveCSV: true
+saveFileCSV: true
 fields:
     - { name: email, label: Your email, type: EmailType, required: true }
     - { name: customer_full_name, label: '', type: TextType, required: false, row_attr: { style: 'display: none;' } } # Antispam

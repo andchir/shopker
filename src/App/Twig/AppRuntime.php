@@ -526,20 +526,27 @@ class AppRuntime
                     $emailSubject .= ($emailSubject ? ' - ' : '') . $formData['subject'];
                 }
 
+                unset($formData['customer_full_name']);
                 $formTextFields = array_filter($formOptions['fields'], function($field) {
                     return !in_array($field['type'], ['SubmitType', 'CaptchaType']) && !in_array($field['name'], ['customer_full_name']);
                 });
-                $emailBody = $environment->render('email/email_custom_form.html.twig', [
-                    'fields' => $formTextFields,
-                    'formData' => $formData
-                ]);
 
-                if ($utilsService->sendMail($emailSubject, $emailBody, $emailTo)) {
-                    $request->getSession()
-                        ->getFlashBag()
-                        ->add('messages', 'email.send_successful');
+                if (!empty($formOptions['saveFileCSV'])) {
+                    // Save to CSV file
+                    UtilsService::csvSaveFile($formData, $formName);
+                } else {
+                    // Send Email
+                    $emailBody = $environment->render('email/email_custom_form.html.twig', [
+                        'fields' => $formTextFields,
+                        'formData' => $formData
+                    ]);
+                    if ($utilsService->sendMail($emailSubject, $emailBody, $emailTo)) {
+                        $request->getSession()
+                            ->getFlashBag()
+                            ->add('messages', 'email.send_successful');
 
-                    return '';
+                        return '';
+                    }
                 }
             }
         }

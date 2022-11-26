@@ -589,4 +589,39 @@ class UtilsService
         $purifier = new HTMLPurifier($config);
         return trim($purifier->purify((string) $string));
     }
+
+    public static function csvSaveFile($data, $fileName)
+    {
+        $rootPath = self::getRootPath();
+        $filePath = $rootPath . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'uploads';
+        $filePath .= DIRECTORY_SEPARATOR . $fileName . '.csv';
+
+        $fileData = self::csvGetData($filePath);
+        $fileData[] = array_values($data);
+
+        $fp = fopen($filePath, 'w+');
+        foreach ($fileData as $fields) {
+            fputcsv($fp, is_array($fields) ? $fields : [$fields]);
+        }
+        fclose($fp);
+
+        return true;
+    }
+
+    public static function csvGetData($filePath)
+    {
+        $output = [];
+        if (($handle = fopen($filePath, 'r')) !== false) {
+            while (($data = fgetcsv($handle)) !== false) {
+                $output[] = $data;
+            }
+            fclose($handle);
+        }
+        return $output;
+    }
+
+    public static function getRootPath()
+    {
+        return dirname(dirname(dirname(dirname(__FILE__))));
+    }
 }

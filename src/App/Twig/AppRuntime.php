@@ -507,14 +507,18 @@ class AppRuntime
             $emailTo = !empty($formOptions['emailTo'])
                 ? $formOptions['emailTo']
                 : $this->container->getParameter('app.admin_email');
+            $formData = $form->getData();
 
-            if (empty($emailTo)) {
+            if (!empty($formData['customer_full_name'])) {
+
+                $form->addError(new FormError('Spam.'));
+
+            } elseif (empty($emailTo)) {
 
                 $form->addError(new FormError($translator->trans('email.recipient_error')));
 
             } else {
 
-                $formData = $form->getData();
                 $emailSubject = !empty($formOptions['emailSubject'])
                     ? $translator->trans($formOptions['emailSubject'])
                     : '';

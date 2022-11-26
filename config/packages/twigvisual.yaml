@@ -18,6 +18,11 @@ twig_visual:
         - nav/pagination
         - nav/pagination_simple
         - nav/default
+        - email/email_custom_form.html.twig
+        - email/email_order_adminNotify.html.twig
+        - email/email_order_userEmailStatus.html.twig
+        - email/email_password_reset.html.twig
+        - email/email_user_confirm_email.html.twig
     templates:
         - homepage
         - text-content_category
@@ -711,7 +716,7 @@ twig_visual:
                     output: "{{ renderForm('{{ formName }}', '{{ formName }}') }}"
                     template: |
                         {{ form_errors(form) }}
-                        {{ form_start(form, {attr: {class: '{{ root.class }}'}}) }}
+                        {{ form_start(form, {attr: {action: '/form_action/{{ formName }}', class: '{{ root.class }}'}}) }}
                             <root/>
                         {{ form_end(form) }}
                     templatePath: "form/{{ formName }}"
@@ -749,9 +754,9 @@ twig_visual:
                     output: |
                         {{ form_widget(form.content, {attr: {class: '{{ fieldContent.class }}', placeholder: '{{ fieldContent.placeholder }}'}}) }}
 
-                buttonSubmit:
-                    title: Submit button
-                    type: elementSelect
-                    template: '<buttonSubmit/>'
-                    output: |
-                        {{ form_widget(form.submit, {attr: {class: '{{ buttonSubmit.class }}'}}) }}
+#                buttonSubmit:
+#                    title: Submit button
+#                    type: elementSelect
+#                    template: '<buttonSubmit/>'
+#                    output: |
+#                        {{ form_widget(form.submit, {attr: {class: '{{ buttonSubmit.class }}'}}) }}

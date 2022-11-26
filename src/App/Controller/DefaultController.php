@@ -27,6 +27,7 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
+use Twig\Environment as TwigEnvironment;
 
 /**
  * Class DefaultController
@@ -347,6 +348,26 @@ class DefaultController extends AbstractController
         return $this->render('setup.twig', [
             'form' => $form->createView()
         ]);
+    }
+
+    /**
+     * @Route("/form_action/{formName}/{_locale}", name="form_action", requirements={"_locale"=".+"}, defaults={"_locale": "en"})
+     * @param Request $request
+     * @param TwigEnvironment $environment
+     * @param string $formName
+     * @param string $locale
+     * @return string
+     */
+    public function showFormAction(Request $request, TwigEnvironment $environment, $formName)
+    {
+        $templateCode = "{{ renderForm('{$formName}', '{$formName}') }}";
+        $pageContent = $environment->createTemplate($templateCode)->render([]);
+
+        $messages = $request->getSession()->getFlashBag()->get('messages');
+        if (!empty($messages) && $messages[0] === 'email.send_successful') {
+            return new Response('OK');
+        }
+        return new Response($pageContent);
     }
 
     /**

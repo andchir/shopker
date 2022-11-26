@@ -5,5 +5,6 @@ fields:
     - { name: email, label: Your email, type: EmailType, required: true }
     - { name: subject, label: Subject, type: TextType, required: false }
     - { name: content, label: E-mail text, type: TextareaType, required: true, attr: { rows: 6 } }
+    - { name: customer_full_name, label: '', type: TextType, required: false, row_attr: { style: 'display: none;' } } # Antispam
     # - { name: captcha, label: Captcha, type: CaptchaType }
-    - { name: submit, label: Submit, type: SubmitType }
+    # - { name: submit, label: Submit, type: SubmitType }

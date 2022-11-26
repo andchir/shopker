@@ -59,17 +59,7 @@ class SettingsController extends AbstractController
      */
     public function getListAction(SettingsService $settingsService)
     {
-        $output = [
-            Setting::GROUP_MAIN => [],
-            Setting::GROUP_ORDER_STATUSES => [],
-            Setting::GROUP_DELIVERY => [],
-            Setting::GROUP_PAYMENT => [],
-            Setting::GROUP_CURRENCY => [],
-            Setting::GROUP_PROMOCODES => [],
-            Setting::GROUP_LANGUAGES => [],
-            Setting::GROUP_USER_GROUPS => []
-        ];
-
+        $output = [];
         $output[Setting::GROUP_MAIN] = $settingsService->getSettingsFromYaml('settings');
         $output[Setting::GROUP_ORDER_STATUSES] = $settingsService->getSettingsGroup(Setting::GROUP_ORDER_STATUSES);
         $output[Setting::GROUP_DELIVERY] = $settingsService->getSettingsGroup(Setting::GROUP_DELIVERY);
@@ -80,6 +70,35 @@ class SettingsController extends AbstractController
         $output[Setting::GROUP_USER_GROUPS] = $settingsService->getSettingsGroup(Setting::GROUP_USER_GROUPS);
 
         return $this->json($output, 200, [], ['groups' => ['list']]);
+    }
+
+    /**
+     * @Route("/themes_list", name="themes_list", methods={"GET"})
+     * @return JsonResponse
+     * @throws \Twig\Error\LoaderError
+     */
+    public function themesListAction()
+    {
+        $templatesDirPath = $this->getTemplatesDirPath();
+        $themeCurrent = $this->params->get('app.template_theme');
+
+        $items = [];
+        foreach (new \DirectoryIterator($templatesDirPath) as $fileInfo) {
+            if (!$fileInfo->isDot() && $fileInfo->isDir()) {
+                $items[] = [
+                    'name' => $fileInfo->getFilename(),
+                    'isActive' => $fileInfo->getFilename() == $themeCurrent
+                ];
+            }
+        }
+
+        usort($items, function($a, $b) {
+            return strcmp(mb_strtolower($a['name']), mb_strtolower($b['name']));
+        });
+
+        return $this->json([
+            'items' => $items
+        ]);
     }
 
     /**
@@ -495,7 +514,7 @@ class SettingsController extends AbstractController
      */
     public function getTemplatesDirPath()
     {
-        return dirname(dirname($this->twig->getLoader()->getSourceContext('base.html.twig')->getPath()));;
+        return dirname(dirname($this->twig->getLoader()->getSourceContext('base.html.twig')->getPath()));
     }
 
     /**

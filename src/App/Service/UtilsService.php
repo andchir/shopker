@@ -596,13 +596,8 @@ class UtilsService
         $filePath = $rootPath . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'uploads';
         $filePath .= DIRECTORY_SEPARATOR . $fileName . '.csv';
 
-        $fileData = self::csvGetData($filePath);
-        $fileData[] = array_values($data);
-
-        $fp = fopen($filePath, 'w+');
-        foreach ($fileData as $fields) {
-            fputcsv($fp, is_array($fields) ? $fields : [$fields]);
-        }
+        $fp = fopen($filePath, 'a');
+        fputcsv($fp, array_values($data));
         fclose($fp);
 
         return true;

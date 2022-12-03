@@ -139,6 +139,7 @@ Reserved: Занято
 'Promo code': 'Промо код'
 'Enter promo code here': 'Введите промо код здесь'
 'Promo code not found.': 'Промо код не найден.'
+Page not found: Страница не найдена
 Discount: Скидка
 'The promo code has expired.': 'Промо код не действителен.'
 'You are logged in as %username%': 'Вы авторизованы как %username%'

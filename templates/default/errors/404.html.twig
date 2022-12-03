@@ -5,7 +5,7 @@
 
     <main role="main" class="container">
         <div class="min-height400 pt-4">
-            <h1>404 - Page not found</h1>
+            <h1>404 - {{ 'Page not found' | trans }}</h1>
             {% if message is defined and message is not empty %}
                 <div class="alert alert-danger">{{ message }}</div>
             {% endif %}

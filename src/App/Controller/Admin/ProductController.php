@@ -428,8 +428,6 @@ class ProductController extends BaseController
 
         $contentType = $category->getContentType();
         $contentTypeFields = $contentType->getFields();
-        $collection = $this->catalogService->getCollection($contentType->getCollection());
-
         $fieldNames = array_map(function($item) {
             return $item['name'];
         }, $contentTypeFields);
@@ -440,23 +438,10 @@ class ProductController extends BaseController
             }
         }
 
-        if (!empty($data)) {
-            try {
-                $result = $collection->updateOne(
-                    ['_id' => (int) $itemId],
-                    ['$set' => $data]
-                );
-            } catch (\Exception $e) {
-                $result = false;
-            }
-        }
-
-        if (!empty($result)) {
-            return $this->json([
-                'success' => true
-            ]);
+        if ($this->catalogService->updateContentData($contentType->getCollection(), $itemId, $data)) {
+            return $this->json(['success' => true]);
         } else {
-            return $this->setError('Item not saved.');
+            return $this->setError('Item not updated.');
         }
     }
 

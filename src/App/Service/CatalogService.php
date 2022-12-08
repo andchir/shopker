@@ -44,6 +44,29 @@ class CatalogService {
     }
 
     /**
+     * @param string $collectionName
+     * @param int $contentId
+     * @param array $data
+     * @return bool
+     */
+    public function updateContentData($collectionName, $contentId, $data)
+    {
+        if (empty($data) || !is_array($data)) {
+            return false;
+        }
+        $collection = $this->getCollection($collectionName);
+        try {
+            $result = $collection->updateOne(
+                ['_id' => (int) $contentId],
+                ['$set' => $data]
+            );
+        } catch (\Exception $e) {
+            $result = false;
+        }
+        return !empty($result) && $result->getModifiedCount() > 0;
+    }
+
+    /**
      * @param int $parentId
      * @param string $locale
      * @param bool $activeOnly

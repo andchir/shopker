@@ -409,6 +409,58 @@ class ProductController extends BaseController
     }
 
     /**
+     * @Route("/{categoryId}/{itemId}/patch", methods={"PATCH"})
+     * @IsGranted("ROLE_ADMIN_WRITE", statusCode="400", message="Your user has read-only permission.")
+     * @ParamConverter("category", class="App\MainBundle\Document\Category", options={"id" = "categoryId"})
+     * @param Request $request
+     * @param Category $category
+     * @param int $itemId
+     * @return JsonResponse
+     * @throws \Doctrine\ODM\MongoDB\LockException
+     * @throws \Doctrine\ODM\MongoDB\Mapping\MappingException
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
+     */
+    public function patchItemAction(Request $request, Category $category, $itemId)
+    {
+        $data = $request->getContent()
+            ? json_decode($request->getContent(), true)
+            : [];
+
+        $contentType = $category->getContentType();
+        $contentTypeFields = $contentType->getFields();
+        $collection = $this->catalogService->getCollection($contentType->getCollection());
+
+        $fieldNames = array_map(function($item) {
+            return $item['name'];
+        }, $contentTypeFields);
+
+        foreach ($data as $key => $value) {
+            if (!in_array($key, $fieldNames)) {
+                unset($data[$key]);
+            }
+        }
+
+        if (!empty($data)) {
+            try {
+                $result = $collection->updateOne(
+                    ['_id' => (int) $itemId],
+                    ['$set' => $data]
+                );
+            } catch (\Exception $e) {
+                $result = false;
+            }
+        }
+
+        if (!empty($result)) {
+            return $this->json([
+                'success' => true
+            ]);
+        } else {
+            return $this->setError('Item not saved.');
+        }
+    }
+
+    /**
      * @Route(
      *     "/{categoryId}/{action}/batch",
      *     requirements={"action"=".+"},

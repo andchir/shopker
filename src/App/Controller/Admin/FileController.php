@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Events;
 use App\MainBundle\Document\Category;
 use App\MainBundle\Document\ContentType;
 use App\MainBundle\Document\FileDocument;
@@ -12,6 +13,8 @@ use App\Service\UtilsService;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\Persistence\ObjectRepository;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\FileBag;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -33,18 +36,22 @@ class FileController extends BaseController
     protected $catalogService;
     /** @var SettingsService */
     protected $settingsService;
+    /** @var EventDispatcherInterface */
+    protected $eventDispatcher;
 
     public function __construct(
         ParameterBagInterface $params,
         DocumentManager $dm,
         TranslatorInterface $translator,
         CatalogService $catalogService,
-        SettingsService $settingsService
+        SettingsService $settingsService,
+        EventDispatcherInterface $eventDispatcher
     )
     {
         parent::__construct($params, $dm, $translator);
         $this->catalogService = $catalogService;
         $this->settingsService = $settingsService;
+        $this->eventDispatcher = $eventDispatcher;
     }
     
     /**
@@ -220,6 +227,10 @@ class FileController extends BaseController
 
                 $this->dm->persist($fileDocument);
                 $this->dm->flush();
+
+                // Dispatch event
+                $event = new GenericEvent($fileDocument);
+                $this->eventDispatcher->dispatch($event, Events::FILE_AFTER_CREATED);
 
                 $usedFiles[] = $fileDocument->toArray();
                 $entity[$fieldName] = $fileDocument->getRecordData();

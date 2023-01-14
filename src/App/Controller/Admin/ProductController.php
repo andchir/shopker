@@ -388,7 +388,8 @@ class ProductController extends BaseController
                 $this->dm,
                 $this->translator,
                 $this->catalogService,
-                $this->settingsService
+                $this->settingsService,
+                $this->eventDispatcher
             );
             $fileController->deleteUnused($contentType->getName(), $itemId, $fileIds);
         }

@@ -13,6 +13,11 @@ final class Events
      * @Event("Symfony\Component\EventDispatcher\GenericEvent")
      * @var string
      */
+    const PRODUCT_BEFORE_UPDATE = 'product.before_update';
+    /**
+     * @Event("Symfony\Component\EventDispatcher\GenericEvent")
+     * @var string
+     */
     const PRODUCT_UPDATED = 'product.updated';
     /**
      * @Event("Symfony\Component\EventDispatcher\GenericEvent")
@@ -49,4 +54,9 @@ final class Events
      * @var string
      */
     const SHOPPING_CART_ADD_PRODUCT = 'shopping_cart.add_product';
+    /**
+     * @Event("Symfony\Component\EventDispatcher\GenericEvent")
+     * @var string
+     */
+    const FILE_AFTER_CREATED = 'file.after_created';
 }

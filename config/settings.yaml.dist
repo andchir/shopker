@@ -43,3 +43,4 @@ parameters:
     router.request_context.host: localhost
     router.request_context.scheme: http
     router.request_context.base_url: ''
+    app.ffmpeg_path: '/usr/bin/ffmpeg'

@@ -3,7 +3,7 @@ emailSubject: Email from your website
 fields:
     - { name: name, label: Your name, type: TextType, required: true }
     - { name: email, label: Your email, type: EmailType, required: true }
-    - { name: subject, label: Subject, type: TextType, required: false }
+    # - { name: subject, label: Subject, type: TextType, required: false }
     - { name: content, label: E-mail text, type: TextareaType, required: true, attr: { rows: 6 } }
     - { name: customer_full_name, label: '', type: TextType, required: false, row_attr: { style: 'display: none;' } } # Antispam
     # - { name: captcha, label: Captcha, type: CaptchaType }
